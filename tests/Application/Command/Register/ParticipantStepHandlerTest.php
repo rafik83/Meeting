@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent;
@@ -123,6 +124,11 @@ class ParticipantStepHandlerTest extends TestCase
                 return true;
             }
         ))->shouldBeCalled();
+
+        $eventDispatcher
+            ->dispatch(Events::PARTICIPANT_UPDATED, new ParticipantUpdatedEvent($expectedParticipant))
+            ->shouldBeCalled()
+        ;
 
         $participantStep        = new ParticipantStep($templateData, $participant, 1, $locale, $data);
         $participantStepHandler = new ParticipantStepHandler(

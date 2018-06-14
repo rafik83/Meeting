@@ -1,0 +1,19 @@
+Proximum\Vimeet\Domain\Model\Filter\FilledTemplateFilter:
+    type:  entity
+    table: filled_template_filter
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        templateKey:
+            type: string
+        label:
+            type: string
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false

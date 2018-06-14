@@ -62,6 +62,12 @@
                     {{ form_row(form.follower) }}
                     {{ form_row(form.commercialStatus) }}
 
+                    {% if form.filled_filters is defined %}
+                        {% for filled_filter in form.filled_filters.children %}
+                            {{ form_row(filled_filter) }}
+                        {% endfor %}
+                    {% endif %}
+
                     <hr>
 
                     {% if form.boolean_filters is defined %}

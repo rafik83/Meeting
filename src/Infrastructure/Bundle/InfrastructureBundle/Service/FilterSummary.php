@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Domain\Sheet\FilledFilter;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Translation\TranslatorInterface as SymfonyTranslatorInterface;
 
@@ -71,6 +72,20 @@ class FilterSummary
                         continue;
                     }
                 }
+            } elseif (Constant::FILLED_FILTER === $field->vars['name']) {
+                foreach ($field->children as $childrenRow) {
+                    try {
+                        list($label, $value) = $this->handleFormRow($childrenRow, $event, $locale);
+
+                        if (empty($value)) {
+                            continue;
+                        }
+
+                        $selectedFilters[$label] = $value;
+                    } catch (\Exception $exception) {
+                        continue;
+                    }
+                }
             } else {
                 try {
                     list($label, $value) = $this->handleFormRow($field, $event, $locale);
@@ -119,7 +134,9 @@ class FilterSummary
             foreach ($field->vars['choices'] as $choice) {
                 foreach ($values as $currentValue) {
                     if ($choice->value === $currentValue) {
-                        $value .= ('' !== $value ? ', ' : '') . $this->translator->trans($choice->label, [], null, $locale);
+                        $domain = \in_array($choice->value, FilledFilter::FILLED_FILTERS, true) ? 'forms' : null;
+
+                        $value .= ('' !== $value ? ', ' : '') . $this->translator->trans($choice->label, [], $domain, $locale);
                     }
                 }
             }

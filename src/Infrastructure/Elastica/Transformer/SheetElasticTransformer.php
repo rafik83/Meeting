@@ -34,6 +34,7 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\IndexableObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
+use Proximum\Vimeet\Domain\Template\TemplateFilledFilter;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Symfony\Component\Intl\Intl;
 
@@ -121,6 +122,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $fallbackLocale);
         $filtersValue             = TemplateBooleanFilterIdentifier::getBooleanFilterValues($registrationTemplateData);
         $organizationCategory     = $registrationTemplateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
+        $filledFilterValues       = TemplateFilledFilter::getFilledFilterValues($registrationTemplateData, $sheet);
 
         $content         = [];
         $contentByLocale = [];
@@ -175,6 +177,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'inCatalog'               => $sheet->isInCatalog(),
                 'inCatalogAt'             => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
                 'booleanFilter'           => $filtersValue,
+                'filledFilter'            => $filledFilterValues,
                 'orderStatus'             => $this->getOrderStatus($sheet),
                 'hasCart'                 => $hasCart,
                 'organizationCategory'    => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,

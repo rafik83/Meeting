@@ -15,8 +15,8 @@ use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileException;
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
@@ -36,19 +36,12 @@ class UpdateProfileHandler
     /** @var UploadFileHandler */
     private $uploadFileHandler;
 
-    /**
-     * @param ParticipantRepositoryInterface    $participantRepository
-     * @param Synchronizer                      $accountSynchronizer
-     * @param DelayedEventDispatcher            $eventDispatcher
-     * @param UploadFileHandler                 $uploadFileHandler
-     */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         Synchronizer $accountSynchronizer,
         DelayedEventDispatcher $eventDispatcher,
         UploadFileHandler $uploadFileHandler
-    )
-    {
+    ) {
         $this->participantRepository = $participantRepository;
         $this->accountSynchronizer = $accountSynchronizer;
         $this->eventDispatcher = $eventDispatcher;
@@ -102,13 +95,10 @@ class UpdateProfileHandler
             $this->accountSynchronizer->set($templateData, $updateProfile->participant->getUser());
         }
 
-        // Send Sheet Update Event to recalculate completeness of the sheet
-        $sheetUpdatedEvent = new SheetUpdatedEvent($participant->getSheet());
-
         // Send event to check and update sheet title depends on sheet title or owner fullname settings
         $sheetTitleCheckEvent = new SheetTitleCheckEvent($participant->getSheet());
 
-        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
+        $this->eventDispatcher->dispatch(Events::PARTICIPANT_UPDATED, new ParticipantUpdatedEvent($participant));
         $this->eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, $sheetTitleCheckEvent);
     }
 }

@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFiltersBuilder;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilledFiltersBuilder;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Sheet\Filter\ReminderDateChoiceConstraint;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\ImportedChoiceType;
@@ -34,16 +35,17 @@ abstract class AbstractFilterType extends AbstractType
     /** @var BooleanFiltersBuilder */
     protected $booleanFilterBuilder;
 
-    /**
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param BooleanFiltersBuilder       $booleanFilterBuilder
-     */
+    /** @var FilledFiltersBuilder */
+    protected $filledFiltersBuilder;
+
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
-        BooleanFiltersBuilder $booleanFilterBuilder
+        BooleanFiltersBuilder $booleanFilterBuilder,
+        FilledFiltersBuilder $filledFiltersBuilder
     ) {
         $this->categoryRepository   = $categoryRepository;
         $this->booleanFilterBuilder = $booleanFilterBuilder;
+        $this->filledFiltersBuilder = $filledFiltersBuilder;
     }
 
     /**
@@ -254,6 +256,15 @@ abstract class AbstractFilterType extends AbstractType
             $builder->add(Constant::BOOLEAN_FILTER, BooleanFilterType::class, [
                 'booleanFilters' => $booleanFilters,
                 'label'          => false,
+            ]);
+        }
+
+        $filledFilters = $this->filledFiltersBuilder->getFilters($event);
+
+        if (!empty($filledFilters)) {
+            $builder->add(Constant::FILLED_FILTER, FilledFilterType::class, [
+                'filledFilters' => $filledFilters,
+                'label' => false,
             ]);
         }
     }

@@ -165,6 +165,10 @@ class SheetSearchQueryBuilder
         $this->filterByReminderDate($filters);
         $this->filterByCountry($filters);
 
+        if (isset($filters[Constant::FILLED_FILTER])) {
+            $this->filterByFilledFilter($filters[Constant::FILLED_FILTER]);
+        }
+
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
             $this->filterHasCart(true);
         }
@@ -666,6 +670,35 @@ class SheetSearchQueryBuilder
         }
 
         $this->query->addMust($boolQuery);
+    }
+
+    protected function filterByFilledFilter(array $filledFilters): void
+    {
+        $numberOfFilterApplied = 0;
+        $boolQuery = new BoolQuery();
+        $nestedQuery = new Nested();
+        $nestedQuery->setPath('filledFilter');
+
+        foreach ($filledFilters as $key => $values) {
+            if (!$values) {
+                continue;
+            }
+
+            foreach ($values as $filter) {
+                $subBoolQuery = (new BoolQuery())
+                    ->addMust((new Term())->setTerm('filledFilter.key', $key))
+                    ->addMust((new Term())->setTerm('filledFilter.status', $filter));
+
+                $boolQuery->addShould($subBoolQuery);
+            }
+
+            $numberOfFilterApplied++;
+        }
+
+        if (0 < $numberOfFilterApplied) {
+            $nestedQuery->setQuery($boolQuery);
+            $this->query->addMust($nestedQuery);
+        }
     }
 
     /**

@@ -744,6 +744,9 @@ form.sheet_filter.children.availabilityConfirmationStatus.choice.all_confirmed: 
 form.sheet_filter.children.availabilityConfirmationStatus.choice.none_confirmed: 'Not confirmed'
 form.sheet_filter.children.availabilityConfirmationStatus.choice.partly_confirmed: 'partly confirmed'
 form.sheet_filter.children.availabilityConfirmationStatus.label: 'availibilities confirmation'
+form.sheet_filter.children.filledFilter.choice.filled: 'Filled'
+form.sheet_filter.children.filledFilter.choice.not_filled: 'Not filled'
+form.sheet_filter.children.filledFilter.choice.partly_filled: 'Partly filled'
 form.sheet_filter.children.booleanFilters.noPreference.label: 'no matter'
 form.sheet_filter.children.cancelAttendance.label: 'cancel the attendance'
 form.sheet_filter.children.cart.no.label: without

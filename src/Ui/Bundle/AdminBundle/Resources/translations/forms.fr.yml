@@ -799,6 +799,9 @@ form.sheet_filter.children.phoneValidationStatus.choice.all_confirmed: Confirmé
 form.sheet_filter.children.phoneValidationStatus.choice.none_confirmed: 'Non confirmé'
 form.sheet_filter.children.phoneValidationStatus.choice.partly_confirmed: 'Partiellement confirmé'
 form.sheet_filter.children.phoneValidationStatus.label: 'A confirmé son portable'
+form.sheet_filter.children.filledFilter.choice.filled: 'Renseigné'
+form.sheet_filter.children.filledFilter.choice.not_filled: 'Non renseigné'
+form.sheet_filter.children.filledFilter.choice.partly_filled: 'Partiellement renseigné'
 form.sheet_filter.children.reminderDate.label: 'Date rappel'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
