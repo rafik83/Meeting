@@ -664,15 +664,15 @@ form.promotion_code_update.children.stock.label: Stock
 form.promotion_code_update.children.submit.label: Enregistrer
 form.promotion_code_update.children.title.label: Titre
 form.promotion_code_update.children.validUntil.label: 'Valide jusqu''au'
-form.registration_template_duplicate.children.event.label: 'Événement de destination du nouveau template'
-form.registration_template_duplicate.children.submit.label: 'Dupliquer'
-form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
-form.registration_template_create.children.submit.label: 'Créer'
-form.registration_template_create.children.title.label: 'Titre du nouveau template'
 form.register.children.email.label: E-mail
 form.register.children.password.children.first.label: 'Mot de passe'
 form.register.children.password.children.second.label: 'Ressaisir le mot de passe'
 form.register.children.submit.label: Envoyer
+form.registration_template_create.children.submit.label: Créer
+form.registration_template_create.children.title.label: 'Titre du nouveau template'
+form.registration_template_duplicate.children.event.label: 'Événement de destination du nouveau template'
+form.registration_template_duplicate.children.submit.label: Dupliquer
+form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
 form.rule_see_what.children.priority.label: 'Priorité de la règle'
 form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'
 form.rule_see_what.children.submit.label: 'Enregistrer la règle'
@@ -769,6 +769,9 @@ form.sheet_filter.children.enabledState.all.label: Toutes
 form.sheet_filter.children.enabledState.disabled.label: 'Non active'
 form.sheet_filter.children.enabledState.enabled.label: Active
 form.sheet_filter.children.enabledState.label: 'Statut de la fiche'
+form.sheet_filter.children.filledFilter.choice.filled: Renseigné
+form.sheet_filter.children.filledFilter.choice.not_filled: 'Non renseigné'
+form.sheet_filter.children.filledFilter.choice.partly_filled: 'Partiellement renseigné'
 form.sheet_filter.children.follower.children.un-assigned: 'Non assigné'
 form.sheet_filter.children.follower.label: 'Suivi commercial'
 form.sheet_filter.children.hasCart.label: Panier
@@ -799,9 +802,6 @@ form.sheet_filter.children.phoneValidationStatus.choice.all_confirmed: Confirmé
 form.sheet_filter.children.phoneValidationStatus.choice.none_confirmed: 'Non confirmé'
 form.sheet_filter.children.phoneValidationStatus.choice.partly_confirmed: 'Partiellement confirmé'
 form.sheet_filter.children.phoneValidationStatus.label: 'A confirmé son portable'
-form.sheet_filter.children.filledFilter.choice.filled: 'Renseigné'
-form.sheet_filter.children.filledFilter.choice.not_filled: 'Non renseigné'
-form.sheet_filter.children.filledFilter.choice.partly_filled: 'Partiellement renseigné'
 form.sheet_filter.children.reminderDate.label: 'Date rappel'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
@@ -983,8 +983,10 @@ form.type_template_field_update.children.required.label: Obligatoire
 form.type_template_field_update.children.submit.label: Enregistrer
 form.type_template.registration.base: 'Template d''Inscription de base'
 form.type_template.registration.event: 'Templates de l''événement'
+form.type_template.registration.organizer: 'Mes templates d''Inscription'
 form.type_template.sheet.base: 'Template de Participation de base'
 form.type_template.sheet.event: 'Templates de l''événément'
+form.type_template.sheet.organizer: 'Mes templates de Participation'
 form.type_update.children.hidden.label: Caché
 form.type_update.children.package.label: 'Template de forfait de participation'
 form.type_update.children.rank.label: Position
