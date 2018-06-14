@@ -364,6 +364,7 @@ class SheetElasticTransformerTest extends TestCase
                 'content' => 'Ma description My description',
                 'content_fr' => 'Ma description',
                 'content_en' => 'My description',
+                'filledFilter' => [],
             ]
         );
 
