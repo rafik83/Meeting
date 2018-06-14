@@ -439,7 +439,7 @@ summary.total: 'Total de la commande'
 summary.totalByVat: 'Total assujetti à %vatRate%%'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
-unavailability.action.remove.title: 'Supprimer'
+unavailability.action.remove.title: Supprimer
 unavailability.createdBySystem.buy.title: 'Modifier mon forfait'
 unavailability.createdBySystem.explaination.title: 'Veuillez sélectionner le produit vous permettant d''accéder à ce contenu'
 unavailability.title: Indisponible
