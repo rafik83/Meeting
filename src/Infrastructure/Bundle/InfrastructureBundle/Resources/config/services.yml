@@ -3190,6 +3190,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
+    Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQueryHandler:
+        arguments:
+            - '@template.template_data_factory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQuery }
+
     query.catalog.catalog_available_slot_ids_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQueryHandler
         arguments:

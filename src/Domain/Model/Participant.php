@@ -321,6 +321,11 @@ class Participant implements MailRecipientInterface
         return $this->participantProduct;
     }
 
+    public function getIdAndFullName(): string
+    {
+        return $this->getId().'_'.$this->getFullname();
+    }
+
     /**
      * @return bool
      */
