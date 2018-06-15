@@ -30,12 +30,12 @@ use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\IndexableObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateFilledFilter;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
+use Proximum\Vimeet\Infrastructure\Elastica\SheetContentView;
 use Symfony\Component\Intl\Intl;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
@@ -103,32 +103,117 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     public function transform($sheet, array $fields)
     {
         $fallbackLocale = $sheet->getEvent()->getFallback();
+        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $fallbackLocale);
+        $fallbackData = $this->templateDataFactory->createFromSheet($sheet, $fallbackLocale);
+        $sheetContentView = $this->getSheetContentView($sheet);
 
+        return new Document(
+            $sheet->getId(),
+            array_merge(
+                [
+                    'id' => $sheet->getId(),
+                    'sheetName' => $this->sheetInfoGuesser->guessSheetTitle($sheet, $fallbackLocale),
+                    'state' => $sheet->getState(),
+                    'validationState' => $sheet->getValidationState(),
+                    'agendaConfirmedStatus' => $sheet->getAgendaConfirmedStatus(),
+                    'phoneValidationStatus' => $sheet->getPhoneValidationStatus(),
+                    'availabilityConfirmationStatus' => $sheet->getAvailabilityConfirmationStatus(),
+                    'enabled' => $sheet->isEnabled(),
+                    'completed' => $sheet->isCompleted(),
+                    'completeness' => $sheet->getCompleteness(),
+                    'type' => $sheet->getType()->getId(),
+                    'categories' => $this->buildCategories($sheet),
+                    'followUp' => $this->getFollowerId($sheet),
+                    'commercialStatus' => $sheet->getCommercialStatus(),
+                    'participantNumber' => $sheet->countParticipants(),
+                    'participants' => $this->getParticipantsData($sheet, $fallbackLocale),
+                    'event' => $sheet->getEvent()->getId(),
+                    'owner' => $sheet->getOwner()->getId(),
+                    'ownerEmail' => $sheet->getOwner()->getEmail(),
+                    'remainingToPay' => $this->orderBalance->getRemainingToPay($sheet),
+                    'imported' => $sheet->isImported(),
+                    'lastLoginAt' => $sheet->getLastLoginAt() ? $sheet->getLastLoginAt()->format('c') : null,
+                    'createdAt' => $sheet->getCreatedAt()->format('c'),
+                    'inCatalog' => $sheet->isInCatalog(),
+                    'inCatalogAt' => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
+                    'booleanFilter' => TemplateBooleanFilterIdentifier::getBooleanFilterValues($registrationTemplateData),
+                    'filledFilter' => TemplateFilledFilter::getFilledFilterValues($registrationTemplateData, $sheet),
+                    'orderStatus' => $this->getOrderStatus($sheet),
+                    'hasCart' => $this->hasCart($sheet),
+                    'organizationCategory' => $this->getOrganizationCategory($registrationTemplateData),
+                    'content' => implode(' ', $sheetContentView->content),
+                    'city' => $this->getCity($registrationTemplateData),
+                    'zipcode' => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
+                    'country' => $this->buildCountries($registrationTemplateData, $sheet->getEvent()->getLocales()),
+                    'countryCode' => $this->getCountryCode($registrationTemplateData),
+                    'nomenclatureItems' => $this->buildNomenclatureItems($sheet, $fallbackData),
+                    'nomenclatureItemsSupply' => $this
+                        ->buildNomenclatureItems($sheet, $fallbackData, Nomenclature::OBJECTIVE_SUPPLY),
+                    'nomenclatureItemsNeeds' => $this
+                        ->buildNomenclatureItems($sheet, $fallbackData, Nomenclature::OBJECTIVE_NEED),
+                    'keywords' => $this->buildKeywords($sheet),
+                    'hasHappeningParticipation' => $this->happeningParticipationRepository
+                        ->hasParticipationsBySheet($sheet),
+                    'hasMeetingRequest' => $this->meetingRequestRepository->hasRequestSentBySheet($sheet),
+                    'hasPendingMeetingProposition' => $this->meetingRequestRepository
+                        ->hasPendingPropositionReceivedBySheet($sheet),
+                    'hasScheduledMeeting' => $this->meetingRepository->hasScheduledMeeting($sheet),
+                    'hasInvoice' => $this->invoiceRepository->hasInvoice($sheet),
+                    'attend' => $sheet->attend(),
+                    'hasGroup' => $sheet->hasGroup(),
+                    'hasSpot' => $sheet->hasSpot(),
+                    'availableSlotIds' => $this->buildAvailableSlots($sheet),
+                    'reminderDate' => $this->getReminderDate($sheet),
+                ],
+                $sheetContentView->contentByLocale
+            )
+        );
+    }
+
+    private function getFollowerId(Sheet $sheet): ?int
+    {
+        return $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null;
+    }
+
+    private function getParticipantsData(Sheet $sheet, string $fallbackLocale): array
+    {
         $participants = $this->buildParticipants($sheet, $fallbackLocale);
 
         if (!$sheet->hasUserParticipant($sheet->getOwner())) {
             $participants[] = [
-                'email'    => $sheet->getOwner()->getEmail(),
+                'email' => $sheet->getOwner()->getEmail(),
                 'lastname' => $sheet->getOwner()->getAccount()->getLastName(),
             ];
         }
 
-        $owner      = $sheet->getOwner()->getId();
-        $ownerEmail = $sheet->getOwner()->getEmail();
+        return $participants;
+    }
 
-        $categories = $this->buildCategories($sheet);
+    private function hasCart(Sheet $sheet): bool
+    {
+        return \count($this->cartRowRepository->findBySheet($sheet)) > 0;
+    }
 
-        $hasCart                  = \count($this->cartRowRepository->findBySheet($sheet)) > 0;
-        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $fallbackLocale);
-        $filtersValue             = TemplateBooleanFilterIdentifier::getBooleanFilterValues($registrationTemplateData);
-        $organizationCategory     = $registrationTemplateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
-        $filledFilterValues       = TemplateFilledFilter::getFilledFilterValues($registrationTemplateData, $sheet);
+    private function getReminderDate(Sheet $sheet): ?string
+    {
+        return null !== $sheet->getReminderDate() ? $sheet->getReminderDate()->format('c') : null;
+    }
 
-        $content         = [];
+    private function getOrganizationCategory(TemplateData $registrationTemplateData)
+    {
+        $organizationCategory = $registrationTemplateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
+
+        return \in_array($organizationCategory, [false, ''], true) ? null : $organizationCategory;
+    }
+
+    private function getSheetContentView(Sheet $sheet): SheetContentView
+    {
+        if (!$sheet->isInCatalog()) {
+            return new SheetContentView([], []);
+        }
+
+        $content = [];
         $contentByLocale = [];
-
-        $fallbackData      = $this->templateDataFactory->createFromSheet($sheet, $fallbackLocale);
-        $nomenclatureItems = $this->buildNomenclatureItems($fallbackData);
 
         foreach ($sheet->getEvent()->getLocales() as $locale) {
             $templateData = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale);
@@ -137,80 +222,15 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             // Add locale content in same field
             $content[] = $localeContent;
 
-            // if locale field exists in ES, add it
             if (\in_array($locale, AvailableLocales::getAvailableLocalesForContent(), true)) {
                 $contentByLocale[sprintf('content_%s', $locale)] = $localeContent;
             }
         }
 
-        $countryCode = $this->getCountryCode($registrationTemplateData);
-
-        if (false === $countryCode) {
-            $countryCode = null;
-        }
-
-        return new Document($sheet->getId(), array_merge(
-            [
-                'id'                      => $sheet->getId(),
-                'sheetName'               => $this->sheetInfoGuesser->guessSheetTitle($sheet, $fallbackLocale),
-                'state'                   => $sheet->getState(),
-                'validationState'         => $sheet->getValidationState(),
-                'agendaConfirmedStatus'          => $sheet->getAgendaConfirmedStatus(),
-                'phoneValidationStatus'          => $sheet->getPhoneValidationStatus(),
-                'availabilityConfirmationStatus' => $sheet->getAvailabilityConfirmationStatus(),
-                'enabled'                 => $sheet->isEnabled(),
-                'completed'               => $sheet->isCompleted(),
-                'completeness'            => $sheet->getCompleteness(),
-                'type'                    => $sheet->getType()->getId(),
-                'categories'              => $categories,
-                'followUp'                => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
-                'commercialStatus'        => $sheet->getCommercialStatus(),
-                'participantNumber'       => $sheet->countParticipants(),
-                'participants'            => $participants,
-                'event'                   => $sheet->getEvent()->getId(),
-                'owner'                   => $owner,
-                'ownerEmail'              => $ownerEmail,
-                'remainingToPay'          => $this->orderBalance->getRemainingToPay($sheet),
-                'imported'                => $sheet->isImported(),
-                'lastLoginAt'             => $sheet->getLastLoginAt() ? $sheet->getLastLoginAt()->format('c') : null,
-                'createdAt'               => $sheet->getCreatedAt()->format('c'),
-                'inCatalog'               => $sheet->isInCatalog(),
-                'inCatalogAt'             => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
-                'booleanFilter'           => $filtersValue,
-                'filledFilter'            => $filledFilterValues,
-                'orderStatus'             => $this->getOrderStatus($sheet),
-                'hasCart'                 => $hasCart,
-                'organizationCategory'    => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
-                'content'                 => implode(' ', $content),
-                'city'                    => $this->getCity($registrationTemplateData),
-                'zipcode'                 => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
-                'country'                 => $this->buildCountry($registrationTemplateData, $sheet->getEvent()->getLocales()),
-                'countryCode'             => $countryCode,
-                'nomenclatureItems'       => $nomenclatureItems,
-                'nomenclatureItemsSupply' => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_SUPPLY),
-                'nomenclatureItemsNeeds'  => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_NEED),
-                'keywords'                => $this->buildKeywords($sheet),
-                'hasHappeningParticipation'    => $this->happeningParticipationRepository->hasParticipationsBySheet($sheet),
-                'hasMeetingRequest'            => $this->meetingRequestRepository->hasRequestSentBySheet($sheet),
-                'hasPendingMeetingProposition' => $this->meetingRequestRepository->hasPendingPropositionReceivedBySheet($sheet),
-                'hasScheduledMeeting'          => $this->meetingRepository->hasScheduledMeeting($sheet),
-                'hasInvoice'                   => $this->invoiceRepository->hasInvoice($sheet),
-                'attend'                       => $sheet->attend(),
-                'hasGroup'                     => $sheet->hasGroup(),
-                'hasSpot'                      => null !== $sheet->getSpot(),
-                'availableSlotIds'             => $this->buildAvailableSlots($sheet),
-                'reminderDate'                 => null !== $sheet->getReminderDate() ? $sheet->getReminderDate()->format('c') : null,
-            ],
-            $contentByLocale
-        ));
+        return new SheetContentView($contentByLocale, $content);
     }
 
-    /**
-     * @param TemplateObject[] $templatesObjects
-     *
-     * @return string
-     */
-    private function getSearchableContent(array $templatesObjects)
+    private function getSearchableContent(array $templatesObjects): string
     {
         $searchableContent = [];
 
@@ -218,7 +238,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             if ($templateObject instanceof SearchableObjectInterface) {
                 $content = $templateObject->getSearchableContent();
 
-                if (is_array($content)) {
+                if (\is_array($content)) {
                     foreach ($content as $item) {
                         $searchableContent[] = $item;
                     }
@@ -231,50 +251,46 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         return implode(' ', $searchableContent);
     }
 
-    /**
-     * @param TemplateData $templateData
-     *
-     * @return false|string
-     */
-    private function getCountryCode(TemplateData $templateData)
+    private function getCountryCode(TemplateData $templateData): ?string
     {
-        return $templateData->getTaggedContentValue(Tag::SHEET_COUNTRY);
-    }
+        $countryCode = $templateData->getTaggedContentValue(Tag::SHEET_COUNTRY);
 
-    /**
-     * @param TemplateData $templateData
-     * @param array        $locales
-     *
-     * @return array
-     */
-    private function buildCountry(TemplateData $templateData, array $locales)
-    {
-        $country     = [];
-        $countryCode = $this->getCountryCode($templateData);
-
-        if (false !== $countryCode) {
-            $regionBundle = Intl::getRegionBundle();
-
-            foreach ($locales as $key => $locale) {
-                $countryName = $regionBundle->getCountryName($countryCode, $locale);
-
-                $country[$key]['locale']             = $locale;
-                $country[$key]['label']              = $countryName;
-                $country[$key]['label_autocomplete'] = $countryName;
-            }
+        if (false === $countryCode) {
+            return null;
         }
 
-        return $country;
+        return $countryCode;
     }
 
-    /**
-     * @param Sheet $sheet
-     *
-     * @return array
-     */
-    private function buildKeywords(Sheet $sheet)
+    private function buildCountries(TemplateData $templateData, array $locales): array
     {
-        $keywords     = [];
+        $countryCode = $this->getCountryCode($templateData);
+
+        if (null === $countryCode) {
+            return [];
+        }
+
+        $countries = [];
+        $regionBundle = Intl::getRegionBundle();
+
+        foreach ($locales as $key => $locale) {
+            $countryName = $regionBundle->getCountryName($countryCode, $locale);
+
+            $countries[$key]['locale'] = $locale;
+            $countries[$key]['label'] = $countryName;
+            $countries[$key]['label_autocomplete'] = $countryName;
+        }
+
+        return $countries;
+    }
+
+    private function buildKeywords(Sheet $sheet): array
+    {
+        if (!$sheet->isInCatalog()) {
+            return [];
+        }
+
+        $keywords = [];
         $keywordIndex = 0;
 
         foreach ($sheet->getEvent()->getLocales() as $locale) {
@@ -284,17 +300,17 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 if ($templateObject instanceof IndexableObjectInterface) {
                     $content = $templateObject->getSearchableContent();
 
-                    if (is_array($content)) {
+                    if (\is_array($content)) {
                         foreach ($content as $item) {
-                            $keywords[$keywordIndex]['label']              = $item;
+                            $keywords[$keywordIndex]['label'] = $item;
                             $keywords[$keywordIndex]['label_autocomplete'] = $item;
-                            $keywords[$keywordIndex]['locale']             = $locale;
+                            $keywords[$keywordIndex]['locale'] = $locale;
                             ++$keywordIndex;
                         }
                     } elseif (null !== $content && !empty($content)) {
-                        $keywords[$keywordIndex]['label']              = $content;
+                        $keywords[$keywordIndex]['label'] = $content;
                         $keywords[$keywordIndex]['label_autocomplete'] = $content;
-                        $keywords[$keywordIndex]['locale']             = $locale;
+                        $keywords[$keywordIndex]['locale'] = $locale;
                         ++$keywordIndex;
                     }
                 }
@@ -304,12 +320,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         return $keywords;
     }
 
-    /**
-     * @param TemplateData $templateData
-     *
-     * @return null|string
-     */
-    private function getTwoFirstCharsOfFranceZipcode(TemplateData $templateData)
+    private function getTwoFirstCharsOfFranceZipcode(TemplateData $templateData): ?string
     {
         $countryCode = $this->getCountryCode($templateData);
 
@@ -324,7 +335,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         if (4 === mb_strlen($zipcode)) {
-            return '0' . substr($zipcode, 0, 1);
+            return '0' . $zipcode[0];
         }
 
         if (5 === mb_strlen($zipcode)) {
@@ -334,28 +345,17 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         return null;
     }
 
-    /**
-     * @param TemplateData $templateData
-     *
-     * @return null|string
-     */
-    private function getCity(TemplateData $templateData)
+    private function getCity(TemplateData $templateData): ?string
     {
         return $templateData->getTaggedContentValue(Tag::SHEET_CITY) ?: null;
     }
 
-    /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     *
-     * @return array
-     */
-    private function buildParticipants(Sheet $sheet, $locale)
+    private function buildParticipants(Sheet $sheet, string $locale): array
     {
         $participants = array_map(
             function (Participant $participant) use ($locale) {
                 return [
-                    'email'    => $participant->getUser()->getEmail(),
+                    'email' => $participant->getUser()->getEmail(),
                     'lastname' => $this->participantInfoGuesser->guessParticipantLastName(
                         $participant,
                         $locale
@@ -373,11 +373,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     }
 
     /**
-     * @param Sheet $sheet
-     *
-     * @return array
+     * @return int[] Category ids
      */
-    private function buildCategories(Sheet $sheet)
+    private function buildCategories(Sheet $sheet): array
     {
         $categories = array_map(
             function (Category $category) {
@@ -389,15 +387,16 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         return $categories;
     }
 
-    /**
-     * @param TemplateData $data
-     * @param string       $objective
-     *
-     * @return array
-     */
-    private function buildNomenclatureItems(TemplateData $data, $objective = Nomenclature::OBJECTIVE_NONE)
-    {
-        $nomenclatureItems   = [];
+    private function buildNomenclatureItems(
+        Sheet $sheet,
+        TemplateData $data,
+        string $objective = Nomenclature::OBJECTIVE_NONE
+    ): array {
+        if (!$sheet->isInCatalog()) {
+            return [];
+        }
+
+        $nomenclatureItems = [];
         $nomenclatureObjects = $data->getNomenclatureObjectsByObjective($objective);
 
         foreach ($nomenclatureObjects as $nomenclatureObject) {
@@ -414,15 +413,20 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     }
 
     /**
-     * @param Sheet $sheet
-     *
-     * @return array
+     * @return int[] AvailableSlot ids
      */
-    private function buildAvailableSlots(Sheet $sheet)
+    private function buildAvailableSlots(Sheet $sheet): array
     {
-        $ids = array_map(function (Sheet\AvailableSlot $availableSlot) {
-            return ['id' => $availableSlot->getSlot()->getId()];
-        }, $sheet->getAvailableSlots());
+        if (!$sheet->isInCatalog()) {
+            return [];
+        }
+
+        $ids = array_map(
+            function (Sheet\AvailableSlot $availableSlot) {
+                return ['id' => $availableSlot->getSlot()->getId()];
+            },
+            $sheet->getAvailableSlots()
+        );
 
         return $ids;
     }
