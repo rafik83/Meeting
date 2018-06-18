@@ -613,11 +613,23 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
+     * @param string $locale
+     *
      * @return bool
      */
-    public function isSvgLogo()
+    public function hasSvgLogo(string $locale): bool
     {
-        return 'svg' === $this->logoExtension;
+        return 'svg' === $this->getLocalizedLogoExtension($locale);
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public function hasSvgMobileLogo(string $locale): bool
+    {
+        return 'svg' === $this->getLocalizedMobileLogoExtension($locale);
     }
 
     /**

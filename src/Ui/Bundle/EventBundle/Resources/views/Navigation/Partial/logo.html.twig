@@ -1,9 +1,9 @@
-{% if menuHeaderView.event.logo != null %}
+{% if menuHeaderView.event.localizedLogo(app.request.locale) != null %}
     <a href="{{ path('event') }}">
-        {% if menuHeaderView.event.isSvgLogo %}
-            <img src="{{ menuHeaderView.event.logo }}" class="logo">
+        {% if menuHeaderView.event.hasSvgLogo(app.request.locale) %}
+            <img src="{{ asset(menuHeaderView.event.localizedLogo(app.request.locale)) }}" class="logo">
         {% else %}
-            <img src="{{ menuHeaderView.event.logo|imagine_filter('event_header_logo') }}" class="logo">
+            <img src="{{ menuHeaderView.event.localizedLogo(app.request.locale)|imagine_filter('event_header_logo') }}" class="logo">
         {% endif %}
     </a>
 {% endif %}
