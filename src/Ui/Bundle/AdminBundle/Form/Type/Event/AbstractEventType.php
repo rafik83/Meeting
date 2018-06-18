@@ -31,24 +31,16 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 abstract class AbstractEventType extends AbstractType
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $supportedCurrencies;
 
-    /**
-     * @var PrefixRepositoryInterface
-     */
+    /** @var PrefixRepositoryInterface */
     private $prefixRepository;
 
-    /**
-     * @var AuthorizationCheckerInterface
-     */
+    /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $preferredLocales;
 
     /**
@@ -95,12 +87,6 @@ abstract class AbstractEventType extends AbstractType
             ->add('fallback', LocaleType::class, [
                 'preferred_choices' => $this->preferredLocales,
             ])
-            ->add('logo', FileType::class, [
-                'required' => false,
-                'attr'     => [
-                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
-                ],
-            ])
             ->add('country', CountryType::class)
             ->add('mode', VatModeType::class, [
                 'expanded' => true,
@@ -114,30 +100,13 @@ abstract class AbstractEventType extends AbstractType
                     return Intl::getCurrencyBundle()->getCurrencyName($currentChoice, $currentLocale);
                 },
             ])
-            ->add('backgroundImage', FileType::class, [
-                'required' => false,
-                'attr'        => [
-                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
-                ],
-            ])
-            ->add('backgroundColor', TextType::class, [
-                'required' => true,
-            ])
-            ->add('leftColor', TextType::class)
-            ->add('rightColor', TextType::class)
-            ->add('textColor', TextType::class)
             ->add('organiserName', TextType::class, [
                 'required' => true,
             ])
             ->add('emailTeam', EmailType::class, [
                 'required' => false,
-            ]);
-
-        if (null !== $event && $event->getConfiguration()->hasBackgroundImage()) {
-            $builder->add('isBackgroundImageToRemove', CheckboxType::class, [
-                'required' => false,
-            ]);
-        }
+            ])
+        ;
 
         // default invoicePrefix choice type options
         $invoicePrefixOptions = [
@@ -191,9 +160,17 @@ abstract class AbstractEventType extends AbstractType
 
         $builder->add('invoicePrefix', ChoiceType::class, $invoicePrefixOptions);
 
-        $builder->add('welcomeEnabled', CheckboxType::class, [
-            'required' => false,
-        ]);
+        $builder
+            ->add('welcomeEnabled', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('disabledEmailChanging', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('disabledPasswordChanging', CheckboxType::class, [
+                'required' => false,
+            ])
+        ;
     }
 
     /**

@@ -205,6 +205,8 @@ form.event_create.children.backgroundImage.label: 'Image de fond'
 form.event_create.children.country.label: Pays
 form.event_create.children.currency.label: Devise
 form.event_create.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
+form.event_create.children.disabledEmailChanging.label: 'Changement d''email désactivé'
+form.event_create.children.disabledPasswordChanging.label: 'Changement de mot de passe désactivé'
 form.event_create.children.domain.label: 'Domaine (complet)'
 form.event_create.children.domain.placeholder: 'Nom de domaine complet de l''événement: *.vimeet.events'
 form.event_create.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
@@ -265,6 +267,18 @@ form.event_update.children.translations.prototype.children.description.label: 'E
 form.event_update.children.vat.label: TVA
 form.event_update.children.visible.label: Visible
 form.event_update.children.welcomeEnabled.label: 'Popup de bienvenue'
+form.event_update_design.children.backgroundColor.label: 'Couleur de fond'
+form.event_update_design.children.backgroundImage.label: 'Image de fond'
+form.event_update_design.children.headerLeftColor.label: 'Couleur de gauche du Header'
+form.event_update_design.children.headerRightColor.label: 'Couleur de droite du Header'
+form.event_update_design.children.removeBackgroundImage.label: 'Supprimer l''image de fond actuelle'
+form.event_update_design.children.localizedImages.prototype.children.logo.label: 'Logo desktop'
+form.event_update_design.children.localizedImages.prototype.children.mobileLogo.label: 'Logo mobile'
+form.event_update_design.children.localizedImages.prototype.children.undefined: 'Non défini'
+form.event_update_design.children.leftColor.label: 'Couleur de gauche des CTA'
+form.event_update_design.children.rightColor.label: 'Couleur de droite des CTA'
+form.event_update_design.children.submit.label: 'Sauvegarder'
+form.event_update_design.children.textColor.label: 'Couleur du texte'
 form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
 form.extra_parameter_create.children.name.label: Nom
 form.extra_parameter_create.children.submit.label: Enregistrer

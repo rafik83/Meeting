@@ -29,12 +29,6 @@ class Update extends AbstractEvent
      */
     public $analyticsCode = null;
 
-    /** @var bool */
-    public $disabledEmailChanging;
-
-    /** @var bool */
-    public $disabledPasswordChanging;
-
     /**
      * @param Model\Event $event
      */
@@ -51,15 +45,11 @@ class Update extends AbstractEvent
         $this->country = $event->getCountry();
         $this->vat = $event->getVat();
         $this->currency = $event->getCurrency();
-        $this->leftColor = $event->getConfiguration()->getLeftColor();
-        $this->rightColor = $event->getConfiguration()->getRightColor();
-        $this->textColor = $event->getConfiguration()->getTextColor();
         $this->organiserName = $event->getOrganiserName();
         $this->emailTeam = $event->getEmailTeam();
         $this->invoicePrefix = $event->getInvoicePrefix();
         $this->analyticsCode = $event->getConfiguration()->getAnalyticsCode();
         $this->visible = $event->isVisible();
-        $this->backgroundColor = $event->getConfiguration()->getBackgroundColor();
         $this->welcomeEnabled = $event->isWelcomeEnabled();
         $this->disabledEmailChanging = $event->isDisabledEmailChanging();
         $this->disabledPasswordChanging = $event->isDisabledPasswordChanging();
@@ -74,33 +64,10 @@ class Update extends AbstractEvent
     /**
      * @return bool
      */
-    public function isColorsUpdated()
+    public function isLocalesUpdated(): bool
     {
-        return
-            $this->leftColor  !== $this->event->getConfiguration()->getLeftColor()  ||
-            $this->rightColor !== $this->event->getConfiguration()->getRightColor() ||
-            $this->textColor  !== $this->event->getConfiguration()->getTextColor();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isLocalesUpdated()
-    {
-        return
-            $this->locales !== $this->event->getLocales() ||
-            $this->fallback !== $this->event->getFallback();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBackgroundUpdated(): bool
-    {
-        $eventBackgroundImage = $this->event->getConfiguration()->getBackgroundImage();
-        $eventBackgroundColor = $this->event->getConfiguration()->getBackgroundColor();
-
-        return $this->backgroundColor !== $eventBackgroundColor
-            || (null !== $this->backgroundImage && $this->backgroundImage !== $eventBackgroundImage);
+        return $this->locales !== $this->event->getLocales()
+            || $this->fallback !== $this->event->getFallback()
+        ;
     }
 }

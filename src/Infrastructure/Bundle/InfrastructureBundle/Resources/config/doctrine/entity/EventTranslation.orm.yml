@@ -23,6 +23,18 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
         paymentFooter:
             type: text
             nullable: true
+        logo:
+            type: string
+            nullable: true
+        logoExtension:
+            type: string
+            nullable: true
+        mobileLogo:
+            type: string
+            nullable: true
+        mobileLogoExtension:
+            type: string
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

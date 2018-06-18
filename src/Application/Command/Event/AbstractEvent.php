@@ -10,107 +10,59 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class AbstractEvent
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var UploadedFile
-     */
+    /** @var UploadedFile */
     public $logo;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $locales;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $timeZone;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $domain;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $fallback;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $country;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $mode;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $vat;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $currency;
 
-    /**
-     * @var string
-     */
-    public $leftColor;
-
-    /**
-     * @var string
-     */
-    public $rightColor;
-
-    /**
-     * @var string
-     */
-    public $textColor;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     public $organiserName;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $emailTeam;
 
-    /**
-     * @var null|Prefix
-     */
+    /** @var null|Prefix */
     public $invoicePrefix;
 
     /** @var bool */
     public $visible;
 
-    /** @var null|Event */
-    public $duplicatedFrom;
-
-    /** @var null|UploadedFile */
-    public $backgroundImage;
-
-    /** @var string */
-    public $backgroundColor;
-
-    /** @var bool */
-    public $isBackgroundImageToRemove = false;
-
     /** @var bool */
     public $welcomeEnabled;
+
+    /** @var bool */
+    public $disabledEmailChanging;
+
+    /** @var bool */
+    public $disabledPasswordChanging;
 }

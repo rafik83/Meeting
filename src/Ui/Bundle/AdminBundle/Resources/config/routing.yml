@@ -168,6 +168,13 @@ admin_event_billing_configuration:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:billingConfiguration }
 
+admin_event_design_update:
+    path: /event/{event}/design/update
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Design\UpdateDesignAction }
+
 admin_event_practical_info_update:
     path: /event/{event}/practical-info
     requirements:
