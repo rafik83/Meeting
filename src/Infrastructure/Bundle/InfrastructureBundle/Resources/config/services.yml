@@ -1354,6 +1354,13 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ChangeType }
+    Proximum\Vimeet\Application\Command\Sheet\ConvertFilesystemTreeToZipCommandHandler:
+        arguments:
+            - '@repository.file_repository'
+            - '@adapter.file_system_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ConvertFilesystemTreeToZipCommand }
     command.product.create_option_handler:
         class: Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler
         arguments:
