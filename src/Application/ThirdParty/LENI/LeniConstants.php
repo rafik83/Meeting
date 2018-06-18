@@ -34,6 +34,7 @@ class LeniConstants
     public const ATTENDANCE = 'Inscrit';
 
     public const LONG_FIELD = 255;
+    public const MEDIUM_FIELD = 100;
     public const SHORT_FIELD = 50;
 
     public const LENI_COL_USER_ID = 'Id';
