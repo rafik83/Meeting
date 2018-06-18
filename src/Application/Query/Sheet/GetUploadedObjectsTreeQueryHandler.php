@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Behat\Transliterator\Transliterator;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectNodeView;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectsTreeView;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectView;
@@ -58,29 +59,32 @@ class GetUploadedObjectsTreeQueryHandler
                     $uploadedObjectNodeView = $uploadedObjectsTreeView->tree[$object->getKey()];
                 }
 
-                if (isset($sheet->getRegistrationData()[$object->getKey()]['path'])) {
+                if ($object->hasTag(Tag::SHEET_DATA) && isset($sheet->getRegistrationData()[$object->getKey()]['path'])) {
                     $uploadedObjectNodeView->addUploadedObjectView(
                         new UploadedObjectView(
                             $sheet->getRegistrationData()[$object->getKey()]['path'],
                             $this->sheetUploadObjectFilename($sheet, $object->getKey()),
-                            $object->isCrypted()
+                            $object->isCrypted(),
+                            $sheet
                         )
                     );
 
                     $canAddNode = true;
-                }
+                } elseif ($object->hasTag(Tag::PARTICIPANT_DATA)) {
+                    foreach ($sheet->getParticipantsArray() as $participant) {
+                        if (isset($participant->getData()[$object->getKey()]['path'])) {
+                            $uploadedObjectNodeView->addUploadedObjectView(
+                                new UploadedObjectView(
+                                    $participant->getData()[$object->getKey()]['path'],
+                                    $this->participantUploadObjectFilename($sheet, $participant, $object->getKey()),
+                                    $object->isCrypted(),
+                                    null,
+                                    $participant->getUser()
+                                )
+                            );
 
-                foreach ($sheet->getParticipantsArray() as $participant) {
-                    if (isset($participant->getData()[$object->getKey()]['path'])) {
-                        $uploadedObjectNodeView->addUploadedObjectView(
-                            new UploadedObjectView(
-                                $participant->getData()[$object->getKey()]['path'],
-                                $this->participantUploadObjectFilename($sheet, $participant, $object->getKey()),
-                                $object->isCrypted()
-                            )
-                        );
-
-                        $canAddNode = true;
+                            $canAddNode = true;
+                        }
                     }
                 }
 

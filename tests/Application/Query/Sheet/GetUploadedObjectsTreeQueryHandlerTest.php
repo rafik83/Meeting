@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQuery;
 use Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectNodeView;
@@ -20,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
@@ -33,11 +35,18 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
         $admin->getLocale()->shouldBeCalled()->willReturn('fr');
         $type = $this->prophesize(Type::class);
 
+        $user = $this->prophesize(User::class);
+        $user2 = $this->prophesize(User::class);
+
         $object1 = $this->prophesize(UploadObject::class);
         $object1->isCrypted()->shouldBeCalled()->willReturn(true);
+        $object1->hasTag(Tag::SHEET_DATA)->shouldBeCalled()->willReturn(true);
+        $object1->hasTag(Tag::PARTICIPANT_DATA)->shouldBeCalled()->willReturn(false);
         $object1->getKey()->shouldBeCalled()->willReturn('Mb7d3M765e');
         $object1->getLabel('fr')->shouldBeCalled()->willReturn('Label 1');
         $object2 = $this->prophesize(UploadObject::class);
+        $object2->hasTag(Tag::SHEET_DATA)->shouldBeCalled()->willReturn(false);
+        $object2->hasTag(Tag::PARTICIPANT_DATA)->shouldBeCalled()->willReturn(true);
         $object2->isCrypted()->shouldBeCalled()->willReturn(false);
         $object2->getKey()->shouldBeCalled()->willReturn('Med79Mea70');
         $object2->getLabel('fr')->shouldBeCalled()->willReturn('Label 2');
@@ -61,6 +70,7 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
 
         $participant = $this->prophesize(Participant::class);
         $participant->getIdAndFullName()->shouldBeCalled()->willReturn('1-mathieu-marchois');
+        $participant->getUser()->willReturn($user->reveal());
         $participant->getData()
             ->shouldBeCalled()
             ->willReturn([
@@ -73,6 +83,7 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
 
         $participant2 = $this->prophesize(Participant::class);
         $participant2->getIdAndFullName()->shouldBeCalled()->willReturn('2-richard-hanna');
+        $participant2->getUser()->willReturn($user2->reveal());
         $participant2->getData()
             ->shouldBeCalled()
             ->willReturn([
@@ -99,10 +110,16 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
         $handler = new GetUploadedObjectsTreeQueryHandler($templateDataFactory->reveal());
 
         $node1 = new UploadedObjectNodeView('Mb7d3M765e', 'Label 1');
-        $node1->addUploadedObjectView(new UploadedObjectView('/path/to/file1', '1-title-1.jpg', true));
+        $node1->addUploadedObjectView(
+            new UploadedObjectView('/path/to/file1', '1-title-1.jpg', true, $sheet1->reveal())
+        );
         $node2 = new UploadedObjectNodeView('Med79Mea70', 'Label 2');
-        $node2->addUploadedObjectView(new UploadedObjectView('/path/to/file2', '2-title-2-1-mathieu-marchois.jpg', false));
-        $node2->addUploadedObjectView(new UploadedObjectView('/path/to/file3', '2-title-2-2-richard-hanna.jpg', false));
+        $node2->addUploadedObjectView(
+            new UploadedObjectView('/path/to/file2', '2-title-2-1-mathieu-marchois.jpg', false, null, $user->reveal())
+        );
+        $node2->addUploadedObjectView(
+            new UploadedObjectView('/path/to/file3', '2-title-2-2-richard-hanna.jpg', false, null, $user2->reveal())
+        );
 
         $expectedResult = new UploadedObjectsTreeView();
         $expectedResult->addNode($node1, 'Mb7d3M765e');

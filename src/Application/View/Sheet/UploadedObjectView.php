@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+
 class UploadedObjectView
 {
     /** @var string */
@@ -21,10 +24,23 @@ class UploadedObjectView
     /** @var bool */
     public $crypted;
 
-    public function __construct(string $path, string $filename, bool $crypted)
-    {
+    /** @var null|Sheet */
+    public $sheet;
+
+    /** @var null|User */
+    public $user;
+
+    public function __construct(
+        string $path,
+        string $filename,
+        bool $crypted,
+        ?Sheet $sheet = null,
+        ?User $user = null
+    ) {
         $this->path = $path;
         $this->filename = $filename;
         $this->crypted = $crypted;
+        $this->sheet = $sheet;
+        $this->user = $user;
     }
 }
