@@ -78,7 +78,7 @@ class GetUploadedObjectsTreeQueryHandler
                                     $participant->getData()[$object->getKey()]['path'],
                                     $this->participantUploadObjectFilename($sheet, $participant, $object->getKey()),
                                     $object->isCrypted(),
-                                    null,
+                                    $sheet,
                                     $participant->getUser()
                                 )
                             );

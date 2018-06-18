@@ -992,6 +992,15 @@ services:
             - '@command.sheet.remove_data_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveImage }
+    Proximum\Vimeet\Application\Command\Sheet\SaveTreeToFileSystemCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
+            - '@adapter.file_system_adapter'
+            - '%shared_uploaded_files%'
+            - '%infrastructure.encrypted_files_path%'
+            - '%kernel.project_dir%/web'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SaveTreeToFileSystemCommand }
     command.sheet.submit_validation_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\SubmitValidationHandler
         arguments:

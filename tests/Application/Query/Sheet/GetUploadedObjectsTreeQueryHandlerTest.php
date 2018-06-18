@@ -115,10 +115,10 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
         );
         $node2 = new UploadedObjectNodeView('Med79Mea70', 'Label 2');
         $node2->addUploadedObjectView(
-            new UploadedObjectView('/path/to/file2', '2-title-2-1-mathieu-marchois.jpg', false, null, $user->reveal())
+            new UploadedObjectView('/path/to/file2', '2-title-2-1-mathieu-marchois.jpg', false, $sheet2->reveal(), $user->reveal())
         );
         $node2->addUploadedObjectView(
-            new UploadedObjectView('/path/to/file3', '2-title-2-2-richard-hanna.jpg', false, null, $user2->reveal())
+            new UploadedObjectView('/path/to/file3', '2-title-2-2-richard-hanna.jpg', false, $sheet2->reveal(), $user2->reveal())
         );
 
         $expectedResult = new UploadedObjectsTreeView();

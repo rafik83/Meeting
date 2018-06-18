@@ -24,7 +24,7 @@ class UploadedObjectView
     /** @var bool */
     public $crypted;
 
-    /** @var null|Sheet */
+    /** @var Sheet */
     public $sheet;
 
     /** @var null|User */
@@ -34,7 +34,7 @@ class UploadedObjectView
         string $path,
         string $filename,
         bool $crypted,
-        ?Sheet $sheet = null,
+        Sheet $sheet,
         ?User $user = null
     ) {
         $this->path = $path;
