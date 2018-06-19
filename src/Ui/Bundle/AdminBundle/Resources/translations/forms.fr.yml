@@ -207,6 +207,7 @@ form.event_create.children.currency.label: Devise
 form.event_create.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
 form.event_create.children.domain.label: 'Domaine (complet)'
 form.event_create.children.domain.placeholder: 'Nom de domaine complet de l''événement: *.vimeet.events'
+form.event_create.children.domain.help: 'Caractères autorisés : a-z 0-9 et -'
 form.event_create.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_create.children.fallback.label: 'Langue par défaut'
 form.event_create.children.invoicePrefix.label: 'Préfixe de facturation'

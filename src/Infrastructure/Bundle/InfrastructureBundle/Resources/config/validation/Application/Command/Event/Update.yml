@@ -9,8 +9,7 @@ Proximum\Vimeet\Application\Command\Event\Update:
             - Length:
                 max: 63
             - Regex:
-                pattern: '/^\S*$/'
-                message: validators.whitespace
+                pattern: '/^[a-z0-9-]+$/'
         timeZone:
             - NotBlank: ~
         locales:
