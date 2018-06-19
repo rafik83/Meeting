@@ -85,7 +85,7 @@ class DuplicateAction
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->commandBus->handle($duplicate);
 
-            return new RedirectResponse($this->router->generate('admin_template_registration_builder', [
+            return new RedirectResponse($this->router->generate('admin_template_registration_build', [
                 'template' => $result->registrationTemplate->getId(),
                 'locale'   => $result->registrationTemplate->getFallback(),
             ]));
