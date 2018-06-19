@@ -1358,6 +1358,8 @@ services:
         arguments:
             - '@repository.file_repository'
             - '@adapter.file_system_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ConvertFilesystemTreeToZipCommand }
@@ -2298,6 +2300,9 @@ services:
             - '@adapter.file_system_adapter'
             - '%kernel.root_dir%/../web'
             - '@datetime'
+    Proximum\Vimeet\Infrastructure\Adapter\TransliteratorAdapter: ~
+    Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter: ~
+    Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter: ~
     adapter.authentication_manager:
         class: Proximum\Vimeet\Infrastructure\Adapter\AuthenticationManager
         arguments:
@@ -3209,6 +3214,7 @@ services:
     Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQueryHandler:
         arguments:
             - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\TransliteratorAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQuery }
 

@@ -11,9 +11,10 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\FinderAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\ZipArchiveAdapterInterface;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
-use Symfony\Component\Finder\Finder;
 
 class ConvertFilesystemTreeToZipCommandHandler
 {
@@ -23,51 +24,41 @@ class ConvertFilesystemTreeToZipCommandHandler
     /** @var FileSystemAdapterInterface */
     private $fileSystemAdapter;
 
+    /** @var FinderAdapterInterface */
+    private $finderAdapter;
+
+    /** @var ZipArchiveAdapterInterface */
+    private $zipArchiveAdapter;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
     public function __construct(
         FileRepositoryInterface $fileRepository,
         FileSystemAdapterInterface $fileSystemAdapter,
+        FinderAdapterInterface $finderAdapter,
+        ZipArchiveAdapterInterface $zipArchiveAdapter,
         \DateTimeInterface $dateTime
     ) {
         $this->fileRepository = $fileRepository;
         $this->fileSystemAdapter = $fileSystemAdapter;
+        $this->finderAdapter = $finderAdapter;
+        $this->zipArchiveAdapter = $zipArchiveAdapter;
         $this->dateTime = $dateTime;
     }
 
     public function handle(ConvertFilesystemTreeToZipCommand $command): void
     {
-        $path = explode('/', $command->rootDir);
-        $rootFolder = end($path);
-
-        $finder = new Finder();
-        $files = $finder->files()->in($command->rootDir);
+        $files = $this->finderAdapter->filesIn($command->rootDir);
 
         if (0 === $files->count()) {
             return;
         }
 
-        $zip = new \ZipArchive();
+        $path = explode('/', $command->rootDir);
+        $rootFolder = end($path);
 
-        if (true !== $zip->open($command->rootDir . '.zip', \ZipArchive::CREATE)) {
-            return;
-        }
-
-        /** @var \SplFileInfo $file */
-        foreach ($files as $file) {
-            $zip->addFile(
-                $file->getRealPath(),
-                str_replace($command->rootDir . '/', '', $file->getRealPath())
-            );
-        }
-
-        if ($command->password) {
-            $zip->setPassword($command->password);
-        }
-
-        $zip->close();
-
+        $this->zipArchiveAdapter->zipFiles($files, $command->rootDir . '.zip', $command->rootDir, $command->password);
         $this->fileRepository->add(new File($rootFolder . '.zip', $this->dateTime));
         $this->fileSystemAdapter->remove($command->rootDir);
     }

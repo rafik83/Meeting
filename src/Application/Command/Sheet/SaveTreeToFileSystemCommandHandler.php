@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Nelmio\Alice\support\models\User;
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\UserEventDecryptFileInterface;
+use Proximum\Vimeet\Application\View\Sheet\UploadedObjectView;
 
 class SaveTreeToFileSystemCommandHandler
 {
@@ -57,24 +58,28 @@ class SaveTreeToFileSystemCommandHandler
                 $destinationPath = $nodeDir . '/' . $uploadedObject->filename;
 
                 if (true === $uploadedObject->crypted) {
-                    $owner = $uploadedObject->user instanceof User ? $uploadedObject->user : $uploadedObject->sheet->getOwner();
-                    $originalPath = $this->encryptedFilesPath . $uploadedObject->path;
+                    $this->handleCryptedFile($uploadedObject, $destinationPath);
 
-                    $this->userEventDecryptFile->decryptFile(
-                        $uploadedObject->sheet->getEvent(),
-                        $owner,
-                        $originalPath,
-                        $destinationPath
-                    );
-                } else {
-                    $this->fileSystemAdapter->copy(
-                        $this->webDir. $uploadedObject->path,
-                        $destinationPath
-                    );
+                    continue;
                 }
+
+                $this->fileSystemAdapter->copy($this->webDir. $uploadedObject->path, $destinationPath);
             }
         }
 
         return $rootDir;
+    }
+
+    private function handleCryptedFile(UploadedObjectView $uploadedObjectView, string $destinationPath): void
+    {
+        $owner = $uploadedObjectView->user instanceof User ? $uploadedObjectView->user : $uploadedObjectView->sheet->getOwner();
+        $originalPath = $this->encryptedFilesPath . $uploadedObjectView->path;
+
+        $this->userEventDecryptFile->decryptFile(
+            $uploadedObjectView->sheet->getEvent(),
+            $owner,
+            $originalPath,
+            $destinationPath
+        );
     }
 }

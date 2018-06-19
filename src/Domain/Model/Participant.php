@@ -323,7 +323,7 @@ class Participant implements MailRecipientInterface
 
     public function getIdAndFullName(): string
     {
-        return $this->getId().'_'.$this->getFullname();
+        return sprintf('%d-%s', $this->getId(), $this->getFullname());
     }
 
     /**

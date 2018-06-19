@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet;
 
-use Behat\Transliterator\Transliterator;
-
 class UploadedObjectNodeView
 {
     /** @var string */
@@ -20,9 +18,9 @@ class UploadedObjectNodeView
     /** @var UploadedObjectView[] */
     public $uploadedObjectsView;
 
-    public function __construct(string $key, string $label)
+    public function __construct(string $folder)
     {
-        $this->folder = Transliterator::urlize($key.'-'.$label);
+        $this->folder = $folder;
     }
 
     public function addUploadedObjectView(UploadedObjectView $uploadedObjectView): void

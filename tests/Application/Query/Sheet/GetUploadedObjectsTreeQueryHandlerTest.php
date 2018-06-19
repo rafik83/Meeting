@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\TransliteratorAdapterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQuery;
 use Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQueryHandler;
@@ -31,6 +32,7 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
     public function testHandle(): void
     {
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $transliteratorAdapter = $this->prophesize(TransliteratorAdapterInterface::class);
         $admin = $this->prophesize(Admin::class);
         $admin->getLocale()->shouldBeCalled()->willReturn('fr');
         $type = $this->prophesize(Type::class);
@@ -107,13 +109,21 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
         $sheet2->getRegistrationData()->shouldBeCalled()->willReturn([]);
         $sheet2->getParticipantsArray()->shouldBeCalled()->willReturn([$participant->reveal(), $participant2->reveal()]);
 
-        $handler = new GetUploadedObjectsTreeQueryHandler($templateDataFactory->reveal());
+        $transliteratorAdapter->urlize([1, 'Title 1'])->shouldBeCalled()->willReturn('1-title-1');
+        $transliteratorAdapter->urlize([2, 'Title 2', '1-mathieu-marchois'])->shouldBeCalled()->willReturn('2-title-2-1-mathieu-marchois');
+        $transliteratorAdapter->urlize([2, 'Title 2', '2-richard-hanna'])->shouldBeCalled()->willReturn('2-title-2-2-richard-hanna');
 
-        $node1 = new UploadedObjectNodeView('Mb7d3M765e', 'Label 1');
+        $handler = new GetUploadedObjectsTreeQueryHandler($templateDataFactory->reveal(), $transliteratorAdapter->reveal());
+
+        $transliteratorAdapter->urlize(['Mb7d3M765e', 'Label 1'])->shouldBeCalled()->willReturn('Mb7d3M765e-label-1');
+
+        $node1 = new UploadedObjectNodeView('Mb7d3M765e-label-1');
         $node1->addUploadedObjectView(
             new UploadedObjectView('/path/to/file1', '1-title-1.jpg', true, $sheet1->reveal())
         );
-        $node2 = new UploadedObjectNodeView('Med79Mea70', 'Label 2');
+
+        $transliteratorAdapter->urlize(['Med79Mea70', 'Label 2'])->shouldBeCalled()->willReturn('Med79Mea70-label-2');
+        $node2 = new UploadedObjectNodeView('Med79Mea70-label-2');
         $node2->addUploadedObjectView(
             new UploadedObjectView('/path/to/file2', '2-title-2-1-mathieu-marchois.jpg', false, $sheet2->reveal(), $user->reveal())
         );
@@ -124,7 +134,6 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
         $expectedResult = new UploadedObjectsTreeView();
         $expectedResult->addNode($node1, 'Mb7d3M765e');
         $expectedResult->addNode($node2, 'Med79Mea70');
-
         $result = $handler->handle(
             new GetUploadedObjectsTreeQuery(
                 [$sheet1->reveal(), $sheet2->reveal()],
