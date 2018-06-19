@@ -12,27 +12,28 @@ namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\View\Invoice\ExportView;
 use Proximum\Vimeet\Domain\View\Normalizer\InvoicesNormalizerView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
-    const COL_EVENT_ID                = 'event_id';
-    const COL_EVENT_NAME              = 'event_name';
-    const COL_OWNER_ID                = 'owner_id';
-    const COL_SHEET_ID                = 'sheet_id';
-    const COL_SHEET_TITLE             = 'sheet_title';
-    const COL_INVOICE_DATE            = 'invoice_date';
-    const COL_INVOICE_NUMBER          = 'invoice_number';
-    const COL_TOTAL                   = 'total';
-    const COL_TOTAL_WITH_VAT          = 'total_with_vat';
-    const COL_VAT_AMOUNT              = 'vat_amount';
-    const COL_BALANCE                 = 'balance';
-    const COL_INTRA_COMMUNITY_VAT     = 'vat_number';
-    const COL_BILLING_CONTACT_COUNTRY = 'billing_contact_country';
-    const COL_ANALYTIC_CODE           = 'analytic_code';
-    const EXPORT_BASE_KEY             = 'admin.invoice.export.fields.';
+    private const COL_EVENT_ID = 'event_id';
+    private const COL_EVENT_NAME = 'event_name';
+    private const COL_OWNER_ID = 'owner_id';
+    private const COL_SHEET_ID = 'sheet_id';
+    private const COL_SHEET_TITLE = 'sheet_title';
+    private const COL_INVOICE_DATE = 'invoice_date';
+    private const COL_INVOICE_NUMBER = 'invoice_number';
+    private const COL_TOTAL_FOR_VAT_RATE = 'total_for_vat_rate';
+    private const COL_TOTAL_WITH_VAT_FOR_VAT_RATE  = 'total_with_vat_for_vat_rate';
+    private const COL_VAT_AMOUNT_FOR_VAT_RATE  = 'vat_amount_for_vat_rate';
+    private const COL_BALANCE = 'balance';
+    private const COL_INTRA_COMMUNITY_VAT = 'vat_number';
+    private const COL_BILLING_CONTACT_COUNTRY = 'billing_contact_country';
+    private const COL_ANALYTIC_CODE = 'analytic_code';
+    private const EXPORT_BASE_KEY = 'admin.invoice.export.fields.';
 
     /**
      * @var string
@@ -56,17 +57,11 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
      */
     public function normalize($object, $format = null, array $context = [])
     {
-        $rawInvoices        = [];
         $normalizedInvoices = [];
+        $charset = $context['charset'] ?? Charset::WINDOWS_1252;
 
         foreach ($object->exportViews as $invoice) {
-            $rawInvoices[] = $this->getInvoiceRawData($invoice, $object->locale);
-        }
-
-        $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;
-
-        foreach ($rawInvoices as $rawInvoice) {
-            $normalizedInvoices[] = $this->normalizeInvoiceRawData($rawInvoice, $charset);
+            $normalizedInvoices[] = $this->getInvoiceData($invoice, $charset, $object->locale);
         }
 
         return $normalizedInvoices;
@@ -80,85 +75,82 @@ class InvoiceNormalizer extends AbstractNormalizer implements NormalizerInterfac
         return $data instanceof InvoicesNormalizerView && 'csv' === $format;
     }
 
-    /**
-     * @param ExportView $invoice
-     *
-     * @return array Raw data about invoice
-     */
-    private function getInvoiceRawData(ExportView $invoice)
+    private function getInvoiceData(ExportView $exportView, string $charset, string $locale): array
     {
         $rawData = [
-            self::COL_EVENT_ID                => $invoice->eventId,
-            self::COL_EVENT_NAME              => $invoice->eventTitle,
-            self::COL_OWNER_ID                => $invoice->ownerId,
-            self::COL_SHEET_ID                => $invoice->sheetId,
-            self::COL_SHEET_TITLE             => $invoice->sheetTitle,
-            self::COL_INVOICE_NUMBER          => $invoice->invoiceNumber,
-            self::COL_INVOICE_DATE            => $invoice->invoiceDate,
-            self::COL_TOTAL                   => $invoice->total,
-            self::COL_TOTAL_WITH_VAT          => $invoice->totalWithVat,
-            self::COL_VAT_AMOUNT              => $invoice->vatAmount,
-            self::COL_BALANCE                 => $invoice->balance,
-            self::COL_INTRA_COMMUNITY_VAT     => $invoice->vatNumber,
-            self::COL_BILLING_CONTACT_COUNTRY => $invoice->billingInfoCountry,
-            self::COL_ANALYTIC_CODE           => $invoice->analyticsCode,
+            $this->translateKey(self::COL_EVENT_ID, $charset, $locale) => $exportView->eventId,
+            $this->translateKey(self::COL_EVENT_NAME, $charset, $locale) => $this->convertInput($exportView->eventTitle, $charset),
+            $this->translateKey(self::COL_OWNER_ID, $charset, $locale) => $exportView->ownerId,
+            $this->translateKey(self::COL_SHEET_ID, $charset, $locale) => $exportView->sheetId,
+            $this->translateKey(self::COL_SHEET_TITLE, $charset, $locale) => $this->convertInput($exportView->sheetTitle, $charset),
+            $this->translateKey(self::COL_INVOICE_NUMBER, $charset, $locale) => $this->convertInput($exportView->invoiceNumber, $charset),
+            $this->translateKey(self::COL_INVOICE_DATE, $charset, $locale) => $exportView->invoiceDate,
+            $this->translateKey(self::COL_INTRA_COMMUNITY_VAT, $charset, $locale) => $this->convertInput($exportView->vatNumber, $charset),
+            $this->translateKey(self::COL_BILLING_CONTACT_COUNTRY, $charset, $locale) => $exportView->billingInfoCountry,
+            $this->translateKey(self::COL_ANALYTIC_CODE, $charset, $locale) => $this->convertInput($exportView->analyticsCode, $charset),
+            $this->translateKey(self::COL_BALANCE, $charset, $locale) => AmountFormatter::centsToDecimalAmount($exportView->balance),
         ];
+
+        if (null === $exportView->vatListView || empty($exportView->vatListView->vatViews)) {
+            $this->setDataByVat(
+                $rawData,
+                $charset,
+                $locale,
+                $exportView->vatRate,
+                $exportView->total,
+                $exportView->vatAmount,
+                $exportView->totalWithVat
+            );
+
+            return $rawData;
+        }
+
+        foreach ($exportView->vatListView->vatViews as $vatView) {
+            $this->setDataByVat(
+                $rawData,
+                $charset,
+                $locale,
+                $vatView->vatRate,
+                $vatView->total,
+                $vatView->totalVat,
+                $vatView->total + $vatView->totalVat
+            );
+        }
 
         return $rawData;
     }
 
-    /**
-     * Returns an array of normalized data from an invoice's raw data
-     *
-     * @param array  $rawData
-     * @param string $charset
-     *
-     * @return array
-     */
-    private function normalizeInvoiceRawData($rawData, $charset = Charset::WINDOWS_1252)
-    {
-        $normalizedData = [];
+    private function setDataByVat(
+        array &$rawData,
+        string $charset,
+        string $locale,
+        float $vatRate,
+        int $total,
+        int $vatAmount,
+        int $totalWithVat
+    ): void {
+        $parameters = ['%vatRate%' => $vatRate];
 
-        foreach (self::getFieldKeys() as $fieldKey) {
-            $translationKey = self::EXPORT_BASE_KEY . $fieldKey;
-            $input          = $rawData[$fieldKey];
+        $colTotalForVatRate = $this->translateKey(self::COL_TOTAL_FOR_VAT_RATE, $charset, $locale, $parameters);
+        $rawData[$colTotalForVatRate] = AmountFormatter::centsToDecimalAmount($total);
 
-            $translatedFieldname = $this->convertCharset(
-                $this->translator->trans($translationKey),
-                Charset::UTF_8,
-                $charset
-            );
+        $colVatAmountForVatRate = $this->translateKey(self::COL_VAT_AMOUNT_FOR_VAT_RATE, $charset, $locale, $parameters);
+        $rawData[$colVatAmountForVatRate] = AmountFormatter::centsToDecimalAmount($vatAmount);
 
-            $normalizedData[$translatedFieldname] = $this->convertCharset(
-                $input,
-                Charset::UTF_8,
-                $charset
-            );
-        }
-
-        return $normalizedData;
+        $colTotalWithVatForVatRate = $this->translateKey(self::COL_TOTAL_WITH_VAT_FOR_VAT_RATE, $charset, $locale, $parameters);
+        $rawData[$colTotalWithVatForVatRate] = AmountFormatter::centsToDecimalAmount($totalWithVat);
     }
 
-    /**
-     * @return string[] Keys of common columns' headers
-     */
-    private static function getFieldKeys()
+    private function convertInput(?string $input, string $charset): ?string
     {
-        return [
-            self::COL_EVENT_ID,
-            self::COL_EVENT_NAME,
-            self::COL_OWNER_ID,
-            self::COL_SHEET_ID,
-            self::COL_SHEET_TITLE,
-            self::COL_INVOICE_NUMBER,
-            self::COL_INVOICE_DATE,
-            self::COL_TOTAL,
-            self::COL_TOTAL_WITH_VAT,
-            self::COL_VAT_AMOUNT,
-            self::COL_BALANCE,
-            self::COL_INTRA_COMMUNITY_VAT,
-            self::COL_BILLING_CONTACT_COUNTRY,
-            self::COL_ANALYTIC_CODE,
-        ];
+        return $this->convertCharset($input, Charset::UTF_8, $charset);
+    }
+
+    private function translateKey(string $fieldKey, string $charset, string $locale, array $parameters = []): string
+    {
+        return $this->convertInput(
+            $this->translator->trans(self::EXPORT_BASE_KEY . $fieldKey, $parameters, 'messages', $locale),
+            $charset
+        );
     }
 }
