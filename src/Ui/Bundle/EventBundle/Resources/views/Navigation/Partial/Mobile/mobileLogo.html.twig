@@ -1,9 +1,9 @@
 {% if menuHeaderView.event.localizedMobileLogo(app.request.locale) != null %}
     <a href="{{ path('event') }}">
-        {% if menuHeaderView.event.hasSvgMobileLogo(app.request.locale) %}
-            <img src="{{ asset(menuHeaderView.event.localizedMobileLogo(app.request.locale)) }}" class="logo">
-        {% else %}
-            <img src="{{ menuHeaderView.event.localizedMobileLogo(app.request.locale)|imagine_filter('event_header_logo') }}" class="logo">
-        {% endif %}
+        <img src="{{ asset(menuHeaderView.event.localizedMobileLogo(app.request.locale)) }}"
+             class="logo"
+             alt="{{ menuHeaderView.event.title }}"
+             title="{{ menuHeaderView.event.title }}"
+        />
     </a>
 {% endif %}

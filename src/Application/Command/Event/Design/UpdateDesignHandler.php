@@ -71,7 +71,7 @@ class UpdateDesignHandler
             }
 
             if ($localizedImage['mobileLogo'] instanceof UploadedFile) {
-                $logoToRemove = $event->getLocalizedLogo($locale);
+                $logoToRemove = $event->getLocalizedMobileLogo($locale);
                 $this->fileStorage->remove($logoToRemove);
 
                 $mobileLogoExtension = $this->fileStorage->getExtension($localizedImage['mobileLogo']);
@@ -104,7 +104,7 @@ class UpdateDesignHandler
             $command->rightColor,
             $command->textColor,
             $command->headerLeftColor,
-            $command->rightColor,
+            $command->headerRightColor,
             $command->backgroundColor
         );
 

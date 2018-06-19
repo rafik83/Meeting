@@ -1,9 +1,7 @@
 <div class="header hide-on-mobile">
     {% if menuHeaderView.event is defined %}
-        {{ include('EventBundle:Navigation/Partial:logo.html.twig') }}
-
-        <div class="header__info">
-            <div>{{ menuHeaderView.event.description(app.request.locale)|nl2br }}</div>
+        <div class="header__logo">
+            {{ include('EventBundle:Navigation/Partial:logo.html.twig') }}
         </div>
     {% endif %}
 
@@ -103,3 +101,9 @@
         </div>
     </div>
 </div>
+
+{% if isHeaderDisplayed %}
+    <div class="header-mobile hide-on-desktop">
+        {{ include('EventBundle:Navigation/Partial/Mobile:mobileLogo.html.twig') }}
+    </div>
+{% endif %}

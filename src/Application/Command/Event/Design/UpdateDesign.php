@@ -72,6 +72,8 @@ class UpdateDesign implements Command
     {
         return $this->leftColor  !== $this->event->getConfiguration()->getLeftColor()
             || $this->rightColor !== $this->event->getConfiguration()->getRightColor()
+            || $this->leftColor  !== $this->event->getConfiguration()->getHeaderLeftColor()
+            || $this->rightColor !== $this->event->getConfiguration()->getHeaderRightColor()
             || $this->textColor  !== $this->event->getConfiguration()->getTextColor()
             || $this->backgroundColor !== $this->event->getConfiguration()->getBackgroundColor()
         ;
