@@ -96,6 +96,19 @@ class Image extends EditableObject implements UploadableObjectInterface
         return MimeType::getMimeTypesByFormats([MimeType::FORMAT_IMAGE]);
     }
 
+    public function canDisplayImage(): bool
+    {
+        if (!$this->getProducts()) {
+            return true;
+        }
+
+        if ($this->isBuyable() && null === $this->getSelectedProduct()) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * {@inheritdoc}
      */
