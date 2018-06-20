@@ -326,6 +326,17 @@ services:
             - '@adapter.router'
             - '@security.impersonate'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\ExportUploadedObjectsBySheetsAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@router.default'
+            - '@session.flash_bag'
+            - '@adapter.job_queue_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@datetime'
+
     #
     # Availability Time Range
     #

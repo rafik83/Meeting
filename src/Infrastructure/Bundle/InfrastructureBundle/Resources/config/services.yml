@@ -3218,6 +3218,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQuery }
 
+    Proximum\Vimeet\Application\Query\Sheet\GetSheetIdsByFiltersQueryHandler:
+        arguments:
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\GetSheetIdsByFiltersQuery }
+
     query.catalog.catalog_available_slot_ids_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQueryHandler
         arguments:
@@ -4420,6 +4426,15 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@guideline.generator'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
         tags:
             - { name: console.command }
 

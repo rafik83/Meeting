@@ -714,6 +714,12 @@ admin_sheet_details:
         sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction }
+admin_event_export_uploaded_objets:
+    path: /event/{event}/export/uploaded-objects
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\ExportUploadedObjectsBySheetsAction }
 admin_sheet_batch:
     path: /event/{event}/sheet/batch
     requirements:
