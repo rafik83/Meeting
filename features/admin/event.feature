@@ -62,9 +62,8 @@ Feature: See, create and update event
     Then I should see "Other event"
     When I go to "http://rdv-carnot-2016.vimeet.proximum/app_test.php/fr"
     Then the response status code should be 200
-    And I should see "LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE"
     Then I go to "http://rdv-carnot-2016.vimeet.proximum/app_test.php/en"
-    And I should see "In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion."
+    And the response status code should be 200
 
   Scenario: update invoice prefix on event
     Given the invoice prefix with name "ViMeet" and prefix "Vi" is created and is default
