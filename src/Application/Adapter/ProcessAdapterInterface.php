@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
-interface ZipArchiveAdapterInterface
+interface ProcessAdapterInterface
 {
-    public function zipFiles(array $files, string $zipName, string $rootDir, ?string $password = null): void;
+    public function exec(string $commandline): bool;
 }

@@ -51,6 +51,8 @@ class SaveTreeToFileSystemCommandHandlerTest extends TestCase
         $tree->addNode($node1, 'Mb7d3M765e');
         $tree->addNode($node2, 'Med79Mea70');
 
+        $fileSystemAdapter->exists('/path/to/encrypted/files/path/to/file1')->shouldBeCalled()->willReturn(true);
+
         $userEventDecryptFile
             ->decryptFile($event->reveal(), $user2->reveal(), '/path/to/encrypted/files/path/to/file1', Argument::any())
             ->shouldBeCalled();
@@ -58,9 +60,11 @@ class SaveTreeToFileSystemCommandHandlerTest extends TestCase
         $fileSystemAdapter->mkdir(Argument::any())
             ->shouldBeCalled();
 
+        $fileSystemAdapter->exists('/path/to/web/path/to/file2')->shouldBeCalled()->willReturn(true);
         $fileSystemAdapter->copy('/path/to/web/path/to/file2', Argument::any())
             ->shouldBeCalled();
 
+        $fileSystemAdapter->exists('/path/to/web/path/to/file3')->shouldBeCalled()->willReturn(true);
         $fileSystemAdapter->copy('/path/to/web/path/to/file3', Argument::any())
             ->shouldBeCalled();
 

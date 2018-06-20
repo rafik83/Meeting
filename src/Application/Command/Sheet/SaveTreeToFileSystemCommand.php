@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\View\Sheet\UploadedObjectsTreeView;
 
 class SaveTreeToFileSystemCommand implements Command
 {
+    /** @var UploadedObjectsTreeView */
     public $uploadedObjectsTreeView;
 
     public function __construct(UploadedObjectsTreeView $uploadedObjectsTreeView)

@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command;
 
+use Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommand;
+use Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommandHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\ExtraData;
@@ -38,11 +40,15 @@ class ExportUploadedObjectsBySheetsCommand extends Command
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
+    /** @var ExportUploadedObjectsCommandHandler */
+    private $exportUploadedObjectsCommandHandler;
+
     public function __construct(
         EventRepositoryInterface $eventRepository,
         AdminRepositoryInterface $adminRepository,
         SheetRepositoryInterface $sheetRepository,
-        ExtraDataRepositoryInterface $extraDataRepository
+        ExtraDataRepositoryInterface $extraDataRepository,
+        ExportUploadedObjectsCommandHandler $exportUploadedObjectsCommandHandler
     ) {
         parent::__construct(self::NAME);
 
@@ -50,6 +56,7 @@ class ExportUploadedObjectsBySheetsCommand extends Command
         $this->adminRepository = $adminRepository;
         $this->sheetRepository = $sheetRepository;
         $this->extraDataRepository = $extraDataRepository;
+        $this->exportUploadedObjectsCommandHandler = $exportUploadedObjectsCommandHandler;
     }
 
     protected function configure(): void
@@ -85,6 +92,8 @@ class ExportUploadedObjectsBySheetsCommand extends Command
         $sheetIds = explode(',', $extraData->getValue());
         $sheets = $this->sheetRepository->findByIds($sheetIds);
 
-        // handler
+        $this->exportUploadedObjectsCommandHandler->handle(
+            new ExportUploadedObjectsCommand($sheets, $admin, $event)
+        );
     }
 }

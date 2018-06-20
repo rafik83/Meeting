@@ -10,9 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
-use Symfony\Component\Finder\Finder;
-
 interface FinderAdapterInterface
 {
-    public function filesIn(string $path): Finder;
+    public function filesIn(string $path): array;
 }

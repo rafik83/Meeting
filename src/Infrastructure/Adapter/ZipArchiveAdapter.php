@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\ZipArchiveAdapterInterface;
-use Symfony\Component\Finder\Finder;
 
 class ZipArchiveAdapter implements ZipArchiveAdapterInterface
 {
@@ -23,7 +22,7 @@ class ZipArchiveAdapter implements ZipArchiveAdapterInterface
         $this->zipArchive = new \ZipArchive();
     }
 
-    public function zipFiles(Finder $files, string $zipName, string $rootDir, ?string $password = null): void
+    public function zipFiles(array $files, string $zipName, string $rootDir, ?string $password = null): void
     {
         if (true !== $this->zipArchive->open($zipName, \ZipArchive::CREATE)) {
             return;
@@ -35,10 +34,6 @@ class ZipArchiveAdapter implements ZipArchiveAdapterInterface
                 $file->getRealPath(),
                 str_replace($rootDir . '/', '', $file->getRealPath())
             );
-        }
-
-        if ($password) {
-            $this->zipArchive->setPassword($password);
         }
 
         $this->zipArchive->close();

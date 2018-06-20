@@ -23,8 +23,10 @@ class FinderAdapter implements FinderAdapterInterface
         $this->finder = new Finder();
     }
 
-    public function filesIn(string $path): Finder
+    public function filesIn(string $path): array
     {
-        return $this->finder->files()->in($path);
+        $files = $this->finder->files()->in($path);
+
+        return iterator_to_array($files, false);
     }
 }

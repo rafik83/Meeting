@@ -63,7 +63,12 @@ class SaveTreeToFileSystemCommandHandler
                     continue;
                 }
 
-                $this->fileSystemAdapter->copy($this->webDir. $uploadedObject->path, $destinationPath);
+                $originalPath = $this->webDir. $uploadedObject->path;
+                if (!$this->fileSystemAdapter->exists($originalPath)) {
+                    continue;
+                }
+
+                $this->fileSystemAdapter->copy($originalPath, $destinationPath);
             }
         }
 
@@ -74,6 +79,10 @@ class SaveTreeToFileSystemCommandHandler
     {
         $owner = $uploadedObjectView->user instanceof User ? $uploadedObjectView->user : $uploadedObjectView->sheet->getOwner();
         $originalPath = $this->encryptedFilesPath . $uploadedObjectView->path;
+
+        if (!$this->fileSystemAdapter->exists($originalPath)) {
+            return;
+        }
 
         $this->userEventDecryptFile->decryptFile(
             $uploadedObjectView->sheet->getEvent(),

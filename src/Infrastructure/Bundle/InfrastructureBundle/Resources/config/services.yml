@@ -1360,9 +1360,17 @@ services:
             - '@adapter.file_system_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ProcessAdapter'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ConvertFilesystemTreeToZipCommand }
+    Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.mailer_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommand }
     command.product.create_option_handler:
         class: Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler
         arguments:
@@ -2303,6 +2311,7 @@ services:
     Proximum\Vimeet\Infrastructure\Adapter\TransliteratorAdapter: ~
     Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter: ~
     Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter: ~
+    Proximum\Vimeet\Infrastructure\Adapter\ProcessAdapter: ~
     adapter.authentication_manager:
         class: Proximum\Vimeet\Infrastructure\Adapter\AuthenticationManager
         arguments:
@@ -4435,6 +4444,7 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommandHandler'
         tags:
             - { name: console.command }
 
