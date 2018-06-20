@@ -17,6 +17,8 @@ use Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQuery;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectsTreeView;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Sheet\PasswordGenerator;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ExportUploadedObjectsPasswordMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ExportUploadedObjectsZipMail;
 
 class ExportUploadedObjectsCommandHandler
 {
@@ -29,14 +31,19 @@ class ExportUploadedObjectsCommandHandler
     /** @var MailerInterface */
     private $mailer;
 
+    /** @var string */
+    private $sender;
+
     public function __construct(
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+        string $sender
     ) {
         $this->commandBus = $commandBus;
         $this->queryBus = $queryBus;
         $this->mailer = $mailer;
+        $this->sender = $sender;
     }
 
     public function handle(ExportUploadedObjectsCommand $command): void
@@ -60,10 +67,24 @@ class ExportUploadedObjectsCommandHandler
             return;
         }
 
-        // todo : send password
-        //$this->mailer->send();
+        $this->mailer->send(
+            new ExportUploadedObjectsPasswordMail(
+                $command->event,
+                $password,
+                $this->sender,
+                $command->admin->getEmail(),
+                $command->admin->getLocale()
+            )
+        );
 
-        // todo : send file
-        //$this->mailer->send();
+        $this->mailer->send(
+            new ExportUploadedObjectsZipMail(
+                $command->event,
+                $file,
+                $this->sender,
+                $command->admin->getEmail(),
+                $command->admin->getLocale()
+            )
+        );
     }
 }

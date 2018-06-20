@@ -337,6 +337,12 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@datetime'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DownloadUploadedObjectsZipAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.file_system_adapter'
+            - '%shared_uploaded_files%'
+
     #
     # Availability Time Range
     #

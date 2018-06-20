@@ -1,0 +1,18 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    <p>
+        {{ 'mail.event.export.uploaded_objects_zip.subject'|trans({'%event%': mail.event.title}, 'mail', mail.locale) }}
+        <br>
+        {{ macros.button(
+            'mail.event.export.uploaded_objects_zip.link.click'|trans({},'mail', mail.locale),
+            url('admin_event_download_uploaded_objets', {
+                'event': mail.event.id,
+                'hash': mail.file.hash,
+                'file': mail.file.id,
+                '_locale': mail.locale,
+            })
+        ) }}
+    </p>
+{% endblock %}

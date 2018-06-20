@@ -720,6 +720,13 @@ admin_event_export_uploaded_objets:
         event: \d+
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\ExportUploadedObjectsBySheetsAction }
+admin_event_download_uploaded_objets:
+    path: /event/{event}/download/uploaded-objects/{hash}/{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DownloadUploadedObjectsZipAction }
 admin_sheet_batch:
     path: /event/{event}/sheet/batch
     requirements:
