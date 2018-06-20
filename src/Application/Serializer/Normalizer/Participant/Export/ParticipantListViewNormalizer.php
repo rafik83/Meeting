@@ -97,11 +97,7 @@ class ParticipantListViewNormalizer implements NormalizerInterface
      */
     private function convertCharset($input)
     {
-        if (!$input || !\is_string($input)) {
-            return $input;
-        }
-
-        return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . '//TRANSLIT//IGNORE', $input);
+        return Charset::convertString($input);
     }
 
     /**
@@ -153,7 +149,9 @@ class ParticipantListViewNormalizer implements NormalizerInterface
         ];
 
         foreach ($participantListView->registrationColumns as $key => $registrationColumn) {
-            $data[$key] = $participantView->registrationData[$key] ?? '';
+            $data[$key] = isset($participantView->registrationData[$key])
+                ? $this->convertCharset($participantView->registrationData[$key])
+                : '';
         }
 
         foreach ($participantListView->productColumns as $productKey => $productColumn) {

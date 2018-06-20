@@ -14,8 +14,8 @@ use Proximum\Vimeet\Application\Nomenclature\Import\Exception\BadCharsetExceptio
 
 final class Charset
 {
-    const UTF_8        = 'UTF-8';
-    const ISO_8859_1   = 'ISO-8859-1';
+    const UTF_8 = 'UTF-8';
+    const ISO_8859_1 = 'ISO-8859-1';
     const WINDOWS_1252 = 'Windows-1252';
 
     /**
@@ -28,26 +28,51 @@ final class Charset
      *
      * @return null|string
      */
-    public static function convert($inFilename, $inCharset, $outCharset, $outFilename = null)
+    public static function convertFile($inFilename, $inCharset, $outCharset, $outFilename = null)
     {
-        if ($inCharset !== $outCharset) {
-            try {
-                $input       = file_get_contents($inFilename);
-                $outFilename = $outFilename ?: sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'charset-' . uniqid();
-                try {
-                    $output = iconv($inCharset, $outCharset . '//TRANSLIT', $input);
-                } catch (\ErrorException  $exception) {
-                    $output = iconv($inCharset, $outCharset . '//IGNORE', $input);
-                }
-
-                file_put_contents($outFilename, $output);
-            } catch (\ErrorException $exception) {
-                throw new BadCharsetException($exception->getMessage());
-            }
-
-            return $outFilename;
+        if ($inCharset === $outCharset) {
+            return $inFilename;
         }
 
-        return $inFilename;
+        try {
+            $input = file_get_contents($inFilename);
+            $outFilename = $outFilename ?: sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'charset-' . uniqid();
+            try {
+                $output = iconv($inCharset, $outCharset . '//TRANSLIT', $input);
+            } catch (\Exception $exception) {
+                $output = iconv($inCharset, $outCharset . '//IGNORE', $input);
+            }
+
+            file_put_contents($outFilename, $output);
+        } catch (\Exception $exception) {
+            throw new BadCharsetException($exception->getMessage());
+        }
+
+        return $outFilename;
+    }
+
+    /**
+     * @deprecated use convertFile()
+     * @throws BadCharsetException
+     */
+    public static function convert($inFilename, $inCharset, $outCharset, $outFilename = null)
+    {
+        return self::convertFile($inFilename, $inCharset, $outCharset, $outFilename);
+    }
+
+    /**
+     * @param mixed|string $input
+     * @param string       $fromCharset
+     * @param string       $toCharset
+     *
+     * @return mixed|string
+     */
+    public static function convertString($input, $fromCharset = self::UTF_8, $toCharset = self::WINDOWS_1252)
+    {
+        if (!$input || !\is_string($input)) {
+            return $input;
+        }
+
+        return iconv($fromCharset, $toCharset . '//TRANSLIT//IGNORE', $input);
     }
 }
