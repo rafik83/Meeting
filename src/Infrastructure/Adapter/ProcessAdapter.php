@@ -20,7 +20,7 @@ class ProcessAdapter implements ProcessAdapterInterface
         try {
             $process = new Process($commandline);
             $process->run();
-dump($process->getOutput());
+
             return $process->isSuccessful();
         } catch (\RuntimeException $e) {
             return false;
