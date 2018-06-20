@@ -1,0 +1,55 @@
+Proximum\Vimeet\Domain\Model\Badge:
+    type:  entity
+    table: badge
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        header:
+            type: string
+            nullable: true
+        showHeader:
+            type: boolean
+        showFooterTypeOrCategory:
+            type: string
+            options:
+                default: 'type'
+        footerTextColor:
+            type: string
+            options:
+                default: '#ffffff'
+        footerColor:
+            type: string
+            options:
+                default: '#000000'
+        showPosition:
+            type: boolean
+        showFirstName:
+            type: boolean
+        showLastName:
+            type: boolean
+        showQRCode:
+            type: boolean
+        activated:
+            type: boolean
+        conditioned:
+            type: boolean
+        conditionedByPackage:
+            type: boolean
+        conditionedByStates:
+            type: json_array
+    manyToOne:
+        type:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            joinColumn:
+                nullable: true
+                unique: true
+                onDelete: CASCADE
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+
