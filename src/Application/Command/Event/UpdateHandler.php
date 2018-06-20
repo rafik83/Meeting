@@ -81,10 +81,12 @@ class UpdateHandler
         $isLocalesUpdated = $update->isLocalesUpdated();
         $backgroundUpdated = $update->isBackgroundUpdated();
 
-        if ($update->domain !== $update->event->getDomain()
-            && null !== $this->eventRepository->getEventByDomain($update->domain)
-        ) {
-            throw new DomainAlreadyUsedException(sprintf('Given domain %s', $update->domain));
+        if ($update->domain !== $update->event->getDomain()) {
+            $foundEvent = $this->eventRepository->getEventByDomain($update->domain);
+
+            if (null !== $foundEvent && $update->event !== $foundEvent) {
+                throw new DomainAlreadyUsedException(sprintf('Given domain %s', $update->domain));
+            }
         }
 
         $event = $update->event;
