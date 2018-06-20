@@ -87,16 +87,16 @@ class UpdateDesignHandler
             );
         }
 
+        if ($command->removeBackgroundImage) {
+            $this->removeImageHandler->handle(new RemoveImage($event));
+        }
+
         if ($command->backgroundImage instanceof UploadedFile) {
             $backgroundImageToRemove = $event->getConfiguration()->getBackgroundImage();
             $this->fileStorage->remove($backgroundImageToRemove);
 
             $backGroundImagePath = $this->fileStorage->upload($command->backgroundImage);
             $event->getConfiguration()->setBackgroundImage($backGroundImagePath);
-        }
-
-        if ($command->removeBackgroundImage) {
-            $this->removeImageHandler->handle(new RemoveImage($event));
         }
 
         $event->getConfiguration()->setColors(
