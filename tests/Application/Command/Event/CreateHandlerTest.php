@@ -31,33 +31,20 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CreateHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         // Actual user
         $prefix   = new Prefix('Vimeet', 'Vi');
-        $dateTime = new \DateTime();
-        $user     = new Admin(
-            'email@email.fr',
-            'salt',
-            'password',
-            'fr',
-            'toto',
-            'tata',
-            'ROLE_SUPER_ADMIN',
-            $dateTime
-        );
+        $admin = $this->prophesize(Admin::class);
 
         // Update command
-        $create                = new Create($user);
+        $create                = new Create($admin->reveal());
         $create->title         = 'barfoo';
         $create->locales       = ['fr', 'en'];
         $create->mode          = 'et';
         $create->vat           = 20;
         $create->fallback      = 'en';
         $create->currency      = 'USD';
-        $create->leftColor     = '#FFFFFF';
-        $create->rightColor    = '#000000';
-        $create->textColor     = '#CCCCCC';
         $create->invoicePrefix = $prefix;
         // It mocks the creation of an UploadedFile
         $create->logo          = $this
@@ -70,12 +57,6 @@ class CreateHandlerTest extends TestCase
         $create->organiserName = 'proximum';
         $create->emailTeam     = 'team-project@example.net';
         $create->visible       = true;
-        $create->backgroundColor = '#DDDDDD';
-        $create->backgroundImage = $this
-            ->getMockBuilder(UploadedFile::class)
-            ->enableOriginalConstructor()
-            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
-            ->getMock();
 
         // Expected event
         $expectedEvent = new Event(
@@ -93,25 +74,12 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#DDDDDD');
-        $expectedEvent->getConfiguration()->setBackgroundImage('foofoo.jpeg');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
-        $expectedEvent->setLogo('toto.jpeg', 'jpeg');
 
-        $expectedUser = new Admin(
-            'email@email.fr',
-            'salt',
-            'password',
-            'fr',
-            'toto',
-            'tata',
-            'ROLE_SUPER_ADMIN',
-            $dateTime
-        );
         // Mock
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
-        $adminRepository->set($expectedUser)->shouldNotBeCalled();
+        $adminRepository->set($admin->reveal())->shouldNotBeCalled();
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->add(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
@@ -124,16 +92,6 @@ class CreateHandlerTest extends TestCase
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldBeCalled();
-        $fileStorage = $this->prophesize(FileStorageInterface::class);
-        $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
-            return true;
-        }))->shouldBeCalled()->willReturn('toto.jpeg');
-        $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
-            return true;
-        }))->shouldBeCalled()->willReturn('foofoo.jpeg');
-        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
-            return true;
-        }))->shouldBeCalled()->willReturn('jpeg');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
@@ -148,13 +106,12 @@ class CreateHandlerTest extends TestCase
             $eventRepository->reveal(),
             $contentRepository->reveal(),
             $guidelineGenerator->reveal(),
-            $fileStorage->reveal(),
             $duplicator->reveal()
         );
         $handler->handle($create);
     }
 
-    public function testHandleWithOrganizer()
+    public function testHandleWithOrganizer(): void
     {
         // Actual user
         $prefix   = new Prefix('Vimeet', 'Vi');
@@ -178,9 +135,6 @@ class CreateHandlerTest extends TestCase
         $create->vat           = 20;
         $create->fallback      = 'en';
         $create->currency      = 'USD';
-        $create->leftColor     = '#FFFFFF';
-        $create->rightColor    = '#000000';
-        $create->textColor     = '#CCCCCC';
         $create->invoicePrefix = $prefix;
         $create->logo          = $this
             ->getMockBuilder(UploadedFile::class)
@@ -191,7 +145,6 @@ class CreateHandlerTest extends TestCase
         $create->timeZone      = 'Europe/Paris';
         $create->emailTeam     = 'team-project@example.net';
         $create->visible       = true;
-        $create->backgroundColor = '#CCCCCC';
 
         // Expected event
         $expectedEvent = new Event(
@@ -209,10 +162,8 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
-        $expectedEvent->setLogo('toto.jpeg', 'jpeg');
 
         $expectedUser = new Admin(
             'email@email.fr',
@@ -246,13 +197,6 @@ class CreateHandlerTest extends TestCase
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldBeCalled();
 
-        $fileStorage = $this->prophesize(FileStorageInterface::class);
-        $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
-            return true;
-        }))->shouldBeCalled()->willReturn('toto.jpeg');
-        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
-            return true;
-        }))->shouldBeCalled()->willReturn('jpeg');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
@@ -267,13 +211,12 @@ class CreateHandlerTest extends TestCase
             $eventRepository->reveal(),
             $contentRepository->reveal(),
             $guidelineGenerator->reveal(),
-            $fileStorage->reveal(),
             $duplicator->reveal()
         );
         $handler->handle($create);
     }
 
-    public function testHandleWithAlreadyUsedDomain()
+    public function testHandleWithAlreadyUsedDomain(): void
     {
         $this->expectException(DomainAlreadyUsedException::class);
 
@@ -298,9 +241,6 @@ class CreateHandlerTest extends TestCase
         $create->mode          = 'et';
         $create->fallback      = 'en';
         $create->currency      = 'USD';
-        $create->leftColor     = '#FFFFFF';
-        $create->rightColor    = '#000000';
-        $create->textColor     = '#CCCCCC';
         $create->invoicePrefix = $prefix;
         $create->logo          = $this
             ->getMockBuilder(UploadedFile::class)
@@ -328,10 +268,8 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
-        $expectedEvent->setLogo('toto.jpeg', 'jpeg');
 
         $expectedUser = new Admin(
             'email@email.fr',
@@ -357,13 +295,6 @@ class CreateHandlerTest extends TestCase
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldNotBeCalled();
-        $fileStorage = $this->prophesize(FileStorageInterface::class);
-        $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
-            return true;
-        }))->shouldNotBeCalled()->willReturn('toto.jpeg');
-        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
-            return true;
-        }))->shouldNotBeCalled()->willReturn('jpeg');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
@@ -378,13 +309,12 @@ class CreateHandlerTest extends TestCase
             $eventRepository->reveal(),
             $contentRepository->reveal(),
             $guidelineGenerator->reveal(),
-            $fileStorage->reveal(),
             $duplicator->reveal()
         );
         $handler->handle($create);
     }
 
-    public function testCreateFromOtherEvent()
+    public function testCreateFromOtherEvent(): void
     {
         $prefix = new Prefix('Vimeet', 'Vi');
         $user   = AdminFactory::create();
@@ -404,24 +334,25 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true,
             $duplicatedEvent
+
         );
-        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
+        $event->getConfiguration()->setColors('#AAAAAA', '#BBBBBB', '#CCCCCC', '#DDDDDD', '#EEEEEE', '#FFFFFF');
 
         $create = new Create($user, $event);
-        $create->backgroundColor = '#FFFFFF';
 
         // Mock
         $adminRepository    = $this->prophesize(AdminRepositoryInterface::class);
         $eventRepository    = $this->prophesize(EventRepositoryInterface::class);
         $guidelineGenerator = $this->prophesize(Generator::class);
-        $fileStorage        = $this->prophesize(FileStorageInterface::class);
         $contentRepository  = $this->prophesize(ContentRepositoryInterface::class);
         $duplicator         = $this->prophesize(Duplicator::class);
 
         $eventRepository->getEventByDomain('hello.vimeet.proximum')->shouldBeCalled()->willReturn(null);
 
         $eventRepository->add(Argument::that(function (Event $expectedEvent) use ($event) {
-            return $expectedEvent->getTitle() === $event->getTitle();
+            return $expectedEvent->getTitle() === $event->getTitle()
+                && $expectedEvent->getConfiguration()->getHeaderLeftColor() === $event->getConfiguration()->getHeaderLeftColor()
+            ;
         }))->shouldBeCalled();
 
         $eventRepository->set(Argument::that(function (Event $expectedEvent) use ($event) {
@@ -433,9 +364,6 @@ class CreateHandlerTest extends TestCase
         $guidelineGenerator->generate(Argument::that(function (Event $expectedEvent) use ($event) {
             return $expectedEvent->getTitle() === $event->getTitle();
         }))->shouldBeCalled();
-
-        $fileStorage->upload(Argument::type(UploadedFile::class))->shouldNotBeCalled();
-        $fileStorage->getExtension(Argument::type(UploadedFile::class))->shouldNotBeCalled();
 
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($event) {
             return Event\Content::TYPE_TERMS_OF_SALE === $content->getType();
@@ -451,7 +379,6 @@ class CreateHandlerTest extends TestCase
             $eventRepository->reveal(),
             $contentRepository->reveal(),
             $guidelineGenerator->reveal(),
-            $fileStorage->reveal(),
             $duplicator->reveal()
         );
         $handler->handle($create);

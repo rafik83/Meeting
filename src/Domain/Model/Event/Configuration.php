@@ -208,7 +208,7 @@ class Configuration
         string $headerLeftColor,
         string $headerRightColor,
         string $backgroundColor
-    ) {
+    ): void {
         $this->leftColor  = $leftColor;
         $this->rightColor = $rightColor;
         $this->textColor  = $textColor;

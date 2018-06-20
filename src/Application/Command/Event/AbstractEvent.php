@@ -61,8 +61,8 @@ abstract class AbstractEvent
     public $welcomeEnabled;
 
     /** @var bool */
-    public $disabledEmailChanging;
+    public $disabledEmailChanging = false;
 
     /** @var bool */
-    public $disabledPasswordChanging;
+    public $disabledPasswordChanging = false;
 }
