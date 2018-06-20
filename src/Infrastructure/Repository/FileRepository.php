@@ -63,4 +63,19 @@ class FileRepository implements FileRepositoryInterface
         $this->entityManager->remove($file);
         $this->entityManager->flush($file);
     }
+
+    public function removeExpiredFilesByType(string $type, \DateTimeInterface $dateTime): void
+    {
+        $this->entityManager->createQueryBuilder()
+            ->delete()
+            ->from(File::class, 'file')
+            ->where('file.type = :type')
+            ->andWhere('file.createdAt <= :dateTime')
+            ->setParameters([
+                'type' => $type,
+                'dateTime' => $dateTime,
+            ])
+            ->getQuery()
+            ->execute();
+    }
 }

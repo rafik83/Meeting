@@ -63,7 +63,7 @@ class ConvertFilesystemTreeToZipCommandHandler
 
         $path = explode('/', $command->rootDir);
         $rootFolder = end($path);
-        $file = new File($rootFolder . '.zip', $this->dateTime);
+        $file = new File($rootFolder . '.zip', $this->dateTime, File::TYPE_UPLOADED_OBJECTS_ZIP);
 
         $this->zipArchiveAdapter->zipFiles($files, $command->rootDir . '.zip', $command->rootDir);
         $this->fileRepository->add($file);

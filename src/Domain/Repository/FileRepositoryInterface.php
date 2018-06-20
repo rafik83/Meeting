@@ -30,4 +30,6 @@ interface FileRepositoryInterface
      * @param File $file
      */
     public function remove(File $file);
+
+    public function removeExpiredFilesByType(string $type, \DateTimeInterface $dateTime): void;
 }

@@ -4532,6 +4532,13 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\RemoveExpiredUploadedObjectsZipCommand:
+        arguments:
+            - '@repository.file_repository'
+            - '@datetime'
+        tags:
+            - { name: console.command }
+
     command_batch.batch_accept_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchAcceptCommand
         arguments:
