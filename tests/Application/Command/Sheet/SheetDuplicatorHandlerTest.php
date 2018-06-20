@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\SheetDuplicator;
 use Proximum\Vimeet\Application\Command\Sheet\SheetDuplicatorHandler;
@@ -118,6 +117,8 @@ class SheetDuplicatorHandlerTest extends TestCase
                 $expectedSheet->getEvent(),
                 $originalEvent->reveal(),
                 [$expectedSheet],
+                [],
+                [],
                 'sender@mail.fr',
                 'admin@mail.fr',
                 'fr'

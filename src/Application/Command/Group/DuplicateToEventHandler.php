@@ -10,24 +10,32 @@
 
 namespace Proximum\Vimeet\Application\Command\Group;
 
+use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
+use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
 use Proximum\Vimeet\Domain\Exception\Group\Duplicate\CanNotDuplicateToTheSameEventException;
 use Proximum\Vimeet\Domain\Exception\Group\Duplicate\GroupAlreadyDuplicatedInGivenEventException;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker;
 
 class DuplicateToEventHandler
 {
     /** @var GroupRepositoryInterface */
     private $groupRepository;
 
+    /** @var UserToGroupManagerChecker */
+    private $userToGroupManagerChecker;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
     public function __construct(
         GroupRepositoryInterface $groupRepository,
+        UserToGroupManagerChecker $userToGroupManagerChecker,
         \DateTimeInterface $dateTime
     ) {
         $this->groupRepository = $groupRepository;
+        $this->userToGroupManagerChecker = $userToGroupManagerChecker;
         $this->dateTime = $dateTime;
     }
 
@@ -38,6 +46,8 @@ class DuplicateToEventHandler
      *
      * @throws CanNotDuplicateToTheSameEventException
      * @throws GroupAlreadyDuplicatedInGivenEventException
+     * @throws UserAlreadyGroupManagerOnSameEventException
+     * @throws UserAlreadyParticipantOrOwnerOnGroupOnSameEventException
      */
     public function handle(DuplicateToEvent $duplicateToEvent): Group
     {
@@ -51,6 +61,12 @@ class DuplicateToEventHandler
         }
 
         $originGroup = $duplicateToEvent->group;
+
+        $this->userToGroupManagerChecker->isUserToGroupManagerAllowed(
+            $duplicateToEvent->toEvent,
+            $originGroup->getManager()
+        );
+
         $group = new Group(
             $duplicateToEvent->toEvent,
             $originGroup->getManager(),

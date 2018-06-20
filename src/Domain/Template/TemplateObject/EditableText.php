@@ -24,6 +24,10 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         $thisLocale = null === $locale ? $this->locale : $locale;
 
         if ($this->isTranslatable()) {
+            if (null === $thisLocale) {
+                return null;
+            }
+
             return isset($this->data['text'][$thisLocale]) ? $this->data['text'][$thisLocale] : null;
         }
 

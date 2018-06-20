@@ -217,6 +217,7 @@ services:
     Proximum\Vimeet\Application\Command\Group\DuplicateToEventHandler:
         arguments:
             - '@repository.sheet.group_repository'
+            - '@user_to_group_manager_checker'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\DuplicateToEvent }
