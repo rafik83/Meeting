@@ -1,0 +1,19 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Repository;
+
+use Proximum\Vimeet\Domain\Model\Badge;
+use Proximum\Vimeet\Domain\Model\Type;
+
+interface BadgeRepositoryInterface
+{
+    public function findByType(Type $type): ?Badge;
+}
