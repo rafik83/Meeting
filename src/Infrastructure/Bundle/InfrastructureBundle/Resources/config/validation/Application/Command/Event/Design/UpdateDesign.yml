@@ -3,27 +3,27 @@ Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign:
         textColor:
             - NotBlank: ~
             - Regex:
-                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         leftColor:
             - NotBlank: ~
             - Regex:
-                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         headerLeftColor:
             - NotBlank: ~
             - Regex:
-                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         rightColor:
             - NotBlank: ~
             - Regex:
-                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         headerRightColor:
             - NotBlank: ~
             - Regex:
-                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         localizedImages:
             - All:
@@ -37,7 +37,7 @@ Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign:
                                 mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
         backgroundColor:
             - Regex:
-                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         backgroundImage:
             - Image:

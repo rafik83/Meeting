@@ -18,7 +18,7 @@ class CreateType extends AbstractEventType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
@@ -30,7 +30,7 @@ class CreateType extends AbstractEventType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix(): string
+    public function getBlockPrefix()
     {
         return 'event_create';
     }
