@@ -107,6 +107,9 @@ class Configuration
     /** @var \DateTimeInterface|null "Date de cloture des inscriptions" */
     private $registrationCloseDate;
 
+    /** @var \DateTimeInterface|null "Active l'affichage du badge pour le participant" */
+    private $enableBadgeForParticipantDate;
+
     /**
      * @param string $leftColor
      * @param string $rightColor
@@ -302,19 +305,6 @@ class Configuration
         return $this->organiserWebsite;
     }
 
-    /**
-     * @param \DateTimeInterface|null $catalogOnlineDate
-     * @param \DateTimeInterface|null $happeningsOpenDate
-     * @param \DateTimeInterface|null $schedulePublishDate
-     * @param \DateTimeInterface|null $closeMeetingRequestDate
-     * @param \DateTimeInterface|null $closeAnsweringMeetingRequestDate
-     * @param \DateTimeInterface|null $smsActivationDate
-     * @param \DateTimeInterface|null $agendaOnlineDate
-     * @param \DateTimeInterface|null $registrationOpenDate
-     * @param \DateTimeInterface|null $registrationCloseDate
-     *
-     * @return Configuration
-     */
     public function setDates(
         \DateTimeInterface $catalogOnlineDate = null,
         \DateTimeInterface $happeningsOpenDate = null,
@@ -324,7 +314,8 @@ class Configuration
         \DateTimeInterface $smsActivationDate = null,
         \DateTimeInterface $agendaOnlineDate = null,
         \DateTimeInterface $registrationOpenDate = null,
-        \DateTimeInterface $registrationCloseDate = null
+        \DateTimeInterface $registrationCloseDate = null,
+        \DateTimeInterface $enableBadgeForParticipantDate = null
     ) {
         $this->catalogOnlineDate                = $catalogOnlineDate;
         $this->happeningsOpenDate               = $happeningsOpenDate;
@@ -335,6 +326,7 @@ class Configuration
         $this->agendaOnlineDate                 = $agendaOnlineDate;
         $this->registrationOpenDate             = $registrationOpenDate;
         $this->registrationCloseDate            = $registrationCloseDate;
+        $this->enableBadgeForParticipantDate    = $enableBadgeForParticipantDate;
 
         return $this;
     }
@@ -495,5 +487,10 @@ class Configuration
     public function hasBackgroundImage(): bool
     {
         return null !== $this->backgroundImage;
+    }
+
+    public function getEnableBadgeForParticipantDate(): ?\DateTimeInterface
+    {
+        return $this->enableBadgeForParticipantDate;
     }
 }

@@ -29,6 +29,7 @@ class ConfigureDatesType extends AbstractType
         'agendaOnlineDate',
         'registrationOpenDate',
         'registrationCloseDate',
+        'enableBadgeForParticipantDate',
     ];
 
     /**
