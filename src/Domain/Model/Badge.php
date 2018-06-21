@@ -113,137 +113,86 @@ class Badge
         $this->conditionedByStates = $conditionedByStates;
     }
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Event
-     */
     public function getEvent(): Event
     {
         return $this->event;
     }
 
-    /**
-     * @return Type
-     */
     public function getType(): Type
     {
         return $this->type;
     }
 
-    /**
-     * @return null|string
-     */
     public function getHeader(): ?string
     {
         return $this->header;
     }
 
-    /**
-     * @return bool
-     */
     public function isShowHeader(): bool
     {
         return $this->showHeader;
     }
 
-    /**
-     * @return string
-     */
     public function getShowFooterTypeOrCategory(): string
     {
         return $this->showFooterTypeOrCategory;
     }
 
-    /**
-     * @return string
-     */
     public function getFooterTextColor(): string
     {
         return $this->footerTextColor;
     }
 
-    /**
-     * @return string
-     */
     public function getFooterColor(): string
     {
         return $this->footerColor;
     }
 
-    /**
-     * @return bool
-     */
     public function isShowPosition(): bool
     {
         return $this->showPosition;
     }
 
-    /**
-     * @return bool
-     */
     public function isShowFirstName(): bool
     {
         return $this->showFirstName;
     }
 
-    /**
-     * @return bool
-     */
     public function isShowLastName(): bool
     {
         return $this->showLastName;
     }
 
-    /**
-     * @return bool
-     */
     public function isShowSheetTitle(): bool
     {
         return $this->showSheetTitle;
     }
 
-    /**
-     * @return bool
-     */
     public function isShowQRCode(): bool
     {
         return $this->showQRCode;
     }
 
-    /**
-     * @return bool
-     */
     public function isActivated(): bool
     {
         return $this->activated;
     }
 
-    /**
-     * @return bool
-     */
     public function isConditioned(): bool
     {
         return $this->conditioned;
     }
 
-    /**
-     * @return bool
-     */
     public function isConditionedByPackage(): bool
     {
         return $this->conditionedByPackage;
     }
 
-    /**
-     * @return array
-     */
     public function getConditionedByStates(): array
     {
         return $this->conditionedByStates;
