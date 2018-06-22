@@ -1,0 +1,7 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% block body %}
+    <p>
+        {{ 'mail.event.export.no_uploaded_objects.subject'|trans({'%event%': mail.event.title}, 'mail', mail.locale) }}
+    </p>
+{% endblock %}

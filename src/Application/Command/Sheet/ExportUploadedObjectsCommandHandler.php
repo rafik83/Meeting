@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Sheet\PasswordGenerator;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ExportUploadedObjectsPasswordMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ExportUploadedObjectsZipMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\NoUploadedObjectsZipMail;
 
 class ExportUploadedObjectsCommandHandler
 {
@@ -64,6 +65,15 @@ class ExportUploadedObjectsCommandHandler
         $file = $this->commandBus->handle(new ConvertFilesystemTreeToZipCommand($rootDir, $password));
 
         if (!$file instanceof File) {
+            $this->mailer->send(
+                new NoUploadedObjectsZipMail(
+                    $command->event,
+                    $this->sender,
+                    $command->admin->getEmail(),
+                    $command->admin->getLocale()
+                )
+            );
+
             return;
         }
 
