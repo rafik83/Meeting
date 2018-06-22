@@ -32,6 +32,10 @@ class ConfigureDatesType extends AbstractType
         'enableBadgeForParticipantDate',
     ];
 
+    const CONFIGURATION_DATES_HELP = [
+        'enableBadgeForParticipantDate' => 'form.event_configure_date.children.enableBadgeForParticipantDate.help',
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -42,6 +46,7 @@ class ConfigureDatesType extends AbstractType
                 ->add($configurationDate, DateTimePickerType::class, [
                     'view_timezone' => $options['event']->getTimezone(),
                     'required' => false,
+                    'help' => isset(self::CONFIGURATION_DATES_HELP[$configurationDate]) ?? self::CONFIGURATION_DATES_HELP[$configurationDate],
                 ]);
         }
     }
