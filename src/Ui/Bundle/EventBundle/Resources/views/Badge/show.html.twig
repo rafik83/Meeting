@@ -1,0 +1,43 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% set showQrCode = true %}
+
+{% block title 'badge.title'|trans %}
+
+{% block content %}
+    <div class="ebadge">
+        <div class="ebadge-content">
+            <div class="company-participant {% if not showQrCode %}company-zone-without-qrcode{% endif %}">
+                <div class="text">CompanyName</div>
+            </div>
+
+            {% if showQrCode %}
+                <div class="qrcode">
+                    <div class="qrcode-border">
+                        <img src="https://placeimg.com/300/300/animals" /><br>
+                        123456666TOKEN<br>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="info-participant {% if not showQrCode %}participant-zone-without-qrcode{% endif %}">
+                <div class="name-participant {% if not showQrCode %}text-participant-without-qrcode{% endif %}">
+                    <div class="text">
+                        FIRSTNAME
+                        <span class="last-name-participant">LASTNAME</span>
+                    </div>
+                </div>
+
+                <div class="position-participant {% if not showQrCode %}text-participant-without-qrcode{% endif %}">
+                    <div class="text">
+                        POSITION
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="type-participant">
+            TYPE DE PARTICIPATION<br>
+        </div>
+    </div>
+{% endblock %}

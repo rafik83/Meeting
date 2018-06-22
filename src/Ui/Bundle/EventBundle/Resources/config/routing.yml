@@ -864,3 +864,14 @@ event_video_conference_access_session_test:
         sessionId: .*
     methods: [GET]
     defaults: { _controller: EventBundle:VideoConference:accessSessionVideoTest }
+
+#
+# Badge
+#
+event_participant_badge:
+    path: /sheet/{sheet}/participant/{participant}/badge
+    requirements:
+        sheet: \d+
+        participant: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ShowAction }
