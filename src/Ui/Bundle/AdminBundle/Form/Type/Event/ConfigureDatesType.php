@@ -46,7 +46,7 @@ class ConfigureDatesType extends AbstractType
                 ->add($configurationDate, DateTimePickerType::class, [
                     'view_timezone' => $options['event']->getTimezone(),
                     'required' => false,
-                    'help' => isset(self::CONFIGURATION_DATES_HELP[$configurationDate]) ?? self::CONFIGURATION_DATES_HELP[$configurationDate],
+                    'help' => self::CONFIGURATION_DATES_HELP[$configurationDate] ?? null,
                 ]);
         }
     }
