@@ -64,18 +64,18 @@ class FileRepository implements FileRepositoryInterface
         $this->entityManager->flush($file);
     }
 
-    public function removeExpiredFilesByType(string $type, \DateTimeInterface $dateTime): void
+    public function findExpiredFiles(\DateTimeInterface $dateTime): array
     {
-        $this->entityManager->createQueryBuilder()
-            ->delete()
+        return $this->entityManager->createQueryBuilder()
+            ->select('file')
             ->from(File::class, 'file')
-            ->where('file.type = :type')
+            ->where('file.type != :unknownType')
             ->andWhere('file.createdAt <= :dateTime')
             ->setParameters([
-                'type' => $type,
-                'dateTime' => $dateTime,
+                'unknownType' => File::TYPE_UNKNOWN,
+                'dateTime' => $dateTime->modify('-48 hours'),
             ])
             ->getQuery()
-            ->execute();
+            ->getResult();
     }
 }

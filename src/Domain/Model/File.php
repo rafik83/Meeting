@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model;
 
 class File
 {
+    public const TYPE_UNKNOWN = 'unknown';
     public const TYPE_UPLOADED_OBJECTS_ZIP = 'uploaded_objects_zip';
 
     /** @var int */
@@ -26,7 +27,7 @@ class File
     /** @var \DateTimeInterface */
     private $createdAt;
 
-    public function __construct($path, \DateTimeInterface $createdAt, ?string $type = null)
+    public function __construct($path, \DateTimeInterface $createdAt, string $type = self::TYPE_UNKNOWN)
     {
         $this->path = $path;
         $this->createdAt = $createdAt;

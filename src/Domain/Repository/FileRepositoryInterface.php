@@ -31,5 +31,5 @@ interface FileRepositoryInterface
      */
     public function remove(File $file);
 
-    public function removeExpiredFilesByType(string $type, \DateTimeInterface $dateTime): void;
+    public function findExpiredFiles(\DateTimeInterface $dateTime): array;
 }

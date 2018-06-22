@@ -4531,10 +4531,12 @@ services:
         tags:
             - { name: console.command }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\RemoveExpiredUploadedObjectsZipCommand:
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\RemoveExpiredFilesCommand:
         arguments:
             - '@repository.file_repository'
+            - '@adapter.file_system_adapter'
             - '@datetime'
+            - '%shared_uploaded_files%'
         tags:
             - { name: console.command }
 
