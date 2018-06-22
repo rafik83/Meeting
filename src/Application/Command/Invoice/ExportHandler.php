@@ -14,6 +14,7 @@ use IntlDateFormatter;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Query\Invoice\BillingInfos\BillingInfosQuery;
 use Proximum\Vimeet\Application\Query\Invoice\BillingInfos\BillingInfosQueryHandler;
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\ExportView;
@@ -21,50 +22,34 @@ use Proximum\Vimeet\Domain\View\Normalizer\InvoicesNormalizerView;
 
 class ExportHandler
 {
-    /**
-     * @var SerializerAdapterInterface
-     */
+    /** @var SerializerAdapterInterface */
     private $serializer;
 
-    /**
-     * @var EventRepositoryInterface
-     */
+    /** @var EventRepositoryInterface */
     private $eventRepository;
 
-    /**
-     * @var InvoiceRepositoryInterface
-     */
+    /** @var InvoiceRepositoryInterface */
     private $invoiceRepository;
 
     /** @var BillingInfosQueryHandler */
     private $billingInfosQueryHandler;
 
-    /**
-     * Export constructor.
-     *
-     * @param SerializerAdapterInterface $serializer
-     * @param EventRepositoryInterface   $eventRepository
-     * @param InvoiceRepositoryInterface $invoiceRepository
-     * @param BillingInfosQueryHandler   $billingInfosQueryHandler
-     */
     public function __construct(
         SerializerAdapterInterface $serializer,
         EventRepositoryInterface $eventRepository,
         InvoiceRepositoryInterface $invoiceRepository,
         BillingInfosQueryHandler $billingInfosQueryHandler
     ) {
-        $this->serializer               = $serializer;
-        $this->eventRepository          = $eventRepository;
-        $this->invoiceRepository        = $invoiceRepository;
+        $this->serializer = $serializer;
+        $this->eventRepository = $eventRepository;
+        $this->invoiceRepository = $invoiceRepository;
         $this->billingInfosQueryHandler = $billingInfosQueryHandler;
     }
 
     /**
-     * @param Export $command
-     *
-     * @return InvoicesNormalizerView
+     * @throws MissingBillingInfoException
      */
-    public function handle(Export $command)
+    public function handle(Export $command): InvoicesNormalizerView
     {
         $endDate = new \DateTime(sprintf('%s %s', $command->endDate->format('Y-m-d'), '23:59:59.999'));
         $events  = $this->eventRepository->getEventsByAdmin($command->admin);
