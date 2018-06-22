@@ -24,6 +24,8 @@ Proximum\Vimeet\Domain\Model\Badge:
             type: string
             options:
                 default: '#000000'
+        showSheetTitle:
+            type: boolean
         showPosition:
             type: boolean
         showFirstName:
