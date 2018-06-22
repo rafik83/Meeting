@@ -1360,7 +1360,6 @@ services:
             - '@adapter.file_system_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\ProcessAdapter'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ConvertFilesystemTreeToZipCommand }

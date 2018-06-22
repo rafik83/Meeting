@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\FinderAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\ProcessAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ZipArchiveAdapterInterface;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
@@ -31,9 +30,6 @@ class ConvertFilesystemTreeToZipCommandHandler
     /** @var ZipArchiveAdapterInterface */
     private $zipArchiveAdapter;
 
-    /** @var ProcessAdapterInterface */
-    private $processAdapter;
-
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -42,14 +38,12 @@ class ConvertFilesystemTreeToZipCommandHandler
         FileSystemAdapterInterface $fileSystemAdapter,
         FinderAdapterInterface $finderAdapter,
         ZipArchiveAdapterInterface $zipArchiveAdapter,
-        ProcessAdapterInterface $processAdapter,
         \DateTimeInterface $dateTime
     ) {
         $this->fileRepository = $fileRepository;
         $this->fileSystemAdapter = $fileSystemAdapter;
         $this->finderAdapter = $finderAdapter;
         $this->zipArchiveAdapter = $zipArchiveAdapter;
-        $this->processAdapter = $processAdapter;
         $this->dateTime = $dateTime;
     }
 
@@ -65,15 +59,9 @@ class ConvertFilesystemTreeToZipCommandHandler
         $rootFolder = end($path);
         $file = new File($rootFolder . '.zip', $this->dateTime, File::TYPE_UPLOADED_OBJECTS_ZIP);
 
-        $this->zipArchiveAdapter->zipFiles($files, $command->rootDir . '.zip', $command->rootDir);
+        $this->zipArchiveAdapter->zipFiles($files, $command->rootDir . '.zip', $command->rootDir, $command->password);
         $this->fileRepository->add($file);
         $this->fileSystemAdapter->remove($command->rootDir);
-
-        if ($command->password) {
-            $this->processAdapter->exec(
-                sprintf('zip --password %s %s', $command->password, $command->rootDir . '.zip')
-            );
-        }
 
         return $file;
     }
