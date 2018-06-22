@@ -56,6 +56,7 @@ class ExportUploadedObjectsCommandHandler
         }
 
         $password = PasswordGenerator::generate();
+        var_dump($password);
 
         /** @var string $rootDir */
         $rootDir = $this->commandBus->handle(new SaveTreeToFileSystemCommand($uploadedObjectsTreeView));
