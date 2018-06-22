@@ -48,6 +48,19 @@ services:
             - '@templating'
 
     #
+    # Type Badge
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\ConfigureAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@templating'
+            - '@adapter.router'
+
+    #
     # Event
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\PaymentConditionsAction:

@@ -113,6 +113,38 @@ class Badge
         $this->conditionedByStates = $conditionedByStates;
     }
 
+    public function update(
+        ?string $header = null,
+        bool $showHeader = true,
+        string $showFooterTypeOrCategory = self::FOOTER_SHOW_TYPE,
+        string $footerTextColor = '#ffffff',
+        string $footerColor = '#000000',
+        bool $showPosition = true,
+        bool $showFirstName = true,
+        bool $showLastName = true,
+        bool $showSheetTitle = true,
+        bool $showQRCode = true,
+        bool $activated = true,
+        bool $conditioned = false,
+        bool $conditionedByPackage = false,
+        array $conditionedByStates = []
+    ): void {
+        $this->header = $header;
+        $this->showHeader = $showHeader;
+        $this->showFooterTypeOrCategory = $showFooterTypeOrCategory;
+        $this->footerTextColor = $footerTextColor;
+        $this->footerColor = $footerColor;
+        $this->showPosition = $showPosition;
+        $this->showFirstName = $showFirstName;
+        $this->showLastName = $showLastName;
+        $this->showSheetTitle = $showSheetTitle;
+        $this->showQRCode = $showQRCode;
+        $this->activated = $activated;
+        $this->conditioned = $conditioned;
+        $this->conditionedByPackage = $conditionedByPackage;
+        $this->conditionedByStates = $conditionedByStates;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

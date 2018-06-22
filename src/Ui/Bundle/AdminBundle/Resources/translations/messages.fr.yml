@@ -1026,6 +1026,11 @@ admin.transaction.state.pending: 'En attente'
 admin.transaction.update: 'Modifier une transaction'
 admin.type.action.confirmDelete: 'Etes-vous sûr de vouloir supprimer ce type ?'
 admin.type.already_exists: 'Un type de participation au titre identique existe déjà'
+admin.type.badge.configuration.link: 'Configuration du e-badge'
+admin.type.badge.configuration.title: 'Configuration du design et des conditions du e-Badge'
+admin.type.badge.example.firstNameLastName: 'Prénom Nom'
+admin.type.badge.example.position: 'Directeur des badges '
+admin.type.badge.example.sheetTitle: 'Exemple de titre de Fiche'
 admin.type.create.link: Ajouter
 admin.type.create.title: 'Ajouter un type de participation'
 admin.type.hidden: Caché

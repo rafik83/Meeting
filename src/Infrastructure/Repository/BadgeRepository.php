@@ -25,6 +25,17 @@ class BadgeRepository implements BadgeRepositoryInterface
         $this->entityManager = $entityManager;
     }
 
+    public function add(Badge $badge): void
+    {
+        $this->entityManager->persist($badge);
+        $this->entityManager->flush($badge);
+    }
+
+    public function set(Badge $badge): void
+    {
+        $this->entityManager->flush($badge);
+    }
+
     public function findByType(Type $type): ?Badge
     {
         $queryBuilder = $this->entityManager
