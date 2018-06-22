@@ -84,7 +84,7 @@ class ConfigureAction
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($configure);
-            $this->flashBag->add('success', '');
+            $this->flashBag->add('success', 'flash.admin.type.badge.configuration.success');
 
             return new RedirectResponse($this->router->generate('admin_type_badge_configuration', [
                 'event' => $event->getId(),

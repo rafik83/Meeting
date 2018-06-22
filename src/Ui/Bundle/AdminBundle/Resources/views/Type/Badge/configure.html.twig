@@ -9,14 +9,16 @@
         justify-content: center;
         flex-direction: column;
         text-align: center;
+        border: 1px solid #000000;
     }
     .badge-header {
         height: 200px;
         margin: 10px;
         overflow: hidden;
+        max-width: 100%;
     }
     .badge-header-edit {
-        height: 150px;
+        height: 220px;
         margin: 10px;
     }
     .badge-footer {
@@ -46,7 +48,7 @@
         height: 230px;
     }
     .badge-qrcode-edit {
-        height: 220px;
+        height: 180px;
     }
 
     .badge-name-position {
@@ -64,30 +66,47 @@
 {{ form_row(form.activated) }}
 <hr>
 <div class="col-md-12">
-    <div class="col-md-6 badge-preview">
-        <div class="badge-header" style="max-height: 200px;">
-            {% if badge is null or badge.header is not null %}
-                <img src="{{ event.logo }}" width="200"/>
-            {% else %}
-                <img src="{{ badge.header }}" width="200"/>
-            {% endif %}
-        </div>
-        <div class="badge-sheet-title">
-            {% if badge is null or (badge is not null and badge.showSheetTitle) %}
-                {{ 'admin.type.badge.example.sheetTitle'|trans }}
-            {% endif %}
-        </div>
-        <div class="badge-qrcode">
-            <img src="{{ asset('assets/images/qrcode-vimeet.svg') }}" width="225"/>
-        </div>
-        <div class="badge-name-position">
-            {{ 'admin.type.badge.example.firstNameLastName'|trans }}<br/>
-            {{ 'admin.type.badge.example.position'|trans }}
-        </div>
-        <div class="badge-footer"
-             {% if badge is not null %}style="background-color: {{ badge.footerColor }}; color: {{ badge.footerTextColor }};"{% endif %}
-        >
-            <p>{{ type.title(locale) }}</p>
+    <div class="col-md-6">
+        <p>{{ 'admin.type.badge.example.explanation'|trans }}</p>
+        <div class="badge-preview">
+            <div class="badge-header" style="max-height: 200px;">
+                {% if badge is null or badge.showHeader %}
+                    {% if badge is null or badge.header is null %}
+                        <img src="{{ event.logo }}" height="200"/>
+                    {% else %}
+                        <img src="{{ badge.header }}" height="200"/>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="badge-sheet-title">
+                {% if badge is null or (badge is not null and badge.showSheetTitle) %}
+                    {{ 'admin.type.badge.example.sheetTitle'|trans }}
+                {% endif %}
+            </div>
+            <div class="badge-qrcode">
+                {% if badge is null or badge.showQRCode %}
+                    <img src="{{ asset('assets/images/qrcode-vimeet.svg') }}" width="225"/>
+                {% endif %}
+            </div>
+            <div class="badge-name-position">
+                {% if badge is null or badge.showFirstName %}
+                    {{ 'admin.type.badge.example.firstName'|trans }}
+                {% endif %}
+                {% if badge is null or badge.showLastName %}
+                    {{ 'admin.type.badge.example.lastName'|trans }}
+                {% endif %}
+                <br/>
+                {% if badge is null or badge.showPosition %}
+                    {{ 'admin.type.badge.example.position'|trans }}
+                {% endif %}
+            </div>
+            <div class="badge-footer"
+                 {% if badge is not null %}
+                     style="background-color: {{ badge.footerColor }}; color: {{ badge.footerTextColor }};"
+                 {% endif %}
+            >
+                <p>{{ type.title(locale)|upper }}</p>
+            </div>
         </div>
     </div>
     <div class="col-md-6">
