@@ -6215,5 +6215,9 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.service.sheets_group.group_name_resolver'
+            - '@domain.service.sheets_group.type_name_resolver'
+            - '@components.user.user_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery }

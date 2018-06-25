@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Badge;
 
 use Proximum\Vimeet\Application\Adapter\QRCodeGeneratorInterface;
+use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQueryHandler;
 use PHPUnit\Framework\TestCase;
@@ -18,13 +19,22 @@ use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler;
 use Proximum\Vimeet\Application\Query\Badge\UserBadgeByEventView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
+use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
 
 class GetUserBadgeByEventQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
+        $sheet = $this->prophesize(Sheet::class);
+        $sheets = [$sheet->reveal()];
+
         $event = $this->prophesize(Event::class);
+        $event->getFallback()->shouldBeCalled()->willReturn('en');
+
         $user = $this->prophesize(User::class);
 
         $qrCodeIdentifierQueryHandler = $this->prophesize(QRCodeIdentifierQueryHandler::class);
@@ -41,19 +51,51 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
             ->willReturn('data:qrCodeImageBase64')
         ;
 
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $sheetRepository
+            ->getSheetsByUserAndEvent($user->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheets)
+        ;
+
+        $groupNameResolver = $this->prophesize(GroupNameResolver::class);
+        $groupNameResolver
+            ->resolve($event->reveal(), $user->reveal(), $sheets)
+            ->shouldBeCalled()
+            ->willReturn('Taxi company')
+        ;
+
+        $typeNameResolver = $this->prophesize(TypeNameResolver::class);
+        $typeNameResolver
+            ->resolveWithPreloadedSheets($sheets, 'en')
+            ->shouldBeCalled()
+            ->willReturn('Exhibitor')
+        ;
+
+        $userInfoGuesser = $this->prophesize(UserInfoGuesser::class);
+        $userInfoGuesser
+            ->getUserInfoFromParticipant($user->reveal(), 'en', $sheets)
+            ->shouldBeCalled()
+            ->willReturn(['firstName' => 'Korben', 'lastName' => 'Dallas', 'position' => 'Taxi driver'])
+        ;
+
         $expectedUserBadgeByEventView = new UserBadgeByEventView(
-            'sheet title',
-            'first name',
-            'last name',
-            'user position',
-            'participation type',
+            'Taxi company',
+            'Korben',
+            'Dallas',
+            'Taxi driver',
+            'Exhibitor',
             '0000133700042',
             'data:qrCodeImageBase64'
         );
 
         $getUserBadgeByEventQueryHandler = new GetUserBadgeByEventQueryHandler(
             $qrCodeIdentifierQueryHandler->reveal(),
-            $qrCodeGenerator->reveal()
+            $qrCodeGenerator->reveal(),
+            $sheetRepository->reveal(),
+            $groupNameResolver->reveal(),
+            $typeNameResolver->reveal(),
+            $userInfoGuesser->reveal()
         );
         $result = $getUserBadgeByEventQueryHandler->handle(new GetUserBadgeByEventQuery($event->reveal(), $user->reveal()));
 
