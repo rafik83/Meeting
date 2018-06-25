@@ -123,6 +123,7 @@ app_patterns:
     # App
     - imagick
     - soap
+    - gd
 
   php_applications: []
 

@@ -58,7 +58,8 @@
         "twig/twig": "~1.35",
         "tilleuls/ovh-bundle": "^1.0.1",
         "league/iso3166": "^2.1",
-        "defuse/php-encryption": "^2.2"
+        "defuse/php-encryption": "^2.2",
+        "endroid/qrcode": "^3.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
