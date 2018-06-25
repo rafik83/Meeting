@@ -17,7 +17,7 @@ class MeetingRequestListView
     /**
      * @var MeetingRequestView[]
      */
-    private $meetingRequestsView;
+    private $meetingRequestsView = [];
 
     /**
      * @return MeetingRequestView[]
