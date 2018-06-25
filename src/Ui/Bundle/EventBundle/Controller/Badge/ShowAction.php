@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\QRCodeGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -29,12 +29,17 @@ class ShowAction
     /** @var EngineInterface */
     private $engine;
 
+    /** @var QRCodeGeneratorInterface */
+    private $qrCodeGenerator;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine
+        EngineInterface $engine,
+        QRCodeGeneratorInterface $qrCodeGenerator
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
+        $this->qrCodeGenerator = $qrCodeGenerator;
     }
 
     public function __invoke(
@@ -48,6 +53,7 @@ class ShowAction
         }
 
         $event = $eventDomain->getEvent();
+        $userToken = $event->getId() . $participant->getUser()->getId();
 
         return new Response(
             $this->engine->render(
@@ -55,6 +61,8 @@ class ShowAction
                 [
                     'event' => $event,
                     'sheet' => $sheet,
+                    'qrCode' => $this->qrCodeGenerator->generateBase64Image($userToken),
+                    'userToken' => $userToken,
                 ]
             )
         );

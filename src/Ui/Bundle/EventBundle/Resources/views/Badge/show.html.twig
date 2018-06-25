@@ -21,6 +21,11 @@
             padding: 10px 10px 4px 10px;
         }
 
+        .ebadge-qrcode img {
+            width: 150px;
+            height: 150px;
+        }
+
         .ebadge-qrcode-token {
             margin-top: 4px;
         }
@@ -65,8 +70,8 @@
             </div>
 
             <div class="ebadge-qrcode">
-                <img src="https://placeimg.com/150/150/animals" /><br>
-                <div class="ebadge-qrcode-token">ID 123456666TOKEN</div>
+                <img src="{{ qrCode }}" /><br>
+                <div class="ebadge-qrcode-token">ID {{ userToken }}</div>
             </div>
 
             <div>

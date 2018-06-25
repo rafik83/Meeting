@@ -54,3 +54,4 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter'
