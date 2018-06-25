@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\Address (local):
+Proximum\Vimeet\Domain\Model\Address:
     sheet_asddays_1_address:
         __construct: false
         street: <address()>
