@@ -11,9 +11,13 @@
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Controller\Badge;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
+use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQueryHandler;
+use Proximum\Vimeet\Application\Query\Badge\UserBadgeByEventView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ShowAction;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -32,12 +36,38 @@ class ShowActionTest extends TestCase
         $eventDomain->getEvent()->shouldBeCalled()->willReturn($event->reveal());
 
         $request = $this->prophesize(Request::class);
+
+        $user = $this->prophesize(User::class);
         $sheet = $this->prophesize(Sheet::class);
         $participant = $this->prophesize(Participant::class);
+        $participant->getUser()->willReturn($user->reveal());
+
+        $userBadgeByEventView = new UserBadgeByEventView(
+            'Sheet title',
+            'Korben',
+            'Dallas',
+            'Taxi driver',
+            'Exhibitor',
+            '000420001337',
+            'qrCodeImageBase64'
+        );
+
+        $getUserBadgeByEventQueryHandler = $this->prophesize(GetUserBadgeByEventQueryHandler::class);
+        $getUserBadgeByEventQueryHandler
+            ->handle(new GetUserBadgeByEventQuery($event->reveal(), $user->reveal()))
+            ->shouldBeCalled()
+            ->willReturn($userBadgeByEventView)
+        ;
 
         $engine = $this->prophesize(EngineInterface::class);
         $engine
-            ->render('EventBundle:Badge:show.html.twig', ['event' => $event->reveal(), 'sheet' => $sheet->reveal()])
+            ->render('EventBundle:Badge:show.html.twig',
+                [
+                    'event' => $event->reveal(),
+                    'sheet' => $sheet->reveal(),
+                    'userBadgeByEventView' => $userBadgeByEventView,
+                ]
+            )
             ->shouldBeCalled()
             ->willReturn('HTML of the badge')
         ;
@@ -45,7 +75,11 @@ class ShowActionTest extends TestCase
         $authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $authorizationChecker->isGranted(SheetVoter::EDIT, $sheet->reveal())->shouldBeCalled()->willReturn(true);
 
-        $showAction = new ShowAction($authorizationChecker->reveal(), $engine->reveal());
+        $showAction = new ShowAction(
+            $authorizationChecker->reveal(),
+            $engine->reveal(),
+            $getUserBadgeByEventQueryHandler->reveal()
+        );
         $response = $showAction($request->reveal(), $eventDomain->reveal(), $sheet->reveal(), $participant->reveal());
 
         $this->assertInstanceOf(Response::class, $response);

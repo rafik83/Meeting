@@ -6207,6 +6207,13 @@ services:
     #
     Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter: ~
 
-    Proximum\Vimeet\Application\Query\User\QRCode\QRCodeIdentifierQueryHandler:
+    Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler:
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\QRCode\QRCodeIdentifierQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery }
+
+    Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery }

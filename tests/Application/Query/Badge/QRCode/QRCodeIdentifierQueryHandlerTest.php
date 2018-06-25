@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Query\User\QRCode;
+namespace Proximum\Vimeet\Tests\Application\Query\Badge\QRCode;
 
-use Proximum\Vimeet\Application\Query\User\QRCode\QRCodeIdentifierQuery;
-use Proximum\Vimeet\Application\Query\User\QRCode\QRCodeIdentifierQueryHandler;
+use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
+use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;

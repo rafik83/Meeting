@@ -54,5 +54,4 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@templating'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter'
-            - '@Proximum\Vimeet\Application\Query\User\QRCode\QRCodeIdentifierQueryHandler'
+            - '@Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQueryHandler'

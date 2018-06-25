@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\User\QRCode;
+namespace Proximum\Vimeet\Application\Query\Badge\QRCode;
 
 class QRCodeIdentifierQueryHandler
 {
