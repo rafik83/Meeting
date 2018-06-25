@@ -55,3 +55,4 @@ services:
             - '@adapter.authorization_checker'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter'
+            - '@Proximum\Vimeet\Application\Query\User\QRCode\QRCodeIdentifierQueryHandler'

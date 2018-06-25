@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QRCodeGeneratorInterface;
+use Proximum\Vimeet\Application\Query\User\QRCode\QRCodeIdentifierQuery;
+use Proximum\Vimeet\Application\Query\User\QRCode\QRCodeIdentifierQueryHandler;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -32,14 +34,19 @@ class ShowAction
     /** @var QRCodeGeneratorInterface */
     private $qrCodeGenerator;
 
+    /** @var QRCodeIdentifierQueryHandler */
+    private $QRCodeIdentifierQueryHandler;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
-        QRCodeGeneratorInterface $qrCodeGenerator
+        QRCodeGeneratorInterface $qrCodeGenerator,
+        QRCodeIdentifierQueryHandler $QRCodeIdentifierQueryHandler
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
         $this->qrCodeGenerator = $qrCodeGenerator;
+        $this->QRCodeIdentifierQueryHandler = $QRCodeIdentifierQueryHandler;
     }
 
     public function __invoke(
@@ -53,7 +60,9 @@ class ShowAction
         }
 
         $event = $eventDomain->getEvent();
-        $userToken = $event->getId() . $participant->getUser()->getId();
+        $qrCodeIdentifier = $this->QRCodeIdentifierQueryHandler->handle(
+            new QRCodeIdentifierQuery($event, $participant->getUser())
+        );
 
         return new Response(
             $this->engine->render(
@@ -61,8 +70,8 @@ class ShowAction
                 [
                     'event' => $event,
                     'sheet' => $sheet,
-                    'qrCode' => $this->qrCodeGenerator->generateBase64Image($userToken),
-                    'userToken' => $userToken,
+                    'qrCode' => $this->qrCodeGenerator->generateBase64Image($qrCodeIdentifier),
+                    'qrCodeIdentifier' => $qrCodeIdentifier,
                 ]
             )
         );
