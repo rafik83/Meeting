@@ -1,43 +1,85 @@
 {% extends 'EventBundle::base.html.twig' %}
 
-{% set showQrCode = true %}
-
 {% block title 'badge.title'|trans %}
+
+{% block container_classes 'no-margin-mobile-container' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style type="text/css">
+        .ebadge-logo {
+            width: 100%;
+            position: fixed;
+            top: 0;
+        }
+
+        .ebadge-qrcode {
+            width: 170px;
+            border: 1px solid #e2e3e4;
+            margin: 10px auto;
+            padding: 10px 10px 4px 10px;
+        }
+
+        .ebadge-qrcode-token {
+            margin-top: 4px;
+        }
+
+        .ebadge-content {
+            text-align: center;
+            padding: 4px;
+        }
+
+        .ebadge-participation-type {
+            overflow: hidden;
+            width: 95%;
+            height: 41px;
+            line-height: 41px;
+            position: fixed;
+            bottom: 0px;
+            display: block;
+            text-align: center;
+        }
+
+        @media screen and (max-width: 767px) {
+            .ebadge-content {
+                margin-top: 50vh;
+                transform: translateY(-50%);
+            }
+
+            .ebadge-participation-type {
+                width: 100%;
+                bottom: 80px;
+            }
+        }
+    </style>
+{% endblock %}
 
 {% block content %}
     <div class="ebadge">
+        <img src="https://placeimg.com/300/100/building" class="ebadge-logo show-on-mobile" />
+
         <div class="ebadge-content">
-            <div class="company-participant {% if not showQrCode %}company-zone-without-qrcode{% endif %}">
-                <div class="text">CompanyName</div>
+            <div class="ft-bold">
+                LONG-VERY-LONG-COMPANY-NAME PARIS AND NEW YORK SARL
             </div>
 
-            {% if showQrCode %}
-                <div class="qrcode">
-                    <div class="qrcode-border">
-                        <img src="https://placeimg.com/300/300/animals" /><br>
-                        123456666TOKEN<br>
-                    </div>
-                </div>
-            {% endif %}
+            <div class="ebadge-qrcode">
+                <img src="https://placeimg.com/150/150/animals" /><br>
+                <div class="ebadge-qrcode-token">ID 123456666TOKEN</div>
+            </div>
 
-            <div class="info-participant {% if not showQrCode %}participant-zone-without-qrcode{% endif %}">
-                <div class="name-participant {% if not showQrCode %}text-participant-without-qrcode{% endif %}">
-                    <div class="text">
-                        FIRSTNAME
-                        <span class="last-name-participant">LASTNAME</span>
-                    </div>
-                </div>
+            <div>
+                <div>FIRSTNAME PHILIPPE-DUBOIS DE LONG-VERY-LONG-LASTNAME</div>
 
-                <div class="position-participant {% if not showQrCode %}text-participant-without-qrcode{% endif %}">
-                    <div class="text">
-                        POSITION
-                    </div>
+                <div class="ft-bold highlight">
+                    Head Director of marketing bla bla bla bla bla  bla bla bla bla bla
                 </div>
             </div>
         </div>
 
-        <div class="type-participant">
-            TYPE DE PARTICIPATION<br>
+        <div class="ebadge-participation-type ft-bold" style="background: blue; color: white;">{# @todo: background and font colors need to be replaced #}
+            TYPE DE PARTICIPATION bla bla bla bla bla on one line
         </div>
     </div>
 {% endblock %}
