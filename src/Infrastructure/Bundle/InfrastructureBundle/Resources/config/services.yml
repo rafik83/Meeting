@@ -6201,3 +6201,8 @@ services:
             - '@adapter.router'
             - '@datetime'
             - '@Proximum\Vimeet\Application\Command\User\Event\ActivateAccountTokenByUserAndSheetGuesserHandler'
+
+    #
+    # QRCode
+    #
+    Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter: ~
