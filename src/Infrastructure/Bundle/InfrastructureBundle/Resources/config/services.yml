@@ -6206,3 +6206,7 @@ services:
     # QRCode
     #
     Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter: ~
+
+    Proximum\Vimeet\Application\Query\User\QRCode\QRCodeIdentifierQueryHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\QRCode\QRCodeIdentifierQuery }
