@@ -218,6 +218,7 @@ navigation.category.member_space: 'Espace membre'
 navigation.category.package: 'Forfait de participation'
 navigation.category.planning: Agenda
 navigation.category.program: Programme
+navigation.category.badge: Badge
 navigation.category.sheet: 'Fiche de présentation'
 navigation.close: Fermer
 navigation.links.billing.billing_info: 'Informations de facturation'

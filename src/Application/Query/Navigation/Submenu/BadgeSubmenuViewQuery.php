@@ -11,22 +11,32 @@
 namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 
 use Proximum\Vimeet\Application\Query\Query;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
-class PackageSubmenuButtonViewQuery implements Query
+class BadgeSubmenuViewQuery implements Query
 {
+    /** @var User */
+    public $user;
+
+    /** @var Event */
+    public $event;
+
+    /** @var string */
+    public $locale;
+
     /** @var Sheet */
     public $sheet;
 
     /** @var string */
     public $route;
 
-    /**
-     * @param Sheet  $sheet
-     * @param string $route
-     */
-    public function __construct(Sheet $sheet, $route)
+    public function __construct(User $user, Event $event, string $locale, Sheet $sheet, string $route)
     {
+        $this->user = $user;
+        $this->event = $event;
+        $this->locale = $locale;
         $this->sheet = $sheet;
         $this->route = $route;
     }

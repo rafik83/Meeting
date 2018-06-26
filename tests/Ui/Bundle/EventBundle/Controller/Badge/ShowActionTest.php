@@ -10,17 +10,16 @@
 
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Controller\Badge;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
-use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQueryHandler;
 use Proximum\Vimeet\Application\Query\Badge\UserBadgeByEventView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ShowAction;
-use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,7 +83,7 @@ class ShowActionTest extends TestCase
             $engine->reveal(),
             $queryBus->reveal()
         );
-        $response = $showAction($request->reveal(), $eventDomain->reveal(), $sheet->reveal(), $participant->reveal());
+        $response = $showAction($request->reveal(), $eventDomain->reveal(), $user->reveal(), $sheet->reveal());
 
         $this->assertInstanceOf(Response::class, $response);
     }

@@ -39,6 +39,9 @@ final class Category
     const PROGRAM       = 'navigation.category.program';
     const PROGRAM_ICON  = 'icon-PresFlash_2';
 
+    const BADGE      = 'navigation.category.badge';
+    const BADGE_ICON = 'icon-Badge_1';
+
     public static $categories = [
         self::MEMBER_SPACE,
         self::BILLING,
@@ -48,5 +51,6 @@ final class Category
         self::MEETING,
         self::PLANNING,
         self::PROGRAM,
+        self::BADGE,
     ];
 }

@@ -3959,10 +3959,7 @@ services:
     query.navigation.submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQueryHandler
         arguments:
-            - '@query.navigation.sheet_submenu_view_query_handler'
-            - '@query.navigation.catalog_submenu_view_query_handler'
-            - '@query.navigation.agenda_submenu_view_query_handler'
-            - '@query.navigation.package_submenu_button_view_query_handler'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery }
     query.navigation.category_view_query_handler:
@@ -4006,37 +4003,61 @@ services:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.agenda_access_checker'
             - '@domain.key_dates.checker.meeting_published_access_checker'
+
     query.navigation.category_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
             - '@adapter.locale_helper_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetViewQuery }
+
     query.navigation.category_program_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.happenings_access_checker'
             - '@vimeet_infrastructure.repository.happening_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ProgramViewQuery }
+
     query.navigation.catalog_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
             - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery }
+
     query.navigation.sheet_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery }
+
     query.navigation.agenda_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.happenings_access_checker'
             - '@domain.key_dates.checker.agenda_access_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery }
+
     query.navigation.package_submenu_button_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
             - '@repository.cart_row_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery }
+
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQueryHandler:
+        arguments:
+            - '@adapter.router'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery }
 
     ##
     # Mass Assignment query handler

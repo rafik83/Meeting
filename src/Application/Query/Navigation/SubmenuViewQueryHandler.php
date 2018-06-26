@@ -10,62 +10,25 @@
 
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery;
-use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
-use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
-use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
-use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuView;
 
 class SubmenuViewQueryHandler
 {
-    /**
-     * @var SheetSubmenuViewQueryHandler
-     */
-    private $sheetSubmenuViewQueryHandler;
+    /** @var QueryBusInterface */
+    private $queryBus;
 
-    /**
-     * @var CatalogSubmenuViewQueryHandler
-     */
-    private $catalogSubmenuViewQueryHandler;
-
-    /**
-     * @var AgendaSubmenuViewQueryHandler
-     */
-    private $agendaSubmenuViewQueryHandler;
-
-    /**
-     * @var PackageSubmenuButtonViewQueryHandler
-     */
-    private $packageSubmenuButtonViewQueryHandler;
-
-    /**
-     * @param SheetSubmenuViewQueryHandler         $sheetSubmenuViewQueryHandler
-     * @param CatalogSubmenuViewQueryHandler       $catalogSubmenuViewQueryHandler
-     * @param AgendaSubmenuViewQueryHandler        $agendaSubmenuViewQueryHandler
-     * @param PackageSubmenuButtonViewQueryHandler $packageSubmenuButtonViewQueryHandler
-     */
-    public function __construct(
-        SheetSubmenuViewQueryHandler $sheetSubmenuViewQueryHandler,
-        CatalogSubmenuViewQueryHandler $catalogSubmenuViewQueryHandler,
-        AgendaSubmenuViewQueryHandler $agendaSubmenuViewQueryHandler,
-        PackageSubmenuButtonViewQueryHandler $packageSubmenuButtonViewQueryHandler
-    ) {
-        $this->sheetSubmenuViewQueryHandler         = $sheetSubmenuViewQueryHandler;
-        $this->catalogSubmenuViewQueryHandler       = $catalogSubmenuViewQueryHandler;
-        $this->agendaSubmenuViewQueryHandler        = $agendaSubmenuViewQueryHandler;
-        $this->packageSubmenuButtonViewQueryHandler = $packageSubmenuButtonViewQueryHandler;
+    public function __construct(QueryBusInterface $queryBus)
+    {
+        $this->queryBus = $queryBus;
     }
 
-    /**
-     * @param SubmenuViewQuery $submenuViewQuery
-     *
-     * @return SubmenuView
-     */
-    public function handle(SubmenuViewQuery $submenuViewQuery)
+    public function handle(SubmenuViewQuery $submenuViewQuery): SubmenuView
     {
         if (null === $submenuViewQuery->sheet || null === $submenuViewQuery->user) {
             return new SubmenuView([]);
@@ -73,8 +36,8 @@ class SubmenuViewQueryHandler
 
         $buttonsViews = [];
 
-        $sheetButtonViews = $this->sheetSubmenuViewQueryHandler->handle(
-            new SheetSubmenuViewQuery(
+        $badgeSubmenuView = $this->queryBus->handle(
+            new BadgeSubmenuViewQuery(
                 $submenuViewQuery->user,
                 $submenuViewQuery->event,
                 $submenuViewQuery->locale,
@@ -83,9 +46,24 @@ class SubmenuViewQueryHandler
             )
         );
 
-        $buttonsViews = array_merge($buttonsViews, $sheetButtonViews);
+        $buttonsViews[] = $badgeSubmenuView;
 
-        $catalogButtonViews = $this->catalogSubmenuViewQueryHandler->handle(
+        // If badge available do not show sheet links
+        if (null === $badgeSubmenuView) {
+            $sheetButtonViews = $this->queryBus->handle(
+                new SheetSubmenuViewQuery(
+                    $submenuViewQuery->user,
+                    $submenuViewQuery->event,
+                    $submenuViewQuery->locale,
+                    $submenuViewQuery->sheet,
+                    $submenuViewQuery->route
+                )
+            );
+
+            $buttonsViews = array_merge($buttonsViews, $sheetButtonViews);
+        }
+
+        $catalogButtonViews = $this->queryBus->handle(
             new CatalogSubmenuViewQuery(
                 $submenuViewQuery->user,
                 $submenuViewQuery->event,
@@ -97,7 +75,7 @@ class SubmenuViewQueryHandler
 
         $buttonsViews = array_merge($buttonsViews, $catalogButtonViews);
 
-        $agendaButtonViews = $this->agendaSubmenuViewQueryHandler->handle(
+        $agendaButtonViews = $this->queryBus->handle(
             new AgendaSubmenuViewQuery(
                 $submenuViewQuery->user,
                 $submenuViewQuery->event,
@@ -109,8 +87,7 @@ class SubmenuViewQueryHandler
 
         $buttonsViews = array_merge($buttonsViews, $agendaButtonViews);
 
-        // Package button
-        $packageSubmenuButtonView = $this->packageSubmenuButtonViewQueryHandler->handle(
+        $packageSubmenuButtonView = $this->queryBus->handle(
             new PackageSubmenuButtonViewQuery($submenuViewQuery->sheet, $submenuViewQuery->route)
         );
 
