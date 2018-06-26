@@ -36,15 +36,6 @@
 
     <hr>
 
-    {{ form_row(form.logo, {widget_columns: 3}) }}
-    {{ form_row(form.leftColor, {widget_columns: 2}) }}
-    {{ form_row(form.rightColor, {widget_columns: 2}) }}
-    {{ form_row(form.textColor, {widget_columns: 2}) }}
-    {{ form_row(form.backgroundColor, {widget_columns: 2}) }}
-    {{ form_row(form.backgroundImage, {widget_columns: 3}) }}
-    {% if form.isBackgroundImageToRemove is defined %}
-        {{ form_row(form.isBackgroundImageToRemove, {widget_columns: 3}) }}
-    {% endif %}
     {{ form_row(form.welcomeEnabled) }}
     {{ form_row(form.disabledEmailChanging) }}
     {{ form_row(form.disabledPasswordChanging) }}

@@ -34,6 +34,7 @@ Encore
 
     .addPlugin(new CopyWebPackPlugin([
         {from: './node_modules/tinymce/skins/lightgray/', to: 'tinymce/skins/lightgray'},
+        {from: './src/Ui/Bundle/AdminBundle/Resources/assets/images', to: 'images'},
         {from: './src/Ui/Bundle/EventBundle/Resources/assets/images', to: 'images'},
         {from: './src/Ui/Bundle/EventBundle/Resources/assets/fonts', to: 'fonts'}
     ]))
