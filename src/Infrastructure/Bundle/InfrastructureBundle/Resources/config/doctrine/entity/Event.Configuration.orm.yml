@@ -16,6 +16,9 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         catalogOnlineDate:
             type: datetime
             nullable: true
+        enableBadgeForParticipantDate:
+            type: datetime
+            nullable: true
         happeningsOpenDate:
             type: datetime
             nullable: true

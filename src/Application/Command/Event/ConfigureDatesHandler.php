@@ -51,7 +51,8 @@ class ConfigureDatesHandler
             $configureDates->smsActivationDate,
             $configureDates->agendaOnlineDate,
             $configureDates->registrationOpenDate,
-            $configureDates->registrationCloseDate
+            $configureDates->registrationCloseDate,
+            $configureDates->enableBadgeForParticipantDate
         );
 
         $this->eventRepository->set($configureDates->event);

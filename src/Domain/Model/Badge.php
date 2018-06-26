@@ -17,9 +17,9 @@ class Badge
     public const FOOTER_SHOW_NONE = 'none';
 
     public const FOOTER_SHOW_POSSIBILITIES = [
-        self::FOOTER_SHOW_NONE,
-        self::FOOTER_SHOW_TYPE,
-        self::FOOTER_SHOW_CATEGORY,
+        self::FOOTER_SHOW_NONE => self::FOOTER_SHOW_NONE,
+        self::FOOTER_SHOW_TYPE => self::FOOTER_SHOW_TYPE,
+        self::FOOTER_SHOW_CATEGORY => self::FOOTER_SHOW_CATEGORY,
     ];
 
     /** @var int|null */
