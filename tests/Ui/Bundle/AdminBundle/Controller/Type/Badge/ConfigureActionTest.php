@@ -149,6 +149,7 @@ class ConfigureActionTest extends TestCase
         $form->createView()->shouldBeCalled()->willReturn($formView);
         $this->formFactory
             ->create(ConfigureType::class, $configure, [
+                'type' => $this->type->reveal(),
                 'submit' => true,
             ])
             ->shouldBeCalled()
@@ -204,6 +205,7 @@ class ConfigureActionTest extends TestCase
         $form->isValid()->willReturn(true);
         $this->formFactory
             ->create(ConfigureType::class, $configure, [
+                'type' => $this->type->reveal(),
                 'submit' => true,
             ])
             ->shouldBeCalled()
@@ -218,7 +220,6 @@ class ConfigureActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('path/to/route')
         ;
-
 
         $this->engine
             ->renderResponse(Argument::any())

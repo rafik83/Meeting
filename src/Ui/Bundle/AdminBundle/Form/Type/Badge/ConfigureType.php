@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Badge;
 use Proximum\Vimeet\Application\Command\Type\Badge\Configure;
 use Proximum\Vimeet\Domain\Model\Badge;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -25,6 +26,12 @@ class ConfigureType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $footerPossibilities = Badge::FOOTER_SHOW_POSSIBILITIES;
+
+        if ($options['type']->getCategories()->isEmpty()) {
+            unset($footerPossibilities[Badge::FOOTER_SHOW_CATEGORY]);
+        }
+
         $builder
             ->add('header', FileType::class, [
                 'required' => false,
@@ -37,8 +44,8 @@ class ConfigureType extends AbstractType
                 'required' => true,
                 'multiple' => false,
                 'expanded' => false,
-                'choices' => Badge::FOOTER_SHOW_POSSIBILITIES,
-                'choice_label' => function (string $choice, int $key) {
+                'choices' => $footerPossibilities,
+                'choice_label' => function (string $choice, string $key) {
                     return sprintf('form.badge_configuration.children.showFooterTypeOrCategory.choices.%s', $choice);
                 }
             ])
@@ -95,6 +102,8 @@ class ConfigureType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
+            ->setRequired('type')
+            ->setAllowedTypes('type', Type::class)
             ->setDefaults([
                 'data_class' => Configure::class,
             ])

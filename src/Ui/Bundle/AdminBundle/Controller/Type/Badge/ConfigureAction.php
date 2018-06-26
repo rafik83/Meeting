@@ -79,6 +79,7 @@ class ConfigureAction
 
         $configure = new Configure($event, $type, $badge);
         $form = $this->formFactory->create(ConfigureType::class, $configure, [
+            'type' => $type,
             'submit' => true,
         ]);
 
