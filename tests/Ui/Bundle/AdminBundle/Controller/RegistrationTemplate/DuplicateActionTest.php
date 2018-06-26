@@ -229,7 +229,7 @@ class DuplicateActionTest extends TestCase
         $this->router
             ->generate('admin_template_registration_build', [
                 'locale' => 'fr',
-                'template' => 12,
+                'registrationTemplate' => 12,
             ])
             ->shouldBeCalled()
             ->willReturn('/path/to/route')
