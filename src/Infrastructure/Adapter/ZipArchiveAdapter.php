@@ -34,15 +34,13 @@ class ZipArchiveAdapter implements ZipArchiveAdapterInterface
 
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {
-            $filePath = str_replace($rootDir . '/', '', $file->getRealPath());
-
             $this->zipArchive->addFile(
                 $file->getRealPath(),
-                $filePath
+                $file->getRelativePathname()
             );
 
             if ($password) {
-                $this->zipArchive->setEncryptionName($filePath, \ZipArchive::EM_AES_256);
+                $this->zipArchive->setEncryptionName($file->getRelativePathname(), \ZipArchive::EM_AES_256);
             }
         }
         $this->zipArchive->close();
