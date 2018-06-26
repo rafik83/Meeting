@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Badge\QRCode;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class QRCodeIdentifierQuery
+class QRCodeIdentifierQuery implements Query
 {
     /** @var Event */
     public $event;

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Controller\Badge;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQueryHandler;
 use Proximum\Vimeet\Application\Query\Badge\UserBadgeByEventView;
@@ -52,8 +53,8 @@ class ShowActionTest extends TestCase
             'qrCodeImageBase64'
         );
 
-        $getUserBadgeByEventQueryHandler = $this->prophesize(GetUserBadgeByEventQueryHandler::class);
-        $getUserBadgeByEventQueryHandler
+        $queryBus = $this->prophesize(QueryBusInterface::class);
+        $queryBus
             ->handle(new GetUserBadgeByEventQuery($event->reveal(), $user->reveal()))
             ->shouldBeCalled()
             ->willReturn($userBadgeByEventView)
@@ -78,7 +79,7 @@ class ShowActionTest extends TestCase
         $showAction = new ShowAction(
             $authorizationChecker->reveal(),
             $engine->reveal(),
-            $getUserBadgeByEventQueryHandler->reveal()
+            $queryBus->reveal()
         );
         $response = $showAction($request->reveal(), $eventDomain->reveal(), $sheet->reveal(), $participant->reveal());
 

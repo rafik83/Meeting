@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Badge;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class GetUserBadgeByEventQuery
+class GetUserBadgeByEventQuery implements Query
 {
     /** @var Event */
     public $event;

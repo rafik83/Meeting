@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Badge;
 
 use Proximum\Vimeet\Application\Adapter\QRCodeGeneratorInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQueryHandler;
@@ -37,8 +38,8 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
 
         $user = $this->prophesize(User::class);
 
-        $qrCodeIdentifierQueryHandler = $this->prophesize(QRCodeIdentifierQueryHandler::class);
-        $qrCodeIdentifierQueryHandler
+        $queryBus = $this->prophesize(QueryBusInterface::class);
+        $queryBus
             ->handle(new QRCodeIdentifierQuery($event->reveal(), $user->reveal()))
             ->shouldBeCalled()
             ->willReturn('0000133700042')
@@ -90,7 +91,7 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
         );
 
         $getUserBadgeByEventQueryHandler = new GetUserBadgeByEventQueryHandler(
-            $qrCodeIdentifierQueryHandler->reveal(),
+            $queryBus->reveal(),
             $qrCodeGenerator->reveal(),
             $sheetRepository->reveal(),
             $groupNameResolver->reveal(),

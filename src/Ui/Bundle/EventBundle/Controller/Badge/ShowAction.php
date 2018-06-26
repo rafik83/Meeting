@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
-use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQueryHandler;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -30,17 +30,17 @@ class ShowAction
     /** @var EngineInterface */
     private $engine;
 
-    /** @var GetUserBadgeByEventQueryHandler */
-    private $getUserBadgeByEventQueryHandler;
+    /** @var QueryBusInterface */
+    private $queryBus;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
-        GetUserBadgeByEventQueryHandler $getUserBadgeByEventQueryHandler
+        QueryBusInterface $queryBus
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
-        $this->getUserBadgeByEventQueryHandler = $getUserBadgeByEventQueryHandler;
+        $this->queryBus = $queryBus;
     }
 
     public function __invoke(
@@ -61,7 +61,7 @@ class ShowAction
                 [
                     'event' => $event,
                     'sheet' => $sheet,
-                    'userBadgeByEventView' => $this->getUserBadgeByEventQueryHandler->handle(
+                    'userBadgeByEventView' => $this->queryBus->handle(
                         new GetUserBadgeByEventQuery($event, $participant->getUser())
                     ),
                 ]
