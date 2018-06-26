@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
 use Proximum\Vimeet\Application\Query\Badge\UserBadgeByEventView;
+use Proximum\Vimeet\Domain\Badge\AvailableChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -62,6 +63,9 @@ class ShowActionTest extends TestCase
             ->willReturn($userBadgeByEventView)
         ;
 
+        $badgeAvailableChecker = $this->prophesize(AvailableChecker::class);
+        $badgeAvailableChecker->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(true);
+
         $engine = $this->prophesize(EngineInterface::class);
         $engine
             ->render('EventBundle:Badge:show.html.twig',
@@ -79,6 +83,7 @@ class ShowActionTest extends TestCase
         $authorizationChecker->isGranted(SheetVoter::EDIT, $sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $showAction = new ShowAction(
+            $badgeAvailableChecker->reveal(),
             $authorizationChecker->reveal(),
             $engine->reveal(),
             $queryBus->reveal()

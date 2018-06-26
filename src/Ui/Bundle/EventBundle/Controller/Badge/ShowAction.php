@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
+use Proximum\Vimeet\Domain\Badge\AvailableChecker;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -34,12 +35,16 @@ class ShowAction
 
     /** @var QueryBusInterface */
     private $queryBus;
+    /** @var AvailableChecker */
+    private $availableChecker;
 
     public function __construct(
+        AvailableChecker $availableChecker,
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
         QueryBusInterface $queryBus
     ) {
+        $this->availableChecker = $availableChecker;
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
@@ -51,7 +56,9 @@ class ShowAction
         User $user,
         Sheet $sheet
     ): Response {
-        if (!$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)) {
+        if (!$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)
+            || !$this->availableChecker->isSatisfiedBy($sheet)
+        ) {
             throw new AccessDeniedException();
         }
 

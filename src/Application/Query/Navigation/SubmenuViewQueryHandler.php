@@ -46,10 +46,10 @@ class SubmenuViewQueryHandler
             )
         );
 
-        $buttonsViews[] = $badgeSubmenuView;
-
-        // If badge available do not show sheet links
-        if (null === $badgeSubmenuView) {
+        if (null !== $badgeSubmenuView) {
+            $buttonsViews[] = $badgeSubmenuView;
+        } else {
+            // If badge available do not show sheet links
             $sheetButtonViews = $this->queryBus->handle(
                 new SheetSubmenuViewQuery(
                     $submenuViewQuery->user,

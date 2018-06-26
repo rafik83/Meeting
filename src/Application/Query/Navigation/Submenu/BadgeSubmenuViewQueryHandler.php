@@ -14,19 +14,28 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Domain\Badge\AvailableChecker;
 
 class BadgeSubmenuViewQueryHandler
 {
+    /** @var AvailableChecker */
+    private $availableChecker;
+
     /** @var RouterInterface */
     private $router;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(AvailableChecker $availableChecker, RouterInterface $router)
     {
+        $this->availableChecker = $availableChecker;
         $this->router = $router;
     }
 
     public function handle(BadgeSubmenuViewQuery $query): ?SubmenuButtonView
     {
+        if (!$this->availableChecker->isSatisfiedBy($query->sheet)) {
+            return null;
+        }
+
         return new SubmenuButtonView(
             Category::BADGE_ICON,
             Category::BADGE,

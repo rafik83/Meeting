@@ -4055,6 +4055,7 @@ services:
 
     Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQueryHandler:
         arguments:
+            - '@Proximum\Vimeet\Domain\Badge\AvailableChecker'
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery }
