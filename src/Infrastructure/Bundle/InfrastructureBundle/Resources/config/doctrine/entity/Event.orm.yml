@@ -13,9 +13,6 @@ Proximum\Vimeet\Domain\Model\Event:
             type: string
         timeZone:
             type: string
-        logo:
-            type: string
-            nullable: true
         invoiceLogo:
             type: string
             nullable: true
@@ -48,9 +45,6 @@ Proximum\Vimeet\Domain\Model\Event:
             type: string
         currency:
             type: string
-        logoExtension:
-            type: string
-            nullable: true
         emailTeam:
             type: string
             nullable: true

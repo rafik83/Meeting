@@ -224,6 +224,7 @@ navigation.links.billing.order_history: 'Historique des commandes'
 navigation.links.catalog.available_date: 'Disponible le'
 navigation.links.catalog.incoming: 'A venir'
 navigation.links.catalog.sheet_not_in_catalog: 'Votre participation est en attente de validation'
+navigation.links.contactUs: 'Nous contacter'
 navigation.links.happening.accept: Acceptées
 navigation.links.happening.approved: Acceptées
 navigation.links.happening.decline: Refusées

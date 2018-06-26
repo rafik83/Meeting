@@ -146,6 +146,32 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PrepareIndex }
 
+    Proximum\Vimeet\Application\Command\Event\UpdateHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
+
+    Proximum\Vimeet\Application\Command\Event\CreateHandler:
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.event.content_repository'
+            - '@guideline.generator'
+            - '@domain.event.duplicator'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
+
+    Proximum\Vimeet\Application\Command\Event\Design\UpdateDesignHandler:
+        arguments:
+             - '@vimeet_infrastructure.repository.event_repository'
+             - '@adapter.local_file_storage'
+             - '@command.event.configuration.background.remove_image_handler'
+             - '@guideline.generator'
+        tags:
+             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign }
+
     #
     # Event / Sheet
     #

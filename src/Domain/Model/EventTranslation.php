@@ -54,6 +54,18 @@ class EventTranslation
      */
     private $paymentFooter;
 
+    /** @var string|null */
+    private $logo;
+
+    /** @var string|null */
+    private $logoExtension;
+
+    /** @var string|null */
+    private $mobileLogo;
+
+    /** @var string|null */
+    private $mobileLogoExtension;
+
     /**
      * @param Event       $event
      * @param string      $locale
@@ -65,12 +77,12 @@ class EventTranslation
      */
     public function __construct(
         Event $event,
-        $locale,
-        $description,
-        $bankInfo = null,
-        $billingAddress = null,
-        $paymentCondition = null,
-        $paymentFooter = null
+        string $locale,
+        string $description,
+        ?string $bankInfo = null,
+        ?string $billingAddress = null,
+        ?string $paymentCondition = null,
+        ?string $paymentFooter = null
     ) {
         $this->event            = $event;
         $this->locale           = $locale;
@@ -82,13 +94,17 @@ class EventTranslation
     }
 
     /**
-     * @param string $bankInfo
-     * @param string $billingAddress
-     * @param string $paymentCondition
-     * @param string $paymentFooter
+     * @param string|null $bankInfo
+     * @param string|null $billingAddress
+     * @param string|null $paymentCondition
+     * @param string|null $paymentFooter
      */
-    public function setBillingConfiguration($bankInfo, $billingAddress, $paymentCondition, $paymentFooter)
-    {
+    public function setBillingConfiguration(
+        ?string $bankInfo = null,
+        ?string $billingAddress = null,
+        ?string $paymentCondition = null,
+        ?string $paymentFooter = null
+    ): void {
         $this->bankInfo         = $bankInfo;
         $this->billingAddress   = $billingAddress;
         $this->paymentCondition = $paymentCondition;
@@ -98,7 +114,7 @@ class EventTranslation
     /**
      * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
@@ -217,5 +233,49 @@ class EventTranslation
         $this->paymentFooter = $paymentFooter;
 
         return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLogoExtension(): ?string
+    {
+        return $this->logoExtension;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getMobileLogo(): ?string
+    {
+        return $this->mobileLogo;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getMobileLogoExtension(): ?string
+    {
+        return $this->mobileLogoExtension;
+    }
+
+    public function updateLogoAndMobileLogo(
+        ?string $logo = null,
+        ?string $logoExtension = null,
+        ?string $mobileLogo = null,
+        ?string $mobileLogoExtension = null
+    ): void {
+        $this->logo = $logo;
+        $this->logoExtension = $logoExtension;
+        $this->mobileLogo = $mobileLogo;
+        $this->mobileLogoExtension = $mobileLogoExtension;
     }
 }

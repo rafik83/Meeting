@@ -19,10 +19,10 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CreateHandlerTest extends TestCase
 {
-    public function testHandleWithoutcolorGiven()
+    public function testHandleWithoutcolorGiven(): void
     {
         $event = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('#123123', '#456456', '#AABBCC', '#CCCCCC');
+        $event->getConfiguration()->setColors('#123123', '#456456', '#AABBCC', '#CCCCCC', '#DDDDDD', '#EEEEEE');
 
         // Expected
         $expectedCategory = new Category(
@@ -45,7 +45,7 @@ class CreateHandlerTest extends TestCase
         $handler->handle($create);
     }
 
-    public function testHandleWithAllGiven()
+    public function testHandleWithAllGiven(): void
     {
         $event = EventFactory::createEvent();
 

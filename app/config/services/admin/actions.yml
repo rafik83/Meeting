@@ -91,6 +91,15 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Design\UpdateDesignAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+
     #
     # Registration Template
     #

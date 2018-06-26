@@ -1,0 +1,44 @@
+Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign:
+    properties:
+        textColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                message: validators.hexadecimal
+        leftColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                message: validators.hexadecimal
+        headerLeftColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                message: validators.hexadecimal
+        rightColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                message: validators.hexadecimal
+        headerRightColor:
+            - NotBlank: ~
+            - Regex:
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                message: validators.hexadecimal
+        localizedImages:
+            - All:
+                - Collection:
+                    fields:
+                        logo:
+                            - Image:
+                                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
+                        mobileLogo:
+                            - Image:
+                                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
+        backgroundColor:
+            - Regex:
+                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                message: validators.hexadecimal
+        backgroundImage:
+            - Image:
+                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
