@@ -50,7 +50,8 @@ class ShowActionTest extends TestCase
             'Taxi driver',
             'Exhibitor',
             '000420001337',
-            'qrCodeImageBase64'
+            'qrCodeImageBase64',
+            '/path/to/header.png'
         );
 
         $queryBus = $this->prophesize(QueryBusInterface::class);

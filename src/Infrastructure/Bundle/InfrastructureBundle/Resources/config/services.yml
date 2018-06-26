@@ -6200,3 +6200,9 @@ services:
             - '@components.user.user_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery }
+
+    Proximum\Vimeet\Application\Query\Badge\GetBadgeConfigurationByTypeQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetBadgeConfigurationByTypeQuery }

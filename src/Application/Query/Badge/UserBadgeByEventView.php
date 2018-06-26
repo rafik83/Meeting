@@ -33,6 +33,9 @@ class UserBadgeByEventView
     /** @var null|string */
     public $qrCodeImage;
 
+    /** @var null|string */
+    public $header;
+
     public function __construct(
         ?string $sheetTitle,
         ?string $firstName,
@@ -40,7 +43,8 @@ class UserBadgeByEventView
         ?string $position,
         ?string $participationType,
         ?string $qrCodeIdentifier,
-        ?string $qrCodeImage
+        ?string $qrCodeImage,
+        ?string $header
     ) {
         $this->sheetTitle = $sheetTitle;
         $this->firstName = $firstName;
@@ -49,5 +53,6 @@ class UserBadgeByEventView
         $this->participationType = $participationType;
         $this->qrCodeIdentifier = $qrCodeIdentifier;
         $this->qrCodeImage = $qrCodeImage;
+        $this->header = $header;
     }
 }

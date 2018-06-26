@@ -113,6 +113,11 @@ class Badge
         $this->conditionedByStates = $conditionedByStates;
     }
 
+    public static function createDefault(Event $event, Type $type): self
+    {
+        return new self($event, $type);
+    }
+
     public function update(
         ?string $header = null,
         bool $showHeader = true,

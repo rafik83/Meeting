@@ -62,7 +62,9 @@
 
 {% block content %}
     <div class="ebadge">
-        <img src="https://placeimg.com/300/100/building" class="ebadge-logo show-on-mobile" />
+        {% if userBadgeByEventView.header %}
+            <img src="{{ userBadgeByEventView.header }}" class="ebadge-logo show-on-mobile" />
+        {% endif %}
 
         <div class="ebadge-content">
             <div class="ft-bold">
