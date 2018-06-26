@@ -2,11 +2,6 @@ Proximum\Vimeet\Application\Command\Type\Badge\Configure:
     properties:
         showFooterTypeOrCategory:
             - NotBlank: ~
-        leftColor:
-            - NotBlank: ~
-            - Regex:
-                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
-                message: validators.hexadecimal
         footerTextColor:
             - NotBlank: ~
             - Regex:
