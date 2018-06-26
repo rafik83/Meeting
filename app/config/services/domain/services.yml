@@ -80,3 +80,13 @@ services:
     Proximum\Vimeet\Domain\KeyDates\Checker\EnableBadgeForParticipantDateAccessChecker:
         arguments:
             - '@datetime'
+
+
+    #
+    # Badge
+    #
+    Proximum\Vimeet\Domain\Badge\AvailableChecker:
+        arguments:
+            - '@Proximum\Vimeet\Domain\KeyDates\Checker\EnableBadgeForParticipantDateAccessChecker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
+            - '@Proximum\Vimeet\Domain\Sheet\HasRemainingToPay'
