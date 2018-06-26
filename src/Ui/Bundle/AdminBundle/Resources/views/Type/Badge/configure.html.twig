@@ -72,7 +72,7 @@
             <div class="badge-header" style="max-height: 200px;">
                 {% if badge is null or badge.showHeader %}
                     {% if badge is null or badge.header is null %}
-                        <img src="{{ event.logo }}" height="200"/>
+                        <img src="{{ event.localizedMobileLogo(locale) }}" height="200"/>
                     {% else %}
                         <img src="{{ badge.header }}" height="200"/>
                     {% endif %}
