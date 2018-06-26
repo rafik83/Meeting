@@ -137,12 +137,7 @@ final class Route
         return in_array($route, self::PROGRAM);
     }
 
-    /**
-     * @param string $route
-     *
-     * @return bool
-     */
-    public static function isBadge($route)
+    public static function isBadge(string $route): bool
     {
         return \in_array($route, self::BADGE, true);
     }
