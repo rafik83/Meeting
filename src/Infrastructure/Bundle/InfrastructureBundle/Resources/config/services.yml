@@ -6196,6 +6196,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.service.sheets_group.group_name_resolver'
+            - '@domain.service.category.category_name_resolver'
             - '@domain.service.sheets_group.type_name_resolver'
             - '@components.user.user_info_guesser'
         tags:

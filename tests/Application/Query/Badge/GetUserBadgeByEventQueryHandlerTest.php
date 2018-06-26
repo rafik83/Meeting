@@ -20,11 +20,13 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
 use Proximum\Vimeet\Application\Query\Badge\UserBadgeByEventView;
 use Proximum\Vimeet\Domain\Model\Badge;
+use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
 
@@ -32,6 +34,13 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
+        $event = $this->prophesize(Event::class);
+        $event->getFallback()->shouldBeCalled()->willReturn('en');
+        $event->getLocalizedMobileLogo('en')->shouldBeCalled()->willReturn('/path/to/header.png');
+
+        $type = $this->prophesize(Type::class);
+        $type->getTitle('en')->shouldNotBeCalled();
+
         $badge = $this->prophesize(Badge::class);
         $badge->isActivated()->shouldBeCalled()->willReturn(true);
         $badge->isShowQRCode()->shouldBeCalled()->willReturn(true);
@@ -41,16 +50,17 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
         $badge->isShowLastName()->shouldBeCalled()->willReturn(true);
         $badge->isShowPosition()->shouldBeCalled()->willReturn(false);
         $badge->isShowSheetTitle()->shouldBeCalled()->willReturn(true);
+        $badge->getFooterColor()->shouldBeCalled()->willReturn('#000000');
+        $badge->getFooterTextColor()->shouldBeCalled()->willReturn('#ffffff');
+        $badge->isShowFooterTypeOrCategory()->shouldBeCalled()->willReturn(true);
+        $badge->isShowFooterType()->shouldBeCalled()->willReturn(false);
+        $badge->getEvent()->shouldBeCalled()->willReturn($event->reveal());
 
-        $type = $this->prophesize(Type::class);
-        $type->getTitle('en')->shouldBeCalled()->willReturn('Exhibitor');
+        $category = $this->prophesize(Category::class);
+        $category->getTitle('en')->shouldBeCalled()->willReturn('Exhibitor');
 
         $sheet = $this->prophesize(Sheet::class);
         $sheets = [$sheet->reveal()];
-
-        $event = $this->prophesize(Event::class);
-        $event->getFallback()->shouldBeCalled()->willReturn('en');
-        $event->getLocalizedMobileLogo('en')->shouldBeCalled()->willReturn('/path/to/header.png');
 
         $user = $this->prophesize(User::class);
 
@@ -94,6 +104,13 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
             ->willReturn($type->reveal())
         ;
 
+        $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
+        $categoryNameResolver
+            ->resolveCategoryForPreloadSheets($sheets)
+            ->shouldBeCalled()
+            ->willReturn($category->reveal())
+        ;
+
         $userInfoGuesser = $this->prophesize(UserInfoGuesser::class);
         $userInfoGuesser
             ->getUserInfoFromParticipant($user->reveal(), 'en', $sheets)
@@ -109,7 +126,9 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
             'Exhibitor',
             '0000133700042',
             'data:qrCodeImageBase64',
-            '/path/to/header.png'
+            '/path/to/header.png',
+            '#ffffff',
+            '#000000'
         );
 
         $getUserBadgeByEventQueryHandler = new GetUserBadgeByEventQueryHandler(
@@ -117,6 +136,7 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
             $qrCodeGenerator->reveal(),
             $sheetRepository->reveal(),
             $groupNameResolver->reveal(),
+            $categoryNameResolver->reveal(),
             $typeNameResolver->reveal(),
             $userInfoGuesser->reveal()
         );

@@ -25,7 +25,7 @@ class UserBadgeByEventView
     public $position;
 
     /** @var null|string */
-    public $participationType;
+    public $participationTypeOrCategoryLabel;
 
     /** @var null|string */
     public $qrCodeIdentifier;
@@ -36,23 +36,33 @@ class UserBadgeByEventView
     /** @var null|string */
     public $header;
 
+    /** @var string */
+    public $footerTextColor;
+
+    /** @var string */
+    public $footerColor;
+
     public function __construct(
         ?string $sheetTitle,
         ?string $firstName,
         ?string $lastName,
         ?string $position,
-        ?string $participationType,
+        ?string $participationTypeOrCategoryLabel,
         ?string $qrCodeIdentifier,
         ?string $qrCodeImage,
-        ?string $header
+        ?string $header,
+        string $footerTextColor,
+        string $footerColor
     ) {
         $this->sheetTitle = $sheetTitle;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->position = $position;
-        $this->participationType = $participationType;
+        $this->participationTypeOrCategoryLabel = $participationTypeOrCategoryLabel;
         $this->qrCodeIdentifier = $qrCodeIdentifier;
         $this->qrCodeImage = $qrCodeImage;
         $this->header = $header;
+        $this->footerTextColor = $footerTextColor;
+        $this->footerColor = $footerColor;
     }
 }

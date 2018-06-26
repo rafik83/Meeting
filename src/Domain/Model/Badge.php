@@ -180,6 +180,16 @@ class Badge
         return $this->showFooterTypeOrCategory;
     }
 
+    public function isShowFooterTypeOrCategory()
+    {
+        return self::FOOTER_SHOW_NONE !== $this->showFooterTypeOrCategory;
+    }
+
+    public function isShowFooterType()
+    {
+        return self::FOOTER_SHOW_TYPE === $this->showFooterTypeOrCategory;
+    }
+
     public function getFooterTextColor(): string
     {
         return $this->footerTextColor;
