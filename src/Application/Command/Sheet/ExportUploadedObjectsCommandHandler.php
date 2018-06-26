@@ -53,6 +53,15 @@ class ExportUploadedObjectsCommandHandler
         $uploadedObjectsTreeView = $this->queryBus->handle(new GetUploadedObjectsTreeQuery($command->sheets, $command->admin));
 
         if (0 === \count($uploadedObjectsTreeView->tree)) {
+            $this->mailer->send(
+                new NoUploadedObjectsZipMail(
+                    $command->event,
+                    $this->sender,
+                    $command->admin->getEmail(),
+                    $command->admin->getLocale()
+                )
+            );
+
             return;
         }
 
