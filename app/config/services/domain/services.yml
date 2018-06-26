@@ -73,3 +73,10 @@ services:
     Proximum\Vimeet\Domain\Sheet\HasRemainingToPay:
         arguments:
             - '@order.balance'
+
+    #
+    # Key Dates
+    #
+    Proximum\Vimeet\Domain\KeyDates\Checker\EnableBadgeForParticipantDateAccessChecker:
+        arguments:
+            - '@datetime'
