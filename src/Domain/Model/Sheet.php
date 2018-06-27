@@ -881,6 +881,11 @@ class Sheet implements TraceableInterface
         return $this->spot;
     }
 
+    public function hasSpot(): bool
+    {
+        return null !== $this->spot;
+    }
+
     /**
      * @param Spot $spot
      */
