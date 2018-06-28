@@ -216,6 +216,8 @@ fos_elastica:
                                 id:
                                     type: integer
                     persistence:
+                        elastica_to_model_transformer:
+                            ignore_missing: true
                         model_to_elastica_transformer:
                             service: transformer.elastic.sheet_elastic_transformer
                         driver: orm
