@@ -328,4 +328,21 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findSlotIdsByEvents(array $events): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot.id')
+            ->from(MeetingSlot::class, 'slot', 'slot.id')
+            ->where('slot.event IN (:events)')
+            ->setParameter('events', $events)
+        ;
+
+        return array_keys($queryBuilder->getQuery()->getResult());
+    }
 }
