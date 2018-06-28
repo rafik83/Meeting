@@ -173,6 +173,7 @@ template.tag.sheet_generic_tag_97: 'Tag générique 97'
 template.tag.sheet_generic_tag_98: 'Tag générique 98'
 template.tag.sheet_generic_tag_99: 'Tag générique 99'
 template.tag.sheet_logo: Logo
+template.tag.sheet_application_domain: 'Domaine d''application'
 template.tag.sheet_organization: 'Nom de l''organisation'
 template.tag.sheet_organization_category: 'Catégorie d''organisation'
 template.tag.sheet_organization_staff: Effectifs
