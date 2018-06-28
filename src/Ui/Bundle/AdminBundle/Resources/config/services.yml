@@ -362,13 +362,6 @@ services:
             - '@template.template_data_factory'
         tags:
             - { name: kernel.event_subscriber }
-    event_listener_event.event_updated_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Event\EventUpdatedEventSubscriber
-        arguments:
-            - '@repository.adapter.job_repository_adapter'
-            - '@adapter.job_queue_adapter'
-        tags:
-            - { name: kernel.event_subscriber }
 
     event_listener_meeting_request.smsnotifier_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\MeetingRequest\SMSNotifierSubscriber

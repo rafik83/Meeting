@@ -28,3 +28,11 @@ services:
             - '@repository.admin_repository'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsForEventsCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@command.event.user.agenda.version.generate_versions_handler'
+            - '@datetime'
+        tags:
+            - { name: console.command }

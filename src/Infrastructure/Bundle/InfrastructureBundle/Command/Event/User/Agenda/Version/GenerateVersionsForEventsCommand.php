@@ -72,6 +72,8 @@ class GenerateVersionsForEventsCommand extends Command
             }
 
             try {
+                $output->writeln(sprintf('Generating user agenda versions for the event of id %d', $event->getId()));
+
                 $this->generateVersionsHandler->handle(new GenerateVersions($event));
             } catch (VersionsAlreadyGenerated $exception) {
                 continue;
