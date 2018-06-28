@@ -1,0 +1,225 @@
+fos_elastica:
+    clients:
+        default: { host: "%elastic_host%", port: "%elastic_port%", retryOnConflict: 2 }
+    indexes:
+        app:
+            index_name: "app_%kernel.environment%"
+            settings:
+                index:
+                    analysis:
+                        analyzer:
+                            lowercaseAnalyzer:
+                                tokenizer: "keyword"
+                                filter: "lowercase"
+                            sheetAnalyzer:
+                                tokenizer: "standard"
+                                filter: ["standard", "lowercase"]
+                            emailAnalyzer:
+                                tokenizer: "uax_url_email"
+                            autocomplete:
+                                type: custom
+                                tokenizer: "standard"
+                                filter: ["standard", "lowercase", "autocomplete_filter", "asciifolding"]
+                        filter:
+                            autocomplete_filter:
+                                type: edge_ngram
+                                side: front
+                                min_gram: 3
+                                max_gram: 20
+            types:
+                sheet:
+                    mappings:
+                        id:
+                            type: integer
+                            index: "not_analyzed"
+                        sheetName:
+                            type: string
+                            analyzer: "sheetAnalyzer"
+                            fields:
+                                raw:
+                                    type: string
+                                    analyzer: "lowercaseAnalyzer"
+                                autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
+                        content:
+                            type: string
+                        content_en:
+                            type: string
+                            analyzer: "english"
+                        content_fr:
+                            type: string
+                            analyzer: "french"
+                        state:
+                            type: string
+                            index: "not_analyzed"
+                        validationState:
+                            type: string
+                            index: "not_analyzed"
+                        agendaConfirmedStatus:
+                            type: string
+                            index: "not_analyzed"
+                        phoneValidationStatus:
+                            type: string
+                            index: "not_analyzed"
+                        availabilityConfirmationStatus:
+                            type: string
+                            index: "not_analyzed"
+                        enabled:
+                            type: boolean
+                        completed:
+                            type: boolean
+                        completeness:
+                            type: integer
+                        categories:
+                            type: nested
+                        booleanFilter:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
+                        filledFilter:
+                            type: nested
+                            index: "not_analyzed"
+                            properties:
+                                key:
+                                    type: string
+                                    index: "not_analyzed"
+                                status:
+                                    type: string
+                                    index: "not_analyzed"
+                        type:
+                            type: integer
+                        followUp:
+                            type: integer
+                            nullable: true
+                            null_value: 0
+                        commercialStatus:
+                            type: string
+                        participantNumber:
+                            type: integer
+                        participants:
+                            type: nested
+                            properties:
+                                lastname:
+                                    type: string
+                                    analyzer: "sheetAnalyzer"
+                                email:
+                                    type: string
+                                    analyzer: "emailAnalyzer"
+                                position:
+                                    type: string
+                                    index: "not_analyzed"
+                        event:
+                            type: integer
+                        owner:
+                            type: integer
+                        ownerEmail:
+                            type: string
+                        lastLoginAt:
+                            type: date
+                        imported:
+                            type: boolean
+                        createdAt:
+                            type: date
+                        remainingToPay:
+                            type: float
+                        inCatalog:
+                            type: boolean
+                        inCatalogAt:
+                            type: date
+                        orderStatus:
+                            type: string
+                        hasCart:
+                            type: boolean
+                        hasHappeningParticipation:
+                            type: boolean
+                        hasMeetingRequest:
+                            type: boolean
+                        hasPendingMeetingProposition:
+                            type: boolean
+                        hasScheduledMeeting:
+                            type: boolean
+                        hasInvoice:
+                            type: boolean
+                        hasSpot:
+                            type: boolean
+                        attend:
+                            type: boolean
+                        hasGroup:
+                            type: boolean
+                        reminderDate:
+                            type: date
+                            nullable: true
+                        organizationCategory:
+                            type: string
+                            index: "not_analyzed"
+                        nomenclatureItems:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
+                        nomenclatureItemsSupply:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
+                        nomenclatureItemsNeeds:
+                            type: nested
+                            properties:
+                                key:
+                                    type: string
+                        zipcode:
+                            type: string
+                            index: "not_analyzed"
+                        countryCode:
+                            type: string
+                            index: "not_analyzed"
+                        city:
+                            type: multi_field
+                            fields:
+                                city:
+                                    type: string
+                                    analyzer: "lowercaseAnalyzer"
+                                city_autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
+                        country:
+                            type: nested
+                            index: "not_analyzed"
+                            properties:
+                                label:
+                                    type: string
+                                    analyzer: "lowercaseAnalyzer"
+                                label_autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
+                                locale:
+                                    type: string
+                                    index: "not_analyzed"
+                        keywords:
+                            type: nested
+                            index: "not_analyzed"
+                            properties:
+                                label:
+                                    type: string
+                                    analyzer: "lowercaseAnalyzer"
+                                label_autocomplete:
+                                    type: string
+                                    analyzer: "autocomplete"
+                                locale:
+                                    type: string
+                                    index: "not_analyzed"
+                        availableSlotIds:
+                            type: nested
+                            properties:
+                                id:
+                                    type: integer
+                    persistence:
+                        model_to_elastica_transformer:
+                            service: transformer.elastic.sheet_elastic_transformer
+                        driver: orm
+                        model: Proximum\Vimeet\Domain\Model\Sheet
+                        provider: ~
+                        listener: ~
+                        finder: ~
