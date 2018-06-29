@@ -461,3 +461,13 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
             - '@session.flash_bag'
+
+    #
+    # Order
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Order\CancelAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.router'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'

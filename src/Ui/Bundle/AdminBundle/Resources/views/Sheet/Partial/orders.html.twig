@@ -1,3 +1,5 @@
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
 <div class="panel panel-default">
     <div class="panel-heading">
         {{ 'admin.sheet.details.orders'|trans }}
@@ -34,6 +36,13 @@
                                 <a href="{{ path('admin_sheet_order_edit', { event: event.id, order: orderVatView.orderId }) }}" class="btn btn-default btn-sm">
                                     {{ 'admin.order_edit.link'|trans }}
                                 </a>
+                                {% if not orderVatView.isCancelled %}
+                                    {{ delete_button(
+                                        path('admin_sheet_order_cancel', {'event': event.id, 'sheet': sheet.id, 'order': orderVatView.orderId}),
+                                        'REMOVE',
+                                        {'class' : 'btn btn-danger btn-sm'})
+                                    }}
+                                {% endif %}
                             {% else %}
                                 <span class="label label-success">
                                     {{ 'admin.order.invoiceNumber'|trans }}

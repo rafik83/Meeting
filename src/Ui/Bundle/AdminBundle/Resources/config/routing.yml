@@ -783,6 +783,14 @@ admin_sheet_order_list:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order:list }
+admin_sheet_order_cancel:
+    path: /event/{event}/sheet/{sheet}/order/{order}/cancel
+    requirements:
+        event: \d+
+        sheet: \d+
+        order: \d+
+    methods: [DELETE]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Order\CancelAction }
 admin_sheet_order_edit:
     path: /event/{event}/order/{order}/edit
     requirements:

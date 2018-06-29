@@ -261,3 +261,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Create }
+
+    #
+    # Order
+    #
+    Proximum\Vimeet\Application\Command\Order\CancelHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@cart_manager'
+            - '@Proximum\Vimeet\Application\Command\Sheet\ChangeType\CancelPackageHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Cancel }
