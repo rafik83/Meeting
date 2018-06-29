@@ -247,6 +247,8 @@ form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
 form.event_update.children.disabledEmailChanging.label: 'Changement d''email désactivé'
 form.event_update.children.disabledPasswordChanging.label: 'Changement de mot de passe désactivé'
+form.event_update.children.displayParticipantNameOnPlanning.label: 'Prénom et Nom des participants affichés sur le planning'
+form.event_update.children.displayParticipantPositionOnPlanning.label: 'Fonction des participants affichés sur le planning'
 form.event_update.children.domain.label: 'Domaine (complet)'
 form.event_update.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_update.children.fallback.label: 'Langue par défaut'

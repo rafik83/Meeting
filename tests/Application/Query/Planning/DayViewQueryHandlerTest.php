@@ -122,11 +122,11 @@ class DayViewQueryHandlerTest extends TestCase
             ->shouldNotBeCalled();
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
         $meetingHandler
-            ->handle(new MeetingViewQuery($meeting2->reveal(), $user->reveal()))
+            ->handle(new MeetingViewQuery($event, $meeting2->reveal(), $user->reveal(), 'fr'))
             ->shouldBeCalled()
             ->willReturn(new MeetingView($begin, $end, 'spotRef', 'userSheetTitle', 'sheetMetTitle'));
         $meetingHandler
-            ->handle(new MeetingViewQuery($meeting1->reveal(), $user->reveal()))
+            ->handle(new MeetingViewQuery($event, $meeting1->reveal(), $user->reveal(), 'fr'))
             ->shouldNotBeCalled();
 
         $handler = new DayViewQueryHandler(
@@ -137,6 +137,7 @@ class DayViewQueryHandlerTest extends TestCase
             $meetingHandler->reveal()
         );
         $result = $handler->handle(new DayViewQuery(
+            $event,
             $user->reveal(),
             $day,
             $locale,

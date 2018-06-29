@@ -56,6 +56,23 @@ class ParticipantInfoGuesserCache
      *
      * @return string
      */
+    public function guessParticipantPosition(Participant $participant, $locale)
+    {
+        $key = $participant->getId() . $locale;
+
+        if (!isset($this->cache['position'][$key])) {
+            $this->cache['position'][$key] = $this->guesser->guessParticipantPositionLabel($participant, $locale);
+        }
+
+        return $this->cache['position'][$key];
+    }
+
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return string
+     */
     public function guessParticipantCompleteName(Participant $participant, $locale)
     {
         $key = $participant->getId() . $locale;
