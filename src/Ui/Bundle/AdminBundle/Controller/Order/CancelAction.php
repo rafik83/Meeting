@@ -25,10 +25,13 @@ class CancelAction
 {
     /** @var RouterInterface */
     private $router;
+
     /** @var FlashBagInterface */
     private $flashBag;
+
     /** @var CommandBusInterface */
     private $commandBus;
+
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
@@ -56,6 +59,7 @@ class CancelAction
         }
 
         $this->commandBus->handle(new Cancel($order));
+        $this->flashBag->add('success', 'flash.admin.order.cancel.success');
 
         return new RedirectResponse(
             $this->router->generate('admin_sheet_details', [

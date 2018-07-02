@@ -50,6 +50,7 @@ flash.admin.nomenclature.update.success: 'La nomenclature a bien été mise à j
 flash.admin.operator.create.success: 'Le nouveau collaborateur a bien été créé, un email a été envoyé pour que le nouveau collaborateur active son compte'
 flash.admin.operator.update.success: 'Le collaborateur a été édité avec succès'
 flash.admin.order.add_row.success: 'La ligne a été ajoutée'
+flash.admin.order.cancel.success: 'La commande a été annulée'
 flash.admin.order.export.success: 'L''export des commandes a été planifié, vous allez recevoir un mail avec le fichier'
 flash.admin.order.remove_row.success: 'La ligne a été supprimée'
 flash.admin.order.update_row.success: 'La ligne a été mise à jour'
