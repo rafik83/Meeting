@@ -5638,6 +5638,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Planning\Day\MassViewQueryHandler
     query.planning.day.meeting_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planning\Day\MeetingViewQueryHandler
+        arguments:
+            - '@command.planning.participant_info_guesser_cache'
     query.planning.day.unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planning\Day\UnavailabilityViewQueryHandler
     query.planning.day_view_query_handler:
