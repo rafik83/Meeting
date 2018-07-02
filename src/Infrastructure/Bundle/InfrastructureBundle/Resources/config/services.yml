@@ -333,6 +333,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     #
     # Handlers
     #
