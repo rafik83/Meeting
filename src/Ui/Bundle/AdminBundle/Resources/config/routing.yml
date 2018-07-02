@@ -715,7 +715,7 @@ admin_sheet_details:
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction }
 admin_sheet_remove_comment:
-    path: /event/{event}/sheet/{sheet}/remove/{comment}
+    path: /event/{event}/sheet/{sheet}/remove/comment/{comment}
     requirements:
         event: \d+
         sheet: \d+
