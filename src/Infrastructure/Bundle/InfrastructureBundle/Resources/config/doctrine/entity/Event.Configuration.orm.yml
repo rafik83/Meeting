@@ -86,3 +86,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             type: boolean
             options:
                 default: false
+        isVisio:
+            type: boolean
+            options:
+                default: false
