@@ -42,7 +42,7 @@ class Update extends AbstractEvent
     public $displayParticipantPositionOnPlanning;
 
     /** @var bool */
-    public $isVisio;
+    public $visio;
 
     /**
      * @param Model\Event $event
@@ -74,7 +74,7 @@ class Update extends AbstractEvent
         $this->disabledPasswordChanging = $event->isDisabledPasswordChanging();
         $this->displayParticipantPositionOnPlanning = $event->getConfiguration()->displayParticipantPositionOnPlanning();
         $this->displayParticipantNameOnPlanning = $event->getConfiguration()->displayParticipantNameOnPlanning();
-        $this->isVisio = $event->getConfiguration()->isVisio();
+        $this->visio = $event->getConfiguration()->isVisio();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

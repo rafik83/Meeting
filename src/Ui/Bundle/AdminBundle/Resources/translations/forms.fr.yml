@@ -1093,5 +1093,5 @@ form.who_see_who.children.priority.label: 'Priorité de la règle'
 form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter
-form.event_update.children.isVisio.label: "Evenement dématérialisé"
-form.event_create.children.isVisio.label: "Evenement dématérialisé"
+form.event_update.children.visio.label: "Evenement dématérialisé"
+form.event_create.children.visio.label: "Evenement dématérialisé"

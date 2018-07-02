@@ -114,7 +114,7 @@ class Configuration
     private $displayParticipantPositionOnPlanning = false;
 
     /** @var bool */
-    private $isVisio = false;
+    private $visio = false;
 
     /**
      * @param string $leftColor
@@ -508,12 +508,12 @@ class Configuration
 
     public function isVisio(): bool
     {
-        return $this->isVisio;
+        return $this->visio;
     }
 
-    public function setIsVisio(bool $isVisio): self
+    public function setVisio(bool $visio): self
     {
-        $this->isVisio = $isVisio;
+        $this->visio = $visio;
 
         return $this;
     }

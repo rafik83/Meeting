@@ -6,9 +6,9 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Add visio on Event configuration
+ * Add visio on event configuration
  */
-class Version20180702125909 extends AbstractMigration
+class Version20180702133715 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -17,7 +17,7 @@ class Version20180702125909 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE event ADD configuration_is_visio TINYINT(1) DEFAULT \'0\' NOT NULL');
+        $this->addSql('ALTER TABLE event ADD configuration_visio TINYINT(1) DEFAULT \'0\' NOT NULL');
     }
 
     /**
@@ -27,6 +27,6 @@ class Version20180702125909 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE event DROP configuration_is_visio');
+        $this->addSql('ALTER TABLE event DROP configuration_visio');
     }
 }
