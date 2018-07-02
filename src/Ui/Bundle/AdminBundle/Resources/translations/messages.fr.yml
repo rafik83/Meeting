@@ -806,8 +806,11 @@ admin.sheet.duplication: 'Dupliquer les fiches'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.export.button.label: Exporter
+admin.sheet.export.field.comment: '%author% le %date%: "%comment%"'
 admin.sheet.export.fields.balance: 'Balance TTC'
 admin.sheet.export.fields.category: Catégorie
+admin.sheet.export.fields.comments: 'Commentaires'
+admin.sheet.export.fields.commercial_status: 'Statut commercial'
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
 admin.sheet.export.fields.following: 'Suivi commercial'
