@@ -20,6 +20,9 @@ class Create extends AbstractEvent
      */
     public $admin;
 
+    /** @var bool */
+    public $isVisio;
+
     /**
      * @param Admin      $admin
      * @param Event|null $event
@@ -64,6 +67,7 @@ class Create extends AbstractEvent
         $this->visible = $event->isVisible();
         $this->duplicatedFrom = $event;
         $this->backgroundColor = $event->getConfiguration()->getBackgroundColor();
+        $this->isVisio = $event->getConfiguration()->isVisio();
         $this->welcomeEnabled = $event->isWelcomeEnabled();
     }
 }

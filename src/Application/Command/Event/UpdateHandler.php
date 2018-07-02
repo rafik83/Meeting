@@ -115,6 +115,8 @@ class UpdateHandler
             $update->backgroundColor
         );
 
+        $event->getConfiguration()->setIsVisio($update->isVisio);
+
         $event->getConfiguration()->setParticipantInfoToDisplayOnPlanning(
             $update->displayParticipantNameOnPlanning,
             $update->displayParticipantPositionOnPlanning
