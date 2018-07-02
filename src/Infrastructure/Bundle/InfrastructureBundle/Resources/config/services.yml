@@ -4389,6 +4389,19 @@ services:
              - '@fos_elastica.index.app.sheet'
 
     #
+    # Elastica
+    #
+    Elastica\Client:
+        arguments:
+            - {'host': '%elastic_host%', 'port': '%elastic_port%'}
+
+    Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister:
+        arguments:
+            - '@Elastica\Client'
+            - 'app_%kernel.environment%'
+            - '@adapter.serializer_adapter'
+
+    #
     # Command
     #
     command.build_event_guideline_asset_command:
