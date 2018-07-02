@@ -11,7 +11,8 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\Event\Sheet\Index;
+use Proximum\Vimeet\Application\Command\Event\Sheet\Index as SheetIndex;
+use Proximum\Vimeet\Application\Command\UserEvent\Index as UserEventViewIndex;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -85,7 +86,8 @@ class IndexSheetsByEventCommand extends Command
             $reset ? ' with reset of the event first.' : '.'
         ));
 
-        $this->commandBus->handle(new Index($event, $reset));
+        $this->commandBus->handle(new SheetIndex($event, $reset));
+        $this->commandBus->handle(new UserEventViewIndex($event, $reset));
 
         $output->writeln('Indexation finished.');
     }

@@ -2251,6 +2251,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdate }
 
+    Proximum\Vimeet\Application\Command\UserEvent\IndexHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister'
+            - '@Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEvent\Index }
+
     #
     # Security
     #
