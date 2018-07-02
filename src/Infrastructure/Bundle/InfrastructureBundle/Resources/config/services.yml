@@ -4408,6 +4408,11 @@ services:
             - 'app_%kernel.environment%'
             - '@adapter.serializer_adapter'
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter:
+        arguments:
+            - '@Elastica\Client'
+            - 'app_%kernel.environment%'
+
     #
     # Command
     #
