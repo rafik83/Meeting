@@ -12,29 +12,26 @@ namespace Proximum\Vimeet\Domain\Model;
 
 class File
 {
-    /**
-     * @var int
-     */
+    public const TYPE_UNKNOWN = 'unknown';
+    public const TYPE_UPLOADED_OBJECTS_ZIP = 'uploaded_objects_zip';
+
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $path;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var string */
+    private $type;
+
+    /** @var \DateTimeInterface */
     private $createdAt;
 
-    /**
-     * @param string             $path
-     * @param \DateTimeInterface $createdAt
-     */
-    public function __construct($path, \DateTimeInterface $createdAt)
+    public function __construct($path, \DateTimeInterface $createdAt, string $type = self::TYPE_UNKNOWN)
     {
-        $this->path      = $path;
+        $this->path = $path;
         $this->createdAt = $createdAt;
+        $this->type = $type;
     }
 
     /**
@@ -51,6 +48,11 @@ class File
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
     }
 
     /**
