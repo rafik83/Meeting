@@ -12,22 +12,22 @@ namespace Proximum\Vimeet\Domain\Template;
 
 abstract class AbstractChild
 {
-    const TEMPLATE_OBJECT_TYPE_BUTTON_LINK   = 'button-link';
-    const TEMPLATE_OBJECT_TYPE_COLLECTION    = 'collection';
-    const TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT = 'editable-text';
-    const TEMPLATE_OBJECT_TYPE_IMAGE         = 'image';
-    const TEMPLATE_OBJECT_TYPE_MEDIA         = 'medias';
-    const TEMPLATE_OBJECT_TYPE_NOMENCLATURE  = 'nomenclature';
-    const TEMPLATE_OBJECT_TYPE_PARTICIPANT   = 'participant';
-    const TEMPLATE_OBJECT_TYPE_TAG           = 'tag';
-    const TEMPLATE_OBJECT_TYPE_TEXT          = 'text';
-    const TEMPLATE_OBJECT_TYPE_TELEPHONE     = 'telephone';
-    const TEMPLATE_OBJECT_TYPE_COUNTRY       = 'country';
-    const TEMPLATE_OBJECT_TYPE_URL           = 'url';
-    const TEMPLATE_OBJECT_TYPE_TAGS          = 'tags';
-    const TEMPLATE_OBJECT_TYPE_GENDER        = 'gender';
-    const TEMPLATE_OBJECT_TYPE_BOOLEAN       = 'boolean';
-    const TEMPLATE_OBJECT_TYPE_UPLOAD        = 'upload';
+    public const TEMPLATE_OBJECT_TYPE_BUTTON_LINK   = 'button-link';
+    public const TEMPLATE_OBJECT_TYPE_COLLECTION    = 'collection';
+    public const TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT = 'editable-text';
+    public const TEMPLATE_OBJECT_TYPE_IMAGE         = 'image';
+    public const TEMPLATE_OBJECT_TYPE_MEDIA         = 'medias';
+    public const TEMPLATE_OBJECT_TYPE_NOMENCLATURE  = 'nomenclature';
+    public const TEMPLATE_OBJECT_TYPE_PARTICIPANT   = 'participant';
+    public const TEMPLATE_OBJECT_TYPE_TAG           = 'tag';
+    public const TEMPLATE_OBJECT_TYPE_TEXT          = 'text';
+    public const TEMPLATE_OBJECT_TYPE_TELEPHONE     = 'telephone';
+    public const TEMPLATE_OBJECT_TYPE_COUNTRY       = 'country';
+    public const TEMPLATE_OBJECT_TYPE_URL           = 'url';
+    public const TEMPLATE_OBJECT_TYPE_TAGS          = 'tags';
+    public const TEMPLATE_OBJECT_TYPE_GENDER        = 'gender';
+    public const TEMPLATE_OBJECT_TYPE_BOOLEAN       = 'boolean';
+    public const TEMPLATE_OBJECT_TYPE_UPLOAD        = 'upload';
 
     /**
      * @var string

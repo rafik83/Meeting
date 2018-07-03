@@ -57,6 +57,10 @@ final class Tag
     public const PARTICIPANT_DATA = 'participant_data';
     public const SHEET_DATA       = 'sheet_data';
 
+    public const SHEET_TEMPLATE_TAGS = [
+        self::SHEET_LOGO,
+    ];
+
     /**
      * @return array
      */
