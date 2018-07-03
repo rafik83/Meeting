@@ -60,14 +60,11 @@ class UserEventView
         $this->sheets[$sheetId] = ['id' => $sheetId];
     }
 
+    /**
+     * Get array of sheets data without the index (sheetId)
+     */
     public function getSheets(): array
     {
-        $sheets = [];
-
-        foreach ($this->sheets as $sheet) {
-            $sheets[] = $sheet;
-        }
-
-        return $sheets;
+        return array_values($this->sheets);
     }
 }
