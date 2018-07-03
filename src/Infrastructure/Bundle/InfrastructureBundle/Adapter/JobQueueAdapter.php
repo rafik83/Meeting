@@ -29,6 +29,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\IndexFromScratchCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\ToggleParticipantVisioCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
@@ -416,6 +417,18 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             $admin->getId(),
         ]);
 
+        $this->setJob($job);
+    }
+
+    public function toggleParticipantVisioForEvent(Event $event, bool $visio): void
+    {
+        $job = new Job(
+            ToggleParticipantVisioCommand::NAME,
+            [
+                $event->getId(),
+                (int)$visio,
+            ]
+        );
         $this->setJob($job);
     }
 }
