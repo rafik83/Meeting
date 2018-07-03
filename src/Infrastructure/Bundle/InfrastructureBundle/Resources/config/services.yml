@@ -2254,7 +2254,7 @@ services:
     Proximum\Vimeet\Application\Command\UserEvent\IndexHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister'
-            - '@Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository'
+            - '@Proximum\Vimeet\Domain\UserEvent\UserEventViewsFactory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEvent\Index }
 
@@ -2564,6 +2564,10 @@ services:
         class: Proximum\Vimeet\Domain\UserEvent\TypeResolver
         arguments:
             - '@vimeet_infrastructure.repository.user_event_repository'
+
+    Proximum\Vimeet\Domain\UserEvent\UserEventViewsFactory:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository'
 
     #
     # Token component

@@ -12,45 +12,40 @@ namespace Proximum\Vimeet\Infrastructure\Repository\UserEvent;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserEvent\UserEventViewRepositoryInterface;
-use Proximum\Vimeet\Domain\UserEvent\UserEventView;
 
 class UserEventViewRepository implements UserEventViewRepositoryInterface
 {
     /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @return UserEventView[]
-     */
     public function getByEvent(Event $event): array
     {
         return $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('new Proximum\Vimeet\Domain\UserEvent\UserEventView(:eventId, user.id, user.account.firstName, user.account.lastName, user.email)')
-            ->from(User::class, 'user')
-            ->join(
-                Sheet::class,
-                'sheet',
-                'WITH',
-                'sheet.event = :eventId'
-            )
-            ->leftJoin(Participant::class, 'participant', 'WITH', 'participant.user = user AND participant.sheet = sheet')
-            ->where('sheet.owner = user OR participant.id IS NOT NULL')
-            ->setParameter('eventId', $event->getId())
-            ->setMaxResults(100) // @todo: to remove
+            ->select('
+                sheet.id sheetId,
+                owner.id ownerId,
+                owner.email ownerEmail,
+                owner.account.firstName ownerFirstName,
+                owner.account.lastName ownerLastName,
+                user.id userId,
+                user.email userEmail,
+                user.account.firstName userFirstName,
+                user.account.lastName userLastName
+            ')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.owner', 'owner', 'WITH', 'sheet.event = :event')
+            ->join('sheet.participants', 'participant')
+            ->join('participant.user', 'user')
+            ->setParameter('event', $event)
             ->getQuery()
             ->getResult()
         ;

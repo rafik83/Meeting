@@ -11,12 +11,8 @@
 namespace Proximum\Vimeet\Domain\Repository\UserEvent;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\UserEvent\UserEventView;
 
 interface UserEventViewRepositoryInterface
 {
-    /**
-     * @return UserEventView[]
-     */
     public function getByEvent(Event $event): array;
 }
