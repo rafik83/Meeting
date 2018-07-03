@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Eve
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Event\Sheet\Index as SheetIndex;
-use Proximum\Vimeet\Application\Command\UserEvent\Index as UserEventViewIndex;
+use Proximum\Vimeet\Application\Command\UserEventView\Index as UserEventViewIndex;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\UserEvent;
+namespace Proximum\Vimeet\Application\Command\UserEventView;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchPersisterInterface;
-use Proximum\Vimeet\Domain\UserEvent\UserEventViewsFactory;
+use Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory;
 
 class IndexHandler
 {

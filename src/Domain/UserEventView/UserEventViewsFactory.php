@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\UserEvent;
+namespace Proximum\Vimeet\Domain\UserEventView;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\UserEvent\UserEventViewRepositoryInterface;
@@ -30,23 +30,48 @@ class UserEventViewsFactory
         $userEventViews = [];
 
         foreach ($results as $result) {
-            $userEventViews[$result['ownerId']] = new UserEventView(
+            $this->addUserEventViewOrSheetToExistingOne(
+                $userEventViews,
                 $event->getId(),
                 $result['ownerId'],
                 $result['ownerFirstName'],
                 $result['ownerLastName'],
-                $result['ownerEmail']
+                $result['ownerEmail'],
+                $result['sheetId']
             );
 
-            $userEventViews[$result['userId']] = new UserEventView(
+            $this->addUserEventViewOrSheetToExistingOne(
+                $userEventViews,
                 $event->getId(),
                 $result['userId'],
                 $result['userFirstName'],
                 $result['userLastName'],
-                $result['userEmail']
+                $result['userEmail'],
+                $result['sheetId']
             );
         }
 
         return $userEventViews;
+    }
+
+    /**
+     * @param UserEventView[] $userEventViews
+     */
+    private function addUserEventViewOrSheetToExistingOne(
+        &$userEventViews,
+        int $eventId,
+        int $userId,
+        ?string $firstName,
+        ?string $lastName,
+        string $email,
+        int $sheetId
+    ): void {
+        if (isset($userEventViews[$userId])) {
+            if (!$userEventViews[$userId]->hasSheetId($sheetId)) {
+                $userEventViews[$userId]->addSheetId($sheetId);
+            }
+        } else {
+            $userEventViews[$userId] = new UserEventView($eventId, $userId, $firstName, $lastName, $email, $sheetId);
+        }
     }
 }

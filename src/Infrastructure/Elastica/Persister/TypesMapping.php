@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Elastica\Persister;
 
-use Proximum\Vimeet\Domain\UserEvent\UserEventView;
+use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 
 final class TypesMapping
 {
@@ -35,6 +35,12 @@ final class TypesMapping
                 ],
                 'email' => [
                     'type' => 'string',
+                ],
+                'sheets' => [
+                    'type' => 'nested',
+                    'properties' => [
+                        'id' => ['type' => 'integer']
+                    ],
                 ],
             ],
         ],
