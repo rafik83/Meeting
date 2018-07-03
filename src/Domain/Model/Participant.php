@@ -83,12 +83,13 @@ class Participant implements MailRecipientInterface
      * @param array $data
      * @param bool  $active
      */
-    public function __construct(Sheet $sheet, User $user, array $data, $active)
+    public function __construct(Sheet $sheet, User $user, array $data, $active, bool $visio = false)
     {
         $this->sheet  = $sheet;
         $this->user   = $user;
         $this->data   = $data;
         $this->active = $active;
+        $this->visio = $visio;
     }
 
     /**
@@ -360,7 +361,8 @@ class Participant implements MailRecipientInterface
             $sheet,
             $participant->getUser(),
             $participant->getData(),
-            $participant->isActive()
+            $participant->isActive(),
+            $sheet->getEvent()->getConfiguration()->isVisio()
         );
 
         $duplicatedParticipant->setImported(true);
