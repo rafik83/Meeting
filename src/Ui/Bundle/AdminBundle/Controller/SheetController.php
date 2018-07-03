@@ -432,6 +432,10 @@ class SheetController extends Controller
     {
         $this->checkAccess($event);
 
+        if (true === $event->getConfiguration()->isVisio()) {
+            throw new AccessDeniedException();
+        }
+
         $visioParam = $request->request->get('isVisio');
 
         if ('true' !== $visioParam && 'false' !== $visioParam) {
@@ -511,10 +515,6 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
-
-        if (true === $event->getConfiguration()->isVisio()) {
-            throw new AccessDeniedException();
-        }
     }
 
     /**

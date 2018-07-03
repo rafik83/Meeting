@@ -269,6 +269,8 @@ form.event_update.children.vat.label: TVA
 form.event_update.children.visible.label: Visible
 form.event_update.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
+form.event_update.children.visio.label: "Evenement dématérialisé"
+form.event_create.children.visio.label: "Evenement dématérialisé"
 form.extra_parameter_create.children.name.label: Nom
 form.extra_parameter_create.children.submit.label: Enregistrer
 form.extra_parameter_create.children.type.choices.comexposium_event_reference: 'Comexposium : Référence manifestation'
@@ -1093,5 +1095,3 @@ form.who_see_who.children.priority.label: 'Priorité de la règle'
 form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter
-form.event_update.children.visio.label: "Evenement dématérialisé"
-form.event_create.children.visio.label: "Evenement dématérialisé"
