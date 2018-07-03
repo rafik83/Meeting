@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct;
+use Proximum\Vimeet\Domain\Sheet\Product\SelectedProductAssigner;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OrderEventSubscriber implements EventSubscriberInterface
@@ -20,9 +21,15 @@ class OrderEventSubscriber implements EventSubscriberInterface
     /** @var ParticipateToHappeningsByProduct */
     private $participateToHappeningsByProduct;
 
-    public function __construct(ParticipateToHappeningsByProduct $participateToHappeningsByProduct)
-    {
+    /** @var SelectedProductAssigner */
+    private $selectedProductAssigner;
+
+    public function __construct(
+        ParticipateToHappeningsByProduct $participateToHappeningsByProduct,
+        SelectedProductAssigner $selectedProductAssigner
+    ) {
         $this->participateToHappeningsByProduct = $participateToHappeningsByProduct;
+        $this->selectedProductAssigner = $selectedProductAssigner;
     }
 
     /**
@@ -35,8 +42,9 @@ class OrderEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onOrderConfirmed(OrderConfirmEvent $orderConfirmEvent)
+    public function onOrderConfirmed(OrderConfirmEvent $orderConfirmEvent): void
     {
+        $this->selectedProductAssigner->handle($orderConfirmEvent->getOrder()->getSheet());
         $this->participateToHappeningsByProduct->handle($orderConfirmEvent->getOrder()->getSheet());
     }
 }

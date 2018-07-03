@@ -505,6 +505,7 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Order\OrderEventSubscriber:
         arguments:
             - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
+            - '@Proximum\Vimeet\Domain\Sheet\Product\SelectedProductAssigner'
         tags:
             - { name: kernel.event_subscriber }
 
