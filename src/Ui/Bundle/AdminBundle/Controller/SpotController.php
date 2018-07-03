@@ -170,6 +170,7 @@ class SpotController extends Controller
         $form   = $this->createForm(SpotCreateType::class, $create, [
             'action' => $this->generateUrl('admin_spot_create', ['event' => $event->getId()]),
             'method' => 'POST',
+            'visio' => $event->getConfiguration()->isVisio(),
         ]);
         $form->add('submit', SubmitType::class);
 
