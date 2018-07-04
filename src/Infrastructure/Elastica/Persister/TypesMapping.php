@@ -45,4 +45,9 @@ final class TypesMapping
             ],
         ],
     ];
+
+    public static function getTypeByClass(string $class): string
+    {
+        return self::AVAILABLE_TYPES[$class]['type'];
+    }
 }
