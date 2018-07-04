@@ -1,0 +1,25 @@
+Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilterTranslation:
+    type:  entity
+    table: catalog_tag_filter_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        label:
+            type: string
+            nullable: true
+        placeholder:
+            type: string
+            nullable: true
+        locale:
+            type: string
+            nullable: false
+    manyToOne:
+        catalogTagFilter:
+            targetEntity: Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
