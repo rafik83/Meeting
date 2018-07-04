@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
-use Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator;
+use Proximum\Vimeet\Application\Components\TemplateData\TemplateDataDuplicator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
@@ -33,7 +33,6 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -182,7 +181,6 @@ class ParticipateHandlerTest extends TestCase
 
         $expectedSheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedSheetWithParticipant->setRegistrationData(['sheet1234' => ['text' => 'truc']]);
-        $expectedSheetWithParticipant->setData(['user data']);
         $expectedParticipant          = new Participant(
             $expectedSheetWithParticipant,
             $user,
@@ -194,37 +192,24 @@ class ParticipateHandlerTest extends TestCase
             ],
             $owner = true
         );
-        $expectedParticipant->getSheet()->setData([['user data']]);
 
+        $previousSheet = $this->prophesize(Sheet::class);
+        $previousParticipant = $this->prophesize(Participant::class);
         $lastEventParticipation
             ->getLastEventParticipation($user, $event)
             ->shouldBeCalled()
-            ->willReturn($expectedParticipant)
+            ->willReturn($previousParticipant->reveal())
         ;
+
+        $previousParticipant->getSheet()->willReturn($previousSheet->reveal());
 
         $typeResolver = $this->prophesize(TypeResolver::class);
         $typeResolver->resolve($user, $event, $type)->shouldBeCalled();
 
-        $templateData = $this->prophesize(TemplateData::class);
-        $templateData->sanitizedDataWithoutType(AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA)
-            ->willReturn([['user data']]);
-        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
-        $templateFileDuplicator = $this->prophesize(TemplateDataFileDuplicator::class);
-
-        $templateDataFactory
-            ->createFromSheet($expectedSheetWithParticipant, null)
-            ->shouldBeCalled()
-            ->willReturn($templateData->reveal());
-
-        $templateFileDuplicator
-            ->handle($templateData->reveal())
-            ->shouldBeCalled()
-            ->willReturn($templateData->reveal());
-
         $sheetRepository->add(Argument::that(
             function (Sheet $sheet) use ($expectedSheetWithParticipant) {
                 return $sheet->getData() === $expectedSheetWithParticipant->getData()
-                && $sheet->getRegistrationData() === $expectedSheetWithParticipant->getRegistrationData();
+                    && $sheet->getRegistrationData() === $expectedSheetWithParticipant->getRegistrationData();
             }
         ))->shouldBeCalled();
 
@@ -234,6 +219,21 @@ class ParticipateHandlerTest extends TestCase
             }
         ))->shouldBeCalled();
 
+        $templateDataDuplicator = $this->prophesize(TemplateDataDuplicator::class);
+        $templateDataDuplicator
+            ->duplicateData(
+                Argument::that(function (Sheet $sheet) use ($event, $type) {
+                    return $sheet->getEvent() === $event
+                        && $sheet->getType() === $type
+                        && $sheet->getData() === []
+                    ;
+                }),
+                $previousSheet->reveal(),
+                [AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA, 'product']
+            )
+            ->shouldBeCalled()
+        ;
+
         $handler = new ParticipateHandler(
             $sheetRepository->reveal(),
             $participantRepository->reveal(),
@@ -242,8 +242,7 @@ class ParticipateHandlerTest extends TestCase
             $eventDispatcher->reveal(),
             $now,
             $lastEventParticipation->reveal(),
-            $templateDataFactory->reveal(),
-            $templateFileDuplicator->reveal()
+            $templateDataDuplicator->reveal()
         );
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
