@@ -12,10 +12,13 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Ela
 
 use Elastica\Client;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Infrastructure\Elastica\Transformer\UserEventView\UserEventViewConstant;
+use Proximum\Vimeet\Domain\UserEventView\UserEventView;
+use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
 
 class SearchAdapter
 {
+    const RESULTS_NUMBER_BY_PAGE = 100;
+
     /** @var Client */
     private $client;
 
@@ -28,11 +31,14 @@ class SearchAdapter
         $this->index = $index;
     }
 
-    public function getSheets(Event $event)
+    /**
+     * @return UserEventView[]
+     */
+    public function getUsersByEvent(Event $event, int $page): array
     {
         $search = new \Elastica\Search($this->client);
         $search->addIndex($this->index);
-        $search->addType(UserEventViewConstant::TYPE);
+        $search->addType(TypesMapping::getTypeByClass(UserEventView::class));
 
         $query = new \Elastica\Query(
             [
@@ -41,29 +47,42 @@ class SearchAdapter
                         'must' => [
                             [
                                 'term' => [
-                                    'event' => [
+                                    'eventId' => [
                                         'value' => $event->getId(),
-                                    ],
-                                ],
-                            ],
-                            [
-                                'term' => [
-                                    'enabled' => [
-                                        'value' => true,
                                     ],
                                 ],
                             ],
                         ],
                     ],
                 ],
-                'from' => 0,
-                'size' => 100,
+                'sort' => [
+                    ['lastName' => 'asc'],
+                    ['firstName' => 'asc'],
+                ],
+                'from' => ($page - 1) * self::RESULTS_NUMBER_BY_PAGE,
+                'size' => self::RESULTS_NUMBER_BY_PAGE,
             ]
         );
 
         $search->setQuery($query);
         $resultSet = $search->search();
 
-        dump($resultSet->getDocuments());
+        $userEventViews = [];
+
+        /** @var \Elastica\Document $document */
+        foreach ($resultSet->getDocuments() as $document) {
+            $data = $document->getData();
+
+            $userEventViews[] = new UserEventView(
+                $data['eventId'],
+                $data['userId'],
+                $data['firstName'],
+                $data['lastName'],
+                $data['email'],
+                $data['sheets']
+            );
+        }
+
+        return $userEventViews;
     }
 }
