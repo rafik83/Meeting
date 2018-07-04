@@ -1376,6 +1376,13 @@ admin_users:
     requirements:
         event: \d+
 
+admin_users_list:
+    path: /event/{event}/users/list
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\ListAction }
+
 admin_users_details:
     path: /event/{event}/users/{user}
     defaults: { _controller: AdminBundle:User:show }

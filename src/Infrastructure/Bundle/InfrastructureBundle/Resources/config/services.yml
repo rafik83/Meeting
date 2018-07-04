@@ -3614,6 +3614,13 @@ services:
             - '@repository.catalog_visibility_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery }
+
+    Proximum\Vimeet\Application\Query\User\GetUserEventViewsQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventViewsByEvent'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\GetUserEventViewsQuery }
+
     #
     # Program query
     #

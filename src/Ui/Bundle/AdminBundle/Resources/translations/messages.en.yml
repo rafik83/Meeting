@@ -1072,6 +1072,7 @@ admin.user.events: Events
 admin.users.details: 'View the account'
 admin.users.email: Email
 admin.users.firstName: Firstname
+admin.users.id: Id
 admin.users.lastName: Name
 admin.users.link: Users
 admin.users.see-sheet: 'See the participation'

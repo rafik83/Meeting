@@ -1090,6 +1090,7 @@ admin.user.events: Evénements
 admin.users.details: 'Voir le compte'
 admin.users.email: Email
 admin.users.firstName: Prénom
+admin.users.id: Id
 admin.users.lastName: Nom
 admin.users.link: Utilisateurs
 admin.users.see-sheet: 'Voir la participation'

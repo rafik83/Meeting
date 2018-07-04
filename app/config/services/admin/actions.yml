@@ -212,6 +212,12 @@ services:
             - '@command.user.event.phone.ignore_confirmation'
             - '@adapter.authorization_checker'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
     #
     # Happening
     #
