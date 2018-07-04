@@ -62,13 +62,14 @@ class CatalogTagFilter
         return $this->type;
     }
 
-    public function getTranslations(): array
+    public function getTranslations(): iterable
     {
         return $this->translations;
     }
 
-    public function setTranslations(array $translations): void
+    public function addTranslation(CatalogTagFilterTranslation $catalogTagFilterTranslation): void
     {
-        $this->translations = $translations;
+        $this->translations[] = $catalogTagFilterTranslation;
+        $catalogTagFilterTranslation->setCatalogTagFilter($this);
     }
 }

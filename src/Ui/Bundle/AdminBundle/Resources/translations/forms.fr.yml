@@ -699,6 +699,14 @@ form.search_facet_update.children.searchFacets.position.label: Fonction
 form.search_facet_update.children.searchFacets.type.help: ''
 form.search_facet_update.children.searchFacets.type.label: Type
 form.search_facet_update.children.submit.label: Enregistrer
+form.search_facet_update.children.catalogTagFilters.prototype.children.tag.label: 'Tag'
+form.configure.children.catalogTagFilters.prototype.children.tag.label: 'Tag'
+form.search_facet_update.children.catalogTagFilters.label_delete: 'Supprimer un filtre tag'
+form.configure.children.catalogTagFilters.label_delete: 'Supprimer un filtre tag'
+form.search_facet_update.children.catalogTagFilters.label_add: 'Ajouter un filtre tag'
+form.configure.children.catalogTagFilters.label_add: 'Ajouter un filtre tag'
+form.search_facet_update.children.catalogTagFilters.translations.label: 'Label'
+form.search_facet_update.children.catalogTagFilters.translations.placeholder: 'Placeholder'
 form.search_user_sheets_group.children.email.label: 'E-mail de l''utilisateur'
 form.search_user_sheets_group.children.submit.label: Suivant
 form.select_recipients.children.recipients.label: Destinataires

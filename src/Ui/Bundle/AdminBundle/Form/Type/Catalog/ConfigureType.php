@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Catalog\CatalogTagFilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -64,6 +65,16 @@ class ConfigureType extends AbstractType
                     'help'     => true,
                 ],
                 'label'         => false,
+            ])
+            ->add('catalogTagFilters', CollectionType::class, [
+                'entry_type'  => CatalogTagFilterType::class,
+                'entry_options' => [
+                    'label' => false,
+                    'event' => $options['event'],
+                ],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'label' => false,
             ])
             ->add('submit', SubmitType::class);
     }

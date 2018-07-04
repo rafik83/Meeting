@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SearchFacet;
 
 use Proximum\Vimeet\Application\Command\Event\SearchFacet\Update;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Catalog\CatalogTagFilterType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -34,6 +35,16 @@ class UpdateType extends AbstractType
                 ],
                 'label' => false,
             ])
+            ->add('catalogTagFilters', CollectionType::class, [
+                'entry_type'  => CatalogTagFilterType::class,
+                'entry_options' => [
+                    'label'  => false,
+                    'event' => $options['event'],
+                ],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'label' => false,
+            ])
         ;
     }
 
@@ -45,6 +56,7 @@ class UpdateType extends AbstractType
         $resolver->setRequired(['types']);
         $resolver->setDefaults([
             'data_class' => Update::class,
+            'event' => null,
         ]);
     }
 

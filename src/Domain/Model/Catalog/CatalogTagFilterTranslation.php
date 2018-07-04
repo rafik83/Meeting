@@ -28,10 +28,10 @@ class CatalogTagFilterTranslation
     /** @var string */
     private $locale;
 
-    /** @var string */
+    /** @var null|string */
     private $label;
 
-    /** @var string */
+    /** @var null|string */
     private $placeholder;
 
     /** @var CatalogTagFilter */
@@ -67,5 +67,10 @@ class CatalogTagFilterTranslation
     public function getCatalogTagFilter(): CatalogTagFilter
     {
         return $this->catalogTagFilter;
+    }
+
+    public function setCatalogTagFilter(CatalogTagFilter $catalogTagFilter): void
+    {
+        $this->catalogTagFilter = $catalogTagFilter;
     }
 }

@@ -26,6 +26,7 @@
     {{ form_row(form.types) }}
     {{ form_row(form.categories) }}
     {% include 'AdminBundle:SearchFacet:search_facets.html.twig' with {form: form} %}
+    {{ form_row(form.catalogTagFilters) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_read', { 'event': event.id }) %}
