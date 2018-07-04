@@ -36,6 +36,9 @@ final class TypesMapping
                 'email' => [
                     'type' => 'string',
                 ],
+                'locale' => [
+                    'type' => 'string',
+                ],
                 'sheets' => [
                     'type' => 'nested',
                     'properties' => [

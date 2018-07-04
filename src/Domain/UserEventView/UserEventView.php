@@ -30,6 +30,9 @@ class UserEventView
     /** @var string */
     public $email;
 
+    /** @var string */
+    public $locale;
+
     /** @var array */
     private $sheets = [];
 
@@ -39,6 +42,7 @@ class UserEventView
         ?string $firstName,
         ?string $lastName,
         string $email,
+        string $locale,
         array $sheets
     ) {
         $this->id = $eventId . '_' . $userId;
@@ -47,6 +51,7 @@ class UserEventView
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
+        $this->locale = $locale;
 
         $this->addSheets($sheets);
     }

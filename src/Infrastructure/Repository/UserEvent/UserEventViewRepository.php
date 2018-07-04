@@ -36,10 +36,12 @@ class UserEventViewRepository implements UserEventViewRepositoryInterface
                 owner.email ownerEmail,
                 owner.account.firstName ownerFirstName,
                 owner.account.lastName ownerLastName,
+                owner.locale ownerLocale,
                 user.id userId,
                 user.email userEmail,
                 user.account.firstName userFirstName,
-                user.account.lastName userLastName
+                user.account.lastName userLastName,
+                user.locale userLocale
             ')
             ->from(Sheet::class, 'sheet')
             ->join('sheet.owner', 'owner', 'WITH', 'sheet.event = :event')

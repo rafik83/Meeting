@@ -23,11 +23,20 @@ class ElasticaPersisterTest extends TestCase
     {
         $index = 'app_prod';
 
-        $userEventView = new UserEventView(42, 3, 'Korben', 'DALLAS', 'korben.dallas@example.net', [['id' => 1337]]);
+        $userEventView = new UserEventView(
+            42,
+            3,
+            'Korben',
+            'DALLAS',
+            'korben.dallas@example.net',
+            'fr',
+            [['id' => 1337]]
+        );
         $normalizedUserEventView = [
             'firstName' => 'Korben',
             'lastName' => 'DALLAS',
             'email' => 'korben.dallas@example.net',
+            'locale' => 'fr',
         ];
 
         $response = $this->prophesize(\Elastica\Bulk\ResponseSet::class);

@@ -40,6 +40,7 @@ class UserEventViewsFactory
                 $result['ownerFirstName'],
                 $result['ownerLastName'],
                 $result['ownerEmail'],
+                $result['ownerLocale'],
                 $result['sheetId']
             );
 
@@ -50,6 +51,7 @@ class UserEventViewsFactory
                 $result['userFirstName'],
                 $result['userLastName'],
                 $result['userEmail'],
+                $result['userLocale'],
                 $result['sheetId']
             );
         }
@@ -67,6 +69,7 @@ class UserEventViewsFactory
         ?string $firstName,
         ?string $lastName,
         string $email,
+        string $locale,
         int $sheetId
     ): void {
         if (isset($userEventViews[$userId])) {
@@ -80,6 +83,7 @@ class UserEventViewsFactory
                 $firstName,
                 $lastName,
                 $email,
+                $locale,
                 [
                     ['id' => $sheetId]
                 ]

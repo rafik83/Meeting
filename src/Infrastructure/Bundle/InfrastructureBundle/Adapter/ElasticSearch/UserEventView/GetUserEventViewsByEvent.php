@@ -67,6 +67,7 @@ class GetUserEventViewsByEvent implements GetUserEventViewsByEventInterface
                 $data['firstName'],
                 $data['lastName'],
                 $data['email'],
+                $data['locale'],
                 $data['sheets']
             );
         }

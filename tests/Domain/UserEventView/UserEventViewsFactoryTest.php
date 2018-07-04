@@ -27,10 +27,12 @@ class UserEventViewsFactoryTest extends TestCase
                 'ownerEmail' => 'michel@example.net',
                 'ownerFirstName' => 'Michel',
                 'ownerLastName' => 'BLANC',
+                'ownerLocale' => 'fr',
                 'userId' => 78,
                 'userEmail' => 'chloe@example.net',
                 'userFirstName' => 'Chloé',
                 'userLastName' => 'HENRY',
+                'userLocale' => 'en',
             ],
             [
                 'sheetId' => 43,
@@ -38,10 +40,12 @@ class UserEventViewsFactoryTest extends TestCase
                 'ownerEmail' => 'julie@example.net',
                 'ownerFirstName' => 'Julie',
                 'ownerLastName' => 'DUPOND',
+                'ownerLocale' => 'fr',
                 'userId' => 33,
                 'userEmail' => 'michel@example.net',
                 'userFirstName' => 'Michel',
                 'userLastName' => 'BLANC',
+                'userLocale' => 'fr',
             ],
             [
                 'sheetId' => 1456,
@@ -49,10 +53,12 @@ class UserEventViewsFactoryTest extends TestCase
                 'ownerEmail' => 'hello@example.net',
                 'ownerFirstName' => null,
                 'ownerLastName' => null,
+                'ownerLocale' => 'en',
                 'userId' => 99,
                 'userEmail' => 'hello@example.net',
                 'userFirstName' => null,
                 'userLastName' => null,
+                'userLocale' => 'en',
             ],
         ];
 
@@ -63,6 +69,7 @@ class UserEventViewsFactoryTest extends TestCase
                 'Michel',
                 'BLANC',
                 'michel@example.net',
+                'fr',
                 [
                     ['id' => 42],
                     ['id' => 43],
@@ -74,6 +81,7 @@ class UserEventViewsFactoryTest extends TestCase
                 'Chloé',
                 'HENRY',
                 'chloe@example.net',
+                'en',
                 [
                     ['id' => 42],
                 ]
@@ -84,6 +92,7 @@ class UserEventViewsFactoryTest extends TestCase
                 'Julie',
                 'DUPOND',
                 'julie@example.net',
+                'fr',
                 [
                     ['id' => 43],
                 ]
@@ -94,6 +103,7 @@ class UserEventViewsFactoryTest extends TestCase
                 null,
                 null,
                 'hello@example.net',
+                'en',
                 [
                     ['id' => 1456],
                 ]
