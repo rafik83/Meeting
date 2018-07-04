@@ -15,8 +15,6 @@ use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
-use Proximum\Vimeet\Application\Event\Event\VisioUpdatedEvent;
-use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -147,13 +145,6 @@ class EventController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                if ($event->getConfiguration()->isVisio() !== $update->visio) {
-                    $this->get('vimeet_infrastructure.adapter.delayed_event_dispatcher')->dispatch(
-                        Events::EVENT_VISIO_UPDATED,
-                        new VisioUpdatedEvent($update)
-                    );
-                }
-
                 $this->get('tactician.commandbus')->handle($update);
                 $this->addFlash('success', 'flash.admin.event.update.success');
 

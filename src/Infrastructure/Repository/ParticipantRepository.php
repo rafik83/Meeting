@@ -639,23 +639,15 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
     public function toggleParticipantVisioForEvent(Event $event, int $visio): void
     {
-        $result = $this
+        $participantIds = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('participant.id')
-            ->from(Participant::class, 'participant')
+            ->from(Participant::class, 'participant', 'participant.id')
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->setParameter('event', $event)
             ->getQuery()
             ->getResult();
-
-        $participantIds = array_map(function($participant) {
-            return $participant['id'];
-        }, $result);
-
-        if (!$participantIds) {
-            return;
-        }
 
         $this->entityManager->createQueryBuilder()
             ->update(Participant::class, 'participant')
@@ -663,7 +655,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->where('participant.id IN (:participantIds)')
             ->setParameters([
                 'visio' =>  $visio,
-                'participantIds' => $participantIds,
+                'participantIds' => array_keys($participantIds),
             ])
             ->getQuery()
             ->execute();

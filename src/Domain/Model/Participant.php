@@ -82,6 +82,7 @@ class Participant implements MailRecipientInterface
      * @param User  $user
      * @param array $data
      * @param bool  $active
+     * @param bool  $visio
      */
     public function __construct(Sheet $sheet, User $user, array $data, $active, bool $visio = false)
     {

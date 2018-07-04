@@ -47,7 +47,6 @@ class SpotCreateType extends AbstractType
             ])
             ->add('visio', CheckboxType::class, [
                 'required' => false,
-                'data' => $options['visio'],
             ])
         ;
     }
@@ -60,7 +59,6 @@ class SpotCreateType extends AbstractType
         $resolver->setDefaults([
             'data_class'    => Create::class,
             'csrf_token_id' => 'spot_create',
-            'visio' => false,
         ]);
     }
 }
