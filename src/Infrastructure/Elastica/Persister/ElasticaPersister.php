@@ -50,6 +50,7 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
         $this->setMapping($elasticaType, $objectType['properties']);
 
         $response = $elasticaType->addDocuments($this->getDocuments($identifierProperty, $objects));
+        $elasticaType->getIndex()->refresh();
 
         return $response->getData();
     }
