@@ -714,6 +714,19 @@ admin_sheet_details:
         sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction }
+admin_event_export_uploaded_objets:
+    path: /event/{event}/export/uploaded-objects
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\ExportUploadedObjectsBySheetsAction }
+admin_event_download_uploaded_objets:
+    path: /event/{event}/download/uploaded-objects/{hash}/{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DownloadUploadedObjectsZipAction }
 admin_sheet_batch:
     path: /event/{event}/sheet/batch
     requirements:
@@ -783,12 +796,11 @@ admin_sheet_order_list:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order:list }
-admin_sheet_order_cancel:
-    path: /event/{event}/sheet/{sheet}/order/{order}/cancel
+admin_sheet_orders_cancel:
+    path: /event/{event}/sheet/{sheet}/orders/cancel
     requirements:
         event: \d+
         sheet: \d+
-        order: \d+
     methods: [DELETE]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Order\CancelAction }
 admin_sheet_order_edit:

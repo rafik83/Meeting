@@ -16,6 +16,7 @@ final class Events
     public const SHEET_ACCEPTED = 'sheet.accepted';
     public const SHEET_PENDING = 'sheet.pending';
     public const SHEET_REFUSED = 'sheet.refused';
+    public const SHEET_ORDERS_CANCELLED = 'sheet.orders.cancelled';
     public const SHEET_INVITATION_CLOSE_TO_EXPIRATION = 'sheet.invitation.close_to_expiration';
     public const SHEET_ADD_PARTICIPANT_CONFIRMATION = 'sheet.participant.add.confirmation';
     public const SHEET_CHANGED_TYPE = 'sheet.changed_type';

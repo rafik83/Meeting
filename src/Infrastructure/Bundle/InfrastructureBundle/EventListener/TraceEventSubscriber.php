@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\CommercialStatusChanged;
+use Proximum\Vimeet\Application\Event\Sheet\Order\OrdersCancelledEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
@@ -31,23 +32,28 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class TraceEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var TraceRepositoryInterface
-     */
+    /** @var TraceRepositoryInterface */
     private $traceRepository;
+
+    /** @var DateTimeInterface */
+    private $dateTime;
 
     /**
      * @param TraceRepositoryInterface $traceRepository
+     * @param DateTimeInterface        $dateTime
      */
-    public function __construct(TraceRepositoryInterface $traceRepository)
-    {
+    public function __construct(
+        TraceRepositoryInterface $traceRepository,
+        \DateTimeInterface $dateTime
+    ) {
         $this->traceRepository = $traceRepository;
+        $this->dateTime = $dateTime;
     }
 
     /**
      * @param CommercialStatusChanged $event
      */
-    public function onSheetCommercialStatusChanged(CommercialStatusChanged $event)
+    public function onSheetCommercialStatusChanged(CommercialStatusChanged $event): void
     {
         $this->addTrace(
             $event->getSheet(),
@@ -61,7 +67,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetAcceptedEvent $event
      */
-    public function onSheetAccepted(SheetAcceptedEvent $event)
+    public function onSheetAccepted(SheetAcceptedEvent $event): void
     {
         $this->addTrace(
             $event->getSheet(),
@@ -75,7 +81,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetCatalogEvent $event
      */
-    public function onSheetCatalog(SheetCatalogEvent $event)
+    public function onSheetCatalog(SheetCatalogEvent $event): void
     {
         $this->addTrace(
             $event->getSheet(),
@@ -89,7 +95,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetEnableDisableEvent $event
      */
-    public function onSheetEnableDisable(SheetEnableDisableEvent $event)
+    public function onSheetEnableDisable(SheetEnableDisableEvent $event): void
     {
         $this->addTrace(
             $event->getSheet(),
@@ -103,7 +109,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetPendingEvent $event
      */
-    public function onSheetPending(SheetPendingEvent $event)
+    public function onSheetPending(SheetPendingEvent $event): void
     {
         $this->addTrace(
             $event->getSheet(),
@@ -117,7 +123,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetDraftEvent $event
      */
-    public function onSheetValidationDraft(SheetDraftEvent $event)
+    public function onSheetValidationDraft(SheetDraftEvent $event): void
     {
         $this->addTrace(
             $event->getSheet(),
@@ -131,7 +137,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetValidationValidateEvent $event
      */
-    public function onSheetValidationValidate(SheetValidationValidateEvent $event)
+    public function onSheetValidationValidate(SheetValidationValidateEvent $event): void
     {
         $this->addTrace(
             $event->getSheet(),
@@ -145,7 +151,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetValidatedEvent $event
      */
-    public function onSheetValidated(SheetValidatedEvent $event)
+    public function onSheetValidated(SheetValidatedEvent $event): void
     {
         $this->addTrace(
             $event->getSheet(),
@@ -159,7 +165,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetChangedTypeEvent $event
      */
-    public function onSheetChangedType(SheetChangedTypeEvent $event)
+    public function onSheetChangedType(SheetChangedTypeEvent $event): void
     {
         $this->addTrace(
             $event->getSheet(),
@@ -173,7 +179,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param ParticipantImportedEvent $event
      */
-    public function onParticipantImported(ParticipantImportedEvent $event)
+    public function onParticipantImported(ParticipantImportedEvent $event): void
     {
         $this->addTrace(
             $event->getEvent(),
@@ -187,7 +193,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetCreatedByManagerEvent $event
      */
-    public function onSheetCreateByGroupManager(SheetCreatedByManagerEvent $event)
+    public function onSheetCreateByGroupManager(SheetCreatedByManagerEvent $event): void
     {
         $this->addTrace(
             $event->sheet,
@@ -195,6 +201,17 @@ class TraceEventSubscriber implements EventSubscriberInterface
             $event->date,
             '',
             $event->sheet->getGroup()->getManager()
+        );
+    }
+
+    public function onOrdersCancelled(OrdersCancelledEvent $event): void
+    {
+        $this->addTrace(
+            $event->sheet,
+            Trace::ORDERS_CANCELLED,
+            $this->dateTime,
+            '',
+            $event->admin
         );
     }
 
@@ -211,7 +228,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
         DateTimeInterface $date,
         $comment,
         AbstractUser $user = null
-    ) {
+    ): void {
         $trace = new Trace(
             $traceable,
             $action,
@@ -240,6 +257,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
             Events::PARTICIPANT_IMPORTED          => 'onParticipantImported',
             Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreateByGroupManager',
             Events::SHEET_SET_COMMERCIAL_STATUS   => 'onSheetCommercialStatusChanged',
+            Events::SHEET_ORDERS_CANCELLED        => 'onOrdersCancelled',
         ];
     }
 }

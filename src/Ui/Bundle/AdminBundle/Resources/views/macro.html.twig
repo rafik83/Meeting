@@ -1,4 +1,4 @@
-{% macro button(url, method, label, attributes, formAttributes) %}
+{% macro button(url, method, label, attributes, formAttributes, csrf_intention) %}
     {% set attributes = attributes|default({})|merge({'type': 'submit'}) %}
     {% set formAttributes = formAttributes|default({'style': 'display: inline'}) %}
 
@@ -11,15 +11,18 @@
         {% if _method is defined %}
             <input type="hidden" name="_method" value="{{ _method }}" />
         {% endif %}
+        {% if csrf_intention is not null %}
+            <input type="hidden" name="_token" value="{{ csrf_token(csrf_intention) }}">
+        {% endif %}
         <button {% for attribute, value in attributes %} {{ attribute }}="{{ value }}"{% endfor %}>
             {{ label|html }}
         </button>
     </form>
 {% endmacro %}
 
-{% macro delete_button(url, label, attributes) %}
+{% macro delete_button(url, label, attributes, csrf_intention) %}
     {% import _self as macros %}
-    {{ macros.button(url, 'DELETE', label, attributes) }}
+    {{ macros.button(url, 'DELETE', label, attributes, {}, csrf_intention) }}
 {% endmacro %}
 
 {% macro more(values, limit) %}

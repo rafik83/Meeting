@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\Order\OrdersCancelledEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
@@ -34,22 +36,28 @@ class SheetUpdatedEventSubscriber implements EventSubscriberInterface
     /** @var DisableEnableParticipation */
     private $disableEnableParticipation;
 
+    /** @var SheetIndexerInterface */
+    private $sheetIndexer;
+
     /**
      * @param CompletenessCalculator     $completenessCalculator
      * @param DisableEnableParticipation $disableEnableParticipation
      * @param SheetInfoGuesser           $sheetInfoGuesser
      * @param SheetRepositoryInterface   $sheetRepository
+     * @param SheetIndexerInterface      $sheetIndexer
      */
     public function __construct(
         CompletenessCalculator $completenessCalculator,
         DisableEnableParticipation $disableEnableParticipation,
         SheetInfoGuesser $sheetInfoGuesser,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        SheetIndexerInterface $sheetIndexer
     ) {
         $this->completenessCalculator     = $completenessCalculator;
         $this->disableEnableParticipation = $disableEnableParticipation;
         $this->sheetRepository            = $sheetRepository;
         $this->sheetInfoGuesser           = $sheetInfoGuesser;
+        $this->sheetIndexer = $sheetIndexer;
     }
 
     /**
@@ -91,6 +99,11 @@ class SheetUpdatedEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function onOrdersCancelled(OrdersCancelledEvent $ordersCancelledEvent): void
+    {
+        $this->sheetIndexer->reindexSheets([$ordersCancelledEvent->sheet]);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -100,6 +113,7 @@ class SheetUpdatedEventSubscriber implements EventSubscriberInterface
             Events::SHEET_UPDATED      => 'onSheetUpdated',
             Events::SHEET_CHANGED_TYPE => 'onChangeType',
             Events::SHEET_TITLE_CHECK  => 'onSheetTitleCheck',
+            Events::SHEET_ORDERS_CANCELLED => 'onOrdersCancelled',
         ];
     }
 }

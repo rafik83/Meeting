@@ -265,10 +265,9 @@ services:
     #
     # Order
     #
-    Proximum\Vimeet\Application\Command\Order\CancelHandler:
+    Proximum\Vimeet\Application\Command\Order\CancelAllHandler:
         arguments:
-            - '@vimeet_infrastructure.repository.order_repository'
-            - '@cart_manager'
             - '@Proximum\Vimeet\Application\Command\Sheet\ChangeType\CancelPackageHandler'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Cancel }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\CancelAll }

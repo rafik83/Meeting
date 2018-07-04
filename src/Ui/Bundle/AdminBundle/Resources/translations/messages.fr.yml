@@ -829,6 +829,7 @@ admin.sheet.export.invoice.button.label: 'Exporter factures'
 admin.sheet.export.meetings.button.label: 'Exporter RDV'
 admin.sheet.export.no: Non
 admin.sheet.export.participant.button.label: 'Exporter participants'
+admin.sheet.export.uploaded_objects.button.label: 'Exporter les fichiers uploadés'
 admin.sheet.export.sheet.button.label: 'Exporter fiches'
 admin.sheet.export.yes: Oui
 admin.sheet.filter.has_cart: 'Fiche avec panier'
@@ -846,6 +847,8 @@ admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
 admin.sheet.list.filters.label: 'Filtres avancés'
+admin.sheet.orders.cancel: 'Annuler tout'
+admin.sheet.orders.cancel.confirm: 'Êtes vous sûr de vouloir annuler toutes les commandes ? Cette action est irréversible'
 admin.sheet.participant_visio.success: 'Le participant a été mis à jour'
 admin.sheet.participant.invalid-parameters: 'Le paramètre envoyé n''est pas valide'
 admin.sheet.participant.not_found: 'Ce participant n''existe pas'
@@ -873,6 +876,7 @@ admin.sheet.trace.sheet_created_by_group_manager: 'Fiche dupliquée par le gesti
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
+admin.sheet.trace.orders_cancelled: 'Commandes annulées le %at%'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
 admin.sheet.validateSheets: 'Valider les fiches'
