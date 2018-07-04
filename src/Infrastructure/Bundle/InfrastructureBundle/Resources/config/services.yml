@@ -4409,8 +4409,11 @@ services:
     Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister:
         arguments:
             - '@Elastica\Client'
+            - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaMapping'
             - 'app_%kernel.environment%'
             - '@adapter.serializer_adapter'
+
+    Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaMapping: ~
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter:
         arguments:

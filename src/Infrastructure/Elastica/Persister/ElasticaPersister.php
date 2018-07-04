@@ -18,15 +18,23 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
     /** @var \Elastica\Client */
     private $client;
 
+    /** @var ElasticaMapping */
+    private $mapping;
+
     /** @var string */
     private $index;
 
     /** @var SerializerAdapterInterface */
     private $serializer;
 
-    public function __construct(\Elastica\Client $client, string $index, SerializerAdapterInterface $serializer)
-    {
+    public function __construct(
+        \Elastica\Client $client,
+        ElasticaMapping $mapping,
+        string $index,
+        SerializerAdapterInterface $serializer
+    ) {
         $this->client = $client;
+        $this->mapping = $mapping;
         $this->index = $index;
         $this->serializer = $serializer;
     }
@@ -47,15 +55,18 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
 
         $elasticaIndex = $this->client->getIndex($this->index);
         $elasticaType = $elasticaIndex->getType($objectType['type']);
-        $this->setMapping($elasticaType, $objectType['properties']);
+        $this->mapping->setMapping($elasticaType, $objectType['properties']);
 
         $response = $elasticaType->addDocuments($this->getDocuments($identifierProperty, $objects));
-        $elasticaType->getIndex()->refresh();
+        $elasticaIndex->refresh();
 
         return $response->getData();
     }
 
-    private function getDocuments(string $identifierProperty, array &$objects)
+    /**
+     * @param \Elastica\Document[] $objects
+     */
+    private function getDocuments(string $identifierProperty, array &$objects): array
     {
         $documents = [];
 
@@ -68,11 +79,5 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
         }
 
         return $documents;
-    }
-
-    private function setMapping(\Elastica\Type $elasticaType, array $properties)
-    {
-        $mapping = new \Elastica\Type\Mapping($elasticaType, $properties);
-        $mapping->send();
     }
 }
