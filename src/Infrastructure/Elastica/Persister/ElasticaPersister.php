@@ -72,9 +72,7 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
 
     private function setMapping(\Elastica\Type $elasticaType, array $properties)
     {
-        $mapping = new \Elastica\Type\Mapping();
-        $mapping->setType($elasticaType);
-        $mapping->setProperties($properties);
+        $mapping = new \Elastica\Type\Mapping($elasticaType, $properties);
         $mapping->send();
     }
 }
