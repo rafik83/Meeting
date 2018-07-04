@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Sheet\Product;
 
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
@@ -46,20 +47,7 @@ class SelectedProductAssigner
         }
 
         $orderMerged = $this->merger->merge($orders);
-
-        $orderMergedProducts = [];
-
-        foreach ($orderMerged->getRows() as $row) {
-            if ($row->getType() !== Product::TYPE_OPTION) {
-                continue;
-            }
-
-            if ($row->getProduct() === null) {
-                continue;
-            }
-
-            $orderMergedProducts[$row->getProduct()->getId()] = $row->getProduct()->getId();
-        }
+        $orderMergedProducts = $this->getOrderMergedProducts($orderMerged);
 
         $templateData = $this->templateDataFactory->createFromSheet($sheet, null);
 
@@ -88,5 +76,29 @@ class SelectedProductAssigner
         $sheet->setData($templateData->getData());
 
         $this->sheetRepository->set($sheet);
+    }
+
+    /**
+     * @param Order $orderMerged
+     *
+     * @return array
+     */
+    private function getOrderMergedProducts(Order $orderMerged): array
+    {
+        $orderMergedProducts = [];
+
+        foreach ($orderMerged->getRows() as $row) {
+            if ($row->getType() !== Product::TYPE_OPTION) {
+                continue;
+            }
+
+            if ($row->getProduct() === null) {
+                continue;
+            }
+
+            $orderMergedProducts[$row->getProduct()->getId()] = $row->getProduct()->getId();
+        }
+
+        return $orderMergedProducts;
     }
 }
