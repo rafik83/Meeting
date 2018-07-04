@@ -1093,6 +1093,7 @@ admin.users.firstName: Prénom
 admin.users.id: Id
 admin.users.lastName: Nom
 admin.users.link: Utilisateurs
+admin.users.locale: Langue
 admin.users.see-sheet: 'Voir la participation'
 admin.users.title: Utilisateurs
 admin.users.type: Type

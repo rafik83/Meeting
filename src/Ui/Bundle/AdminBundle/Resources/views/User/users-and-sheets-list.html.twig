@@ -12,6 +12,7 @@
             <th>{{ 'admin.users.email'|trans }}</th>
             <th>{{ 'admin.users.lastName'|trans }}</th>
             <th>{{ 'admin.users.firstName'|trans }}</th>
+            <th>{{ 'admin.users.locale'|trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -21,6 +22,7 @@
                 <td><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEventView.userId }) }}">{{ userEventView.email }}</a></td>
                 <td>{{ userEventView.lastName }}</td>
                 <td>{{ userEventView.firstName }}</td>
+                <td>{{ userEventView.locale|language }}</td>
             </tr>
         {% else %}
             <tr>

@@ -1075,6 +1075,7 @@ admin.users.firstName: Firstname
 admin.users.id: Id
 admin.users.lastName: Name
 admin.users.link: Users
+admin.users.locale: Language
 admin.users.see-sheet: 'See the participation'
 admin.users.title: Users
 admin.users.type: 'Users type'
