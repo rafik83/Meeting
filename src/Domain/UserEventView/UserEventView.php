@@ -39,7 +39,7 @@ class UserEventView
         ?string $firstName,
         ?string $lastName,
         string $email,
-        int $sheetId
+        array $sheets
     ) {
         $this->id = $eventId . '_' . $userId;
         $this->eventId = $eventId;
@@ -47,7 +47,8 @@ class UserEventView
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
-        $this->addSheetId($sheetId);
+
+        $this->addSheets($sheets);
     }
 
     public function hasSheetId(int $sheetId): bool
@@ -55,9 +56,16 @@ class UserEventView
         return isset($this->sheets[$sheetId]);
     }
 
-    public function addSheetId(int $sheetId): void
+    public function addSheets(array $sheets): void
     {
-        $this->sheets[$sheetId] = ['id' => $sheetId];
+        foreach ($sheets as $sheet) {
+            $this->addSheet($sheet);
+        }
+    }
+
+    public function addSheet(array $sheet): void
+    {
+        $this->sheets[$sheet['id']] = $sheet;
     }
 
     /**

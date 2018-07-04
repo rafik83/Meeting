@@ -23,6 +23,9 @@ class UserEventViewsFactory
         $this->userEventViewRepository = $userEventViewRepository;
     }
 
+    /**
+     * @return UserEventView[]
+     */
     public function getByEvent(Event $event): array
     {
         $results = $this->userEventViewRepository->getByEvent($event);
@@ -68,10 +71,19 @@ class UserEventViewsFactory
     ): void {
         if (isset($userEventViews[$userId])) {
             if (!$userEventViews[$userId]->hasSheetId($sheetId)) {
-                $userEventViews[$userId]->addSheetId($sheetId);
+                $userEventViews[$userId]->addSheet(['id' => $sheetId]);
             }
         } else {
-            $userEventViews[$userId] = new UserEventView($eventId, $userId, $firstName, $lastName, $email, $sheetId);
+            $userEventViews[$userId] = new UserEventView(
+                $eventId,
+                $userId,
+                $firstName,
+                $lastName,
+                $email,
+                [
+                    ['id' => $sheetId]
+                ]
+            );
         }
     }
 }
