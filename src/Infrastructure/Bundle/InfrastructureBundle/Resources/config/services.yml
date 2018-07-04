@@ -4420,6 +4420,10 @@ services:
             - '@Elastica\Client'
             - 'app_%kernel.environment%'
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventViewsByEvent:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
+
     #
     # Command
     #
