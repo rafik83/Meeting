@@ -10,15 +10,12 @@
 
 namespace Proximum\Vimeet\Infrastructure\Elastica\Persister;
 
-use Elastica\Client;
-use Elastica\Document;
-use Elastica\Type\Mapping;
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchPersisterInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 
 class ElasticaPersister implements ElasticSearchPersisterInterface
 {
-    /** @var Client */
+    /** @var \Elastica\Client */
     private $client;
 
     /** @var string */
@@ -27,33 +24,56 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
     /** @var SerializerAdapterInterface */
     private $serializer;
 
-    public function __construct(Client $client, string $index, SerializerAdapterInterface $serializer)
+    public function __construct(\Elastica\Client $client, string $index, SerializerAdapterInterface $serializer)
     {
         $this->client = $client;
         $this->index = $index;
         $this->serializer = $serializer;
     }
 
-    public function persist($id, $object): array
+    public function persist($identifierProperty = 'id', array $objects = []): array
     {
-        $class = \get_class($object);
+        if (empty($objects)) {
+            return [];
+        }
+
+        $class = \get_class(reset($objects));
 
         if (!isset(TypesMapping::AVAILABLE_TYPES[$class])) {
             throw new \InvalidArgumentException(sprintf('ElasticSearch type for %s is not available', $class));
         }
 
-        $type = TypesMapping::AVAILABLE_TYPES[$class];
+        $objectType = TypesMapping::AVAILABLE_TYPES[$class];
 
         $elasticaIndex = $this->client->getIndex($this->index);
-        $elasticaType = $elasticaIndex->getType($type['type']);
+        $elasticaType = $elasticaIndex->getType($objectType['type']);
+        $this->setMapping($elasticaType, $objectType['properties']);
 
-        $mapping = new Mapping();
-        $mapping->setType($elasticaType);
-        $mapping->setProperties($type['properties']);
-        $mapping->send();
-
-        $response = $elasticaType->addDocument(new Document($id, $this->serializer->normalize($object)));
+        $response = $elasticaType->addDocuments($this->getDocuments($identifierProperty, $objects));
 
         return $response->getData();
+    }
+
+    private function getDocuments(string $identifierProperty, array &$objects)
+    {
+        $documents = [];
+
+        foreach ($objects as $object) {
+            if (!isset($object->$identifierProperty)) {
+                throw new \InvalidArgumentException('Missing identifier column');
+            }
+
+            $documents[] = new \Elastica\Document($object->$identifierProperty, $this->serializer->normalize($object));
+        }
+
+        return $documents;
+    }
+
+    private function setMapping(\Elastica\Type $elasticaType, array $properties)
+    {
+        $mapping = new \Elastica\Type\Mapping();
+        $mapping->setType($elasticaType);
+        $mapping->setProperties($properties);
+        $mapping->send();
     }
 }

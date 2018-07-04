@@ -41,8 +41,6 @@ class IndexHandler
 
         $userEventViews = $this->userEventViewsFactory->getByEvent($command->event);
 
-        foreach ($userEventViews as $userEventView) {
-            $this->elasticSearchPersister->persist($userEventView->id, $userEventView);
-        }
+        $this->elasticSearchPersister->persist('id', $userEventViews);
     }
 }

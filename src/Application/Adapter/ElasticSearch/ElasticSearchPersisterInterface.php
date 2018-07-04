@@ -12,11 +12,5 @@ namespace Proximum\Vimeet\Application\Adapter\ElasticSearch;
 
 interface ElasticSearchPersisterInterface
 {
-    /**
-     * @param string|int $id
-     * @param object     $object
-     *
-     * @return array
-     */
-    public function persist($id, $object): array;
+    public function persist($identifierProperty = 'id', array $objects = []): array;
 }
