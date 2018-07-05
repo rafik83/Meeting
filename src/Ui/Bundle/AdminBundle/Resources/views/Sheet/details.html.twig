@@ -105,7 +105,12 @@
         </div>
 
         <div class="col-md-3">
-            {{ include('AdminBundle:Sheet/Partial:records.html.twig', { addCommentForm: addCommentForm, records: details.recordViews }, false) }}
+            {{ include('AdminBundle:Sheet/Partial:records.html.twig', {
+                addCommentForm: addCommentForm,
+                records: details.recordViews,
+                event: event,
+                sheet: sheet
+            }, false) }}
         </div>
     </div>
 

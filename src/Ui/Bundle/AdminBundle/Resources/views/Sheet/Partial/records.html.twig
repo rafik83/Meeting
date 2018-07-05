@@ -13,6 +13,14 @@
 
 {% for record in records %}
         <blockquote>
+        {% if is_granted('ROLE_SUPER_ADMIN') and record.isComment %}
+            <form style="float: right;" data-confirm="{{ 'admin.event.sheet.comment.remove.confirm'|trans }}" method="post" action="{{ path('admin_sheet_remove_comment', {'event': event.id, 'sheet': sheet.id, 'comment': record.commentId}) }}">
+                <input type="hidden" name="_method" value="DELETE" />
+                <input type="hidden" name="_token" value="{{ csrf_token(record.getRemoveIntentionComment) }}">
+                <button class="btn btn-xs btn-danger" type="submit">x</button>
+            </form>
+        {% endif %}
+
         {% if record.isTrace %}
             <span class="label label-{{ record.getCorrespondingLabel }}">
                 {{ (record.getTraceTranslationKey ~ record.comment)|trans }}

@@ -714,6 +714,14 @@ admin_sheet_details:
         sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction }
+admin_sheet_remove_comment:
+    path: /event/{event}/sheet/{sheet}/remove/comment/{comment}
+    requirements:
+        event: \d+
+        sheet: \d+
+        comment: \d+
+    methods: [DELETE]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\RemoveCommentAction }
 admin_event_export_uploaded_objets:
     path: /event/{event}/export/uploaded-objects
     requirements:

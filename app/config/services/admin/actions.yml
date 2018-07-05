@@ -326,6 +326,14 @@ services:
             - '@adapter.router'
             - '@security.impersonate'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\RemoveCommentAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@repository.sheet.comment_repository'
+            - '@router.default'
+            - '@security.csrf.token_manager'
+            - '@session.flash_bag'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\ExportUploadedObjectsBySheetsAction:
         arguments:
             - '@adapter.authorization_checker'
