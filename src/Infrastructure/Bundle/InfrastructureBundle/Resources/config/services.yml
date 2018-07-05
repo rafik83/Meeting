@@ -5288,6 +5288,7 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@order.merger'
             - '@order.balance'
+            - '@Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler'
         tags:
             - { name: serializer.normalizer }
 
