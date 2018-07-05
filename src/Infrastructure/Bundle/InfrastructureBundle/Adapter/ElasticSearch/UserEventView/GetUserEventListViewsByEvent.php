@@ -10,14 +10,14 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
-use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventViewsByEventInterface;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEventInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter;
 use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
 
-class GetUserEventViewsByEvent implements GetUserEventViewsByEventInterface
+class GetUserEventListViewsByEvent implements GetUserEventListViewsByEventInterface
 {
     /** @var SearchAdapter */
     private $searchAdapter;

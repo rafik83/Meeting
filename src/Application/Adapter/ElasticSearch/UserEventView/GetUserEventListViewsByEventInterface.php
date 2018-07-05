@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 
-interface GetUserEventViewsByEventInterface
+interface GetUserEventListViewsByEventInterface
 {
     public const RESULTS_NUMBER_BY_PAGE = 100;
 

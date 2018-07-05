@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\User;
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class GetUserEventViewsQuery implements Query
+class GetUserEventListViewsQuery implements Query
 {
     /** @var Event */
     public $event;

@@ -13,10 +13,10 @@ namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Adapt
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventViewsByEvent;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEvent;
 use PHPUnit\Framework\TestCase;
 
-class GetUserEventViewsByEventTest extends TestCase
+class GetUserEventListViewsByEventTest extends TestCase
 {
     public function testHandle()
     {
@@ -86,7 +86,7 @@ class GetUserEventViewsByEventTest extends TestCase
             )
         ;
 
-        $getUserEventViewsByEvent = new GetUserEventViewsByEvent($searchAdapter->reveal());
+        $getUserEventViewsByEvent = new GetUserEventListViewsByEvent($searchAdapter->reveal());
 
         $this->assertEquals(
             [

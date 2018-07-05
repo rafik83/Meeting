@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Query\User\GetUserEventViewsQuery;
+use Proximum\Vimeet\Application\Query\User\GetUserEventListViewsQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +48,7 @@ class ListAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $userEventListViews = $this->queryBus->handle(new GetUserEventViewsQuery($event, 1));
+        $userEventListViews = $this->queryBus->handle(new GetUserEventListViewsQuery($event, 1));
 
         return new Response(
             $this->engine->render(
