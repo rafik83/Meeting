@@ -48,14 +48,14 @@ class ListAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $userEventViews = $this->queryBus->handle(new GetUserEventViewsQuery($event, 1));
+        $userEventListViews = $this->queryBus->handle(new GetUserEventViewsQuery($event, 1));
 
         return new Response(
             $this->engine->render(
                 '@Admin/User/users-and-sheets-list.html.twig',
                 [
                     'event' => $event,
-                    'userEventViews' => $userEventViews,
+                    'userEventListViews' => $userEventListViews,
                 ]
             )
         );

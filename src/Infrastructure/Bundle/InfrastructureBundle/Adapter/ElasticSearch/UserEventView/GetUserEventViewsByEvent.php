@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Ela
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventViewsByEventInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter;
 use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
@@ -26,9 +27,6 @@ class GetUserEventViewsByEvent implements GetUserEventViewsByEventInterface
         $this->searchAdapter = $searchAdapter;
     }
 
-    /**
-     * @return UserEventView[]
-     */
     public function handle(Event $event, int $page): array
     {
         $query = new \Elastica\Query(
@@ -61,7 +59,7 @@ class GetUserEventViewsByEvent implements GetUserEventViewsByEventInterface
         foreach ($documents as $document) {
             $data = $document->getData();
 
-            $userEventViews[] = new UserEventView(
+            $userEventViews[] = new UserEventListView(
                 $data['eventId'],
                 $data['userId'],
                 $data['firstName'],

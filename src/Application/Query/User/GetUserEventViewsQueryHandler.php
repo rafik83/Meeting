@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\User;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventViewsByEventInterface;
+use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 
 class GetUserEventViewsQueryHandler
 {
@@ -22,7 +23,10 @@ class GetUserEventViewsQueryHandler
         $this->getUserEventViewsByEvent = $getUserEventViewsByEvent;
     }
 
-    public function handle(GetUserEventViewsQuery $query)
+    /**
+     * @return UserEventListView[]
+     */
+    public function handle(GetUserEventViewsQuery $query): array
     {
         return $this->getUserEventViewsByEvent->handle($query->event, $query->page);
     }
