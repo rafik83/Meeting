@@ -63,7 +63,7 @@ class UserEventViewsFactory
      * @param UserEventView[] $userEventViews
      */
     private function addUserEventViewOrSheetToExistingOne(
-        &$userEventViews,
+        array &$userEventViews,
         int $eventId,
         int $userId,
         ?string $firstName,

@@ -39,7 +39,7 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
         $this->serializer = $serializer;
     }
 
-    public function persist($identifierProperty = 'id', array $objects = []): array
+    public function persist(string $identifierProperty = 'id', array $objects = []): array
     {
         if (empty($objects)) {
             return [];
