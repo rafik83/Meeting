@@ -511,11 +511,9 @@ class Configuration
         return $this->visio;
     }
 
-    public function setVisio(bool $visio): self
+    public function setVisio(bool $visio): void
     {
         $this->visio = $visio;
-
-        return $this;
     }
 
     /**
