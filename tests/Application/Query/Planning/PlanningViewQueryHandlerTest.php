@@ -108,6 +108,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $dayViewQueryHandler
             ->handle(
                 new DayViewQuery(
+                    $event,
                     $user->reveal(),
                     $day1,
                     'fr',
@@ -124,6 +125,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $dayViewQueryHandler
             ->handle(
                 new DayViewQuery(
+                    $event,
                     $user->reveal(),
                     $day2,
                     'fr',
@@ -256,6 +258,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $dayViewQueryHandler
             ->handle(
                 new DayViewQuery(
+                    $event,
                     $user->reveal(),
                     $day1,
                     $locale,
@@ -272,6 +275,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $dayViewQueryHandler
             ->handle(
                 new DayViewQuery(
+                    $event,
                     $user->reveal(),
                     $day2,
                     $locale,
@@ -396,6 +400,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $dayViewQueryHandler
             ->handle(
                 new DayViewQuery(
+                    $event,
                     $user1->reveal(),
                     $day1,
                     $locale,
@@ -412,6 +417,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $dayViewQueryHandler
             ->handle(
                 new DayViewQuery(
+                    $event,
                     $user1->reveal(),
                     $day2,
                     $locale,

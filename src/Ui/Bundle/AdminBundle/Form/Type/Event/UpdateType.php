@@ -43,7 +43,13 @@ class UpdateType extends AbstractEventType
             ])
             ->add('disabledPasswordChanging', CheckboxType::class, [
                 'required' => false,
-            ]);
+            ])
+            ->add('displayParticipantNameOnPlanning', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('displayParticipantPositionOnPlanning', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 

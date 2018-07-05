@@ -115,6 +115,11 @@ class UpdateHandler
             $update->backgroundColor
         );
 
+        $event->getConfiguration()->setParticipantInfoToDisplayOnPlanning(
+            $update->displayParticipantNameOnPlanning,
+            $update->displayParticipantPositionOnPlanning
+        );
+
         $update->event->getConfiguration()->setAnalyticsCode($update->analyticsCode);
 
         if (null !== $update->logo) {

@@ -205,9 +205,9 @@ form.event_create.children.backgroundImage.label: 'Image de fond'
 form.event_create.children.country.label: Pays
 form.event_create.children.currency.label: Devise
 form.event_create.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
+form.event_create.children.domain.help: 'Caractères autorisés : alphanumérique en minuscule, "." et "-"'
 form.event_create.children.domain.label: 'Domaine (complet)'
 form.event_create.children.domain.placeholder: 'Nom de domaine complet de l''événement: *.vimeet.events'
-form.event_create.children.domain.help: 'Caractères autorisés : alphanumérique en minuscule, "." et "-"'
 form.event_create.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_create.children.fallback.label: 'Langue par défaut'
 form.event_create.children.invoicePrefix.label: 'Préfixe de facturation'
@@ -247,6 +247,8 @@ form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
 form.event_update.children.disabledEmailChanging.label: 'Changement d''email désactivé'
 form.event_update.children.disabledPasswordChanging.label: 'Changement de mot de passe désactivé'
+form.event_update.children.displayParticipantNameOnPlanning.label: 'Prénom et Nom des participants affichés sur le planning'
+form.event_update.children.displayParticipantPositionOnPlanning.label: 'Fonction des participants affichés sur le planning'
 form.event_update.children.domain.label: 'Domaine (complet)'
 form.event_update.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_update.children.fallback.label: 'Langue par défaut'
@@ -498,7 +500,7 @@ form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
 form.participate_happening.children.submit.label: Participer
 form.payment_mode_choice.children.paymentMode.bank_check: Chèque
-form.payment_mode_choice.children.paymentMode.bank_transfer: Transfert
+form.payment_mode_choice.children.paymentMode.bank_transfer: Virement
 form.payment_mode_choice.children.paymentMode.paypal: Paypal
 form.planner_export.children.lockMeetingRequest.label: 'Verrouiller les demandes de rendez-vous'
 form.planner_export.children.lockMeetingRequest.option.no: Non

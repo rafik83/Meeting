@@ -35,6 +35,12 @@
             <section class="important fail">
                 <p>{{ form_errors(form.password.first) }}</p>
             </section>
+            <br/>
+        {% endif %}
+        {% if typeDescription is not empty %}
+            <section id="type-description" class="important">
+                {{ typeDescription|html }}
+            </section>
         {% endif %}
     </div>
 {% endblock %}
