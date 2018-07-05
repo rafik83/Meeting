@@ -27,6 +27,17 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
         $sheet1337->getOwnerId()->willReturn(1);
         $sheet1337->getTypeTitle('fr')->willReturn('Taxi drivers');
         $sheet1337->getCategoriesTitles('fr')->willReturn('Drivers');
+        $sheet1337->isEnabled()->willReturn(false);
+        $sheet1337->getState()->willReturn('pending');
+        $sheet1337->getValidationState()->willReturn('validated');
+        $sheet1337->getCompleteness()->willReturn(100);
+        $sheet1337->attend()->willReturn(false);
+        $sheet1337->hasGroup()->willReturn(true);
+        $sheet1337->getGroupTitle()->willReturn('My sheets group');
+        $sheet1337->isInCatalog()->willReturn(false);
+        $sheet1337->getFollowerName()->willReturn(null);
+        $sheet1337->getCommercialStatus()->willReturn('verbal_agreement');
+        $sheet1337->getCommercialStatusLabel()->willReturn('success');
 
         $sheet4556 = $this->prophesize(Sheet::class);
         $sheet4556->getId()->willReturn(4556);
@@ -34,6 +45,17 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
         $sheet4556->getOwnerId()->willReturn(2);
         $sheet4556->getTypeTitle('fr')->willReturn('Cruise');
         $sheet4556->getCategoriesTitles('fr')->willReturn('Boat');
+        $sheet4556->isEnabled()->willReturn(true);
+        $sheet4556->getState()->willReturn('pending');
+        $sheet4556->getValidationState()->willReturn('validated');
+        $sheet4556->getCompleteness()->willReturn(100);
+        $sheet4556->attend()->willReturn(true);
+        $sheet4556->hasGroup()->willReturn(false);
+        $sheet4556->getGroupTitle()->willReturn(null);
+        $sheet4556->isInCatalog()->willReturn(true);
+        $sheet4556->getFollowerName()->willReturn('Henry MICHOU');
+        $sheet4556->getCommercialStatus()->willReturn('verbal_agreement');
+        $sheet4556->getCommercialStatusLabel()->willReturn('success');
 
         $documents = [
             new \Elastica\Document(
@@ -81,7 +103,19 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
                         'Taxi Company',
                         true,
                         'Taxi drivers',
-                        'Drivers'
+                        'Drivers',
+                        false,
+                        'pending',
+                        'validated',
+                        100,
+                        'success',
+                        false,
+                        true,
+                        'My sheets group',
+                        false,
+                        null,
+                        'verbal_agreement',
+                        'success'
                     ),
                 ]
             ),
@@ -98,14 +132,38 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
                         'Taxi Company',
                         false,
                         'Taxi drivers',
-                        'Drivers'
+                        'Drivers',
+                        false,
+                        'pending',
+                        'validated',
+                        100,
+                        'success',
+                        false,
+                        true,
+                        'My sheets group',
+                        false,
+                        null,
+                        'verbal_agreement',
+                        'success'
                     ),
                     new UserEventSheetsListView(
                         4556,
                         'Fhloston paradise',
                         true,
                         'Cruise',
-                        'Boat'
+                        'Boat',
+                        true,
+                        'pending',
+                        'validated',
+                        100,
+                        'success',
+                        true,
+                        false,
+                        null,
+                        true,
+                        'Henry MICHOU',
+                        'verbal_agreement',
+                        'success'
                     ),
                 ]
             ),

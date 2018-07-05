@@ -861,6 +861,7 @@ admin.sheet.trace.validation_validate: 'validated content at %at%'
 admin.sheet.type: Type
 admin.sheet.validate: validate
 admin.sheet.validateSheets: 'validate sheets'
+admin.sheet.validationState: 'Profile status'
 admin.sheets_group.column.created_at: 'created at'
 admin.sheets_group.column.email_manager: 'manager''s email'
 admin.sheets_group.column.sheet_list: 'sheets list'
@@ -1080,6 +1081,7 @@ admin.users.locale: Language
 admin.users.see-sheet: 'See the participation'
 admin.users.title: Users
 admin.users.type: 'Users type'
+admin.users.user: Users
 admin.users.withoutSheet: 'without sheet'
 admin.users.withSheet: 'with sheet'
 admin.zero-result: 'No result'

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventSheetsListView;
@@ -62,7 +63,19 @@ class ElasticDocumentsToUserEventListViewsTransformer
                         $sheet->getTitle(),
                         $data['userId'] === $sheet->getOwnerId(),
                         $sheet->getTypeTitle($locale),
-                        $sheet->getCategoriesTitles($locale)
+                        $sheet->getCategoriesTitles($locale),
+                        $sheet->isEnabled(),
+                        $sheet->getState(),
+                        $sheet->getValidationState(),
+                        $sheet->getCompleteness(),
+                        Sheet::getCompletenessStatus($sheet->getCompleteness()),
+                        $sheet->attend(),
+                        $sheet->hasGroup(),
+                        $sheet->getGroupTitle(),
+                        $sheet->isInCatalog(),
+                        $sheet->getFollowerName(),
+                        $sheet->getCommercialStatus(),
+                        $sheet->getCommercialStatusLabel()
                     );
                 }
             }

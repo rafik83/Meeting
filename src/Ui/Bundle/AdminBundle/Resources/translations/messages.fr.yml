@@ -877,6 +877,7 @@ admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
 admin.sheet.validateSheets: 'Valider les fiches'
+admin.sheet.validationState: 'Statut fiche'
 admin.sheets_group.column.created_at: 'Date de création'
 admin.sheets_group.column.email_manager: 'Email du gestionnaire'
 admin.sheets_group.column.sheet_list: 'Liste des fiches'
@@ -1098,6 +1099,7 @@ admin.users.locale: Langue
 admin.users.see-sheet: 'Voir la participation'
 admin.users.title: Utilisateurs
 admin.users.type: Type
+admin.users.user: Utilisateur
 admin.users.withoutSheet: 'Sans fiche'
 admin.users.withSheet: 'Avec fiche'
 admin.zero-result: 'Aucun résultat'

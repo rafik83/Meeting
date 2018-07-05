@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
 {% block title 'admin.users.title'|trans %}
 
 {% block content %}
@@ -9,36 +11,106 @@
         <thead>
         <tr>
             <th>{{ 'admin.users.id'|trans }}</th>
-            <th>{{ 'admin.users.email'|trans }}</th>
-            <th>{{ 'admin.users.lastName'|trans }}</th>
-            <th>{{ 'admin.users.firstName'|trans }}</th>
+            <th>{{ 'admin.users.user'|trans }}</th>
             <th>{{ 'admin.users.locale'|trans }}</th>
             <th>{{ 'admin.sheet.title'|trans }}</th>
-            <th>{{ 'admin.sheet.type'|trans }}</th>
             <th>{{ 'admin.sheet.category'|trans }}</th>
+            <th>{{ 'admin.sheet.type'|trans }}</th>
+            <th>{{ 'admin.sheet.validationState'|trans }}</th>
+            <th>{{ 'admin.sheet.state'|trans }}</th>
+            <th>{{ 'admin.sheet.follower'|trans }}</th>
+            <th>{{ 'admin.sheet.commercialStatus'|trans }}</th>
         </tr>
         </thead>
         <tbody>
         {% for userEventListView in userEventListViews %}
             {% set rowSpanValue = userEventListView.userEventSheetsListViews|length %}
             <tr>
-                <td rowspan="{{ rowSpanValue }}">{{ userEventListView.userId }}</td>
-                <td rowspan="{{ rowSpanValue }}"><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEventListView.userId }) }}">{{ userEventListView.email }}</a></td>
-                <td rowspan="{{ rowSpanValue }}">{{ userEventListView.lastName }}</td>
-                <td rowspan="{{ rowSpanValue }}">{{ userEventListView.firstName }}</td>
+                <td rowspan="{{ rowSpanValue }}">
+                    <small><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEventListView.userId }) }}">{{ userEventListView.userId }}</a></small>
+                </td>
+                <td rowspan="{{ rowSpanValue }}" nowrap>
+                    <strong>{{ userEventListView.lastName }}</strong> {{ userEventListView.firstName }}<br>
+                    <small>
+                        <a href="mailto:{{ userEventListView.email }}">{{ userEventListView.email }}</a>
+                    </small>
+                </td>
+
                 <td rowspan="{{ rowSpanValue }}">{{ userEventListView.locale|language }}</td>
 
-                {% for userEventSheetsListView in userEventListView.userEventSheetsListViews %}
+                {% for userEventSheetListView in userEventListView.userEventSheetsListViews %}
                     {% if not loop.first %}<tr>{% endif %}
                         <td>
-                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': userEventSheetsListView.id }) }}">{{ userEventSheetsListView.title }}</a>
+                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': userEventSheetListView.id }) }}">{{ userEventSheetListView.title }}</a>
 
-                            {% if userEventSheetsListView.isOwner %}
+                            {% if not userEventSheetListView.isEnabled %}
+                                <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
+                            {% endif %}
+
+                            {% if userEventSheetListView.hasGroup %}
+                                <span class="label label-success">
+                                    <i class="glyphicon glyphicon-duplicate" data-toggle="tooltip" data-placement="top" title="{{ userEventSheetListView.groupTitle }}"></i>
+                                </span>
+                            {% endif %}
+
+                            {% if not userEventSheetListView.attend %}
+                                <span class="label label-danger">{{ 'event.sheet.attend.cancel'|trans }}</span>
+                            {% endif %}
+
+                            {% if userEventSheetListView.isOwner %}
                                 <span class="label label-default">{{ 'admin.sheet.isOwner'|trans }}</span>
                             {% endif %}
                         </td>
-                        <td>{{ userEventSheetsListView.typeTitle }}</td>
-                        <td>{{ userEventSheetsListView.categoriesTitle }}</td>
+
+                        <td>{{ userEventSheetListView.categoriesTitle }}</td>
+                        <td>{{ userEventSheetListView.typeTitle }}</td>
+
+                        <td>
+                            {{ macro.state_label(
+                                ('event.sheet.validationState.' ~ userEventSheetListView.validationState)|trans,
+                                userEventSheetListView.validationState,
+                                {
+                                    'draft': 'default',
+                                    'pending': 'warning',
+                                    'validated': 'success'
+                                }
+                            ) }}
+                            <div class="progress progress-completeness" data-toggle="tooltip" title="{{ 'form.sheet_filter.children.completed.label'|trans({}, 'forms') }}">
+                                <div class="progress-bar progress-bar-{{ userEventSheetListView.completenessStatus }}" role="progressbar" aria-valuenow="{{ userEventSheetListView.completeness }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ userEventSheetListView.completeness }}%;">
+                                    {{ userEventSheetListView.completeness }}%
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div>
+                                {{ macro.state_label(
+                                    ('event.sheet.state.' ~ userEventSheetListView.state)|trans,
+                                    userEventSheetListView.state,
+                                    {
+                                        'pending': 'default',
+                                        'accepted': 'warning',
+                                        'validated': 'success',
+                                        'refused': 'danger',
+                                    }
+                                ) }}
+                            </div>
+                            {% if userEventSheetListView.isInCatalog %}
+                                <div class="label label-info">
+                                    {{ 'admin.sheet.inCatalog'|trans }}
+                                </div>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ userEventSheetListView.followerName }}</td>
+
+                        <td>
+                            {% if userEventSheetListView.commercialStatus %}
+                                <div class="label label-{{ userEventSheetListView.commercialStatusLabel }}">
+                                    {{ ('admin.sheet.details.crm.record.trace.set_commercial_status.' ~ userEventSheetListView.commercialStatus)|trans }}
+                                </div>
+                            {% endif %}
+                        </td>
                     {% if not loop.first %}</tr>{% endif %}
                 {% endfor %}
             </tr>
