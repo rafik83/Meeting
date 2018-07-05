@@ -21,9 +21,13 @@ class GetUserEventListViewsQuery implements Query
     /** @var string */
     public $page;
 
-    public function __construct(Event $event, string $page)
+    /** @var string */
+    public $locale;
+
+    public function __construct(Event $event, string $page, string $locale)
     {
         $this->event = $event;
         $this->page = $page;
+        $this->locale = $locale;
     }
 }

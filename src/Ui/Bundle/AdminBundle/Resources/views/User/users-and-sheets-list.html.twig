@@ -13,16 +13,26 @@
             <th>{{ 'admin.users.lastName'|trans }}</th>
             <th>{{ 'admin.users.firstName'|trans }}</th>
             <th>{{ 'admin.users.locale'|trans }}</th>
+            <th>{{ 'admin.sheet.title'|trans }}</th>
+            <th>{{ 'admin.sheet.type'|trans }}</th>
         </tr>
         </thead>
         <tbody>
         {% for userEventListView in userEventListViews %}
+            {% set rowSpanValue = userEventListView.sheets|length %}
             <tr>
-                <td>{{ userEventListView.userId }}</td>
-                <td><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEventListView.userId }) }}">{{ userEventListView.email }}</a></td>
-                <td>{{ userEventListView.lastName }}</td>
-                <td>{{ userEventListView.firstName }}</td>
-                <td>{{ userEventListView.locale|language }}</td>
+                <td rowspan="{{ rowSpanValue }}">{{ userEventListView.userId }}</td>
+                <td rowspan="{{ rowSpanValue }}"><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEventListView.userId }) }}">{{ userEventListView.email }}</a></td>
+                <td rowspan="{{ rowSpanValue }}">{{ userEventListView.lastName }}</td>
+                <td rowspan="{{ rowSpanValue }}">{{ userEventListView.firstName }}</td>
+                <td rowspan="{{ rowSpanValue }}">{{ userEventListView.locale|language }}</td>
+
+                {% for sheet in userEventListView.sheets %}
+                    {% if not loop.first %}<tr>{% endif %}
+                        <td>{{ sheet.title }}</td>
+                        <td>{{ sheet.type.title(app.request.locale) }}</td>
+                    {% if not loop.first %}</tr>{% endif %}
+                {% endfor %}
             </tr>
         {% else %}
             <tr>

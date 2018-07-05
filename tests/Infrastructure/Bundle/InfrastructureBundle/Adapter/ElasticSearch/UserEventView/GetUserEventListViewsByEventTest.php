@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEvent;
-use PHPUnit\Framework\TestCase;
 
 class GetUserEventListViewsByEventTest extends TestCase
 {
@@ -47,72 +48,86 @@ class GetUserEventListViewsByEventTest extends TestCase
             ]
         );
 
+        $documents = [
+            new \Elastica\Document(
+                '42_1',
+                [
+                    'eventId' => 42,
+                    'userId' => 1,
+                    'firstName' => 'Korben',
+                    'lastName' => 'DALLAS',
+                    'email' => 'korben.dallas@fifth.element',
+                    'locale' => 'en',
+                    'sheets' => [
+                        ['id' => 1337]
+                    ],
+                ]
+            ),
+            new \Elastica\Document(
+                '42_2',
+                [
+                    'eventId' => 42,
+                    'userId' => 2,
+                    'firstName' => 'Leeloo',
+                    'lastName' => 'Ekbat de Sebat',
+                    'email' => 'leeloo@fifth.element',
+                    'locale' => 'fr',
+                    'sheets' => [
+                        ['id' => 1337],
+                        ['id' => 4556],
+                    ],
+                ]
+            ),
+        ];
+
+        $expectedResult = [
+            new UserEventListView(
+                42,
+                1,
+                'Korben',
+                'DALLAS',
+                'korben.dallas@fifth.element',
+                'en',
+                [['id' => 1337]]
+            ),
+            new UserEventListView(
+                42,
+                2,
+                'Leeloo',
+                'Ekbat de Sebat',
+                'leeloo@fifth.element',
+                'fr',
+                [
+                    ['id' => 1337],
+                    ['id' => 4556],
+                ]
+            ),
+        ];
+
         $searchAdapter = $this->prophesize(SearchAdapter::class);
         $searchAdapter
             ->handleQuery('user_event', $expectedQuery)
             ->shouldBeCalled()
-            ->willReturn(
-                [
-                    new \Elastica\Document(
-                        '42_1',
-                        [
-                            'eventId' => 42,
-                            'userId' => 1,
-                            'firstName' => 'Korben',
-                            'lastName' => 'DALLAS',
-                            'email' => 'korben.dallas@fifth.element',
-                            'locale' => 'en',
-                            'sheets' => [
-                                ['id' => 1337]
-                            ],
-                        ]
-                    ),
-                    new \Elastica\Document(
-                        '42_2',
-                        [
-                            'eventId' => 42,
-                            'userId' => 2,
-                            'firstName' => 'Leeloo',
-                            'lastName' => 'Ekbat de Sebat',
-                            'email' => 'leeloo@fifth.element',
-                            'locale' => 'fr',
-                            'sheets' => [
-                                ['id' => 1337],
-                                ['id' => 4556],
-                            ],
-                        ]
-                    ),
-                ]
-            )
+            ->willReturn($documents)
         ;
 
-        $getUserEventViewsByEvent = new GetUserEventListViewsByEvent($searchAdapter->reveal());
+        $elasticDocumentsToUserEventListViewsTranformer = $this->prophesize(
+            ElasticDocumentsToUserEventListViewsTransformer::class
+        );
+        $elasticDocumentsToUserEventListViewsTranformer
+            ->handle($documents, 'fr')
+            ->shouldBeCalled()
+            ->willReturn($expectedResult)
+        ;
+
+        $getUserEventViewsByEvent = new GetUserEventListViewsByEvent(
+            $searchAdapter->reveal(),
+            $elasticDocumentsToUserEventListViewsTranformer->reveal()
+        );
 
         $this->assertEquals(
-            [
-                new UserEventListView(
-                    42,
-                    1,
-                    'Korben',
-                    'DALLAS',
-                    'korben.dallas@fifth.element',
-                    'en',
-                    [['id' => 1337]]
-                ),
-                new UserEventListView(
-                    42,
-                    2,
-                    'Leeloo',
-                    'Ekbat de Sebat',
-                    'leeloo@fifth.element',
-                    'fr',
-                    [
-                        ['id' => 1337],
-                        ['id' => 4556],
-                    ]
-                ),
-            ],
-            $getUserEventViewsByEvent->handle($event->reveal(), 2)
+            $expectedResult,
+            $getUserEventViewsByEvent->handle($event->reveal(), 2, 'fr')
         );
     }
 }

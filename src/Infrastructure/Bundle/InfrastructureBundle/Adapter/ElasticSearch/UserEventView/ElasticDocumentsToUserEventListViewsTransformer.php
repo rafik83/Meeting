@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Ela
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 
-class ElasticDocumentsToUserEventListViewsTranformer
+class ElasticDocumentsToUserEventListViewsTransformer
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;

@@ -48,7 +48,9 @@ class ListAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $userEventListViews = $this->queryBus->handle(new GetUserEventListViewsQuery($event, 1));
+        $userEventListViews = $this->queryBus->handle(
+            new GetUserEventListViewsQuery($event, 1, $event->getAvailableLocale($request->getLocale()))
+        );
 
         return new Response(
             $this->engine->render(

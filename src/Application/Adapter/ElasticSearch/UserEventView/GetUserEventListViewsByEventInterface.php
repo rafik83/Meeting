@@ -20,5 +20,5 @@ interface GetUserEventListViewsByEventInterface
     /**
      * @return UserEventListView[]
      */
-    public function handle(Event $event, int $page): array;
+    public function handle(Event $event, int $page, string $locale): array;
 }

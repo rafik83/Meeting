@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Ela
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEventInterface;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter;
 use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
@@ -22,12 +21,18 @@ class GetUserEventListViewsByEvent implements GetUserEventListViewsByEventInterf
     /** @var SearchAdapter */
     private $searchAdapter;
 
-    public function __construct(SearchAdapter $searchAdapter)
-    {
+    /** @var ElasticDocumentsToUserEventListViewsTransformer */
+    private $elasticDocumentsToUserEventListViewsTranformer;
+
+    public function __construct(
+        SearchAdapter $searchAdapter,
+        ElasticDocumentsToUserEventListViewsTransformer $elasticDocumentsToUserEventListViewsTranformer
+    ) {
         $this->searchAdapter = $searchAdapter;
+        $this->elasticDocumentsToUserEventListViewsTranformer = $elasticDocumentsToUserEventListViewsTranformer;
     }
 
-    public function handle(Event $event, int $page): array
+    public function handle(Event $event, int $page, string $locale): array
     {
         $query = new \Elastica\Query(
             [
@@ -53,23 +58,8 @@ class GetUserEventListViewsByEvent implements GetUserEventListViewsByEventInterf
             ]
         );
 
-        $userEventViews = [];
         $documents = $this->searchAdapter->handleQuery(TypesMapping::getTypeByClass(UserEventView::class), $query);
 
-        foreach ($documents as $document) {
-            $data = $document->getData();
-
-            $userEventViews[] = new UserEventListView(
-                $data['eventId'],
-                $data['userId'],
-                $data['firstName'],
-                $data['lastName'],
-                $data['email'],
-                $data['locale'],
-                $data['sheets']
-            );
-        }
-
-        return $userEventViews;
+        return $this->elasticDocumentsToUserEventListViewsTranformer->handle($documents, $locale);
     }
 }

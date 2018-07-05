@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\UserEventView;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
+
 class UserEventListView
 {
     /** @var string */
@@ -33,7 +35,7 @@ class UserEventListView
     /** @var string */
     public $locale;
 
-    /** @var array */
+    /** @var Sheet[] */
     public $sheets;
 
     public function __construct(

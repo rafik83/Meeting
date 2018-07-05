@@ -28,6 +28,6 @@ class GetUserEventListViewsQueryHandler
      */
     public function handle(GetUserEventListViewsQuery $query): array
     {
-        return $this->getUserEventViewsByEvent->handle($query->event, $query->page);
+        return $this->getUserEventViewsByEvent->handle($query->event, $query->page, $query->locale);
     }
 }

@@ -14,9 +14,9 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTranformer;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer;
 
-class ElasticDocumentsToUserEventListViewsTranformerTest extends TestCase
+class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
 {
     public function testHandle()
     {
@@ -86,7 +86,7 @@ class ElasticDocumentsToUserEventListViewsTranformerTest extends TestCase
             ->willReturn([1337 => $sheet1337->reveal(), 4556 => $sheet4556->reveal()])
         ;
 
-        $elasticDocumentsToUserEventListViewsTranformer = new ElasticDocumentsToUserEventListViewsTranformer(
+        $elasticDocumentsToUserEventListViewsTranformer = new ElasticDocumentsToUserEventListViewsTransformer(
             $sheetRepository->reveal()
         );
         $this->assertEquals($expectedResult, $elasticDocumentsToUserEventListViewsTranformer->handle($documents, 'fr'));
