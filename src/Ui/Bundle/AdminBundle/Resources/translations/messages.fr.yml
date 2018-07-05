@@ -843,6 +843,7 @@ admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que
 admin.sheet.import.button.label: Importer
 admin.sheet.imported.all.label: 'Peu importe'
 admin.sheet.inCatalog: 'Au catalogue'
+admin.sheet.isOwner: Propriétaire
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
 admin.sheet.list.filters.label: 'Filtres avancés'

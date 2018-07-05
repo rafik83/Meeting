@@ -35,8 +35,8 @@ class UserEventListView
     /** @var string */
     public $locale;
 
-    /** @var Sheet[] */
-    public $sheets;
+    /** @var UserEventSheetsListView[] */
+    public $userEventSheetsListViews;
 
     public function __construct(
         int $eventId,
@@ -45,7 +45,7 @@ class UserEventListView
         ?string $lastName,
         string $email,
         string $locale,
-        array $sheets
+        array $userEventSheetsListViews
     ) {
         $this->id = $eventId . '_' . $userId;
         $this->eventId = $eventId;
@@ -54,6 +54,6 @@ class UserEventListView
         $this->lastName = $lastName;
         $this->email = $email;
         $this->locale = $locale;
-        $this->sheets = $sheets;
+        $this->userEventSheetsListViews = $userEventSheetsListViews;
     }
 }

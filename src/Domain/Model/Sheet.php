@@ -306,6 +306,16 @@ class Sheet implements TraceableInterface
         return $this->type;
     }
 
+    public function getTypeTitle(string $locale): string
+    {
+        return $this->type->getTitle($locale);
+    }
+
+    public function getCategoriesTitles(string $locale): string
+    {
+        return implode(', ', $this->type->getCategoriesTitles($locale));
+    }
+
     /**
      * Get participants.
      *
@@ -532,6 +542,11 @@ class Sheet implements TraceableInterface
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    public function getOwnerId(): ?int
+    {
+        return $this->owner->getId();
     }
 
     /**

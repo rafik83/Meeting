@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Ela
 
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
+use Proximum\Vimeet\Domain\UserEventView\UserEventSheetsListView;
 
 class ElasticDocumentsToUserEventListViewsTransformer
 {
@@ -51,20 +52,32 @@ class ElasticDocumentsToUserEventListViewsTransformer
         foreach ($documents as $document) {
             $data = $document->getData();
 
-            $userEventListViews[] = new UserEventListView(
-                $data['eventId'],
-                $data['userId'],
-                $data['firstName'],
-                $data['lastName'],
-                $data['email'],
-                $data['locale'],
-                array_map(
-                    function ($sheetData) use ($sheetsIndexedById) {
-                        return $sheetsIndexedById[$sheetData['id']] ?? null;
-                    },
-                    $data['sheets']
-                )
-            );
+            $userEventSheetsListViews = [];
+
+            foreach ($data['sheets'] as $sheetData) {
+                if (isset($sheetsIndexedById[$sheetData['id']])) {
+                    $sheet = $sheetsIndexedById[$sheetData['id']];
+                    $userEventSheetsListViews[] = new UserEventSheetsListView(
+                        $sheet->getId(),
+                        $sheet->getTitle(),
+                        $data['userId'] === $sheet->getOwnerId(),
+                        $sheet->getTypeTitle($locale),
+                        $sheet->getCategoriesTitles($locale)
+                    );
+                }
+            }
+
+            if (!empty($userEventSheetsListViews)) {
+                $userEventListViews[] = new UserEventListView(
+                    $data['eventId'],
+                    $data['userId'],
+                    $data['firstName'],
+                    $data['lastName'],
+                    $data['email'],
+                    $data['locale'],
+                    $userEventSheetsListViews
+                );
+            }
         }
 
         return $userEventListViews;

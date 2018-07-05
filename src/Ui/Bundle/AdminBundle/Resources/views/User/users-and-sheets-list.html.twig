@@ -15,11 +15,12 @@
             <th>{{ 'admin.users.locale'|trans }}</th>
             <th>{{ 'admin.sheet.title'|trans }}</th>
             <th>{{ 'admin.sheet.type'|trans }}</th>
+            <th>{{ 'admin.sheet.category'|trans }}</th>
         </tr>
         </thead>
         <tbody>
         {% for userEventListView in userEventListViews %}
-            {% set rowSpanValue = userEventListView.sheets|length %}
+            {% set rowSpanValue = userEventListView.userEventSheetsListViews|length %}
             <tr>
                 <td rowspan="{{ rowSpanValue }}">{{ userEventListView.userId }}</td>
                 <td rowspan="{{ rowSpanValue }}"><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEventListView.userId }) }}">{{ userEventListView.email }}</a></td>
@@ -27,10 +28,17 @@
                 <td rowspan="{{ rowSpanValue }}">{{ userEventListView.firstName }}</td>
                 <td rowspan="{{ rowSpanValue }}">{{ userEventListView.locale|language }}</td>
 
-                {% for sheet in userEventListView.sheets %}
+                {% for userEventSheetsListView in userEventListView.userEventSheetsListViews %}
                     {% if not loop.first %}<tr>{% endif %}
-                        <td>{{ sheet.title }}</td>
-                        <td>{{ sheet.type.title(app.request.locale) }}</td>
+                        <td>
+                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': userEventSheetsListView.id }) }}">{{ userEventSheetsListView.title }}</a>
+
+                            {% if userEventSheetsListView.isOwner %}
+                                <span class="label label-default">{{ 'admin.sheet.isOwner'|trans }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ userEventSheetsListView.typeTitle }}</td>
+                        <td>{{ userEventSheetsListView.categoriesTitle }}</td>
                     {% if not loop.first %}</tr>{% endif %}
                 {% endfor %}
             </tr>

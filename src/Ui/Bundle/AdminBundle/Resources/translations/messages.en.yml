@@ -827,6 +827,7 @@ admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%)connected as %userEmai
 admin.sheet.import.button.label: import
 admin.sheet.imported.all.label: 'no matter'
 admin.sheet.inCatalog: 'in catalog'
+admin.sheet.isOwner: Owner
 admin.sheet.lastLoginAt: 'last login'
 admin.sheet.link: 'Participation sheets'
 admin.sheet.list.filters.label: 'advanced filters'
