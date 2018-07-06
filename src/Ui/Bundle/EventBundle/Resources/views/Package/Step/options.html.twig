@@ -9,15 +9,28 @@
 
     {{ form_errors(form) }}
 
-    {% for group in view.products.groups %}
+    {% for groupKey, group in view.products.groups %}
         <div class="content-header clearfix">
             <h2 class="pull-left">{{ 'package.product.selectOptions'|trans }}</h2>
             <p class="category-option pull-left">{{ group.label }}</p>
         </div>
 
+        {% set displaySeeMore = not loop.first and form.vars.valid %}
+
         <section class="section">
             <div class="object object--collection style--style-1"></div>
-            <table class="table table-striped">
+            {% if displaySeeMore %}
+                <p class="text-center">
+                    <a href="#"
+                        data-toggle-visibility="true"
+                        data-element-id-to-hide="group-key-{{ groupKey }}"
+                        data-element-clickable-to-hide="true"
+                    >
+                        {{ 'package.product.seeMore'|transchoice(group.options|length, {'%count%': group.options|length}) }}
+                    </a>
+                </p>
+            {% endif %}
+            <table class="table table-striped" {% if displaySeeMore %}style="display: none;" id="group-key-{{ groupKey }}"{% endif %}>
                 <thead>
                     <tr>
                         <th>{{ 'package.product.unitPriceLabel'|trans }}</th>
