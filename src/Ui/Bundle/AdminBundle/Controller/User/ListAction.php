@@ -48,8 +48,10 @@ class ListAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $userEventListViews = $this->queryBus->handle(
-            new GetUserEventListViewsQuery($event, 1, $event->getAvailableLocale($request->getLocale()))
+        $page = $request->query->getInt('page', 1);
+
+        $paginatedResult = $this->queryBus->handle(
+            new GetUserEventListViewsQuery($event, $page, $event->getAvailableLocale($request->getLocale()))
         );
 
         return new Response(
@@ -57,7 +59,7 @@ class ListAction
                 '@Admin/User/users-and-sheets-list.html.twig',
                 [
                     'event' => $event,
-                    'userEventListViews' => $userEventListViews,
+                    'paginatedResult' => $paginatedResult,
                 ]
             )
         );

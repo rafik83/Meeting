@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\User;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEventInterface;
-use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
 class GetUserEventListViewsQueryHandler
 {
@@ -23,10 +23,7 @@ class GetUserEventListViewsQueryHandler
         $this->getUserEventViewsByEvent = $getUserEventViewsByEvent;
     }
 
-    /**
-     * @return UserEventListView[]
-     */
-    public function handle(GetUserEventListViewsQuery $query): array
+    public function handle(GetUserEventListViewsQuery $query): PaginatedResult
     {
         return $this->getUserEventViewsByEvent->handle($query->event, $query->page, $query->locale);
     }

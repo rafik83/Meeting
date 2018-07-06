@@ -11,14 +11,11 @@
 namespace Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 
 interface GetUserEventListViewsByEventInterface
 {
     public const RESULTS_NUMBER_BY_PAGE = 100;
 
-    /**
-     * @return UserEventListView[]
-     */
-    public function handle(Event $event, int $page, string $locale): array;
+    public function handle(Event $event, int $page, string $locale): PaginatedResult;
 }

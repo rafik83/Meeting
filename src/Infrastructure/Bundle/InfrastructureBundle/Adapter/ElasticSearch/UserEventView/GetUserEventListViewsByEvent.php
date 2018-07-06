@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Ela
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEventInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter;
 use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
@@ -32,7 +33,7 @@ class GetUserEventListViewsByEvent implements GetUserEventListViewsByEventInterf
         $this->elasticDocumentsToUserEventListViewsTranformer = $elasticDocumentsToUserEventListViewsTranformer;
     }
 
-    public function handle(Event $event, int $page, string $locale): array
+    public function handle(Event $event, int $page, string $locale): PaginatedResult
     {
         $query = new \Elastica\Query(
             [
@@ -58,8 +59,13 @@ class GetUserEventListViewsByEvent implements GetUserEventListViewsByEventInterf
             ]
         );
 
-        $documents = $this->searchAdapter->handleQuery(TypesMapping::getTypeByClass(UserEventView::class), $query);
+        $resultSet = $this->searchAdapter->handleQuery(TypesMapping::getTypeByClass(UserEventView::class), $query);
 
-        return $this->elasticDocumentsToUserEventListViewsTranformer->handle($documents, $locale);
+        return new PaginatedResult(
+            $this->elasticDocumentsToUserEventListViewsTranformer->handle($resultSet->getDocuments(), $locale),
+            $page,
+            self::RESULTS_NUMBER_BY_PAGE,
+            $resultSet->getTotalHits()
+        );
     }
 }

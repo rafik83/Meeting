@@ -26,18 +26,13 @@ class SearchAdapter
         $this->index = $index;
     }
 
-    /**
-     * @return \Elastica\Document[]
-     */
-    public function handleQuery(string $type, \Elastica\Query $query): array
+    public function handleQuery(string $type, \Elastica\Query $query): \Elastica\ResultSet
     {
         $search = new \Elastica\Search($this->client);
         $search->addIndex($this->index);
         $search->addType($type);
         $search->setQuery($query);
 
-        $resultSet = $search->search();
-
-        return $resultSet->getDocuments();
+        return $search->search();
     }
 }

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Adapt
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer;
@@ -80,7 +81,7 @@ class GetUserEventListViewsByEventTest extends TestCase
             ),
         ];
 
-        $expectedResult = [
+        $expectedUserEventListViews = [
             new UserEventListView(
                 42,
                 1,
@@ -104,11 +105,22 @@ class GetUserEventListViewsByEventTest extends TestCase
             ),
         ];
 
+        $expectedResult = new PaginatedResult(
+            $expectedUserEventListViews,
+            2,
+            100,
+            77
+        );
+
+        $resultSet = $this->prophesize(\Elastica\ResultSet::class);
+        $resultSet->getDocuments()->shouldBeCalled()->willReturn($documents);
+        $resultSet->getTotalHits()->shouldBeCalled()->willReturn(77);
+
         $searchAdapter = $this->prophesize(SearchAdapter::class);
         $searchAdapter
             ->handleQuery('user_event', $expectedQuery)
             ->shouldBeCalled()
-            ->willReturn($documents)
+            ->willReturn($resultSet->reveal())
         ;
 
         $elasticDocumentsToUserEventListViewsTranformer = $this->prophesize(
@@ -117,7 +129,7 @@ class GetUserEventListViewsByEventTest extends TestCase
         $elasticDocumentsToUserEventListViewsTranformer
             ->handle($documents, 'fr')
             ->shouldBeCalled()
-            ->willReturn($expectedResult)
+            ->willReturn($expectedUserEventListViews)
         ;
 
         $getUserEventViewsByEvent = new GetUserEventListViewsByEvent(
