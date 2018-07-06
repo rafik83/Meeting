@@ -37,6 +37,9 @@ class UpdateType extends AbstractType
             ])
             ->add('catalogTagFilters', CollectionType::class, [
                 'entry_type'  => CatalogTagFilterType::class,
+                'attr' => [
+                    'data-shared-choices-collection' => 'tags',
+                ],
                 'entry_options' => [
                     'label'  => false,
                     'event' => $options['event'],

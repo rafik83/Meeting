@@ -28,6 +28,9 @@ class CatalogTagFilterType extends AbstractType
                 'choice_label' => function ($value) {
                     return sprintf('template.tag.%s', $value);
                 },
+                'attr' => [
+                    'data-shared-choices-collection-item' => 'tags',
+                ],
                 'choice_translation_domain' => 'templates',
             ])
             ->add('translations', CatalogTagFilterTranslationLocaleType::class, [
