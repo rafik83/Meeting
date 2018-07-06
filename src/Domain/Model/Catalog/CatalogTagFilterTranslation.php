@@ -10,18 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model\Catalog;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\PersistentCollection;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Domain\Model\Category;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Type;
-
 class CatalogTagFilterTranslation
 {
-    public const TYPE_INTERNAL = 'internal';
-    public const TYPE_EXTERNAL = 'external';
-
     /** @var int */
     private $id;
 
