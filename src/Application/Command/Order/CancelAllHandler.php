@@ -46,7 +46,6 @@ class CancelAllHandler
             return $order->hasInvoice();
         }));
 
-
         if ($isInvoiced) {
             throw new OrderCanNotBeCancelledException('Orders have been invoiced');
         }
