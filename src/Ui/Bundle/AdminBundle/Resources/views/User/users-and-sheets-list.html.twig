@@ -5,9 +5,9 @@
 {% block title 'admin.users.title'|trans %}
 
 {% block content %}
-    <h1 class="page-header">{{ paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
+    <h1 class="page-header">{{ userEventListViews.paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
 
-    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': paginatedResult }) }}
+    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}
 
     <table class="table table-hover">
         <thead>
@@ -16,7 +16,11 @@
             <th>{{ 'admin.users.user'|trans }}</th>
             <th>{{ 'admin.users.locale'|trans }}</th>
             <th>{{ 'admin.sheet.title'|trans }}</th>
-            <th>{{ 'admin.sheet.category'|trans }}</th>
+
+            {% if userEventListViews.eventHasCategories %}
+                <th>{{ 'admin.sheet.category'|trans }}</th>
+            {% endif %}
+
             <th>{{ 'admin.sheet.type'|trans }}</th>
             <th>{{ 'admin.sheet.validationState'|trans }}</th>
             <th>{{ 'admin.sheet.state'|trans }}</th>
@@ -25,7 +29,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for userEventListView in paginatedResult.results %}
+        {% for userEventListView in userEventListViews.paginatedResult.results %}
             {% set rowSpanValue = userEventListView.userEventSheetsListViews|length %}
             <tr>
                 <td rowspan="{{ rowSpanValue }}">
@@ -64,7 +68,10 @@
                             {% endif %}
                         </td>
 
-                        <td>{{ userEventSheetListView.categoriesTitle }}</td>
+                        {% if userEventListViews.eventHasCategories %}
+                            <td>{{ userEventSheetListView.categoriesTitle }}</td>
+                        {% endif %}
+
                         <td>{{ userEventSheetListView.typeTitle }}</td>
 
                         <td>
@@ -124,5 +131,5 @@
         </tbody>
     </table>
 
-    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': paginatedResult }) }}
+    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}
 {% endblock %}

@@ -138,6 +138,20 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function eventHasCategories(Event $event): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('category.id')
+            ->from('Entity:Category', 'category')
+            ->where('category.event = :event')
+            ->setMaxResults(1)
+            ->setParameter('event', $event);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
     /**
      * {@inheritdoc}
      */

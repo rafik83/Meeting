@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Query\User\GetUserEventListViewsQuery;
+use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,7 +50,7 @@ class ListAction
 
         $page = $request->query->getInt('page', 1);
 
-        $paginatedResult = $this->queryBus->handle(
+        $userEventListViews = $this->queryBus->handle(
             new GetUserEventListViewsQuery($event, $page, $event->getAvailableLocale($request->getLocale()))
         );
 
@@ -59,7 +59,7 @@ class ListAction
                 '@Admin/User/users-and-sheets-list.html.twig',
                 [
                     'event' => $event,
-                    'paginatedResult' => $paginatedResult,
+                    'userEventListViews' => $userEventListViews,
                 ]
             )
         );

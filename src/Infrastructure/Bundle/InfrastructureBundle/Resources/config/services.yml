@@ -3615,11 +3615,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery }
 
-    Proximum\Vimeet\Application\Query\User\GetUserEventListViewsQueryHandler:
+    Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEvent'
+            - '@vimeet_infrastructure.repository.category_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\GetUserEventListViewsQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery }
 
     #
     # Program query
