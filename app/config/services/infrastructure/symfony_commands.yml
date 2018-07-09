@@ -35,3 +35,13 @@ services:
             - '@repository.admin_repository'
         tags:
             - { name: console.command }
+
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Clean\RemovePastAvailableSlotCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\AvailableSlotRepository'
+            - '@datetime'
+        tags:
+            - { name: console.command }
