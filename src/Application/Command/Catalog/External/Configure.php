@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Category;
@@ -18,9 +19,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 
 class Configure extends ConfigureSearchFacet
 {
-    /** @var Event */
-    public $event;
-
     /** @var Type[] */
     public $types;
 
@@ -43,13 +41,21 @@ class Configure extends ConfigureSearchFacet
     public $registrationUrl;
 
     /**
-     * @param Event             $event
-     * @param CatalogVisibility $catalogVisibility
-     * @param SearchFacet[]     $searchFacets
+     * @param Event                 $event
+     * @param CatalogVisibility     $catalogVisibility
+     * @param SearchFacet[]         $searchFacets
+     * @param CatalogTagFilter[]    $catalogTagFilters
      */
-    public function __construct(Event $event, CatalogVisibility $catalogVisibility, array $searchFacets)
-    {
-        $this->event                  = $event;
+    public function __construct(
+        Event $event,
+        CatalogVisibility $catalogVisibility,
+        array $searchFacets,
+        array $catalogTagFilters
+    ) {
+        parent::__construct($catalogTagFilters);
+
+        $this->type = CatalogTagFilter::TYPE_EXTERNAL;
+        $this->event = $event;
 
         foreach ($event->getLocales() as $locale) {
             if (null !== ($catalogVisibilityTranslation = $catalogVisibility->getMessage($locale))) {

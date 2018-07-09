@@ -1,0 +1,21 @@
+<?php
+
+/*
+ * This file is part of the PhpStorm project.
+ *
+ * Copyright (C) PhpStorm
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Repository\Catalog;
+
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
+use Proximum\Vimeet\Domain\Model\Event;
+
+interface CatalogTagFilterRepositoryInterface
+{
+    public function getByEventAndType(Event $event, string $type): array;
+    public function removeByEventAndType(Event $event, string $type): void;
+    public function add(CatalogTagFilter $catalogTagFilter): void;
+}

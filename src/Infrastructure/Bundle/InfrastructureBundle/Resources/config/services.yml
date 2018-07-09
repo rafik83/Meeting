@@ -35,6 +35,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Catalog\External\SearchFacetRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\UserRepository
         arguments:
@@ -1664,6 +1667,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\SearchFacet\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.search_facet'
+            - '@Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\SearchFacet\Update }
     command.payment.abstract_choice_handler:
@@ -4814,6 +4818,7 @@ services:
             - '@repository.catalog_visibility_repository'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@catalog.external.set_search_facet_handler'
+            - '@Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\Configure }
     catalog.external.set_search_facet_handler:
@@ -4822,6 +4827,10 @@ services:
             - '@vimeet_infrastructure.repository.catalog.external.search_facet'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacet }
+
+    Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository'
 
     #
     # Promotion

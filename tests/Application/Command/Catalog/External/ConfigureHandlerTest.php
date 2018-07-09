@@ -12,10 +12,13 @@ namespace Application\Command\Catalog\External;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler;
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Application\Command\Catalog\External\ConfigureHandler;
 use Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacet;
 use Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacetHandler;
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilterTranslation;
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -39,11 +42,18 @@ class ConfigureHandlerTest extends TestCase
     /** @var array */
     private $searchFacets;
 
+    /** @var array */
+    private $persistedCatalogTagFilter;
+
+    /** @var ObjectProphecy */
+    private $catalogTagFilterHandler;
+
     public function setUp()
     {
         $this->catalogVisibilityRepository = $this->prophesize(CatalogVisibilityRepositoryInterface::class);
         $this->eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $this->setSearchFacetHandler = $this->prophesize(SetSearchFacetHandler::class);
+        $this->catalogTagFilterHandler = $this->prophesize(CatalogTagFilterHandler::class);
         $this->event = $this->prophesize(Event::class);
 
         $this->searchFacets = [
@@ -139,6 +149,14 @@ class ConfigureHandlerTest extends TestCase
             ],
         ];
 
+        $ct1 = new CatalogTagFilter($this->event->reveal(), 'sheet_title', 'external');
+        $ct1->addTranslation(new CatalogTagFilterTranslation('fr', 'label', 'placeholder'));
+
+        $ct2 = new CatalogTagFilter($this->event->reveal(), 'sheet_description', 'external');
+        $ct2->addTranslation(new CatalogTagFilterTranslation('fr', 'label2', 'placeholder2'));
+
+        $this->persistedCatalogTagFilter = [$ct1, $ct2];
+
         $this->event->getLocales()->willReturn(['fr', 'en']);
         $this->event->isExternalCatalogEnabled()->willReturn(false);
     }
@@ -153,7 +171,8 @@ class ConfigureHandlerTest extends TestCase
 
         $persistedSearchFacets = [$sf1, $sf2, $sf3];
 
-        $command = new Configure($this->event->reveal(), $catalogVisibility, $persistedSearchFacets);
+        $command = new Configure($this->event->reveal(), $catalogVisibility, $persistedSearchFacets, $this->persistedCatalogTagFilter);
+
         $command->externalCatalogEnabled = true;
         $command->searchFacets = $this->searchFacets;
 
@@ -170,13 +189,16 @@ class ConfigureHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $this->catalogTagFilterHandler->handle($command)->shouldBeCalled();
+
         $this->event->setExternalCatalog(true)->shouldBeCalled();
         $this->eventRepository->set($this->event->reveal())->shouldBeCalled();
 
         $handler = new ConfigureHandler(
             $this->catalogVisibilityRepository->reveal(),
             $this->eventRepository->reveal(),
-            $this->setSearchFacetHandler->reveal()
+            $this->setSearchFacetHandler->reveal(),
+            $this->catalogTagFilterHandler->reveal()
         );
 
         $handler->handle($command);
@@ -191,7 +213,7 @@ class ConfigureHandlerTest extends TestCase
             new SearchFacet($this->event->reveal(), 'keywords', true),
         ];
 
-        $command = new Configure($this->event->reveal(), $catalogVisibility, $persistedSearchFacets);
+        $command = new Configure($this->event->reveal(), $catalogVisibility, $persistedSearchFacets, $this->persistedCatalogTagFilter);
         $command->externalCatalogEnabled = false;
         $command->searchFacets = $this->searchFacets;
 
@@ -208,13 +230,16 @@ class ConfigureHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $this->catalogTagFilterHandler->handle($command)->shouldBeCalled();
+
         $this->event->setExternalCatalog(false)->shouldBeCalled();
         $this->eventRepository->set($this->event->reveal())->shouldBeCalled();
 
         $handler = new ConfigureHandler(
             $this->catalogVisibilityRepository->reveal(),
             $this->eventRepository->reveal(),
-            $this->setSearchFacetHandler->reveal()
+            $this->setSearchFacetHandler->reveal(),
+            $this->catalogTagFilterHandler->reveal()
         );
 
         $handler->handle($command);
@@ -235,11 +260,14 @@ class ConfigureHandlerTest extends TestCase
             new SearchFacet($this->event->reveal(), 'type', false),
             new SearchFacet($this->event->reveal(), 'keywords', true),
         ];
+
         $command = new Configure(
             $this->event->reveal(),
             $catalogVisibility->reveal(),
-            $persistedSearchFacets
+            $persistedSearchFacets,
+            $this->persistedCatalogTagFilter
         );
+
         $command->externalCatalogEnabled = false;
         $command->searchFacets = $this->searchFacets;
 
@@ -259,6 +287,8 @@ class ConfigureHandlerTest extends TestCase
 
         $this->catalogVisibilityRepository->add($catalogVisibility->reveal())->shouldBeCalled();
 
+        $this->catalogTagFilterHandler->handle($command)->shouldBeCalled();
+
         $this->setSearchFacetHandler->handle(
             new SetSearchFacet($this->event->reveal(), $this->searchFacets, $persistedSearchFacets)
         )->shouldBeCalled();
@@ -269,7 +299,8 @@ class ConfigureHandlerTest extends TestCase
         $handler = new ConfigureHandler(
             $this->catalogVisibilityRepository->reveal(),
             $this->eventRepository->reveal(),
-            $this->setSearchFacetHandler->reveal()
+            $this->setSearchFacetHandler->reveal(),
+            $this->catalogTagFilterHandler->reveal()
         );
 
         $handler->handle($command);
