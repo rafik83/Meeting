@@ -45,7 +45,13 @@ class UserToParticipant
      */
     public function handle(Sheet $sheet, User $user)
     {
-        $participant = new Participant($sheet, $user, $this->getTemplateData($sheet, $user), true);
+        $participant = new Participant(
+            $sheet,
+            $user,
+            $this->getTemplateData($sheet, $user),
+            true,
+            $sheet->getEvent()->getConfiguration()->isVisio()
+        );
         $this->participantRepository->add($participant);
 
         $sheet->addParticipant($participant);

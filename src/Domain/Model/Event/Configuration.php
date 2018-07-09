@@ -113,6 +113,9 @@ class Configuration
     /** @var bool */
     private $displayParticipantPositionOnPlanning = false;
 
+    /** @var bool */
+    private $visio = false;
+
     /**
      * @param string $leftColor
      * @param string $rightColor
@@ -501,6 +504,16 @@ class Configuration
     public function hasBackgroundImage(): bool
     {
         return null !== $this->backgroundImage;
+    }
+
+    public function isVisio(): bool
+    {
+        return $this->visio;
+    }
+
+    public function setVisio(bool $visio): void
+    {
+        $this->visio = $visio;
     }
 
     /**

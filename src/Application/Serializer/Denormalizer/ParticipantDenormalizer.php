@@ -356,7 +356,13 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $sheet->setRegistrationData($sheetData);
         $this->sheetRepository->add($sheet);
 
-        $participant = new Participant($sheet, $user, $participantData, false);
+        $participant = new Participant(
+            $sheet,
+            $user,
+            $participantData,
+            false,
+            $sheet->getEvent()->getConfiguration()->isVisio()
+        );
         $participant->setImported(true);
         $this->participantRepository->add($participant);
         $sheet->addParticipant($participant); // required to have participant in array sheet array collection

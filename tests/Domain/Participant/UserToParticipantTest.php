@@ -30,7 +30,10 @@ class UserToParticipantTest extends TestCase
         $templateDataFactoryMock = $this->prophesize(TemplateDataFactory::class);
 
         $eventMock = $this->prophesize(Event::class);
+        $configuration = $this->prophesize(Event\Configuration::class);
+        $configuration->isVisio()->shouldBeCalled()->willReturn(false);
         $eventMock->getFallback()->shouldBeCalled()->willReturn('fr');
+        $eventMock->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
 
         $typeMock = $this->prophesize(Type::class);
         $sheetMock = $this->prophesize(Sheet::class);

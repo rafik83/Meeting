@@ -26,17 +26,19 @@
                         ({{ 'admin.sheet.details.owner.title'|trans }})
                     {% endif %}
 
-                    <div class="pull-right">
-                        <form class="form-participant-visio" action="{{ path('admin_sheet_update_participant_visio', {
-                                    'event': event.id,
-                                    'participant': participant.id
-                                }) }}">
-                            <label for="is-visio-{{ participant.id }}">
-                                {{ 'admin.sheet.details.participant.visio'|trans }}
-                                <input type="checkbox" id="is-visio-{{ participant.id }}" name="is-visio" {{ participant.isVisio }}>
-                            </label>
-                        </form>
-                    </div>
+                    {% if not event.configuration.isVisio %}
+                        <div class="pull-right">
+                            <form class="form-participant-visio" action="{{ path('admin_sheet_update_participant_visio', {
+                                        'event': event.id,
+                                        'participant': participant.id
+                                    }) }}">
+                                <label for="is-visio-{{ participant.id }}">
+                                    {{ 'admin.sheet.details.participant.visio'|trans }}
+                                    <input type="checkbox" id="is-visio-{{ participant.id }}" name="is-visio" {{ participant.isVisio }}>
+                                </label>
+                            </form>
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="panel-body">
                     {% for object in participant.templateData.getProfileObjects %}

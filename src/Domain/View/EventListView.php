@@ -48,16 +48,21 @@ class EventListView implements EventInterface
     /** @var bool */
     public $visible;
 
+    /** @var bool */
+    public $visio;
+
+
     /**
-     * @param int       $id
+     * @param null|int  $id
      * @param string    $title
      * @param string    $domain
      * @param array     $locales
      * @param string    $fallback
      * @param bool      $visible
      * @param DayView[] $days
+     * @param bool      $visio
      */
-    public function __construct($id, $title, $domain, array $locales, $fallback, bool $visible, array $days = [])
+    public function __construct($id, $title, $domain, array $locales, $fallback, bool $visible, array $days = [], bool $visio = false)
     {
         $this->id       = $id;
         $this->title    = $title;
@@ -66,6 +71,7 @@ class EventListView implements EventInterface
         $this->fallback = $fallback;
         $this->visible  = $visible;
         $this->days     = $days;
+        $this->visio    = $visio;
     }
 
     /**

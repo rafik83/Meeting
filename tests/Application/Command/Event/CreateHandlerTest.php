@@ -70,6 +70,7 @@ class CreateHandlerTest extends TestCase
         $create->organiserName = 'proximum';
         $create->emailTeam     = 'team-project@example.net';
         $create->visible       = true;
+        $create->visio         = false;
         $create->backgroundColor = '#DDDDDD';
         $create->backgroundImage = $this
             ->getMockBuilder(UploadedFile::class)
@@ -93,6 +94,7 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
+        $expectedEvent->getConfiguration()->setVisio(false);
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#DDDDDD');
         $expectedEvent->getConfiguration()->setBackgroundImage('foofoo.jpeg');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
@@ -192,6 +194,7 @@ class CreateHandlerTest extends TestCase
         $create->emailTeam     = 'team-project@example.net';
         $create->visible       = true;
         $create->backgroundColor = '#CCCCCC';
+        $create->visio         = false;
 
         // Expected event
         $expectedEvent = new Event(
@@ -209,6 +212,8 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
+
+        $expectedEvent->getConfiguration()->setVisio(false);
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
@@ -311,6 +316,7 @@ class CreateHandlerTest extends TestCase
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
         $create->visible       = true;
+        $create->visio         = false;
 
         // Expected event
         $expectedEvent = new Event(
@@ -328,6 +334,7 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
+        $expectedEvent->getConfiguration()->setVisio(false);
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
@@ -405,6 +412,7 @@ class CreateHandlerTest extends TestCase
             true,
             $duplicatedEvent
         );
+        $event->getConfiguration()->setVisio(false);
         $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
 
         $create = new Create($user, $event);

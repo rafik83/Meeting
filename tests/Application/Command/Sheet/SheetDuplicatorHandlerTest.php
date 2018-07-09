@@ -50,6 +50,10 @@ class SheetDuplicatorHandlerTest extends TestCase
 
         $originalEvent = $this->prophesize(Event::class);
         $event = $this->prophesize(Event::class);
+        $configuration = $this->prophesize(Event\Configuration::class);
+        $configuration->isVisio()->shouldBeCalled()->willReturn(false);
+        $event->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
+
         $type = $this->prophesize(Type::class);
         $type->getEvent()
             ->shouldBeCalled()

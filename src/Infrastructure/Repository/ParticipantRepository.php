@@ -636,4 +636,28 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function toggleParticipantVisioForEvent(Event $event, int $visio): void
+    {
+        $participantIds = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant.id')
+            ->from(Participant::class, 'participant', 'participant.id')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult();
+
+        $this->entityManager->createQueryBuilder()
+            ->update(Participant::class, 'participant')
+            ->set('participant.visio', ':visio')
+            ->where('participant.id IN (:participantIds)')
+            ->setParameters([
+                'visio' =>  $visio,
+                'participantIds' => array_keys($participantIds),
+            ])
+            ->getQuery()
+            ->execute();
+    }
 }

@@ -130,7 +130,13 @@ class ParticipateHandler
         $this->sheetRepository->add($sheet);
 
         // Create a new participant
-        $participant = new Participant($sheet, $participate->user, $participantData, true);
+        $participant = new Participant(
+            $sheet,
+            $participate->user,
+            $participantData,
+            true,
+            $sheet->getEvent()->getConfiguration()->isVisio()
+        );
         $this->participantRepository->add($participant);
 
         $sheet->addParticipant($participant);
