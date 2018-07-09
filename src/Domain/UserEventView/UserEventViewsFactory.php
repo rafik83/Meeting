@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\UserEventView;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserEvent\UserEventViewRepositoryInterface;
 
 class UserEventViewsFactory
@@ -28,32 +29,54 @@ class UserEventViewsFactory
      */
     public function getByEvent(Event $event): array
     {
-        $results = $this->userEventViewRepository->getByEvent($event);
+        return $this->getUserEventViews($event, $this->userEventViewRepository->getByEvent($event));
+    }
 
+    /**
+     * @return UserEventView[]
+     */
+    public function getByEventAndUser(Event $event, User $user): array
+    {
+        return $this->getUserEventViews(
+            $event,
+            $this->userEventViewRepository->getAllSheetsByUserAndEvent($user, $event),
+            $user
+        );
+    }
+
+    /**
+     * @return UserEventView[]
+     */
+    private function getUserEventViews(Event $event, array $results, ?User $filteredUser = null): array
+    {
         $userEventViews = [];
 
         foreach ($results as $result) {
-            $this->addUserEventViewOrSheetToExistingOne(
-                $userEventViews,
-                $event->getId(),
-                $result['ownerId'],
-                $result['ownerFirstName'],
-                $result['ownerLastName'],
-                $result['ownerEmail'],
-                $result['ownerLocale'],
-                $result['sheetId']
-            );
+            if (null === $filteredUser || $filteredUser->getId() === $result['ownerId']) {
+                $this->addUserEventViewOrSheetToExistingOne(
+                    $userEventViews,
+                    $event->getId(),
+                    $result['ownerId'],
+                    $result['ownerFirstName'],
+                    $result['ownerLastName'],
+                    $result['ownerEmail'],
+                    $result['ownerLocale'],
+                    $result['sheetId']
+                );
+            }
 
-            $this->addUserEventViewOrSheetToExistingOne(
-                $userEventViews,
-                $event->getId(),
-                $result['userId'],
-                $result['userFirstName'],
-                $result['userLastName'],
-                $result['userEmail'],
-                $result['userLocale'],
-                $result['sheetId']
-            );
+            if (null === $filteredUser || $filteredUser->getId() === $result['userId']) {
+                $this->addUserEventViewOrSheetToExistingOne(
+                    $userEventViews,
+                    $event->getId(),
+                    $result['userId'],
+                    $result['userFirstName'],
+                    $result['userLastName'],
+                    $result['userEmail'],
+                    $result['userLocale'],
+                    $result['sheetId']
+                );
+            }
         }
 
         return $userEventViews;

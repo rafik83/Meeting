@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\UserEvent;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserEvent\UserEventViewRepositoryInterface;
 
 class UserEventViewRepository implements UserEventViewRepositoryInterface
@@ -26,6 +28,35 @@ class UserEventViewRepository implements UserEventViewRepositoryInterface
     }
 
     public function getByEvent(Event $event): array
+    {
+        return $this
+            ->getCommonQueryBuilder($event)
+            ->join('sheet.participants', 'participant')
+            ->join('participant.user', 'user')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getAllSheetsByUserAndEvent(User $user, Event $event): array
+    {
+        return $this
+            ->getCommonQueryBuilder($event)
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                'sheet.owner = :user OR participant.user = :user'
+            )
+            ->join('participant.user', 'user')
+            ->setParameter('event', $event)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    private function getCommonQueryBuilder(Event $event): QueryBuilder
     {
         return $this
             ->entityManager
@@ -45,11 +76,7 @@ class UserEventViewRepository implements UserEventViewRepositoryInterface
             ')
             ->from(Sheet::class, 'sheet')
             ->join('sheet.owner', 'owner', 'WITH', 'sheet.event = :event')
-            ->join('sheet.participants', 'participant')
-            ->join('participant.user', 'user')
             ->setParameter('event', $event)
-            ->getQuery()
-            ->getResult()
         ;
     }
 }
