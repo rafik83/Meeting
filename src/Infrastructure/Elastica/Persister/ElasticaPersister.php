@@ -60,7 +60,7 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
         return $response->getData();
     }
 
-    public function deleteIds($typeName, array $identifiers): array
+    public function deleteIds(string $typeName, array $identifiers): array
     {
         if (empty($identifiers)) {
             return [];

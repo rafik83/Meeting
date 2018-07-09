@@ -14,5 +14,5 @@ interface ElasticSearchPersisterInterface
 {
     public function persist(string $identifierProperty = 'id', array $objects = []): array;
 
-    public function deleteIds($typeName, array $identifiers): array;
+    public function deleteIds(string $typeName, array $identifiers): array;
 }
