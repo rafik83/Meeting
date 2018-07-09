@@ -357,8 +357,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
             - '@domain.event.last_event_participation'
-            - '@template.template_data_factory'
-            - '@Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator'
+            - '@Proximum\Vimeet\Application\Components\TemplateData\TemplateDataDuplicator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:

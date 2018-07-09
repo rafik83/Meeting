@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetsDuplicatedMail;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -106,7 +107,7 @@ class SheetDuplicatorHandlerTest extends TestCase
         $expectedSheet->addParticipant($expectedParticipant);
 
         $templateDateDuplicator
-            ->duplicateData($expectedSheet)
+            ->duplicateData($expectedSheet, $sheet2->reveal(), [AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA, 'product'])
             ->shouldBeCalled()
         ;
 

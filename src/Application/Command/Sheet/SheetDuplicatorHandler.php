@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnG
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetsDuplicatedMail;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -114,7 +115,11 @@ class SheetDuplicatorHandler
         $group = $this->duplicateGroupFrom($sheet, $destinationEvent);
         $duplicatedSheet = Sheet::duplicateSheetFrom($sheet, $group, $destinationType, $this->datetime);
 
-        $this->templateDataDuplicator->duplicateData($duplicatedSheet);
+        $this->templateDataDuplicator->duplicateData(
+            $duplicatedSheet,
+            $sheet,
+            [AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA, 'product']
+        );
 
         $this->sheetRepository->add($duplicatedSheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($duplicatedSheet));
