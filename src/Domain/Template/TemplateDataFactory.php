@@ -92,7 +92,7 @@ class TemplateDataFactory
      *
      * @return TemplateData
      */
-    public function createFromSheet(Sheet $sheet, ?string $locale): TemplateData
+    public function createFromSheet(Sheet $sheet, ?string $locale = null): TemplateData
     {
         return $this
             ->loadNomenclatures($sheet->getEvent())
