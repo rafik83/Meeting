@@ -76,4 +76,33 @@ class ElasticaPersisterTest extends TestCase
         );
         $elasticaPersister->persist('id', [$userEventView]);
     }
+
+    public function testDeleteIds()
+    {
+        $index = 'app_prod';
+        $identifiers = ['1_2', '42_1337'];
+
+        $response = $this->prophesize(\Elastica\Bulk\ResponseSet::class);
+        $response->getData()->shouldBeCalled()->willReturn(['response' => 'ok']);
+
+        $elasticaType = $this->prophesize(\Elastica\Type::class);
+        $elasticaIndex = $this->prophesize(\Elastica\Index::class);
+        $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
+
+        $client = $this->prophesize(\Elastica\Client::class);
+        $client->getIndex($index)->shouldBeCalled()->willReturn($elasticaIndex->reveal());
+        $client
+            ->deleteIds($identifiers, $index, $elasticaType->reveal())
+            ->shouldBeCalled()
+            ->willReturn($response->reveal())
+        ;
+
+        $elasticaPersister = new ElasticaPersister(
+            $client->reveal(),
+            $this->prophesize(ElasticaMapping::class)->reveal(),
+            $index,
+            $this->prophesize(SerializerAdapterInterface::class)->reveal()
+        );
+        $elasticaPersister->deleteIds('user_event', $identifiers);
+    }
 }
