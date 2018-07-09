@@ -62,6 +62,10 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
 
     public function deleteIds($typeName, array $identifiers): array
     {
+        if (empty($identifiers)) {
+            return [];
+        }
+
         $elasticaType = $this->getType($typeName);
         $response = $this->client->deleteIds($identifiers, $this->index, $elasticaType);
 
