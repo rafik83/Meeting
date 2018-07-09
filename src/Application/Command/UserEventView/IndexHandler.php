@@ -11,21 +11,29 @@
 namespace Proximum\Vimeet\Application\Command\UserEventView;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchPersisterInterface;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventIdsByEventInterface;
+use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory;
+use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
 
 class IndexHandler
 {
     /** @var ElasticSearchPersisterInterface */
     private $elasticSearchPersister;
 
+    /** @var GetUserEventIdsByEventInterface */
+    private $getUserEventIdsByEvent;
+
     /** @var UserEventViewsFactory */
     private $userEventViewsFactory;
 
     public function __construct(
         ElasticSearchPersisterInterface $elasticSearchPersister,
+        GetUserEventIdsByEventInterface $getUserEventIdsByEvent,
         UserEventViewsFactory $userEventViewsFactory
     ) {
         $this->elasticSearchPersister = $elasticSearchPersister;
+        $this->getUserEventIdsByEvent = $getUserEventIdsByEvent;
         $this->userEventViewsFactory = $userEventViewsFactory;
     }
 
@@ -35,12 +43,14 @@ class IndexHandler
     public function handle(Index $command): void
     {
         if ($command->removeAllByEvent) {
-//            $userEventDocumentIds = $this->searchAdapter->getUserEventByEvent($command->event, [], 'fr');
-//            $this->userEventIndexer->delete($userEventDocumentIds);
+            $userEventDocumentIds = $this->getUserEventIdsByEvent->handle($command->event);
+            $this->elasticSearchPersister->deleteIds(
+                TypesMapping::getTypeByClass(UserEventView::class),
+                $userEventDocumentIds
+            );
         }
 
         $userEventViews = $this->userEventViewsFactory->getByEvent($command->event);
-
         $this->elasticSearchPersister->persist('id', $userEventViews);
     }
 }

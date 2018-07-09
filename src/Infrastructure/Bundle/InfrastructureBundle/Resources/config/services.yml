@@ -2254,6 +2254,7 @@ services:
     Proximum\Vimeet\Application\Command\UserEventView\IndexHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventIdsByEvent'
             - '@Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEventView\Index }
@@ -4432,6 +4433,10 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventIdsByEvent:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer:
         arguments:

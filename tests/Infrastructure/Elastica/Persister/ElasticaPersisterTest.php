@@ -43,6 +43,7 @@ class ElasticaPersisterTest extends TestCase
         $response->getData()->shouldBeCalled()->willReturn(['response' => 'ok']);
 
         $elasticaType = $this->prophesize(\Elastica\Type::class);
+
         $elasticaType
             ->addDocuments([new \Elastica\Document('42_3', $normalizedUserEventView)])
             ->shouldBeCalled()
@@ -52,6 +53,8 @@ class ElasticaPersisterTest extends TestCase
         $elasticaIndex = $this->prophesize(\Elastica\Index::class);
         $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
         $elasticaIndex->refresh()->shouldBeCalled();
+
+        $elasticaType->getIndex()->willReturn($elasticaIndex->reveal());
 
         $client = $this->prophesize(\Elastica\Client::class);
         $client->getIndex($index)->shouldBeCalled()->willReturn($elasticaIndex->reveal());

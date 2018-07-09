@@ -45,22 +45,45 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
             return [];
         }
 
-        $class = \get_class(reset($objects));
+        $object = reset($objects);
+
+        if (false === $object) {
+            return [];
+        }
+
+        $typeMapping = $this->getObjectTypeMapping($object);
+        $elasticaType = $this->getType($typeMapping['type']);
+        $this->mapping->setMapping($elasticaType, $typeMapping['properties']);
+        $response = $elasticaType->addDocuments($this->getDocuments($identifierProperty, $objects));
+        $elasticaType->getIndex()->refresh();
+
+        return $response->getData();
+    }
+
+    public function deleteIds($typeName, array $identifiers): array
+    {
+        $elasticaType = $this->getType($typeName);
+        $response = $this->client->deleteIds($identifiers, $this->index, $elasticaType);
+
+        return $response->getData();
+    }
+
+    private function getObjectTypeMapping($object): array
+    {
+        $class = \get_class($object);
 
         if (!isset(TypesMapping::AVAILABLE_TYPES[$class])) {
             throw new \InvalidArgumentException(sprintf('ElasticSearch type for %s is not available', $class));
         }
 
-        $objectType = TypesMapping::AVAILABLE_TYPES[$class];
+        return TypesMapping::AVAILABLE_TYPES[$class];
+    }
 
+    private function getType(string $typeName): \Elastica\Type
+    {
         $elasticaIndex = $this->client->getIndex($this->index);
-        $elasticaType = $elasticaIndex->getType($objectType['type']);
-        $this->mapping->setMapping($elasticaType, $objectType['properties']);
 
-        $response = $elasticaType->addDocuments($this->getDocuments($identifierProperty, $objects));
-        $elasticaIndex->refresh();
-
-        return $response->getData();
+        return $elasticaIndex->getType($typeName);
     }
 
     /**
