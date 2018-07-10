@@ -2259,6 +2259,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEventView\Index }
 
+    Proximum\Vimeet\Application\Command\UserEventView\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister'
+            - '@Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEventView\Update }
+
+
     #
     # Security
     #
