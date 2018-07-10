@@ -75,6 +75,7 @@ final class Events
     public const TRANSACTION_REMOVED = 'transaction.removed';
     public const TRANSACTION_CONFIRMED = 'transaction.confirm';
     public const PARTICIPANT_IMPORTED = 'participant.imported';
+    public const PARTICIPANT_IMPORTED_FROM_API = 'participant.imported_from_api';
     public const PARTICIPANT_ADDED = 'participant.added';
     public const PARTICIPANT_UPDATED = 'participant.updated';
     public const PARTICIPANT_REMOVED = 'participant.removed';

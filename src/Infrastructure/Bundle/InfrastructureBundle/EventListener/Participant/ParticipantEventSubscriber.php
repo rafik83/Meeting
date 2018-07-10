@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -43,6 +44,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             Events::PARTICIPANT_UPDATED => 'onParticipantUpdated',
             Events::PARTICIPANT_ADDED => 'onParticipantAdded',
             Events::PARTICIPANT_IMPORTED => 'onParticipantImported',
+            Events::PARTICIPANT_IMPORTED_FROM_API => 'onParticipantImportedFromApi',
             Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreatedByGroupManager',
         ];
     }
@@ -66,6 +68,16 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
                 $this->commandBus->handle(new Update($user, $participantImportedEvent->getEvent()));
             }
         }
+    }
+
+    public function onParticipantImportedFromApi(ParticipantImportedFromApiEvent $participantImportedFromApiEvent): void
+    {
+        $this->commandBus->handle(
+            new Update(
+                $participantImportedFromApiEvent->participant->getUser(),
+                $participantImportedFromApiEvent->participant->getEvent()
+            )
+        );
     }
 
     public function onSheetCreatedByGroupManager(SheetCreatedByManagerEvent $sheetCreatedByManagerEvent)
