@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded;
 use Proximum\Vimeet\Application\Command\UserEventView\Update;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
@@ -42,6 +43,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             Events::PARTICIPANT_UPDATED => 'onParticipantUpdated',
             Events::PARTICIPANT_ADDED => 'onParticipantAdded',
             Events::PARTICIPANT_IMPORTED => 'onParticipantImported',
+            Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreatedByGroupManager',
         ];
     }
 
@@ -63,6 +65,13 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             foreach ($sheet->getUsers() as $user) {
                 $this->commandBus->handle(new Update($user, $participantImportedEvent->getEvent()));
             }
+        }
+    }
+
+    public function onSheetCreatedByGroupManager(SheetCreatedByManagerEvent $sheetCreatedByManagerEvent)
+    {
+        foreach ($sheetCreatedByManagerEvent->sheet->getUsers() as $user) {
+            $this->commandBus->handle(new Update($user, $sheetCreatedByManagerEvent->sheet->getEvent()));
         }
     }
 }
