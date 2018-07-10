@@ -47,7 +47,7 @@ class UserEventListView
         string $locale,
         array $userEventSheetsListViews
     ) {
-        $this->id = $eventId . '_' . $userId;
+        $this->id = UserEventView::generateId($eventId, $userId);
         $this->eventId = $eventId;
         $this->userId = $userId;
         $this->firstName = $firstName;

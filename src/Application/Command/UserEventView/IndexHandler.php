@@ -43,14 +43,12 @@ class IndexHandler
     public function handle(Index $command): void
     {
         if ($command->removeAllByEvent) {
-            $userEventDocumentIds = $this->getUserEventIdsByEvent->handle($command->event);
             $this->elasticSearchPersister->deleteIds(
                 TypesMapping::getTypeByClass(UserEventView::class),
-                $userEventDocumentIds
+                $this->getUserEventIdsByEvent->handle($command->event)
             );
         }
 
-        $userEventViews = $this->userEventViewsFactory->getByEvent($command->event);
-        $this->elasticSearchPersister->persist('id', $userEventViews);
+        $this->elasticSearchPersister->persist('id', $this->userEventViewsFactory->getByEvent($command->event));
     }
 }

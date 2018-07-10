@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 interface GetUserEventIdsByEventInterface
 {
     /**
-     * @return int[] elasticsearch document id
+     * @return string[] elasticsearch document id
      */
     public function handle(Event $event): array;
 }

@@ -45,7 +45,7 @@ class UserEventView
         string $locale,
         array $sheets
     ) {
-        $this->id = $eventId . '_' . $userId;
+        $this->id = self::generateId($eventId, $userId);
         $this->eventId = $eventId;
         $this->userId = $userId;
         $this->firstName = $firstName;
@@ -54,6 +54,11 @@ class UserEventView
         $this->locale = $locale;
 
         $this->addSheets($sheets);
+    }
+
+    public static function generateId(int $eventId, int $userId): string
+    {
+        return $eventId . '_' . $userId;
     }
 
     public function hasSheetId(int $sheetId): bool
