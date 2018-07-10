@@ -81,6 +81,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@behat_manager.sheet'
             - '@behat_manager.user'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     behat_manager.slot:
         class: Proximum\Vimeet\Behat\Service\Manager\SlotManager
