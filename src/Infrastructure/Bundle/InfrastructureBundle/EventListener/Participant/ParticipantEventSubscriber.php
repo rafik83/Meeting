@@ -21,6 +21,7 @@ use Proximum\Vimeet\Application\Event\Participant\ParticipantCreatedByGroupManag
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
+use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ParticipantEventSubscriber implements EventSubscriberInterface
@@ -48,6 +49,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             Events::PARTICIPANT_IMPORTED_FROM_API => 'onParticipantImportedFromApi',
             Events::PARTICIPANT_CREATED_BY_GROUP_MANAGER => 'onParticipantCreatedByGroupManager',
             Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreatedByGroupManager',
+            Events::REGISTRATION_STEP => 'onRegistrationStepCompleted',
         ];
     }
 
@@ -98,5 +100,19 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         foreach ($sheetCreatedByManagerEvent->sheet->getUsers() as $user) {
             $this->commandBus->handle(new Update($user, $sheetCreatedByManagerEvent->sheet->getEvent()));
         }
+    }
+
+    public function onRegistrationStepCompleted(RegistrationStepEvent $registrationStepEvent)
+    {
+        if ($registrationStepEvent->getStep() !== 1) {
+            return;
+        }
+
+        $this->commandBus->handle(
+            new Update(
+                $registrationStepEvent->getParticipant()->getUser(),
+                $registrationStepEvent->getParticipant()->getEvent()
+            )
+        );
     }
 }
