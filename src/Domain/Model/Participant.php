@@ -129,6 +129,11 @@ class Participant implements MailRecipientInterface
         return $this->sheet;
     }
 
+    public function getEvent(): Event
+    {
+        return $this->sheet->getEvent();
+    }
+
     /**
      * Is owner.
      *

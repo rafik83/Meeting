@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant\Add;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Command\UserEventView\Update;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
@@ -66,29 +67,36 @@ class OnParticipantAddedHandler
 
     public function handle(OnParticipantAdded $command): void
     {
+        if (!$command->participant->getSheet()->isOwner($command->participant->getUser())) {
+            $this->handleNotOwnerOfSheet($command);
+        }
+
+        $this->commandBus->handle(new Update($command->participant->getUser(), $command->participant->getEvent()));
+    }
+
+    private function handleNotOwnerOfSheet(OnParticipantAdded $command): void
+    {
         $sheet = $command->participant->getSheet();
-        $event = $sheet->getEvent();
+        $event = $command->participant->getEvent();
         $user = $command->participant->getUser();
 
-        if (!$sheet->isOwner($user)) {
-            // Check that an SSO is activated for the event
-            $ssoEnabled = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_COMEXPOSIUM_SSO_ENABLED);
+        // Check that an SSO is activated for the event
+        $ssoEnabled = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_COMEXPOSIUM_SSO_ENABLED);
 
-            if (null === $ssoEnabled) {
-                // If sso is not enabled, we send the event to warn the user
-                // send to the guest
-                if ($user->isActive()) {
-                    $this->sendCompleteProfileEvent($event, $user, $command->participant);
-                } else {
-                    $this->sendActivationEvent($command->adder, $sheet, $user);
-                }
+        if (null === $ssoEnabled) {
+            // If sso is not enabled, we send the event to warn the user
+            // send to the guest
+            if ($user->isActive()) {
+                $this->sendCompleteProfileEvent($event, $user, $command->participant);
             } else {
-                $this->commandBus->handle(new ComexposiumOnParticipantAdded($event, $command->participant));
+                $this->sendActivationEvent($command->adder, $sheet, $user);
             }
-
-            // send to the adder
-            $this->sendActivationConfirmEvent($sheet, $command->participant, $command->adder);
+        } else {
+            $this->commandBus->handle(new ComexposiumOnParticipantAdded($event, $command->participant));
         }
+
+        // send to the adder
+        $this->sendActivationConfirmEvent($sheet, $command->participant, $command->adder);
     }
 
     /**
