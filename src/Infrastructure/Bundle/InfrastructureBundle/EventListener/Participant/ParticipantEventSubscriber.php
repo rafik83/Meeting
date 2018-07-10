@@ -13,8 +13,10 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded;
+use Proximum\Vimeet\Application\Command\UserEventView\Update;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -39,6 +41,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         return [
             Events::PARTICIPANT_UPDATED => 'onParticipantUpdated',
             Events::PARTICIPANT_ADDED => 'onParticipantAdded',
+            Events::PARTICIPANT_IMPORTED => 'onParticipantImported',
         ];
     }
 
@@ -52,5 +55,14 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         $this->commandBus->handle(
             new OnParticipantAdded($participantAddedEvent->participant, $participantAddedEvent->adderOfTheParticipant)
         );
+    }
+
+    public function onParticipantImported(ParticipantImportedEvent $participantImportedEvent): void
+    {
+        foreach ($participantImportedEvent->getSheets() as $sheet) {
+            foreach ($sheet->getUsers() as $user) {
+                $this->commandBus->handle(new Update($user, $participantImportedEvent->getEvent()));
+            }
+        }
     }
 }
