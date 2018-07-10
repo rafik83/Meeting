@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantCreatedByGroupManagerEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedByGroupManagerEvent;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Group\Participant\UpdateUsersSheetsResultView;
@@ -141,6 +142,14 @@ class UpdateUsersSheetsHandler
 
                         $this->participantRepository->delete($participantToDelete);
                         $sheet->removeParticipant($participantToDelete);
+
+                        $this->delayedEventDispatcher->dispatch(
+                            Events::PARTICIPANT_REMOVED_BY_GROUP_MANAGER,
+                            new ParticipantRemovedByGroupManagerEvent(
+                                $participantToDelete->getUser(),
+                                $sheet
+                            )
+                        );
                     }
                 }
             }

@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheetsHandl
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantCreatedByGroupManagerEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedByGroupManagerEvent;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Group\Participant\UpdateUsersSheetsResultView;
@@ -52,7 +53,9 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $userMock1 = $this->prophesize(User::class);
         $userMock2 = $this->prophesize(User::class);
 
-        $participantMock = $this->prophesize(Participant::class);
+        $participantMock2 = $this->prophesize(Participant::class);
+        $participantMock2->getUser()->willReturn($userMock2->reveal());
+
         $participantCreated1 = $this->prophesize(Participant::class);
         $participantCreated2 = $this->prophesize(Participant::class);
 
@@ -99,17 +102,28 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $participantRepositoryMock
             ->getParticipantForUserAndSheet($userMock2->reveal(), $sheetMock1->reveal())
             ->shouldBeCalled()
-            ->willReturn($participantMock->reveal());
+            ->willReturn($participantMock2->reveal());
 
         $meetingRepositoryMock
-            ->hasScheduledMeetingByParticipant($participantMock->reveal())
+            ->hasScheduledMeetingByParticipant($participantMock2->reveal())
             ->shouldBeCalled()
             ->willReturn(false);
 
         $sheetInfoGuesserCacheMock->guessSheetTitle($sheetMock1->reveal(), null)->shouldNotBeCalled();
         $sheetInfoGuesserCacheMock->guessSheetTitle($sheetMock2->reveal(), null)->shouldNotBeCalled();
 
-        $participantRepositoryMock->delete($participantMock->reveal())->shouldBeCalled();
+        $participantRepositoryMock->delete($participantMock2->reveal())->shouldBeCalled();
+
+        $delayedEventDispatcher
+            ->dispatch(
+                Events::PARTICIPANT_REMOVED_BY_GROUP_MANAGER,
+                new ParticipantRemovedByGroupManagerEvent(
+                    $userMock2->reveal(),
+                    $sheetMock1->reveal()
+                )
+            )
+            ->shouldBeCalled()
+        ;
 
         $updateUsersSheets = new UpdateUsersSheets($groupMock->reveal(), $userParticipantViews);
 

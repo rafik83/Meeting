@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantCreatedByGroupManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedByGroupManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -48,6 +49,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             Events::PARTICIPANT_IMPORTED => 'onParticipantImported',
             Events::PARTICIPANT_IMPORTED_FROM_API => 'onParticipantImportedFromApi',
             Events::PARTICIPANT_CREATED_BY_GROUP_MANAGER => 'onParticipantCreatedByGroupManager',
+            Events::PARTICIPANT_REMOVED_BY_GROUP_MANAGER => 'onParticipantRemovedByGroupManager',
             Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreatedByGroupManager',
             Events::REGISTRATION_STEP => 'onRegistrationStepCompleted',
         ];
@@ -91,6 +93,17 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             new Update(
                 $participantCreatedByGroupManagerEvent->participant->getUser(),
                 $participantCreatedByGroupManagerEvent->participant->getEvent()
+            )
+        );
+    }
+
+    public function onParticipantRemovedByGroupManager(
+        ParticipantRemovedByGroupManagerEvent $participantRemovedByGroupManagerEvent
+    ) {
+        $this->commandBus->handle(
+            new Update(
+                $participantRemovedByGroupManagerEvent->user,
+                $participantRemovedByGroupManagerEvent->sheet->getEvent()
             )
         );
     }
