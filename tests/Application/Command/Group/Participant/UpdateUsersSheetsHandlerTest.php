@@ -11,9 +11,12 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Group\Participant;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets;
 use Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheetsHandler;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantCreatedByGroupManagerEvent;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Group\Participant\UpdateUsersSheetsResultView;
@@ -39,6 +42,7 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $usersParticipantViewQueryHandlerMock = $this->prophesize(UsersParticipantViewQueryHandler::class);
         $userToParticipantMock = $this->prophesize(UserToParticipant::class);
         $sheetInfoGuesserCacheMock = $this->prophesize(SheetInfoGuesserCache::class);
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $groupMock = $this->prophesize(Group::class);
 
@@ -49,6 +53,8 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $userMock2 = $this->prophesize(User::class);
 
         $participantMock = $this->prophesize(Participant::class);
+        $participantCreated1 = $this->prophesize(Participant::class);
+        $participantCreated2 = $this->prophesize(Participant::class);
 
         $userParticipantViews = [
             1 => new UserParticipantView(1, 'jean@bon.com', 'Jean Bon', [$sheetMock1->reveal()]),
@@ -59,23 +65,36 @@ class UpdateUsersSheetsHandlerTest extends TestCase
             ->handle(new UsersParticipantViewQuery($groupMock->reveal()))
             ->willReturn($userParticipantViews);
 
-        $updateUsersSheetsHandler = new UpdateUsersSheetsHandler(
-            $participantRepositoryMock->reveal(),
-            $userRepositoryMock->reveal(),
-            $meetingRepositoryMock->reveal(),
-            $requestRepositoryMock->reveal(),
-            $usersParticipantViewQueryHandlerMock->reveal(),
-            $userToParticipantMock->reveal(),
-            $sheetInfoGuesserCacheMock->reveal()
-        );
-
         $userRepositoryMock
             ->getByIdsIndexedById([1, 2])
             ->shouldBeCalled()
             ->willReturn([1 => $userMock1->reveal(), 2 => $userMock2->reveal()]);
 
-        $userToParticipantMock->handle($sheetMock2->reveal(), $userMock1->reveal())->shouldBeCalled();
-        $userToParticipantMock->handle($sheetMock2->reveal(), $userMock2->reveal())->shouldBeCalled();
+        $userToParticipantMock
+            ->handle($sheetMock2->reveal(), $userMock1->reveal())
+            ->shouldBeCalled()
+            ->willReturn($participantCreated1->reveal())
+        ;
+        $userToParticipantMock
+            ->handle($sheetMock2->reveal(), $userMock2->reveal())
+            ->shouldBeCalled()
+            ->willReturn($participantCreated2->reveal())
+        ;
+
+        $delayedEventDispatcher
+            ->dispatch(
+                Events::PARTICIPANT_CREATED_BY_GROUP_MANAGER,
+                new ParticipantCreatedByGroupManagerEvent($participantCreated1->reveal())
+            )
+            ->shouldBeCalled()
+        ;
+        $delayedEventDispatcher
+            ->dispatch(
+                Events::PARTICIPANT_CREATED_BY_GROUP_MANAGER,
+                new ParticipantCreatedByGroupManagerEvent($participantCreated2->reveal())
+            )
+            ->shouldBeCalled()
+        ;
 
         $participantRepositoryMock
             ->getParticipantForUserAndSheet($userMock2->reveal(), $sheetMock1->reveal())
@@ -99,6 +118,17 @@ class UpdateUsersSheetsHandlerTest extends TestCase
             2 => [$sheetMock2->reveal()],
         ];
 
+        $updateUsersSheetsHandler = new UpdateUsersSheetsHandler(
+            $participantRepositoryMock->reveal(),
+            $userRepositoryMock->reveal(),
+            $meetingRepositoryMock->reveal(),
+            $requestRepositoryMock->reveal(),
+            $usersParticipantViewQueryHandlerMock->reveal(),
+            $userToParticipantMock->reveal(),
+            $sheetInfoGuesserCacheMock->reveal(),
+            $delayedEventDispatcher->reveal()
+        );
+
         $this->assertEquals([], $updateUsersSheetsHandler->handle($updateUsersSheets));
     }
 
@@ -111,6 +141,7 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $usersParticipantViewQueryHandlerMock = $this->prophesize(UsersParticipantViewQueryHandler::class);
         $userToParticipantMock = $this->prophesize(UserToParticipant::class);
         $sheetInfoGuesserCacheMock = $this->prophesize(SheetInfoGuesserCache::class);
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $groupMock = $this->prophesize(Group::class);
 
@@ -136,7 +167,8 @@ class UpdateUsersSheetsHandlerTest extends TestCase
             $requestRepositoryMock->reveal(),
             $usersParticipantViewQueryHandlerMock->reveal(),
             $userToParticipantMock->reveal(),
-            $sheetInfoGuesserCacheMock->reveal()
+            $sheetInfoGuesserCacheMock->reveal(),
+            $delayedEventDispatcher->reveal()
         );
 
         $userRepositoryMock
@@ -188,6 +220,7 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $usersParticipantViewQueryHandlerMock = $this->prophesize(UsersParticipantViewQueryHandler::class);
         $userToParticipantMock = $this->prophesize(UserToParticipant::class);
         $sheetInfoGuesserCacheMock = $this->prophesize(SheetInfoGuesserCache::class);
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $groupMock = $this->prophesize(Group::class);
 
@@ -213,7 +246,8 @@ class UpdateUsersSheetsHandlerTest extends TestCase
             $requestRepositoryMock->reveal(),
             $usersParticipantViewQueryHandlerMock->reveal(),
             $userToParticipantMock->reveal(),
-            $sheetInfoGuesserCacheMock->reveal()
+            $sheetInfoGuesserCacheMock->reveal(),
+            $delayedEventDispatcher->reveal()
         );
 
         $userRepositoryMock
@@ -264,6 +298,7 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $usersParticipantViewQueryHandlerMock = $this->prophesize(UsersParticipantViewQueryHandler::class);
         $userToParticipantMock = $this->prophesize(UserToParticipant::class);
         $sheetInfoGuesserCacheMock = $this->prophesize(SheetInfoGuesserCache::class);
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $groupMock = $this->prophesize(Group::class);
 
@@ -289,7 +324,8 @@ class UpdateUsersSheetsHandlerTest extends TestCase
             $requestRepositoryMock->reveal(),
             $usersParticipantViewQueryHandlerMock->reveal(),
             $userToParticipantMock->reveal(),
-            $sheetInfoGuesserCacheMock->reveal()
+            $sheetInfoGuesserCacheMock->reveal(),
+            $delayedEventDispatcher->reveal()
         );
 
         $userRepositoryMock

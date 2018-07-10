@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\UserEventView\Update;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantCreatedByGroupManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
@@ -45,6 +46,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             Events::PARTICIPANT_ADDED => 'onParticipantAdded',
             Events::PARTICIPANT_IMPORTED => 'onParticipantImported',
             Events::PARTICIPANT_IMPORTED_FROM_API => 'onParticipantImportedFromApi',
+            Events::PARTICIPANT_CREATED_BY_GROUP_MANAGER => 'onParticipantCreatedByGroupManager',
             Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreatedByGroupManager',
         ];
     }
@@ -76,6 +78,17 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             new Update(
                 $participantImportedFromApiEvent->participant->getUser(),
                 $participantImportedFromApiEvent->participant->getEvent()
+            )
+        );
+    }
+
+    public function onParticipantCreatedByGroupManager(
+        ParticipantCreatedByGroupManagerEvent $participantCreatedByGroupManagerEvent
+    ) {
+        $this->commandBus->handle(
+            new Update(
+                $participantCreatedByGroupManagerEvent->participant->getUser(),
+                $participantCreatedByGroupManagerEvent->participant->getEvent()
             )
         );
     }
