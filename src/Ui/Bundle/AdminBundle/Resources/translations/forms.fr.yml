@@ -110,6 +110,9 @@ form.change_type.children.submit.label: Changer
 form.change_type.children.type.label: 'Type de participation'
 form.choose_payment_mode.children.submit.label: Enregistrer
 form.common.choices.all: 'Tout sélectionner'
+form.configure.children.catalogTagFilters.label_add: 'Ajouter un filtre tag'
+form.configure.children.catalogTagFilters.label_delete: 'Supprimer un filtre tag'
+form.configure.children.catalogTagFilters.prototype.children.tag.label: Tag
 form.configure.children.categories.label: 'Catégories visibles'
 form.configure.children.externalCatalogEnabled.label: 'Catalogue public activé'
 form.configure.children.hasMessage.label: 'Message activé'
@@ -223,6 +226,7 @@ form.event_create.children.timeZone.label: 'Fuseau horaire'
 form.event_create.children.title.label: Titre
 form.event_create.children.vat.label: TVA
 form.event_create.children.visible.label: Visible
+form.event_create.children.visio.label: 'Evenement dématérialisé'
 form.event_create.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event_duplicate.children.event.label: Événement
 form.event_duplicate.children.submit.label: Créer
@@ -267,10 +271,9 @@ form.event_update.children.title.label: Titre
 form.event_update.children.translations.prototype.children.description.label: 'Entête de page'
 form.event_update.children.vat.label: TVA
 form.event_update.children.visible.label: Visible
+form.event_update.children.visio.label: 'Evenement dématérialisé'
 form.event_update.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
-form.event_update.children.visio.label: "Evenement dématérialisé"
-form.event_create.children.visio.label: "Evenement dématérialisé"
 form.extra_parameter_create.children.name.label: Nom
 form.extra_parameter_create.children.submit.label: Enregistrer
 form.extra_parameter_create.children.type.choices.comexposium_event_reference: 'Comexposium : Référence manifestation'
@@ -688,6 +691,11 @@ form.schedule_config.children.submit.label: Enregistrer
 form.search_facet_translation.children.enabled.label: Activé
 form.search_facet_translation.children.label.label: Label
 form.search_facet_translation.children.placeholder.label: Placeholder
+form.search_facet_update.children.catalogTagFilters.label_add: 'Ajouter un filtre tag'
+form.search_facet_update.children.catalogTagFilters.label_delete: 'Supprimer un filtre tag'
+form.search_facet_update.children.catalogTagFilters.prototype.children.tag.label: Tag
+form.search_facet_update.children.catalogTagFilters.translations.label: Label
+form.search_facet_update.children.catalogTagFilters.translations.placeholder: Placeholder
 form.search_facet_update.children.searchFacets.category.help: ''
 form.search_facet_update.children.searchFacets.category.label: Catégorie
 form.search_facet_update.children.searchFacets.keywords.help: 'Nom de la fiche, texte, objets collections et nomenclatures sur la fiche de participation'
@@ -701,14 +709,6 @@ form.search_facet_update.children.searchFacets.position.label: Fonction
 form.search_facet_update.children.searchFacets.type.help: ''
 form.search_facet_update.children.searchFacets.type.label: Type
 form.search_facet_update.children.submit.label: Enregistrer
-form.search_facet_update.children.catalogTagFilters.prototype.children.tag.label: 'Tag'
-form.configure.children.catalogTagFilters.prototype.children.tag.label: 'Tag'
-form.search_facet_update.children.catalogTagFilters.label_delete: 'Supprimer un filtre tag'
-form.configure.children.catalogTagFilters.label_delete: 'Supprimer un filtre tag'
-form.search_facet_update.children.catalogTagFilters.label_add: 'Ajouter un filtre tag'
-form.configure.children.catalogTagFilters.label_add: 'Ajouter un filtre tag'
-form.search_facet_update.children.catalogTagFilters.translations.label: 'Label'
-form.search_facet_update.children.catalogTagFilters.translations.placeholder: 'Placeholder'
 form.search_user_sheets_group.children.email.label: 'E-mail de l''utilisateur'
 form.search_user_sheets_group.children.submit.label: Suivant
 form.select_recipients.children.recipients.label: Destinataires

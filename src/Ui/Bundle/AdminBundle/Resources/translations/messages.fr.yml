@@ -810,7 +810,7 @@ admin.sheet.export.button.label: Exporter
 admin.sheet.export.field.comment: '%author% le %date%: "%comment%"'
 admin.sheet.export.fields.balance: 'Balance TTC'
 admin.sheet.export.fields.category: Catégorie
-admin.sheet.export.fields.comments: 'Commentaires'
+admin.sheet.export.fields.comments: Commentaires
 admin.sheet.export.fields.commercial_status: 'Statut commercial'
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
@@ -833,8 +833,8 @@ admin.sheet.export.invoice.button.label: 'Exporter factures'
 admin.sheet.export.meetings.button.label: 'Exporter RDV'
 admin.sheet.export.no: Non
 admin.sheet.export.participant.button.label: 'Exporter participants'
-admin.sheet.export.uploaded_objects.button.label: 'Exporter les fichiers uploadés'
 admin.sheet.export.sheet.button.label: 'Exporter fiches'
+admin.sheet.export.uploaded_objects.button.label: 'Exporter les fichiers uploadés'
 admin.sheet.export.yes: Oui
 admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
