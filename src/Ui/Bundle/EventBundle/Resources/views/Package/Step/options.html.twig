@@ -11,8 +11,7 @@
 
     {% for groupKey, group in view.products.groups %}
         <div class="content-header clearfix">
-            <h2 class="pull-left">{{ 'package.product.selectOptions'|trans }}</h2>
-            <p class="category-option pull-left">{{ group.label }}</p>
+            <h2 class="pull-left">{{ group.label }}</h2>
         </div>
 
         {% set displaySeeMore = not loop.first and form.vars.valid %}
