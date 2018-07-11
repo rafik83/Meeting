@@ -21,6 +21,7 @@ use Proximum\Vimeet\Application\Event\Participant\ParticipantCreatedByGroupManag
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedByGroupManagerEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -50,6 +51,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             Events::PARTICIPANT_IMPORTED_FROM_API => 'onParticipantImportedFromApi',
             Events::PARTICIPANT_CREATED_BY_GROUP_MANAGER => 'onParticipantCreatedByGroupManager',
             Events::PARTICIPANT_REMOVED_BY_GROUP_MANAGER => 'onParticipantRemovedByGroupManager',
+            Events::PARTICIPANT_REMOVED => 'onParticipantRemoved',
             Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreatedByGroupManager',
             Events::REGISTRATION_STEP => 'onRegistrationStepCompleted',
         ];
@@ -110,8 +112,10 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
 
     public function onSheetCreatedByGroupManager(SheetCreatedByManagerEvent $sheetCreatedByManagerEvent)
     {
+        $event = $sheetCreatedByManagerEvent->sheet->getEvent();
+
         foreach ($sheetCreatedByManagerEvent->sheet->getUsers() as $user) {
-            $this->commandBus->handle(new Update($user, $sheetCreatedByManagerEvent->sheet->getEvent()));
+            $this->commandBus->handle(new Update($user, $event));
         }
     }
 
@@ -127,5 +131,14 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
                 $registrationStepEvent->getParticipant()->getEvent()
             )
         );
+    }
+
+    public function onParticipantRemoved(ParticipantRemovedEvent $participantRemovedEvent)
+    {
+        $event = $participantRemovedEvent->sheet->getEvent();
+
+        foreach ($participantRemovedEvent->usersRemovedFromSheet as $user) {
+            $this->commandBus->handle(new Update($user, $event));
+        }
     }
 }
