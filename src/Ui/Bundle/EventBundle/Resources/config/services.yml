@@ -385,6 +385,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\TraceEventSubscriber
         arguments:
             - '@repository.trace_repository'
+            - '@datetime'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.sheet_validator_event_subscriber:
@@ -400,6 +401,7 @@ services:
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_indexer'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.sheet.package_orders_updated_event_subscriber:

@@ -323,6 +323,11 @@ services:
             - '@behat_storage'
             - '@Proximum\Vimeet\Behat\Service\Manager\AvailabilityTimeRangeManager'
 
+    Proximum\Vimeet\Behat\Proxy\BillingInfoContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.billing_info'
+
     #
     # Other services
     #
