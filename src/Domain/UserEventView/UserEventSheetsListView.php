@@ -15,7 +15,7 @@ class UserEventSheetsListView
     /** @var int */
     public $id;
 
-    /** @var string */
+    /** @var null|string */
     public $title;
 
     /** @var bool */
@@ -65,7 +65,7 @@ class UserEventSheetsListView
 
     public function __construct(
         int $id,
-        string $title,
+        ?string $title,
         bool $isOwner,
         string $typeTitle,
         string $categoriesTitle,

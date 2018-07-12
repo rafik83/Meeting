@@ -1041,10 +1041,7 @@ class Sheet implements TraceableInterface
         return $this->attend;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
