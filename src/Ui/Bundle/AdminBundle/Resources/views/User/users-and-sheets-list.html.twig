@@ -9,6 +9,7 @@
 
     {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}
 
+    {% if userEventListViews.paginatedResult.total > 0 %}
     <table class="table table-hover">
         <thead>
         <tr>
@@ -123,13 +124,12 @@
                     {% if not loop.first %}</tr>{% endif %}
                 {% endfor %}
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="5" class="text-danger">{{ 'admin.zero-result'|trans }}</td>
-            </tr>
         {% endfor %}
         </tbody>
     </table>
+    {% else %}
+        <div class="text-danger">{{ 'admin.zero-result'|trans }}</div>
+    {% endif %}
 
     {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}
 {% endblock %}
