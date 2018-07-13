@@ -110,6 +110,12 @@ class TypeConverterTest extends TestCase
                 ],
                 'expectedResult' => 1324,
             ],
+            'type1324WithArrayValue' => [
+                'payload' => [
+                    'ZL_SOUSCATEGORIE' => ['1324'],
+                ],
+                'expectedResult' => 1324,
+            ],
             'whateverIsNull' => [
                 'payload' => [
                     'Id' => 12334,

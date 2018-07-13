@@ -64,9 +64,19 @@ class TypeConverter
     private function matchType(array $mappedType, array $payload): bool
     {
         foreach ($mappedType as $fieldName => $fieldValue) {
-            if (!array_key_exists($fieldName, $payload)
-                || (string) $fieldValue !== (string) $payload[$fieldName]
-            ) {
+            if (!array_key_exists($fieldName, $payload)) {
+                return false;
+            }
+
+            if (\is_array($payload[$fieldName])) {
+               if (!\in_array((string) $fieldValue, $payload[$fieldName], true)) {
+                   return false;
+               }
+
+               continue;
+            }
+
+            if ((string) $fieldValue !== (string) $payload[$fieldName]) {
                 return false;
             }
         }
