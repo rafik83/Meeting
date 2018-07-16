@@ -69,7 +69,7 @@ class RemovePastAvailableSlotCommand extends Command
         $pastMonthDate = clone $this->dateTime;
         $pastMonthDate = $pastMonthDate->modify('-1 month');
 
-        $events = $this->eventRepository->findEventsBetweenBeginAndEnd($pastMonthDate, $this->dateTime);
+        $events = $this->eventRepository->findEventsByDateRange($pastMonthDate, $this->dateTime);
         $slots = $this->meetingSlotRepository->findSlotIdsByEvents($events);
 
         $this->availableSlotRepository->deleteForSlotIds($slots);

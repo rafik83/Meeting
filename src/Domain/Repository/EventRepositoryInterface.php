@@ -114,5 +114,5 @@ interface EventRepositoryInterface
      *
      * @return Event[]
      */
-    public function findEventsBetweenBeginAndEnd(\DateTimeInterface $begin, \DateTimeInterface $end): array;
+    public function findEventsByDateRange(\DateTimeInterface $begin, \DateTimeInterface $end): array;
 }
