@@ -33,6 +33,10 @@ class TypeConverter
                     return [];
                 }
 
+                if (isset($mappedType['condition'])) {
+                    return [];
+                }
+
                 foreach ($mappedType as $mappedKey => $mappedField) {
                     $typeMapping[$mappedKey] = $mappedField;
                 }

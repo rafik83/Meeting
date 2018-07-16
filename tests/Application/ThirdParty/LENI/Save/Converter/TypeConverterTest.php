@@ -19,8 +19,22 @@ class TypeConverterTest extends TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testConvert(Type $type, array $mapping, array $expected)
+    public function testConvert(Type $type, array $expected)
     {
+        $mapping = [
+            2 => [
+                'CategorieIndividuEvt' => 'VISITEUR',
+                'ZL_PROFIL' => 'SALON',
+            ],
+            3 => [
+                'CategorieIndividuEvt' => 'PROSPECT',
+                'ZL_PROFIL' => null,
+            ],
+            4 => [
+                'condition' => 'CategorieIndividuEvt !== null',
+            ]
+        ];
+
         $converter = new TypeConverter();
         $result = $converter->convert($type, $mapping);
 
@@ -32,31 +46,20 @@ class TypeConverterTest extends TestCase
         $type1 = $this->prophesize(Type::class);
         $type2 = $this->prophesize(Type::class);
         $type3 = $this->prophesize(Type::class);
+        $type4 = $this->prophesize(Type::class);
 
         $type1->getId()->willReturn(1);
         $type2->getId()->willReturn(2);
         $type3->getId()->willReturn(3);
-
-        $mapping = [
-            2 => [
-                'CategorieIndividuEvt' => 'VISITEUR',
-                'ZL_PROFIL' => 'SALON',
-            ],
-            3 => [
-                'CategorieIndividuEvt' => 'PROSPECT',
-                'ZL_PROFIL' => null,
-            ]
-        ];
+        $type4->getId()->willReturn(4);
 
         return [
             'no-result' => [
                 $type1->reveal(),
-                $mapping,
                 []
             ],
             [
                 $type2->reveal(),
-                $mapping,
                 [
                     'CategorieIndividuEvt' => 'VISITEUR',
                     'ZL_PROFIL' => 'SALON',
@@ -64,11 +67,14 @@ class TypeConverterTest extends TestCase
             ],
             'mapping-with-null-field' => [
                 $type3->reveal(),
-                $mapping,
                 [
                     'CategorieIndividuEvt' => 'PROSPECT',
                     'ZL_PROFIL' => null,
                 ]
+            ],
+            [
+                $type4->reveal(),
+                []
             ],
         ];
     }
