@@ -24,3 +24,5 @@ services:
             - '%jenkins_command%'
             - '%jenkins_user%'
             - '%jenkins_password%'
+
+    Proximum\Vimeet\Infrastructure\Adapter\ExpressionLanguageAdapter: ~

@@ -1,0 +1,76 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Infrastructure\Adapter;
+
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Infrastructure\Adapter\ExpressionLanguageAdapter;
+
+class ExpressionLanguageAdapterTest extends TestCase
+{
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testEvaluate(array $data, bool $expectedResult)
+    {
+        $expression = "data['speciality'] === 'MachineLearning' | data['speciality'] in ['IA', 'DeepLearning'] & data['turnover'] > 10";
+
+        $expressionLanguageAdapter = new ExpressionLanguageAdapter();
+        $this->assertEquals($expectedResult, $expressionLanguageAdapter->evaluate($expression, ['data' => $data]));
+    }
+
+    public function dataProvider()
+    {
+        return [
+            [
+                [
+                    'speciality' => 'MachineLearning',
+                    'turnover' => 1,
+                ],
+                true,
+            ],
+            [
+                [
+                    'speciality' => 'IA',
+                    'turnover' => 11,
+                ],
+                true,
+            ],
+            [
+                [
+                    'speciality' => 'IA',
+                    'turnover' => 10,
+                ],
+                false,
+            ],
+            [
+                [
+                    'speciality' => 'DeepLearning',
+                    'turnover' => 20,
+                ],
+                true,
+            ],
+            [
+                [
+                    'speciality' => 'DeepLearning',
+                    'turnover' => 1,
+                ],
+                false,
+            ],
+            [
+                [
+                    'speciality' => 'SpeechRecognition',
+                    'turnover' => 20,
+                ],
+                false,
+            ],
+        ];
+    }
+}
