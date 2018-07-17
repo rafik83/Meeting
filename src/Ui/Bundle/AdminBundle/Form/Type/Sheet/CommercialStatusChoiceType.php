@@ -27,6 +27,7 @@ class CommercialStatusChoiceType extends AbstractType
         $resolver
             ->setDefaults([
                 'choices' => CommercialStatus::STATUS,
+                'placeholder' => false,
             ])
         ;
     }
