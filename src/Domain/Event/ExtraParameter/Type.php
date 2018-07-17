@@ -24,11 +24,13 @@ class Type
     public const TYPE_LENI_SAVE_ENDPOINT = 'leni_save_endpoint';
     public const TYPE_LENI_GET_ENDPOINT = 'leni_get_endpoint';
     public const TYPE_LENI_SENDING_REQUEST = 'leni_sending_request';
-
     public const TYPE_LENI_MODE = 'leni_mode';
+    public const TYPE_LENI_PREDEFINED_FILTERS = 'leni_predefined_filters';
+
     public const VALUE_LENI_MODE_SAVE = 'save';
     public const VALUE_LENI_MODE_GET = 'get';
     public const VALUE_LENI_MODE_BOTH = 'both';
+
     public const ALLOWED_LENI_MODE_FOR_GET = [self::VALUE_LENI_MODE_GET, self::VALUE_LENI_MODE_BOTH];
     public const ALLOWED_LENI_MODE_FOR_SAVE = [self::VALUE_LENI_MODE_SAVE, self::VALUE_LENI_MODE_BOTH];
 
@@ -58,6 +60,7 @@ class Type
         self::TYPE_LENI_TYPES_MAPPING,
         self::TYPE_LENI_DATA_MAPPING,
         self::TYPE_LENI_SENDING_REQUEST,
+        self::TYPE_LENI_PREDEFINED_FILTERS,
         self::TYPE_VIANEO_ENDPOINT,
         self::TYPE_VIANEO_CONCERNED_TYPES_ID,
         self::TYPE_COMEXPOSIUM_EVENT_REFERENCE,

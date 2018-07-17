@@ -212,6 +212,22 @@ class LeniApiCallHandlerTest extends TestCase
             ->willReturn($extraParameterEvent2->reveal())
         ;
 
+        $extraParameterEvent3 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameterEvent3
+            ->getValue()
+            ->willReturn('[{"selectedFieldId": "CategorieIndividuEvt", "selectedOperator": "IN", "value": ["Exhibitor", "Visitor"]}]')
+        ;
+        $extraParameterRepository
+            ->findByEventAndType($event1->reveal(), ExtraParameterType::TYPE_LENI_PREDEFINED_FILTERS)
+            ->shouldBeCalled()
+            ->willReturn($extraParameterEvent3->reveal())
+        ;
+        $extraParameterRepository
+            ->findByEventAndType($event2->reveal(), ExtraParameterType::TYPE_LENI_PREDEFINED_FILTERS)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
         $eventExtraData = $this->prophesize(Event\ExtraData::class);
         $eventExtraData->getValue()->willReturn('/Date(1000000000000)/');
         $eventExtraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);

@@ -278,6 +278,7 @@ form.extra_parameter_create.children.type.choices.leni_get_endpoint: 'LENI Get e
 form.extra_parameter_create.children.type.choices.leni_mode: 'LENI Mode (save, get ou both)'
 form.extra_parameter_create.children.type.choices.leni_participation_data_mapping: 'LENI fields mapping'
 form.extra_parameter_create.children.type.choices.leni_participation_types_mapping: 'LENI participation types mapping'
+form.extra_parameter_create.children.type.choices.leni_predefined_filters: 'LENI filtres de l''API (GET)'
 form.extra_parameter_create.children.type.choices.leni_save_endpoint: 'LENI Save endpoint'
 form.extra_parameter_create.children.type.choices.leni_sending_request: 'LENI Paramètre SendingRequests'
 form.extra_parameter_create.children.type.choices.leni_user: 'User LENI code'

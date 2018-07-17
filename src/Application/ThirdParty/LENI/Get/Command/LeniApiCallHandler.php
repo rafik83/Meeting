@@ -147,7 +147,7 @@ class LeniApiCallHandler
             ? $lastCreatedAtExtraData->getValue()
             : null;
         $fields = $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping));
-        $filters = $this->getFilters($typesMapping, $lastCreatedAt);
+        $filters = $this->getFilters($event, $lastCreatedAt);
         $sort = $this->getSort();
 
         $newLastCreatedAt = $this->getBatchUserData(
@@ -251,13 +251,7 @@ class LeniApiCallHandler
         return $newLastCreatedAt;
     }
 
-    /**
-     * @param array       $typesMapping
-     * @param null|string $lastCreatedAt
-     *
-     * @return array
-     */
-    private function getFilters(array &$typesMapping, ?string $lastCreatedAt): array
+    private function getFilters(Event $event, ?string $lastCreatedAt): array
     {
         $filters = [];
 
@@ -265,10 +259,8 @@ class LeniApiCallHandler
             $filters[] = $this->getFilterGreaterOrEqualLastCreatedAt($lastCreatedAt);
         }
 
-        $filterByLeniCategory = $this->getFiltersByLeniCategoryInTypeMappingValues($typesMapping);
-
-        if (!empty($filterByLeniCategory)) {
-            $filters[] = $filterByLeniCategory;
+        foreach ($this->getPredefinedFilters($event) as $filter) {
+            $filters[] = $filter;
         }
 
         return $filters;
@@ -289,35 +281,28 @@ class LeniApiCallHandler
     }
 
     /**
-     * @param array $typesMapping
+     * @param Event $event
      *
      * @return array
      */
-    private function getFiltersByLeniCategoryInTypeMappingValues(array &$typesMapping): array
+    private function getPredefinedFilters(Event $event): array
     {
-        $possibleCategoryValuesByFieldName = [];
+        $predefinedFilters = $this->extraParameterRepository->findByEventAndType(
+            $event,
+            EventExtraParameterType::TYPE_LENI_PREDEFINED_FILTERS
+        );
 
-        foreach ($typesMapping as $typeMapping) {
-            if (\is_array($typeMapping)) {
-                foreach ($typeMapping as $fieldName => $value) {
-                    if (LeniConstants::LENI_COL_CATEGORY !== $fieldName) {
-                        continue;
-                    }
-
-                    $possibleCategoryValuesByFieldName[$value] = $value;
-                }
-            }
+        if (null === $predefinedFilters) {
+            return [];
         }
 
-        if (!empty($possibleCategoryValuesByFieldName)) {
-            return [
-                LeniConstants::FILTER_FIELD => LeniConstants::LENI_COL_CATEGORY,
-                LeniConstants::FILTER_OPERATOR => LeniConstants::FILTER_OPERATOR_IN,
-                LeniConstants::FILTER_VALUE => array_values($possibleCategoryValuesByFieldName),
-            ];
+        $predefinedFiltersDecoded = json_decode($predefinedFilters->getValue(), true);
+
+        if (!$predefinedFiltersDecoded) {
+            return [];
         }
 
-        return [];
+        return $predefinedFiltersDecoded;
     }
 
     /**
