@@ -96,8 +96,26 @@ class TypeConverter
         return true;
     }
 
+    private function arrayWithZeroOrOneElementToNullOrStringValue(array $data): array
+    {
+        foreach ($data as $key => $value) {
+            if (\is_array($value)) {
+                if (0 === \count($value)) {
+                    $data[$key] = null;
+                } elseif (1 === \count($value)) {
+                    $data[$key] = reset($value);
+                }
+            }
+        }
+
+        return $data;
+    }
+
     private function matchTypeByCondition(string $condition, array &$payload): bool
     {
-        return $this->expressionLanguage->evaluate($condition, $payload);
+        return $this->expressionLanguage->evaluate(
+            $condition,
+            $this->arrayWithZeroOrOneElementToNullOrStringValue($payload)
+        );
     }
 }

@@ -214,6 +214,12 @@ class TypeConverterTest extends TestCase
                 ],
                 'expectedResult' => null,
             ],
+            'matchType42WithArrayValue' => [
+                'payload' => [
+                    'CategorieIndividuEvt' => ['EXPOSANT'],
+                ],
+                'expectedResult' => 42,
+            ],
         ];
     }
 }
