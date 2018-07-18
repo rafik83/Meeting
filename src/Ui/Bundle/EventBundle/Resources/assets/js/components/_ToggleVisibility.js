@@ -2,6 +2,7 @@ function ToggleVisibility(element, document)
 {
     this.element = element;
     this.elementToHideId = this.element.getAttribute('data-element-id-to-hide');
+    this.elementClickableToHide = this.element.getAttribute('data-element-clickable-to-hide');
     this.elementToHide = document.getElementById(this.elementToHideId);
     this.displayType = this.element.getAttribute('data-toggle-visibility-display-type');
 
@@ -14,10 +15,16 @@ function ToggleVisibility(element, document)
 
 ToggleVisibility.prototype.onClick = function (event)
 {
+    event.preventDefault();
+
     if (this.elementToHide.style.display === 'none') {
         this.elementToHide.style.display = this.displayType;
     } else {
         this.elementToHide.style.display = 'none';
+    }
+
+    if (this.elementClickableToHide === 'true') {
+        this.element.style.display = 'none';
     }
 };
 
