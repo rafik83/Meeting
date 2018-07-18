@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Clean;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AvailableSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -63,8 +64,12 @@ class RemovePastAvailableSlotCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Start the deletion of the past available slots');
-        $events = $this->eventRepository->findPastEvents($this->dateTime);
+        $output->writeln('Start the deletion of the past available slots of the past month');
+
+        $pastMonthDate = clone $this->dateTime;
+        $pastMonthDate = $pastMonthDate->modify('-1 month');
+
+        $events = $this->eventRepository->findEventsByDateRange($pastMonthDate, $this->dateTime);
         $slots = $this->meetingSlotRepository->findSlotIdsByEvents($events);
 
         $this->availableSlotRepository->deleteForSlotIds($slots);

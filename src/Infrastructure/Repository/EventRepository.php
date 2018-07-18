@@ -313,4 +313,28 @@ class EventRepository implements EventRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     *
+     * @return Event[]
+     */
+    public function findEventsByDateRange(\DateTimeInterface $begin, \DateTimeInterface $end): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->join('event.days', 'day', 'WITH', 'day.endTime <= :end AND day.startTime >= :begin')
+            ->join('event.days', 'otherDay')
+            ->where('NOT (otherDay.endTime > :end)')
+            ->andWhere('NOT (otherDay.startTime < :begin)')
+            ->setParameter('begin', $begin)
+            ->setParameter('end', $end)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
