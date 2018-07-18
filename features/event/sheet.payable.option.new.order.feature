@@ -85,7 +85,6 @@ Feature: Select payable option in sheet
     Then I should be on this page "/fr/sheet/1/order/summary"
     When I follow "package.summary.edit"
     Then I go to this page "/fr/sheet/1/package/step/2"
-    And I should see "package.product.selectOptions"
     And the "options[11][quantity]" field should contain "1"
 
   Scenario: I can pay my new payable option "Option E"

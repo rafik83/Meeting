@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\SearchFacet;
 
+use Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler;
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
 
 class UpdateHandler
@@ -18,12 +20,15 @@ class UpdateHandler
     /** @var SearchFacetRepositoryInterface */
     private $searchFacetRepository;
 
-    /**
-     * @param SearchFacetRepositoryInterface $searchFacetRepository
-     */
-    public function __construct(SearchFacetRepositoryInterface $searchFacetRepository)
-    {
+    /** @var CatalogTagFilterHandler */
+    private $catalogTagFilterHandler;
+
+    public function __construct(
+        SearchFacetRepositoryInterface $searchFacetRepository,
+        CatalogTagFilterHandler $catalogTagFilterHandler
+    ) {
         $this->searchFacetRepository = $searchFacetRepository;
+        $this->catalogTagFilterHandler = $catalogTagFilterHandler;
     }
 
     /**
@@ -31,10 +36,16 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        foreach ($update->searchFacets as $type => $searchFacet) {
+        $this->handleSearchFacets($update->event, $update->persistedSearchFacets, $update->searchFacets);
+        $this->catalogTagFilterHandler->handle($update);
+    }
+
+    private function handleSearchFacets(Event $event, array $persistedSearchFacets, array $searchFacets): void
+    {
+        foreach ($searchFacets as $type => $searchFacet) {
             $found = false;
 
-            foreach ($update->persistedSearchFacets as $persistedSearchFacet) {
+            foreach ($persistedSearchFacets as $persistedSearchFacet) {
                 if ($persistedSearchFacet->getType() === $type) {
                     $found = true;
                     $persistedSearchFacet->setEnabled($searchFacet['enabled']);
@@ -48,7 +59,7 @@ class UpdateHandler
             }
 
             if (false === $found) {
-                $newSearchFacet = new SearchFacet($update->event, $type, $searchFacet['enabled']);
+                $newSearchFacet = new SearchFacet($event, $type, $searchFacet['enabled']);
 
                 foreach ($searchFacet['translations'] as $locale => $translation) {
                     $newSearchFacet->translate($locale, $translation['label'], $translation['placeholder']);

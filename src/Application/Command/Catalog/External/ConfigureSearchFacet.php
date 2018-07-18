@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
 use Proximum\Vimeet\Domain\Model\Catalog\AbstractSearchFacet;
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilterTranslation;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ConfigureSearchFacet
+abstract class ConfigureSearchFacet
 {
     /** @var Event */
     public $event;
@@ -23,6 +25,28 @@ class ConfigureSearchFacet
 
     /** @var array */
     public $searchFacets;
+
+    /** @var CatalogTagFilter[] */
+    public $catalogTagFilters = [];
+
+    /** @var string */
+    public $type;
+
+    public function __construct(array $catalogTagFilters)
+    {
+        /** @var CatalogTagFilter $catalogTagFilter */
+        foreach ($catalogTagFilters as $key => $catalogTagFilter) {
+            $this->catalogTagFilters[$key]['tag'] = $catalogTagFilter->getTag();
+
+            /** @var CatalogTagFilterTranslation $translation */
+            foreach ($catalogTagFilter->getTranslations() as $translation) {
+                $this->catalogTagFilters[$key]['translations'][$translation->getLocale()] = [
+                    'label' => $translation->getLabel(),
+                    'placeholder'=>  $translation->getPlaceholder(),
+                ];
+            }
+        }
+    }
 
     public function prepareSearchFacetFields()
     {

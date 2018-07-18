@@ -107,6 +107,15 @@ class Configuration
     /** @var \DateTimeInterface|null "Date de cloture des inscriptions" */
     private $registrationCloseDate;
 
+    /** @var bool */
+    private $displayParticipantNameOnPlanning = false;
+
+    /** @var bool */
+    private $displayParticipantPositionOnPlanning = false;
+
+    /** @var bool */
+    private $visio = false;
+
     /**
      * @param string $leftColor
      * @param string $rightColor
@@ -495,5 +504,43 @@ class Configuration
     public function hasBackgroundImage(): bool
     {
         return null !== $this->backgroundImage;
+    }
+
+    public function isVisio(): bool
+    {
+        return $this->visio;
+    }
+
+    public function setVisio(bool $visio): void
+    {
+        $this->visio = $visio;
+    }
+
+    /**
+     * @return bool
+     */
+    public function displayParticipantNameOnPlanning(): bool
+    {
+        return $this->displayParticipantNameOnPlanning;
+    }
+
+    /**
+     * @return bool
+     */
+    public function displayParticipantPositionOnPlanning(): bool
+    {
+        return $this->displayParticipantPositionOnPlanning;
+    }
+
+    /**
+     * @param bool $displayParticipantNameOnPlanning
+     * @param bool $displayParticipantPositionOnPlanning
+     */
+    public function setParticipantInfoToDisplayOnPlanning(
+        bool $displayParticipantNameOnPlanning,
+        bool $displayParticipantPositionOnPlanning
+    ): void {
+        $this->displayParticipantNameOnPlanning = $displayParticipantNameOnPlanning;
+        $this->displayParticipantPositionOnPlanning = $displayParticipantPositionOnPlanning;
     }
 }

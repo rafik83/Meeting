@@ -52,7 +52,8 @@ class RecordViewsQueryHandler
                 $comment->getAuthor(),
                 $comment->getText(),
                 RecordView::COMMENT,
-                $comment->getCreatedAt()
+                $comment->getCreatedAt(),
+                $comment->getId()
             );
         }
 

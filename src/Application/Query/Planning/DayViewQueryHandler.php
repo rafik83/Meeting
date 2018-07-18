@@ -108,8 +108,10 @@ class DayViewQueryHandler
             if (TimeOverlap::contains($meeting->getSlot(), $query->day)) {
                 $meetings[] = $this->meetingHandler->handle(
                     new MeetingViewQuery(
+                        $query->event,
                         $meeting,
-                        $query->user
+                        $query->user,
+                        $query->locale
                     )
                 );
             }

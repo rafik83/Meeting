@@ -294,4 +294,23 @@ class EventRepository implements EventRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findPastEvents(\DateTimeInterface $dateTime): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->join('event.days', 'day', 'WITH', 'day.endTime <= :datetime')
+            ->join('event.days', 'otherDay')
+            ->where('NOT (otherDay.endTime > :datetime)')
+            ->setParameter('datetime', $dateTime)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

@@ -19,7 +19,7 @@ validators.participant.alreadyLinkedToASheet: 'This person is already registered
 validators.participant.alreadyLinkedToThisSheet: 'This person is already attached to this sheet'
 validators.participant.canNotRemoveAllParticipants: 'You can not remove all the participants of the sheet'
 validators.participant.mustSelectProduct: 'a product must be selected to add this participant to the sheet'
-validators.participant.remove.hasMeeting: '{1} You cannot delete the participant %participantName% because he has meetings. To request his deletion please contact: %contactInfo% |]1, INF[ You can not delete participants %participantName% because they have meetings. To request their deletion please contact: %contactInfo%'
+validators.participant.remove.hasMeeting: '{1} You cannot delete the participant %participantName% because he has meetings. To request his deletion please contact: %contactInfo%|]1, Inf[ You can not delete participants %participantName% because they have meetings. To request their deletion please contact: %contactInfo%'
 validators.send_code.error.invalidReceiver: 'the phone number does not seem valid'
 validators.sheet.object.productNotValid: 'this product is not valid'
 validators.type.required: 'Required participation type'

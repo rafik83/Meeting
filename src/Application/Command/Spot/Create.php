@@ -64,6 +64,6 @@ class Create
     {
         $this->event    = $event;
         $this->priority = Spot::PRIORITY_MUTUALIZE;
-        $this->visio    = false;
+        $this->visio    = $event->getConfiguration()->isVisio();
     }
 }

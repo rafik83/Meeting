@@ -12,6 +12,13 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\ToggleParticipantVisioCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: console.command }
+
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\OMZ\ExportUserCommand:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
@@ -33,6 +40,13 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@command.event.user.agenda.version.generate_versions_handler'
+            - '@datetime'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Clean\RemovePastAvailableSlotCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\AvailableSlotRepository'
             - '@datetime'
         tags:
             - { name: console.command }

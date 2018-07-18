@@ -52,10 +52,15 @@ final class Tag
     public const SHEET_PHONE                 = 'sheet_phone';
     public const SHEET_DESCRIPTION           = 'sheet_description';
     public const SHEET_LOGO                  = 'sheet_logo';
+    public const SHEET_APPLICATION_DOMAIN    = 'sheet_application_domain';
 
     // Setter
     public const PARTICIPANT_DATA = 'participant_data';
     public const SHEET_DATA       = 'sheet_data';
+
+    public const SHEET_TEMPLATE_TAGS = [
+        self::SHEET_LOGO,
+    ];
 
     /**
      * @return array
@@ -150,6 +155,7 @@ final class Tag
             self::SHEET_PHONE,
             self::SHEET_DESCRIPTION,
             self::SHEET_LOGO,
+            self::SHEET_APPLICATION_DOMAIN,
         ];
     }
 
@@ -173,6 +179,7 @@ final class Tag
             self::SHEET_DESCRIPTION,
             self::SHEET_LOGO,
             self::PARTICIPANT_POSITION,
+            self::SHEET_APPLICATION_DOMAIN,
         ];
     }
 

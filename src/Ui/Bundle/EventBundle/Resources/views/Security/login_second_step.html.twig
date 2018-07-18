@@ -63,5 +63,12 @@
         <section class="important fail">
             <p>{{ error.message|trans }}</p>
         </section>
+        <br/>
+    {% endif %}
+    {% if type is not null and typeDescription is defined and typeDescription is not empty %}
+        <section id="type-description" class="important">
+            {{ typeDescription|html }}
+        </section>
+        <br/>
     {% endif %}
 {% endblock %}

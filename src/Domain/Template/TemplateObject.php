@@ -304,6 +304,14 @@ class TemplateObject extends AbstractChild
     }
 
     /**
+     * @param int|null $selectedProductId
+     */
+    public function setSelectedProductId(?int $selectedProductId = null): void
+    {
+        $this->data['product'] = $selectedProductId;
+    }
+
+    /**
      * @return null|Sheet
      */
     public function getSheet()

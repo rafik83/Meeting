@@ -29,7 +29,9 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\IndexFromScratchCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\ToggleParticipantVisioCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\OMZ\ExportUserCommand;
@@ -404,6 +406,29 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $job->addRelatedEntity($event);
         $job->setExecuteAfter($dateTime);
 
+        $this->setJob($job);
+    }
+
+    public function exportUploadedObjectsBySheets(Event $event, Admin $admin, Event\ExtraData $extraData): void
+    {
+        $job = new Job(ExportUploadedObjectsBySheetsCommand::NAME, [
+            $event->getId(),
+            $extraData->getId(),
+            $admin->getId(),
+        ]);
+
+        $this->setJob($job);
+    }
+
+    public function toggleParticipantVisioForEvent(Event $event, bool $visio): void
+    {
+        $job = new Job(
+            ToggleParticipantVisioCommand::NAME,
+            [
+                $event->getId(),
+                (int)$visio,
+            ]
+        );
         $this->setJob($job);
     }
 }

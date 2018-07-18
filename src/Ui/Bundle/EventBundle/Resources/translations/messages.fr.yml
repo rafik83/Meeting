@@ -298,7 +298,7 @@ order.transaction.list.column.total: Montant
 order.transaction.list.title: 'Liste des transactions'
 order.transaction.mode.bank_card: 'Carte bancaire'
 order.transaction.mode.bank_check: Chèque
-order.transaction.mode.bank_transfer: Transfert
+order.transaction.mode.bank_transfer: Virement
 order.transaction.mode.paypal: Paypal
 order.transaction.no: Aucune
 order.transaction.paypal.description: '%eventId%-%sheetId% : Participation de %sheetName% à l''évènement %eventName%'
@@ -317,8 +317,8 @@ package.participants.delete: 'Supprimer des participants'
 package.participants.included: inclus
 package.payment.bankInfo: 'Coordonnées bancaires'
 package.payment.billingAddress: 'Adresse de facturation'
-package.payment.deposit.title: 'Accompte :'
-package.payment.deposit.toPay: 'Vous pouvez choisir de payer un accompte de %deposit% en sélectionnant les modes de paiement avec accompte'
+package.payment.deposit.title: 'Acompte :'
+package.payment.deposit.toPay: 'Vous pouvez choisir de payer un acompte de %deposit% en sélectionnant les modes de paiement avec acompte'
 package.payment.pay.label: Valider
 package.payment.title: Paiement
 package.payment.total.title: Total
@@ -347,6 +347,7 @@ package.product.quantityMaxInformation: 'Max : %quantityMax%'
 package.product.quantityMin: 'Quantité minimum atteinte'
 package.product.selectedParticipants: 'Participants sélectionnés :'
 package.product.selectOptions: 'Sélectionner vos options'
+package.product.seeMore: '{0}|{1} Voir l''option|]1, Inf[ Voir les %count% options'
 package.product.subjectedToValidationHelp: 'Sous réserve de validation'
 package.product.total: Total
 package.product.totalPrice: '<span class="product-total-price">%price%</span> <sup>%currency% %vatMode%</sup>'

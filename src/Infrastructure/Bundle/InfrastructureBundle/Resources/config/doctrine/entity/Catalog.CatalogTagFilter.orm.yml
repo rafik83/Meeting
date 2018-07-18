@@ -1,0 +1,27 @@
+Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter:
+    type:  entity
+    table: catalog_tag_filter
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        tag:
+            type: string
+            nullable: false
+        type:
+            type: string
+            nullable: false
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilterTranslation
+            mappedBy: catalogTagFilter
+            indexBy: locale
+            cascade: ["persist"]

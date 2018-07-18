@@ -70,6 +70,9 @@ class ConvertToParticipantHandlerTest extends TestCase
         $dataIndexedByTag = ['whatever-data'];
 
         $event = $this->prophesize(Event::class);
+        $configuration = $this->prophesize(Event\Configuration::class);
+        $configuration->isVisio()->shouldBeCalled()->willReturn(false);
+        $event->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
         $event->getAvailableLocale('en')->shouldBeCalled()->willReturn('fr');
         $type = $this->prophesize(Type::class);
 
@@ -159,6 +162,10 @@ class ConvertToParticipantHandlerTest extends TestCase
         $user = $this->prophesize(User::class);
 
         $event = $this->prophesize(Event::class);
+        $configuration = $this->prophesize(Event\Configuration::class);
+        $configuration->isVisio()->shouldBeCalled()->willReturn(false);
+        $event->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
+
         $type = $this->prophesize(Type::class);
 
         $this->userRepository->findByEmail($email)->shouldBeCalled()->willReturn($user->reveal());

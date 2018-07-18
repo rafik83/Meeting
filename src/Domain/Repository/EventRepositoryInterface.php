@@ -107,4 +107,11 @@ interface EventRepositoryInterface
      * @return Event[]
      */
     public function findEventsWithPastSMSActivationDateAndAgendaVersionsNotGenerated(\DateTimeInterface $dateTime): array;
+
+    /**
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return Event[]
+     */
+    public function findPastEvents(\DateTimeInterface $dateTime): array;
 }

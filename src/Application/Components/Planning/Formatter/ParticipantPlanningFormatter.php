@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\View\Planning\day\AssignmentView;
 use Proximum\Vimeet\Application\View\Planning\day\HappeningParticipationView;
 use Proximum\Vimeet\Application\View\Planning\day\MassView;
 use Proximum\Vimeet\Application\View\Planning\day\MeetingView;
+use Proximum\Vimeet\Application\View\Planning\Day\ParticipantMetView;
 use Proximum\Vimeet\Application\View\Planning\day\UnavailabilityView;
 use Proximum\Vimeet\Application\View\Planning\DayView;
 use Proximum\Vimeet\Application\View\Planning\PlanningView;
@@ -27,11 +28,11 @@ use Proximum\Vimeet\Domain\Service\MarkdownFormatter;
 
 class ParticipantPlanningFormatter
 {
-    const TRANSLATION_DOMAIN               = 'messages';
-    const TRANSLATE_MEETING                = 'planning.participant.meeting';
-    const TRANSLATE_MEETING_MULTIPLE_SHEET = 'planning.participant.meeting_multiple_sheet';
-    const TRANSLATE_UNAVAILABILITY         = 'planning.participant.unavailability';
-    const TRANSLATE_TIME_ENTITY            = 'planning.participant.time';
+    public const TRANSLATION_DOMAIN = 'messages';
+    public const TRANSLATE_MEETING  = 'planning.participant.meeting';
+    public const TRANSLATE_MEETING_MULTIPLE_SHEET = 'planning.participant.meeting_multiple_sheet';
+    public const TRANSLATE_UNAVAILABILITY = 'planning.participant.unavailability';
+    public const TRANSLATE_TIME_ENTITY  = 'planning.participant.time';
 
     /** @var TranslatorInterface */
     private $translator;
@@ -130,7 +131,7 @@ class ParticipantPlanningFormatter
     /**
      * @param Event $event
      */
-    public function preloadPlanningHandlerForEvent(Event $event)
+    public function preloadPlanningHandlerForEvent(Event $event): void
     {
         $this->planningViewQueryHandler->preloadForEvent($event);
     }
@@ -138,7 +139,7 @@ class ParticipantPlanningFormatter
     /**
      * @param $event
      */
-    public function resetPlanningHandlerForEvent($event)
+    public function resetPlanningHandlerForEvent($event): void
     {
         $this->planningViewQueryHandler->resetForEvent($event);
     }
@@ -147,7 +148,7 @@ class ParticipantPlanningFormatter
      * @param User[] $users
      * @param Event  $event
      */
-    public function preloadPlanningHandlerForUsersAndEvent(array $users, Event $event)
+    public function preloadPlanningHandlerForUsersAndEvent(array $users, Event $event): void
     {
         $this->planningViewQueryHandler->preloadForEventAndUsers($event, $users);
     }
@@ -159,7 +160,7 @@ class ParticipantPlanningFormatter
      *
      * @return PlanningView
      */
-    private function getPlanningFromUser(Event $event, User $user, $userLocale)
+    private function getPlanningFromUser(Event $event, User $user, $userLocale): PlanningView
     {
         return $this->planningViewQueryHandler->handle(
             new PlanningViewQuery($event, $user, $userLocale)
@@ -322,24 +323,41 @@ class ParticipantPlanningFormatter
     private function formatMeeting(MeetingView $meetingView, $userLocale, $isUserMultipleSheets)
     {
         if (true === $isUserMultipleSheets) {
-            return $this->translator->trans(
+            $meetingTranslation = $this->translator->trans(
                 self::TRANSLATE_MEETING_MULTIPLE_SHEET,
                 [
                     '%userSheet%' => $meetingView->userSheetTitle,
                     '%sheetMet%' => $meetingView->sheetMetTitle,
-                    '%spotRef%'  => $meetingView->spotRef,
+                    '%spotRef%' => $meetingView->spotRef,
+                ],
+                self::TRANSLATION_DOMAIN,
+                $userLocale
+            );
+        } else {
+            $meetingTranslation = $this->translator->trans(
+                self::TRANSLATE_MEETING,
+                [
+                    '%sheetMet%' => $meetingView->sheetMetTitle,
+                    '%spotRef%' => $meetingView->spotRef,
                 ],
                 self::TRANSLATION_DOMAIN,
                 $userLocale
             );
         }
 
-        return $this->translator->trans(
-            self::TRANSLATE_MEETING,
-            ['%sheetMet%' => $meetingView->sheetMetTitle, '%spotRef%'  => $meetingView->spotRef],
-            self::TRANSLATION_DOMAIN,
-            $userLocale
-        );
+        if ($meetingView->hasParticipantsInfo) {
+            $meetingTranslation .= ' - ' . implode(
+                    ', ',
+                    array_map(function (ParticipantMetView $participantMetView) {
+                        $completeName = $participantMetView->completeName;
+                        $position = $participantMetView->position;
+
+                        return trim(sprintf('%s %s', $completeName, $position));
+                    }, $meetingView->participantsMetViews)
+                );
+        }
+
+        return $meetingTranslation;
     }
 
     /**
@@ -347,7 +365,7 @@ class ParticipantPlanningFormatter
      *
      * @return array
      */
-    private function sortChronologicalOrder(array $timeEntities)
+    private function sortChronologicalOrder(array $timeEntities): array
     {
         usort($timeEntities, function (AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
             return $first->begin > $second->begin;
@@ -362,10 +380,10 @@ class ParticipantPlanningFormatter
      *
      * @return string
      */
-    private function getFormattedDate(\IntlDateFormatter $formatter, \DateTimeInterface $date)
+    private function getFormattedDate(\IntlDateFormatter $formatter, \DateTimeInterface $date): string
     {
         $formatted = $formatter->format($date);
 
-        return !is_bool($formatted) ? $formatted : '';
+        return !\is_bool($formatted) ? $formatted : '';
     }
 }

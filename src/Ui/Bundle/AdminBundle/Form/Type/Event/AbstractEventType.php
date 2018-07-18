@@ -192,9 +192,13 @@ abstract class AbstractEventType extends AbstractType
 
         $builder->add('invoicePrefix', ChoiceType::class, $invoicePrefixOptions);
 
-        $builder->add('welcomeEnabled', CheckboxType::class, [
-            'required' => false,
-        ]);
+        $builder
+            ->add('welcomeEnabled', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('visio', CheckboxType::class, [
+                'required' => false,
+            ]);
     }
 
     /**

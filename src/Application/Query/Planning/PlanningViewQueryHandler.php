@@ -131,6 +131,7 @@ class PlanningViewQueryHandler
         foreach ($this->eventDays[$eventId] as $day) {
             $days[] = $this->dayViewQueryHandler->handle(
                 new DayViewQuery(
+                    $query->event,
                     $query->user,
                     $day,
                     $userAvailableLocale,

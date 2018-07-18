@@ -274,6 +274,7 @@ class UpdateHandlerTest extends TestCase
         $update->emailTeam     = 'team-event@example.net';
         $update->invoicePrefix = $prefix;
         $update->visible       = false;
+        $update->displayParticipantNameOnPlanning = true;
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
@@ -299,6 +300,7 @@ class UpdateHandlerTest extends TestCase
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
         $expectedEvent->getTranslations()->set('de', new EventTranslation($expectedEvent, 'de', ''));
+        $expectedEvent->getConfiguration()->setParticipantInfoToDisplayOnPlanning(true, false);
 
         // Mock
         $this->eventRepository->set($expectedEvent)->shouldBeCalled();

@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Domain\View\TypeView;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
@@ -95,9 +96,10 @@ class RegisterController extends Controller
         }
 
         return $this->render('EventBundle:Register:register.html.twig', [
-            'form'     => $form->createView(),
-            'event'    => $eventDomain->getEvent(),
+            'form' => $form->createView(),
+            'event' => $eventDomain->getEvent(),
             'typeView' => $typeView,
+            'typeDescription' => $this->get('markdown')->toHtml($typeView->description),
         ]);
     }
 
@@ -141,10 +143,11 @@ class RegisterController extends Controller
         }
 
         return $this->render('EventBundle:Register:registerNewUser.html.twig', [
-            'email'    => $command->email,
-            'form'     => $form->createView(),
-            'event'    => $eventDomain->getEvent(),
+            'email' => $command->email,
+            'form' => $form->createView(),
+            'event' => $eventDomain->getEvent(),
             'typeView' => $typeView,
+            'typeDescription' => $this->get('markdown')->toHtml($typeView->description),
         ]);
     }
 

@@ -69,7 +69,8 @@ class EventListQueryHandler
                 $event->isVisible(),
                 array_map(function (Day $day) {
                     return new DayView($day->getStartTime(), $day->getEndTime());
-                }, $event->getDays())
+                }, $event->getDays()),
+                $event->getConfiguration()->isVisio()
             );
 
             if (EventListQuery::STATE_ARCHIVED !== $query->state) {
