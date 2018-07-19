@@ -62,4 +62,24 @@ class PackageTest extends TestCase
 
         $this->assertSame([$plan1, $plan3], $package->getAvailablePlans());
     }
+
+    public function testHasAtLeastOneProduct()
+    {
+        $event = EventFactory::createEvent();
+        $dateTime = new \DateTime();
+        $package = new Package($event, 'My event', $dateTime);
+
+        $option1 = $this->prophesize(Product::class);
+        $option1->getId()->willReturn(1);
+        $option1->isOption()->willReturn(true);
+
+        $option2 = $this->prophesize(Product::class);
+        $option2->getId()->willReturn(2);
+        $option2->isOption()->willReturn(true);
+
+        $package->setGroupsOptions([[$option1->reveal(), $option2->reveal()]]);
+
+        $this->assertFalse($package->hasAtLeastOneProduct([3, 4]));
+        $this->assertTrue($package->hasAtLeastOneProduct([3, 2]));
+    }
 }

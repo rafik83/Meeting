@@ -219,7 +219,7 @@ class TemplateObject extends AbstractChild
      */
     public function isBuyable()
     {
-        return null !== $this->getOption('products');
+        return null !== $this->getProducts();
     }
 
     /**
