@@ -356,14 +356,23 @@ class TemplateObject extends AbstractChild
     /**
      * @return bool
      */
-    public function hasOnlyTagUrl()
+    public function hasOnlyTagUrl(): bool
     {
-        if (1 === count($this->getTags())) {
+        if (1 === \count($this->getTags())) {
             $tag = $this->getTags()[0];
 
             if (Tag::SHEET_WEBSITE === $tag['tag']) {
                 return true;
             }
+
+            $taggedData = $this->getTaggedDataViews();
+            $taggedElement = reset($taggedData);
+
+            if ($taggedElement === false) {
+                return false;
+            }
+
+            return $taggedElement->type === AbstractChild::TEMPLATE_OBJECT_TYPE_URL;
         }
 
         return false;
