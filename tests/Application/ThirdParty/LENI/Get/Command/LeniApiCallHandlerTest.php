@@ -39,14 +39,14 @@ class LeniApiCallHandlerTest extends TestCase
             'Id' => 'user-id-1',
             'Email' => 'bruce@willis.usa',
             'Langue' => 'fr',
-            'CreeLe' => '/Date(1000000000000)/'
+            'ModifieLe' => '/Date(1000000000000)/'
         ];
 
         $rawDataUser2 = [
             'Id' => 'user-id-2',
             'Email' => 'ronald@macdonald.food',
             'Langue' => 'en',
-            'CreeLe' => '/Date(2000000000000)/'
+            'ModifieLe' => '/Date(2000000000000)/'
         ];
 
         $event1 = $this->prophesize(Event::class);
@@ -109,10 +109,10 @@ class LeniApiCallHandlerTest extends TestCase
         $leniApi
             ->get(
                 $event1->reveal(),
-                ['field1', 'field2', 'CreeLe'],
+                ['field1', 'field2', 'ModifieLe'],
                 [
                     [
-                        'selectedFieldId' => 'CreeLe',
+                        'selectedFieldId' => 'ModifieLe',
                         'selectedOperator' => 'GREATER_OR_EQUAL',
                         'value' => '/Date(1000000000000)/',
                     ],
@@ -125,7 +125,7 @@ class LeniApiCallHandlerTest extends TestCase
                         ],
                     ],
                 ],
-                ['CreeLe' => 'ASC'],
+                ['ModifieLe' => 'ASC'],
                 0,
                 100
             )
@@ -133,7 +133,7 @@ class LeniApiCallHandlerTest extends TestCase
             ->willReturn([$rawDataUser1, $rawDataUser2])
         ;
         $leniApi
-            ->get($event2->reveal(), ['field1', 'field3', 'CreeLe'], [], ['CreeLe' => 'ASC'], 0, 100)
+            ->get($event2->reveal(), ['field1', 'field3', 'ModifieLe'], [], ['ModifieLe' => 'ASC'], 0, 100)
             ->shouldBeCalled()
             ->willReturn([])
         ;
@@ -186,12 +186,12 @@ class LeniApiCallHandlerTest extends TestCase
         $fieldsByEventQueryHandler
             ->handle(new FieldsByEventQuery($typeMappingEvent1, $customDataMappingEvent1))
             ->shouldBeCalled()
-            ->willReturn(['field1', 'field2', 'CreeLe'])
+            ->willReturn(['field1', 'field2', 'ModifieLe'])
         ;
         $fieldsByEventQueryHandler
             ->handle(new FieldsByEventQuery($typeMappingEvent2, $customDataMappingEvent2))
             ->shouldBeCalled()
-            ->willReturn(['field1', 'field3', 'CreeLe'])
+            ->willReturn(['field1', 'field3', 'ModifieLe'])
         ;
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
@@ -234,7 +234,7 @@ class LeniApiCallHandlerTest extends TestCase
         $eventExtraDataRepository
             ->getExtraDataForEvent(
                 $event1->reveal(),
-                'leni_get_last_created_at'
+                'leni_get_last_updated_at'
             )
             ->shouldBeCalled()
             ->willReturn($eventExtraData->reveal())
@@ -242,7 +242,7 @@ class LeniApiCallHandlerTest extends TestCase
         $eventExtraDataRepository
             ->getExtraDataForEvent(
                 $event2->reveal(),
-                'leni_get_last_created_at'
+                'leni_get_last_updated_at'
             )
             ->shouldBeCalled()
             ->willReturn(null)
@@ -250,7 +250,7 @@ class LeniApiCallHandlerTest extends TestCase
 
         $addOrUpdateEventExtraDataHandler = $this->prophesize(AddOrUpdateHandler::class);
         $addOrUpdateEventExtraDataHandler
-            ->handle(new AddOrUpdate($event1->reveal(), 'leni_get_last_created_at', '/Date(2000000000000)/'))
+            ->handle(new AddOrUpdate($event1->reveal(), 'leni_get_last_updated_at', '/Date(2000000000000)/'))
             ->shouldBeCalled()
         ;
 
