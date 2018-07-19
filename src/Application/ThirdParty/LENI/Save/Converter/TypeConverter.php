@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter;
 
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\TypeDoesNotMatchException;
 use Proximum\Vimeet\Domain\Model\Type;
 
 /**
@@ -22,6 +23,7 @@ class TypeConverter
      * @param array $mapping
      *
      * @return array
+     * @throws TypeDoesNotMatchException
      */
     public function convert(Type $type, array $mapping): array
     {
@@ -45,6 +47,6 @@ class TypeConverter
             }
         }
 
-        return [];
+        throw new TypeDoesNotMatchException();
     }
 }

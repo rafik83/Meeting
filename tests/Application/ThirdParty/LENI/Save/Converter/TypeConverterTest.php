@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Save\Converter;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\TypeDoesNotMatchException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter;
 use Proximum\Vimeet\Domain\Model\Type;
 
@@ -19,7 +20,7 @@ class TypeConverterTest extends TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testConvert(Type $type, array $expected)
+    public function testConvert(Type $type, ?array $expected)
     {
         $mapping = [
             2 => [
@@ -36,9 +37,17 @@ class TypeConverterTest extends TestCase
         ];
 
         $converter = new TypeConverter();
-        $result = $converter->convert($type, $mapping);
 
-        $this->assertEquals($expected, $result);
+        if (null === $expected) {
+            $this->expectException(TypeDoesNotMatchException::class);
+            $converter->convert($type, $mapping);
+
+            return;
+        }
+
+        if (null !== $expected) {
+            $this->assertEquals($expected, $converter->convert($type, $mapping));
+        }
     }
 
     public function dataProvider(): array
@@ -56,9 +65,9 @@ class TypeConverterTest extends TestCase
         return [
             'no-result' => [
                 $type1->reveal(),
-                []
+                null
             ],
-            [
+            'convertType2' => [
                 $type2->reveal(),
                 [
                     'CategorieIndividuEvt' => 'VISITEUR',
@@ -72,7 +81,7 @@ class TypeConverterTest extends TestCase
                     'ZL_PROFIL' => null,
                 ]
             ],
-            [
+            'convertType4' => [
                 $type4->reveal(),
                 []
             ],
