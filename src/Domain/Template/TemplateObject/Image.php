@@ -115,7 +115,7 @@ class Image extends EditableObject implements UploadableObjectInterface
             }
         }
 
-        if ($this->isBuyable() && null === $this->getSelectedProduct()) {
+        if (null === $this->getSelectedProduct()) {
             return false;
         }
 
