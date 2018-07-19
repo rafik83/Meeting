@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\MimeType\MimeType;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Image extends EditableObject implements UploadableObjectInterface
@@ -100,6 +101,18 @@ class Image extends EditableObject implements UploadableObjectInterface
     {
         if (!$this->getProducts()) {
             return true;
+        }
+
+        if ($this->getSheet() instanceof Sheet) {
+            $package = $this->getSheet()->getPackage();
+
+            if (!$package->isPassable()) {
+                return true;
+            }
+
+            if (!$package->hasAtLeastOneProduct($this->getProducts())) {
+                return true;
+            }
         }
 
         if ($this->isBuyable() && null === $this->getSelectedProduct()) {
