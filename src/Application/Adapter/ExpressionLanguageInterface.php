@@ -20,5 +20,5 @@ interface ExpressionLanguageInterface
      *
      * @return string The result of the evaluation of the expression
      */
-    public function evaluate($expression, $values = []);
+    public function evaluate(string $expression, array $values = []): string;
 }
