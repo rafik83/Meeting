@@ -34,7 +34,7 @@
             {% set rowSpanValue = userEventListView.userEventSheetsListViews|length %}
             <tr>
                 <td rowspan="{{ rowSpanValue }}">
-                    <small><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEventListView.userId }) }}">{{ userEventListView.userId }}</a></small>
+                    <small><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEventListView.userId }) }}" target="_blank">{{ userEventListView.userId }}</a></small>
                 </td>
                 <td rowspan="{{ rowSpanValue }}" nowrap>
                     <strong>{{ userEventListView.lastName }}</strong> {{ userEventListView.firstName }}<br>
@@ -48,7 +48,7 @@
                 {% for userEventSheetListView in userEventListView.userEventSheetsListViews %}
                     {% if not loop.first %}<tr>{% endif %}
                         <td>
-                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': userEventSheetListView.id }) }}">{{ userEventSheetListView.title }}</a>
+                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': userEventSheetListView.id }) }}" target="_blank">{{ userEventSheetListView.title }}</a>
 
                             {% if not userEventSheetListView.isEnabled %}
                                 <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
