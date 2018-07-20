@@ -35,6 +35,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Catalog\External\SearchFacetRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\UserRepository
         arguments:
@@ -354,6 +357,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
             - '@domain.event.last_event_participation'
+            - '@Proximum\Vimeet\Application\Components\TemplateData\TemplateDataDuplicator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
@@ -990,6 +994,15 @@ services:
             - '@command.sheet.remove_data_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveImage }
+    Proximum\Vimeet\Application\Command\Sheet\SaveTreeToFileSystemCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
+            - '@adapter.file_system_adapter'
+            - '%shared_uploaded_files%'
+            - '%infrastructure.encrypted_files_path%'
+            - '%kernel.project_dir%/web'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SaveTreeToFileSystemCommand }
     command.sheet.submit_validation_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\SubmitValidationHandler
         arguments:
@@ -1343,6 +1356,23 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ChangeType }
+    Proximum\Vimeet\Application\Command\Sheet\ConvertFilesystemTreeToZipCommandHandler:
+        arguments:
+            - '@repository.file_repository'
+            - '@adapter.file_system_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ConvertFilesystemTreeToZipCommand }
+    Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommand }
     command.product.create_option_handler:
         class: Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler
         arguments:
@@ -1636,6 +1666,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\SearchFacet\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.search_facet'
+            - '@Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\SearchFacet\Update }
     command.payment.abstract_choice_handler:
@@ -2137,6 +2168,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive }
 
+    Proximum\Vimeet\Application\Command\Event\ToggleParticipantVisioCommandHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ToggleParticipantVisioCommand }
+
     command.event.configuration.background.remove_image_handler:
         class: Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImageHandler
         arguments:
@@ -2280,6 +2317,10 @@ services:
             - '@adapter.file_system_adapter'
             - '%kernel.root_dir%/../web'
             - '@datetime'
+    Proximum\Vimeet\Infrastructure\Adapter\TransliteratorAdapter: ~
+    Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter: ~
+    Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter: ~
+    Proximum\Vimeet\Infrastructure\Adapter\ProcessAdapter: ~
     adapter.authentication_manager:
         class: Proximum\Vimeet\Infrastructure\Adapter\AuthenticationManager
         arguments:
@@ -3187,6 +3228,19 @@ services:
             - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
+
+    Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQueryHandler:
+        arguments:
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\TransliteratorAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQuery }
+
+    Proximum\Vimeet\Application\Query\Sheet\GetSheetIdsByFiltersQueryHandler:
+        arguments:
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\GetSheetIdsByFiltersQuery }
 
     query.catalog.catalog_available_slot_ids_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQueryHandler
@@ -4393,6 +4447,16 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommandHandler'
+        tags:
+            - { name: console.command }
+
     command.send_campaign_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendCampaignCommand
         arguments:
@@ -4473,6 +4537,15 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_indexer'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\RemoveExpiredFilesCommand:
+        arguments:
+            - '@repository.file_repository'
+            - '@adapter.file_system_adapter'
+            - '@datetime'
+            - '%shared_uploaded_files%'
         tags:
             - { name: console.command }
 
@@ -4744,6 +4817,7 @@ services:
             - '@repository.catalog_visibility_repository'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@catalog.external.set_search_facet_handler'
+            - '@Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\Configure }
     catalog.external.set_search_facet_handler:
@@ -4752,6 +4826,10 @@ services:
             - '@vimeet_infrastructure.repository.catalog.external.search_facet'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacet }
+
+    Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository'
 
     #
     # Promotion
@@ -5224,6 +5302,7 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@order.merger'
             - '@order.balance'
+            - '@Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler'
         tags:
             - { name: serializer.normalizer }
 
@@ -5636,6 +5715,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Planning\Day\MassViewQueryHandler
     query.planning.day.meeting_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planning\Day\MeetingViewQueryHandler
+        arguments:
+            - '@command.planning.participant_info_guesser_cache'
     query.planning.day.unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planning\Day\UnavailabilityViewQueryHandler
     query.planning.day_view_query_handler:

@@ -2,9 +2,39 @@
 
 {% block body %}
     <p>{{ 'mail.event.sheets_duplicated.subject'|trans({'%eventOrigin%': mail.originEvent.title, '%event%': mail.event.title}, 'mail', mail.locale) }}</p>
-    <ul>
-        {% for sheet in mail.importedSheets %}
-            <li>{{ sheet.title }}</li>
-        {% endfor %}
-    </ul>
+
+    {% if mail.userAlreadyGroupManagerOnSameEvent|length %}
+        <p style="color: red">{{ 'mail.event.sheets_duplicated.userAlreadyGroupManagerOnSameEvent'|trans({'%count%': mail.importedSheets|length}, 'mail', mail.locale) }}</p>
+        <ul>
+            {% for email in mail.userAlreadyGroupManagerOnSameEvent %}
+                <li>{{ email }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if mail.userAlreadyParticipantOrOwnerOnGroupOnSameEvent|length %}
+        <p style="color: red">{{ 'mail.event.sheets_duplicated.userAlreadyParticipantOrOwnerOnGroupOnSameEvent'|trans({}, 'mail', mail.locale) }}</p>
+        <ul>
+            {% for email in mail.userAlreadyParticipantOrOwnerOnGroupOnSameEvent %}
+                <li>{{ email }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <p>{{ 'mail.event.sheets_duplicated.sheetsCount'|trans({'%count%': mail.importedSheets|length}, 'mail', mail.locale) }}</p>
+
+    {% if mail.importedSheets|length %}
+        <table style="width: 100%; border-collapse: collapse;" border="1">
+            <tr>
+                <th>{{ 'mail.event.sheets_duplicated.sheetTitle'|trans({}, 'mail', mail.locale) }}</th>
+                <th>{{ 'mail.event.sheets_duplicated.groupTitle'|trans({}, 'mail', mail.locale) }}</th>
+            </tr>
+            {% for sheet in mail.importedSheets %}
+                <tr>
+                    <td>{{ sheet.title }}</td>
+                    <td>{{ sheet.group ? sheet.group.title : '-' }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 {% endblock %}

@@ -28,6 +28,8 @@ class Event implements EventInterface, TraceableInterface
     /** Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices*/
     const VAT_MODE_ET = 'et';
 
+    public const DOMAIN_VALIDATION_REGEX = '/^[a-z0-9-.]+$/';
+
     /** @var int */
     private $id;
 

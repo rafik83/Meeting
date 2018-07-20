@@ -14,8 +14,8 @@ use IntlDateFormatter;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Invoice\BillingInfosView;
+use Proximum\Vimeet\Application\View\Invoice\Vat\VatListView;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
-use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\View\Invoice\ExportView;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -68,29 +68,26 @@ class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAware
             $invoice->getEvent()->getAvailableLocale($context['locale'])
         );
 
-        $invoiceDate = $this->getFormattedDate(
-            $context['dateFormatter'],
-            $invoice->getCreatedAt()
-        );
+        $invoiceDate = $this->getFormattedDate($context['dateFormatter'], $invoice->getCreatedAt());
 
-        $invoiceExportView = new ExportView(
+        return new ExportView(
             $invoice->getEvent()->getId(),
             $invoice->getEvent()->getTitle(),
             $invoice->getSheet()->getOwner()->getId(),
             $invoice->getSheet()->getId(),
             $sheetTitle,
             $invoice->getNumber(),
+            $invoice->getVatRate(),
             $invoiceDate,
-            AmountFormatter::centsToDecimalAmount($invoice->getTotal()),
-            AmountFormatter::centsToDecimalAmount($invoice->getTotalWithVat()),
-            AmountFormatter::centsToDecimalAmount($invoice->getVatAmount()),
-            AmountFormatter::centsToDecimalAmount($this->balance->getBalance($invoice->getSheet())),
+            $invoice->getTotal(),
+            $invoice->getTotalWithVat(),
+            $invoice->getVatAmount(),
+            $this->balance->getBalance($invoice->getSheet()),
             $invoice->getEvent()->getConfiguration()->getAnalyticsCode(),
             $billingInfo->vatNumber,
-            $billingInfo->country
+            $billingInfo->country,
+            $this->getVatListView($data, $format, $context)
         );
-
-        return $invoiceExportView;
     }
 
     /**
@@ -99,6 +96,17 @@ class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAware
     public function supportsDenormalization($data, $type, $format = null)
     {
         return ExportView::class === $type && isset($data['billingInfosView']);
+    }
+
+    private function getVatListView($data, $format, array $context): ?VatListView
+    {
+        if (isset($data['vatListView'])) {
+            return $this
+                ->denormalizer
+                ->denormalize($data['vatListView'], VatListView::class, $format, $context);
+        }
+
+        return null;
     }
 
     /**

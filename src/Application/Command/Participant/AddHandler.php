@@ -156,7 +156,13 @@ class AddHandler
             Tag::PARTICIPANT_LASTNAME  => $add->lastName,
         ]);
 
-        $participant = new Participant($add->sheet, $user, $templateData->getData(), false);
+        $participant = new Participant(
+            $add->sheet,
+            $user,
+            $templateData->getData(),
+            false,
+            $add->sheet->getEvent()->getConfiguration()->isVisio()
+        );
         $this->participantRepository->add($participant);
 
         $add->sheet->addParticipant($participant);

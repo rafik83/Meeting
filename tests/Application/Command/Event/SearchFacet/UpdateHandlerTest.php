@@ -12,8 +12,11 @@ namespace Proximum\Vimeet\Tests\Application\Command\Event\SearchFacet;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler;
 use Proximum\Vimeet\Application\Command\Event\SearchFacet\Update;
 use Proximum\Vimeet\Application\Command\Event\SearchFacet\UpdateHandler;
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilterTranslation;
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
@@ -24,6 +27,7 @@ class UpdateHandlerTest extends TestCase
     {
         $event = $this->prophesize(Event::class);
         $event->getLocales()->willReturn(['fr', 'en']);
+        $catalogTagFilterHandler = $this->prophesize(CatalogTagFilterHandler::class);
 
         $searchFacets = [
             new SearchFacet($event->reveal(), 'structure', true),
@@ -31,7 +35,13 @@ class UpdateHandlerTest extends TestCase
             new SearchFacet($event->reveal(), 'keywords', true),
         ];
 
-        $update = new Update($event->reveal(), $searchFacets);
+        $ct1 = new CatalogTagFilter($event->reveal(), 'sheet_title', 'internal');
+        $ct1->addTranslation(new CatalogTagFilterTranslation('fr', 'label', 'placeholder'));
+
+        $ct2 = new CatalogTagFilter($event->reveal(), 'sheet_description', 'internal');
+        $ct2->addTranslation(new CatalogTagFilterTranslation('fr', 'label2', 'placeholder2'));
+
+        $update = new Update($event->reveal(), $searchFacets, [$ct1, $ct2]);
         $update->searchFacets = [
             'type' => [
                 'enabled' => true,
@@ -132,6 +142,8 @@ class UpdateHandlerTest extends TestCase
         $expectedFacetOther3->translate('en', 'Position', 'Position placeholder en');
         $expectedFacetOther3->translate('fr', 'Position', 'Position placeholder fr');
 
+        $catalogTagFilterHandler->handle($update)->shouldBeCalled();
+
         $searchFacetRepository = $this->prophesize(SearchFacetRepositoryInterface::class);
         $searchFacetRepository->set(Argument::that(function (SearchFacet $searchFacet) use ($expectedFacetOne) {
             return $searchFacet->getType() === $expectedFacetOne->getType()
@@ -189,7 +201,7 @@ class UpdateHandlerTest extends TestCase
                 ;
         }))->shouldBeCalled();
 
-        $handler = new UpdateHandler($searchFacetRepository->reveal());
+        $handler = new UpdateHandler($searchFacetRepository->reveal(), $catalogTagFilterHandler->reveal());
         $handler->handle($update);
     }
 }

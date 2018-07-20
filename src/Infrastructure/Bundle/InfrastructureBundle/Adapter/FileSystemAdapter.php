@@ -59,4 +59,20 @@ class FileSystemAdapter implements FileSystemAdapterInterface
     {
         $this->fileSystem->rename($origin, $target, $overwrite);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mkdir($dirs, int $mode = 0777): void
+    {
+        $this->fileSystem->mkdir($dirs);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): void
+    {
+        $this->fileSystem->copy($originFile, $targetFile, $overwriteNewerFiles);
+    }
 }

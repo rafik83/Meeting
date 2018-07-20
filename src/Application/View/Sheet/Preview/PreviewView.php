@@ -41,21 +41,24 @@ class PreviewView
     /** @var string */
     public $populatedFromTag;
 
-    /**
-     * @param string     $id
-     * @param string     $content
-     * @param string     $type
-     * @param CardView[] $cardViews
-     * @param bool       $link
-     */
-    public function __construct($id, $content, $type, array $cardViews = [], bool $link = false)
-    {
-        $this->id        = $id;
-        $this->content   = $content;
-        $this->type      = $type;
+    /** @var bool */
+    public $canDisplayImage;
+
+    public function __construct(
+        string $id,
+        string $content,
+        string $type,
+        array $cardViews = [],
+        bool $link = false,
+        bool $canDisplayImage = true
+    ) {
+        $this->id = $id;
+        $this->content = $content;
+        $this->type = $type;
         $this->cardViews = $cardViews;
-        $this->tagViews  = [];
-        $this->link      = $link;
+        $this->tagViews = [];
+        $this->link = $link;
+        $this->canDisplayImage = $canDisplayImage;
     }
 
     /**

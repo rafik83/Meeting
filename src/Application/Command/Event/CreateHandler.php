@@ -116,6 +116,8 @@ class CreateHandler
             $create->backgroundColor
         );
 
+        $event->getConfiguration()->setVisio($create->visio);
+
         if (null !== $create->logo) {
             $logoExtension = $this->fileStorage->getExtension($create->logo);
             $logoPath      = $this->fileStorage->upload($create->logo);

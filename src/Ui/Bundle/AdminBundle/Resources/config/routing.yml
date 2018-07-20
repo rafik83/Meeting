@@ -714,12 +714,37 @@ admin_sheet_details:
         sheet: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction }
+admin_sheet_remove_comment:
+    path: /event/{event}/sheet/{sheet}/remove/comment/{comment}
+    requirements:
+        event: \d+
+        sheet: \d+
+        comment: \d+
+    methods: [DELETE]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\RemoveCommentAction }
+admin_event_export_uploaded_objets:
+    path: /event/{event}/export/uploaded-objects
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\ExportUploadedObjectsBySheetsAction }
+admin_event_download_uploaded_objets:
+    path: /event/{event}/download/uploaded-objects/{hash}/{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DownloadUploadedObjectsZipAction }
 admin_sheet_batch:
     path: /event/{event}/sheet/batch
     requirements:
         event: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:batch }
+admin_demo_qr_code_reader:
+    path: /demo/qr_code_reader
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\DemoQrCodeReaderAction }
 admin_sheet_export_sheet:
     path: /event/{event}/sheet/export/sheet
     requirements:
@@ -783,6 +808,13 @@ admin_sheet_order_list:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Order:list }
+admin_sheet_orders_cancel:
+    path: /event/{event}/sheet/{sheet}/orders/cancel
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [DELETE]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Order\CancelAction }
 admin_sheet_order_edit:
     path: /event/{event}/order/{order}/edit
     requirements:

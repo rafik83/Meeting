@@ -398,6 +398,17 @@ class Package
         );
     }
 
+    public function hasAtLeastOneProduct(array $productIds): bool
+    {
+        foreach ($this->getOptions() as $option) {
+            if (\in_array($option->getId(), $productIds, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param array $plans
      *

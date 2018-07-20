@@ -20,6 +20,8 @@ interface CommentRepositoryInterface
      */
     public function add(Comment $comment);
 
+    public function remove(Comment $comment): void;
+
     /**
      * @param Sheet $sheet
      *

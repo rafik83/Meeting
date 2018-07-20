@@ -265,7 +265,7 @@ class Invoice
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getVatRate()
     {

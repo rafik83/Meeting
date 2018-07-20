@@ -12,7 +12,8 @@ namespace Proximum\Vimeet\Application\Components\Group;
 
 use Proximum\Vimeet\Application\Command\Group\DuplicateToEvent;
 use Proximum\Vimeet\Application\Command\Group\DuplicateToEventHandler;
-use Proximum\Vimeet\Domain\Exception\Group\Duplicate\CanNotDuplicateToTheSameEventException;
+use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
+use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
 use Proximum\Vimeet\Domain\Exception\Group\Duplicate\GroupAlreadyDuplicatedInGivenEventException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
@@ -33,7 +34,8 @@ class GroupDuplicator
      *
      * @return Group
      *
-     * @throws CanNotDuplicateToTheSameEventException
+     * @throws UserAlreadyGroupManagerOnSameEventException
+     * @throws UserAlreadyParticipantOrOwnerOnGroupOnSameEventException
      */
     public function duplicateToEvent(Group $group, Event $event): Group
     {

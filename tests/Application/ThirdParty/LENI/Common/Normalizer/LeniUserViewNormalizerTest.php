@@ -38,7 +38,7 @@ class LeniUserViewNormalizerTest extends TestCase
         $leniUserView = new LeniUserView(
             1337,
             true,
-            'Star Fleet',
+            'Star Fleet - Paris II Pantéon - Assas Sorbonne; Centre Thucydide pour le droit et les relations internationales',
             369,
             963,
             'James Tiberius Kirk',
@@ -70,7 +70,7 @@ class LeniUserViewNormalizerTest extends TestCase
         $expectedLeniUserViewSerialized = [
             'Cab2' => '1337',
             'CleExterne' => 1337,
-            'Societe' => 'Star Fleet',
+            'Societe' => 'Star Fleet - Paris II Pantéon - Assas Sorbonne; Centre Thucydide pour le droit et les relations inte',
             'CategorieIndividuEvt' => '963',
             'ZL_SOUSCATEGORIE' => '369',
             'Civilite' => 'M',

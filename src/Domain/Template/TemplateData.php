@@ -12,11 +12,32 @@ namespace Proximum\Vimeet\Domain\Template;
 
 class TemplateData extends Block
 {
-    /**
-     * @return array
-     */
-    public function getConfig()
+    public function getConfig(): array
     {
-        return $this->normalize();
+        $normalizedConfig = $this->normalize();
+
+        return \is_array($normalizedConfig) ? $normalizedConfig : [];
+    }
+
+    public function sanitizedDataWithoutType(array $types = []): void
+    {
+        if (empty($types)) {
+            return;
+        }
+
+        foreach ($this->getObjects() as $objectKey => $object) {
+            $data = $object->getData();
+            $sanitizedData = $data;
+
+            if (\is_array($data)) {
+                foreach ($data as $key => $datum) {
+                    if (\in_array($key, $types, true)) {
+                        unset($sanitizedData[$key]);
+                    }
+                }
+            }
+
+            $object->setData($sanitizedData);
+        }
     }
 }

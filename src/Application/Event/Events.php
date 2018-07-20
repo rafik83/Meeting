@@ -16,6 +16,7 @@ final class Events
     public const SHEET_ACCEPTED = 'sheet.accepted';
     public const SHEET_PENDING = 'sheet.pending';
     public const SHEET_REFUSED = 'sheet.refused';
+    public const SHEET_ORDERS_CANCELLED = 'sheet.orders.cancelled';
     public const SHEET_INVITATION_CLOSE_TO_EXPIRATION = 'sheet.invitation.close_to_expiration';
     public const SHEET_ADD_PARTICIPANT_CONFIRMATION = 'sheet.participant.add.confirmation';
     public const SHEET_CHANGED_TYPE = 'sheet.changed_type';
@@ -52,6 +53,7 @@ final class Events
     public const REQUEST_UPDATE_MESSAGE = 'meeting_request.update.message';
     public const MEETING_UPDATE_MESSAGE = 'meeting.update.message';
     public const EVENT_PRE_REGISTERED = 'event.preregistered';
+    public const EVENT_VISIO_UPDATED = 'event.visio.updated';
     public const EVENT_LOCALE_CHANGED = 'event.locale_changed';
     public const EVENT_KEY_DATES_UPDATED = 'event.key_dates.updated';
     public const EVENT_SHEETS_DUPLICATED = 'event.sheets.updated';

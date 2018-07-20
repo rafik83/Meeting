@@ -9,8 +9,7 @@ Proximum\Vimeet\Application\Command\Event\Create:
             - Length:
                 max: 63
             - Regex:
-                pattern: '/^\S*$/'
-                message: validators.whitespace
+                pattern: !php/const:Proximum\Vimeet\Domain\Model\Event::DOMAIN_VALIDATION_REGEX
         timeZone:
             - NotBlank: ~
         locales:

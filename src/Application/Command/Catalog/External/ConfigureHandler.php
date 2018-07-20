@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
+use Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
@@ -24,25 +25,31 @@ class ConfigureHandler
     /** @var SetSearchFacetHandler */
     private $setSearchFacetHandler;
 
-    /**
-     * @param CatalogVisibilityRepositoryInterface $catalogVisibilityRepository
-     * @param EventRepositoryInterface             $eventRepository
-     * @param SetSearchFacetHandler                $setSearchFacetHandler
-     */
+    /** @var CatalogTagFilterHandler */
+    private $catalogTagFilterHandler;
+
     public function __construct(
         CatalogVisibilityRepositoryInterface $catalogVisibilityRepository,
         EventRepositoryInterface $eventRepository,
-        SetSearchFacetHandler $setSearchFacetHandler
+        SetSearchFacetHandler $setSearchFacetHandler,
+        CatalogTagFilterHandler $catalogTagFilterHandler
     ) {
         $this->catalogVisibilityRepository = $catalogVisibilityRepository;
         $this->eventRepository             = $eventRepository;
         $this->setSearchFacetHandler       = $setSearchFacetHandler;
+        $this->catalogTagFilterHandler     = $catalogTagFilterHandler;
     }
 
     /**
      * @param Configure $command
      */
     public function handle(Configure $command)
+    {
+        $this->handleConfigure($command);
+        $this->catalogTagFilterHandler->handle($command);
+    }
+
+    private function handleConfigure(Configure $command): void
     {
         $catalogVisibility = $command->catalogVisibility;
 

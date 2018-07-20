@@ -23,9 +23,6 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class ParticipantViewQueryHandler
 {
-    /** @var null|\IntlDateFormatter */
-    private $timeFormatter;
-
     /** @var HappeningParticipationRepositoryInterface */
     private $happeningParticipationRepository;
 
@@ -57,15 +54,6 @@ class ParticipantViewQueryHandler
 
     public function handle(ParticipantViewQuery $query): ParticipantView
     {
-        if (null === $this->timeFormatter) {
-            $this->timeFormatter = \IntlDateFormatter::create(
-                $query->locale,
-                \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::NONE,
-                $query->event->getTimeZone()
-            );
-        }
-
         $registrationData = $this->getRegistrationData($query->participant, $query->locale);
 
         $participantProductId = null !== $query->participant->getParticipantProduct()
@@ -83,7 +71,7 @@ class ParticipantViewQueryHandler
             $query->participant->getUser()->getId(),
             $query->participant->getId(),
             $query->participant->getEmail(),
-            $this->timeFormatter->format($query->participant->getSheet()->getCreatedAt()),
+            $query->participant->getSheet()->getCreatedAt()->format('Y-m-d'),
             $this->happeningParticipationRepository->hasParticipationForUserAndEvent(
                 $query->participant->getUser(),
                 $query->event

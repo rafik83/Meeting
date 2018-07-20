@@ -24,6 +24,11 @@
                             {{ 'admin.sheet.export.participant.button.label'|trans }}
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ path('admin_event_export_uploaded_objets', {'event': event.id}) }}">
+                            {{ 'admin.sheet.export.uploaded_objects.button.label'|trans }}
+                        </a>
+                    </li>
                 </ul>
             </div>
 

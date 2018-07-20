@@ -26,5 +26,7 @@ manala_deploy_removed:
 manala_deploy_tasks:
   - make: install@prod
   - make: migration@prod
+
+manala_deploy_post_tasks:
   - command: sudo /usr/sbin/service php7.2-fpm reload
   - command: sudo supervisorctl restart all

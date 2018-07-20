@@ -20,7 +20,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Balance;
@@ -38,7 +37,6 @@ use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
-use Proximum\Vimeet\Domain\Template\TemplateObject\Tag;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 use Proximum\Vimeet\Infrastructure\Elastica\Transformer\SheetElasticTransformer;
 
@@ -82,8 +80,6 @@ class SheetElasticTransformerTest extends TestCase
         $event->getId()->willReturn(66);
         $event->getLocales()->willReturn(['fr', 'en']);
         $event->getFallback()->willReturn('fr');
-
-        $spot = $this->prophesize(Spot::class);
 
         $meetingSlot1 = $this->prophesize(MeetingSlot::class);
         $meetingSlot1->getId()->willReturn(11);
@@ -132,7 +128,7 @@ class SheetElasticTransformerTest extends TestCase
         $sheet->isInCatalog()->willReturn(true);
         $sheet->attend()->willReturn(true);
         $sheet->hasGroup()->willReturn(true);
-        $sheet->getSpot()->willReturn($spot->reveal());
+        $sheet->hasSpot()->willReturn(true);
         $sheet->getAvailableSlots()->willReturn(
             [
                 $availableSlot1->reveal(),

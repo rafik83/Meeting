@@ -112,4 +112,11 @@ interface MeetingSlotRepositoryInterface
      * @return bool
      */
     public function hasActiveSlot(Event $event): bool;
+
+    /**
+     * @param Event[] $events
+     *
+     * @return int[]
+     */
+    public function findSlotIdsByEvents(array $events): array;
 }

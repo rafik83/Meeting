@@ -10,125 +10,91 @@
 
 namespace Proximum\Vimeet\Domain\View\Invoice;
 
+use Proximum\Vimeet\Application\View\Invoice\Vat\VatListView;
+
 class ExportView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $eventId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $eventTitle;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $ownerId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $sheetTitle;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $invoiceNumber;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $total;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $totalWithVat;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $vatAmount;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $balance;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $billingInfoCountry;
 
-    /**
-     * @var string
-     */
+    /** @var null|string */
     public $vatNumber;
 
-    /**
-     * @var string
-     */
+    /** @var float */
+    public $vatRate;
+
+    /** @var null|string */
     public $analyticsCode;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $invoiceDate;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $sheetId;
 
-    /**
-     * ExportView constructor.
-     *
-     * @param int    $eventId
-     * @param string $eventTitle
-     * @param int    $ownerId
-     * @param int    $sheetId
-     * @param string $sheetTitle
-     * @param string $invoiceNumber
-     * @param string $invoiceDate
-     * @param int    $total
-     * @param int    $totalWithVat
-     * @param int    $vatAmount
-     * @param int    $balance
-     * @param string $analyticsCode
-     * @param string $vatNumber
-     * @param string $billingInfoCountry
-     */
+    /** @var null|VatListView */
+    public $vatListView;
+
     public function __construct(
-        $eventId,
-        $eventTitle,
-        $ownerId,
-        $sheetId,
-        $sheetTitle,
-        $invoiceNumber,
-        $invoiceDate,
-        $total,
-        $totalWithVat,
-        $vatAmount,
-        $balance,
-        $analyticsCode,
-        $vatNumber,
-        $billingInfoCountry
+        int $eventId,
+        string $eventTitle,
+        int $ownerId,
+        int $sheetId,
+        string $sheetTitle,
+        string $invoiceNumber,
+        float $vatRate,
+        string $invoiceDate,
+        int $total,
+        int $totalWithVat,
+        int $vatAmount,
+        int $balance,
+        ?string $analyticsCode,
+        ?string $vatNumber,
+        string $billingInfoCountry,
+        ?VatListView $vatListView
     ) {
-        $this->eventId            = $eventId;
-        $this->eventTitle         = $eventTitle;
-        $this->ownerId            = $ownerId;
-        $this->sheetTitle         = $sheetTitle;
-        $this->invoiceNumber      = $invoiceNumber;
-        $this->total              = $total;
-        $this->totalWithVat       = $totalWithVat;
-        $this->vatAmount          = $vatAmount;
-        $this->balance            = $balance;
-        $this->analyticsCode      = $analyticsCode;
-        $this->invoiceDate        = $invoiceDate;
-        $this->vatNumber          = $vatNumber;
+        $this->eventId = $eventId;
+        $this->eventTitle = $eventTitle;
+        $this->ownerId = $ownerId;
+        $this->sheetTitle = $sheetTitle;
+        $this->invoiceNumber = $invoiceNumber;
+        $this->vatRate = $vatRate;
+        $this->total = $total;
+        $this->totalWithVat = $totalWithVat;
+        $this->vatAmount = $vatAmount;
+        $this->balance = $balance;
+        $this->analyticsCode = $analyticsCode;
+        $this->invoiceDate = $invoiceDate;
+        $this->vatNumber = $vatNumber;
         $this->billingInfoCountry = $billingInfoCountry;
-        $this->sheetId            = $sheetId;
+        $this->sheetId = $sheetId;
+        $this->vatListView = $vatListView;
     }
 }

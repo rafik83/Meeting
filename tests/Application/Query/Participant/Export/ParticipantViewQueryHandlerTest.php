@@ -99,7 +99,7 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $this->participant->getSheet()->willReturn($this->sheet->reveal());
         $this->sheet->getType()->willReturn($this->type->reveal());
         $this->participant->getUser()->willReturn($this->user->reveal());
-        $this->dateTime = new \DateTime('2017-10-10 10:10:10.000');
+        $this->dateTime = new \DateTime('2017-10-09 13:39:34.000');
         $this->sheet->getCreatedAt()->willReturn($this->dateTime);
         $this->event->getTimeZone()->willReturn('Europe/Paris');
 
@@ -216,7 +216,7 @@ class ParticipantViewQueryHandlerTest extends TestCase
             123,
             1234,
             'email@example.net',
-            '10/10/2017',
+            '2017-10-09',
             false,
             true,
             12345,

@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker;
 
 class DuplicateToEventHandlerTest extends TestCase
 {
@@ -36,8 +37,12 @@ class DuplicateToEventHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $event;
 
+    /** @var ObjectProphecy */
+    private $userToGroupManagerChecker;
+
     public function setUp()
     {
+        $this->userToGroupManagerChecker = $this->prophesize(UserToGroupManagerChecker::class);
         $this->groupRepository = $this->prophesize(GroupRepositoryInterface::class);
         $this->dateTime = new \DateTime();
         $this->group = $this->prophesize(Group::class);
@@ -54,6 +59,7 @@ class DuplicateToEventHandlerTest extends TestCase
         $command = new DuplicateToEvent($this->group->reveal(), $this->event->reveal());
         $handler = new DuplicateToEventHandler(
             $this->groupRepository->reveal(),
+            $this->userToGroupManagerChecker->reveal(),
             $this->dateTime
         );
 
@@ -78,6 +84,7 @@ class DuplicateToEventHandlerTest extends TestCase
         $command = new DuplicateToEvent($this->group->reveal(), $this->event->reveal());
         $handler = new DuplicateToEventHandler(
             $this->groupRepository->reveal(),
+            $this->userToGroupManagerChecker->reveal(),
             $this->dateTime
         );
 
@@ -99,6 +106,16 @@ class DuplicateToEventHandlerTest extends TestCase
         $this->group->getManager()->willReturn($manager->reveal());
         $this->group->getTitle()->willReturn('title');
 
+        $this
+            ->userToGroupManagerChecker
+            ->isUserToGroupManagerAllowed(
+                $this->event->reveal(),
+                $manager->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
         $expectedGroup = new Group(
             $this->event->reveal(),
             $manager->reveal(),
@@ -112,6 +129,7 @@ class DuplicateToEventHandlerTest extends TestCase
         $command = new DuplicateToEvent($this->group->reveal(), $this->event->reveal());
         $handler = new DuplicateToEventHandler(
             $this->groupRepository->reveal(),
+            $this->userToGroupManagerChecker->reveal(),
             $this->dateTime
         );
 

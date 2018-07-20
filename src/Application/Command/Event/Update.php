@@ -35,6 +35,15 @@ class Update extends AbstractEvent
     /** @var bool */
     public $disabledPasswordChanging;
 
+    /** @var bool */
+    public $displayParticipantNameOnPlanning;
+
+    /** @var bool */
+    public $displayParticipantPositionOnPlanning;
+
+    /** @var bool */
+    public $visio;
+
     /**
      * @param Model\Event $event
      */
@@ -63,6 +72,9 @@ class Update extends AbstractEvent
         $this->welcomeEnabled = $event->isWelcomeEnabled();
         $this->disabledEmailChanging = $event->isDisabledEmailChanging();
         $this->disabledPasswordChanging = $event->isDisabledPasswordChanging();
+        $this->displayParticipantPositionOnPlanning = $event->getConfiguration()->displayParticipantPositionOnPlanning();
+        $this->displayParticipantNameOnPlanning = $event->getConfiguration()->displayParticipantNameOnPlanning();
+        $this->visio = $event->getConfiguration()->isVisio();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

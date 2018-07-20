@@ -87,14 +87,14 @@ class TemplateDataFactory
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
+     * @param Sheet       $sheet
+     * @param null|string $locale
      *
      * @return TemplateData
      */
-    public function createFromSheet(Sheet $sheet, ?string $locale): TemplateData
+    public function createFromSheet(Sheet $sheet, ?string $locale = null): TemplateData
     {
-        return $this
+        $templateData = $this
             ->loadNomenclatures($sheet->getEvent())
             ->create(
                 $sheet->getType()->getSheetTemplate()->getValue(),
@@ -102,6 +102,12 @@ class TemplateDataFactory
                 $locale,
                 $sheet->getType()->getSheetTemplate()->getFallback()
             );
+
+        foreach ($templateData->getObjects() as $templateObject) {
+            $templateObject->setSheet($sheet);
+        }
+
+        return $templateData;
     }
 
     /**
@@ -239,12 +245,12 @@ class TemplateDataFactory
     /**
      * @param array  $template
      * @param array  $data
-     * @param string $locale
+     * @param null|string $locale
      * @param string $fallback
      *
      * @return TemplateData
      */
-    public function create(array $template, array $data = [], $locale = null, $fallback = null)
+    public function create(array $template, array $data = [], ?string $locale = null, $fallback = null)
     {
         $templateData = new TemplateData('root', [], $locale, $fallback);
 

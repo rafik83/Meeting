@@ -217,6 +217,7 @@ services:
     Proximum\Vimeet\Application\Command\Group\DuplicateToEventHandler:
         arguments:
             - '@repository.sheet.group_repository'
+            - '@user_to_group_manager_checker'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\DuplicateToEvent }
@@ -260,3 +261,13 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Create }
+
+    #
+    # Order
+    #
+    Proximum\Vimeet\Application\Command\Order\CancelAllHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Sheet\ChangeType\CancelPackageHandler'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\CancelAll }

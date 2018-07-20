@@ -3,6 +3,9 @@
         <div class="dropdown">
             <a href="#" class="dropdown-toggle" type="button" data-toggle="dropdown">
                 {{ event.title }}
+                {% if event.visio %}
+                    <i class="glyphicon glyphicon-facetime-video"></i>
+                {% endif %}
                 <span class="caret"></span>
             </a>
             {% if event.visible == false %}

@@ -73,3 +73,9 @@ services:
     Proximum\Vimeet\Domain\Sheet\HasRemainingToPay:
         arguments:
             - '@order.balance'
+
+    Proximum\Vimeet\Domain\Sheet\Product\SelectedProductAssigner:
+        arguments:
+            - '@template.template_data_factory'
+            - '@order.merger'
+            - '@vimeet_infrastructure.repository.sheet_repository'

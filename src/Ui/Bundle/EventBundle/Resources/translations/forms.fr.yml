@@ -72,14 +72,14 @@ form.participate.children.participants.unavailable: Indisponible
 form.participate.children.question.label: 'Posez une question aux intervenants pour préparer l''atelier'
 form.participate.children.submit.label: Participer
 form.participate.children.submitUpdate.label: Modifier
-form.payment_choice_with_deposit.children.deposit.label: 'Choisissez si vous souhaitez payer le total ou l''accompte'
-form.payment_choice_with_deposit.children.depositMode.deposit: Accompte
+form.payment_choice_with_deposit.children.deposit.label: 'Choisissez si vous souhaitez payer le total ou l''acompte'
+form.payment_choice_with_deposit.children.depositMode.deposit: Acompte
 form.payment_choice_with_deposit.children.depositMode.total: Total
 form.payment_choice_with_deposit.children.mode.label: 'Choisissez votre mode de paiement'
 form.payment_choice.children.mode.label: 'Choisissez votre mode de paiement'
 form.payment_choice.children.paymentMode.bank_card: 'Carte bancaire'
 form.payment_choice.children.paymentMode.bank_check: Chèque
-form.payment_choice.children.paymentMode.bank_transfer: Transfert
+form.payment_choice.children.paymentMode.bank_transfer: Virement
 form.payment_choice.children.paymentMode.paypal: 'Carte bancaire ou Paypal'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'

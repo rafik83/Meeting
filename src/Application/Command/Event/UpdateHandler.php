@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveIma
 use Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImageHandler;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Event\Event\LocaleChangedEvent;
+use Proximum\Vimeet\Application\Event\Event\VisioUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
@@ -81,10 +82,12 @@ class UpdateHandler
         $isLocalesUpdated = $update->isLocalesUpdated();
         $backgroundUpdated = $update->isBackgroundUpdated();
 
-        if ($update->domain !== $update->event->getDomain()
-            && null !== $this->eventRepository->getEventByDomain($update->domain)
-        ) {
-            throw new DomainAlreadyUsedException(sprintf('Given domain %s', $update->domain));
+        if ($update->domain !== $update->event->getDomain()) {
+            $foundEvent = $this->eventRepository->getEventByDomain($update->domain);
+
+            if (null !== $foundEvent && $update->event !== $foundEvent) {
+                throw new DomainAlreadyUsedException(sprintf('Given domain %s', $update->domain));
+            }
         }
 
         $event = $update->event;
@@ -111,6 +114,20 @@ class UpdateHandler
             $update->rightColor,
             $update->textColor,
             $update->backgroundColor
+        );
+
+        if ($event->getConfiguration()->isVisio() !== $update->visio) {
+            $this->eventDispatcher->dispatch(
+                Events::EVENT_VISIO_UPDATED,
+                new VisioUpdatedEvent($update)
+            );
+        }
+
+        $event->getConfiguration()->setVisio($update->visio);
+
+        $event->getConfiguration()->setParticipantInfoToDisplayOnPlanning(
+            $update->displayParticipantNameOnPlanning,
+            $update->displayParticipantPositionOnPlanning
         );
 
         $update->event->getConfiguration()->setAnalyticsCode($update->analyticsCode);

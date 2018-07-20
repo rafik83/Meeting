@@ -90,6 +90,7 @@ abstract class AbstractEventType extends AbstractType
             ])
             ->add('domain', TextType::class, [
                 'placeholder' => 'form.event_create.children.domain.placeholder',
+                'help' => 'form.event_create.children.domain.help'
             ])
             ->add('timeZone', TimezoneType::class)
             ->add('fallback', LocaleType::class, [
@@ -191,9 +192,13 @@ abstract class AbstractEventType extends AbstractType
 
         $builder->add('invoicePrefix', ChoiceType::class, $invoicePrefixOptions);
 
-        $builder->add('welcomeEnabled', CheckboxType::class, [
-            'required' => false,
-        ]);
+        $builder
+            ->add('welcomeEnabled', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('visio', CheckboxType::class, [
+                'required' => false,
+            ]);
     }
 
     /**
