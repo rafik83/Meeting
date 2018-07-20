@@ -394,7 +394,7 @@ sync-db-from-prod@preprod:
 	  scp vimeet-prod1:prod.sql prod.sql; \
 	  ssh vimeet-prod1 "rm prod.sql"; \
 	  scp prod.sql vimeet-preprod:prod.sql; \
-	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT(id, '@example.net')\" && bin/console doctrine:query:sql \"UPDATE user_event_phone SET phone = 'undefined'\" && bin/console doctrine:migrations:migrate && bin/console vimeet:event:build-guideline-asset && bin/console vimeet:elasticsearch:index --env=prod"; \
+	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT('user-', id, '@example.net')\" && bin/console doctrine:query:sql \"UPDATE user_event_phone SET phone = 'undefined'\" && bin/console doctrine:query:sql \"UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')\" && bin/console doctrine:migrations:migrate && bin/console vimeet:event:build-guideline-asset && bin/console vimeet:elasticsearch:index --env=prod"; \
 	fi
 
 endif
