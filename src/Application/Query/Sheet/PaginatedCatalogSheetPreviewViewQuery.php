@@ -43,6 +43,9 @@ class PaginatedCatalogSheetPreviewViewQuery
     /** @var array */
     public $sheetsToExclude;
 
+    /** @var bool */
+    public $showCategory;
+
     /**
      * @param Event  $event
      * @param array  $filters
@@ -53,6 +56,7 @@ class PaginatedCatalogSheetPreviewViewQuery
      * @param User   $user
      * @param array  $availableSlotIds
      * @param array  $sheetsToExclude
+     * @param bool   $showCategory
      */
     public function __construct(
         Event $event,
@@ -63,16 +67,18 @@ class PaginatedCatalogSheetPreviewViewQuery
         Sheet $viewer,
         User $user,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        bool $showCategory = false
     ) {
-        $this->event            = $event;
-        $this->filters          = $filters;
-        $this->page             = $page;
-        $this->limit            = $limit;
-        $this->locale           = $locale;
-        $this->viewer           = $viewer;
-        $this->user             = $user;
+        $this->event = $event;
+        $this->filters = $filters;
+        $this->page = $page;
+        $this->limit = $limit;
+        $this->locale = $locale;
+        $this->viewer = $viewer;
+        $this->user = $user;
         $this->availableSlotIds = $availableSlotIds;
         $this->sheetsToExclude  = $sheetsToExclude;
+        $this->showCategory = $showCategory;
     }
 }

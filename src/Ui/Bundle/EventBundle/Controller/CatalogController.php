@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
@@ -181,6 +182,8 @@ class CatalogController extends Controller
 
         $filters = array_merge(Catalog::DEFAULT_FILTERS, $filters);
 
+        $searchFacetView = $this->get('tactician.commandbus.query')->handle(new SearchFacetViewQuery($event, $locale));
+
         try {
             /** @var PaginatedResult $paginatedResult */
             $paginatedResult = $this->get('tactician.commandbus.query')->handle(
@@ -193,7 +196,8 @@ class CatalogController extends Controller
                     $sheet,
                     $user,
                     $availableSlotsIds,
-                    $sheetsToExclude
+                    $sheetsToExclude,
+                    $searchFacetView->hasCategory()
                 )
             );
         } catch (UnavailableCurrentPageException $exception) {
