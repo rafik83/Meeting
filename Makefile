@@ -271,7 +271,7 @@ init-db:
 	  bin/console doctrine:schema:drop --force; \
 	  bin/console doctrine:schema:create; \
 	  bin/console doctrine:fixtures:load -n; \
-	  bin/console fos:elastica:populate; \
+	  bin/console vimeet:elasticsearch:index; \
 	  bin/console vimeet:event:build-guideline-asset; \
 	fi
 
@@ -280,7 +280,7 @@ init-db@test:
 	bin/console doctrine:schema:create --env=test
 	bin/console doctrine:fixtures:load -n --env=test
 	bin/console cache:clear --env=test
-	bin/console fos:elastica:populate --env=test
+	bin/console vimeet:elasticsearch:index --env=test
 
 migration@prod:
 	bin/console doctrine:migrations:migrate --no-interaction
@@ -383,7 +383,7 @@ post-import-db@vm:
 	bin/console doctrine:query:sql "UPDATE user_event_phone SET phone = 'undefined'"
 	bin/console doctrine:migrations:migrate
 	bin/console vimeet:event:build-guideline-asset
-	bin/console fos:elastica:populate --env=dev --no-debug
+	bin/console vimeet:elasticsearch:index --env=dev
 
 sync-db-from-prod@preprod:
 	read -p "You are about to sync preprod DB from prod db, please confirm (y/n)?" CONFIRM; \
@@ -394,7 +394,7 @@ sync-db-from-prod@preprod:
 	  scp vimeet-prod1:prod.sql prod.sql; \
 	  ssh vimeet-prod1 "rm prod.sql"; \
 	  scp prod.sql vimeet-preprod:prod.sql; \
-	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT(id, '@example.net')\" && bin/console doctrine:query:sql \"UPDATE user_event_phone SET phone = 'undefined'\" && bin/console doctrine:migrations:migrate && bin/console vimeet:event:build-guideline-asset && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"; \
+	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT(id, '@example.net')\" && bin/console doctrine:query:sql \"UPDATE user_event_phone SET phone = 'undefined'\" && bin/console doctrine:migrations:migrate && bin/console vimeet:event:build-guideline-asset && bin/console vimeet:elasticsearch:index --env=prod"; \
 	fi
 
 endif
