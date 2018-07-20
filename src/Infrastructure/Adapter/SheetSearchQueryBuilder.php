@@ -767,33 +767,18 @@ class SheetSearchQueryBuilder
 
         $booleanFilters = (array) $booleanFilters;
 
-        $hasNestedMust = false;
-        $hasNestedMustNot = false;
-
-        $nestedMust    = new Nested();
-        $boolQueryMust = new BoolQuery();
-
-        $nestedMustNot    = new Nested();
-        $boolQueryMustNot = new BoolQuery();
-
         foreach ($booleanFilters as $key => $isFiltered) {
+            $boolQuery = new BoolQuery();
+            $boolQuery->addMust((new Match())->setField('booleanFilter.key', $key));
+
+            $nested = new Nested();
+            $nested->setQuery($boolQuery)->setPath('booleanFilter');
+
             if (true === $isFiltered) {
-                $boolQueryMust->addMust((new Match())->setField('booleanFilter.key', $key));
-                $hasNestedMust = true;
+                $this->query->addMust($nested);
             } elseif (false === $isFiltered) {
-                $boolQueryMustNot->addMust((new Match())->setField('booleanFilter.key', $key));
-                $hasNestedMustNot = true;
+                $this->query->addMustNot($nested);
             }
-        }
-
-        if (true === $hasNestedMust) {
-            $nestedMust->setQuery($boolQueryMust)->setPath('booleanFilter');
-            $this->query->addMust($nestedMust);
-        }
-
-        if (true === $hasNestedMustNot) {
-            $nestedMustNot->setQuery($boolQueryMustNot)->setPath('booleanFilter');
-            $this->query->addMustNot($nestedMustNot);
         }
     }
 
