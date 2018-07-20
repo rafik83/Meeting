@@ -58,8 +58,7 @@
         "twig/twig": "~1.35",
         "tilleuls/ovh-bundle": "^1.0.1",
         "league/iso3166": "^2.1",
-        "defuse/php-encryption": "^2.2",
-        "friendsofphp/php-cs-fixer": "^2.12"
+        "defuse/php-encryption": "^2.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
@@ -76,7 +75,8 @@
         "friends-of-behat/performance-extension": "^1.0",
         "phpspec/prophecy": "^1.7",
         "friends-of-behat/context-service-extension": "^1.0",
-        "nelmio/alice": "2.1.4"
+        "nelmio/alice": "2.1.4",
+        "friendsofphp/php-cs-fixer": "^2.12"
     },
     "scripts": {
         "symfony-scripts": [
