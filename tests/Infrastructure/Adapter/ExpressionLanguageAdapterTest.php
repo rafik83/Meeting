@@ -23,7 +23,7 @@ class ExpressionLanguageAdapterTest extends TestCase
         $expression = "speciality === 'MachineLearning' | speciality in ['IA', 'DeepLearning'] & turnover > 10";
 
         $expressionLanguageAdapter = new ExpressionLanguageAdapter();
-        $this->assertEquals($expectedResult, $expressionLanguageAdapter->evaluate($expression, $data));
+        $this->assertEquals($expectedResult, (bool) $expressionLanguageAdapter->evaluate($expression, $data));
     }
 
     public function dataProvider()

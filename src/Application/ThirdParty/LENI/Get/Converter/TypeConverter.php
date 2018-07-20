@@ -113,7 +113,7 @@ class TypeConverter
 
     private function matchTypeByCondition(string $condition, array &$payload): bool
     {
-        return $this->expressionLanguage->evaluate(
+        return (bool) $this->expressionLanguage->evaluate(
             $condition,
             $this->arrayWithZeroOrOneElementToNullOrStringValue($payload)
         );
