@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route;
 
 use Proximum\Vimeet\Application\Components\Home\HomeDispatch;
 use Proximum\Vimeet\Application\Components\Home\HomeDispatchAnonymousUser;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter;
@@ -33,24 +35,26 @@ class HomeUserDispatcher
     /** @var AuthorizationCheckerAdapter */
     private $authorizationChecker;
 
-    /**
-     * HomeUserDispatcher constructor.
-     *
-     * @param Router                      $router
-     * @param HomeDispatch                $homeDispatch
-     * @param HomeDispatchAnonymousUser   $homeDispatchAnonynmousUser
-     * @param AuthorizationCheckerAdapter $authorizationChecker
-     */
+    /** @var DDayGuesser */
+    private $dayGuesser;
+
+    /** @var AgendaAccessChecker */
+    private $agendaAccessChecker;
+
     public function __construct(
         Router $router,
         HomeDispatch $homeDispatch,
         HomeDispatchAnonymousUser $homeDispatchAnonynmousUser,
-        AuthorizationCheckerAdapter $authorizationChecker
+        AuthorizationCheckerAdapter $authorizationChecker,
+        DDayGuesser $dayGuesser,
+        AgendaAccessChecker $agendaAccessChecker
     ) {
         $this->router = $router;
         $this->homeDispatch = $homeDispatch;
         $this->homeDispatchAnonymousUser = $homeDispatchAnonynmousUser;
         $this->authorizationChecker = $authorizationChecker;
+        $this->dayGuesser = $dayGuesser;
+        $this->agendaAccessChecker = $agendaAccessChecker;
     }
 
     /**
@@ -89,6 +93,13 @@ class HomeUserDispatcher
                 return new RedirectResponse($this->router->generate(
                     'event_sheet_group_index',
                     ['sheetGroup' => $homeDispatchView->getGroup()->getId()]
+                ));
+            }
+
+            if ($this->dayGuesser->isItDDay($event) && $this->agendaAccessChecker->allowedToAccess($event)) {
+                return new RedirectResponse($this->router->generate(
+                    'event_agenda',
+                    ['sheet' => $homeDispatchView->getSheet()->getId()]
                 ));
             }
 
