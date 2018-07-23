@@ -372,6 +372,13 @@ axios@^0.15.3:
   dependencies:
     follow-redirects "1.0.0"
 
+axios@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.17.1.tgz#2d8e3e5d0bdbd7327f91bc814f5c57660f81824d"
+  dependencies:
+    follow-redirects "^1.2.5"
+    is-buffer "^1.1.5"
+
 babel-code-frame@^6.11.0, babel-code-frame@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-6.26.0.tgz#63fd43f7dc1e3bb7ce35947db8fe369a3f58c74b"
@@ -1040,7 +1047,7 @@ bootstrap-sass@3.3.6:
   version "3.3.6"
   resolved "https://registry.yarnpkg.com/bootstrap-sass/-/bootstrap-sass-3.3.6.tgz#363b0d300e868d3e70134c1a742bb17288444fd1"
 
-bootstrap@^3.3, bootstrap@^3.3.7:
+"bootstrap@>=3.1.0 <4", bootstrap@^3.3, bootstrap@^3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
 
@@ -1977,6 +1984,10 @@ detect-node@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.3.tgz#a2033c09cc8e158d37748fbde7507832bd6ce127"
 
+dexie@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/dexie/-/dexie-2.0.4.tgz#6027a5e05879424e8f9979d8c14e7420f27e3a11"
+
 diffie-hellman@^5.0.0:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/diffie-hellman/-/diffie-hellman-5.0.2.tgz#b5835739270cfe26acf632099fded2a07f209e5e"
@@ -2045,6 +2056,10 @@ domutils@1.5.1:
   dependencies:
     dom-serializer "0"
     domelementtype "1"
+
+dot@>=1.0.3:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/dot/-/dot-1.1.2.tgz#c7377019fc4e550798928b2b9afeb66abfa1f2f9"
 
 download@^4.4.1:
   version "4.4.3"
@@ -2609,6 +2624,12 @@ follow-redirects@1.0.0:
 follow-redirects@^1.0.0:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.2.tgz#5a9d80e0165957e5ef0c1210678fc5c4acb9fb03"
+  dependencies:
+    debug "^3.1.0"
+
+follow-redirects@^1.2.5:
+  version "1.5.7"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.7.tgz#a39e4804dacb90202bca76a9e2ac10433ca6a69a"
   dependencies:
     debug "^3.1.0"
 
@@ -3628,6 +3649,22 @@ isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
 
+jQuery-QueryBuilder@^2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/jQuery-QueryBuilder/-/jQuery-QueryBuilder-2.5.2.tgz#be337dc3ec01a35380fa0f7ee9366a5fc75a0dd1"
+  dependencies:
+    bootstrap ">=3.1.0 <4"
+    dot ">=1.0.3"
+    jquery "^3.3.1"
+    jquery-extendext ">=0.1.2"
+    moment "^2.21.0"
+
+jquery-extendext@>=0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/jquery-extendext/-/jquery-extendext-0.1.2.tgz#d45b548b512d174a2a733d7ac2448b90456c7156"
+  dependencies:
+    jquery ">=1.9.1"
+
 jquery-mousewheel@~3.1.13:
   version "3.1.13"
   resolved "https://registry.yarnpkg.com/jquery-mousewheel/-/jquery-mousewheel-3.1.13.tgz#06f0335f16e353a695e7206bf50503cb523a6ee5"
@@ -3639,6 +3676,10 @@ jquery@2.1.1:
 jquery@>=1.7, jquery@>=1.9, "jquery@^1.8.3 || ^2.0 || ^3.0":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
+
+jquery@>=1.9.1, jquery@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
 js-base64@^2.1.8:
   version "2.3.2"
@@ -4273,6 +4314,10 @@ moment-timezone@^0.4.0, moment-timezone@^0.4.1:
   version "2.19.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.1.tgz#56da1a2d1cbf01d38b7e1afc31c10bcfa1929167"
 
+moment@^2.21.0:
+  version "2.22.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+
 moment@~2.18.0:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
@@ -4641,6 +4686,20 @@ onetime@^1.0.0:
 opentok-layout-js@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/opentok-layout-js/-/opentok-layout-js-0.5.1.tgz#907d8af955542e9e41b67df281645bde052b7efa"
+
+opentok-network-test-js@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/opentok-network-test-js/-/opentok-network-test-js-1.1.0.tgz#c370d32977e464af39d98b5bc1ec5e37ceceaedd"
+  dependencies:
+    axios "^0.17.1"
+    opentok-solutions-logging "^1.0.14"
+    promise "^8.0.1"
+
+opentok-solutions-logging@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/opentok-solutions-logging/-/opentok-solutions-logging-1.0.14.tgz#6f36a698e1c7d3360dc54f97195a191d02d175ec"
+  dependencies:
+    axios "^0.15.3"
 
 opn@^5.1.0:
   version "5.3.0"
@@ -5158,6 +5217,12 @@ progress@^1.1.8:
 promise@^7.1.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
+  dependencies:
+    asap "~2.0.3"
+
+promise@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/promise/-/promise-8.0.1.tgz#e45d68b00a17647b6da711bf85ed6ed47208f450"
   dependencies:
     asap "~2.0.3"
 

@@ -48,6 +48,20 @@ services:
             - '%kernel.project_dir%/web'
 
     #
+    # Visio
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\CreateTestNetworkSessionAction:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@adapter.router'
+
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\TestNetworkSessionAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+
+    #
     # Agenda
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ParticipantTimezoneAction:
@@ -74,13 +88,3 @@ services:
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\EBadgePdfPrinter'
-
-    #
-    # Agenda
-    #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ParticipantTimezoneAction:
-        arguments:
-            - '@templating.engine.twig'
-            - '@form.factory'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@router'
