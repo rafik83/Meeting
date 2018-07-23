@@ -38,14 +38,22 @@
             {% for meeting in meetings.results %}
                 <tr>
                     <td>
-                        <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetFromId }) }}" target="_blank">
+                        {% if is_granted('ROLE_ALLOWED_TO_HOST') %}
                             {{ meeting.sheetNameFrom }}
-                        </a>
+                        {% else %}
+                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetFromId }) }}" target="_blank">
+                                {{ meeting.sheetNameFrom }}
+                            </a>
+                        {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetToId }) }}" target="_blank">
+                        {% if is_granted('ROLE_ALLOWED_TO_HOST') %}
                             {{ meeting.sheetNameTo }}
-                        </a>
+                        {% else %}
+                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetToId }) }}" target="_blank">
+                                {{ meeting.sheetNameTo }}
+                            </a>
+                        {% endif %}
                     </td>
                     <td>
                         {{ meeting.slotBegin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}

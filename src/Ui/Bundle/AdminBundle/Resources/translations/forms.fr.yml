@@ -148,6 +148,7 @@ form.create_admin.role.operator: Collaborateur
 form.create_admin.role.organizer: Organisateur
 form.create_admin.role.partner: Partenaire
 form.create_admin.role.super_admin: Administrateur
+form.create_admin.role.host: Hôte
 form.create_operator.children.email.label: Email
 form.create_operator.children.events.label: 'Événements disponibles pour ce collaborateur'
 form.create_operator.children.firstname.label: Prénom
@@ -305,6 +306,7 @@ form.filter_admin.role.all: 'Tous les types'
 form.filter_admin.role.operator: Collaborateur
 form.filter_admin.role.organizer: Organisateur
 form.filter_admin.role.partner: Partenaire
+form.filter_admin.role.host: Hôte
 form.filter_admin.role.super_admin: Admin
 form.filter_operator.children.submit.label: Filtrer
 form.filter_operator.event.all: 'Tous les événements'

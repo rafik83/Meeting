@@ -236,6 +236,14 @@
     </li>
 {% endif %}
 
+{% if is_granted('ROLE_HOST') %}
+    <li>
+        <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">
+            {{ 'admin.meeting.link'|trans }}
+        </a>
+    </li>
+{% endif %}
+
 {% if is_granted('ROLE_ALLOWED_TO_OPERATE') %}
     <li>
         <a href="{{ path('admin_sheets_group_list', { 'event': event.id }) }}">

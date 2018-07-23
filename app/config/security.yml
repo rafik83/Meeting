@@ -108,12 +108,15 @@ security:
         - { path: ^/(fr|en)/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
         - { path: ^/(fr|en)/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
         - { path: ^/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event$', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/past', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/archived', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event$', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event/past', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event/archived', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/sheet', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%admin_domain%' }
         - { path: ^/(fr|en)/account, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event/[0-9]+/meeting-request', role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event/[0-9]+/meeting', roles: [ROLE_ALLOWED_TO_ADMIN, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
+        - { path: ^/(fr|en)/logout, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
         - { path: ^/, role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
         # Front
         - { path: '^/([a-z]{2})/sheet', role: ROLE_USER }
@@ -127,14 +130,16 @@ security:
             - 'ROLE_ALLOWED_TO_MANAGE_SHEET'
             - 'ROLE_ALLOWED_TO_MANAGE_USER'
             - 'ROLE_ALLOWED_TO_OPERATE'
-            - 'ROLE_ALLOWED_TO_PARTNER'
         ROLE_ALLOWED_TO_PARTNER:
             - 'ROLE_ALLOWED_TO_SWITCH'
             - 'ROLE_ALLOWED_TO_ACCOUNT'
             - 'ROLE_ALLOWED_TO_MANAGE_SHEET'
             - 'ROLE_ALLOWED_TO_MANAGE_USER'
+        ROLE_ALLOWED_TO_HOST:
+            - 'ROLE_ALLOWED_TO_ACCOUNT'
 
         ROLE_SUPER_ADMIN: ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_ORGANIZE']
         ROLE_ORGANIZER:   ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_ORGANIZE']
         ROLE_OPERATOR:    ['ROLE_ALLOWED_TO_ADMIN']
         ROLE_PARTNER:     ['ROLE_ALLOWED_TO_PARTNER']
+        ROLE_HOST:        ['ROLE_ALLOWED_TO_HOST']

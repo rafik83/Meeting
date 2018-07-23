@@ -18,12 +18,14 @@
             {{ meeting.slot.begin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }} >
             {{ meeting.slot.end|localizeddate('none', 'short', app.request.locale, event.timeZone) }}
         </span>
-        <span class="label label-success">
-            <a href="{{ path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting.requestId}) }}" style="color: white;">
-                <i class="glyphicon glyphicon-link"></i>
-                {{ 'event.meeting.details.request'|trans }}
-            </a>
-        </span>
+        {% if not is_granted('ROLE_ALLOWED_TO_HOST') %}
+            <span class="label label-success">
+                <a href="{{ path('admin_meeting_request_details', {'event': event.id, 'meetingRequest': meeting.requestId}) }}" style="color: white;">
+                    <i class="glyphicon glyphicon-link"></i>
+                    {{ 'event.meeting.details.request'|trans }}
+                </a>
+            </span>
+        {% endif %}
     </h1>
 
     <div class="row">
@@ -55,13 +57,15 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-offset-10 col-md-2">
-            <div class="panel panel-warning">
-                <div class="panel-body text-center">
-                    {{ delete_button(path('admin_meeting_delete', {'event': event.id, 'meeting': meeting.meetingId, }), 'admin.meeting.action.remove.link'|trans, {'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.meeting.action.remove.confirm'|trans})}}
+        {% if not is_granted('ROLE_ALLOWED_TO_HOST') %}
+            <div class="col-md-offset-10 col-md-2">
+                <div class="panel panel-warning">
+                    <div class="panel-body text-center">
+                        {{ delete_button(path('admin_meeting_delete', {'event': event.id, 'meeting': meeting.meetingId, }), 'admin.meeting.action.remove.link'|trans, {'class': 'btn btn-sm btn-danger', 'data-confirm': 'admin.meeting.action.remove.confirm'|trans})}}
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     </div>
     <div class="form-group submit-section">
         <div class="col-sm-3">

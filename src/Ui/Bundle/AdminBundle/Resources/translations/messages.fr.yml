@@ -674,6 +674,7 @@ admin.promotion_code.table.column.validUntil: 'Valide jusqu''au'
 admin.promotion_code.table.no_result: 'Aucun code promo'
 admin.promotion_code.title: 'Codes promos'
 admin.promotion_code.update: 'Modifier code promo'
+admin.role.ROLE_HOST: Hôte
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
 admin.role.ROLE_PARTNER: Partenaire
