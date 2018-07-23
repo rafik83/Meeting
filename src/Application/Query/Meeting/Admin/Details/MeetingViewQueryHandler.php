@@ -16,28 +16,29 @@ use Proximum\Vimeet\Application\View\Meeting\Admin\Details\ParticipantView;
 use Proximum\Vimeet\Application\View\Meeting\Admin\Details\SheetView;
 use Proximum\Vimeet\Application\View\Meeting\Admin\Details\SlotView;
 use Proximum\Vimeet\Application\View\Meeting\Admin\Details\SpotView;
+use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\UserEvent\UserEventPhoneChecker;
 
 class MeetingViewQueryHandler
 {
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
-    /**
-     * @param SheetInfoGuesser       $sheetInfoGuesser
-     * @param ParticipantInfoGuesser $participantInfoGuesser
-     */
-    public function __construct(SheetInfoGuesser $sheetInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    /** @var UserEventPhoneChecker */
+    private $userEventPhoneChecker;
+
+    public function __construct(
+        SheetInfoGuesser $sheetInfoGuesser,
+        ParticipantInfoGuesser $participantInfoGuesser,
+        UserEventPhoneChecker $userEventPhoneChecker
+    ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->userEventPhoneChecker = $userEventPhoneChecker;
     }
 
     /**
@@ -64,14 +65,22 @@ class MeetingViewQueryHandler
         $toParticipants   = [];
 
         foreach ($meeting->getFromParticipants()->toArray() as $fromParticipant) {
+            $userEventPhone = $this->userEventPhoneChecker
+                ->getValidatedUserEventPhone($fromParticipant->getUser(), $meeting->getEvent());
+
             $fromParticipants[] = new ParticipantView(
-                $this->participantInfoGuesser->guessParticipantCompleteName($fromParticipant, $locale)
+                $this->participantInfoGuesser->guessParticipantCompleteName($fromParticipant, $locale),
+                $userEventPhone instanceof UserEventPhone ? $userEventPhone->getPhone() : null
             );
         }
 
         foreach ($meeting->getToParticipants()->toArray() as $toParticipant) {
+            $userEventPhone = $this->userEventPhoneChecker
+                ->getValidatedUserEventPhone($toParticipant->getUser(), $meeting->getEvent());
+
             $toParticipants[] = new ParticipantView(
-                $this->participantInfoGuesser->guessParticipantCompleteName($toParticipant, $locale)
+                $this->participantInfoGuesser->guessParticipantCompleteName($toParticipant, $locale),
+                $userEventPhone instanceof UserEventPhone ? $userEventPhone->getPhone() : null
             );
         }
 

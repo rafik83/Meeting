@@ -4325,6 +4325,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
+            - '@domain.user_event.user_event_phone_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\Admin\Details\MeetingViewQuery }
 
