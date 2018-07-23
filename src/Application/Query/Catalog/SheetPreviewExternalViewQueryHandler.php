@@ -40,7 +40,7 @@ class SheetPreviewExternalViewQueryHandler
 
     private function getTypeOrCategoryTitle(bool $showCategory, Sheet $sheet, string $locale): string
     {
-        if ($showCategory === false) {
+        if (false === $showCategory) {
             return $sheet->getType()->getTitle($locale);
         }
 

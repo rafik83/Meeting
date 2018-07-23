@@ -57,17 +57,15 @@ class SheetPreviewExternalViewQueryHandlerTest extends TestCase
      */
     public function testHandleWithCategory(Sheet $sheet, string $locale, Event $event)
     {
-        // Mock
         $preview = $this->prophesize(Preview::class);
 
         $preview->getPreview($sheet, $locale)
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $query   = new SheetPreviewExternalViewQuery($sheet, $locale, $event, true);
+        $query = new SheetPreviewExternalViewQuery($sheet, $locale, $event, true);
         $handler = new SheetPreviewExternalViewQueryHandler($preview->reveal());
 
-        // Expected
         $expectedPreviewExternalView = new CatalogSheetPreviewExternalView(1, 'Proximum', 'Fournisseur, Exposant', [], $sheet);
 
         $sheetPreviewExternalView = $handler->handle($query);
