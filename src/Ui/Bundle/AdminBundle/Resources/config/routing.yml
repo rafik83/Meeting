@@ -523,7 +523,7 @@ admin_meeting_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Meeting:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\ListAction }
 
 admin_meeting_details:
     path: /event/{event}/meeting/{meeting}/details
