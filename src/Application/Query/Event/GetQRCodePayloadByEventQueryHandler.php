@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
 use Proximum\Vimeet\Application\View\Event\QRCodePayloadListView;
 use Proximum\Vimeet\Application\View\Event\QRCodePayloadView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
@@ -64,9 +65,9 @@ class GetQRCodePayloadByEventQueryHandler
 
             $qrCodePayloadListView[] = new QRCodePayloadView(
                 $this->getQrCodeIdentifier($query->event, $user),
-                $participantInfo['participant_firstname'] ?? null,
-                $participantInfo['participant_lastname'] ?? null,
-                $this->getSheetTitle($query->event, $user)
+                $participantInfo['participant_firstname'] ?? '',
+                $participantInfo['participant_lastname'] ?? '',
+                $this->getSheetTitle($query->event, $user, $participant->getSheet())
             );
 
             $identifiedUsers[] = $user->getId();
@@ -75,10 +76,10 @@ class GetQRCodePayloadByEventQueryHandler
         return new QRCodePayloadListView($qrCodePayloadListView);
     }
 
-    private function getSheetTitle(Event $event, User $user): ?string
+    private function getSheetTitle(Event $event, User $user, Sheet $sheet): ?string
     {
         try {
-            return $this->groupNameResolver->resolve($event, $user);
+            return $this->groupNameResolver->resolve($event, $user, [$sheet]);
         } catch (SheetNotFoundException $exception) {
             return null;
         }

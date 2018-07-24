@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\View\Event\QRCodePayloadListView;
 use Proximum\Vimeet\Application\View\Event\QRCodePayloadView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
@@ -28,6 +29,8 @@ class GetQRCodePayloadByEventQueryHandlerTest extends TestCase
 {
     public function testHandle(): void
     {
+        $sheet = $this->prophesize(Sheet::class);
+
         $user1 = $this->prophesize(User::class);
         $user1->getId()->shouldBeCalled()->willReturn(1);
         $user2 = $this->prophesize(User::class);
@@ -35,10 +38,12 @@ class GetQRCodePayloadByEventQueryHandlerTest extends TestCase
 
         $participant1 = $this->prophesize(Participant::class);
         $participant1->getUser()->shouldBeCalled()->willReturn($user1->reveal());
+        $participant1->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
         $participant2 = $this->prophesize(Participant::class);
         $participant2->getUser()->shouldBeCalled()->willReturn($user1->reveal());
         $participant3 = $this->prophesize(Participant::class);
         $participant3->getUser()->shouldBeCalled()->willReturn($user2->reveal());
+        $participant3->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
 
         $event = $this->prophesize(Event::class);
         $queryBus = $this->prophesize(QueryBusInterface::class);
@@ -72,11 +77,11 @@ class GetQRCodePayloadByEventQueryHandlerTest extends TestCase
                 "participant_lastname" => "Modric",
             ]);
 
-        $groupNameResolver->resolve($event->reveal(), $user1->reveal())
+        $groupNameResolver->resolve($event->reveal(), $user1->reveal(), [$sheet->reveal()])
             ->shouldBeCalled()
             ->willReturn('France');
 
-        $groupNameResolver->resolve($event->reveal(), $user2->reveal())
+        $groupNameResolver->resolve($event->reveal(), $user2->reveal(), [$sheet->reveal()])
             ->shouldBeCalled()
             ->willReturn('Croatie');
 

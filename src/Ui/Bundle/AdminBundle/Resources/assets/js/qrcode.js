@@ -1,11 +1,43 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import QrReader from 'react-qr-reader';
+import db from './vendor/db';
 
-class QrCode extends React.Component {
-    handleScan(data) {
-        if (data) {
-            alert(data);
+class QrCode extends Component {
+    constructor() {
+        super();
+
+        this.state = {
+            display: false,
+            error: false,
+            result: null
+        };
+
+        this.element = document.querySelector('#qrcode');
+
+        this.handleScan = this.handleScan.bind(this);
+        this.handleError = this.handleError.bind(this);
+        this.handleReset = this.handleReset.bind(this);
+    }
+
+    componentDidMount() {
+        let data = JSON.parse(this.element.dataset.payloads);
+
+        db.table('qrCodePayloads').clear();
+        db.table('qrCodePayloads').bulkAdd(data).then(() => {
+            this.setState({ display: true });
+        });
+    }
+
+    handleScan(payload) {
+        if (payload) {
+            db.table('qrCodePayloads').get(payload).then(result => {
+                if (result) {
+                    this.setState({ display: false, error: false, result: result });
+                } else {
+                    this.setState({ display: false, error: true, result: null });
+                }
+            });
         }
     }
 
@@ -15,15 +47,55 @@ class QrCode extends React.Component {
         }
     }
 
-    render() {
+    handleReset() {
+        this.setState({ display: true, error: false, result: null });
+    }
+
+    renderResult(result) {
         return (
-            <React.Fragment>
-                <QrReader
-                    delay={300}
-                    onError={this.handleError}
-                    onScan={this.handleScan}
-                    style={{ width: '30%' }} />
-            </React.Fragment>
+            <div className="row">
+                <div className="col-md-12">
+                    <div className="panel panel-default">
+                        <div className="panel-heading">
+                            <i className="glyphicon glyphicon-qrcode"></i> {this.element.dataset.title}
+                        </div>
+                        <div className="panel-body text-center h1 dashboard-total-orders">
+                            {result &&
+                                <div>
+                                    {result.firstName} {result.lastName}
+                                    <br/>
+                                    {result.sheetTitle}
+                                </div>
+                            }
+
+                            {!result && <div className={'alert alert-danger'}>{this.element.dataset.notFound}</div>}
+
+                            <button className={"btn btn-primary"} onClick={this.handleReset}>
+                                {this.element.dataset.close}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    render() {
+        let { display, error, result} = this.state;
+
+        return (
+            <Fragment>
+                {display &&
+                    <QrReader
+                        delay={300}
+                        facingMode={'user'}
+                        onScan={this.handleScan}
+                        onError={this.handleError} />
+                }
+
+                {error && this.renderResult(null)}
+                {result && this.renderResult(result)}
+            </Fragment>
         );
     }
 }
