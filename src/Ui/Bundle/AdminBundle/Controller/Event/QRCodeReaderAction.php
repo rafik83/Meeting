@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Event\GetQRCodePayloadByEventQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class QRCodeReaderAction
@@ -30,13 +31,20 @@ class QRCodeReaderAction
         $this->queryBus = $queryBus;
     }
 
-    public function __invoke(Event $event): Response
+    public function __invoke(Request $request, Event $event): Response
     {
-        $result = $this->queryBus->handle(new GetQRCodePayloadByEventQuery($event));
-        dump($result);die;
+        $qrCodePayloads = $this->queryBus->handle(
+            new GetQRCodePayloadByEventQuery(
+                $event,
+                $event->getAvailableLocale($request->getLocale())
+            )
+        );
 
-        return new Response($this->engine->render('@Admin/Event/qrCodeReader.html.twig', [
-            'event' => $event,
-        ]));
+        return new Response(
+            $this->engine->render('@Admin/Event/qrCodeReader.html.twig', [
+                'event' => $event,
+                'qrCodePayloads' => json_encode($qrCodePayloads),
+            ])
+        );
     }
 }

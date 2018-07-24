@@ -11,25 +11,40 @@
 namespace Proximum\Vimeet\Application\Query\Event;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
 use Proximum\Vimeet\Application\View\Event\QRCodePayloadListView;
 use Proximum\Vimeet\Application\View\Event\QRCodePayloadView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class GetQRCodePayloadByEventQueryHandler
 {
     /** @var QueryBusInterface */
-    public $queryBus;
+    private $queryBus;
 
     /** @var ParticipantRepositoryInterface */
-    public $participantRepository;
+    private $participantRepository;
+
+    /** @var ParticipantInfoGuesser */
+    private $participantInfoGuesser;
+
+    /** @var GroupNameResolver */
+    private $groupNameResolver;
 
     public function __construct(
         QueryBusInterface $queryBus,
-        ParticipantRepositoryInterface $participantRepository
+        ParticipantRepositoryInterface $participantRepository,
+        ParticipantInfoGuesser $participantInfoGuesser,
+        GroupNameResolver $groupNameResolver
     ) {
         $this->queryBus = $queryBus;
         $this->participantRepository = $participantRepository;
+        $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->groupNameResolver = $groupNameResolver;
     }
 
     public function handle(GetQRCodePayloadByEventQuery $query): QRCodePayloadListView
@@ -45,11 +60,32 @@ class GetQRCodePayloadByEventQueryHandler
                 continue;
             }
 
-            $qRCodeIdentifier = $this->queryBus->handle(new QRCodeIdentifierQuery($query->event, $user));
-            $qrCodePayloadListView[] = new QRCodePayloadView($qRCodeIdentifier);
+            $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $query->locale);
+
+            $qrCodePayloadListView[] = new QRCodePayloadView(
+                $this->getQrCodeIdentifier($query->event, $user),
+                $participantInfo['participant_firstname'] ?? null,
+                $participantInfo['participant_lastname'] ?? null,
+                $this->getSheetTitle($query->event, $user)
+            );
+
             $identifiedUsers[] = $user->getId();
         }
 
         return new QRCodePayloadListView($qrCodePayloadListView);
+    }
+
+    private function getSheetTitle(Event $event, User $user): ?string
+    {
+        try {
+            return $this->groupNameResolver->resolve($event, $user);
+        } catch (SheetNotFoundException $exception) {
+            return null;
+        }
+    }
+
+    private function getQrCodeIdentifier(Event $event, User $user): string
+    {
+        return $this->queryBus->handle(new QRCodeIdentifierQuery($event, $user));
     }
 }

@@ -21,6 +21,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class GetQRCodePayloadByEventQueryHandlerTest extends TestCase
 {
@@ -41,6 +43,8 @@ class GetQRCodePayloadByEventQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $queryBus = $this->prophesize(QueryBusInterface::class);
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $groupNameResolver = $this->prophesize(GroupNameResolver::class);
 
         $queryBus->handle(new QRCodeIdentifierQuery($event->reveal(), $user1->reveal()))
             ->shouldBeCalled()
@@ -54,17 +58,41 @@ class GetQRCodePayloadByEventQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([$participant1->reveal(), $participant2->reveal(), $participant3->reveal()]);
 
+        $participantInfoGuesser->guessParticipantInfos($participant1->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn([
+                "participant_firstname" => "Kylian",
+                "participant_lastname" => "Mbappe"
+            ]);
+
+        $participantInfoGuesser->guessParticipantInfos($participant3->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn([
+                "participant_firstname" => "Luka",
+                "participant_lastname" => "Modric",
+            ]);
+
+        $groupNameResolver->resolve($event->reveal(), $user1->reveal())
+            ->shouldBeCalled()
+            ->willReturn('France');
+
+        $groupNameResolver->resolve($event->reveal(), $user2->reveal())
+            ->shouldBeCalled()
+            ->willReturn('Croatie');
+
         $handler = new GetQRCodePayloadByEventQueryHandler(
             $queryBus->reveal(),
-            $participantRepository->reveal()
+            $participantRepository->reveal(),
+            $participantInfoGuesser->reveal(),
+            $groupNameResolver->reveal()
         );
 
         $expectedResult = new QRCodePayloadListView([
-            new QRCodePayloadView('00000010000002'),
-            new QRCodePayloadView('00000020000003'),
+            new QRCodePayloadView('00000010000002', 'Kylian', 'Mbappe', 'France'),
+            new QRCodePayloadView('00000020000003', 'Luka', 'Modric', 'Croatie'),
         ]);
 
-        $result = $handler->handle(new GetQRCodePayloadByEventQuery($event->reveal()));
+        $result = $handler->handle(new GetQRCodePayloadByEventQuery($event->reveal(), 'fr'));
         $this->assertEquals($expectedResult, $result);
     }
 }

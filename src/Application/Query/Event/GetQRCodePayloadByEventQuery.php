@@ -18,8 +18,12 @@ class GetQRCodePayloadByEventQuery implements Query
     /** @var Event */
     public $event;
 
-    public function __construct(Event $event)
+    /** @var string */
+    public $locale;
+
+    public function __construct(Event $event, string $locale)
     {
         $this->event = $event;
+        $this->locale = $locale;
     }
 }

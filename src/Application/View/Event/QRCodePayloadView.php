@@ -15,8 +15,20 @@ class QRCodePayloadView
     /** @var string */
     public $payload;
 
-    public function __construct(string $payload)
+    /** @var string */
+    public $firstName;
+
+    /** @var string */
+    public $lastName;
+
+    /** @var null|string */
+    public $sheetTitle;
+
+    public function __construct(string $payload, string $firstName, string $lastName, ?string $sheetTitle)
     {
         $this->payload = $payload;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->sheetTitle = $sheetTitle;
     }
 }
