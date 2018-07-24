@@ -111,7 +111,8 @@ class MeetingRequestListViewQueryHandler
                     $isMeetingRequestClosed,
                     $isAnsweringMeetingRequestClosed,
                     isset($viewedSheetListView[$meetingRequest->getSheetMet($query->sheet)->getId()]),
-                    $isPhoneValidationRequired
+                    $isPhoneValidationRequired,
+                    $query->showCategory
                 )
             );
 
