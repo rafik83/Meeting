@@ -127,6 +127,22 @@ class ParticipateHandlerTest extends TestCase
         $this->expectException(NotEnoughtRemainingParticipationsException::class);
         $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(0);
 
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this->participantRepository
+            ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this->participate->sheet = $this->sheet;
+        $this->participate->happening = $this->happening;
+        $this->participate->participants = [$this->participant];
+
         $this->handler->handle($this->participate);
     }
 
@@ -162,6 +178,12 @@ class ParticipateHandlerTest extends TestCase
     public function testParticipantRequiredException()
     {
         $this->expectException(ParticipantRequiredException::class);
+
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
 
         $participate = $this->participate;
         $participate->participants = [];
