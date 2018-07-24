@@ -13,51 +13,30 @@ namespace Proximum\Vimeet\Application\Query\User;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\User\UserDetailsView;
 use Proximum\Vimeet\Application\View\User\UserSheetView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\Exception\UserEventMissingException;
 
 class UserDetailsViewQueryHandler
 {
-    /**
-     * @var UserEventRepositoryInterface
-     */
-    private $userEventRepository;
-
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * UserDetailsViewQueryHandler constructor.
-     *
-     * @param UserEventRepositoryInterface $userEventRepository
-     * @param SheetRepositoryInterface     $sheetRepository
-     */
-    public function __construct(
-        UserEventRepositoryInterface $userEventRepository,
-        SheetRepositoryInterface $sheetRepository
-    ) {
-        $this->userEventRepository = $userEventRepository;
+    public function __construct(SheetRepositoryInterface $sheetRepository)
+    {
         $this->sheetRepository     = $sheetRepository;
     }
 
     /**
-     * @param UserDetailsViewQuery $query
-     *
-     * @throws SheetNotFoundException
      * @throws UserEventMissingException
-     *
-     * @return UserDetailsView
      */
-    public function handle(UserDetailsViewQuery $query)
+    public function handle(UserDetailsViewQuery $query): UserDetailsView
     {
         $userSheetListView = [];
 
-        $userEvent = $this->userEventRepository->getUserEvent($query->user, $query->event);
+        $sheets = $this->sheetRepository->getByUser($query->user);
 
-        if (null === $userEvent) {
+        if (!$this->hasSheetInEvent($sheets, $query->event)) {
             throw new UserEventMissingException(
                 sprintf(
                     'This user %s is not on this event %s',
@@ -67,12 +46,21 @@ class UserDetailsViewQueryHandler
             );
         }
 
-        $sheets = $this->sheetRepository->getByUser($query->user);
-
         foreach ($sheets as $sheet) {
             $userSheetListView[] = new UserSheetView($sheet);
         }
 
         return new UserDetailsView($query->event, $query->user, $userSheetListView);
+    }
+
+    private function hasSheetInEvent(array $sheets, Event $event)
+    {
+        foreach ($sheets as $sheet) {
+            if ($sheet->getEvent() === $event) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

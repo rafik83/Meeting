@@ -19,7 +19,7 @@
     },
     "require": {
         "php": "^7.1",
-        "symfony/symfony": "^3.4.12",
+        "symfony/symfony": "^3.4.13",
         "doctrine/orm": "^2.6.1",
         "doctrine/doctrine-bundle": "~1.6",
         "symfony/swiftmailer-bundle": "^3.1.6",
@@ -58,7 +58,8 @@
         "twig/twig": "~1.35",
         "tilleuls/ovh-bundle": "^1.0.1",
         "league/iso3166": "^2.1",
-        "defuse/php-encryption": "^2.2"
+        "defuse/php-encryption": "^2.2",
+        "ruflin/elastica": "3.2.3"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\View\Sheet\Details;
 
 use Proximum\Vimeet\Application\View\Sheet\Details\CRM\RecordView;
 use Proximum\Vimeet\Application\View\Sheet\Details\Invoice\InvoiceView;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -111,18 +112,6 @@ class SheetDetailsView
      */
     public function completenessStatus()
     {
-        if ($this->completeness < 40) {
-            return 'danger';
-        }
-
-        if ($this->completeness < 100) {
-            return 'warning';
-        }
-
-        if (100 === $this->completeness) {
-            return 'success';
-        }
-
-        return 'danger';
+        return Sheet::getCompletenessStatus($this->completeness);
     }
 }

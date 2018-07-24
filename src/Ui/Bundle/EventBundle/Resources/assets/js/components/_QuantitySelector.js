@@ -26,6 +26,7 @@ function QuantitySelector(element)
 
     if (this.selectParticipants) {
         $(this.selectParticipants).select2({
+            width: '100%',
             placeholder: this.selectParticipants.getAttribute('data-placeholder'),
             maximumSelectionLength: this.max ? this.max : 0
         });

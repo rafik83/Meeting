@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Command\UserEventView\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -28,19 +30,19 @@ class ParticipantManager
     /** @var UserManager */
     private $userManager;
 
-    /**
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param SheetManager                   $sheetManager
-     * @param UserManager                    $userManager
-     */
+    /** @var CommandBusInterface */
+    private $commandBus;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         SheetManager $sheetManager,
-        UserManager $userManager
+        UserManager $userManager,
+        CommandBusInterface $commandBus
     ) {
         $this->participantRepository = $participantRepository;
-        $this->sheetManager          = $sheetManager;
-        $this->userManager           = $userManager;
+        $this->sheetManager = $sheetManager;
+        $this->userManager = $userManager;
+        $this->commandBus = $commandBus;
     }
 
     /**
@@ -63,6 +65,7 @@ class ParticipantManager
         $participant = ParticipantFactory::create($sheet, $user);
         $participant->setData([]);
         $this->participantRepository->add($participant);
+        $this->commandBus->handle(new Update($participant->getUser(), $participant->getEvent()));
 
         return $participant;
     }

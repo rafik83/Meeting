@@ -100,6 +100,7 @@ class CreateHandler
             $newParticipant->setVisio($participant->isVisio());
             $newParticipant->setRegistrationComplete($participant->isRegistrationComplete());
             $newParticipant->setRegistrationStep($participant->getRegistrationStep());
+            $newSheet->addParticipant($newParticipant);
 
             $this->participantRepository->add($newParticipant);
         }

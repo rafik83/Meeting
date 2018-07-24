@@ -64,7 +64,7 @@ class BatchCreate
     {
         $this->event     = $event;
         $this->recipes[] = new Recipe('');
-        $this->visio     = false;
+        $this->visio     = $event->getConfiguration()->isVisio();
         $this->priority  = 12;
     }
 }

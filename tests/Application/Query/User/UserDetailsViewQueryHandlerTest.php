@@ -15,9 +15,7 @@ use Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery;
 use Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\Exception\UserEventMissingException;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
@@ -26,7 +24,6 @@ class UserDetailsViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $event = EventFactory::createEvent();
         $user = UserFactory::create('toto@toto.com');
 
         $mockedEvent1 = $this->prophesize(Event::class);
@@ -42,33 +39,25 @@ class UserDetailsViewQueryHandlerTest extends TestCase
         $mockedEvent3->getTitle()->willReturn('event three');
 
         $sheet1 = $this->prophesize(Sheet::class);
-        $sheet1->getEvent()->willReturn($mockedEvent1);
+        $sheet1->getEvent()->willReturn($mockedEvent1->reveal());
         $sheet1->getId()->willReturn(1);
 
         $sheet2 = $this->prophesize(Sheet::class);
-        $sheet2->getEvent()->willReturn($mockedEvent2);
+        $sheet2->getEvent()->willReturn($mockedEvent2->reveal());
         $sheet2->getId()->willReturn(2);
 
         $sheet3 = $this->prophesize(Sheet::class);
-        $sheet3->getEvent()->willReturn($mockedEvent3);
+        $sheet3->getEvent()->willReturn($mockedEvent3->reveal());
         $sheet3->getId()->willReturn(3);
 
-        $userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-
-        $userEvent = $this->prophesize(UserEvent::class);
-        $userEventRepository->getUserEvent($user, $event)->shouldBeCalled()->willReturn($userEvent->reveal());
         $sheetRepository->getByUser($user)->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
 
-        $handler = new UserDetailsViewQueryHandler(
-            $userEventRepository->reveal(),
-            $sheetRepository->reveal()
-        );
-
-        $view = $handler->handle(new UserDetailsViewQuery($user, $event));
+        $handler = new UserDetailsViewQueryHandler($sheetRepository->reveal());
+        $view = $handler->handle(new UserDetailsViewQuery($user, $mockedEvent1->reveal()));
 
         $this->assertEquals($user, $view->user);
-        $this->assertEquals($event, $view->event);
+        $this->assertEquals($mockedEvent1->reveal(), $view->event);
 
         $this->assertCount(3, $view->userSheetView);
 
@@ -76,23 +65,39 @@ class UserDetailsViewQueryHandlerTest extends TestCase
         $this->assertEquals('event three', $view->userSheetView[2]->eventTitle);
     }
 
-    public function testUserEventMissingException()
+    public function testUserHasNoSheet()
     {
         $this->expectException(UserEventMissingException::class);
 
         $event = EventFactory::createEvent();
         $user = UserFactory::create('toto@toto.com');
 
-        $userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $sheetRepository->getByUser($user)->shouldBeCalled()->willReturn([]);
 
-        $userEventRepository->getUserEvent($user, $event)->shouldBeCalled()->willReturn(null);
-
-        $handler = new UserDetailsViewQueryHandler(
-            $userEventRepository->reveal(),
-            $sheetRepository->reveal()
-        );
-
+        $handler = new UserDetailsViewQueryHandler($sheetRepository->reveal());
         $handler->handle(new UserDetailsViewQuery($user, $event));
+    }
+
+    public function testUserHasNoSheetForThisEvent()
+    {
+        $this->expectException(UserEventMissingException::class);
+
+        $user = UserFactory::create('toto@toto.com');
+
+        $mockedEvent1 = $this->prophesize(Event::class);
+        $mockedEvent1->getId()->willReturn(1);
+
+        $mockedEvent2 = $this->prophesize(Event::class);
+        $mockedEvent2->getId()->willReturn(2);
+
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->getEvent()->willReturn($mockedEvent2->reveal());
+
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $sheetRepository->getByUser($user)->shouldBeCalled()->willReturn([$sheet1->reveal()]);
+
+        $handler = new UserDetailsViewQueryHandler($sheetRepository->reveal());
+        $handler->handle(new UserDetailsViewQuery($user, $mockedEvent1->reveal()));
     }
 }
