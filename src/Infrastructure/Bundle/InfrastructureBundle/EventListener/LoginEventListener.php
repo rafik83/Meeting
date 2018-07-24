@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler as AdminUpd
 use Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLogin as SheetUpdateLastLogin;
 use Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLoginHandler as SheetUpdateLastLoginHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -65,7 +66,7 @@ class LoginEventListener
      *
      * @param AuthenticationEvent $authenticationEvent
      */
-    public function onLoginSuccess(AuthenticationEvent $authenticationEvent)
+    public function onLoginSuccess(AuthenticationEvent $authenticationEvent): void
     {
         $user = $authenticationEvent->getAuthenticationToken()->getUser();
 
@@ -83,6 +84,10 @@ class LoginEventListener
 
         $host = $this->requestStack->getMasterRequest()->getHost();
         $event = $this->eventRepository->getEventByDomain($host);
+
+        if (!$event instanceof Event) {
+            return;
+        }
 
         $this->sheetUpdateLastLoginHandler->handle(new SheetUpdateLastLogin($event, $user));
     }

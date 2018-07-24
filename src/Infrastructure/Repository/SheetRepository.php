@@ -730,6 +730,27 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetsByIdsWithTypesAndCategories(array $sheetIds, string $locale): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, type, typeTranslation, category, categoryTranslation')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join('sheet.type', 'type', 'WITH', 'sheet.id IN (:sheetIds)')
+            ->leftJoin('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->leftJoin('type.categories', 'category')
+            ->leftJoin('category.translations', 'categoryTranslation', 'WITH', 'categoryTranslation.locale = :locale')
+            ->setParameter('sheetIds', $sheetIds)
+            ->setParameter('locale', $locale)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByIds(array $sheetIds)
     {
         $queryBuilder = $this

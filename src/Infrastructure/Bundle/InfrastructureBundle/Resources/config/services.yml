@@ -336,6 +336,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     #
     # Handlers
     #
@@ -2061,6 +2065,7 @@ services:
             - '@query.sheet.group.participant.participant_view_query_handler'
             - '@participant.user_to_participant'
             - '@command.planning.sheet_info_guesser_cache'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets }
     command.group.sheet.create_handler:
@@ -2281,6 +2286,22 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdate }
+
+    Proximum\Vimeet\Application\Command\UserEventView\IndexHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventIdsByEvent'
+            - '@Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEventView\Index }
+
+    Proximum\Vimeet\Application\Command\UserEventView\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister'
+            - '@Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEventView\Update }
+
 
     #
     # Security
@@ -2592,6 +2613,10 @@ services:
         class: Proximum\Vimeet\Domain\UserEvent\TypeResolver
         arguments:
             - '@vimeet_infrastructure.repository.user_event_repository'
+
+    Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository'
 
     #
     # Token component
@@ -3444,7 +3469,6 @@ services:
     query.user.user_details_view_query_handler:
         class: Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler
         arguments:
-            - '@vimeet_infrastructure.repository.user_event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery }
@@ -3651,6 +3675,14 @@ services:
             - '@repository.catalog_visibility_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery }
+
+    Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEvent'
+            - '@vimeet_infrastructure.repository.category_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery }
+
     #
     # Program query
     #
@@ -4435,6 +4467,40 @@ services:
         arguments:
              - '@fos_elastica.finder.app.sheet'
              - '@fos_elastica.index.app.sheet'
+
+    #
+    # Elastica
+    #
+    Elastica\Client:
+        arguments:
+            - {'host': '%elastic_host%', 'port': '%elastic_port%'}
+
+    Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister:
+        arguments:
+            - '@Elastica\Client'
+            - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaMapping'
+            - 'app_%kernel.environment%'
+            - '@adapter.serializer_adapter'
+
+    Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaMapping: ~
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter:
+        arguments:
+            - '@Elastica\Client'
+            - 'app_%kernel.environment%'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEvent:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventIdsByEvent:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
     # Command

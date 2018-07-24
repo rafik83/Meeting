@@ -83,7 +83,7 @@
 
 {% if is_granted('ROLE_ALLOWED_TO_MANAGE_USER') %}
     <li>
-        <a href="{{ path('admin_users', { 'event': event.id }) }}">
+        <a href="{{ path('admin_users_list', { 'event': event.id }) }}">
             {{ 'admin.users.link'|trans }}
         </a>
     </li>
