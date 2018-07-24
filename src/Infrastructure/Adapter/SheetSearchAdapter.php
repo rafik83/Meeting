@@ -21,6 +21,7 @@ use Elastica\SearchableInterface;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchConstant;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
@@ -143,7 +144,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $availableSlotIds,
             $sheetsToExclude
         );
-        $options = ['size' => 100000];
+        $options = ['size' => ElasticSearchConstant::LONG_RESULTS_NUMBER];
 
         return $this->searchable->search($query, $options)->getResults();
     }
@@ -213,7 +214,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         return array_map(function (Result $sheet) {
             return $sheet->id[0];
-        }, $this->searchable->search($query, ['limit' => 100000])->getResults());
+        }, $this->searchable->search($query, ['limit' => ElasticSearchConstant::LONG_RESULTS_NUMBER])->getResults());
     }
 
     /**
@@ -439,7 +440,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query = new Query($builder->getQuery());
         $query->addSort(['sheetName' => 'asc']);
 
-        $options = ['size' => 100000];
+        $options = ['size' => ElasticSearchConstant::LONG_RESULTS_NUMBER];
 
         return $this->searchable->search($query, $options)->getResults();
     }

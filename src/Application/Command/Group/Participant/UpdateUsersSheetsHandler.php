@@ -10,7 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Group\Participant;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantCreatedByGroupManagerEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedByGroupManagerEvent;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Group\Participant\UpdateUsersSheetsResultView;
@@ -44,15 +48,9 @@ class UpdateUsersSheetsHandler
     /** @var SheetInfoGuesserCache */
     private $sheetInfoGuesserCache;
 
-    /**
-     * @param ParticipantRepositoryInterface   $participantRepository
-     * @param UserRepositoryInterface          $userRepository
-     * @param MeetingRepositoryInterface       $meetingRepository
-     * @param RequestRepositoryInterface       $requestRepository
-     * @param UsersParticipantViewQueryHandler $usersParticipantViewQueryHandler
-     * @param UserToParticipant                $userToParticipant
-     * @param SheetInfoGuesserCache            $sheetInfoGuesserCache
-     */
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         UserRepositoryInterface $userRepository,
@@ -60,7 +58,8 @@ class UpdateUsersSheetsHandler
         RequestRepositoryInterface $requestRepository,
         UsersParticipantViewQueryHandler $usersParticipantViewQueryHandler,
         UserToParticipant $userToParticipant,
-        SheetInfoGuesserCache $sheetInfoGuesserCache
+        SheetInfoGuesserCache $sheetInfoGuesserCache,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->participantRepository = $participantRepository;
         $this->userRepository = $userRepository;
@@ -69,6 +68,7 @@ class UpdateUsersSheetsHandler
         $this->usersParticipantViewQueryHandler = $usersParticipantViewQueryHandler;
         $this->userToParticipant = $userToParticipant;
         $this->sheetInfoGuesserCache = $sheetInfoGuesserCache;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     /**
@@ -98,8 +98,12 @@ class UpdateUsersSheetsHandler
 
             // Create Participant to new assigned sheet
             foreach ($sheets as $sheet) {
-                if (false === in_array($sheet, $userParticipantViews[$userId]->sheets)) {
-                    $this->userToParticipant->handle($sheet, $user);
+                if (false === \in_array($sheet, $userParticipantViews[$userId]->sheets, true)) {
+                    $participant = $this->userToParticipant->handle($sheet, $user);
+                    $this->delayedEventDispatcher->dispatch(
+                        Events::PARTICIPANT_CREATED_BY_GROUP_MANAGER,
+                        new ParticipantCreatedByGroupManagerEvent($participant)
+                    );
                 }
             }
 
@@ -138,6 +142,14 @@ class UpdateUsersSheetsHandler
 
                         $this->participantRepository->delete($participantToDelete);
                         $sheet->removeParticipant($participantToDelete);
+
+                        $this->delayedEventDispatcher->dispatch(
+                            Events::PARTICIPANT_REMOVED_BY_GROUP_MANAGER,
+                            new ParticipantRemovedByGroupManagerEvent(
+                                $participantToDelete->getUser(),
+                                $sheet
+                            )
+                        );
                     }
                 }
             }

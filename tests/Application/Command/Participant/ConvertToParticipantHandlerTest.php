@@ -14,6 +14,9 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
 use Proximum\Vimeet\Application\Command\Participant\SheetAndParticipantTemplateDataHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\View\Participant\SheetAndParticipantTemplateDataView;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -105,6 +108,11 @@ class ConvertToParticipantHandlerTest extends TestCase
             ->add(new UserEvent($user, $event->reveal(), $type->reveal()))
             ->shouldBeCalled()
         ;
+        $this
+            ->eventDispatcher
+            ->dispatch(Events::PARTICIPANT_IMPORTED_FROM_API, new ParticipantImportedFromApiEvent($participant))
+            ->shouldBeCalled()
+        ;
 
         $this
             ->sheetAndParticipantTemplateDataHandler->handle(
@@ -124,6 +132,7 @@ class ConvertToParticipantHandlerTest extends TestCase
         ;
 
         $this->synchronizer->set($this->registrationTemplateData->reveal(), $user)->shouldBeCalled();
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($sheet))->shouldBeCalled();
 
         $convertToParticipantHandler = new ConvertToParticipantHandler(
             $this->userRepository->reveal(),
