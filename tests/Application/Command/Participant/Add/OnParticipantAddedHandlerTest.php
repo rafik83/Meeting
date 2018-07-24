@@ -16,6 +16,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded;
 use Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAddedHandler;
+use Proximum\Vimeet\Application\Command\UserEventView\Update;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
@@ -61,20 +62,22 @@ class OnParticipantAddedHandlerTest extends TestCase
 
     public function setUp()
     {
-        $this->user = $this->prophesize(User::class);
-        $this->sheet = $this->prophesize(Sheet::class);
-        $this->participant = $this->prophesize(Participant::class);
         $this->event = $this->prophesize(Event::class);
         $this->adder = $this->prophesize(User::class);
+        $this->user = $this->prophesize(User::class);
+
+        $this->sheet = $this->prophesize(Sheet::class);
+        $this->sheet->getEvent()->willReturn($this->event->reveal());
+
+        $this->participant = $this->prophesize(Participant::class);
+        $this->participant->getSheet()->willReturn($this->sheet->reveal());
+        $this->participant->getUser()->willReturn($this->user->reveal());
+        $this->participant->getEvent()->willReturn($this->event->reveal());
 
         $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $this->activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
         $this->extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
-
-        $this->participant->getSheet()->willReturn($this->sheet->reveal());
-        $this->participant->getUser()->willReturn($this->user->reveal());
-        $this->sheet->getEvent()->willReturn($this->event->reveal());
     }
 
     public function testHandleUserOwner()
@@ -219,8 +222,14 @@ class OnParticipantAddedHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($extraParameter->reveal())
         ;
+
         $this->commandBus
             ->handle(new ComexposiumOnParticipantAdded($this->event->reveal(), $this->participant->reveal()))
+            ->shouldBeCalled()
+        ;
+
+        $this->commandBus
+            ->handle(new Update($this->user->reveal(), $this->event->reveal()))
             ->shouldBeCalled()
         ;
 

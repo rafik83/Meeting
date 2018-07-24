@@ -23,7 +23,7 @@
 
     <h4>{{ 'admin.user.contact-information'|trans }}</h4>
     <ul>
-        <li><i class="glyphicon glyphicon-envelope"></i> {{ user.email }}</li>
+        <li><i class="glyphicon glyphicon-envelope"></i> <a href="mailto:{{ user.email }}">{{ user.email }}</a></li>
         <li><i class="glyphicon glyphicon-earphone"></i> {{ user.account.phone|default('-') }}</li>
         <li><i class="glyphicon glyphicon-phone"></i> {{ user.account.mobile|default('-') }}</li>
         <li>

@@ -258,19 +258,7 @@ class SheetListView
      */
     public function completenessStatus()
     {
-        if ($this->completeness < 40) {
-            return 'danger';
-        }
-
-        if ($this->completeness < 100) {
-            return 'warning';
-        }
-
-        if (100 === $this->completeness) {
-            return 'success';
-        }
-
-        return 'danger';
+        return Sheet::getCompletenessStatus($this->completeness);
     }
 
     /**
