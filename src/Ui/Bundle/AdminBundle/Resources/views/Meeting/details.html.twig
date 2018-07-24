@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        {% if not is_granted('ROLE_ALLOWED_TO_HOST') %}
+        {% if is_granted('ROLE_ALLOWED_TO_ADMIN') %}
             <div class="col-md-offset-10 col-md-2">
                 <div class="panel panel-warning">
                     <div class="panel-body text-center">

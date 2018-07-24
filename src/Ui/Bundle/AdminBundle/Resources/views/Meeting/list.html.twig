@@ -38,7 +38,7 @@
             {% for meeting in meetings.results %}
                 <tr>
                     <td>
-                        {% if is_granted('ROLE_ALLOWED_TO_HOST') %}
+                        {% if not is_granted('ROLE_ALLOWED_TO_ADMIN') %}
                             {{ meeting.sheetNameFrom }}
                         {% else %}
                             <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetFromId }) }}" target="_blank">
@@ -47,7 +47,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        {% if is_granted('ROLE_ALLOWED_TO_HOST') %}
+                        {% if not is_granted('ROLE_ALLOWED_TO_ADMIN') %}
                             {{ meeting.sheetNameTo }}
                         {% else %}
                             <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetToId }) }}" target="_blank">
