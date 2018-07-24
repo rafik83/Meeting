@@ -39,6 +39,10 @@
     {{ form_row(form.welcomeEnabled) }}
     {{ form_row(form.disabledEmailChanging) }}
     {{ form_row(form.disabledPasswordChanging) }}
+
+    <hr>
+    {{ form_row(form.displayParticipantNameOnPlanning) }}
+    {{ form_row(form.displayParticipantPositionOnPlanning) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}

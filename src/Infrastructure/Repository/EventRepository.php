@@ -274,4 +274,67 @@ class EventRepository implements EventRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return Event[]
+     */
+    public function findEventsWithPastSMSActivationDateAndAgendaVersionsNotGenerated(\DateTimeInterface $dateTime): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->where('event.configuration.smsActivationDate < :datetime')
+            ->andWhere('event.userAgendaVersionsGenerated = false')
+            ->setParameter('datetime', $dateTime)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findPastEvents(\DateTimeInterface $dateTime): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->join('event.days', 'day', 'WITH', 'day.endTime <= :datetime')
+            ->join('event.days', 'otherDay')
+            ->where('NOT (otherDay.endTime > :datetime)')
+            ->setParameter('datetime', $dateTime)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     *
+     * @return Event[]
+     */
+    public function findEventsByDateRange(\DateTimeInterface $begin, \DateTimeInterface $end): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->join('event.days', 'day', 'WITH', 'day.endTime <= :end AND day.startTime >= :begin')
+            ->join('event.days', 'otherDay')
+            ->where('NOT (otherDay.endTime > :end)')
+            ->andWhere('NOT (otherDay.startTime < :begin)')
+            ->setParameter('begin', $begin)
+            ->setParameter('end', $end)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

@@ -100,4 +100,26 @@ interface EventRepositoryInterface
      * @return Event[]
      */
     public function findByDay(\DateTimeInterface $dateTime): array;
+
+    /**
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return Event[]
+     */
+    public function findEventsWithPastSMSActivationDateAndAgendaVersionsNotGenerated(\DateTimeInterface $dateTime): array;
+
+    /**
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return Event[]
+     */
+    public function findPastEvents(\DateTimeInterface $dateTime): array;
+
+    /**
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     *
+     * @return Event[]
+     */
+    public function findEventsByDateRange(\DateTimeInterface $begin, \DateTimeInterface $end): array;
 }

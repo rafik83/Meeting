@@ -1,6 +1,20 @@
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
 <div class="panel panel-default">
     <div class="panel-heading">
         {{ 'admin.sheet.details.orders'|trans }}
+        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') and not hasInvoice and orderVatViews|length > 0 %}
+            {{ delete_button(
+                path('admin_sheet_orders_cancel', {'event': event.id, 'sheet': sheet.id}),
+                'admin.sheet.orders.cancel'|trans,
+                {
+                    'class' : 'btn btn-danger btn-sm',
+                    'data-confirm': 'admin.sheet.orders.cancel.confirm'|trans
+                },
+                constant('Proximum\\Vimeet\\Domain\\Intention\\IntentionType::INTENTION_CANCEL_ORDERS')
+                )
+            }}
+        {% endif %}
     </div>
     <div class="panel-body">
         {% if orderVatViews|length > 0 %}

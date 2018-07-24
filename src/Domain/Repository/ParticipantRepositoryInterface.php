@@ -261,4 +261,6 @@ interface ParticipantRepositoryInterface
      *               ]
      */
     public function getParticipantEmailsForEvent(Event $event): array;
+
+    public function toggleParticipantVisioForEvent(Event $event, int $visio): void;
 }

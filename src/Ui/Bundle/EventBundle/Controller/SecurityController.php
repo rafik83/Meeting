@@ -146,6 +146,7 @@ class SecurityController extends Controller
             'error' => $error,
             'typeId' => $typeId,
             'type' => $type,
+            'typeDescription' => $type !== null ? $this->get('markdown')->toHtml($type->description) : null,
         ]);
     }
 

@@ -16,6 +16,7 @@ final class Events
     public const SHEET_ACCEPTED = 'sheet.accepted';
     public const SHEET_PENDING = 'sheet.pending';
     public const SHEET_REFUSED = 'sheet.refused';
+    public const SHEET_ORDERS_CANCELLED = 'sheet.orders.cancelled';
     public const SHEET_INVITATION_CLOSE_TO_EXPIRATION = 'sheet.invitation.close_to_expiration';
     public const SHEET_ADD_PARTICIPANT_CONFIRMATION = 'sheet.participant.add.confirmation';
     public const SHEET_CHANGED_TYPE = 'sheet.changed_type';
@@ -52,6 +53,7 @@ final class Events
     public const REQUEST_UPDATE_MESSAGE = 'meeting_request.update.message';
     public const MEETING_UPDATE_MESSAGE = 'meeting.update.message';
     public const EVENT_PRE_REGISTERED = 'event.preregistered';
+    public const EVENT_VISIO_UPDATED = 'event.visio.updated';
     public const EVENT_LOCALE_CHANGED = 'event.locale_changed';
     public const EVENT_KEY_DATES_UPDATED = 'event.key_dates.updated';
     public const EVENT_SHEETS_DUPLICATED = 'event.sheets.updated';
@@ -75,9 +77,12 @@ final class Events
     public const TRANSACTION_REMOVED = 'transaction.removed';
     public const TRANSACTION_CONFIRMED = 'transaction.confirm';
     public const PARTICIPANT_IMPORTED = 'participant.imported';
+    public const PARTICIPANT_IMPORTED_FROM_API = 'participant.imported_from_api';
     public const PARTICIPANT_ADDED = 'participant.added';
     public const PARTICIPANT_UPDATED = 'participant.updated';
     public const PARTICIPANT_REMOVED = 'participant.removed';
+    public const PARTICIPANT_CREATED_BY_GROUP_MANAGER = 'participant.created_by_group_manager';
+    public const PARTICIPANT_REMOVED_BY_GROUP_MANAGER = 'participant.removed_by_group_manager';
     public const HAPPENING_PARTICIPATED = 'happening.participated';
     public const HAPPENING_PARTICIPATE = 'happening.participate';
     public const HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED = 'happening.participation.automatically.updated';

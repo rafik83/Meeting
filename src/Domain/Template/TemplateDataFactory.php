@@ -92,9 +92,9 @@ class TemplateDataFactory
      *
      * @return TemplateData
      */
-    public function createFromSheet(Sheet $sheet, ?string $locale): TemplateData
+    public function createFromSheet(Sheet $sheet, ?string $locale = null): TemplateData
     {
-        return $this
+        $templateData = $this
             ->loadNomenclatures($sheet->getEvent())
             ->create(
                 $sheet->getType()->getSheetTemplate()->getValue(),
@@ -102,6 +102,12 @@ class TemplateDataFactory
                 $locale,
                 $sheet->getType()->getSheetTemplate()->getFallback()
             );
+
+        foreach ($templateData->getObjects() as $templateObject) {
+            $templateObject->setSheet($sheet);
+        }
+
+        return $templateData;
     }
 
     /**

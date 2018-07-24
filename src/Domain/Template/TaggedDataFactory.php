@@ -62,9 +62,8 @@ class TaggedDataFactory
     public function buildTaggedDataView(Sheet $sheet, $locale, array $rules = [])
     {
         $this->createTaggedDataView($sheet, $locale);
-        $sheetTemplateData = $this->attachTaggedDataView($sheet, $locale, $rules);
 
-        return $sheetTemplateData;
+        return $this->attachTaggedDataView($sheet, $locale, $rules);
     }
 
     /**

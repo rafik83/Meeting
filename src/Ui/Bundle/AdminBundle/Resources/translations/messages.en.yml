@@ -827,6 +827,7 @@ admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%)connected as %userEmai
 admin.sheet.import.button.label: import
 admin.sheet.imported.all.label: 'no matter'
 admin.sheet.inCatalog: 'in catalog'
+admin.sheet.isOwner: Owner
 admin.sheet.lastLoginAt: 'last login'
 admin.sheet.link: 'Participation sheets'
 admin.sheet.list.filters.label: 'advanced filters'
@@ -860,6 +861,7 @@ admin.sheet.trace.validation_validate: 'validated content at %at%'
 admin.sheet.type: Type
 admin.sheet.validate: validate
 admin.sheet.validateSheets: 'validate sheets'
+admin.sheet.validationState: 'Profile status'
 admin.sheets_group.column.created_at: 'created at'
 admin.sheets_group.column.email_manager: 'manager''s email'
 admin.sheets_group.column.sheet_list: 'sheets list'
@@ -1072,11 +1074,14 @@ admin.user.events: Events
 admin.users.details: 'View the account'
 admin.users.email: Email
 admin.users.firstName: Firstname
+admin.users.id: Id
 admin.users.lastName: Name
 admin.users.link: Users
+admin.users.locale: Language
 admin.users.see-sheet: 'See the participation'
 admin.users.title: Users
 admin.users.type: 'Users type'
+admin.users.user: Users
 admin.users.withoutSheet: 'without sheet'
 admin.users.withSheet: 'with sheet'
 admin.zero-result: 'No result'

@@ -32,7 +32,7 @@ class SheetContext implements Context
     /**
      * @Given there is a sheet
      */
-    public function thereIsASheet()
+    public function thereIsASheet(): void
     {
         $this->thereIsASheetWithTheTitle(null);
     }

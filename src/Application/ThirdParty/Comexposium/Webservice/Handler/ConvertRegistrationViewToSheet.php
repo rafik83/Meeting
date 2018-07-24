@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler;
 
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Sheet\SheetExtraDataType;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
@@ -243,6 +244,12 @@ class ConvertRegistrationViewToSheet
         );
 
         $this->participantRepository->add($participant);
+
+        $this->eventDispatcher->dispatch(
+            Events::PARTICIPANT_IMPORTED_FROM_API,
+            new ParticipantImportedFromApiEvent($participant)
+        );
+
         $this->userEventRepository->add(new UserEvent($participant->getUser(), $sheet->getEvent(), $sheet->getType()));
     }
 
@@ -259,7 +266,8 @@ class ConvertRegistrationViewToSheet
             $sheet,
             $user,
             $participantRegistrationData,
-            false
+            false,
+            $sheet->getEvent()->getConfiguration()->isVisio()
         );
         $participant->setImported(true);
 

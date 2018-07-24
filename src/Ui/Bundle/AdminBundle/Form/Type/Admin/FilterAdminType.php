@@ -35,6 +35,7 @@ class FilterAdminType extends AbstractType
                     'form.filter_admin.role.operator'    => Admin::ROLE_OPERATOR,
                     'form.filter_admin.role.super_admin' => Admin::ROLE_SUPER_ADMIN,
                     'form.filter_admin.role.partner'     => Admin::ROLE_PARTNER,
+                    'form.filter_admin.role.host'        => Admin::ROLE_HOST,
                 ],
             ])
             ->add('event', EventChoiceType::class, [

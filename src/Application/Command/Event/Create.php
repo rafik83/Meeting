@@ -18,8 +18,12 @@ class Create extends AbstractEvent
     /** @var Admin */
     public $admin;
 
+
     /** @var null|Event */
     public $duplicatedFrom;
+
+    /** @var bool */
+    public $visio;
 
     /**
      * @param Admin      $admin
@@ -61,6 +65,7 @@ class Create extends AbstractEvent
         $this->invoicePrefix = $event->getInvoicePrefix();
         $this->visible = $event->isVisible();
         $this->duplicatedFrom = $event;
+        $this->visio = $event->getConfiguration()->isVisio();
         $this->welcomeEnabled = $event->isWelcomeEnabled();
     }
 }

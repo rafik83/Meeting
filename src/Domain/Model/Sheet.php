@@ -306,6 +306,16 @@ class Sheet implements TraceableInterface
         return $this->type;
     }
 
+    public function getTypeTitle(string $locale): string
+    {
+        return $this->type->getTitle($locale);
+    }
+
+    public function getCategoriesTitles(string $locale): string
+    {
+        return implode(', ', $this->type->getCategoriesTitles($locale));
+    }
+
     /**
      * Get participants.
      *
@@ -534,6 +544,11 @@ class Sheet implements TraceableInterface
         return $this->owner;
     }
 
+    public function getOwnerId(): ?int
+    {
+        return $this->owner->getId();
+    }
+
     /**
      * Get the sheet participant owner
      *
@@ -724,6 +739,23 @@ class Sheet implements TraceableInterface
         return $this->completeness;
     }
 
+    public static function getCompletenessStatus(int $completeness)
+    {
+        if ($completeness < 40) {
+            return 'danger';
+        }
+
+        if ($completeness < 100) {
+            return 'warning';
+        }
+
+        if (100 === $completeness) {
+            return 'success';
+        }
+
+        return 'danger';
+    }
+
     /**
      * @return bool
      */
@@ -756,6 +788,11 @@ class Sheet implements TraceableInterface
     public function getFollower()
     {
         return $this->follower;
+    }
+
+    public function getFollowerName(): ?string
+    {
+        return $this->follower ? $this->follower->getDisplayName() : null;
     }
 
     /**
@@ -881,6 +918,11 @@ class Sheet implements TraceableInterface
         return $this->spot;
     }
 
+    public function hasSpot(): bool
+    {
+        return null !== $this->spot;
+    }
+
     /**
      * @param Spot $spot
      */
@@ -948,6 +990,11 @@ class Sheet implements TraceableInterface
         return $this->group;
     }
 
+    public function getGroupTitle(): ?string
+    {
+        return $this->group ? $this->group->getTitle() : null;
+    }
+
     /**
      * @param Group $group
      *
@@ -994,10 +1041,7 @@ class Sheet implements TraceableInterface
         return $this->attend;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -1124,6 +1168,18 @@ class Sheet implements TraceableInterface
     public function setCommercialStatus(string $commercialStatus): void
     {
         $this->commercialStatus = $commercialStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommercialStatusLabel(): string
+    {
+        if (isset(CommercialStatus::STATUS_WITH_LABEL[$this->commercialStatus])) {
+            return CommercialStatus::STATUS_WITH_LABEL[$this->commercialStatus];
+        }
+
+        return 'default';
     }
 
     /**

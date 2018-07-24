@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\CreateHandler;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
@@ -57,6 +56,7 @@ class CreateHandlerTest extends TestCase
         $create->organiserName = 'proximum';
         $create->emailTeam     = 'team-project@example.net';
         $create->visible       = true;
+        $create->visio         = false;
 
         // Expected event
         $expectedEvent = new Event(
@@ -74,6 +74,8 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
+
+        $expectedEvent->getConfiguration()->setVisio(false);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
 
@@ -145,6 +147,7 @@ class CreateHandlerTest extends TestCase
         $create->timeZone      = 'Europe/Paris';
         $create->emailTeam     = 'team-project@example.net';
         $create->visible       = true;
+        $create->visio         = false;
 
         // Expected event
         $expectedEvent = new Event(
@@ -162,6 +165,8 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
+
+        $expectedEvent->getConfiguration()->setVisio(false);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
 
@@ -251,6 +256,7 @@ class CreateHandlerTest extends TestCase
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
         $create->visible       = true;
+        $create->visio         = false;
 
         // Expected event
         $expectedEvent = new Event(
@@ -268,6 +274,7 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
+
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
 
@@ -334,9 +341,9 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true,
             $duplicatedEvent
-
         );
-        $event->getConfiguration()->setColors('#AAAAAA', '#BBBBBB', '#CCCCCC', '#DDDDDD', '#EEEEEE', '#FFFFFF');
+
+        $event->getConfiguration()->setVisio(false);
 
         $create = new Create($user, $event);
 

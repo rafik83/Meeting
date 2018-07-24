@@ -21,6 +21,7 @@ var $ = require('jquery'),
     MeetingRequestMobileFilters = require('./components/MeetingRequest/_MeetingRequestMobileFilters'),
     AnchorFocuser = require('./components/_AnchorFocuser'),
     Happening = require('./components/_Happening'),
+    ToggleVisibility = require('./components/_ToggleVisibility'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
     FilterRequestByType = require('./components/MeetingRequest/_FilterByType'),
     CatalogPagination = require('./components/_CatalogPagination'),
@@ -236,6 +237,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('[data-serialized-participant-products]'), function (element) {
         new PackageParticipantProducts(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-toggle-visibility]'), function (element) {
+        new ToggleVisibility(element, target);
     });
 }
 

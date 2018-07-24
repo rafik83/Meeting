@@ -88,7 +88,7 @@
 
 {% if is_granted('ROLE_ALLOWED_TO_MANAGE_USER') %}
     <li>
-        <a href="{{ path('admin_users', { 'event': event.id }) }}">
+        <a href="{{ path('admin_users_list', { 'event': event.id }) }}">
             {{ 'admin.users.link'|trans }}
         </a>
     </li>
@@ -238,6 +238,14 @@
                 </a>
             </li>
         </ul>
+    </li>
+{% endif %}
+
+{% if is_granted('ROLE_ALLOWED_TO_HOST') %}
+    <li>
+        <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">
+            {{ 'admin.meeting.link'|trans }}
+        </a>
     </li>
 {% endif %}
 

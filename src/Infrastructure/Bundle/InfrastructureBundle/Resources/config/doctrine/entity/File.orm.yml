@@ -9,5 +9,8 @@ Proximum\Vimeet\Domain\Model\File:
     fields:
         path:
             type: string
+        type:
+            type: string
+            nullable: true
         createdAt:
             type: datetime

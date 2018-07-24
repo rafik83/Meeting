@@ -116,6 +116,15 @@ class Configuration
     /** @var \DateTimeInterface|null "Active l'affichage du badge pour le participant" */
     private $enableBadgeForParticipantDate;
 
+    /** @var bool */
+    private $displayParticipantNameOnPlanning = false;
+
+    /** @var bool */
+    private $displayParticipantPositionOnPlanning = false;
+
+    /** @var bool */
+    private $visio = false;
+
     public function __construct()
     {
         $this->meetingRequestUpdateLocked = false;
@@ -524,5 +533,43 @@ class Configuration
     public function getEnableBadgeForParticipantDate(): ?\DateTimeInterface
     {
         return $this->enableBadgeForParticipantDate;
+    }
+
+    public function isVisio(): bool
+    {
+        return $this->visio;
+    }
+
+    public function setVisio(bool $visio): void
+    {
+        $this->visio = $visio;
+    }
+
+    /**
+     * @return bool
+     */
+    public function displayParticipantNameOnPlanning(): bool
+    {
+        return $this->displayParticipantNameOnPlanning;
+    }
+
+    /**
+     * @return bool
+     */
+    public function displayParticipantPositionOnPlanning(): bool
+    {
+        return $this->displayParticipantPositionOnPlanning;
+    }
+
+    /**
+     * @param bool $displayParticipantNameOnPlanning
+     * @param bool $displayParticipantPositionOnPlanning
+     */
+    public function setParticipantInfoToDisplayOnPlanning(
+        bool $displayParticipantNameOnPlanning,
+        bool $displayParticipantPositionOnPlanning
+    ): void {
+        $this->displayParticipantNameOnPlanning = $displayParticipantNameOnPlanning;
+        $this->displayParticipantPositionOnPlanning = $displayParticipantPositionOnPlanning;
     }
 }

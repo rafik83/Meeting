@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQuery;
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\ConfigureType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,12 +38,14 @@ class CatalogController extends Controller
         $locale = $event->getAvailableLocale($request->getLocale());
 
         $searchFacets = $this->get('vimeet_infrastructure.repository.catalog.external.search_facet')->getByEvent($event);
+        $catalogTagFilters = $this->get(CatalogTagFilterRepository::class)
+            ->getByEventAndType($event, CatalogTagFilter::TYPE_EXTERNAL);
 
         $catalogVisibility = $this
             ->get('query.catalog.external.catalog_visibility_view_query_handler')
             ->handle(new CatalogVisibilityQuery($event));
 
-        $configure = new Configure($event, $catalogVisibility, $searchFacets);
+        $configure = new Configure($event, $catalogVisibility, $searchFacets, $catalogTagFilters);
 
         $configureForm = $this->createForm(ConfigureType::class, $configure, [
             'user'   => $user,

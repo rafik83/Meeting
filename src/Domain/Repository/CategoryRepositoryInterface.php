@@ -54,6 +54,8 @@ interface CategoryRepositoryInterface
      */
     public function getCategoriesByEvent(Event $event): array;
 
+    public function eventHasCategories(Event $event): bool;
+
     /**
      * @param Event  $event
      * @param string $locale

@@ -35,6 +35,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Catalog\External\SearchFacetRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.user_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\UserRepository
         arguments:
@@ -333,6 +336,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     #
     # Handlers
     #
@@ -354,8 +361,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
             - '@domain.event.last_event_participation'
-            - '@template.template_data_factory'
-            - '@Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator'
+            - '@Proximum\Vimeet\Application\Components\TemplateData\TemplateDataDuplicator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Participate }
     vimeet_infrastructure.vimeet.application.command.participant.add_handler:
@@ -982,6 +988,15 @@ services:
             - '@command.sheet.remove_data_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveImage }
+    Proximum\Vimeet\Application\Command\Sheet\SaveTreeToFileSystemCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
+            - '@adapter.file_system_adapter'
+            - '%shared_uploaded_files%'
+            - '%infrastructure.encrypted_files_path%'
+            - '%kernel.project_dir%/web'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SaveTreeToFileSystemCommand }
     command.sheet.submit_validation_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\SubmitValidationHandler
         arguments:
@@ -1335,6 +1350,23 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ChangeType }
+    Proximum\Vimeet\Application\Command\Sheet\ConvertFilesystemTreeToZipCommandHandler:
+        arguments:
+            - '@repository.file_repository'
+            - '@adapter.file_system_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ConvertFilesystemTreeToZipCommand }
+    Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommand }
     command.product.create_option_handler:
         class: Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler
         arguments:
@@ -1617,6 +1649,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\SearchFacet\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.search_facet'
+            - '@Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\SearchFacet\Update }
     command.payment.abstract_choice_handler:
@@ -2011,6 +2044,7 @@ services:
             - '@query.sheet.group.participant.participant_view_query_handler'
             - '@participant.user_to_participant'
             - '@command.planning.sheet_info_guesser_cache'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets }
     command.group.sheet.create_handler:
@@ -2117,6 +2151,12 @@ services:
             - '@command.event.un_archive_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive }
+
+    Proximum\Vimeet\Application\Command\Event\ToggleParticipantVisioCommandHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ToggleParticipantVisioCommand }
 
     command.event.configuration.background.remove_image_handler:
         class: Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImageHandler
@@ -2226,6 +2266,22 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdate }
 
+    Proximum\Vimeet\Application\Command\UserEventView\IndexHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventIdsByEvent'
+            - '@Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEventView\Index }
+
+    Proximum\Vimeet\Application\Command\UserEventView\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister'
+            - '@Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEventView\Update }
+
+
     #
     # Security
     #
@@ -2261,6 +2317,10 @@ services:
             - '@adapter.file_system_adapter'
             - '%kernel.root_dir%/../web'
             - '@datetime'
+    Proximum\Vimeet\Infrastructure\Adapter\TransliteratorAdapter: ~
+    Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter: ~
+    Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter: ~
+    Proximum\Vimeet\Infrastructure\Adapter\ProcessAdapter: ~
     adapter.authentication_manager:
         class: Proximum\Vimeet\Infrastructure\Adapter\AuthenticationManager
         arguments:
@@ -2532,6 +2592,10 @@ services:
         class: Proximum\Vimeet\Domain\UserEvent\TypeResolver
         arguments:
             - '@vimeet_infrastructure.repository.user_event_repository'
+
+    Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository'
 
     #
     # Token component
@@ -3169,6 +3233,19 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
+    Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQueryHandler:
+        arguments:
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\TransliteratorAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQuery }
+
+    Proximum\Vimeet\Application\Query\Sheet\GetSheetIdsByFiltersQueryHandler:
+        arguments:
+            - '@adapter.sheet_search_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\GetSheetIdsByFiltersQuery }
+
     query.catalog.catalog_available_slot_ids_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQueryHandler
         arguments:
@@ -3371,7 +3448,6 @@ services:
     query.user.user_details_view_query_handler:
         class: Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler
         arguments:
-            - '@vimeet_infrastructure.repository.user_event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery }
@@ -3578,6 +3654,14 @@ services:
             - '@repository.catalog_visibility_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery }
+
+    Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEvent'
+            - '@vimeet_infrastructure.repository.category_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery }
+
     #
     # Program query
     #
@@ -4386,6 +4470,40 @@ services:
              - '@fos_elastica.index.app.sheet'
 
     #
+    # Elastica
+    #
+    Elastica\Client:
+        arguments:
+            - {'host': '%elastic_host%', 'port': '%elastic_port%'}
+
+    Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister:
+        arguments:
+            - '@Elastica\Client'
+            - '@Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaMapping'
+            - 'app_%kernel.environment%'
+            - '@adapter.serializer_adapter'
+
+    Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaMapping: ~
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter:
+        arguments:
+            - '@Elastica\Client'
+            - 'app_%kernel.environment%'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEvent:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventIdsByEvent:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
+    #
     # Command
     #
     command.build_event_guideline_asset_command:
@@ -4393,6 +4511,16 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@guideline.generator'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@Proximum\Vimeet\Application\Command\Sheet\ExportUploadedObjectsCommandHandler'
         tags:
             - { name: console.command }
 
@@ -4476,6 +4604,15 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_indexer'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\RemoveExpiredFilesCommand:
+        arguments:
+            - '@repository.file_repository'
+            - '@adapter.file_system_adapter'
+            - '@datetime'
+            - '%shared_uploaded_files%'
         tags:
             - { name: console.command }
 
@@ -4747,6 +4884,7 @@ services:
             - '@repository.catalog_visibility_repository'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@catalog.external.set_search_facet_handler'
+            - '@Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\Configure }
     catalog.external.set_search_facet_handler:
@@ -4755,6 +4893,10 @@ services:
             - '@vimeet_infrastructure.repository.catalog.external.search_facet'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacet }
+
+    Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository'
 
     #
     # Promotion
@@ -5227,6 +5369,7 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@order.merger'
             - '@order.balance'
+            - '@Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler'
         tags:
             - { name: serializer.normalizer }
 
@@ -5639,6 +5782,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Planning\Day\MassViewQueryHandler
     query.planning.day.meeting_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planning\Day\MeetingViewQueryHandler
+        arguments:
+            - '@command.planning.participant_info_guesser_cache'
     query.planning.day.unavailability_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planning\Day\UnavailabilityViewQueryHandler
     query.planning.day_view_query_handler:

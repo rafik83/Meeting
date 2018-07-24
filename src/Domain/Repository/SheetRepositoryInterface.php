@@ -340,6 +340,14 @@ interface SheetRepositoryInterface
     public function findSheets(array $sheets);
 
     /**
+     * @param int[]  $sheetIds
+     * @param string $locale
+     *
+     * @return Sheet[] indexed by id
+     */
+    public function getSheetsByIdsWithTypesAndCategories(array $sheetIds, string $locale): array;
+
+    /**
      * @param array $sheetIds
      *
      * @return Sheet[]

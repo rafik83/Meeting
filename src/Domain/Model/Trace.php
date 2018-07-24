@@ -17,21 +17,22 @@ use DateTimeInterface;
  */
 class Trace
 {
-    const ACCEPT                         = 'accept';
-    const VALIDATE                       = 'validate';
-    const CREATE                         = 'create';
-    const UPDATE                         = 'update';
-    const ENABLE                         = 'enable';
-    const DISABLE                        = 'disable';
-    const ENABLE_CATALOG                 = 'enable_catalog';
-    const DISABLE_CATALOG                = 'disable_catalog';
-    const CHANGED_TYPE                   = 'changed_type';
-    const VALIDATION_DRAFT               = 'validation_draft';
-    const VALIDATION_VALIDATE            = 'validation_validate';
-    const PARTICIPANT_IMPORTED           = 'participant_imported';
-    const SHEET_CREATED_BY_GROUP_MANAGER = 'sheet_created_by_group_manager';
-    const PENDING                        = 'pending';
-    const SET_COMMERCIAL_STATUS          = 'set_commercial_status';
+    public const ACCEPT                         = 'accept';
+    public const VALIDATE                       = 'validate';
+    public const CREATE                         = 'create';
+    public const UPDATE                         = 'update';
+    public const ENABLE                         = 'enable';
+    public const DISABLE                        = 'disable';
+    public const ENABLE_CATALOG                 = 'enable_catalog';
+    public const DISABLE_CATALOG                = 'disable_catalog';
+    public const CHANGED_TYPE                   = 'changed_type';
+    public const VALIDATION_DRAFT               = 'validation_draft';
+    public const VALIDATION_VALIDATE            = 'validation_validate';
+    public const PARTICIPANT_IMPORTED           = 'participant_imported';
+    public const SHEET_CREATED_BY_GROUP_MANAGER = 'sheet_created_by_group_manager';
+    public const PENDING                        = 'pending';
+    public const SET_COMMERCIAL_STATUS          = 'set_commercial_status';
+    public const ORDERS_CANCELLED               = 'orders_cancelled';
 
     const ACTIONS_REQUIRED_TRANSLATION = [
         self::SET_COMMERCIAL_STATUS,

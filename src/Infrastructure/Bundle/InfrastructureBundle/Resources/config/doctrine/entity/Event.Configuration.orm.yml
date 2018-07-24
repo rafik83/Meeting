@@ -85,3 +85,15 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             type: string
             options:
                 default: '#ffffff'
+        displayParticipantNameOnPlanning:
+            type: boolean
+            options:
+                default: false
+        displayParticipantPositionOnPlanning:
+            type: boolean
+            options:
+                default: false
+        visio:
+            type: boolean
+            options:
+                default: false

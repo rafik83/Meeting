@@ -39,6 +39,12 @@ class CommentRepository implements CommentRepositoryInterface
         $this->entityManager->flush($comment);
     }
 
+    public function remove(Comment $comment): void
+    {
+        $this->entityManager->remove($comment);
+        $this->entityManager->flush($comment);
+    }
+
     /**
      * {@inheritdoc}
      */

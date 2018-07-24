@@ -12,13 +12,15 @@ namespace Proximum\Vimeet\Application\View\Sheet\Details\CRM;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\RemoveCommentAction;
 
 class RecordView
 {
-    const TRANSLATION_KEY_TRACE_COMMERCIAL_STATUS = 'admin.sheet.details.crm.record.trace.set_commercial_status.';
+    public const TRANSLATION_KEY_TRACE_COMMERCIAL_STATUS = 'admin.sheet.details.crm.record.trace.set_commercial_status.';
+    public const INTENTION_REMOVE_COMMENT = 'remove_comment';
 
-    const TRACE = 'trace';
-    const COMMENT = 'comment';
+    public const TRACE = 'trace';
+    public const COMMENT = 'comment';
 
     /** @var Admin */
     public $author;
@@ -32,22 +34,21 @@ class RecordView
     /** @var string */
     public $type;
 
-    /**
-     * @param Admin              $author
-     * @param string             $comment
-     * @param string             $type
-     * @param \DateTimeInterface $createdAt
-     */
+    /** @var null|int */
+    public $commentId;
+
     public function __construct(
         Admin $author,
         string $comment,
         string $type,
-        \DateTimeInterface $createdAt
+        \DateTimeInterface $createdAt,
+        ?int $commentId = null
     ) {
         $this->author = $author;
         $this->comment = $comment;
         $this->createdAt = $createdAt;
         $this->type = $type;
+        $this->commentId = $commentId;
     }
 
     /**
@@ -88,5 +89,10 @@ class RecordView
         }
 
         return 'default';
+    }
+
+    public function getRemoveIntentionComment(): string
+    {
+        return self::INTENTION_REMOVE_COMMENT;
     }
 }

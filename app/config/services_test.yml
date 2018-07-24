@@ -81,6 +81,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@behat_manager.sheet'
             - '@behat_manager.user'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     behat_manager.slot:
         class: Proximum\Vimeet\Behat\Service\Manager\SlotManager
@@ -322,6 +323,11 @@ services:
         arguments:
             - '@behat_storage'
             - '@Proximum\Vimeet\Behat\Service\Manager\AvailabilityTimeRangeManager'
+
+    Proximum\Vimeet\Behat\Proxy\BillingInfoContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.billing_info'
 
     #
     # Other services

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
@@ -249,6 +250,10 @@ class ConvertToParticipantHandler
         $this->sheetRepository->add($sheet);
         $this->participantRepository->add($participant);
         $this->userEventRepository->add(new UserEvent($participant->getUser(), $sheet->getEvent(), $sheet->getType()));
+        $this->eventDispatcher->dispatch(
+            Events::PARTICIPANT_IMPORTED_FROM_API,
+            new ParticipantImportedFromApiEvent($participant)
+        );
     }
 
     /**
@@ -264,7 +269,9 @@ class ConvertToParticipantHandler
             $sheet,
             $user,
             $participantRegistrationData,
-            false
+            false,
+            $sheet->getEvent()->getConfiguration()->isVisio()
+
         );
         $participant->setImported(true);
 

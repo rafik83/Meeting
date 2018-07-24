@@ -297,3 +297,13 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Create }
+
+    #
+    # Order
+    #
+    Proximum\Vimeet\Application\Command\Order\CancelAllHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Sheet\ChangeType\CancelPackageHandler'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\CancelAll }

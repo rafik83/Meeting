@@ -195,6 +195,7 @@ admin.event.search_facets.link: 'Filtres catalogue'
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
 admin.event.settings.link: 'Paramètrages de l''événement'
+admin.event.sheet.comment.remove.confirm: 'Etes-vous sûr de vouloir supprimer ce commentaire ?'
 admin.event.sheet.index.title: 'Ré-indexer les fiches de l''événement'
 admin.event.template.link: Templates
 admin.event.template.package: 'Forfait de participation'
@@ -675,6 +676,7 @@ admin.promotion_code.table.column.validUntil: 'Valide jusqu''au'
 admin.promotion_code.table.no_result: 'Aucun code promo'
 admin.promotion_code.title: 'Codes promos'
 admin.promotion_code.update: 'Modifier code promo'
+admin.role.ROLE_HOST: Hôte
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
 admin.role.ROLE_PARTNER: Partenaire
@@ -808,8 +810,11 @@ admin.sheet.duplication: 'Dupliquer les fiches'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
 admin.sheet.export.button.label: Exporter
+admin.sheet.export.field.comment: '%author% le %date%: "%comment%"'
 admin.sheet.export.fields.balance: 'Balance TTC'
 admin.sheet.export.fields.category: Catégorie
+admin.sheet.export.fields.comments: Commentaires
+admin.sheet.export.fields.commercial_status: 'Statut commercial'
 admin.sheet.export.fields.event_id: 'ID événement'
 admin.sheet.export.fields.event_name: 'Nom de l''événement'
 admin.sheet.export.fields.following: 'Suivi commercial'
@@ -832,6 +837,7 @@ admin.sheet.export.meetings.button.label: 'Exporter RDV'
 admin.sheet.export.no: Non
 admin.sheet.export.participant.button.label: 'Exporter participants'
 admin.sheet.export.sheet.button.label: 'Exporter fiches'
+admin.sheet.export.uploaded_objects.button.label: 'Exporter les fichiers uploadés'
 admin.sheet.export.yes: Oui
 admin.sheet.filter.has_cart: 'Fiche avec panier'
 admin.sheet.filter.no_order: 'Fiche sans commande'
@@ -845,9 +851,12 @@ admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que
 admin.sheet.import.button.label: Importer
 admin.sheet.imported.all.label: 'Peu importe'
 admin.sheet.inCatalog: 'Au catalogue'
+admin.sheet.isOwner: Propriétaire
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
 admin.sheet.list.filters.label: 'Filtres avancés'
+admin.sheet.orders.cancel: 'Annuler tout'
+admin.sheet.orders.cancel.confirm: 'Êtes vous sûr de vouloir annuler toutes les commandes ? Cette action est irréversible'
 admin.sheet.participant_visio.success: 'Le participant a été mis à jour'
 admin.sheet.participant.invalid-parameters: 'Le paramètre envoyé n''est pas valide'
 admin.sheet.participant.not_found: 'Ce participant n''existe pas'
@@ -875,9 +884,11 @@ admin.sheet.trace.sheet_created_by_group_manager: 'Fiche dupliquée par le gesti
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
+admin.sheet.trace.orders_cancelled: 'Commandes annulées le %at%'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
 admin.sheet.validateSheets: 'Valider les fiches'
+admin.sheet.validationState: 'Statut fiche'
 admin.sheets_group.column.created_at: 'Date de création'
 admin.sheets_group.column.email_manager: 'Email du gestionnaire'
 admin.sheets_group.column.sheet_list: 'Liste des fiches'
@@ -1099,11 +1110,14 @@ admin.user.events: Evénements
 admin.users.details: 'Voir le compte'
 admin.users.email: Email
 admin.users.firstName: Prénom
+admin.users.id: Id
 admin.users.lastName: Nom
 admin.users.link: Utilisateurs
+admin.users.locale: Langue
 admin.users.see-sheet: 'Voir la participation'
 admin.users.title: Utilisateurs
 admin.users.type: Type
+admin.users.user: Utilisateur
 admin.users.withoutSheet: 'Sans fiche'
 admin.users.withSheet: 'Avec fiche'
 admin.zero-result: 'Aucun résultat'

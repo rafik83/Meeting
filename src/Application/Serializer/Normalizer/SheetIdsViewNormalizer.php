@@ -11,7 +11,10 @@
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler;
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Application\View\Sheet\Details\CRM\RecordView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -36,26 +39,31 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  */
 class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
-    const TRANSLATION_COL       = 'admin.sheet.export.fields';
-    const COL_EVENT_ID          = 'event_id';
-    const COL_EVENT_NAME        = 'event_name';
-    const COL_SHEET_ID          = 'sheet_id';
-    const COL_SHEET_ENABLE      = 'sheet_enable';
-    const COL_OWNER_ID          = 'owner_id';
-    const COL_OWNER_EMAIL       = 'owner_email';
-    const COL_TYPE              = 'type';
-    const COL_CATEGORY          = 'category';
-    const COL_REGISTRATION_DATE = 'registration_date';
-    const COL_PARTICIPANTS      = 'participants';
-    const COL_STATUS            = 'status'; // Validation State
-    const COL_FOLLOWING         = 'following';  // Admin that follow up the sheet
-    const COL_IN_CATALOG        = 'in_catalog';
-    const COL_ORDER_PROMO_CODE  = 'order_promo_code';
-    const COL_SHEET_STATE       = 'sheet_state'; // State
-    const COL_TOTAL_ORDER       = 'total_excluded_vat'; // Total hors taxes
-    const COL_BALANCE           = 'balance';
+    public const TRANSLATION_COL       = 'admin.sheet.export.fields';
+    public const COL_EVENT_ID          = 'event_id';
+    public const COL_EVENT_NAME        = 'event_name';
+    public const COL_SHEET_ID          = 'sheet_id';
+    public const COL_SHEET_ENABLE      = 'sheet_enable';
+    public const COL_OWNER_ID          = 'owner_id';
+    public const COL_OWNER_EMAIL       = 'owner_email';
+    public const COL_TYPE              = 'type';
+    public const COL_CATEGORY          = 'category';
+    public const COL_REGISTRATION_DATE = 'registration_date';
+    public const COL_PARTICIPANTS      = 'participants';
+    public const COL_STATUS            = 'status'; // Validation State
+    public const COL_FOLLOWING         = 'following';  // Admin that follow up the sheet
+    public const COL_IN_CATALOG        = 'in_catalog';
+    public const COL_ORDER_PROMO_CODE  = 'order_promo_code';
+    public const COL_SHEET_STATE       = 'sheet_state'; // State
+    public const COL_TOTAL_ORDER       = 'total_excluded_vat'; // Total hors taxes
+    public const COL_BALANCE           = 'balance';
+    public const COL_COMMENTS          = 'comments';
+    public const COL_COMMERCIAL_STATUS = 'commercial_status';
 
-    const COMMON_COL = [
+    public const TRANSLATION_KEY_COMMERCIAL_STATUS = 'admin.sheet.details.crm.record.trace.set_commercial_status.';
+    public const TRANSLATION_KEY_COMMENT = 'admin.sheet.export.field.comment';
+
+    public const COMMON_COL = [
         self::COL_EVENT_ID,
         self::COL_EVENT_NAME,
         self::COL_SHEET_ID,
@@ -73,6 +81,8 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         self::COL_ORDER_PROMO_CODE,
         self::COL_TOTAL_ORDER,
         self::COL_BALANCE,
+        self::COL_COMMENTS,
+        self::COL_COMMERCIAL_STATUS,
     ];
 
     protected $normalizerType = 'sheet';
@@ -113,12 +123,20 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     private $balance;
 
     /**
+     * RecordViewsQueryHandler is used to get the comment and commercialStatus historic
+     *
+     * @var RecordViewsQueryHandler
+     */
+    private $recordViewsQueryHandler;
+
+    /**
      * @param TranslatorInterface      $translator
      * @param SheetRepositoryInterface $sheetRepository
      * @param TemplateDataFactory      $templateDataFactory
      * @param OrderRepositoryInterface $orderRepository
      * @param Merger                   $merger
      * @param Balance                  $balance
+     * @param RecordViewsQueryHandler  $recordViewsQueryHandler
      */
     public function __construct(
         TranslatorInterface $translator,
@@ -126,7 +144,8 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         TemplateDataFactory $templateDataFactory,
         OrderRepositoryInterface $orderRepository,
         Merger $merger,
-        Balance $balance
+        Balance $balance,
+        RecordViewsQueryHandler $recordViewsQueryHandler
     ) {
         parent::__construct($translator);
 
@@ -137,6 +156,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         $this->merger              = $merger;
         $this->balance             = $balance;
         $this->orderRepository     = $orderRepository;
+        $this->recordViewsQueryHandler = $recordViewsQueryHandler;
     }
 
     /**
@@ -232,13 +252,15 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_TYPE              => $sheet->getType()->getTitle($availableLocale),
             self::COL_CATEGORY          => $categories,
             self::COL_REGISTRATION_DATE => $sheet->getCreatedAt()->format('d/m/Y'),
-            self::COL_PARTICIPANTS      => $sheet->countParticipant(),
+            self::COL_PARTICIPANTS      => $sheet->countParticipants(),
             self::COL_STATUS            => $sheet->getValidationState(),
             self::COL_FOLLOWING         => null !== $follower ? $follower->getDisplayName() : '',
             self::COL_IN_CATALOG        => $this->normalizeBoolean($sheet->isInCatalog()),
             self::COL_ORDER_PROMO_CODE  => implode(',', $promotionCodes),
             self::COL_TOTAL_ORDER       => $totalWithoutVat,
             self::COL_BALANCE           => $balance,
+            self::COL_COMMENTS          => $this->getCommentHistoric($sheet, $locale),
+            self::COL_COMMERCIAL_STATUS => $this->getCommercialStatus($sheet),
         ];
 
         // 2. Registration data
@@ -248,6 +270,33 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         $this->addPresentationRawData($rawData, $sheet, $availableLocale, $fallbackLocale);
 
         return $rawData;
+    }
+
+    private function getCommercialStatus(Sheet $sheet): string
+    {
+        return $sheet->getCommercialStatus() !== null
+            ? $this->translator->trans(sprintf('%s%s', self::TRANSLATION_KEY_COMMERCIAL_STATUS, $sheet->getCommercialStatus()))
+            : ''
+        ;
+    }
+
+    private function getCommentHistoric(Sheet $sheet, string $locale): string
+    {
+        return implode("\r\n", array_map(function (RecordView $recordView) use ($locale) {
+            return $this->translator->trans(
+                self::TRANSLATION_KEY_COMMENT,
+                [
+                    '%author%' => $recordView->author->getDisplayName(),
+                    '%date%' => $recordView->createdAt->format('d/m/Y H:i'),
+                    '%comment%' => $recordView->isComment()
+                        ? $recordView->comment
+                        : $this->translator->trans($recordView->getTraceTranslationKey() . $recordView->comment)
+                    ,
+                ],
+                'messages',
+                $locale
+            );
+        }, $this->recordViewsQueryHandler->handle(new RecordViewsQuery($sheet))));
     }
 
     /**

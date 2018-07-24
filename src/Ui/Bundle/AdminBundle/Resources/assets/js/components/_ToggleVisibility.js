@@ -5,7 +5,7 @@ function ToggleVisibility(element, document)
     this.elementToHide = document.getElementById(this.elementToHideId);
     this.displayType = this.element.getAttribute('data-toggle-visibility-display-type');
 
-    if (this.displayType === 'undefined' || this.displayType === 'undefined') {
+    if (this.displayType === 'undefined' || this.displayType === null) {
         this.displayType = 'block';
     }
 

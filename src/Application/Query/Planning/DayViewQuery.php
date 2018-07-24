@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Planning;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -44,7 +45,11 @@ class DayViewQuery
     /** @var string */
     public $locale;
 
+    /** @var Event */
+    public $event;
+
     /**
+     * @param Event                    $event
      * @param User                     $user
      * @param Day                      $day
      * @param string                   $locale
@@ -55,6 +60,7 @@ class DayViewQuery
      * @param Meeting[]                $meetings
      */
     public function __construct(
+        Event $event,
         User $user,
         Day $day,
         $locale,
@@ -72,5 +78,6 @@ class DayViewQuery
         $this->masses           = $masses;
         $this->assignments      = $assignments;
         $this->meetings         = $meetings;
+        $this->event = $event;
     }
 }

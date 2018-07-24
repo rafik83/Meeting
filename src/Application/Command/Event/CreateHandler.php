@@ -103,6 +103,8 @@ class CreateHandler
             );
         }
 
+        $event->getConfiguration()->setVisio($create->visio);
+
         foreach ($event->getLocales() as $locale) {
             if (!$event->getTranslations()->get($locale)) {
                 $event->getTranslations()->set($locale, new EventTranslation($event, $locale, ''));

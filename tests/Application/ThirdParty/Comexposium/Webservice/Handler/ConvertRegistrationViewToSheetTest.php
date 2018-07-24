@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Ha
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ConvertRegistrationViewToSheet;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler;
@@ -40,6 +41,9 @@ class ConvertRegistrationViewToSheetTest extends TestCase
     {
         $dateTime = new \DateTime();
         $event = $this->prophesize(Event::class);
+        $configuration = $this->prophesize(Event\Configuration::class);
+        $configuration->isVisio()->shouldBeCalled()->willReturn(false);
+        $event->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
         $type = $this->prophesize(Type::class);
 
         $registrationView = new RegistrationView(
@@ -122,6 +126,13 @@ class ConvertRegistrationViewToSheetTest extends TestCase
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $eventDispatcher
             ->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($expectedSheet))
+            ->shouldBeCalled()
+        ;
+        $eventDispatcher
+            ->dispatch(
+                Events::PARTICIPANT_IMPORTED_FROM_API,
+                new ParticipantImportedFromApiEvent($expectedParticipant)
+            )
             ->shouldBeCalled()
         ;
 
