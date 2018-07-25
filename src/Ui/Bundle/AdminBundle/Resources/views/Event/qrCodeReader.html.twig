@@ -4,7 +4,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
     <script src="{{ asset('assets/js/qrcode.js') }}"></script>
 {% endblock %}
 
@@ -15,6 +14,7 @@
         data-payloads="{{ qrCodePayloads | json_encode }}"
         data-not-found="{{ 'admin.event.qrcode.notfound'|trans }}"
         data-close="{{ 'admin.common.close'|trans }}"
-        data-title="{{ 'admin.event.qrcode.title'|trans }}">
+        data-title="{{ 'admin.event.qrcode.title'|trans }}"
+        data-number-of-available-badge="{{ 'admin.event.qrcode.number_of_available_badge'|trans }}">
     </div>
 {% endblock %}

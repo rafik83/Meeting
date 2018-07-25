@@ -10,6 +10,7 @@ class QrCode extends Component {
         this.state = {
             display: false,
             error: false,
+            nbBadgeImported: 0,
             result: null
         };
 
@@ -26,6 +27,10 @@ class QrCode extends Component {
         db.table('qrCodePayloads').clear();
         db.table('qrCodePayloads').bulkAdd(data).then(() => {
             this.setState({ display: true });
+
+            db.table('qrCodePayloads').count().then(count => {
+                this.setState({ nbBadgeImported: count });
+            });
         });
     }
 
@@ -33,6 +38,7 @@ class QrCode extends Component {
         if (payload) {
             db.table('qrCodePayloads').get(payload).then(result => {
                 if (result) {
+                    db.table('spool').add({ payload: result.payload, scannedAt: new Date() });
                     this.setState({ display: false, error: false, result: result });
                 } else {
                     this.setState({ display: false, error: true, result: null });
@@ -81,10 +87,16 @@ class QrCode extends Component {
     }
 
     render() {
-        let { display, error, result} = this.state;
+        let { display, error, result, nbBadgeImported} = this.state;
 
         return (
             <Fragment>
+                {nbBadgeImported > 0 &&
+                    <p>
+                        {this.element.dataset.numberOfAvailableBadge} : {nbBadgeImported}
+                    </p>
+                }
+
                 {display &&
                     <QrReader
                         delay={300}
