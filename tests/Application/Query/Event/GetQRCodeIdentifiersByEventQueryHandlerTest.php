@@ -13,10 +13,10 @@ namespace Proximum\Vimeet\Tests\Application\Query\Event;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
-use Proximum\Vimeet\Application\Query\Event\GetQRCodePayloadByEventQuery;
-use Proximum\Vimeet\Application\Query\Event\GetQRCodePayloadByEventQueryHandler;
-use Proximum\Vimeet\Application\View\Event\QRCodePayloadListView;
-use Proximum\Vimeet\Application\View\Event\QRCodePayloadView;
+use Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery;
+use Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQueryHandler;
+use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierListView;
+use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -25,7 +25,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
-class GetQRCodePayloadByEventQueryHandlerTest extends TestCase
+class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
 {
     public function testHandle(): void
     {
@@ -85,19 +85,19 @@ class GetQRCodePayloadByEventQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('Croatie');
 
-        $handler = new GetQRCodePayloadByEventQueryHandler(
+        $handler = new GetQRCodeIdentifiersByEventQueryHandler(
             $queryBus->reveal(),
             $participantRepository->reveal(),
             $participantInfoGuesser->reveal(),
             $groupNameResolver->reveal()
         );
 
-        $expectedResult = new QRCodePayloadListView([
-            new QRCodePayloadView('00000010000002', 'Kylian', 'Mbappe', 'France'),
-            new QRCodePayloadView('00000020000003', 'Luka', 'Modric', 'Croatie'),
+        $expectedResult = new QRCodeIdentifierListView([
+            new QRCodeIdentifierView('00000010000002', 'Kylian', 'Mbappe', 'France'),
+            new QRCodeIdentifierView('00000020000003', 'Luka', 'Modric', 'Croatie'),
         ]);
 
-        $result = $handler->handle(new GetQRCodePayloadByEventQuery($event->reveal(), 'fr'));
+        $result = $handler->handle(new GetQRCodeIdentifiersByEventQuery($event->reveal(), 'fr'));
         $this->assertEquals($expectedResult, $result);
     }
 }

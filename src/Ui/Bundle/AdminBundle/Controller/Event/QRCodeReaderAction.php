@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Query\Event\GetQRCodePayloadByEventQuery;
-use Proximum\Vimeet\Application\View\Event\QRCodePayloadListView;
+use Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery;
+use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,9 +36,9 @@ class QRCodeReaderAction
 
     public function __invoke(Request $request, Event $event): Response
     {
-        /** @var QRCodePayloadListView $qrCodePayloads */
-        $qrCodePayloads = $this->queryBus->handle(
-            new GetQRCodePayloadByEventQuery(
+        /** @var QRCodeIdentifierListView $identifiers */
+        $identifiers = $this->queryBus->handle(
+            new GetQRCodeIdentifiersByEventQuery(
                 $event,
                 $event->getAvailableLocale($request->getLocale())
             )
@@ -47,7 +47,7 @@ class QRCodeReaderAction
         return new Response(
             $this->engine->render('@Admin/Event/qrCodeReader.html.twig', [
                 'event' => $event,
-                'qrCodePayloads' => $qrCodePayloads->list,
+                'identifiers' => $identifiers->list,
             ])
         );
     }

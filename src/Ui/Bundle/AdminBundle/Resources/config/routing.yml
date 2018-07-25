@@ -1433,6 +1433,13 @@ admin_users_list:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\ListAction }
 
+admin_user_event_scan:
+    path: /event/{event}/access/scan
+    requirements:
+        event: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction }
+
 admin_users_details:
     path: /event/{event}/users/{user}
     defaults: { _controller: AdminBundle:User:show }

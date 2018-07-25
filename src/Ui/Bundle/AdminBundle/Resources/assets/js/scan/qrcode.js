@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import QrReader from 'react-qr-reader';
-import db from './vendor/db';
+import db from '../vendor/db';
+import Spool from './spool';
 
 class QrCode extends Component {
     constructor() {
@@ -10,7 +11,7 @@ class QrCode extends Component {
         this.state = {
             display: false,
             error: false,
-            nbBadgeImported: 0,
+            nbImportedIdentifiers: 0,
             result: null
         };
 
@@ -22,28 +23,30 @@ class QrCode extends Component {
     }
 
     componentDidMount() {
-        let data = JSON.parse(this.element.dataset.payloads);
+        let data = JSON.parse(this.element.dataset.identifiers);
 
-        db.table('qrCodePayloads').clear();
-        db.table('qrCodePayloads').bulkAdd(data).then(() => {
+        db.table('identifiers').clear();
+        db.table('identifiers').bulkAdd(data).then(() => {
             this.setState({ display: true });
 
-            db.table('qrCodePayloads').count().then(count => {
-                this.setState({ nbBadgeImported: count });
+            db.table('identifiers').count().then(count => {
+                this.setState({ nbImportedIdentifiers: count });
             });
         });
     }
 
-    handleScan(payload) {
-        if (payload) {
-            db.table('qrCodePayloads').get(payload).then(result => {
+    handleScan(identifier) {
+        if (identifier) {
+            let spool = new Spool();
+
+            db.table('identifiers').get(identifier).then(result => {
                 if (result) {
-                    db.table('spool').add({ payload: result.payload, scannedAt: new Date() });
+                    spool.add(identifier);
                     this.setState({ display: false, error: false, result: result });
                 } else {
                     this.setState({ display: false, error: true, result: null });
                 }
-            });
+            }).catch(e => console.log(e));
         }
     }
 
@@ -76,7 +79,7 @@ class QrCode extends Component {
 
                             {!result && <div className={'alert alert-danger'}>{this.element.dataset.notFound}</div>}
 
-                            <button className={"btn btn-primary"} onClick={this.handleReset}>
+                            <button className={"btn btn-primary btn-lg"} onClick={this.handleReset}>
                                 {this.element.dataset.close}
                             </button>
                         </div>
@@ -87,20 +90,19 @@ class QrCode extends Component {
     }
 
     render() {
-        let { display, error, result, nbBadgeImported} = this.state;
+        let { display, error, result, nbImportedIdentifiers} = this.state;
 
         return (
             <Fragment>
-                {nbBadgeImported > 0 &&
+                {nbImportedIdentifiers > 0 &&
                     <p>
-                        {this.element.dataset.numberOfAvailableBadge} : {nbBadgeImported}
+                        {this.element.dataset.numberOfAvailableIdentifiers} : {nbImportedIdentifiers}
                     </p>
                 }
 
                 {display &&
                     <QrReader
                         delay={300}
-                        facingMode={'user'}
                         onScan={this.handleScan}
                         onError={this.handleError} />
                 }

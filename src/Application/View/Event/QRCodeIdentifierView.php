@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\View\Event;
 
-class QRCodePayloadView
+class QRCodeIdentifierView
 {
     /** @var string */
-    public $payload;
+    public $identifier;
 
     /** @var string */
     public $firstName;
@@ -24,9 +24,9 @@ class QRCodePayloadView
     /** @var null|string */
     public $sheetTitle;
 
-    public function __construct(string $payload, string $firstName, string $lastName, ?string $sheetTitle)
+    public function __construct(string $identifier, string $firstName, string $lastName, ?string $sheetTitle)
     {
-        $this->payload = $payload;
+        $this->identifier = $identifier;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->sheetTitle = $sheetTitle;

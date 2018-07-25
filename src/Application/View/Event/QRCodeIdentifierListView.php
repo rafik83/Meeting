@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Application\View\Event;
 
-class QRCodePayloadListView
+class QRCodeIdentifierListView
 {
-    /** @var QRCodePayloadView[] */
+    /** @var QRCodeIdentifierView[] */
     public $list;
 
     public function __construct(array $list)

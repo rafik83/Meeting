@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Event;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
-use Proximum\Vimeet\Application\View\Event\QRCodePayloadListView;
-use Proximum\Vimeet\Application\View\Event\QRCodePayloadView;
+use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierListView;
+use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -22,7 +22,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
-class GetQRCodePayloadByEventQueryHandler
+class GetQRCodeIdentifiersByEventQueryHandler
 {
     /** @var QueryBusInterface */
     private $queryBus;
@@ -48,7 +48,7 @@ class GetQRCodePayloadByEventQueryHandler
         $this->groupNameResolver = $groupNameResolver;
     }
 
-    public function handle(GetQRCodePayloadByEventQuery $query): QRCodePayloadListView
+    public function handle(GetQRCodeIdentifiersByEventQuery $query): QRCodeIdentifierListView
     {
         $participants = $this->participantRepository->findByEvent($query->event);
         $identifiedUsers = [];
@@ -63,7 +63,7 @@ class GetQRCodePayloadByEventQueryHandler
 
             $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $query->locale);
 
-            $qrCodePayloadListView[] = new QRCodePayloadView(
+            $qrCodePayloadListView[] = new QRCodeIdentifierView(
                 $this->getQrCodeIdentifier($query->event, $user),
                 $participantInfo['participant_firstname'] ?? '',
                 $participantInfo['participant_lastname'] ?? '',
@@ -73,7 +73,7 @@ class GetQRCodePayloadByEventQueryHandler
             $identifiedUsers[] = $user->getId();
         }
 
-        return new QRCodePayloadListView($qrCodePayloadListView);
+        return new QRCodeIdentifierListView($qrCodePayloadListView);
     }
 
     private function getSheetTitle(Event $event, User $user, Sheet $sheet): ?string

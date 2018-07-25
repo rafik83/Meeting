@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Event;
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class GetQRCodePayloadByEventQuery implements Query
+class GetQRCodeIdentifiersByEventQuery implements Query
 {
     /** @var Event */
     public $event;

@@ -558,6 +558,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImport }
 
+    Proximum\Vimeet\Application\Command\User\Event\ScanCommandHandler:
+        arguments:
+            - '@adapter.entity_manager_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ScanCommand }
+
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
@@ -3528,14 +3534,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
 
-    Proximum\Vimeet\Application\Query\Event\GetQRCodePayloadByEventQueryHandler:
+    Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
             - '@domain.service.sheets_group.group_name_resolver'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetQRCodePayloadByEventQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery }
 
     Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQueryHandler:
         arguments:
@@ -6365,6 +6371,12 @@ services:
     Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery }
+
+    Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierToUserQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierToUserQuery }
 
     Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQueryHandler:
         arguments:
