@@ -410,9 +410,12 @@ admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandés'
 admin.meeting.link: Rendez-vous
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
+admin.meeting.list.column.head.fromParticipants: 'Participants du demandeur'
 admin.meeting.list.column.head.isCreatedByParticipants: 'Créé par les participants'
 admin.meeting.list.column.head.slot: Créneau
+admin.meeting.list.column.head.spot: Lieu
 admin.meeting.list.column.head.to: À
+admin.meeting.list.column.head.toParticipants: 'Participants du demandé'
 admin.meeting.list.details: Détails
 admin.meeting.list.noResult: 'Aucun RDV positionné'
 admin.meeting.list.title: 'RDV positionnés'

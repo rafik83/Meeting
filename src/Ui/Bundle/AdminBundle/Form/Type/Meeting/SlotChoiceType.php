@@ -32,45 +32,47 @@ class SlotChoiceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $hourFormatter = \IntlDateFormatter::create(
+            $options['locale'],
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::SHORT,
+            $options['timeZone']
+        );
+
+        $dayFormatter = \IntlDateFormatter::create(
+            $options['locale'],
+            \IntlDateFormatter::MEDIUM,
+            \IntlDateFormatter::NONE,
+            $options['timeZone']
+        );
+
         $builder
             ->add('slot', ChoiceType::class, [
-                'choices' => $this->getFormattedSlots($options['slots'], $options['locale'], $options['timeZone']),
+                'choices' => $this->getFormattedSlots($dayFormatter, $options['slots']),
+                'choice_label' => function (MeetingSlot $meetingSlot) use ($hourFormatter) {
+                    return sprintf(
+                        '%s - %s',
+                        $hourFormatter->format($meetingSlot->getBegin()),
+                        $hourFormatter->format($meetingSlot->getEnd())
+                    );
+                },
                 'required' => true,
             ])
         ;
     }
 
     /**
-     * @param MeetingSlot[] $slots
-     * @param string        $locale
-     * @param string        $timeZone
+     * @param \IntlDateFormatter $dayFormatter
+     * @param MeetingSlot[]      $slots
      *
      * @return array
      */
-    private function getFormattedSlots(array $slots, string $locale, string $timeZone): array
+    private function getFormattedSlots(\IntlDateFormatter $dayFormatter, array $slots): array
     {
         $formattedSlots = [];
 
-        $dayFormatter = \IntlDateFormatter::create(
-            $locale,
-            \IntlDateFormatter::MEDIUM,
-            \IntlDateFormatter::NONE,
-            $timeZone
-        );
-
-        $hourFormatter = \IntlDateFormatter::create(
-            $locale,
-            \IntlDateFormatter::NONE,
-            \IntlDateFormatter::SHORT,
-            $timeZone
-        );
-
         foreach ($slots as $slot) {
-            $formattedSlots[$dayFormatter->format($slot->getBegin())][$slot->getId()] = sprintf(
-                '%s - %s',
-                $hourFormatter->format($slot->getBegin()),
-                $hourFormatter->format($slot->getEnd())
-            );
+            $formattedSlots[$dayFormatter->format($slot->getBegin())][$slot->getId()] = $slot;
         }
 
         return $formattedSlots;

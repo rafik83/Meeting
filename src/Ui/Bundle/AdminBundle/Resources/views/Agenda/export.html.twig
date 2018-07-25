@@ -2,6 +2,8 @@
 
 {% block title 'admin.agenda.export.link'|trans %}
 
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
 {% block content %}
     <h1 class="page-header">{{ 'admin.agenda.export.title'|trans }}</h1>
 
@@ -16,5 +18,31 @@
                 </div>
             </div>
         </div>
+        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+        <div class="col-md-4 text-center">
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ 'admin.sheet.export.meetings.button.label'|trans }}</div>
+                <div class="panel-body">
+                    <form action="{{ path('admin_meeting_export', { 'event': event.id }) }}" method="GET">
+                        <input type="submit" value="{{ 'admin.sheet.export.meetings.button.label'|trans }}" class="btn btn-lg btn-default"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <div class="col-md-4 text-center">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ 'admin.meeting.action.deleteAll.title'|trans }}</div>
+                    <div class="panel-body">
+                        {{ macro.delete_button(
+                            path('admin_meeting_delete_all', {'event': event.id}),
+                            'admin.meeting.action.deleteAll.title'|trans,
+                            {'class': 'btn btn-danger', 'data-confirm': 'admin.meeting.action.deleteAll.confirm'|trans}
+                        ) }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
