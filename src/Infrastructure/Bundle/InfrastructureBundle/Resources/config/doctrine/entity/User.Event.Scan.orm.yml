@@ -1,0 +1,24 @@
+Proximum\Vimeet\Domain\Model\User\Event\Scan:
+    type:  entity
+    table: user_event_scan
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        scannedAt:
+            type: datetime
+        createdAt:
+            type: datetime
+    manyToOne:
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
