@@ -61,8 +61,8 @@
                     </td>
                     <td>
                         <ul>
-                            {% for participantName in meeting.fromParticipantsName %}
-                                <li>{{ participantName }}</li>
+                            {% for participant in meeting.fromParticipants %}
+                                <li>{{ participant.completeName }}</li>
                             {% endfor %}
                         </ul>
                     </td>
@@ -77,8 +77,8 @@
                     </td>
                     <td>
                         <ul>
-                            {% for participantName in meeting.toParticipantsName %}
-                                <li>{{ participantName }}</li>
+                            {% for participant in meeting.toParticipants %}
+                                <li>{{ participant.completeName }}</li>
                             {% endfor %}
                         </ul>
                     </td>

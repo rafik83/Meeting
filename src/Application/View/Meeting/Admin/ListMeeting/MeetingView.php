@@ -30,21 +30,21 @@ class MeetingView
     /** @var string */
     public $toSheetTitle;
 
-    /** @var string[] */
-    public $fromParticipantsName;
+    /** @var ParticipantView[] */
+    public $fromParticipants;
 
-    /** @var string[] */
-    public $toParticipantsName;
+    /** @var ParticipantView[] */
+    public $toParticipants;
 
     public function __construct(
         int $id,
         string $spotReference,
         int $fromSheetId,
         string $fromSheetTitle = null,
-        array $fromParticipantsName,
+        array $fromParticipants,
         int $toSheetId,
         string $toSheetTitle = null,
-        array $toParticipantsName
+        array $toParticipants
     ) {
         $this->id = $id;
         $this->spotReference = $spotReference;
@@ -52,7 +52,7 @@ class MeetingView
         $this->fromSheetTitle = $fromSheetTitle;
         $this->toSheetId = $toSheetId;
         $this->toSheetTitle = $toSheetTitle;
-        $this->fromParticipantsName = $fromParticipantsName;
-        $this->toParticipantsName = $toParticipantsName;
+        $this->fromParticipants = $fromParticipants;
+        $this->toParticipants = $toParticipants;
     }
 }
