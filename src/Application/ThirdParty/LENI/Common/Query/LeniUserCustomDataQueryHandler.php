@@ -85,13 +85,7 @@ class LeniUserCustomDataQueryHandler
             return [];
         }
 
-        $data = $this->typeConverter->convert($type, $typesMapping);
-
-        if ([] === $data) {
-            throw new TypeDoesNotMatchException();
-        }
-
-        return $data;
+        return $this->typeConverter->convert($type, $typesMapping);
     }
 
     private function handleCustomData(Event $event, Sheet $sheet, User $user, string $locale): array

@@ -12,17 +12,14 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewExternalView;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetPreviewExternalViewQueryHandler
 {
-    /**
-     * @var Preview
-     */
+    /** @var Preview */
     private $preview;
 
     /**
-     * SheetPreviewExternalViewQueryHandler constructor.
-     *
      * @param Preview $preview
      */
     public function __construct(Preview $preview)
@@ -30,19 +27,23 @@ class SheetPreviewExternalViewQueryHandler
         $this->preview = $preview;
     }
 
-    /**
-     * @param SheetPreviewExternalViewQuery $query
-     *
-     * @return CatalogSheetPreviewExternalView
-     */
-    public function handle(SheetPreviewExternalViewQuery $query)
+    public function handle(SheetPreviewExternalViewQuery $query): CatalogSheetPreviewExternalView
     {
         return new CatalogSheetPreviewExternalView(
             $query->sheet->getId(),
             $query->sheet->getTitle(),
-            $query->sheet->getType()->getTitle($query->locale),
+            $this->getTypeOrCategoryTitle($query->showCategory, $query->sheet, $query->locale),
             $this->preview->getPreview($query->sheet, $query->locale),
             $query->sheet
         );
+    }
+
+    private function getTypeOrCategoryTitle(bool $showCategory, Sheet $sheet, string $locale): string
+    {
+        if (false === $showCategory) {
+            return $sheet->getType()->getTitle($locale);
+        }
+
+        return implode(', ', $sheet->getType()->getCategoriesTitles($locale));
     }
 }
