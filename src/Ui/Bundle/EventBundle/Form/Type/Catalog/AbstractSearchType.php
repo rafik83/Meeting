@@ -58,7 +58,7 @@ abstract class AbstractSearchType extends AbstractType
             new SearchFacetViewQuery($options['event'], $options['locale'])
         );
 
-        $hasTypeViews    = count($typeViews) > 1;
+        $hasTypeViews    = \count($typeViews) > 1;
         $typeSearchFacet = $searchFacetsView->getType();
 
         /* show type search facet only if there is more than one filter
@@ -84,7 +84,7 @@ abstract class AbstractSearchType extends AbstractType
                 );
         }
 
-        $hasCategoryViews    = count($categoryViews) > 1;
+        $hasCategoryViews    = \count($categoryViews) > 1;
         $categorySearchFacet = $searchFacetsView->getCategory();
 
         // show category search facet only if there is more than one filter

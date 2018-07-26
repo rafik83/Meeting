@@ -14,46 +14,45 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class PaginatedSheetExternalViewQuery
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $filters = [];
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $page;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $limit;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
+    /** @var bool */
+    public $showCategory;
+
     /**
-     * PaginatedSheetExternalViewQuery constructor.
-     *
      * @param Event  $event
      * @param array  $filters
      * @param int    $page
      * @param int    $limit
      * @param string $locale
+     * @param bool   $showCategory
      */
-    public function __construct(Event $event, array $filters, int $page, int $limit, string $locale)
-    {
+    public function __construct(
+        Event $event,
+        array $filters,
+        int $page,
+        int $limit,
+        string $locale,
+        bool $showCategory = false
+    ) {
         $this->event   = $event;
         $this->filters = $filters;
         $this->page    = $page;
         $this->limit   = $limit;
         $this->locale  = $locale;
+        $this->showCategory = $showCategory;
     }
 }
