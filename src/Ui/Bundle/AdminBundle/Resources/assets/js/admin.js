@@ -20,7 +20,8 @@ var $ = require('jquery'),
     CommercialStatusSelect = require('./components/_CommercialStatusSelect'),
     AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening'),
     DuplicationSheetsModal = require('./components/_DuplicationSheetsModal'),
-    SelectPreviousNextMover = require('./components/_SelectPreviousNextMover')
+    SelectPreviousNextMover = require('./components/_SelectPreviousNextMover'),
+    RadioGroupAjax = require('./components/_RadioGroupAjax')
 ;
 
 require('bootstrap');
@@ -169,6 +170,10 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-select-mover-form]'), function (element) {
         new SelectPreviousNextMover(element, element.querySelector('[data-select-mover]'));
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-radio-group-ajax]'), function (element) {
+        new RadioGroupAjax(element);
     });
 }
 

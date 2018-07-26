@@ -83,6 +83,38 @@
                         </ul>
                     </td>
                     <td>
+                        <div class="btn-group" data-toggle="buttons"
+                             data-radio-group-ajax="{{ path('admin_meeting_update_status', {'event': event.id, 'meeting': meeting.id}) }}"
+                        >
+                            <label class="btn btn-danger {% if meeting.status == 'canceled' %}active{% endif %}">
+                                <input
+                                    type="radio"
+                                    name="status_{{ meeting.id }}"
+                                    value="canceled"
+                                    {% if meeting.status == 'canceled' %}checked{% endif %}
+                                >
+                                X
+                            </label>
+                            <label class="btn btn-default {% if meeting.status == 'not_confirmed' %}active{% endif %}">
+                                <input
+                                    type="radio"
+                                    name="status_{{ meeting.id }}"
+                                    value="not_confirmed"
+                                    {% if meeting.status == 'not_confirmed' %}checked{% endif %}
+                                >
+                                &nbsp;
+                            </label>
+                            <label class="btn btn-primary btn-success {% if meeting.status == 'confirmed' %}active{% endif %}">
+                                <input
+                                    type="radio"
+                                    name="status_{{ meeting.id }}"
+                                    value="confirmed"
+                                    {% if meeting.status == 'confirmed' %}checked{% endif %}
+                                >
+                                ✔
+                            </label>
+                        </div>
+                        <hr/>
                         {{ macro.btnGroupAndRightMenuDropdown({('admin.meeting.list.details'|trans): path('admin_meeting_details', {'event': event.id, 'meeting': meeting.id})}) }}
                     </td>
                 </tr>
