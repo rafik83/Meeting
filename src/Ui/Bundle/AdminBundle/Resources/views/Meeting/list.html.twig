@@ -9,8 +9,27 @@
         {{ view.getNumberOfMeetingsOnThisSlot }} / {{ view.totalMeetings }}<br>
     </h2>
     <p>
-        {{ form_start(form) }}
-            {{ form_widget(form.slot, {'attr': {'onChange': 'document.getElementsByName("slot_choice")[0].submit();'}}) }}
+        {{ form_start(form, {'attr': {'data-select-mover-form': 'data-select-mover-form'}}) }}
+            <div>
+                <div class="col-md-2">
+                    <button data-select-mover-previous="data-select-mover-previous" class="btn btn-default pull-right">
+                        <
+                    </button>
+                </div>
+                <div class="col-md-8">
+                    {{ form_widget(form.slot, {
+                        'attr': {
+                            'onChange': 'document.getElementsByName("slot_choice")[0].submit();',
+                            'data-select-mover': 'data-select-mover'
+                        }
+                    }) }}
+                </div>
+                <div class="col-md-2">
+                    <button data-select-mover-next="data-select-mover-next" class="btn btn-default">
+                        >
+                    </button>
+                </div>
+            </div>
         {{ form_end(form) }}
     </p>
 
@@ -69,7 +88,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="4" class="text-center">
+                    <td colspan="6" class="text-center">
                          {{ 'admin.meeting.list.noResult'|trans }}
                     </td>
                 </tr>

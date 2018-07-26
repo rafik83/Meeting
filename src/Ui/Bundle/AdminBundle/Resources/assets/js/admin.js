@@ -19,7 +19,8 @@ var $ = require('jquery'),
     ToggleVisibility = require('./components/_ToggleVisibility'),
     CommercialStatusSelect = require('./components/_CommercialStatusSelect'),
     AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening'),
-    DuplicationSheetsModal = require('./components/_DuplicationSheetsModal')
+    DuplicationSheetsModal = require('./components/_DuplicationSheetsModal'),
+    SelectPreviousNextMover = require('./components/_SelectPreviousNextMover')
 ;
 
 require('bootstrap');
@@ -164,6 +165,10 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('.duplication-sheet'), function (element) {
         new DuplicationSheetsModal(element, target.querySelector('#duplication-sheet'));
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-select-mover-form]'), function (element) {
+        new SelectPreviousNextMover(element, element.querySelector('[data-select-mover]'));
     });
 }
 

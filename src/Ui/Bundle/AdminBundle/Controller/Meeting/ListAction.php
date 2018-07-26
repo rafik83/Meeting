@@ -41,25 +41,23 @@ class ListAction
     /** @var FormFactoryInterface */
     private $formFactory;
 
-    /**
-     * @param QueryBusInterface                    $queryBus
-     * @param EngineInterface                      $engine
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param MeetingSlotRepositoryInterface       $slotRepository
-     * @param FormFactoryInterface                 $formFactory
-     */
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     public function __construct(
         QueryBusInterface $queryBus,
         EngineInterface $engine,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         MeetingSlotRepositoryInterface $slotRepository,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
+        \DateTimeInterface $dateTime
     ) {
         $this->queryBus = $queryBus;
         $this->engine = $engine;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->slotRepository = $slotRepository;
         $this->formFactory = $formFactory;
+        $this->dateTime = $dateTime;
     }
 
     public function __invoke(Request $request, Event $event): Response
@@ -80,7 +78,7 @@ class ListAction
             'locale' => $locale,
         ]);
 
-        $currentSlot = $this->getCurrentSlot($slots, $form, $request);
+        $currentSlot = $this->getCurrentSlot($event, $slots, $form, $request);
         $meetingListView = $this->queryBus->handle(
             new MeetingListViewQuery($event, $locale, $currentSlot))
         ;
@@ -94,16 +92,33 @@ class ListAction
         ]);
     }
 
-    private function getCurrentSlot(array $slots, FormInterface $form, Request $request): ?MeetingSlot
+    private function getCurrentSlot(Event $event, array $slots, FormInterface $form, Request $request): ?MeetingSlot
     {
-        $currentSlot = null;
-
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             return $form->getData()['slot'];
         }
 
+        if ($event->hasDay()) {
+            $days = $event->getDays();
+
+            foreach ($days as $day) {
+                if ($day->getBegin() <= $this->dateTime && $day->getEnd() >= $this->dateTime) {
+                    foreach ($slots as $slot) {
+                        if ($slot->getBegin() <= $this->dateTime && $slot->getEnd() >= $this->dateTime) {
+                            $form->get('slot')->setData($slot);
+
+                            return $slot;
+                        }
+                    }
+                }
+            }
+        }
+
         if (!empty($slots)) {
-            return reset($slots);
+            $slot = reset($slots);
+            $form->get('slot')->setData($slot);
+
+            return $slot;
         }
 
         return null;
