@@ -40,10 +40,10 @@ class MeetingView
         int $id,
         string $spotReference,
         int $fromSheetId,
-        string $fromSheetTitle = null,
+        ?string $fromSheetTitle = null,
         array $fromParticipants,
         int $toSheetId,
-        string $toSheetTitle = null,
+        ?string $toSheetTitle = null,
         array $toParticipants
     ) {
         $this->id = $id;

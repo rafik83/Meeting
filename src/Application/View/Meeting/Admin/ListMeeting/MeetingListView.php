@@ -39,7 +39,7 @@ class MeetingListView
 
     public function addMeetingView(MeetingView $meetingView): void
     {
-        $this->meetingViews[] = $meetingView;
+        $this->meetingViews[$meetingView->id] = $meetingView;
     }
 
     public function sortMeetingView(): void

@@ -25,21 +25,22 @@ class MeetingViewQueryHandler
 
     public function handle(MeetingViewQuery $query): MeetingView
     {
-        $locale = $query->locale;
-
         return new MeetingView(
             $query->meeting->getId(),
             $query->meeting->getSpot()->getReference(),
             $query->meeting->getFromSheet()->getId(),
             $query->meeting->getFromSheet()->getTitle(),
-            array_map(function (Participant $participant) use ($locale) {
-                return $this->participantViewQueryHandler->handle(new ParticipantViewQuery($participant, $locale));
-            }, $query->meeting->getFromParticipants()->toArray()),
+            $this->getParticipantViews($query->meeting->getFromParticipants()->toArray(), $query->locale),
             $query->meeting->getToSheet()->getId(),
             $query->meeting->getToSheet()->getTitle(),
-            array_map(function (Participant $participant) use ($locale) {
-                return $this->participantViewQueryHandler->handle(new ParticipantViewQuery($participant, $locale));
-            }, $query->meeting->getToParticipants()->toArray())
+            $this->getParticipantViews($query->meeting->getToParticipants()->toArray(), $query->locale)
         );
+    }
+
+    private function getParticipantViews(array $participants, string $locale): array
+    {
+        return array_map(function (Participant $participant) use ($locale) {
+            return $this->participantViewQueryHandler->handle(new ParticipantViewQuery($participant, $locale));
+        }, $participants);
     }
 }
