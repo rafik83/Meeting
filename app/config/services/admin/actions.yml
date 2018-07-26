@@ -21,6 +21,7 @@ services:
             - '@adapter.authorization_checker'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@form.factory'
+            - '@datetime'
 
     #
     # Type
