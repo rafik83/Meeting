@@ -80,8 +80,8 @@ class ListAction
 
         $currentSlot = $this->getCurrentSlot($event, $slots, $form, $request);
         $meetingListView = $this->queryBus->handle(
-            new MeetingListViewQuery($event, $locale, $currentSlot))
-        ;
+            new MeetingListViewQuery($event, $locale, $currentSlot)
+        );
 
         return $this->engine->renderResponse('AdminBundle:Meeting:list.html.twig', [
             'event' => $event,
