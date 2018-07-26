@@ -46,7 +46,7 @@ class QrCode extends Component {
                 } else {
                     this.setState({ display: false, error: true, result: null });
                 }
-            }).catch(e => console.log(e));
+            });
         }
     }
 

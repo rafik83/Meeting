@@ -29,7 +29,7 @@ class QRCodeReaderAction
     public function __construct(
         EngineInterface $engine,
         QueryBusInterface $queryBus
-    ){
+    ) {
         $this->engine = $engine;
         $this->queryBus = $queryBus;
     }

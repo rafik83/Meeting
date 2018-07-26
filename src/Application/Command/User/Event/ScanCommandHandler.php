@@ -10,29 +10,28 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Event;
 
-use Proximum\Vimeet\Application\Adapter\EntityManagerAdapterInterface;
 use Proximum\Vimeet\Domain\Model\User\Event\Scan;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 
 class ScanCommandHandler
 {
-    /** @var EntityManagerAdapterInterface */
-    private $entityManagerAdapter;
+    /** @var ScanRepositoryInterface */
+    private $scanRepository;
 
-    public function __construct(EntityManagerAdapterInterface $entityManagerAdapter)
+    public function __construct(ScanRepositoryInterface $scanRepository)
     {
-        $this->entityManagerAdapter = $entityManagerAdapter;
+        $this->scanRepository = $scanRepository;
     }
 
     public function handle(ScanCommand $command): void
     {
-        $scan = new Scan(
-            $command->event,
-            $command->user,
-            $command->scannedAt,
-            $command->createdAt
+        $this->scanRepository->add(
+            new Scan(
+                $command->event,
+                $command->user,
+                $command->scannedAt,
+                $command->createdAt
+            )
         );
-
-        $this->entityManagerAdapter->persist($scan);
-        $this->entityManagerAdapter->flush($scan);
     }
 }
