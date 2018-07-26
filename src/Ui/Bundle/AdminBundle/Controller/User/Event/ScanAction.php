@@ -49,13 +49,17 @@ class ScanAction
             return new JsonResponse('User not found', 400);
         }
 
-        $this->commandBus->handle(
-            new ScanCommand(
-                $event,
-                $user,
-                new \DateTime($data['scannedAt'])
-            )
-        );
+        try {
+            $this->commandBus->handle(
+                new ScanCommand(
+                    $event,
+                    $user,
+                    new \DateTime($data['scannedAt'])
+                )
+            );
+        } catch (\Exception $e) {
+            return new JsonResponse('Bad datetime format', 400);
+        }
 
         return new JsonResponse('ok');
     }
