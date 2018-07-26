@@ -564,6 +564,7 @@ services:
     Proximum\Vimeet\Application\Command\User\Event\ScanCommandHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ScanCommand }
 

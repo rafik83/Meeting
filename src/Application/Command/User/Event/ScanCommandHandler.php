@@ -18,9 +18,15 @@ class ScanCommandHandler
     /** @var ScanRepositoryInterface */
     private $scanRepository;
 
-    public function __construct(ScanRepositoryInterface $scanRepository)
-    {
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
+    public function __construct(
+        ScanRepositoryInterface $scanRepository,
+        \DateTimeInterface $dateTime
+    ) {
         $this->scanRepository = $scanRepository;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(ScanCommand $command): void
@@ -30,7 +36,7 @@ class ScanCommandHandler
                 $command->event,
                 $command->user,
                 $command->scannedAt,
-                $command->createdAt
+                $this->dateTime
             )
         );
     }

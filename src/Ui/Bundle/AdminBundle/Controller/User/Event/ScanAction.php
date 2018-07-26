@@ -18,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ScanAction
 {
@@ -28,17 +27,12 @@ class ScanAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var \DateTimeInterface */
-    private $dateTime;
-
     public function __construct(
         CommandBusInterface $commandBus,
-        QueryBusInterface $queryBus,
-        \DateTimeInterface $dateTime
+        QueryBusInterface $queryBus
     ) {
         $this->commandBus = $commandBus;
         $this->queryBus = $queryBus;
-        $this->dateTime = $dateTime;
     }
 
     public function __invoke(Request $request, Event $event): JsonResponse
@@ -59,8 +53,7 @@ class ScanAction
             new ScanCommand(
                 $event,
                 $user,
-                new \DateTime($data['scannedAt']),
-                $this->dateTime
+                new \DateTime($data['scannedAt'])
             )
         );
 

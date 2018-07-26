@@ -25,18 +25,13 @@ class ScanCommand implements Command
     /** @var \DateTimeInterface */
     public $scannedAt;
 
-    /** @var \DateTimeInterface */
-    public $createdAt;
-
     public function __construct(
         Event $event,
         User $user,
-        \DateTimeInterface $scannedAt,
-        \DateTimeInterface $createdAt
+        \DateTimeInterface $scannedAt
     ) {
         $this->event = $event;
         $this->user = $user;
         $this->scannedAt = $scannedAt;
-        $this->createdAt = $createdAt;
     }
 }
