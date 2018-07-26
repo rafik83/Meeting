@@ -508,4 +508,9 @@ class Meeting implements MessageSubjectInterface
     {
         return $this->status;
     }
+
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
+    }
 }

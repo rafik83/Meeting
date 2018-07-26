@@ -27,6 +27,16 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\Create }
 
     #
+    # Meeting
+    #
+    Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateStatusHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateStatus }
+
+
+    #
     # Extra Parameter
     #
     command.event.extra_parameter.create_handler:
