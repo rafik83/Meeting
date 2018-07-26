@@ -31,7 +31,7 @@ class MeetingListViewQueryHandler
 
     public function handle(MeetingListViewQuery $query): MeetingListView
     {
-        if ($query->slot === null) {
+        if (null === $query->slot) {
             return new MeetingListView(
                 $this->meetingRepository->countByEvent($query->event),
                 null

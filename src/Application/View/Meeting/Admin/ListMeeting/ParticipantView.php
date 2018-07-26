@@ -20,7 +20,7 @@ class ParticipantView
 
     public function __construct(
         int $id,
-        string $completeName = null
+        ?string $completeName = null
     ) {
         $this->id = $id;
         $this->completeName = $completeName;
