@@ -101,16 +101,10 @@ class ListAction
         if ($event->hasDay()) {
             $days = $event->getDays();
 
-            foreach ($days as $day) {
-                if ($day->getBegin() <= $this->dateTime && $day->getEnd() >= $this->dateTime) {
-                    foreach ($slots as $slot) {
-                        if ($slot->getBegin() <= $this->dateTime && $slot->getEnd() >= $this->dateTime) {
-                            $form->get('slot')->setData($slot);
+            $slot = $this->getSlotOfTheDay($days, $slots, $form);
 
-                            return $slot;
-                        }
-                    }
-                }
+            if ($slot instanceof MeetingSlot) {
+                return $slot;
             }
         }
 
@@ -119,6 +113,23 @@ class ListAction
             $form->get('slot')->setData($slot);
 
             return $slot;
+        }
+
+        return null;
+    }
+
+    private function getSlotOfTheDay(array $days, array $slots, FormInterface $form): ?MeetingSlot
+    {
+        foreach ($days as $day) {
+            if ($day->getBegin() <= $this->dateTime && $day->getEnd() >= $this->dateTime) {
+                foreach ($slots as $slot) {
+                    if ($slot->getBegin() <= $this->dateTime && $slot->getEnd() >= $this->dateTime) {
+                        $form->get('slot')->setData($slot);
+
+                        return $slot;
+                    }
+                }
+            }
         }
 
         return null;
