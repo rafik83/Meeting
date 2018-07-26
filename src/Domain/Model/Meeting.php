@@ -513,4 +513,9 @@ class Meeting implements MessageSubjectInterface
     {
         $this->status = $status;
     }
+
+    public function resetStatus(): void
+    {
+        $this->status = self::STATUS_NOT_CONFIRMED;
+    }
 }
