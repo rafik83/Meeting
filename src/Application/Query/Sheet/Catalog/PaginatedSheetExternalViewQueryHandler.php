@@ -77,7 +77,7 @@ class PaginatedSheetExternalViewQueryHandler
     {
         return function (Sheet $sheet) use ($query) {
             return $this->sheetPreviewExternalViewQueryHandler->handle(
-                new SheetPreviewExternalViewQuery($sheet, $query->locale, $query->event)
+                new SheetPreviewExternalViewQuery($sheet, $query->locale, $query->event, $query->showCategory)
             );
         };
     }

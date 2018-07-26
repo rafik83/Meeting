@@ -88,7 +88,8 @@ class CatalogExternalController extends Controller
                     $filters,
                     $page,
                     48,
-                    $request->getLocale()
+                    $request->getLocale(),
+                    $searchFacetsView->hasCategory()
                 )
             );
         } catch (UnavailableCurrentPageException $exception) {

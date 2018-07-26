@@ -14,15 +14,13 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 
 class MeetingRequestListView
 {
-    /**
-     * @var MeetingRequestView[]
-     */
-    private $meetingRequestsView;
+    /** @var MeetingRequestView[] */
+    private $meetingRequestsView = [];
 
     /**
      * @return MeetingRequestView[]
      */
-    public function getMeetingRequestsView()
+    public function getMeetingRequestsView(): array
     {
         return $this->meetingRequestsView;
     }
@@ -30,7 +28,7 @@ class MeetingRequestListView
     /**
      * @param MeetingRequestView $meetingRequestView
      */
-    public function addRequestView(MeetingRequestView $meetingRequestView)
+    public function addRequestView(MeetingRequestView $meetingRequestView): void
     {
         $this->meetingRequestsView[] = $meetingRequestView;
     }
@@ -38,9 +36,9 @@ class MeetingRequestListView
     /**
      * @param string $order
      */
-    public function sortBy($order)
+    public function sortBy($order): void
     {
-        if (null === $this->meetingRequestsView) {
+        if (empty($this->meetingRequestsView)) {
             return;
         }
 
