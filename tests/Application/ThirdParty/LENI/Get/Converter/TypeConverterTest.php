@@ -13,9 +13,18 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Get\Converter;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Infrastructure\Adapter\ExpressionLanguageAdapter;
 
 class TypeConverterTest extends TestCase
 {
+    private $typeConverter;
+
+    public function setUp()
+    {
+        $expressionLanguage = new ExpressionLanguageAdapter();
+        $this->typeConverter = new TypeConverter($expressionLanguage);
+    }
+
     /**
      * @dataProvider dataProvider
      */
@@ -61,8 +70,8 @@ class TypeConverterTest extends TestCase
             ],
         ];
 
-        $typeConverter = new TypeConverter();
-        $result = $typeConverter->convert(
+
+        $result = $this->typeConverter->convert(
             [
                 $type1337->reveal(),
                 $type9966->reveal(),
@@ -110,6 +119,12 @@ class TypeConverterTest extends TestCase
                 ],
                 'expectedResult' => 1324,
             ],
+            'type1324WithArrayValue' => [
+                'payload' => [
+                    'ZL_SOUSCATEGORIE' => ['1324'],
+                ],
+                'expectedResult' => 1324,
+            ],
             'whateverIsNull' => [
                 'payload' => [
                     'Id' => 12334,
@@ -141,6 +156,69 @@ class TypeConverterTest extends TestCase
                     'notKnownKey' => 'VISITEUR',
                 ],
                 'expectedResult' => null,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderForConvertionWithCondition
+     */
+    public function testConvertWithCondition(array $payload, ?int $typeId)
+    {
+        $type42 = $this->prophesize(Type::class);
+        $type42->getId()->willReturn(42);
+
+        $type1337 = $this->prophesize(Type::class);
+        $type1337->getId()->willReturn(1337);
+
+        $typesById = [
+            42 => $type42->reveal(),
+            1337 => $type1337->reveal(),
+        ];
+
+        $mapping = [
+            42 => ['condition' => "CategorieIndividuEvt === 'EXPOSANT'"],
+            1337 => ['condition' => "CategorieIndividuEvt === 'VISITEUR'"],
+        ];
+
+        $result = $this->typeConverter->convert(
+            [
+                $type42->reveal(),
+                $type1337->reveal(),
+            ],
+            $mapping,
+            $payload
+        );
+
+        $this->assertEquals(null === $typeId ? null : $typesById[$typeId], $result);
+    }
+
+    public function dataProviderForConvertionWithCondition()
+    {
+        return [
+            'matchType42' => [
+                'payload' => [
+                    'CategorieIndividuEvt' => 'EXPOSANT',
+                ],
+                'expectedResult' => 42,
+            ],
+            'matchType1337' => [
+                'payload' => [
+                    'CategorieIndividuEvt' => 'VISITEUR',
+                ],
+                'expectedResult' => 1337,
+            ],
+            'doNotMatchType' => [
+                'payload' => [
+                    'CategorieIndividuEvt' => 'PROSPECT',
+                ],
+                'expectedResult' => null,
+            ],
+            'matchType42WithArrayValue' => [
+                'payload' => [
+                    'CategorieIndividuEvt' => ['EXPOSANT'],
+                ],
+                'expectedResult' => 42,
             ],
         ];
     }
