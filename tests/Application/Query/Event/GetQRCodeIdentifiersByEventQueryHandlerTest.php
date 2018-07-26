@@ -39,8 +39,11 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
         $participant1 = $this->prophesize(Participant::class);
         $participant1->getUser()->shouldBeCalled()->willReturn($user1->reveal());
         $participant1->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
+
         $participant2 = $this->prophesize(Participant::class);
         $participant2->getUser()->shouldBeCalled()->willReturn($user1->reveal());
+        $participant2->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
+
         $participant3 = $this->prophesize(Participant::class);
         $participant3->getUser()->shouldBeCalled()->willReturn($user2->reveal());
         $participant3->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
@@ -81,6 +84,10 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('France');
 
+        $groupNameResolver->resolve($event->reveal(), $user1->reveal(), [$sheet->reveal(), $sheet->reveal()])
+            ->shouldBeCalled()
+            ->willReturn('France');
+
         $groupNameResolver->resolve($event->reveal(), $user2->reveal(), [$sheet->reveal()])
             ->shouldBeCalled()
             ->willReturn('Croatie');
@@ -93,11 +100,11 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
         );
 
         $expectedResult = new QRCodeIdentifierListView([
-            new QRCodeIdentifierView('00000010000002', 'Kylian', 'Mbappe', 'France'),
-            new QRCodeIdentifierView('00000020000003', 'Luka', 'Modric', 'Croatie'),
+            1 => new QRCodeIdentifierView('00000010000002', 'Kylian', 'Mbappe', 'France'),
+            2 => new QRCodeIdentifierView('00000020000003', 'Luka', 'Modric', 'Croatie'),
         ]);
-
         $result = $handler->handle(new GetQRCodeIdentifiersByEventQuery($event->reveal(), 'fr'));
+
         $this->assertEquals($expectedResult, $result);
     }
 }

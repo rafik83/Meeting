@@ -31,4 +31,9 @@ class QRCodeIdentifierView
         $this->lastName = $lastName;
         $this->sheetTitle = $sheetTitle;
     }
+
+    public function setSheetTitle(?string $sheetTitle): void
+    {
+        $this->sheetTitle = $sheetTitle;
+    }
 }

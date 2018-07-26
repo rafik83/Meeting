@@ -51,35 +51,43 @@ class GetQRCodeIdentifiersByEventQueryHandler
     public function handle(GetQRCodeIdentifiersByEventQuery $query): QRCodeIdentifierListView
     {
         $participants = $this->participantRepository->findByEvent($query->event);
-        $identifiedUsers = [];
+        $userSheets = [];
         $qrCodePayloadListView = [];
 
         foreach ($participants as $participant) {
             $user = $participant->getUser();
 
-            if (\in_array($user->getId(), $identifiedUsers, true)) {
+            if (\array_key_exists($user->getId(), $qrCodePayloadListView)) {
+                $qrCodePayloadListView[$user->getId()]->setSheetTitle(
+                    $this->getSheetTitle(
+                        $query->event,
+                        $user,
+                        array_merge([$participant->getSheet()], $userSheets[$user->getId()])
+                    )
+                );
+
                 continue;
             }
 
             $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $query->locale);
 
-            $qrCodePayloadListView[] = new QRCodeIdentifierView(
+            $qrCodePayloadListView[$user->getId()] = new QRCodeIdentifierView(
                 $this->getQrCodeIdentifier($query->event, $user),
                 $participantInfo['participant_firstname'] ?? '',
                 $participantInfo['participant_lastname'] ?? '',
-                $this->getSheetTitle($query->event, $user, $participant->getSheet())
+                $this->getSheetTitle($query->event, $user, [$participant->getSheet()])
             );
 
-            $identifiedUsers[] = $user->getId();
+            $userSheets[$user->getId()][] = $participant->getSheet();
         }
 
         return new QRCodeIdentifierListView($qrCodePayloadListView);
     }
 
-    private function getSheetTitle(Event $event, User $user, Sheet $sheet): ?string
+    private function getSheetTitle(Event $event, User $user, array $sheets): ?string
     {
         try {
-            return $this->groupNameResolver->resolve($event, $user, [$sheet]);
+            return $this->groupNameResolver->resolve($event, $user, $sheets);
         } catch (SheetNotFoundException $exception) {
             return null;
         }
