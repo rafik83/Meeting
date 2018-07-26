@@ -17,8 +17,18 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
 class Meeting implements MessageSubjectInterface
 {
-    const STATE_SCHEDULED = 'scheduled';
-    const STATE_CANCELED  = 'canceled';
+    public const STATE_SCHEDULED = 'scheduled';
+    public const STATE_CANCELED  = 'canceled';
+
+    public const STATUS_NOT_CONFIRMED = 'not_confirmed';
+    public const STATUS_CONFIRMED = 'confirmed';
+    public const STATUS_CANCELED = 'canceled';
+
+    public const STATUS_LIST = [
+        self::STATUS_CANCELED,
+        self::STATUS_NOT_CONFIRMED,
+        self::STATUS_CONFIRMED,
+    ];
 
     /**
      * @var int
@@ -91,6 +101,13 @@ class Meeting implements MessageSubjectInterface
     private $isCreatedByParticipants = false;
 
     /**
+     * @var string
+     *
+     * @see self::STATUS_LIST
+     */
+    private $status;
+
+    /**
      * Meeting constructor.
      *
      * @param Request            $request
@@ -118,17 +135,18 @@ class Meeting implements MessageSubjectInterface
         $blockedSpot = false,
         $blockedSlot = false
     ) {
-        $this->request          = $request;
-        $this->slot             = $slot;
-        $this->fromSheet        = $fromSheet;
+        $this->request = $request;
+        $this->slot = $slot;
+        $this->fromSheet = $fromSheet;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
-        $this->toSheet          = $toSheet;
-        $this->toParticipants   = new ArrayCollection($toParticipants);
-        $this->createdAt        = $createdAt;
-        $this->spot             = $spot;
-        $this->blockedSpot      = $blockedSpot;
-        $this->blockedSlot      = $blockedSlot;
-        $this->event            = $event;
+        $this->toSheet = $toSheet;
+        $this->toParticipants = new ArrayCollection($toParticipants);
+        $this->createdAt = $createdAt;
+        $this->spot = $spot;
+        $this->blockedSpot = $blockedSpot;
+        $this->blockedSlot = $blockedSlot;
+        $this->event = $event;
+        $this->status = self::STATUS_NOT_CONFIRMED;
     }
 
     /**
@@ -484,5 +502,10 @@ class Meeting implements MessageSubjectInterface
         }
 
         return null;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 }
