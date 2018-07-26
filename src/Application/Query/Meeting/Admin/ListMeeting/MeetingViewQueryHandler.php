@@ -10,18 +10,17 @@
 
 namespace Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting;
 
-use Proximum\Vimeet\Application\Command\Planning\ParticipantInfoGuesserCache;
 use Proximum\Vimeet\Application\View\Meeting\Admin\ListMeeting\MeetingView;
 use Proximum\Vimeet\Domain\Model\Participant;
 
 class MeetingViewQueryHandler
 {
-    /** @var ParticipantInfoGuesserCache */
-    private $participantInfoGuesser;
+    /** @var ParticipantViewQueryHandler */
+    private $participantViewQueryHandler;
 
-    public function __construct(ParticipantInfoGuesserCache $participantInfoGuesser)
+    public function __construct(ParticipantViewQueryHandler $participantViewQueryHandler)
     {
-        $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->participantViewQueryHandler = $participantViewQueryHandler;
     }
 
     public function handle(MeetingViewQuery $query): MeetingView
@@ -34,12 +33,12 @@ class MeetingViewQueryHandler
             $query->meeting->getFromSheet()->getId(),
             $query->meeting->getFromSheet()->getTitle(),
             array_map(function (Participant $participant) use ($locale) {
-                return $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
+                return $this->participantViewQueryHandler->handle(new ParticipantViewQuery($participant, $locale));
             }, $query->meeting->getFromParticipants()->toArray()),
             $query->meeting->getToSheet()->getId(),
             $query->meeting->getToSheet()->getTitle(),
             array_map(function (Participant $participant) use ($locale) {
-                return $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
+                return $this->participantViewQueryHandler->handle(new ParticipantViewQuery($participant, $locale));
             }, $query->meeting->getToParticipants()->toArray())
         );
     }

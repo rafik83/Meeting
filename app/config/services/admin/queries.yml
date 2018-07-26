@@ -109,9 +109,13 @@ services:
     #
     # Meeting
     #
+    Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\ParticipantViewQueryHandler:
+        arguments:
+            - '@template.participant_info_guesser'
+
     Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingViewQueryHandler:
         arguments:
-            - '@command.planning.participant_info_guesser_cache'
+            - '@Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\ParticipantViewQueryHandler'
 
     Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingListViewQueryHandler:
         arguments:
