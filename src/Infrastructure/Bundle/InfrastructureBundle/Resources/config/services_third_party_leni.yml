@@ -42,7 +42,9 @@ services:
     #
     # Converter
     #
-    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter: ~
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ExpressionLanguageAdapter'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter:
         arguments:

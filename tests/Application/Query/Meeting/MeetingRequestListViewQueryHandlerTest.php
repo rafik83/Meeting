@@ -57,20 +57,28 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
 
         $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user, $event->reveal());
 
-        $query = new MeetingRequestListViewQuery($event->reveal(), $sheet, $user, 'fr', [], []);
+        $query = new MeetingRequestListViewQuery($event->reveal(), $sheet, $user, 'fr', [], [], true);
 
         // Expected
         $meetingRequestListView = new MeetingRequestListView();
-        $meetingRequestView     = new MeetingRequestView($sheetTwo, '', Request::STATE_SENT, '', $now, $meetingRequest, []);
+        $meetingRequestView     = new MeetingRequestView(
+            $sheetTwo,
+            '',
+            Request::STATE_SENT,
+            '',
+            $now,
+            $meetingRequest,
+            []
+        );
         $meetingRequestListView->addRequestView($meetingRequestView);
 
         // Mock
-        $meetingRequestRepository             = $this->prophesize(RequestRepositoryInterface::class);
-        $meetingRequestViewQueryHandler       = $this->prophesize(MeetingRequestViewQueryHandler::class);
-        $meetingPublishedAccessChecker        = $this->prophesize(MeetingPublishedAccessChecker::class);
-        $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
+        $meetingRequestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $meetingRequestViewQueryHandler = $this->prophesize(MeetingRequestViewQueryHandler::class);
+        $meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
+        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
-        $viewedSheetListViewQueryHandler      = $this->prophesize(ViewedSheetListViewQueryHandler::class);
+        $viewedSheetListViewQueryHandler = $this->prophesize(ViewedSheetListViewQueryHandler::class);
         $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
 
         $meetingRequestRepository
@@ -92,6 +100,8 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
                 false,
                 true,
                 false,
+                false,
+                true,
                 false,
                 true
             ))
@@ -141,11 +151,19 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
 
         $meetingSlot = $this->prophesize(MeetingSlot::class);
 
-        $query = new MeetingRequestListViewQuery($event->reveal(), $sheet, $user, 'fr', [], [$meetingSlot]);
+        $query = new MeetingRequestListViewQuery($event->reveal(), $sheet, $user, 'fr', [], [$meetingSlot], false);
 
         // Expected
         $meetingRequestListView = new MeetingRequestListView();
-        $meetingRequestView     = new MeetingRequestView($sheetTwo, '', Request::STATE_SENT, '', $now, $meetingRequest, []);
+        $meetingRequestView     = new MeetingRequestView(
+            $sheetTwo,
+            '',
+            Request::STATE_SENT,
+            '',
+            $now,
+            $meetingRequest,
+            []
+        );
         $meetingRequestListView->addRequestView($meetingRequestView);
 
         // Mock
@@ -177,6 +195,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
                 false,
                 true,
                 true,
+                false,
                 false
             ))
             ->shouldBeCalled()

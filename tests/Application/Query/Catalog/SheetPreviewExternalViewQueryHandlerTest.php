@@ -38,11 +38,35 @@ class SheetPreviewExternalViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $query   = new SheetPreviewExternalViewQuery($sheet, $locale, $event);
+        $query   = new SheetPreviewExternalViewQuery($sheet, $locale, $event, false);
         $handler = new SheetPreviewExternalViewQueryHandler($preview->reveal());
 
         // Expected
         $expectedPreviewExternalView = new CatalogSheetPreviewExternalView(1, 'Proximum', 'Fournisseur', [], $sheet);
+
+        $sheetPreviewExternalView = $handler->handle($query);
+        $this->assertEquals($expectedPreviewExternalView, $sheetPreviewExternalView);
+    }
+
+    /**
+     * @dataProvider handleProvider
+     *
+     * @param Sheet  $sheet
+     * @param string $locale
+     * @param Event  $event
+     */
+    public function testHandleWithCategory(Sheet $sheet, string $locale, Event $event)
+    {
+        $preview = $this->prophesize(Preview::class);
+
+        $preview->getPreview($sheet, $locale)
+            ->shouldBeCalled()
+            ->willReturn([]);
+
+        $query = new SheetPreviewExternalViewQuery($sheet, $locale, $event, true);
+        $handler = new SheetPreviewExternalViewQueryHandler($preview->reveal());
+
+        $expectedPreviewExternalView = new CatalogSheetPreviewExternalView(1, 'Proximum', 'Fournisseur, Exposant', [], $sheet);
 
         $sheetPreviewExternalView = $handler->handle($query);
         $this->assertEquals($expectedPreviewExternalView, $sheetPreviewExternalView);
@@ -60,6 +84,7 @@ class SheetPreviewExternalViewQueryHandlerTest extends TestCase
         $sheet->getId()->willReturn(1);
         $sheet->getTitle()->willReturn('Proximum');
         $sheet->getType()->willReturn($type->reveal());
+        $type->getCategoriesTitles('fr')->willReturn(['Fournisseur', 'Exposant']);
 
         return [
             [
