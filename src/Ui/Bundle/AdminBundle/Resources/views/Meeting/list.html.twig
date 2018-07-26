@@ -11,12 +11,12 @@
     <p>
         {{ form_start(form, {'attr': {'data-select-mover-form': 'data-select-mover-form'}}) }}
             <div>
-                <div class="col-md-2">
+                <div class="col-xs-2">
                     <button data-select-mover-previous="data-select-mover-previous" class="btn btn-default pull-right">
                         <
                     </button>
                 </div>
-                <div class="col-md-8">
+                <div class="col-xs-8">
                     {{ form_widget(form.slot, {
                         'attr': {
                             'onChange': 'document.getElementsByName("slot_choice")[0].submit();',
@@ -24,7 +24,7 @@
                         }
                     }) }}
                 </div>
-                <div class="col-md-2">
+                <div class="col-xs-2">
                     <button data-select-mover-next="data-select-mover-next" class="btn btn-default">
                         >
                     </button>
