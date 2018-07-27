@@ -112,6 +112,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function eslaticaIsPopulate()
     {
+        exec('bin/console fos:elastica:reset --env=test --no-debug');
         exec('bin/console fos:elastica:populate --env=test --quiet --no-interaction --no-debug');
     }
 
