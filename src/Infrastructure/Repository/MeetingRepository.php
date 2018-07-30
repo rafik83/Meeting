@@ -723,10 +723,11 @@ class MeetingRepository implements MeetingRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('meeting, fromSheet, toSheet')
+            ->select('meeting, fromSheet, toSheet, spot')
             ->from(Meeting::class, 'meeting')
             ->join('meeting.fromSheet', 'fromSheet')
             ->join('meeting.toSheet', 'toSheet')
+            ->join('meeting.spot', 'spot')
             ->where('meeting.slot = :slot')
             ->setParameter('slot', $slot)
         ;

@@ -417,6 +417,8 @@ admin.meeting.list.column.head.spot: Lieu
 admin.meeting.list.column.head.to: À
 admin.meeting.list.column.head.toParticipants: 'Participants du demandé'
 admin.meeting.list.details: Détails
+admin.meeting.list.participant.absent: 'Absent'
+admin.meeting.list.participant.present: 'Présent'
 admin.meeting.list.noResult: 'Aucun RDV positionné'
 admin.meeting.list.title: 'RDV positionnés'
 admin.menu.link: Menu
