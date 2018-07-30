@@ -19,7 +19,8 @@ var $ = require('jquery'),
     ToggleVisibility = require('./components/_ToggleVisibility'),
     CommercialStatusSelect = require('./components/_CommercialStatusSelect'),
     AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening'),
-    DuplicationSheetsModal = require('./components/_DuplicationSheetsModal')
+    DuplicationSheetsModal = require('./components/_DuplicationSheetsModal'),
+    FilterBuilder = require('./components/_FilterBuilder')
 ;
 
 require('bootstrap');
@@ -164,6 +165,10 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('.duplication-sheet'), function (element) {
         new DuplicationSheetsModal(element, target.querySelector('#duplication-sheet'));
+    });
+
+    [].forEach.call(target.querySelectorAll('.filter-builder'), function (element) {
+        new FilterBuilder(element);
     });
 }
 

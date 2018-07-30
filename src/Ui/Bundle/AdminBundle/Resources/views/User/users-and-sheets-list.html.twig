@@ -7,6 +7,8 @@
 {% block content %}
     <h1 class="page-header">{{ userEventListViews.paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
 
+    <div class="filter-builder"></div>
+
     {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}
 
     {% if userEventListViews.paginatedResult.total > 0 %}

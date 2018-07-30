@@ -16,6 +16,7 @@
     "elao-form.js": "0.1.*",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "intl-tel-input": "8.5.2",
+    "jQuery-QueryBuilder": "^2.5.2",
     "jquery": "2.1.1",
     "lodash": "^4.17.4",
     "moment": ">=2.8",
