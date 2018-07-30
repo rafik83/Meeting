@@ -78,6 +78,16 @@ fos_elastica:
                             properties:
                                 key:
                                     type: string
+                        nestedTaggedData:
+                            type: nested
+                            properties:
+                                tag:
+                                    type: string
+                                values:
+                                    type: nested
+                                    properties:
+                                        value:
+                                            type: string
                         filledFilter:
                             type: nested
                             index: "not_analyzed"
