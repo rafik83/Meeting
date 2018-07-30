@@ -26,7 +26,7 @@ class QrCode extends Component {
         let data = JSON.parse(this.element.dataset.identifiers);
 
         db.table('identifiers').clear();
-        db.table('identifiers').bulkAdd(data).then(() => {
+        db.table('identifiers').bulkAdd(Object.values(data)).then(() => {
             this.setState({ display: true });
 
             db.table('identifiers').count().then(count => {
