@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\ConditionRules\Rules\GetRulesByTypeAndLocaleQuery;
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,10 +50,13 @@ class ListAction
         }
 
         $page = $request->query->getInt('page', 1);
+        $locale = $event->getAvailableLocale($request->getLocale());
 
         $userEventListViews = $this->queryBus->handle(
-            new GetUserEventListViewsQuery($event, $page, $event->getAvailableLocale($request->getLocale()))
+            new GetUserEventListViewsQuery($event, $page, $locale)
         );
+
+        $rules = $this->queryBus->handle(new GetRulesByTypeAndLocaleQuery('user', $locale));
 
         return new Response(
             $this->engine->render(
@@ -60,6 +64,8 @@ class ListAction
                 [
                     'event' => $event,
                     'userEventListViews' => $userEventListViews,
+                    'rules' => $rules,
+                    'locale' => $locale,
                 ]
             )
         );

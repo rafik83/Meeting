@@ -1,0 +1,84 @@
+{
+  "en": [
+    {
+      "id": "firstName",
+      "label": "First name",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "in",
+        "not_in",
+        "is_null",
+        "is_not_null"
+      ]
+    },
+    {
+      "id": "lastName",
+      "label": "Last name",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "in",
+        "not_in",
+        "is_null",
+        "is_not_null"
+      ]
+    },
+    {
+      "id": "email",
+      "label": "Email",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "in",
+        "not_in",
+        "is_null",
+        "is_not_null"
+      ]
+    }
+  ],
+  "fr": [
+    {
+      "id": "firstName",
+      "label": "Prénom",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "in",
+        "not_in",
+        "is_null",
+        "is_not_null"
+      ]
+    },
+    {
+      "id": "lastName",
+      "label": "Nom",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "in",
+        "not_in",
+        "is_null",
+        "is_not_null"
+      ]
+    },
+    {
+      "id": "email",
+      "label": "Email",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "in",
+        "not_in",
+        "is_null",
+        "is_not_null"
+      ]
+    }
+  ]
+}

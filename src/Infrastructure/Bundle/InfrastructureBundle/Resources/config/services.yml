@@ -2186,6 +2186,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImage }
 
+    Proximum\Vimeet\Application\Command\ConditionRules\Rules\GetRulesByTypeAndLocaleQueryHandler:
+        arguments:
+            - '@adapter.file_system_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\ConditionRules\Rules\GetRulesByTypeAndLocaleQuery }
+
     command.product.remove.remove_handler:
         class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler
         arguments:

@@ -7,7 +7,10 @@
 {% block content %}
     <h1 class="page-header">{{ userEventListViews.paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
 
-    <div class="filter-builder"></div>
+    <div class="filter-block">
+        <div id="builder" data-locale="{{ locale }}" data-rules="{{ rules | json_encode }}"></div>
+        <button class="btn btn-primary" id="submit-rules">{{ 'admin.filter'|trans }}</button>
+    </div>
 
     {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}
 

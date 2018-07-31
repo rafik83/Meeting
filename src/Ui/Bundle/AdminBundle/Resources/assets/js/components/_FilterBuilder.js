@@ -1,30 +1,26 @@
 require('jQuery-QueryBuilder');
 var $ = require('jquery');
 
-function FilterBuilder(element) {
-    this.element = element;
+function FilterBuilder(builder, submitRules) {
+    this.builder = $(builder);
+    this.init(builder);
 
-    $(element).queryBuilder({
-        filters: [{
-            id: 'name',
-            label: 'Name',
-            type: 'string'
-        }, {
-            id: 'category',
-            label: 'Category',
-            type: 'integer',
-            input: 'select',
-            values: {
-                1: 'Books',
-                2: 'Movies',
-                3: 'Music',
-                4: 'Tools',
-                5: 'Goodies',
-                6: 'Clothes'
-            },
-            operators: ['equal', 'not_equal', 'in', 'not_in', 'is_null', 'is_not_null']
-        }]
-    });
+    submitRules.addEventListener('click', this.getRules.bind(this));
 }
+
+FilterBuilder.prototype.init = function(builder) {
+    this.builder.queryBuilder({
+        lang_code: builder.getAttribute('data-locale'),
+        filters: JSON.parse(builder.getAttribute('data-rules'))
+    });
+};
+
+FilterBuilder.prototype.getRules = function() {
+    let result = this.builder.queryBuilder('getRules');
+
+    if (!$.isEmptyObject(result)) {
+        alert(JSON.stringify(result, null, 2));
+    }
+};
 
 module.exports = FilterBuilder;
