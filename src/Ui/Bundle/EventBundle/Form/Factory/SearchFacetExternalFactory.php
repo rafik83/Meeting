@@ -14,6 +14,7 @@ use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
+use Proximum\Vimeet\Application\Query\Catalog\NomenclatureTagViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
@@ -24,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchExternalType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -48,8 +50,6 @@ class SearchFacetExternalFactory
     private $categoryViewsByEvent;
 
     /**
-     * SearchFacetExternalFactory constructor.
-     *
      * @param CommandBus                           $commandBus
      * @param CatalogVisibilityRepositoryInterface $catalogVisibilityRepository
      * @param FormFactoryInterface                 $formFactory
@@ -84,10 +84,10 @@ class SearchFacetExternalFactory
             $event,
             $locale,
             $filters,
-            $initialFieldsView->typeViews,
-            $initialFieldsView->categoryViews,
-            $initialFieldsView->organizationCategoryViews,
-            $initialFieldsView->positionViews
+            $initialFieldsView->catalogFilterViewsResult->typeViews,
+            $initialFieldsView->catalogFilterViewsResult->categoryViews,
+            $initialFieldsView->catalogFilterViewsResult->organizationCategoryViews,
+            $initialFieldsView->catalogFilterViewsResult->positionViews
         );
     }
 
@@ -115,10 +115,7 @@ class SearchFacetExternalFactory
                 $event,
                 $filters,
                 $currentAggregations,
-                $initialFieldsView->typeViews,
-                $initialFieldsView->categoryViews,
-                $initialFieldsView->organizationCategoryViews,
-                $initialFieldsView->positionViews,
+                $initialFieldsView->catalogFilterViewsResult,
                 $locale
             )
         );
@@ -127,10 +124,10 @@ class SearchFacetExternalFactory
             $event,
             $locale,
             $filters,
-            $filteredFieldsView->typeViews,
-            $filteredFieldsView->categoryViews,
-            $filteredFieldsView->organizationCategoryViews,
-            $filteredFieldsView->positionViews
+            $filteredFieldsView->catalogFilterViewsResult->typeViews,
+            $filteredFieldsView->catalogFilterViewsResult->categoryViews,
+            $filteredFieldsView->catalogFilterViewsResult->organizationCategoryViews,
+            $filteredFieldsView->catalogFilterViewsResult->positionViews
         );
     }
 
@@ -211,11 +208,18 @@ class SearchFacetExternalFactory
             new PositionViewQuery($event, $locale)
         );
 
-        return new FilteredFieldsView(
-            $typeViews,
-            $organizationCategoryViews,
-            $positionViews,
-            $categoryViews
+        $taggedNomenclatureTagViews = $this->commandBus->handle(
+            new NomenclatureTagViewQuery($event, array_keys([]), $locale)
+        );
+
+        return new FilteredFieldsView(new CatalogFilterViewsResult(
+                CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
+                $categoryViews,
+                $typeViews,
+                $organizationCategoryViews,
+                $positionViews,
+                $taggedNomenclatureTagViews
+            )
         );
     }
 

@@ -166,6 +166,15 @@ abstract class AbstractSearchType extends AbstractType
                 ],
             ]);
         }
+
+        $tagFilterViews = $searchFacetsView->getTagFilterViews();
+        if (!empty($tagFilterViews)) {
+            $builder->add('tagFilters', TagFiltersType::class, [
+                'label' => false,
+                'tagFilterViews' => $tagFilterViews,
+            ]);
+        }
+
     }
 
     /**

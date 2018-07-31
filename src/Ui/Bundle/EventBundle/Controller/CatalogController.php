@@ -36,6 +36,9 @@ use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViews;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViews;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotChecker;
@@ -114,21 +117,19 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $categoryTypeOrganizationPositionViews = $this
-            ->get(CategoryTypeOrganizationAndPositionViewsHandler::class)
-            ->handle(new CategoryTypeOrganizationAndPositionViews($event, $sheet, $locale))
+        $catalogFilterViewsResult = $this
+            ->get(CatalogFilterViewsHandler::class)
+            ->handle(new CatalogFilterViews($event, $sheet, $locale))
         ;
 
-        if ($categoryTypeOrganizationPositionViews->hasEmptyCategoryOrType()) {
-            return $categoryTypeOrganizationPositionViews->response;
+        if ($catalogFilterViewsResult->hasEmptyCategoryOrType()) {
+            return $catalogFilterViewsResult->response;
         }
 
-        $categoryViews             = $categoryTypeOrganizationPositionViews->categoryViews;
-        $typeViews                 = $categoryTypeOrganizationPositionViews->typeViews;
-        $organizationCategoryViews = $categoryTypeOrganizationPositionViews->organizationCategoryViews;
-        $positionViews             = $categoryTypeOrganizationPositionViews->positionViews;
-        $sheetsToExclude           = [];
-        $availableSlotsIds         = [];
+        $categoryViews     = $catalogFilterViewsResult->categoryViews;
+        $typeViews         = $catalogFilterViewsResult->typeViews;
+        $sheetsToExclude   = [];
+        $availableSlotsIds = [];
 
         $filterAvailableSlotAndSpecificSlotChecker = $this
             ->get(FilterAvailableSlotAndSpecificSlotCheckerHandler::class)
@@ -144,10 +145,7 @@ class CatalogController extends Controller
 
         $searchForm = $this->getSearchForm(
             $filters,
-            $typeViews,
-            $categoryViews,
-            $organizationCategoryViews,
-            $positionViews,
+            $catalogFilterViewsResult,
             $event,
             $sheet,
             $locale,
@@ -216,10 +214,7 @@ class CatalogController extends Controller
             $locale,
             $filters,
             $paginatedResult->aggregations,
-            $typeViews,
-            $categoryViews,
-            $organizationCategoryViews,
-            $positionViews,
+            $catalogFilterViewsResult,
             $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
             $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
             $availableSlotsIds,
@@ -340,11 +335,11 @@ class CatalogController extends Controller
     /**
      * Display a sheet.
      *
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param int           $sheetToDisplay id of Sheet
-     * @param UserInterface $user
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param int         $sheetToDisplay id of Sheet
+     * @param UserDomain  $userDomain
      *
      * @return Response
      */
@@ -353,11 +348,11 @@ class CatalogController extends Controller
         EventDomain $eventDomain,
         Sheet $sheet,
         $sheetToDisplay,
-        UserInterface $user
+        UserDomain $userDomain
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
+        $user = $userDomain->getUser();
         $event = $eventDomain->getEvent();
 
         if (!$sheet->isInCatalog()) {
@@ -497,25 +492,19 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param array                      $filters
-     * @param TypeView[]                 $typeViews
-     * @param CategoryView[]             $categoryViews
-     * @param OrganizationCategoryView[] $organizationCategoryViews
-     * @param PositionView[]             $positionViews
-     * @param Event                      $event
-     * @param Sheet                      $sheet
-     * @param string                     $locale
-     * @param bool                       $filterAvailableSlotIds
-     * @param MeetingSlot|null           $specificSlot
+     * @param array                    $filters
+     * @param CatalogFilterViewsResult $catalogFilterViewsResult
+     * @param Event                    $event
+     * @param Sheet                    $sheet
+     * @param string                   $locale
+     * @param bool                     $filterAvailableSlotIds
+     * @param MeetingSlot|null         $specificSlot
      *
      * @return FormInterface
      */
     private function getSearchForm(
         array $filters,
-        array $typeViews,
-        array $categoryViews,
-        array $organizationCategoryViews,
-        array $positionViews,
+        CatalogFilterViewsResult $catalogFilterViewsResult,
         Event $event,
         Sheet $sheet,
         $locale,
@@ -524,10 +513,10 @@ class CatalogController extends Controller
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
-            'typeViews'                 => $typeViews,
-            'categoryViews'             => $categoryViews,
-            'organizationCategoryViews' => $organizationCategoryViews,
-            'positionViews'             => $positionViews,
+            'typeViews'                 => $catalogFilterViewsResult->typeViews,
+            'categoryViews'             => $catalogFilterViewsResult->categoryViews,
+            'organizationCategoryViews' => $catalogFilterViewsResult->organizationCategoryViews,
+            'positionViews'             => $catalogFilterViewsResult->positionViews,
             'event'                     => $event,
             'locale'                    => $locale,
             'filterByAvailableSlotIds'  => $filterAvailableSlotIds,
@@ -537,19 +526,16 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Event                      $event
-     * @param Sheet                      $sheet
-     * @param string                     $locale
-     * @param array                      $filters
-     * @param array                      $currentAggregations
-     * @param TypeView[]                 $typeViews
-     * @param CategoryView[]             $categoryViews
-     * @param OrganizationCategoryView[] $organizationCategoryViews
-     * @param PositionView[]             $positionViews
-     * @param bool                       $filterAvailableSlotIds
-     * @param MeetingSlot|null           $specificSlot
-     * @param array                      $availableSlotsIds
-     * @param array                      $sheetsToExclude
+     * @param Event                    $event
+     * @param Sheet                    $sheet
+     * @param string                   $locale
+     * @param array                    $filters
+     * @param array                    $currentAggregations
+     * @param CatalogFilterViewsResult $catalogFilterViewsResult
+     * @param bool                     $filterAvailableSlotIds
+     * @param MeetingSlot|null         $specificSlot
+     * @param array                    $availableSlotsIds
+     * @param array                    $sheetsToExclude
      *
      * @return FormInterface
      */
@@ -559,10 +545,7 @@ class CatalogController extends Controller
         $locale,
         array $filters,
         array $currentAggregations,
-        array $typeViews,
-        array $categoryViews,
-        array $organizationCategoryViews,
-        array $positionViews,
+        CatalogFilterViewsResult $catalogFilterViewsResult,
         bool $filterAvailableSlotIds = false,
         MeetingSlot $specificSlot = null,
         array $availableSlotsIds = [],
@@ -574,10 +557,7 @@ class CatalogController extends Controller
                 $event,
                 $filters,
                 $currentAggregations,
-                $typeViews,
-                $categoryViews,
-                $organizationCategoryViews,
-                $positionViews,
+                $catalogFilterViewsResult,
                 $locale,
                 $availableSlotsIds,
                 $sheetsToExclude
@@ -586,10 +566,7 @@ class CatalogController extends Controller
 
         return $this->getSearchForm(
             $filters,
-            $filteredFieldsView->typeViews,
-            $filteredFieldsView->categoryViews,
-            $filteredFieldsView->organizationCategoryViews,
-            $filteredFieldsView->positionViews,
+            $filteredFieldsView->catalogFilterViewsResult,
             $event,
             $sheet,
             $locale,

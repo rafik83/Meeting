@@ -19,8 +19,6 @@ class SearchFacetQueryHandler
     private $searchFacetRepository;
 
     /**
-     * SearchFacetQueryHandler constructor.
-     *
      * @param SearchFacetRepositoryInterface $searchFacetRepository
      */
     public function __construct(SearchFacetRepositoryInterface $searchFacetRepository)

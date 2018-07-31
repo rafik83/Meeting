@@ -74,6 +74,12 @@
             </select>
         </div>
     {% endif %}
+
+    {% if searchForm.tagFilters is defined %}
+        {% for child in searchForm.tagFilters %}
+            {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: child }, false) }}
+        {% endfor %}
+    {% endif %}
 </div>
 
 {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}

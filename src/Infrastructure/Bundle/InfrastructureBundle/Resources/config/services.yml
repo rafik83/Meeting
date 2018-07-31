@@ -3484,6 +3484,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.search_facet'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery }
 

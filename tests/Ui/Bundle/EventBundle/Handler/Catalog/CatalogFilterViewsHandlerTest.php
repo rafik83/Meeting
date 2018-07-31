@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Query\Catalog\NomenclatureTagViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
@@ -27,13 +28,13 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViews;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsResult;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViews;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
+class CatalogFilterViewsHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
     public $queryBus;
@@ -69,7 +70,7 @@ class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
 
     public function testHandleNoType()
     {
-        $view = new CategoryTypeOrganizationAndPositionViews(
+        $view = new CatalogFilterViews(
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->locale
@@ -93,7 +94,7 @@ class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($response);
 
-        $handler = new CategoryTypeOrganizationAndPositionViewsHandler(
+        $handler = new CatalogFilterViewsHandler(
             $this->queryBus->reveal(),
             $this->visibleParticipationCategories->reveal(),
             $this->visibleParticipationTypes->reveal(),
@@ -102,8 +103,9 @@ class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
 
         $result = $handler->handle($view);
 
-        $expected = new CategoryTypeOrganizationAndPositionViewsResult(
-            CategoryTypeOrganizationAndPositionViewsResult::EMPTY_CATEGORY_OR_TYPE,
+        $expected = new CatalogFilterViewsResult(
+            CatalogFilterViewsResult::EMPTY_CATEGORY_OR_TYPE,
+            [],
             [],
             [],
             [],
@@ -116,14 +118,15 @@ class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
 
     public function testHandle()
     {
-        $view = new CategoryTypeOrganizationAndPositionViews(
+        $view = new CatalogFilterViews(
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->locale
         );
 
-        $searchFacetView = new SearchFacetView('type', 'label', 'placeholder', true);
-        $searchFacetsView = new SearchFacetsView([$searchFacetView]);
+        $searchFacetView1 = new SearchFacetView('type', 'label', 'placeholder', true);
+        $searchFacetView2 = new SearchFacetView('position', 'label', 'placeholder', true);
+        $searchFacetsView = new SearchFacetsView([$searchFacetView1, $searchFacetView2], ['sheet_organization_category' => []]);
         $query = new SearchFacetViewQuery($this->event->reveal(), 'fr');
         $this->queryBus->handle($query)->shouldBeCalled()->willReturn($searchFacetsView);
 
@@ -143,7 +146,6 @@ class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
         ;
         $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
 
-        $organizationCategoryViews = [];
         $positionView1 = $this->prophesize(PositionView::class);
         $positionView2 = $this->prophesize(PositionView::class);
         $positionViews = [
@@ -152,8 +154,7 @@ class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
         ];
         $this->queryBus
              ->handle(new OrganizationCategoryViewQuery($this->event->reveal(), 'fr'))
-             ->shouldBeCalled()
-             ->willReturn($organizationCategoryViews)
+             ->shouldNotBeCalled()
          ;
         $this->queryBus
              ->handle(new PositionViewQuery($this->event->reveal(), 'fr'))
@@ -161,7 +162,15 @@ class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
              ->willReturn($positionViews)
          ;
 
-        $handler = new CategoryTypeOrganizationAndPositionViewsHandler(
+        $this->queryBus
+            ->handle(new NomenclatureTagViewQuery($this->event->reveal(), [0 => 'sheet_organization_category'], 'fr'))
+            ->shouldBeCalled()
+            ->willReturn([
+                'sheet_organization_category' => [],
+            ])
+        ;
+
+        $handler = new CatalogFilterViewsHandler(
             $this->queryBus->reveal(),
             $this->visibleParticipationCategories->reveal(),
             $this->visibleParticipationTypes->reveal(),
@@ -170,12 +179,15 @@ class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
 
         $result = $handler->handle($view);
 
-        $expected = new CategoryTypeOrganizationAndPositionViewsResult(
-            CategoryTypeOrganizationAndPositionViewsResult::RESULT_CATEGORY_OR_TYPE,
+        $expected = new CatalogFilterViewsResult(
+            CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
             [],
             [$typeView1->reveal(), $typeView2->reveal()],
             [],
             $positionViews,
+            [
+                'sheet_organization_category' => [],
+            ],
             null
         );
 

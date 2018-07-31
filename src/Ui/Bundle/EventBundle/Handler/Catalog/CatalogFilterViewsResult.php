@@ -16,10 +16,10 @@ use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Symfony\Component\HttpFoundation\Response;
 
-class CategoryTypeOrganizationAndPositionViewsResult
+class CatalogFilterViewsResult
 {
-    const EMPTY_CATEGORY_OR_TYPE = 'empty_category_or_type';
-    const RESULT_CATEGORY_OR_TYPE = 'result_category_or_type';
+    public const EMPTY_CATEGORY_OR_TYPE = 'empty_category_or_type';
+    public const RESULT_CATEGORY_OR_TYPE = 'result_category_or_type';
 
     /** @var string */
     public $type;
@@ -40,11 +40,24 @@ class CategoryTypeOrganizationAndPositionViewsResult
     public $response;
 
     /**
+     * @var array of NomenclatureTagView[] indexed by Tag
+     *
+     * @example [
+     *     'sheet_organization_category' => [
+     *          0 => NomenclatureTagView,
+     *          1 => NomenclatureTagView,
+     *     ]
+     * ]
+     */
+    public $taggedNomenclatureTagViews;
+
+    /**
      * @param string                     $type
      * @param CategoryView[]             $categoryViews
      * @param TypeView[]                 $typeViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
+     * @param array                      $taggedNomenclatureTagViews
      * @param Response|null              $response
      */
     public function __construct(
@@ -53,6 +66,7 @@ class CategoryTypeOrganizationAndPositionViewsResult
         array $typeViews = [],
         array $organizationCategoryViews = [],
         array $positionViews = [],
+        array $taggedNomenclatureTagViews = [],
         Response $response = null
     ) {
         $this->type = $type;
@@ -61,6 +75,7 @@ class CategoryTypeOrganizationAndPositionViewsResult
         $this->response = $response;
         $this->organizationCategoryViews = $organizationCategoryViews;
         $this->positionViews = $positionViews;
+        $this->taggedNomenclatureTagViews = $taggedNomenclatureTagViews;
     }
 
     /**

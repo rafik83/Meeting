@@ -10,39 +10,19 @@
 
 namespace Proximum\Vimeet\Application\View\Catalog;
 
-use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
-use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Proximum\Vimeet\Domain\View\CategoryView;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
 
 class FilteredFieldsView
 {
-    /** @var TypeView[] */
-    public $typeViews;
-
-    /** @var OrganizationCategoryView[] */
-    public $organizationCategoryViews;
-
-    /** @var PositionView[] */
-    public $positionViews;
-
-    /** @var CategoryView[] */
-    public $categoryViews;
+    /** @var CatalogFilterViewsResult */
+    public $catalogFilterViewsResult;
 
     /**
-     * @param TypeView[]                 $typeViews
-     * @param OrganizationCategoryView[] $organizationCategoryViews
-     * @param PositionView[]             $positionViews
-     * @param CategoryView[]             $categoryViews
+     * @param CatalogFilterViewsResult $catalogFilterViewsResult
      */
     public function __construct(
-        array $typeViews,
-        array $organizationCategoryViews,
-        array $positionViews,
-        array $categoryViews
+        CatalogFilterViewsResult $catalogFilterViewsResult
     ) {
-        $this->typeViews                 = $typeViews;
-        $this->organizationCategoryViews = $organizationCategoryViews;
-        $this->positionViews             = $positionViews;
-        $this->categoryViews             = $categoryViews;
+        $this->catalogFilterViewsResult = $catalogFilterViewsResult;
     }
 }
