@@ -8,12 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Domain\Condition;
+namespace Proximum\Vimeet\Tests\Domain\ConditionRules;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\ConditionRules\ConditionRulesParser;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorIn;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotNull;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorAnd;
@@ -21,7 +23,7 @@ use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorOr
 
 class ConditionParserTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $conditions = [
             'logicalOperator' => 'AND',
@@ -44,6 +46,21 @@ class ConditionParserTest extends TestCase
                             'comparisonOperator' => 'equal',
                             'value' => 'U4',
                         ],
+                        [
+                            'logicalOperator' => 'AND',
+                            'rules' => [
+                                [
+                                    'field' => 'LastName',
+                                    'comparisonOperator' => 'is_null',
+                                    'value' => null,
+                                ],
+                                [
+                                    'field' => 'FirstName',
+                                    'comparisonOperator' => 'is_not_null',
+                                    'value' => 'mathieu',
+                                ],
+                            ]
+                        ]
                     ],
                 ],
             ],
@@ -58,6 +75,13 @@ class ConditionParserTest extends TestCase
                     [
                         new Field('Sector', new ComparisonOperatorIn, ['S1', 'S3']),
                         new Field('Universe', new ComparisonOperatorEqual, 'U4'),
+                        new Condition(
+                            new LogicalOperatorAnd,
+                            [
+                                new Field('LastName', new ComparisonOperatorNull, null),
+                                new Field('FirstName', new ComparisonOperatorNotNull, 'mathieu'),
+                            ]
+                        ),
                     ]
                 ),
             ]

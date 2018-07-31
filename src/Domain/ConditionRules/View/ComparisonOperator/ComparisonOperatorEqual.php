@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator;
 
-class ComparisonOperatorEqual implements ComparisonOperator
+class ComparisonOperatorEqual implements ComparisonOperatorInterface
 {
 }

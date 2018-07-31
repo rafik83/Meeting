@@ -10,23 +10,20 @@
 
 namespace Proximum\Vimeet\Domain\ConditionRules\View;
 
-use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperator;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorInterface;
 
-class Field implements Rule
+class Field implements RuleInterface
 {
     /** @var string */
     private $field;
 
-    /** @var ComparisonOperator */
+    /** @var ComparisonOperatorInterface */
     private $comparisonOperator;
 
-    /** @var mixed */
+    /** @var string|array */
     private $value;
 
-    /**
-     * @var string|array $value
-     */
-    public function __construct(string $field, ComparisonOperator $comparisonOperator, $value)
+    public function __construct(string $field, ComparisonOperatorInterface $comparisonOperator, $value)
     {
         $this->field = $field;
         $this->comparisonOperator = $comparisonOperator;
@@ -38,7 +35,7 @@ class Field implements Rule
         return $this->field;
     }
 
-    public function getComparisonOperator(): ComparisonOperator
+    public function getComparisonOperator(): ComparisonOperatorInterface
     {
         return $this->comparisonOperator;
     }

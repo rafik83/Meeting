@@ -8,8 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator;
+namespace Proximum\Vimeet\Domain\ConditionRules\View;
 
-class LogicalOperatorAnd implements LogicalOperatorInterface
+interface RuleInterface
 {
 }

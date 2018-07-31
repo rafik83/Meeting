@@ -10,33 +10,27 @@
 
 namespace Proximum\Vimeet\Domain\ConditionRules\View;
 
-use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperator;
+use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorInterface;
 
-class Condition implements Rule
+class Condition implements RuleInterface
 {
-    /** @var LogicalOperator */
+    /** @var LogicalOperatorInterface */
     private $logicalOperator;
 
-    /** @var array */
+    /** @var RuleInterface[] */
     private $rules;
 
-    /**
-     * @param Rule[] $rules
-     */
-    public function __construct(LogicalOperator $logicalOperator, array $rules)
+    public function __construct(LogicalOperatorInterface $logicalOperator, array $rules)
     {
         $this->logicalOperator = $logicalOperator;
         $this->rules = $rules;
     }
 
-    public function getLogicalOperator(): LogicalOperator
+    public function getLogicalOperator(): LogicalOperatorInterface
     {
         return $this->logicalOperator;
     }
 
-    /**
-     * @return Rule[]
-     */
     public function getRules(): array
     {
         return $this->rules;
