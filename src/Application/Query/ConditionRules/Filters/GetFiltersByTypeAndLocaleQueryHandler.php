@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\ConditionRules\Rules;
+namespace Proximum\Vimeet\Application\Query\ConditionRules\Filters;
 
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 
-class GetRulesByTypeAndLocaleQueryHandler
+class GetFiltersByTypeAndLocaleQueryHandler
 {
     /** @var FileSystemAdapterInterface */
     private $fileSystemAdapter;
@@ -22,7 +22,7 @@ class GetRulesByTypeAndLocaleQueryHandler
         $this->fileSystemAdapter = $fileSystemAdapter;
     }
 
-    public function handle(GetRulesByTypeAndLocaleQuery $query): array
+    public function handle(GetFiltersByTypeAndLocaleQuery $query): array
     {
         $file = sprintf('%s/../../../../Domain/ConditionRules/Rules/%s.json', __DIR__, $query->type);
 

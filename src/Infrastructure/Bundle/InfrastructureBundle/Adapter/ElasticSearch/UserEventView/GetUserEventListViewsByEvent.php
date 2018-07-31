@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEventInterface;
+use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
@@ -33,7 +34,7 @@ class GetUserEventListViewsByEvent implements GetUserEventListViewsByEventInterf
         $this->elasticDocumentsToUserEventListViewsTranformer = $elasticDocumentsToUserEventListViewsTranformer;
     }
 
-    public function handle(Event $event, int $page, string $locale): PaginatedResult
+    public function handle(Event $event, int $page, string $locale, ?RuleInterface $rule): PaginatedResult
     {
         $query = new \Elastica\Query(
             [

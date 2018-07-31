@@ -27,14 +27,11 @@ use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 
 class ConditionRulesParser
 {
-    public const LOGICAL_OPERATOR_KEY = 'logicalOperator';
-    public const RULES_KEY = 'rules';
-
     public static function parse(array $condition): RuleInterface
     {
         $buildRules = [];
 
-        foreach ($condition[self::RULES_KEY] as $rule) {
+        foreach ($condition['rules'] as $rule) {
             $buildRules[] = self::rulesBuilder($buildRules, $rule);
         }
 
@@ -43,10 +40,10 @@ class ConditionRulesParser
 
     private static function rulesBuilder(array $buildRules, array $initialRule): RuleInterface
     {
-        if (isset($initialRule[self::RULES_KEY])) {
+        if (isset($initialRule['rules'])) {
             $subBuildRules = [];
 
-            foreach ($initialRule[self::RULES_KEY] as $subInitialRule) {
+            foreach ($initialRule['rules'] as $subInitialRule) {
                 $subBuildRules[] = self::rulesBuilder($buildRules, $subInitialRule);
             }
 
@@ -55,14 +52,14 @@ class ConditionRulesParser
 
         return new Field(
             $initialRule['field'],
-            self::getComparisonOperator($initialRule['comparisonOperator']),
+            self::getComparisonOperator($initialRule['operator']),
             $initialRule['value']
         );
     }
 
     private static function getLogicalOperator(array $rule): LogicalOperatorInterface
     {
-        return $rule[self::LOGICAL_OPERATOR_KEY] === 'AND'
+        return $rule['condition'] === 'AND'
             ? new LogicalOperatorAnd()
             : new LogicalOperatorOr();
     }

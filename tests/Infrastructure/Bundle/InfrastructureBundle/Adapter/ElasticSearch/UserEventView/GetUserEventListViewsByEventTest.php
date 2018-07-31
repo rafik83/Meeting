@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
@@ -23,6 +24,7 @@ class GetUserEventListViewsByEventTest extends TestCase
     public function testHandle()
     {
         $event = $this->prophesize(Event::class);
+        $rule = $this->prophesize(RuleInterface::class);
         $event->getId()->willReturn(42);
 
         $expectedQuery = new \Elastica\Query(
@@ -139,7 +141,7 @@ class GetUserEventListViewsByEventTest extends TestCase
 
         $this->assertEquals(
             $expectedResult,
-            $getUserEventViewsByEvent->handle($event->reveal(), 2, 'fr')
+            $getUserEventViewsByEvent->handle($event->reveal(), 2, 'fr', $rule->reveal())
         );
     }
 }

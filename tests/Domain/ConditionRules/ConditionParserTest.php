@@ -26,37 +26,37 @@ class ConditionParserTest extends TestCase
     public function testHandle(): void
     {
         $conditions = [
-            'logicalOperator' => 'AND',
+            'condition' => 'AND',
             'rules' => [
                 [
                     'field' => 'Activity',
-                    'comparisonOperator' => 'equal',
+                    'operator' => 'equal',
                     'value' => 'A1',
                 ],
                 [
-                    'logicalOperator' => 'OR',
+                    'condition' => 'OR',
                     'rules' => [
                         [
                             'field' => 'Sector',
-                            'comparisonOperator' => 'in',
+                            'operator' => 'in',
                             'value' => ['S1', 'S3'],
                         ],
                         [
                             'field' => 'Universe',
-                            'comparisonOperator' => 'equal',
+                            'operator' => 'equal',
                             'value' => 'U4',
                         ],
                         [
-                            'logicalOperator' => 'AND',
+                            'condition' => 'AND',
                             'rules' => [
                                 [
                                     'field' => 'LastName',
-                                    'comparisonOperator' => 'is_null',
+                                    'operator' => 'is_null',
                                     'value' => null,
                                 ],
                                 [
                                     'field' => 'FirstName',
-                                    'comparisonOperator' => 'is_not_null',
+                                    'operator' => 'is_not_null',
                                     'value' => 'mathieu',
                                 ],
                             ]

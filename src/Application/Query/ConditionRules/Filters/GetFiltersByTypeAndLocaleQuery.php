@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\ConditionRules\Rules;
+namespace Proximum\Vimeet\Application\Query\ConditionRules\Filters;
 
 use Proximum\Vimeet\Application\Query\Query;
 
-class GetRulesByTypeAndLocaleQuery implements Query
+class GetFiltersByTypeAndLocaleQuery implements Query
 {
     /** @var string */
     public $type;

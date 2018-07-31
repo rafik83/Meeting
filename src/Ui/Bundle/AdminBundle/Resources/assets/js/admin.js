@@ -167,8 +167,9 @@ function init(target) {
         new DuplicationSheetsModal(element, target.querySelector('#duplication-sheet'));
     });
 
-    [].forEach.call(target.querySelectorAll('.filter-block'), function () {
+    [].forEach.call(target.querySelectorAll('.filter-form'), function () {
         new FilterBuilder(
+            target.querySelector('#rules'),
             target.querySelector('#builder'),
             target.querySelector('#submit-rules'),
         );
