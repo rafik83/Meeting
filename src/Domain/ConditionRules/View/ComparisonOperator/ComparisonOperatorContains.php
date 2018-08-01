@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator;
 
-class ComparisonOperatorNotIn implements ComparisonOperatorInterface
+class ComparisonOperatorContains implements ComparisonOperatorInterface
 {
 }

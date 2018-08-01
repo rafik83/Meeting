@@ -52,6 +52,23 @@ class ElasticaPersisterTest extends TestCase
 
         $elasticaIndex = $this->prophesize(\Elastica\Index::class);
         $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
+        $elasticaIndex
+            ->create([
+                'analysis' =>
+                    [
+                        'analyzer' =>
+                            [
+                                'lowercaseAnalyzer' => [
+                                    'tokenizer' => 'keyword',
+                                    'filter' => ['lowercase']
+                                ]
+                            ]
+                    ]
+            ], true)
+            ->shouldBeCalled()
+            ->willReturn($elasticaIndex)
+        ;
+
         $elasticaIndex->refresh()->shouldBeCalled();
 
         $elasticaType->getIndex()->willReturn($elasticaIndex->reveal());
@@ -61,7 +78,11 @@ class ElasticaPersisterTest extends TestCase
 
         $elasticaMapping = $this->prophesize(ElasticaMapping::class);
         $elasticaMapping
-            ->setMapping($elasticaType, TypesMapping::AVAILABLE_TYPES[UserEventView::class]['properties'])
+            ->setMapping(
+                $elasticaType,
+                TypesMapping::AVAILABLE_TYPES[UserEventView::class]['properties'],
+                ['index_analyzer' => 'lowercaseAnalyzer']
+            )
             ->shouldBeCalled()
         ;
 
@@ -87,6 +108,23 @@ class ElasticaPersisterTest extends TestCase
 
         $elasticaType = $this->prophesize(\Elastica\Type::class);
         $elasticaIndex = $this->prophesize(\Elastica\Index::class);
+        $elasticaIndex
+            ->create([
+                'analysis' =>
+                    [
+                        'analyzer' =>
+                            [
+                                'lowercaseAnalyzer' => [
+                                    'tokenizer' => 'keyword',
+                                    'filter' => ['lowercase']
+                                ]
+                            ]
+                    ]
+            ], true)
+            ->shouldBeCalled()
+            ->willReturn($elasticaIndex)
+        ;
+
         $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
 
         $client = $this->prophesize(\Elastica\Client::class);

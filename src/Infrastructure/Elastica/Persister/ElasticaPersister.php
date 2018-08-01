@@ -53,7 +53,11 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
 
         $typeMapping = $this->getObjectTypeMapping($object);
         $elasticaType = $this->getType($typeMapping['type']);
-        $this->mapping->setMapping($elasticaType, $typeMapping['properties']);
+        $params = [
+            'index_analyzer' => 'lowercaseAnalyzer',
+        ];
+
+        $this->mapping->setMapping($elasticaType, $typeMapping['properties'], $params);
 
         foreach (array_chunk($objects, 100, false) as $chunkObjects) {
             $response = $elasticaType->addDocuments($this->getDocuments($identifierProperty, $chunkObjects));
@@ -89,9 +93,27 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
 
     private function getType(string $typeName): \Elastica\Type
     {
-        $elasticaIndex = $this->client->getIndex($this->index);
+        return $this->getIndex()->getType($typeName);
+    }
 
-        return $elasticaIndex->getType($typeName);
+    private function getIndex(): \Elastica\Index
+    {
+        $index = $this->client->getIndex($this->index);
+
+        $index->create([
+            'analysis' => [
+                'analyzer' => [
+                    'lowercaseAnalyzer' => [
+                        'tokenizer' => 'keyword',
+                        'filter' => [
+                            'lowercase',
+                        ],
+                    ],
+                ],
+            ]
+        ], true);
+
+        return $index;
     }
 
     /**

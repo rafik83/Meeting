@@ -7,10 +7,14 @@
       "operators": [
         "equal",
         "not_equal",
-        "in",
-        "not_in",
+        "contains",
+        "not_contains",
         "is_null",
-        "is_not_null"
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
       ]
     },
     {
@@ -20,10 +24,14 @@
       "operators": [
         "equal",
         "not_equal",
-        "in",
-        "not_in",
+        "contains",
+        "not_contains",
         "is_null",
-        "is_not_null"
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
       ]
     },
     {
@@ -33,10 +41,14 @@
       "operators": [
         "equal",
         "not_equal",
-        "in",
-        "not_in",
+        "contains",
+        "not_contains",
         "is_null",
-        "is_not_null"
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
       ]
     }
   ],
@@ -48,10 +60,14 @@
       "operators": [
         "equal",
         "not_equal",
-        "in",
-        "not_in",
+        "contains",
+        "not_contains",
         "is_null",
-        "is_not_null"
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
       ]
     },
     {
@@ -61,10 +77,14 @@
       "operators": [
         "equal",
         "not_equal",
-        "in",
-        "not_in",
+        "contains",
+        "not_contains",
         "is_null",
-        "is_not_null"
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
       ]
     },
     {
@@ -74,10 +94,14 @@
       "operators": [
         "equal",
         "not_equal",
-        "in",
-        "not_in",
+        "contains",
+        "not_contains",
         "is_null",
-        "is_not_null"
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
       ]
     }
   ]

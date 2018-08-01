@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEvent
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery;
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQueryHandler;
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\UserEventListViews;
-use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
+use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
@@ -26,11 +26,11 @@ class GetUserEventListViewsQueryHandlerTest extends TestCase
     {
         $event = $this->prophesize(Event::class);
         $paginatedResult = $this->prophesize(PaginatedResult::class);
-        $rule = $this->prophesize(RuleInterface::class);
+        $condition = $this->prophesize(Condition::class);
 
         $getUserEventViewsByEvent = $this->prophesize(GetUserEventListViewsByEventInterface::class);
         $getUserEventViewsByEvent
-            ->handle($event, 1, 'fr', $rule->reveal())
+            ->handle($event, 1, 'fr', $condition->reveal())
             ->shouldBeCalled()
             ->willReturn($paginatedResult->reveal())
         ;
@@ -49,7 +49,7 @@ class GetUserEventListViewsQueryHandlerTest extends TestCase
 
         $this->assertEquals(
             new UserEventListViews($paginatedResult->reveal(), true),
-            $getUserEventListViewsQueryHandler->handle(new GetUserEventListViewsQuery($event->reveal(), 1, 'fr', $rule->reveal()))
+            $getUserEventListViewsQueryHandler->handle(new GetUserEventListViewsQuery($event->reveal(), 1, 'fr', $condition->reveal()))
         );
     }
 }
