@@ -3346,6 +3346,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQueryHandler
         arguments:
             - '@adapter.sheet_search_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery }
 

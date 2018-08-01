@@ -460,12 +460,21 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                         continue;
                     }
 
+                    $items = $object->getItems();
+
+                    if (empty($items)) {
+                        continue;
+                    }
+
                     if (isset($nestedTaggedData[$tag])) {
                         $nestedTaggedData[$tag]['values'] = array_merge(
                             $nestedTaggedData[$tag]['values'],
-                            array_map(function ($item) {
-                                return ['value' => $item];
-                            }, $object->getItems())
+                            array_map(function ($item) use ($tag) {
+                                return [
+                                    'tag' => $tag,
+                                    'value' => $item,
+                                ];
+                            }, $items)
                         );
 
                         continue;
@@ -473,9 +482,12 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
                     $nestedTaggedData[$tag] = [
                         'tag' => $tag,
-                        'values' => array_map(function ($item) {
-                            return ['value' => $item];
-                        }, $object->getItems()),
+                        'values' => array_map(function ($item) use ($tag) {
+                            return [
+                                'tag' => $tag,
+                                'value' => $item,
+                            ];
+                        }, $items),
                     ];
                 }
             }

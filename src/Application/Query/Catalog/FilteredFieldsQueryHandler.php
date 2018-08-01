@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\Sheet\TagFilterAggregator;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
@@ -21,12 +22,19 @@ class FilteredFieldsQueryHandler
     /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
+    /** @var TagFilterAggregator */
+    private $tagFilterAggregator;
+
     /**
      * @param SheetSearchAdapterInterface $sheetSearchAdapter
+     * @param TagFilterAggregator         $tagFilterAggregator
      */
-    public function __construct(SheetSearchAdapterInterface $sheetSearchAdapter)
-    {
+    public function __construct(
+        SheetSearchAdapterInterface $sheetSearchAdapter,
+        TagFilterAggregator $tagFilterAggregator
+    ) {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
+        $this->tagFilterAggregator = $tagFilterAggregator;
     }
 
     /**
@@ -336,7 +344,16 @@ class FilteredFieldsQueryHandler
     private function filterTaggedNomenclatureTagViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
         foreach ($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews as $tag => $nomenclatureTagViews) {
-            //@todo request aggregation
+            $aggregations = $this->tagFilterAggregator->getAggregationsForTag(
+                $filteredFieldsQuery->event,
+                $tag,
+                $filteredFieldsQuery->locale,
+                $filteredFieldsQuery->filters,
+                $filteredFieldsQuery->availableSlotIds,
+                $filteredFieldsQuery->sheetsToExclude
+            );
+
+            dump($aggregations);
         }
     }
 }

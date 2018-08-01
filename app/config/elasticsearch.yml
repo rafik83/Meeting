@@ -86,6 +86,8 @@ fos_elastica:
                                 values:
                                     type: nested
                                     properties:
+                                        tag:
+                                            type: string
                                         value:
                                             type: string
                         filledFilter:
