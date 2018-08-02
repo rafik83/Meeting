@@ -26,3 +26,11 @@ Proximum\Vimeet\Application\Command\Happening\Create:
             - Length:
                 min: 4
                 minMessage: "validators.invitationCode.length.min"
+        talkings:
+            - All:
+                - Collection:
+                    fields:
+                        speaker:
+                            - NotNull: ~
+                        position:
+                            - NotNull: ~
