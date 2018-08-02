@@ -68,7 +68,7 @@ class ListAction
         $locale = $event->getAvailableLocale($request->getLocale());
 
         if (1 === $request->query->getInt('reset')) {
-            $this->session->remove('rules');
+            $this->session->remove($this->getRulesKey($event));
 
             return new RedirectResponse(
                 $this->urlGenerator->generate('admin_users_list', ['event' => $event->getId()])
@@ -76,11 +76,11 @@ class ListAction
         }
 
         if ('POST' === $request->getMethod() && $request->request->get('rules')) {
-            $this->session->set('rules', $request->request->get('rules'));
+            $this->session->set($this->getRulesKey($event), $request->request->get('rules'));
         }
 
         $userEventListViews = $this->queryBus->handle(
-            new GetUserEventListViewsQuery($event, $page, $locale, $this->getRules())
+            new GetUserEventListViewsQuery($event, $page, $locale, $this->getRules($event))
         );
 
         $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $locale));
@@ -92,21 +92,26 @@ class ListAction
                     'event' => $event,
                     'userEventListViews' => $userEventListViews,
                     'filters' => $filters,
-                    'rules' => $this->session->get('rules'),
+                    'rules' => $this->session->get($this->getRulesKey($event)),
                     'locale' => $locale,
                 ]
             )
         );
     }
 
-    private function getRules(): ?RuleInterface
+    private function getRules(Event $event): ?RuleInterface
     {
-        $rules = json_decode($this->session->get('rules'), true);
+        $rules = json_decode($this->session->get($this->getRulesKey($event)), true);
 
         if ($rules) {
             return $this->queryBus->handle(new GetConditionRulesQuery($rules));
         }
 
         return null;
+    }
+
+    private function getRulesKey(Event $event): string
+    {
+        return sprintf('rules_%s', $event->getId());
     }
 }

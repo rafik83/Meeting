@@ -29,15 +29,12 @@ final class TypesMapping
                 ],
                 'firstName' => [
                     'type' => 'string',
-                    'analyzer' => 'lowercaseAnalyzer',
                 ],
                 'lastName' => [
                     'type' => 'string',
-                    'analyzer' => 'lowercaseAnalyzer',
                 ],
                 'email' => [
                     'type' => 'string',
-                    'analyzer' => 'lowercaseAnalyzer',
                 ],
                 'locale' => [
                     'type' => 'string',

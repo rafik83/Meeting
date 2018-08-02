@@ -52,22 +52,6 @@ class ElasticaPersisterTest extends TestCase
 
         $elasticaIndex = $this->prophesize(\Elastica\Index::class);
         $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
-        $elasticaIndex
-            ->create([
-                'analysis' =>
-                    [
-                        'analyzer' =>
-                            [
-                                'lowercaseAnalyzer' => [
-                                    'tokenizer' => 'keyword',
-                                    'filter' => ['lowercase']
-                                ]
-                            ]
-                    ]
-            ], true)
-            ->shouldBeCalled()
-            ->willReturn($elasticaIndex)
-        ;
 
         $elasticaIndex->refresh()->shouldBeCalled();
 
@@ -80,8 +64,7 @@ class ElasticaPersisterTest extends TestCase
         $elasticaMapping
             ->setMapping(
                 $elasticaType,
-                TypesMapping::AVAILABLE_TYPES[UserEventView::class]['properties'],
-                ['index_analyzer' => 'lowercaseAnalyzer']
+                TypesMapping::AVAILABLE_TYPES[UserEventView::class]['properties']
             )
             ->shouldBeCalled()
         ;
@@ -108,22 +91,6 @@ class ElasticaPersisterTest extends TestCase
 
         $elasticaType = $this->prophesize(\Elastica\Type::class);
         $elasticaIndex = $this->prophesize(\Elastica\Index::class);
-        $elasticaIndex
-            ->create([
-                'analysis' =>
-                    [
-                        'analyzer' =>
-                            [
-                                'lowercaseAnalyzer' => [
-                                    'tokenizer' => 'keyword',
-                                    'filter' => ['lowercase']
-                                ]
-                            ]
-                    ]
-            ], true)
-            ->shouldBeCalled()
-            ->willReturn($elasticaIndex)
-        ;
 
         $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
 
