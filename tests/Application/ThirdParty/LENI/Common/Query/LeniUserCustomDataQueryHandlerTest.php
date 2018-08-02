@@ -201,7 +201,7 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
         $typeConverter
             ->convert($type->reveal(), $typeMapping)
             ->shouldBeCalled()
-            ->willReturn([]) // an empty array from the TypeConverter throws the exception
+            ->willThrow(TypeDoesNotMatchException::class)
         ;
 
         $mappingGetter = $this->prophesize(MappingGetter::class);

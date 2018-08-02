@@ -19,10 +19,11 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  */
 class Admin extends AbstractUser implements AdvancedUserInterface
 {
-    const ROLE_ORGANIZER   = 'ROLE_ORGANIZER';
-    const ROLE_OPERATOR    = 'ROLE_OPERATOR';
-    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
-    const ROLE_PARTNER     = 'ROLE_PARTNER';
+    public const ROLE_ORGANIZER = 'ROLE_ORGANIZER';
+    public const ROLE_OPERATOR = 'ROLE_OPERATOR';
+    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+    public const ROLE_PARTNER = 'ROLE_PARTNER';
+    public const ROLE_HOST = 'ROLE_HOST';
 
     /**
      * @var string
@@ -115,6 +116,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
             self::ROLE_ORGANIZER,
             self::ROLE_SUPER_ADMIN,
             self::ROLE_PARTNER,
+            self::ROLE_HOST,
         ];
     }
 

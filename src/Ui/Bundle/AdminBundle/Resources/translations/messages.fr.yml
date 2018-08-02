@@ -246,6 +246,7 @@ admin.extraParameter.type.leni_get_endpoint: 'LENI Get endpoint'
 admin.extraParameter.type.leni_mode: 'LENI Mode'
 admin.extraParameter.type.leni_participation_data_mapping: 'LENI mapping des champs'
 admin.extraParameter.type.leni_participation_types_mapping: 'LENI mapping des types de participation'
+admin.extraParameter.type.leni_predefined_filters: 'LENI filtres de l''API (GET)'
 admin.extraParameter.type.leni_save_endpoint: 'LENI Save endpoint'
 admin.extraParameter.type.leni_sending_request: 'LENI Paramètre SendingRequests'
 admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
@@ -674,6 +675,7 @@ admin.promotion_code.table.column.validUntil: 'Valide jusqu''au'
 admin.promotion_code.table.no_result: 'Aucun code promo'
 admin.promotion_code.title: 'Codes promos'
 admin.promotion_code.update: 'Modifier code promo'
+admin.role.ROLE_HOST: Hôte
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
 admin.role.ROLE_PARTNER: Partenaire

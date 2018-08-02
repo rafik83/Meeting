@@ -34,14 +34,10 @@ class MeetingRequestViewQueryHandler
     /** @var Composer */
     private $ruleComposer;
 
-    /**
-     * @var RouterInterface
-     */
+    /** @var RouterInterface */
     private $router;
 
     /**
-     * MeetingRequestViewQueryHandler constructor.
-     *
      * @param Preview                 $preview
      * @param SheetInfoGuesser        $sheetInfoGuesser
      * @param RuleRepositoryInterface $ruleRepository
@@ -67,7 +63,7 @@ class MeetingRequestViewQueryHandler
      *
      * @return MeetingRequestView
      */
-    public function handle(MeetingRequestViewQuery $query)
+    public function handle(MeetingRequestViewQuery $query): MeetingRequestView
     {
         $sheet        = $this->getViewedSheet($query);
         $userSheet    = $query->sheet;
@@ -98,7 +94,7 @@ class MeetingRequestViewQueryHandler
             $sheet,
             $this->sheetInfoGuesser->guessSheetTitle($sheet, $query->locale),
             $this->getFilterState($query),
-            $sheet->getType()->getTitle($query->locale),
+            !$query->showCategory ? $sheet->getTypeTitle($query->locale) : $sheet->getCategoriesTitles($query->locale),
             $query->meetingRequest->getCreatedAt(),
             $query->meetingRequest,
             $previews,

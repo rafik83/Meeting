@@ -132,7 +132,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                             $isMeetingRequestClosed,
                             $isAnsweringMeetingRequestClosed,
                             isset($seenSheetIndexed[$sheet->getId()]),
-                            $isPhoneValidationRequired
+                            $isPhoneValidationRequired,
+                            $query->showCategory
                         )
                     );
             },

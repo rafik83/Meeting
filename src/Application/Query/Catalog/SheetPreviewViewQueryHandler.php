@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Composer;
@@ -125,7 +126,7 @@ class SheetPreviewViewQueryHandler
             $sheet->getId(),
             $sheet,
             $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
-            $sheet->getType()->getTitle($locale),
+            $this->getTypeOrCategoryTitle($catalogSheetPreviewViewQuery->showCategory, $sheet, $locale),
             $this->preview->getPreview($sheet, $locale, $rule),
             $meetingRequest,
             $viewer === $sheet,
@@ -138,5 +139,14 @@ class SheetPreviewViewQueryHandler
             $catalogSheetPreviewViewQuery->isMobileValidationRequired,
             $validatePhoneLink ?? null
         );
+    }
+
+    private function getTypeOrCategoryTitle(bool $showCategory, Sheet $sheet, string $locale): string
+    {
+        if ($showCategory === false) {
+            return $sheet->getType()->getTitle($locale);
+        }
+
+        return implode(', ', $sheet->getType()->getCategoriesTitles($locale));
     }
 }

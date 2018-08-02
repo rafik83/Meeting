@@ -143,6 +143,22 @@ class ParticipateHandlerTest extends TestCase
         $this->participate->happening = $this->happening;
         $this->participate->participants = [$this->participant];
 
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this->participantRepository
+            ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this->participate->sheet = $this->sheet;
+        $this->participate->happening = $this->happening;
+        $this->participate->participants = [$this->participant];
+
         $this->handler->handle($this->participate);
     }
 
