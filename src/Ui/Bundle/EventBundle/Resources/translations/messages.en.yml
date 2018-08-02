@@ -289,7 +289,7 @@ order.list.pay_remaining: 'Full payment'
 order.list.pro_forma.link: 'View Proforma'
 order.list.remainingToPay: 'To be paid'
 order.list.title: 'My orders'
-order.transaction.howtopay: 'How to pay?'
+order.transaction.howtopay: 'How to make a bank transfer payment ?'
 order.transaction.list.column.date: Date
 order.transaction.list.column.mode: Mode
 order.transaction.list.column.state: State
@@ -308,7 +308,7 @@ package.funnel.error: 'An error has occured. Please check the form below.'
 package.funnel.payment: Payment
 package.funnel.summary: 'Summary & billing details'
 package.options.included: Included
-package.participant_planning.validate: Validate
+package.participant_planning.validate: Proceed
 package.participant.add: 'Add participant'
 package.participant.delete: 'delete a participant'
 package.participants.add: 'Add participants'
