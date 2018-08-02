@@ -44,7 +44,7 @@ Feature: add type
     When I follow "admin.type.link"
     Then I should be on "/fr/event/1/type"
     When I follow "admin.type.update.link"
-    Then I should be on "/fr/event/1/type/2/update"
+    Then I should be on "/fr/event/1/type/1/update"
     And I should see "admin.type.update.title"
     And I should not see "form.type_update.sheetTemplate.label"
     And I should not see "form.type_update.registrationTemplate.label"

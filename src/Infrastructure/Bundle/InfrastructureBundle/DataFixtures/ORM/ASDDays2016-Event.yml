@@ -44,7 +44,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_asddays_2016_fr:
         __construct: false
-        description: "ASD Days, le Rdv international dédié à l'Aéronautique,\nle Spatial, la Défense, la Sécurité et les Drones\n12 > 13 OCTOBRE 2016 - Aéroport d’Orly - Paris - FRANCE"
+        description: 'ASD Days, le Rdv international dédié à l''Aéronautique,\\nle Spatial, la Défense, la Sécurité et les Drones\\n12  \> 13 OCTOBRE 2016 - Aéroport d’Orly - Paris - FRANCE'
         locale: fr
         event: '@event_asddays_2016'
         bankInfo: |+
