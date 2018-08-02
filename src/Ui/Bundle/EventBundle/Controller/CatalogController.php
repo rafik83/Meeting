@@ -21,7 +21,6 @@ use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuer
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
-use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
@@ -31,7 +30,6 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
-use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
@@ -39,8 +37,6 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmati
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViews;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViews;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -52,7 +48,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class CatalogController
@@ -512,16 +507,17 @@ class CatalogController extends Controller
         MeetingSlot $specificSlot = null
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
-            'action'                    => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
-            'typeViews'                 => $catalogFilterViewsResult->typeViews,
-            'categoryViews'             => $catalogFilterViewsResult->categoryViews,
+            'action' => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
+            'typeViews' => $catalogFilterViewsResult->typeViews,
+            'categoryViews' => $catalogFilterViewsResult->categoryViews,
             'organizationCategoryViews' => $catalogFilterViewsResult->organizationCategoryViews,
-            'positionViews'             => $catalogFilterViewsResult->positionViews,
-            'event'                     => $event,
-            'locale'                    => $locale,
-            'filterByAvailableSlotIds'  => $filterAvailableSlotIds,
-            'filterBySpecificSlot'      => null !== $specificSlot,
-            'specificSlot'              => $specificSlot,
+            'positionViews' => $catalogFilterViewsResult->positionViews,
+            'taggedNomenclatureTagViews' => $catalogFilterViewsResult->taggedNomenclatureTagViews,
+            'event' => $event,
+            'locale' => $locale,
+            'filterByAvailableSlotIds' => $filterAvailableSlotIds,
+            'filterBySpecificSlot' => null !== $specificSlot,
+            'specificSlot' => $specificSlot,
         ]);
     }
 

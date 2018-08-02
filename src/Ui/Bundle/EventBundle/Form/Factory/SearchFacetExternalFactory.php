@@ -84,10 +84,7 @@ class SearchFacetExternalFactory
             $event,
             $locale,
             $filters,
-            $initialFieldsView->catalogFilterViewsResult->typeViews,
-            $initialFieldsView->catalogFilterViewsResult->categoryViews,
-            $initialFieldsView->catalogFilterViewsResult->organizationCategoryViews,
-            $initialFieldsView->catalogFilterViewsResult->positionViews
+            $initialFieldsView->catalogFilterViewsResult
         );
     }
 
@@ -124,10 +121,7 @@ class SearchFacetExternalFactory
             $event,
             $locale,
             $filters,
-            $filteredFieldsView->catalogFilterViewsResult->typeViews,
-            $filteredFieldsView->catalogFilterViewsResult->categoryViews,
-            $filteredFieldsView->catalogFilterViewsResult->organizationCategoryViews,
-            $filteredFieldsView->catalogFilterViewsResult->positionViews
+            $filteredFieldsView->catalogFilterViewsResult
         );
     }
 
@@ -224,13 +218,10 @@ class SearchFacetExternalFactory
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param array  $typeViews
-     * @param array  $categoryViews
-     * @param array  $organizationCategoryViews
-     * @param array  $positionViews
+     * @param Event                    $event
+     * @param string                   $locale
+     * @param array                    $filters
+     * @param CatalogFilterViewsResult $catalogFilterViewsResult
      *
      * @return FormInterface
      */
@@ -238,19 +229,17 @@ class SearchFacetExternalFactory
         Event $event,
         string $locale,
         array $filters = [],
-        array $typeViews,
-        array $categoryViews,
-        array $organizationCategoryViews,
-        array $positionViews
+        CatalogFilterViewsResult $catalogFilterViewsResult
     ): FormInterface {
         return $this->formFactory->createNamed('', SearchExternalType::class, $filters, [
-            'action'                    => $this->router->generate('event_catalog_external_index'),
-            'typeViews'                 => $typeViews,
-            'categoryViews'             => $categoryViews,
-            'organizationCategoryViews' => $organizationCategoryViews,
-            'positionViews'             => $positionViews,
-            'event'                     => $event,
-            'locale'                    => $locale,
+            'action' => $this->router->generate('event_catalog_external_index'),
+            'typeViews' => $catalogFilterViewsResult->typeViews,
+            'categoryViews' => $catalogFilterViewsResult->categoryViews,
+            'organizationCategoryViews' => $catalogFilterViewsResult->organizationCategoryViews,
+            'positionViews' => $catalogFilterViewsResult->positionViews,
+            'taggedNomenclatureTagViews' => $catalogFilterViewsResult->taggedNomenclatureTagViews,
+            'event' => $event,
+            'locale' => $locale,
         ]);
     }
 }

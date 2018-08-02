@@ -164,6 +164,7 @@ class SheetSearchQueryBuilder
         $this->filterByOrderStatus($filters);
         $this->filterByReminderDate($filters);
         $this->filterByCountry($filters);
+        $this->filterByTagFilters($filters);
 
         if (isset($filters[Constant::FILLED_FILTER])) {
             $this->filterByFilledFilter($filters[Constant::FILLED_FILTER]);
@@ -1132,5 +1133,53 @@ class SheetSearchQueryBuilder
         }
 
         $this->query->addMust($commercialStatusQuery);
+    }
+
+    private function filterByTagFilters(array $filters): void
+    {
+        if (!isset($filters['tagFilters']) || empty($filters['tagFilters'])) {
+            return;
+        }
+
+        foreach ($filters['tagFilters'] as $tag => $tagFilter) {
+            if (empty($tagFilter)) {
+                continue;
+            }
+
+            $nested = new Nested();
+            $nested->setPath('nestedTaggedData');
+            $boolQuery = new BoolQuery();
+
+            $tagBoolQuery = new BoolQuery();
+            $tagBoolQuery->addMust(new Term([
+                'nestedTaggedData.tag' => [
+                    'value' => $tag,
+                ]
+            ]));
+
+            $tagValuesNestedQuery = new Nested();
+            $tagValuesNestedQuery->setPath('nestedTaggedData.values');
+
+            $tagValuesBoolQuery = new BoolQuery();
+
+            foreach ($tagFilter as $tagKey) {
+                $tagValuesBoolQuery->addShould(new Term([
+                        'nestedTaggedData.values.value' => [
+                            'value' => $tagKey->key,
+                        ]
+                    ]
+                ));
+            }
+
+            $tagValuesNestedQuery->setQuery($tagValuesBoolQuery);
+
+            // We check the existence of the tag on the first level of the nested
+            $boolQuery->addMust($tagBoolQuery);
+            // We then check that the below level contain the given keys
+            $boolQuery->addMust($tagValuesNestedQuery);
+
+            $nested->setQuery($boolQuery);
+            $this->query->addMust($nested);
+        }
     }
 }

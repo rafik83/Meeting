@@ -37,8 +37,7 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
         array $availableSlotIds = [],
         array $sheetsToExclude = []
     ): array {
-        // @todo remove filter on tag
-        //unset($filters[$filterToRemove]);
+        unset($filters['tagFilters'][$tag]);
 
         $builder = new SheetSearchQueryBuilder(
             $event,

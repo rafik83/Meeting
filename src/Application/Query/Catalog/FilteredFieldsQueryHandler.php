@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\Sheet\TagFilterAggregator;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagView;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -353,7 +354,24 @@ class FilteredFieldsQueryHandler
                 $filteredFieldsQuery->sheetsToExclude
             );
 
-            dump($aggregations);
+            $aggregationKeys = [];
+
+            foreach ($aggregations as $aggregation) {
+                $key = $aggregation['key'] ?? null;
+
+                if (null === $key) {
+                    continue;
+                }
+
+                $aggregationKeys[$key] = $key;
+            }
+
+            /** @var NomenclatureTagView[] $nomenclatureTagViews */
+            foreach ($nomenclatureTagViews as $key => $nomenclatureTagView) {
+                if (!isset($aggregationKeys[$nomenclatureTagView->key])) {
+                    unset($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews[$tag][$key]);
+                }
+            }
         }
     }
 }
