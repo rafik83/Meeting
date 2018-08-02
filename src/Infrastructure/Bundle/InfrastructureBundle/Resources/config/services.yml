@@ -3233,13 +3233,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQuery }
 
-    query.catalog.external.search_facet_query:
-        class: Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQueryHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.catalog.external.search_facet'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQuery }
-
     query.sheet.paginated_catalog_sheet_preview_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
         arguments:
@@ -3493,6 +3486,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetExternalViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.catalog.external.search_facet'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository'
 
     query.mail.participant_mail_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler

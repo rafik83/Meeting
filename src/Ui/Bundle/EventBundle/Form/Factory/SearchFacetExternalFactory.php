@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
+use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
@@ -68,17 +69,17 @@ class SearchFacetExternalFactory
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     *
-     * @throws CatalogVisibilityNotFoundException
+     * @param Event            $event
+     * @param string           $locale
+     * @param array            $filters
+     * @param SearchFacetsView $searchFacetsView
      *
      * @return FormInterface
+     * @throws CatalogVisibilityNotFoundException
      */
-    public function create(Event $event, string $locale, array $filters): FormInterface
+    public function create(Event $event, string $locale, array $filters, SearchFacetsView $searchFacetsView): FormInterface
     {
-        $initialFieldsView = $this->getInitialFieldsView($event, $locale);
+        $initialFieldsView = $this->getInitialFieldsView($event, $locale, $searchFacetsView);
 
         return $this->getForm(
             $event,
@@ -89,22 +90,23 @@ class SearchFacetExternalFactory
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param array  $currentAggregations
-     *
-     * @throws CatalogVisibilityNotFoundException
+     * @param Event            $event
+     * @param string           $locale
+     * @param array            $filters
+     * @param array            $currentAggregations
+     * @param SearchFacetsView $searchFacetsView
      *
      * @return FormInterface
+     * @throws CatalogVisibilityNotFoundException
      */
     public function createFiltered(
         Event $event,
         string $locale,
         array $filters,
-        array $currentAggregations
+        array $currentAggregations,
+        SearchFacetsView $searchFacetsView
     ): FormInterface {
-        $initialFieldsView = $this->getInitialFieldsView($event, $locale);
+        $initialFieldsView = $this->getInitialFieldsView($event, $locale, $searchFacetsView);
 
         /** @var FilteredFieldsView $filteredFieldsView */
         $filteredFieldsView = $this->commandBus->handle(
@@ -176,14 +178,14 @@ class SearchFacetExternalFactory
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     *
-     * @throws CatalogVisibilityNotFoundException
+     * @param Event            $event
+     * @param string           $locale
+     * @param SearchFacetsView $searchFacetsView
      *
      * @return FilteredFieldsView
+     * @throws CatalogVisibilityNotFoundException
      */
-    private function getInitialFieldsView(Event $event, string $locale): FilteredFieldsView
+    private function getInitialFieldsView(Event $event, string $locale, SearchFacetsView $searchFacetsView): FilteredFieldsView
     {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
 
@@ -202,9 +204,14 @@ class SearchFacetExternalFactory
             new PositionViewQuery($event, $locale)
         );
 
-        $taggedNomenclatureTagViews = $this->commandBus->handle(
-            new NomenclatureTagViewQuery($event, array_keys([]), $locale)
-        );
+        $taggedNomenclatureTagViews = [];
+        $tagFilterViews = $searchFacetsView->getTagFilterViews();
+
+        if (!empty($tagFilterViews)) {
+            $taggedNomenclatureTagViews = $this->commandBus->handle(
+                new NomenclatureTagViewQuery($event, array_keys($tagFilterViews), $locale)
+            );
+        }
 
         return new FilteredFieldsView(new CatalogFilterViewsResult(
                 CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
