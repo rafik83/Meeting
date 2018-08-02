@@ -19,11 +19,11 @@
     },
     "require": {
         "php": "^7.1",
-        "symfony/symfony": "v3.4.11",
+        "symfony/symfony": "^3.4.13",
         "doctrine/orm": "^2.6.1",
         "doctrine/doctrine-bundle": "~1.6",
         "symfony/swiftmailer-bundle": "^3.1.6",
-        "symfony/monolog-bundle": "^3.1.0",
+        "symfony/monolog-bundle": "^3.3.0",
         "symfony/polyfill-apcu": "^1.0",
         "sensio/distribution-bundle": "~5.0.19",
         "sensio/framework-extra-bundle": "^3.0.2",
@@ -72,12 +72,12 @@
         "behat/mink-goutte-driver": "~1.2.1",
         "theofidry/alice-bundle-extension": "~1.1",
         "hautelook/alice-bundle": "~1.2.2",
-        "friendsofphp/php-cs-fixer": "^2.1",
         "behatch/contexts": "^2.5",
         "friends-of-behat/performance-extension": "^1.0",
         "phpspec/prophecy": "^1.7",
         "friends-of-behat/context-service-extension": "^1.0",
-        "nelmio/alice": "2.1.4"
+        "nelmio/alice": "2.1.4",
+        "friendsofphp/php-cs-fixer": "^2.12"
     },
     "scripts": {
         "symfony-scripts": [
