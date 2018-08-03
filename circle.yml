@@ -29,6 +29,7 @@ test:
     override:
         - bin/phpunit
         - bin/console cache:clear --env=test
+        - bin/console fos:elastica:reset --env=test --no-debug
         - bin/behat --format progress --no-interaction
 notify:
     webhooks:
