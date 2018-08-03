@@ -19,9 +19,6 @@ class NomenclatureTagViewQueryHandler
     /** @var TaggedNomenclatureFilterGetter */
     private $taggedNomenclatureFilterGetter;
 
-    /**
-     * @param TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter
-     */
     public function __construct(TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter)
     {
         $this->taggedNomenclatureFilterGetter = $taggedNomenclatureFilterGetter;

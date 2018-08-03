@@ -213,7 +213,8 @@ class SearchFacetExternalFactory
             );
         }
 
-        return new FilteredFieldsView(new CatalogFilterViewsResult(
+        return new FilteredFieldsView(
+            new CatalogFilterViewsResult(
                 CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
                 $categoryViews,
                 $typeViews,

@@ -26,10 +26,6 @@ class FilteredFieldsQueryHandler
     /** @var TagFilterAggregator */
     private $tagFilterAggregator;
 
-    /**
-     * @param SheetSearchAdapterInterface $sheetSearchAdapter
-     * @param TagFilterAggregator         $tagFilterAggregator
-     */
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
         TagFilterAggregator $tagFilterAggregator

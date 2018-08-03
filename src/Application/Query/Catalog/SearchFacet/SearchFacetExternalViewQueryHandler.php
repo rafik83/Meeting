@@ -25,10 +25,6 @@ class SearchFacetExternalViewQueryHandler implements SearchFacetQueryHandlerInte
     /** @var CatalogTagFilterRepositoryInterface */
     private $catalogTagFilterRepository;
 
-    /**
-     * @param SearchFacetRepositoryInterface      $externalSearchFacetRepository
-     * @param CatalogTagFilterRepositoryInterface $catalogTagFilterRepository
-     */
     public function __construct(
         SearchFacetRepositoryInterface $externalSearchFacetRepository,
         CatalogTagFilterRepositoryInterface $catalogTagFilterRepository
