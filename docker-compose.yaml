@@ -1,0 +1,39 @@
+version: "3"
+
+volumes:
+  db_data: ~
+  logs: ~
+
+services:
+    database:
+        image: mysql:5.6
+        volumes:
+            - db_data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ~
+            MYSQL_DATABASE: proximum_vimeet
+            MYSQL_USER: app
+            MYSQL_PASSWORD: ~
+        ports:
+            - "3306:3306"
+    elasticsearch:
+        image: elasticsearch:1.7
+        ports:
+            - "9200:9200"
+    nginx:
+        image: nginx:alpine
+        volumes:
+            - "./docker/nginx/app.conf:/etc/nginx/conf.d/app.conf"
+            - "./docker/nginx/app_php_fpm:/etc/nginx/conf.d/app_php_fpm"
+            - "./docker/nginx/app_gzip:/etc/nginx/conf.d/app_gzip"
+            - "./:/srv"
+            - "./var:/var"
+        ports:
+            - "8000:80"
+        links:
+            - php
+            - elasticsearch
+            - database
+    php:
+        build: docker/php
