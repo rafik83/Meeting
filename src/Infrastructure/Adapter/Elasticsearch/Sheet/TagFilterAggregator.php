@@ -48,18 +48,78 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
             $availableSlotIds,
             $sheetsToExclude
         );
+
+        $query = $this->getQuery($builder, $tag);
+
+        $this->addAggregationsOnQuery($query, $tag);
+
+        $result = $this->searchable->search($query);
+
+        $resultAggregations = $result->getAggregations();
+
+        return $resultAggregations['nestedTaggedData']
+            ['nestedTaggedData_nested_values_filter']
+            ['nestedTaggedData_nested_values_terms']
+            ['buckets']
+            ?? []
+        ;
+    }
+
+    private function getQuery(SheetSearchQueryBuilder $builder, string $tag): Query
+    {
+        // pre filter by adding a query on the tag
         $boolQuery = $builder->getQuery();
+
         $queryNestedTaggedData = new Query\Nested();
         $queryNestedTaggedData->setPath('nestedTaggedData');
-        $queryNestedTaggedData->setQuery(new Query\Term(
-            [
-            'nestedTaggedData.tag' => [
-                'value' => $tag,
-            ]
-        ]));
+        $queryNestedTaggedData->setQuery(
+            new Query\Term([
+                'nestedTaggedData.tag' => [
+                    'value' => $tag,
+                ]
+            ])
+        );
 
         $boolQuery->addMust($queryNestedTaggedData);
-        $query = new Query($boolQuery);
+
+        return new Query($boolQuery);
+    }
+
+    private function addAggregationsOnQuery(Query $query, string $tag): void
+    {
+        // Example of query for this aggregation
+        /*
+         * {
+                "aggs": {
+                    "nestedTaggedData": {
+                        "nested": {
+                            "path": "nestedTaggedData.values"
+                        },
+                        "aggs": {
+                            "nestedTaggedData_nested_values_filter": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [{
+                                            "term": {
+                                                "nestedTaggedData.values.tag": "sheet_organization_category"
+                                            }
+                                        }]
+                                    }
+                                },
+                                "aggs": {
+                                    "nestedTaggedData_nested_values_terms": {
+                                        "terms": {
+                                            "field": "nestedTaggedData.values.value",
+                                            "size": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+         */
 
         $aggregation = new Nested('nestedTaggedData', 'nestedTaggedData.values');
 
@@ -74,17 +134,6 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
 
         $aggregation->addAggregation($subAggregation);
         $query->addAggregation($aggregation);
-
         $query->setSize(0);
-        $result = $this->searchable->search($query);
-
-        $resultAggregations = $result->getAggregations();
-
-        return $resultAggregations['nestedTaggedData']
-            ['nestedTaggedData_nested_values_filter']
-            ['nestedTaggedData_nested_values_terms']
-            ['buckets']
-            ?? []
-        ;
     }
 }
