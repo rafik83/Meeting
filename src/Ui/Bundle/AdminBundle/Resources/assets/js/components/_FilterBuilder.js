@@ -18,7 +18,7 @@ FilterBuilder.prototype.init = function(builder) {
 };
 
 FilterBuilder.prototype.getRules = function() {
-    let result = this.builder.queryBuilder('getRules');
+    var result = this.builder.queryBuilder('getRules');
 
     if (!$.isEmptyObject(result)) {
         this.hiddenInput.val(JSON.stringify(result));
