@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOper
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotContains;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotEndsWith;
-use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotEqual;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonContraryOperatorInterface;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 class TextTransformer implements InputTransformerInterface
@@ -47,15 +47,7 @@ class TextTransformer implements InputTransformerInterface
 
     private static function isContraryComparisonOperator(Field $field): bool
     {
-        switch (\get_class($field->getComparisonOperator())) {
-            case ComparisonOperatorNotEndsWith::class:
-            case ComparisonOperatorNotBeginsWith::class:
-            case ComparisonOperatorNotContains::class:
-            case ComparisonOperatorNotEqual::class:
-                return true;
-            default:
-                return false;
-        }
+        return $field->getComparisonOperator() instanceof ComparisonContraryOperatorInterface;
     }
 
     private static function getFilterQuery(Field $field): ?string

@@ -17,9 +17,13 @@ class GetFiltersByTypeAndLocaleQueryHandler
     /** @var FileSystemAdapterInterface */
     private $fileSystemAdapter;
 
-    public function __construct(FileSystemAdapterInterface $fileSystemAdapter)
+    /** @var string */
+    private $fallbackLocale;
+
+    public function __construct(FileSystemAdapterInterface $fileSystemAdapter, string $fallbackLocale)
     {
         $this->fileSystemAdapter = $fileSystemAdapter;
+        $this->fallbackLocale = $fallbackLocale;
     }
 
     public function handle(GetFiltersByTypeAndLocaleQuery $query): array
@@ -32,6 +36,6 @@ class GetFiltersByTypeAndLocaleQueryHandler
 
         $content = json_decode(file_get_contents($file), true);
 
-        return $content[$query->locale] ?? [];
+        return $content[$query->locale] ?? $content[$this->fallbackLocale] ?? [];
     }
 }

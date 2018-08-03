@@ -23,7 +23,7 @@ class Field implements RuleInterface
     /** @var string */
     private $input;
 
-    /** @var string|array */
+    /** @var string|array|null */
     private $value;
 
     public function __construct(string $field, ComparisonOperatorInterface $comparisonOperator, string $input, $value)
