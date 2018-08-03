@@ -25,6 +25,7 @@
             </div>
         </form>
     </div>
+    <br/>
     {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}
 
     {% if userEventListViews.paginatedResult.total > 0 %}
