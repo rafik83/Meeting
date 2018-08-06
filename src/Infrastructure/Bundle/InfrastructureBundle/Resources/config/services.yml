@@ -5280,14 +5280,18 @@ services:
         arguments:
             - '@package.product.included_product_guesser'
 
-    printer.sheet_pdf_printer:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\PdfPrinter:
         arguments:
-            - '@router'
             - '%phantomjs_path%'
             - '%phantomjs_script%'
             - '%phantomjs_http_user%'
             - '%phantomjs_http_password%'
+
+    printer.sheet_pdf_printer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter
+        arguments:
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\PdfPrinter'
             - '%infrastructure.print_sheet_path%'
 
     sheet.infos_helper:
@@ -5900,10 +5904,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicePdfPrinter
         arguments:
             - '@router'
-            - '%phantomjs_path%'
-            - '%phantomjs_script%'
-            - '%phantomjs_http_user%'
-            - '%phantomjs_http_password%'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\PdfPrinter'
 
     query.invoice_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceQueryHandler
