@@ -1,8 +1,13 @@
 version: "3"
 
+networks:
+    proxy:
+        external:
+            name: proxy
+
 volumes:
-  db_data: ~
-  logs: ~
+    db_data: ~
+    logs: ~
 
 services:
     database:
@@ -17,22 +22,32 @@ services:
             MYSQL_PASSWORD: password
         ports:
             - "3306:3306"
+        networks:
+            - proxy
+
     elasticsearch:
         image: elasticsearch:1.7
         ports:
             - "9200:9200"
+        networks:
+            - proxy
+
     nginx:
-        image: nginx:alpine
+        image: nginx
         volumes:
-            - "./docker/nginx/app.conf:/etc/nginx/conf.d/app.conf"
-            - "./docker/nginx/app_php_fpm:/etc/nginx/conf.d/app_php_fpm"
-            - "./docker/nginx/app_gzip:/etc/nginx/conf.d/app_gzip"
-            - ./:/srv
+            - .:/srv
+            - ./docker/nginx/app_php_fpm:/etc/nginx/conf.d/app_php_fpm
+            - ./docker/nginx/app_gzip:/etc/nginx/conf.d/app_gzip
+            - ./docker/nginx/app.conf:/etc/nginx/conf.d/app.conf
         ports:
             - "8000:80"
-        links:
-            - php
-            - elasticsearch
-            - database
+        networks:
+            - proxy
+
     php:
         build: docker/php
+        networks:
+            - proxy
+        volumes:
+            - .:/srv
+            - logs:/srv/var/logs
