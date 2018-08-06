@@ -56,3 +56,10 @@ services:
             - '@adapter.authorization_checker'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\DownloadAction:
+        arguments:
+            - '@repository.token.user_event_token_repository'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\EBadgePdfPrinter'

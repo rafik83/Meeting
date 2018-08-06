@@ -5294,6 +5294,11 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\PdfPrinter'
             - '%infrastructure.print_sheet_path%'
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\EBadgePdfPrinter:
+        arguments:
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\PdfPrinter'
+
     sheet.infos_helper:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfosHelper
         arguments:
@@ -5760,6 +5765,7 @@ services:
             - '@components.token.user.activate_account_token_generator'
             - '@query.sheet.planning.sheet_planning_view_query_handler'
             - '@domain.messaging.substitutions.agenda_confirmation_ctasubstitution'
+            - '@Proximum\Vimeet\Domain\Messaging\Substitutions\DownloadEBadgeCTASubstitution'
 
     domain.messaging.emailing.substitution_resolver:
         class: Proximum\Vimeet\Domain\Messaging\Emailing\SubstitutionResolver
@@ -6104,6 +6110,11 @@ services:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\ScheduleDateSubstitution
     domain.messaging.substitutions.catalog_online_date_substitution:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\CatalogOnlineDateSubstitution
+    Proximum\Vimeet\Domain\Messaging\Substitutions\DownloadEBadgeCTASubstitution:
+        arguments:
+            - '@adapter.templating_adapter'
+            - '@adapter.event_url_generator'
+            - '@domain.token.user_event_token_generator'
     domain.messaging.substitutions.sheet_link_substitution:
         class: Proximum\Vimeet\Domain\Messaging\Substitutions\SheetLinkSubstitution
         arguments:
