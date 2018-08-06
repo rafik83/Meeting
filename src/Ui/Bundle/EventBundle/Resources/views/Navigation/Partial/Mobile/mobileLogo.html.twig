@@ -1,0 +1,9 @@
+{% if menuHeaderView.event.localizedMobileLogo(app.request.locale) != null %}
+    <a href="{{ path('event') }}">
+        <img src="{{ asset(menuHeaderView.event.localizedMobileLogo(app.request.locale)) }}"
+             class="logo"
+             alt="{{ menuHeaderView.event.title }}"
+             title="{{ menuHeaderView.event.title }}"
+        />
+    </a>
+{% endif %}

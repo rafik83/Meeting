@@ -15,6 +15,12 @@ use Proximum\Vimeet\Domain\Payment\Mode;
 class Configuration
 {
     /** @var string */
+    private $headerLeftColor;
+
+    /** @var string */
+    private $headerRightColor;
+
+    /** @var string */
     private $leftColor;
 
     /** @var string */
@@ -77,7 +83,7 @@ class Configuration
     /** @var null|string */
     private $backgroundImage;
 
-    /** @var null|string */
+    /** @var string */
     private $backgroundColor;
 
     /**
@@ -107,6 +113,9 @@ class Configuration
     /** @var \DateTimeInterface|null "Date de cloture des inscriptions" */
     private $registrationCloseDate;
 
+    /** @var \DateTimeInterface|null "Active l'affichage du badge pour le participant" */
+    private $enableBadgeForParticipantDate;
+
     /** @var bool */
     private $displayParticipantNameOnPlanning = false;
 
@@ -116,18 +125,17 @@ class Configuration
     /** @var bool */
     private $visio = false;
 
-    /**
-     * @param string $leftColor
-     * @param string $rightColor
-     * @param string $textColor
-     */
-    public function __construct($leftColor, $rightColor, $textColor)
+    public function __construct()
     {
-        $this->leftColor                  = $leftColor;
-        $this->rightColor                 = $rightColor;
-        $this->textColor                  = $textColor;
         $this->meetingRequestUpdateLocked = false;
-        $this->paymentModes               = Mode::getPaymentModes();
+        $this->paymentModes = Mode::getPaymentModes();
+
+        $this->rightColor = '#000000';
+        $this->leftColor = '#000000';
+        $this->headerRightColor = '#000000';
+        $this->headerLeftColor = '#000000';
+        $this->textColor = '#FFFFFF';
+        $this->backgroundColor = '#FFFFFF';
     }
 
     /**
@@ -201,20 +209,47 @@ class Configuration
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
+     * @param string $headerLeftColor
+     * @param string $headerRightColor
      * @param string $backgroundColor
      */
-    public function setColors(string $leftColor, string $rightColor, string $textColor, string $backgroundColor)
-    {
+    public function setColors(
+        string $leftColor,
+        string $rightColor,
+        string $textColor,
+        string $headerLeftColor,
+        string $headerRightColor,
+        string $backgroundColor
+    ): void {
         $this->leftColor  = $leftColor;
         $this->rightColor = $rightColor;
         $this->textColor  = $textColor;
+        $this->headerLeftColor = $headerLeftColor;
+        $this->headerRightColor = $headerRightColor;
         $this->backgroundColor = $backgroundColor;
     }
 
     /**
      * @return string
      */
-    public function getLeftColor()
+    public function getHeaderLeftColor(): string
+    {
+        return $this->headerLeftColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeaderRightColor(): string
+    {
+        return $this->headerRightColor;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getLeftColor(): string
     {
         return $this->leftColor;
     }
@@ -222,7 +257,7 @@ class Configuration
     /**
      * @return string
      */
-    public function getRightColor()
+    public function getRightColor(): string
     {
         return $this->rightColor;
     }
@@ -230,7 +265,7 @@ class Configuration
     /**
      * @return string
      */
-    public function getTextColor()
+    public function getTextColor(): string
     {
         return $this->textColor;
     }
@@ -311,19 +346,6 @@ class Configuration
         return $this->organiserWebsite;
     }
 
-    /**
-     * @param \DateTimeInterface|null $catalogOnlineDate
-     * @param \DateTimeInterface|null $happeningsOpenDate
-     * @param \DateTimeInterface|null $schedulePublishDate
-     * @param \DateTimeInterface|null $closeMeetingRequestDate
-     * @param \DateTimeInterface|null $closeAnsweringMeetingRequestDate
-     * @param \DateTimeInterface|null $smsActivationDate
-     * @param \DateTimeInterface|null $agendaOnlineDate
-     * @param \DateTimeInterface|null $registrationOpenDate
-     * @param \DateTimeInterface|null $registrationCloseDate
-     *
-     * @return Configuration
-     */
     public function setDates(
         \DateTimeInterface $catalogOnlineDate = null,
         \DateTimeInterface $happeningsOpenDate = null,
@@ -333,7 +355,8 @@ class Configuration
         \DateTimeInterface $smsActivationDate = null,
         \DateTimeInterface $agendaOnlineDate = null,
         \DateTimeInterface $registrationOpenDate = null,
-        \DateTimeInterface $registrationCloseDate = null
+        \DateTimeInterface $registrationCloseDate = null,
+        \DateTimeInterface $enableBadgeForParticipantDate = null
     ) {
         $this->catalogOnlineDate                = $catalogOnlineDate;
         $this->happeningsOpenDate               = $happeningsOpenDate;
@@ -344,6 +367,7 @@ class Configuration
         $this->agendaOnlineDate                 = $agendaOnlineDate;
         $this->registrationOpenDate             = $registrationOpenDate;
         $this->registrationCloseDate            = $registrationCloseDate;
+        $this->enableBadgeForParticipantDate    = $enableBadgeForParticipantDate;
 
         return $this;
     }
@@ -504,6 +528,11 @@ class Configuration
     public function hasBackgroundImage(): bool
     {
         return null !== $this->backgroundImage;
+    }
+
+    public function getEnableBadgeForParticipantDate(): ?\DateTimeInterface
+    {
+        return $this->enableBadgeForParticipantDate;
     }
 
     public function isVisio(): bool

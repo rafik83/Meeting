@@ -28,6 +28,12 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\BadgeRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Domain\Repository\BadgeRepositoryInterface: '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
+
     Proximum\Vimeet\Infrastructure\Repository\AvailableSlotRepository:
         arguments:
            - '@doctrine.orm.entity_manager'
