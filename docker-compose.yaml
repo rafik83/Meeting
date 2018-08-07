@@ -47,5 +47,6 @@ services:
         build: docker/php
         networks:
             - proxy
+        working_dir: /srv
         volumes:
             - .:/srv
