@@ -37,7 +37,7 @@ services:
         volumes:
             - .:/srv
         ports:
-            - "8000:80"
+            - "80:80"
         networks:
             - proxy
 
