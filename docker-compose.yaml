@@ -45,8 +45,21 @@ services:
 
     php:
         build: docker/php
-        networks:
-            - proxy
         working_dir: /srv
+        links:
+          - node
         volumes:
             - .:/srv
+        networks:
+            - proxy
+
+    node:
+        image: node
+        volumes:
+            - .:/srv
+        working_dir: /srv
+        ports:
+            - "3000:3000"
+        command: "node"
+        networks:
+            - proxy
