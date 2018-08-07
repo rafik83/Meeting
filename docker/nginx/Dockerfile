@@ -1,7 +1,6 @@
-FROM debian:jessie
+FROM nginx
 
 RUN apt-get update && apt-get install -y \
-    nginx \
     vim
 
 ADD app.conf /etc/nginx/conf.d/default.conf
@@ -14,8 +13,6 @@ RUN echo "upstream php-upstream { server php:9000; }" > /etc/nginx/conf.d/upstre
 RUN usermod -u 1000 www-data
 RUN chown -R www-data:www-data /srv
 RUN chmod -R 777 /srv
-
-CMD ["nginx"]
 
 EXPOSE 80
 EXPOSE 443
