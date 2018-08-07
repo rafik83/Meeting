@@ -1,8 +1,15 @@
 #ARG PHP_VERSION=7.2
 FROM php:7.2-fpm
 
-RUN apt-get install make
+RUN apt-get update
+RUN apt-get install -y make wget gnupg
 RUN curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get install -y nodejs
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update && apt-get install yarn
+
 
 # PHP Extensions
 RUN apt-get update \
