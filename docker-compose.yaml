@@ -16,7 +16,7 @@ services:
             - db_data:/var/lib/mysql
         restart: always
         environment:
-            MYSQL_DATABASE: proximum_vimeet
+            MYSQL_DATABASE: proximum_vimeet_test
             MYSQL_USER: app
             MYSQL_PASSWORD: password
             MYSQL_ROOT_PASSWORD: password
@@ -45,8 +45,21 @@ services:
 
     php:
         build: docker/php
-        networks:
-            - proxy
         working_dir: /srv
+        links:
+          - node
         volumes:
             - .:/srv
+        networks:
+            - proxy
+
+    node:
+        image: node
+        volumes:
+            - .:/srv
+        working_dir: /srv
+        ports:
+            - "3000:3000"
+        command: "node"
+        networks:
+            - proxy
