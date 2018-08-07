@@ -25,6 +25,7 @@ jobs:
             docker-compose -p vimeet exec php make install-app@test
             docker-compose -p vimeet exec php make install-db@test
             docker-compose -p vimeet exec php make install-dep
+            docker-compose -p vimeet exec php make build@prod
       - run:
           name: "[test] phpunit"
           command: |
