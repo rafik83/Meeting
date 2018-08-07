@@ -33,7 +33,7 @@ jobs:
       - run:
           name: "[test] behat"
           command: |
-            docker-compose -p vimeet exec php php bin/behat
+            docker-compose -p vimeet exec php php bin/behat --format progress --no-interaction
       - save_cache:
           name: "[cache] saving composer"
           key: composer-{{ .Branch }}-{{ checksum "composer.lock" }}
