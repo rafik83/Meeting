@@ -16,10 +16,10 @@ services:
             - db_data:/var/lib/mysql
         restart: always
         environment:
-            MYSQL_ROOT_PASSWORD: password
             MYSQL_DATABASE: proximum_vimeet
             MYSQL_USER: app
             MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: password
         ports:
             - "3306:3306"
         networks:
@@ -37,7 +37,9 @@ services:
         volumes:
             - .:/srv
         ports:
-            - "80:80"
+            - "8080:80"
+        depends_on:
+            - php
         networks:
             - proxy
 
@@ -47,4 +49,3 @@ services:
             - proxy
         volumes:
             - .:/srv
-            - logs:/srv/var/logs

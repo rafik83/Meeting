@@ -20,3 +20,5 @@ RUN apt-get update \
   && docker-php-ext-install intl soap zip gd pdo_mysql
 
 RUN usermod -u 1000 www-data
+RUN chown -R www-data:www-data /srv
+RUN chmod -R 777 /srv
