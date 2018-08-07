@@ -1,3 +1,12 @@
+Proximum\Vimeet\Domain\Model\User\Account:
+    user_asddays_many_{1..100}_account:
+        __construct: false
+        firstName: "<firstName()>"
+        lastName: "<lastName()>"
+    user_asddays_many_other_participant_{1..30}_account:
+        __construct: false
+        firstName: "<firstName()>"
+        lastName: "<lastName()>"
 Proximum\Vimeet\Domain\Model\User:
     user_asddays_many_{1..100}:
         __construct: false
@@ -5,12 +14,14 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: '@user_asddays_many_<current()>_account'
     user_asddays_many_other_participant_{1..30}:
         __construct: false
         email: 'user_asddays_many_other_participant_<current()>@example.net'
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: '@user_asddays_many_other_participant_<current()>_account'
 
 Proximum\Vimeet\Domain\Model\Sheet:
     sheet_asddays_many_{1..100}:
