@@ -1,4 +1,4 @@
-fastcgi_pass unix:/run/php-fpm.app.sock;
+fastcgi_pass php-upstream;
 fastcgi_split_path_info ^(.+\.php)(/.*)$;
 fastcgi_read_timeout 999s;#origin60s
 include fastcgi_params;

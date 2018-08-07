@@ -18,3 +18,5 @@ RUN apt-get update \
     libjpeg-dev \
     libfreetype6-dev \
   && docker-php-ext-install intl soap zip gd pdo_mysql
+
+RUN usermod -u 1000 www-data
