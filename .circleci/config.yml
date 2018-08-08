@@ -7,7 +7,6 @@ jobs:
       image: circleci/classic:edge
     environment:
       COMPOSE_FILE: "docker-compose.yaml"
-      #BUILD_IMAGES: "php node"
     steps:
       - checkout
       - restore_cache:
@@ -16,6 +15,12 @@ jobs:
             - composer-{{ .Branch }}-{{ checksum "composer.lock" }}
             - composer-master-{{ checksum "composer.lock" }}
             - composer-master
+      - restore_cache:
+          name: "[cache] restoring packages"
+          keys:
+            - package-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - package-master-{{ checksum "package-lock.json" }}
+            - package-master
       - run:
           name: "[build] install the project"
           command: |
@@ -39,3 +44,8 @@ jobs:
           key: composer-{{ .Branch }}-{{ checksum "composer.lock" }}
           paths:
             - vendor
+      - save_cache:
+          name: "[cache] saving packages"
+          key: package-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules

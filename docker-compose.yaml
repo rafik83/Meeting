@@ -7,7 +7,6 @@ networks:
 
 volumes:
     db_data: ~
-    logs: ~
 
 services:
     database:
@@ -33,7 +32,7 @@ services:
             - proxy
 
     nginx:
-        build: docker/nginx
+        image: teamparis/v_nginx:latest
         volumes:
             - .:/srv
         ports:
@@ -44,25 +43,11 @@ services:
             - proxy
 
     php:
-        build: docker/php
+        image: teamparis/v_php:latest
         working_dir: /srv
         environment:
             TZ: "Europe/Paris"
-        #inks:
-        #   - node
         volumes:
             - .:/srv
         networks:
             - proxy
-
-    #node:
-    #    image: node
-    #    volumes:
-    #        - .:/srv
-    #    working_dir: /srv
-    #    restart: always
-    #    command: "tail -f /dev/null"
-    #    ports:
-    #        - "3000:3000"
-    #    networks:
-    #        - proxy
