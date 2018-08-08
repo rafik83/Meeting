@@ -11,6 +11,18 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             type: string
         textColor:
             type: string
+        headerButtonLeftColor:
+            type: string
+            options:
+                default: '#2F2F2F'
+        headerButtonRightColor:
+            type: string
+            options:
+                default: '#2F2F2F'
+        headerButtonTextColor:
+            type: string
+            options:
+                default: '#FFFFFF'
         scheduleScale:
             type: integer
         catalogOnlineDate:

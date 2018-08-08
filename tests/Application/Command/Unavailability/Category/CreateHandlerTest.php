@@ -22,7 +22,17 @@ class CreateHandlerTest extends TestCase
     public function testHandleWithoutcolorGiven(): void
     {
         $event = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('#123123', '#456456', '#AABBCC', '#CCCCCC', '#DDDDDD', '#EEEEEE');
+        $event->getConfiguration()->setColors(
+            '#123123',
+            '#456456',
+            '#AABBCC',
+            '#CCCCCC',
+            '#DDDDDD',
+            '#EEEEEE',
+            '#2F2F2F',
+            '#2F2F2F',
+            '#FFFFFF'
+        );
 
         // Expected
         $expectedCategory = new Category(

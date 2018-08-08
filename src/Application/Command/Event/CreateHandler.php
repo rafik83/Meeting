@@ -101,7 +101,10 @@ class CreateHandler
                 $event->getDuplicatedFrom()->getConfiguration()->getTextColor(),
                 $event->getDuplicatedFrom()->getConfiguration()->getHeaderLeftColor(),
                 $event->getDuplicatedFrom()->getConfiguration()->getHeaderRightColor(),
-                $event->getDuplicatedFrom()->getConfiguration()->getBackgroundColor()
+                $event->getDuplicatedFrom()->getConfiguration()->getBackgroundColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderButtonLeftColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderButtonRightColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderButtonTextColor()
             );
         }
 

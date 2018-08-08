@@ -42,7 +42,10 @@ class MeetingViewQueryHandlerTest extends TestCase
             'textColor',
             'headerLeftColor',
             'headerRightColor',
-            'backgroundColor'
+            'backgroundColor',
+            '#2F2F2F',
+            '#2F2F2F',
+            '#FFF'
         );
         $user = UserFactory::create();
         $type = new Type($event);
@@ -140,7 +143,10 @@ class MeetingViewQueryHandlerTest extends TestCase
             'textColor',
             'headerLeftColor',
             'headerRightColor',
-            'backgroundColor'
+            'backgroundColor',
+            '#2F2F2F',
+            '#2F2F2F',
+            '#FFF'
         );
         $user = UserFactory::create();
         $type = new Type($event);

@@ -105,7 +105,10 @@ class UpdateDesignHandler
             $command->textColor,
             $command->headerLeftColor,
             $command->headerRightColor,
-            $command->backgroundColor
+            $command->backgroundColor,
+            $command->headerButtonLeftColor,
+            $command->headerButtonRightColor,
+            $command->headerButtonTextColor
         );
 
         if (true === $colorUpdated || true === $command->backgroundImageChanged()) {
