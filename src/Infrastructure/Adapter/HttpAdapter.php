@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\Exception\ClientErrorResponseException;
-use Guzzle\Http\Exception\ServerErrorResponseException;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Psr7\Request;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
 use Proximum\Vimeet\Application\View\Adapter\Http\Response;
@@ -24,16 +25,16 @@ class HttpAdapter implements HttpAdapterInterface
      */
     public function post(string $uri, array $headers = [], $body): Response
     {
-        $client = new Client($uri);
-        $resource = $client->post($uri, $headers, $body);
+        $client = new Client();
+        $request = new Request('POST', $uri, $headers, $body);
 
         try {
-            $guzzleResponse = $client->send($resource);
+            $response = $client->send($request);
 
-            return new Response($guzzleResponse->getStatusCode(), (string) $guzzleResponse->getBody());
-        } catch (ServerErrorResponseException $exception) {
+            return new Response($response->getStatusCode(), (string) $response->getBody());
+        } catch (ServerException $exception) {
             throw new ServerErrorException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ClientErrorResponseException $clientErrorResponseException) {
+        } catch (ClientException $clientErrorResponseException) {
             return new Response(
                 $clientErrorResponseException->getResponse()->getStatusCode(),
                 (string) $clientErrorResponseException->getResponse()->getBody()
@@ -46,16 +47,20 @@ class HttpAdapter implements HttpAdapterInterface
      */
     public function get(string $uri, array $headers = [], array $options = []): Response
     {
-        $client = new Client($uri);
-        $resource = $client->get($uri, $headers, $options);
+        $client = new Client();
+        $request = new Request(
+            'GET',
+            $uri,
+            $headers
+        );
 
         try {
-            $guzzleResponse = $client->send($resource);
+            $guzzleResponse = $client->send($request, $options);
 
             return new Response($guzzleResponse->getStatusCode(), (string) $guzzleResponse->getBody());
-        } catch (ServerErrorResponseException $exception) {
+        } catch (ServerException $exception) {
             throw new ServerErrorException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ClientErrorResponseException $clientErrorResponseException) {
+        } catch (ClientException $clientErrorResponseException) {
             return new Response(
                 $clientErrorResponseException->getResponse()->getStatusCode(),
                 (string) $clientErrorResponseException->getResponse()->getBody()
