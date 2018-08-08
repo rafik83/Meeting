@@ -5,6 +5,7 @@ jobs:
     machine:
       enabled: true
       image: circleci/classic:edge
+      docker_layer_caching: true
     environment:
       COMPOSE_FILE: "docker-compose.yaml"
     steps:
