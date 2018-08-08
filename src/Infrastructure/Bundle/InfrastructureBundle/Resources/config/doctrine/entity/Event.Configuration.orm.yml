@@ -1,6 +1,10 @@
 Proximum\Vimeet\Domain\Model\Event\Configuration:
     type:  embeddable
     fields:
+        headerLeftColor:
+            type: string
+        headerRightColor:
+            type: string
         leftColor:
             type: string
         rightColor:

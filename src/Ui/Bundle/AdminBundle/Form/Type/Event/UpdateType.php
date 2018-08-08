@@ -38,12 +38,6 @@ class UpdateType extends AbstractEventType
             ->add('analyticsCode', TextType::class, [
                 'required' => false,
             ])
-            ->add('disabledEmailChanging', CheckboxType::class, [
-                'required' => false,
-            ])
-            ->add('disabledPasswordChanging', CheckboxType::class, [
-                'required' => false,
-            ])
             ->add('displayParticipantNameOnPlanning', CheckboxType::class, [
                 'required' => false,
             ])

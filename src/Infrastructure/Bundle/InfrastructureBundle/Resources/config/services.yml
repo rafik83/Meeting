@@ -434,16 +434,6 @@ services:
             - '@repository.participant_import_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\ImportMapping }
-    command.event.update_handler:
-        class: Proximum\Vimeet\Application\Command\Event\UpdateHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.event_repository'
-            - '@guideline.generator'
-            - '@adapter.local_file_storage'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@command.event.configuration.background.remove_image_handler'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
 
     command.event.index_handler:
         class: Proximum\Vimeet\Application\Command\Event\IndexHandler
@@ -1634,17 +1624,6 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update }
-    command.event.create_handler:
-        class: Proximum\Vimeet\Application\Command\Event\CreateHandler
-        arguments:
-            - '@repository.admin_repository'
-            - '@vimeet_infrastructure.repository.event_repository'
-            - '@repository.event.content_repository'
-            - '@guideline.generator'
-            - '@adapter.local_file_storage'
-            - '@domain.event.duplicator'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
     command.event.user.agenda.version.generate_versions_handler:
         class: Proximum\Vimeet\Application\Command\Event\User\Agenda\Version\GenerateVersionsHandler
         arguments:
