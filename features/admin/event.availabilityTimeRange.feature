@@ -19,8 +19,9 @@ Feature: See and update the availability time ranges of an event
     When I press "form.availability_time_range_create.children.submit.label"
     Then I should be on this page "/fr/event/1/availability-time-range"
     And I should see "Plage de détente"
-    And I should see "12 oct. 2018 12:00"
-    And I should see "12 oct. 2018 13:00"
+    And I should see "12 oct. 2018"
+    And I should see "12:00"
+    And I should see "13:00"
 
   Scenario: I can link a participant product to an AvailabilityTimeRange
     Given the database is purged

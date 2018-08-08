@@ -1,0 +1,52 @@
+version: 2
+
+jobs:
+  build:
+    machine:
+      enabled: true
+      image: circleci/classic:edge
+      docker_layer_caching: true
+    environment:
+      COMPOSE_FILE: "docker-compose.yaml"
+    steps:
+      - checkout
+      - restore_cache:
+          name: "[cache] restoring composer"
+          keys:
+            - composer-{{ .Branch }}-{{ checksum "composer.lock" }}
+            - composer-master-{{ checksum "composer.lock" }}
+            - composer-master
+      - restore_cache:
+          name: "[cache] restoring packages"
+          keys:
+            - package-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - package-master-{{ checksum "package-lock.json" }}
+            - package-master
+      - run:
+          name: "[build] install the project"
+          command: |
+            docker network create proxy
+            cp app/config/parameters_circle.yml app/config/parameters.yml
+            docker-compose -p vimeet up -d
+            docker-compose -p vimeet exec php make install-app@test
+            docker-compose -p vimeet exec php make install-db@test
+            docker-compose -p vimeet exec php make install-dep
+            docker-compose -p vimeet exec php make build@prod
+      - run:
+          name: "[test] phpunit"
+          command: |
+            docker-compose -p vimeet exec php bin/phpunit
+      - run:
+          name: "[test] behat"
+          command: |
+            docker-compose -p vimeet exec php php bin/behat --format progress --no-interaction
+      - save_cache:
+          name: "[cache] saving composer"
+          key: composer-{{ .Branch }}-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+      - save_cache:
+          name: "[cache] saving packages"
+          key: package-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules

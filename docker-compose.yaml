@@ -1,0 +1,53 @@
+version: "3"
+
+networks:
+    proxy:
+        external:
+            name: proxy
+
+volumes:
+    db_data: ~
+
+services:
+    database:
+        image: mysql:5.6
+        volumes:
+            - db_data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_DATABASE: proximum_vimeet_test
+            MYSQL_USER: app
+            MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: password
+        ports:
+            - "3306:3306"
+        networks:
+            - proxy
+
+    elasticsearch:
+        image: elasticsearch:1.7
+        ports:
+            - "9200:9200"
+        networks:
+            - proxy
+
+    nginx:
+        image: teamparis/v_nginx:latest
+        volumes:
+            - .:/srv
+        ports:
+            - "8080:80"
+        depends_on:
+            - php
+        networks:
+            - proxy
+
+    php:
+        image: teamparis/v_php:latest
+        working_dir: /srv
+        environment:
+            TZ: "Europe/Paris"
+        volumes:
+            - .:/srv
+        networks:
+            - proxy
