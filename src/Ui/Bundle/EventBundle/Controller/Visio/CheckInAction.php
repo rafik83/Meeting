@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\User\Event\ScanCommand;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,6 +67,7 @@ class CheckInAction
         $participant = $sheet->getUserParticipant($userDomain->getUser());
 
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            || $this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
             || !$participant instanceof Participant
             || !$participant->isVisio()
             || false === $this->dayGuesser->isItDDay($event)) {

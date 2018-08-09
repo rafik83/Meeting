@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Event\EventByHostResolver;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -66,12 +67,16 @@ class VisioCheckinSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(GetResponseEvent $responseEvent): void
     {
-        $request = $responseEvent->getRequest();
-        $sheet = $this->sheetRepository->getSheetById($request->attributes->get('sheet'));
         $token = $this->tokenStorage->getToken();
 
-        if (!$token instanceof TokenInterface
-            || !$sheet instanceof Sheet
+        if (!$token instanceof TokenInterface || !$token->getUser() instanceof User) {
+            return;
+        }
+
+        $request = $responseEvent->getRequest();
+        $sheet = $this->sheetRepository->getSheetById($request->attributes->get('sheet'));
+
+        if (!$sheet instanceof Sheet
             || 'event_visio_checkin' === $request->attributes->get('_route')) {
             return;
         }
