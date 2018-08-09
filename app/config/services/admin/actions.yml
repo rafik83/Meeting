@@ -535,3 +535,15 @@ services:
             - '@session.flash_bag'
             - '@security.csrf.token_manager'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    #
+    # Visio
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction:
+        arguments:
+            - '@domain.event.day.dday_guesser'
+            - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@router'
+            - '@adapter.authorization_checker'
+            - '@datetime'

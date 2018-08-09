@@ -1,0 +1,17 @@
+{% extends 'EventBundle:Register:base.html.twig' %}
+
+{% block title event.title %}
+
+{% block content %}
+    <section class="main">
+        <header>
+            <h1>{{ 'event.visio.welcome'|trans({'%event%': event.title}) }}</h1>
+        </header>
+
+        <div class="main__content">
+            <form method="post">
+                <button type="submit" class="btn btn-default">{{ 'event.visio.agenda_access'|trans }}</button>
+            </form>
+        </div>
+    </section>
+{% endblock %}
