@@ -36,12 +36,13 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th class="col-md-1">{{ 'admin.meeting.list.column.head.spot'|trans }}</th>
-                <th class="col-md-2">{{ 'admin.meeting.list.column.head.from'|trans }}</th>
-                <th class="col-md-2">{{ 'admin.meeting.list.column.head.fromParticipants'|trans }}</th>
-                <th class="col-md-2">{{ 'admin.meeting.list.column.head.to'|trans }}</th>
-                <th class="col-md-2">{{ 'admin.meeting.list.column.head.toParticipants'|trans }}</th>
-                <th class="col-md-1"></th>
+                <th>{{ 'admin.meeting.list.column.head.spot'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.from'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.fromParticipants'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.to'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.toParticipants'|trans }}</th>
+                <th></th>
+                <th class="col-sm-2 col-md-2"></th>
             </tr>
         </thead>
         <tbody>
@@ -83,7 +84,12 @@
                         </ul>
                     </td>
                     <td>
-                        <div class="btn-group" data-toggle="buttons"
+                        <a href="{{ path('admin_meeting_details', {'event': event.id, 'meeting': meeting.id}) }}" class="btn btn-default btn-sm">
+                            {{ 'admin.meeting.list.details'|trans }}
+                        </a>
+                    </td>
+                    <td>
+                        <div class="btn-group pull-right" data-toggle="buttons"
                              data-radio-group-ajax="{{ path('admin_meeting_update_status', {'event': event.id, 'meeting': meeting.id}) }}"
                         >
                             <label class="btn btn-danger {% if meeting.status == 'canceled' %}active{% endif %}">
@@ -114,8 +120,6 @@
                                 ✔
                             </label>
                         </div>
-                        <hr/>
-                        {{ macro.btnGroupAndRightMenuDropdown({('admin.meeting.list.details'|trans): path('admin_meeting_details', {'event': event.id, 'meeting': meeting.id})}) }}
                     </td>
                 </tr>
             {% else %}
