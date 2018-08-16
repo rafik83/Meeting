@@ -118,12 +118,24 @@ class ListAction
 
     private function getSlotOfTheDay(array $days, array $slots): ?MeetingSlot
     {
+        $previousSlot = null;
+
         foreach ($days as $day) {
             if ($day->getBegin() <= $this->dateTime && $day->getEnd() >= $this->dateTime) {
                 foreach ($slots as $slot) {
                     if ($slot->getBegin() <= $this->dateTime && $slot->getEnd() >= $this->dateTime) {
                         return $slot;
                     }
+
+                    $currentDateTimeIsBetweenPreviousAndCurrentSlot = $previousSlot instanceof MeetingSlot
+                        && $previousSlot->getEnd() < $this->dateTime
+                        && $this->dateTime < $slot->getBegin();
+
+                    if ($currentDateTimeIsBetweenPreviousAndCurrentSlot) {
+                        return $slot;
+                    }
+
+                    $previousSlot = $slot;
                 }
             }
         }
