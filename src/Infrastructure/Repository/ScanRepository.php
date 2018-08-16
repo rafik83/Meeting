@@ -35,6 +35,9 @@ class ScanRepository implements ScanRepositoryInterface
 
     public function isUserCheckinTodayByEvent(User $user, Event $event, \DateTimeInterface $dateTime): bool
     {
+        $today = (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp());
+
         return
             (int) $this->entityManager->createQueryBuilder()
                 ->select('count(scan.id)')
@@ -45,8 +48,8 @@ class ScanRepository implements ScanRepositoryInterface
                 ->setParameters([
                     'event' => $event,
                     'user' => $user,
-                    'startAt' => $dateTime->setTime(0, 0, 0),
-                    'endAt' => $dateTime->setTime(23, 59, 59)
+                    'startAt' => $today->setTime(0, 0, 0),
+                    'endAt' => $today->setTime(23, 59, 59)
                 ])
                 ->getQuery()
                 ->getSingleScalarResult() > 0;
