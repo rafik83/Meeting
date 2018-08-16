@@ -93,6 +93,8 @@ class ListAction
             'locale' => $locale,
             'view' => $meetingListView,
             'form' => $form->createView(),
+            'hasPrevious' => !empty($slots) && reset($slots) !== $currentSlot,
+            'hasNext' => !empty($slots) && end($slots) !== $currentSlot,
         ]);
     }
 
