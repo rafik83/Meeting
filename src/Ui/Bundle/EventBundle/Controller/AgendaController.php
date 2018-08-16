@@ -154,6 +154,7 @@ class AgendaController extends Controller
             'sendCodeForm' => $sendCodeForm,
             'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
             'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
+            'participant' => $participant,
         ]);
     }
 
