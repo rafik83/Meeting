@@ -727,8 +727,10 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->from(Meeting::class, 'meeting')
             ->join('meeting.fromSheet', 'fromSheet')
             ->join('meeting.toSheet', 'toSheet')
+            ->join('meeting.spot', 'spot')
             ->where('meeting.slot = :slot')
             ->setParameter('slot', $slot)
+            ->orderBy('spot.reference')
         ;
 
         return $queryBuilder->getQuery()->getResult();
