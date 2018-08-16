@@ -36,6 +36,11 @@ class ScanRepository implements ScanRepositoryInterface
 
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool
     {
+        $begin = (new \DateTime())
+            ->setTimestamp($meetingSlot->getBegin()->getTimestamp());
+        $end = (new \DateTime())
+            ->setTimestamp($meetingSlot->getEnd()->getTimestamp());
+
         return
             (int) $this->entityManager->createQueryBuilder()
             ->select('count(scan.id)')
@@ -46,8 +51,8 @@ class ScanRepository implements ScanRepositoryInterface
             ->setParameters([
                 'event' => $event,
                 'user' => $user,
-                'startAt' => $meetingSlot->getBegin()->setTime(0, 0, 0),
-                'endAt' => $meetingSlot->getEnd()->setTime(23, 59, 59)
+                'startAt' => $begin->setTime(0, 0, 0),
+                'endAt' => $end->setTime(23, 59, 59)
             ])
             ->getQuery()
             ->getSingleScalarResult() > 0;
