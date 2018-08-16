@@ -99,8 +99,7 @@ class ListAction
     private function getDefaultSlot(Event $event, array $slots): ?MeetingSlot
     {
         if ($event->hasDay()) {
-            $days = $event->getDays();
-            $slot = $this->getSlotOfTheDay($days, $slots);
+            $slot = $this->getCurrentSlot($slots);
 
             if ($slot instanceof MeetingSlot) {
                 return $slot;
@@ -116,28 +115,27 @@ class ListAction
         return null;
     }
 
-    private function getSlotOfTheDay(array $days, array $slots): ?MeetingSlot
+    /**
+     * @param MeetingSlot[] $slots
+     */
+    private function getCurrentSlot(array $slots): ?MeetingSlot
     {
         $previousSlot = null;
 
-        foreach ($days as $day) {
-            if ($day->getBegin() <= $this->dateTime && $day->getEnd() >= $this->dateTime) {
-                foreach ($slots as $slot) {
-                    if ($slot->getBegin() <= $this->dateTime && $slot->getEnd() >= $this->dateTime) {
-                        return $slot;
-                    }
-
-                    $currentDateTimeIsBetweenPreviousAndCurrentSlot = $previousSlot instanceof MeetingSlot
-                        && $previousSlot->getEnd() < $this->dateTime
-                        && $this->dateTime < $slot->getBegin();
-
-                    if ($currentDateTimeIsBetweenPreviousAndCurrentSlot) {
-                        return $slot;
-                    }
-
-                    $previousSlot = $slot;
-                }
+        foreach ($slots as $slot) {
+            if ($slot->getBegin() <= $this->dateTime && $slot->getEnd() >= $this->dateTime) {
+                return $slot;
             }
+
+            $currentDateTimeIsBetweenPreviousAndCurrentSlot = $previousSlot instanceof MeetingSlot
+                && $previousSlot->getEnd() < $this->dateTime
+                && $this->dateTime < $slot->getBegin();
+
+            if ($currentDateTimeIsBetweenPreviousAndCurrentSlot) {
+                return $slot;
+            }
+
+            $previousSlot = $slot;
         }
 
         return null;
