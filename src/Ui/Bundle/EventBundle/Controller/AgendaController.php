@@ -84,6 +84,13 @@ class AgendaController extends Controller
             throw $this->createNotFoundException('This participant is not in this sheet');
         }
 
+        if ($participant->isVisio() && !$participant->getTimezone()) {
+            return $this->redirectToRoute('event_participant_timezone', [
+                'participant' => $participant->getId(),
+                'sheet' => $sheet->getId(),
+            ]);
+        }
+
         /** @var AgendaView $agenda */
         $agenda = $this->get('tactician.commandbus.query')->handle(new AgendaViewQuery(
             $eventDomain->getEvent(),

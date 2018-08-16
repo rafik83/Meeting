@@ -46,3 +46,13 @@ services:
             - '@templating.engine.twig'
             - '%infrastructure.encrypted_files_path%'
             - '%kernel.project_dir%/web'
+
+    #
+    # Agenda
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ParticipantTimezoneAction:
+        arguments:
+            - '@templating.engine.twig'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@router'

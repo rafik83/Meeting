@@ -403,6 +403,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded }
 
+    Proximum\Vimeet\Application\Command\Participant\ParticipantTimezoneHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\ParticipantTimezone }
+
     Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler:
         arguments:
             - '@cart_manager'
