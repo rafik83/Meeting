@@ -19,7 +19,6 @@ use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\SlotChoiceType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -69,8 +68,9 @@ class ListAction
         $slots = $this->slotRepository->findByEvent($event);
 
         $locale = $event->getAvailableLocale($request->getLocale());
-        $filter = [];
-        $form = $this->formFactory->create(SlotChoiceType::class, $filter, [
+
+        $defaultSlot = $this->getDefaultSlot($event, $slots);
+        $form = $this->formFactory->create(SlotChoiceType::class, ['slot' => $defaultSlot], [
             'slots' => $slots,
             'method' => 'GET',
             'csrf_protection' => false,
@@ -78,7 +78,12 @@ class ListAction
             'locale' => $locale,
         ]);
 
-        $currentSlot = $this->getCurrentSlot($event, $slots, $form, $request);
+        $currentSlot = $defaultSlot;
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $currentSlot = $form->getData()['slot'];
+        }
+
         $meetingListView = $this->queryBus->handle(
             new MeetingListViewQuery($event, $locale, $currentSlot)
         );
@@ -86,22 +91,16 @@ class ListAction
         return $this->engine->renderResponse('AdminBundle:Meeting:list.html.twig', [
             'event' => $event,
             'locale' => $locale,
-            'currentSlot' => $currentSlot,
             'view' => $meetingListView,
             'form' => $form->createView(),
         ]);
     }
 
-    private function getCurrentSlot(Event $event, array $slots, FormInterface $form, Request $request): ?MeetingSlot
+    private function getDefaultSlot(Event $event, array $slots): ?MeetingSlot
     {
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            return $form->getData()['slot'];
-        }
-
         if ($event->hasDay()) {
             $days = $event->getDays();
-
-            $slot = $this->getSlotOfTheDay($days, $slots, $form);
+            $slot = $this->getSlotOfTheDay($days, $slots);
 
             if ($slot instanceof MeetingSlot) {
                 return $slot;
@@ -110,7 +109,6 @@ class ListAction
 
         if (!empty($slots)) {
             $slot = reset($slots);
-            $form->get('slot')->setData($slot);
 
             return $slot;
         }
@@ -118,14 +116,12 @@ class ListAction
         return null;
     }
 
-    private function getSlotOfTheDay(array $days, array $slots, FormInterface $form): ?MeetingSlot
+    private function getSlotOfTheDay(array $days, array $slots): ?MeetingSlot
     {
         foreach ($days as $day) {
             if ($day->getBegin() <= $this->dateTime && $day->getEnd() >= $this->dateTime) {
                 foreach ($slots as $slot) {
                     if ($slot->getBegin() <= $this->dateTime && $slot->getEnd() >= $this->dateTime) {
-                        $form->get('slot')->setData($slot);
-
                         return $slot;
                     }
                 }
