@@ -72,6 +72,7 @@ form.participate.children.participants.unavailable: Indisponible
 form.participate.children.question.label: 'Posez une question aux intervenants pour préparer l''atelier'
 form.participate.children.submit.label: Participer
 form.participate.children.submitUpdate.label: Modifier
+form.participant_timezone.children.timezone.label: 'Fuseau horraire'
 form.payment_choice_with_deposit.children.deposit.label: 'Choisissez si vous souhaitez payer le total ou l''acompte'
 form.payment_choice_with_deposit.children.depositMode.deposit: Acompte
 form.payment_choice_with_deposit.children.depositMode.total: Total

@@ -1,0 +1,31 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Participant;
+
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+
+class ParticipantTimezoneHandler
+{
+    /** @var ParticipantRepositoryInterface $participantRepository */
+    private $participantRepository;
+
+    public function __construct(ParticipantRepositoryInterface $participantRepository)
+    {
+        $this->participantRepository = $participantRepository;
+    }
+
+    public function handle(ParticipantTimezone $command): void
+    {
+        $command->participant->setTimezone($command->timezone);
+
+        $this->participantRepository->set($command->participant);
+    }
+}
