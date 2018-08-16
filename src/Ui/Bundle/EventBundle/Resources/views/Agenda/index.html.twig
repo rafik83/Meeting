@@ -45,6 +45,13 @@
                     <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
                 </div>
             {% endif %}
+            {% if participant.visio %}
+                <div class="pull-right mg-tp" style="margin-right: 5px;">
+                    <a href="{{ path('event_participant_timezone', { 'sheet': sheet.id, 'participant': participant.id }) }}" class="btn btn-primary">
+                        {{ participant.timezone }}
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="agenda-container">
