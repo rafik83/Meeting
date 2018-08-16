@@ -47,6 +47,7 @@ class MassUnavailabilityViewQueryHandler
     {
         $begin = $query->mass->getBegin();
         $end   = $query->mass->getEnd();
+        $timezone = $query->participant->getTimezone();
 
         if ($query->mass->isDispatch()) {
             if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
@@ -63,6 +64,16 @@ class MassUnavailabilityViewQueryHandler
             }
         }
 
+        if ($query->participant->isVisio() && $timezone) {
+            $begin = (new \DateTime())
+                ->setTimestamp($begin->getTimestamp())
+                ->setTimezone(new \DateTimeZone($timezone));
+
+            $end = (new \DateTime())
+                ->setTimestamp($end->getTimestamp())
+                ->setTimezone(new \DateTimeZone($timezone));
+        }
+
         return new MassUnavailabilityView(
             $query->mass->getId(),
             $begin,
@@ -72,7 +83,7 @@ class MassUnavailabilityViewQueryHandler
             $query->mass->getCategory()->getPicto(),
             $query->mass->getCategory()->getLeftColor(),
             $query->mass->getCategory()->getRightColor(),
-            $query->event->getTimeZone(),
+            $query->participant->isVisio() && $timezone ? $timezone : $query->event->getTimeZone(),
             $query->mass->isBlocking()
         );
     }

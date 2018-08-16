@@ -80,6 +80,12 @@ class DayViewQueryHandler
         $meetings             = [];
         $availableSlotViews   = [];
         $cancelAttendanceView = null;
+        $timezone = $query->participant->getTimezone();
+
+        if ($query->participant->isVisio() && $timezone) {
+            $query->day->getStartTime()->setTimezone(new \DateTimeZone($timezone));
+            $query->day->getEndTime()->setTimezone(new \DateTimeZone($timezone));
+        }
 
         if ($query->currentSheet->attend()) {
             foreach ($query->happenings as $happening) {
