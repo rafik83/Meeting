@@ -97,7 +97,7 @@ event.meeting.request.transformIntoMeeting.error: 'Le RDV ne peut pas être posi
 event.meeting.request.transformIntoMeeting.success: 'RDV positionné pour %participants% le %date% à %time% : %spot%.'
 event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez-vous'
 event.registration_not_open: 'Les inscriptions ne sont pas encore ouvertes'
-event.participant.define_timezone: 'Définir mon fuseau horraire'
+event.participant.define_timezone: 'Définir mon fuseau horaire'
 event.sheet.export.fields.event_name: 'Nom de l''événement'
 event.sheet.export.fields.participant_email: 'Email participant'
 event.sheet.export.fields.participant_firstname: Prénom

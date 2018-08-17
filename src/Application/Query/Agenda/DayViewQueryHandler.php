@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
+use Proximum\Vimeet\Application\Components\Agenda\DateTimeZoneConverter;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
@@ -80,12 +81,6 @@ class DayViewQueryHandler
         $meetings             = [];
         $availableSlotViews   = [];
         $cancelAttendanceView = null;
-        $timezone = $query->participant->getTimezone();
-
-        if ($query->participant->isVisio() && $timezone) {
-            $query->day->getStartTime()->setTimezone(new \DateTimeZone($timezone));
-            $query->day->getEndTime()->setTimezone(new \DateTimeZone($timezone));
-        }
 
         if ($query->currentSheet->attend()) {
             foreach ($query->happenings as $happening) {

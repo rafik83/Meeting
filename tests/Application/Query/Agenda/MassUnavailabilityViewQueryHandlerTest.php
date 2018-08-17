@@ -139,8 +139,6 @@ class MassUnavailabilityViewQueryHandlerTest extends TestCase
         $user = $this->prophesize(User::class);
         $participant->getUser()->willReturn($user->reveal());
         $participant->getSheet()->willReturn($sheet);
-        $participant->getTimezone()->shouldBeCalled()->willReturn(null);
-        $participant->isVisio()->shouldBeCalled()->willReturn(false);
         $massAssignment = new Unavailability\MassAssignment($mass, $user->reveal(), $begin, $end2);
 
         $reflection = new \ReflectionClass(Unavailability\Mass::class);
