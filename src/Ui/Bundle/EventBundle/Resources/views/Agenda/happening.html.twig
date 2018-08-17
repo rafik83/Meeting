@@ -1,4 +1,9 @@
-<div class="happening has-details meet" data-beginHour="{{ happening.begin|date('H:i', happening.timeZone) }}" data-duration="{{ happening.duration.format('%H:%I') }}">
+{% set timezone = happening.timeZone %}
+{% if participant.visio and participant.timezone %}
+    {% set timezone = participant.timezone %}
+{% endif %}
+
+<div class="happening has-details meet" data-beginHour="{{ happening.begin|date('H:i', timezone) }}" data-duration="{{ happening.duration.format('%H:%I') }}">
     {{ include('EventBundle:Happening:header.html.twig', {
         'leftColor': happening.leftColor,
         'rightColor': happening.rightColor,
@@ -6,6 +11,7 @@
         'doesCurrentUserParticipate': true,
         'isUserAloneParticipant': isUserAloneParticipant,
         'isActionButtonsOnDetails': true,
+        'timezone': timezone
     }) }}
     <div class="details">
         {{ include('EventBundle:Happening:speakers.html.twig', {happening: happening}) }}
@@ -18,6 +24,7 @@
             'isUserAloneParticipant': isUserAloneParticipant,
             'doesCurrentUserParticipate': true,
             'isActionButtonsOnDetails': true,
+            'timezone': timezone
         }) }}
     </div>
 </div>

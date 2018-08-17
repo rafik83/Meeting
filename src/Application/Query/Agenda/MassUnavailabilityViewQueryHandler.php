@@ -47,7 +47,6 @@ class MassUnavailabilityViewQueryHandler
     {
         $begin = $query->mass->getBegin();
         $end   = $query->mass->getEnd();
-        $timezone = $query->participant->getTimezone();
 
         if ($query->mass->isDispatch()) {
             if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {

@@ -1,6 +1,6 @@
 <div class="has-details meet"
      data-meeting-id="{{ meeting.id }}"
-     data-beginHour="{{ meeting.begin|date('H:i', meeting.timeZone) }}"
+     data-beginHour="{{ meeting.begin|date('H:i', timezone) }}"
      data-duration="{{ meeting.duration.format('%H:%I') }}"
 >
     <header style="background: linear-gradient(to right, {{ meeting.leftColor }} 0%, {{ meeting.rightColor }} 100%) !important;">
@@ -38,7 +38,7 @@
         <footer>
             <p class="hours">
                 <i class="icon icon-Horaire"></i>
-                <span>{{ meeting.begin|date('H:i', meeting.timeZone) }} - {{ meeting.end|date('H:i', meeting.timeZone) }}</span>
+                <span>{{ meeting.begin|date('H:i', timezone) }} - {{ meeting.end|date('H:i', timezone) }}</span>
             </p>
 
             {% if meeting.isSheetDetailsSeeAble %}
