@@ -1,6 +1,6 @@
 <header style="background: linear-gradient(to right, {{ leftColor }} 0%, {{ rightColor }} 100%) !important;">
     {% if withHourPrefix is defined and withHourPrefix == true %}
-        <div class="hour">{{ happening.begin|date('H:i', happening.timeZone) }} {{ happening.end|date('H:i', happening.timeZone) }}</div>
+        <div class="hour">{{ happening.begin|date('H:i', timezone) }} {{ happening.end|date('H:i', timezone) }}</div>
     {% endif %}
 
     <a class="content" href="#">

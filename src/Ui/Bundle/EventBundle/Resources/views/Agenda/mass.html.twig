@@ -1,1 +1,6 @@
-{{ include('EventBundle:Unavailability/Mass:mass.html.twig', {mass: mass}) }}
+{% set timezone = mass.timeZone %}
+{% if participant.visio and participant.timezone %}
+    {% set timezone = participant.timezone %}
+{% endif %}
+
+{{ include('EventBundle:Unavailability/Mass:mass.html.twig', {mass: mass, timezone: timezone}) }}

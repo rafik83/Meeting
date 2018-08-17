@@ -70,19 +70,19 @@
                     <div class="meets">
                         {% if day.isSheetAttendingTheEvent %}
                             {% for happening in day.happenings %}
-                                {{ include('EventBundle:Agenda:happening.html.twig', {'sheet': agenda.sheet, 'happening': happening, 'isUserAloneParticipant': agenda.isUserAloneParticipant }) }}
+                                {{ include('EventBundle:Agenda:happening.html.twig', {'sheet': agenda.sheet, 'happening': happening, 'participant': participant, isUserAloneParticipant: agenda.isUserAloneParticipant }) }}
                             {% endfor %}
 
                             {% for unavailability in day.unavailabilities %}
-                                {{ include('EventBundle:Agenda:unavailability.html.twig', {'sheetId': agenda.sheet.id, 'unavailability': unavailability, 'participantId': agenda.participant.id }) }}
+                                {{ include('EventBundle:Agenda:unavailability.html.twig', {'sheetId': agenda.sheet.id, 'participant': participant, 'unavailability': unavailability, 'participantId': agenda.participant.id }) }}
                             {% endfor %}
 
                             {% for mass in day.masses %}
-                                {{ include('EventBundle:Agenda:mass.html.twig', {'mass': mass }) }}
+                                {{ include('EventBundle:Agenda:mass.html.twig', {'mass': mass, 'participant': participant}) }}
                             {% endfor %}
 
                             {% for meeting in day.meetings %}
-                                {{ include('EventBundle:Agenda:meeting.html.twig', {'sheetId': agenda.sheet.id, 'participantId': agenda.participant.id, 'meeting': meeting }) }}
+                                {{ include('EventBundle:Agenda:meeting.html.twig', {'sheetId': agenda.sheet.id, 'participant': participant, 'participantId': agenda.participant.id, 'meeting': meeting }) }}
                             {% endfor %}
 
                             {% for availableSlotView in day.availableSlotViews %}
@@ -95,7 +95,7 @@
                                 </div>
                             {% endfor %}
                         {% else %}
-                            {{ include('EventBundle:Unavailability/CancelAttendance:cancelAttendanceUnavailability.html.twig', {'cancelAttendanceUnavailability': day.cancelAttendanceUnavailabilityView }) }}
+                            {{ include('EventBundle:Unavailability/CancelAttendance:cancelAttendanceUnavailability.html.twig', {'cancelAttendanceUnavailability': day.cancelAttendanceUnavailabilityView, 'participant': participant }) }}
                         {% endif %}
                     </div>
                     <div class="layout"></div>

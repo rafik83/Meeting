@@ -1,8 +1,8 @@
 {% set withHourPrefix = (withHourPrefix is defined and withHourPrefix == true) %}
-<div class="program-mass mass has-details meet" data-beginHour="{{ mass.begin|date('H:i', mass.timeZone) }}" data-duration="{{ mass.duration.format('%H:%I') }}">
-    {{ include('EventBundle:Unavailability/Mass:header.html.twig', {'mass': mass, 'withHourPrefix': withHourPrefix}) }}
+<div class="program-mass mass has-details meet" data-beginHour="{{ mass.begin|date('H:i', timezone) }}" data-duration="{{ mass.duration.format('%H:%I') }}">
+    {{ include('EventBundle:Unavailability/Mass:header.html.twig', {'mass': mass, 'timezone': timezone, 'withHourPrefix': withHourPrefix}) }}
     <div class="details">
         <p>{{ mass.description|nl2br }}</p>
-        {{ include('EventBundle:Unavailability/Mass:footer.html.twig', {mass: mass}) }}
+        {{ include('EventBundle:Unavailability/Mass:footer.html.twig', {timezone: timezone, mass: mass}) }}
     </div>
 </div>
