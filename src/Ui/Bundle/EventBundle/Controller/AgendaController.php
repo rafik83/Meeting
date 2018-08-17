@@ -146,6 +146,11 @@ class AgendaController extends Controller
             ]);
         }
 
+        $timezone = $eventDomain->getEvent()->getTimeZone();
+        if ($participant->isVisio() && $participant->getTimezone()) {
+            $timezone = $participant->getTimezone();
+        }
+
         return $this->render('EventBundle:Agenda:index.html.twig', [
             'event' => $eventDomain->getEvent(),
             'agenda' => $agenda,
@@ -155,6 +160,7 @@ class AgendaController extends Controller
             'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
             'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
             'participant' => $participant,
+            'timezone' => $timezone,
         ]);
     }
 
