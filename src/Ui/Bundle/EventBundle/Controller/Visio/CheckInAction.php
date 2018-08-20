@@ -67,7 +67,7 @@ class CheckInAction
         $participant = $sheet->getUserParticipant($userDomain->getUser());
 
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
-            || $this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
+            || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
             || !$participant instanceof Participant
             || !$participant->isVisio()
             || false === $this->dayGuesser->isItDDay($event)) {
