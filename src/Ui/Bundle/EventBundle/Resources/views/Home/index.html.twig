@@ -1,25 +1,31 @@
 {% extends 'EventBundle:Register:base.html.twig' %}
 
-{% form_theme form '@Ui/default.html.twig' %}
-
 {% block title event.title %}
 
 {% block content %}
     <section class="main">
-        <header>
-            <h1><i class="icon-Clef"></i> {{ 'register.register_as'|trans }}</h1>
-        </header>
+        {% if form %}
+            {% form_theme form '@Ui/default.html.twig' %}
 
-        <div class="main__content">
-            {{ form_start(form, {attr: {class: 'styled-form'}}) }}
-            {{ form_row(form.type) }}
+            <header>
+                <h1><i class="icon-Clef"></i> {{ 'register.register_as'|trans }}</h1>
+            </header>
 
-            <div class="validation">
-                <button type="submit" class="btn btn-primary"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
+            <div class="main__content">
+                {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+                {{ form_row(form.type) }}
+
+                <div class="validation">
+                    <button type="submit" class="btn btn-primary"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
+                </div>
+
+                {{ form_end(form) }}
             </div>
-
-            {{ form_end(form) }}
-        </div>
+        {% else %}
+            <div class="important fail">
+                {{ 'register.noAvailableRegistrationType'|trans }}
+            </div>
+        {% endif %}
     </section>
 
     <section id="type-description" class="important hide">
