@@ -29,6 +29,11 @@ class ConfigureDatesType extends AbstractType
         'agendaOnlineDate',
         'registrationOpenDate',
         'registrationCloseDate',
+        'enableBadgeForParticipantDate',
+    ];
+
+    const CONFIGURATION_DATES_HELP = [
+        'enableBadgeForParticipantDate' => 'form.event_configure_date.children.enableBadgeForParticipantDate.help',
     ];
 
     /**
@@ -41,6 +46,7 @@ class ConfigureDatesType extends AbstractType
                 ->add($configurationDate, DateTimePickerType::class, [
                     'view_timezone' => $options['event']->getTimezone(),
                     'required' => false,
+                    'help' => self::CONFIGURATION_DATES_HELP[$configurationDate] ?? null,
                 ]);
         }
     }

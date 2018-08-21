@@ -5,19 +5,6 @@
             <img src="{{ asset(planning.eventLogo) }}" class="logo"/>
         </div>
         {% endif %}
-        <div class="event-title">
-            <span style="font-size: 19px">{{ planning.eventTitle }}</span><br>
-            <span style="line-height: 21px">
-                {{ planning.eventDescription|nl2br }}
-
-                {% set website = planning.organiserWebsite ? planning.organiserWebsite : 'https://' ~ planning.eventDomain %}
-
-                <br>
-                <a href="{{ website }}" class="link">
-                    {{ website }}
-                </a>
-            </span>
-        </div>
         <div class="clear-both"></div>
     </div>
     <div class="clear-both">
@@ -25,18 +12,34 @@
     </div>
     <div>
         <div class="footer" style="background: {{ planning.leftColor }}; background: linear-gradient(to right, {{planning.leftColor }}, {{ planning.rightColor }})">
-                <span style="font-size: 17px">{{ 'mail.footer.contact'|trans({}, 'mail', planning.participantLocale) }}</span><br>
-                <span style="line-height: 21px">
-                    {{ planning.contactFirstName|default('')|capitalize }} {{ planning.contactLastName|default('')|upper }}
+                <div class="event-contact">
+                    <span style="font-size: 17px">{{ 'mail.footer.contact'|trans({}, 'mail', planning.participantLocale) }}</span><br>
+                    <span style="line-height: 21px">
+                        {{ planning.contactFirstName|default('')|capitalize }} {{ planning.contactLastName|default('')|upper }}
 
-                    {% if planning.organiserPhone %}
-                        <br><a href="tel:{{ planning.organiserPhone }}" class="link">{{ planning.organiserPhone }}</a>
-                    {% endif %}
+                        {% if planning.organiserPhone %}
+                            <br><a href="tel:{{ planning.organiserPhone }}" class="link">{{ planning.organiserPhone }}</a>
+                        {% endif %}
 
-                    {% if planning.organiserEmail %}
-                        <br><a href="mailto:{{ planning.organiserEmail }}" class="link">{{ planning.organiserEmail }}</a>
-                    {% endif %}
+                        {% if planning.organiserEmail %}
+                            <br><a href="mailto:{{ planning.organiserEmail }}" class="link">{{ planning.organiserEmail }}</a>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="event-title">
+                    <span style="font-size: 19px">{{ planning.eventTitle }}</span><br>
+                    <span style="line-height: 21px">
+                    {{ planning.eventDescription|nl2br }}
+
+                        {% set website = planning.organiserWebsite ? planning.organiserWebsite : 'https://' ~ planning.eventDomain %}
+
+                        <br>
+                    <a href="{{ website }}" class="link">
+                        {{ website }}
+                    </a>
                 </span>
+            </div>
+            <div class="clear-both"></div>
         </div>
     </div>
 

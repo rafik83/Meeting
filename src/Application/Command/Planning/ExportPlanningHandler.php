@@ -157,7 +157,7 @@ class ExportPlanningHandler
                 $event->getDescription($event->getAvailableLocale($participant->getLocale())), // Event description
                 $event->getDomain(), // Domain
                 $participant->getSheet()->getSpot() instanceof Spot ? $participant->getSheet()->getSpot()->getReference() : null,
-                $event->getLogo(), // Event logo
+                $event->getLocalizedLogo($event->getAvailableLocale($participant->getLocale())), // Event logo
                 $event->getConfiguration()->getOrganiserWebsite(), // Organiser website
                 $event->getConfiguration()->getContactFirstName(), // event contact first name
                 $event->getConfiguration()->getContactLastName(), // event contact last name
