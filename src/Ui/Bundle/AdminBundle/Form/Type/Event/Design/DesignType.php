@@ -55,6 +55,15 @@ class DesignType extends AbstractType
             ->add('headerRightColor', TextType::class, [
                 'required' => true,
             ])
+            ->add('headerButtonLeftColor', TextType::class, [
+                'required' => true,
+            ])
+            ->add('headerButtonRightColor', TextType::class, [
+                'required' => true,
+            ])
+            ->add('headerButtonTextColor', TextType::class, [
+                'required' => true,
+            ])
             ->add('leftColor', TextType::class, [
                 'required' => true,
             ])

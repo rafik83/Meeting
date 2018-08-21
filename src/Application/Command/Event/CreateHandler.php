@@ -92,6 +92,8 @@ class CreateHandler
             $create->disabledPasswordChanging
         );
 
+        $event->getConfiguration()->setVisio($create->visio);
+
         if (null !== $event->getDuplicatedFrom()) {
             $event->getConfiguration()->setColors(
                 $event->getDuplicatedFrom()->getConfiguration()->getLeftColor(),
@@ -99,11 +101,12 @@ class CreateHandler
                 $event->getDuplicatedFrom()->getConfiguration()->getTextColor(),
                 $event->getDuplicatedFrom()->getConfiguration()->getHeaderLeftColor(),
                 $event->getDuplicatedFrom()->getConfiguration()->getHeaderRightColor(),
-                $event->getDuplicatedFrom()->getConfiguration()->getBackgroundColor()
+                $event->getDuplicatedFrom()->getConfiguration()->getBackgroundColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderButtonLeftColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderButtonRightColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderButtonTextColor()
             );
         }
-
-        $event->getConfiguration()->setVisio($create->visio);
 
         foreach ($event->getLocales() as $locale) {
             if (!$event->getTranslations()->get($locale)) {
