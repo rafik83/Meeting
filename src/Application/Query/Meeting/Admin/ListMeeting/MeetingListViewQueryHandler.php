@@ -51,8 +51,6 @@ class MeetingListViewQueryHandler
             );
         }
 
-        $meetingListView->sortMeetingView();
-
         return $meetingListView;
     }
 }

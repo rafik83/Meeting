@@ -41,11 +41,4 @@ class MeetingListView
     {
         $this->meetingViews[$meetingView->id] = $meetingView;
     }
-
-    public function sortMeetingView(): void
-    {
-        uasort($this->meetingViews, function (MeetingView $meetingA, MeetingView $meetingB) {
-            return $meetingA->spotReference <=> $meetingB->spotReference;
-        });
-    }
 }

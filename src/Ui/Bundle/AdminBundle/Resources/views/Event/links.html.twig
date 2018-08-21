@@ -241,7 +241,7 @@
     </li>
 {% endif %}
 
-{% if is_granted('ROLE_ALLOWED_TO_HOST') %}
+{% if is_granted('ROLE_ALLOWED_TO_HOST') and not is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
     <li>
         <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">
             {{ 'admin.meeting.link'|trans }}
