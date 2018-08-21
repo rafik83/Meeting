@@ -105,3 +105,21 @@ services:
             - '@Proximum\Vimeet\Domain\Sheet\HasRemainingToPay'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+
+    #
+    # Meeting
+    #
+    Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\ParticipantViewQueryHandler:
+        arguments:
+            - '@template.participant_info_guesser'
+
+    Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\ParticipantViewQueryHandler'
+
+    Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingListViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingViewQueryHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingListViewQuery }

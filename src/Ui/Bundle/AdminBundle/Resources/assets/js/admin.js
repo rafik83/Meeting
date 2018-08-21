@@ -20,6 +20,7 @@ var $ = require('jquery'),
     CommercialStatusSelect = require('./components/_CommercialStatusSelect'),
     AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening'),
     DuplicationSheetsModal = require('./components/_DuplicationSheetsModal'),
+    SelectPreviousNextMover = require('./components/_SelectPreviousNextMover'),
     FilterBuilder = require('./components/_FilterBuilder')
 ;
 
@@ -167,11 +168,15 @@ function init(target) {
         new DuplicationSheetsModal(element, target.querySelector('#duplication-sheet'));
     });
 
+    [].forEach.call(target.querySelectorAll('[data-select-mover-form]'), function (element) {
+        new SelectPreviousNextMover(element, element.querySelector('[data-select-mover]'));
+    });
+
     [].forEach.call(target.querySelectorAll('.filter-form'), function () {
         new FilterBuilder(
             target.querySelector('#rules'),
             target.querySelector('#builder'),
-            target.querySelector('#submit-rules'),
+            target.querySelector('#submit-rules')
         );
     });
 }
