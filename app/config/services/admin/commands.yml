@@ -93,6 +93,16 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmation }
 
     #
+    # Type Badge
+    #
+    Proximum\Vimeet\Application\Command\Type\Badge\ConfigureHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Badge\Configure }
+
+    #
     # Type Payment Conditions
     #
     Proximum\Vimeet\Application\Command\Type\PaymentConditions\UpdateHandler:

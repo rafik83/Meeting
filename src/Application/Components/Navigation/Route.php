@@ -63,6 +63,10 @@ final class Route
         'happening_program',
     ];
 
+    private const BADGE = [
+        'event_sheet_user_badge',
+    ];
+
     /**
      * @param string $route
      *
@@ -131,5 +135,10 @@ final class Route
     public static function isProgram($route)
     {
         return in_array($route, self::PROGRAM);
+    }
+
+    public static function isBadge(string $route): bool
+    {
+        return \in_array($route, self::BADGE, true);
     }
 }

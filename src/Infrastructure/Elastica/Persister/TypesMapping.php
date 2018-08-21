@@ -35,6 +35,7 @@ final class TypesMapping
                 ],
                 'email' => [
                     'type' => 'string',
+                    'analyzer' => 'emailAnalyzer'
                 ],
                 'locale' => [
                     'type' => 'string',

@@ -94,9 +94,6 @@ class Event implements EventInterface, TraceableInterface
     private $currency;
 
     /** @var null|string */
-    private $logoExtension;
-
-    /** @var null|string */
     private $emailTeam;
 
     /** @var ArrayCollection */
@@ -852,7 +849,7 @@ class Event implements EventInterface, TraceableInterface
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getLogoExtension()
             : null
-            ;
+        ;
     }
 
     public function getLocalizedMobileLogoExtension(string $locale): ?string
@@ -860,7 +857,7 @@ class Event implements EventInterface, TraceableInterface
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getMobileLogoExtension()
             : null
-            ;
+        ;
     }
 
     public function updateLocalizedLogos(

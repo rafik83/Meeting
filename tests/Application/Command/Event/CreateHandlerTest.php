@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\CreateHandler;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
@@ -75,6 +74,7 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
+
         $expectedEvent->getConfiguration()->setVisio(false);
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
@@ -275,6 +275,7 @@ class CreateHandlerTest extends TestCase
             true
         );
         $expectedEvent->getConfiguration()->setVisio(false);
+
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
 
@@ -341,8 +342,8 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true,
             $duplicatedEvent
-
         );
+
         $event->getConfiguration()->setVisio(false);
 
         $create = new Create($user, $event);

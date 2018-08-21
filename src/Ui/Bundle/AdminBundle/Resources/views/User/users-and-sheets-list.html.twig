@@ -7,6 +7,25 @@
 {% block content %}
     <h1 class="page-header">{{ userEventListViews.paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
 
+    <div class="row">
+        <form class="filter-form" method="post">
+            <div class="col-md-12">
+                <input type="hidden" name="rules" id="rules"/>
+                <div id="builder"
+                     data-locale="{{ locale }}"
+                     data-rules="{{ rules }}"
+                     data-filters="{{ filters|json_encode }}">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-primary" id="submit-rules">{{ 'admin.filter'|trans }}</button>
+                    <a class="btn btn-primary" href="{{ path('admin_users_list', {'event': event.id, 'reset': 1 }) }}">{{ 'admin.filters.reset'|trans }}</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br/>
     {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}
 
     {% if userEventListViews.paginatedResult.total > 0 %}

@@ -247,6 +247,11 @@
             {{ 'admin.meeting.link'|trans }}
         </a>
     </li>
+    <li>
+        <a href="{{ path('admin_event_qr_code_reader', { 'event': event.id }) }}">
+            {{ 'admin.event.access_control'|trans }}
+        </a>
+    </li>
 {% endif %}
 
 {% if is_granted('ROLE_ALLOWED_TO_OPERATE') %}

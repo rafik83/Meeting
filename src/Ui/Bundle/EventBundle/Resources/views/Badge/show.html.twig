@@ -1,0 +1,96 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'badge.title'|trans %}
+
+{% block container_classes 'no-margin-mobile-container' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style type="text/css">
+        .ebadge-logo {
+            width: 100%;
+            position: fixed;
+            top: 0;
+        }
+
+        .ebadge-qrcode {
+            width: 170px;
+            border: 1px solid #e2e3e4;
+            margin: 10px auto;
+            padding: 10px 10px 4px 10px;
+        }
+
+        .ebadge-qrcode img {
+            width: 150px;
+            height: 150px;
+        }
+
+        .ebadge-qrcode-token {
+            margin-top: 4px;
+        }
+
+        .ebadge-content {
+            text-align: center;
+            padding: 4px;
+        }
+
+        .ebadge-participation-type {
+            overflow: hidden;
+            width: 95%;
+            height: 41px;
+            line-height: 41px;
+            position: fixed;
+            bottom: 0px;
+            display: block;
+            text-align: center;
+        }
+
+        @media screen and (max-width: 767px) {
+            .ebadge-content {
+                margin-top: 50vh;
+                transform: translateY(-50%);
+            }
+
+            .ebadge-participation-type {
+                width: 100%;
+                bottom: 80px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="ebadge">
+        {% if userBadgeByEventView.header %}
+            <img src="{{ userBadgeByEventView.header }}" class="ebadge-logo show-on-mobile" />
+        {% endif %}
+
+        <div class="ebadge-content">
+            <div class="ft-bold">
+                {{ userBadgeByEventView.sheetTitle }}
+            </div>
+
+            {% if userBadgeByEventView.qrCodeIdentifier %}
+                <div class="ebadge-qrcode">
+                    <img src="{{ userBadgeByEventView.qrCodeImage }}" /><br>
+                    <div class="ebadge-qrcode-token">ID {{ userBadgeByEventView.qrCodeIdentifier }}</div>
+                </div>
+            {% endif %}
+
+            <div>
+                <div>{{ userBadgeByEventView.firstName }} {{ userBadgeByEventView.lastName }}</div>
+
+                <div class="ft-bold highlight">
+                    {{ userBadgeByEventView.position }}
+                </div>
+            </div>
+        </div>
+
+        {% if userBadgeByEventView.participationTypeOrCategoryLabel %}
+            <div class="ebadge-participation-type ft-bold" style="background: {{ userBadgeByEventView.footerColor }}; color: {{ userBadgeByEventView.footerTextColor }};">
+                {{ userBadgeByEventView.participationTypeOrCategoryLabel }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

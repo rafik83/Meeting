@@ -65,5 +65,6 @@ class Create extends AbstractEvent
         $this->visible = $event->isVisible();
         $this->duplicatedFrom = $event;
         $this->visio = $event->getConfiguration()->isVisio();
+        $this->welcomeEnabled = $event->isWelcomeEnabled();
     }
 }
