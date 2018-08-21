@@ -43,4 +43,6 @@ interface UserEventTokenRepositoryInterface
      * @return UserEventToken[]
      */
     public function getForEventTypeAndUsers(Event $event, string $type, array $users): array;
+
+    public function findByTokenAndEventAndType(string $token, Event $event, string $type): ?UserEventToken;
 }

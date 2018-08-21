@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer;
 
-use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class InvoicePdfPrinter
+class EBadgePdfPrinter
 {
     /** @var RouterInterface */
     private $router;
@@ -30,20 +30,18 @@ class InvoicePdfPrinter
         $this->pdfPrinter = $pdfPrinter;
     }
 
-    public function generate(Invoice $invoice): string
+    public function generate(UserEventToken $userEventToken): string
     {
         $pathToPdf = sprintf(
-            '%s/invoice-%s.pdf',
+            '%s/edbadge-%s.pdf',
             sys_get_temp_dir(),
-            $invoice->getId()
+            $userEventToken->getToken()
         );
 
         $urlToPrint = $this->router->generate(
-            'event_invoice_show',
+            'event_sheet_user_badge_download',
             [
-                'sheet'  => $invoice->getSheet()->getId(),
-                'invoice' => $invoice->getId(),
-                'hash'   => $invoice->getHash(),
+                'token' => $userEventToken->getToken(),
                 'format' => 'html',
             ],
             UrlGeneratorInterface::ABSOLUTE_URL

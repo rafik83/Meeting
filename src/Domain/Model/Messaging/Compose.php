@@ -12,29 +12,30 @@ namespace Proximum\Vimeet\Domain\Model\Messaging;
 
 class Compose
 {
-    const TAG_EVENT_NAME         = '%event%';
-    const TAG_PARTICIPANT        = '%participant%';
-    const TAG_PARTICIPATION_TYPE = '%participationType%';
-    const TAG_SHEET_PLANNING     = '%sheetPlanning%';
+    public const TAG_EVENT_NAME         = '%event%';
+    public const TAG_PARTICIPANT        = '%participant%';
+    public const TAG_PARTICIPATION_TYPE = '%participationType%';
+    public const TAG_SHEET_PLANNING     = '%sheetPlanning%';
 
     // CTA
-    const TAG_CTA_AGENDA_CONFIRMATION = '%agendaConfirmationCTA%';
+    public const TAG_CTA_AGENDA_CONFIRMATION = '%agendaConfirmationCTA%';
+    public const TAG_CTA_EBADGE = '%downloadEbadgeCTA%';
 
-    const LINK_SHEET                 = '%sheetLink%';
-    const LINK_PACKAGE               = '%packageLink%';
-    const LINK_ORDERS                = '%ordersLink%';
-    const LINK_AGENDA                = '%agendaLink%';
-    const LINK_PROGRAM               = '%programLink%';
-    const LINK_CATALOG               = '%catalogLink%';
-    const LINK_MEETING_REQUEST       = '%meetingRequestLink%';
-    const LINK_ACTIVACTE_ACCOUNT     = '%activateAccountLink%';
-    const LINK_EXPORT_MEETING_SHEET  = '%exportMeetingSheetLink%';
-    const LINK_VALIDATE_MOBILE_PHONE = '%validateMobilePhoneLink%';
+    public const LINK_SHEET                 = '%sheetLink%';
+    public const LINK_PACKAGE               = '%packageLink%';
+    public const LINK_ORDERS                = '%ordersLink%';
+    public const LINK_AGENDA                = '%agendaLink%';
+    public const LINK_PROGRAM               = '%programLink%';
+    public const LINK_CATALOG               = '%catalogLink%';
+    public const LINK_MEETING_REQUEST       = '%meetingRequestLink%';
+    public const LINK_ACTIVACTE_ACCOUNT     = '%activateAccountLink%';
+    public const LINK_EXPORT_MEETING_SHEET  = '%exportMeetingSheetLink%';
+    public const LINK_VALIDATE_MOBILE_PHONE = '%validateMobilePhoneLink%';
 
     /**
      * @return string[]
      */
-    public static function getAllPlaceholders()
+    public static function getAllPlaceholders(): array
     {
         return array_merge(self::getTagPlaceholders(), self::getLinkPlaceholders());
     }
@@ -42,7 +43,7 @@ class Compose
     /**
      * @return string[]
      */
-    private static function getTagPlaceholders()
+    private static function getTagPlaceholders(): array
     {
         return [
             self::TAG_EVENT_NAME,
@@ -50,13 +51,14 @@ class Compose
             self::TAG_PARTICIPATION_TYPE,
             self::TAG_SHEET_PLANNING,
             self::TAG_CTA_AGENDA_CONFIRMATION,
+            self::TAG_CTA_EBADGE,
         ];
     }
 
     /**
      * @return string[]
      */
-    private static function getLinkPlaceholders()
+    private static function getLinkPlaceholders(): array
     {
         return [
             self::LINK_ACTIVACTE_ACCOUNT,
