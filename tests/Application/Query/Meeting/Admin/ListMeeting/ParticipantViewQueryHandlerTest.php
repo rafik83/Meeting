@@ -14,7 +14,11 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\ParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\Admin\ListMeeting\ParticipantView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ParticipantViewQueryHandlerTest extends TestCase
@@ -22,24 +26,34 @@ class ParticipantViewQueryHandlerTest extends TestCase
     public function testHandle(): void
     {
         $participant = $this->prophesize(Participant::class);
+        $user = $this->prophesize(User::class);
+        $slot = $this->prophesize(MeetingSlot::class);
+        $event = $this->prophesize(Event::class);
+
         $participant->getId()->shouldBeCalled()->willReturn(12);
+        $participant->getUser()->shouldBeCalled()->willReturn($user->reveal());
         $locale = 'fr';
 
+        $scanRepository = $this->prophesize(ScanRepositoryInterface::class);
+        $scanRepository->isUserCheckinByEventAndSlot($user->reveal(), $event->reveal(), $slot->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true);
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $participantInfoGuesser->guessParticipantCompleteName($participant->reveal(), $locale)
             ->shouldBeCalled()
             ->willReturn('Jean Paul')
         ;
 
-        $query = new ParticipantViewQuery($participant->reveal(), $locale);
+        $query = new ParticipantViewQuery($participant->reveal(), $event->reveal(), $slot->reveal(), $locale);
 
         $handler = new ParticipantViewQueryHandler(
-            $participantInfoGuesser->reveal()
+            $participantInfoGuesser->reveal(),
+            $scanRepository->reveal()
         );
 
         $result = $handler->handle($query);
 
-        $expected = new ParticipantView(12, 'Jean Paul');
+        $expected = new ParticipantView(12, 'Jean Paul', true);
 
         $this->assertEquals($expected, $result);
     }

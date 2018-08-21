@@ -18,11 +18,16 @@ class ParticipantView
     /** @var string|null */
     public $completeName;
 
+    /** @var bool */
+    public $checkin;
+
     public function __construct(
         int $id,
-        ?string $completeName = null
+        ?string $completeName = null,
+        bool $checkin = false
     ) {
         $this->id = $id;
         $this->completeName = $completeName;
+        $this->checkin = $checkin;
     }
 }
