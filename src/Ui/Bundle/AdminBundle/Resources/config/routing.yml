@@ -168,6 +168,13 @@ admin_event_billing_configuration:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event:billingConfiguration }
 
+admin_event_design_update:
+    path: /event/{event}/design/update
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Design\UpdateDesignAction }
+
 admin_event_practical_info_update:
     path: /event/{event}/practical-info
     requirements:
@@ -304,6 +311,17 @@ admin_type_payment_conditions:
         type: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\PaymentConditionsAction }
+
+#
+# Badge
+#
+admin_type_badge_configuration:
+    path: /event/{event}/type/{type}/badge/configuration
+    requirements:
+        event: \d+
+        type: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\ConfigureAction }
 
 #
 # Category
@@ -741,10 +759,10 @@ admin_sheet_batch:
         event: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:batch }
-admin_demo_qr_code_reader:
-    path: /demo/qr_code_reader
+admin_event_qr_code_reader:
+    path: /event/{event}/access
     methods: [GET]
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\DemoQrCodeReaderAction }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QrCodeReaderAction }
 admin_sheet_export_sheet:
     path: /event/{event}/sheet/export/sheet
     requirements:
@@ -1414,6 +1432,13 @@ admin_users_list:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\ListAction }
+
+admin_user_event_scan:
+    path: /event/{event}/access/scan
+    requirements:
+        event: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction }
 
 admin_users_details:
     path: /event/{event}/users/{user}

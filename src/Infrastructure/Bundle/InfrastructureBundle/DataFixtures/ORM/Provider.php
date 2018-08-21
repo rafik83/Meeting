@@ -18,17 +18,18 @@ class Provider
     private $domain;
 
     /**
-     * @param $domain
+     * @param string $domain
      */
-    public function __construct($domain)
-    {
+    public function __construct(
+        string $domain
+    ) {
         $this->domain = $domain;
     }
 
     /**
      * @return string
      */
-    public function domain()
+    public function domain(): string
     {
         return $this->domain;
     }

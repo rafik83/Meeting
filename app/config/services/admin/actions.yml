@@ -48,6 +48,19 @@ services:
             - '@templating'
 
     #
+    # Type Badge
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\ConfigureAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@templating'
+            - '@adapter.router'
+
+    #
     # Event
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\PaymentConditionsAction:
@@ -77,6 +90,15 @@ services:
             - '@templating'
             - '@session.flash_bag'
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Design\UpdateDesignAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
 
     #
     # Registration Template
@@ -219,6 +241,11 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.session'
             - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # Happening
@@ -378,9 +405,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
 
-    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\DemoQRCodeReaderAction:
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QRCodeReaderAction:
         arguments:
             - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # OMZ

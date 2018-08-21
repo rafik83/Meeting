@@ -289,7 +289,7 @@ order.list.pay_remaining: 'Full payment'
 order.list.pro_forma.link: 'View Proforma'
 order.list.remainingToPay: 'To be paid'
 order.list.title: 'My orders'
-order.transaction.howtopay: 'How to pay?'
+order.transaction.howtopay: 'How to make a bank transfer payment ?'
 order.transaction.list.column.date: Date
 order.transaction.list.column.mode: Mode
 order.transaction.list.column.state: State
@@ -308,7 +308,7 @@ package.funnel.error: 'An error has occured. Please check the form below.'
 package.funnel.payment: Payment
 package.funnel.summary: 'Summary & billing details'
 package.options.included: Included
-package.participant_planning.validate: Validate
+package.participant_planning.validate: Proceed
 package.participant.add: 'Add participant'
 package.participant.delete: 'delete a participant'
 package.participants.add: 'Add participants'
@@ -417,8 +417,8 @@ sheet.submit.validation: 'Submit for validation'
 sheet.submit.validation.moreInfoOnPending: 'Submit your presentation sheet to validation'
 sheet.submit.validation.pending: 'Awaiting validation'
 sheet.title: 'Presentation sheet'
-sheet.validation.complete.message: 'Once your presentation sheet has been completed, you need to submit it before publication in the BtoB plateform of the participants. Your presentation form will be validated within 48 hours. You will still be able to modify it later on'
-sheet.validation.uncomplete.message: 'Warning, you have not completed the mandatory feedls marked with an asterisk.'
+sheet.validation.complete.message: "You have the possibility to submit your profile for validation if you need the event team to check it.\nYour presentation form will be validated within 48 hours.\nYou will still be able to modify it later on."
+sheet.validation.uncomplete.message: 'Warning, you have not completed the mandatory fields marked with an asterisk.'
 sheet.welcome.packageContent: 'Choose the formula of participation.'
 sheet.welcome.programContent: 'Choose your conferences'
 sheet.welcome.sheetContent: "Complete your presentation sheet.\n\nThen\n\nSubmit it for validation"
