@@ -369,6 +369,18 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Event\VisioCheckinSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+            - '@domain.event.day.dday_guesser'
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@security.token_storage'
+            - '@datetime'
+        tags:
+            - { name: kernel.event_subscriber }
+
     event_listener_meeting_request.smsnotifier_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\MeetingRequest\SMSNotifierSubscriber
         arguments:

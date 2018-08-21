@@ -19,5 +19,7 @@ interface ScanRepositoryInterface
 {
     public function add(Scan $scan): void;
 
+    public function isUserCheckinTodayByEvent(User $user, Event $event, \DateTimeInterface $dateTime): bool;
+
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool;
 }
