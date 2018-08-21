@@ -14,16 +14,19 @@ use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
+use Proximum\Vimeet\Application\Query\Catalog\NomenclatureTagViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
+use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchExternalType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -48,8 +51,6 @@ class SearchFacetExternalFactory
     private $categoryViewsByEvent;
 
     /**
-     * SearchFacetExternalFactory constructor.
-     *
      * @param CommandBus                           $commandBus
      * @param CatalogVisibilityRepositoryInterface $catalogVisibilityRepository
      * @param FormFactoryInterface                 $formFactory
@@ -68,46 +69,44 @@ class SearchFacetExternalFactory
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     *
-     * @throws CatalogVisibilityNotFoundException
+     * @param Event            $event
+     * @param string           $locale
+     * @param array            $filters
+     * @param SearchFacetsView $searchFacetsView
      *
      * @return FormInterface
+     * @throws CatalogVisibilityNotFoundException
      */
-    public function create(Event $event, string $locale, array $filters): FormInterface
+    public function create(Event $event, string $locale, array $filters, SearchFacetsView $searchFacetsView): FormInterface
     {
-        $initialFieldsView = $this->getInitialFieldsView($event, $locale);
+        $initialFieldsView = $this->getInitialFieldsView($event, $locale, $searchFacetsView);
 
         return $this->getForm(
             $event,
             $locale,
             $filters,
-            $initialFieldsView->typeViews,
-            $initialFieldsView->categoryViews,
-            $initialFieldsView->organizationCategoryViews,
-            $initialFieldsView->positionViews
+            $initialFieldsView->catalogFilterViewsResult
         );
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param array  $currentAggregations
-     *
-     * @throws CatalogVisibilityNotFoundException
+     * @param Event            $event
+     * @param string           $locale
+     * @param array            $filters
+     * @param array            $currentAggregations
+     * @param SearchFacetsView $searchFacetsView
      *
      * @return FormInterface
+     * @throws CatalogVisibilityNotFoundException
      */
     public function createFiltered(
         Event $event,
         string $locale,
         array $filters,
-        array $currentAggregations
+        array $currentAggregations,
+        SearchFacetsView $searchFacetsView
     ): FormInterface {
-        $initialFieldsView = $this->getInitialFieldsView($event, $locale);
+        $initialFieldsView = $this->getInitialFieldsView($event, $locale, $searchFacetsView);
 
         /** @var FilteredFieldsView $filteredFieldsView */
         $filteredFieldsView = $this->commandBus->handle(
@@ -115,10 +114,7 @@ class SearchFacetExternalFactory
                 $event,
                 $filters,
                 $currentAggregations,
-                $initialFieldsView->typeViews,
-                $initialFieldsView->categoryViews,
-                $initialFieldsView->organizationCategoryViews,
-                $initialFieldsView->positionViews,
+                $initialFieldsView->catalogFilterViewsResult,
                 $locale
             )
         );
@@ -127,10 +123,7 @@ class SearchFacetExternalFactory
             $event,
             $locale,
             $filters,
-            $filteredFieldsView->typeViews,
-            $filteredFieldsView->categoryViews,
-            $filteredFieldsView->organizationCategoryViews,
-            $filteredFieldsView->positionViews
+            $filteredFieldsView->catalogFilterViewsResult
         );
     }
 
@@ -185,14 +178,14 @@ class SearchFacetExternalFactory
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     *
-     * @throws CatalogVisibilityNotFoundException
+     * @param Event            $event
+     * @param string           $locale
+     * @param SearchFacetsView $searchFacetsView
      *
      * @return FilteredFieldsView
+     * @throws CatalogVisibilityNotFoundException
      */
-    private function getInitialFieldsView(Event $event, string $locale): FilteredFieldsView
+    private function getInitialFieldsView(Event $event, string $locale, SearchFacetsView $searchFacetsView): FilteredFieldsView
     {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
 
@@ -211,22 +204,32 @@ class SearchFacetExternalFactory
             new PositionViewQuery($event, $locale)
         );
 
+        $taggedNomenclatureTagViews = [];
+        $tagFilterViews = $searchFacetsView->getTagFilterViews();
+
+        if (!empty($tagFilterViews)) {
+            $taggedNomenclatureTagViews = $this->commandBus->handle(
+                new NomenclatureTagViewQuery($event, array_keys($tagFilterViews), $locale)
+            );
+        }
+
         return new FilteredFieldsView(
-            $typeViews,
-            $organizationCategoryViews,
-            $positionViews,
-            $categoryViews
+            new CatalogFilterViewsResult(
+                CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
+                $categoryViews,
+                $typeViews,
+                $organizationCategoryViews,
+                $positionViews,
+                $taggedNomenclatureTagViews
+            )
         );
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param array  $typeViews
-     * @param array  $categoryViews
-     * @param array  $organizationCategoryViews
-     * @param array  $positionViews
+     * @param Event                    $event
+     * @param string                   $locale
+     * @param array                    $filters
+     * @param CatalogFilterViewsResult $catalogFilterViewsResult
      *
      * @return FormInterface
      */
@@ -234,19 +237,17 @@ class SearchFacetExternalFactory
         Event $event,
         string $locale,
         array $filters = [],
-        array $typeViews,
-        array $categoryViews,
-        array $organizationCategoryViews,
-        array $positionViews
+        CatalogFilterViewsResult $catalogFilterViewsResult
     ): FormInterface {
         return $this->formFactory->createNamed('', SearchExternalType::class, $filters, [
-            'action'                    => $this->router->generate('event_catalog_external_index'),
-            'typeViews'                 => $typeViews,
-            'categoryViews'             => $categoryViews,
-            'organizationCategoryViews' => $organizationCategoryViews,
-            'positionViews'             => $positionViews,
-            'event'                     => $event,
-            'locale'                    => $locale,
+            'action' => $this->router->generate('event_catalog_external_index'),
+            'typeViews' => $catalogFilterViewsResult->typeViews,
+            'categoryViews' => $catalogFilterViewsResult->categoryViews,
+            'organizationCategoryViews' => $catalogFilterViewsResult->organizationCategoryViews,
+            'positionViews' => $catalogFilterViewsResult->positionViews,
+            'taggedNomenclatureTagViews' => $catalogFilterViewsResult->taggedNomenclatureTagViews,
+            'event' => $event,
+            'locale' => $locale,
         ]);
     }
 }

@@ -61,18 +61,18 @@ class PaginatedSheetExternalViewQueryHandlerTest extends TestCase
         $sheet1Preview = new CatalogSheetPreviewExternalView(1, 'Elao', 'Fournisseur', [], $sheet1);
 
         $sheetPreviewExternalViewQueryHandler
-            ->handle(new SheetPreviewExternalViewQuery($sheet1, $locale, $event))
+            ->handle(new SheetPreviewExternalViewQuery($sheet1, $locale, $event, true))
             ->shouldBeCalled()
             ->willReturn($sheet1Preview);
 
         $sheet2Preview = new CatalogSheetPreviewExternalView(2, 'Vimeet', 'Investisseur', [], $sheet2);
 
         $sheetPreviewExternalViewQueryHandler
-            ->handle(new SheetPreviewExternalViewQuery($sheet2, $locale, $event))
+            ->handle(new SheetPreviewExternalViewQuery($sheet2, $locale, $event, true))
             ->shouldBeCalled()
             ->willReturn($sheet2Preview);
 
-        $query = new PaginatedSheetExternalViewQuery($event, ExternalCatalog::DEFAULT_FILTERS, $page, $limit, $locale);
+        $query = new PaginatedSheetExternalViewQuery($event, ExternalCatalog::DEFAULT_FILTERS, $page, $limit, $locale, true);
         $handler = new PaginatedSheetExternalViewQueryHandler(
             $sheetSearchAdapter->reveal(),
             $sheetPreviewExternalViewQueryHandler->reveal()

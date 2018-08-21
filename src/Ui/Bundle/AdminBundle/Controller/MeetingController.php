@@ -30,31 +30,6 @@ class MeetingController extends Controller
     /**
      * @param Request $request
      * @param Event   $event
-     *
-     * @return Response
-     */
-    public function listAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $meetings = $this
-            ->get('vimeet_infrastructure.repository.meeting_repository')
-            ->getByEvent(
-                $event,
-                $request->query->getInt('page', 1),
-                20,
-                $event->getAvailableLocale($request->getLocale())
-            );
-
-        return $this->render('AdminBundle:Meeting:list.html.twig', [
-            'event'    => $event,
-            'meetings' => $meetings,
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
      * @param Meeting $meeting
      *
      * @return Response

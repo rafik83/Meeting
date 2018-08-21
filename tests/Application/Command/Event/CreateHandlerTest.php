@@ -274,6 +274,7 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
+        $expectedEvent->getConfiguration()->setVisio(false);
 
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));

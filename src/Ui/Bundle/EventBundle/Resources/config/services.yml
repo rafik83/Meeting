@@ -726,7 +726,7 @@ services:
             - '@adapter.router'
             - '%feature_availability_confirmation_enabled%'
 
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler:
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@catalog.visible_participation_categories'

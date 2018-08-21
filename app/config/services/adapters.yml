@@ -24,3 +24,9 @@ services:
             - '%jenkins_command%'
             - '%jenkins_user%'
             - '%jenkins_password%'
+
+    Proximum\Vimeet\Infrastructure\Adapter\ExpressionLanguageAdapter: ~
+
+    Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator:
+        arguments:
+            - '@fos_elastica.index.app.sheet'

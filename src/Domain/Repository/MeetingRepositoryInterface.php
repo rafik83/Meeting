@@ -247,6 +247,13 @@ interface MeetingRepositoryInterface
     public function hasScheduledMeeting(Sheet $sheet);
 
     /**
+     * @param MeetingSlot $slot
+     *
+     * @return Meeting[]
+     */
+    public function findByMeetingSlot(MeetingSlot $slot): array;
+
+    /**
      * @param Event $event
      *
      * @return array

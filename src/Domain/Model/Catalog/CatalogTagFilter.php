@@ -67,6 +67,24 @@ class CatalogTagFilter
         return $this->translations;
     }
 
+    public function getLabel(string $locale): ?string
+    {
+        if (!isset($this->translations[$locale])) {
+            return null;
+        }
+
+        return $this->translations[$locale]->getLabel();
+    }
+
+    public function getPlaceholder(string $locale): ?string
+    {
+        if (!isset($this->translations[$locale])) {
+            return null;
+        }
+
+        return $this->translations[$locale]->getPlaceholder();
+    }
+
     public function addTranslation(CatalogTagFilterTranslation $catalogTagFilterTranslation): void
     {
         $this->translations[] = $catalogTagFilterTranslation;

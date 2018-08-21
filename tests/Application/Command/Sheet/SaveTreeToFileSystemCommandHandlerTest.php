@@ -41,9 +41,10 @@ class SaveTreeToFileSystemCommandHandlerTest extends TestCase
         $sheet1->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $sheet2 = $this->prophesize(Sheet::class);
 
-        $node1 = new UploadedObjectNodeView('Mb7d3M765e', 'Label 1');
+        $node1 = new UploadedObjectNodeView('Mb7d3M765e');
         $node1->addUploadedObjectView(new UploadedObjectView('/path/to/file1', '1-title-1.jpg', true, $sheet1->reveal()));
-        $node2 = new UploadedObjectNodeView('Med79Mea70', 'Label 2');
+        $node1->addUploadedObjectView(new UploadedObjectView('/path/to/file4', '4-title-4-1-mathieu-marchois.jpg', true, $sheet1->reveal(), $user->reveal()));
+        $node2 = new UploadedObjectNodeView('Med79Mea70');
         $node2->addUploadedObjectView(new UploadedObjectView('/path/to/file2', '2-title-2-1-mathieu-marchois.jpg', false, $sheet2->reveal(), $user->reveal()));
         $node2->addUploadedObjectView(new UploadedObjectView('/path/to/file3', '2-title-2-2-richard-hanna.jpg', false, $sheet2->reveal(), $user2->reveal()));
 
@@ -52,9 +53,14 @@ class SaveTreeToFileSystemCommandHandlerTest extends TestCase
         $tree->addNode($node2, 'Med79Mea70');
 
         $fileSystemAdapter->exists('/path/to/encrypted/files/path/to/file1')->shouldBeCalled()->willReturn(true);
+        $fileSystemAdapter->exists('/path/to/encrypted/files/path/to/file4')->shouldBeCalled()->willReturn(true);
 
         $userEventDecryptFile
             ->decryptFile($event->reveal(), $user2->reveal(), '/path/to/encrypted/files/path/to/file1', Argument::any())
+            ->shouldBeCalled();
+
+        $userEventDecryptFile
+            ->decryptFile($event->reveal(), $user->reveal(), '/path/to/encrypted/files/path/to/file4', Argument::any())
             ->shouldBeCalled();
 
         $fileSystemAdapter->mkdir(Argument::any())

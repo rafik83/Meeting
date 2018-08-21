@@ -1,19 +1,19 @@
 Proximum\Vimeet\Domain\Model\User:
     user_1:
         __construct: false
-        email: "test@test.com"
+        email: 'test\@test.com'
         salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
         password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
         locale: "fr"
     user_2:
         __construct: false
-        email: "test-2@test.com"
+        email: 'test-2\@test.com'
         salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
         password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
         locale: "fr"
     user_3:
         __construct: false
-        email: "test-3@test.com"
+        email: 'test-3\@test.com'
         salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
         password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
         locale: "fr"

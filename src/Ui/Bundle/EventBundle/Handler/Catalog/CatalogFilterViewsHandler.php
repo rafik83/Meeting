@@ -12,15 +12,17 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\NomenclatureTagViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
+use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
-class CategoryTypeOrganizationAndPositionViewsHandler
+class CatalogFilterViewsHandler
 {
     /** @var QueryBusInterface */
     private $queryBus;
@@ -53,17 +55,18 @@ class CategoryTypeOrganizationAndPositionViewsHandler
     }
 
     /**
-     * @param CategoryTypeOrganizationAndPositionViews $categoryTypeOrganizationAndPositionViews
+     * @param CatalogFilterViews $catalogFilterViews
      *
-     * @return CategoryTypeOrganizationAndPositionViewsResult
+     * @return CatalogFilterViewsResult
      */
     public function handle(
-        CategoryTypeOrganizationAndPositionViews $categoryTypeOrganizationAndPositionViews
-    ): CategoryTypeOrganizationAndPositionViewsResult {
-        $event = $categoryTypeOrganizationAndPositionViews->event;
-        $sheet = $categoryTypeOrganizationAndPositionViews->sheet;
-        $locale = $categoryTypeOrganizationAndPositionViews->locale;
+        CatalogFilterViews $catalogFilterViews
+    ): CatalogFilterViewsResult {
+        $event = $catalogFilterViews->event;
+        $sheet = $catalogFilterViews->sheet;
+        $locale = $catalogFilterViews->locale;
 
+        /** @var SearchFacetsView $searchFacetsView */
         $searchFacetsView = $this->queryBus->handle(
             new SearchFacetViewQuery($event, $locale)
         );
@@ -72,6 +75,7 @@ class CategoryTypeOrganizationAndPositionViewsHandler
         $typeViews = [];
         $organizationCategoryViews = [];
         $positionViews = [];
+        $taggedNomenclatureTagViews = [];
 
         if ($searchFacetsView->hasCategory()) {
             $visibleCategories = $this
@@ -79,12 +83,13 @@ class CategoryTypeOrganizationAndPositionViewsHandler
                 ->getAllowedCategoriesList($sheet);
 
             if (empty($visibleCategories)) {
-                return new CategoryTypeOrganizationAndPositionViewsResult(
-                    CategoryTypeOrganizationAndPositionViewsResult::EMPTY_CATEGORY_OR_TYPE,
+                return new CatalogFilterViewsResult(
+                    CatalogFilterViewsResult::EMPTY_CATEGORY_OR_TYPE,
                     $categoryViews,
                     $typeViews,
                     $organizationCategoryViews,
                     $positionViews,
+                    $taggedNomenclatureTagViews,
                     $this->engine->renderResponse(
                         'EventBundle:Catalog:no-visible-category.html.twig',
                         ['event' => $event, 'sheet' => $sheet]
@@ -97,12 +102,13 @@ class CategoryTypeOrganizationAndPositionViewsHandler
             $visibleTypes = $this->visibleParticipationTypes->getAllowedTypesList($sheet);
 
             if (empty($visibleTypes)) {
-                return new CategoryTypeOrganizationAndPositionViewsResult(
-                    CategoryTypeOrganizationAndPositionViewsResult::EMPTY_CATEGORY_OR_TYPE,
+                return new CatalogFilterViewsResult(
+                    CatalogFilterViewsResult::EMPTY_CATEGORY_OR_TYPE,
                     $categoryViews,
                     $typeViews,
                     $organizationCategoryViews,
                     $positionViews,
+                    $taggedNomenclatureTagViews,
                     $this->engine->renderResponse(
                         'EventBundle:Catalog:no-visible-type.html.twig',
                         ['event' => $event, 'sheet' => $sheet]
@@ -113,15 +119,29 @@ class CategoryTypeOrganizationAndPositionViewsHandler
             $typeViews = $this->queryBus->handle(new TypeViewQuery($event, $visibleTypes, $locale));
         }
 
-        $organizationCategoryViews = $this->queryBus->handle(new OrganizationCategoryViewQuery($event, $locale));
-        $positionViews = $this->queryBus->handle(new PositionViewQuery($event, $locale));
+        if (null !== $searchFacetsView->getOrganizationCategory()) {
+            $organizationCategoryViews = $this->queryBus->handle(new OrganizationCategoryViewQuery($event, $locale));
+        }
 
-        return new CategoryTypeOrganizationAndPositionViewsResult(
-            CategoryTypeOrganizationAndPositionViewsResult::RESULT_CATEGORY_OR_TYPE,
+        if (null !== $searchFacetsView->getPosition()) {
+            $positionViews = $this->queryBus->handle(new PositionViewQuery($event, $locale));
+        }
+
+        $tagFilterViews = $searchFacetsView->getTagFilterViews();
+
+        if (!empty($tagFilterViews)) {
+            $taggedNomenclatureTagViews = $this->queryBus->handle(
+                new NomenclatureTagViewQuery($event, array_keys($tagFilterViews), $locale)
+            );
+        }
+
+        return new CatalogFilterViewsResult(
+            CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
             $categoryViews,
             $typeViews,
             $organizationCategoryViews,
-            $positionViews
+            $positionViews,
+            $taggedNomenclatureTagViews
         );
     }
 }

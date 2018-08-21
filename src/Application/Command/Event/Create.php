@@ -18,12 +18,11 @@ class Create extends AbstractEvent
     /** @var Admin */
     public $admin;
 
+    /** @var bool */
+    public $visio;
 
     /** @var null|Event */
     public $duplicatedFrom;
-
-    /** @var bool */
-    public $visio;
 
     /**
      * @param Admin      $admin

@@ -22,6 +22,7 @@ class AuthenticationTokenImport
 
     public function __construct(?AuthenticationTokenImportView $authenticationTokenImportView = null)
     {
+        $this->errors = [];
         $this->authenticationTokenImportView = $authenticationTokenImportView;
     }
 

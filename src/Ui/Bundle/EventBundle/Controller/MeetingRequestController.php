@@ -71,8 +71,12 @@ class MeetingRequestController extends Controller
      *
      * @return Response
      */
-    public function listRequestAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
-    {
+    public function listRequestAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        UserInterface $user
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $event = $eventDomain->getEvent();
@@ -131,8 +135,7 @@ class MeetingRequestController extends Controller
             }
         }
 
-        $defaults   = SearchType::getDefaultFilters($typeViews, $categoryViews);
-
+        $defaults = SearchType::getDefaultFilters($typeViews, $categoryViews);
         $searchForm = $this->createSearchForm(
             $event,
             $sheet,
@@ -174,7 +177,8 @@ class MeetingRequestController extends Controller
             $user,
             $locale,
             $filters,
-            $this->getSpecificSlot($filters, $specificSlot, $availableSlots)
+            $this->getSpecificSlot($filters, $specificSlot, $availableSlots),
+            \count($categoryViews) > 1
         );
         $statusQuery = new StateListViewQuery(
             $sheet,
@@ -213,7 +217,7 @@ class MeetingRequestController extends Controller
             'isMeeting'                => true,
             'isEventOpen'              => $isEventOpen,
             'filterRequestProposition' => $this->isFilterRequestPropositionActive($searchForm->get('state')->getData()),
-            'resultsCount'             => count($meetingRequestListView->getMeetingRequestsView()),
+            'resultsCount'             => \count($meetingRequestListView->getMeetingRequestsView()),
             'tipTranslationViews'      => $tipTranslationViews,
             'participant'              => $sheet->getUserParticipant($user),
         ]);

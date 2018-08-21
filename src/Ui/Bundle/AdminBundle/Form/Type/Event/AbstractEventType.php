@@ -165,15 +165,16 @@ abstract class AbstractEventType extends AbstractType
             ->add('welcomeEnabled', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('visio', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('disabledEmailChanging', CheckboxType::class, [
                 'required' => false,
             ])
             ->add('disabledPasswordChanging', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('visio', CheckboxType::class, [
-                'required' => false,
-            ]);
+        ;
     }
 
     /**

@@ -251,6 +251,7 @@ admin.extraParameter.type.leni_get_endpoint: 'LENI Get endpoint'
 admin.extraParameter.type.leni_mode: 'LENI Mode'
 admin.extraParameter.type.leni_participation_data_mapping: 'LENI mapping des champs'
 admin.extraParameter.type.leni_participation_types_mapping: 'LENI mapping des types de participation'
+admin.extraParameter.type.leni_predefined_filters: 'LENI filtres de l''API (GET)'
 admin.extraParameter.type.leni_save_endpoint: 'LENI Save endpoint'
 admin.extraParameter.type.leni_sending_request: 'LENI Paramètre SendingRequests'
 admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
@@ -415,10 +416,15 @@ admin.meeting.link: Rendez-vous
 admin.event.access_control: Contrôle d'accès
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
+admin.meeting.list.column.head.fromParticipants: 'Participants du demandeur'
 admin.meeting.list.column.head.isCreatedByParticipants: 'Créé par les participants'
 admin.meeting.list.column.head.slot: Créneau
+admin.meeting.list.column.head.spot: Lieu
 admin.meeting.list.column.head.to: À
+admin.meeting.list.column.head.toParticipants: 'Participants du demandé'
 admin.meeting.list.details: Détails
+admin.meeting.list.participant.absent: 'Absent'
+admin.meeting.list.participant.present: 'Présent'
 admin.meeting.list.noResult: 'Aucun RDV positionné'
 admin.meeting.list.title: 'RDV positionnés'
 admin.menu.link: Menu
@@ -460,6 +466,7 @@ admin.messaging.message.compose.links.program: Programme
 admin.messaging.message.compose.links.sheet: 'Fiche de présentation'
 admin.messaging.message.compose.links.validateMobilePhone: 'Confirmer votre téléphone'
 admin.messaging.message.compose.tags.cta.agendaConfirmation: 'Lien CTA confirmation agenda'
+admin.messaging.message.compose.tags.cta.ebadge: 'Lien CTA téléchargement E-Badge'
 admin.messaging.message.compose.tags.eventName: 'Nom de l''événement'
 admin.messaging.message.compose.tags.label: Tags
 admin.messaging.message.compose.tags.participant: 'Prénom et nom du participant'
@@ -882,13 +889,13 @@ admin.sheet.trace.disable: 'Désactivée le %at%'
 admin.sheet.trace.disable_catalog: 'Enlevée du catalogue le %at%'
 admin.sheet.trace.enable: 'Activée le %at%'
 admin.sheet.trace.enable_catalog: 'Ajoutée au catalogue le %at%'
+admin.sheet.trace.orders_cancelled: 'Commandes annulées le %at%'
 admin.sheet.trace.pending: 'En attente le %at%'
 admin.sheet.trace.set_commercial_status: 'Le statut commercial a été changé'
 admin.sheet.trace.sheet_created_by_group_manager: 'Fiche dupliquée par le gestionnaire d''entité'
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
-admin.sheet.trace.orders_cancelled: 'Commandes annulées le %at%'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
 admin.sheet.validateSheets: 'Valider les fiches'

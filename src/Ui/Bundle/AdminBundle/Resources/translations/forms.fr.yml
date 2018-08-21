@@ -163,11 +163,11 @@ form.create_admin.children.lastname.label: Nom
 form.create_admin.children.password.label: 'Mot de passe'
 form.create_admin.children.role.label: Type
 form.create_admin.children.submit.label: Envoyer
+form.create_admin.role.host: Hôte
 form.create_admin.role.operator: Collaborateur
 form.create_admin.role.organizer: Organisateur
 form.create_admin.role.partner: Partenaire
 form.create_admin.role.super_admin: Administrateur
-form.create_admin.role.host: Hôte
 form.create_operator.children.email.label: Email
 form.create_operator.children.events.label: 'Événements disponibles pour ce collaborateur'
 form.create_operator.children.firstname.label: Prénom
@@ -299,6 +299,9 @@ form.event_update.children.visio.label: 'Evenement dématérialisé'
 form.event_update.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event_update_design.children.backgroundColor.label: 'Couleur de fond'
 form.event_update_design.children.backgroundImage.label: 'Image de fond'
+form.event_update_design.children.headerButtonLeftColor.label: 'Couleur de gauche des boutons du Header'
+form.event_update_design.children.headerButtonRightColor.label: 'Couleur de droite des boutons du Header'
+form.event_update_design.children.headerButtonTextColor.label: 'Couleur du texte des boutons du Header'
 form.event_update_design.children.headerLeftColor.label: 'Couleur de gauche du Header'
 form.event_update_design.children.headerRightColor.label: 'Couleur de droite du Header'
 form.event_update_design.children.removeBackgroundImage.label: 'Supprimer l''image de fond actuelle'
@@ -324,6 +327,7 @@ form.extra_parameter_create.children.type.choices.leni_get_endpoint: 'LENI Get e
 form.extra_parameter_create.children.type.choices.leni_mode: 'LENI Mode (save, get ou both)'
 form.extra_parameter_create.children.type.choices.leni_participation_data_mapping: 'LENI mapping des champs'
 form.extra_parameter_create.children.type.choices.leni_participation_types_mapping: 'LENI mapping des types de participation'
+form.extra_parameter_create.children.type.choices.leni_predefined_filters: 'LENI filtres de l''API (GET)'
 form.extra_parameter_create.children.type.choices.leni_save_endpoint: 'LENI Save endpoint'
 form.extra_parameter_create.children.type.choices.leni_sending_request: 'LENI Paramètre SendingRequests'
 form.extra_parameter_create.children.type.choices.leni_user: 'Code Utilisateur LENI'
@@ -338,10 +342,10 @@ form.field.private: 'Champ privé'
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'
 form.filter_admin.role.all: 'Tous les types'
+form.filter_admin.role.host: Hôte
 form.filter_admin.role.operator: Collaborateur
 form.filter_admin.role.organizer: Organisateur
 form.filter_admin.role.partner: Partenaire
-form.filter_admin.role.host: Hôte
 form.filter_admin.role.super_admin: Admin
 form.filter_operator.children.submit.label: Filtrer
 form.filter_operator.event.all: 'Tous les événements'

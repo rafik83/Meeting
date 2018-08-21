@@ -882,3 +882,11 @@ event_sheet_user_badge:
         user: \d+
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ShowAction }
+
+event_sheet_user_badge_download:
+    path: /badge/download/{token}.{format}
+    requirements:
+        token: \w+
+        format: (html|pdf)
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\DownloadAction, format: 'pdf' }

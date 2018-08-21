@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\User\Account (local):
+Proximum\Vimeet\Domain\Model\User\Account:
     account_asddays_user_sheet_which_have_a_spot:
         __construct: false
         firstName: "Victor"
@@ -6,11 +6,11 @@ Proximum\Vimeet\Domain\Model\User\Account (local):
 
 Proximum\Vimeet\Domain\Model\User:
     user_asddays_sheet_which_have_a_spot:
-        __construct: false
-        email: "user_asddays_sheet_asddays_which_have_a_spot@proximum.com"
-        salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
-        password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
-        locale: "fr"
+        __construct:
+            - 'user_asddays_sheet_asddays_which_have_a_spot\@proximum.com'
+            - "600f1943340f930f8dd8a22c6f8876ae71415ed5"
+            - "+Ht6FUfCoS8Q063evTVxDS0yerY=" #password
+            - "fr"
         account: "@account_asddays_user_sheet_which_have_a_spot"
 
 Proximum\Vimeet\Domain\Model\Sheet:

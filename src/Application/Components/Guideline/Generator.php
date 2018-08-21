@@ -74,6 +74,9 @@ class Generator
         $gradientHeaderLeftColor  = $event->getConfiguration()->getHeaderLeftColor();
         $gradientHeaderRightColor = $event->getConfiguration()->getHeaderRightColor();
         $colorHighlighted   = $event->getConfiguration()->getTextColor();
+        $gradientHeaderButtonLeftColor = $event->getConfiguration()->getHeaderButtonLeftColor();
+        $gradientHeaderButtonRightColor = $event->getConfiguration()->getHeaderButtonRightColor();
+        $gradientHeaderButtonTextColor = $event->getConfiguration()->getHeaderButtonTextColor();
 
         $repoName = $event->getId();
 
@@ -88,6 +91,9 @@ class Generator
             'gradientRightColor' => $gradientRightColor,
             'gradientHeaderLeftColor' => $gradientHeaderLeftColor,
             'gradientHeaderRightColor' => $gradientHeaderRightColor,
+            'gradientHeaderButtonLeftColor' => $gradientHeaderButtonLeftColor,
+            'gradientHeaderButtonRightColor' => $gradientHeaderButtonRightColor,
+            'gradientHeaderButtonTextColor' => $gradientHeaderButtonTextColor,
             'colorHighLighted' => $colorHighlighted,
             'bundleGuidelinePath' => $this->bundleGuidelinePath,
             'fontPath' => $this->fontPath,

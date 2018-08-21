@@ -541,7 +541,15 @@ admin_meeting_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Meeting:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\ListAction }
+
+admin_meeting_update_status:
+    path: /event/{event}/meeting/{meeting}/update/status
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\UpdateStatusAction }
 
 admin_meeting_details:
     path: /event/{event}/meeting/{meeting}/details
@@ -1430,7 +1438,7 @@ admin_users_list:
     path: /event/{event}/users/list
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\ListAction }
 
 admin_user_event_scan:
