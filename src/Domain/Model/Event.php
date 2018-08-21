@@ -94,9 +94,6 @@ class Event implements EventInterface, TraceableInterface
     private $currency;
 
     /** @var null|string */
-    private $logoExtension;
-
-    /** @var null|string */
     private $emailTeam;
 
     /** @var ArrayCollection */
@@ -149,7 +146,7 @@ class Event implements EventInterface, TraceableInterface
         bool $disabledPasswordChanging = false
     ) {
         $this->translations   = new ArrayCollection();
-        $this->configuration  = new Configuration('', '', '');
+        $this->configuration  = new Configuration();
         $this->paymentAddress = new Address('', '', '', '');
         $this->days           = new ArrayCollection();
         $this->title          = $title;
@@ -369,27 +366,29 @@ class Event implements EventInterface, TraceableInterface
      *
      * @return bool
      */
-    public function hasLocale($locale)
+    public function hasLocale($locale): bool
     {
-        return in_array($locale, $this->locales);
+        return \in_array($locale, $this->locales, true);
     }
 
     /**
+     * @deprecated
+     *
      * @return string
      */
     public function getLogo()
     {
-        return $this->logo;
+        return '';
     }
 
     /**
+     * @deprecated
+     *
      * @param string $logo
      * @param string $logoExtension
      */
     public function setLogo($logo, $logoExtension)
     {
-        $this->logo          = $logo;
-        $this->logoExtension = $logoExtension;
     }
 
     /**
@@ -613,11 +612,23 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
+     * @param string $locale
+     *
      * @return bool
      */
-    public function isSvgLogo()
+    public function hasSvgLogo(string $locale): bool
     {
-        return 'svg' === $this->logoExtension;
+        return 'svg' === $this->getLocalizedLogoExtension($locale);
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public function hasSvgMobileLogo(string $locale): bool
+    {
+        return 'svg' === $this->getLocalizedMobileLogoExtension($locale);
     }
 
     /**
@@ -815,5 +826,68 @@ class Event implements EventInterface, TraceableInterface
     public function isFinished(\DateTimeInterface $datetime): bool
     {
         return $this->getLastDay()->getEndTime() < $datetime;
+    }
+
+    public function getLocalizedLogo(string $locale): ?string
+    {
+        return $this->translations->containsKey($locale)
+            ? $this->translations->get($locale)->getLogo()
+            : null
+        ;
+    }
+
+    public function getLocalizedMobileLogo(string $locale): ?string
+    {
+        return $this->translations->containsKey($locale)
+            ? $this->translations->get($locale)->getMobileLogo()
+            : null
+        ;
+    }
+
+    public function getLocalizedLogoExtension(string $locale): ?string
+    {
+        return $this->translations->containsKey($locale)
+            ? $this->translations->get($locale)->getLogoExtension()
+            : null
+        ;
+    }
+
+    public function getLocalizedMobileLogoExtension(string $locale): ?string
+    {
+        return $this->translations->containsKey($locale)
+            ? $this->translations->get($locale)->getMobileLogoExtension()
+            : null
+        ;
+    }
+
+    public function updateLocalizedLogos(
+        string $locale,
+        ?string $logo = null,
+        ?string $logoExtension = null,
+        ?string $mobileLogo = null,
+        ?string $mobileLogoExtension = null
+    ): void {
+        if ($this->translations->containsKey($locale)) {
+            $this->translations
+                ->get($locale)
+                ->updateLogoAndMobileLogo(
+                    $logo,
+                    $logoExtension,
+                    $mobileLogo,
+                    $mobileLogoExtension
+                )
+            ;
+
+            return;
+        }
+
+        $eventTranslation = new EventTranslation($this, $locale, '');
+        $eventTranslation->updateLogoAndMobileLogo(
+            $logo,
+            $logoExtension,
+            $mobileLogo,
+            $mobileLogoExtension
+        );
+        $this->translations->set($locale, $eventTranslation);
     }
 }

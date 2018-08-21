@@ -621,6 +621,13 @@ event_package_summary:
         sheet: \d+
     methods: [GET, POST]
 
+event_visio_checkin:
+    path: /sheet/{sheet}/checkin
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction }
+    requirements:
+        sheet: \d+
+    methods: [GET, POST]
+
 event_package_summary_fill_billing_info:
     path: /sheet/{sheet}/package/summary/fill-billing-info
     defaults: { _controller: EventBundle:Package:fillBillingInfo }
@@ -864,3 +871,22 @@ event_video_conference_access_session_test:
         sessionId: .*
     methods: [GET]
     defaults: { _controller: EventBundle:VideoConference:accessSessionVideoTest }
+
+#
+# Badge
+#
+event_sheet_user_badge:
+    path: /sheet/{sheet}/user/{user}/badge
+    requirements:
+        sheet: \d+
+        user: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ShowAction }
+
+event_sheet_user_badge_download:
+    path: /badge/download/{token}.{format}
+    requirements:
+        token: \w+
+        format: (html|pdf)
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\DownloadAction, format: 'pdf' }

@@ -21,8 +21,13 @@ var $ = require('jquery'),
     AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening'),
     DuplicationSheetsModal = require('./components/_DuplicationSheetsModal'),
     SelectPreviousNextMover = require('./components/_SelectPreviousNextMover'),
+<<<<<<< HEAD
     RadioGroupAjax = require('./components/_RadioGroupAjax'),
     ButtonGroupDefaultStateChanger = require('./components/_ButtonGroupDefaultStateChanger')
+=======
+    FilterBuilder = require('./components/_FilterBuilder'),
+    RadioGroupAjax = require('./components/_RadioGroupAjax')
+>>>>>>> origin/master
 ;
 
 require('bootstrap');
@@ -179,6 +184,14 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('.btn-group[data-btn-group-default-state]'), function (element) {
         new ButtonGroupDefaultStateChanger(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.filter-form'), function () {
+        new FilterBuilder(
+            target.querySelector('#rules'),
+            target.querySelector('#builder'),
+            target.querySelector('#submit-rules')
+        );
     });
 }
 

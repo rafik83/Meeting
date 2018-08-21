@@ -23,6 +23,7 @@ mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
 mail.confirm.agenda.link: 'Confirmer mon agenda'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
 mail.confirmResetPassword.subject: 'Votre mot de passe a bien été changé'
+mail.download.ebadge.link: 'Télécharger mon e-badge'
 mail.event.export.no_uploaded_objects.subject: 'Aucun fichier n''a pu être exporté selon le filtre réalisé sur l''événement "%event%"'
 mail.event.export.uploaded_objects_password.subject: 'Mot de passe du fichier zip des fiches sélectionnées de l''événement "%event%"'
 mail.event.export.uploaded_objects_zip.link.click: 'Télécharger le fichier zip'

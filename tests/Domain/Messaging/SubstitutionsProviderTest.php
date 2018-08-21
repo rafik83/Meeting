@@ -11,12 +11,14 @@
 namespace Proximum\Vimeet\Tests\Domain\Messaging;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Planning\SheetPlanningView;
 use Proximum\Vimeet\Domain\Messaging\InvalidMessagePlaceholderException;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\AgendaConfirmationCTASubstitution;
+use Proximum\Vimeet\Domain\Messaging\Substitutions\DownloadEBadgeCTASubstitution;
 use Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
@@ -46,6 +48,9 @@ class SubstitutionsProviderTest extends TestCase
     /** @var AgendaConfirmationCTASubstitution */
     private $agendaConfirmationCTASubstitution;
 
+    /** @var ObjectProphecy */
+    private $downloadEBadgeCTASubstitution;
+
     public function setUp()
     {
         $this->eventUrlGenerator                 = $this->prophesize(Event\EventUrlGeneratorInterface::class);
@@ -53,13 +58,15 @@ class SubstitutionsProviderTest extends TestCase
         $this->activateAccountTokenGenerator     = $this->prophesize(ActivateAccountTokenGenerator::class);
         $this->sheetPlanningViewQueryHandler     = $this->prophesize(SheetPlanningViewQueryHandler::class);
         $this->agendaConfirmationCTASubstitution = $this->prophesize(AgendaConfirmationCTASubstitution::class);
+        $this->downloadEBadgeCTASubstitution = $this->prophesize(DownloadEBadgeCTASubstitution::class);
 
         $this->substitutionProvider = new SubstitutionsProvider(
             $this->eventUrlGenerator->reveal(),
             $this->participantInfoGuesser->reveal(),
             $this->activateAccountTokenGenerator->reveal(),
             $this->sheetPlanningViewQueryHandler->reveal(),
-            $this->agendaConfirmationCTASubstitution->reveal()
+            $this->agendaConfirmationCTASubstitution->reveal(),
+            $this->downloadEBadgeCTASubstitution->reveal()
         );
     }
 
@@ -118,6 +125,34 @@ class SubstitutionsProviderTest extends TestCase
             [
                 Compose::TAG_PARTICIPANT => 'Henri Désiré Landru',
                 Compose::LINK_AGENDA     => 'url-to-event-agenda',
+            ],
+            $this->substitutionProvider->getSubstitutions($recipient->reveal(), $sheet->reveal(), $locale, $placeholders)
+        );
+    }
+
+    public function testGetSubstitutionsForCTA()
+    {
+        $recipient = $this->prophesize(Participant::class);
+        $sheet     = $this->prophesize(Sheet::class);
+        $event     = $this->prophesize(Event::class);
+        $sheet->getEvent()->willReturn($event->reveal());
+        $sheet->getId()->willReturn(1);
+        $locale    = 'fr';
+        $event->getAvailableLocale($locale)->willReturn($locale);
+
+        $placeholders = [Compose::TAG_PARTICIPANT, Compose::LINK_AGENDA, Compose::TAG_CTA_EBADGE];
+        $this->participantInfoGuesser->guessParticipantCompleteName($recipient->reveal(), $locale)->willReturn('Henri Désiré Landru');
+        $this->eventUrlGenerator->generateEventAbsoluteUrl($event->reveal(), 'event_agenda', ['sheet' => 1, '_locale' => 'fr'])->willReturn('url-to-event-agenda');
+        $this->downloadEBadgeCTASubstitution->getCTA($recipient->reveal(), $sheet->reveal(), $locale)
+            ->shouldBeCalled()
+            ->willReturn('<a href="/download">Download</a>')
+        ;
+
+        $this->assertEquals(
+            [
+                Compose::TAG_PARTICIPANT => 'Henri Désiré Landru',
+                Compose::LINK_AGENDA     => 'url-to-event-agenda',
+                Compose::TAG_CTA_EBADGE => '<a href="/download">Download</a>',
             ],
             $this->substitutionProvider->getSubstitutions($recipient->reveal(), $sheet->reveal(), $locale, $placeholders)
         );

@@ -37,7 +37,12 @@
                 <div class="panel-body">
                     <ul>
                     {% for fromParticipant in meeting.fromParticipants %}
-                        <li>{{ fromParticipant.fullName }}</li>
+                        <li>
+                            {{ fromParticipant.fullName }}
+                            {% if fromParticipant.mobile %}
+                                ({{ fromParticipant.mobile }})
+                            {% endif %}
+                        </li>
                     {% endfor %}
                     </ul>
                 </div>
@@ -51,7 +56,12 @@
                 <div class="panel-body">
                     <ul>
                         {% for toParticipant in meeting.toParticipants %}
-                            <li>{{ toParticipant.fullName }}</li>
+                            <li>
+                                {{ toParticipant.fullName }}
+                                {% if toParticipant.mobile %}
+                                    ({{ toParticipant.mobile }})
+                                {% endif %}
+                            </li>
                         {% endfor %}
                     </ul>
                 </div>

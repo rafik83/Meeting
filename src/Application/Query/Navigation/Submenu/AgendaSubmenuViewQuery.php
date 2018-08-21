@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class AgendaSubmenuViewQuery
+class AgendaSubmenuViewQuery implements Query
 {
     /**
      * @var User

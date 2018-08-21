@@ -23,6 +23,7 @@ availability.confirmation.action.add_unavailability: 'Ajouter une indisponibilit
 availability.confirmation.explanation.title: 'Afin d''accéder à la prise de rendez-vous nous vous remercions de confirmer vos disponibilités pour la planification des rendez-vous.'
 availability.confirmation.title: 'Confirmer vos disponibilités'
 'Bad credentials.': 'Identifiants incorrects'
+badge.title: 'Mon badge'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
 catalog.action.meeting.proposition.show.refuse: 'Proposition refusée'
@@ -123,6 +124,8 @@ event.user_event_phone.validate.ignore: Ignorer
 event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
+event.visio.welcome: 'Bienvenue sur %event%'
+event.visio.agenda_access: 'Cliquez ici pour accéder à votre agenda'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'
@@ -217,6 +220,7 @@ navigation.category.member_space: 'Espace membre'
 navigation.category.package: 'Forfait de participation'
 navigation.category.planning: Agenda
 navigation.category.program: Programme
+navigation.category.badge: Badge
 navigation.category.sheet: 'Fiche de présentation'
 navigation.close: Fermer
 navigation.links.billing.billing_info: 'Informations de facturation'
@@ -224,6 +228,7 @@ navigation.links.billing.order_history: 'Historique des commandes'
 navigation.links.catalog.available_date: 'Disponible le'
 navigation.links.catalog.incoming: 'A venir'
 navigation.links.catalog.sheet_not_in_catalog: 'Votre participation est en attente de validation'
+navigation.links.contactUs: 'Nous contacter'
 navigation.links.happening.accept: Acceptées
 navigation.links.happening.approved: Acceptées
 navigation.links.happening.decline: Refusées

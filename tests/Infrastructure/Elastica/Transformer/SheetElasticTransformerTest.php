@@ -361,6 +361,7 @@ class SheetElasticTransformerTest extends TestCase
                 'content_fr' => 'Ma description',
                 'content_en' => 'My description',
                 'filledFilter' => [],
+                'nestedTaggedData' => [],
             ]
         );
 

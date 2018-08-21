@@ -38,6 +38,9 @@ class ConfigureDates
     /** @var null|\DateTimeInterface "Date de cloture des inscriptions" */
     public $registrationCloseDate;
 
+    /** @var null|\DateTimeInterface "Active l'affichage du badge pour le participant" */
+    public $enableBadgeForParticipantDate;
+
     /**
      * "Bloquer la demande de rendez-vous"
      *
@@ -73,5 +76,6 @@ class ConfigureDates
         $this->agendaOnlineDate                 = $event->getConfiguration()->getAgendaOnlineDate();
         $this->registrationOpenDate             = $event->getConfiguration()->getRegistrationOpenDate();
         $this->registrationCloseDate            = $event->getConfiguration()->getRegistrationCloseDate();
+        $this->enableBadgeForParticipantDate    = $event->getConfiguration()->getEnableBadgeForParticipantDate();
     }
 }

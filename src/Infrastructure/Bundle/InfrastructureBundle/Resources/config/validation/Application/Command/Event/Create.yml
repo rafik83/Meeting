@@ -25,33 +25,7 @@ Proximum\Vimeet\Application\Command\Event\Create:
             - NotBlank: ~
         currency:
             - NotBlank: ~
-        logo:
-            - Image:
-                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
-        textColor:
-            - NotBlank: ~
-            - Regex:
-                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
-                message: validators.hexadecimal
-        leftColor:
-            - NotBlank: ~
-            - Regex:
-                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
-                message: validators.hexadecimal
-        rightColor:
-            - NotBlank: ~
-            - Regex:
-                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
-                message: validators.hexadecimal
         organiserName:
             - NotBlank: ~
         invoicePrefix:
             - NotBlank: ~
-        backgroundColor:
-            - NotBlank: ~
-            - Regex:
-                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
-                message: validators.hexadecimal
-        backgroundImage:
-            - Image:
-                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE

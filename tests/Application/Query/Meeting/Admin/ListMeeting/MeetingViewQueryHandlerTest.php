@@ -18,7 +18,9 @@ use Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\ParticipantViewQ
 use Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\Admin\ListMeeting\MeetingView;
 use Proximum\Vimeet\Application\View\Meeting\Admin\ListMeeting\ParticipantView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
@@ -34,7 +36,9 @@ class MeetingViewQueryHandlerTest extends TestCase
         $participantA2 = $this->prophesize(Participant::class);
         $participantB1 = $this->prophesize(Participant::class);
         $spot = $this->prophesize(Spot::class);
+        $slot = $this->prophesize(MeetingSlot::class);
         $spot->getReference()->willReturn('RefA');
+        $event = $this->prophesize(Event::class);
 
         $meeting = $this->prophesize(Meeting::class);
         $meeting->getId()->willReturn(12);
@@ -47,7 +51,9 @@ class MeetingViewQueryHandlerTest extends TestCase
         $meeting->getToParticipants()->willReturn(
             new ArrayCollection([$participantB1->reveal()])
         );
+        $meeting->getEvent()->willReturn($event->reveal());
         $meeting->getSpot()->willReturn($spot->reveal());
+        $meeting->getSlot()->willReturn($slot->reveal());
 
         $pv1 = new ParticipantView(18, 'ParticipantA1');
         $pv2 = new ParticipantView(20, 'ParticipantA2');
@@ -55,17 +61,17 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $participantViewQueryHandler = $this->prophesize(ParticipantViewQueryHandler::class);
         $participantViewQueryHandler
-            ->handle(new ParticipantViewQuery($participantA1->reveal(), $locale))
+            ->handle(new ParticipantViewQuery($participantA1->reveal(), $event->reveal(), $slot->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($pv1)
         ;
         $participantViewQueryHandler
-            ->handle(new ParticipantViewQuery($participantA2->reveal(), $locale))
+            ->handle(new ParticipantViewQuery($participantA2->reveal(), $event->reveal(), $slot->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($pv2)
         ;
         $participantViewQueryHandler
-            ->handle(new ParticipantViewQuery($participantB1->reveal(), $locale))
+            ->handle(new ParticipantViewQuery($participantB1->reveal(), $event->reveal(), $slot->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($pv3)
         ;
