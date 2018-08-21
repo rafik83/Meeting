@@ -38,8 +38,8 @@ class DataConverter
     public function convert(array $customDataMapping, array $rawUser): array
     {
         return array_merge(
-            $this->customDataConverter->convert($customDataMapping, $rawUser),
-            $this->mainDataConverter->convert($rawUser)
+            $this->mainDataConverter->convert($rawUser),
+            $this->customDataConverter->convert($customDataMapping, $rawUser)
         );
     }
 }

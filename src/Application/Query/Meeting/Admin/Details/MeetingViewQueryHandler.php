@@ -20,22 +20,16 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class MeetingViewQueryHandler
 {
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
-    /**
-     * @param SheetInfoGuesser       $sheetInfoGuesser
-     * @param ParticipantInfoGuesser $participantInfoGuesser
-     */
-    public function __construct(SheetInfoGuesser $sheetInfoGuesser, ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    public function __construct(
+        SheetInfoGuesser $sheetInfoGuesser,
+        ParticipantInfoGuesser $participantInfoGuesser
+    ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
     }
@@ -65,13 +59,15 @@ class MeetingViewQueryHandler
 
         foreach ($meeting->getFromParticipants()->toArray() as $fromParticipant) {
             $fromParticipants[] = new ParticipantView(
-                $this->participantInfoGuesser->guessParticipantCompleteName($fromParticipant, $locale)
+                $this->participantInfoGuesser->guessParticipantCompleteName($fromParticipant, $locale),
+                $this->participantInfoGuesser->guessParticipantMobile($fromParticipant, $locale)
             );
         }
 
         foreach ($meeting->getToParticipants()->toArray() as $toParticipant) {
             $toParticipants[] = new ParticipantView(
-                $this->participantInfoGuesser->guessParticipantCompleteName($toParticipant, $locale)
+                $this->participantInfoGuesser->guessParticipantCompleteName($toParticipant, $locale),
+                $this->participantInfoGuesser->guessParticipantMobile($toParticipant, $locale)
             );
         }
 

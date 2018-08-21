@@ -1,0 +1,98 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    database_host:     database
+    database_port:     3306
+    database_name:     proximum_vimeet
+    database_user:     app
+    database_password: password
+    # You should uncomment this if you want use pdo_sqlite
+    # database_path: "%kernel.root_dir%/data.db3"
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+    mailer_port:       ~
+    mailer_sender:     "vimeet@proximum.com"
+    mailer_encryption: ~
+    mailer_error_transport: smtp
+    mailer_error_host:      127.0.0.1
+    mailer_error_user:      ~
+    mailer_error_password:  ~
+    mailer_error_port:      ~
+    mailer_error_from:      "vimeet@proximum.com"
+    mailer_error_encryption: ~
+
+    # A secret key that's used to generate certain security-related tokens
+    secret:            LcTdBOetSYwmhWirRZHleWO8FJknzXLu
+
+    sendgrid_api_key: ~
+
+    domain: vimeet.proximum
+    admin_domain: admin.vimeet.proximum
+    scheme: http
+
+    timezone_default: Europe/Paris
+
+    trusted_proxies: []
+    elastic_host: elasticsearch
+    elastic_port: 9200
+
+    paypal_username:  "richard.hanna-facilitator_api1.elao.com"
+    paypal_password:  "U3BUA8GS7FM44K7F"
+    paypal_signature: "AKarEPU9IGhpxmdZtMXPhpeKKLPRAe-BNJglO3FIWyFQxmJFjwjXo1hC"
+    paypal_sandbox:   true
+
+    phantomjs_path:          '%kernel.root_dir%/../node_modules/.bin/phantomjs'
+    phantomjs_script:        '%kernel.root_dir%/../phantomjs/render.js'
+    phantomjs_http_user:     'phantomjs'
+    phantomjs_http_password: '7DSJD2sm8YpzfjmnXeethPuybb'
+
+    user_activate_account_token_expiration: 'P7D'
+
+    sentry_dsn: ~
+
+    admin_menu_color: "#222"
+
+    ovh_endpoint_name:      'thisEndPointIsNotSecretYouShouldChangeIt'
+    ovh_application_key:    'thisApplicationKeyIsNotSecretYouShouldChangeIt'
+    ovh_application_secret: 'thisApplicationSecretIsNotSecretYouShouldChangeIt'
+    ovh_consumer_key:       'thisConsumerKeyIsNotSecretYouShouldChangeIt'
+    ovh_service_name:       'thisServiceNameIsNotSecretYouShouldChangeIt'
+    ovh_sender_name:        'thisSenderNameIsNotSecretYouShouldChangeIt'
+
+    tokbox_api_key: ~
+    tokbox_api_secret: ~
+
+    planner_files_path: '%kernel.root_dir%/../var/planner'
+    planner_command: 'curl -v -X POST http://optaplanner:8080/job/NameOfTheBuildYouShouldChangeIt/build --user vimeet:PasswordYouShouldChangeIt --data-urlencode json=''{"parameter": [{"name":"INPUT", "value":"%%filename%%"}]}'''
+    planner_trusted_name: 'NameOfTheBuildYouShouldChangeIt'
+
+    shared_uploaded_files: '%kernel.project_dir%/var/shared_uploaded_files'
+
+    jenkins_user: vimeet
+    jenkins_password: PasswordYouShouldChangeIt
+    jenkins_command: 'curl -v -X POST http://optaplanner:8080/job/%%buildName%%/build --user %%jenkinsUser%%:%%jenkinsPassword%% --data-urlencode json=''{"parameter": %%jenkinsParameters%%}'''
+
+    jenkins_phantomjs_sheet_pdf_print_build_name: 'PhantomJsSheetPrintPdfBuild'
+
+    comexposium_check_user_token_endpoint: "https://comexposium-host/_plugin/Comexposium/user/checkUserToken"
+    comexposium_login_endpoint: "https://comexposium-host/_login/local"
+    comexposium_get_user_endpoint: "https://comexposium-host/_plugin/Comexposium/thirdParty/getUser/%%email%%"
+    comexposium_create_user_endpoint: "https://comexposium-host/_plugin/Comexposium/user/create"
+    comexposium_sso_loader_lib_endpoint: "https://comexposium-cdn/js/loader.min.js"
+    comexposium_sso_username: informatique@proximumgroup.com
+    comexposium_sso_password: password
+    comexposium_username: comexposiumUsername
+    comexposium_password: comexposiumPassword
+
+    # Features flag
+    feature_video_conference_enabled: false
+    feature_video_conference_date_security_enabled: false
+    feature_event_dates_to_current_date_enabled: false
+    feature_dday_enabled: false
+    feature_availability_confirmation_enabled: true
+    feature_registration_template_builder_enabled: false
+    feature_product_vat_enabled: false

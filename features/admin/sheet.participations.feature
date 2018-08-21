@@ -101,7 +101,7 @@ Feature: Edit participant status
     Given I am logged with "test@test.com" on admin
     And I am on this page "/fr/event"
     When I go to "/fr/event/2/sheet?text=aanera&enabled=1&orderBy=created_at"
-    And I check "sheet_batch_ids_22"
+    And I check "sheet_batch_ids_1"
     And I press "form.sheet_batch.children.removeCatalog"
     Then I should be on this page "/fr/event/2/sheet?text=aanera&enabled=1&orderBy=created_at"
     And I should see "flash.admin.sheet_batch.catalog.remove.warning"
@@ -110,7 +110,7 @@ Feature: Edit participant status
     Given I am logged with "test@test.com" on admin
     And I am on this page "/fr/event"
     When I go to "/fr/event/2/sheet?text=aanera&enabled=1&orderBy=created_at"
-    And I check "sheet_batch_ids_22"
+    And I check "sheet_batch_ids_1"
     And I press "form.sheet_batch.children.disable"
     Then I should be on this page "/fr/event/2/sheet?text=aanera&enabled=1&orderBy=created_at"
     And I should see "flash.admin.sheet_batch.disable.warning"

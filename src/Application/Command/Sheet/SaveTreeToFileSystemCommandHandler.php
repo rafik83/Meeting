@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-use Nelmio\Alice\support\models\User;
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\UserEventDecryptFileInterface;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectView;
+use Proximum\Vimeet\Domain\Model\User;
 
 class SaveTreeToFileSystemCommandHandler
 {

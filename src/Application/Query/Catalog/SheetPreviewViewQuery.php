@@ -51,6 +51,9 @@ class SheetPreviewViewQuery
     /** @var User */
     public $user;
 
+    /** @var bool */
+    public $showCategory;
+
     /**
      * @param Event  $event
      * @param Sheet  $sheet
@@ -61,6 +64,7 @@ class SheetPreviewViewQuery
      * @param bool   $isAnsweringMeetingRequestClosed
      * @param bool   $isSeenByCurrentUser
      * @param bool   $isMobileValidationRequired
+     * @param bool   $showCategory
      */
     public function __construct(
         Event $event,
@@ -68,19 +72,21 @@ class SheetPreviewViewQuery
         $locale,
         Sheet $viewer,
         User $user,
-        $isMeetingRequestClosed = false,
-        $isAnsweringMeetingRequestClosed = false,
-        $isSeenByCurrentUser = false,
-        $isMobileValidationRequired = false
+        bool $isMeetingRequestClosed = false,
+        bool $isAnsweringMeetingRequestClosed = false,
+        bool $isSeenByCurrentUser = false,
+        bool $isMobileValidationRequired = false,
+        bool $showCategory = false
     ) {
-        $this->event                           = $event;
-        $this->sheet                           = $sheet;
-        $this->locale                          = $locale;
-        $this->viewer                          = $viewer;
-        $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
+        $this->event = $event;
+        $this->sheet = $sheet;
+        $this->locale  = $locale;
+        $this->viewer = $viewer;
+        $this->isMeetingRequestClosed = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
-        $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
-        $this->isMobileValidationRequired      = $isMobileValidationRequired;
-        $this->user                            = $user;
+        $this->isSeenByCurrentUser = $isSeenByCurrentUser;
+        $this->isMobileValidationRequired = $isMobileValidationRequired;
+        $this->user = $user;
+        $this->showCategory = $showCategory;
     }
 }

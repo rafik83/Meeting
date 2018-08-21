@@ -16,34 +16,22 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class MeetingRequestViewQuery
 {
-    /**
-     * @var MeetingRequest
-     */
+    /** @var MeetingRequest */
     public $meetingRequest;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var User
-     */
+    /** @var User */
     public $user;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isMeetingPublished;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isMeetingRequestUpdateLocked;
 
     /** @var bool */
@@ -58,9 +46,10 @@ class MeetingRequestViewQuery
     /** @var bool */
     public $isPhoneValidationRequired;
 
+    /** @var bool */
+    public $showCategory;
+
     /**
-     * MeetingRequestViewQuery constructor.
-     *
      * @param MeetingRequest $meetingRequest
      * @param Sheet          $sheet
      * @param User           $user
@@ -71,6 +60,7 @@ class MeetingRequestViewQuery
      * @param bool           $isAnsweringMeetingRequestClosed
      * @param bool           $isSeenByUser
      * @param bool           $isPhoneValidationRequired
+     * @param bool           $showCategory
      */
     public function __construct(
         MeetingRequest $meetingRequest,
@@ -82,17 +72,19 @@ class MeetingRequestViewQuery
         $isMeetingRequestClosed = false,
         $isAnsweringMeetingRequestClosed = false,
         $isSeenByUser = false,
-        $isPhoneValidationRequired = false
+        $isPhoneValidationRequired = false,
+        bool $showCategory = false
     ) {
-        $this->meetingRequest                  = $meetingRequest;
-        $this->locale                          = $locale;
-        $this->sheet                           = $sheet;
-        $this->user                            = $user;
-        $this->isMeetingPublished              = $isMeetingPublished;
-        $this->isMeetingRequestUpdateLocked    = $isMeetingRequestUpdateLocked;
-        $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
+        $this->meetingRequest = $meetingRequest;
+        $this->locale = $locale;
+        $this->sheet = $sheet;
+        $this->user = $user;
+        $this->isMeetingPublished = $isMeetingPublished;
+        $this->isMeetingRequestUpdateLocked = $isMeetingRequestUpdateLocked;
+        $this->isMeetingRequestClosed = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
-        $this->isSeenByUser                    = $isSeenByUser;
-        $this->isPhoneValidationRequired       = $isPhoneValidationRequired;
+        $this->isSeenByUser = $isSeenByUser;
+        $this->isPhoneValidationRequired = $isPhoneValidationRequired;
+        $this->showCategory = $showCategory;
     }
 }

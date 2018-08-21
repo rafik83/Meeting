@@ -146,7 +146,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function supports(Request $request): bool
     {
         return
-            Route::USER_EVENT_AUTHENTICATION_TOKEN_LOGIN === $request->attributes->get('_route') &&
+            \in_array($request->attributes->get('_route'), [Route::LOGIN, Route::USER_EVENT_AUTHENTICATION_TOKEN_LOGIN], true) &&
             'GET' === $request->getMethod() &&
             true === (bool) $request->query->has('token');
     }
