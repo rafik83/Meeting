@@ -32,6 +32,7 @@ Proximum\Vimeet\Domain\Model\Meeting:
         createdAt: <(new DateTime('2016-10-12 09:00:00'))>
         spot: '@asddays_spot_1'
         event: '@event_asddays_2016'
+        status: 'not_confirmed'
     asddays_meeting_02:
         __construct: false
         request: '@meeting_request_02'
@@ -43,6 +44,7 @@ Proximum\Vimeet\Domain\Model\Meeting:
         createdAt: <(new DateTime('2016-10-12 11:00:00'))>
         spot: '@asddays_spot_1'
         event: '@event_asddays_2016'
+        status: 'not_confirmed'
 
 Proximum\Vimeet\Domain\Model\Unavailability:
     unavailability_01:

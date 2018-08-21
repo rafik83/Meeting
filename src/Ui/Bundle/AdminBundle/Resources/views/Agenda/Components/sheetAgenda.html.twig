@@ -1,12 +1,12 @@
 <script type="x/template" id="sheet-agenda">
     <div class="panel panel-default agenda-panel">
         <div v-bind:class="{ 'agenda-sheet-focus': sheet == focusedSheet }" class="panel-heading">
+            <a href="#" class="pull-right" v-on:click="close()"><span class="glyphicon glyphicon-remove"></span></a>
             <a v-bind:href="sheet.url" target="_blank" title="{{ 'admin.agenda.sheet.see'|trans }}" class="link-to-sheet"><span class="glyphicon"></span></a>
             <a v-bind:href="routeToUpdateSheetAttendance" target="_blank" title="{{ 'admin.agenda.sheet.attend'|trans }}">
                 <span class="glyphicon glyphicon-minus-sign"></span>
             </a>
             <a href="#" v-on:click="focus()">${ sheet.title }</a>
-            <a href="#" class="pull-right" v-on:click="close()"><span class="glyphicon glyphicon-remove"></span></a>
         </div>
         <div class="panel-body">
             <table class="table-agenda table-condensed">

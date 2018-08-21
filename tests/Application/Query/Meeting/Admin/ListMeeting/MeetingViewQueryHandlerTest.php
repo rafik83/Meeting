@@ -40,6 +40,7 @@ class MeetingViewQueryHandlerTest extends TestCase
         $meeting->getId()->willReturn(12);
         $meeting->getFromSheet()->willReturn($sheetA->reveal());
         $meeting->getToSheet()->willReturn($sheetB->reveal());
+        $meeting->getStatus()->willReturn(Meeting::STATUS_CONFIRMED);
         $meeting->getFromParticipants()->willReturn(
             new ArrayCollection([$participantA1->reveal(), $participantA2->reveal()])
         );
@@ -95,7 +96,8 @@ class MeetingViewQueryHandlerTest extends TestCase
             'SheetB',
             [
                 $pv3,
-            ]
+            ],
+            Meeting::STATUS_CONFIRMED
         );
 
         $this->assertEquals($expected, $result);

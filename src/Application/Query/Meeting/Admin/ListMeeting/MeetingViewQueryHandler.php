@@ -33,7 +33,8 @@ class MeetingViewQueryHandler
             $this->getParticipantViews($query->meeting->getFromParticipants()->toArray(), $query->locale),
             $query->meeting->getToSheet()->getId(),
             $query->meeting->getToSheet()->getTitle(),
-            $this->getParticipantViews($query->meeting->getToParticipants()->toArray(), $query->locale)
+            $this->getParticipantViews($query->meeting->getToParticipants()->toArray(), $query->locale),
+            $query->meeting->getStatus()
         );
     }
 

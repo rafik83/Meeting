@@ -48,7 +48,7 @@ class SpotReassignHandler
             $toSpot   = $meeting->getToSheet()->getSpot();
 
             // do not process meeting spot which already a meeting sheet's spot
-            if (in_array($meeting->getSpot(), [$fromSpot, $toSpot])) {
+            if (\in_array($meeting->getSpot(), [$fromSpot, $toSpot])) {
                 continue;
             }
 

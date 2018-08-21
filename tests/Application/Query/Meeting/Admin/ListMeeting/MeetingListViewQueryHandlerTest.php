@@ -50,7 +50,8 @@ class MeetingListViewQueryHandlerTest extends TestCase
             [],
             2,
             'sheetTitleB',
-            []
+            [],
+            Meeting::STATUS_NOT_CONFIRMED
         );
         $mv2 = new MeetingView(
             2,
@@ -60,7 +61,8 @@ class MeetingListViewQueryHandlerTest extends TestCase
             [],
             4,
             'sheetTitleD',
-            []
+            [],
+            Meeting::STATUS_CANCELED
         );
         $mv3 = new MeetingView(
             3,
@@ -70,7 +72,8 @@ class MeetingListViewQueryHandlerTest extends TestCase
             [],
             6,
             'sheetTitleF',
-            []
+            [],
+            Meeting::STATUS_CONFIRMED
         );
 
         $meetingViewQueryHandler
