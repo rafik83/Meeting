@@ -38,7 +38,7 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
             IBAN: FR76 3005 6006 4306 4332 4153 439
             SWIFT (BIC): CCFRFRPP
 
-Proximum\Vimeet\Domain\Model\Event\Configuration (local):
+Proximum\Vimeet\Domain\Model\Event\Configuration:
     configuration_event_spanish:
         __construct:
             - '#59a4eb'
@@ -48,7 +48,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
         contactLastName: "DURAND"
         backgroundColor: '#00398C'
 
-Proximum\Vimeet\Domain\Model\Address (local):
+Proximum\Vimeet\Domain\Model\Address:
     payment_address_event_spanish:
         __construct:
             - 855 Avenue Roger Salengro
