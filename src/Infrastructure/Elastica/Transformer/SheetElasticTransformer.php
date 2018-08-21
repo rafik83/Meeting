@@ -164,6 +164,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'hasSpot' => $sheet->hasSpot(),
                     'availableSlotIds' => $this->buildAvailableSlots($sheet),
                     'reminderDate' => $this->getReminderDate($sheet),
+                    'nestedTaggedData' => $this->getNestedTaggedData($registrationTemplateData),
                 ],
                 $sheetContentView->contentByLocale
             )
@@ -446,5 +447,52 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return Constant::ORDER_STATUS_TOTAL_ORDER_EQUAL_ZERO;
+    }
+
+    private function getNestedTaggedData(TemplateData $registrationTemplateData): array
+    {
+        $nestedTaggedData = [];
+
+        foreach ($registrationTemplateData->getSheetObjects() as $object) {
+            if ($object instanceof Nomenclature) {
+                foreach ($object->getTags() as $tag) {
+                    if ($tag === Tag::SHEET_DATA || !\in_array($tag, Tag::getSheetTags(), true)) {
+                        continue;
+                    }
+
+                    $items = $object->getItems();
+
+                    if (empty($items)) {
+                        continue;
+                    }
+
+                    if (isset($nestedTaggedData[$tag])) {
+                        $nestedTaggedData[$tag]['values'] = array_merge(
+                            $nestedTaggedData[$tag]['values'],
+                            array_map(function ($item) use ($tag) {
+                                return [
+                                    'tag' => $tag,
+                                    'value' => $item,
+                                ];
+                            }, $items)
+                        );
+
+                        continue;
+                    }
+
+                    $nestedTaggedData[$tag] = [
+                        'tag' => $tag,
+                        'values' => array_map(function ($item) use ($tag) {
+                            return [
+                                'tag' => $tag,
+                                'value' => $item,
+                            ];
+                        }, $items),
+                    ];
+                }
+            }
+        }
+
+        return array_values($nestedTaggedData);
     }
 }

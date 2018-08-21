@@ -1,15 +1,34 @@
 Proximum\Vimeet\Domain\Model\Event\Configuration:
     type:  embeddable
     fields:
+        headerLeftColor:
+            type: string
+        headerRightColor:
+            type: string
         leftColor:
             type: string
         rightColor:
             type: string
         textColor:
             type: string
+        headerButtonLeftColor:
+            type: string
+            options:
+                default: '#2F2F2F'
+        headerButtonRightColor:
+            type: string
+            options:
+                default: '#2F2F2F'
+        headerButtonTextColor:
+            type: string
+            options:
+                default: '#FFFFFF'
         scheduleScale:
             type: integer
         catalogOnlineDate:
+            type: datetime
+            nullable: true
+        enableBadgeForParticipantDate:
             type: datetime
             nullable: true
         happeningsOpenDate:

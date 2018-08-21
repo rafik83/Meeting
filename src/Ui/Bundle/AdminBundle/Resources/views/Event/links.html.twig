@@ -14,6 +14,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ path('admin_event_design_update', { 'event': event.id }) }}">
+                    {{ 'admin.event.design.update.link'|trans }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ path('admin_content_update', { 'event': event.id, 'type': 'terms-of-sale' }) }}">
                     {{ 'admin.update_content.terms-of-sale.link'|trans }}
                 </a>
@@ -240,6 +245,11 @@
     <li>
         <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">
             {{ 'admin.meeting.link'|trans }}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_event_qr_code_reader', { 'event': event.id }) }}">
+            {{ 'admin.event.access_control'|trans }}
         </a>
     </li>
 {% endif %}

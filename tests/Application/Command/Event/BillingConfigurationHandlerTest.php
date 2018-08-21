@@ -25,19 +25,17 @@ class BillingConfigurationHandlerTest extends TestCase
         // Data
         $event = EventFactory::createEvent();
 
-        $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
+        $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC', '#CCCCCC', '#CCCCCC', '#2F2F2F', '#2F2F2F', '#FFF');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', ''));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', ''));
-        $event->setLogo('toto.jpg', 'jpg');
         $event->setInvoiceLogo('toto.jpg', 'jpg');
 
         $expectedEvent = EventFactory::createEvent();
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC', '#CCCCCC', '#CCCCCC', '#2F2F2F', '#2F2F2F', '#FFF');
         $expectedEvent->getTranslations()->set('fr',
             new EventTranslation($expectedEvent, 'fr', '', 'FR14-000', 'billing address', 'condition', 'footers'));
         $expectedEvent->getTranslations()->set('en',
             new EventTranslation($expectedEvent, 'en', '', 'FR14-000', 'billing address', 'condition', 'footers'));
-        $expectedEvent->setLogo('toto.jpg', 'jpg');
         $expectedEvent->setInvoiceLogo('toto.jpg', 'jpg');
 
         // Command

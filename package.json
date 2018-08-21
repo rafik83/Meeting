@@ -7,15 +7,18 @@
   "private": true,
   "dependencies": {
     "@opentok/client": "^2.14.7",
+    "@symfony/webpack-encore": "^0.20.1",
     "axios": "^0.15.3",
     "babel-polyfill": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "3.3.6",
     "chart.js": "^2.6.0",
+    "dexie": "^2.0.4",
     "elao-form.js": "0.1.*",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "intl-tel-input": "8.5.2",
+    "jQuery-QueryBuilder": "^2.5.2",
     "jquery": "2.1.1",
     "lodash": "^4.17.4",
     "moment": ">=2.8",
@@ -36,7 +39,6 @@
     "install": "napa"
   },
   "devDependencies": {
-    "@symfony/webpack-encore": "^0.17.0",
     "babel-loader": "^7.1.2",
     "copy-webpack-plugin": "^4.2.0",
     "napa": "2.3.*",

@@ -17,7 +17,8 @@ Encore
     .addEntry('js/admin', './src/Ui/Bundle/AdminBundle/Resources/assets/js/admin.js')
     .addEntry('js/chart', './src/Ui/Bundle/AdminBundle/Resources/assets/js/chart.js')
     .addEntry('js/agenda', './src/Ui/Bundle/AdminBundle/Resources/assets/js/agenda.js')
-    .addEntry('js/qrcode', './src/Ui/Bundle/AdminBundle/Resources/assets/js/qrcode.js')
+    .addEntry('js/qrcode', './src/Ui/Bundle/AdminBundle/Resources/assets/js/scan/qrcode.js')
+    .addEntry('js/spool', './src/Ui/Bundle/AdminBundle/Resources/assets/js/scan/spool.js')
     .addEntry('tinymce/tinymce', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tinymce.js')
     .addEntry('tinymce/pages/messaging-message-tinymce', './src/Ui/Bundle/AdminBundle/Resources/assets/js/pages/messaging-message-tinymce.js')
     .addEntry('tinymce/tip/tip', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tip/tip.js')
@@ -35,6 +36,7 @@ Encore
 
     .addPlugin(new CopyWebPackPlugin([
         {from: './node_modules/tinymce/skins/lightgray/', to: 'tinymce/skins/lightgray'},
+        {from: './src/Ui/Bundle/AdminBundle/Resources/assets/images', to: 'images'},
         {from: './src/Ui/Bundle/EventBundle/Resources/assets/images', to: 'images'},
         {from: './src/Ui/Bundle/EventBundle/Resources/assets/fonts', to: 'fonts'}
     ]))

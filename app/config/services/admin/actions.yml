@@ -60,6 +60,19 @@ services:
             - '@templating'
 
     #
+    # Type Badge
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\ConfigureAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@templating'
+            - '@adapter.router'
+
+    #
     # Event
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\PaymentConditionsAction:
@@ -89,6 +102,15 @@ services:
             - '@templating'
             - '@session.flash_bag'
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Design\UpdateDesignAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
 
     #
     # Registration Template
@@ -229,6 +251,13 @@ services:
             - '@adapter.authorization_checker'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.session'
+            - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # Happening
@@ -310,7 +339,7 @@ services:
             - '@domain.key_dates.checker.catalog_access_checker'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler'
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler'
             - '@adapter.serializer_adapter'
             - '@datetime'
@@ -388,9 +417,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
 
-    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\DemoQRCodeReaderAction:
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QRCodeReaderAction:
         arguments:
             - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # OMZ

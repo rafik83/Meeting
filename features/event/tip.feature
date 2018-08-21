@@ -1,4 +1,4 @@
-@event @agenda @catalog
+@event @agenda @catalog @tip
 
   Feature: Tip message on front
     As a participant I can see tip message when they are set
@@ -8,6 +8,7 @@
     And the event "Best of web" is created
     And there is a type in this event
     And there is a sheet for this type with the title "SheetA"
+    And elastica is populate
     And the user "user@example.net" is created
     And there is a participant for this sheet and this user
     And the catalog is open since "2016-10-10 10:00:00"
@@ -17,7 +18,6 @@
     And the "fr" title translation of this tip is "Awesome tip"
     And this tip is affected on the catalog
     And this tip is affected on the meeting request management
-    And elastica is populate
     And I am logged with "user@example.net" on event "http://super-event.vimeet.proximum"
     And I go to this page "/fr/catalog"
     Then I should see "Awesome tip"

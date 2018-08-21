@@ -33,12 +33,22 @@ use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class MeetingViewQueryHandlerTest extends TestCase
 {
-    public function testHandleFrom()
+    public function testHandleFrom(): void
     {
-        $event        = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
-        $user         = UserFactory::create();
-        $type         = new Type($event);
+        $event = EventFactory::createEvent();
+        $event->getConfiguration()->setColors(
+            'leftColor',
+            'rightColor',
+            'textColor',
+            'headerLeftColor',
+            'headerRightColor',
+            'backgroundColor',
+            '#2F2F2F',
+            '#2F2F2F',
+            '#FFF'
+        );
+        $user = UserFactory::create();
+        $type = new Type($event);
 
         $sheet = $this->prophesize(Sheet::class);
         $sheetMet = $this->prophesize(Sheet::class);
@@ -124,13 +134,23 @@ class MeetingViewQueryHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleTo()
+    public function testHandleTo(): void
     {
-        $event        = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
-        $user         = UserFactory::create();
-        $type         = new Type($event);
-        $sheet    = $this->prophesize(Sheet::class);
+        $event = EventFactory::createEvent();
+        $event->getConfiguration()->setColors(
+            'leftColor',
+            'rightColor',
+            'textColor',
+            'headerLeftColor',
+            'headerRightColor',
+            'backgroundColor',
+            '#2F2F2F',
+            '#2F2F2F',
+            '#FFF'
+        );
+        $user = UserFactory::create();
+        $type = new Type($event);
+        $sheet = $this->prophesize(Sheet::class);
         $sheetMet = $this->prophesize(Sheet::class);
         $sheet->getType()->willReturn($type);
         $sheetMet->getType()->willReturn($type);

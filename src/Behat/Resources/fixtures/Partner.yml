@@ -1,7 +1,7 @@
 Proximum\Vimeet\Domain\Model\Admin:
     user_orga:
         __construct:
-            - "partner@proximumgroup.com"
+            - 'partner\@proximumgroup.com'
             - "D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO"
             - "YzzBNEhw7I6H5xPuziQEAPAsg5g=" #vimeet_admin
             - 'fr'

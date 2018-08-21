@@ -13,6 +13,12 @@
         {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.organizationCategory }, false) }}
     {% endif %}
 
+    {% if searchForm.tagFilters is defined %}
+        {% for child in searchForm.tagFilters %}
+            {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: child }, false) }}
+        {% endfor %}
+    {% endif %}
+
     {% if searchForm.position is defined %}
         {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.position }, false) }}
     {% endif %}

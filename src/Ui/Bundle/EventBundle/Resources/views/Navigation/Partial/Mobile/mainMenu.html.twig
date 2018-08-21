@@ -1,7 +1,7 @@
 <div class="mobile-menu">
     {% if menuHeaderView.event is defined %}
         <div class="header-mobile">
-            {{ include('EventBundle:Navigation/Partial:logo.html.twig') }}
+            {{ include('EventBundle:Navigation/Partial/Mobile:mobileLogo.html.twig') }}
         </div>
     {% endif %}
 
@@ -9,7 +9,7 @@
         <a href="#event-contact-modal" data-toggle="modal" data-target="#event-contact-modal"
            class="btn btn-primary btn-lg btn-inactive">
             <i class="icon-Appeler"></i>
-            Nous contacter
+            {{ 'navigation.links.contactUs'|trans }}
         </a>
 
         {% if is_granted('ROLE_USER') and menuHeaderView.hasMultipleSheets %}

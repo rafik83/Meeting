@@ -1,21 +1,21 @@
 Proximum\Vimeet\Domain\Model\User:
     user_asddays_1:
         __construct: false
-        email: "user_asddays_1@proximum.com"
+        email: 'user_asddays_1\@proximum.com'
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
         account: "@event_asddays_2016_account_user_1"
     user_asddays_2:
         __construct: false
-        email: "user_asddays_2@proximum.com"
+        email: 'user_asddays_2\@proximum.com'
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
         account: "@event_asddays_2016_account_user_2"
     user_asddays_3:
         __construct: false
-        email: "user_asddays_3@proximum.com"
+        email: 'user_asddays_3\@proximum.com'
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
@@ -23,7 +23,7 @@ Proximum\Vimeet\Domain\Model\User:
     # User without sheet
     user_asddays_4:
         __construct: false
-        email: "user_asddays_4@proximum.com"
+        email: 'user_asddays_4\@proximum.com'
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
@@ -61,7 +61,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 # Equipements, technologies et progrès
                 097ab5e8: { items: [{ title: { fr: "Fortes praepositis" } }, { title: { fr: "Agmina obluridi" } }, { title: { fr: "Atratum ioculatores" } }, { title: { fr: "Virgae coniunctis" } }, { title: { fr: "Velut incedit" } }, { title: { fr: "Post adegerit" } }, { title: { fr: "Ministerium" } }, { title: { fr: "Praepositis servitium" } } ] }
                 # Repères
-                d6fa1ac7: { items: [{ title: { fr: "2001 salariés" } }, { title: { fr: "207 M€ de CA en 2015" } }, { title: { fr: "Activitées en coopération : 25%" } }, { title: { fr: "Activités sur contrats : 47%" } }, { title: { fr: "1er parc de souffleries en Europe" } }, { title: { fr: "8 centres en France" } } ] }
+                d6fa1ac7: { items: [{ title: { fr: "2001 salariés" } }, { title: { fr: "207 M€ de CA en 2015" } }, { title: { fr: 'Activitées en coopération : 25\%' } }, { title: { fr: 'Activités sur contrats : 47\%' } }, { title: { fr: "1er parc de souffleries en Europe" } }, { title: { fr: "8 centres en France" } } ] }
                 # Groupe / Membre
                 a9271999: { items: [{ title: { fr: "Pôle de compétivité Astech" } }, { title: { fr: "Instituts Carnot" } }, { title: { fr: "Optitec" } } ] }
                 # Certification
@@ -191,7 +191,7 @@ Proximum\Vimeet\Domain\Model\Participant:
             3b759fbb: { telephone: "+33069090909" }
             6c4a3a4f: { items: ["position50"] } # Community Manager
 
-Proximum\Vimeet\Domain\Model\User\Account (local):
+Proximum\Vimeet\Domain\Model\User\Account:
     event_asddays_2016_account_user_1:
         __construct: false
         firstName: "John"
