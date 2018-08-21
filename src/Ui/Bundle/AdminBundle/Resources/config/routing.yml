@@ -541,7 +541,15 @@ admin_meeting_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Meeting:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\ListAction }
+
+admin_meeting_update_status:
+    path: /event/{event}/meeting/{meeting}/update/status
+    requirements:
+        event: \d+
+        meeting: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\UpdateStatusAction }
 
 admin_meeting_details:
     path: /event/{event}/meeting/{meeting}/details
@@ -759,10 +767,10 @@ admin_sheet_batch:
         event: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:batch }
-admin_demo_qr_code_reader:
-    path: /demo/qr_code_reader
+admin_event_qr_code_reader:
+    path: /event/{event}/access
     methods: [GET]
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\DemoQrCodeReaderAction }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QrCodeReaderAction }
 admin_sheet_export_sheet:
     path: /event/{event}/sheet/export/sheet
     requirements:
@@ -1430,8 +1438,15 @@ admin_users_list:
     path: /event/{event}/users/list
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\ListAction }
+
+admin_user_event_scan:
+    path: /event/{event}/access/scan
+    requirements:
+        event: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction }
 
 admin_users_details:
     path: /event/{event}/users/{user}

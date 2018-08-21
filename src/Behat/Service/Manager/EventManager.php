@@ -42,6 +42,9 @@ class EventManager
             '#00398C',
             '#4697ff',
             '#4b41d0',
+            '#FFFFFF',
+            '#2F2F2F',
+            '#2F2F2F',
             '#FFFFFF'
         );
         foreach ($event->getLocales() as $locale) {

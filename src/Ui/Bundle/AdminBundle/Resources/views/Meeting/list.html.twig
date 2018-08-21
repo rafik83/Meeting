@@ -6,75 +6,135 @@
 
 {% block content %}
     <h2>
-        {{ meetings.total }} {{ 'admin.meeting.list.title'|trans }}
-        {% if is_granted('ROLE_SUPER_ADMIN') %}
-        <span class="pull-right" style="margin-left: 10px;">
-            {{ macro.delete_button(
-                path('admin_meeting_delete_all', {'event': event.id}),
-                'admin.meeting.action.deleteAll.title'|trans,
-                {'class': 'btn btn-danger', 'data-confirm': 'admin.meeting.action.deleteAll.confirm'|trans}
-            ) }}
-        </span>
-        {% endif %}
-        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
-            <form action="{{ path('admin_meeting_export', { 'event': event.id }) }}" method="GET" class="pull-right">
-                <input type="submit" value="{{ 'admin.sheet.export.meetings.button.label'|trans }}" class="btn btn-sm btn-default"/>
-            </form>
-        {% endif %}
+        {{ view.getNumberOfMeetingsOnThisSlot }} / {{ view.totalMeetings }}<br>
     </h2>
+    <p>
+        {{ form_start(form, {'attr': {'data-select-mover-form': 'data-select-mover-form'}}) }}
+            <div>
+                <div class="col-xs-2">
+                    <button data-select-mover-previous="data-select-mover-previous" class="btn btn-default pull-right">
+                        <
+                    </button>
+                </div>
+                <div class="col-xs-8">
+                    {{ form_widget(form.slot, {
+                        'attr': {
+                            'onChange': 'document.getElementsByName("slot_choice")[0].submit();',
+                            'data-select-mover': 'data-select-mover'
+                        }
+                    }) }}
+                </div>
+                <div class="col-xs-2">
+                    <button data-select-mover-next="data-select-mover-next" class="btn btn-default">
+                        >
+                    </button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </p>
 
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>{{ 'admin.meeting.list.column.head.from'|trans }}</th>
-                <th>{{ 'admin.meeting.list.column.head.to'|trans }}</th>
-                <th>{{ 'admin.meeting.list.column.head.slot'|trans }}</th>
-                <th>{{ 'admin.meeting.list.column.head.createdAt'|trans }}</th>
-                <th>{{ 'admin.meeting.list.column.head.isCreatedByParticipants'|trans }}</th>
-                <th></th>
+                <th class="col-md-1">{{ 'admin.meeting.list.column.head.spot'|trans }}</th>
+                <th class="col-md-2">{{ 'admin.meeting.list.column.head.from'|trans }}</th>
+                <th class="col-md-2">{{ 'admin.meeting.list.column.head.fromParticipants'|trans }}</th>
+                <th class="col-md-2">{{ 'admin.meeting.list.column.head.to'|trans }}</th>
+                <th class="col-md-2">{{ 'admin.meeting.list.column.head.toParticipants'|trans }}</th>
+                <th class="col-md-1"></th>
             </tr>
         </thead>
         <tbody>
-            {% for meeting in meetings.results %}
+            {% for meeting in view.meetingViews %}
                 <tr>
                     <td>
+                        {{ meeting.spotReference }}
+                    </td>
+                    <td>
                         {% if not is_granted('ROLE_ALLOWED_TO_ADMIN') %}
-                            {{ meeting.sheetNameFrom }}
+                            {{ meeting.fromSheetTitle }}
                         {% else %}
-                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetFromId }) }}" target="_blank">
-                                {{ meeting.sheetNameFrom }}
+                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.fromSheetId }) }}" target="_blank">
+                                {{ meeting.fromSheetTitle }}
                             </a>
                         {% endif %}
                     </td>
                     <td>
+                        <ul>
+                            {% for participant in meeting.fromParticipants %}
+                                <li>
+                                    {{ participant.completeName }}
+                                    <label class="btn btn-primary btn-xs btn-{{ participant.checkin ? 'success' : 'danger' }}">
+                                        {{ (participant.checkin ? 'admin.meeting.list.participant.present' : 'admin.meeting.list.participant.absent') |trans }}
+                                    </label>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
                         {% if not is_granted('ROLE_ALLOWED_TO_ADMIN') %}
-                            {{ meeting.sheetNameTo }}
+                            {{ meeting.toSheetTitle }}
                         {% else %}
-                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetToId }) }}" target="_blank">
-                                {{ meeting.sheetNameTo }}
+                            <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.toSheetId }) }}" target="_blank">
+                                {{ meeting.toSheetTitle }}
                             </a>
                         {% endif %}
                     </td>
                     <td>
-                        {{ meeting.slotBegin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
-                        -
-                        {{ meeting.slotEnd|localizeddate('none', 'short', app.request.locale, event.timeZone) }}
+                        <ul>
+                            {% for participant in meeting.toParticipants %}
+                                <li>
+                                    {{ participant.completeName }}
+                                    <label class="btn btn-primary btn-xs btn-{{ participant.checkin ? 'success' : 'danger' }}">
+                                        {{ (participant.checkin ? 'admin.meeting.list.participant.present' : 'admin.meeting.list.participant.absent') |trans }}
+                                    </label>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </td>
-                    <td>{{ meeting.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
-                    <td>{{ meeting.isCreatedByParticipants ? '✓' : '' }}</td>
                     <td>
+                        <div class="btn-group" data-toggle="buttons"
+                             data-radio-group-ajax="{{ path('admin_meeting_update_status', {'event': event.id, 'meeting': meeting.id}) }}"
+                        >
+                            <label class="btn btn-danger {% if meeting.status == 'canceled' %}active{% endif %}">
+                                <input
+                                    type="radio"
+                                    name="status_{{ meeting.id }}"
+                                    value="canceled"
+                                    {% if meeting.status == 'canceled' %}checked{% endif %}
+                                >
+                                X
+                            </label>
+                            <label class="btn btn-default {% if meeting.status == 'not_confirmed' %}active{% endif %}">
+                                <input
+                                    type="radio"
+                                    name="status_{{ meeting.id }}"
+                                    value="not_confirmed"
+                                    {% if meeting.status == 'not_confirmed' %}checked{% endif %}
+                                >
+                                &nbsp;
+                            </label>
+                            <label class="btn btn-primary btn-success {% if meeting.status == 'confirmed' %}active{% endif %}">
+                                <input
+                                    type="radio"
+                                    name="status_{{ meeting.id }}"
+                                    value="confirmed"
+                                    {% if meeting.status == 'confirmed' %}checked{% endif %}
+                                >
+                                ✔
+                            </label>
+                        </div>
+                        <hr/>
                         {{ macro.btnGroupAndRightMenuDropdown({('admin.meeting.list.details'|trans): path('admin_meeting_details', {'event': event.id, 'meeting': meeting.id})}) }}
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5" class="text-center">
+                    <td colspan="6" class="text-center">
                          {{ 'admin.meeting.list.noResult'|trans }}
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-
-    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': meetings}) }}
 {% endblock %}

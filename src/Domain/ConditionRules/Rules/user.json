@@ -1,0 +1,108 @@
+{
+  "en": [
+    {
+      "id": "firstName",
+      "label": "First name",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    },
+    {
+      "id": "lastName",
+      "label": "Last name",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    },
+    {
+      "id": "email",
+      "label": "Email",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    }
+  ],
+  "fr": [
+    {
+      "id": "firstName",
+      "label": "Prénom",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    },
+    {
+      "id": "lastName",
+      "label": "Nom",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    },
+    {
+      "id": "email",
+      "label": "Email",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    }
+  ]
+}

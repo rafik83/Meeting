@@ -4,9 +4,10 @@
             {{ include('EventBundle::Catalog/External/sheet-card.html.twig', {
                 catalogSheetPreviewView: catalogSheetPreviewView,
             }) }}
-            {% if loop.index % 3 == 0 %}
-                </div>
-                <div class="row">
+            {% if loop.last and (loop.index % 3 != 0) %}
+                {% for i in (loop.index % 3)..3 %}
+                    <div class="col-md-4"></div>
+                {% endfor %}
             {% endif %}
         {% else %}
             <div class="col-md-12 important fail text-center">

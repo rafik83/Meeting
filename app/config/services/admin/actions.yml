@@ -12,6 +12,23 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     #
+    # Meeting
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\ListAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating.engine.twig'
+            - '@adapter.authorization_checker'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@form.factory'
+            - '@datetime'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\UpdateStatusAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    #
     # Type
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\ListAction:
@@ -239,6 +256,13 @@ services:
             - '@adapter.authorization_checker'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.session'
+            - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # Happening
@@ -320,7 +344,7 @@ services:
             - '@domain.key_dates.checker.catalog_access_checker'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler'
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler'
             - '@adapter.serializer_adapter'
             - '@datetime'
@@ -398,9 +422,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
 
-    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\DemoQRCodeReaderAction:
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QRCodeReaderAction:
         arguments:
             - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # OMZ

@@ -25,6 +25,21 @@ Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign:
             - Regex:
                 pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
+        headerButtonTextColor:
+            - NotBlank: ~
+            - Regex:
+                  pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                  message: validators.hexadecimal
+        headerButtonLeftColor:
+            - NotBlank: ~
+            - Regex:
+                  pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                  message: validators.hexadecimal
+        headerButtonRightColor:
+            - NotBlank: ~
+            - Regex:
+                  pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                  message: validators.hexadecimal
         localizedImages:
             - All:
                 - Collection:

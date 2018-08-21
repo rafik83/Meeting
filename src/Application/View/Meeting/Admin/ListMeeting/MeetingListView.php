@@ -1,0 +1,51 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Meeting\Admin\ListMeeting;
+
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+
+class MeetingListView
+{
+    /** @var MeetingSlot|null */
+    public $slot;
+
+    /** @var int */
+    public $totalMeetings;
+
+    /** @var MeetingView[] */
+    public $meetingViews;
+
+    public function __construct(
+        int $totalMeetings,
+        ?MeetingSlot $slot = null
+    ) {
+        $this->totalMeetings = $totalMeetings;
+        $this->slot = $slot;
+        $this->meetingViews = [];
+    }
+
+    public function getNumberOfMeetingsOnThisSlot(): int
+    {
+        return \count($this->meetingViews);
+    }
+
+    public function addMeetingView(MeetingView $meetingView): void
+    {
+        $this->meetingViews[$meetingView->id] = $meetingView;
+    }
+
+    public function sortMeetingView(): void
+    {
+        uasort($this->meetingViews, function (MeetingView $meetingA, MeetingView $meetingB) {
+            return $meetingA->spotReference <=> $meetingB->spotReference;
+        });
+    }
+}

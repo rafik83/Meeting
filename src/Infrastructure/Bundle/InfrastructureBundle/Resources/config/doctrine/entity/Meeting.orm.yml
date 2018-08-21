@@ -9,6 +9,10 @@ Proximum\Vimeet\Domain\Model\Meeting:
     fields:
         state:
             type: string
+        status:
+            type: string
+            options:
+                default: 'not_confirmed'
         createdAt:
             type: datetime
         blockedSpot:

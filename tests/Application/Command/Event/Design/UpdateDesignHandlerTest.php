@@ -64,6 +64,9 @@ class UpdateDesignHandlerTest extends TestCase
         $this->configuration->getRightColor()->willReturn('#DDDDDD');
         $this->configuration->getBackgroundColor()->willReturn('#EEEEEE');
         $this->configuration->getTextColor()->willReturn('#FFFFFF');
+        $this->configuration->getHeaderButtonLeftColor()->willReturn('#2F2F2F');
+        $this->configuration->getHeaderButtonRightColor()->willReturn('#2F2F2F');
+        $this->configuration->getHeaderButtonTextColor()->willReturn('#FFFFFF');
         $this->configuration->getBackgroundImage()->willReturn(null);
 
         $this->event->getLocalizedLogo('fr')->willReturn('logoFr.png');
@@ -108,7 +111,10 @@ class UpdateDesignHandlerTest extends TestCase
             '#FFFFFF',
             '#AAAAAA',
             '#BBBBBB',
-            '#EEEEE2'
+            '#EEEEE2',
+            '#2F2F2F',
+            '#2D2D2D',
+            '#FFFFFF'
         )->shouldBeCalled();
 
         $this->event->setAssetPath('/path/asset/main.css')->shouldBeCalled();
@@ -146,6 +152,7 @@ class UpdateDesignHandlerTest extends TestCase
         $updateDesign->backgroundColor = '#EEEEE2';
         $updateDesign->leftColor = '#CCCCC2';
         $updateDesign->rightColor = '#DDDDD2';
+        $updateDesign->headerButtonRightColor = '#2D2D2D';
 
         $handler = new UpdateDesignHandler(
             $this->eventRepository->reveal(),
@@ -166,6 +173,9 @@ class UpdateDesignHandlerTest extends TestCase
         $this->configuration->getRightColor()->willReturn('#DDDDDD');
         $this->configuration->getBackgroundColor()->willReturn('#EEEEEE');
         $this->configuration->getTextColor()->willReturn('#FFFFFF');
+        $this->configuration->getHeaderButtonLeftColor()->willReturn('#2F2F2F');
+        $this->configuration->getHeaderButtonRightColor()->willReturn('#2F2F2F');
+        $this->configuration->getHeaderButtonTextColor()->willReturn('#FFFFFF');
         $this->configuration->getBackgroundImage()->willReturn('background.png');
 
         $this->event->getLocalizedLogo('fr')->willReturn('logoFr.png');
@@ -201,7 +211,10 @@ class UpdateDesignHandlerTest extends TestCase
             '#FFFFFF',
             '#AAAAAA',
             '#BBBBBB',
-            '#EEEEE2'
+            '#EEEEE2',
+            '#2F2F2F',
+            '#2D2D2D',
+            '#FFFFFF'
         )->shouldBeCalled();
 
         $this->event->setAssetPath('/path/asset/main.css')->shouldBeCalled();
@@ -223,6 +236,7 @@ class UpdateDesignHandlerTest extends TestCase
         $updateDesign->backgroundColor = '#EEEEE2';
         $updateDesign->leftColor = '#CCCCC2';
         $updateDesign->rightColor = '#DDDDD2';
+        $updateDesign->headerButtonRightColor = '#2D2D2D';
         $updateDesign->removeBackgroundImage = true;
 
         $handler = new UpdateDesignHandler(
@@ -244,6 +258,9 @@ class UpdateDesignHandlerTest extends TestCase
         $this->configuration->getRightColor()->willReturn('#DDDDDD');
         $this->configuration->getBackgroundColor()->willReturn('#EEEEEE');
         $this->configuration->getTextColor()->willReturn('#FFFFFF');
+        $this->configuration->getHeaderButtonLeftColor()->willReturn('#2F2F2F');
+        $this->configuration->getHeaderButtonRightColor()->willReturn('#2F2F2F');
+        $this->configuration->getHeaderButtonTextColor()->willReturn('#FFFFFF');
         $this->configuration->getBackgroundImage()->willReturn('background.png');
 
         $this->event->getLocalizedLogo('fr')->willReturn('logoFr.png');
@@ -279,7 +296,10 @@ class UpdateDesignHandlerTest extends TestCase
             '#FFFFFF',
             '#AAAAAA',
             '#BBBBBB',
-            '#EEEEEE'
+            '#EEEEEE',
+            '#2F2F2F',
+            '#2F2F2F',
+            '#FFFFFF'
         )->shouldBeCalled();
 
         $this->event->setAssetPath('/new/asset/path.css')->shouldBeCalled();

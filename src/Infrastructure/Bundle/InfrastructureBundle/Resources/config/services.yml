@@ -69,6 +69,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\RuleRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Repository\ScanRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.unavailability_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\UnavailabilityRepository
         arguments:
@@ -557,6 +560,13 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImport }
+
+    Proximum\Vimeet\Application\Command\User\Event\ScanCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ScanCommand }
 
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
@@ -2165,6 +2175,19 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImage }
 
+    Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQueryHandler:
+        arguments:
+            - '@adapter.file_system_adapter'
+            - '%locale%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
+
+    Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQueryHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery }
+
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer: ~
+
     command.product.remove.remove_handler:
         class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler
         arguments:
@@ -3212,13 +3235,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQuery }
 
-    query.catalog.external.search_facet_query:
-        class: Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQueryHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.catalog.external.search_facet'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQuery }
-
     query.sheet.paginated_catalog_sheet_preview_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQueryHandler
         arguments:
@@ -3325,6 +3341,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQueryHandler
         arguments:
             - '@adapter.sheet_search_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery }
 
@@ -3463,6 +3480,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.search_facet'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery }
 
@@ -3470,6 +3488,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetExternalViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.catalog.external.search_facet'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository'
 
     query.mail.participant_mail_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler
@@ -3527,6 +3546,15 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
+
+    Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@template.participant_info_guesser'
+            - '@domain.service.sheets_group.group_name_resolver'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery }
 
     Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQueryHandler:
         arguments:
@@ -4494,6 +4522,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserEventIdsByEvent:
         arguments:
@@ -6370,6 +6399,12 @@ services:
     Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery }
+
+    Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierToUserQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierToUserQuery }
 
     Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQueryHandler:
         arguments:

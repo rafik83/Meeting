@@ -52,6 +52,7 @@ class ElasticaPersisterTest extends TestCase
 
         $elasticaIndex = $this->prophesize(\Elastica\Index::class);
         $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
+
         $elasticaIndex->refresh()->shouldBeCalled();
 
         $elasticaType->getIndex()->willReturn($elasticaIndex->reveal());
@@ -61,7 +62,10 @@ class ElasticaPersisterTest extends TestCase
 
         $elasticaMapping = $this->prophesize(ElasticaMapping::class);
         $elasticaMapping
-            ->setMapping($elasticaType, TypesMapping::AVAILABLE_TYPES[UserEventView::class]['properties'])
+            ->setMapping(
+                $elasticaType,
+                TypesMapping::AVAILABLE_TYPES[UserEventView::class]['properties']
+            )
             ->shouldBeCalled()
         ;
 
@@ -87,6 +91,7 @@ class ElasticaPersisterTest extends TestCase
 
         $elasticaType = $this->prophesize(\Elastica\Type::class);
         $elasticaIndex = $this->prophesize(\Elastica\Index::class);
+
         $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
 
         $client = $this->prophesize(\Elastica\Client::class);

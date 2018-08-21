@@ -110,6 +110,9 @@ class UpdateDesignActionTest extends TestCase
         $this->configuration->getLeftColor()->willReturn('#CCCCCC');
         $this->configuration->getRightColor()->willReturn('#DDDDDD');
         $this->configuration->getTextColor()->willReturn('#EEEEEE');
+        $this->configuration->getHeaderButtonLeftColor()->willReturn('#2F2F2F');
+        $this->configuration->getHeaderButtonRightColor()->willReturn('#2F2F2F');
+        $this->configuration->getHeaderButtonTextColor()->willReturn('#FFFFFF');
         $this->configuration->getBackgroundColor()->willReturn('#FFFFFF');
 
 
@@ -161,6 +164,9 @@ class UpdateDesignActionTest extends TestCase
         $this->configuration->getLeftColor()->willReturn('#CCCCCC');
         $this->configuration->getRightColor()->willReturn('#DDDDDD');
         $this->configuration->getTextColor()->willReturn('#EEEEEE');
+        $this->configuration->getHeaderButtonLeftColor()->willReturn('#2F2F2F');
+        $this->configuration->getHeaderButtonRightColor()->willReturn('#2F2F2F');
+        $this->configuration->getHeaderButtonTextColor()->willReturn('#FFFFFF');
         $this->configuration->getBackgroundColor()->willReturn('#FFFFFF');
 
 

@@ -76,7 +76,8 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
 
         $this->taggedNomenclatureFilterRepository->deleteForEvent($event->getEvent());
 
-        foreach ([Tag::SHEET_ORGANIZATION_CATEGORY, Tag::PARTICIPANT_POSITION] as $tag) {
+        // The TaggedNomenclatureFilter can be used on any Sheet tags or the participant position tag
+        foreach (array_merge([Tag::PARTICIPANT_POSITION], Tag::getSheetAndGenericTags()) as $tag) {
             $this->saveNomenclaturesForGivenTag($event->getEvent(), $templatesData, $tag);
         }
     }
@@ -133,7 +134,7 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
      * @param TemplateData[] $templatesData
      * @param string         $tag
      */
-    private function saveNomenclaturesForGivenTag(Event $event, array &$templatesData, $tag)
+    private function saveNomenclaturesForGivenTag(Event $event, array &$templatesData, $tag): void
     {
         $nomenclaturesAdded = [];
 
@@ -144,14 +145,14 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
                 ) {
                     $nomenclatureId = $templateObject->getNomenclatureId();
 
-                    if (false === in_array($nomenclatureId, $nomenclaturesAdded)) {
-                        $nomenclaturesAdded[] = $nomenclatureId;
+                    if (!isset($nomenclaturesAdded[$nomenclatureId])) {
+                        $nomenclaturesAdded[$nomenclatureId] = $nomenclatureId;
                     }
                 }
             }
         }
 
-        if (count($nomenclaturesAdded)) {
+        if (\count($nomenclaturesAdded)) {
             $this->taggedNomenclatureFilterRepository->add(
                 new TaggedNomenclatureFilter($event, $tag, $nomenclaturesAdded)
             );

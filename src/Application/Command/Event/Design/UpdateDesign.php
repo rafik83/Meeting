@@ -46,6 +46,15 @@ class UpdateDesign implements Command
     /** @var array */
     public $localizedImages;
 
+    /** @var string */
+    public $headerButtonLeftColor;
+
+    /** @var string */
+    public $headerButtonRightColor;
+
+    /** @var string */
+    public $headerButtonTextColor;
+
     public function __construct(Event $event)
     {
         $this->event = $event;
@@ -53,6 +62,9 @@ class UpdateDesign implements Command
         $this->rightColor = $event->getConfiguration()->getRightColor();
         $this->headerLeftColor = $event->getConfiguration()->getHeaderLeftColor();
         $this->headerRightColor = $event->getConfiguration()->getHeaderRightColor();
+        $this->headerButtonLeftColor = $event->getConfiguration()->getHeaderButtonLeftColor();
+        $this->headerButtonRightColor = $event->getConfiguration()->getHeaderButtonRightColor();
+        $this->headerButtonTextColor = $event->getConfiguration()->getHeaderButtonTextColor();
         $this->textColor = $event->getConfiguration()->getTextColor();
         $this->backgroundColor = $event->getConfiguration()->getBackgroundColor();
         $this->localizedImages = [];
@@ -70,11 +82,16 @@ class UpdateDesign implements Command
      */
     public function isColorsUpdated(): bool
     {
-        return $this->leftColor  !== $this->event->getConfiguration()->getLeftColor()
+        return $this->leftColor !== $this->event->getConfiguration()->getLeftColor()
             || $this->rightColor !== $this->event->getConfiguration()->getRightColor()
-            || $this->leftColor  !== $this->event->getConfiguration()->getHeaderLeftColor()
+            || $this->leftColor !== $this->event->getConfiguration()->getHeaderLeftColor()
             || $this->rightColor !== $this->event->getConfiguration()->getHeaderRightColor()
-            || $this->textColor  !== $this->event->getConfiguration()->getTextColor()
+            || $this->textColor !== $this->event->getConfiguration()->getTextColor()
+            || $this->headerButtonTextColor !== $this->event->getConfiguration()->getHeaderButtonTextColor()
+            || $this->headerButtonLeftColor !== $this->event->getConfiguration()->getHeaderButtonLeftColor()
+            || $this->headerButtonRightColor !== $this->event->getConfiguration()->getHeaderButtonRightColor()
+            || $this->textColor !== $this->event->getConfiguration()->getTextColor()
+            || $this->textColor !== $this->event->getConfiguration()->getTextColor()
             || $this->backgroundColor !== $this->event->getConfiguration()->getBackgroundColor()
         ;
     }

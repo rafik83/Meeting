@@ -21,6 +21,15 @@ class Configuration
     private $headerRightColor;
 
     /** @var string */
+    private $headerButtonLeftColor;
+
+    /** @var string */
+    private $headerButtonRightColor;
+
+    /** @var string */
+    private $headerButtonTextColor;
+
+    /** @var string */
     private $leftColor;
 
     /** @var string */
@@ -136,6 +145,10 @@ class Configuration
         $this->headerLeftColor = '#000000';
         $this->textColor = '#FFFFFF';
         $this->backgroundColor = '#FFFFFF';
+
+        $this->headerButtonLeftColor = '#2F2F2F';
+        $this->headerButtonRightColor = '#2F2F2F';
+        $this->headerButtonTextColor = '#FFFFFF';
     }
 
     /**
@@ -212,6 +225,9 @@ class Configuration
      * @param string $headerLeftColor
      * @param string $headerRightColor
      * @param string $backgroundColor
+     * @param string $headerButtonLeftColor
+     * @param string $headerButtonRightColor
+     * @param string $headerButtonTextColor
      */
     public function setColors(
         string $leftColor,
@@ -219,7 +235,10 @@ class Configuration
         string $textColor,
         string $headerLeftColor,
         string $headerRightColor,
-        string $backgroundColor
+        string $backgroundColor,
+        string $headerButtonLeftColor,
+        string $headerButtonRightColor,
+        string $headerButtonTextColor
     ): void {
         $this->leftColor  = $leftColor;
         $this->rightColor = $rightColor;
@@ -227,6 +246,9 @@ class Configuration
         $this->headerLeftColor = $headerLeftColor;
         $this->headerRightColor = $headerRightColor;
         $this->backgroundColor = $backgroundColor;
+        $this->headerButtonLeftColor = $headerButtonLeftColor;
+        $this->headerButtonRightColor = $headerButtonRightColor;
+        $this->headerButtonTextColor = $headerButtonTextColor;
     }
 
     /**
@@ -268,6 +290,21 @@ class Configuration
     public function getTextColor(): string
     {
         return $this->textColor;
+    }
+
+    public function getHeaderButtonLeftColor(): string
+    {
+        return $this->headerButtonLeftColor;
+    }
+
+    public function getHeaderButtonRightColor(): string
+    {
+        return $this->headerButtonRightColor;
+    }
+
+    public function getHeaderButtonTextColor(): string
+    {
+        return $this->headerButtonTextColor;
     }
 
     /**
