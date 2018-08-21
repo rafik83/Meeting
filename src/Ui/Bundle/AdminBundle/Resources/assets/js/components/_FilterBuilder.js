@@ -1,5 +1,6 @@
-require('jQuery-QueryBuilder');
 var $ = require('jquery');
+require('jQuery-QueryBuilder');
+var frTranslations = require('../vendor/jQuery-QueryBuilder/i18n/fr');
 
 function FilterBuilder(hiddenInput, builder, submitRules) {
     this.builder = $(builder);
@@ -10,8 +11,11 @@ function FilterBuilder(hiddenInput, builder, submitRules) {
 }
 
 FilterBuilder.prototype.init = function(builder) {
+    var locale = builder.getAttribute('data-locale');
+
     this.builder.queryBuilder({
-        lang_code: builder.getAttribute('data-locale'),
+        lang_code: locale,
+        lang: 'fr' === locale ? frTranslations : {}, // default jQuery-QueryBuilder included language is 'en'
         filters: JSON.parse(builder.getAttribute('data-filters')),
         rules: builder.getAttribute('data-rules') ? JSON.parse(builder.getAttribute('data-rules')) : ''
     });

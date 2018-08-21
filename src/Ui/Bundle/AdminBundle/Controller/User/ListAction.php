@@ -93,7 +93,7 @@ class ListAction
                     'userEventListViews' => $userEventListViews,
                     'filters' => $filters,
                     'rules' => $this->session->get($this->getRulesKey($event)),
-                    'locale' => $locale,
+                    'locale' => $request->getLocale(),
                 ]
             )
         );
