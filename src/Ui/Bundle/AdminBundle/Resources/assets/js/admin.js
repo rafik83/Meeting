@@ -21,13 +21,9 @@ var $ = require('jquery'),
     AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening'),
     DuplicationSheetsModal = require('./components/_DuplicationSheetsModal'),
     SelectPreviousNextMover = require('./components/_SelectPreviousNextMover'),
-<<<<<<< HEAD
     RadioGroupAjax = require('./components/_RadioGroupAjax'),
-    ButtonGroupDefaultStateChanger = require('./components/_ButtonGroupDefaultStateChanger')
-=======
     FilterBuilder = require('./components/_FilterBuilder'),
-    RadioGroupAjax = require('./components/_RadioGroupAjax')
->>>>>>> origin/master
+    ButtonGroupDefaultStateChanger = require('./components/_ButtonGroupDefaultStateChanger')
 ;
 
 require('bootstrap');
