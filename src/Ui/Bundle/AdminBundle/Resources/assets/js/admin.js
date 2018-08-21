@@ -21,7 +21,8 @@ var $ = require('jquery'),
     AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening'),
     DuplicationSheetsModal = require('./components/_DuplicationSheetsModal'),
     SelectPreviousNextMover = require('./components/_SelectPreviousNextMover'),
-    RadioGroupAjax = require('./components/_RadioGroupAjax')
+    RadioGroupAjax = require('./components/_RadioGroupAjax'),
+    ButtonGroupDefaultStateChanger = require('./components/_ButtonGroupDefaultStateChanger')
 ;
 
 require('bootstrap');
@@ -174,6 +175,10 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-radio-group-ajax]'), function (element) {
         new RadioGroupAjax(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.btn-group[data-btn-group-default-state]'), function (element) {
+        new ButtonGroupDefaultStateChanger(element);
     });
 }
 

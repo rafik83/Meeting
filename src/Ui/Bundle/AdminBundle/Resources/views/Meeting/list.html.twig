@@ -47,9 +47,7 @@
                 <tr>
                     <th>{{ 'admin.meeting.list.column.head.spot'|trans }}</th>
                     <th>{{ 'admin.meeting.list.column.head.from'|trans }}</th>
-                    <th>{{ 'admin.meeting.list.column.head.fromParticipants'|trans }}</th>
                     <th>{{ 'admin.meeting.list.column.head.to'|trans }}</th>
-                    <th>{{ 'admin.meeting.list.column.head.toParticipants'|trans }}</th>
                     <th></th>
                     <th class="col-sm-2 col-md-2"></th>
                 </tr>
@@ -68,8 +66,6 @@
                                     {{ meeting.fromSheetTitle }}
                                 </a>
                             {% endif %}
-                        </td>
-                        <td>
                             <ul>
                                 {% for participant in meeting.fromParticipants %}
                                     <li>{{ participant.completeName }}</li>
@@ -84,8 +80,6 @@
                                     {{ meeting.toSheetTitle }}
                                 </a>
                             {% endif %}
-                        </td>
-                        <td>
                             <ul>
                                 {% for participant in meeting.toParticipants %}
                                     <li>{{ participant.completeName }}</li>
@@ -94,14 +88,17 @@
                         </td>
                         <td>
                             <a href="{{ path('admin_meeting_details', {'event': event.id, 'meeting': meeting.id}) }}" class="btn btn-default btn-sm">
-                                {{ 'admin.meeting.list.details'|trans }}
+                                <i class="glyphicon glyphicon-eye-open"></i>
                             </a>
                         </td>
                         <td>
                             <div class="btn-group pull-right" data-toggle="buttons"
+                                 data-btn-group-default-state="group"
                                  data-radio-group-ajax="{{ path('admin_meeting_update_status', {'event': event.id, 'meeting': meeting.id}) }}"
                             >
-                                <label class="btn btn-danger {% if meeting.status == 'canceled' %}active{% endif %}">
+                                <label class="btn btn-default {% if meeting.status == 'canceled' %}active btn-danger{% endif %}"
+                                       data-btn-group-default-state-item="btn-danger"
+                                >
                                     <input
                                         type="radio"
                                         name="status_{{ meeting.id }}"
@@ -119,7 +116,9 @@
                                     >
                                     &nbsp;
                                 </label>
-                                <label class="btn btn-primary btn-success {% if meeting.status == 'confirmed' %}active{% endif %}">
+                                <label class="btn btn-default {% if meeting.status == 'confirmed' %}active btn-success{% endif %}"
+                                    data-btn-group-default-state-item="btn-success"
+                                >
                                     <input
                                         type="radio"
                                         name="status_{{ meeting.id }}"
