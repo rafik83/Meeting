@@ -27,8 +27,10 @@ class UserEventDecryptFileAdapter implements UserEventDecryptFileInterface
 
     public function decryptFile(Event $event, User $user, string $encryptedFilePath, string $decryptedFilePath): void
     {
-        $userKey = $this->userEventKeyGetter->getKeyByEventAndUser($event, $user);
+        try {
+            $userKey = $this->userEventKeyGetter->getKeyByEventAndUser($event, $user);
 
-        File::decryptFile($encryptedFilePath, $decryptedFilePath, $userKey);
+            File::decryptFile($encryptedFilePath, $decryptedFilePath, $userKey);
+        } catch (\Exception $e) {}
     }
 }

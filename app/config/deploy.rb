@@ -68,7 +68,7 @@ after :deploy, 'deploy:cleanup'
 namespace :app_tasks do
   task :php do
     capifony_pretty_print "--> Restarting PHP"
-    invoke_command "sudo /usr/sbin/service php7.1-fpm reload", :via => run_method
+    invoke_command "sudo /usr/sbin/service php7.2-fpm reload", :via => run_method
     capifony_puts_ok
   end
   task :supervisor do

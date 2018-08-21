@@ -65,7 +65,7 @@ class SearchType extends AbstractType
                 },
             ]);
 
-        if (count($options['categoryViews']) > 1) {
+        if (\count($options['categoryViews']) > 1) {
             $builder
                 ->add('category', ChoiceType::class, [
                     'label'        => 'form.search.type.label',
@@ -73,7 +73,7 @@ class SearchType extends AbstractType
                     'multiple'     => true,
                     'choices'      => $options['categoryViews'],
                 ]);
-        } elseif (count($options['typeViews']) > 1) {
+        } elseif (\count($options['typeViews']) > 1) {
             $builder
                 ->add('type', ChoiceType::class, [
                     'label'        => 'form.search.type.label',
@@ -195,10 +195,10 @@ class SearchType extends AbstractType
         ];
 
         // Allow to filters by type if there are more than 1
-        if (count($typeViews) > 1) {
+        if (\count($typeViews) > 1) {
             $defaultFilters['type'] = array_values(self::transformTypeViews($typeViews));
         }
-        if (count($categoryViews) > 1) {
+        if (\count($categoryViews) > 1) {
             $defaultFilters['category'] = array_values(self::transformCategoryViews($categoryViews));
         }
 

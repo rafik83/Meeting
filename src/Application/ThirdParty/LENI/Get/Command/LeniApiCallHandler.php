@@ -138,21 +138,21 @@ class LeniApiCallHandler
                 EventExtraParameterType::TYPE_LENI_DATA_MAPPING
             ) ?? [];
 
-        $lastCreatedAtExtraData = $this->eventExtraDataRepository->getExtraDataForEvent(
+        $lastUpdatedAtExtraData = $this->eventExtraDataRepository->getExtraDataForEvent(
             $event,
-            EventExtraDataType::LENI_GET_LAST_CREATED_AT
+            EventExtraDataType::LENI_GET_LAST_UPDATED_AT
         );
 
-        $lastCreatedAt = $lastCreatedAtExtraData instanceof Event\ExtraData
-            ? $lastCreatedAtExtraData->getValue()
+        $lastUpdatedAt = $lastUpdatedAtExtraData instanceof Event\ExtraData
+            ? $lastUpdatedAtExtraData->getValue()
             : null;
         $fields = $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping));
-        $filters = $this->getFilters($typesMapping, $lastCreatedAt);
+        $filters = $this->getFilters($event, $lastUpdatedAt);
         $sort = $this->getSort();
 
-        $newLastCreatedAt = $this->getBatchUserData(
+        $newLastUpdatedAt = $this->getBatchUserData(
             $event,
-            $lastCreatedAt,
+            $lastUpdatedAt,
             $fields,
             $filters,
             $sort,
@@ -162,16 +162,16 @@ class LeniApiCallHandler
             0
         );
 
-        if (null !== $newLastCreatedAt) {
+        if (null !== $newLastUpdatedAt) {
             $this->addOrUpdateEventExtraDataHandler->handle(
-                new AddOrUpdateEventExtraData($event, EventExtraDataType::LENI_GET_LAST_CREATED_AT, $newLastCreatedAt)
+                new AddOrUpdateEventExtraData($event, EventExtraDataType::LENI_GET_LAST_UPDATED_AT, $newLastUpdatedAt)
             );
         }
     }
 
     /**
      * @param Event       $event
-     * @param null|string $lastCreatedAt
+     * @param null|string $lastUpdatedAt
      * @param array       $fields
      * @param array       $filters
      * @param array       $sort
@@ -186,7 +186,7 @@ class LeniApiCallHandler
      */
     private function getBatchUserData(
         Event $event,
-        ?string $lastCreatedAt,
+        ?string $lastUpdatedAt,
         array &$fields,
         array &$filters,
         array &$sort,
@@ -204,7 +204,7 @@ class LeniApiCallHandler
             self::BATCH_LENGTH
         );
 
-        $newLastCreatedAt = null;
+        $newLastUpdatedAt = null;
 
         $sheetIds = [];
 
@@ -221,7 +221,7 @@ class LeniApiCallHandler
                 $sheetIds[$participant->getSheet()->getId()] = $participant->getSheet()->getId();
             }
 
-            $newLastCreatedAt = $rawUserData[LeniConstants::LENI_COL_CREATED_AT];
+            $newLastUpdatedAt = $rawUserData[LeniConstants::LENI_COL_UPDATED_AT];
         }
 
         if (!empty($sheetIds)) {
@@ -231,9 +231,9 @@ class LeniApiCallHandler
         if (self::BATCH_LENGTH === \count($rawUsersData)) {
             unset($rawUsersData, $sheetIds);
 
-            $newLastCreatedAt = $this->getBatchUserData(
+            $newLastUpdatedAt = $this->getBatchUserData(
                 $event,
-                $lastCreatedAt,
+                $lastUpdatedAt,
                 $fields,
                 $filters,
                 $sort,
@@ -244,87 +244,59 @@ class LeniApiCallHandler
             );
         }
 
-        if (null === $newLastCreatedAt) {
-            return $lastCreatedAt;
+        if (null === $newLastUpdatedAt) {
+            return $lastUpdatedAt;
         }
 
-        return $newLastCreatedAt;
+        return $newLastUpdatedAt;
     }
 
-    /**
-     * @param array       $typesMapping
-     * @param null|string $lastCreatedAt
-     *
-     * @return array
-     */
-    private function getFilters(array &$typesMapping, ?string $lastCreatedAt): array
+    private function getFilters(Event $event, ?string $lastUpdatedAt): array
     {
         $filters = [];
 
-        if (null !== $lastCreatedAt) {
-            $filters[] = $this->getFilterGreaterOrEqualLastCreatedAt($lastCreatedAt);
+        if (null !== $lastUpdatedAt) {
+            $filters[] = $this->getFilterGreaterOrEqualLastUpdatedAt($lastUpdatedAt);
         }
 
-        $filterByLeniCategory = $this->getFiltersByLeniCategoryInTypeMappingValues($typesMapping);
-
-        if (!empty($filterByLeniCategory)) {
-            $filters[] = $filterByLeniCategory;
+        foreach ($this->getPredefinedFilters($event) as $filter) {
+            $filters[] = $filter;
         }
 
         return $filters;
     }
 
-    /**
-     * @param string $lastCreatedAt
-     *
-     * @return array
-     */
-    private function getFilterGreaterOrEqualLastCreatedAt(string $lastCreatedAt): array
+    private function getFilterGreaterOrEqualLastUpdatedAt(string $lastUpdatedAt): array
     {
         return [
-            LeniConstants::FILTER_FIELD => LeniConstants::LENI_COL_CREATED_AT,
+            LeniConstants::FILTER_FIELD => LeniConstants::LENI_COL_UPDATED_AT,
             LeniConstants::FILTER_OPERATOR => LeniConstants::FILTER_OPERATOR_GREATER_OR_EQUAL,
-            LeniConstants::FILTER_VALUE => $lastCreatedAt,
+            LeniConstants::FILTER_VALUE => $lastUpdatedAt,
         ];
     }
 
-    /**
-     * @param array $typesMapping
-     *
-     * @return array
-     */
-    private function getFiltersByLeniCategoryInTypeMappingValues(array &$typesMapping): array
+    private function getPredefinedFilters(Event $event): array
     {
-        $possibleCategoryValuesByFieldName = [];
+        $predefinedFilters = $this->extraParameterRepository->findByEventAndType(
+            $event,
+            EventExtraParameterType::TYPE_LENI_PREDEFINED_FILTERS
+        );
 
-        foreach ($typesMapping as $typeMapping) {
-            if (\is_array($typeMapping)) {
-                foreach ($typeMapping as $fieldName => $value) {
-                    if (LeniConstants::LENI_COL_CATEGORY !== $fieldName) {
-                        continue;
-                    }
-
-                    $possibleCategoryValuesByFieldName[$value] = $value;
-                }
-            }
+        if (null === $predefinedFilters) {
+            return [];
         }
 
-        if (!empty($possibleCategoryValuesByFieldName)) {
-            return [
-                LeniConstants::FILTER_FIELD => LeniConstants::LENI_COL_CATEGORY,
-                LeniConstants::FILTER_OPERATOR => LeniConstants::FILTER_OPERATOR_IN,
-                LeniConstants::FILTER_VALUE => array_values($possibleCategoryValuesByFieldName),
-            ];
+        $predefinedFiltersDecoded = json_decode($predefinedFilters->getValue(), true);
+
+        if (!$predefinedFiltersDecoded) {
+            return [];
         }
 
-        return [];
+        return $predefinedFiltersDecoded;
     }
 
-    /**
-     * @return array
-     */
     private function getSort(): array
     {
-        return [LeniConstants::LENI_COL_CREATED_AT => LeniConstants::SORT_ASC];
+        return [LeniConstants::LENI_COL_UPDATED_AT => LeniConstants::SORT_ASC];
     }
 }

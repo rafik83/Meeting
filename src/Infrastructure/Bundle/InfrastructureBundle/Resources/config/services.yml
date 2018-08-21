@@ -6284,6 +6284,8 @@ services:
             - '@components.home.home_dispatch'
             - '@components.home.home_dispatch_anonymous_user'
             - '@adapter.authorization_checker'
+            - '@domain.event.day.dday_guesser'
+            - '@domain.key_dates.checker.agenda_access_checker'
 
     #
     # Event Day service

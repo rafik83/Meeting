@@ -1,0 +1,7 @@
+fastcgi_pass php-upstream;
+fastcgi_split_path_info ^(.+\.php)(/.*)$;
+fastcgi_read_timeout 999s;#origin60s
+include fastcgi_params;
+fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+fastcgi_param DOCUMENT_ROOT $realpath_root;
+fastcgi_param HTTPS $https if_not_empty;

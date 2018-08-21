@@ -55,12 +55,11 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $sheet->getType()->willReturn($type1->reveal());
         $sheet->getUserParticipant($user)->willReturn($participant->reveal());
         $sheet2->getType()->willReturn($type2->reveal());
+        $sheet2->getCategoriesTitles('fr')->shouldBeCalled()->willReturn('category');
         $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), $locale)->willReturn('sheet name');
         $ruleRepository->getBySeerTypeAndSeeableType($type1->reveal(), $type2->reveal())->shouldBeCalled()
             ->willReturn([]);
         $preview->getPreview($sheet2->reveal(), $locale, null)->shouldBeCalled()->willReturn([]);
-
-        $type2->getTitle($locale)->willReturn('type');
 
         $router->generate('event_user_phone_redirect_to_validation', [
             'sheet'       => 1,
@@ -90,6 +89,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             false,
             false,
             false,
+            true,
             true
         ));
 
@@ -97,7 +97,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             $sheet2->reveal(),
             'sheet name',
             'sent',
-            'type',
+            'category',
             $datetime,
             $meetingRequest->reveal(),
             [],

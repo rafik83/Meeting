@@ -1,4 +1,4 @@
-Proximum\Vimeet\Domain\Model\ValidationCriteria (local):
+Proximum\Vimeet\Domain\Model\ValidationCriteria:
     validation_criteria_event_rdv_carnot_2016:
         __construct:
             - false

@@ -34,6 +34,9 @@ class MeetingRequestListViewQuery
     /** @var Event */
     public $event;
 
+    /** @var bool */
+    public $showCategory;
+
     /**
      * @param Event  $event
      * @param Sheet  $sheet
@@ -41,6 +44,7 @@ class MeetingRequestListViewQuery
      * @param string $locale
      * @param array  $filters
      * @param array  $slotsToFilter
+     * @param bool   $showCategory
      */
     public function __construct(
         Event $event,
@@ -48,13 +52,15 @@ class MeetingRequestListViewQuery
         User $user,
         $locale,
         array $filters = [],
-        array $slotsToFilter = []
+        array $slotsToFilter = [],
+        bool $showCategory = false
     ) {
-        $this->event         = $event;
-        $this->sheet         = $sheet;
-        $this->user          = $user;
-        $this->locale        = $locale;
-        $this->filters       = $filters;
+        $this->event = $event;
+        $this->sheet = $sheet;
+        $this->user = $user;
+        $this->locale = $locale;
+        $this->filters = $filters;
         $this->slotsToFilter = $slotsToFilter;
+        $this->showCategory = $showCategory;
     }
 }

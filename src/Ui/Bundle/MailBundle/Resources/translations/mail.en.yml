@@ -68,7 +68,7 @@ mail.resetPassword.link: 'Reset password'
 mail.resetPassword.subject: '[%event%] Forgotten password'
 mail.sheet.add_participant_confirmation.body: "Hello, \n\nYour invitation to %guestEmail% for %event% has been sent. \n\nRegards,"
 mail.sheet.add_participant_confirmation.subject: 'Invitation sent'
-mail.sheet.change_type.body: "%firstname% %lastname%, \n\nYour participation has been converted from %fromType% to %toType%.\n\nRegards,"
+mail.sheet.change_type.body: "%firstname% %lastname%, \n\nYour participation has been converted from %fromType% to %toType%."
 mail.sheet.change_type.end: 'Regards,'
 mail.sheet.change_type.subject: '[%event%] Your participation has been converted'
 mail.sheet.generate_pdf.click: 'Download the sheets PDFs'
