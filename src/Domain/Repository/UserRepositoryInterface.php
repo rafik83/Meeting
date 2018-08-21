@@ -42,6 +42,8 @@ interface UserRepositoryInterface
      */
     public function findByEmail($email): ?User;
 
+    public function findOneById(int $id): ?User;
+
     /**
      * @return User[]
      */

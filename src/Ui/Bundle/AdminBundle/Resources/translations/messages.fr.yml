@@ -188,6 +188,9 @@ admin.event.paymentConditions.typeWithSpecificPaymentConditions: 'Liste des type
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
+admin.event.qrcode.notfound: 'Participant inconnu'
+admin.event.qrcode.title: 'Résultat du scan'
+admin.event.qrcode.number_of_available_badge: 'Nombre de badge possible'
 admin.event.registration.template_builder.remove_confirm: 'Confirmez-vous la suppression de cet élément ?'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
@@ -410,6 +413,7 @@ admin.meeting.export.fields.to_sheet_participants: 'Participants demandés'
 admin.meeting.export.fields.to_sheet_title: 'Titre fiche demandée'
 admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandés'
 admin.meeting.link: Rendez-vous
+admin.event.access_control: Contrôle d'accès
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
 admin.meeting.list.column.head.isCreatedByParticipants: 'Créé par les participants'
