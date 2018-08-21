@@ -96,6 +96,20 @@ class UserRepository implements UserRepositoryInterface
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
+    public function findOneById(int $id): ?User
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->where('user.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
     /**
      * {@inheritdoc}
      */

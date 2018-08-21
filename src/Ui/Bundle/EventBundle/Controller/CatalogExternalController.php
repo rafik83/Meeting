@@ -42,12 +42,12 @@ class CatalogExternalController extends Controller
         $filters = [];
 
         try {
-            $searchForm = $this->get('form_factory.search_facet_external_factory')
-                ->create($event, $locale, $filters);
-
             $searchFacetsView = $this->get('query.catalog.search_facet_external_view_query_handler')->handle(
                 new SearchFacetExternalViewQuery($event, $locale)
             );
+
+            $searchForm = $this->get('form_factory.search_facet_external_factory')
+                ->create($event, $locale, $filters, $searchFacetsView);
 
             $categoryViews = $searchFacetsView->hasCategory()
                 ? $this->get('form_factory.search_facet_external_factory')->getCategoryViews($event, $locale)
@@ -97,7 +97,7 @@ class CatalogExternalController extends Controller
         }
 
         $searchForm = $this->get('form_factory.search_facet_external_factory')
-            ->createFiltered($event, $locale, $filters, $paginatedResult->aggregations);
+            ->createFiltered($event, $locale, $filters, $paginatedResult->aggregations, $searchFacetsView);
         $message = $this->get('tactician.commandbus.query')->handle(
             new CatalogVisibilityMessageQuery($event, $locale)
         );

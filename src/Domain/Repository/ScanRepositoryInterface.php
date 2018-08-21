@@ -18,5 +18,6 @@ use Proximum\Vimeet\Domain\Model\User\Event\Scan;
 interface ScanRepositoryInterface
 {
     public function add(Scan $scan): void;
+
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool;
 }

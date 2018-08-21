@@ -46,6 +46,7 @@ class ConfigureDatesHandlerTest extends TestCase
         $smsActivationDate                = new \DateTime('2016-06-09 12:00:00');
         $registrationOpenDate             = new \DateTime('2016-06-09 12:00:00');
         $registrationCloseDate            = new \DateTime('2016-06-10 12:00:00');
+        $enableBadgeForParticipantDate    = new \DateTime('2016-06-10 12:00:00');
 
         $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setDates(
@@ -57,7 +58,8 @@ class ConfigureDatesHandlerTest extends TestCase
             $smsActivationDate,
             null,
             $registrationOpenDate,
-            $registrationCloseDate
+            $registrationCloseDate,
+            $enableBadgeForParticipantDate
         );
 
         $this->eventRepository->set($expectedEvent)->shouldBeCalled();
@@ -72,6 +74,7 @@ class ConfigureDatesHandlerTest extends TestCase
         $command->smsActivationDate                = $smsActivationDate;
         $command->registrationOpenDate             = $registrationOpenDate;
         $command->registrationCloseDate            = $registrationCloseDate;
+        $command->enableBadgeForParticipantDate    = $enableBadgeForParticipantDate;
 
         $handler = new ConfigureDatesHandler($this->eventRepository->reveal(), $this->eventDispatcher->reveal());
         $handler->handle($command);
@@ -107,6 +110,7 @@ class ConfigureDatesHandlerTest extends TestCase
         $command->smsActivationDate                = null;
         $command->registrationOpenDate             = null;
         $command->registrationCloseDate            = null;
+        $command->enableBadgeForParticipantDate    = null;
 
         $handler = new ConfigureDatesHandler($this->eventRepository->reveal(), $this->eventDispatcher->reveal());
         $handler->handle($command);
