@@ -239,6 +239,8 @@ services:
             - '@adapter.authorization_checker'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.session'
+            - '@router'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction:
         arguments:
