@@ -166,6 +166,16 @@ abstract class AbstractSearchType extends AbstractType
                 ],
             ]);
         }
+
+        $tagFilterViews = $searchFacetsView->getTagFilterViews();
+        if (!empty($tagFilterViews)) {
+            $builder->add('tagFilters', TagFiltersType::class, [
+                'label' => false,
+                'tagFilterViews' => $tagFilterViews,
+                'taggedNomenclatureTagViews' => $options['taggedNomenclatureTagViews'],
+            ]);
+        }
+
     }
 
     /**
@@ -178,6 +188,7 @@ abstract class AbstractSearchType extends AbstractType
             'categoryViews',
             'organizationCategoryViews',
             'positionViews',
+            'taggedNomenclatureTagViews',
             'event',
             'locale',
         ]);
@@ -186,6 +197,7 @@ abstract class AbstractSearchType extends AbstractType
         $resolver->setAllowedTypes('categoryViews', 'array');
         $resolver->setAllowedTypes('organizationCategoryViews', 'array');
         $resolver->setAllowedTypes('positionViews', 'array');
+        $resolver->setAllowedTypes('taggedNomenclatureTagViews', 'array');
         $resolver->setAllowedTypes('locale', 'string');
         $resolver->setAllowedTypes('event', Event::class);
 

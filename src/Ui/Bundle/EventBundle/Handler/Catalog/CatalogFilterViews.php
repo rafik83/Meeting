@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class CategoryTypeOrganizationAndPositionViews
+class CatalogFilterViews
 {
     /** @var Event */
     public $event;

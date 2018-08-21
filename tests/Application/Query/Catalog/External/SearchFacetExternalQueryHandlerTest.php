@@ -11,21 +11,24 @@
 namespace Application\Query\Catalog\External;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQuery;
-use Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQueryHandler;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetExternalViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetExternalViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
+use Proximum\Vimeet\Application\View\Catalog\TagFilterView;
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\Catalog\CatalogTagFilterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class SearchFacetQueryHandlerTest extends TestCase
+class SearchFacetExternalQueryHandlerTest extends TestCase
 {
     /** @var SearchFacetRepositoryInterface */
     private $searchFacetRepository;
+
+    private $catalogTagFilterRepository;
 
     /** @var Event */
     private $event;
@@ -33,21 +36,8 @@ class SearchFacetQueryHandlerTest extends TestCase
     public function setUp()
     {
         $this->searchFacetRepository = $this->prophesize(SearchFacetRepositoryInterface::class);
+        $this->catalogTagFilterRepository = $this->prophesize(CatalogTagFilterRepositoryInterface::class);
         $this->event = EventFactory::createEvent();
-    }
-
-    public function testHandle()
-    {
-        $expectedSearchFacet = new SearchFacet($this->event, SearchFacet::TYPE_TYPE, true);
-        $expectedSearchFacet->translate('fr', 'type', 'type');
-        $query = new SearchFacetQuery($this->event);
-        $handler = new SearchFacetQueryHandler($this->searchFacetRepository->reveal());
-
-        $this->searchFacetRepository->getByEvent($this->event)->shouldBeCalled()->willReturn($expectedSearchFacet);
-
-        $resultSearchFacet = $handler->handle($query);
-
-        $this->assertEquals($expectedSearchFacet, $resultSearchFacet);
     }
 
     public function testHandleWithCategory()
@@ -64,20 +54,38 @@ class SearchFacetQueryHandlerTest extends TestCase
         $searchFacetCategoryView     = new SearchFacetView(SearchFacet::TYPE_CATEGORY, '', '', true);
         $searchFacetLocalizationView = new SearchFacetView(SearchFacet::TYPE_LOCALIZATION, '', '', false);
 
-        $expectedSearchFacetsView = new SearchFacetsView([
-            $searchFacetTypeView,
-            $searchFacetCategoryView,
-            $searchFacetLocalizationView,
-        ]);
+        $expectedSearchFacetsView = new SearchFacetsView(
+            [
+                $searchFacetTypeView,
+                $searchFacetCategoryView,
+                $searchFacetLocalizationView,
+            ],
+            [
+                'sheet_organization_staff' => new TagFilterView('sheet_organization_staff', 'Effectif', 'Les effectifs'),
+            ]
+        );
 
         // Mock
-        $searchFacetRepository = $this->prophesize(SearchFacetRepositoryInterface::class);
-
-        $searchFacetRepository->getByEvent($event)
+        $this->searchFacetRepository->getByEvent($event)
             ->shouldBeCalled()
             ->willReturn([$typeSearchFacet, $keywordsSearchFacet, $localizationSearchFacet]);
 
-        $handler = new SearchFacetExternalViewQueryHandler($searchFacetRepository->reveal());
+        $tagFilter = $this->prophesize(CatalogTagFilter::class);
+        $tagFilter->getTag()->shouldBeCalled()->willReturn('sheet_organization_staff');
+        $tagFilter->getLabel('fr')->shouldBeCalled()->willReturn('Effectif');
+        $tagFilter->getPlaceholder('fr')->shouldBeCalled()->willReturn('Les effectifs');
+        $this->catalogTagFilterRepository
+            ->getByEventAndType($this->event, CatalogTagFilter::TYPE_EXTERNAL)
+            ->shouldBeCalled()
+            ->willReturn([
+                $tagFilter->reveal()
+            ])
+        ;
+
+        $handler = new SearchFacetExternalViewQueryHandler(
+            $this->searchFacetRepository->reveal(),
+            $this->catalogTagFilterRepository->reveal()
+        );
 
         $searchFacetsView = $handler->handle(new SearchFacetExternalViewQuery($event, $locale));
 
