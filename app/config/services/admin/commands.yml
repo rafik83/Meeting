@@ -103,6 +103,16 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmation }
 
     #
+    # Type Badge
+    #
+    Proximum\Vimeet\Application\Command\Type\Badge\ConfigureHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Badge\Configure }
+
+    #
     # Type Payment Conditions
     #
     Proximum\Vimeet\Application\Command\Type\PaymentConditions\UpdateHandler:
@@ -145,6 +155,32 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PrepareIndex }
+
+    Proximum\Vimeet\Application\Command\Event\UpdateHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
+
+    Proximum\Vimeet\Application\Command\Event\CreateHandler:
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.event.content_repository'
+            - '@guideline.generator'
+            - '@domain.event.duplicator'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
+
+    Proximum\Vimeet\Application\Command\Event\Design\UpdateDesignHandler:
+        arguments:
+             - '@vimeet_infrastructure.repository.event_repository'
+             - '@adapter.local_file_storage'
+             - '@command.event.configuration.background.remove_image_handler'
+             - '@guideline.generator'
+        tags:
+             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign }
 
     #
     # Event / Sheet

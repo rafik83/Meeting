@@ -14,19 +14,20 @@ use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 
 class SearchFacetsView
 {
-    /**
-     * @var SearchFacetView[]
-     */
+    /** @var SearchFacetView[] */
     private $searchFacets;
 
+    /** @var TagFilterView[] */
+    private $tagFilterViews;
+
     /**
-     * SearchFacetsView constructor.
-     *
      * @param SearchFacetView[] $searchFacets
+     * @param TagFilterView[]   $tagFilterViews
      */
-    public function __construct(array $searchFacets)
+    public function __construct(array $searchFacets, array $tagFilterViews = [])
     {
         $this->searchFacets = $searchFacets;
+        $this->tagFilterViews = $tagFilterViews;
     }
 
     /**
@@ -59,7 +60,7 @@ class SearchFacetsView
     }
 
     /**
-     * @return SearchFacetView|false
+     * @return SearchFacetView|null
      */
     public function getPosition(): ?SearchFacetView
     {
@@ -122,5 +123,13 @@ class SearchFacetsView
     private function hasFilter($filter): bool
     {
         return null !== $this->getFilter($filter);
+    }
+
+    /**
+     * @return TagFilterView[]
+     */
+    public function getTagFilterViews(): array
+    {
+        return $this->tagFilterViews;
     }
 }

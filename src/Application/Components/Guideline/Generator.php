@@ -18,34 +18,22 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class Generator
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $webAssetsPath;
 
-    /**
-     * @var \Twig_Environment
-     */
+    /** @var \Twig_Environment */
     private $twig;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $bundleGuidelinePath;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fontPath;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $imagePath;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $rootPath;
 
     /**
@@ -83,7 +71,12 @@ class Generator
     {
         $gradientLeftColor  = $event->getConfiguration()->getLeftColor();
         $gradientRightColor = $event->getConfiguration()->getRightColor();
+        $gradientHeaderLeftColor  = $event->getConfiguration()->getHeaderLeftColor();
+        $gradientHeaderRightColor = $event->getConfiguration()->getHeaderRightColor();
         $colorHighlighted   = $event->getConfiguration()->getTextColor();
+        $gradientHeaderButtonLeftColor = $event->getConfiguration()->getHeaderButtonLeftColor();
+        $gradientHeaderButtonRightColor = $event->getConfiguration()->getHeaderButtonRightColor();
+        $gradientHeaderButtonTextColor = $event->getConfiguration()->getHeaderButtonTextColor();
 
         $repoName = $event->getId();
 
@@ -94,14 +87,19 @@ class Generator
         $this->createDirIfNotExist($fullPath);
 
         $file = $this->twig->loadTemplate('AdminBundle:Asset:eventGuidelineVars.scss.twig')->render([
-            'gradientLeftColor'   => $gradientLeftColor,
-            'gradientRightColor'  => $gradientRightColor,
-            'colorHighLighted'    => $colorHighlighted,
+            'gradientLeftColor' => $gradientLeftColor,
+            'gradientRightColor' => $gradientRightColor,
+            'gradientHeaderLeftColor' => $gradientHeaderLeftColor,
+            'gradientHeaderRightColor' => $gradientHeaderRightColor,
+            'gradientHeaderButtonLeftColor' => $gradientHeaderButtonLeftColor,
+            'gradientHeaderButtonRightColor' => $gradientHeaderButtonRightColor,
+            'gradientHeaderButtonTextColor' => $gradientHeaderButtonTextColor,
+            'colorHighLighted' => $colorHighlighted,
             'bundleGuidelinePath' => $this->bundleGuidelinePath,
-            'fontPath'            => $this->fontPath,
-            'imagePath'           => $this->imagePath,
-            'backgroundImage'     => $event->getConfiguration()->getBackgroundImage(),
-            'backgroundColor'     => $event->getConfiguration()->getBackgroundColor(),
+            'fontPath' => $this->fontPath,
+            'imagePath' => $this->imagePath,
+            'backgroundImage' => $event->getConfiguration()->getBackgroundImage(),
+            'backgroundColor' => $event->getConfiguration()->getBackgroundColor(),
         ]);
 
         $varsFileName = 'vars-' . sha1(uniqid()) . '.scss';

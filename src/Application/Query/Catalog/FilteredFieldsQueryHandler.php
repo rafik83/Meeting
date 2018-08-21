@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\Sheet\TagFilterAggregator;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagView;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -21,12 +23,15 @@ class FilteredFieldsQueryHandler
     /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
-    /**
-     * @param SheetSearchAdapterInterface $sheetSearchAdapter
-     */
-    public function __construct(SheetSearchAdapterInterface $sheetSearchAdapter)
-    {
+    /** @var TagFilterAggregator */
+    private $tagFilterAggregator;
+
+    public function __construct(
+        SheetSearchAdapterInterface $sheetSearchAdapter,
+        TagFilterAggregator $tagFilterAggregator
+    ) {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
+        $this->tagFilterAggregator = $tagFilterAggregator;
     }
 
     /**
@@ -40,12 +45,10 @@ class FilteredFieldsQueryHandler
         $this->filterCategoryViews($filteredFieldsQuery);
         $this->filterOrganizationCategoryViews($filteredFieldsQuery);
         $this->filterPositionViews($filteredFieldsQuery);
+        $this->filterTaggedNomenclatureTagViews($filteredFieldsQuery);
 
         return new FilteredFieldsView(
-            $filteredFieldsQuery->typeViews,
-            $filteredFieldsQuery->organizationCategoryViews,
-            $filteredFieldsQuery->positionViews,
-            $filteredFieldsQuery->categoryViews
+            $filteredFieldsQuery->catalogFilterViewsResult
         );
     }
 
@@ -68,7 +71,7 @@ class FilteredFieldsQueryHandler
         array $sheetsToExclude = []
     ): ?array {
         if (isset($filters[SearchFields::FILTER_TYPE])
-            && count($filters[SearchFields::FILTER_TYPE]) === count($typeViews)
+            && \count($filters[SearchFields::FILTER_TYPE]) === \count($typeViews)
         ) {
             return null;
         }
@@ -104,7 +107,7 @@ class FilteredFieldsQueryHandler
         array $sheetsToExclude = []
     ): ?array {
         if (isset($filters[SearchFields::FILTER_CATEGORY])
-            && count($filters[SearchFields::FILTER_CATEGORY]) === count($categoryViews)
+            && \count($filters[SearchFields::FILTER_CATEGORY]) === \count($categoryViews)
         ) {
             return null;
         }
@@ -176,7 +179,7 @@ class FilteredFieldsQueryHandler
             $filteredFieldsQuery->event,
             $filteredFieldsQuery->locale,
             $filteredFieldsQuery->filters,
-            $filteredFieldsQuery->typeViews,
+            $filteredFieldsQuery->catalogFilterViewsResult->typeViews,
             $filteredFieldsQuery->availableSlotIds,
             $filteredFieldsQuery->sheetsToExclude
         );
@@ -188,7 +191,7 @@ class FilteredFieldsQueryHandler
             SheetSearchAdapterInterface::ES_FIELD_TYPE
         );
 
-        foreach ($filteredFieldsQuery->typeViews as $typeView) {
+        foreach ($filteredFieldsQuery->catalogFilterViewsResult->typeViews as $typeView) {
             if (isset($aggregationsIndexedByKey[$typeView->id])) {
                 $typeView->count = $aggregationsIndexedByKey[$typeView->id];
             }
@@ -204,7 +207,7 @@ class FilteredFieldsQueryHandler
             $filteredFieldsQuery->event,
             $filteredFieldsQuery->locale,
             $filteredFieldsQuery->filters,
-            $filteredFieldsQuery->categoryViews,
+            $filteredFieldsQuery->catalogFilterViewsResult->categoryViews,
             $filteredFieldsQuery->availableSlotIds,
             $filteredFieldsQuery->sheetsToExclude
         );
@@ -219,7 +222,7 @@ class FilteredFieldsQueryHandler
             true
         );
 
-        foreach ($filteredFieldsQuery->categoryViews as $categoryView) {
+        foreach ($filteredFieldsQuery->catalogFilterViewsResult->categoryViews as $categoryView) {
             if (isset($aggregationsIndexedByKey[$categoryView->id])) {
                 $categoryView->count = $aggregationsIndexedByKey[$categoryView->id];
             }
@@ -237,7 +240,7 @@ class FilteredFieldsQueryHandler
             $filteredFieldsQuery->filters
         );
 
-        $aggregations = null !== $aggregations ? $aggregations : $filteredFieldsQuery->currentAggregations;
+        $aggregations = $aggregations ?? $filteredFieldsQuery->currentAggregations;
 
         $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
             $aggregations,
@@ -245,17 +248,17 @@ class FilteredFieldsQueryHandler
         );
 
         if (empty($aggregationsIndexedByKey)) {
-            $filteredFieldsQuery->organizationCategoryViews = [];
+            $filteredFieldsQuery->catalogFilterViewsResult->organizationCategoryViews = [];
 
             return;
         }
 
-        foreach ($filteredFieldsQuery->organizationCategoryViews as $index => $organizationCategoryView) {
+        foreach ($filteredFieldsQuery->catalogFilterViewsResult->organizationCategoryViews as $index => $organizationCategoryView) {
             // Show only filter which have result
             if (!isset($aggregationsIndexedByKey[$organizationCategoryView->key])
                 || 0 === $aggregationsIndexedByKey[$organizationCategoryView->key]
             ) {
-                unset($filteredFieldsQuery->organizationCategoryViews[$index]);
+                unset($filteredFieldsQuery->catalogFilterViewsResult->organizationCategoryViews[$index]);
             }
         }
     }
@@ -271,7 +274,7 @@ class FilteredFieldsQueryHandler
             $filteredFieldsQuery->filters
         );
 
-        $aggregations = null !== $aggregations ? $aggregations : $filteredFieldsQuery->currentAggregations;
+        $aggregations = $aggregations ?? $filteredFieldsQuery->currentAggregations;
 
         $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
             $aggregations,
@@ -280,17 +283,17 @@ class FilteredFieldsQueryHandler
         );
 
         if (empty($aggregationsIndexedByKey)) {
-            $filteredFieldsQuery->positionViews = [];
+            $filteredFieldsQuery->catalogFilterViewsResult->positionViews = [];
 
             return;
         }
 
-        foreach ($filteredFieldsQuery->positionViews as $index => $positionView) {
+        foreach ($filteredFieldsQuery->catalogFilterViewsResult->positionViews as $index => $positionView) {
             // Show only filter which have result
             if (!isset($aggregationsIndexedByKey[$positionView->getKey()])
                 || 0 === $aggregationsIndexedByKey[$positionView->getKey()]
             ) {
-                unset($filteredFieldsQuery->positionViews[$index]);
+                unset($filteredFieldsQuery->catalogFilterViewsResult->positionViews[$index]);
             }
         }
     }
@@ -333,5 +336,38 @@ class FilteredFieldsQueryHandler
         }
 
         return $aggregationsIndexedByKey;
+    }
+
+    private function filterTaggedNomenclatureTagViews(FilteredFieldsQuery $filteredFieldsQuery): void
+    {
+        foreach ($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews as $tag => $nomenclatureTagViews) {
+            $aggregations = $this->tagFilterAggregator->getAggregationsForTag(
+                $filteredFieldsQuery->event,
+                $tag,
+                $filteredFieldsQuery->locale,
+                $filteredFieldsQuery->filters,
+                $filteredFieldsQuery->availableSlotIds,
+                $filteredFieldsQuery->sheetsToExclude
+            );
+
+            $aggregationKeys = [];
+
+            foreach ($aggregations as $aggregation) {
+                $key = $aggregation['key'] ?? null;
+
+                if (null === $key) {
+                    continue;
+                }
+
+                $aggregationKeys[$key] = $key;
+            }
+
+            /** @var NomenclatureTagView[] $nomenclatureTagViews */
+            foreach ($nomenclatureTagViews as $key => $nomenclatureTagView) {
+                if (!isset($aggregationKeys[$nomenclatureTagView->key])) {
+                    unset($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews[$tag][$key]);
+                }
+            }
+        }
     }
 }

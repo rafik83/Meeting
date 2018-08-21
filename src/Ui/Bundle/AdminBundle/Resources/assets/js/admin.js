@@ -21,6 +21,7 @@ var $ = require('jquery'),
     AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening'),
     DuplicationSheetsModal = require('./components/_DuplicationSheetsModal'),
     SelectPreviousNextMover = require('./components/_SelectPreviousNextMover'),
+    FilterBuilder = require('./components/_FilterBuilder'),
     RadioGroupAjax = require('./components/_RadioGroupAjax')
 ;
 
@@ -174,6 +175,14 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-radio-group-ajax]'), function (element) {
         new RadioGroupAjax(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.filter-form'), function () {
+        new FilterBuilder(
+            target.querySelector('#rules'),
+            target.querySelector('#builder'),
+            target.querySelector('#submit-rules')
+        );
     });
 }
 

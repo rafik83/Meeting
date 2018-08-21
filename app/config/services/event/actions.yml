@@ -46,3 +46,13 @@ services:
             - '@templating.engine.twig'
             - '%infrastructure.encrypted_files_path%'
             - '%kernel.project_dir%/web'
+
+    #
+    # Badge
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ShowAction:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Badge\AvailableChecker'
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

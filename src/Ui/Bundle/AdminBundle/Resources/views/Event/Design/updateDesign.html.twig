@@ -1,0 +1,67 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title %}
+    {{ 'admin.event.design.update.title'|trans }}
+{% endblock %}
+
+{% block form_title 'admin.event.design.update.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.localizedImages) }}
+
+    {% for locale in event.locales %}
+            <div>
+                <div class="col-md-3 text-right">
+                    <b>{{ locale|locale }}</b>
+                </div>
+                <div class="col-md-9">
+                    <label>{{ 'form.event_update_design.children.localizedImages.prototype.children.logo.label'|trans({}, 'forms') }}</label>
+                    {% if event.localizedLogo(locale) %}
+                        <img src="{{ asset(event.localizedLogo(locale)) }}" class="img-responsive"/>
+                    {% else %}
+                        {{ 'form.event_update_design.children.localizedImages.prototype.children.undefined'|trans({}, 'forms') }}
+                    {% endif %}<br>
+                    <label>{{ 'form.event_update_design.children.localizedImages.prototype.children.mobileLogo.label'|trans({}, 'forms') }}</label>
+                    {% if event.localizedMobileLogo(locale) %}
+                        <img src="{{ asset(event.localizedMobileLogo(locale)) }}" class="img-responsive"/>
+                    {% else %}
+                        {{ 'form.event_update_design.children.localizedImages.prototype.children.undefined'|trans({}, 'forms') }}
+                    {% endif %}
+                    <hr>
+                </div>
+            </div>
+
+    {% endfor %}
+
+    <hr>
+
+    {{ form_row(form.headerLeftColor, {widget_columns: 2}) }}
+    {{ form_row(form.headerRightColor, {widget_columns: 2}) }}
+    {{ form_row(form.headerButtonLeftColor, {widget_columns: 2}) }}
+    {{ form_row(form.headerButtonRightColor, {widget_columns: 2}) }}
+    {{ form_row(form.headerButtonTextColor, {widget_columns: 2}) }}
+    {{ form_row(form.leftColor, {widget_columns: 2}) }}
+    {{ form_row(form.rightColor, {widget_columns: 2}) }}
+    {{ form_row(form.textColor, {widget_columns: 2}) }}
+
+    <hr>
+    {{ form_row(form.backgroundColor, {widget_columns: 2}) }}
+    {{ form_row(form.backgroundImage, {widget_columns: 2}) }}
+
+    {% if event.configuration.backgroundImage %}
+        <div>
+            <div class="col-md-3 text-right">
+                <label>{{ 'form.event_update_design.children.backgroundImage.label'|trans({}, 'forms') }}</label>
+            </div>
+            <div class="col-md-9">
+                <img src="{{ asset(event.configuration.backgroundImage) }}" class="img-responsive"/>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if fow.removeBackgroundImage is defined %}
+        {{ form_row(form.removeBackgroundImage, {inline: true}) }}
+    {% endif %}
+{% endblock form_content %}
+
+{% block goback_link path('admin_event_list') %}

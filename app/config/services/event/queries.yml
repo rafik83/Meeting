@@ -36,3 +36,12 @@ services:
             - '@domain.rule.applyer'
             - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetInfoQueryHandler'
             - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetRegistrationInfoQueryHandler'
+
+    #
+    # Catalog
+    #
+    Proximum\Vimeet\Application\Query\Catalog\NomenclatureTagViewQueryHandler:
+        arguments:
+            - '@catalog.tagged_nomenclature_filter_getter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\NomenclatureTagViewQuery }
