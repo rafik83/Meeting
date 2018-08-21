@@ -123,7 +123,7 @@ security:
         # Print
         - { path: '^/([a-z]{2})/_internal', roles: ROLE_PHANTOMJS }
         # Badge
-        - { path: '/([a-z]{2})/badge/$', role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: '/([a-z]{2})/badge', role: IS_AUTHENTICATED_ANONYMOUSLY }
 
     role_hierarchy:
         ROLE_ALLOWED_TO_ADMIN:
