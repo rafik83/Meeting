@@ -32,8 +32,8 @@ Feature: Forgot Password Admin
     And I should be on this page "/fr/login"
     And I should see "flash.admin.reset_password_token.success"
     And the "admin.password_reset" mail should be sent to "test@test.com" from "vimeet"
-    And the "admin.password_reset" mail should contain the link "http://admin.vimeet.proximum/app_test.php/fr/reset-password/"
-    And I follow the "http://admin.vimeet.proximum/app_test.php/fr/reset-password/" link in the "admin.password_reset" mail
+    And the "admin.password_reset" mail should contain the link "http://admin.vimeet.proximum/fr/reset-password/"
+    And I follow the "http://admin.vimeet.proximum/fr/reset-password/" link in the "admin.password_reset" mail
     And the response status code should be 200
     And I should see "new_password.title"
     And I fill in the following:
