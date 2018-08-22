@@ -5,7 +5,7 @@ default:
                env: test
                bootstrap: 'vendor/autoload.php'
         Behat\MinkExtension:
-            base_url:  'http://admin.vimeet.proximum/app_test.php'
+            base_url: 'http://admin.vimeet.proximum'
             sessions:
                 default:
                     symfony2: ~
@@ -15,7 +15,6 @@ default:
         Fidry\AliceBundleExtension\Extension:
             fixtures_base_path: %paths.base%/src/Behat/Resources/fixtures
         Behatch\Extension: ~
-        FriendsOfBehat\PerformanceExtension: ~
     suites:
         default:
             contexts:
