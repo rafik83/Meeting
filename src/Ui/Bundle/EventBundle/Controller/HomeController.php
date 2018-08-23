@@ -48,33 +48,44 @@ class HomeController extends Controller
             ->getVisibleTypesViewsByEvent($event, $locale)
         ;
 
-        if (empty($typeViews)) {
+        if (empty($typeViews) && !$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event_login');
         }
 
-        $form = $this->createForm(TypeChoiceType::class, null, [
-            'typeViews' => $typeViews,
-        ]);
+        $formView = null;
 
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $typeView = $form->getData()['type'];
+        if (!empty($typeViews)) {
+            $form = $this->createForm(
+                TypeChoiceType::class,
+                null,
+                [
+                    'typeViews' => $typeViews,
+                ]
+            );
 
-            if (null === $typeView) {
-                $form->get('type')->addError(
-                    new FormError($this->get('translator')->trans('validators.type.required', [], 'validators'))
-                );
-            } else {
-                if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                    return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
+            if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+                $typeView = $form->getData()['type'];
+
+                if (null === $typeView) {
+                    $form->get('type')->addError(
+                        new FormError($this->get('translator')->trans('validators.type.required', [], 'validators'))
+                    )
+                    ;
+                } else {
+                    if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                        return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
+                    }
+
+                    return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
                 }
-
-                return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
             }
+
+            $formView = $form->createView();
         }
 
         return $this->render('EventBundle:Home:index.html.twig', [
             'event' => $event,
-            'form'  => $form->createView(),
+            'form'  => $formView,
         ]);
     }
 }
