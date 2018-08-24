@@ -14,21 +14,21 @@ Feature: Show the homepage of an event
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/app_test.php/fr/"
+    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/fr/"
     Then I should see "Les rendez-vous CARNOT 2016"
 
   Scenario: Show the participant types of 'Les rendez-vous Carnot 2016' in French
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/app_test.php/fr/"
+    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/fr/"
     Then I should see "Exposant"
     And I should see "Visiteur"
 
   Scenario: Show the participant types of 'Les rendez-vous Carnot 2016' in English
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/app_test.php/en/"
+    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/en/"
     Then I should see "Exhibitor"
     And I should see "Visitor"
 
   Scenario: See pratical info of the event
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/app_test.php/fr/"
+    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/fr/"
     Then I should see "event.info.contact"
     And I should see "PROXIMUM"
     And I should see "accounts@proximumgroup.com"

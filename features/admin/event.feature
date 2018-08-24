@@ -60,9 +60,9 @@ Feature: See, create and update event
     And the "event_update_analyticsCode" field should contain "analyticsCode"
     When I go to "/fr/event"
     Then I should see "Other event"
-    When I go to "http://rdv-carnot-2016.vimeet.proximum/app_test.php/fr"
+    When I go to "http://rdv-carnot-2016.vimeet.proximum/fr"
     Then the response status code should be 200
-    Then I go to "http://rdv-carnot-2016.vimeet.proximum/app_test.php/en"
+    Then I go to "http://rdv-carnot-2016.vimeet.proximum/en"
     And the response status code should be 200
 
   Scenario: update invoice prefix on event
@@ -87,7 +87,7 @@ Feature: See, create and update event
     And I press "form.event_update.children.submit.label"
     Then I go to this page "/en/event"
     And I should see "Invisible"
-    Then this event page "http://super-event.vimeet.proximum/app_test.php/fr" returns 404
+    Then this event page "http://super-event.vimeet.proximum/fr" returns 404
 
   Scenario: I can duplicate an event
     Given I am logged with "test@test.com" on admin

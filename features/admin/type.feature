@@ -106,7 +106,7 @@ Feature: add type
     And I should see "flash.admin.type.remove.error"
 
   Scenario: I should not see an hidden type
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/app_test.php/en/"
+    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/en/"
     Then I should not see "Investisseur"
 
   Scenario: I see type list with associated template

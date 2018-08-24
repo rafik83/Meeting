@@ -704,7 +704,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     private function setBaseUrl($url)
     {
-        $this->baseUrl = $url . '/app_test.php';
+        $this->baseUrl = $url;
     }
 
     /**
