@@ -1,0 +1,93 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Time;
+
+class DaysHelper
+{
+    /**
+     * @param TimeRangeView[] $timeRangeViews
+     *
+     * @return TimeRangeView[]
+     */
+    public static function splitDays(array $timeRangeViews): array
+    {
+        $splitedDays = self::splitOneDayIntoTwoDays($timeRangeViews);
+
+        return self::mergeDays($splitedDays);
+    }
+
+    /**
+     * @param TimeRangeView[] $timeRangeViews
+     *
+     * @return TimeRangeView[]
+     */
+    public static function mergeDays(array $timeRangeViews): array
+    {
+        $previousDay = null;
+        $mergeDays = [];
+
+        foreach ($timeRangeViews as $day) {
+            if ($previousDay instanceof TimeRangeView) {
+                if ($previousDay->getBegin()->format('Y-m-d') === $day->getEnd()->format('Y-m-d')) {
+                    $previousDay->merge($day);
+
+                    continue;
+                } else {
+                    $mergeDays[] = $previousDay;
+                }
+            }
+
+            $previousDay = $day;
+        }
+
+        $mergeDays[] = $previousDay;
+
+        return $mergeDays;
+    }
+
+    /**
+     * @param TimeRangeView[] $timeRangeViews
+     *
+     * @return TimeRangeView[]
+     */
+    public static function splitOneDayIntoTwoDays(array $timeRangeViews): array
+    {
+        $splitedDays = [];
+
+        foreach ($timeRangeViews as $timeRange) {
+            if ($timeRange->getBegin()->format('Y-m-d') !== $timeRange->getEnd()->format('Y-m-d')) {
+                $splitedDays[] = new TimeRangeView(
+                    (new \DateTime())
+                        ->setTimestamp($timeRange->getBegin()->getTimestamp())
+                        ->setTimezone($timeRange->getBegin()->getTimezone()),
+                    (new \DateTime())
+                        ->setTimestamp($timeRange->getBegin()->getTimestamp())
+                        ->setTimezone($timeRange->getBegin()->getTimezone())
+                        ->setTime(23, 59, 59)
+                );
+
+                $splitedDays[] = new TimeRangeView(
+                    (new \DateTime())
+                        ->setTimestamp($timeRange->getEnd()->getTimestamp())
+                        ->setTimezone($timeRange->getEnd()->getTimezone())
+                        ->setTime(0, 0),
+                    (new \DateTime())
+                        ->setTimestamp($timeRange->getEnd()->getTimestamp())
+                        ->setTimezone($timeRange->getEnd()->getTimezone())
+                );
+            } else {
+                $splitedDays[] = $timeRange;
+            }
+        }
+
+        return $splitedDays;
+    }
+}
