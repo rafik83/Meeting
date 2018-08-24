@@ -65,23 +65,13 @@ class DaysHelper
         foreach ($timeRangeViews as $timeRange) {
             if ($timeRange->getBegin()->format('Y-m-d') !== $timeRange->getEnd()->format('Y-m-d')) {
                 $splitedDays[] = new TimeRangeView(
-                    (new \DateTime())
-                        ->setTimestamp($timeRange->getBegin()->getTimestamp())
-                        ->setTimezone($timeRange->getBegin()->getTimezone()),
-                    (new \DateTime())
-                        ->setTimestamp($timeRange->getBegin()->getTimestamp())
-                        ->setTimezone($timeRange->getBegin()->getTimezone())
-                        ->setTime(23, 59, 59)
+                    self::cloneDateTime($timeRange->getBegin()),
+                    self::cloneDateTime($timeRange->getBegin())->setTime(23, 59, 59)
                 );
 
                 $splitedDays[] = new TimeRangeView(
-                    (new \DateTime())
-                        ->setTimestamp($timeRange->getEnd()->getTimestamp())
-                        ->setTimezone($timeRange->getEnd()->getTimezone())
-                        ->setTime(0, 0),
-                    (new \DateTime())
-                        ->setTimestamp($timeRange->getEnd()->getTimestamp())
-                        ->setTimezone($timeRange->getEnd()->getTimezone())
+                    self::cloneDateTime($timeRange->getEnd())->setTime(0, 0),
+                    self::cloneDateTime($timeRange->getEnd())
                 );
             } else {
                 $splitedDays[] = $timeRange;
@@ -89,5 +79,13 @@ class DaysHelper
         }
 
         return $splitedDays;
+    }
+
+    public static function cloneDateTime(\DateTimeInterface $dateTime, ?string $timezone = null): \DateTime
+    {
+        return (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTimezone(null !== $timezone ? new \DateTimeZone($timezone) : $dateTime->getTimezone())
+        ;
     }
 }
