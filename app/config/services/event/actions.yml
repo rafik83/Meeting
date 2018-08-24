@@ -56,3 +56,4 @@ services:
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router'
+            - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
