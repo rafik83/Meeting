@@ -55,12 +55,13 @@ class CreateType extends AbstractType
         /** @var Event $event */
         $event  = $options['event'];
         $locale = $options['locale'];
+        $timezone = $options['timezone'];
 
         if (count($event->getDays()) > 1) {
             $builder
                 ->add('day', DayType::class, [
                     'event'     => $event,
-                    'formatter' => DayHelper::getFormatter($locale, $event->getTimeZone()),
+                    'formatter' => DayHelper::getFormatter($locale, $timezone),
                     'locale'    => $locale,
                     'required'  => true,
                 ]);
@@ -70,6 +71,7 @@ class CreateType extends AbstractType
             ->add('time', TimeRangeType::class, [
                 'event'    => $event,
                 'label'    => false,
+                'timezone' => $timezone,
                 'required' => true,
             ])
         ;
@@ -121,6 +123,7 @@ class CreateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('event');
+        $resolver->setRequired('timezone');
         $resolver->setRequired('locale');
         $resolver->setRequired('isUserAloneParticipant');
         $resolver->setRequired('sheet');

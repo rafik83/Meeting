@@ -32,24 +32,22 @@ class CreateForm
     /** @var string */
     public $actionUrl;
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Sheet   $sheet
-     * @param User    $user
-     * @param string  $actionUrl
-     */
+    /** @var string */
+    public $timezone;
+
     public function __construct(
         Request $request,
         Event $event,
         Sheet $sheet,
         User $user,
-        string $actionUrl
+        string $actionUrl,
+        string $timezone
     ) {
         $this->request     = $request;
         $this->event       = $event;
         $this->sheet       = $sheet;
         $this->user        = $user;
         $this->actionUrl   = $actionUrl;
+        $this->timezone = $timezone;
     }
 }

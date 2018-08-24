@@ -63,9 +63,14 @@ class UnavailabilityController extends Controller
             'sheet'       => $sheet->getId(),
         ]);
 
+        $timezone = $eventDomain->getEvent()->getTimeZone();
+        if ($participant->isVisio() && $participant->getTimezone()) {
+            $timezone = $participant->getTimezone();
+        }
+
         /** @var CreateFormView $createFormView */
         $createFormView = $this->get('handler.unavailability.create_form_handler')->handle(
-            new CreateForm($request, $event, $sheet, $user, $actionUrl)
+            new CreateForm($request, $event, $sheet, $user, $actionUrl, $timezone)
         );
 
         if ($createFormView->isXmlHttpRequest()) {
@@ -75,7 +80,7 @@ class UnavailabilityController extends Controller
         }
 
         if ($createFormView->isSuccess()) {
-            return  $this->redirectToRoute('event_agenda_participant', [
+            return $this->redirectToRoute('event_agenda_participant', [
                 'participant' => $participant->getId(),
                 'sheet'       => $sheet->getId(),
             ]);

@@ -78,7 +78,7 @@ class CreateHandlerTest extends TestCase
         $event->setDays([$day]);
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -107,7 +107,7 @@ class CreateHandlerTest extends TestCase
         $event->setDays([$day]);
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -134,7 +134,7 @@ class CreateHandlerTest extends TestCase
         $event->setDays([$day]);
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),
@@ -165,7 +165,7 @@ class CreateHandlerTest extends TestCase
         $user                 = UserFactory::create();
         $sheet                = SheetFactory::create($event, $user);
         $participant          = ParticipantFactory::create($sheet, $user);
-        $create               = new Create($event, $sheet, $user, 'fr');
+        $create               = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
         $create->participants = [$participant];
         $begin                = new \DateTime('2016-10-12 12:00:00.000');
         $end                  = new \DateTime('2016-10-12 14:00:00.000');
@@ -198,7 +198,7 @@ class CreateHandlerTest extends TestCase
         $user                 = UserFactory::create();
         $sheet                = SheetFactory::create($event, $user);
         $participant          = ParticipantFactory::create($sheet, $user);
-        $create               = new Create($event, $sheet, $user, 'fr');
+        $create               = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
         $create->participants = [$participant];
         $begin                = new \DateTime('2016-10-12 12:00:00.000');
         $end                  = new \DateTime('2016-10-12 14:00:00.000');
@@ -232,7 +232,7 @@ class CreateHandlerTest extends TestCase
         $event->setDays([$day]);
         $user     = UserFactory::create();
         $sheet    = SheetFactory::create($event, $user);
-        $create   = new Create($event, $sheet, $user, 'fr');
+        $create   = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
         $begin    = new \DateTime('2016-10-12 09:00:00.000');
         $end      = new \DateTime('2016-10-12 14:00:00.000');
         $endCheck = new \DateTime('2016-10-12 14:00:00.000');
@@ -262,7 +262,7 @@ class CreateHandlerTest extends TestCase
         $event->setDays([$day]);
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
         $end    = new \DateTime('2016-10-12 19:00:00.000');
 
@@ -291,7 +291,7 @@ class CreateHandlerTest extends TestCase
         $event->setDays([$day]);
         $user       = UserFactory::create();
         $sheet      = SheetFactory::create($event, $user);
-        $create     = new Create($event, $sheet, $user, 'fr');
+        $create     = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
         $begin      = new \DateTime('2016-10-12 11:00:00.000');
         $beginCheck = new \DateTime('2016-10-12 11:00:00.000');
         $end        = new \DateTime('2016-10-12 13:00:00.000');
@@ -322,7 +322,7 @@ class CreateHandlerTest extends TestCase
         $event->setDays([$day]);
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
 
         $expectedBegin = new \DateTime('2016-10-12 08:30:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 12:00:00.000');
@@ -377,7 +377,7 @@ class CreateHandlerTest extends TestCase
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'America/New_York');
 
         $expectedBegin = new \DateTime('2016-10-12 14:30:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 18:00:00.000');
@@ -432,7 +432,7 @@ class CreateHandlerTest extends TestCase
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'Europe/London');
 
         $expectedBegin = new \DateTime('2016-10-12 09:30:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 13:00:00.000');
@@ -468,7 +468,7 @@ class CreateHandlerTest extends TestCase
         $event->setDays([$day]);
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
 
         $expectedBegin = new \DateTime('2016-10-12 08:30:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 12:00:00.000');
@@ -504,7 +504,7 @@ class CreateHandlerTest extends TestCase
         $event->setDays([$day]);
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
 
         $expectedBegin = new \DateTime('2016-10-11 23:05:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 18:00:00.000');
@@ -559,7 +559,7 @@ class CreateHandlerTest extends TestCase
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'America/New_York');
 
         $expectedBegin = new \DateTime('2016-10-11 11:05:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 01:00:00.000');
@@ -614,7 +614,7 @@ class CreateHandlerTest extends TestCase
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
-        $create = new Create($event, $sheet, $user, 'fr');
+        $create = new Create($event, $sheet, $user, 'fr', 'America/Los_Angeles');
 
         $expectedBegin = new \DateTime('2016-10-11 18:05:00.000');
         $expectedEnd   = new \DateTime('2016-10-12 01:00:00.000');
@@ -652,7 +652,7 @@ class CreateHandlerTest extends TestCase
         $event->setDays([$day]);
         $user                 = UserFactory::create();
         $sheet                = SheetFactory::create($event, $user);
-        $create               = new Create($event, $sheet, $user, 'fr');
+        $create               = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
         $create->participants = [];
 
         $handler = new CreateHandler(
@@ -674,7 +674,7 @@ class CreateHandlerTest extends TestCase
         $user                 = UserFactory::create();
         $sheet                = SheetFactory::create($event, $user);
         $participant          = ParticipantFactory::create($sheet, $user);
-        $create               = new Create($event, $sheet, $user, 'fr');
+        $create               = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
         $create->participants = [$participant];
 
         $expectedBegin = new \DateTime('2016-10-12 08:30:00.000');
@@ -730,7 +730,7 @@ class CreateHandlerTest extends TestCase
         $user                 = UserFactory::create();
         $sheet                = SheetFactory::create($event, $user);
         $participant          = ParticipantFactory::create($sheet, $user);
-        $create               = new Create($event, $sheet, $user, 'fr');
+        $create               = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
         $create->participants = [$participant];
         $create->message      = 'Ceci est un message de test';
 
@@ -788,7 +788,7 @@ class CreateHandlerTest extends TestCase
         $user                 = UserFactory::create();
         $sheet                = SheetFactory::create($event, $user);
         $participant          = ParticipantFactory::create($sheet, $user);
-        $create               = new Create($event, $sheet, $user, 'fr');
+        $create               = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
         $create->participants = [$participant];
 
         $expectedBegin  = new \DateTime('2016-10-12 08:30:00.000');
@@ -851,7 +851,7 @@ class CreateHandlerTest extends TestCase
         $sheet                = SheetFactory::create($event, $user);
         $sheet->setAttendance(false);
         $participant          = ParticipantFactory::create($sheet, $user);
-        $create               = new Create($event, $sheet, $user, 'fr');
+        $create               = new Create($event, $sheet, $user, 'fr', 'Europe/Paris');
         $create->participants = [$participant];
 
         $expectedBegin  = new \DateTime('2016-10-12 08:30:00.000');
@@ -918,7 +918,7 @@ class CreateHandlerTest extends TestCase
 
         $sheet->getUserParticipant($user->reveal())->willReturn($participant->reveal());
 
-        $create = new Create($event->reveal(), $sheet->reveal(), $user->reveal(), 'fr');
+        $create = new Create($event->reveal(), $sheet->reveal(), $user->reveal(), 'fr', 'UTC');
         $create->participants = [$participant->reveal()];
         $create->time = [
             'begin' => [
@@ -1004,7 +1004,7 @@ class CreateHandlerTest extends TestCase
 
         $sheet->getUserParticipant($user->reveal())->willReturn($participant->reveal());
 
-        $create = new Create($event->reveal(), $sheet->reveal(), $user->reveal(), 'fr');
+        $create = new Create($event->reveal(), $sheet->reveal(), $user->reveal(), 'fr', 'UTC');
         $create->participants = [$participant->reveal()];
         $create->time = [
             'begin' => [
@@ -1056,5 +1056,41 @@ class CreateHandlerTest extends TestCase
             $this->eventDispatcher->reveal()
         );
         $handler->handle($create);
+    }
+
+    public function testPrepareBeginAndEndWithTimezoneDifferentThanEvent(): void
+    {
+        $startTime = new \DateTime('2016-10-11 11:00:00.000');
+        $endTime   = new \DateTime('2016-10-12 02:00:00.000');
+        $event     = EventFactory::createEvent();
+        $day       = new Day($event, $startTime, $endTime);
+        $event->setDays([$day]);
+        $user   = UserFactory::create();
+        $sheet  = SheetFactory::create($event, $user);
+        $create = new Create($event, $sheet, $user, 'fr', 'America/New_York');
+
+        $expectedBegin = new \DateTime('2016-10-11 11:05:00.000');
+        $expectedEnd   = new \DateTime('2016-10-12 01:00:00.000');
+
+        $create->time['begin']['hour']   = '07';
+        $create->time['begin']['minute'] = '05';
+
+        $create->time['end']['hour']   = '21';
+        $create->time['end']['minute'] = '00';
+
+        $handler = new CreateHandler(
+            $this->unavailabilityRepository->reveal(),
+            $this->participantRepository->reveal(),
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
+        );
+
+        $reflection = new \ReflectionClass(CreateHandler::class);
+        $method     = $reflection->getMethod('prepareBeginAndEnd');
+        $method->setAccessible(true);
+        list($begin, $end) = $method->invokeArgs($handler, [$create]);
+
+        $this->assertEquals($expectedBegin, $begin);
+        $this->assertEquals($expectedEnd, $end);
     }
 }
