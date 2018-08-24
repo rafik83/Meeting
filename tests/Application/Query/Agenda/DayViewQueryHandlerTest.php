@@ -36,7 +36,6 @@ use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -47,6 +46,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -63,7 +63,7 @@ class DayViewQueryHandlerTest extends TestCase
     /** @var User */
     private $user;
 
-    /** @var Day */
+    /** @var TimeRangeView */
     private $day;
 
     /** @var \DateTimeInterface */
@@ -149,7 +149,7 @@ class DayViewQueryHandlerTest extends TestCase
         $this->user = UserFactory::create();
         $this->startTime = new \DateTime('2016-10-12 10:00:00');
         $this->endTime = new \DateTime('2016-10-12 18:00:00');
-        $this->day = new Day($this->event, $this->startTime, $this->endTime);
+        $this->day = new TimeRangeView($this->startTime, $this->endTime);
         $this->sheet = SheetFactory::create($this->event);
         $this->sheet->setInCatalog(true);
         $this->participant = ParticipantFactory::create($this->sheet, $this->user);
@@ -437,7 +437,7 @@ class DayViewQueryHandlerTest extends TestCase
         $category  = null;
         $startTime = new \DateTime('2016-10-12 10:00:00');
         $endTime   = new \DateTime('2016-10-12 18:00:00');
-        $eventDay  = new Day($event, $startTime, $endTime);
+        $eventDay  = new TimeRangeView($startTime, $endTime);
         $sheet     = SheetFactory::create($event);
         $sheet->setAttendance(false);
         $participant  = ParticipantFactory::create($sheet);

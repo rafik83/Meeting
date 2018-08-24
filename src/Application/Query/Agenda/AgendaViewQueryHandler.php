@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
@@ -19,6 +21,8 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\DaysHelper;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
@@ -58,19 +62,6 @@ class AgendaViewQueryHandler
     /** @var ExtraDataRepository */
     private $extraDataRepository;
 
-    /**
-     * @param DayRepositoryInterface                    $dayRepository
-     * @param SheetRepositoryInterface                  $sheetRepository
-     * @param DayViewQueryHandler                       $dayViewQueryHandler
-     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
-     * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
-     * @param MassRepositoryInterface                   $massUnavailabilityRepository
-     * @param ParticipantViewQueryHandler               $participantViewQueryHandler
-     * @param MeetingRepositoryInterface                $meetingRepository
-     * @param MeetingPublishedAccessChecker             $meetingPublishedAccessChecker
-     * @param ValidationRequiredChecker                 $validationRequiredChecker
-     * @param ExtraDataRepository                       $extraDataRepository
-     */
     public function __construct(
         DayRepositoryInterface $dayRepository,
         SheetRepositoryInterface $sheetRepository,
@@ -147,9 +138,11 @@ class AgendaViewQueryHandler
             }
         }
 
+        $timezone = $this->getTimezone($query->participant, $query->event);
+        $timezonedDays = $this->getTimezonedDays($eventDays, $timezone);
         $dayViews = [];
 
-        foreach ($eventDays as $day) {
+        foreach ($timezonedDays as $day) {
             $dayViews[] = $this->dayViewQueryHandler->handle(
                 new DayViewQuery(
                     $day,
@@ -181,11 +174,41 @@ class AgendaViewQueryHandler
 
         return new AgendaView(
             $dayViews,
+            $timezone,
             $sheet,
             $participant,
             $isUserAloneParticipant,
             $participants,
             $isPhoneConfirmationRequired
         );
+    }
+
+    private function getTimezone(Participant $participant, Event $event): string
+    {
+        if ($participant->isVisio() && $participant->getTimezone()) {
+            return $participant->getTimezone();
+        }
+
+        return $event->getTimeZone();
+    }
+
+    /**
+     * @param array  $eventDays
+     * @param string $timezone
+     *
+     * @return TimeRangeView[]
+     */
+    private function getTimezonedDays(array $eventDays, string $timezone): array
+    {
+        $timezonedTimeRangeViews = [];
+
+        foreach ($eventDays as $day) {
+            $timezonedTimeRangeViews[] = new TimeRangeView(
+                DaysHelper::cloneDateTime($day->getBegin(), $timezone),
+                DaysHelper::cloneDateTime($day->getEnd(), $timezone)
+            );
+        }
+
+        return DaysHelper::splitDays($timezonedTimeRangeViews);
     }
 }

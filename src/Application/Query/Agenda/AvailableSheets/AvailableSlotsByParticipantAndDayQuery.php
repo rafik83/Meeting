@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda\AvailableSheets;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
 class AvailableSlotsByParticipantAndDayQuery
 {
@@ -21,15 +22,10 @@ class AvailableSlotsByParticipantAndDayQuery
     /** @var Participant */
     public $participant;
 
-    /** @var Event\Day */
+    /** @var TimeRangeInterface */
     public $day;
 
-    /**
-     * @param Event       $event
-     * @param Participant $participant
-     * @param Event\Day   $day
-     */
-    public function __construct(Event $event, Participant $participant, Event\Day $day)
+    public function __construct(Event $event, Participant $participant, TimeRangeInterface $day)
     {
         $this->event = $event;
         $this->participant = $participant;
