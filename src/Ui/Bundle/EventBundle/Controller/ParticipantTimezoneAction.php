@@ -50,7 +50,8 @@ class ParticipantTimezoneAction
 
     public function __invoke(Request $request, Sheet $sheet, Participant $participant): Response
     {
-        $command = new ParticipantTimezone($participant, $participant->getTimezone());
+        $timezone = $participant->getTimezone() ?? $sheet->getEvent()->getTimeZone();
+        $command = new ParticipantTimezone($participant, $timezone);
         $form = $this->formFactory->create(ParticipantTimezoneType::class, $command);
 
         $form->handleRequest($request);
