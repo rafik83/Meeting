@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Tests\Domain\Unavailability\SystemGenerator;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater;
-use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\TimeRangeNotAccessibleView;
-use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\TimeRangeView;
+use Proximum\Vimeet\Domain\Time\TimeRangeNotAccessibleView;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class OverlappedTimeRangeTruncaterTest extends TestCase
 {

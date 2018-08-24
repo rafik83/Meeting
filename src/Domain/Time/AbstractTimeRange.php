@@ -8,10 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Unavailability\SystemGenerator;
-
-use Proximum\Vimeet\Domain\Time\TimeOverlap;
-use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
+namespace Proximum\Vimeet\Domain\Time;
 
 abstract class AbstractTimeRange implements TimeRangeInterface
 {

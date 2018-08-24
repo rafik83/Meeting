@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Unavailability\SystemGenerator;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger;
-use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\TimeRangeView;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class OverlappedTimeRangeMergerTest extends TestCase
 {
