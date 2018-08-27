@@ -61,17 +61,17 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $participantViewQueryHandler = $this->prophesize(ParticipantViewQueryHandler::class);
         $participantViewQueryHandler
-            ->handle(new ParticipantViewQuery($participantA1->reveal(), $event->reveal(), $slot->reveal(), $locale))
+            ->handle(new ParticipantViewQuery($participantA1->reveal(), $event->reveal(), $meeting->reveal(), $slot->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($pv1)
         ;
         $participantViewQueryHandler
-            ->handle(new ParticipantViewQuery($participantA2->reveal(), $event->reveal(), $slot->reveal(), $locale))
+            ->handle(new ParticipantViewQuery($participantA2->reveal(), $event->reveal(), $meeting->reveal(), $slot->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($pv2)
         ;
         $participantViewQueryHandler
-            ->handle(new ParticipantViewQuery($participantB1->reveal(), $event->reveal(), $slot->reveal(), $locale))
+            ->handle(new ParticipantViewQuery($participantB1->reveal(), $event->reveal(), $meeting->reveal(), $slot->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($pv3)
         ;

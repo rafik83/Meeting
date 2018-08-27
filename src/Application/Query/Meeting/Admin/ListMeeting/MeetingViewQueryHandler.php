@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting;
 
 use Proximum\Vimeet\Application\View\Meeting\Admin\ListMeeting\MeetingView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 
@@ -35,6 +36,7 @@ class MeetingViewQueryHandler
             $this->getParticipantViews(
                 $query->meeting->getFromParticipants()->toArray(),
                 $query->meeting->getEvent(),
+                $query->meeting,
                 $query->meeting->getSlot(),
                 $query->locale
             ),
@@ -43,6 +45,7 @@ class MeetingViewQueryHandler
             $this->getParticipantViews(
                 $query->meeting->getToParticipants()->toArray(),
                 $query->meeting->getEvent(),
+                $query->meeting,
                 $query->meeting->getSlot(),
                 $query->locale
             ),
@@ -53,12 +56,13 @@ class MeetingViewQueryHandler
     private function getParticipantViews(
         array $participants,
         Event $event,
+        Meeting $meeting,
         MeetingSlot $meetingSlot,
         string $locale
     ): array {
-        return array_map(function (Participant $participant) use ($locale, $event, $meetingSlot) {
+        return array_map(function (Participant $participant) use ($locale, $event, $meeting, $meetingSlot) {
             return $this->participantViewQueryHandler->handle(
-                new ParticipantViewQuery($participant, $event, $meetingSlot, $locale)
+                new ParticipantViewQuery($participant, $event, $meeting, $meetingSlot, $locale)
             );
         }, $participants);
     }
