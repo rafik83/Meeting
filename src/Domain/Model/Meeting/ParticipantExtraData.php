@@ -68,4 +68,9 @@ class ParticipantExtraData
     {
         return $this->date;
     }
+
+    public function setDate(\DateTimeInterface $dateTime): void
+    {
+        $this->date = $dateTime;
+    }
 }

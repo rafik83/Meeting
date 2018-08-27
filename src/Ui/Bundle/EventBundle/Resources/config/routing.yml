@@ -860,6 +860,15 @@ event_video_video_meeting:
     methods: [GET]
     defaults: { _controller: EventBundle:VideoConference:videoMeeting }
 
+event_video_meeting_presence:
+    path: /sheet/{sheet}/video-meeting/{meeting}/participant/{participant}/presence
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\MeetingParticipantPresenceAction }
+    requirements:
+        sheet: \d+
+        participant: \d+
+        meeting: \d+
+    methods: [POST]
+
 event_video_conference_create_session_test:
     path: /video/test
     methods: [GET]
