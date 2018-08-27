@@ -433,6 +433,13 @@ services:
             - '@adapter.sheet_indexer'
         tags:
             - { name: kernel.event_subscriber }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Template\SheetTemplateUpdatedEventSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Sheet\Template\GenerateTaggedNomenclatureFilterHandler'
+        tags:
+            - { name: kernel.event_subscriber }
+
     event_listener.notification_event_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Notification\NotificationEventSubscriber
         arguments:

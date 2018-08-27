@@ -33,14 +33,15 @@ class TaggedNomenclatureFilterRepository implements TaggedNomenclatureFilterRepo
     /**
      * {@inheritdoc}
      */
-    public function deleteForEvent(Event $event)
+    public function deleteForEventAndTags(Event $event, array $tags)
     {
         $this
             ->entityManager
             ->createQueryBuilder()
             ->delete(TaggedNomenclatureFilter::class, 'taggedNomenclatureFilter')
-            ->where('taggedNomenclatureFilter.event = :event')
+            ->where('taggedNomenclatureFilter.event = :event AND taggedNomenclatureFilter.tag IN (:tags)')
             ->setParameter('event', $event)
+            ->setParameter('tags', $tags)
             ->getQuery()
             ->execute();
 
