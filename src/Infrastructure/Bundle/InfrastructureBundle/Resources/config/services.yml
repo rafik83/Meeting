@@ -2873,6 +2873,7 @@ services:
             - '@application.nomenclature.nomenclature_cloner'
             - '@datetime'
             - '@template.template_remove_field'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     template.registration.registration_template_cloner:
         class: Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner
         arguments:
