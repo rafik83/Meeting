@@ -51,6 +51,9 @@ class Type
     public const TYPE_COMEXPOSIUM_SSO_SESSION_SALON = 'comexposium_sso_session_salon';
     public const TYPE_COMEXPOSIUM_SSO_APPLICATION = 'comexposium_sso_application';
 
+    // TechEvent
+    public const TYPE_TECH_EVENT_CONFIGURATION = 'tech_event_configuration';
+
     public const TYPES = [
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
@@ -70,5 +73,6 @@ class Type
         self::TYPE_COMEXPOSIUM_SSO_SALON,
         self::TYPE_COMEXPOSIUM_SSO_SESSION_SALON,
         self::TYPE_COMEXPOSIUM_SSO_APPLICATION,
+        self::TYPE_TECH_EVENT_CONFIGURATION,
     ];
 }
