@@ -4938,6 +4938,11 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository'
 
+    Proximum\Vimeet\Application\Command\Catalog\GetNomenclaturesByTag:
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@repository.filter.tagged_nomenclature_filter_repository'
+
     #
     # Promotion
     #

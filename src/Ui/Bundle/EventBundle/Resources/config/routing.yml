@@ -454,6 +454,14 @@ event_catalog_search_keywords:
     methods:  [POST]
     defaults: { _controller: EventBundle:Catalog:searchKeywords }
 
+event_catalog_select_items_from_nomenclatures:
+    path: /sheet/{sheet}/catalog/select-items-from-nomenclatures/{tag}
+    requirements:
+        sheet: \d+
+        tag: \w+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\SelectItemsFromNomenclaturesAction }
+
 event_catalog_complete_sheet:
     path: /sheet/{sheet}/catalog/display/{sheetToDisplay}
     requirements:
