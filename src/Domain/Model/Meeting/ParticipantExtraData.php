@@ -29,14 +29,14 @@ class ParticipantExtraData
     /** @var Meeting */
     private $meeting;
 
-    /** @var \DateTimeInterface */
+    /** @var null|\DateTimeInterface */
     private $date;
 
     public function __construct(
         string $type,
         Participant $participant,
         Meeting $meeting,
-        \DateTimeInterface $date
+        ?\DateTimeInterface $date = null
     ) {
         $this->type = $type;
         $this->participant = $participant;
@@ -64,7 +64,7 @@ class ParticipantExtraData
         return $this->meeting;
     }
 
-    public function getDate(): \DateTimeInterface
+    public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
     }

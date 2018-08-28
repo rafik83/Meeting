@@ -39,3 +39,7 @@ services:
            - '@doctrine.orm.entity_manager'
 
     Proximum\Vimeet\Domain\Repository\AvailableSlotRepositoryInterface: '@Proximum\Vimeet\Infrastructure\Repository\AvailableSlotRepository'
+
+    Proximum\Vimeet\Infrastructure\Repository\Meeting\ParticipantExtraDataRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'

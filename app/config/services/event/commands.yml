@@ -27,3 +27,10 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Availability\Confirmation }
+
+    Proximum\Vimeet\Application\Command\Meeting\ParticipantPresenceCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Meeting\ParticipantExtraDataRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ParticipantPresenceCommand }

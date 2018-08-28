@@ -132,9 +132,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Meeting\MessageRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    Proximum\Vimeet\Infrastructure\Repository\Meeting\ParticipantExtraDataRepository:
-        arguments:
-            - '@doctrine.orm.entity_manager'
     repository.transaction:
         class: Proximum\Vimeet\Infrastructure\Repository\TransactionRepository
         arguments:
@@ -652,12 +649,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\CreateRequest }
-    Proximum\Vimeet\Application\Command\Meeting\ParticipantPresenceCommandHandler:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\Meeting\ParticipantExtraDataRepository'
-            - '@datetime'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ParticipantPresenceCommand }
     vimeet_infrastructure.vimeet.application.command.meeting.update_request_from_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequestHandler
         arguments:

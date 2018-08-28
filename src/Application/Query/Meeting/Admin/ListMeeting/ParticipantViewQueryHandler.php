@@ -38,10 +38,8 @@ class ParticipantViewQueryHandler
 
     public function handle(ParticipantViewQuery $query): ParticipantView
     {
-        $present = false;
-        if ($query->participant->isVisio()) {
-            $present = $this->isParticipantPresentToMeeting->isSatisfiedBy($query->participant, $query->meeting);
-        }
+        $present = $query->participant->isVisio() && $this->isParticipantPresentToMeeting
+                ->isSatisfiedBy($query->participant, $query->meeting);
 
         return new ParticipantView(
             $query->participant->getId(),
