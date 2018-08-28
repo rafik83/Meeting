@@ -329,6 +329,7 @@ class ExportActionTest extends TestCase
                     'filterByAvailableSlotIds'  => false,
                     'filterBySpecificSlot'      => false,
                     'specificSlot'              => null,
+                    'taggedNomenclatureTagViews' => [],
                 ]
             )
             ->shouldBeCalled()
@@ -450,6 +451,7 @@ class ExportActionTest extends TestCase
                 'filterByAvailableSlotIds'  => false,
                 'filterBySpecificSlot'      => false,
                 'specificSlot'              => null,
+                'taggedNomenclatureTagViews' => [],
             ]
         )
             ->shouldBeCalled()
