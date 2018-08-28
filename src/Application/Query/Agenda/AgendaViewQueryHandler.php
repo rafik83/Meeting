@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
+use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -109,12 +110,14 @@ class AgendaViewQueryHandler
             : false
         ;
 
+        $timezone = GetTimezoneHelper::getTimezoneByEventAndParticipant($query->event, $query->participant);
+
         $participants = $this->participantViewQueryHandler->handle(
             new ParticipantViewQuery($sheet->getParticipants()->toArray(), $query->locale)
         );
 
         if (empty($eventDays)) {
-            return new AgendaView([], $sheet, $participant, $isUserAloneParticipant, $participants, false);
+            return new AgendaView([], $timezone, $sheet, $participant, $isUserAloneParticipant, $participants, false);
         }
 
         $unavailabilities        = [];
@@ -138,7 +141,6 @@ class AgendaViewQueryHandler
             }
         }
 
-        $timezone = $this->getTimezone($query->participant, $query->event);
         $timezonedDays = $this->getTimezonedDays($eventDays, $timezone);
         $dayViews = [];
 
@@ -181,15 +183,6 @@ class AgendaViewQueryHandler
             $participants,
             $isPhoneConfirmationRequired
         );
-    }
-
-    private function getTimezone(Participant $participant, Event $event): string
-    {
-        if ($participant->isVisio() && $participant->getTimezone()) {
-            return $participant->getTimezone();
-        }
-
-        return $event->getTimeZone();
     }
 
     /**
