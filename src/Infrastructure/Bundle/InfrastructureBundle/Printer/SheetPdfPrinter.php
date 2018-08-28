@@ -65,9 +65,17 @@ class SheetPdfPrinter
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        return $this->pdfPrinter->generate($pathToPdf, $urlToPrint);
+        return $this->pdfPrinter->generate($urlToPrint, $pathToPdf);
     }
 
+    /**
+     * @deprecated
+     *
+     * @param File   $file
+     * @param string $directory
+     *
+     * @return string
+     */
     public function printFromFile(File $file, string $directory): string
     {
         $pathToPdf = sprintf(
@@ -84,6 +92,6 @@ class SheetPdfPrinter
             $file->getPath()
         );
 
-        return $this->pdfPrinter->generate($pathToPdf, $pathToHtml);
+        return $this->pdfPrinter->generate($pathToHtml, $pathToPdf);
     }
 }
