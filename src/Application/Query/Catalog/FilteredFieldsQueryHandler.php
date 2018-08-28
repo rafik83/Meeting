@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\Sheet\TagFilterAggregator;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagView;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
@@ -341,6 +342,10 @@ class FilteredFieldsQueryHandler
     private function filterTaggedNomenclatureTagViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
         foreach ($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews as $tag => $nomenclatureTagViews) {
+            if (\in_array($tag, Tag::getGenericSheetTemplateTags(), true)) {
+                return;
+            }
+
             $aggregations = $this->tagFilterAggregator->getAggregationsForTag(
                 $filteredFieldsQuery->event,
                 $tag,
