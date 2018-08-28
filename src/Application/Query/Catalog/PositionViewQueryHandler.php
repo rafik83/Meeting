@@ -34,7 +34,7 @@ class PositionViewQueryHandler
      */
     public function handle(PositionViewQuery $query): array
     {
-        $positionItems = $this->taggedNomenclatureFilterGetter->getLastNomenclaturesItems(
+        $nomenclaturesItemsViews = $this->taggedNomenclatureFilterGetter->getLastNomenclaturesItems(
             $query->event,
             Tag::PARTICIPANT_POSITION,
             $query->locale
@@ -42,7 +42,7 @@ class PositionViewQueryHandler
 
         $positionViews = [];
 
-        foreach ($positionItems as $key => $title) {
+        foreach ($nomenclaturesItemsViews->nomenclaturesItems as $key => $title) {
             $positionViews[] = new PositionView($key, $title);
         }
 

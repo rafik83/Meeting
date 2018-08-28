@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\Filter\TaggedNomenclatureFilterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
@@ -74,9 +75,9 @@ class TaggedNomenclatureFilterGetter
      * @param string $tag
      * @param string $locale
      *
-     * @return array
+     * @return NomenclaturesItemsView
      */
-    public function getLastNomenclaturesItems(Event $event, $tag, $locale)
+    public function getLastNomenclaturesItems(Event $event, $tag, $locale): NomenclaturesItemsView
     {
         $taggedNomenclatureFilter = $this->taggedNomenclatureFilterRepository->getByEventAndTag(
             $event,
@@ -84,7 +85,7 @@ class TaggedNomenclatureFilterGetter
         );
 
         if (null === $taggedNomenclatureFilter) {
-            return [];
+            return new NomenclaturesItemsView([], 0);
         }
 
         $nomenclatures = $this->nomenclatureRepository->findByEventAndIds(
@@ -101,7 +102,25 @@ class TaggedNomenclatureFilterGetter
             );
         }
 
-        return $nomenclatureItems;
+        return new NomenclaturesItemsView($nomenclatureItems, $this->getMaxDepth($nomenclatures));
+    }
+
+    /**
+     * @param Nomenclature[] $nomenclatures
+     *
+     * @return int
+     */
+    private function getMaxDepth(array $nomenclatures): int
+    {
+        $maxDepth = 0;
+
+        foreach ($nomenclatures as $nomenclature) {
+            if ($maxDepth < $nomenclature->getDepth()) {
+                $maxDepth = $nomenclature->getDepth();
+            }
+        }
+
+        return $maxDepth;
     }
 
     /**
