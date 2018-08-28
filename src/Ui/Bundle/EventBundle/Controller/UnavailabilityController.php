@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
+use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
@@ -63,10 +64,7 @@ class UnavailabilityController extends Controller
             'sheet'       => $sheet->getId(),
         ]);
 
-        $timezone = $eventDomain->getEvent()->getTimeZone();
-        if ($participant->isVisio() && $participant->getTimezone()) {
-            $timezone = $participant->getTimezone();
-        }
+        $timezone = GetTimezoneHelper::getTimezoneByEventAndParticipant($eventDomain->getEvent(), $participant);
 
         /** @var CreateFormView $createFormView */
         $createFormView = $this->get('handler.unavailability.create_form_handler')->handle(
