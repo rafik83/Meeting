@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagView;
+use Proximum\Vimeet\Application\View\Catalog\TagFilterView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,6 +25,7 @@ class TagFiltersType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var TagFilterView[] $tagFilterViews */
         $tagFilterViews = $options['tagFilterViews'];
 
         foreach ($tagFilterViews as $tagFilterView) {
@@ -47,13 +50,26 @@ class TagFiltersType extends AbstractType
                 'choices' => $choices,
                 'required' => false,
                 'multiple' => true,
-                'attr'  => [
-                    'data-placeholder' => $tagFilterView->placeholder,
-                    'class' => 'form-control select2',
-                    'data-disallow-clear' => 'true',
-                ],
+                'attr' => $this->getAttributes($tagFilterView),
             ]);
         }
+    }
+
+    private function getAttributes(TagFilterView $tagFilterView)
+    {
+        if (\in_array($tagFilterView->tag, Tag::getGenericSheetTemplateTags(), true)) {
+            return [
+                'data-placeholder' => $tagFilterView->placeholder,
+                'data-select-in-list' => true,
+                'class' => 'hidden',
+            ];
+        }
+
+        return [
+            'data-placeholder' => $tagFilterView->placeholder,
+            'class' => 'form-control select2',
+            'data-disallow-clear' => 'true',
+        ];
     }
 
     /**
