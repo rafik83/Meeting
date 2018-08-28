@@ -1,9 +1,15 @@
-<div class="meet lock" data-beginHour="{{ cancelAttendanceUnavailability.begin|date('H:i', cancelAttendanceUnavailability.timeZone) }}" data-duration="{{ cancelAttendanceUnavailability.duration.format('%H:%I') }}">
+{% set timezone = cancelAttendanceUnavailability.timeZone %}
+{% if participant.visio and participant.timezone %}
+    {% set timezone = participant.timezone %}
+{% endif %}
+
+
+<div class="meet lock" data-beginHour="{{ cancelAttendanceUnavailability.begin|date('H:i', timezone) }}" data-duration="{{ cancelAttendanceUnavailability.duration.format('%H:%I') }}">
     <header>
         <div class="content">
             <span class="prefix"><i class="icon icon-Verouiller_1"></i></span>
             <p class="title">
-                {{ cancelAttendanceUnavailability.begin|date('H:i', cancelAttendanceUnavailability.timeZone) ~ ' - ' ~ cancelAttendanceUnavailability.end|date('H:i', cancelAttendanceUnavailability.timeZone) }}
+                {{ cancelAttendanceUnavailability.begin|date('H:i', timezone) ~ ' - ' ~ cancelAttendanceUnavailability.end|date('H:i', timezone) }}
                 -
                 {{ 'unavailability.title'|trans }}
             </p>

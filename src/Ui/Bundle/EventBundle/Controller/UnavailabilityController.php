@@ -100,12 +100,19 @@ class UnavailabilityController extends Controller
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
+        $timezone = $eventDomain->getEvent()->getTimeZone();
+        if ($participant->isVisio() && $participant->getTimezone()) {
+            $timezone = $participant->getTimezone();
+        }
+
         return $this->render('EventBundle:Unavailability:create.html.twig', [
             'event'               => $event,
+            'participant'         => $participant,
             'agenda'              => $agenda,
             'sheet'               => $sheet,
             'form_unavailability' => $createFormView->formView,
             'tipTranslationViews' => $tipTranslationViews,
+            'timezone' => $timezone,
         ]);
     }
 

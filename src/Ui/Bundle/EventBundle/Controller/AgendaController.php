@@ -84,6 +84,13 @@ class AgendaController extends Controller
             throw $this->createNotFoundException('This participant is not in this sheet');
         }
 
+        if ($participant->isVisio() && !$participant->getTimezone()) {
+            return $this->redirectToRoute('event_participant_timezone', [
+                'participant' => $participant->getId(),
+                'sheet' => $sheet->getId(),
+            ]);
+        }
+
         /** @var AgendaView $agenda */
         $agenda = $this->get('tactician.commandbus.query')->handle(new AgendaViewQuery(
             $eventDomain->getEvent(),
@@ -139,6 +146,11 @@ class AgendaController extends Controller
             ]);
         }
 
+        $timezone = $eventDomain->getEvent()->getTimeZone();
+        if ($participant->isVisio() && $participant->getTimezone()) {
+            $timezone = $participant->getTimezone();
+        }
+
         return $this->render('EventBundle:Agenda:index.html.twig', [
             'event' => $eventDomain->getEvent(),
             'agenda' => $agenda,
@@ -147,6 +159,8 @@ class AgendaController extends Controller
             'sendCodeForm' => $sendCodeForm,
             'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
             'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
+            'participant' => $participant,
+            'timezone' => $timezone,
         ]);
     }
 

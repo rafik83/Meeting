@@ -1,0 +1,22 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'event.participant.define_timezone'|trans %}
+{% form_theme form '@Ui/default.html.twig' %}
+
+{% block content %}
+<div class="profile__content">
+    <section class="main">
+        <header>
+            <h1>{{ 'event.participant.define_timezone'|trans }}</h1>
+        </header>
+        <div class="main__content">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="btn btn-primary">
+                <i class="icon-Suivant_3"></i> {{ 'common.validate'|trans }}
+            </button>
+            {{ form_end(form) }}
+        </div>
+    </section>
+</div>
+{% endblock %}
