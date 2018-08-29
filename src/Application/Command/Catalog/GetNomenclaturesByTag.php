@@ -39,11 +39,9 @@ class GetNomenclaturesByTag
             return [];
         }
 
-        $nomenclatures = $this->nomenclatureRepository->findByEventAndIds(
+        return $this->nomenclatureRepository->findByEventAndIds(
             $event,
             $taggedNomenclatureFilter->getNomenclaturesId()
         );
-
-        return $nomenclatures;
     }
 }
