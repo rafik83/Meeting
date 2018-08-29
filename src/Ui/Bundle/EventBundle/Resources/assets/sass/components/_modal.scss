@@ -32,7 +32,7 @@
   position: relative;
 }
 
-.modal-dialog.modal-display-sheet {
+.modal-dialog.modal-display-large {
   width: 80%;
 
   > .modal-content {
@@ -41,7 +41,7 @@
 }
 
 @media screen and (max-width: 768px) {
-  .modal-dialog.modal-display-sheet {
+  .modal-dialog.modal-display-large {
     width: auto;
   }
 }
