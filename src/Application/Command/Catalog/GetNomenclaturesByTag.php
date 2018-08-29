@@ -31,7 +31,7 @@ class GetNomenclaturesByTag
         $this->nomenclatureRepository = $nomenclatureRepository;
     }
 
-    public function __invoke(Event $event, string $tag): array
+    public function handle(Event $event, string $tag): array
     {
         $taggedNomenclatureFilter = $this->taggedNomenclatureFilterRepository->getByEventAndTag($event, $tag);
 

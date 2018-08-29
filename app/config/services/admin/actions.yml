@@ -354,6 +354,7 @@ services:
             - '@adapter.authorization_checker'
             - '@domain.key_dates.checker.catalog_access_checker'
             - '@templating'
+            - '@form.factory'
             - '@Proximum\Vimeet\Application\Command\Catalog\GetNomenclaturesByTag'
 
     #
