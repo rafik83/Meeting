@@ -33,6 +33,11 @@ CatalogSelectFromNomenclaturesField.prototype.showModalContent = function (html)
 {
   $(this.modal).find('.modal-content').html(html);
   $(this.modal).modal().show();
+
+  var modalTitle = $(this.modal).find('.modal-title');
+  if (modalTitle) {
+    modalTitle.html(this.element.querySelector('[data-title]').textContent)
+  }
 };
 
 module.exports = CatalogSelectFromNomenclaturesField;
