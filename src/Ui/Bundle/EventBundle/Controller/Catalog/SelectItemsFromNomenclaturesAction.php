@@ -91,7 +91,6 @@ class SelectItemsFromNomenclaturesAction
                 [
                     'event' => $event,
                     'sheet' => $sheet,
-                    'tag' => $tag,
                     'form' => $form->createView(),
                 ]
             )
