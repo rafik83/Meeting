@@ -1,4 +1,5 @@
-var $ = require('jquery');
+var $ = require('jquery'),
+  CheckAllButton = require('./_CheckAllButton');
 
 function CatalogSelectFromNomenclaturesField(element, modal) {
     this.element = element;
@@ -38,6 +39,14 @@ CatalogSelectFromNomenclaturesField.prototype.showModalContent = function (html)
   if (modalTitle) {
     modalTitle.html(this.element.querySelector('[data-title]').textContent)
   }
+
+  [].forEach.call(this.modal.querySelectorAll('[data-check-all-button]'), function (element) {
+    new CheckAllButton(element, element.getAttribute('data-check-all-button'), true)
+  });
+
+  [].forEach.call(this.modal.querySelectorAll('[data-uncheck-all-button]'), function (element) {
+    new CheckAllButton(element, element.getAttribute('data-uncheck-all-button'), false)
+  });
 };
 
 module.exports = CatalogSelectFromNomenclaturesField;
