@@ -33,7 +33,7 @@ class TemplateDataDuplicator
 
     /**
      * @param Sheet      $sheet
-     * @param null|Sheet $fromSheet if provided, the template of the fromSheet will be used for object with tags
+     * @param null|Sheet $fromSheet              if provided, the template of the fromSheet will be used for object with tags
      * @param array      $sanitizedTypesOfObject array of type of object to remove from template (media, etc...)
      *
      * @return Sheet
@@ -83,7 +83,7 @@ class TemplateDataDuplicator
     {
         $fromSheetTagsData = [];
 
-        if ($fromSheet !== null) {
+        if (null !== $fromSheet) {
             $fromSheetTemplateData = $this->factory->createFromSheet($fromSheet, null);
 
             foreach ($fromSheetTemplateData->getObjects() as $key => $object) {

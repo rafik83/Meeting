@@ -368,11 +368,11 @@ class TemplateObject extends AbstractChild
             $taggedData = $this->getTaggedDataViews();
             $taggedElement = reset($taggedData);
 
-            if ($taggedElement === false) {
+            if (false === $taggedElement) {
                 return false;
             }
 
-            return $taggedElement->type === AbstractChild::TEMPLATE_OBJECT_TYPE_URL;
+            return AbstractChild::TEMPLATE_OBJECT_TYPE_URL === $taggedElement->type;
         }
 
         return false;

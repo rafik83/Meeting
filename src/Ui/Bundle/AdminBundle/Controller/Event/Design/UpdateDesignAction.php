@@ -82,7 +82,7 @@ class UpdateDesignAction
 
         return $this->engine->renderResponse('AdminBundle:Event/Design:updateDesign.html.twig', [
             'event' => $event,
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

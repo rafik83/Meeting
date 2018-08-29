@@ -65,7 +65,7 @@ class UserEventTokenGenerator
         return $userEventToken;
     }
 
-    public function getUserEventToken(Event $event, User $user,  string $type): UserEventToken
+    public function getUserEventToken(Event $event, User $user, string $type): UserEventToken
     {
         $userEventToken = $this->getPreviousToken($event, $user, $type);
 

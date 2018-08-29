@@ -243,10 +243,10 @@ class TemplateDataFactory
     }
 
     /**
-     * @param array  $template
-     * @param array  $data
+     * @param array       $template
+     * @param array       $data
      * @param null|string $locale
-     * @param string $fallback
+     * @param string      $fallback
      *
      * @return TemplateData
      */

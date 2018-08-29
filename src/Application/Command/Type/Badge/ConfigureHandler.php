@@ -44,7 +44,7 @@ class ConfigureHandler
         if ($configure->header instanceof UploadedFile) {
             $header = $this->fileStorage->upload($configure->header);
 
-            if ($previousHeader !== null) {
+            if (null !== $previousHeader) {
                 $this->fileStorage->remove($previousHeader);
             }
         }

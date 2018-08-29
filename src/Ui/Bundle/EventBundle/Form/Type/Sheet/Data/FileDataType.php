@@ -40,7 +40,7 @@ class FileDataType extends AbstractType
         }
 
         $builder->add('file', FileType::class, [
-            'label' => $options['showLabel'] === true ? $uploadObject->getLabel($options['locale']) : false,
+            'label' => true === $options['showLabel'] ? $uploadObject->getLabel($options['locale']) : false,
             'required' => $uploadObject->getOption('required') && null === $uploadObject->getPath(),
             'help' => $this->getHelp($uploadObject),
             'attr' => [

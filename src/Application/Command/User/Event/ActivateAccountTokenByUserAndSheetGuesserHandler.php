@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Command\User\Event;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
-use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 

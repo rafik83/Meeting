@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the PhpStorm project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) PhpStorm
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */

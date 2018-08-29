@@ -24,7 +24,6 @@ class TemplateFilledFilter
 
         foreach ($templateData->getObjects() as $object) {
             if ($object instanceof UploadObject && $object->isFilter()) {
-
                 if ($object->hasTag(Tag::SHEET_DATA)) {
                     $filters[] = [
                         'key' => $object->getKey(),
@@ -37,7 +36,7 @@ class TemplateFilledFilter
                     /** @var Participant $participant */
                     foreach ($participants as $participant) {
                         if (isset($participant->getData()[$object->getKey()]['path'])) {
-                            $numberOfFilledParticipant++;
+                            ++$numberOfFilledParticipant;
                         }
                     }
 

@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Command\Event\ToggleParticipantVisioCommand as ToggleParticipantVisioCommandForEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Application\Command\Event\ToggleParticipantVisioCommand as ToggleParticipantVisioCommandForEvent;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

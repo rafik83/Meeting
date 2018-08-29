@@ -32,7 +32,7 @@ class UploadObjectValidator extends TemplateObjectValidator
         ) {
             $content = $object->getPath();
 
-            if ($content === null) {
+            if (null === $content) {
                 $content = $object->getFile();
             }
 

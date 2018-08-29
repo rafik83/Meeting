@@ -1214,7 +1214,7 @@ class Sheet implements TraceableInterface
         Type $type,
         \DateTimeInterface $createdAt
     ): Sheet {
-        $duplicatedSheet = new Sheet(
+        $duplicatedSheet = new self(
             $type->getEvent(),
             $type,
             $sheet->getData(),

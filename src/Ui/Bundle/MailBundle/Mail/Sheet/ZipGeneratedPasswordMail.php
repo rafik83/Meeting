@@ -14,5 +14,4 @@ use Proximum\Vimeet\Application\Components\Mail\AdminMail;
 
 class ZipGeneratedPasswordMail extends AdminMail
 {
-
 }

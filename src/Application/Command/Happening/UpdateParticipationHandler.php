@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;

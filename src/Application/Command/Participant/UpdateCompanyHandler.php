@@ -37,10 +37,10 @@ class UpdateCompanyHandler
     private $uploadFileHandler;
 
     /**
-     * @param SheetRepositoryInterface  $sheetRepository
-     * @param Synchronizer              $accountSynchronizer
-     * @param DelayedEventDispatcher    $eventDispatcher
-     * @param UploadFileHandler         $uploadFileHandler
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param Synchronizer             $accountSynchronizer
+     * @param DelayedEventDispatcher   $eventDispatcher
+     * @param UploadFileHandler        $uploadFileHandler
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,

@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -15,7 +23,7 @@ class Version20180529095236 extends AbstractMigration
      */
     public function up(Schema $schema): void
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE sheet_group ADD duplicated_from_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE sheet_group ADD CONSTRAINT FK_E95566CF0949296 FOREIGN KEY (duplicated_from_id) REFERENCES sheet_group (id) ON DELETE SET NULL');
@@ -27,7 +35,7 @@ class Version20180529095236 extends AbstractMigration
      */
     public function down(Schema $schema): void
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE sheet_group DROP FOREIGN KEY FK_E95566CF0949296');
         $this->addSql('DROP INDEX UNIQ_E95566CF0949296 ON sheet_group');

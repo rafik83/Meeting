@@ -30,10 +30,10 @@ use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateFilledFilter;
 use Proximum\Vimeet\Domain\Template\TemplateObject\IndexableObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
-use Proximum\Vimeet\Domain\Template\TemplateFilledFilter;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Proximum\Vimeet\Infrastructure\Elastica\SheetContentView;
 use Symfony\Component\Intl\Intl;
@@ -456,7 +456,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         foreach ($registrationTemplateData->getSheetObjects() as $object) {
             if ($object instanceof Nomenclature) {
                 foreach ($object->getTags() as $tag) {
-                    if ($tag === Tag::SHEET_DATA || !\in_array($tag, Tag::getSheetTags(), true)) {
+                    if (Tag::SHEET_DATA === $tag || !\in_array($tag, Tag::getSheetTags(), true)) {
                         continue;
                     }
 

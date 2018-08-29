@@ -47,7 +47,7 @@ class TagIdentifier
             $templates = [];
             $tags = [];
 
-            /**
+            /*
              * @var Type
              */
             foreach ($who->getTypes() as $type) {

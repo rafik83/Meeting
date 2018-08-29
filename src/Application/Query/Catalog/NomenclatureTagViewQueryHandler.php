@@ -33,7 +33,7 @@ class NomenclatureTagViewQueryHandler
             $items = $this->taggedNomenclatureFilterGetter->getLastNomenclaturesItems($query->event, $tag, $query->locale);
 
             foreach ($items as $itemKey => $itemLabel) {
-                $tagViews[$tag][] = new NomenclatureTagView($itemKey , $itemLabel);
+                $tagViews[$tag][] = new NomenclatureTagView($itemKey, $itemLabel);
             }
         }
 

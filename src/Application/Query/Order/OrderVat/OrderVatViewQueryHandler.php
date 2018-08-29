@@ -98,7 +98,7 @@ class OrderVatViewQueryHandler
     /**
      * @param array  $vatViews
      * @param float  $vatRate
-     * @param int    $price in cents
+     * @param int    $price    in cents
      * @param string $vatMode
      */
     private function addToVatViews(array &$vatViews, float $vatRate, int $price, string $vatMode): void

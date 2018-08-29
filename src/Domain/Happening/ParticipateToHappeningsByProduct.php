@@ -96,7 +96,7 @@ class ParticipateToHappeningsByProduct
 
         $happeningParticipationViewByHappeningNotEmpty = array_filter(
             $happeningParticipationViewByHappening,
-            function(HappeningParticipationView $happeningParticipationView) {
+            function (HappeningParticipationView $happeningParticipationView) {
                 return !empty($happeningParticipationView->addedParticipants) ||
                     !empty($happeningParticipationView->removedParticipants);
             }

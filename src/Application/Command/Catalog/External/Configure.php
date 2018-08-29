@@ -41,10 +41,10 @@ class Configure extends ConfigureSearchFacet
     public $registrationUrl;
 
     /**
-     * @param Event                 $event
-     * @param CatalogVisibility     $catalogVisibility
-     * @param SearchFacet[]         $searchFacets
-     * @param CatalogTagFilter[]    $catalogTagFilters
+     * @param Event              $event
+     * @param CatalogVisibility  $catalogVisibility
+     * @param SearchFacet[]      $searchFacets
+     * @param CatalogTagFilter[] $catalogTagFilters
      */
     public function __construct(
         Event $event,

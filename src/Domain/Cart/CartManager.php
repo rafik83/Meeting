@@ -211,7 +211,7 @@ class CartManager
             return;
         }
 
-        if (($quantity - $orderQuantity - $includedQuantity) === 0) {
+        if (0 === ($quantity - $orderQuantity - $includedQuantity)) {
             $this->productAttributedToParticipantSetter->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
                 $product,
                 $sheetParticipants,

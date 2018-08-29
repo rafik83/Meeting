@@ -110,8 +110,9 @@ class FilterSummary
      * @param null|Event $event
      * @param string     $locale
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     private function handleFormRow(FormView $field, ?Event $event, $locale): array
     {
@@ -170,7 +171,7 @@ class FilterSummary
                     $values[] = sprintf('%s: %s', $subLabel, $subValues[$key]);
                 }
 
-               $value = implode(', ', $values);
+                $value = implode(', ', $values);
             } else {
                 $value = '';
             }
@@ -184,7 +185,7 @@ class FilterSummary
     private function hasNotNullValues(array $values): bool
     {
         foreach ($values as $element) {
-            if ($element !== null) {
+            if (null !== $element) {
                 return true;
             }
         }

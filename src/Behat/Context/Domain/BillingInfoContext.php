@@ -30,7 +30,7 @@ class BillingInfoContext implements Context
     {
         $sheet = $this->billingInfoProxy->getStorage()->get('sheet');
 
-        if ($sheet === null) {
+        if (null === $sheet) {
             throw new \InvalidArgumentException('Sheet missing');
         }
 

@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\User;
 
-use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\User\UserDetailsView;
 use Proximum\Vimeet\Application\View\User\UserSheetView;
 use Proximum\Vimeet\Domain\Model\Event;
