@@ -1,5 +1,18 @@
-<section class="main">
-    my beautiful form for tag {{ tag }}
+<div class="modal-header">
+    <h4 class="modal-title">
+        My beautiful form for tag {{ tag }}
+    </h4>
+</div>
 
+<div class="modal-body">
     {{ dump(nomenclatures) }}
-</section>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'modal.close'|trans }}
+    </button>
+    <button type="submit" class="btn btn btn-primary">
+        {{ 'modal.submit'|trans }}
+    </button>
+</div>

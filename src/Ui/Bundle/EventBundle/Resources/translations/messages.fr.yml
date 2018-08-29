@@ -57,6 +57,7 @@ catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.preview.participant_positions_see_more: 'voir plus'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
 catalog.seeMore: 'Voir plus'
+catalog.selectItemsFromNomenclatures: 'Sélectionner'
 catalog.sheet.export.csv: Exporter
 catalog.sheet.result.total: '{0} Aucun résultat|{1} 1 résultat|]1,Inf[ %total% résultats'
 catalog.title: Catalogue
@@ -195,6 +196,7 @@ meetingRequest.mobile.filters.state.title: 'Gestion RDV'
 modal.back: Retour
 modal.close: Fermer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
+modal.submit: 'Valider'
 multiple_sheets.modal.close: Fermer
 multiple_sheets.request.filter.reset: 'Réinitialiser les filtres'
 multiple_sheets.request.list.no-preference: 'Pas de préférence'

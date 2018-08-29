@@ -1,5 +1,9 @@
 <div class="filter" data-select-from-nomenclature-field>
     <h3>{{ form.vars.label }}</h3>
-    <a href="{{ path('event_catalog_select_items_from_nomenclatures', { sheet: sheet.id, tag: form.vars.name }) }}">{{ form.vars.attr['data-placeholder'] ? form.vars.attr['data-placeholder'] : 'catalog.select'|trans }}</a>
+    <p class="text-center">
+        <a href="{{ path('event_catalog_select_items_from_nomenclatures', { sheet: sheet.id, tag: form.vars.name }) }}" class="btn btn-link">
+            {{ form.vars.attr['data-placeholder'] ? form.vars.attr['data-placeholder'] : 'catalog.selectItemsFromNomenclatures'|trans }}
+        </a>
+    </p>
     {{ form_widget(form) }}
 </div>
