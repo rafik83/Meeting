@@ -61,7 +61,7 @@ class TagFiltersType extends AbstractType
             return [
                 'data-placeholder' => $tagFilterView->placeholder,
                 'data-select-in-list' => true,
-                'class' => 'hidden',
+                //'class' => 'hidden',
             ];
         }
 

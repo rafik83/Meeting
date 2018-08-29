@@ -6,6 +6,8 @@ function CatalogSelectFromNomenclaturesField(element, modal) {
     this.modal = modal;
     this.cachedForms = [];
 
+    this.initialSelect = this.element.querySelector('select');
+
     this.link = this.element.querySelector('a');
     this.link.addEventListener('click', this.handleClick.bind(this));
 }
@@ -44,7 +46,7 @@ CatalogSelectFromNomenclaturesField.prototype.loadForm = function (href)
 CatalogSelectFromNomenclaturesField.prototype.showModalContent = function (html)
 {
   $(this.modal).find('.modal-content').html(html);
-  $(this.modal).modal().show();
+  $(this.modal).modal('show');
 
   var modalTitle = $(this.modal).find('.modal-title');
 
@@ -52,12 +54,38 @@ CatalogSelectFromNomenclaturesField.prototype.showModalContent = function (html)
       modalTitle.html(this.element.querySelector('[data-title]').textContent)
   }
 
+  this.initModalContent();
+};
+
+CatalogSelectFromNomenclaturesField.prototype.initModalContent = function ()
+{
   [].forEach.call(this.modal.querySelectorAll('[data-check-all-button]'), function (element) {
       new CheckAllButton(element, element.getAttribute('data-check-all-button'), true)
   });
 
   [].forEach.call(this.modal.querySelectorAll('[data-uncheck-all-button]'), function (element) {
       new CheckAllButton(element, element.getAttribute('data-uncheck-all-button'), false)
+  });
+
+  this.form = this.modal.querySelector('form');
+
+  if (this.form) {
+    this.form.addEventListener('submit', this.handleForm.bind(this));
+  }
+};
+
+CatalogSelectFromNomenclaturesField.prototype.handleForm = function (event)
+{
+  event.preventDefault();
+  $(this.initialSelect).val(this.getCheckedValues());
+  $(this.modal).modal('hide');
+};
+
+CatalogSelectFromNomenclaturesField.prototype.getCheckedValues = function ()
+{
+  var checked = this.form.querySelectorAll('input[type="checkbox"]:checked');
+  return Array.prototype.map.call(checked, function (element) {
+    return element.value;
   });
 };
 
