@@ -341,10 +341,12 @@ class FilteredFieldsQueryHandler
 
     private function filterTaggedNomenclatureTagViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
-        foreach ($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews as $tag => $nomenclatureTagViews) {
-            if (\in_array($tag, Tag::getGenericSheetTemplateTags(), true)) {
-                return;
+        foreach ($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews as $nomenclatureTagViews) {
+            if ($nomenclatureTagViews->maxDepth > 1) {
+                continue;
             }
+
+            $tag = $nomenclatureTagViews->tag;
 
             $aggregations = $this->tagFilterAggregator->getAggregationsForTag(
                 $filteredFieldsQuery->event,
@@ -367,10 +369,9 @@ class FilteredFieldsQueryHandler
                 $aggregationKeys[$key] = $key;
             }
 
-            /** @var NomenclatureTagView[] $nomenclatureTagViews */
-            foreach ($nomenclatureTagViews as $key => $nomenclatureTagView) {
+            foreach ($nomenclatureTagViews->nomenclatureTagViews as $key => $nomenclatureTagView) {
                 if (!isset($aggregationKeys[$nomenclatureTagView->key])) {
-                    unset($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews[$tag][$key]);
+                    unset($nomenclatureTagViews->nomenclatureTagViews[$key]);
                 }
             }
         }

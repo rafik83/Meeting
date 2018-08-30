@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagView;
+use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagViews;
 use Proximum\Vimeet\Application\View\Catalog\TagFilterView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -28,8 +29,16 @@ class TagFiltersType extends AbstractType
         /** @var TagFilterView[] $tagFilterViews */
         $tagFilterViews = $options['tagFilterViews'];
 
+        /** @var NomenclatureTagViews[] $taggedNomenclatureTagViews */
+        $taggedNomenclatureTagViews = $options['taggedNomenclatureTagViews'];
+
         foreach ($tagFilterViews as $tagFilterView) {
-            $choices = $options['taggedNomenclatureTagViews'][$tagFilterView->tag] ?? [];
+            $choices = [];
+            $nomenclatureTagViews = $taggedNomenclatureTagViews[$tagFilterView->tag] ?? null;
+
+            if (null !== $nomenclatureTagViews) {
+                $choices = $nomenclatureTagViews->nomenclatureTagViews;
+            }
 
             $builder->add($tagFilterView->tag, ChoiceType::class, [
                 'label' => $tagFilterView->label,
@@ -50,14 +59,14 @@ class TagFiltersType extends AbstractType
                 'choices' => $choices,
                 'required' => false,
                 'multiple' => true,
-                'attr' => $this->getAttributes($tagFilterView),
+                'attr' => $this->getAttributes($nomenclatureTagViews, $tagFilterView),
             ]);
         }
     }
 
-    private function getAttributes(TagFilterView $tagFilterView): array
+    private function getAttributes(?NomenclatureTagViews $nomenclatureTagViews, TagFilterView $tagFilterView): array
     {
-        if (\in_array($tagFilterView->tag, Tag::getGenericSheetTemplateTags(), true)) {
+        if (null !== $nomenclatureTagViews && $nomenclatureTagViews->maxDepth > 1) {
             return [
                 'data-placeholder' => $tagFilterView->placeholder,
                 'data-select-in-list' => true,
