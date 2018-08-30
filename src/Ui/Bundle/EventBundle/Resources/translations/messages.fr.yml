@@ -124,8 +124,8 @@ event.user_event_phone.validate.ignore: Ignorer
 event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
-event.visio.welcome: 'Bienvenue sur %event%'
 event.visio.agenda_access: 'Cliquez ici pour accéder à votre agenda'
+event.visio.welcome: 'Bienvenue sur %event%'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'
@@ -212,6 +212,7 @@ multiple_sheets.request.list.totalRequest: '{0} Aucune demande de rendez-vous |{
 multiple_sheets.request.title: 'Gestion des rendez-vous'
 multiple_sheets.select_sheet: 'Sélectionner une fiche'
 multiple_sheets.title: 'Mes fiches'
+navigation.category.badge: Badge
 navigation.category.billing: Facturation
 navigation.category.catalog: Catalogue
 navigation.category.happening: 'Gestion RDV'
@@ -220,7 +221,6 @@ navigation.category.member_space: 'Espace membre'
 navigation.category.package: 'Forfait de participation'
 navigation.category.planning: Agenda
 navigation.category.program: Programme
-navigation.category.badge: Badge
 navigation.category.sheet: 'Fiche de présentation'
 navigation.close: Fermer
 navigation.links.billing.billing_info: 'Informations de facturation'
