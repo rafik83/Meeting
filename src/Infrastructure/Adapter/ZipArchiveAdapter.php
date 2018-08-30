@@ -32,7 +32,7 @@ class ZipArchiveAdapter implements ZipArchiveAdapterInterface
             $this->zipArchive->setPassword($password);
         }
 
-        $directoryStructure = explode('/',  $rootDir);
+        $directoryStructure = explode('/', $rootDir);
         $rootDirId = end($directoryStructure);
 
         /** @var \SplFileInfo $file */

@@ -271,7 +271,6 @@ class ConvertToParticipantHandler
             $participantRegistrationData,
             false,
             $sheet->getEvent()->getConfiguration()->isVisio()
-
         );
         $participant->setImported(true);
 

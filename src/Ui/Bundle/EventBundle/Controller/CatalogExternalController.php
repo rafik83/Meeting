@@ -53,7 +53,6 @@ class CatalogExternalController extends Controller
                 ? $this->get('form_factory.search_facet_external_factory')->getCategoryViews($event, $locale)
                 : null;
 
-
             $typeViews = $searchFacetsView->hasType()
                 ? $this->get('form_factory.search_facet_external_factory')->getTypeViews($event, $locale)
                 : null

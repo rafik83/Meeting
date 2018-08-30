@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Participant\Export\PrepareExport;
-use Proximum\Vimeet\Application\Command\Participant\Export\PrepareExportHandler;
 use Proximum\Vimeet\Domain\Exception\Participant\Export\NoParticipantToExportException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter;

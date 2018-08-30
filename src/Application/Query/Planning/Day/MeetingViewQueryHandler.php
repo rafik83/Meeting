@@ -57,8 +57,7 @@ class MeetingViewQueryHandler
                 return new ParticipantMetView(
                     true === $displayParticipantName
                         ? $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale)
-                        : null
-                    ,
+                        : null,
                     true === $displayParticipantPosition
                         ? $this->participantInfoGuesser->guessParticipantPosition($participant, $locale)
                         : null

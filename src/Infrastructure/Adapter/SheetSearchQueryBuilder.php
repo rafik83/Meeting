@@ -1134,7 +1134,7 @@ class SheetSearchQueryBuilder
             $tagBoolQuery->addMust(new Term([
                 'nestedTaggedData.tag' => [
                     'value' => $tag,
-                ]
+                ],
             ]));
 
             $tagValuesNestedQuery = new Nested();
@@ -1146,7 +1146,7 @@ class SheetSearchQueryBuilder
                 $tagValuesBoolQuery->addShould(new Term([
                         'nestedTaggedData.values.value' => [
                             'value' => $tagKey->key,
-                        ]
+                        ],
                     ]
                 ));
             }

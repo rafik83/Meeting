@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\View\Sheet\Details\CRM;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\RemoveCommentAction;
 
 class RecordView
 {

@@ -68,7 +68,7 @@ class Update
         $this->lastname     = $speaker->getLastname();
         $this->organization = $speaker->getOrganization();
 
-        /**
+        /*
          * @var SpeakerTranslation
          */
         foreach ($speaker->getTranslations() as $translation) {

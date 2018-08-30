@@ -267,7 +267,6 @@ class Configuration
         return $this->headerRightColor;
     }
 
-
     /**
      * @return string
      */

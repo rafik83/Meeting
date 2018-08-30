@@ -48,8 +48,8 @@ interface ParticipantRepositoryInterface
     public function findByEventAndInCatalog(Event $event);
 
     /**
-     * @param Event  $event
-     * @param int[]  $sheetIds
+     * @param Event $event
+     * @param int[] $sheetIds
      *
      * @return Participant[]
      */

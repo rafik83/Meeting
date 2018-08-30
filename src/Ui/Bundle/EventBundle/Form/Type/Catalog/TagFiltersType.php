@@ -64,7 +64,7 @@ class TagFiltersType extends AbstractType
         $resolver
             ->setRequired([
                 'tagFilterViews',
-                'taggedNomenclatureTagViews'
+                'taggedNomenclatureTagViews',
             ])
             ->setAllowedTypes('tagFilterViews', 'array')
             ->setAllowedTypes('taggedNomenclatureTagViews', 'array')

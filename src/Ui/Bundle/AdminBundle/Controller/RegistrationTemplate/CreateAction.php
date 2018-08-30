@@ -58,9 +58,9 @@ class CreateAction
      * @param Request $request
      * @param Event   $event
      *
-     * @return Response|RedirectResponse
-     *
      * @throws AccessDeniedException
+     *
+     * @return Response|RedirectResponse
      */
     public function __invoke(Request $request, Event $event): Response
     {
@@ -72,7 +72,7 @@ class CreateAction
 
         $create = new Create($event);
         $form = $this->formFactory->create(CreateType::class, $create, [
-            'submit' => true
+            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -86,7 +86,7 @@ class CreateAction
         }
 
         return $this->engine->renderResponse('AdminBundle:RegistrationTemplate:create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

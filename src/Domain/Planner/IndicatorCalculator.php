@@ -125,7 +125,7 @@ class IndicatorCalculator
                 }
 
                 if ($slotAvailability->isMassUnavaibility()) {
-                    ++$massUnavaibilitiesCount ;
+                    ++$massUnavaibilitiesCount;
                 }
             }
         }

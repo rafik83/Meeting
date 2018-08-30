@@ -274,7 +274,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
 
     private function getCommercialStatus(Sheet $sheet): string
     {
-        return $sheet->getCommercialStatus() !== null
+        return null !== $sheet->getCommercialStatus()
             ? $this->translator->trans(sprintf('%s%s', self::TRANSLATION_KEY_COMMERCIAL_STATUS, $sheet->getCommercialStatus()))
             : ''
         ;
@@ -290,8 +290,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
                     '%date%' => $recordView->createdAt->format('d/m/Y H:i'),
                     '%comment%' => $recordView->isComment()
                         ? $recordView->comment
-                        : $this->translator->trans($recordView->getTraceTranslationKey() . $recordView->comment)
-                    ,
+                        : $this->translator->trans($recordView->getTraceTranslationKey() . $recordView->comment),
                 ],
                 'messages',
                 $locale

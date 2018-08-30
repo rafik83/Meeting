@@ -20,9 +20,9 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
-use Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQuery;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
+use Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -467,20 +467,19 @@ class SheetController extends Controller
         $i = 0;
 
         /** @var Type $type */
-
         foreach ($types as $type) {
             $event = $type->getEvent();
 
             // Start from 0 to keep sorting while parsing array in javascript
-            if (isset($typesByEvent[$i]['id']) && $event->getId() !== $typesByEvent[$i]['id']) {
-                $i++;
+            if (isset($typesByEvent[$i]['id']) && $typesByEvent[$i]['id'] !== $event->getId()) {
+                ++$i;
             }
 
             $typesByEvent[$i]['id'] = $event->getId();
             $typesByEvent[$i]['title'] = $event->getTitle();
             $typesByEvent[$i]['types'][] = [
                 'id' => $type->getId(),
-                'title' => $type->getTitle($event->getAvailableLocale($requestLocale))
+                'title' => $type->getTitle($event->getAvailableLocale($requestLocale)),
             ];
         }
 

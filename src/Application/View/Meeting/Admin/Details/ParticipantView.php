@@ -19,7 +19,7 @@ class ParticipantView
     public $mobile;
 
     /**
-     * @param string $fullName
+     * @param string      $fullName
      * @param null|string $mobile
      */
     public function __construct($fullName, $mobile)

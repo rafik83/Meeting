@@ -45,7 +45,7 @@ class SheetsDuplicatedMail extends AbstractMail
      * @param Event    $event
      * @param Event    $originEvent
      * @param array    $importedSheets
-     * @param string[] $userAlreadyGroupManagerOnSameEvent array of emails
+     * @param string[] $userAlreadyGroupManagerOnSameEvent              array of emails
      * @param string[] $userAlreadyParticipantOrOwnerOnGroupOnSameEvent array of emails
      * @param string   $sender
      * @param string   $receiver

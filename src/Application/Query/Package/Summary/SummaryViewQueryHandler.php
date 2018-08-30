@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Query\Package\Summary;
 use Proximum\Vimeet\Application\Query\Package\Vat\VatListViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Vat\VatListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\Summary\SummaryView;
-use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 
 class SummaryViewQueryHandler

@@ -40,8 +40,9 @@ class UploadFileHandler
     }
 
     /**
-     * @return array of registration or sheet data
      * @throws UploadFileException
+     *
+     * @return array of registration or sheet data
      */
     public function handle(UploadFile $uploadFile): array
     {

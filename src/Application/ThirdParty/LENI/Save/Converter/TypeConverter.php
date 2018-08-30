@@ -22,8 +22,9 @@ class TypeConverter
      * @param Type  $type
      * @param array $mapping
      *
-     * @return array
      * @throws TypeDoesNotMatchException
+     *
+     * @return array
      */
     public function convert(Type $type, array $mapping): array
     {

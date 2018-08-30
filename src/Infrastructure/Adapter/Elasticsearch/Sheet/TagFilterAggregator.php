@@ -57,10 +57,7 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
 
         $resultAggregations = $result->getAggregations();
 
-        return $resultAggregations['nestedTaggedData']
-            ['nestedTaggedData_nested_values_filter']
-            ['nestedTaggedData_nested_values_terms']
-            ['buckets']
+        return $resultAggregations['nestedTaggedData']['nestedTaggedData_nested_values_filter']['nestedTaggedData_nested_values_terms']['buckets']
             ?? []
         ;
     }
@@ -76,7 +73,7 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
             new Query\Term([
                 'nestedTaggedData.tag' => [
                     'value' => $tag,
-                ]
+                ],
             ])
         );
 

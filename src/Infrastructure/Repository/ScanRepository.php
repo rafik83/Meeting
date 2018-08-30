@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\Scan;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 
@@ -55,12 +55,12 @@ class ScanRepository implements ScanRepositoryInterface
                     'event' => $event,
                     'user' => $user,
                     'startAt' => $begin,
-                    'endAt' => $end
+                    'endAt' => $end,
                 ])
                 ->getQuery()
                 ->getSingleScalarResult() > 0;
     }
-    
+
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool
     {
         $begin = (new \DateTime())
@@ -79,7 +79,7 @@ class ScanRepository implements ScanRepositoryInterface
                 'event' => $event,
                 'user' => $user,
                 'startAt' => $begin->setTime(0, 0, 0),
-                'endAt' => $end->setTime(23, 59, 59)
+                'endAt' => $end->setTime(23, 59, 59),
             ])
             ->getQuery()
             ->getSingleScalarResult() > 0;

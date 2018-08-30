@@ -25,11 +25,11 @@ use Symfony\Component\HttpFoundation\Response;
 class NavigationController extends Controller
 {
     /**
-     * @param Request        $request
-     * @param EventDomain    $eventDomain
+     * @param Request         $request
+     * @param EventDomain     $eventDomain
      * @param UserDomain|null $userDomain
-     * @param Sheet|null     $sheet
-     * @param bool           $registration
+     * @param Sheet|null      $sheet
+     * @param bool            $registration
      *
      * @return Response
      */

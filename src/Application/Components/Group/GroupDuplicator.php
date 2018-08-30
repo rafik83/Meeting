@@ -32,10 +32,10 @@ class GroupDuplicator
      * @param Group $group
      * @param Event $event
      *
-     * @return Group
-     *
      * @throws UserAlreadyGroupManagerOnSameEventException
      * @throws UserAlreadyParticipantOrOwnerOnGroupOnSameEventException
+     *
+     * @return Group
      */
     public function duplicateToEvent(Group $group, Event $event): Group
     {

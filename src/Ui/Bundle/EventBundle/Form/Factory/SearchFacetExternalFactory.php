@@ -74,8 +74,9 @@ class SearchFacetExternalFactory
      * @param array            $filters
      * @param SearchFacetsView $searchFacetsView
      *
-     * @return FormInterface
      * @throws CatalogVisibilityNotFoundException
+     *
+     * @return FormInterface
      */
     public function create(Event $event, string $locale, array $filters, SearchFacetsView $searchFacetsView): FormInterface
     {
@@ -96,8 +97,9 @@ class SearchFacetExternalFactory
      * @param array            $currentAggregations
      * @param SearchFacetsView $searchFacetsView
      *
-     * @return FormInterface
      * @throws CatalogVisibilityNotFoundException
+     *
+     * @return FormInterface
      */
     public function createFiltered(
         Event $event,
@@ -182,8 +184,9 @@ class SearchFacetExternalFactory
      * @param string           $locale
      * @param SearchFacetsView $searchFacetsView
      *
-     * @return FilteredFieldsView
      * @throws CatalogVisibilityNotFoundException
+     *
+     * @return FilteredFieldsView
      */
     private function getInitialFieldsView(Event $event, string $locale, SearchFacetsView $searchFacetsView): FilteredFieldsView
     {

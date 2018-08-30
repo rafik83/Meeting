@@ -51,7 +51,6 @@ class EventListView implements EventInterface
     /** @var bool */
     public $visio;
 
-
     /**
      * @param null|int  $id
      * @param string    $title
