@@ -6,8 +6,6 @@ function CatalogSelectFromNomenclaturesField(element, modal) {
     this.modal = modal;
     this.cachedForms = [];
 
-    this.formSubmitted = false;
-
     this.initialSelect = this.element.querySelector('select');
     this.selectedItemsZone = this.element.querySelector('[data-selected-items]');
     this.labelMore = this.selectedItemsZone.getAttribute('data-label-more');
@@ -54,10 +52,6 @@ CatalogSelectFromNomenclaturesField.prototype.getSelectedItemsLabel = function (
 
 CatalogSelectFromNomenclaturesField.prototype.handleClick = function (event) {
     event.preventDefault();
-
-    if (this.formSubmitted) {
-        return;
-    }
 
     var href = this.link.getAttribute('href');
 
@@ -111,8 +105,6 @@ CatalogSelectFromNomenclaturesField.prototype.initModalContent = function () {
 
 CatalogSelectFromNomenclaturesField.prototype.handleForm = function (event) {
     event.preventDefault();
-
-    this.formSubmitted = true;
 
     $(this.initialSelect).val(this.getCheckedValues());
     this.showSelectedItemsLabel();
