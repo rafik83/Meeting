@@ -29,7 +29,7 @@ class SelectItemsFromNomenclaturesType extends AbstractType
 
         foreach ($nomenclatures as $nomenclature) {
             $builder->add(
-                'items' . $nomenclature->getId(),
+                sprintf('items%s', $nomenclature->getId()),
                 CheckboxesType::class,
                 [
                     'nomenclature' => $nomenclature,

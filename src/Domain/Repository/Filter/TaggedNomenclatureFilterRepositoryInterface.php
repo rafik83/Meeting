@@ -19,7 +19,7 @@ interface TaggedNomenclatureFilterRepositoryInterface
      * @param Event    $event
      * @param string[] $tags
      */
-    public function deleteForEventAndTags(Event $event, array $tags);
+    public function deleteForEventAndTags(Event $event, array $tags): void;
 
     /**
      * @param TaggedNomenclatureFilter $taggedNomenclatureFilter

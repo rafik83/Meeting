@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Model\NomenclatureItem;
 
 class NomenclaturesItemsView
 {
-    /** @var array|NomenclatureItem[] */
+    /** @var NomenclatureItem[] */
     public $nomenclaturesItems;
 
     /** @var int */

@@ -55,7 +55,7 @@ class TagFiltersType extends AbstractType
         }
     }
 
-    private function getAttributes(TagFilterView $tagFilterView)
+    private function getAttributes(TagFilterView $tagFilterView): array
     {
         if (\in_array($tagFilterView->tag, Tag::getGenericSheetTemplateTags(), true)) {
             return [

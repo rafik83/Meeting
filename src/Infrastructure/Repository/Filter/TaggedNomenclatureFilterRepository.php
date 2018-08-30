@@ -33,7 +33,7 @@ class TaggedNomenclatureFilterRepository implements TaggedNomenclatureFilterRepo
     /**
      * {@inheritdoc}
      */
-    public function deleteForEventAndTags(Event $event, array $tags)
+    public function deleteForEventAndTags(Event $event, array $tags): void
     {
         $this
             ->entityManager
