@@ -99,7 +99,19 @@ CatalogSelectFromNomenclaturesField.prototype.initModalContent = function () {
     this.form = this.modal.querySelector('form');
 
     if (this.form) {
+        this.selectSelectedItems();
         this.form.addEventListener('submit', this.handleForm.bind(this));
+    }
+};
+
+CatalogSelectFromNomenclaturesField.prototype.selectSelectedItems = function () {
+    var selectedItems = $(this.initialSelect).val();
+
+    for (var i = 0; i < selectedItems.length; i++) {
+        var checkbox = this.form.querySelector('input[value="' + selectedItems[i] + '"]');
+        if (checkbox) {
+            checkbox.checked = true;
+        }
     }
 };
 
