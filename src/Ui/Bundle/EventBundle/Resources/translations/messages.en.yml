@@ -344,6 +344,7 @@ package.product.quantity: Quantity
 package.product.quantityMax: 'Maximum quantity reached'
 package.product.quantityMaxInformation: 'Max: %quantityMax%'
 package.product.quantityMin: 'Maximum minimum reached'
+package.product.seeMore: '{0}|{1} See the option|]1, Inf[ See the %count% options'
 package.product.selectedParticipants: 'Selected participants:'
 package.product.selectOptions: 'Select your options'
 package.product.subjectedToValidationHelp: 'Subject to validation'
@@ -439,6 +440,9 @@ summary.total: Total
 summary.totalByVat: 'Total subjected to %vatRate%%'
 summary.totalToPay: 'Total to pay'
 summary.vatRate: '%vatRate%% VAT'
+unavailability.action.remove.title: Delete
+unavailability.createdBySystem.buy.title: 'Modify my package'
+unavailability.createdBySystem.explaination.title: 'Please select the product that allows you to access this content'
 unavailability.title: Unavailable
 user_event.confirm.agenda.already_confirmed: 'Schedule already confirmed'
 user_event.confirm.agenda.success: 'Thank you for confirming your schedule'
