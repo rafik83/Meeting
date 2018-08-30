@@ -87,4 +87,26 @@ class IsParticipantPresentToMeetingTest extends TestCase
 
         $this->assertFalse($pattern->isSatisfiedBy($participant->reveal(), $meeting->reveal()));
     }
+
+    public function testIsNotSatisfiedByNonVisioParticipant(): void
+    {
+        $participantExtraDataRepository = $this->prophesize(ParticipantExtraDataRepositoryInterface::class);
+        $participant = $this->prophesize(Participant::class);
+        $participant->isVisio()->shouldBeCalled()->willReturn(false);
+        $meeting = $this->prophesize(Meeting::class);
+        $date = new \DateTime();
+
+        $participantExtraDataRepository->findOneByParticipantAndMeetingAndType(
+            $participant->reveal(),
+            $meeting->reveal(),
+            Meeting\ParticipantExtraData::TYPE_PRESENCE
+        )->shouldNotBeCalled();
+
+        $pattern = new IsParticipantPresentToMeeting(
+            $participantExtraDataRepository->reveal(),
+            $date
+        );
+
+        $this->assertFalse($pattern->isSatisfiedBy($participant->reveal(), $meeting->reveal()));
+    }
 }
