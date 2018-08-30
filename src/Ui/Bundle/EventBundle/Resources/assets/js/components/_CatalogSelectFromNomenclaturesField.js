@@ -106,6 +106,9 @@ CatalogSelectFromNomenclaturesField.prototype.initModalContent = function () {
 
 CatalogSelectFromNomenclaturesField.prototype.selectSelectedItems = function () {
     var selectedItems = $(this.initialSelect).val();
+    if (!selectedItems) {
+        return;
+    }
 
     for (var i = 0; i < selectedItems.length; i++) {
         var checkbox = this.form.querySelector('input[value="' + selectedItems[i] + '"]');
