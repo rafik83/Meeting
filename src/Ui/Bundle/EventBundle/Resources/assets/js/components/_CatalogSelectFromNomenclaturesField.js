@@ -79,6 +79,10 @@ CatalogSelectFromNomenclaturesField.prototype.handleForm = function (event)
   event.preventDefault();
   $(this.initialSelect).val(this.getCheckedValues());
   $(this.modal).modal('hide');
+
+  var htmlEvent = document.createEvent('HTMLEvents');
+  htmlEvent.initEvent('change', true, true);
+  this.initialSelect.dispatchEvent(htmlEvent);
 };
 
 CatalogSelectFromNomenclaturesField.prototype.getCheckedValues = function ()
