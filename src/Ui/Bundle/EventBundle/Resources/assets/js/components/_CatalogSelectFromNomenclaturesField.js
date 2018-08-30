@@ -7,6 +7,11 @@ function CatalogSelectFromNomenclaturesField(element, modal) {
     this.cachedForms = [];
 
     this.initialSelect = this.element.querySelector('select');
+    this.selectedItemsZone = this.element.querySelector('[data-selected-items]');
+    this.labelMore = this.selectedItemsZone.getAttribute('data-label-more');
+    this.initialSelect.style.display = 'none';
+
+    this.showSelectedItemsLabel();
 
     this.link = this.element.querySelector('a');
     this.link.addEventListener('click', this.handleClick.bind(this));
@@ -15,6 +20,34 @@ function CatalogSelectFromNomenclaturesField(element, modal) {
 CatalogSelectFromNomenclaturesField.prototype.showPlaceholder = function () {
     var placeholder = this.modal.getAttribute('data-placeholder');
     this.showModalContent(placeholder);
+};
+
+CatalogSelectFromNomenclaturesField.prototype.showSelectedItemsLabel = function () {
+    var selectedItemsLabel = this.getSelectedItemsLabel();
+    var html = '';
+
+    for (var i = 0; i < selectedItemsLabel.length; i++) {
+        if (3 === i && selectedItemsLabel.length > 4) {
+            html += '<li class="select-from-nomenclature-field__more">' + this.labelMore.replace('%count%', selectedItemsLabel.length - 3) + '</li>';
+            break;
+        }
+
+        html += '<li>' + selectedItemsLabel[i] + '</li>';
+    }
+
+    this.selectedItemsZone.innerHTML = html;
+};
+
+CatalogSelectFromNomenclaturesField.prototype.getSelectedItemsLabel = function () {
+    var selectedLabels = [];
+
+    for (var i = 0; i < this.initialSelect.options.length; i++) {
+        if (this.initialSelect.options[i].selected) {
+            selectedLabels.push(this.initialSelect.options[i].text);
+        }
+    }
+
+    return selectedLabels;
 };
 
 CatalogSelectFromNomenclaturesField.prototype.handleClick = function (event) {
@@ -71,7 +104,10 @@ CatalogSelectFromNomenclaturesField.prototype.initModalContent = function () {
 
 CatalogSelectFromNomenclaturesField.prototype.handleForm = function (event) {
     event.preventDefault();
+
     $(this.initialSelect).val(this.getCheckedValues());
+    this.showSelectedItemsLabel();
+
     $(this.modal).modal('hide');
 
     var htmlEvent = document.createEvent('HTMLEvents');
