@@ -32,6 +32,10 @@ class IsParticipantPresentToMeeting
 
     public function isSatisfiedBy(Participant $participant, Meeting $meeting): bool
     {
+        if (false === $participant->isVisio()) {
+            return false;
+        }
+
         $participantExtraData = $this->participantExtraDataRepository->findOneByParticipantAndMeetingAndType(
             $participant,
             $meeting,

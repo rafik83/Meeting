@@ -22,6 +22,7 @@ class IsParticipantPresentToMeetingTest extends TestCase
     {
         $participantExtraDataRepository = $this->prophesize(ParticipantExtraDataRepositoryInterface::class);
         $participant = $this->prophesize(Participant::class);
+        $participant->isVisio()->shouldBeCalled()->willReturn(true);
         $participantExtraData = $this->prophesize(Meeting\ParticipantExtraData::class);
         $participantExtraData->getDate()->shouldBeCalled()->willReturn(new \DateTime('2018-08-22 10:08:00.000'));
         $meeting = $this->prophesize(Meeting::class);
@@ -45,6 +46,7 @@ class IsParticipantPresentToMeetingTest extends TestCase
     {
         $participantExtraDataRepository = $this->prophesize(ParticipantExtraDataRepositoryInterface::class);
         $participant = $this->prophesize(Participant::class);
+        $participant->isVisio()->shouldBeCalled()->willReturn(true);
         $participantExtraData = $this->prophesize(Meeting\ParticipantExtraData::class);
         $participantExtraData->getDate()->shouldBeCalled()->willReturn(new \DateTime('2018-08-22 10:06:00.000'));
         $meeting = $this->prophesize(Meeting::class);
@@ -68,6 +70,7 @@ class IsParticipantPresentToMeetingTest extends TestCase
     {
         $participantExtraDataRepository = $this->prophesize(ParticipantExtraDataRepositoryInterface::class);
         $participant = $this->prophesize(Participant::class);
+        $participant->isVisio()->shouldBeCalled()->willReturn(true);
         $meeting = $this->prophesize(Meeting::class);
         $date = new \DateTime();
 

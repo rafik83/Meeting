@@ -1,0 +1,9 @@
+{{ participant.completeName }}
+
+{% if participant.visio %}
+    <label class="badge badge-pill" style="background-color: {{ participant.present ? '#28a745' : '#c9302c' }}">&nbsp;</label>
+{% endif %}
+
+<label class="btn btn-primary btn-xs btn-{{ participant.checkin ? 'success' : 'danger' }}">
+    {{ (participant.checkin ? 'admin.meeting.list.participant.present' : 'admin.meeting.list.participant.absent') |trans }}
+</label>

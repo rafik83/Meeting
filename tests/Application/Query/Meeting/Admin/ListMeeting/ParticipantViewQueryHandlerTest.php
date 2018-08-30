@@ -39,6 +39,8 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $participant->getUser()->shouldBeCalled()->willReturn($user->reveal());
         $locale = 'fr';
 
+        $isParticipantPresentToMeeting->isSatisfiedBy($participant->reveal(), $meeting->reveal())->shouldBeCalled()->willReturn(false);
+
         $scanRepository = $this->prophesize(ScanRepositoryInterface::class);
         $scanRepository->isUserCheckinByEventAndSlot($user->reveal(), $event->reveal(), $slot->reveal())
             ->shouldBeCalled()

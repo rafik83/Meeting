@@ -69,15 +69,7 @@
                             <ul>
                                 {% for participant in meeting.fromParticipants %}
                                     <li>
-                                        {{ participant.completeName }}
-
-                                        {% if participant.visio %}
-                                            <label class="badge badge-pill" style="background-color: {{ participant.present ? '#28a745' : '#c9302c' }}">&nbsp;</label>
-                                        {% endif %}
-
-                                        <label class="btn btn-primary btn-xs btn-{{ participant.checkin ? 'success' : 'danger' }}">
-                                            {{ (participant.checkin ? 'admin.meeting.list.participant.present' : 'admin.meeting.list.participant.absent') |trans }}
-                                        </label>
+                                        {% include '@Admin/Meeting/participantDetail.html.twig' with {participant: participant} %}
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -93,15 +85,7 @@
                             <ul>
                                 {% for participant in meeting.toParticipants %}
                                     <li>
-                                        {{ participant.completeName }}
-
-                                        {% if participant.visio %}
-                                            <label class="badge badge-pill" style="background-color: {{ participant.present ? '#28a745' : '#c9302c' }}">&nbsp;</label>
-                                        {% endif %}
-
-                                        <label class="btn btn-primary btn-xs btn-{{ participant.checkin ? 'success' : 'danger' }}">
-                                            {{ (participant.checkin ? 'admin.meeting.list.participant.present' : 'admin.meeting.list.participant.absent') |trans }}
-                                        </label>
+                                        {% include '@Admin/Meeting/participantDetail.html.twig' with {participant: participant} %}
                                     </li>
                                 {% endfor %}
                             </ul>
