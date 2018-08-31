@@ -90,7 +90,6 @@ class SelectItemsFromNomenclaturesAction
                 'EventBundle:Catalog/Partial:selectItemsFromNomenclatures.html.twig',
                 [
                     'event' => $event,
-                    'sheet' => $sheet,
                     'form' => $form->createView(),
                 ]
             )

@@ -78,7 +78,7 @@ class SelectItemsFromNomenclaturesActionTest extends TestCase
         $this->eventDomain = $this->prophesize(EventDomain::class);
         $this->eventDomain->getEvent()->willReturn($this->event->reveal());
 
-        $this->request = new Request(['slot_id' => 1]);
+        $this->request = new Request();
         $this->request->setLocale('fr');
 
         $this->userDomain = $this->prophesize(UserDomain::class);
@@ -176,7 +176,6 @@ class SelectItemsFromNomenclaturesActionTest extends TestCase
                 'EventBundle:Catalog/Partial:selectItemsFromNomenclatures.html.twig',
                 [
                     'event' => $this->event->reveal(),
-                    'sheet' => $this->sheet->reveal(),
                     'form' => $formView->reveal(),
                 ]
             )
