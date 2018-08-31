@@ -5,7 +5,7 @@
 
     <div class="clearboth"></div>
 
-    <a href="{{ path('event_catalog_select_items_from_nomenclatures', { sheet: sheet.id, tag: form.vars.name }) }}" class="select-from-nomenclature-field__link">
+    <a href="{{ selectItemsFromNomenclaturesUrl }}" class="select-from-nomenclature-field__link">
         {{ form.vars.attr['data-placeholder'] ? form.vars.attr['data-placeholder'] : 'catalog.selectItemsFromNomenclatures.select'|trans }}
     </a>
 

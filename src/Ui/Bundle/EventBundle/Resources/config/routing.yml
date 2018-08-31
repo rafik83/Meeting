@@ -518,6 +518,13 @@ event_catalog_external_search_keywords:
     methods:  [POST]
     defaults: { _controller: EventBundle:CatalogExternal:searchKeywords }
 
+event_catalog_external_select_items_from_nomenclatures:
+    path: /list/select-items-from-nomenclatures/{tag}
+    requirements:
+        tag: \w+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\CatalogExternal\SelectItemsFromNomenclaturesAction }
+
 #
 # Meeting Request
 #
