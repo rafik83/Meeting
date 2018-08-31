@@ -89,14 +89,44 @@
                 bottom: 0;
             }
         }
+
+        @media print {
+            .ebadge {
+                position: relative;
+                width: 105mm;
+                height: 148mm;
+            }
+
+            .ebadge-logo {
+                width: 100%;
+                background: linear-gradient(to right, {{ event.configuration.headerLeftColor }} 0%, {{ event.configuration.headerRightColor }} 100%);
+            }
+
+            .ebadge-qrcode {
+                width: 45mm;
+            }
+
+            .ebadge-qrcode img {
+                width: 40mm;
+                height: 40mm;
+            }
+
+            .ebadge-content {
+                margin-top: 7mm;
+            }
+
+            .ebadge-participation-type {
+                bottom: 0;
+            }
+        }
     </style>
 {% endblock %}
 
 {% block content %}
     <div class="ebadge-container">
-        <div class="ebadge">
+        <div class="ebadge print-bg">
             {% if userBadgeByEventView.header %}
-                <img src="{{ userBadgeByEventView.header }}" class="ebadge-logo" />
+                <img src="{{ userBadgeByEventView.header }}" class="ebadge-logo print-bg" />
             {% endif %}
 
             <div class="ebadge-content">
@@ -121,7 +151,7 @@
             </div>
 
             {% if userBadgeByEventView.participationTypeOrCategoryLabel %}
-                <div class="ebadge-participation-type ft-bold" style="background: {{ userBadgeByEventView.footerColor }}; color: {{ userBadgeByEventView.footerTextColor }};">
+                <div class="ebadge-participation-type ft-bold print-bg" style="background: {{ userBadgeByEventView.footerColor }}; color: {{ userBadgeByEventView.footerTextColor }};">
                     {{ userBadgeByEventView.participationTypeOrCategoryLabel }}
                 </div>
             {% endif %}
