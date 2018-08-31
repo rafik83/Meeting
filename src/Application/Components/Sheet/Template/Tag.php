@@ -221,6 +221,11 @@ final class Tag
         return array_merge(self::getSheetTags(), self::getGenericSheetTags());
     }
 
+    public static function getSheetAndGenericSheetTagsAndGenericSheetTemplateTags(): array
+    {
+        return array_merge(self::getSheetTags(), self::getGenericSheetTags(), self::getGenericSheetTemplateTags());
+    }
+
     /**
      * @return array
      */
