@@ -16,6 +16,8 @@ use Proximum\Vimeet\Domain\Template\TranslatableInterface;
 
 class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
+    public const SEMICOLON_ESCAPE_CHAR = '__VIMEET_SEMICOLON__';
+
     /**
      * Need and supply objectives constants
      */
@@ -400,9 +402,9 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     private function getLabelsByItem(&$nomenclatureLabels, $item)
     {
         foreach ($nomenclatureLabels as $firstLevelKey => $child) {
-            if (is_array($child)) {
+            if (\is_array($child)) {
                 foreach ($child as $secondLevelKey => $secondLevelChild) {
-                    if (is_array($secondLevelChild)) {
+                    if (\is_array($secondLevelChild)) {
                         foreach ($secondLevelChild as $lastLevelKey => $lastLevelLabel) {
                             if ($lastLevelKey === $item) {
                                 return [$firstLevelKey, $secondLevelKey, $lastLevelLabel];

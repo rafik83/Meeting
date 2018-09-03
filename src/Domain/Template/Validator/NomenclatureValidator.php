@@ -24,20 +24,25 @@ class NomenclatureValidator implements ObjectValidatorInterface
             return new NomenclatureError($data, true);
         }
 
+        $dataItems = explode(';', $data);
+        $dataItems = array_map(function ($element) {
+            return str_replace(Nomenclature::SEMICOLON_ESCAPE_CHAR, ';', $element);
+        }, $dataItems);
+
         /** @var Nomenclature $nomenclature */
         $nomenclature = $options['object'];
         $items        = $nomenclature->getNomenclatureModel()->getLastLevel();
-        $validState   = false;
+        $dataItemFound = 0;
+        $dataItemToFound = \count($dataItems);
 
         foreach ($items as $nomenclatureItem) {
             $nomenclatureLabel = $nomenclatureItem->getLabel($options['locale']);
 
-            if ($nomenclatureLabel === $data) {
-                $validState = true;
-                break;
+            if (\in_array($nomenclatureLabel, $dataItems, true)) {
+                ++$dataItemFound;
             }
         }
 
-        return new NomenclatureError($data, $validState);
+        return new NomenclatureError($data, $dataItemFound === $dataItemToFound);
     }
 }

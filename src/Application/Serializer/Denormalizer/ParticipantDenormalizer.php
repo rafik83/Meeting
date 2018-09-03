@@ -274,27 +274,27 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 ]);
 
                 if (!$validatorError->hasError()) {
-                    if ($templateObject instanceof TemplateObject\Nomenclature) {
-                        $nomenclatureKey = $templateObject->getKeyForLabel($column, $context['locale']);
-                        $templateObject->setContentValue($nomenclatureKey);
-                    } else {
-                        $templateObject->setContentValue($column);
-                    }
-
-                    $this->dispatchTemplateData($templateObject, $sheetData, $participantData, $registrationObjectKey);
+                    $this->handleColumn(
+                        $templateObject,
+                        $column,
+                        $sheetData,
+                        $participantData,
+                        $registrationObjectKey,
+                        $context['locale']
+                    );
                 } else {
                     throw new InvalidObjectContentException($validatorError);
                 }
             } catch (ObjectValidatorNotExistException $exception) {
                 // if not validator defined, set data without check if valid
-                if ($templateObject instanceof TemplateObject\Nomenclature) {
-                    $nomenclatureKey = $templateObject->getKeyForLabel($column, $context['locale']);
-                    $templateObject->setContentValue($nomenclatureKey);
-                } else {
-                    $templateObject->setContentValue($column);
-                }
-
-                $this->dispatchTemplateData($templateObject, $sheetData, $participantData, $registrationObjectKey);
+                $this->handleColumn(
+                    $templateObject,
+                    $column,
+                    $sheetData,
+                    $participantData,
+                    $registrationObjectKey,
+                    $context['locale']
+                );
             }
 
             if ($templateObject->hasTag(Tag::SHEET_ORGANIZATION) && !empty($templateObject->getContentValue())) {
@@ -312,6 +312,30 @@ class ParticipantDenormalizer implements DenormalizerInterface
         return [$sheetData, $participantData, $sheetTitle];
     }
 
+    private function handleColumn(
+        ContentObjectInterface $templateObject,
+        $column,
+        array &$sheetData,
+        array &$participantData,
+        $registrationObjectKey,
+        $locale
+    ): void {
+        if ($templateObject instanceof TemplateObject\Nomenclature) {
+            $items    = $this->denormalizerNomenclatureItems($column);
+            $itemKeys = [];
+
+            foreach ($items as $item) {
+                $itemKeys[] = $templateObject->getKeyForLabel($item, $locale);
+            }
+
+            $templateObject->setItems($itemKeys);
+        } else {
+            $templateObject->setContentValue($column);
+        }
+
+        $this->dispatchTemplateData($templateObject, $sheetData, $participantData, $registrationObjectKey);
+    }
+
     /**
      * @param $phone
      *
@@ -320,6 +344,15 @@ class ParticipantDenormalizer implements DenormalizerInterface
     private function denormalizerPhoneNumber($phone)
     {
         return preg_replace("/(\\'+)|(\\s)+/", '', $phone);
+    }
+
+    private function denormalizerNomenclatureItems($data): array
+    {
+        $dataItems = explode(';', $data);
+
+        return array_map(function ($element) {
+            return str_replace(TemplateObject\Nomenclature::SEMICOLON_ESCAPE_CHAR, ';', $element);
+        }, $dataItems);
     }
 
     /**
@@ -385,7 +418,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         &$sheetData,
         &$participantData,
         $registrationObjectKey
-    ) {
+    ): void {
         if ($templateObject->hasTag(Tag::SHEET_DATA)) {
             $sheetData = array_merge($sheetData, [
                 $registrationObjectKey => $templateObject->getData(),
