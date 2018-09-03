@@ -38,7 +38,7 @@ class AuthenticationTokenDenormalizer implements DenormalizerInterface
         $this->validator = $validator;
     }
 
-    public function denormalize($data, $class, $format = null, array $context = array()): iterable
+    public function denormalize($data, $class, $format = null, array $context = []): iterable
     {
         if (!$context['event'] instanceof Event) {
             throw new \InvalidArgumentException();

@@ -17,7 +17,7 @@ class PasswordGenerator
         $password = '';
         $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+;:,.?';
 
-        for ($i = 0; $i <= $length; $i++) {
+        for ($i = 0; $i <= $length; ++$i) {
             $password .= $characters[random_int(0, \strlen($characters) - 1)];
         }
 

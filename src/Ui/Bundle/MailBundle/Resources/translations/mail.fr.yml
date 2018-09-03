@@ -23,6 +23,7 @@ mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
 mail.confirm.agenda.link: 'Confirmer mon agenda'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
 mail.confirmResetPassword.subject: 'Votre mot de passe a bien été changé'
+mail.download.ebadge.link: 'Télécharger mon e-badge'
 mail.event.export.no_uploaded_objects.subject: 'Aucun fichier n''a pu être exporté selon le filtre réalisé sur l''événement "%event%"'
 mail.event.export.uploaded_objects_password.subject: 'Mot de passe du fichier zip des fiches sélectionnées de l''événement "%event%"'
 mail.event.export.uploaded_objects_zip.link.click: 'Télécharger le fichier zip'
@@ -43,7 +44,7 @@ mail.happening.participation.register: '%name% inscrit'
 mail.happening.participation.subject: 'Liste des participants mis à jour automatiquement par événement'
 mail.happening.participation.unregister: '%name% désinscrit'
 mail.omz.export.intro: "Bonjour,\n\n Voici l'export OMZ pour l'événement %eventTitle% :\n"
-mail.omz.export.link.click: 'Télécharger le fichier participant OMZ'
+mail.omz.export.link.click: 'Télécharger le fichier des participants OMZ'
 mail.omz.export.subject: 'Fichier d''export OMZ'
 mail.order.export.intro: "Bonjour,\n\n Voici l'export des commandes pour l'événement %eventTitle% :\n"
 mail.order.export.link.click: 'Télécharger les commandes'
@@ -53,7 +54,7 @@ mail.orderConfirm.end: 'Cordialement,'
 mail.orderConfirm.linkToProForma: 'Voir la facture pro-forma'
 mail.orderConfirm.subject: 'Votre commande a été enregistrée'
 mail.participant.export.intro: "Bonjour,\n\n Voici l'export des participants que vous avez demandé pour l'événement %eventTitle% :\n"
-mail.participant.export.link.click: 'Télécharger le fichier participant'
+mail.participant.export.link.click: 'Télécharger le fichier des participants'
 mail.participant.export.subject: 'Fichier d''export des participants'
 mail.participant.profile.link: 'Votre profil participant'
 mail.planner.export.error: "Bonjour, \n\n Une erreur s'est produite durant le traitement de l'export des planifications \n\n"

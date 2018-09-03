@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -22,43 +21,20 @@ class SheetPdfPrinter
     /** @var RouterInterface */
     private $router;
 
-    /** @var string */
-    private $phantomjsPath;
-
-    /** @var string */
-    private $phantomjsScript;
-
-    /** @var string */
-    private $phantomjsHttpUser;
-
-    /** @var string */
-    private $phantomjsHttpPassword;
+    /** @var PdfPrinter */
+    private $pdfPrinter;
 
     /** @var string */
     private $pdfPath;
 
-    /**
-     * @param RouterInterface $router
-     * @param string          $phantomjsPath
-     * @param string          $phantomjsScript
-     * @param string          $phantomjsHttpUser
-     * @param string          $phantomjsHttpPassword
-     * @param string          $pdfPath
-     */
     public function __construct(
         RouterInterface $router,
-        string $phantomjsPath,
-        string $phantomjsScript,
-        string $phantomjsHttpUser,
-        string $phantomjsHttpPassword,
+        PdfPrinter $pdfPrinter,
         string $pdfPath
     ) {
-        $this->router                = $router;
-        $this->phantomjsPath         = $phantomjsPath;
-        $this->phantomjsScript       = $phantomjsScript;
-        $this->phantomjsHttpUser     = $phantomjsHttpUser;
-        $this->phantomjsHttpPassword = $phantomjsHttpPassword;
-        $this->pdfPath               = $pdfPath;
+        $this->router     = $router;
+        $this->pdfPrinter = $pdfPrinter;
+        $this->pdfPath    = $pdfPath;
     }
 
     /**
@@ -69,7 +45,7 @@ class SheetPdfPrinter
      *
      * @return string
      */
-    public function generate(User $user, Sheet $sheet, Sheet $sheetToDisplay, $locale)
+    public function generate(User $user, Sheet $sheet, Sheet $sheetToDisplay, $locale): string
     {
         $pathToPdf = sprintf(
             '%s/%s-%s.pdf',
@@ -89,34 +65,18 @@ class SheetPdfPrinter
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        $process = new Process(
-            sprintf(
-                '%s %s %s %s %s %s',
-                $this->phantomjsPath,
-                $this->phantomjsScript,
-                $urlToPrint,
-                $pathToPdf,
-                $this->phantomjsHttpUser,
-                $this->phantomjsHttpPassword
-            )
-        );
-
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException($process->getErrorOutput());
-        }
-
-        return $pathToPdf;
+        return $this->pdfPrinter->generate($urlToPrint, $pathToPdf);
     }
 
     /**
+     * @deprecated
+     *
      * @param File   $file
      * @param string $directory
      *
      * @return string
      */
-    public function printFromFile(File $file, string $directory)
+    public function printFromFile(File $file, string $directory): string
     {
         $pathToPdf = sprintf(
             '%s/%s-%s-%s.pdf',
@@ -132,22 +92,6 @@ class SheetPdfPrinter
             $file->getPath()
         );
 
-        $process = new Process(
-            sprintf(
-                '%s %s %s %s',
-                $this->phantomjsPath,
-                $this->phantomjsScript,
-                $pathToHtml,
-                $pathToPdf
-            )
-        );
-
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException($process->getErrorOutput());
-        }
-
-        return $pathToPdf;
+        return $this->pdfPrinter->generate($pathToHtml, $pathToPdf);
     }
 }

@@ -92,11 +92,11 @@ class ProductManager
     }
 
     /**
-     * @param Event $event
+     * @param Event  $event
      * @param string $title
-     * @param float $unitPrice
-     * @param float $vat
-     * @param int $quantityMax
+     * @param float  $unitPrice
+     * @param float  $vat
+     * @param int    $quantityMax
      *
      * @return Product
      */

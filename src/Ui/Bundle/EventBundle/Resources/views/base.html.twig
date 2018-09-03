@@ -35,7 +35,7 @@
                 {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event, 'sheet': sheet is defined ? sheet : null })) }}
             {% endif %}
 
-            <div class="main-content container-fluid {% block full_mobile_container '' %}">
+            <div class="main-content container-fluid {% block container_classes '' %}">
                 {{ include('EventBundle::flashes.html.twig') }}
 
                 {% block content %}{% endblock %}

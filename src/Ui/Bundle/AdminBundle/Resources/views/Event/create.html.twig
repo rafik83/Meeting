@@ -26,12 +26,9 @@
 
     <hr>
 
-    {{ form_row(form.logo, {widget_columns: 3}) }}
-    {{ form_row(form.leftColor, {widget_columns: 2}) }}
-    {{ form_row(form.rightColor, {widget_columns: 2}) }}
-    {{ form_row(form.textColor, {widget_columns: 2}) }}
-    {{ form_row(form.backgroundColor, {widget_columns: 2}) }}
-    {{ form_row(form.backgroundImage, {widget_columns: 3}) }}
+    {{ form_row(form.welcomeEnabled) }}
+    {{ form_row(form.disabledEmailChanging) }}
+    {{ form_row(form.disabledPasswordChanging) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}

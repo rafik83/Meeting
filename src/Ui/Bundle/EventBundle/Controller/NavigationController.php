@@ -17,31 +17,32 @@ use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\Route;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class NavigationController extends Controller
 {
     /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param UserInterface $user
-     * @param Sheet|null    $sheet
-     * @param bool          $registration
+     * @param Request         $request
+     * @param EventDomain     $eventDomain
+     * @param UserDomain|null $userDomain
+     * @param Sheet|null      $sheet
+     * @param bool            $registration
      *
      * @return Response
      */
     public function menuAction(
         Request $request,
         EventDomain $eventDomain,
-        UserInterface $user = null,
+        UserDomain $userDomain = null,
         Sheet $sheet = null,
         $registration = false
     ) {
         $event = $eventDomain->getEvent();
         $locale = $request->getLocale();
+        $user = $userDomain instanceof UserDomain ? $userDomain->getUser() : null;
 
         $requestStack    = $this->get('request_stack');
         $route           = $requestStack->getMasterRequest()->get('_route');

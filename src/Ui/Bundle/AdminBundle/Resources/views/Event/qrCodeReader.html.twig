@@ -1,0 +1,22 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.event.access_control'|trans %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/qrcode.js') }}"></script>
+    <script src="{{ asset('assets/js/spool.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <h1>{{ 'admin.event.access_control'|trans }}</h1>
+    <div
+        id="qrcode"
+        data-scan-endpoint="{{ path('admin_user_event_scan', {'event': event.id}) }}"
+        data-identifiers="{{ identifiers | json_encode }}"
+        data-not-found="{{ 'admin.event.qrcode.notfound'|trans }}"
+        data-close="{{ 'admin.common.close'|trans }}"
+        data-title="{{ 'admin.event.qrcode.title'|trans }}"
+        data-number-of-available-identifiers="{{ 'admin.event.qrcode.number_of_available_badge'|trans }}">
+    </div>
+{% endblock %}

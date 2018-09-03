@@ -32,7 +32,7 @@ class GetUserEventListViewsQueryHandler
     public function handle(GetUserEventListViewsQuery $query): UserEventListViews
     {
         return new UserEventListViews(
-            $this->getUserEventViewsByEvent->handle($query->event, $query->page, $query->locale),
+            $this->getUserEventViewsByEvent->handle($query->event, $query->page, $query->locale, $query->rule),
             $this->categoryRepository->eventHasCategories($query->event)
         );
     }

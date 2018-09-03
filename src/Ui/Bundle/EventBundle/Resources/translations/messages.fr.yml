@@ -23,6 +23,7 @@ availability.confirmation.action.add_unavailability: 'Ajouter une indisponibilit
 availability.confirmation.explanation.title: 'Afin d''accéder à la prise de rendez-vous nous vous remercions de confirmer vos disponibilités pour la planification des rendez-vous.'
 availability.confirmation.title: 'Confirmer vos disponibilités'
 'Bad credentials.': 'Identifiants incorrects'
+badge.title: 'Mon badge'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
 catalog.action.meeting.proposition.show.refuse: 'Proposition refusée'
@@ -56,6 +57,8 @@ catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.preview.participant_positions_see_more: 'voir plus'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
 catalog.seeMore: 'Voir plus'
+catalog.selectItemsFromNomenclatures.more: '... et %count% autres'
+catalog.selectItemsFromNomenclatures.select: 'Sélectionner'
 catalog.sheet.export.csv: Exporter
 catalog.sheet.result.total: '{0} Aucun résultat|{1} 1 résultat|]1,Inf[ %total% résultats'
 catalog.title: Catalogue
@@ -124,6 +127,8 @@ event.user_event_phone.validate.ignore: Ignorer
 event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
+event.visio.agenda_access: 'Cliquez ici pour accéder à votre agenda'
+event.visio.welcome: 'Bienvenue sur %event%'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'
@@ -193,6 +198,7 @@ meetingRequest.mobile.filters.state.title: 'Gestion RDV'
 modal.back: Retour
 modal.close: Fermer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
+modal.submit: 'Valider'
 multiple_sheets.modal.close: Fermer
 multiple_sheets.request.filter.reset: 'Réinitialiser les filtres'
 multiple_sheets.request.list.no-preference: 'Pas de préférence'
@@ -210,6 +216,7 @@ multiple_sheets.request.list.totalRequest: '{0} Aucune demande de rendez-vous |{
 multiple_sheets.request.title: 'Gestion des rendez-vous'
 multiple_sheets.select_sheet: 'Sélectionner une fiche'
 multiple_sheets.title: 'Mes fiches'
+navigation.category.badge: Badge
 navigation.category.billing: Facturation
 navigation.category.catalog: Catalogue
 navigation.category.happening: 'Gestion RDV'
@@ -225,6 +232,7 @@ navigation.links.billing.order_history: 'Historique des commandes'
 navigation.links.catalog.available_date: 'Disponible le'
 navigation.links.catalog.incoming: 'A venir'
 navigation.links.catalog.sheet_not_in_catalog: 'Votre participation est en attente de validation'
+navigation.links.contactUs: 'Nous contacter'
 navigation.links.happening.accept: Acceptées
 navigation.links.happening.approved: Acceptées
 navigation.links.happening.decline: Refusées
@@ -390,6 +398,7 @@ program.title: Programme
 register.already_registered: 'Déjà inscrit ?'
 register.connect: Valider
 register.finalize: Finaliser
+register.noAvailableRegistrationType: 'Aucun type d''inscription n''est disponible.'
 register.photo: "Pourquoi la photo du participant est utile ?\n- Ne restez pas un anonyme pour vos futurs partenaires,\n- Renforcez votre réseau professionnel\n- Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,\n- Des cartes de visites complètes pour tous,\n- Identifiez facilement les agendas de chacun..."
 register.privacy_policies: "Les informations recueillies sur ce formulaire sont enregistrées dans un fichier informatisé par Vimeet pour votre participation à cet événement.\n\nElles sont conservées pendant 2 ans et sont destinées à l'organisateur de l'événement basé dans l'Union européenne.\n\nConformément à la loi européenne sur la protection des données personnelles, vous pouvez exercer votre droit d'accès aux données vous concernant et les faire rectifier ou supprimer en contactant : cnil@vi-meet.com"
 register.register: Inscription

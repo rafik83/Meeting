@@ -48,7 +48,7 @@ class UpdateSpotHandler
             throw new MeetingIsBlockedSpotException();
         }
 
-        if (false === in_array(
+        if (false === \in_array(
             $updateSpot->spot,
             $this->spotRepository->getSpotsForSlotAndParticipantsQuantity(
                 $updateSpot->meeting->getSlot(),
@@ -63,6 +63,7 @@ class UpdateSpotHandler
         }
 
         $updateSpot->meeting->updateSpot($updateSpot->spot, $updateSpot->blockedSpot, $updateSpot->blockedSlot);
+        $updateSpot->meeting->resetStatus();
         $this->meetingRepository->set($updateSpot->meeting);
     }
 }

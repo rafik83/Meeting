@@ -34,7 +34,7 @@ class SampleAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $sample = implode(AuthenticationTokenDenormalizer::ALLOWED_KEYS, ';').'
+        $sample = implode(AuthenticationTokenDenormalizer::ALLOWED_KEYS, ';') . '
 aa@aa.fr;AABBCCDDEE;2020-01-01
 bb@bb.fr;FFGGHHIIKK;';
 

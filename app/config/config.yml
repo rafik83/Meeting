@@ -156,7 +156,7 @@ tactician:
     commandbus:
         default:
             middleware:
-                - tactician.middleware.doctrine
+                - tactician.middleware.doctrine_rollback_only
                 - tactician.middleware.command_handler
         query:
             middleware:

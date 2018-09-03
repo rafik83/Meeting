@@ -1,0 +1,45 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting;
+
+use Proximum\Vimeet\Application\View\Meeting\Admin\ListMeeting\ParticipantView;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+
+class ParticipantViewQueryHandler
+{
+    /** @var ParticipantInfoGuesser */
+    private $participantInfoGuesser;
+
+    /** @var ScanRepositoryInterface */
+    private $scanRepository;
+
+    public function __construct(
+        ParticipantInfoGuesser $participantInfoGuesser,
+        ScanRepositoryInterface $scanRepository
+    ) {
+        $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->scanRepository = $scanRepository;
+    }
+
+    public function handle(ParticipantViewQuery $query): ParticipantView
+    {
+        return new ParticipantView(
+            $query->participant->getId(),
+            $this->participantInfoGuesser->guessParticipantCompleteName($query->participant, $query->locale),
+            $this->scanRepository->isUserCheckinByEventAndSlot(
+                $query->participant->getUser(),
+                $query->event,
+                $query->meetingSlot
+            )
+        );
+    }
+}

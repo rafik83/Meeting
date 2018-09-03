@@ -35,6 +35,7 @@ final class TypesMapping
                 ],
                 'email' => [
                     'type' => 'string',
+                    'analyzer' => 'emailAnalyzer',
                 ],
                 'locale' => [
                     'type' => 'string',
@@ -42,7 +43,7 @@ final class TypesMapping
                 'sheets' => [
                     'type' => 'nested',
                     'properties' => [
-                        'id' => ['type' => 'integer']
+                        'id' => ['type' => 'integer'],
                     ],
                 ],
             ],

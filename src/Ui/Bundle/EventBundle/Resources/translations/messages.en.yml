@@ -56,6 +56,8 @@ catalog.noVisibleTypes: 'You can''t access to any participant''s type'
 catalog.preview.participant_positions_see_more: 'see more'
 catalog.search.no-filter-to-refine: 'No result'
 catalog.seeMore: 'See more'
+catalog.selectItemsFromNomenclatures.more: '... and %count% more'
+catalog.selectItemsFromNomenclatures.select: 'Select'
 catalog.sheet.export.csv: Export
 catalog.sheet.result.total: '{0} No result|{1} 1 result|]1,Inf[ %total% results'
 catalog.title: Catalogue
@@ -192,6 +194,7 @@ meetingRequest.mobile.filters.state.title: 'My meetings'
 modal.back: Back
 modal.close: Close
 modal.loading.error: 'A problem occurred while loading, you can close the modal'
+modal.submit: 'Submit'
 multiple_sheets.modal.close: close
 multiple_sheets.request.filter.reset: 'Reset all the filters'
 multiple_sheets.request.list.no-preference: 'No preferences'
@@ -344,6 +347,7 @@ package.product.quantity: Quantity
 package.product.quantityMax: 'Maximum quantity reached'
 package.product.quantityMaxInformation: 'Max: %quantityMax%'
 package.product.quantityMin: 'Maximum minimum reached'
+package.product.seeMore: '{0}|{1} See the option|]1, Inf[ See the %count% options'
 package.product.selectedParticipants: 'Selected participants:'
 package.product.selectOptions: 'Select your options'
 package.product.subjectedToValidationHelp: 'Subject to validation'
@@ -387,6 +391,7 @@ program.title: Program
 register.already_registered: 'Already registered?'
 register.connect: validate
 register.finalize: Complete
+register.noAvailableRegistrationType: 'No available registration type'
 register.photo: "Why should you publish a photo?\n- Let potential business partners “put a face to a name” \n- Reinforce your professional network\n- Help contacts identify you more easily, and vice-versa\n- Complete digital business cards available to everyone\n- Easily identify each participant’s schedule"
 register.privacy_policies: "The data collected in this form will be registered with Vimeet, and is needed for your participation at this event. \n\nThe data will be stored safely and confidentially and will be kept for two years. \n\nAccording  to the European Union data protection and freedom of information laws, you have the right to access, rectify, modify and delete all data concerning you. You may do so by contacting cnil@vi-meet.com"
 register.register: Registration
@@ -438,6 +443,9 @@ summary.total: Total
 summary.totalByVat: 'Total subjected to %vatRate%%'
 summary.totalToPay: 'Total to pay'
 summary.vatRate: '%vatRate%% VAT'
+unavailability.action.remove.title: Delete
+unavailability.createdBySystem.buy.title: 'Modify my package'
+unavailability.createdBySystem.explaination.title: 'Please select the product that allows you to access this content'
 unavailability.title: Unavailable
 user_event.confirm.agenda.already_confirmed: 'Schedule already confirmed'
 user_event.confirm.agenda.success: 'Thank you for confirming your schedule'

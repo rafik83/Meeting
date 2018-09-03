@@ -1,0 +1,13 @@
+<div class="filter" data-select-from-nomenclature-field>
+    <h3 data-title>{{ form.vars.label }}</h3>
+
+    <ul class="select-from-nomenclature-field__selected-items" data-selected-items data-label-more="{{ 'catalog.selectItemsFromNomenclatures.more'|trans }}"></ul>
+
+    <div class="clearboth"></div>
+
+    <a href="{{ selectItemsFromNomenclaturesUrl }}" class="select-from-nomenclature-field__link">
+        {{ form.vars.attr['data-placeholder'] ? form.vars.attr['data-placeholder'] : 'catalog.selectItemsFromNomenclatures.select'|trans }}
+    </a>
+
+    {{ form_widget(form) }}
+</div>

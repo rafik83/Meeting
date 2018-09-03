@@ -15,13 +15,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class Create extends AbstractEvent
 {
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $admin;
 
     /** @var bool */
     public $visio;
+
+    /** @var null|Event */
+    public $duplicatedFrom;
 
     /**
      * @param Admin      $admin
@@ -43,7 +44,7 @@ class Create extends AbstractEvent
     /**
      * @param Event $event
      */
-    public function prefillData(Event $event)
+    public function prefillData(Event $event): void
     {
         $this->title = $event->getTitle();
         $this->locales = $event->getLocales();
@@ -58,15 +59,11 @@ class Create extends AbstractEvent
         $this->organiserName = $event->getOrganiserName();
         $this->invoicePrefix = $event->getInvoicePrefix();
         $this->timeZone = $event->getTimeZone();
-        $this->leftColor = $event->getConfiguration()->getLeftColor();
-        $this->rightColor = $event->getConfiguration()->getRightColor();
-        $this->textColor = $event->getConfiguration()->getTextColor();
         $this->organiserName = $event->getOrganiserName();
         $this->emailTeam = $event->getEmailTeam();
         $this->invoicePrefix = $event->getInvoicePrefix();
         $this->visible = $event->isVisible();
         $this->duplicatedFrom = $event;
-        $this->backgroundColor = $event->getConfiguration()->getBackgroundColor();
         $this->visio = $event->getConfiguration()->isVisio();
         $this->welcomeEnabled = $event->isWelcomeEnabled();
     }

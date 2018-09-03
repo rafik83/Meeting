@@ -164,6 +164,7 @@ class SheetSearchQueryBuilder
         $this->filterByOrderStatus($filters);
         $this->filterByReminderDate($filters);
         $this->filterByCountry($filters);
+        $this->filterByTagFilters($filters);
 
         if (isset($filters[Constant::FILLED_FILTER])) {
             $this->filterByFilledFilter($filters[Constant::FILLED_FILTER]);
@@ -674,15 +675,12 @@ class SheetSearchQueryBuilder
 
     protected function filterByFilledFilter(array $filledFilters): void
     {
-        $numberOfFilterApplied = 0;
-        $boolQuery = new BoolQuery();
-        $nestedQuery = new Nested();
-        $nestedQuery->setPath('filledFilter');
-
         foreach ($filledFilters as $key => $values) {
             if (!$values) {
                 continue;
             }
+
+            $boolQuery = new BoolQuery();
 
             foreach ($values as $filter) {
                 $subBoolQuery = (new BoolQuery())
@@ -692,10 +690,8 @@ class SheetSearchQueryBuilder
                 $boolQuery->addShould($subBoolQuery);
             }
 
-            $numberOfFilterApplied++;
-        }
-
-        if (0 < $numberOfFilterApplied) {
+            $nestedQuery = new Nested();
+            $nestedQuery->setPath('filledFilter');
             $nestedQuery->setQuery($boolQuery);
             $this->query->addMust($nestedQuery);
         }
@@ -767,33 +763,18 @@ class SheetSearchQueryBuilder
 
         $booleanFilters = (array) $booleanFilters;
 
-        $hasNestedMust = false;
-        $hasNestedMustNot = false;
-
-        $nestedMust    = new Nested();
-        $boolQueryMust = new BoolQuery();
-
-        $nestedMustNot    = new Nested();
-        $boolQueryMustNot = new BoolQuery();
-
         foreach ($booleanFilters as $key => $isFiltered) {
+            $boolQuery = new BoolQuery();
+            $boolQuery->addMust((new Match())->setField('booleanFilter.key', $key));
+
+            $nested = new Nested();
+            $nested->setQuery($boolQuery)->setPath('booleanFilter');
+
             if (true === $isFiltered) {
-                $boolQueryMust->addMust((new Match())->setField('booleanFilter.key', $key));
-                $hasNestedMust = true;
+                $this->query->addMust($nested);
             } elseif (false === $isFiltered) {
-                $boolQueryMustNot->addMust((new Match())->setField('booleanFilter.key', $key));
-                $hasNestedMustNot = true;
+                $this->query->addMustNot($nested);
             }
-        }
-
-        if (true === $hasNestedMust) {
-            $nestedMust->setQuery($boolQueryMust)->setPath('booleanFilter');
-            $this->query->addMust($nestedMust);
-        }
-
-        if (true === $hasNestedMustNot) {
-            $nestedMustNot->setQuery($boolQueryMustNot)->setPath('booleanFilter');
-            $this->query->addMustNot($nestedMustNot);
         }
     }
 
@@ -1132,5 +1113,53 @@ class SheetSearchQueryBuilder
         }
 
         $this->query->addMust($commercialStatusQuery);
+    }
+
+    private function filterByTagFilters(array $filters): void
+    {
+        if (!isset($filters['tagFilters']) || empty($filters['tagFilters'])) {
+            return;
+        }
+
+        foreach ($filters['tagFilters'] as $tag => $tagFilter) {
+            if (empty($tagFilter)) {
+                continue;
+            }
+
+            $nested = new Nested();
+            $nested->setPath('nestedTaggedData');
+            $boolQuery = new BoolQuery();
+
+            $tagBoolQuery = new BoolQuery();
+            $tagBoolQuery->addMust(new Term([
+                'nestedTaggedData.tag' => [
+                    'value' => $tag,
+                ],
+            ]));
+
+            $tagValuesNestedQuery = new Nested();
+            $tagValuesNestedQuery->setPath('nestedTaggedData.values');
+
+            $tagValuesBoolQuery = new BoolQuery();
+
+            foreach ($tagFilter as $tagKey) {
+                $tagValuesBoolQuery->addShould(new Term([
+                        'nestedTaggedData.values.value' => [
+                            'value' => $tagKey->key,
+                        ],
+                    ]
+                ));
+            }
+
+            $tagValuesNestedQuery->setQuery($tagValuesBoolQuery);
+
+            // We check the existence of the tag on the first level of the nested
+            $boolQuery->addMust($tagBoolQuery);
+            // We then check that the below level contain the given keys
+            $boolQuery->addMust($tagValuesNestedQuery);
+
+            $nested->setQuery($boolQuery);
+            $this->query->addMust($nested);
+        }
     }
 }

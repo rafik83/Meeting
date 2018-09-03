@@ -204,6 +204,8 @@ interface TypeRepositoryInterface
      */
     public function getVisibleTypesViewsByEvent(Event $event, $locale);
 
+    public function hasVisibleTypeByEvent(Event $event): bool;
+
     /**
      * @param Event $event
      *

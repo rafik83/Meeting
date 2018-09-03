@@ -23,10 +23,6 @@ Feature: See, create and update event
       | form.event_create.children.title.label           | Alternative Event                 |
       | form.event_create.children.domain.label          | alternative-event.vimeet.proximum |
       | form.event_create.children.vat.label             | 20                                |
-      | form.event_create.children.leftColor.label       | #123456                           |
-      | form.event_create.children.rightColor.label      | #123456                           |
-      | form.event_create.children.textColor.label       | #123456                           |
-      | form.event_create.children.backgroundColor.label | #123456                           |
       | form.event_create.children.organiserName.label   | Proximum                          |
       | form.event_create.children.emailTeam.label       | team-project@example.net          |
     And I select "Europe/Paris" from "form.event_create.children.timeZone.label"
@@ -64,11 +60,10 @@ Feature: See, create and update event
     And the "event_update_analyticsCode" field should contain "analyticsCode"
     When I go to "/fr/event"
     Then I should see "Other event"
-    When I go to "http://rdv-carnot-2016.vimeet.proximum/app_test.php/fr"
+    When I go to "http://rdv-carnot-2016.vimeet.proximum/fr"
     Then the response status code should be 200
-    And I should see "LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE"
-    Then I go to "http://rdv-carnot-2016.vimeet.proximum/app_test.php/en"
-    And I should see "In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion."
+    Then I go to "http://rdv-carnot-2016.vimeet.proximum/en"
+    And the response status code should be 200
 
   Scenario: update invoice prefix on event
     Given the invoice prefix with name "ViMeet" and prefix "Vi" is created and is default
@@ -92,7 +87,7 @@ Feature: See, create and update event
     And I press "form.event_update.children.submit.label"
     Then I go to this page "/en/event"
     And I should see "Invisible"
-    Then this event page "http://super-event.vimeet.proximum/app_test.php/fr" returns 404
+    Then this event page "http://super-event.vimeet.proximum/fr" returns 404
 
   Scenario: I can duplicate an event
     Given I am logged with "test@test.com" on admin

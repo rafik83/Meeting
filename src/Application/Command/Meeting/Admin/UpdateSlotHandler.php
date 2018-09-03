@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAnd
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHandler;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
@@ -90,7 +91,7 @@ class UpdateSlotHandler
         );
 
         // If no spot available
-        if (0 === count($spots)) {
+        if (0 === \count($spots)) {
             throw new NoSpotsAvailableForThisSlotAndMeetingException();
         }
 
@@ -102,12 +103,13 @@ class UpdateSlotHandler
             $newSpot = $updateSlot->meeting->getSpot();
 
             // Current meeting spot not available for selected slot
-            if (false === in_array($updateSlot->meeting->getSpot(), $spots)) {
+            if (false === \in_array($updateSlot->meeting->getSpot(), $spots)) {
                 throw new BlockedSpotNotAvailableForThisMeetingAndSlotException();
             }
         }
 
         $updateSlot->meeting->updateSlotAndSpot($updateSlot->slot, $newSpot);
+        $updateSlot->meeting->resetStatus();
         $this->meetingRepository->set($updateSlot->meeting);
 
         $this->eventDispatcher->dispatch(Events::MEETING_MOVED, new MeetingMovedEvent($updateSlot->meeting));

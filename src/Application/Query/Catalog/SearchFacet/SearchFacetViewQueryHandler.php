@@ -12,23 +12,29 @@ namespace Proximum\Vimeet\Application\Query\Catalog\SearchFacet;
 
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
+use Proximum\Vimeet\Application\View\Catalog\TagFilterView;
+use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
+use Proximum\Vimeet\Domain\Repository\Catalog\CatalogTagFilterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
 
 class SearchFacetViewQueryHandler implements SearchFacetQueryHandlerInterface
 {
-    /**
-     * @var SearchFacetRepositoryInterface
-     */
+    /** @var SearchFacetRepositoryInterface */
     private $searchFacetRepository;
 
+    /** @var CatalogTagFilterRepositoryInterface */
+    private $catalogTagFilterRepository;
+
     /**
-     * SearchFacetViewQueryHandler constructor.
-     *
-     * @param SearchFacetRepositoryInterface $searchFacetRepository
+     * @param SearchFacetRepositoryInterface      $searchFacetRepository
+     * @param CatalogTagFilterRepositoryInterface $catalogTagFilterRepository
      */
-    public function __construct(SearchFacetRepositoryInterface $searchFacetRepository)
-    {
+    public function __construct(
+        SearchFacetRepositoryInterface $searchFacetRepository,
+        CatalogTagFilterRepositoryInterface $catalogTagFilterRepository
+    ) {
         $this->searchFacetRepository = $searchFacetRepository;
+        $this->catalogTagFilterRepository = $catalogTagFilterRepository;
     }
 
     /**
@@ -51,6 +57,21 @@ class SearchFacetViewQueryHandler implements SearchFacetQueryHandlerInterface
             );
         }
 
-        return new SearchFacetsView($searchFacetViews);
+        $catalogTagFilters = $this->catalogTagFilterRepository->getByEventAndType($query->event, CatalogTagFilter::TYPE_INTERNAL);
+        $catalogTagFilterViews = [];
+
+        foreach ($catalogTagFilters as $catalogTagFilter) {
+            $tag = $catalogTagFilter->getTag();
+            $catalogTagFilterViews[$tag] = new TagFilterView(
+                $tag,
+                $catalogTagFilter->getLabel($query->locale),
+                $catalogTagFilter->getPlaceholder($query->locale)
+            );
+        }
+
+        return new SearchFacetsView(
+            $searchFacetViews,
+            $catalogTagFilterViews
+        );
     }
 }

@@ -20,7 +20,7 @@ class CatalogTagFilterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $sheetAndGenericTags = Tag::getSheetAndGenericTags();
+        $sheetAndGenericTags = array_merge(Tag::getSheetAndGenericTags(), Tag::getGenericSheetTemplateTags());
 
         $builder
             ->add('tag', ChoiceType::class, [

@@ -176,6 +176,20 @@ class TypeRepository implements TypeRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function hasVisibleTypeByEvent(Event $event): bool
+    {
+        return null !== $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type.id')
+            ->from(Type::class, 'type')
+            ->where('type.event = :event AND type.hidden = false')
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -335,7 +349,7 @@ class TypeRepository implements TypeRepositoryInterface
             ->where('days.id IS NULL OR days.startTime > :datetime')
             ->setParameters([
                 'excludedEvent' => $excludedEvent,
-                'datetime' => $datetime
+                'datetime' => $datetime,
             ])
             ->orderBy('event.title, typeTranslation.title', 'ASC');
 

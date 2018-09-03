@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
-use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
@@ -23,34 +22,19 @@ use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class CreateHandler
 {
-    /**
-     * @var EventRepositoryInterface
-     */
+    /** @var EventRepositoryInterface */
     private $eventRepository;
 
-    /**
-     * @var AdminRepositoryInterface
-     */
+    /** @var AdminRepositoryInterface */
     private $adminRepository;
 
-    /**
-     * @var ContentRepositoryInterface
-     */
+    /** @var ContentRepositoryInterface */
     private $contentRepository;
 
-    /**
-     * @var Generator
-     */
+    /** @var Generator */
     private $guidelinesGenerator;
 
-    /**
-     * @var FileStorageInterface
-     */
-    private $fileStorage;
-
-    /**
-     * @var Duplicator
-     */
+    /** @var Duplicator */
     private $duplicator;
 
     /**
@@ -58,7 +42,6 @@ class CreateHandler
      * @param EventRepositoryInterface   $eventRepository
      * @param ContentRepositoryInterface $contentRepository
      * @param Generator                  $guidelinesGenerator
-     * @param FileStorageInterface       $fileStorage
      * @param Duplicator                 $duplicator
      */
     public function __construct(
@@ -66,15 +49,13 @@ class CreateHandler
         EventRepositoryInterface $eventRepository,
         ContentRepositoryInterface $contentRepository,
         Generator $guidelinesGenerator,
-        FileStorageInterface $fileStorage,
         Duplicator $duplicator
     ) {
-        $this->adminRepository     = $adminRepository;
-        $this->eventRepository     = $eventRepository;
-        $this->contentRepository   = $contentRepository;
+        $this->adminRepository = $adminRepository;
+        $this->eventRepository = $eventRepository;
+        $this->contentRepository = $contentRepository;
         $this->guidelinesGenerator = $guidelinesGenerator;
-        $this->fileStorage         = $fileStorage;
-        $this->duplicator          = $duplicator;
+        $this->duplicator = $duplicator;
     }
 
     /**
@@ -106,27 +87,25 @@ class CreateHandler
             $create->invoicePrefix,
             $create->visible,
             $create->duplicatedFrom,
-            $create->welcomeEnabled
-        );
-
-        $event->getConfiguration()->setColors(
-            $create->leftColor,
-            $create->rightColor,
-            $create->textColor,
-            $create->backgroundColor
+            $create->welcomeEnabled,
+            $create->disabledEmailChanging,
+            $create->disabledPasswordChanging
         );
 
         $event->getConfiguration()->setVisio($create->visio);
 
-        if (null !== $create->logo) {
-            $logoExtension = $this->fileStorage->getExtension($create->logo);
-            $logoPath      = $this->fileStorage->upload($create->logo);
-            $event->setLogo($logoPath, $logoExtension);
-        }
-
-        if (null !== $create->backgroundImage) {
-            $backGroundImagePath      = $this->fileStorage->upload($create->backgroundImage);
-            $event->getConfiguration()->setBackgroundImage($backGroundImagePath);
+        if (null !== $event->getDuplicatedFrom()) {
+            $event->getConfiguration()->setColors(
+                $event->getDuplicatedFrom()->getConfiguration()->getLeftColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getRightColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getTextColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderLeftColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderRightColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getBackgroundColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderButtonLeftColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderButtonRightColor(),
+                $event->getDuplicatedFrom()->getConfiguration()->getHeaderButtonTextColor()
+            );
         }
 
         foreach ($event->getLocales() as $locale) {
@@ -138,12 +117,8 @@ class CreateHandler
         $event->setAssetPath('');
         $this->eventRepository->add($event);
 
-        try {
-            $event->setAssetPath($this->guidelinesGenerator->generate($event));
-            $this->eventRepository->set($event);
-        } catch (GuidelineAssetBuildFailedException $exception) {
-            throw new GuidelineAssetBuildFailedException($exception->getMessage());
-        }
+        $event->setAssetPath($this->guidelinesGenerator->generate($event));
+        $this->eventRepository->set($event);
 
         if ($create->admin->isOrganizer()) {
             $create->admin->addEvent($event);
@@ -162,7 +137,7 @@ class CreateHandler
     /**
      * @param Event $event
      */
-    private function generateContent(Event $event)
+    private function generateContent(Event $event): void
     {
         $termsOfSale = new Event\Content($event, Event\Content::TYPE_TERMS_OF_SALE);
         $this->contentRepository->add($termsOfSale);

@@ -50,21 +50,34 @@ class UserEventTokenGenerator
         $this->dateTime = $dateTime;
     }
 
-    /**
-     * @param Event  $event
-     * @param User   $user
-     * @param string $type
-     *
-     * @return UserEventToken
-     */
-    public function getUserEventTokenForConfirmAgenda(Event $event, User $user, $type)
+    public function getUserEventTokenForConfirmAgenda(Event $event, User $user, string $type): UserEventToken
     {
-        $userEventToken = $this->userEventTokenRepository->findByEventAndUserAndType($event, $user, $type);
+        $userEventToken = $this->getPreviousToken($event, $user, $type);
 
         if (null !== $userEventToken) {
             return $userEventToken;
         }
 
+        $userEventToken = $this->generateNewToken($event, $user, $type);
+
+        $this->dispatchEventOfCreation($userEventToken);
+
+        return $userEventToken;
+    }
+
+    public function getUserEventToken(Event $event, User $user, string $type): UserEventToken
+    {
+        $userEventToken = $this->getPreviousToken($event, $user, $type);
+
+        if (null !== $userEventToken) {
+            return $userEventToken;
+        }
+
+        return $this->generateNewToken($event, $user, $type);
+    }
+
+    private function generateNewToken(Event $event, User $user, string $type): UserEventToken
+    {
         $uniqid = $this->uniqidGenerator->generate();
         $token = sha1(sprintf('%s%s%s%s%s', $event->getId(), $user->getId(), $type, $this->dateTime->format('c'), $uniqid));
 
@@ -72,9 +85,12 @@ class UserEventTokenGenerator
 
         $this->userEventTokenRepository->add($userEventToken);
 
-        $this->dispatchEventOfCreation($userEventToken);
-
         return $userEventToken;
+    }
+
+    private function getPreviousToken(Event $event, User $user, string $type): ?UserEventToken
+    {
+        return $this->userEventTokenRepository->findByEventAndUserAndType($event, $user, $type);
     }
 
     /**

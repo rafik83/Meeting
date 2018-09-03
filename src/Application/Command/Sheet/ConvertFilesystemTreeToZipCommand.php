@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Command\Command;
 
 class ConvertFilesystemTreeToZipCommand implements Command
 {
-    /** @var string  */
+    /** @var string */
     public $rootDir;
 
     /** @var null|string */

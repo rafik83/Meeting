@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
-use Proximum\Vimeet\Domain\Event\Image;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
@@ -19,7 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,24 +29,16 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 abstract class AbstractEventType extends AbstractType
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $supportedCurrencies;
 
-    /**
-     * @var PrefixRepositoryInterface
-     */
+    /** @var PrefixRepositoryInterface */
     private $prefixRepository;
 
-    /**
-     * @var AuthorizationCheckerInterface
-     */
+    /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $preferredLocales;
 
     /**
@@ -90,17 +80,11 @@ abstract class AbstractEventType extends AbstractType
             ])
             ->add('domain', TextType::class, [
                 'placeholder' => 'form.event_create.children.domain.placeholder',
-                'help' => 'form.event_create.children.domain.help'
+                'help' => 'form.event_create.children.domain.help',
             ])
             ->add('timeZone', TimezoneType::class)
             ->add('fallback', LocaleType::class, [
                 'preferred_choices' => $this->preferredLocales,
-            ])
-            ->add('logo', FileType::class, [
-                'required' => false,
-                'attr'     => [
-                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
-                ],
             ])
             ->add('country', CountryType::class)
             ->add('mode', VatModeType::class, [
@@ -115,30 +99,13 @@ abstract class AbstractEventType extends AbstractType
                     return Intl::getCurrencyBundle()->getCurrencyName($currentChoice, $currentLocale);
                 },
             ])
-            ->add('backgroundImage', FileType::class, [
-                'required' => false,
-                'attr'        => [
-                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
-                ],
-            ])
-            ->add('backgroundColor', TextType::class, [
-                'required' => true,
-            ])
-            ->add('leftColor', TextType::class)
-            ->add('rightColor', TextType::class)
-            ->add('textColor', TextType::class)
             ->add('organiserName', TextType::class, [
                 'required' => true,
             ])
             ->add('emailTeam', EmailType::class, [
                 'required' => false,
-            ]);
-
-        if (null !== $event && $event->getConfiguration()->hasBackgroundImage()) {
-            $builder->add('isBackgroundImageToRemove', CheckboxType::class, [
-                'required' => false,
-            ]);
-        }
+            ])
+        ;
 
         // default invoicePrefix choice type options
         $invoicePrefixOptions = [
@@ -198,7 +165,14 @@ abstract class AbstractEventType extends AbstractType
             ])
             ->add('visio', CheckboxType::class, [
                 'required' => false,
-            ]);
+            ])
+            ->add('disabledEmailChanging', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('disabledPasswordChanging', CheckboxType::class, [
+                'required' => false,
+            ])
+        ;
     }
 
     /**

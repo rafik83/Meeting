@@ -13,12 +13,14 @@ namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Que
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\EmailToUserConverter;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\CanNotCreateUserException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\ComboEmailUserNotValidException;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\NoRegistrationTypeIsAvailableException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\UserNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\UserNotOnEventException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\TokenChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class SSOCheckerHandler
@@ -35,16 +37,26 @@ class SSOCheckerHandler
     /** @var EmailToUserConverter */
     private $emailToUserConverter;
 
+    /** @var SSORegistrationTypeResolver */
+    private $SSORegistrationTypeResolver;
+
+    /** @var TypeRepositoryInterface */
+    private $typeRepository;
+
     public function __construct(
         UserRepositoryInterface $userRepository,
         SheetRepositoryInterface $sheetRepository,
         TokenChecker $tokenChecker,
-        EmailToUserConverter $emailToUserConverter
+        EmailToUserConverter $emailToUserConverter,
+        SSORegistrationTypeResolver $SSORegistrationTypeResolver,
+        TypeRepositoryInterface $typeRepository
     ) {
         $this->userRepository = $userRepository;
         $this->sheetRepository = $sheetRepository;
         $this->tokenChecker = $tokenChecker;
         $this->emailToUserConverter = $emailToUserConverter;
+        $this->SSORegistrationTypeResolver = $SSORegistrationTypeResolver;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
@@ -80,6 +92,7 @@ class SSOCheckerHandler
      *
      * @throws ComboEmailUserNotValidException
      * @throws UserNotOnEventException
+     * @throws NoRegistrationTypeIsAvailableException
      *
      * @return User
      */
@@ -87,14 +100,23 @@ class SSOCheckerHandler
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
-        if (empty($sheets) && $isExhibitor) {
-            throw new UserNotOnEventException(
-                sprintf(
-                    'User with mail %s not found on Event %d',
-                    $user->getEmail(),
-                    $event->getId()
-                )
-            );
+        if (empty($sheets)) {
+            if ($isExhibitor) {
+                throw new UserNotOnEventException(
+                    sprintf(
+                        'User with mail %s not found on Event %d',
+                        $user->getEmail(),
+                        $event->getId()
+                    )
+                );
+            }
+
+            $visitorType = $this->SSORegistrationTypeResolver->handle($event);
+            $hasVisibleTypeByEvent = $this->typeRepository->hasVisibleTypeByEvent($event);
+
+            if (null === $visitorType && false === $hasVisibleTypeByEvent) {
+                throw new NoRegistrationTypeIsAvailableException('No registration type is available');
+            }
         }
 
         $this->checkEmailAndToken($user->getEmail(), $token);

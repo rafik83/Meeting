@@ -11,6 +11,11 @@
 namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
+use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
+use Proximum\Vimeet\Domain\ConditionRules\View\Field;
+use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorAnd;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
@@ -23,6 +28,12 @@ class GetUserEventListViewsByEventTest extends TestCase
     public function testHandle()
     {
         $event = $this->prophesize(Event::class);
+
+        $condition = new Condition(
+            new LogicalOperatorAnd,
+            [ new Field('field', new ComparisonOperatorEqual, 'text', 'A1') ]
+        );
+
         $event->getId()->willReturn(42);
 
         $expectedQuery = new \Elastica\Query(
@@ -37,6 +48,18 @@ class GetUserEventListViewsByEventTest extends TestCase
                                     ],
                                 ],
                             ],
+                            [
+                                'bool' => [
+                                    'must' => [
+                                        [
+                                            'query_string' => [
+                                                'default_field' => 'field',
+                                                'query' => 'A1',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ]
                         ],
                     ],
                 ],
@@ -123,23 +146,40 @@ class GetUserEventListViewsByEventTest extends TestCase
             ->willReturn($resultSet->reveal())
         ;
 
-        $elasticDocumentsToUserEventListViewsTranformer = $this->prophesize(
+        $elasticDocumentsToUserEventListViewsTransformer = $this->prophesize(
             ElasticDocumentsToUserEventListViewsTransformer::class
         );
-        $elasticDocumentsToUserEventListViewsTranformer
+        $elasticDocumentsToUserEventListViewsTransformer
             ->handle($documents, 'fr')
             ->shouldBeCalled()
             ->willReturn($expectedUserEventListViews)
         ;
 
+        $conditionRulesTransformer = $this->prophesize(ConditionRulesToElasticTransformer::class);
+        $conditionRulesTransformer->transform($condition)->willReturn(
+            [
+                'bool' => [
+                    'must' => [
+                        [
+                            'query_string' => [
+                                'default_field' => 'field',
+                                'query' => 'A1',
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        );
+
         $getUserEventViewsByEvent = new GetUserEventListViewsByEvent(
             $searchAdapter->reveal(),
-            $elasticDocumentsToUserEventListViewsTranformer->reveal()
+            $elasticDocumentsToUserEventListViewsTransformer->reveal(),
+            $conditionRulesTransformer->reveal()
         );
 
         $this->assertEquals(
             $expectedResult,
-            $getUserEventViewsByEvent->handle($event->reveal(), 2, 'fr')
+            $getUserEventViewsByEvent->handle($event->reveal(), 2, 'fr', $condition)
         );
     }
 }

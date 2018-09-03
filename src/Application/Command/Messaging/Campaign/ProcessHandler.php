@@ -99,13 +99,13 @@ class ProcessHandler
     private function getReceivers(array $sheets, array $recipients, Message $message)
     {
         $event                 = $message->getEvent();
-        $sendToParticipants    = in_array(Campaign::RECIPIENT_PARTICIPANTS, $recipients, true);
-        $sendToOwners          = in_array(Campaign::RECIPIENT_SHEET_OWNER, $recipients, true);
-        $sendToBillingContacts = in_array(Campaign::RECIPIENT_BILLING_CONTACT, $recipients, true);
+        $sendToParticipants    = \in_array(Campaign::RECIPIENT_PARTICIPANTS, $recipients, true);
+        $sendToOwners          = \in_array(Campaign::RECIPIENT_SHEET_OWNER, $recipients, true);
+        $sendToBillingContacts = \in_array(Campaign::RECIPIENT_BILLING_CONTACT, $recipients, true);
 
         $receivers    = [];
         $addReceivers = function (Sheet $sheet, $newReceivers) use (&$receivers, $message, $event) {
-            if (!is_array($newReceivers) && !$newReceivers instanceof \Traversable) {
+            if (!\is_array($newReceivers) && !$newReceivers instanceof \Traversable) {
                 return;
             }
 

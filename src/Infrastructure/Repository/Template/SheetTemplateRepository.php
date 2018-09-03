@@ -150,4 +150,20 @@ class SheetTemplateRepository implements SheetTemplateRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsedTemplateForGivenEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('template')
+            ->from(SheetTemplate::class, 'template')
+            ->join('template.types', 'type', 'WITH', 'template.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

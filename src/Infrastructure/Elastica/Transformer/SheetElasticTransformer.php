@@ -30,10 +30,10 @@ use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateFilledFilter;
 use Proximum\Vimeet\Domain\Template\TemplateObject\IndexableObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
-use Proximum\Vimeet\Domain\Template\TemplateFilledFilter;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Proximum\Vimeet\Infrastructure\Elastica\SheetContentView;
 use Symfony\Component\Intl\Intl;
@@ -164,6 +164,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'hasSpot' => $sheet->hasSpot(),
                     'availableSlotIds' => $this->buildAvailableSlots($sheet),
                     'reminderDate' => $this->getReminderDate($sheet),
+                    'nestedTaggedData' => $this->getNestedTaggedData($registrationTemplateData),
                 ],
                 $sheetContentView->contentByLocale
             )
@@ -446,5 +447,52 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return Constant::ORDER_STATUS_TOTAL_ORDER_EQUAL_ZERO;
+    }
+
+    private function getNestedTaggedData(TemplateData $registrationTemplateData): array
+    {
+        $nestedTaggedData = [];
+
+        foreach ($registrationTemplateData->getSheetObjects() as $object) {
+            if ($object instanceof Nomenclature) {
+                foreach ($object->getTags() as $tag) {
+                    if (Tag::SHEET_DATA === $tag || !\in_array($tag, Tag::getSheetTags(), true)) {
+                        continue;
+                    }
+
+                    $items = $object->getItems();
+
+                    if (empty($items)) {
+                        continue;
+                    }
+
+                    if (isset($nestedTaggedData[$tag])) {
+                        $nestedTaggedData[$tag]['values'] = array_merge(
+                            $nestedTaggedData[$tag]['values'],
+                            array_map(function ($item) use ($tag) {
+                                return [
+                                    'tag' => $tag,
+                                    'value' => $item,
+                                ];
+                            }, $items)
+                        );
+
+                        continue;
+                    }
+
+                    $nestedTaggedData[$tag] = [
+                        'tag' => $tag,
+                        'values' => array_map(function ($item) use ($tag) {
+                            return [
+                                'tag' => $tag,
+                                'value' => $item,
+                            ];
+                        }, $items),
+                    ];
+                }
+            }
+        }
+
+        return array_values($nestedTaggedData);
     }
 }

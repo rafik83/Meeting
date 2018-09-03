@@ -57,3 +57,20 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router'
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
+
+    #
+    # Badge
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ShowAction:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Badge\AvailableChecker'
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\DownloadAction:
+        arguments:
+            - '@repository.token.user_event_token_repository'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\EBadgePdfPrinter'

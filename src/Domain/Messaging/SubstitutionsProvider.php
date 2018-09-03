@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenera
 use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\AgendaConfirmationCTASubstitution;
+use Proximum\Vimeet\Domain\Messaging\Substitutions\DownloadEBadgeCTASubstitution;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
@@ -50,6 +51,9 @@ class SubstitutionsProvider
     /** @var AgendaConfirmationCTASubstitution */
     private $agendaConfirmationCTASubstitution;
 
+    /** @var DownloadEBadgeCTASubstitution */
+    private $downloadEBadgeCTASubstitution;
+
     /**
      * @param EventUrlGeneratorInterface        $eventUrlGenerator                 Event URL generator used to substitute
      *                                                                             event-related link placeholders
@@ -61,19 +65,22 @@ class SubstitutionsProvider
      * @param SheetPlanningViewQueryHandler     $sheetPlanningViewQueryHandler     Service used to generate the sheet
      *                                                                             planning in html format
      * @param AgendaConfirmationCTASubstitution $agendaConfirmationCTASubstitution
+     * @param DownloadEBadgeCTASubstitution     $downloadEBadgeCTASubstitution
      */
     public function __construct(
         EventUrlGeneratorInterface $eventUrlGenerator,
         ParticipantInfoGuesser $participantInfoGuesser,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         SheetPlanningViewQueryHandler $sheetPlanningViewQueryHandler,
-        AgendaConfirmationCTASubstitution $agendaConfirmationCTASubstitution
+        AgendaConfirmationCTASubstitution $agendaConfirmationCTASubstitution,
+        DownloadEBadgeCTASubstitution $downloadEBadgeCTASubstitution
     ) {
         $this->eventUrlGenerator                 = $eventUrlGenerator;
         $this->participantInfoGuesser            = $participantInfoGuesser;
         $this->activateAccountTokenGenerator     = $activateAccountTokenGenerator;
         $this->sheetPlanningViewQueryHandler     = $sheetPlanningViewQueryHandler;
         $this->agendaConfirmationCTASubstitution = $agendaConfirmationCTASubstitution;
+        $this->downloadEBadgeCTASubstitution = $downloadEBadgeCTASubstitution;
     }
 
     /**
@@ -131,7 +138,7 @@ class SubstitutionsProvider
      */
     private function getSubstitution($placeholder, MailRecipientInterface $recipient, Sheet $sheet, $locale)
     {
-        if (!in_array($placeholder, Compose::getAllPlaceholders())) {
+        if (!\in_array($placeholder, Compose::getAllPlaceholders())) {
             throw new InvalidMessagePlaceholderException($placeholder);
         }
 
@@ -209,6 +216,8 @@ class SubstitutionsProvider
                         '_locale'     => $locale,
                     ]
                 );
+            case Compose::TAG_CTA_EBADGE:
+                return $this->downloadEBadgeCTASubstitution->getCTA($recipient, $sheet, $locale);
         }
 
         throw new InvalidMessagePlaceholderException($placeholder);

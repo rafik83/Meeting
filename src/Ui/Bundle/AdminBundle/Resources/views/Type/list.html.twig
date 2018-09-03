@@ -73,6 +73,13 @@
                                 </li>
                             {% endif %}
                             <li>
+                                <a href="{{ path('admin_type_badge_configuration', {'event': event.id, 'type': type.id}) }}"
+                                   class="btn-sm"
+                                >
+                                    {{ 'admin.type.badge.configuration.link'|trans }}
+                                </a>
+                            </li>
+                            <li>
                                 {{ macro.delete_button(
                                 path('admin_type_remove', { 'event': event.id, 'type': type.id }),
                                 'admin.type.remove.link'|trans,

@@ -16,6 +16,8 @@ use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter;
 
 /**
+ * @deprecated
+ *
  * This class generate a pdf file from an html string
  */
 class HtmlToPdf

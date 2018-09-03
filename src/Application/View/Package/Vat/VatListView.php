@@ -28,8 +28,8 @@ class VatListView
     public $vatViews;
 
     /**
-     * @param int    $total in cents
-     * @param int    $totalWithVat in cents
+     * @param int    $total         in cents
+     * @param int    $totalWithVat  in cents
      * @param bool   $vatApplicable
      * @param string $vatMode
      * @param array  $vatViews

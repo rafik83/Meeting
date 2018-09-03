@@ -25,9 +25,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\ExportAction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViews;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsResult;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViews;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerView;
@@ -55,7 +55,7 @@ class ExportActionTest extends TestCase
     private $queryBus;
 
     /** @var ObjectProphecy */
-    private $categoryTypeOrganizationAndPositionViewsHandler;
+    private $catalogFilterViewHandler;
 
     /** @var ObjectProphecy */
     private $filterAvailableSlotAndSpecificSlotCheckerHandler;
@@ -90,7 +90,7 @@ class ExportActionTest extends TestCase
         $this->catalogAccessChecker = $this->prophesize(CatalogAccessChecker::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
-        $this->categoryTypeOrganizationAndPositionViewsHandler = $this->prophesize(CategoryTypeOrganizationAndPositionViewsHandler::class);
+        $this->catalogFilterViewHandler = $this->prophesize(CatalogFilterViewsHandler::class);
         $this->filterAvailableSlotAndSpecificSlotCheckerHandler = $this->prophesize(FilterAvailableSlotAndSpecificSlotCheckerHandler::class);
         $this->serializerAdapter = $this->prophesize(SerializerAdapterInterface::class);
         $this->dateTime = new \DateTime();
@@ -117,7 +117,7 @@ class ExportActionTest extends TestCase
             $this->catalogAccessChecker->reveal(),
             $this->formFactory->reveal(),
             $this->queryBus->reveal(),
-            $this->categoryTypeOrganizationAndPositionViewsHandler->reveal(),
+            $this->catalogFilterViewHandler->reveal(),
             $this->filterAvailableSlotAndSpecificSlotCheckerHandler->reveal(),
             $this->serializerAdapter->reveal(),
             $this->dateTime
@@ -146,7 +146,7 @@ class ExportActionTest extends TestCase
             $this->catalogAccessChecker->reveal(),
             $this->formFactory->reveal(),
             $this->queryBus->reveal(),
-            $this->categoryTypeOrganizationAndPositionViewsHandler->reveal(),
+            $this->catalogFilterViewHandler->reveal(),
             $this->filterAvailableSlotAndSpecificSlotCheckerHandler->reveal(),
             $this->serializerAdapter->reveal(),
             $this->dateTime
@@ -177,7 +177,7 @@ class ExportActionTest extends TestCase
             $this->catalogAccessChecker->reveal(),
             $this->formFactory->reveal(),
             $this->queryBus->reveal(),
-            $this->categoryTypeOrganizationAndPositionViewsHandler->reveal(),
+            $this->catalogFilterViewHandler->reveal(),
             $this->filterAvailableSlotAndSpecificSlotCheckerHandler->reveal(),
             $this->serializerAdapter->reveal(),
             $this->dateTime
@@ -210,7 +210,7 @@ class ExportActionTest extends TestCase
             $this->catalogAccessChecker->reveal(),
             $this->formFactory->reveal(),
             $this->queryBus->reveal(),
-            $this->categoryTypeOrganizationAndPositionViewsHandler->reveal(),
+            $this->catalogFilterViewHandler->reveal(),
             $this->filterAvailableSlotAndSpecificSlotCheckerHandler->reveal(),
             $this->serializerAdapter->reveal(),
             $this->dateTime
@@ -236,25 +236,25 @@ class ExportActionTest extends TestCase
         $this->sheet->isInCatalog()->willReturn(true);
         $this->catalogAccessChecker->allowedToAccess($this->event->reveal())->shouldBeCalled()->willReturn(true);
 
-        $categoryTypeOrganizationAndPositionViewsResult = $this->prophesize(CategoryTypeOrganizationAndPositionViewsResult::class);
-        $this->categoryTypeOrganizationAndPositionViewsHandler
-            ->handle(new CategoryTypeOrganizationAndPositionViews(
+        $catalogFilterViewResult = $this->prophesize(CatalogFilterViewsResult::class);
+        $this->catalogFilterViewHandler
+            ->handle(new CatalogFilterViews(
                 $this->event->reveal(),
                 $this->sheet->reveal(),
                 'fr'
             ))
             ->shouldBeCalled()
-            ->willReturn($categoryTypeOrganizationAndPositionViewsResult->reveal())
+            ->willReturn($catalogFilterViewResult->reveal())
         ;
 
-        $categoryTypeOrganizationAndPositionViewsResult->hasEmptyCategoryOrType()->willReturn(true);
+        $catalogFilterViewResult->hasEmptyCategoryOrType()->willReturn(true);
 
         $action = new ExportAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->catalogAccessChecker->reveal(),
             $this->formFactory->reveal(),
             $this->queryBus->reveal(),
-            $this->categoryTypeOrganizationAndPositionViewsHandler->reveal(),
+            $this->catalogFilterViewHandler->reveal(),
             $this->filterAvailableSlotAndSpecificSlotCheckerHandler->reveal(),
             $this->serializerAdapter->reveal(),
             $this->dateTime
@@ -281,22 +281,23 @@ class ExportActionTest extends TestCase
         $typeViews = [];
         $positionViews = [];
 
-        $categoryTypeOrganizationAndPositionViewsResult = new CategoryTypeOrganizationAndPositionViewsResult(
-            CategoryTypeOrganizationAndPositionViewsResult::RESULT_CATEGORY_OR_TYPE,
+        $catalogFilterViewResult = new CatalogFilterViewsResult(
+            CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
             [],
             $typeViews,
             [],
             $positionViews,
+            [],
             null
         );
-        $this->categoryTypeOrganizationAndPositionViewsHandler
-            ->handle(new CategoryTypeOrganizationAndPositionViews(
+        $this->catalogFilterViewHandler
+            ->handle(new CatalogFilterViews(
                 $this->event->reveal(),
                 $this->sheet->reveal(),
                 'fr'
             ))
             ->shouldBeCalled()
-            ->willReturn($categoryTypeOrganizationAndPositionViewsResult)
+            ->willReturn($catalogFilterViewResult)
         ;
 
         $this
@@ -326,6 +327,7 @@ class ExportActionTest extends TestCase
                     'filterByAvailableSlotIds'  => false,
                     'filterBySpecificSlot'      => false,
                     'specificSlot'              => null,
+                    'taggedNomenclatureTagViews' => [],
                 ]
             )
             ->shouldBeCalled()
@@ -371,7 +373,7 @@ class ExportActionTest extends TestCase
             $this->catalogAccessChecker->reveal(),
             $this->formFactory->reveal(),
             $this->queryBus->reveal(),
-            $this->categoryTypeOrganizationAndPositionViewsHandler->reveal(),
+            $this->catalogFilterViewHandler->reveal(),
             $this->filterAvailableSlotAndSpecificSlotCheckerHandler->reveal(),
             $this->serializerAdapter->reveal(),
             $this->dateTime
@@ -401,22 +403,23 @@ class ExportActionTest extends TestCase
         $typeViews = [];
         $positionViews = [];
 
-        $categoryTypeOrganizationAndPositionViewsResult = new CategoryTypeOrganizationAndPositionViewsResult(
-            CategoryTypeOrganizationAndPositionViewsResult::RESULT_CATEGORY_OR_TYPE,
+        $catalogFilterViewResult = new CatalogFilterViewsResult(
+            CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
             [],
             $typeViews,
             [],
             $positionViews,
+            [],
             null
         );
-        $this->categoryTypeOrganizationAndPositionViewsHandler
-            ->handle(new CategoryTypeOrganizationAndPositionViews(
+        $this->catalogFilterViewHandler
+            ->handle(new CatalogFilterViews(
                 $this->event->reveal(),
                 $this->sheet->reveal(),
                 'fr'
             ))
             ->shouldBeCalled()
-            ->willReturn($categoryTypeOrganizationAndPositionViewsResult)
+            ->willReturn($catalogFilterViewResult)
         ;
 
         $this
@@ -446,6 +449,7 @@ class ExportActionTest extends TestCase
                 'filterByAvailableSlotIds'  => false,
                 'filterBySpecificSlot'      => false,
                 'specificSlot'              => null,
+                'taggedNomenclatureTagViews' => [],
             ]
         )
             ->shouldBeCalled()
@@ -499,7 +503,7 @@ class ExportActionTest extends TestCase
             $this->catalogAccessChecker->reveal(),
             $this->formFactory->reveal(),
             $this->queryBus->reveal(),
-            $this->categoryTypeOrganizationAndPositionViewsHandler->reveal(),
+            $this->catalogFilterViewHandler->reveal(),
             $this->filterAvailableSlotAndSpecificSlotCheckerHandler->reveal(),
             $this->serializerAdapter->reveal(),
             $this->dateTime

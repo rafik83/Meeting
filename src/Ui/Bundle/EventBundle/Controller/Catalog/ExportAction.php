@@ -24,8 +24,8 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViews;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViews;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -50,8 +50,8 @@ class ExportAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var CategoryTypeOrganizationAndPositionViewsHandler */
-    private $categoryTypeOrganizationAndPositionViewsHandler;
+    /** @var CatalogFilterViewsHandler */
+    private $catalogFilterViewsHandler;
 
     /** @var FilterAvailableSlotAndSpecificSlotCheckerHandler */
     private $filterAvailableSlotAndSpecificSlotCheckerHandler;
@@ -67,7 +67,7 @@ class ExportAction
      * @param CatalogAccessChecker                             $catalogAccessChecker
      * @param FormFactoryInterface                             $formFactory
      * @param QueryBusInterface                                $queryBus
-     * @param CategoryTypeOrganizationAndPositionViewsHandler  $categoryTypeOrganizationAndPositionViewsHandler
+     * @param CatalogFilterViewsHandler                        $catalogFilterViewsHandler
      * @param FilterAvailableSlotAndSpecificSlotCheckerHandler $filterAvailableSlotAndSpecificSlotCheckerHandler
      * @param SerializerAdapterInterface                       $serializerAdapter
      * @param \DateTimeInterface                               $dateTime
@@ -77,7 +77,7 @@ class ExportAction
         CatalogAccessChecker $catalogAccessChecker,
         FormFactoryInterface $formFactory,
         QueryBusInterface $queryBus,
-        CategoryTypeOrganizationAndPositionViewsHandler $categoryTypeOrganizationAndPositionViewsHandler,
+        CatalogFilterViewsHandler $catalogFilterViewsHandler,
         FilterAvailableSlotAndSpecificSlotCheckerHandler $filterAvailableSlotAndSpecificSlotCheckerHandler,
         SerializerAdapterInterface $serializerAdapter,
         \DateTimeInterface $dateTime
@@ -86,7 +86,7 @@ class ExportAction
         $this->catalogAccessChecker = $catalogAccessChecker;
         $this->formFactory = $formFactory;
         $this->queryBus = $queryBus;
-        $this->categoryTypeOrganizationAndPositionViewsHandler = $categoryTypeOrganizationAndPositionViewsHandler;
+        $this->catalogFilterViewsHandler = $catalogFilterViewsHandler;
         $this->filterAvailableSlotAndSpecificSlotCheckerHandler = $filterAvailableSlotAndSpecificSlotCheckerHandler;
         $this->serializerAdapter = $serializerAdapter;
         $this->dateTime = $dateTime;
@@ -120,18 +120,16 @@ class ExportAction
             throw new AccessDeniedException('Access denied!');
         }
 
-        $categoryTypeOrganizationPositionViews = $this->categoryTypeOrganizationAndPositionViewsHandler
-            ->handle(new CategoryTypeOrganizationAndPositionViews($event, $sheet, $locale))
+        $catalogFilterViewsResult = $this->catalogFilterViewsHandler
+            ->handle(new CatalogFilterViews($event, $sheet, $locale))
         ;
 
-        if ($categoryTypeOrganizationPositionViews->hasEmptyCategoryOrType()) {
+        if ($catalogFilterViewsResult->hasEmptyCategoryOrType()) {
             throw new NotFoundHttpException('Not found category or type');
         }
 
-        $categoryViews             = $categoryTypeOrganizationPositionViews->categoryViews;
-        $typeViews                 = $categoryTypeOrganizationPositionViews->typeViews;
-        $organizationCategoryViews = $categoryTypeOrganizationPositionViews->organizationCategoryViews;
-        $positionViews             = $categoryTypeOrganizationPositionViews->positionViews;
+        $categoryViews             = $catalogFilterViewsResult->categoryViews;
+        $typeViews                 = $catalogFilterViewsResult->typeViews;
         $availableSlotsIds         = [];
         $sheetsToExclude           = [];
 
@@ -152,15 +150,16 @@ class ExportAction
         ;
 
         $form = $this->formFactory->createNamed('', SearchType::class, $filters, [
-            'typeViews'                 => $typeViews,
-            'categoryViews'             => $categoryViews,
-            'organizationCategoryViews' => $organizationCategoryViews,
-            'positionViews'             => $positionViews,
-            'event'                     => $event,
-            'locale'                    => $locale,
-            'filterByAvailableSlotIds'  => $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
-            'filterBySpecificSlot'      => null !== $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
-            'specificSlot'              => $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
+            'typeViews' => $catalogFilterViewsResult->typeViews,
+            'categoryViews' => $catalogFilterViewsResult->categoryViews,
+            'organizationCategoryViews' => $catalogFilterViewsResult->organizationCategoryViews,
+            'taggedNomenclatureTagViews' => $catalogFilterViewsResult->taggedNomenclatureTagViews,
+            'positionViews' => $catalogFilterViewsResult->positionViews,
+            'event' => $event,
+            'locale' => $locale,
+            'filterByAvailableSlotIds' => $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
+            'filterBySpecificSlot' => null !== $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
+            'specificSlot' => $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

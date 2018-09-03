@@ -27,7 +27,8 @@ var $ = require('jquery'),
     CatalogPagination = require('./components/_CatalogPagination'),
     VideoConference = require('./components/VideoConference/VideoConference'),
     IgnorePhoneConfirmation = require('./components/agenda/_IgnorePhoneConfirmation'),
-    PackageParticipantProducts = require('./components/_PackageParticipantProducts')
+    PackageParticipantProducts = require('./components/_PackageParticipantProducts'),
+    CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField')
 ;
 
 require('bootstrap');
@@ -101,6 +102,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.catalog__item, .catalog__sheet'), function (element) {
         new CatalogSheetCard(element, document.getElementById('request-modal'));
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-select-from-nomenclature-field]'), function (element) {
+        new CatalogSelectFromNomenclaturesField(element, document.getElementById('select-from-nomenclatures-modal'));
     });
 
     [].forEach.call(target.querySelectorAll('.agenda'), function (element) {

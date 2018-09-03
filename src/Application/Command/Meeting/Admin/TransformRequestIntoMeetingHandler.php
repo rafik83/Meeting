@@ -83,7 +83,7 @@ class TransformRequestIntoMeetingHandler
         );
 
         // Check if selected slot is in available slots
-        if (false === in_array($transformRequestIntoMeeting->slot->getId(), $meetingUpdateSlotView->availableSlotsId)) {
+        if (false === \in_array($transformRequestIntoMeeting->slot->getId(), $meetingUpdateSlotView->availableSlotsId)) {
             throw new SlotNotAvailableForThisMeetingException();
         }
 

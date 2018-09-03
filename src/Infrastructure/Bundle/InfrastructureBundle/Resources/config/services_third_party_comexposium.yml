@@ -154,6 +154,8 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\TokenChecker'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\EmailToUserConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSORegistrationTypeResolver'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker }
 

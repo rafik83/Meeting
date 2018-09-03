@@ -454,6 +454,14 @@ event_catalog_search_keywords:
     methods:  [POST]
     defaults: { _controller: EventBundle:Catalog:searchKeywords }
 
+event_catalog_select_items_from_nomenclatures:
+    path: /sheet/{sheet}/catalog/select-items-from-nomenclatures/{tag}
+    requirements:
+        sheet: \d+
+        tag: \w+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\SelectItemsFromNomenclaturesAction }
+
 event_catalog_complete_sheet:
     path: /sheet/{sheet}/catalog/display/{sheetToDisplay}
     requirements:
@@ -509,6 +517,13 @@ event_catalog_external_search_keywords:
     path: /list/search-keywords
     methods:  [POST]
     defaults: { _controller: EventBundle:CatalogExternal:searchKeywords }
+
+event_catalog_external_select_items_from_nomenclatures:
+    path: /list/select-items-from-nomenclatures/{tag}
+    requirements:
+        tag: \w+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\CatalogExternal\SelectItemsFromNomenclaturesAction }
 
 #
 # Meeting Request
@@ -617,6 +632,13 @@ event_package_remove_participant:
 event_package_summary:
     path: /sheet/{sheet}/package/summary
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\SummaryAction }
+    requirements:
+        sheet: \d+
+    methods: [GET, POST]
+
+event_visio_checkin:
+    path: /sheet/{sheet}/checkin
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction }
     requirements:
         sheet: \d+
     methods: [GET, POST]
@@ -872,3 +894,22 @@ event_video_conference_access_session_test:
         sessionId: .*
     methods: [GET]
     defaults: { _controller: EventBundle:VideoConference:accessSessionVideoTest }
+
+#
+# Badge
+#
+event_sheet_user_badge:
+    path: /sheet/{sheet}/user/{user}/badge
+    requirements:
+        sheet: \d+
+        user: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ShowAction }
+
+event_sheet_user_badge_download:
+    path: /badge/download/{token}.{format}
+    requirements:
+        token: \w+
+        format: (html|pdf)
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\DownloadAction, format: 'pdf' }

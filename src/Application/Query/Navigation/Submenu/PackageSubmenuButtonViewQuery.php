@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class PackageSubmenuButtonViewQuery
+class PackageSubmenuButtonViewQuery implements Query
 {
     /** @var Sheet */
     public $sheet;

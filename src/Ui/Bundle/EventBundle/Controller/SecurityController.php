@@ -72,7 +72,7 @@ class SecurityController extends Controller
             $form->get('email')->addError($error);
         }
 
-        $users = 'dev' === $this->get('kernel')->getEnvironment() ?
+        $users = 'dev' === $this->get('kernel')->getEnvironment() && 'true' === $request->get('oneClickLogin') ?
             $this->get('vimeet_infrastructure.repository.user_repository')->all() :
             [];
 
@@ -146,7 +146,7 @@ class SecurityController extends Controller
             'error' => $error,
             'typeId' => $typeId,
             'type' => $type,
-            'typeDescription' => $type !== null ? $this->get('markdown')->toHtml($type->description) : null,
+            'typeDescription' => null !== $type ? $this->get('markdown')->toHtml($type->description) : null,
         ]);
     }
 
