@@ -20,6 +20,7 @@ function CatalogFilters(field, filterForm, catalog)
 
     $(catalog).find('.catalog__item').fadeTo('fast', 0.3);
     $(filterForm).find('input, select').attr('disabled','disabled');
+    $(filterForm).find('a').css('pointer-events', 'none');
 
     history.pushState({}, '', action + '?' + data);
 

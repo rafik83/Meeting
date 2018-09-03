@@ -56,6 +56,8 @@ catalog.noVisibleTypes: 'You can''t access to any participant''s type'
 catalog.preview.participant_positions_see_more: 'see more'
 catalog.search.no-filter-to-refine: 'No result'
 catalog.seeMore: 'See more'
+catalog.selectItemsFromNomenclatures.more: '... and %count% more'
+catalog.selectItemsFromNomenclatures.select: 'Select'
 catalog.sheet.export.csv: Export
 catalog.sheet.result.total: '{0} No result|{1} 1 result|]1,Inf[ %total% results'
 catalog.title: Catalogue
@@ -192,6 +194,7 @@ meetingRequest.mobile.filters.state.title: 'My meetings'
 modal.back: Back
 modal.close: Close
 modal.loading.error: 'A problem occurred while loading, you can close the modal'
+modal.submit: 'Submit'
 multiple_sheets.modal.close: close
 multiple_sheets.request.filter.reset: 'Reset all the filters'
 multiple_sheets.request.list.no-preference: 'No preferences'

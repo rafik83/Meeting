@@ -74,10 +74,12 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
         $this->generateBooleanFilter($event->getEvent(), $templatesData);
         $this->generateFilledFilter($event->getEvent(), $templatesData);
 
-        $this->taggedNomenclatureFilterRepository->deleteForEvent($event->getEvent());
+        $tags = array_merge([Tag::PARTICIPANT_POSITION], Tag::getSheetAndGenericTags());
+
+        $this->taggedNomenclatureFilterRepository->deleteForEventAndTags($event->getEvent(), $tags);
 
         // The TaggedNomenclatureFilter can be used on any Sheet tags or the participant position tag
-        foreach (array_merge([Tag::PARTICIPANT_POSITION], Tag::getSheetAndGenericTags()) as $tag) {
+        foreach ($tags as $tag) {
             $this->saveNomenclaturesForGivenTag($event->getEvent(), $templatesData, $tag);
         }
     }

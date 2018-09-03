@@ -35,7 +35,7 @@ class CheckboxesType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale', 'nomenclature']);
+        $resolver->setRequired(['locale', 'nomenclature', 'levelsArchitecture']);
         $resolver->setDefaults([
             'choices'                   => function (Options $options) {
                 return $options['nomenclature']->getLastLevel();
@@ -54,6 +54,7 @@ class CheckboxesType extends AbstractType
                     return $item->getLabel($options['locale']);
                 };
             },
+            'levelsArchitecture' => []
         ]);
     }
 
@@ -62,8 +63,9 @@ class CheckboxesType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['locale']       = $options['locale'];
+        $view->vars['locale'] = $options['locale'];
         $view->vars['nomenclature'] = $options['nomenclature'];
+        $view->vars['levelsArchitecture'] = $options['levelsArchitecture'];
     }
 
     /**
