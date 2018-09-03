@@ -108,7 +108,7 @@ class UserEventViewsFactory
                 $email,
                 $locale,
                 [
-                    ['id' => $sheetId]
+                    ['id' => $sheetId],
                 ]
             );
         }

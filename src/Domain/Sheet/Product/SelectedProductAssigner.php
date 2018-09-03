@@ -58,7 +58,7 @@ class SelectedProductAssigner
 
             $selectedProduct = $object->getSelectedProduct();
 
-            if ($selectedProduct !== null && isset($orderMergedProducts[$selectedProduct])) {
+            if (null !== $selectedProduct && isset($orderMergedProducts[$selectedProduct])) {
                 continue;
             }
 
@@ -88,11 +88,11 @@ class SelectedProductAssigner
         $orderMergedProducts = [];
 
         foreach ($orderMerged->getRows() as $row) {
-            if ($row->getType() !== Product::TYPE_OPTION) {
+            if (Product::TYPE_OPTION !== $row->getType()) {
                 continue;
             }
 
-            if ($row->getProduct() === null) {
+            if (null === $row->getProduct()) {
                 continue;
             }
 

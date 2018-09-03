@@ -366,7 +366,7 @@ class Participant implements MailRecipientInterface
 
     public static function duplicateFrom(Participant $participant, Sheet $sheet): Participant
     {
-        $duplicatedParticipant = new Participant(
+        $duplicatedParticipant = new self(
             $sheet,
             $participant->getUser(),
             $participant->getData(),

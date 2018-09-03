@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagView;
+use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagViews;
 use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
-use Proximum\Vimeet\Domain\Model\NomenclatureItem;
 
 class NomenclatureTagViewQueryHandler
 {
@@ -24,19 +24,33 @@ class NomenclatureTagViewQueryHandler
         $this->taggedNomenclatureFilterGetter = $taggedNomenclatureFilterGetter;
     }
 
+    /**
+     * @return NomenclatureTagViews[] indexed by tag
+     */
     public function handle(NomenclatureTagViewQuery $query): array
     {
-        $tagViews = [];
+        $nomenclatureTagViewsIndexedByTag = [];
 
         foreach ($query->tags as $tag) {
-            /** @var NomenclatureItem[] $items */
-            $items = $this->taggedNomenclatureFilterGetter->getLastNomenclaturesItems($query->event, $tag, $query->locale);
+            $nomenclatureTagViews = [];
 
-            foreach ($items as $itemKey => $itemLabel) {
-                $tagViews[$tag][] = new NomenclatureTagView($itemKey , $itemLabel);
+            $nomenclaturesItemsViews = $this->taggedNomenclatureFilterGetter->getLastNomenclaturesItems(
+                $query->event,
+                $tag,
+                $query->locale
+            );
+
+            foreach ($nomenclaturesItemsViews->nomenclaturesItems as $itemKey => $itemLabel) {
+                $nomenclatureTagViews[] = new NomenclatureTagView($itemKey , $itemLabel);
             }
+
+            $nomenclatureTagViewsIndexedByTag[$tag] = new NomenclatureTagViews(
+                $tag,
+                $nomenclatureTagViews,
+                $nomenclaturesItemsViews->maxDepth
+            );
         }
 
-        return $tagViews;
+        return $nomenclatureTagViewsIndexedByTag;
     }
 }

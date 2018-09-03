@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query;
 
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\EmailToUserConverter;
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\NoRegistrationTypeIsAvailableException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\CanNotCreateUserException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\ComboEmailUserNotValidException;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\NoRegistrationTypeIsAvailableException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\UserNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\UserNotOnEventException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\TokenChecker;

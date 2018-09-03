@@ -44,6 +44,7 @@ template.placeholder.title: Placeholder
 template.products.title: 'linked products'
 template.registration.atLeastOneDataFieldMustBeChecked: 'At least one of the "information type " field must be checked'
 template.registration.dataType: 'information type'
+template.registration.nomenclatureCheckboxesMustBeOfDepthOne: 'Assigned BOMs must be level 1 to be multiple-choice for the following field(s): %objectsLabel%'
 template.registration.optional: optional
 template.registration.participantData: 'participant''s information'
 template.registration.participantTags: 'participant tags'
@@ -51,6 +52,7 @@ template.registration.sheetData: 'sheet data'
 template.registration.sheetTags: 'sheet tags'
 template.registration.tag: Tags
 template.registration.templateObjectMustHaveAtLeastOneSetterTag: 'At least one type of information (tag "sheet_data" ou "participant_data") must be assigned for the following fields : %objectsLabel%'
+template.registration.uploadFormatRequired: 'At least one upload format must be selected'
 template.required.title: Required
 template.sheet_template.tags: 'presentation tags'
 template.style.default: 'by default'
@@ -68,6 +70,7 @@ template.tag.participant_position: 'participant''s position'
 template.tag.participant_website: 'participant''s website'
 template.tag.participant_zipcode: 'participant''s zipcode'
 template.tag.sheet_address: 'sheet adress'
+template.tag.sheet_application_domain: 'Application fields'
 template.tag.sheet_city: 'sheet city'
 template.tag.sheet_country: 'sheet country'
 template.tag.sheet_description: 'sheet description'

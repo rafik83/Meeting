@@ -192,11 +192,15 @@ admin.event.search_facets.link: 'Catalog filters'
 admin.event.see_on_front.link: 'See on front'
 admin.event.see.link: See
 admin.event.settings.link: 'Event settings'
+admin.event.sheet.comment.remove.confirm: 'Are you sure you want to delete this comment?'
 admin.event.sheet.index.title: 'Re-index the event sheets'
 admin.event.template.link: Templates
 admin.event.template.package: 'Registration package'
 admin.event.template.registration: Registration
+admin.event.template.registration.create.form.title: 'Create a registration template'
+admin.event.template.registration.duplicate.form.title: 'Duplicate the template "%templateTitle%"'
 admin.event.template.sheet: Presentation
+admin.event.template.sheet.duplicate.form.title: 'Duplicate the template "%templateTitle%"'
 admin.event.title: Title
 admin.event.trace.participant_imported: 'Imported participants the %at% par %by%'
 admin.event.unArchive.title: 'Unarchive event %eventTitle%'
@@ -342,8 +346,11 @@ admin.invoice.export.fields.owner_id: 'sheet owner ''s user ID'
 admin.invoice.export.fields.sheet_id: 'Sheet ID'
 admin.invoice.export.fields.sheet_title: 'Company name'
 admin.invoice.export.fields.total: 'Excluding VAT amount'
+admin.invoice.export.fields.total_for_vat_rate: 'Amount excluding VAT subject to %vatRate%%'
 admin.invoice.export.fields.total_with_vat: 'With VAT amount'
+admin.invoice.export.fields.total_with_vat_for_vat_rate: 'Amount including VAT for %vatRate%% VAT'
 admin.invoice.export.fields.vat_amount: 'VAT amount'
+admin.invoice.export.fields.vat_amount_for_vat_rate: 'Amount %vatRate%% VAT'
 admin.invoice.export.fields.vat_number: 'VAT amount'
 admin.invoice.link: Invoicing
 admin.invoice.list.isDefault: default
@@ -501,6 +508,7 @@ admin.order_edit.columns.product: Product
 admin.order_edit.columns.quantity: Quantity
 admin.order_edit.columns.total: Total
 admin.order_edit.columns.unitPrice: 'Unit price'
+admin.order_edit.columns.vatRate: 'VAT rate'
 admin.order_edit.command_name: 'N°%id% of %sheetName%'
 admin.order_edit.includedProduct: Included
 admin.order_edit.link: Modify
@@ -517,6 +525,7 @@ admin.order.edit: 'Modification of order'
 admin.order.export.button.label: 'Export orders'
 admin.order.follower: 'Commercial follow-up'
 admin.order.id: Id
+admin.order.invoiced: Invoiced
 admin.order.invoiceNumber: 'Invoice number'
 admin.order.link: Orders
 admin.order.sheet: sheet
@@ -554,6 +563,9 @@ admin.participant.export.fields.participant_created_at: 'participant created at'
 admin.participant.export.fields.participant_email: 'Participant email'
 admin.participant.export.fields.participant_id: 'Participant ID'
 admin.participant.export.fields.participant_type: 'Participation type'
+admin.participant.export.fields.participation_paid: 'Payment status'
+admin.participant.export.fields.participation_paid.not_paid: 'Not payed'
+admin.participant.export.fields.participation_paid.paid: Payed
 admin.participant.export.fields.planning.meeting: '%spotRef% - %sheetMet%'
 admin.participant.export.fields.planning.unallocated_meetings: 'List of validated meeting requests which have not been planned due to availability conflicts.'
 admin.participant.export.fields.planning.unavailability: Unavailable
@@ -660,6 +672,7 @@ admin.promotion_code.table.column.validUntil: 'valid until'
 admin.promotion_code.table.no_result: 'No promotion code'
 admin.promotion_code.title: 'Promotions code'
 admin.promotion_code.update: 'Update the promotion code'
+admin.role.ROLE_HOST: Host
 admin.role.ROLE_OPERATOR: collaborator
 admin.role.ROLE_ORGANIZER: Organizer
 admin.role.ROLE_PARTNER: partner
@@ -781,6 +794,8 @@ admin.sheet.details.participant.phoneValidationStatus.title: 'phone number valid
 admin.sheet.details.participant.phoneValidationStatus.validated: validated
 admin.sheet.details.participant.title: Participant
 admin.sheet.details.participant.tooltip.not_concerned: 'This user is not concerned, she/he hasn''t programmed meetings or does not attend to a sub event'
+admin.sheet.details.participant.upload.filled: Filled
+admin.sheet.details.participant.upload.notFilled: Unfilled
 admin.sheet.details.participant.visio: Visio
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Remaining to pay'
@@ -791,8 +806,11 @@ admin.sheet.duplication: 'Duplicate sheets'
 admin.sheet.enable: enable
 admin.sheet.exit_impersonation: 'Log out from the user''s account'
 admin.sheet.export.button.label: Export
+admin.sheet.export.field.comment: '%author% the %date%: "%comment%"'
 admin.sheet.export.fields.balance: 'balance with VAT'
 admin.sheet.export.fields.category: Category
+admin.sheet.export.fields.comments: Commentary
+admin.sheet.export.fields.commercial_status: 'Commercial status'
 admin.sheet.export.fields.event_id: 'Event ID'
 admin.sheet.export.fields.event_name: 'Event name'
 admin.sheet.export.fields.following: 'commercial follow up'
@@ -815,6 +833,7 @@ admin.sheet.export.meetings.button.label: 'Export meetings'
 admin.sheet.export.no: 'No'
 admin.sheet.export.participant.button.label: 'Export participants'
 admin.sheet.export.sheet.button.label: 'Export sheets'
+admin.sheet.export.uploaded_objects.button.label: 'Export uploaded files'
 admin.sheet.export.yes: 'yes'
 admin.sheet.filter.has_cart: 'sheet has cart'
 admin.sheet.filter.no_order: 'sheet without order'
@@ -832,6 +851,8 @@ admin.sheet.isOwner: Owner
 admin.sheet.lastLoginAt: 'last login'
 admin.sheet.link: 'Participation sheets'
 admin.sheet.list.filters.label: 'advanced filters'
+admin.sheet.orders.cancel: 'cancel all'
+admin.sheet.orders.cancel.confirm: 'Are you sure you want to cancel all orders? This action is irreversible'
 admin.sheet.participant_visio.success: 'the participant has been updated'
 admin.sheet.participant.invalid-parameters: 'the sent parameter is not valid'
 admin.sheet.participant.not_found: 'This participant does not exist'
@@ -853,6 +874,7 @@ admin.sheet.trace.disable: 'disabled on the  %at%'
 admin.sheet.trace.disable_catalog: 'off the catalogue on the'
 admin.sheet.trace.enable: 'enabled on the %at%'
 admin.sheet.trace.enable_catalog: 'added to the catalog on the %at%'
+admin.sheet.trace.orders_cancelled: 'Orders canceled on %at%'
 admin.sheet.trace.pending: 'Pending on the %at%'
 admin.sheet.trace.set_commercial_status: 'the commercial status has been changed'
 admin.sheet.trace.sheet_created_by_group_manager: 'the sheet has been duplicated by the group manager'
@@ -942,6 +964,8 @@ admin.template.registration.table.column.action: Action
 admin.template.registration.table.column.createdAt: 'created at'
 admin.template.registration.table.column.eventType: Event/Type
 admin.template.registration.table.column.title: Title
+admin.template.registration.table.content.create: 'Create a registration template'
+admin.template.registration.table.content.duplicate: Duplicate
 admin.template.registration.table.content.edit: Modify
 admin.template.registration.table.content.editJson: 'Modify JSON'
 admin.template.registration.title: 'registration templates'

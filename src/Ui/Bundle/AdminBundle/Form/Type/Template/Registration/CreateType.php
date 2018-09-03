@@ -35,7 +35,7 @@ class CreateType extends AbstractType
     {
         $resolver
             ->setDefaults([
-                'data_class' => Create::class
+                'data_class' => Create::class,
             ])
         ;
     }

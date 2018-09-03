@@ -21,7 +21,7 @@ Feature: Update spanish event
     Given I am logged with "test@test.com" on admin
     And I am on this page "/en/event/1"
     When I follow "admin.event.see_on_front.link"
-    Then I should be on this url "http://spanish-event.vimeet.proximum/app_test.php/es/"
+    Then I should be on this url "http://spanish-event.vimeet.proximum/es/"
 
   Scenario: I can see the update event form
     Given I am logged with "test@test.com" on admin

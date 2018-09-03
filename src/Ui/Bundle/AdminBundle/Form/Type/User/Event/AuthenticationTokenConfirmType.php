@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event;
 
-use Proximum\Vimeet\Application\Command\Spot\Import\SpotImportConfirm;
 use Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImport;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;

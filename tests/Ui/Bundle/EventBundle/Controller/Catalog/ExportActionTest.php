@@ -27,8 +27,6 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\ExportAction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViews;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViews;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler;
@@ -329,6 +327,7 @@ class ExportActionTest extends TestCase
                     'filterByAvailableSlotIds'  => false,
                     'filterBySpecificSlot'      => false,
                     'specificSlot'              => null,
+                    'taggedNomenclatureTagViews' => [],
                 ]
             )
             ->shouldBeCalled()
@@ -450,6 +449,7 @@ class ExportActionTest extends TestCase
                 'filterByAvailableSlotIds'  => false,
                 'filterBySpecificSlot'      => false,
                 'specificSlot'              => null,
+                'taggedNomenclatureTagViews' => [],
             ]
         )
             ->shouldBeCalled()

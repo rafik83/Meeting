@@ -13,7 +13,7 @@ Feature: Activate Account
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml      |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml         |
       | UserWithActivateAccountTokenAndSheet.yml                              |
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/app_test.php/fr/activate/azertyuiopqsdfghjklmwxcvbn"
+    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/@fr/activate/azertyuiopqsdfghjklmwxcvbn"
     And the response status code should be 200
     Then I fill in the following:
       | form.activate_account_password.children.password.children.first.label  | newpassword |

@@ -16,9 +16,10 @@ use Proximum\Vimeet\Domain\Model\Filter\TaggedNomenclatureFilter;
 interface TaggedNomenclatureFilterRepositoryInterface
 {
     /**
-     * @param Event $event
+     * @param Event    $event
+     * @param string[] $tags
      */
-    public function deleteForEvent(Event $event);
+    public function deleteForEventAndTags(Event $event, array $tags): void;
 
     /**
      * @param TaggedNomenclatureFilter $taggedNomenclatureFilter

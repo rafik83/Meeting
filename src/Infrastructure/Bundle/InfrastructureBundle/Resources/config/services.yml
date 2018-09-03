@@ -1190,6 +1190,15 @@ services:
             - '@template.template_data_factory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\UpdatePreview }
+
+    Proximum\Vimeet\Application\Command\Sheet\Template\GenerateTaggedNomenclatureFilterHandler:
+        arguments:
+            - '@repository.template.sheet_template_repository'
+            - '@repository.filter.tagged_nomenclature_filter_repository'
+            - '@template.template_data_factory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\GenerateTaggedNomenclatureFilter }
+
     command.admin.update_last_login_handler:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
         arguments:
@@ -1217,6 +1226,7 @@ services:
             - '@repository.template.sheet_template_repository'
             - '@template.template_preview_resolver'
             - '@adapter.job_queue_adapter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
 
@@ -2869,6 +2879,7 @@ services:
             - '@application.nomenclature.nomenclature_cloner'
             - '@datetime'
             - '@template.template_remove_field'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     template.registration.registration_template_cloner:
         class: Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner
         arguments:
@@ -4932,6 +4943,11 @@ services:
     Proximum\Vimeet\Application\Command\Catalog\CatalogTagFilterHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository'
+
+    Proximum\Vimeet\Application\Command\Catalog\GetNomenclaturesByTag:
+        arguments:
+            - '@repository.nomenclature_repository'
+            - '@repository.filter.tagged_nomenclature_filter_repository'
 
     #
     # Promotion

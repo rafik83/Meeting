@@ -120,16 +120,16 @@ class ExportAction
             throw new AccessDeniedException('Access denied!');
         }
 
-        $catalogFilterViewsHandler = $this->catalogFilterViewsHandler
+        $catalogFilterViewsResult = $this->catalogFilterViewsHandler
             ->handle(new CatalogFilterViews($event, $sheet, $locale))
         ;
 
-        if ($catalogFilterViewsHandler->hasEmptyCategoryOrType()) {
+        if ($catalogFilterViewsResult->hasEmptyCategoryOrType()) {
             throw new NotFoundHttpException('Not found category or type');
         }
 
-        $categoryViews             = $catalogFilterViewsHandler->categoryViews;
-        $typeViews                 = $catalogFilterViewsHandler->typeViews;
+        $categoryViews             = $catalogFilterViewsResult->categoryViews;
+        $typeViews                 = $catalogFilterViewsResult->typeViews;
         $availableSlotsIds         = [];
         $sheetsToExclude           = [];
 
@@ -150,15 +150,16 @@ class ExportAction
         ;
 
         $form = $this->formFactory->createNamed('', SearchType::class, $filters, [
-            'typeViews'                 => $catalogFilterViewsHandler->typeViews,
-            'categoryViews'             => $catalogFilterViewsHandler->categoryViews,
-            'organizationCategoryViews' => $catalogFilterViewsHandler->organizationCategoryViews,
-            'positionViews'             => $catalogFilterViewsHandler->positionViews,
-            'event'                     => $event,
-            'locale'                    => $locale,
-            'filterByAvailableSlotIds'  => $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
-            'filterBySpecificSlot'      => null !== $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
-            'specificSlot'              => $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
+            'typeViews' => $catalogFilterViewsResult->typeViews,
+            'categoryViews' => $catalogFilterViewsResult->categoryViews,
+            'organizationCategoryViews' => $catalogFilterViewsResult->organizationCategoryViews,
+            'taggedNomenclatureTagViews' => $catalogFilterViewsResult->taggedNomenclatureTagViews,
+            'positionViews' => $catalogFilterViewsResult->positionViews,
+            'event' => $event,
+            'locale' => $locale,
+            'filterByAvailableSlotIds' => $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
+            'filterBySpecificSlot' => null !== $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
+            'specificSlot' => $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

@@ -15,7 +15,7 @@ Feature: Register and login user
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    When I go to this page "http://asddays-2016.vimeet.proximum/app_test.php/fr/"
+    When I go to this page "http://asddays-2016.vimeet.proximum/fr/"
     And I check the "Fournisseur" radio
     And I press "common.next"
     Then the response status code should be 200
@@ -31,7 +31,7 @@ Feature: Register and login user
     And I should see "1/3"
 
   Scenario: Register an user in one step
-    When I go to this page "http://asddays-2016.vimeet.proximum/app_test.php/fr/"
+    When I go to this page "http://asddays-2016.vimeet.proximum/fr/"
     And I check the "Structure de recherche" radio
     And I press "common.next"
     Then the response status code should be 200
@@ -46,7 +46,7 @@ Feature: Register and login user
     And I should not see "register.step"
 
   Scenario: User already exists
-    When I go to this page "http://asddays-2016.vimeet.proximum/app_test.php/fr/"
+    When I go to this page "http://asddays-2016.vimeet.proximum/fr/"
     And I check the "Fournisseur" radio
     And I press "common.next"
     Then the response status code should be 200
@@ -56,7 +56,7 @@ Feature: Register and login user
     And I should see "flash.event.register.already_known.message"
 
   Scenario: Login successful
-    When I go to this page "http://asddays-2016.vimeet.proximum/app_test.php/fr/login"
+    When I go to this page "http://asddays-2016.vimeet.proximum/fr/login"
     And I fill in "email_email" with "test@test.com"
     And I press "common.next"
     Then the response status code should be 200
@@ -67,7 +67,7 @@ Feature: Register and login user
     And I should be on this page "/fr/"
 
   Scenario: Login failed
-    And I go to this page "http://asddays-2016.vimeet.proximum/app_test.php/fr/login"
+    And I go to this page "http://asddays-2016.vimeet.proximum/fr/login"
     And I fill in "email_email" with "test@test.com"
     And I press "common.next"
     Then the response status code should be 200
@@ -95,7 +95,7 @@ Feature: Register and login user
     Then the response status code should be 200
 
   Scenario: Redirect on registration unfinished step
-    When I go to this page "http://asddays-2016.vimeet.proximum/app_test.php/fr/"
+    When I go to this page "http://asddays-2016.vimeet.proximum/fr/"
     And I check the "Fournisseur" radio
     And I press "common.next"
     Then the response status code should be 200
@@ -123,7 +123,7 @@ Feature: Register and login user
     And I should see "2/3"
     When I press "common.next"
     Then the response status code should be 200
-    When I go to this page "http://asddays-2016.vimeet.proximum/app_test.php/fr/"
+    When I go to this page "http://asddays-2016.vimeet.proximum/fr/"
     Then I should be on this page "/fr/participant/5/step/3"
     And I should see "register.step"
     And I should see "3/3"

@@ -64,10 +64,11 @@
         </div>
 
         <section class="object object--collection style--style-1 section">
-
-            <header>
-                <h2>{{ nomenclature_label }}</h2>
-            </header>
+            {% if nomenclature_label is defined %}
+                <header>
+                    <h2>{{ nomenclature_label }}</h2>
+                </header>
+            {% endif %}
 
             <div class="object--nomenclature">
                 <div class="border-table">
@@ -105,22 +106,28 @@
 {% endblock nomenclature_first_over_one %}
 
 {% block nomenclature_checkboxes_two_levels %}
+    {% set showTitle = form.vars.label or sheet_uri is defined %}
+
     <div>
-        <div class="content-header clearfix">
-            <h1 class="pull-left">
-                <i class="icon-Valider_4"></i>
-                {{ form.vars.label|trans({}, 'forms') }}
-            </h1>
+        {% if showTitle %}
+            <div class="content-header clearfix">
+                {% if form.vars.label %}
+                    <h1 class="pull-left">
+                        <i class="icon-Valider_4"></i>
+                        {{ form.vars.label|trans({}, 'forms') }}
+                    </h1>
+                {% endif %}
 
-            {% if sheet_uri is defined %}
-                <button class="btn btn-primary pull-right mg-left" type="submit">{{ 'nomenclature.submit'|trans }}</button>
-                <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
-                    <i class="icon-Retour"></i> {{ 'nomenclature.back_to_sheet'|trans }}
-                </a>
-            {% endif %}
-        </div>
+                {% if sheet_uri is defined %}
+                    <button class="btn btn-primary pull-right mg-left" type="submit">{{ 'nomenclature.submit'|trans }}</button>
+                    <a href="{{ sheet_uri }}" class="btn btn-gray pull-right">
+                        <i class="icon-Retour"></i> {{ 'nomenclature.back_to_sheet'|trans }}
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
 
-        <section class="object object--collection style--style-1 section">
+        <section class="object {% if showTitle %}object--collection{% endif %} style--style-1 section">
             <div class="row">
                 {% set colMdSize = "col-md-4" %}
                 {% if levelsArchitecture['numberOfColumns'] is defined and levelsArchitecture['numberOfColumns'] == 1 %}
@@ -170,12 +177,15 @@
 {% endblock nomenclature_first_over_two %}
 
 {% block nomenclature_checkboxes_three_levels %}
+    {% set showTitle = form.vars.label %}
     <div>
         <div class="content-header clearfix">
-            <h1 class="pull-left">
-                <i class="icon-Valider_4"></i>
-                {{ form.vars.label|trans({}, 'forms') }}
-            </h1>
+            {% if showTitle %}
+                <h1 class="pull-left">
+                    <i class="icon-Valider_4"></i>
+                    {{ form.vars.label|trans({}, 'forms') }}
+                </h1>
+            {% endif %}
 
             <ul class="nav nav-pills pull-left" role="tablist">
                 {% for first_level_item in nomenclature.firstLevelSorted(locale) %}

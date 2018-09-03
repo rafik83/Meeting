@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input;
 
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonContraryOperatorInterface;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorContains;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEndsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotContains;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotEndsWith;
-use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonContraryOperatorInterface;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 class TextTransformer implements InputTransformerInterface

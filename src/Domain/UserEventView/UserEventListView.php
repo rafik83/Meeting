@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\UserEventView;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
-
 class UserEventListView
 {
     /** @var string */

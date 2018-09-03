@@ -61,8 +61,9 @@ class SearchFacetViewQueryHandler implements SearchFacetQueryHandlerInterface
         $catalogTagFilterViews = [];
 
         foreach ($catalogTagFilters as $catalogTagFilter) {
-            $catalogTagFilterViews[$catalogTagFilter->getTag()] = new TagFilterView(
-                $catalogTagFilter->getTag(),
+            $tag = $catalogTagFilter->getTag();
+            $catalogTagFilterViews[$tag] = new TagFilterView(
+                $tag,
                 $catalogTagFilter->getLabel($query->locale),
                 $catalogTagFilter->getPlaceholder($query->locale)
             );

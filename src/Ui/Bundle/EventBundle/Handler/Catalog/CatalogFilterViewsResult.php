@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog;
 
+use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagViews;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
@@ -39,16 +40,7 @@ class CatalogFilterViewsResult
     /** @var Response */
     public $response;
 
-    /**
-     * @var array of NomenclatureTagView[] indexed by Tag
-     *
-     * @example [
-     *     'sheet_organization_category' => [
-     *          0 => NomenclatureTagView,
-     *          1 => NomenclatureTagView,
-     *     ]
-     * ]
-     */
+    /** @var NomenclatureTagViews[] indexed by Tag */
     public $taggedNomenclatureTagViews;
 
     /**
@@ -57,7 +49,7 @@ class CatalogFilterViewsResult
      * @param TypeView[]                 $typeViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
-     * @param array                      $taggedNomenclatureTagViews
+     * @param NomenclatureTagViews[]     $taggedNomenclatureTagViews
      * @param Response|null              $response
      */
     public function __construct(

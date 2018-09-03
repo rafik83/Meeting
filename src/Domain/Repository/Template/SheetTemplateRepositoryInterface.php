@@ -63,4 +63,9 @@ interface SheetTemplateRepositoryInterface
      * @param SheetTemplate $template
      */
     public function set(SheetTemplate $template);
+
+    /**
+     * @return SheetTemplate[]
+     */
+    public function getUsedTemplateForGivenEvent(Event $event): array;
 }

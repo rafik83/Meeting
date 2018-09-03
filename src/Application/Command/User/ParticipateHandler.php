@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\TemplateData\TemplateDataDuplicator;
-use Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
@@ -46,10 +45,10 @@ class ParticipateHandler
     /** @var TypeResolver */
     private $typeResolver;
 
-    /** @var DelayedEventDispatcher*/
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**@var LastEventParticipation */
+    /** @var LastEventParticipation */
     private $lastEventParticipation;
 
     /** @var TemplateDataDuplicator */
