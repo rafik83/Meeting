@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -37,6 +38,7 @@ use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 use Proximum\Vimeet\Infrastructure\Elastica\Transformer\SheetElasticTransformer;
 
@@ -142,7 +144,7 @@ class SheetElasticTransformerTest extends TestCase
         $sheet->getReminderDate()->willReturn(new \DateTime('2016-06-18 09:30:00'));
 
         $registrationEditableText = new EditableText(
-            'registration-123',
+            'registration-editable-text-1',
             'editable-text',
             [
                 'translatable' => false,
@@ -153,8 +155,21 @@ class SheetElasticTransformerTest extends TestCase
         );
         $registrationEditableText->setContentValue('Registration whatever text');
 
+        $registrationNomenclature = new Nomenclature(
+            'registration-nomenclature-1',
+            'nomenclature',
+            [
+                'translatable' => false,
+                'tags' => ['sheet_generic_tag_2', 'sheet_data']
+            ],
+            'fr',
+            'fr'
+        );
+        $registrationNomenclature->setItems(['item1', 'item3']);
+
         $registrationBlock = new Block('12', [], 'fr', 'fr');
         $registrationBlock->addChild(1, '69b3cde3', $registrationEditableText);
+        $registrationBlock->addChild(1, 'c67abcd9', $registrationNomenclature);
         $registrationTemplateData = new TemplateData('root', [], 'fr', 'fr');
         $registrationTemplateData->addChild(0, '811f6edf', $registrationBlock);
 
@@ -169,8 +184,25 @@ class SheetElasticTransformerTest extends TestCase
         );
         $editableTextSheetFr->setContentValue('Ma description');
 
+        $nomenclatureModel = $this->prophesize(NomenclatureModel::class);
+        $nomenclatureModel->getLabels('fr')->shouldBeCalled()->willReturn([]);
+        $nomenclatureModel->getId()->shouldBeCalled()->willReturn(1984);
+        $sheetTemplateNomenclature = new Nomenclature(
+            'sheet-template-nomenclature-1',
+            'nomenclature',
+            [
+                'translatable' => false,
+                'tags' => ['sheet_template_generic_tag_1', 'sheet_data']
+            ],
+            'fr',
+            'fr'
+        );
+        $sheetTemplateNomenclature->setNomenclature($nomenclatureModel->reveal());
+        $sheetTemplateNomenclature->setItems(['item3', 'item5']);
+
         $blockFr = new Block('12', [], 'fr', 'fr');
         $blockFr->addChild(1, '69b3cde3', $editableTextSheetFr);
+        $blockFr->addChild(1, 'abcd1234', $sheetTemplateNomenclature);
         $sheetTemplateWithTaggedDataFr = new TemplateData('root', [], 'fr', 'fr');
         $sheetTemplateWithTaggedDataFr->addChild(0, '811f6edf', $blockFr);
         $sheetTemplateWithTaggedDataFr->setTaggedDataViews(
@@ -340,7 +372,10 @@ class SheetElasticTransformerTest extends TestCase
                 'zipcode' => null,
                 'country' => [],
                 'countryCode' => null,
-                'nomenclatureItems' => [],
+                'nomenclatureItems' => [
+                    ['key' => 'item3'],
+                    ['key' => 'item5'],
+                ],
                 'nomenclatureItemsSupply' => [],
                 'nomenclatureItemsNeeds' => [],
                 'keywords' => [],
@@ -361,7 +396,34 @@ class SheetElasticTransformerTest extends TestCase
                 'content_fr' => 'Ma description',
                 'content_en' => 'My description',
                 'filledFilter' => [],
-                'nestedTaggedData' => [],
+                'nestedTaggedData' => [
+                    [
+                        'tag' => 'sheet_generic_tag_2',
+                        'values' => [
+                            [
+                                'tag' => 'sheet_generic_tag_2',
+                                'value' => 'item1',
+                            ],
+                            [
+                                'tag' => 'sheet_generic_tag_2',
+                                'value' => 'item3',
+                            ],
+                        ],
+                    ],
+                    [
+                        'tag' => 'sheet_template_generic_tag_1',
+                        'values' => [
+                            [
+                                'tag' => 'sheet_template_generic_tag_1',
+                                'value' => 'item3',
+                            ],
+                            [
+                                'tag' => 'sheet_template_generic_tag_1',
+                                'value' => 'item5',
+                            ],
+                        ],
+                    ],
+                ],
             ]
         );
 

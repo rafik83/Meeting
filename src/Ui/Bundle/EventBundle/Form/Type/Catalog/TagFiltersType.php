@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagView;
 use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagViews;
 use Proximum\Vimeet\Application\View\Catalog\TagFilterView;

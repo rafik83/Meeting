@@ -104,7 +104,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     {
         $fallbackLocale = $sheet->getEvent()->getFallback();
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $fallbackLocale);
-        $fallbackData = $this->templateDataFactory->createFromSheet($sheet, $fallbackLocale);
+        $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet, $fallbackLocale);
         $sheetContentView = $this->getSheetContentView($sheet);
 
         return new Document(
@@ -146,11 +146,11 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'zipcode' => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
                     'country' => $this->buildCountries($registrationTemplateData, $sheet->getEvent()->getLocales()),
                     'countryCode' => $this->getCountryCode($registrationTemplateData),
-                    'nomenclatureItems' => $this->buildNomenclatureItems($sheet, $fallbackData),
+                    'nomenclatureItems' => $this->buildNomenclatureItems($sheet, $sheetTemplateData),
                     'nomenclatureItemsSupply' => $this
-                        ->buildNomenclatureItems($sheet, $fallbackData, Nomenclature::OBJECTIVE_SUPPLY),
+                        ->buildNomenclatureItems($sheet, $sheetTemplateData, Nomenclature::OBJECTIVE_SUPPLY),
                     'nomenclatureItemsNeeds' => $this
-                        ->buildNomenclatureItems($sheet, $fallbackData, Nomenclature::OBJECTIVE_NEED),
+                        ->buildNomenclatureItems($sheet, $sheetTemplateData, Nomenclature::OBJECTIVE_NEED),
                     'keywords' => $this->buildKeywords($sheet),
                     'hasHappeningParticipation' => $this->happeningParticipationRepository
                         ->hasParticipationsBySheet($sheet),
@@ -164,7 +164,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'hasSpot' => $sheet->hasSpot(),
                     'availableSlotIds' => $this->buildAvailableSlots($sheet),
                     'reminderDate' => $this->getReminderDate($sheet),
-                    'nestedTaggedData' => $this->getNestedTaggedData($registrationTemplateData),
+                    'nestedTaggedData' => $this->getNestedTaggedData($registrationTemplateData, $sheetTemplateData),
                 ],
                 $sheetContentView->contentByLocale
             )
@@ -449,14 +449,14 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         return Constant::ORDER_STATUS_TOTAL_ORDER_EQUAL_ZERO;
     }
 
-    private function getNestedTaggedData(TemplateData $registrationTemplateData): array
+    private function getNestedTaggedDataFromTemplatData(TemplateData $templateData): array
     {
         $nestedTaggedData = [];
 
-        foreach ($registrationTemplateData->getSheetObjects() as $object) {
+        foreach ($templateData->getObjects() as $object) {
             if ($object instanceof Nomenclature) {
                 foreach ($object->getTags() as $tag) {
-                    if (Tag::SHEET_DATA === $tag || !\in_array($tag, Tag::getSheetTags(), true)) {
+                    if (!\in_array($tag, Tag::getSheetAndGenericSheetTagsAndGenericSheetTemplateTags(), true)) {
                         continue;
                     }
 
@@ -493,6 +493,16 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             }
         }
 
-        return array_values($nestedTaggedData);
+        return $nestedTaggedData;
+    }
+
+    private function getNestedTaggedData(TemplateData $registrationTemplateData, TemplateData $sheetTemplateData): array
+    {
+        return array_values(
+            array_merge(
+                $this->getNestedTaggedDataFromTemplatData($registrationTemplateData),
+                $this->getNestedTaggedDataFromTemplatData($sheetTemplateData)
+            )
+        );
     }
 }
