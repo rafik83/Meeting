@@ -94,7 +94,8 @@ class CreateFormHandlerTest extends TestCase
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
-            'fr'
+            'fr',
+            'Europe/Paris'
         );
         $this->formFactory->create(CreateType::class, $command, [
             'action'                 => 'action_url',
@@ -102,6 +103,7 @@ class CreateFormHandlerTest extends TestCase
             'event'                  => $this->event->reveal(),
             'locale'                 => 'fr',
             'sheet'                  => $this->sheet->reveal(),
+            'timezone'               => 'Europe/Paris',
         ])->shouldBeCalled()->willReturn($this->form->reveal());
 
         $this->request->isXmlHttpRequest()->willReturn(true);
@@ -117,7 +119,8 @@ class CreateFormHandlerTest extends TestCase
                 $this->event->reveal(),
                 $this->sheet->reveal(),
                 $this->user->reveal(),
-                'action_url'
+                'action_url',
+                'Europe/Paris'
             )
         );
 
@@ -132,7 +135,8 @@ class CreateFormHandlerTest extends TestCase
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
-            'fr'
+            'fr',
+            'Europe/Paris'
         );
         $this->formFactory->create(CreateType::class, $command, [
             'action'                 => 'action_url',
@@ -140,6 +144,7 @@ class CreateFormHandlerTest extends TestCase
             'event'                  => $this->event->reveal(),
             'locale'                 => 'fr',
             'sheet'                  => $this->sheet->reveal(),
+            'timezone'               => 'Europe/Paris',
         ])->shouldBeCalled()->willReturn($this->form->reveal());
 
         $this->request->isXmlHttpRequest()->willReturn(false);
@@ -160,7 +165,8 @@ class CreateFormHandlerTest extends TestCase
                 $this->event->reveal(),
                 $this->sheet->reveal(),
                 $this->user->reveal(),
-                'action_url'
+                'action_url',
+                'Europe/Paris'
             )
         );
 
@@ -175,7 +181,8 @@ class CreateFormHandlerTest extends TestCase
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
-            'fr'
+            'fr',
+            'Europe/Paris'
         );
         $this->formFactory->create(CreateType::class, $command, [
             'action'                 => 'action_url',
@@ -183,6 +190,7 @@ class CreateFormHandlerTest extends TestCase
             'event'                  => $this->event->reveal(),
             'locale'                 => 'fr',
             'sheet'                  => $this->sheet->reveal(),
+            'timezone'               => 'Europe/Paris',
         ])->shouldBeCalled()->willReturn($this->form->reveal());
 
         $this->request->isXmlHttpRequest()->willReturn(false);
@@ -212,7 +220,8 @@ class CreateFormHandlerTest extends TestCase
                 $this->event->reveal(),
                 $this->sheet->reveal(),
                 $this->user->reveal(),
-                'action_url'
+                'action_url',
+                'Europe/Paris'
             )
         );
 
@@ -227,7 +236,8 @@ class CreateFormHandlerTest extends TestCase
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
-            'fr'
+            'fr',
+            'Europe/Paris'
         );
         $this->formFactory->create(CreateType::class, $command, [
             'action'                 => 'action_url',
@@ -235,6 +245,7 @@ class CreateFormHandlerTest extends TestCase
             'event'                  => $this->event->reveal(),
             'locale'                 => 'fr',
             'sheet'                  => $this->sheet->reveal(),
+            'timezone'               => 'Europe/Paris',
         ])->shouldBeCalled()->willReturn($this->form->reveal());
 
         $this->request->isXmlHttpRequest()->willReturn(false);
@@ -271,7 +282,8 @@ class CreateFormHandlerTest extends TestCase
                 $this->event->reveal(),
                 $this->sheet->reveal(),
                 $this->user->reveal(),
-                'action_url'
+                'action_url',
+                'Europe/Paris'
             )
         );
 
@@ -290,7 +302,8 @@ class CreateFormHandlerTest extends TestCase
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
-            'fr'
+            'fr',
+            'Europe/Paris'
         );
         $this->formFactory->create(CreateType::class, $command, [
             'action'                 => 'action_url',
@@ -298,6 +311,7 @@ class CreateFormHandlerTest extends TestCase
             'event'                  => $this->event->reveal(),
             'locale'                 => 'fr',
             'sheet'                  => $this->sheet->reveal(),
+            'timezone'               => 'Europe/Paris',
         ])->shouldBeCalled()->willReturn($this->form->reveal());
 
         $this->request->isXmlHttpRequest()->willReturn(false);
@@ -331,7 +345,8 @@ class CreateFormHandlerTest extends TestCase
                 $this->event->reveal(),
                 $this->sheet->reveal(),
                 $this->user->reveal(),
-                'action_url'
+                'action_url',
+                'Europe/Paris'
             )
         );
 
@@ -350,7 +365,8 @@ class CreateFormHandlerTest extends TestCase
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
-            'fr'
+            'fr',
+            'Europe/Paris'
         );
         $this->formFactory->create(CreateType::class, $command, [
             'action'                 => 'action_url',
@@ -358,6 +374,7 @@ class CreateFormHandlerTest extends TestCase
             'event'                  => $this->event->reveal(),
             'locale'                 => 'fr',
             'sheet'                  => $this->sheet->reveal(),
+            'timezone'               => 'Europe/Paris',
         ])->shouldBeCalled()->willReturn($this->form->reveal());
 
         $this->request->isXmlHttpRequest()->willReturn(false);
@@ -391,7 +408,8 @@ class CreateFormHandlerTest extends TestCase
                 $this->event->reveal(),
                 $this->sheet->reveal(),
                 $this->user->reveal(),
-                'action_url'
+                'action_url',
+                'Europe/Paris'
             )
         );
 
@@ -406,7 +424,8 @@ class CreateFormHandlerTest extends TestCase
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
-            'fr'
+            'fr',
+            'Europe/Paris'
         );
         $this->formFactory->create(CreateType::class, $command, [
             'action'                 => 'action_url',
@@ -414,6 +433,7 @@ class CreateFormHandlerTest extends TestCase
             'event'                  => $this->event->reveal(),
             'locale'                 => 'fr',
             'sheet'                  => $this->sheet->reveal(),
+            'timezone'               => 'Europe/Paris',
         ])->shouldBeCalled()->willReturn($this->form->reveal());
 
         $this->request->isXmlHttpRequest()->willReturn(false);
@@ -434,7 +454,8 @@ class CreateFormHandlerTest extends TestCase
                 $this->event->reveal(),
                 $this->sheet->reveal(),
                 $this->user->reveal(),
-                'action_url'
+                'action_url',
+                'Europe/Paris'
             )
         );
 

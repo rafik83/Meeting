@@ -25,11 +25,12 @@ class TimeRangeType extends AbstractType
         /** @var Event $event */
         $event = $options['event'];
         $days  = $event->getDays();
+        $timezone = $options['timezone'];
 
         if (!empty($days)) {
-            $begins = array_map(function (Event\Day $day) use ($event) {
+            $begins = array_map(function (Event\Day $day) use ($timezone) {
                 $clone = $day->getStartTime();
-                $clone->setTimezone(new \DateTimeZone($event->getTimeZone()));
+                $clone->setTimezone(new \DateTimeZone($timezone));
 
                 return $clone;
             }, $days);
@@ -38,9 +39,9 @@ class TimeRangeType extends AbstractType
                 return intval($one->format('H')) - intval($another->format('H'));
             });
 
-            $ends = array_map(function (Event\Day $day) use ($event) {
+            $ends = array_map(function (Event\Day $day) use ($timezone) {
                 $clone = $day->getEndTime();
-                $clone->setTimezone(new \DateTimeZone($event->getTimeZone()));
+                $clone->setTimezone(new \DateTimeZone($timezone));
 
                 return $clone;
             }, $days);
@@ -70,6 +71,7 @@ class TimeRangeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('event');
+        $resolver->setRequired('timezone');
         $resolver->setAllowedTypes('event', Event::class);
     }
 }

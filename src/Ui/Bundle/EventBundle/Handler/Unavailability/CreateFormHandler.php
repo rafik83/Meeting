@@ -61,16 +61,18 @@ class CreateFormHandler
         $event   = $createForm->event;
         $sheet = $createForm->sheet;
         $user = $createForm->user;
+        $timezone = $createForm->timezone;
 
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
 
-        $create = new Create($event, $sheet, $user, $request->getLocale());
-        $form   = $this->formFactory->create(CreateType::class, $create, [
+        $create = new Create($event, $sheet, $user, $request->getLocale(), $createForm->timezone);
+        $form = $this->formFactory->create(CreateType::class, $create, [
             'action'                 => $createForm->actionUrl,
             'isUserAloneParticipant' => $isUserAloneParticipant,
             'event'                  => $event,
             'locale'                 => $request->getLocale(),
             'sheet'                  => $sheet,
+            'timezone'               => $timezone,
         ]);
 
         // If the page is called by an ajax request, only show the form

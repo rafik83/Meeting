@@ -52,13 +52,10 @@ class Create
      */
     public $locale;
 
-    /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param User   $user
-     * @param string $locale
-     */
-    public function __construct(Event $event, Sheet $sheet, User $user, $locale)
+    /** @var string */
+    public $timezone;
+
+    public function __construct(Event $event, Sheet $sheet, User $user, string $locale, string $timezone)
     {
         $this->event  = $event;
         $this->sheet  = $sheet;
@@ -72,6 +69,7 @@ class Create
         }
 
         $this->locale = $locale;
+        $this->timezone = $timezone;
     }
 
     /**

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Participant\ParticipantTimezone;
+use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantTimezoneType;
@@ -63,7 +64,7 @@ class ParticipantTimezoneAction
             throw new AccessDeniedException();
         }
 
-        $timezone = $participant->getTimezone() ?? $sheet->getEvent()->getTimeZone();
+        $timezone = GetTimezoneHelper::getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
         $command = new ParticipantTimezone($participant, $timezone);
         $form = $this->formFactory->create(ParticipantTimezoneType::class, $command);
 
