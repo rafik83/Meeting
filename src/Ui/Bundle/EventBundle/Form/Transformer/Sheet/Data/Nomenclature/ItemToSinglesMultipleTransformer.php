@@ -53,7 +53,7 @@ class ItemToSinglesMultipleTransformer extends AbstractTransformer
         // Only the first depth is handle
         $depth = $this->nomenclature->getDepth();
 
-        if ($depth !== 1) {
+        if (1 !== $depth) {
             return [];
         }
 

@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Template\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\Template\SheetTemplateUpdatedEvent;
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 use Proximum\Vimeet\Application\Template\TemplateCloner;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -35,27 +38,23 @@ class SheetTemplateCloner extends TemplateCloner
      */
     private $templateRemoveField;
 
-    /**
-     * SheetTemplateCloner constructor.
-     *
-     * @param SheetTemplateRepositoryInterface $sheetTemplateRepository
-     * @param TemplateDataFactory              $templateDataFactory
-     * @param NomenclatureCloner               $nomenclatureCloner
-     * @param \DateTimeInterface               $dateTime
-     * @param TemplateRemoveField              $templateRemoveField
-     */
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     public function __construct(
         SheetTemplateRepositoryInterface $sheetTemplateRepository,
         TemplateDataFactory $templateDataFactory,
         NomenclatureCloner $nomenclatureCloner,
         \DateTimeInterface $dateTime,
-        TemplateRemoveField $templateRemoveField
+        TemplateRemoveField $templateRemoveField,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         parent::__construct($templateDataFactory, $nomenclatureCloner);
 
         $this->sheetTemplateRepository = $sheetTemplateRepository;
-        $this->dateTime                = $dateTime;
-        $this->templateRemoveField     = $templateRemoveField;
+        $this->dateTime = $dateTime;
+        $this->templateRemoveField = $templateRemoveField;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     /**
@@ -83,6 +82,11 @@ class SheetTemplateCloner extends TemplateCloner
         }
 
         $this->sheetTemplateRepository->add($clone);
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::SHEET_TEMPLATE_UPDATED,
+            new SheetTemplateUpdatedEvent($clone)
+        );
 
         return $clone;
     }

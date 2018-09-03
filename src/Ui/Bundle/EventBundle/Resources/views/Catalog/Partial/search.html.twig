@@ -34,7 +34,11 @@
 
     {% if searchForm.tagFilters is defined %}
         {% for child in searchForm.tagFilters %}
-            {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: child }, false) }}
+            {% if child.vars.attr['data-select-in-list'] is defined and child.vars.attr['data-select-in-list'] == true %}
+                {{ include('EventBundle:Catalog:Partial/selectFromNomenclaturesField.html.twig', { form: child, selectItemsFromNomenclaturesUrl: path('event_catalog_select_items_from_nomenclatures', { sheet: sheet.id, tag: child.vars.name }) }, false) }}
+            {% else %}
+                {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: child }, false) }}
+            {% endif %}
         {% endfor %}
     {% endif %}
 

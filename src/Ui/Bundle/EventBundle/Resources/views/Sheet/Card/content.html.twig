@@ -15,7 +15,9 @@
         </div>
     {% elseif object.isTag %}
         {% for tag in object.tagViews %}
-            {{ include('EventBundle:Sheet/Card/Tag:' ~ tag.type ~ '.html.twig', {'tag': tag}, false) }}
+            <p>
+                {{ include('EventBundle:Sheet/Card/Tag:' ~ tag.type ~ '.html.twig', {'tag': tag}, false) }}
+            </p>
         {% endfor %}
     {% elseif object.isParticipantsPosition %}
         <p class="preview-participants-position">

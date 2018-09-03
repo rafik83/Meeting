@@ -34,8 +34,8 @@ class ReminderDateChoiceValidator extends ConstraintValidator
             return;
         }
 
-        if (($value['begin'] !== null && $value['end'] !== null)
-            || ($value['begin'] === null && $value['end'] === null)
+        if ((null !== $value['begin'] && null !== $value['end'])
+            || (null === $value['begin'] && null === $value['end'])
         ) {
             return;
         }

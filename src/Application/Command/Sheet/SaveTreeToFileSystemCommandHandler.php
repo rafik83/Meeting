@@ -63,7 +63,7 @@ class SaveTreeToFileSystemCommandHandler
                     continue;
                 }
 
-                $originalPath = $this->webDir. $uploadedObject->path;
+                $originalPath = $this->webDir . $uploadedObject->path;
                 if (!$this->fileSystemAdapter->exists($originalPath)) {
                     continue;
                 }

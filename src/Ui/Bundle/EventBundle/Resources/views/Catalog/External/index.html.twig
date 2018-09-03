@@ -32,6 +32,7 @@
         }, false) }}
     </div>
 
+    {{ include('EventBundle:Catalog/Partial:selectFromNomenclaturesModal.html.twig') }}
     {{ include('EventBundle::Catalog/External/register-modal.html.twig', {
         catalogOnlineDate: catalogOnlineDate,
         registrationUrl: registrationUrl,

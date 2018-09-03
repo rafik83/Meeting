@@ -14,66 +14,50 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class TaggedNomenclatureFilter
 {
-    /**
-     * @var int
-     */
+    /** @var null|int */
     private $id;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $tag;
 
-    /**
-     * @var array
-     */
+    /** @var int[] */
     private $nomenclaturesId = [];
 
     /**
-     * @param Event  $event
-     * @param string $tag
-     * @param array  $nomenclaturesId
+     * @param int[]  $nomenclaturesId
      */
-    public function __construct(Event $event, $tag, array $nomenclaturesId)
+    public function __construct(Event $event, string $tag, array $nomenclaturesId)
     {
-        $this->event           = $event;
-        $this->tag             = $tag;
-        $this->nomenclaturesId = $nomenclaturesId;
+        $this->event = $event;
+        $this->tag = $tag;
+        $this->nomenclaturesId = array_values($nomenclaturesId);
     }
 
     /**
-     * @return int
+     * @return null|int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Event
-     */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    /**
-     * @return string
-     */
-    public function getTag()
+    public function getTag(): string
     {
         return $this->tag;
     }
 
     /**
-     * @return array
+     * @return int[]
      */
-    public function getNomenclaturesId()
+    public function getNomenclaturesId(): array
     {
         return $this->nomenclaturesId;
     }

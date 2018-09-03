@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\Sheet\TagFilterAggregator;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Catalog\Aggregat\NomenclatureTagView;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
@@ -340,7 +341,13 @@ class FilteredFieldsQueryHandler
 
     private function filterTaggedNomenclatureTagViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
-        foreach ($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews as $tag => $nomenclatureTagViews) {
+        foreach ($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews as $nomenclatureTagViews) {
+            if ($nomenclatureTagViews->maxDepth > 1) {
+                continue;
+            }
+
+            $tag = $nomenclatureTagViews->tag;
+
             $aggregations = $this->tagFilterAggregator->getAggregationsForTag(
                 $filteredFieldsQuery->event,
                 $tag,
@@ -362,10 +369,9 @@ class FilteredFieldsQueryHandler
                 $aggregationKeys[$key] = $key;
             }
 
-            /** @var NomenclatureTagView[] $nomenclatureTagViews */
-            foreach ($nomenclatureTagViews as $key => $nomenclatureTagView) {
+            foreach ($nomenclatureTagViews->nomenclatureTagViews as $key => $nomenclatureTagView) {
                 if (!isset($aggregationKeys[$nomenclatureTagView->key])) {
-                    unset($filteredFieldsQuery->catalogFilterViewsResult->taggedNomenclatureTagViews[$tag][$key]);
+                    unset($nomenclatureTagViews->nomenclatureTagViews[$key]);
                 }
             }
         }

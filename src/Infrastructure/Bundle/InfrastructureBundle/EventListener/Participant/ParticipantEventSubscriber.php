@@ -121,7 +121,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
 
     public function onRegistrationStepCompleted(RegistrationStepEvent $registrationStepEvent)
     {
-        if ($registrationStepEvent->getStep() !== 1) {
+        if (1 !== $registrationStepEvent->getStep()) {
             return;
         }
 

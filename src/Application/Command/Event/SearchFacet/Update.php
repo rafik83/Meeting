@@ -18,9 +18,9 @@ use Proximum\Vimeet\Domain\Model\Event;
 class Update extends ConfigureSearchFacet
 {
     /**
-     * @param Event                 $event
-     * @param SearchFacet[]         $searchFacets
-     * @param CatalogTagFilter[]    $catalogTagFilters
+     * @param Event              $event
+     * @param SearchFacet[]      $searchFacets
+     * @param CatalogTagFilter[] $catalogTagFilters
      */
     public function __construct(Event $event, array $searchFacets, array $catalogTagFilters)
     {

@@ -53,6 +53,7 @@ final class Charset
 
     /**
      * @deprecated use convertFile()
+     *
      * @throws BadCharsetException
      */
     public static function convert($inFilename, $inCharset, $outCharset, $outFilename = null)

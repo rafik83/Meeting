@@ -426,7 +426,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             ToggleParticipantVisioCommand::NAME,
             [
                 $event->getId(),
-                (int)$visio,
+                (int) $visio,
             ]
         );
         $this->setJob($job);

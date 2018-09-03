@@ -243,7 +243,7 @@ class CreateHandler
      *
      * @throws TimeOutOfRangeException
      */
-    private function checkTimeOutOfDay(Create $create, \DateTimeInterface $begin, \DateTimeInterface  $end)
+    private function checkTimeOutOfDay(Create $create, \DateTimeInterface $begin, \DateTimeInterface $end)
     {
         // If time selected is out of range of the selected day
         if ($begin >= $create->day->getEndTime()) {
@@ -261,7 +261,7 @@ class CreateHandler
     private function prepareBeginAndEnd(Create $create)
     {
         $dayCloned = clone $create->day->getDay();
-        $dayCloned->setTimeZone(new \DateTimeZone($create->event->getTimeZone()));
+        $dayCloned->setTimeZone(new \DateTimeZone($create->timezone));
 
         $begin = clone $dayCloned;
         $begin->modify(sprintf('%s:%s', $create->time['begin']['hour'], $create->time['begin']['minute']));

@@ -54,7 +54,7 @@ class ParticipantListViewNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, $format = null, array $context = [])
     {
         /** @var ParticipantListView $participantListView */
         $participantListView = $object;
@@ -145,7 +145,6 @@ class ParticipantListViewNormalizer implements NormalizerInterface
                     $participantListView->locale
                 )
             ),
-
         ];
 
         foreach ($participantListView->registrationColumns as $key => $registrationColumn) {

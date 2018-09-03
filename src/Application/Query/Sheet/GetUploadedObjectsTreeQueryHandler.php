@@ -135,7 +135,7 @@ class GetUploadedObjectsTreeQueryHandler
         if (!\array_key_exists($object->getKey(), $uploadedObjectsTreeView->tree)) {
             $folder = $this->transliteratorAdapter->urlize([
                 $object->getKey(),
-                $object->getLabel($locale)
+                $object->getLabel($locale),
             ]);
 
             return new UploadedObjectNodeView($folder);
@@ -160,7 +160,7 @@ class GetUploadedObjectsTreeQueryHandler
     {
         $path = $this->transliteratorAdapter->urlize([$sheet->getId(), $sheet->getTitle()]);
 
-        return $path.'.'.$sheet->getRegistrationData()[$key]['extension'];
+        return $path . '.' . $sheet->getRegistrationData()[$key]['extension'];
     }
 
     private function participantUploadObjectFilename(Sheet $sheet, Participant $participant, string $key): string
@@ -168,9 +168,9 @@ class GetUploadedObjectsTreeQueryHandler
         $path = $this->transliteratorAdapter->urlize([
             $sheet->getId(),
             $sheet->getTitle(),
-            $participant->getIdAndFullName()
+            $participant->getIdAndFullName(),
         ]);
 
-        return $path.'.'.$participant->getData()[$key]['extension'];
+        return $path . '.' . $participant->getData()[$key]['extension'];
     }
 }

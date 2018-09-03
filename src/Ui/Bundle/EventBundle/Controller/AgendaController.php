@@ -63,11 +63,11 @@ class AgendaController extends Controller
     }
 
     /**
-     * @param EventDomain   $eventDomain
-     * @param Request       $request
-     * @param Participant   $participant
-     * @param Sheet         $sheet
-     * @param UserDomain    $userDomain
+     * @param EventDomain $eventDomain
+     * @param Request     $request
+     * @param Participant $participant
+     * @param Sheet       $sheet
+     * @param UserDomain  $userDomain
      *
      * @return Response
      */

@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Tests\Application\Template\Sheet;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\Template\SheetTemplateUpdatedEvent;
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
@@ -51,13 +54,15 @@ class SheetTemplateClonerTest extends TestCase
         $templateDataFactory     = $this->prophesize(TemplateDataFactory::class);
         $nomenclatureCloner      = $this->prophesize(NomenclatureCloner::class);
         $templateRemoveField     = $this->prophesize(TemplateRemoveField::class);
+        $delayedEventDispatcher  = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $cloner = new SheetTemplateCloner(
             $sheetTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
             $nomenclatureCloner->reveal(),
             $dateTime,
-            $templateRemoveField->reveal()
+            $templateRemoveField->reveal(),
+            $delayedEventDispatcher->reveal()
         );
 
         $clone = new SheetTemplate('clone', [
@@ -83,6 +88,14 @@ class SheetTemplateClonerTest extends TestCase
         $nomenclatureCloner->duplicateIfNotExists()->shouldNotBeCalled();
 
         $sheetTemplateRepository->add($clone)->shouldBeCalled();
+
+        $delayedEventDispatcher
+            ->dispatch(
+                Events::SHEET_TEMPLATE_UPDATED,
+                new SheetTemplateUpdatedEvent($clone)
+            )
+            ->shouldBeCalled()
+        ;
 
         $this->assertEquals($clone, $cloner->duplicate($sheetTemplate, $event, 'clone'));
     }
@@ -117,13 +130,15 @@ class SheetTemplateClonerTest extends TestCase
         $templateDataFactory     = $this->prophesize(TemplateDataFactory::class);
         $nomenclatureCloner      = $this->prophesize(NomenclatureCloner::class);
         $templateRemoveField     = $this->prophesize(TemplateRemoveField::class);
+        $delayedEventDispatcher  = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $cloner = new SheetTemplateCloner(
             $sheetTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
             $nomenclatureCloner->reveal(),
             $dateTime,
-            $templateRemoveField->reveal()
+            $templateRemoveField->reveal(),
+            $delayedEventDispatcher->reveal()
         );
 
         $clone = new SheetTemplate('clone', [
@@ -182,6 +197,14 @@ class SheetTemplateClonerTest extends TestCase
         $nomenclatureCloner->duplicateIfNotExists($nomenclature, $event)->shouldBeCalled()->willReturn($nomenclatureClone);
 
         $sheetTemplateRepository->add($clone)->shouldBeCalled();
+
+        $delayedEventDispatcher
+            ->dispatch(
+                Events::SHEET_TEMPLATE_UPDATED,
+                new SheetTemplateUpdatedEvent($clone)
+            )
+            ->shouldBeCalled()
+        ;
 
         $this->assertEquals($clone, $cloner->duplicate($sheetTemplate, $event, 'clone'));
     }

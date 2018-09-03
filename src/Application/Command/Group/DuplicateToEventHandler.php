@@ -42,12 +42,12 @@ class DuplicateToEventHandler
     /**
      * @param DuplicateToEvent $duplicateToEvent
      *
-     * @return Group
-     *
      * @throws CanNotDuplicateToTheSameEventException
      * @throws GroupAlreadyDuplicatedInGivenEventException
      * @throws UserAlreadyGroupManagerOnSameEventException
      * @throws UserAlreadyParticipantOrOwnerOnGroupOnSameEventException
+     *
+     * @return Group
      */
     public function handle(DuplicateToEvent $duplicateToEvent): Group
     {

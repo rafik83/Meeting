@@ -349,7 +349,7 @@ class TypeRepository implements TypeRepositoryInterface
             ->where('days.id IS NULL OR days.startTime > :datetime')
             ->setParameters([
                 'excludedEvent' => $excludedEvent,
-                'datetime' => $datetime
+                'datetime' => $datetime,
             ])
             ->orderBy('event.title, typeTranslation.title', 'ASC');
 

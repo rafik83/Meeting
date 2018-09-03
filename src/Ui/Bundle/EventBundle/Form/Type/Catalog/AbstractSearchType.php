@@ -175,7 +175,6 @@ abstract class AbstractSearchType extends AbstractType
                 'taggedNomenclatureTagViews' => $options['taggedNomenclatureTagViews'],
             ]);
         }
-
     }
 
     /**

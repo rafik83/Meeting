@@ -349,6 +349,21 @@ services:
             - '@adapter.serializer_adapter'
             - '@datetime'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\SelectItemsFromNomenclaturesAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@templating'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Application\Command\Catalog\GetNomenclaturesByTag'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\CatalogExternal\SelectItemsFromNomenclaturesAction:
+        arguments:
+            - '@repository.catalog_visibility_repository'
+            - '@templating'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Application\Command\Catalog\GetNomenclaturesByTag'
+
     #
     # Package
     #

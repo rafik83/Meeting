@@ -1,6 +1,5 @@
 # Proximum - Vimeet
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/proximum/vimeet/badges/quality-score.png?b=master&s=0e5fdaf722de66e218a5900f4197ab71bf6bd001)](https://scrutinizer-ci.com/g/proximum/vimeet/?branch=master)
 [![CircleCI](https://circleci.com/gh/proximum/vimeet/tree/master.svg?style=svg&circle-token=1177af92f29a64cb40f13255e22d302b38d032b5)](https://circleci.com/gh/proximum/vimeet/tree/master)
 
 ## Development
@@ -135,7 +134,7 @@ After a deploy, you will need to do manually some commands at prod or preprod ([
 
 - Update Elastic Search index:
 
-        ⇒ bin/console fos:elastica:populate --env=prod
+        ⇒ bin/console vimeet:elasticsearch:index --env=prod
     
 - Rebuild events assets:
 

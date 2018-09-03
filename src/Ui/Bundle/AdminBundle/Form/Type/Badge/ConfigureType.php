@@ -35,7 +35,7 @@ class ConfigureType extends AbstractType
         $builder
             ->add('header', FileType::class, [
                 'required' => false,
-                'help' => 'form.badge_configuration.children.header.help'
+                'help' => 'form.badge_configuration.children.header.help',
             ])
             ->add('showHeader', CheckboxType::class, [
                 'required' => false,
@@ -47,7 +47,7 @@ class ConfigureType extends AbstractType
                 'choices' => $footerPossibilities,
                 'choice_label' => function (string $choice, string $key) {
                     return sprintf('form.badge_configuration.children.showFooterTypeOrCategory.choices.%s', $choice);
-                }
+                },
             ])
             ->add('footerTextColor', TextType::class, [
                 'required' => true,
@@ -85,7 +85,7 @@ class ConfigureType extends AbstractType
                 'required' => false,
                 'choices' => Sheet::getAllStates(),
                 'choice_label' => function (?string $choice = null, ?int $key = null) {
-                    if ($key === null) {
+                    if (null === $key) {
                         return null;
                     }
 
@@ -94,7 +94,7 @@ class ConfigureType extends AbstractType
                 'choice_translation_domain' => 'messages',
                 'attr' => [
                     'class' => 'select2',
-                ]
+                ],
             ])
         ;
     }

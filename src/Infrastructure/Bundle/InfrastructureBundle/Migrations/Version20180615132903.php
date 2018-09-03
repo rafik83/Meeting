@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -15,7 +23,7 @@ class Version20180615132903 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE event ADD configuration_header_left_color VARCHAR(255) DEFAULT NULL, ADD configuration_header_right_color VARCHAR(255) DEFAULT NULL, DROP logo, DROP logo_extension');
         $this->addSql('UPDATE event SET configuration_header_left_color = configuration_left_color');
@@ -29,7 +37,7 @@ class Version20180615132903 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE event ADD logo VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, ADD logo_extension VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, DROP configuration_header_left_color, DROP configuration_header_right_color');
         $this->addSql('ALTER TABLE event_translation DROP logo, DROP logo_extension, DROP mobile_logo, DROP mobile_logo_extension');

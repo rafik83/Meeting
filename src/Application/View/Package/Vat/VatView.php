@@ -29,7 +29,7 @@ class VatView
     /**
      * @param float  $vatRate
      * @param string $vatMode
-     * @param int    $total in cents
+     * @param int    $total    in cents
      * @param int    $totalVat in cents
      */
     public function __construct(

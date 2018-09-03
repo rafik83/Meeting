@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
-use Proximum\Vimeet\Domain\Event\Image;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
@@ -19,7 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -82,7 +80,7 @@ abstract class AbstractEventType extends AbstractType
             ])
             ->add('domain', TextType::class, [
                 'placeholder' => 'form.event_create.children.domain.placeholder',
-                'help' => 'form.event_create.children.domain.help'
+                'help' => 'form.event_create.children.domain.help',
             ])
             ->add('timeZone', TimezoneType::class)
             ->add('fallback', LocaleType::class, [
