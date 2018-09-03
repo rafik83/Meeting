@@ -11,20 +11,14 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\CancelAttendanceUnavailabilityView;
-use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 
 class CancelAttendanceUnavailabilityViewQueryHandler
 {
-    /**
-     * @param CancelAttendanceUnavailabilityViewQuery $query
-     *
-     * @return UnavailabilityView
-     */
-    public function handle(CancelAttendanceUnavailabilityViewQuery $query)
+    public function handle(CancelAttendanceUnavailabilityViewQuery $query): CancelAttendanceUnavailabilityView
     {
         return new CancelAttendanceUnavailabilityView(
-            $query->day->getStartTime(),
-            $query->day->getEndTime(),
+            $query->day->getBegin(),
+            $query->day->getEnd(),
             $query->event->getTimeZone()
         );
     }

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Unavailability\SystemGenerator;
 
+use Proximum\Vimeet\Domain\Time\AbstractTimeRange;
 use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 /**

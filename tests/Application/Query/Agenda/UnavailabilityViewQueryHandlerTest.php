@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Agenda\UnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Unavailability;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
@@ -27,7 +28,7 @@ class UnavailabilityViewQueryHandlerTest extends TestCase
         $begin = new \DateTime('2016-10-12 12:00:00');
         $end   = new \DateTime('2016-10-12 14:00:00');
         $user  = UserFactory::create();
-        $day   = new Day($event, new \DateTime('2016-10-12 08:00:00'), new \DateTime('2016-10-12 20:00:00'));
+        $day   = new TimeRangeView(new \DateTime('2016-10-12 08:00:00'), new \DateTime('2016-10-12 20:00:00'));
 
         $unavailability = new Unavailability($user, $event, $begin, $end);
         $reflection     = new \ReflectionClass(Unavailability::class);
@@ -63,7 +64,7 @@ class UnavailabilityViewQueryHandlerTest extends TestCase
     {
         $event = EventFactory::createEvent();
         $user  = UserFactory::create();
-        $day   = new Day($event, new \DateTime('2016-10-12 10:00:00'), new \DateTime('2016-10-12 18:00:00'));
+        $day   = new TimeRangeView(new \DateTime('2016-10-12 10:00:00'), new \DateTime('2016-10-12 18:00:00'));
 
         $unavailability = new Unavailability(
             $user,
@@ -104,7 +105,7 @@ class UnavailabilityViewQueryHandlerTest extends TestCase
     {
         $event = EventFactory::createEvent();
         $user  = UserFactory::create();
-        $day   = new Day($event, new \DateTime('2016-10-12 10:00:00'), new \DateTime('2016-10-12 18:00:00'));
+        $day   = new TimeRangeView(new \DateTime('2016-10-12 10:00:00'), new \DateTime('2016-10-12 18:00:00'));
 
         $unavailability = new Unavailability(
             $user,

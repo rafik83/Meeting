@@ -11,22 +11,19 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
 class CancelAttendanceUnavailabilityViewQuery
 {
     /** @var Event */
     public $event;
 
-    /** @var Event\Day */
+    /** @var TimeRangeInterface */
     public $day;
 
-    /**
-     * @param Event     $event
-     * @param Event\Day $day
-     */
-    public function __construct(Event $event, Event\Day $day)
+    public function __construct(Event $event, TimeRangeInterface $day)
     {
         $this->event = $event;
-        $this->day   = $day;
+        $this->day = $day;
     }
 }

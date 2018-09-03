@@ -58,12 +58,12 @@
     <div class="agenda-container">
         <div class="row">
             {% for day in agenda.days %}
-                <div class="col-md-12 agenda" data-beginHour="{{ day.begin|date('H:i', timezone) }}" data-endHour="{{ day.end|date('H:i', timezone) }}" data-slotDuration="{{ day.getScale }}">
+                <div class="col-md-12 agenda" data-beginHour="{{ day.begin|date('H:i', agenda.timezone) }}" data-endHour="{{ day.end|date('H:i', agenda.timezone) }}" data-slotDuration="{{ day.getScale }}">
                     <header class="agenda-head">
                         <p>
                             <i class="icon icon-Calendrier"></i>
                             <span class="agenda-date" data-date="{{ day.day|date('d/m/y h:i:s') }}">
-                                {{ day.day|localizeddate('full', 'none', app.request.locale, timezone)|capitalize }}
+                                {{ day.day|localizeddate('full', 'none', app.request.locale, agenda.timezone)|capitalize }}
                             </span>
                         </p>
                     </header>
@@ -87,7 +87,7 @@
 
                             {% for availableSlotView in day.availableSlotViews %}
                                 <div class="meet available"
-                                     data-beginHour="{{ availableSlotView.beginHour|date('H:i', timezone) }}"
+                                     data-beginHour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}"
                                      data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
                                      data-slot-id="{{ availableSlotView.id }}"
                                 >

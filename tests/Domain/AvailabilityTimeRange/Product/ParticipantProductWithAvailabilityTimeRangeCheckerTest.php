@@ -23,8 +23,8 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger;
 use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater;
-use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\TimeRangeNotAccessibleView;
-use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\TimeRangeView;
+use Proximum\Vimeet\Domain\Time\TimeRangeNotAccessibleView;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class ParticipantProductWithAvailabilityTimeRangeCheckerTest extends TestCase
 {

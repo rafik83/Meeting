@@ -74,3 +74,13 @@ services:
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\EBadgePdfPrinter'
+
+    #
+    # Agenda
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ParticipantTimezoneAction:
+        arguments:
+            - '@templating.engine.twig'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@router'

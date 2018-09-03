@@ -34,6 +34,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
@@ -64,7 +65,7 @@ class AgendaViewQueryHandlerTest extends TestCase
 
         $begin = new \DateTime('2016-10-12 10:00:00');
         $end   = new \DateTime('2016-10-12 18:00:00');
-        $day   = new Day($event, $begin, $end);
+        $day   = new TimeRangeView($begin, $end);
 
         $category = new Category($event, 'picto', 'title', 'leftColor', 'rightColor');
         $mass     = new Mass($event, $category, 'name', $begin, $end, true);
@@ -146,7 +147,15 @@ class AgendaViewQueryHandlerTest extends TestCase
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant, 'fr', $user));
 
         // Expected
-        $expected = new AgendaView([$dayView], $sheet, $participant, true, [new ParticipantView(1, 'fullName')], false);
+        $expected = new AgendaView(
+            [$dayView],
+            'Europe/Paris',
+            $sheet,
+            $participant,
+            true,
+            [new ParticipantView(1, 'fullName')],
+            false
+        );
 
         $this->assertEquals($expected, $result);
     }
@@ -162,7 +171,7 @@ class AgendaViewQueryHandlerTest extends TestCase
 
         $begin = new \DateTime('2016-10-12 10:00:00');
         $end   = new \DateTime('2016-10-12 18:00:00');
-        $day   = new Day($event, $begin, $end);
+        $day   = new TimeRangeView($begin, $end);
 
         $category = new Category($event, 'picto', 'title', 'leftColor', 'rightColor');
         $mass     = new Mass($event, $category, 'name', $begin, $end, true);
@@ -243,7 +252,18 @@ class AgendaViewQueryHandlerTest extends TestCase
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user));
 
         // Expected
-        $expected = new AgendaView([$dayView], $sheet, $participant2, false, [new ParticipantView(1, 'fullName'), new ParticipantView(2, 'fullName2')], true);
+        $expected = new AgendaView(
+            [$dayView],
+            'Europe/Paris',
+            $sheet,
+            $participant2,
+            false,
+            [
+                new ParticipantView(1, 'fullName'),
+                new ParticipantView(2, 'fullName2'),
+            ],
+            true
+        );
 
         $this->assertEquals($expected, $result);
     }

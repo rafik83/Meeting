@@ -17,10 +17,10 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\TimeRangeNotAccessibleView;
 use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger;
 use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater;
-use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\TimeRangeNotAccessibleView;
-use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\TimeRangeView;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 /**
  * This class checks that the product selected for the participant

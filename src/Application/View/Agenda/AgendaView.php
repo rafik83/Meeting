@@ -33,8 +33,12 @@ class AgendaView
     /** @var bool */
     public $isPhoneValidationRequired;
 
+    /** @var string */
+    public $timezone;
+
     /**
      * @param array             $dayViews
+     * @param string            $timezone
      * @param Sheet             $sheet
      * @param Participant       $participant
      * @param bool              $isUserAloneParticipant
@@ -43,18 +47,20 @@ class AgendaView
      */
     public function __construct(
         array $dayViews,
+        string $timezone,
         Sheet $sheet,
         Participant $participant,
         bool $isUserAloneParticipant,
         array $participants,
         bool $isPhoneValidationRequired
     ) {
-        $this->days                   = $dayViews;
-        $this->sheet                  = $sheet;
-        $this->participant            = $participant;
+        $this->days = $dayViews;
+        $this->sheet = $sheet;
+        $this->participant = $participant;
         $this->isUserAloneParticipant = $isUserAloneParticipant;
-        $this->participants           = $participants;
+        $this->participants = $participants;
         $this->isPhoneValidationRequired = $isPhoneValidationRequired;
+        $this->timezone = $timezone;
     }
 
     /**

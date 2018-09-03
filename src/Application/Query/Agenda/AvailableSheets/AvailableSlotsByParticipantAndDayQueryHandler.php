@@ -42,8 +42,6 @@ class AvailableSlotsByParticipantAndDayQueryHandler
     }
 
     /**
-     * @param AvailableSlotsByParticipantAndDayQuery $query
-     *
      * @return AvailableSlotView[]
      */
     public function handle(AvailableSlotsByParticipantAndDayQuery $query): array
@@ -68,8 +66,8 @@ class AvailableSlotsByParticipantAndDayQueryHandler
 
         foreach ($availableSlots as $availableSlot) {
             if ($availableSlot->getBegin() >= $datePlus10Minutes
-                && $query->day->getStartTime() <= $availableSlot->getBegin()
-                && $query->day->getEndTime() >= $availableSlot->getEnd()
+                && $query->day->getBegin() <= $availableSlot->getBegin()
+                && $query->day->getEnd() >= $availableSlot->getEnd()
             ) {
                 $availableSlotViews[] = new AvailableSlotView(
                     $availableSlot->getId(),

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -19,10 +18,11 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class DayViewQuery
 {
-    /** @var Day */
+    /** @var TimeRangeView */
     public $day;
 
     /** @var string */
@@ -56,20 +56,13 @@ class DayViewQuery
     public $isUserParticipantMultipleSheet;
 
     /**
-     * @param Day                      $day
-     * @param Sheet                    $currentSheet
-     * @param Event                    $event
-     * @param Participant              $participant
-     * @param User                     $userViewing
-     * @param bool                     $isUserParticipantMultipleSheet
-     * @param string                   $locale
      * @param HappeningParticipation[] $happenings
      * @param Unavailability[]         $unavailabilities
      * @param Mass[]                   $masses
      * @param Meeting[]                $meetings
      */
     public function __construct(
-        Day $day,
+        TimeRangeView $day,
         Sheet $currentSheet,
         Event $event,
         Participant $participant,

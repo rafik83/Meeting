@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Unavailability\SystemGenerator;
+namespace Proximum\Vimeet\Domain\Time;
 
 class TimeRangeNotAccessibleView extends AbstractTimeRange
 {
