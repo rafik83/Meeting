@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f81d3c1aeb71d1ed8700a4bc6f73829",
+    "content-hash": "46bdc0bb5efcc24a06822cafcaf2f6a5",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1723,16 +1723,16 @@
         },
         {
             "name": "endroid/installer",
-            "version": "1.0.3",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/installer.git",
-                "reference": "dde0a3d63ae92d4a67535e92da2b80d2b45cb06a"
+                "reference": "1472a01e730e5ba37e82bd99694daae92dda0578"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/installer/zipball/dde0a3d63ae92d4a67535e92da2b80d2b45cb06a",
-                "reference": "dde0a3d63ae92d4a67535e92da2b80d2b45cb06a",
+                "url": "https://api.github.com/repos/endroid/installer/zipball/1472a01e730e5ba37e82bd99694daae92dda0578",
+                "reference": "1472a01e730e5ba37e82bd99694daae92dda0578",
                 "shasum": ""
             },
             "require": {
@@ -1764,20 +1764,20 @@
                     "email": "info@endroid.nl"
                 }
             ],
-            "time": "2018-04-10T20:59:23+00:00"
+            "time": "2018-07-15T08:21:39+00:00"
         },
         {
-            "name": "endroid/qrcode",
-            "version": "3.2.12",
+            "name": "endroid/qr-code",
+            "version": "3.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "15411c93fa91c0d0c25d98b08a3d5cc9de720fc7"
+                "reference": "bff7b8ca38d7e15e75e36deadaef6d9250af4221"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/15411c93fa91c0d0c25d98b08a3d5cc9de720fc7",
-                "reference": "15411c93fa91c0d0c25d98b08a3d5cc9de720fc7",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/bff7b8ca38d7e15e75e36deadaef6d9250af4221",
+                "reference": "bff7b8ca38d7e15e75e36deadaef6d9250af4221",
                 "shasum": ""
             },
             "require": {
@@ -1824,8 +1824,7 @@
                 "qr",
                 "qrcode"
             ],
-            "abandoned": "endroid/qr-code",
-            "time": "2018-05-07T16:04:16+00:00"
+            "time": "2018-08-21T20:10:48+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -3660,16 +3659,16 @@
         },
         {
             "name": "myclabs/php-enum",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/php-enum.git",
-                "reference": "8c5649e4ed99acd53a40eada270154dcac089f7e"
+                "reference": "ca2f4090a7ecae6f0c67fc9bd07cfb51cdf04219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/php-enum/zipball/8c5649e4ed99acd53a40eada270154dcac089f7e",
-                "reference": "8c5649e4ed99acd53a40eada270154dcac089f7e",
+                "url": "https://api.github.com/repos/myclabs/php-enum/zipball/ca2f4090a7ecae6f0c67fc9bd07cfb51cdf04219",
+                "reference": "ca2f4090a7ecae6f0c67fc9bd07cfb51cdf04219",
                 "shasum": ""
             },
             "require": {
@@ -3700,7 +3699,7 @@
             "keywords": [
                 "enum"
             ],
-            "time": "2018-05-09T08:09:15+00:00"
+            "time": "2018-08-01T21:05:54+00:00"
         },
         {
             "name": "ocramius/package-versions",
