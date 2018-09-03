@@ -5,9 +5,17 @@
 
     <div class="clearboth"></div>
 
-    <a href="{{ selectItemsFromNomenclaturesUrl }}" class="select-from-nomenclature-field__link">
-        {{ form.vars.attr['data-placeholder'] ? form.vars.attr['data-placeholder'] : 'catalog.selectItemsFromNomenclatures.select'|trans }}
-    </a>
+    <div class="select-from-nomenclature-field__links">
+        <a href="{{ selectItemsFromNomenclaturesUrl }}">
+            {{ form.vars.attr['data-placeholder'] ? form.vars.attr['data-placeholder'] : 'catalog.selectItemsFromNomenclatures.select'|trans }}
+        </a>
+        <span data-unselect-all style="display: none">
+            /
+            <a href="#">
+                {{ 'catalog.selectItemsFromNomenclatures.unSelectAll'|trans }}
+            </a>
+        </span>
+    </div>
 
     {{ form_widget(form) }}
 </div>

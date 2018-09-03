@@ -11,10 +11,14 @@ function CatalogSelectFromNomenclaturesField(element, modal) {
     this.labelMore = this.selectedItemsZone.getAttribute('data-label-more');
     this.initialSelect.style.display = 'none';
 
-    this.showSelectedItemsLabel();
-
     this.link = this.element.querySelector('a');
     this.link.addEventListener('click', this.handleClick.bind(this));
+
+    this.unSelectAll = this.element.querySelector('[data-unselect-all]');
+    this.unSelectAllLink = this.unSelectAll.querySelector('a');
+    this.unSelectAllLink.addEventListener('click', this.handleUnSelectAll.bind(this));
+
+    this.showSelectedItemsLabel();
 }
 
 CatalogSelectFromNomenclaturesField.prototype.showPlaceholder = function () {
@@ -36,6 +40,12 @@ CatalogSelectFromNomenclaturesField.prototype.showSelectedItemsLabel = function 
     }
 
     this.selectedItemsZone.innerHTML = html;
+
+    if (selectedItemsLabel.length) {
+        this.unSelectAll.style.display = 'inline';
+    } else {
+        this.unSelectAll.style.display = 'none';
+    }
 };
 
 CatalogSelectFromNomenclaturesField.prototype.getSelectedItemsLabel = function () {
@@ -62,6 +72,15 @@ CatalogSelectFromNomenclaturesField.prototype.handleClick = function (event) {
     } else {
         this.loadForm(href);
     }
+};
+
+CatalogSelectFromNomenclaturesField.prototype.handleUnSelectAll = function (event) {
+    event.preventDefault();
+
+    this.unSelectAll.style.display = 'none';
+    this.selectedItemsZone.innerHTML = '';
+    $(this.initialSelect).val([]);
+    this.dispatchInitialSelectChanged();
 };
 
 CatalogSelectFromNomenclaturesField.prototype.loadForm = function (href) {
@@ -125,7 +144,10 @@ CatalogSelectFromNomenclaturesField.prototype.handleForm = function (event) {
     this.showSelectedItemsLabel();
 
     $(this.modal).modal('hide');
+    this.dispatchInitialSelectChanged();
+};
 
+CatalogSelectFromNomenclaturesField.prototype.dispatchInitialSelectChanged = function () {
     var htmlEvent = document.createEvent('HTMLEvents');
     htmlEvent.initEvent('change', true, true);
     this.initialSelect.dispatchEvent(htmlEvent);
