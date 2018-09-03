@@ -30,6 +30,10 @@ Proximum\Vimeet\Domain\Model\Participant:
             type: boolean
             options:
                 default: false
+        timezone:
+            type: string
+            nullable: true
+
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

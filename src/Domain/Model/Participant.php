@@ -77,6 +77,9 @@ class Participant implements MailRecipientInterface
     /** @var null|Product */
     private $participantProduct;
 
+    /** @var string */
+    private $timezone;
+
     /**
      * @param Sheet $sheet
      * @param User  $user
@@ -374,5 +377,15 @@ class Participant implements MailRecipientInterface
         $duplicatedParticipant->setImported(true);
 
         return $duplicatedParticipant;
+    }
+
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
+    }
+
+    public function setTimezone(string $timezone): void
+    {
+        $this->timezone = $timezone;
     }
 }

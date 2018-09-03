@@ -1,1 +1,6 @@
-{{ include('EventBundle:Unavailability:unavailability.html.twig', { unavailability: unavailability, 'participantId': participantId, 'sheetId': sheetId}) }}
+{% set timezone = unavailability.timeZone %}
+{% if participant.visio and participant.timezone %}
+    {% set timezone = participant.timezone %}
+{% endif %}
+
+{{ include('EventBundle:Unavailability:unavailability.html.twig', { 'timezone': timezone, unavailability: unavailability, 'participantId': participantId, 'sheetId': sheetId}) }}

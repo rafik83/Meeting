@@ -3,9 +3,9 @@
         <span class="prefix"><i class="icon icon-Verouiller_1"></i></span>
         <p class="title col-xs-12">
             {{
-                unavailability.begin|date('H:i', unavailability.timeZone)
+                unavailability.begin|date('H:i', timezone)
                 ~ ' - '
-                ~ unavailability.end|date('H:i', unavailability.timeZone)
+                ~ unavailability.end|date('H:i', timezone)
             }}
 
             {% if unavailability.isDeletableByUser %}
