@@ -30,10 +30,6 @@ final class Charset
      */
     public static function convertFile($inFilename, $inCharset, $outCharset, $outFilename = null)
     {
-        if ($inCharset === $outCharset) {
-            return $inFilename;
-        }
-
         try {
             $input = file_get_contents($inFilename);
             $outFilename = $outFilename ?: sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'charset-' . uniqid();
