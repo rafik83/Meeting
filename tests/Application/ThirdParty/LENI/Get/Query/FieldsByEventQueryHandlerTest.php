@@ -44,9 +44,7 @@ class FieldsByEventQueryHandlerTest extends TestCase
 
         $expectedResult = [
             'Id',
-            'CategorieIndividuEvt',
             'Societe',
-            'ZL_SOUSCATEGORIE',
             'Civilite',
             'Prenom',
             'Nom',
@@ -62,7 +60,9 @@ class FieldsByEventQueryHandlerTest extends TestCase
             'Langue',
             'CreeLe',
             'ModifieLe',
+            'CategorieIndividuEvt',
             'ZL_PROFIL',
+            'ZL_SOUSCATEGORIE',
             'ZL_Effectif',
             'ZL_ACTIVITE',
             'ZL_TypePrestation',
