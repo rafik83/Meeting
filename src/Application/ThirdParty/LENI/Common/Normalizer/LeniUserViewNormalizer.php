@@ -21,8 +21,6 @@ class LeniUserViewNormalizer
             LeniConstants::LENI_COL_CAB_2 => (string) $userView->id,
             LeniConstants::LENI_COL_EXTERNAL_KEY => $userView->id,
             LeniConstants::LENI_COL_COMPANY_NAME => self::mediumTruncate($userView->sheetName),
-            LeniConstants::LENI_COL_CATEGORY => (string) $userView->categoryId,
-            LeniConstants::LENI_COL_TYPE => (string) $userView->typeId,
             LeniConstants::LENI_COL_TITLE => LeniConstants::GENDER_MAPPING[$userView->gender] ?? '',
             LeniConstants::LENI_COL_FIRST_NAME => self::longTruncate($userView->firstName),
             LeniConstants::LENI_COL_LAST_NAME => self::longTruncate($userView->lastName),

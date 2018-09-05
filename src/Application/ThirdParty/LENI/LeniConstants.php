@@ -41,7 +41,6 @@ class LeniConstants
     public const LENI_COL_CAB_2 = 'Cab2';
     public const LENI_COL_EXTERNAL_KEY = 'CleExterne';
     public const LENI_COL_COMPANY_NAME = 'Societe';
-    public const LENI_COL_TYPE = 'ZL_SOUSCATEGORIE';
     public const LENI_COL_CATEGORY = 'CategorieIndividuEvt';
     public const LENI_COL_TITLE = 'Civilite';
     public const LENI_COL_FIRST_NAME = 'Prenom';
@@ -96,7 +95,6 @@ class LeniConstants
         self::LENI_COL_USER_ID,
         self::LENI_COL_CATEGORY,
         self::LENI_COL_COMPANY_NAME,
-        self::LENI_COL_TYPE,
         self::LENI_COL_TITLE,
         self::LENI_COL_FIRST_NAME,
         self::LENI_COL_LAST_NAME,
