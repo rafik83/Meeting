@@ -24,20 +24,26 @@ class ParticipantListView
     /** @var string[] */
     public $productColumns;
 
+    /** @var string[] */
+    public $dayColumns;
+
     /**
      * @param string            $locale
      * @param ParticipantView[] $participantViews
+     * @param array             $dayColumns
      * @param array             $registrationColumns
      * @param string[]          $productColumns
      */
     public function __construct(
         string $locale,
         array $participantViews,
+        array $dayColumns,
         array $registrationColumns,
         array $productColumns
     ) {
         $this->participantViews = $participantViews;
         $this->registrationColumns = $registrationColumns;
+        $this->dayColumns = $dayColumns;
         $this->locale = $locale;
         $this->productColumns = $productColumns;
     }
