@@ -80,6 +80,9 @@ class VideoConferenceController extends Controller
             'EventBundle:VideoConference:videoConference.html.twig',
             [
                 'event' => $event,
+                'sheet' => $sheet,
+                'participant' => $participant,
+                'meeting' => $meeting,
                 'videoConferenceView' => $videoConferenceView,
                 'meetingView' => $meetingView,
             ]

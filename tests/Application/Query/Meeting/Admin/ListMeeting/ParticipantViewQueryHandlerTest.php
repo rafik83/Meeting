@@ -14,7 +14,9 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\ParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\Admin\ListMeeting\ParticipantView;
+use Proximum\Vimeet\Domain\Meeting\IsParticipantPresentToMeeting;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -29,10 +31,15 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $user = $this->prophesize(User::class);
         $slot = $this->prophesize(MeetingSlot::class);
         $event = $this->prophesize(Event::class);
+        $meeting = $this->prophesize(Meeting::class);
+        $isParticipantPresentToMeeting = $this->prophesize(IsParticipantPresentToMeeting::class);
 
         $participant->getId()->shouldBeCalled()->willReturn(12);
+        $participant->isVisio()->shouldBeCalled()->willReturn(false);
         $participant->getUser()->shouldBeCalled()->willReturn($user->reveal());
         $locale = 'fr';
+
+        $isParticipantPresentToMeeting->isSatisfiedBy($participant->reveal(), $meeting->reveal())->shouldBeCalled()->willReturn(false);
 
         $scanRepository = $this->prophesize(ScanRepositoryInterface::class);
         $scanRepository->isUserCheckinByEventAndSlot($user->reveal(), $event->reveal(), $slot->reveal())
@@ -44,11 +51,12 @@ class ParticipantViewQueryHandlerTest extends TestCase
             ->willReturn('Jean Paul')
         ;
 
-        $query = new ParticipantViewQuery($participant->reveal(), $event->reveal(), $slot->reveal(), $locale);
+        $query = new ParticipantViewQuery($participant->reveal(), $event->reveal(), $meeting->reveal(), $slot->reveal(), $locale);
 
         $handler = new ParticipantViewQueryHandler(
             $participantInfoGuesser->reveal(),
-            $scanRepository->reveal()
+            $scanRepository->reveal(),
+            $isParticipantPresentToMeeting->reveal()
         );
 
         $result = $handler->handle($query);

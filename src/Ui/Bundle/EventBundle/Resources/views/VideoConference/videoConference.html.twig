@@ -1,6 +1,11 @@
 {% extends 'EventBundle::base.html.twig' %}
 
 {% block body %}
+    {% set participantPresenceAction = null %}
+    {% if participant is defined and meeting is defined and sheet is defined %}
+        {% set participantPresenceAction = path('event_video_meeting_presence', {'sheet': sheet.id, 'participant': participant.id, 'meeting': meeting.id}) %}
+    {% endif %}
+
     <div class="video-conference"
          data-token="{{ videoConferenceView.token }}"
          data-session-id="{{ videoConferenceView.sessionId }}"
@@ -8,6 +13,7 @@
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
+         data-participant-presence-action="{{ participantPresenceAction }}"
     >
         <div class="layout-container"></div>
         <div class="publisher-container"></div>
@@ -45,3 +51,4 @@
         </div>
     </div>
 {% endblock body %}
+

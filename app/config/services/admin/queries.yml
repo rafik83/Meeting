@@ -113,6 +113,7 @@ services:
         arguments:
             - '@template.participant_info_guesser'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@Proximum\Vimeet\Domain\Meeting\IsParticipantPresentToMeeting'
 
     Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingViewQueryHandler:
         arguments:

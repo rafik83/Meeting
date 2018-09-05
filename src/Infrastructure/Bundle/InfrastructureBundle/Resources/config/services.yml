@@ -2695,6 +2695,11 @@ services:
         arguments:
             - '@command.messaging.batch.create_handler'
 
+    Proximum\Vimeet\Domain\Meeting\IsParticipantPresentToMeeting:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Meeting\ParticipantExtraDataRepository'
+            - '@datetime'
+
     #
     # Security Component
     #

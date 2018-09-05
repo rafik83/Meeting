@@ -581,3 +581,11 @@ services:
             - '@router'
             - '@adapter.authorization_checker'
             - '@datetime'
+
+    #
+    # Meeting
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\MeetingParticipantPresenceAction:
+        arguments:
+            - '@Proximum\Vimeet\Application\Adapter\CommandBusInterface'
+            - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'

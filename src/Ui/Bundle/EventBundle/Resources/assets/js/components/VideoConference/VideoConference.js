@@ -7,7 +7,7 @@ var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var CHROME_EXTENSION_ID = 'alpphdcgnkkpafmlhllecaganiekhjcp';
 var CHROME_EXTENSION_IS_INSTALLED = 'CHROME_EXTENSION_IS_INSTALLED';
-
+var $ = require('jquery');
 /**
  * @constructor
  *
@@ -19,6 +19,7 @@ function VideoConference(element) {
   this.token = element.getAttribute('data-token');
   this.sessionId = element.getAttribute('data-session-id');
   this.apiKey = element.getAttribute('data-api-key');
+  this.participantPresenceAction = element.getAttribute('data-participant-presence-action');
 
   this.notCompatibleBrowserMessage = element.getAttribute(
     'data-not-compatible-browser-message'
@@ -84,6 +85,7 @@ function VideoConference(element) {
 
   // Init
   this.init();
+  this.saveParticipantPresence();
 }
 
 /**
@@ -412,6 +414,22 @@ VideoConference.prototype.installChromeExtension = function (successCallback, er
       errorCallback(error);
     }
   );
+};
+
+VideoConference.prototype.saveParticipantPresence = function() {
+    var _this = this;
+
+    if (!_this.participantPresenceAction) {
+        return;
+    }
+
+    // Save the first time the page is loaded
+    $.post(_this.participantPresenceAction);
+
+    // Save each 1 minute
+    setInterval(function(){
+        $.post(_this.participantPresenceAction);
+    }, 60000);
 };
 
 module.exports = VideoConference;

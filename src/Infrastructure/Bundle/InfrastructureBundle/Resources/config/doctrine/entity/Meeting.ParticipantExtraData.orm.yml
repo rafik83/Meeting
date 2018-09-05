@@ -1,0 +1,25 @@
+Proximum\Vimeet\Domain\Model\Meeting\ParticipantExtraData:
+    type: entity
+    table: meeting_participant_extra_data
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        date:
+            type: datetime
+            nullable: true
+        type:
+            type: string
+    manyToOne:
+        participant:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+        meeting:
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
