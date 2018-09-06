@@ -138,9 +138,22 @@ class UnavailabilityController extends Controller
             'sheet' => $sheet->getId(),
         ]);
 
+        $participant = $sheet->getUserParticipant($userDomain->getUser());
+        $timezone = $participant instanceof Participant
+            ? GetTimezoneHelper::getTimezoneByEventAndParticipant($eventDomain->getEvent(), $participant)
+            : $event->getTimeZone()
+        ;
+
         /** @var CreateFormView $createFormView */
         $createFormView = $this->get('handler.unavailability.create_form_handler')->handle(
-            new CreateForm($request, $event, $sheet, $userDomain->getUser(), $actionUrl)
+            new CreateForm(
+                $request,
+                $event,
+                $sheet,
+                $userDomain->getUser(),
+                $actionUrl,
+                $timezone
+            )
         );
 
         if ($createFormView->isXmlHttpRequest()) {
