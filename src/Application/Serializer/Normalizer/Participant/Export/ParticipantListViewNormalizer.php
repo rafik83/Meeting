@@ -74,7 +74,14 @@ class ParticipantListViewNormalizer implements NormalizerInterface
         }
 
         foreach ($participantListView->dayColumns as $key => $dayColumn) {
-            $firstLine[$key] = $this->convertCharset($dayColumn);
+            $firstLine[$key] = $this->convertCharset(
+                $this->translator->trans(
+                    'admin.participant.export.fields.day_checkin',
+                    ['%date%' => $dayColumn],
+                    null,
+                    $participantListView->locale
+                )
+            );
         }
 
         foreach ($participantListView->productColumns as $key => $productColumn) {

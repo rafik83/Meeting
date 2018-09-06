@@ -80,6 +80,9 @@ class ExportQueryHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $event;
 
+    /** @var ObjectProphecy */
+    private $day;
+
     public function setUp()
     {
         $this->participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
@@ -89,6 +92,14 @@ class ExportQueryHandlerTest extends TestCase
 
         $this->event = $this->prophesize(Event::class);
         $this->event->getFallback()->willReturn('en');
+
+        $this->day = $this->prophesize(Event\Day::class);
+        $this->event->getDays()->willReturn([$this->day->reveal()]);
+
+        $this->day->getId()->willReturn(123);
+        $dateTime = new \DateTime('2018-10-10 10:00:00.000');
+        $this->day->getBegin()->willReturn($dateTime);
+
         $this->participant1 = $this->prophesize(Participant::class);
         $this->participant2 = $this->prophesize(Participant::class);
         $this->participant3 = $this->prophesize(Participant::class);
@@ -219,6 +230,9 @@ class ExportQueryHandlerTest extends TestCase
                 $view1->reveal(),
                 $view2->reveal(),
                 $view3->reveal(),
+            ],
+            [
+                'day_123' => '10/10/2018',
             ],
             [
                 'AZERTY1' => 'text',
