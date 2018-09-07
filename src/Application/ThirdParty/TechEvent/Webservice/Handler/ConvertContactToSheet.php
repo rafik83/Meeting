@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler;
 
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Data\Type as DataType;
+use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer\ContactNormalizer;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -33,14 +33,19 @@ class ConvertContactToSheet
     /** @var ConvertToParticipantHandler */
     private $convertToParticipantHandler;
 
+    /** @var ContactNormalizer */
+    private $contactNormalizer;
+
     public function __construct(
         ExtraDataRepositoryInterface $userEventExtraDataRepository,
         ConvertToParticipantHandler $convertToParticipantHandler,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        ContactNormalizer $contactNormalizer
     ) {
         $this->userEventExtraDataRepository = $userEventExtraDataRepository;
         $this->dateTime = $dateTime;
         $this->convertToParticipantHandler = $convertToParticipantHandler;
+        $this->contactNormalizer = $contactNormalizer;
     }
 
     public function handle(
@@ -49,25 +54,26 @@ class ConvertContactToSheet
         TemplateData $registrationTemplate,
         TemplateData $sheetTemplate,
         array $contact,
-        array $mapping
+        array $eventConfiguration
     ): void {
         $registrationTemplate->clear();
         $sheetTemplate->clear();
 
-        // Normalize data
+        $contact = $this->contactNormalizer->normalize($contact, $eventConfiguration['normalize'] ?? []);
+        $dataIndexedByTag = $this->getDataIndexedByTag($contact, $eventConfiguration['mapping'] ?? []);
 
-        $participant = $this->convertToParticipantHandler->handle(new ConvertToParticipant(
-            $event,
-            $type,
-            $contact[DataType::EMAIL],
-            $event->getFallback(),
-            [
-                // prepare data indexed by tag via the mapping, but before, need to be normalized
-            ],
-            $registrationTemplate,
-            $sheetTemplate,
-            ExtraDataType::IMPORTED_FROM_TECH_EVENT
-        ));
+        $participant = $this->convertToParticipantHandler->handle(
+            new ConvertToParticipant(
+                $event,
+                $type,
+                $contact[DataType::EMAIL],
+                $event->getFallback(),
+                $dataIndexedByTag,
+                $registrationTemplate,
+                $sheetTemplate,
+                ExtraDataType::IMPORTED_FROM_TECH_EVENT
+            )
+        );
 
         if ($participant instanceof Participant) {
             $this->userEventExtraDataRepository->add(
@@ -80,5 +86,18 @@ class ConvertContactToSheet
                 )
             );
         }
+    }
+
+    private function getDataIndexedByTag(array $contact, array $mapping): array
+    {
+        $dataIndexedByTag = [];
+
+        foreach ($mapping as $key => $tag) {
+            if (isset($contact[$key])) {
+                $dataIndexedByTag[$tag] = $contact[$key];
+            }
+        }
+
+        return $dataIndexedByTag;
     }
 }
