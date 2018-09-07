@@ -26,6 +26,7 @@ class ImportSheetsHandler
 
     /** @var TemplateDataFactory */
     private $templateDataFactory;
+
     /** @var ConvertContactToSheet */
     private $convertContactToSheet;
 
@@ -63,7 +64,14 @@ class ImportSheetsHandler
         $sheetTemplate = $this->templateDataFactory->createSheetTemplateFromType($type, null);
 
         foreach ($contacts as $contact) {
-            $this->convertContactToSheet->handle($event, $type, $registrationTemplate, $sheetTemplate, $contact);
+            $this->convertContactToSheet->handle(
+                $event,
+                $type,
+                $registrationTemplate,
+                $sheetTemplate,
+                $contact,
+                $eventConfiguration
+            );
         }
     }
 }

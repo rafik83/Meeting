@@ -48,10 +48,13 @@ class ConvertContactToSheet
         Type $type,
         TemplateData $registrationTemplate,
         TemplateData $sheetTemplate,
-        array $contact
+        array $contact,
+        array $mapping
     ): void {
         $registrationTemplate->clear();
         $sheetTemplate->clear();
+
+        // Normalize data
 
         $participant = $this->convertToParticipantHandler->handle(new ConvertToParticipant(
             $event,
@@ -59,9 +62,7 @@ class ConvertContactToSheet
             $contact[DataType::EMAIL],
             $event->getFallback(),
             [
-                Tag::SHEET_TITLE => $contact[DataType::SHEET_TITLE] ?? null,
-                Tag::PARTICIPANT_FIRSTNAME => $contact[DataType::FIRST_NAME] ?? null,
-                Tag::PARTICIPANT_LASTNAME  => $contact[DataType::LAST_NAME] ?? null,
+                // prepare data indexed by tag via the mapping, but before, need to be normalized
             ],
             $registrationTemplate,
             $sheetTemplate,
