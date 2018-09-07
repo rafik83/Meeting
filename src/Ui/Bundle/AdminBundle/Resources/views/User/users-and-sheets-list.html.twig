@@ -79,6 +79,13 @@
                                 </span>
                             {% endif %}
 
+                            {% if userEventSheetListView.isVisio %}
+                                {% set tooltip = userEventSheetListView.visioTested ? 'test_performed' : 'test_not_performed' %}
+                                <span class="label label-info">
+                                    <i class="glyphicon glyphicon glyphicon-facetime-video" data-toggle="tooltip" data-placement="top" title="{{ ('admin.sheet.user.' ~ tooltip)|trans }}"></i>
+                                </span>
+                            {% endif %}
+
                             {% if not userEventSheetListView.attend %}
                                 <span class="label label-danger">{{ 'event.sheet.attend.cancel'|trans }}</span>
                             {% endif %}

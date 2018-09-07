@@ -43,4 +43,6 @@ final class Type
      * Protected key to encrypt / decrypt files for this user in the event
      */
     public const PROTECTED_KEY = 'protected_key';
+
+    public const VISIO_TESTED = 'visio_tested';
 }
