@@ -88,3 +88,12 @@ body {
   color: $color-highlighted;
   font-family: OpenSans, Helvetica, sans-serif;
 }
+
+i {
+  &.glyphicon {
+    font-family: 'Glyphicons Halflings' !important;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+  }
+}

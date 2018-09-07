@@ -1,0 +1,76 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block content %}
+<section class="main">
+    <header>
+        <h1>
+            {{ 'event.visio.test'|trans }}
+        </h1>
+    </header>
+
+    <div class="main__container">
+        <div class="video-conference-test text-center"
+             data-token="{{ videoConferenceView.token }}"
+             data-session-id="{{ videoConferenceView.sessionId }}"
+             data-api-key="{{ videoConferenceView.apiKey }}"
+             data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
+             data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
+             data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
+             data-error-audio-not-supported="{{ 'meeting.video.test.error.audio-not-supported'|trans }}"
+             data-error-video-not-supported="{{ 'meeting.video.test.error.video-not-supported'|trans }}"
+             data-error-network-api="{{ 'meeting.video.test.error.network.api'|trans }}"
+             data-error-network-media="{{ 'meeting.video.test.error.network.media'|trans }}"
+             data-error-network-messaging="{{ 'meeting.video.test.error.network.messaging'|trans }}"
+             data-error-network-logging="{{ 'meeting.video.test.error.network.logging'|trans }}"
+             data-error-quality-low="{{ 'meeting.video.test.error.mos.quality-low'|trans }}"
+             data-error-quality-test="{{ 'meeting.video.test.error.quality'|trans }}"
+             data-error-connectivity-test="{{ 'meeting.video.test.error.connectivity'|trans }}"
+        >
+            <div data-spinner style="display: none"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>
+
+            <p data-loading><i class="glyphicon glyphicon-refresh spin"></i> Loading...</p>
+            <p><a href="#" class="btn btn-primary" data-start-button style="display: none">Start the visio test</a></p>
+
+            <div>
+                <table class="table">
+                    <tr data-result-network>
+                        <td class="col-md-2">
+                            <div class="show" data-label-icon><i class="glyphicon glyphicon-globe icon-center text-xl"></i></div>
+                        </td>
+                        <td class="col-md-2"><h2>Network</h2></td>
+                        <td data-comment></td>
+                    </tr>
+
+                    <tr data-result-video>
+                        <td>
+                            <div class="show" data-label-icon><i class="glyphicon glyphicon-facetime-video icon-center text-xl"></i></div>
+                        </td>
+                        <td><h2>Video</h2></td>
+                        <td data-comment></td>
+                    </tr>
+
+                    <tr data-result-audio>
+                        <td>
+                            <div class="show" data-label-icon><i class="icon-Conference icon-center text-xl"></i></div>
+                        </td>
+                        <td><h2>Audio</h2></td>
+                        <td data-comment></td>
+                    </tr>
+
+                    <tr data-result-screensharing>
+                        <td>
+                            <div class="show" data-label-icon><i class="glyphicon glyphicon-share icon-center text-xl"></i></div>
+                        </td>
+                        <td><h2>Screen sharing</h2></td>
+                        <td data-comment></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="layout-container"></div>
+            <div class="publisher-container"></div>
+            <div class="video-helper"></div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -45,7 +45,7 @@ class TestNetworkSessionAction
         }
 
         return $this->engine->renderResponse(
-            'EventBundle:Visio/Test:testNetworkAudioVideo.html.twig', [
+            'EventBundle:VideoConference:testNetworkAudioVideo.html.twig', [
                 'event' => $eventDomain->getEvent(),
                 'videoConferenceView' => $videoConferenceView,
             ]
