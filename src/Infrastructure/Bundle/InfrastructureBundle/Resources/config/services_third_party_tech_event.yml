@@ -17,3 +17,8 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.event.extra_parameter_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ImportSheetsHandler'
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\TechEvent\PrepareImportSheetsCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\PrepareImportSheetsHandler'
+        tags:
+            - { name: console.command }

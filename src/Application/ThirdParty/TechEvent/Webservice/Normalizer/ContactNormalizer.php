@@ -26,6 +26,10 @@ class ContactNormalizer
         $contactsNormalized = [];
 
         foreach ($contact as $key => $contactData) {
+            if (\is_array($contactData)) {
+                continue;
+            }
+
             $contactData = trim($contactData);
 
             if (isset($normalizerMapping[$key])) {
