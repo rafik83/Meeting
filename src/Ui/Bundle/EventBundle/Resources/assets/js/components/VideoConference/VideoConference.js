@@ -43,11 +43,9 @@ function VideoConference(element) {
   this.toggleAudioElement = element.querySelector('#toggle-audio');
   this.toggleVideoElement = element.querySelector('#toggle-video');
 
-  // if (!window.opener) {
-  //   endMeetingButton.classList.add('hide');
-  // } else {
-  endMeetingButton.addEventListener('click', this.disconnect.bind(this));
-  // }
+  if (endMeetingButton) {
+      endMeetingButton.addEventListener('click', this.disconnect.bind(this));
+  }
 
   this.layout = openTokLayout.initLayoutContainer(this.layoutContainer).layout;
 
@@ -247,7 +245,7 @@ VideoConference.prototype.preScreenshare = function () {
       localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, '1');
       this.screenshare();
     }.bind(this), function(error) {
-      console.log('Installation fail : ' + error);
+      alert('Installation fail : ' + error);
       localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, '0');
     });
 
@@ -389,6 +387,10 @@ VideoConference.prototype.isChrome = function () {
  * @param callback
  */
 VideoConference.prototype.isChromeExtensionInstall = function (callback) {
+  if (!chrome || !chrome.runtime) {
+      callback(false);
+  }
+
   chrome.runtime.sendMessage(
     CHROME_EXTENSION_ID,
     { type: 'isInstalled' },

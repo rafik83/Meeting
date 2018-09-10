@@ -1,7 +1,8 @@
 'use strict';
 
-var OTNetworkTest = require('opentok-network-test-js').default;
+var TokBoxNetworkTest = require('opentok-network-test-js').default;
 var tokbox = require('@opentok/client');
+var VideoConference = require('./VideoConference');
 
 /**
  * @constructor
@@ -25,10 +26,10 @@ function VideoConferenceTest(element) {
     this.labelTestInProgress = element.getAttribute('data-label-test-in-progress');
     this.labelTestSuccessful = element.getAttribute('data-label-test-successful');
     this.labelQuality = element.getAttribute('data-label-quality');
+    this.networkApiError = element.getAttribute('data-error-network-api');
 
     this.audioNotSupportedError = element.getAttribute('data-error-audio-not-supported');
     this.videoNotSupportedError = element.getAttribute('data-error-video-not-supported');
-    this.networkApiError = element.getAttribute('data-error-network-api');
     this.networkMediaError = element.getAttribute('data-error-network-media');
     this.networkMessagingError = element.getAttribute('data-error-network-messaging');
     this.networkLoggingError = element.getAttribute('data-error-network-logging');
@@ -40,6 +41,7 @@ function VideoConferenceTest(element) {
     this.startButton.addEventListener('click', this.start.bind(this));
     this.startButton.style.display = 'inline';
 
+    this.videoConferencePreview = element.querySelector('.video-conference-preview');
     this.loading = element.querySelector('[data-loading]');
     this.loading.style.display = 'none';
 }
@@ -60,7 +62,7 @@ VideoConferenceTest.prototype.start = function() {
     this.spinner.style.display = 'block';
     this.startButton.style.display = 'none';
 
-    var otNetworkTest = new OTNetworkTest(tokbox, {
+    var tokBoxNetworkTestInstance = new TokBoxNetworkTest(tokbox, {
         apiKey: this.apiKey,
         sessionId: this.sessionId,
         token: this.token
@@ -68,7 +70,7 @@ VideoConferenceTest.prototype.start = function() {
 
     this.updateResult(this.resultNetwork, this.labelTestInProgress);
 
-    otNetworkTest.testConnectivity().then(function (results) {
+    tokBoxNetworkTestInstance.testConnectivity().then(function (results) {
         if (!results.success) {
             this.updateResult(this.resultNetwork, this.networkApiError, 'error');
             this.end();
@@ -82,7 +84,7 @@ VideoConferenceTest.prototype.start = function() {
 
         var callbackCount = 0;
 
-        otNetworkTest.testQuality(function updateCallback(stats) {
+        tokBoxNetworkTestInstance.testQuality(function updateCallback(stats) {
             callbackCount++;
             var dots = '';
             for (var i=0; i<=callbackCount; i++) {
@@ -93,7 +95,20 @@ VideoConferenceTest.prototype.start = function() {
         }.bind(this)).then(function (results) {
             this.updateAudioVideoResult(this.resultAudio, results.audio);
             this.updateAudioVideoResult(this.resultVideo, results.video);
-            this.end();
+            tokBoxNetworkTestInstance.stop();
+
+            tokbox.checkScreenSharingCapability(function(response) {
+                if (!response.supported || response.extensionRegistered === false) {
+                    this.updateResult(this.resultScreensharing, 'notCompatibleBrowserMessage!', 'error');
+                } else if (response.extensionInstalled === false && (response.extensionRequired)) {
+                    this.updateResult(this.resultScreensharing, 'installScreenSharingExtensionMessage!', 'error');
+                } else {
+                    this.updateResult(this.resultScreensharing, this.labelTestSuccessful, 'success');
+                }
+
+                this.end();
+            }.bind(this));
+
         }.bind(this)).catch(function (error) {
             alert('Quality test error');
             console.log('Quality test error', error);
@@ -112,6 +127,8 @@ VideoConferenceTest.prototype.updateAudioVideoResult = function(element, result)
 
 VideoConferenceTest.prototype.end = function() {
     this.spinner.style.display = 'none';
+    this.videoConferencePreview.style.display = 'block';
+    new VideoConference(this.videoConferencePreview);
 };
 
 module.exports = VideoConferenceTest;
