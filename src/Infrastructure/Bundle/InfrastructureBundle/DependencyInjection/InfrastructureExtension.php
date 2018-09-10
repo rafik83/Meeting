@@ -55,6 +55,7 @@ class InfrastructureExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('services_third_party_tech_event.yml');
         $loader->load('services_third_party_leni.yml');
         $loader->load('services_third_party_vianeo.yml');
         $loader->load('services_third_party_jenkins.yml');

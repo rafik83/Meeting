@@ -14,6 +14,10 @@ class BooleanConverter implements ConverterInterface
 {
     public static function convert(string $data): bool
     {
-        return true;
+        if (!$data) {
+            return false;
+        }
+
+        return (bool)$data;
     }
 }

@@ -14,6 +14,6 @@ class TelephoneConverter implements ConverterInterface
 {
     public static function convert(string $data): string
     {
-        return '';
+        return sprintf('+33%s', substr($data, 1));
     }
 }

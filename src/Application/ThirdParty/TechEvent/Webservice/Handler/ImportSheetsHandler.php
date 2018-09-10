@@ -45,7 +45,7 @@ class ImportSheetsHandler
     public function handle(Event $event, array $eventConfiguration): void
     {
         $endpoint = $eventConfiguration['endpoint'] ?? null;
-        $pIdAuth = $eventConfiguration['pIdAuth'] ?? null;
+        $pIdAuth = $eventConfiguration['pidAuth'] ?? null;
         $typeId = $eventConfiguration['type'] ?? null;
 
         if (null === $endpoint || null === $pIdAuth || null === $typeId) {

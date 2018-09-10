@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\BooleanConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\CountryConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\GenderConverter;
-use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\SeparatorConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\TelephoneConverter;
 
 class ContactNormalizer
@@ -27,6 +26,8 @@ class ContactNormalizer
         $contactsNormalized = [];
 
         foreach ($contact as $key => $contactData) {
+            $contactData = trim($contactData);
+
             if (isset($normalizerMapping[$key])) {
                 $contactsNormalized[$key] = $this->convert($contactData, $normalizerMapping[$key]);
 
@@ -44,14 +45,12 @@ class ContactNormalizer
         switch ($normalizer) {
             case 'boolean':
                 return BooleanConverter::convert($dataToConvert);
-            case 'country':
-                return CountryConverter::convert($dataToConvert);
             case 'gender':
                 return GenderConverter::convert($dataToConvert);
             case 'telephone':
                 return TelephoneConverter::convert($dataToConvert);
-            case 'separator':
-                return SeparatorConverter::convert($dataToConvert);
+            case 'country':
+                return CountryConverter::convert($dataToConvert);
             default:
                 return $dataToConvert;
         }

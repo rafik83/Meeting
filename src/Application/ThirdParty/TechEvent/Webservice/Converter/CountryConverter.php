@@ -14,6 +14,6 @@ class CountryConverter implements ConverterInterface
 {
     public static function convert(string $data): string
     {
-        return '';
+        return strtolower($data);
     }
 }

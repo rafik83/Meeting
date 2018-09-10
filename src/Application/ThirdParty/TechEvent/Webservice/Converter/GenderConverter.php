@@ -14,6 +14,6 @@ class GenderConverter implements ConverterInterface
 {
     public static function convert(string $data): string
     {
-        return '';
+        return 'M' === $data ? 'man' : 'woman';
     }
 }

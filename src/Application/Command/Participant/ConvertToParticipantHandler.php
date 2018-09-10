@@ -134,16 +134,8 @@ class ConvertToParticipantHandler
             return false;
         }
 
-        if (null === $this->userEventExtraDataRepository->getExtraDataForEventNameAndUser(
-                $event,
-                $extraDataType,
-                $user
-            )
-        ) {
-            return false;
-        }
-
-        return true;
+        return null !== $this->userEventExtraDataRepository
+                ->getExtraDataForEventNameAndUser($event, $extraDataType, $user);
     }
 
     /**

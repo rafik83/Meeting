@@ -1,0 +1,19 @@
+services:
+    Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer\ContactNormalizer: ~
+    Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ConvertContactToSheet:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
+            - '@datetime'
+            - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer\ContactNormalizer'
+    Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ImportSheetsHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Client\WSClient'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ConvertContactToSheet'
+    Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\PrepareImportSheetsHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.event.extra_parameter_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ImportSheetsHandler'
