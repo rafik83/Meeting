@@ -15,13 +15,17 @@ function VideoConferenceTest(element) {
     this.sessionId = element.getAttribute('data-session-id');
     this.apiKey = element.getAttribute('data-api-key');
 
+    this.results = element.querySelector('[data-results]');
     this.spinner = element.querySelector('[data-spinner]');
     this.resultNetwork = element.querySelector('[data-result-network]');
     this.resultVideo = element.querySelector('[data-result-video]');
     this.resultAudio = element.querySelector('[data-result-audio]');
     this.resultScreensharing = element.querySelector('[data-result-screensharing]');
 
-    // Error translations
+    this.labelTestInProgress = element.getAttribute('data-label-test-in-progress');
+    this.labelTestSuccessful = element.getAttribute('data-label-test-successful');
+    this.labelQuality = element.getAttribute('data-label-quality');
+
     this.audioNotSupportedError = element.getAttribute('data-error-audio-not-supported');
     this.videoNotSupportedError = element.getAttribute('data-error-video-not-supported');
     this.networkApiError = element.getAttribute('data-error-network-api');
@@ -52,6 +56,7 @@ VideoConferenceTest.prototype.updateResult = function(element, comment, status) 
 };
 
 VideoConferenceTest.prototype.start = function() {
+    this.results.style.display = 'block';
     this.spinner.style.display = 'block';
     this.startButton.style.display = 'none';
 
@@ -61,7 +66,7 @@ VideoConferenceTest.prototype.start = function() {
         token: this.token
     });
 
-    this.updateResult(this.resultNetwork, 'Test de la connexion en cours...');
+    this.updateResult(this.resultNetwork, this.labelTestInProgress);
 
     otNetworkTest.testConnectivity().then(function (results) {
         if (!results.success) {
@@ -71,9 +76,9 @@ VideoConferenceTest.prototype.start = function() {
             return;
         }
 
-        this.updateResult(this.resultNetwork, 'Test de la connexion Ok !', 'success');
-        this.updateResult(this.resultAudio, 'Test en cours');
-        this.updateResult(this.resultVideo, 'Test en cours');
+        this.updateResult(this.resultNetwork, this.labelTestSuccessful, 'success');
+        this.updateResult(this.resultAudio, this.labelTestInProgress);
+        this.updateResult(this.resultVideo, this.labelTestInProgress);
 
         var callbackCount = 0;
 
@@ -83,11 +88,11 @@ VideoConferenceTest.prototype.start = function() {
             for (var i=0; i<=callbackCount; i++) {
                 dots += '.';
             }
-            this.updateResult(this.resultAudio, 'Test en cours' + dots);
-            this.updateResult(this.resultVideo, 'Test en cours' + dots);
+            this.updateResult(this.resultAudio, this.labelTestInProgress + dots);
+            this.updateResult(this.resultVideo, this.labelTestInProgress + dots);
         }.bind(this)).then(function (results) {
-            this.updateResult(this.resultAudio, results.audio.supported ? 'Qualité : ' + Math.round(results.audio.mos * 100 / 4.5) + '%' : results.audio.reason, results.audio.supported ? 'success' : 'error');
-            this.updateResult(this.resultVideo, results.video.supported ? 'Qualité : ' + Math.round(results.audio.mos * 100 / 4.5) + '%' : results.video.reason, results.video.supported ? 'success' : 'error');
+            this.updateAudioVideoResult(this.resultAudio, results.audio);
+            this.updateAudioVideoResult(this.resultVideo, results.video);
             this.end();
         }.bind(this)).catch(function (error) {
             alert('Quality test error');
@@ -97,6 +102,12 @@ VideoConferenceTest.prototype.start = function() {
         alert('Connectivity test error');
         console.log('Connectivity test error', error);
     }.bind(this));
+};
+
+VideoConferenceTest.prototype.updateAudioVideoResult = function(element, result) {
+    var comment = result.supported ? this.labelTestSuccessful + ' ' + this.labelQuality + ' ' + Math.round(result.mos * 100 / 4.5) + '%' : result.reason;
+    var status = result.supported ? 'success' : 'error';
+    this.updateResult(element, comment, status);
 };
 
 VideoConferenceTest.prototype.end = function() {

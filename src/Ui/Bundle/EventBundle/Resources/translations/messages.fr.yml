@@ -130,6 +130,16 @@ event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien 
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
 event.visio.agenda_access: 'Cliquez ici pour accéder à votre agenda'
 event.visio.welcome: 'Bienvenue sur %event%'
+event.visio.test.audio: 'Audio'
+event.visio.test.description: 'Lorsque vous y êtes invité, permettez-nous d''utiliser votre appareil photo et votre matériel audio. Ce test durera environ 30 secondes.'
+event.visio.test.loading: 'Merci de patienter...'
+event.visio.test.quality: 'Qualité :'
+event.visio.test.network: 'Réseau'
+event.visio.test.screenSharing: 'Partage d''écran'
+event.visio.test.testInProgress: 'Test en cours'
+event.visio.test.testSuccessful: 'Test réussi !'
+event.visio.test.title: 'Test de votre configuration rendez-vous visio'
+event.visio.test.video: 'Vidéo'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'

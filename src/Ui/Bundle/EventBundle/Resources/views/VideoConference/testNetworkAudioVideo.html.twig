@@ -4,7 +4,7 @@
 <section class="main">
     <header>
         <h1>
-            {{ 'event.visio.test'|trans }}
+            {{ 'event.visio.test.title'|trans }}
         </h1>
     </header>
 
@@ -13,6 +13,10 @@
              data-token="{{ videoConferenceView.token }}"
              data-session-id="{{ videoConferenceView.sessionId }}"
              data-api-key="{{ videoConferenceView.apiKey }}"
+             data-label-test-in-progress="{{ 'event.visio.test.testInProgress'|trans }}"
+             data-label-test-successful="{{ 'event.visio.test.testSuccessful'|trans }}"
+             data-label-quality="{{ 'event.visio.test.quality'|trans }}"
+
              data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
              data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
              data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
@@ -26,18 +30,19 @@
              data-error-quality-test="{{ 'meeting.video.test.error.quality'|trans }}"
              data-error-connectivity-test="{{ 'meeting.video.test.error.connectivity'|trans }}"
         >
+            <p>{{ 'event.visio.test.description'|trans }}</p>
             <div data-spinner style="display: none"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>
 
-            <p data-loading><i class="glyphicon glyphicon-refresh spin"></i> Loading...</p>
+            <p data-loading><i class="glyphicon glyphicon-refresh spin"></i> {{ 'event.visio.test.loading'|trans }}</p>
             <p><a href="#" class="btn btn-primary" data-start-button style="display: none">Start the visio test</a></p>
 
-            <div>
+            <div data-results style="display:none;">
                 <table class="table">
                     <tr data-result-network>
                         <td class="col-md-2">
                             <div class="show" data-label-icon><i class="glyphicon glyphicon-globe icon-center text-xl"></i></div>
                         </td>
-                        <td class="col-md-2"><h2>Network</h2></td>
+                        <td class="col-md-2"><h2>{{ 'event.visio.test.network'|trans }}</h2></td>
                         <td data-comment></td>
                     </tr>
 
@@ -45,7 +50,7 @@
                         <td>
                             <div class="show" data-label-icon><i class="glyphicon glyphicon-facetime-video icon-center text-xl"></i></div>
                         </td>
-                        <td><h2>Video</h2></td>
+                        <td><h2>{{ 'event.visio.test.video'|trans }}</h2></td>
                         <td data-comment></td>
                     </tr>
 
@@ -53,7 +58,7 @@
                         <td>
                             <div class="show" data-label-icon><i class="icon-Conference icon-center text-xl"></i></div>
                         </td>
-                        <td><h2>Audio</h2></td>
+                        <td><h2>{{ 'event.visio.test.audio'|trans }}</h2></td>
                         <td data-comment></td>
                     </tr>
 
@@ -61,15 +66,15 @@
                         <td>
                             <div class="show" data-label-icon><i class="glyphicon glyphicon-share icon-center text-xl"></i></div>
                         </td>
-                        <td><h2>Screen sharing</h2></td>
+                        <td><h2>{{ 'event.visio.test.screenSharing'|trans }}</h2></td>
                         <td data-comment></td>
                     </tr>
                 </table>
             </div>
 
-            <div class="layout-container"></div>
-            <div class="publisher-container"></div>
-            <div class="video-helper"></div>
+            {#<div class="layout-container"></div>#}
+            {#<div class="publisher-container"></div>#}
+            {#<div class="video-helper"></div>#}
         </div>
     </div>
 </section>
