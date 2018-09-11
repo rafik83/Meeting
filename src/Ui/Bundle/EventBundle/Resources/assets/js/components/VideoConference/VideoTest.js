@@ -98,7 +98,7 @@ VideoConferenceTest.prototype.start = function() {
             this.checkScreenSharingCapability();
         }.bind(this));
     }.bind(this)).catch(function(error) {
-        this.updateResult(this.resultNetwork, this.networkApiError, 'error');
+        this.updateResult(this.resultNetwork, this.labelNetworkApiError, 'error');
     }.bind(this));
 };
 
