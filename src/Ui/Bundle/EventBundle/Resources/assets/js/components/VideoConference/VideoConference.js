@@ -20,6 +20,9 @@ function VideoConference(element) {
   this.sessionId = element.getAttribute('data-session-id');
   this.apiKey = element.getAttribute('data-api-key');
   this.participantPresenceAction = element.getAttribute('data-participant-presence-action');
+  this.meetingEndTime = element.getAttribute('data-meeting-end-time');
+  this.meetingStartTime = element.getAttribute('data-meeting-start-time');
+  this.currentTime = element.getAttribute('data-current-time');
 
   this.notCompatibleBrowserMessage = element.getAttribute(
     'data-not-compatible-browser-message'
@@ -36,6 +39,8 @@ function VideoConference(element) {
   this.publisherContainer = element.querySelector('.publisher-container');
   this.layoutContainer = element.querySelector('.layout-container');
   this.helperContainer = element.querySelector('.video-helper');
+  this.timerContainer = element.querySelector('.timer');
+  this.countDownContainer = element.querySelector('.timer span.countdown');
 
   var endMeetingButton = element.querySelector('.end-meeting');
   this.startScreenSharingButton = element.querySelector('#start-screensharing');
@@ -86,6 +91,7 @@ function VideoConference(element) {
   // Init
   this.init();
   this.saveParticipantPresence();
+  this.countDownBeforeEnd();
 }
 
 /**
@@ -430,6 +436,49 @@ VideoConference.prototype.saveParticipantPresence = function() {
     setInterval(function(){
         $.post(_this.participantPresenceAction);
     }, 60000);
+};
+
+VideoConference.prototype.countDownBeforeEnd = function() {
+    var _this = this;
+
+    var totalTime = this.meetingEndTime - this.meetingStartTime;
+    var warningTime = Math.floor(totalTime * 0.8);
+    var remainingTime = this.meetingEndTime - this.currentTime;
+
+    var seconds = Math.floor(remainingTime % 60);
+    var minutes = Math.floor((remainingTime/60) % 60);
+    var hours = Math.floor((remainingTime/(60*60)) % 24);
+
+    if (hours > 0) {
+        minutes += hours * 60;
+    }
+
+    setInterval(function(){
+        if (remainingTime <= 0) {
+            _this.timerContainer.classList.add('warning');
+            _this.countDownContainer.innerHTML = `00:00`;
+
+            return;
+        }
+
+        if (seconds < 10) {
+            seconds = '0' + seconds;
+        }
+
+        _this.countDownContainer.innerHTML = `${minutes}:${seconds}`;
+        _this.currentTime++;
+        remainingTime--;
+        seconds--;
+
+        if ((_this.meetingStartTime + warningTime) > _this.currentTime) {
+            _this.timerContainer.classList.add('warning');
+        }
+
+        if (0 === seconds) {
+            seconds = 59;
+            minutes--;
+        }
+    }, 1000);
 };
 
 module.exports = VideoConference;

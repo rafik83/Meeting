@@ -187,6 +187,7 @@ login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
 meeting.video.end: 'Arrêter le RDV'
 meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video ou annulé le lancement du partage d'écran.\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques ou le lancement du partage d'écran."
+meeting.video.endingAt: "Fin du rendez-vous dans"
 meeting.video.installScreenSharingExtensionMessage: 'Merci d''installer notre extension de partage d''écran.'
 meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
 meeting.video.screenshare: 'Partage d''écran'
