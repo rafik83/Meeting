@@ -10,14 +10,16 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test;
 
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Templating\EngineInterface;
 
 class TestNetworkSessionAction
 {
@@ -27,14 +29,22 @@ class TestNetworkSessionAction
     /** @var EngineInterface */
     private $engine;
 
-    public function __construct(CommandBusInterface $commandBus, EngineInterface $engine)
+    /** @var AuthorizationCheckerAdapterInterface */
+    private $authorizationCheckerAdapter;
+
+    public function __construct(CommandBusInterface $commandBus, EngineInterface $engine, AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter)
     {
         $this->commandBus = $commandBus;
         $this->engine = $engine;
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
     public function __invoke(EventDomain $eventDomain, string $sessionId): Response
     {
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedException();
+        }
+
         try {
             /** @var VideoConferenceView $videoConferenceView */
             $videoConferenceView = $this->commandBus->handle(
@@ -44,11 +54,14 @@ class TestNetworkSessionAction
             throw new NotFoundHttpException('The sessionId is not valid');
         }
 
-        return $this->engine->renderResponse(
-            'EventBundle:VideoConference:testNetworkAudioVideo.html.twig', [
-                'event' => $eventDomain->getEvent(),
-                'videoConferenceView' => $videoConferenceView,
-            ]
+        return new Response(
+            $this->engine->render(
+                'EventBundle:VideoConference:testNetworkAudioVideo.html.twig',
+                [
+                    'event' => $eventDomain->getEvent(),
+                    'videoConferenceView' => $videoConferenceView,
+                ]
+            )
         );
     }
 }
