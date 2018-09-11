@@ -58,7 +58,7 @@ class ContactNormalizerTest extends TestCase
             "ADRESSE1" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
             "CODEPOSTAL" => "16006",
             "VILLE" => "ALGER",
-            "IDPAYS" => "dz",
+            "IDPAYS" => "DZ",
             "EMAIL" => "HAMLETLEE16@HOTMAIL.COM",
             "Secteur_activité" => "A99",
             "Préciser_Activite_Autre" => "TRANSPORT ET LOGISTIQUE",

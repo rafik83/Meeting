@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer;
 
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\BooleanConverter;
-use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\CountryConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\GenderConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\TelephoneConverter;
 
@@ -53,8 +52,6 @@ class ContactNormalizer
                 return GenderConverter::convert($dataToConvert);
             case 'telephone':
                 return TelephoneConverter::convert($dataToConvert);
-            case 'country':
-                return CountryConverter::convert($dataToConvert);
             default:
                 return $dataToConvert;
         }

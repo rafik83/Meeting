@@ -49,6 +49,7 @@ class ConvertContactToSheetTest extends TestCase
             "NOM" => "HAMLAT",
             "PRENOM" => "MOHAMED",
             "TEL" => "0666778877",
+            "GRADE" => "CF",
             "ADRESSE1" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
             "CODEPOSTAL" => "16006",
             "VILLE" => "ALGER",
@@ -70,7 +71,7 @@ class ConvertContactToSheetTest extends TestCase
             'mapping' => [
                 "EMAIL" => "email",
                 "SOCIETE" => "sheet_title",
-                "GRADE" => "tag_",
+                "GRADE" => "tag_sheet_generic_1",
                 "IDCIVILITE" => "participant_gender",
                 "NOM" => "participant_lastname",
                 "PRENOM" => "participant_firstname",
@@ -83,38 +84,39 @@ class ConvertContactToSheetTest extends TestCase
                 "Typologie_société" => "sheet_organization_category",
                 "Nombre_Personnes" => "sheet_staff",
                 "Votre_Fonction" => "participant_position",
-                "Nature_de_votre_société_organisation" => "tag_sheet_generic_58",
-                "RDV_B2B" => "tag_sheet_generic_59"
+                "Nature_de_votre_société_organisation" => "tag_sheet_generic_3",
+                "RDV_B2B" => "tag_sheet_generic_2"
             ],
             'normalize' => [
                 "TEL" => "telephone",
                 "IDCIVILITE" => "gender",
-                "RDV_B2B" => "boolean",
-                "IDPAYS" => "country"
+                "RDV_B2B" => "boolean"
             ]
         ];
 
         $dataIndexedByTag = [
             "email" => "HAMLETLEE16@HOTMAIL.COM",
             "sheet_title" => "TPM",
+            "tag_sheet_generic_1" => "CF",
             "participant_gender" => "man",
             "participant_lastname" => "HAMLAT",
             "participant_firstname" => "MOHAMED",
             "sheet_address" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
             "sheet_zipcode" => "16006",
             "sheet_city" => "ALGER",
-            "sheet_country" => "dz",
+            "sheet_country" => "DZ",
             "sheet_phone" => "+33666778877",
             "sheet_organization_category" => "TP99",
             "sheet_staff" => "T1",
             "participant_position" => "F02",
-            "tag_sheet_generic_58" => "D07",
-            "tag_sheet_generic_59" => false,
+            "tag_sheet_generic_3" => "D07",
+            "tag_sheet_generic_2" => false,
         ];
 
         $resultNormalizer = [
             "IDCONTACT" => "113893672",
             "SOCIETE" => "TPM",
+            "GRADE" => "CF",
             "IDCIVILITE" => "man",
             "NOM" => "HAMLAT",
             "PRENOM" => "MOHAMED",
@@ -122,7 +124,7 @@ class ConvertContactToSheetTest extends TestCase
             "ADRESSE1" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
             "CODEPOSTAL" => "16006",
             "VILLE" => "ALGER",
-            "IDPAYS" => "dz",
+            "IDPAYS" => "DZ",
             "EMAIL" => "HAMLETLEE16@HOTMAIL.COM",
             "Secteur_activité" => "A99",
             "Préciser_Activite_Autre" => "TRANSPORT ET LOGISTIQUE",
