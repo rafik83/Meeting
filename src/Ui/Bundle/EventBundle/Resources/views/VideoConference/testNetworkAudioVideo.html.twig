@@ -16,18 +16,8 @@
          data-label-test-successful="{{ 'event.visio.test.testSuccessful'|trans }}"
          data-label-quality="{{ 'event.visio.test.quality'|trans }}"
          data-error-network-api="{{ 'event.visio.test.error.network.api'|trans }}"
-
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
-         data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
-         data-error-audio-not-supported="{{ 'meeting.video.test.error.audio-not-supported'|trans }}"
-         data-error-video-not-supported="{{ 'meeting.video.test.error.video-not-supported'|trans }}"
-         data-error-network-media="{{ 'meeting.video.test.error.network.media'|trans }}"
-         data-error-network-messaging="{{ 'meeting.video.test.error.network.messaging'|trans }}"
-         data-error-network-logging="{{ 'meeting.video.test.error.network.logging'|trans }}"
-         data-error-quality-low="{{ 'meeting.video.test.error.mos.quality-low'|trans }}"
-         data-error-quality-test="{{ 'meeting.video.test.error.quality'|trans }}"
-         data-error-connectivity-test="{{ 'meeting.video.test.error.connectivity'|trans }}"
     >
         <p>{{ 'event.visio.test.description'|trans }}</p>
 
@@ -48,19 +38,19 @@
                             <td data-comment></td>
                         </tr>
 
-                        <tr data-result-video>
-                            <td>
-                                <div class="show" data-label-icon><i class="glyphicon glyphicon-facetime-video icon-center text-xl"></i></div>
-                            </td>
-                            <td><h2>{{ 'event.visio.test.video'|trans }}</h2></td>
-                            <td data-comment></td>
-                        </tr>
-
                         <tr data-result-audio>
                             <td>
                                 <div class="show" data-label-icon><i class="icon-Conference icon-center text-xl"></i></div>
                             </td>
                             <td><h2>{{ 'event.visio.test.audio'|trans }}</h2></td>
+                            <td data-comment></td>
+                        </tr>
+
+                        <tr data-result-video>
+                            <td>
+                                <div class="show" data-label-icon><i class="glyphicon glyphicon-facetime-video icon-center text-xl"></i></div>
+                            </td>
+                            <td><h2>{{ 'event.visio.test.video'|trans }}</h2></td>
                             <td data-comment></td>
                         </tr>
 

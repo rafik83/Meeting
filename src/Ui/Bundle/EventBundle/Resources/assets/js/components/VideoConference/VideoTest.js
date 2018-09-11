@@ -23,19 +23,12 @@ function VideoConferenceTest(element) {
     this.resultAudio = element.querySelector('[data-result-audio]');
     this.resultScreensharing = element.querySelector('[data-result-screensharing]');
 
+    this.labelNotCompatibleBrowser = element.getAttribute('data-not-compatible-browser-message');
     this.labelTestInProgress = element.getAttribute('data-label-test-in-progress');
     this.labelTestSuccessful = element.getAttribute('data-label-test-successful');
     this.labelQuality = element.getAttribute('data-label-quality');
-    this.networkApiError = element.getAttribute('data-error-network-api');
-
-    this.audioNotSupportedError = element.getAttribute('data-error-audio-not-supported');
-    this.videoNotSupportedError = element.getAttribute('data-error-video-not-supported');
-    this.networkMediaError = element.getAttribute('data-error-network-media');
-    this.networkMessagingError = element.getAttribute('data-error-network-messaging');
-    this.networkLoggingError = element.getAttribute('data-error-network-logging');
-    this.mosQualityLowError = element.getAttribute('data-error-quality-low');
-    this.qualityTestError = element.getAttribute('data-error-quality-test');
-    this.connectivityTestError = element.getAttribute('data-error-connectivity-test');
+    this.labelNetworkApiError = element.getAttribute('data-error-network-api');
+    this.labelInstallScreensharingExtension = element.getAttribute('data-install-screensharing-extension-message');
 
     this.startButton = element.querySelector('[data-start-button]');
     this.startButton.addEventListener('click', this.start.bind(this));
@@ -72,7 +65,7 @@ VideoConferenceTest.prototype.start = function() {
 
     tokBoxNetworkTestInstance.testConnectivity().then(function (results) {
         if (!results.success) {
-            this.updateResult(this.resultNetwork, this.networkApiError, 'error');
+            this.updateResult(this.resultNetwork, this.labelNetworkApiError, 'error');
             this.end();
 
             return;
@@ -92,30 +85,34 @@ VideoConferenceTest.prototype.start = function() {
             }
             this.updateResult(this.resultAudio, this.labelTestInProgress + dots);
             this.updateResult(this.resultVideo, this.labelTestInProgress + dots);
+
         }.bind(this)).then(function (results) {
             this.updateAudioVideoResult(this.resultAudio, results.audio);
             this.updateAudioVideoResult(this.resultVideo, results.video);
             tokBoxNetworkTestInstance.stop();
-
-            tokbox.checkScreenSharingCapability(function(response) {
-                if (!response.supported || response.extensionRegistered === false) {
-                    this.updateResult(this.resultScreensharing, 'notCompatibleBrowserMessage!', 'error');
-                } else if (response.extensionInstalled === false && (response.extensionRequired)) {
-                    this.updateResult(this.resultScreensharing, 'installScreenSharingExtensionMessage!', 'error');
-                } else {
-                    this.updateResult(this.resultScreensharing, this.labelTestSuccessful, 'success');
-                }
-
-                this.end();
-            }.bind(this));
+            this.checkScreenSharingCapability();
 
         }.bind(this)).catch(function (error) {
-            alert('Quality test error');
-            console.log('Quality test error', error);
+            this.updateResult(this.resultAudio, error.description, 'error');
+            this.updateResult(this.resultVideo, '', 'error');
+            this.checkScreenSharingCapability();
         }.bind(this));
     }.bind(this)).catch(function(error) {
-        alert('Connectivity test error');
-        console.log('Connectivity test error', error);
+        this.updateResult(this.resultNetwork, this.networkApiError, 'error');
+    }.bind(this));
+};
+
+VideoConferenceTest.prototype.checkScreenSharingCapability = function() {
+    tokbox.checkScreenSharingCapability(function(response) {
+        if (!response.supported || response.extensionRegistered === false) {
+            this.updateResult(this.resultScreensharing, this.labelNotCompatibleBrowser, 'error');
+        } else if (response.extensionInstalled === false && (response.extensionRequired)) {
+            this.updateResult(this.resultScreensharing, this.labelInstallScreensharingExtension, 'error');
+        } else {
+            this.updateResult(this.resultScreensharing, this.labelTestSuccessful, 'success');
+        }
+
+        this.end();
     }.bind(this));
 };
 
