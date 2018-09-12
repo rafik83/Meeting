@@ -24,11 +24,10 @@ class WSClient
         $this->httpAdapter = $httpAdapter;
     }
 
-    public function getContactsToSynchro(string $endpoint, string $pIdAuth): array
+    public function getContactsToSynchro(string $endpoint): array
     {
         try {
-
-            $response = $this->httpAdapter->post($endpoint, [], ['pIdAuth' => $pIdAuth]);
+            $response = $this->httpAdapter->get($endpoint);
 
             if ($response->statusCode === 200) {
                 $xml = simplexml_load_string($response->body);

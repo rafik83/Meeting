@@ -45,10 +45,9 @@ class ImportSheetsHandler
     public function handle(Event $event, array $eventConfiguration): void
     {
         $endpoint = $eventConfiguration['endpoint'] ?? null;
-        $pIdAuth = $eventConfiguration['pidAuth'] ?? null;
         $typeId = $eventConfiguration['type'] ?? null;
 
-        if (null === $endpoint || null === $pIdAuth || null === $typeId) {
+        if (null === $endpoint || null === $typeId) {
             return;
         }
 
@@ -58,7 +57,7 @@ class ImportSheetsHandler
             return;
         }
 
-        $contacts = $this->WSClient->getContactsToSynchro($endpoint, $pIdAuth);
+        $contacts = $this->WSClient->getContactsToSynchro($endpoint);
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($type, null);
         $sheetTemplate = $this->templateDataFactory->createSheetTemplateFromType($type, null);
