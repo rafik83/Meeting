@@ -441,9 +441,13 @@ VideoConference.prototype.saveParticipantPresence = function() {
 VideoConference.prototype.countDownBeforeEnd = function() {
     var _this = this;
 
-    var totalTime = this.meetingEndTime - this.meetingStartTime;
+    var meetingEndTime = parseInt(this.meetingEndTime);
+    var meetingStartTime = parseInt(this.meetingStartTime);
+    var currentTime = parseInt(this.currentTime);
+
+    var totalTime = meetingEndTime - meetingStartTime;
     var warningTime = Math.floor(totalTime * 0.8);
-    var remainingTime = this.meetingEndTime - this.currentTime;
+    var remainingTime = meetingEndTime - currentTime;
 
     var seconds = Math.floor(remainingTime % 60);
     var minutes = Math.floor((remainingTime/60) % 60);
@@ -470,7 +474,7 @@ VideoConference.prototype.countDownBeforeEnd = function() {
         remainingTime--;
         seconds--;
 
-        if ((_this.meetingStartTime + warningTime) > _this.currentTime) {
+        if (currentTime > meetingStartTime  && (meetingStartTime + warningTime) > currentTime) {
             _this.timerContainer.classList.add('warning');
         }
 
