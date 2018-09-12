@@ -3575,6 +3575,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.participant_info_guesser'
             - '@domain.service.sheets_group.group_name_resolver'
+            - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery }
 

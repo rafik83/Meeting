@@ -265,6 +265,12 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Badge\ShowAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
     #
     # Happening
     #

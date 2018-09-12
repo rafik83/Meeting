@@ -191,6 +191,7 @@ admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.qrcode.notfound: 'Participant inconnu'
 admin.event.qrcode.number_of_available_badge: 'Nombre de badge possible'
+admin.event.qrcode.printBadge: 'Imprimer badge et planning'
 admin.event.qrcode.title: 'Résultat du scan'
 admin.event.registration.template_builder.remove_confirm: 'Confirmez-vous la suppression de cet élément ?'
 admin.event.search_facet.enabled.label: Activé

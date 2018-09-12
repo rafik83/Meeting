@@ -24,12 +24,21 @@ class QRCodeIdentifierView
     /** @var null|string */
     public $sheetTitle;
 
-    public function __construct(string $identifier, string $firstName, string $lastName, ?string $sheetTitle)
-    {
+    /** @var string */
+    public $badgeUrl;
+
+    public function __construct(
+        string $identifier,
+        string $firstName,
+        string $lastName,
+        ?string $sheetTitle,
+        string $badgeUrl
+    ) {
         $this->identifier = $identifier;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->sheetTitle = $sheetTitle;
+        $this->badgeUrl = $badgeUrl;
     }
 
     public function setSheetTitle(?string $sheetTitle): void
