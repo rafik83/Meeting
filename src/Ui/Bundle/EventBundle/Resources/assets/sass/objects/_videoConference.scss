@@ -1,0 +1,128 @@
+.video-conference {
+  .timer-container {
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    .timer {
+      color: #fff;
+      font-size: 16px;
+      line-height: 22px;
+      font-family: OpenSans, Helvetica, sans-serif;
+      padding: 10px;
+    }
+    .warning {
+      font-weight: bold;
+      color: red;
+    }
+  }
+  .buttons-container {
+    z-index: 9999;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    .btn {
+      position: relative;
+      font-size: 15px;
+      line-height: 22px;
+      font-family: OpenSans, Helvetica, sans-serif;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 18px;
+      transition: background .2s ease-in-out;
+      display: inline-block;
+      background-color: #fff;
+      &.screensharing {
+        margin-right: 10px;
+      }
+      &.btn-off, &.btn-off:hover, &.btn-off:focus {
+        background-color: $bg-fail-color;
+      }
+      i {
+        &.glyphicon {
+          color: #000;
+          font-family: 'Glyphicons Halflings' !important;
+          font-style: normal;
+          font-weight: normal;
+          line-height: 1;
+        }
+        &.icon-center {
+          margin: auto !important;
+        }
+      }
+    }
+  }
+
+  .start-fullscreen-button {
+    z-index: 9999;
+    position: absolute !important;
+    margin-left: auto;
+    margin-right: auto;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+    > i {
+      color: #000;
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: normal;
+      line-height: 1;
+    }
+  }
+
+  .video-helper {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 4px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .layout-container {
+    background-color: #000000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    > * {
+      transition-property: all;
+      transition-duration: 0.2s;
+    }
+
+    > div {
+      background-color: #000;
+      display: inline-block;
+    }
+
+    .subscriber-info {
+      position: absolute;
+      bottom: 0;
+      background: #000;
+      opacity: 0.8;
+      padding: 10px;
+      width: 100%;
+    }
+  }
+
+  .publisher-container {
+    width: 300px;
+    height: 200px;
+    float: right;
+    margin: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .publisher-container {
+      width: 150px;
+      height: 100px;
+      margin: 10px;
+    }
+  }
+}
