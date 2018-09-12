@@ -29,10 +29,12 @@ class ContactNormalizer
                 continue;
             }
 
-            $contactData = trim($contactData);
-
             if (isset($normalizerMapping[$key])) {
-                $contactsNormalized[$key] = $this->convert($contactData, $normalizerMapping[$key]);
+                $contactsNormalized[$key] = $this->convert(
+                    $contactData,
+                    $normalizerMapping[$key],
+                    $contact['IDPAYS'] ?? ''
+                );
 
                 continue;
             }
@@ -43,7 +45,7 @@ class ContactNormalizer
         return $contactsNormalized;
     }
 
-    private function convert(string $dataToConvert, string $normalizer)
+    private function convert(string $dataToConvert, string $normalizer, string $country)
     {
         switch ($normalizer) {
             case 'boolean':
@@ -51,7 +53,7 @@ class ContactNormalizer
             case 'gender':
                 return GenderConverter::convert($dataToConvert);
             case 'telephone':
-                return TelephoneConverter::convert($dataToConvert);
+                return TelephoneConverter::convert($dataToConvert, $country);
             default:
                 return $dataToConvert;
         }
