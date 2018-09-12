@@ -32,8 +32,11 @@ class TestNetworkSessionAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    public function __construct(CommandBusInterface $commandBus, EngineInterface $engine, AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter)
-    {
+    public function __construct(
+        CommandBusInterface $commandBus,
+        EngineInterface $engine,
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
+    ) {
         $this->commandBus = $commandBus;
         $this->engine = $engine;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;

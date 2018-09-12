@@ -54,7 +54,7 @@ services:
         arguments:
             - '@adapter.video_conference_adapter'
             - '@adapter.router'
-
+            - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\TestNetworkSessionAction:
         arguments:
