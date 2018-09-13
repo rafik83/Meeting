@@ -31,7 +31,7 @@ function VideoConferenceTest(element) {
     this.labelNetworkApiError = element.getAttribute('data-error-network-api');
     this.labelInstallScreensharingExtension = element.getAttribute('data-install-screensharing-extension-message');
 
-    this.visioTestedUrl = element.getAttribute('data-visio_tested_url');
+    this.visioTestedUrl = element.getAttribute('data-visio-tested-url');
 
     this.startButton = element.querySelector('[data-start-button]');
     this.startButton.addEventListener('click', this.start.bind(this));
