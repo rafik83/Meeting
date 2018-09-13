@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Event;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
 use Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery;
 use Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQueryHandler;
@@ -51,6 +52,8 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
         $participant3->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
 
         $event = $this->prophesize(Event::class);
+        $event->getId()->shouldBeCalled()->willReturn(1337);
+
         $queryBus = $this->prophesize(QueryBusInterface::class);
         $scanRepository = $this->prophesize(ScanRepositoryInterface::class);
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
@@ -113,6 +116,18 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null);
 
+        $router = $this->prophesize(RouterInterface::class);
+        $router
+            ->generate('admin_user_event_badge', ['user' => 1, 'event' => 1337])
+            ->shouldBeCalled()
+            ->willReturn('/event-1337/url/to/badge/1')
+        ;
+        $router
+            ->generate('admin_user_event_badge', ['user' => 2, 'event' => 1337])
+            ->shouldBeCalled()
+            ->willReturn('/event-1337/url/to/badge/2')
+        ;
+
         $handler = new GetQRCodeIdentifiersByEventQueryHandler(
             $queryBus->reveal(),
             $participantRepository->reveal(),
@@ -120,12 +135,13 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
             $participantInfoGuesser->reveal(),
             $groupNameResolver->reveal(),
             $typeNameResolver->reveal(),
-            $date
+            $date,
+            $router->reveal()
         );
 
         $expectedResult = new QRCodeIdentifierListView([
-            1 => new QRCodeIdentifierView('00000010000002', 'Kylian', 'Mbappe', 'France', 'Groupe B'),
-            2 => new QRCodeIdentifierView('00000020000003', 'Luka', 'Modric', 'Croatie', 'Groupe B'),
+            1 => new QRCodeIdentifierView('00000010000002', 'Kylian', 'Mbappe', 'France', 'Groupe B', null, '/event-1337/url/to/badge/1'),
+            2 => new QRCodeIdentifierView('00000020000003', 'Luka', 'Modric', 'Croatie', 'Groupe B', null, '/event-1337/url/to/badge/2'),
         ]);
         $result = $handler->handle(new GetQRCodeIdentifiersByEventQuery($event->reveal(), 'fr'));
 

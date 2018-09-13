@@ -62,27 +62,30 @@ class QrCode extends Component {
 
     renderResult(result) {
         return (
-            <div className="row">
-                <div className="col-md-12">
-                    <div className="panel panel-default">
-                        <div className="panel-heading">
-                            <i className="glyphicon glyphicon-qrcode"></i> {this.element.dataset.title}
-                        </div>
-                        <div className="panel-body text-center h1 dashboard-total-orders">
-                            {result &&
-                                <div>
-                                    {result.firstName} {result.lastName}
-                                    <br/>
-                                    {result.sheetTitle}
-                                </div>
-                            }
+            <div>
+                <div className="panel panel-default">
+                    <div className="panel-heading">
+                        <i className="glyphicon glyphicon-qrcode"></i> {this.element.dataset.title}
+                    </div>
+                    <div className="panel-body text-center h1 dashboard-total-orders">
+                        {result &&
+                            <div>
+                                {result.firstName} {result.lastName}
+                                <br/>
+                                {result.sheetTitle}
+                            </div>
+                        }
 
-                            {!result && <div className={'alert alert-danger'}>{this.element.dataset.notFound}</div>}
+                        {!result && <div className={'alert alert-danger'}>{this.element.dataset.notFound}</div>}
 
-                            <button className={"btn btn-primary btn-lg"} onClick={this.handleReset}>
-                                {this.element.dataset.close}
-                            </button>
-                        </div>
+                        {result &&
+                            <a className={"btn btn-default btn-lg mg-right"} href={result.badgeUrl} target={"_blank"}>
+                                {this.element.dataset.printBadge}
+                            </a>
+                        }
+                        <a className={"btn btn-primary btn-lg"} onClick={this.handleReset}>
+                            {this.element.dataset.close}
+                        </a>
                     </div>
                 </div>
             </div>

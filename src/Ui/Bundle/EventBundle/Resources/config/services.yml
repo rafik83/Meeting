@@ -526,6 +526,7 @@ services:
         public: false
         arguments:
             - '@sonata.intl.templating.helper.locale'
+            - '@markdown'
         tags:
             - { name: 'twig.extension' }
 

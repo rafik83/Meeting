@@ -261,7 +261,14 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction:
         arguments:
+            - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Badge\ShowAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
@@ -439,6 +446,7 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QRCodeReaderAction:
         arguments:
+            - '@adapter.authorization_checker'
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
