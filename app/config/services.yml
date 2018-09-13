@@ -60,4 +60,5 @@ imports:
     - { resource: services/admin/actions.yml }
     - { resource: services/infrastructure/symfony_commands.yml }
     - { resource: services/infrastructure/listeners.yml }
-    - { resource: services/infrastructure/validators.yml}
+    - { resource: services/infrastructure/validators.yml }
+    - { resource: services/third_party/services_tech_event.yml }
