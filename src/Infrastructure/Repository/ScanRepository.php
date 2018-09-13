@@ -61,6 +61,34 @@ class ScanRepository implements ScanRepositoryInterface
                 ->getSingleScalarResult() > 0;
     }
 
+    public function getScanDateByUserAndEvent(User $user, Event $event, \DateTimeInterface $dateTime): ?Scan
+    {
+        $begin = (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTime(0, 0, 0);
+
+        $end = (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTime(23, 59, 59);
+
+        return
+            $this->entityManager->createQueryBuilder()
+                ->select('scan')
+                ->from(Scan::class, 'scan')
+                ->where('scan.event = :event')
+                ->andWhere('scan.user = :user')
+                ->andWhere('scan.scannedAt >= :startAt and scan.scannedAt <= :endAt')
+                ->setParameters([
+                    'event' => $event,
+                    'user' => $user,
+                    'startAt' => $begin,
+                    'endAt' => $end,
+                ])
+                ->getQuery()
+                ->setMaxResults(1)
+                ->getOneOrNullResult();
+    }
+
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool
     {
         $begin = (new \DateTime())

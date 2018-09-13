@@ -22,7 +22,9 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
+use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
@@ -50,9 +52,12 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $queryBus = $this->prophesize(QueryBusInterface::class);
+        $scanRepository = $this->prophesize(ScanRepositoryInterface::class);
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $groupNameResolver = $this->prophesize(GroupNameResolver::class);
+        $typeNameResolver = $this->prophesize(TypeNameResolver::class);
+        $date = new \DateTime();
 
         $queryBus->handle(new QRCodeIdentifierQuery($event->reveal(), $user1->reveal()))
             ->shouldBeCalled()
@@ -91,17 +96,36 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
         $groupNameResolver->resolve($event->reveal(), $user2->reveal(), [$sheet->reveal()])
             ->shouldBeCalled()
             ->willReturn('Croatie');
+        $sheets = [$sheet->reveal()];
+        $typeNameResolver->resolveWithPreloadedSheets($sheets, 'fr')
+            ->shouldBeCalled()
+            ->willReturn('Groupe A');
+
+        $typeNameResolver->resolveWithPreloadedSheets($sheets, 'fr')
+            ->shouldBeCalled()
+            ->willReturn('Groupe B');
+
+        $scanRepository->getScanDateByUserAndEvent($user1->reveal(), $event->reveal(), $date)
+            ->shouldBeCalled()
+            ->willReturn(null);
+
+        $scanRepository->getScanDateByUserAndEvent($user2->reveal(), $event->reveal(), $date)
+            ->shouldBeCalled()
+            ->willReturn(null);
 
         $handler = new GetQRCodeIdentifiersByEventQueryHandler(
             $queryBus->reveal(),
             $participantRepository->reveal(),
+            $scanRepository->reveal(),
             $participantInfoGuesser->reveal(),
-            $groupNameResolver->reveal()
+            $groupNameResolver->reveal(),
+            $typeNameResolver->reveal(),
+            $date
         );
 
         $expectedResult = new QRCodeIdentifierListView([
-            1 => new QRCodeIdentifierView('00000010000002', 'Kylian', 'Mbappe', 'France'),
-            2 => new QRCodeIdentifierView('00000020000003', 'Luka', 'Modric', 'Croatie'),
+            1 => new QRCodeIdentifierView('00000010000002', 'Kylian', 'Mbappe', 'France', 'Groupe B'),
+            2 => new QRCodeIdentifierView('00000020000003', 'Luka', 'Modric', 'Croatie', 'Groupe B'),
         ]);
         $result = $handler->handle(new GetQRCodeIdentifiersByEventQuery($event->reveal(), 'fr'));
 

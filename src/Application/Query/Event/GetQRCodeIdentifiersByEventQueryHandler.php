@@ -16,9 +16,12 @@ use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
 use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierListView;
 use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
+use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class GetQRCodeIdentifiersByEventQueryHandler
@@ -29,22 +32,37 @@ class GetQRCodeIdentifiersByEventQueryHandler
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
+    /** @var ScanRepositoryInterface */
+    private $scanRepository;
+
     /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
     /** @var GroupNameResolver */
     private $groupNameResolver;
 
+    /** @var TypeNameResolver */
+    private $typeNameResolver;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     public function __construct(
         QueryBusInterface $queryBus,
         ParticipantRepositoryInterface $participantRepository,
+        ScanRepositoryInterface $scanRepository,
         ParticipantInfoGuesser $participantInfoGuesser,
-        GroupNameResolver $groupNameResolver
+        GroupNameResolver $groupNameResolver,
+        TypeNameResolver $typeNameResolver,
+        \DateTimeInterface $dateTime
     ) {
         $this->queryBus = $queryBus;
         $this->participantRepository = $participantRepository;
+        $this->scanRepository = $scanRepository;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->groupNameResolver = $groupNameResolver;
+        $this->typeNameResolver = $typeNameResolver;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(GetQRCodeIdentifiersByEventQuery $query): QRCodeIdentifierListView
@@ -55,6 +73,7 @@ class GetQRCodeIdentifiersByEventQueryHandler
 
         foreach ($participants as $participant) {
             $user = $participant->getUser();
+            $sheets = [$participant->getSheet()];
 
             if (\array_key_exists($user->getId(), $qrCodePayloadListView)) {
                 $qrCodePayloadListView[$user->getId()]->setSheetTitle(
@@ -65,16 +84,23 @@ class GetQRCodeIdentifiersByEventQueryHandler
                     )
                 );
 
+                $qrCodePayloadListView[$user->getId()]->setParticipationType(
+                    $this->typeNameResolver->resolveWithPreloadedSheets($sheets, $query->locale)
+                );
+
                 continue;
             }
 
             $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $query->locale);
+            $scan = $this->scanRepository->getScanDateByUserAndEvent($user, $query->event, $this->dateTime);
 
             $qrCodePayloadListView[$user->getId()] = new QRCodeIdentifierView(
                 $this->getQrCodeIdentifier($query->event, $user),
                 $participantInfo['participant_firstname'] ?? '',
                 $participantInfo['participant_lastname'] ?? '',
-                $this->getSheetTitle($query->event, $user, [$participant->getSheet()])
+                $this->getSheetTitle($query->event, $user, [$participant->getSheet()]),
+                $this->typeNameResolver->resolveWithPreloadedSheets($sheets, $query->locale),
+                $scan instanceof User\Event\Scan ? $scan->getScannedAt() : null
             );
 
             $userSheets[$user->getId()][] = $participant->getSheet();

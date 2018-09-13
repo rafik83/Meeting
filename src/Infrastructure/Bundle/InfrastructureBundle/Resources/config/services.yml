@@ -3573,8 +3573,11 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
             - '@template.participant_info_guesser'
             - '@domain.service.sheets_group.group_name_resolver'
+            - '@domain.service.sheets_group.type_name_resolver'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery }
 
