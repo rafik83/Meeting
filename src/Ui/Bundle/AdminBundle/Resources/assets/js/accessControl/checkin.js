@@ -107,9 +107,9 @@ class Checkin extends Component {
                                     }
                                 </td>
                                 <td>
-                                    <a href={'/'} target={'_blank'}
+                                    <a href={participant.badgeUrl} target={'_blank'}
                                         className={'btn btn-info'}>
-                                        Imprimer le badge
+                                        {this.element.dataset.printBadge}
                                     </a>
                                 </td>
                             </tr>
