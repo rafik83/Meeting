@@ -62,6 +62,11 @@ services:
             - '@templating'
             - '@adapter.authorization_checker'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\VisioTestedAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
     #
     # Agenda
     #

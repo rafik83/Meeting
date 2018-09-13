@@ -909,6 +909,11 @@ event_video_conference_network_test:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\TestNetworkSessionAction }
 
+event_video_conference_network_tested:
+    path: /video/network/tested
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\VisioTestedAction }
+
 #
 # Badge
 #

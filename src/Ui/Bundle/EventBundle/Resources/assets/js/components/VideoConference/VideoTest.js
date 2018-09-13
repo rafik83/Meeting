@@ -1,8 +1,9 @@
 'use strict';
 
-var TokBoxNetworkTest = require('opentok-network-test-js').default;
-var tokbox = require('@opentok/client');
-var VideoConference = require('./VideoConference');
+var $ = require('jquery'),
+    TokBoxNetworkTest = require('opentok-network-test-js').default,
+    tokbox = require('@opentok/client'),
+    VideoConference = require('./VideoConference');
 
 /**
  * @constructor
@@ -29,6 +30,8 @@ function VideoConferenceTest(element) {
     this.labelQuality = element.getAttribute('data-label-quality');
     this.labelNetworkApiError = element.getAttribute('data-error-network-api');
     this.labelInstallScreensharingExtension = element.getAttribute('data-install-screensharing-extension-message');
+
+    this.visioTestedUrl = element.getAttribute('data-visio_tested_url');
 
     this.startButton = element.querySelector('[data-start-button]');
     this.startButton.addEventListener('click', this.start.bind(this));
@@ -126,6 +129,7 @@ VideoConferenceTest.prototype.end = function() {
     this.spinner.style.display = 'none';
     this.videoConferencePreview.style.display = 'block';
     new VideoConference(this.videoConferencePreview);
+    $.post(this.visioTestedUrl);
 };
 
 module.exports = VideoConferenceTest;
