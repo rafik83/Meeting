@@ -11,7 +11,10 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventSheetsListView;
 
@@ -20,9 +23,15 @@ class ElasticDocumentsToUserEventListViewsTransformer
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    public function __construct(SheetRepositoryInterface $sheetRepository)
-    {
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
+
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        ExtraDataRepositoryInterface $extraDataRepository
+    ) {
         $this->sheetRepository = $sheetRepository;
+        $this->extraDataRepository = $extraDataRepository;
     }
 
     /**
@@ -53,11 +62,19 @@ class ElasticDocumentsToUserEventListViewsTransformer
         foreach ($documents as $document) {
             $data = $document->getData();
 
+            $extraData = $this->extraDataRepository->getExtraDataForEventIdNameAndUserId(
+                $data['eventId'],
+                Type::VISIO_TESTED,
+                $data['userId']
+            );
+
             $userEventSheetsListViews = [];
 
             foreach ($data['sheets'] as $sheetData) {
                 if (isset($sheetsIndexedById[$sheetData['id']])) {
                     $sheet = $sheetsIndexedById[$sheetData['id']];
+                    $participant = $sheet->getParticipantByUserId($data['userId']);
+
                     $userEventSheetsListViews[] = new UserEventSheetsListView(
                         $sheet->getId(),
                         $sheet->getTitle(),
@@ -75,7 +92,9 @@ class ElasticDocumentsToUserEventListViewsTransformer
                         $sheet->isInCatalog(),
                         $sheet->getFollowerName(),
                         $sheet->getCommercialStatus(),
-                        $sheet->getCommercialStatusLabel()
+                        $sheet->getCommercialStatusLabel(),
+                        $participant ? $participant->isVisio() : false,
+                        $extraData instanceof ExtraData ? (bool)$extraData->getValue() : false
                     );
                 }
             }
