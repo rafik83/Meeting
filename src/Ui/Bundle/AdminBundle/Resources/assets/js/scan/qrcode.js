@@ -79,7 +79,7 @@ class QrCode extends Component {
                         {!result && <div className={'alert alert-danger'}>{this.element.dataset.notFound}</div>}
 
                         {result &&
-                            <a className={"btn btn-default btn-lg"} href={result.badgeUrl} target={"_blank"}>
+                            <a className={"btn btn-default btn-lg mg-right"} href={result.badgeUrl} target={"_blank"}>
                                 {this.element.dataset.printBadge}
                             </a>
                         }
