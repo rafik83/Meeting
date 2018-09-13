@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Badge;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
+use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,8 +55,8 @@ class ShowAction
                 'AdminBundle:User/Event/Badge:show.html.twig',
                 [
                     'event' => $event,
-                    'userBadgeByEventView' => $this->queryBus->handle(
-                        new GetUserBadgeByEventQuery($event, $user)
+                    'userBadgeAndPlanningByEventView' => $this->queryBus->handle(
+                        new GetUserBadgeAndPlanningByEventQuery($event, $user)
                     ),
                 ]
             )

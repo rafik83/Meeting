@@ -6446,6 +6446,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery }
 
+    Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@planning.formatter.participant_planning_formatter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQuery }
+
     Proximum\Vimeet\Application\Query\Badge\GetBadgeConfigurationByTypeQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
