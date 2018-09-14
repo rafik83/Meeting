@@ -26,7 +26,7 @@ class GroupNameResolver
         $this->sheetRepository = $sheetRepository;
     }
 
-    public function resolve(Event $event, User $user, array $sheets = []): string
+    public function resolve(Event $event, User $user, array $sheets = []): ?string
     {
         if (empty($sheets)) {
             $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);

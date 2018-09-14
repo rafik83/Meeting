@@ -98,4 +98,14 @@ class GroupNameResolverTest extends TestCase
 
         $this->assertEquals('Proximum', $this->resolver->resolve($this->event, $this->user, [$sheet->reveal()]));
     }
+
+    public function testSheetTitleIsNull()
+    {
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getGroup()->willReturn(null);
+        $sheet->getTitle()->willReturn(null);
+        $this->sheetRepository->getSheetsByUserAndEvent($this->user, $this->event)->shouldNotBeCalled();
+
+        $this->assertNull($this->resolver->resolve($this->event, $this->user, [$sheet->reveal()]));
+    }
 }
