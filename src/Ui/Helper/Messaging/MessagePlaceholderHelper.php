@@ -86,6 +86,7 @@ class MessagePlaceholderHelper
             Compose::TAG_SHEET_PLANNING          => 'admin.messaging.message.compose.tags.sheetPlanning',
             Compose::TAG_CTA_AGENDA_CONFIRMATION => 'admin.messaging.message.compose.tags.cta.agendaConfirmation',
             Compose::TAG_CTA_EBADGE => 'admin.messaging.message.compose.tags.cta.ebadge',
+            Compose::TAG_CTA_TEST_VISIO_CONFIGURATION => 'admin.messaging.message.compose.tags.cta.test_visio_configuration',
         ];
     }
 

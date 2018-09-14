@@ -5822,6 +5822,7 @@ services:
             - '@query.sheet.planning.sheet_planning_view_query_handler'
             - '@domain.messaging.substitutions.agenda_confirmation_ctasubstitution'
             - '@Proximum\Vimeet\Domain\Messaging\Substitutions\DownloadEBadgeCTASubstitution'
+            - '@Proximum\Vimeet\Domain\Messaging\Substitutions\TestVisioConfigurationCTASubstitution'
 
     domain.messaging.emailing.substitution_resolver:
         class: Proximum\Vimeet\Domain\Messaging\Emailing\SubstitutionResolver
@@ -6212,6 +6213,10 @@ services:
             - '@adapter.event_url_generator'
             - '@domain.token.user_event_token_generator'
 
+    Proximum\Vimeet\Domain\Messaging\Substitutions\TestVisioConfigurationCTASubstitution:
+        arguments:
+            - '@adapter.templating_adapter'
+            - '@adapter.event_url_generator'
     #
     # Group
     #
