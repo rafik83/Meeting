@@ -20,6 +20,7 @@ class Compose
     // CTA
     public const TAG_CTA_AGENDA_CONFIRMATION = '%agendaConfirmationCTA%';
     public const TAG_CTA_EBADGE = '%downloadEbadgeCTA%';
+    public const TAG_CTA_TEST_VISIO_CONFIGURATION = '%testVisioConfigurationCTA%';
 
     public const LINK_SHEET                 = '%sheetLink%';
     public const LINK_PACKAGE               = '%packageLink%';
@@ -52,6 +53,7 @@ class Compose
             self::TAG_SHEET_PLANNING,
             self::TAG_CTA_AGENDA_CONFIRMATION,
             self::TAG_CTA_EBADGE,
+            self::TAG_CTA_TEST_VISIO_CONFIGURATION,
         ];
     }
 
