@@ -457,10 +457,11 @@ VideoConference.prototype.countDownBeforeEnd = function() {
         minutes += hours * 60;
     }
 
-    setInterval(function(){
+    var timerInterval = setInterval(function(){
         if (remainingTime <= 0) {
             _this.timerContainer.classList.add('warning');
             _this.countDownContainer.innerHTML = `00:00`;
+            clearInterval(timerInterval);
 
             return;
         }
