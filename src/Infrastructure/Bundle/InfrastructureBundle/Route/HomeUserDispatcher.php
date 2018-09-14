@@ -96,14 +96,14 @@ class HomeUserDispatcher
                 ));
             }
 
-            if ($this->dayGuesser->isItDDay($event) && $this->agendaAccessChecker->allowedToAccess($event)) {
-                return new RedirectResponse($this->router->generate(
-                    'event_agenda',
-                    ['sheet' => $homeDispatchView->getSheet()->getId()]
-                ));
-            }
-
             if ($homeDispatchView->isOneSheet()) {
+                if ($this->dayGuesser->isItDDay($event) && $this->agendaAccessChecker->allowedToAccess($event)) {
+                    return new RedirectResponse($this->router->generate(
+                        'event_agenda',
+                        ['sheet' => $homeDispatchView->getSheet()->getId()]
+                    ));
+                }
+
                 return new RedirectResponse($this->router->generate(
                     'event_sheet_default',
                     ['sheet' => $homeDispatchView->getSheet()->getId()]
