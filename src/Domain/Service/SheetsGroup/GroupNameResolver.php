@@ -14,46 +14,19 @@ use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class GroupNameResolver
 {
-    /**
-     * @var GroupRepositoryInterface
-     */
-    private $groupRepository;
-
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * GroupNameResolver constructor.
-     *
-     * @param GroupRepositoryInterface $groupRepository
-     * @param SheetRepositoryInterface $sheetRepository
-     */
-    public function __construct(GroupRepositoryInterface $groupRepository, SheetRepositoryInterface $sheetRepository)
+    public function __construct(SheetRepositoryInterface $sheetRepository)
     {
-        $this->groupRepository = $groupRepository;
         $this->sheetRepository = $sheetRepository;
     }
 
-    /**
-     * If we found a Group return the group's title
-     * Else we return the sheet title
-     *
-     * @param Event   $event
-     * @param User    $user
-     * @param Sheet[] $sheets - Optional parameters to preload sheets
-     *
-     * @throws SheetNotFoundException
-     *
-     * @return string
-     */
-    public function resolve(Event $event, User $user, array $sheets = [])
+    public function resolve(Event $event, User $user, array $sheets = []): string
     {
         if (empty($sheets)) {
             $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
@@ -76,22 +49,5 @@ class GroupNameResolver
         }
 
         return $sheet->getTitle();
-    }
-
-    /**
-     * @param Event $event
-     * @param User  $user
-     *
-     * @return null|string
-     */
-    private function getGroupByUserAndEvent(Event $event, User $user)
-    {
-        $group = $this->groupRepository->getByUserAndEvent($user, $event);
-
-        if (null !== $group) {
-            return $group->getTitle();
-        }
-
-        return null;
     }
 }

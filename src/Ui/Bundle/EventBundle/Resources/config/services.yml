@@ -640,7 +640,6 @@ services:
     domain.service.sheets_group.group_name_resolver:
         class: Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver
         arguments:
-            - '@repository.sheet.group_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
 
     domain.service.sheets_group.type_name_resolver:
