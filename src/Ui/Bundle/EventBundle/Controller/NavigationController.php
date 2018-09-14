@@ -92,7 +92,7 @@ class NavigationController extends Controller
             'menuView' => $menuView,
             'submenuView' => $submenuView,
             'isShowingRegisterButton' => $isShowingRegisterButton,
-            'isHeaderDisplayedOnMobile' => \in_array($route, [Route::EVENT, Route::LOGIN], true),
+            'isHeaderDisplayedOnMobile' => Route::isHeaderDisplayedOnMobile($route),
             'registrationUrl' => $registrationUrl ?? null,
         ]);
     }

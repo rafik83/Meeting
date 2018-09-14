@@ -27,15 +27,10 @@ final class Route
         'event_sheet_update',
     ];
 
-    public const CATALOG = [
-        'event_catalog_index',
-        'event_catalog_complete_sheet',
-        'event_catalog_sheet_meeting_request',
-    ];
-
-    public const MEETING_REQUEST = [
-        'event_meeting_list_request',
-    ];
+    public const CATALOG_INDEX = 'event_catalog_index';
+    public const CATALOG_VIEW_OTHER_SHEET = 'event_catalog_complete_sheet';
+    public const CATALOG_MEETING_REQUEST = 'event_catalog_sheet_meeting_request';
+    public const MEETING_REQUEST_LIST = 'event_meeting_list_request';
 
     public const PACKAGE = [
         'event_package_step',
@@ -58,96 +53,73 @@ final class Route
         'event_order_summary_total',
     ];
 
-    public const NOTIFICATION = [
-        'event_notification_list',
-    ];
-
     public const AGENDA = [
         'event_agenda',
         'event_agenda_participant',
         'event_unavailability_create',
     ];
 
-    public const PROGRAM = [
-        'happening_program',
-    ];
+    public const PROGRAM = 'happening_program';
+    public const BADGE = 'event_sheet_user_badge';
+    public const NOTIFICATION = 'event_notification_list';
 
-    public const BADGE = [
-        'event_sheet_user_badge',
-    ];
-
-    /**
-     * @param string $route
-     *
-     * @return bool
-     */
-    public static function isSheet($route)
+    public static function isSheet(string $route): bool
     {
         return \in_array($route, self::SHEET, true);
     }
 
-    /**
-     * @param string $route
-     *
-     * @return bool
-     */
-    public static function isPackage($route)
+    public static function isPackage(string $route): bool
     {
         return \in_array($route, array_merge(self::PACKAGE, self::ORDER), true);
     }
 
-    /**
-     * @param string $route
-     *
-     * @return bool
-     */
-    public static function isCatalog($route)
+    public static function isCatalog(string $route): bool
     {
-        return \in_array($route, self::CATALOG, true);
+        return \in_array($route,
+            [
+                self::CATALOG_INDEX,
+                self::CATALOG_VIEW_OTHER_SHEET,
+                self::CATALOG_MEETING_REQUEST,
+            ],
+            true
+        );
     }
 
-    /**
-     * @param string $route
-     *
-     * @return bool
-     */
-    public static function isMeetingRequest($route)
+    public static function isMeetingRequest(string $route): bool
     {
-        return \in_array($route, self::MEETING_REQUEST, true);
+        return self::MEETING_REQUEST_LIST === $route;
     }
 
-    /**
-     * @param string $route
-     *
-     * @return bool
-     */
-    public static function isNotification($route)
+    public static function isNotification(string $route): bool
     {
-        return \in_array($route, self::NOTIFICATION, true);
+        return self::NOTIFICATION === $route;
     }
 
-    /**
-     * @param string $route
-     *
-     * @return bool
-     */
-    public static function isAgenda($route)
+    public static function isAgenda(string $route): bool
     {
         return \in_array($route, self::AGENDA, true);
     }
 
-    /**
-     * @param string $route
-     *
-     * @return bool
-     */
-    public static function isProgram($route)
+    public static function isProgram(string $route): bool
     {
-        return \in_array($route, self::PROGRAM, true);
+        return self::PROGRAM === $route;
     }
 
     public static function isBadge(string $route): bool
     {
-        return \in_array($route, self::BADGE, true);
+        return self::BADGE === $route;
+    }
+
+    public static function isHeaderDisplayedOnMobile(string $route): bool
+    {
+        return !\in_array($route,
+            [
+                self::EXTERNAL_CATALOG,
+                self::CATALOG_INDEX,
+                self::MEETING_REQUEST_LIST,
+                self::BADGE,
+            ],
+            true
+        );
     }
 }
