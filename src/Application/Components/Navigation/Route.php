@@ -12,23 +12,32 @@ namespace Proximum\Vimeet\Application\Components\Navigation;
 
 final class Route
 {
-    const SHEET = [
+    public const EVENT = 'event';
+    public const DEFAULT_EVENT = 'default_event';
+
+    public const EXTERNAL_CATALOG = 'event_catalog_external_index';
+
+    public const LOGIN = 'event_login';
+    public const EVENT_LOGIN_CHECK = 'event_login_check';
+    public const USER_EVENT_AUTHENTICATION_TOKEN_LOGIN = 'vimeet_event_authentication_token_login';
+
+    public const SHEET = [
         'event_sheet_default',
         'event_sheet_locale',
         'event_sheet_update',
     ];
 
-    const CATALOG = [
+    public const CATALOG = [
         'event_catalog_index',
         'event_catalog_complete_sheet',
         'event_catalog_sheet_meeting_request',
     ];
 
-    const MEETING_REQUEST = [
+    public const MEETING_REQUEST = [
         'event_meeting_list_request',
     ];
 
-    const PACKAGE = [
+    public const PACKAGE = [
         'event_package_step',
         'event_package_add_participant',
         'event_package_remove_participant',
@@ -43,27 +52,27 @@ final class Route
         'event_payment_info',
     ];
 
-    const ORDER = [
+    public const ORDER = [
         'event_order_list',
         'event_pro_forma',
         'event_order_summary_total',
     ];
 
-    const NOTIFICATION = [
+    public const NOTIFICATION = [
         'event_notification_list',
     ];
 
-    const AGENDA = [
+    public const AGENDA = [
         'event_agenda',
         'event_agenda_participant',
         'event_unavailability_create',
     ];
 
-    const PROGRAM = [
+    public const PROGRAM = [
         'happening_program',
     ];
 
-    private const BADGE = [
+    public const BADGE = [
         'event_sheet_user_badge',
     ];
 
@@ -74,7 +83,7 @@ final class Route
      */
     public static function isSheet($route)
     {
-        return in_array($route, self::SHEET);
+        return \in_array($route, self::SHEET, true);
     }
 
     /**
@@ -84,7 +93,7 @@ final class Route
      */
     public static function isPackage($route)
     {
-        return in_array($route, self::PACKAGE) || in_array($route, self::ORDER);
+        return \in_array($route, array_merge(self::PACKAGE, self::ORDER), true);
     }
 
     /**
@@ -94,7 +103,7 @@ final class Route
      */
     public static function isCatalog($route)
     {
-        return in_array($route, self::CATALOG);
+        return \in_array($route, self::CATALOG, true);
     }
 
     /**
@@ -104,7 +113,7 @@ final class Route
      */
     public static function isMeetingRequest($route)
     {
-        return in_array($route, self::MEETING_REQUEST);
+        return \in_array($route, self::MEETING_REQUEST, true);
     }
 
     /**
@@ -114,7 +123,7 @@ final class Route
      */
     public static function isNotification($route)
     {
-        return in_array($route, self::NOTIFICATION);
+        return \in_array($route, self::NOTIFICATION, true);
     }
 
     /**
@@ -124,7 +133,7 @@ final class Route
      */
     public static function isAgenda($route)
     {
-        return in_array($route, self::AGENDA);
+        return \in_array($route, self::AGENDA, true);
     }
 
     /**
@@ -134,7 +143,7 @@ final class Route
      */
     public static function isProgram($route)
     {
-        return in_array($route, self::PROGRAM);
+        return \in_array($route, self::PROGRAM, true);
     }
 
     public static function isBadge(string $route): bool

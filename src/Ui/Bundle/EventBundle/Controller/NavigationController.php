@@ -10,17 +10,18 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery;
 use Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\Route;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class NavigationController extends Controller
 {
@@ -44,20 +45,21 @@ class NavigationController extends Controller
         $locale = $request->getLocale();
         $user = $userDomain instanceof UserDomain ? $userDomain->getUser() : null;
 
-        $requestStack    = $this->get('request_stack');
-        $route           = $requestStack->getMasterRequest()->get('_route');
-        $routeParameters = $requestStack->getMasterRequest()->get('_route_params');
+        $masterRequest = $this->get('request_stack')->getMasterRequest();
 
-        if (null === $route) {
-            $route = Route::EVENT;
+        if (null === $masterRequest) {
+            throw new AccessDeniedException('This controller must be used as embedded');
         }
+
+        $route = $masterRequest->get('_route', Route::EVENT);
+        $routeParameters = $masterRequest->get('_route_params');
 
         $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
             new HeaderViewQuery(
                 $eventDomain->getEvent(),
                 $request->getLocale(),
                 $route,
-                null === $routeParameters ? [] : $routeParameters,
+                $routeParameters ?? [],
                 $registration,
                 $sheet,
                 $user
@@ -86,12 +88,12 @@ class NavigationController extends Controller
         $isShowingRegisterButton = Route::EVENT !== $route && null === $user;
 
         return $this->render('EventBundle::Navigation/header.html.twig', [
-            'menuHeaderView'          => $menuHeaderView,
-            'menuView'                => $menuView,
-            'submenuView'             => $submenuView,
+            'menuHeaderView' => $menuHeaderView,
+            'menuView' => $menuView,
+            'submenuView' => $submenuView,
             'isShowingRegisterButton' => $isShowingRegisterButton,
-            'isHeaderDisplayed'       => Route::EVENT === $route || Route::LOGIN === $route,
-            'registrationUrl'         => $registrationUrl ?? null,
+            'isHeaderDisplayedOnMobile' => \in_array($route, [Route::EVENT, Route::LOGIN], true),
+            'registrationUrl' => $registrationUrl ?? null,
         ]);
     }
 }
