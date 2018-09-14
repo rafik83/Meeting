@@ -53,6 +53,7 @@ class Compose
             self::TAG_SHEET_PLANNING,
             self::TAG_CTA_AGENDA_CONFIRMATION,
             self::TAG_CTA_EBADGE,
+            self::TAG_CTA_TEST_VISIO_CONFIGURATION,
         ];
     }
 
