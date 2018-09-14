@@ -55,15 +55,17 @@ class GroupNameResolver
      */
     public function resolve(Event $event, User $user, array $sheets = [])
     {
-        if (null !== $groupTitle = $this->getGroupByUserAndEvent($event, $user)) {
-            return $groupTitle;
-        }
-
         if (empty($sheets)) {
             $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
             if (empty($sheets)) {
                 throw new SheetNotFoundException('Sheet not found.');
+            }
+        }
+
+        foreach ($sheets as $sheet) {
+            if (null !== $sheet->getGroup()) {
+                return $sheet->getGroup()->getTitle();
             }
         }
 

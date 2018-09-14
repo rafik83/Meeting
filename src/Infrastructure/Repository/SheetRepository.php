@@ -246,8 +246,8 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet, participants, type, typeTranslation')
             ->from(Sheet::class, 'sheet', 'sheet.id')
-            ->join('sheet.participants', 'participants')
             ->join('sheet.type', 'type', 'WITH', 'type.event = :event')
+            ->join('sheet.participants', 'participants')
             ->setParameter('event', $event)
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
             ->setParameter('locale', $locale);
@@ -1242,5 +1242,23 @@ class SheetRepository implements SheetRepositoryInterface
                 ->getQuery()
                 ->getSingleScalarResult()
             ) > 0;
+    }
+
+    public function getSheetsEnabledByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participant, user, type, typeTranslation, sheetsGroup')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join('sheet.type', 'type', 'WITH', 'type.event = :event AND sheet.enable = true')
+            ->setParameter('event', $event)
+            ->join('sheet.participants', 'participant')
+            ->leftJoin('sheet.group', 'sheetsGroup')
+            ->join('participant.user', 'user')
+            ->join('type.translations', 'typeTranslation')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

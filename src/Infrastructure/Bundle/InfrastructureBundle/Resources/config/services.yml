@@ -3569,12 +3569,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
 
+
     Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@components.user.user_info_guesser'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
-            - '@template.participant_info_guesser'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@domain.service.sheets_group.type_name_resolver'
             - '@datetime'

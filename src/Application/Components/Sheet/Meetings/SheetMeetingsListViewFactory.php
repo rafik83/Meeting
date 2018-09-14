@@ -63,7 +63,6 @@ class SheetMeetingsListViewFactory
         $this->sheetRepository       = $sheetRepository;
         $this->requestRepository     = $requestRepository;
         $this->meetingRepository     = $meetingRepository;
-        $this->meetingRepository     = $meetingRepository;
         $this->meetingSlotRepository = $meetingSlotRepository;
         $this->sheetInfoGuesser      = $sheetInfoGuesser;
     }

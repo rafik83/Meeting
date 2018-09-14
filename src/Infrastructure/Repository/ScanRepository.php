@@ -61,7 +61,7 @@ class ScanRepository implements ScanRepositoryInterface
                 ->getSingleScalarResult() > 0;
     }
 
-    public function getScanDateByUserAndEvent(User $user, Event $event, \DateTimeInterface $dateTime): ?Scan
+    public function getScanDateByUsersAndEvent(array $users, Event $event, \DateTimeInterface $dateTime): array
     {
         $begin = (new \DateTime())
             ->setTimestamp($dateTime->getTimestamp())
@@ -71,22 +71,29 @@ class ScanRepository implements ScanRepositoryInterface
             ->setTimestamp($dateTime->getTimestamp())
             ->setTime(23, 59, 59);
 
-        return
-            $this->entityManager->createQueryBuilder()
+        /** @var Scan[] $scans */
+        $scans = $this->entityManager->createQueryBuilder()
                 ->select('scan')
                 ->from(Scan::class, 'scan')
                 ->where('scan.event = :event')
-                ->andWhere('scan.user = :user')
+                ->andWhere('scan.user in (:users)')
                 ->andWhere('scan.scannedAt >= :startAt and scan.scannedAt <= :endAt')
                 ->setParameters([
                     'event' => $event,
-                    'user' => $user,
+                    'users' => $users,
                     'startAt' => $begin,
                     'endAt' => $end,
                 ])
                 ->getQuery()
-                ->setMaxResults(1)
-                ->getOneOrNullResult();
+                ->getResult();
+
+        $scansIndexedByUserId = [];
+
+        foreach ($scans as $scan) {
+            $scansIndexedByUserId[$scan->getUser()->getId()] = $scan;
+        }
+
+        return $scansIndexedByUserId;
     }
 
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool
