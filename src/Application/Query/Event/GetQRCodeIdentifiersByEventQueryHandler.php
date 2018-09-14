@@ -103,7 +103,7 @@ class GetQRCodeIdentifiersByEventQueryHandler
                 isset($scansIndexedByUserId[$userId]) ? $scansIndexedByUserId[$userId]->getScannedAt() : null,
                 $this->router->generate('admin_user_event_badge',
                     [
-                        'user' => $user->getId(),
+                        'user' => $userId,
                         'event' => $query->event->getId(),
                     ]
                 )
