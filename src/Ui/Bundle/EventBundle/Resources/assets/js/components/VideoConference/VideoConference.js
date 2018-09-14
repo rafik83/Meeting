@@ -465,23 +465,25 @@ VideoConference.prototype.countDownBeforeEnd = function() {
             return;
         }
 
+        currentTime++;
+        remainingTime--;
+
+        if (currentTime >= (meetingStartTime + warningTime)) {
+            _this.timerContainer.classList.add('warning');
+        }
+
+        if (0 === parseInt(seconds)) {
+            seconds = 59;
+            minutes--;
+        } else {
+            seconds--;
+        }
+
         if (seconds < 10) {
             seconds = '0' + seconds;
         }
 
         _this.countDownContainer.innerHTML = `${minutes}:${seconds}`;
-        _this.currentTime++;
-        remainingTime--;
-        seconds--;
-
-        if (currentTime > meetingStartTime  && (meetingStartTime + warningTime) > currentTime) {
-            _this.timerContainer.classList.add('warning');
-        }
-
-        if (0 === seconds) {
-            seconds = 59;
-            minutes--;
-        }
     }, 1000);
 };
 
