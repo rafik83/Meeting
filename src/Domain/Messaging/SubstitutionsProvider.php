@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\AgendaConfirmationCTASubstitution;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\DownloadEBadgeCTASubstitution;
+use Proximum\Vimeet\Domain\Messaging\Substitutions\TestVisioConfigurationCTASubstitution;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
@@ -54,6 +55,9 @@ class SubstitutionsProvider
     /** @var DownloadEBadgeCTASubstitution */
     private $downloadEBadgeCTASubstitution;
 
+    /** @var TestVisioConfigurationCTASubstitution */
+    private $testVisioConfigurationCTASubstitution;
+
     /**
      * @param EventUrlGeneratorInterface        $eventUrlGenerator                 Event URL generator used to substitute
      *                                                                             event-related link placeholders
@@ -66,6 +70,7 @@ class SubstitutionsProvider
      *                                                                             planning in html format
      * @param AgendaConfirmationCTASubstitution $agendaConfirmationCTASubstitution
      * @param DownloadEBadgeCTASubstitution     $downloadEBadgeCTASubstitution
+     * @param TestVisioConfigurationCTASubstitution $testVisioConfigurationCTASubstitution
      */
     public function __construct(
         EventUrlGeneratorInterface $eventUrlGenerator,
@@ -73,7 +78,8 @@ class SubstitutionsProvider
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         SheetPlanningViewQueryHandler $sheetPlanningViewQueryHandler,
         AgendaConfirmationCTASubstitution $agendaConfirmationCTASubstitution,
-        DownloadEBadgeCTASubstitution $downloadEBadgeCTASubstitution
+        DownloadEBadgeCTASubstitution $downloadEBadgeCTASubstitution,
+        TestVisioConfigurationCTASubstitution $testVisioConfigurationCTASubstitution
     ) {
         $this->eventUrlGenerator                 = $eventUrlGenerator;
         $this->participantInfoGuesser            = $participantInfoGuesser;
@@ -81,6 +87,7 @@ class SubstitutionsProvider
         $this->sheetPlanningViewQueryHandler     = $sheetPlanningViewQueryHandler;
         $this->agendaConfirmationCTASubstitution = $agendaConfirmationCTASubstitution;
         $this->downloadEBadgeCTASubstitution = $downloadEBadgeCTASubstitution;
+        $this->testVisioConfigurationCTASubstitution = $testVisioConfigurationCTASubstitution;
     }
 
     /**
@@ -159,6 +166,8 @@ class SubstitutionsProvider
                 return $this->handleSheetPlanning($sheet, $locale, $recipient);
             case Compose::TAG_CTA_AGENDA_CONFIRMATION:
                 return $this->agendaConfirmationCTASubstitution->getCTA($recipient, $sheet, $locale);
+            case Compose::TAG_CTA_TEST_VISIO_CONFIGURATION:
+                return $this->testVisioConfigurationCTASubstitution->getCTA($sheet, $locale);
             case Compose::LINK_ACTIVACTE_ACCOUNT:
                 return $this->getActivateAccountUrl($recipient, $sheet, $locale);
             case Compose::LINK_AGENDA:

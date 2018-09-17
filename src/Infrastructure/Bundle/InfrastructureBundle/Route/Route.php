@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route;
 
+/**
+ * @deprecated use Application/Components/Navigation/Route.php instead
+ */
 final class Route
 {
     const EVENT = 'event';

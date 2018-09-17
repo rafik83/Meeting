@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\HasRemainingToPay;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -48,6 +49,9 @@ class ParticipantViewQueryHandlerTest extends TestCase
 
     /** @var ObjectProphecy */
     private $productAttributedToParticipantRepository;
+
+    /** @var ObjectProphecy */
+    private $scanRepository;
 
     /** @var ObjectProphecy */
     private $sheet;
@@ -80,7 +84,10 @@ class ParticipantViewQueryHandlerTest extends TestCase
     private $attributableProduct2;
 
     /** @var \DateTimeInterface */
-    private $dateTime;
+    private $dateTime, $dateTime2;
+
+    /** @var ObjectProphecy */
+    private $day, $day2;
 
     public function setUp()
     {
@@ -100,8 +107,16 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $this->sheet->getType()->willReturn($this->type->reveal());
         $this->participant->getUser()->willReturn($this->user->reveal());
         $this->dateTime = new \DateTime('2017-10-09 13:39:34.000');
+        $this->dateTime2 = new \DateTime('2017-10-10 13:39:34.000');
         $this->sheet->getCreatedAt()->willReturn($this->dateTime);
         $this->event->getTimeZone()->willReturn('Europe/Paris');
+        $this->day = $this->prophesize(Event\Day::class);
+        $this->day2 = $this->prophesize(Event\Day::class);
+        $this->day->getId()->willReturn(123);
+        $this->day->getBegin()->willReturn($this->dateTime);
+        $this->day2->getId()->willReturn(124);
+        $this->day2->getBegin()->willReturn($this->dateTime2);
+        $this->event->getDays()->willReturn([$this->day->reveal(), $this->day2->reveal()]);
 
         $this->participantProduct = $this->prophesize(Product::class);
         $this->participant->getParticipantProduct()->willReturn($this->participantProduct->reveal());
@@ -116,6 +131,8 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $this->product2->getId()->willReturn(123457);
         $this->attributableProduct1->getProduct()->willReturn($this->product1->reveal());
         $this->attributableProduct2->getProduct()->willReturn($this->product2->reveal());
+
+        $this->scanRepository = $this->prophesize(ScanRepositoryInterface::class);
     }
 
     public function testHandle(): void
@@ -150,7 +167,6 @@ class ParticipantViewQueryHandlerTest extends TestCase
                 $this->attributableProduct2->reveal(),
             ])
         ;
-
 
         $boolean = $this->prophesize(BooleanObject::class);
         $gender = $this->prophesize(Gender::class);
@@ -191,6 +207,20 @@ class ParticipantViewQueryHandlerTest extends TestCase
             ->willReturn($templateData)
         ;
 
+        $check = $this->prophesize(User\Event\Scan::class);
+        $check->getScannedAt()->willReturn($this->dateTime);
+        $this->scanRepository
+            ->getUserFirstCheckinTodayByEvent($this->user->reveal(), $this->event->reveal(), $this->dateTime)
+            ->shouldBeCalled()
+            ->willReturn($check)
+        ;
+
+        $this->scanRepository
+            ->getUserFirstCheckinTodayByEvent($this->user->reveal(), $this->event->reveal(), $this->dateTime2)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
 
         $query = new ParticipantViewQuery(
             $this->event->reveal(),
@@ -203,7 +233,8 @@ class ParticipantViewQueryHandlerTest extends TestCase
             $this->templateDataFactory->reveal(),
             $this->hasRemainingToPay->reveal(),
             $this->translator->reveal(),
-            $this->productAttributedToParticipantRepository->reveal()
+            $this->productAttributedToParticipantRepository->reveal(),
+            $this->scanRepository->reveal()
         );
 
         $result = $handler->handle($query);
@@ -220,6 +251,10 @@ class ParticipantViewQueryHandlerTest extends TestCase
             false,
             true,
             12345,
+            [
+                'day_123' => '09/10/2017 13:39',
+                'day_124' => null,
+            ],
             [
                 'option_123456' => 123456,
                 'option_123457' => 123457,

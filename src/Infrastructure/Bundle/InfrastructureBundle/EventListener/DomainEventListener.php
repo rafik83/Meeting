@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener;
 
+use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 

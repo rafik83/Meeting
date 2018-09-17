@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\View\Sheet\Planning\SheetPlanningView;
 use Proximum\Vimeet\Domain\Messaging\InvalidMessagePlaceholderException;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\AgendaConfirmationCTASubstitution;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\DownloadEBadgeCTASubstitution;
+use Proximum\Vimeet\Domain\Messaging\Substitutions\TestVisioConfigurationCTASubstitution;
 use Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
@@ -51,6 +52,9 @@ class SubstitutionsProviderTest extends TestCase
     /** @var ObjectProphecy */
     private $downloadEBadgeCTASubstitution;
 
+    /** @var ObjectProphecy */
+    private $testVisioConfigurationCTASubstitution;
+
     public function setUp()
     {
         $this->eventUrlGenerator                 = $this->prophesize(Event\EventUrlGeneratorInterface::class);
@@ -59,6 +63,7 @@ class SubstitutionsProviderTest extends TestCase
         $this->sheetPlanningViewQueryHandler     = $this->prophesize(SheetPlanningViewQueryHandler::class);
         $this->agendaConfirmationCTASubstitution = $this->prophesize(AgendaConfirmationCTASubstitution::class);
         $this->downloadEBadgeCTASubstitution = $this->prophesize(DownloadEBadgeCTASubstitution::class);
+        $this->testVisioConfigurationCTASubstitution = $this->prophesize(TestVisioConfigurationCTASubstitution::class);
 
         $this->substitutionProvider = new SubstitutionsProvider(
             $this->eventUrlGenerator->reveal(),
@@ -66,7 +71,8 @@ class SubstitutionsProviderTest extends TestCase
             $this->activateAccountTokenGenerator->reveal(),
             $this->sheetPlanningViewQueryHandler->reveal(),
             $this->agendaConfirmationCTASubstitution->reveal(),
-            $this->downloadEBadgeCTASubstitution->reveal()
+            $this->downloadEBadgeCTASubstitution->reveal(),
+            $this->testVisioConfigurationCTASubstitution->reveal()
         );
     }
 

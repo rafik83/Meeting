@@ -3569,12 +3569,17 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
 
+
     Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@vimeet_infrastructure.repository.participant_repository'
-            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@components.user.user_info_guesser'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
             - '@domain.service.sheets_group.group_name_resolver'
+            - '@domain.service.sheets_group.type_name_resolver'
+            - '@datetime'
+            - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery }
 
@@ -4553,6 +4558,7 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.user.event.extra_data_repository'
 
     #
     # Command
@@ -5822,6 +5828,7 @@ services:
             - '@query.sheet.planning.sheet_planning_view_query_handler'
             - '@domain.messaging.substitutions.agenda_confirmation_ctasubstitution'
             - '@Proximum\Vimeet\Domain\Messaging\Substitutions\DownloadEBadgeCTASubstitution'
+            - '@Proximum\Vimeet\Domain\Messaging\Substitutions\TestVisioConfigurationCTASubstitution'
 
     domain.messaging.emailing.substitution_resolver:
         class: Proximum\Vimeet\Domain\Messaging\Emailing\SubstitutionResolver
@@ -6212,6 +6219,10 @@ services:
             - '@adapter.event_url_generator'
             - '@domain.token.user_event_token_generator'
 
+    Proximum\Vimeet\Domain\Messaging\Substitutions\TestVisioConfigurationCTASubstitution:
+        arguments:
+            - '@adapter.templating_adapter'
+            - '@adapter.event_url_generator'
     #
     # Group
     #
@@ -6444,6 +6455,13 @@ services:
             - '@components.user.user_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery }
+
+    Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@planning.formatter.participant_planning_formatter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQuery }
 
     Proximum\Vimeet\Application\Query\Badge\GetBadgeConfigurationByTypeQueryHandler:
         arguments:

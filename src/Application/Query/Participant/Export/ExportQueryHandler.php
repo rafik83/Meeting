@@ -58,6 +58,7 @@ class ExportQueryHandler
         $participantViews= [];
 
         $productColumns = $this->prepareProductColumns($exportQuery->event);
+        $dayColumns = $this->prepareDayColumns($exportQuery->event);
 
         foreach ($participants as $participant) {
             if (!isset($typesHandled[$participant->getSheet()->getType()->getId()])) {
@@ -79,6 +80,7 @@ class ExportQueryHandler
         return new ParticipantListView(
             $exportQuery->locale,
             $participantViews,
+            $dayColumns,
             $registrationColumns,
             $productColumns
         );
@@ -122,5 +124,16 @@ class ExportQueryHandler
         }
 
         return $columns;
+    }
+
+    private function prepareDayColumns(Event $event): array
+    {
+        $days = [];
+
+        foreach ($event->getDays() as $day) {
+            $days[sprintf('day_%d', $day->getId())] = $day->getBegin()->format('d/m/Y');
+        }
+
+        return $days;
     }
 }

@@ -41,6 +41,7 @@ class HomeUserDispatcherTest extends TestCase
         $sheet->getId()->willReturn(1);
         $homeDispatchView->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
         $homeDispatchView->isGroup()->shouldBeCalled()->willReturn(false);
+        $homeDispatchView->isOneSheet()->shouldBeCalled()->willReturn(true);
 
         $router->generate('event_agenda', ['sheet' => 1])
             ->shouldBeCalled()

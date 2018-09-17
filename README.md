@@ -106,6 +106,9 @@ You can ignore pre commit hooks with `-n` option: `$ git commit -n`
 
 ### Deployment
 
+`Incenteev\ParameterHandler\ScriptHandler::buildParameters` is not ran on preprod or prod.
+If you need to set new parameters, you need to do it manually on preprod or prod before deploying.
+
 To deploy to preprod and prod, you need to be connected to VPN with this  ~/.ssh/config :
 
         Host vimeet-preprod

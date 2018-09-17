@@ -85,6 +85,7 @@ class VideoConferenceController extends Controller
                 'meeting' => $meeting,
                 'videoConferenceView' => $videoConferenceView,
                 'meetingView' => $meetingView,
+                'currentTime' => $this->get('datetime')->getTimestamp(),
             ]
         );
     }
