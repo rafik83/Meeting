@@ -39,7 +39,7 @@ jobs:
           name: "[test] behat"
           command: |
             docker-compose -p vimeet exec php php bin/console fos:elastica:reset --env=test --no-debug
-            docker-compose -p vimeet exec php php bin/behat --format progress --no-interaction
+            docker-compose -p vimeet exec php php -d memory_limit=-1 bin/behat --format progress --no-interaction
       - save_cache:
           name: "[cache] saving composer"
           key: composer-{{ .Branch }}-{{ checksum "composer.lock" }}
