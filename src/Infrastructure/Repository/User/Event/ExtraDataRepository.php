@@ -127,4 +127,21 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    public function getExtraDataForEventIdNameAndUserId(int $eventId, string $name, int $userId): ?ExtraData
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('extraData')
+            ->from(ExtraData::class, 'extraData')
+            ->where('extraData.event = :event')
+            ->andWhere('extraData.name = :name')
+            ->andWhere('extraData.user = :user')
+            ->setParameter('event', $eventId)
+            ->setParameter('user', $userId)
+            ->setParameter('name', $name)
+            ->orderBy('extraData.updatedAt', 'desc')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

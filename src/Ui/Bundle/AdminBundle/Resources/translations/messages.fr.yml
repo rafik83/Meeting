@@ -866,6 +866,8 @@ admin.sheet.import.button.label: Importer
 admin.sheet.imported.all.label: 'Peu importe'
 admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.isOwner: Propriétaire
+admin.sheet.user.test_not_performed: Test non effectué
+admin.sheet.user.test_performed: Test effectué
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
 admin.sheet.list.filters.label: 'Filtres avancés'

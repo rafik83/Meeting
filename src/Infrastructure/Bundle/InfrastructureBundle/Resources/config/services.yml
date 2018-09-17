@@ -4553,6 +4553,7 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.user.event.extra_data_repository'
 
     #
     # Command

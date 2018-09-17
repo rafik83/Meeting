@@ -576,6 +576,17 @@ class Sheet implements TraceableInterface
         return null;
     }
 
+    public function getParticipantByUserId(int $userId): ?Participant
+    {
+        foreach ($this->participants as $participant) {
+            if ($participant->getUser()->getId() === $userId) {
+                return $participant;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * @param User $user
      *
