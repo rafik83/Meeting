@@ -21,11 +21,15 @@
          data-visio-tested-url="{{ path('event_video_conference_network_tested') }}"
     >
         <p>{{ 'event.visio.test.description'|trans }}</p>
+        <p class="text-center alert alert-danger" data-alert-edge style="display: none">{{ 'event.visio.test.edge'|trans }}</p>
 
-        <div data-spinner style="display: none" class="text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>
 
         <p data-loading class="text-center"><i class="glyphicon glyphicon-refresh spin"></i> {{ 'event.visio.test.loading'|trans }}</p>
         <p class="text-center"><a href="#" class="btn btn-primary" data-start-button style="display: none">{{ 'event.visio.test.start'|trans }}</a></p>
+
+        <div class="progress" data-progress style="display: none">
+            <div class="progress-bar progress-bar-striped active progress-bar-success" role="progressbar" style="width: 0%;"></div>
+        </div>
 
         <div class="row text-center">
             <div class="col-md-6">
@@ -81,7 +85,7 @@
                     <div class="layout-container"></div>
                     <div class="publisher-container"></div>
 
-                    <div class="buttons-container">
+                    <div class="buttons-container" style="display:none;">
                         <button id="toggle-audio" class="btn">
                             <i class="icon-Conference icon-center"></i>
                         </button>

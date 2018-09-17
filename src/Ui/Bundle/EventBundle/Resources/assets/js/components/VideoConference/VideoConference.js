@@ -1,13 +1,15 @@
 'use strict';
 
-var tokbox = require('@opentok/client');
+var TokboxInstance = require('./TokboxInstance').TokboxInstance;
+var CHROME_EXTENSION_ID = require('./TokboxInstance').CHROME_EXTENSION_ID;
 var openTokLayout = require('opentok-layout-js');
+
+var CHROME_EXTENSION_IS_INSTALLED = 'CHROME_EXTENSION_IS_INSTALLED';
 
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
-var CHROME_EXTENSION_ID = 'alpphdcgnkkpafmlhllecaganiekhjcp';
-var CHROME_EXTENSION_IS_INSTALLED = 'CHROME_EXTENSION_IS_INSTALLED';
 var $ = require('jquery');
+
 /**
  * @constructor
  *
@@ -60,9 +62,6 @@ function VideoConference(element) {
     }.bind(this), 20);
   }.bind(this);
 
-  // Custom Events
-  tokbox.registerScreenSharingExtension('chrome', CHROME_EXTENSION_ID, 2);
-
   this.startScreenSharingButton.addEventListener('click', this.preScreenshare.bind(this));
   this.endScreenSharingButton.addEventListener('click', this.endScreenshare.bind(this));
 
@@ -102,14 +101,14 @@ VideoConference.prototype.exitFullscreenHandler = function() {
  * Initialize session and subscribe to new other stream
  */
 VideoConference.prototype.init = function() {
-  if (this.isNotIE() && tokbox.checkSystemRequirements() !== 1) {
+  if (this.isNotIE() && TokboxInstance.checkSystemRequirements() !== 1) {
     alert(this.notCompatibleBrowserMessage);
     return;
   }
 
   // Create Tokbox Session
 
-  this.session = tokbox.initSession(this.apiKey, this.sessionId);
+  this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
   // Session Event Listener
 
@@ -260,7 +259,7 @@ VideoConference.prototype.preScreenshare = function () {
  * Start screensharing
  */
 VideoConference.prototype.screenshare = function() {
-  tokbox.checkScreenSharingCapability(function(response) {
+  TokboxInstance.checkScreenSharingCapability(function(response) {
     if (!response.supported || response.extensionRegistered === false) {
       alert(this.notCompatibleBrowserMessage);
     } else if (response.extensionInstalled === false && (response.extensionRequired)) {
