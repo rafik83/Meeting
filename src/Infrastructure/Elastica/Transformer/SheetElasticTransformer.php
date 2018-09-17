@@ -134,7 +134,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'imported' => $sheet->isImported(),
                     'lastLoginAt' => $sheet->getLastLoginAt() ? $sheet->getLastLoginAt()->format('c') : null,
                     'createdAt' => $sheet->getCreatedAt()->format('c'),
-                    'inCatalog' => $sheet->isInCatalog(),
+                    'inCatalog' => $sheet->isInInternalCatalog(),
                     'inCatalogAt' => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
                     'booleanFilter' => TemplateBooleanFilterIdentifier::getBooleanFilterValues($registrationTemplateData),
                     'filledFilter' => TemplateFilledFilter::getFilledFilterValues($registrationTemplateData, $sheet),
@@ -209,7 +209,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
     private function getSheetContentView(Sheet $sheet): SheetContentView
     {
-        if (!$sheet->isInCatalog()) {
+        if (!$sheet->isInExternalOrInternalCatalog()) {
             return new SheetContentView([], []);
         }
 
@@ -287,7 +287,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
     private function buildKeywords(Sheet $sheet): array
     {
-        if (!$sheet->isInCatalog()) {
+        if (!$sheet->isInExternalOrInternalCatalog()) {
             return [];
         }
 
@@ -393,7 +393,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         TemplateData $data,
         string $objective = Nomenclature::OBJECTIVE_NONE
     ): array {
-        if (!$sheet->isInCatalog()) {
+        if (!$sheet->isInExternalOrInternalCatalog()) {
             return [];
         }
 
@@ -418,7 +418,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
      */
     private function buildAvailableSlots(Sheet $sheet): array
     {
-        if (!$sheet->isInCatalog()) {
+        if (!$sheet->isInInternalCatalog()) {
             return [];
         }
 
