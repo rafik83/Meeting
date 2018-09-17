@@ -581,6 +581,7 @@ admin.participant.export.fields.participant_email: 'Email Participant'
 admin.participant.export.fields.participant_id: 'ID Participant'
 admin.participant.export.fields.participant_type: 'Type Participant'
 admin.participant.export.fields.participation_paid: 'Etat de paiement'
+admin.participant.export.fields.day_checkin: 'Venu %date%'
 admin.participant.export.fields.participation_paid.not_paid: 'Pas payé'
 admin.participant.export.fields.participation_paid.paid: Payé
 admin.participant.export.fields.planning.meeting: '%spotRef% - %sheetMet%'

@@ -105,6 +105,7 @@ services:
             - '@Proximum\Vimeet\Domain\Sheet\HasRemainingToPay'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
 
     #
     # Meeting

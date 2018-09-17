@@ -51,6 +51,9 @@ class ParticipantView
     /** @var int[] of product id => product id */
     public $attributableProducts;
 
+    /** @var string[] */
+    public $daysChecking;
+
     public function __construct(
         int $sheetId,
         string $typeTitle,
@@ -63,6 +66,7 @@ class ParticipantView
         bool $hasHappeningParticipation,
         bool $hasPaidParticipation,
         ?int $participantProductId,
+        array $daysChecking,
         array $attributableProducts,
         array $registrationData
     ) {
@@ -79,5 +83,6 @@ class ParticipantView
         $this->participantProductId = $participantProductId;
         $this->attributableProducts = $attributableProducts;
         $this->registrationData = $registrationData;
+        $this->daysChecking = $daysChecking;
     }
 }
