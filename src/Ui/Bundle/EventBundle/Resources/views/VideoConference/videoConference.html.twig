@@ -14,6 +14,9 @@
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-participant-presence-action="{{ participantPresenceAction }}"
+         data-meeting-start-time="{{ meetingView.begin.timestamp }}"
+         data-meeting-end-time="{{ meetingView.end.timestamp }}"
+         data-current-time="{{ currentTime }}"
     >
         <div class="layout-container"></div>
         <div class="publisher-container"></div>
@@ -30,6 +33,13 @@
                     {% endfor %}
                 </div>
             {% endif %}
+        </div>
+
+        <div class="timer-container">
+            <div class="timer">
+                {{ 'meeting.video.endingAt'|trans }}
+                <span class="countdown"></span>
+            </div>
         </div>
 
         <div class="buttons-container">
