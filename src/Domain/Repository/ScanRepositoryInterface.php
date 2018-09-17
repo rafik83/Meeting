@@ -23,5 +23,10 @@ interface ScanRepositoryInterface
 
     public function isUserCheckinTodayByEvent(User $user, Event $event, \DateTimeInterface $dateTime): bool;
 
+    /**
+     * @return Scan[] indexed by User id
+     */
+    public function getScanDateByUsersAndEvent(array $users, Event $event, \DateTimeInterface $dateTime): array;
+
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool;
 }

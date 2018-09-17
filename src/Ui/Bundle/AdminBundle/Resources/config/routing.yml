@@ -323,6 +323,14 @@ admin_type_badge_configuration:
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\ConfigureAction }
 
+admin_user_event_badge:
+    path: /event/{event}/user/{user}/badge
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Badge\ShowAction }
+
 #
 # Category
 #
