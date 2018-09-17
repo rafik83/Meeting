@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Event;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
 use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierListView;
 use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierView;
@@ -76,12 +77,18 @@ class GetQRCodeIdentifiersByEventQueryHandler
         foreach ($sheets as $sheet) {
             foreach ($sheet->getParticipantsArray() as $participant) {
                 $user = $participant->getUser();
-                $users[$participant->getUser()->getId()] = $user;
-                $userSheets[$user->getId()][] = $sheet;
+                $userId = $user->getId();
+                $users[$userId] = $user;
+                $userSheets[$userId][] = $sheet;
             }
         }
 
-        $scansIndexedByUserId = $this->scanRepository->getScanDateByUsersAndEvent($users, $query->event, $this->dateTime);
+        $scansIndexedByUserId = $this->scanRepository->getScanDateByUsersAndEvent(
+            $users,
+            $query->event,
+            $this->dateTime
+        );
+
         $qrCodePayloadListView = [];
 
         foreach ($users as $user) {
@@ -94,20 +101,25 @@ class GetQRCodeIdentifiersByEventQueryHandler
                 $currentUserSheets
             );
 
-            $qrCodePayloadListView[] = new QRCodeIdentifierView(
-                $this->queryBus->handle(new QRCodeIdentifierQuery($query->event, $user)),
-                $userInfo['firstName'],
-                $userInfo['lastName'],
-                $this->groupNameResolver->resolve($query->event, $user, $currentUserSheets),
-                $this->typeNameResolver->resolveWithPreloadedSheets($currentUserSheets, $query->locale),
-                isset($scansIndexedByUserId[$userId]) ? $scansIndexedByUserId[$userId]->getScannedAt() : null,
-                $this->router->generate('admin_user_event_badge',
-                    [
-                        'user' => $userId,
-                        'event' => $query->event->getId(),
-                    ]
-                )
-            );
+            try {
+                $qrCodePayloadListView[] = new QRCodeIdentifierView(
+                    $this->queryBus->handle(new QRCodeIdentifierQuery($query->event, $user)),
+                    $userInfo['firstName'],
+                    $userInfo['lastName'],
+                    $this->groupNameResolver->resolve($query->event, $user, $currentUserSheets),
+                    $this->typeNameResolver->resolveWithPreloadedSheets($currentUserSheets, $query->locale),
+                    isset($scansIndexedByUserId[$userId]) ? $scansIndexedByUserId[$userId]->getScannedAt() : null,
+                    $this->router->generate(
+                        'admin_user_event_badge',
+                        [
+                            'user' => $userId,
+                            'event' => $query->event->getId(),
+                        ]
+                    )
+                );
+            } catch (SheetNotFoundException $sheetNotFoundException) {
+                continue;
+            }
         }
 
         return new QRCodeIdentifierListView($qrCodePayloadListView);
