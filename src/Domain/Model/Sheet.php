@@ -872,11 +872,27 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @deprecated use isInInternalCatalog
      * @return bool
      */
     public function isInCatalog()
     {
+        return $this->isInInternalCatalog();
+    }
+
+    public function isInInternalCatalog(): bool
+    {
         return $this->inCatalog;
+    }
+
+    public function isInExternalCatalog(): bool
+    {
+        return $this->isAccepted() || $this->isValidated();
+    }
+
+    public function isInExternalOrInternalCatalog(): bool
+    {
+        return $this->isInInternalCatalog() || $this->isInExternalCatalog();
     }
 
     /**

@@ -127,7 +127,8 @@ class SheetElasticTransformerTest extends TestCase
         $sheet->getCommercialStatus()->willReturn(CommercialStatus::STATUS_INTEREST);
         $sheet->countParticipants()->willReturn(2);
         $sheet->isImported()->willReturn(false);
-        $sheet->isInCatalog()->willReturn(true);
+        $sheet->isInInternalCatalog()->willReturn(true);
+        $sheet->isInExternalOrInternalCatalog()->willReturn(true);
         $sheet->attend()->willReturn(true);
         $sheet->hasGroup()->willReturn(true);
         $sheet->hasSpot()->willReturn(true);
