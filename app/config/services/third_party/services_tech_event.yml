@@ -1,0 +1,4 @@
+services:
+    Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Client\WSClient:
+        arguments:
+            - '@adapter.http_adapter'

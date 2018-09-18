@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Twig;
 
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown;
 use Proximum\Vimeet\Ui\Helper\ChoiceListFormatter;
 use Proximum\Vimeet\Ui\Helper\DataFormatter;
 use Sonata\IntlBundle\Templating\Helper\LocaleHelper;
@@ -34,14 +35,18 @@ class AppExtension extends \Twig_Extension
      */
     private $choiceListFormatter;
 
+    /** @var Markdown */
+    private $markdown;
+
     /**
      * @param LocaleHelper $localeHelper
      */
-    public function __construct(LocaleHelper $localeHelper)
+    public function __construct(LocaleHelper $localeHelper, Markdown $markdown)
     {
-        $this->localeHelper        = $localeHelper;
-        $this->dataFormatter       = new DataFormatter($localeHelper);
+        $this->localeHelper = $localeHelper;
+        $this->dataFormatter = new DataFormatter($localeHelper);
         $this->choiceListFormatter = new ChoiceListFormatter();
+        $this->markdown = $markdown;
     }
 
     /**
@@ -59,6 +64,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('boolean_tick', [$this, 'booleanTick'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('currency_symbol', [$this, 'currencySymbol']),
             new \Twig_SimpleFilter('format_amount', [$this, 'formatAmount']),
+            new \Twig_SimpleFilter('markdown_to_html', [$this, 'markdownToHtml'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -180,6 +186,11 @@ class AppExtension extends \Twig_Extension
         $pattern = sprintf(UrlValidator::PATTERN, implode('|', ['http', 'https']));
 
         return (bool) is_string($value) && preg_match($pattern, $value);
+    }
+
+    public function markdownToHtml($value)
+    {
+        return $this->markdown->toHtml($value);
     }
 
     /**

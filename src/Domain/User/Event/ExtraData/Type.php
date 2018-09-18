@@ -40,6 +40,11 @@ final class Type
     const IMPORTED_FROM_COMEXPOSIUM = 'imported_from_comexposium';
 
     /**
+     * User imported from the Tech event Webservice, value of the IDCONTACT
+     */
+    public const IMPORTED_FROM_TECH_EVENT = 'imported_from_tech_event';
+
+    /**
      * Protected key to encrypt / decrypt files for this user in the event
      */
     public const PROTECTED_KEY = 'protected_key';

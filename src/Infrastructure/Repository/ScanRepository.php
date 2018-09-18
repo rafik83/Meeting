@@ -34,6 +34,36 @@ class ScanRepository implements ScanRepositoryInterface
         $this->entityManager->flush($scan);
     }
 
+    public function getUserFirstCheckinTodayByEvent(User $user, Event $event, \DateTimeInterface $dateTime): ?Scan
+    {
+        $begin = (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTime(0, 0, 0);
+
+        $end = (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTime(23, 59, 59);
+
+        return
+            $this->entityManager->createQueryBuilder()
+                ->select('scan')
+                ->from(Scan::class, 'scan')
+                ->where('scan.event = :event')
+                ->andWhere('scan.user = :user')
+                ->andWhere('scan.scannedAt >= :startAt and scan.scannedAt <= :endAt')
+                ->setParameters([
+                    'event' => $event,
+                    'user' => $user,
+                    'startAt' => $begin,
+                    'endAt' => $end,
+                ])
+                ->addOrderBy('scan.createdAt', 'asc')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+    }
+
     public function isUserCheckinTodayByEvent(User $user, Event $event, \DateTimeInterface $dateTime): bool
     {
         $begin = (new \DateTime())
@@ -59,6 +89,41 @@ class ScanRepository implements ScanRepositoryInterface
                 ])
                 ->getQuery()
                 ->getSingleScalarResult() > 0;
+    }
+
+    public function getScanDateByUsersAndEvent(array $users, Event $event, \DateTimeInterface $dateTime): array
+    {
+        $begin = (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTime(0, 0, 0);
+
+        $end = (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTime(23, 59, 59);
+
+        /** @var Scan[] $scans */
+        $scans = $this->entityManager->createQueryBuilder()
+                ->select('scan')
+                ->from(Scan::class, 'scan')
+                ->where('scan.event = :event')
+                ->andWhere('scan.user in (:users)')
+                ->andWhere('scan.scannedAt >= :startAt and scan.scannedAt <= :endAt')
+                ->setParameters([
+                    'event' => $event,
+                    'users' => $users,
+                    'startAt' => $begin,
+                    'endAt' => $end,
+                ])
+                ->getQuery()
+                ->getResult();
+
+        $scansIndexedByUserId = [];
+
+        foreach ($scans as $scan) {
+            $scansIndexedByUserId[$scan->getUser()->getId()] = $scan;
+        }
+
+        return $scansIndexedByUserId;
     }
 
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool

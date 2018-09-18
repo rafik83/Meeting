@@ -19,7 +19,7 @@
     },
     "require": {
         "php": "^7.2",
-        "symfony/symfony": "^3.4.13",
+        "symfony/symfony": "^3.4.15",
         "doctrine/orm": "^2.6.1",
         "doctrine/doctrine-bundle": "~1.6",
         "symfony/swiftmailer-bundle": "^3.1.6",
@@ -59,7 +59,8 @@
         "league/iso3166": "^2.1",
         "defuse/php-encryption": "^2.2",
         "ruflin/elastica": "3.2.3",
-        "endroid/qr-code": "^3.4"
+        "endroid/qr-code": "^3.4",
+        "behat/transliterator": "^1.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0",
@@ -79,25 +80,16 @@
     },
     "scripts": {
         "symfony-scripts": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ],
         "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+            "@symfony-scripts"
         ],
         "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+            "@symfony-scripts"
         ]
     },
     "config": {

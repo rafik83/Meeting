@@ -12,9 +12,11 @@ namespace Proximum\Vimeet\Application\Query\Participant\Export;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\View\Participant\Export\ParticipantView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\HasRemainingToPay;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\BooleanObject;
@@ -38,18 +40,23 @@ class ParticipantViewQueryHandler
     /** @var HasRemainingToPay */
     private $hasRemainingToPay;
 
+    /** @var ScanRepositoryInterface */
+    private $scanRepository;
+
     public function __construct(
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         TemplateDataFactory $templateDataFactory,
         HasRemainingToPay $hasRemainingToPay,
         TranslatorInterface $translator,
-        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
+        ScanRepositoryInterface $scanRepository
     ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->templateDataFactory = $templateDataFactory;
         $this->hasRemainingToPay = $hasRemainingToPay;
         $this->translator = $translator;
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
+        $this->scanRepository = $scanRepository;
     }
 
     public function handle(ParticipantViewQuery $query): ParticipantView
@@ -62,6 +69,7 @@ class ParticipantViewQueryHandler
         ;
 
         $attributableProducts = $this->prepareAttributableProducts($query->participant);
+        $daysChecking = $this->prepareDaysChecking($query->participant, $query->event);
 
         $view = new ParticipantView(
             $query->participant->getSheet()->getId(),
@@ -78,6 +86,7 @@ class ParticipantViewQueryHandler
             ),
             !$this->hasRemainingToPay->isSatisfiedBy($query->participant->getSheet()),
             $participantProductId,
+            $daysChecking,
             $attributableProducts,
             $registrationData
         );
@@ -132,5 +141,18 @@ class ParticipantViewQueryHandler
         }
 
         return $registrationData;
+    }
+
+    private function prepareDaysChecking(Participant $participant, Event $event): array
+    {
+        $days = [];
+
+        foreach ($event->getDays() as $day) {
+            $check = $this->scanRepository->getUserFirstCheckinTodayByEvent($participant->getUser(), $event, $day->getBegin());
+
+            $days[sprintf('day_%d', $day->getId())] = $check !== null ? $check->getScannedAt()->format('d/m/Y H:i') : null;
+        }
+
+        return $days;
     }
 }

@@ -5,18 +5,58 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('assets/js/qrcode.js') }}"></script>
+    <script src="{{ asset('assets/js/checkin.js') }}"></script>
     <script src="{{ asset('assets/js/spool.js') }}"></script>
 {% endblock %}
 
 {% block content %}
     <h1>{{ 'admin.event.access_control'|trans }}</h1>
-    <div
-        id="qrcode"
-        data-scan-endpoint="{{ path('admin_user_event_scan', {'event': event.id}) }}"
-        data-identifiers="{{ identifiers | json_encode }}"
-        data-not-found="{{ 'admin.event.qrcode.notfound'|trans }}"
-        data-close="{{ 'admin.common.close'|trans }}"
-        data-title="{{ 'admin.event.qrcode.title'|trans }}"
-        data-number-of-available-identifiers="{{ 'admin.event.qrcode.number_of_available_badge'|trans }}">
+
+    <div class="template-builder-menu-wrapper">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#scan" aria-controls="blocks" role="tab" data-toggle="tab" aria-expanded="true">
+                    <i class="glyphicon glyphicon-qrcode"></i>
+                    {{ 'admin.event.qrcode.scan_participants'|trans }}
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#search" aria-controls="objects" role="tab" data-toggle="tab" aria-expanded="false">
+                    <i class="glyphicon glyphicon-user"></i>
+                    {{ 'admin.event.qrcode.search'|trans }}
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="scan">
+                <div
+                    id="qrcode"
+                    data-scan-endpoint="{{ path('admin_user_event_scan', {'event': event.id}) }}"
+                    data-identifiers="{{ identifiers | json_encode }}"
+                    data-not-found="{{ 'admin.event.qrcode.notfound'|trans }}"
+                    data-close="{{ 'admin.common.close'|trans }}"
+                    data-title="{{ 'admin.event.qrcode.title'|trans }}"
+                    data-print-badge="{{ 'admin.event.qrcode.printBadge'|trans }}"
+                    data-number-of-available-identifiers="{{ 'admin.event.qrcode.number_of_available_badge'|trans }}">
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="search">
+                <div
+                    id="checkin"
+                    data-sheet="{{ 'admin.event.qrcode.sheet'|trans }}"
+                    data-search="{{ 'admin.event.qrcode.search'|trans }}"
+                    data-search-by-name="{{ 'admin.event.qrcode.search_by_name'|trans }}"
+                    data-type="{{ 'admin.event.qrcode.type'|trans }}"
+                    data-firstname="{{ 'admin.event.qrcode.firstName'|trans }}"
+                    data-lastname="{{ 'admin.event.qrcode.lastName'|trans }}"
+                    data-checkin="{{ 'admin.event.qrcode.checkin'|trans }}"
+                    data-date-checkin="{{ 'admin.event.qrcode.date_checkin'|trans }}"
+                    data-print-badge="{{ 'admin.event.qrcode.printBadge'|trans }}"
+                    data-no-result="{{ 'admin.event.qrcode.no_result'|trans }}">
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -21,6 +21,7 @@ mail.completeProfile.end: 'Cordialement,'
 mail.completeProfile.link: 'Compléter votre profil participant'
 mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
 mail.confirm.agenda.link: 'Confirmer mon agenda'
+mail.confirm.test_visio_configuration.link: 'Tester ma configuration visio'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
 mail.confirmResetPassword.subject: 'Votre mot de passe a bien été changé'
 mail.download.ebadge.link: 'Télécharger mon e-badge'

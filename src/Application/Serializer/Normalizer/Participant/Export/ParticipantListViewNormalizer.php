@@ -73,6 +73,17 @@ class ParticipantListViewNormalizer implements NormalizerInterface
             );
         }
 
+        foreach ($participantListView->dayColumns as $key => $dayColumn) {
+            $firstLine[$key] = $this->convertCharset(
+                $this->translator->trans(
+                    'admin.participant.export.fields.day_checkin',
+                    ['%date%' => $dayColumn],
+                    null,
+                    $participantListView->locale
+                )
+            );
+        }
+
         foreach ($participantListView->productColumns as $key => $productColumn) {
             $firstLine[$key] = $this->convertCharset($productColumn);
         }
@@ -80,6 +91,7 @@ class ParticipantListViewNormalizer implements NormalizerInterface
         foreach ($participantListView->registrationColumns as $key => $registrationColumn) {
             $firstLine[$key] = $this->convertCharset($registrationColumn);
         }
+
 
         $result[] = $firstLine;
 
@@ -146,6 +158,10 @@ class ParticipantListViewNormalizer implements NormalizerInterface
                 )
             ),
         ];
+
+        foreach ($participantView->daysChecking as $dayKey => $checkin) {
+            $data[$dayKey] = $checkin;
+        }
 
         foreach ($participantListView->registrationColumns as $key => $registrationColumn) {
             $data[$key] = isset($participantView->registrationData[$key])

@@ -13,12 +13,12 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Gu
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\User\Event\ActivateAccountTokenByUserAndSheetGuesser;
 use Proximum\Vimeet\Application\Command\User\Event\ActivateAccountTokenByUserAndSheetGuesserHandler;
+use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Event\EventByHostResolver;
 use Proximum\Vimeet\Domain\Exception\Event\EventException;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -146,9 +146,15 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function supports(Request $request): bool
     {
         return
-            \in_array($request->attributes->get('_route'), [Route::LOGIN, Route::USER_EVENT_AUTHENTICATION_TOKEN_LOGIN], true) &&
-            'GET' === $request->getMethod() &&
-            true === (bool) $request->query->has('token');
+            \in_array($request->attributes->get('_route'),
+                [
+                    Route::LOGIN,
+                    Route::USER_EVENT_AUTHENTICATION_TOKEN_LOGIN,
+                ],
+                true
+            )
+            && 'GET' === $request->getMethod()
+            && true === (bool)$request->query->has('token');
     }
 
     public function supportsRememberMe(): bool
