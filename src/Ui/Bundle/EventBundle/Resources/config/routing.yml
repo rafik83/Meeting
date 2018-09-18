@@ -636,13 +636,6 @@ event_package_summary:
         sheet: \d+
     methods: [GET, POST]
 
-event_visio_checkin:
-    path: /sheet/{sheet}/checkin
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction }
-    requirements:
-        sheet: \d+
-    methods: [GET, POST]
-
 event_package_summary_fill_billing_info:
     path: /sheet/{sheet}/package/summary/fill-billing-info
     defaults: { _controller: EventBundle:Package:fillBillingInfo }
@@ -903,6 +896,23 @@ event_video_conference_access_session_test:
         sessionId: .*
     methods: [GET]
     defaults: { _controller: EventBundle:VideoConference:accessSessionVideoTest }
+
+event_video_conference_create_network_test:
+    path: /video/network/test
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\CreateTestNetworkSessionAction }
+
+event_video_conference_network_test:
+    path: /video/network/test/{sessionId}
+    requirements:
+        sessionId: .+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\TestNetworkSessionAction }
+
+event_video_conference_network_tested:
+    path: /video/network/tested
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\VisioTestedAction }
 
 #
 # Badge

@@ -1,13 +1,15 @@
 'use strict';
 
-var tokbox = require('@opentok/client');
+var TokboxInstance = require('./TokboxInstance').TokboxInstance;
+var CHROME_EXTENSION_ID = require('./TokboxInstance').CHROME_EXTENSION_ID;
 var openTokLayout = require('opentok-layout-js');
+
+var CHROME_EXTENSION_IS_INSTALLED = 'CHROME_EXTENSION_IS_INSTALLED';
 
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
-var CHROME_EXTENSION_ID = 'alpphdcgnkkpafmlhllecaganiekhjcp';
-var CHROME_EXTENSION_IS_INSTALLED = 'CHROME_EXTENSION_IS_INSTALLED';
 var $ = require('jquery');
+
 /**
  * @constructor
  *
@@ -48,11 +50,9 @@ function VideoConference(element) {
   this.toggleAudioElement = element.querySelector('#toggle-audio');
   this.toggleVideoElement = element.querySelector('#toggle-video');
 
-  // if (!window.opener) {
-  //   endMeetingButton.classList.add('hide');
-  // } else {
-  endMeetingButton.addEventListener('click', this.disconnect.bind(this));
-  // }
+  if (endMeetingButton) {
+      endMeetingButton.addEventListener('click', this.disconnect.bind(this));
+  }
 
   this.layout = openTokLayout.initLayoutContainer(this.layoutContainer).layout;
 
@@ -66,9 +66,6 @@ function VideoConference(element) {
       this.layout();
     }.bind(this), 20);
   }.bind(this);
-
-  // Custom Events
-  tokbox.registerScreenSharingExtension('chrome', CHROME_EXTENSION_ID, 2);
 
   this.startScreenSharingButton.addEventListener('click', this.preScreenshare.bind(this));
   this.endScreenSharingButton.addEventListener('click', this.endScreenshare.bind(this));
@@ -110,14 +107,14 @@ VideoConference.prototype.exitFullscreenHandler = function() {
  * Initialize session and subscribe to new other stream
  */
 VideoConference.prototype.init = function() {
-  if (this.isNotIE() && tokbox.checkSystemRequirements() !== 1) {
+  if (this.isNotIE() && TokboxInstance.checkSystemRequirements() !== 1) {
     alert(this.notCompatibleBrowserMessage);
     return;
   }
 
   // Create Tokbox Session
 
-  this.session = tokbox.initSession(this.apiKey, this.sessionId);
+  this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
   // Session Event Listener
 
@@ -253,7 +250,7 @@ VideoConference.prototype.preScreenshare = function () {
       localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, '1');
       this.screenshare();
     }.bind(this), function(error) {
-      console.log('Installation fail : ' + error);
+      alert('Installation fail : ' + error);
       localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, '0');
     });
 
@@ -268,7 +265,7 @@ VideoConference.prototype.preScreenshare = function () {
  * Start screensharing
  */
 VideoConference.prototype.screenshare = function() {
-  tokbox.checkScreenSharingCapability(function(response) {
+  TokboxInstance.checkScreenSharingCapability(function(response) {
     if (!response.supported || response.extensionRegistered === false) {
       alert(this.notCompatibleBrowserMessage);
     } else if (response.extensionInstalled === false && (response.extensionRequired)) {
@@ -395,6 +392,10 @@ VideoConference.prototype.isChrome = function () {
  * @param callback
  */
 VideoConference.prototype.isChromeExtensionInstall = function (callback) {
+  if (!chrome || !chrome.runtime) {
+      callback(false);
+  }
+
   chrome.runtime.sendMessage(
     CHROME_EXTENSION_ID,
     { type: 'isInstalled' },

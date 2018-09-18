@@ -1,4 +1,4 @@
-.video-conference {
+.video-conference, .video-conference-preview {
   .timer-container {
     z-index: 9999;
     background: rgba(0, 0, 0, 0.5);
@@ -17,6 +17,7 @@
       color: red;
     }
   }
+
   .buttons-container {
     z-index: 9999;
     position: absolute;
@@ -123,6 +124,28 @@
       width: 150px;
       height: 100px;
       margin: 10px;
+    }
+  }
+}
+
+.video-conference-test {
+  .layout-container {
+    display: none;
+  }
+
+  .video-conference-preview {
+    .buttons-container {
+      position: relative;
+      bottom: unset;
+      right: unset;
+    }
+
+    .publisher-container {
+      width: 100%;
+      height: 300px;
+      background-color: #000000;
+      float: none;
+      margin: 20px auto;
     }
   }
 }

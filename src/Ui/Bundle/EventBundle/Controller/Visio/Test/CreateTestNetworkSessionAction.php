@@ -1,0 +1,61 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test;
+
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+class CreateTestNetworkSessionAction
+{
+    /** @var VideoConferenceAdapterInterface */
+    private $videoConferenceAdapter;
+
+    /** @var RouterInterface */
+    private $router;
+
+    /** @var AuthorizationCheckerAdapterInterface */
+    private $authorizationCheckerAdapter;
+
+    public function __construct(
+        VideoConferenceAdapterInterface $videoConferenceAdapter,
+        RouterInterface $router,
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
+    ) {
+        $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->router = $router;
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
+    }
+
+    /**
+     * Page to create a session to test the video/audio/network quality of the user
+     *
+     * @param EventDomain $eventDomain
+     *
+     * @return RedirectResponse
+     */
+    public function __invoke(EventDomain $eventDomain): RedirectResponse
+    {
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedException();
+        }
+
+        $sessionId = $this->videoConferenceAdapter->createSession();
+
+        return new RedirectResponse($this->router->generate(
+            'event_video_conference_network_test',
+            ['sessionId' => $sessionId]
+        ));
+    }
+}

@@ -2229,6 +2229,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess }
 
+    Proximum\Vimeet\Application\Command\VideoConference\SetVisioTestedHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\SetVisioTested }
+
     command.event.update_event_dates_to_current_date_handler:
         class: Proximum\Vimeet\Application\Command\Event\UpdateEventDatesToCurrentDateHandler
         arguments:

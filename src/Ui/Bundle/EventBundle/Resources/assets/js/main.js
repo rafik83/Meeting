@@ -28,7 +28,8 @@ var $ = require('jquery'),
     VideoConference = require('./components/VideoConference/VideoConference'),
     IgnorePhoneConfirmation = require('./components/agenda/_IgnorePhoneConfirmation'),
     PackageParticipantProducts = require('./components/_PackageParticipantProducts'),
-    CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField')
+    CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField'),
+    VideoConferenceTest = require('./components/VideoConference/VideoTest')
 ;
 
 require('bootstrap');
@@ -230,6 +231,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.video-conference'), function (element) {
         new VideoConference(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.video-conference-test'), function (element) {
+        new VideoConferenceTest(element);
     });
 
     [].forEach.call(target.querySelectorAll('[data-ajax-autocomplete]'), function (element) {

@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\VideoConference;
 
-class RequestTestAccess
+use Proximum\Vimeet\Application\Command\Command;
+
+class RequestTestAccess implements Command
 {
     /** @var string */
     public $sessionId;

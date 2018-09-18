@@ -24,6 +24,7 @@
     "moment": ">=2.8",
     "moment-timezone": "^0.4.1",
     "opentok-layout-js": "^0.5.1",
+    "opentok-network-test-js": "^2.0.0",
     "phantomjs-prebuilt": "^2.1.13",
     "pubsub-js": "1.5.3",
     "react": "^16.4.1",
