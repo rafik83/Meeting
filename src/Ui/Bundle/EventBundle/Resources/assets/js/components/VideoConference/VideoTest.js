@@ -2,15 +2,11 @@
 
 var $ = require('jquery'),
     TokboxInstance = require('./TokboxInstance').TokboxInstance,
+    CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL,
     TokBoxNetworkTest = require('opentok-network-test-js').default,
     VideoConference = require('./VideoConference'),
     isEdge = require('./../browser/isEdge');
 
-/**
- * @constructor
- *
- * @param {Element} element
- */
 function VideoConferenceTest(element) {
     this.element = element;
 
@@ -123,10 +119,10 @@ VideoConferenceTest.prototype.checkScreenSharingCapability = function() {
     this.updateProgress(90);
 
     TokboxInstance.checkScreenSharingCapability(function(response) {
-        if (!response.supported || response.extensionRegistered === false) {
+        if (!response.supported || !response.extensionRegistered) {
             this.updateResult(this.resultScreensharing, this.labelNotCompatibleBrowser, 'error');
-        } else if (response.extensionInstalled === false && (response.extensionRequired)) {
-            this.updateResult(this.resultScreensharing, this.labelInstallScreensharingExtension, 'error');
+        } else if (response.extensionRegistered && !response.extensionInstalled) {
+            this.updateResult(this.resultScreensharing, '<a href="' + CHROME_EXTENSION_URL + '" class="btn btn-link" target="_blank">' + this.labelInstallScreensharingExtension + '</a>', 'error');
         } else {
             this.updateResult(this.resultScreensharing, this.labelTestSuccessful, 'success');
         }
