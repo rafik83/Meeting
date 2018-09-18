@@ -228,12 +228,12 @@ VideoConference.prototype.screenshare = function() {
   }
 
   TokboxInstance.checkScreenSharingCapability(function(response) {
-    if (!response.supported || !response.extensionRegistered) {
+    if (!response.supported || response.extensionRegistered === false) {
       alert(this.notCompatibleBrowserMessage);
       return;
     }
 
-    if (response.extensionRegistered && !response.extensionInstalled) {
+    if (response.extensionRegistered && response.extensionInstalled === false) {
       this.installChromeExtension();
       return;
     }

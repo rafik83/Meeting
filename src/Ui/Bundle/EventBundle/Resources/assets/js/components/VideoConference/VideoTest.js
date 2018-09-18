@@ -119,9 +119,9 @@ VideoConferenceTest.prototype.checkScreenSharingCapability = function() {
     this.updateProgress(90);
 
     TokboxInstance.checkScreenSharingCapability(function(response) {
-        if (!response.supported || !response.extensionRegistered) {
+        if (!response.supported || response.extensionRegistered === false) {
             this.updateResult(this.resultScreensharing, this.labelNotCompatibleBrowser, 'error');
-        } else if (response.extensionRegistered && !response.extensionInstalled) {
+        } else if (response.extensionRegistered && response.extensionInstalled === false) {
             this.updateResult(this.resultScreensharing, '<a href="' + CHROME_EXTENSION_URL + '" class="btn btn-link" target="_blank">' + this.labelInstallScreensharingExtension + '</a>', 'error');
         } else {
             this.updateResult(this.resultScreensharing, this.labelTestSuccessful, 'success');
