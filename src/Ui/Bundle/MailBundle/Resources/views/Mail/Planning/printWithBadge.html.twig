@@ -1,0 +1,13 @@
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+<html>
+<body>
+{{ 'mail.planning.printWithBadge.intro'|trans({}, 'mail', mail.locale)|html|nl2br }}
+<br>
+{{ 'mail.planning.printWithBadge.link.intro'|trans({}, 'mail', mail.locale)|html|nl2br }}<br>
+
+{{ macros.button(
+    'mail.planning.printWidthBadge.link.click'|trans({}, 'mail', mail.locale),
+    url('admin_planning_export_link', {'event': mail.event.id, 'hash': mail.fileHash, 'file': mail.fileId})
+) }}
+</body>
+</html>

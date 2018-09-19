@@ -148,12 +148,12 @@
         }
     </style>
 </head>
-
 <body>
-    {% include '@Admin/User/Event/Badge/content.html.twig' with {'userBadgeAndPlanningByEventView': userBadgeAndPlanningByEventView} %}
-    <script>
-        window.print();
-        window.close();
-    </script>
+{% for planningAndBadge in planningsAndBadges %}
+    {% include '@Admin/User/Event/Badge/content.html.twig' with {'userBadgeAndPlanningByEventView': planningAndBadge} %}
+{% endfor %}
+<script>
+    window.print();
+</script>
 </body>
 </html>

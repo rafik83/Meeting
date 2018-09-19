@@ -1131,6 +1131,7 @@ services:
             - '@command.sheet.batch_pdf_job_creator_handler'
             - '@Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningHandler'
             - '@Proximum\Vimeet\Application\Command\Sheet\BatchDuplicateSheetsHandler'
+            - '@Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningAndBadgeHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
 
@@ -1151,6 +1152,12 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchAccept }
 
     Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@datetime'
+
+    Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningAndBadgeHandler:
         arguments:
             - '@adapter.job_queue_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
@@ -4622,6 +4629,13 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningAndBadgeCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Planning\ExportPlanningAndBadgeHandler'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+        tags:
+            - { name: console.command }
+
     command_planning.print_sheets_pdf:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand
         arguments:
@@ -5939,6 +5953,22 @@ services:
             - '%infrastructure.print_planning_path%'
             - '%mailer_sender%'
             - '@repository.file_repository'
+            - '@datetime'
+            - '@query.tip.tip_translation_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanning }
+
+    Proximum\Vimeet\Application\Command\Planning\ExportPlanningAndBadgeHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@command.planning.participant_info_guesser_cache'
+            - '@templating'
+            - '@adapter.local_file_storage'
+            - '@adapter.mailer_adapter'
+            - '%infrastructure.print_planning_path%'
+            - '%mailer_sender%'
+            - '@repository.file_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@datetime'
             - '@query.tip.tip_translation_view_query_handler'
         tags:

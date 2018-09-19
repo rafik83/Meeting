@@ -72,6 +72,7 @@ class BatchType extends AbstractType
             $builder
                 ->add('printPdf', SubmitType::class)
                 ->add('printPlanning', SubmitType::class)
+                ->add('printPlanningAndBadge', SubmitType::class)
                 ->add('printPlanningOrderBy', OrderByChoiceType::class, [
                     'placeholder' => false,
                     'required' => false,

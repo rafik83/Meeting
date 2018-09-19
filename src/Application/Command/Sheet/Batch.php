@@ -112,6 +112,9 @@ class Batch extends AbstractBatch
     /** @var bool */
     public $printPlanning;
 
+    /** @var bool */
+    public $printPlanningAndBadge;
+
     /** @var Type */
     public $duplicateToType;
 

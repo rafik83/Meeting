@@ -176,6 +176,9 @@
                             </a>
                         </li>
                     {% endif %}
+                    {% if batch_form.printPlanningAndBadge is defined %}
+                        <li>{{ form_widget(batch_form.printPlanningAndBadge) }}</li>
+                    {% endif %}
                 {% endblock actions %}
             {% endembed %}
         </div>
