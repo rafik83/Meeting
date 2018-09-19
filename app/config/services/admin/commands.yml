@@ -235,6 +235,7 @@ services:
             - '@domain.service.sheets_group.type_name_resolver'
             - '@components.user.user_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
+            - '@Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler'
             - '@adapter.serializer_adapter'
 
     Proximum\Vimeet\Application\Command\OMZ\NotifyHandler:
