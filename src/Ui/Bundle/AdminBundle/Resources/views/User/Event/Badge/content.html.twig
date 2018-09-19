@@ -1,0 +1,48 @@
+<div class="page">
+    <div class="badge">
+        <div class="badge-content">
+            <div class="company-participant {% if not userBadgeAndPlanningByEventView.userBadgeByEventView.qrCodeIdentifier %}company-zone-without-qrcode{% endif %}">
+                <div class="text">{{ userBadgeAndPlanningByEventView.userBadgeByEventView.sheetTitle }}</div>
+            </div>
+
+            {% if userBadgeAndPlanningByEventView.userBadgeByEventView.qrCodeIdentifier %}
+                <div class="qrcode">
+                    <div class="qrcode-border">
+                        <img src="{{ userBadgeAndPlanningByEventView.userBadgeByEventView.qrCodeImage }}"/><br>
+                        ID {{ userBadgeAndPlanningByEventView.userBadgeByEventView.qrCodeIdentifier }}<br>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="info-participant {% if not userBadgeAndPlanningByEventView.userBadgeByEventView.qrCodeIdentifier %}participant-zone-without-qrcode{% endif %}">
+                <div class="name-participant {% if not userBadgeAndPlanningByEventView.userBadgeByEventView.qrCodeIdentifier %}text-participant-without-qrcode{% endif %}">
+                    <div class="text">
+                        {{ userBadgeAndPlanningByEventView.userBadgeByEventView.firstName }}
+                        <span class="last-name-participant">{{ userBadgeAndPlanningByEventView.userBadgeByEventView.lastName }}</span>
+                    </div>
+                </div>
+
+                <div class="position-participant {% if not userBadgeAndPlanningByEventView.userBadgeByEventView.qrCodeIdentifier %}text-participant-without-qrcode{% endif %}">
+                    <div class="text">
+                        {{ userBadgeAndPlanningByEventView.userBadgeByEventView.position }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="type-participant">
+            {% if userBadgeAndPlanningByEventView.userBadgeByEventView.participationTypeOrCategoryLabel %}
+                {{ userBadgeAndPlanningByEventView.userBadgeByEventView.participationTypeOrCategoryLabel }}<br>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="badge-planning">
+        <div class="badge-planning-content">
+            <div class="text-center">
+                <b>PLANNING</b>
+            </div>
+            {{ userBadgeAndPlanningByEventView.planning|markdown_to_html }}
+        </div>
+    </div>
+</div>

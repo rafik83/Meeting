@@ -43,6 +43,8 @@ interface JobQueueInterface
      */
     public function printPlanning(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale): void;
 
+    public function printPlanningAndBadge(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale): void;
+
     /**
      * @param Event  $event
      * @param array  $sheetIds
