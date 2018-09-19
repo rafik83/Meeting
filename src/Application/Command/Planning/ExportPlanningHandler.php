@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Application\Command\Planning;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Components\Planning\Displayer\ParticipantPlanningDisplayer;
+use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -66,20 +68,9 @@ class ExportPlanningHandler
     /** @var TipTranslationViewQueryHandler */
     private $tipTranslationViewQueryHandler;
 
-    /**
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param ParticipantInfoGuesserCache    $participantInfoGuesserCache
-     * @param SheetInfoGuesserCache          $sheetInfoGuesserCache
-     * @param ParticipantPlanningDisplayer   $participantPlanningDisplayer
-     * @param EngineInterface                $templating
-     * @param LocalFileStorageAdapter        $localFileStorageAdapter
-     * @param MailerInterface                $mailer
-     * @param string                         $printPlanningPath
-     * @param string                         $mailSender
-     * @param FileRepositoryInterface        $fileRepository
-     * @param \DateTimeInterface             $dateTime
-     * @param TipTranslationViewQueryHandler $tipTranslationViewQueryHandler
-     */
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         ParticipantInfoGuesserCache $participantInfoGuesserCache,
@@ -92,7 +83,8 @@ class ExportPlanningHandler
         $mailSender,
         FileRepositoryInterface $fileRepository,
         \DateTimeInterface $dateTime,
-        TipTranslationViewQueryHandler $tipTranslationViewQueryHandler
+        TipTranslationViewQueryHandler $tipTranslationViewQueryHandler,
+        QueryBusInterface $queryBus
     ) {
         $this->participantRepository          = $participantRepository;
         $this->participantInfoGuesserCache    = $participantInfoGuesserCache;
@@ -106,6 +98,7 @@ class ExportPlanningHandler
         $this->fileRepository                 = $fileRepository;
         $this->dateTime                       = $dateTime;
         $this->tipTranslationViewQueryHandler = $tipTranslationViewQueryHandler;
+        $this->queryBus = $queryBus;
     }
 
     /**
@@ -122,10 +115,23 @@ class ExportPlanningHandler
 
         /** @var Participant $firstParticipant */
         $firstParticipant = reset($participants);
-        $event            = $firstParticipant->getSheet()->getEvent();
+        $event = $firstParticipant->getSheet()->getEvent();
 
         $this->orderParticipant($event, $exportPlanning->orderBy, $participants);
 
+        if ($exportPlanning->withBadge) {
+            $print = $this->handlePlanningAndBadge($event, $participants);
+        } else {
+            $print = $this->handlePlanning($event, $participants);
+        }
+
+        $file = $this->createFile($print);
+
+        $this->notifyCreationOfFile($event, $exportPlanning, $file);
+    }
+
+    private function handlePlanning(Event $event, array &$participants): string
+    {
         $plannings = [];
         $this->participantPlanningDisplayer->preloadForUsersAndEvent(
             array_map(function (Participant $participant) {
@@ -167,13 +173,27 @@ class ExportPlanningHandler
             );
         }
 
-        $print = $this->templating->render(self::PLANNING_TEMPLATE, [
+        return $this->templating->render('AdminBundle:Planning/Print:plannings.html.twig', [
             'plannings' => $plannings,
         ]);
+    }
 
-        $file = $this->createFile($print);
+    public function handlePlanningAndBadge(Event $event, array &$participants): string
+    {
+        $planningsAndBadges = [];
 
-        $this->notifyCreationOfFile($event, $exportPlanning, $file);
+        foreach ($participants as $participant) {
+            $planningsAndBadges[] = $this->queryBus->handle(
+                new GetUserBadgeAndPlanningByEventQuery(
+                    $event,
+                    $participant->getUser()
+                )
+            );
+        }
+
+        return $this->templating->render('AdminBundle:Planning/Print:planningsAndBadges.html.twig', [
+            'planningsAndBadges' => $planningsAndBadges,
+        ]);
     }
 
     /**
@@ -200,15 +220,18 @@ class ExportPlanningHandler
      */
     private function notifyCreationOfFile(Event $event, ExportPlanning $exportPlanning, File $file): void
     {
-        $this->mailer->send(new PrintPlanningMail(
-            $event,
-            $this->mailSender,
-            $exportPlanning->emailToNotify,
-            $exportPlanning->locale,
-            $file->getHash(),
-            $file->getId(),
-            $exportPlanning->orderBy
-        ));
+        $this->mailer->send(
+            new PrintPlanningMail(
+                $event,
+                $this->mailSender,
+                $exportPlanning->emailToNotify,
+                $exportPlanning->locale,
+                $file->getHash(),
+                $file->getId(),
+                $exportPlanning->orderBy,
+                $exportPlanning->withBadge
+            )
+        );
     }
 
     /**

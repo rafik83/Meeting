@@ -40,7 +40,7 @@ class PrintPlanningHandlerTest extends TestCase
         $extraDataRepository->add($extraData)->shouldBeCalled();
 
         $jobQueue
-            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr')
+            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr', false)
             ->shouldBeCalled()
         ;
 
@@ -50,7 +50,7 @@ class PrintPlanningHandlerTest extends TestCase
             $dateTime
         );
 
-        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr');
+        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr', false);
         $result = $handler->handle($command);
 
         $expected = new BatchResult($sheetIds, $command->getMessage() . 'printPlanning.success');
