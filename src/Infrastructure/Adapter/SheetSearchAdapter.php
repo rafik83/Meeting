@@ -27,6 +27,9 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\ConditionRulesTransformerInterface;
+use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
+use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
@@ -35,22 +38,25 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ForeignCh
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
-    const NOMENCLATURE_ITEMS_WEIGHT = 1.1;
+    public const NOMENCLATURE_ITEMS_WEIGHT = 1.1;
 
-    /**
-     * @var PaginatedFinderInterface Elastica finder
-     */
+    /** @var PaginatedFinderInterface Elastica finder */
     private $finder;
 
-    /**
-     * @var SearchableInterface
-     */
+    /** @var SearchableInterface */
     private $searchable;
 
-    public function __construct(PaginatedFinderInterface $finder, SearchableInterface $searchable)
-    {
-        $this->finder     = $finder;
+    /** @var ConditionRulesTransformerInterface */
+    private $conditionRulesTransformer;
+
+    public function __construct(
+        PaginatedFinderInterface $finder,
+        SearchableInterface $searchable,
+        ConditionRulesTransformerInterface $conditionRulesTransformer
+    ) {
+        $this->finder = $finder;
         $this->searchable = $searchable;
+        $this->conditionRulesTransformer = $conditionRulesTransformer;
     }
 
     /**
@@ -162,7 +168,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         bool $getAggregations,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?RuleInterface $condition = null
     ): PaginatedResult {
         $query = $this->getQueryToFind(
             $event,
@@ -184,6 +191,14 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
                 $this->getNestedAggregation(self::ES_FIELD_POSITION, self::ES_PATH_POSITION)
             );
         }
+
+        $queryToArray = $query->toArray();
+        if ($condition instanceof Condition) {
+            $queryToArray['query']['bool']['must'][] = $this->conditionRulesTransformer->transform($condition);
+        }
+
+        $query = new Query();
+        $query->setRawQuery($queryToArray);
 
         try {
             $result = $this->finder->findPaginated($query)->setMaxPerPage($limit)->setCurrentPage($page);

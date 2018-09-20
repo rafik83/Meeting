@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
+use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
+use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
@@ -45,23 +47,24 @@ class PaginatedSheetListViewQuery
      */
     public $admin;
 
-    /**
-     * PaginatedSheetListViewQuery constructor.
-     *
-     * @param Event  $event
-     * @param array  $filters
-     * @param int    $page
-     * @param int    $limit
-     * @param string $locale
-     * @param Admin  $admin
-     */
-    public function __construct(Event $event, array $filters, $page, $limit, $locale, Admin $admin)
-    {
+    /** @var RuleInterface */
+    public $condition;
+
+    public function __construct(
+        Event $event,
+        array $filters,
+        $page,
+        $limit,
+        $locale,
+        Admin $admin,
+        RuleInterface $condition = null
+    ) {
         $this->event   = $event;
         $this->filters = $filters;
         $this->page    = $page;
         $this->limit   = $limit;
         $this->locale  = $locale;
         $this->admin   = $admin;
+        $this->condition = $condition;
     }
 }

@@ -1,0 +1,108 @@
+{
+  "en": [
+    {
+      "id": "sheetName",
+      "label": "Sheet name",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    },
+    {
+      "id": "participants.lastName",
+      "label": "Participant name",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    },
+    {
+      "id": "participants.email",
+      "label": "Participant email",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    }
+  ],
+  "fr": [
+    {
+      "id": "sheetName",
+      "label": "Nom de fiche",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    },
+    {
+      "id": "participants.lastName",
+      "label": "Nom du participant",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    },
+    {
+      "id": "participants.email",
+      "label": "Email du participant",
+      "type": "string",
+      "operators": [
+        "equal",
+        "not_equal",
+        "contains",
+        "not_contains",
+        "is_null",
+        "is_not_null",
+        "begins_with",
+        "not_begins_with",
+        "ends_with",
+        "not_ends_with"
+      ]
+    }
+  ]
+}

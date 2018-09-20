@@ -20,16 +20,20 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
+use Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery;
+use Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
+use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Infrastructure\Adapter\QueryBus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
@@ -107,6 +111,12 @@ class SheetController extends Controller
             ));
         }
 
+        if ('POST' === $request->getMethod() && $request->request->get('rules')) {
+            $this->get('session')->set($this->getRulesKey($event), $request->request->get('rules'));
+        }
+
+        $locale = $event->getAvailableLocale($request->getLocale());
+
         // Pagination
         try {
             $query = new PaginatedSheetListViewQuery(
@@ -114,8 +124,9 @@ class SheetController extends Controller
                 $filters,
                 $selectedSheetsPage,
                 self::SHEETS_PER_PAGE, // number of sheets by page
-                $event->getAvailableLocale($request->getLocale()),
-                $this->getUser()
+                $locale,
+                $this->getUser(),
+                $this->getRules($event)
             );
             /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);
@@ -131,14 +142,14 @@ class SheetController extends Controller
         ));
 
         // Batch
-        $batch = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()));
+        $batch = new Batch($event, $this->getUser(), $locale);
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids' => $sheets->map(function (SheetListView $listView) {
                 return $listView->id;
             }),
             'event' => $event,
             'types' => $types,
-            'locale' => $request->getLocale(),
+            'locale' => $locale,
             'action' => $this->generateUrl(
                 'admin_sheet_batch',
                 [
@@ -149,8 +160,10 @@ class SheetController extends Controller
         ]);
 
         $sheetFilterView = $sheetFilterForm->createView();
+        $filters = $this->get(QueryBus::class)->handle(new GetFiltersByTypeAndLocaleQuery('sheet', $locale));
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
+            'locale'           => $locale,
             'event'            => $event,
             'typesByEvent'     => $this->getTypesByEvent($types, $request->getLocale()),
             'sheets'           => $sheets,
@@ -162,7 +175,25 @@ class SheetController extends Controller
             ),
             'batch_form'       => $batchForm->createView(),
             'filter_form'      => $sheetFilterView,
+            'rules'            => $this->get('session')->get($this->getRulesKey($event)),
+            'filters'          => $filters,
         ]);
+    }
+
+    private function getRules(Event $event): ?RuleInterface
+    {
+        $rules = json_decode($this->get('session')->get($this->getRulesKey($event)), true);
+
+        if ($rules) {
+            return $this->get(QueryBus::class)->handle(new GetConditionRulesQuery($rules));
+        }
+
+        return null;
+    }
+
+    private function getRulesKey(Event $event): string
+    {
+        return sprintf('rules_sheets_%s', $event->getId());
     }
 
     /**

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
+use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -56,20 +57,6 @@ interface SheetSearchAdapterInterface
         array $sheetsToExclude = []
     ): array;
 
-    /**
-     * @param Event               $event
-     * @param array               $filters
-     * @param string|null         $orderBy
-     * @param int                 $page
-     * @param int                 $limit
-     * @param string              $locale
-     * @param bool                $getAggregations
-     * @param array               $nomenclatureItems
-     * @param AvailableSlotView[] $availableSlotIds
-     * @param Sheet[]             $sheetsToExclude
-     *
-     * @return PaginatedResult
-     */
     public function paginate(
         Event $event,
         array $filters,
@@ -80,7 +67,8 @@ interface SheetSearchAdapterInterface
         bool $getAggregations,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?RuleInterface $condition = null
     ): PaginatedResult;
 
     /**

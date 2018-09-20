@@ -4522,6 +4522,7 @@ services:
         arguments:
              - '@fos_elastica.finder.app.sheet'
              - '@fos_elastica.index.app.sheet'
+             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
 
     #
     # Elastica
