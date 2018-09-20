@@ -56,11 +56,6 @@ class Participant implements MailRecipientInterface
     private $imported = false;
 
     /**
-     * @var bool
-     */
-    private $visio = false;
-
-    /**
      * The participant is assigned to accepted request
      *
      * @var bool
@@ -80,20 +75,12 @@ class Participant implements MailRecipientInterface
     /** @var string */
     private $timezone;
 
-    /**
-     * @param Sheet $sheet
-     * @param User  $user
-     * @param array $data
-     * @param bool  $active
-     * @param bool  $visio
-     */
-    public function __construct(Sheet $sheet, User $user, array $data, $active, bool $visio = false)
+    public function __construct(Sheet $sheet, User $user, array $data, $active)
     {
         $this->sheet  = $sheet;
         $this->user   = $user;
         $this->data   = $data;
         $this->active = $active;
-        $this->visio = $visio;
     }
 
     /**
@@ -261,18 +248,20 @@ class Participant implements MailRecipientInterface
 
     /**
      * @return bool
+     * @deprecated
      */
     public function isVisio()
     {
-        return $this->visio;
+        return false;
     }
 
     /**
      * @param bool $visio
+     * @deprecated
      */
     public function setVisio($visio)
     {
-        $this->visio = $visio;
+        return;
     }
 
     /**

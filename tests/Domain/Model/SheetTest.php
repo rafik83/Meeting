@@ -39,8 +39,8 @@ class SheetTest extends TestCase
         $property->setValue($user3, 3);
         $property->setAccessible(false);
 
-        $sheet->addParticipant(new Participant($sheet, $user1, [], true, true));
-        $sheet->addParticipant(new Participant($sheet, $user2, [], false, true));
+        $sheet->addParticipant(new Participant($sheet, $user1, [], true));
+        $sheet->addParticipant(new Participant($sheet, $user2, [], false));
 
         $this->assertTrue($sheet->hasUser($user1));
         $this->assertTrue($sheet->hasUser($user2));
@@ -54,9 +54,9 @@ class SheetTest extends TestCase
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet = new Sheet($event, $type, [], $user, new \DateTime());
 
-        $participant1 = new Participant($sheet, new User('user1@test.com', '', '', 'fr'), [], true, true);
-        $participant2 = new Participant($sheet, new User('user2@test.com', '', '', 'fr'), [], true, true);
-        $participant3 = new Participant($sheet, new User('user3@test.com', '', '', 'fr'), [], true, true);
+        $participant1 = new Participant($sheet, new User('user1@test.com', '', '', 'fr'), [], true);
+        $participant2 = new Participant($sheet, new User('user2@test.com', '', '', 'fr'), [], true);
+        $participant3 = new Participant($sheet, new User('user3@test.com', '', '', 'fr'), [], true);
 
         $sheet->addParticipant($participant1);
         $sheet->addParticipant($participant2);
@@ -86,9 +86,9 @@ class SheetTest extends TestCase
 
         $user4 = new User('user4@test.com', '', '', 'fr');
 
-        $participant1 = new Participant($sheet, $user1, [], true, true);
-        $participant2 = new Participant($sheet, $user2, [], true, true);
-        $participant3 = new Participant($sheet, $user3, [], true, true);
+        $participant1 = new Participant($sheet, $user1, [], true);
+        $participant2 = new Participant($sheet, $user2, [], true);
+        $participant3 = new Participant($sheet, $user3, [], true);
 
         $sheet->addParticipant($participant1);
         $sheet->addParticipant($participant2);

@@ -97,7 +97,6 @@ class CreateHandler
 
         foreach ($originalParticipants as $participant) {
             $newParticipant = new Participant($newSheet, $participant->getUser(), $participant->getData(), true);
-            $newParticipant->setVisio($participant->isVisio());
             $newParticipant->setRegistrationComplete($participant->isRegistrationComplete());
             $newParticipant->setRegistrationStep($participant->getRegistrationStep());
             $newSheet->addParticipant($newParticipant);
