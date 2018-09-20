@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\View\Sheet\Details\CRM\RecordView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Order\Merger;
@@ -59,6 +60,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     public const COL_BALANCE           = 'balance';
     public const COL_COMMENTS          = 'comments';
     public const COL_COMMERCIAL_STATUS = 'commercial_status';
+    public const COL_SPOT = 'sheet_spot';
 
     public const TRANSLATION_KEY_COMMERCIAL_STATUS = 'admin.sheet.details.crm.record.trace.set_commercial_status.';
     public const TRANSLATION_KEY_COMMENT = 'admin.sheet.export.field.comment';
@@ -69,6 +71,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         self::COL_SHEET_ID,
         self::COL_SHEET_ENABLE,
         self::COL_SHEET_STATE,
+        self::COL_SPOT,
         self::COL_OWNER_ID,
         self::COL_OWNER_EMAIL,
         self::COL_TYPE,
@@ -247,6 +250,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_SHEET_ID          => $sheet->getId(),
             self::COL_SHEET_ENABLE      => $this->normalizeBoolean($sheet->isEnabled()),
             self::COL_SHEET_STATE       => $sheet->getState(),
+            self::COL_SPOT              => $sheet->getSpot() instanceof Spot ? $sheet->getSpot()->getReference() : null,
             self::COL_OWNER_ID          => $owner->getId(),
             self::COL_OWNER_EMAIL       => $owner->getEmail(),
             self::COL_TYPE              => $sheet->getType()->getTitle($availableLocale),
