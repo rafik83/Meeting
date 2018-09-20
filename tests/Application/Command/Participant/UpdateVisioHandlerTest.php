@@ -49,6 +49,10 @@ class UpdateVisioHandlerTest extends TestCase
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
 
+        $participantRepository->getAllParticipantForUser($event, $user)
+            ->shouldBeCalled()
+            ->willReturn([$participant]);
+
         $command = new UpdateVisio($participant, true);
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();

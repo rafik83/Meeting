@@ -28,17 +28,16 @@ class UpdateVisioHandler
         $this->participantRepository = $participantRepository;
     }
 
-    /**
-     * @param UpdateVisio $updateVisio
-     *
-     * @throws ParticipantException
-     */
-    public function handle(UpdateVisio $updateVisio)
+    public function handle(UpdateVisio $updateVisio): void
     {
-        $participant = $updateVisio->participant;
+        $participants = $this->participantRepository->getAllParticipantForUser(
+            $updateVisio->participant->getEvent(),
+            $updateVisio->participant->getUser()
+        );
 
-        $participant->setVisio($updateVisio->visio);
-
-        $this->participantRepository->set($participant);
+        foreach ($participants as $participant) {
+            $participant->setVisio($updateVisio->visio);
+            $this->participantRepository->set($participant);
+        }
     }
 }
