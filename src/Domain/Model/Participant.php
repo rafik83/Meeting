@@ -247,24 +247,6 @@ class Participant implements MailRecipientInterface
     }
 
     /**
-     * @return bool
-     * @deprecated
-     */
-    public function isVisio()
-    {
-        return false;
-    }
-
-    /**
-     * @param bool $visio
-     * @deprecated
-     */
-    public function setVisio($visio)
-    {
-        return;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getFullname()
@@ -359,8 +341,7 @@ class Participant implements MailRecipientInterface
             $sheet,
             $participant->getUser(),
             $participant->getData(),
-            $participant->isActive(),
-            $sheet->getEvent()->getConfiguration()->isVisio()
+            $participant->isActive()
         );
 
         $duplicatedParticipant->setImported(true);

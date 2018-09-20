@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeForm;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -84,7 +85,7 @@ class AgendaController extends Controller
             throw $this->createNotFoundException('This participant is not in this sheet');
         }
 
-        if ($participant->isVisio() && !$participant->getTimezone()) {
+        if ($this->get(IsParticipantVisio::class)->isSatisfiedBy($participant) && !$participant->getTimezone()) {
             return $this->redirectToRoute('event_participant_timezone', [
                 'participant' => $participant->getId(),
                 'sheet' => $sheet->getId(),

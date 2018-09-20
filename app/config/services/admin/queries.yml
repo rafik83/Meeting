@@ -115,6 +115,7 @@ services:
             - '@template.participant_info_guesser'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
             - '@Proximum\Vimeet\Domain\Meeting\IsParticipantPresentToMeeting'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingViewQueryHandler:
         arguments:

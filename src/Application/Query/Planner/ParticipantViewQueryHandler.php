@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
@@ -37,19 +38,19 @@ class ParticipantViewQueryHandler
     /** @var Participant[] */
     private $participants = [];
 
-    /**
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param MeetingSlotRepositoryInterface $slotRepository
-     * @param SlotAvailability               $slotAvailability
-     */
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         MeetingSlotRepositoryInterface $slotRepository,
-        SlotAvailability $slotAvailability
+        SlotAvailability $slotAvailability,
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->participantRepository = $participantRepository;
         $this->slotRepository        = $slotRepository;
         $this->slotAvailability      = $slotAvailability;
+        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     /**
@@ -92,7 +93,7 @@ class ParticipantViewQueryHandler
                         $participant->getUser()->getAccount()->getCompleteName(),
                         $sheet,
                         $unavailabilitiesSlots,
-                        $participant->isVisio()
+                        $this->isParticipantVisio->isSatisfiedBy($participant)
                     );
                 }
             }

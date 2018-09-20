@@ -44,7 +44,6 @@ class UpdateVisioHandlerTest extends TestCase
             [],
             false
         );
-        $expectedParticipant->setVisio(true);
 
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);

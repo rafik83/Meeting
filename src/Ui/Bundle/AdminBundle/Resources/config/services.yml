@@ -378,6 +378,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@security.token_storage'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
         tags:
             - { name: kernel.event_subscriber }
 

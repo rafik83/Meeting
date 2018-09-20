@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Ela
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
@@ -26,12 +27,17 @@ class ElasticDocumentsToUserEventListViewsTransformer
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        ExtraDataRepositoryInterface $extraDataRepository
+        ExtraDataRepositoryInterface $extraDataRepository,
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->extraDataRepository = $extraDataRepository;
+        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     /**
@@ -93,7 +99,7 @@ class ElasticDocumentsToUserEventListViewsTransformer
                         $sheet->getFollowerName(),
                         $sheet->getCommercialStatus(),
                         $sheet->getCommercialStatusLabel(),
-                        $participant ? $participant->isVisio() : false,
+                        $participant ? $this->isParticipantVisio->isSatisfiedBy($participant) : false,
                         $extraData instanceof ExtraData ? (bool)$extraData->getValue() : false
                     );
                 }

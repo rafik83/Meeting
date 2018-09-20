@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting;
 
 use Proximum\Vimeet\Application\View\Meeting\Admin\ListMeeting\ParticipantView;
 use Proximum\Vimeet\Domain\Meeting\IsParticipantPresentToMeeting;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
@@ -26,14 +27,19 @@ class ParticipantViewQueryHandler
     /** @var IsParticipantPresentToMeeting */
     private $isParticipantPresentToMeeting;
 
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         ScanRepositoryInterface $scanRepository,
-        IsParticipantPresentToMeeting $isParticipantPresentToMeeting
+        IsParticipantPresentToMeeting $isParticipantPresentToMeeting,
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->scanRepository = $scanRepository;
         $this->isParticipantPresentToMeeting = $isParticipantPresentToMeeting;
+        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     public function handle(ParticipantViewQuery $query): ParticipantView
@@ -48,7 +54,7 @@ class ParticipantViewQueryHandler
                 $query->event,
                 $query->meetingSlot
             ),
-            $query->participant->isVisio(),
+            $this->isParticipantVisio->isSatisfiedBy($query->participant),
             $present
         );
     }

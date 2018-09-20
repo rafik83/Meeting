@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\Meeting\ParticipantExtraDataRepositoryInterface;
 
 class IsParticipantPresentToMeeting
@@ -22,17 +23,22 @@ class IsParticipantPresentToMeeting
     /** @var \DateTimeInterface */
     private $date;
 
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
     public function __construct(
         ParticipantExtraDataRepositoryInterface $participantExtraDataRepository,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->participantExtraDataRepository = $participantExtraDataRepository;
         $this->date = $dateTime;
+        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     public function isSatisfiedBy(Participant $participant, Meeting $meeting): bool
     {
-        if (false === $participant->isVisio()) {
+        if (false === $this->isParticipantVisio->isSatisfiedBy($participant)) {
             return false;
         }
 

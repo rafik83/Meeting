@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Event\EventByHostResolver;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -47,6 +48,9 @@ class VisioCheckinSubscriber implements EventSubscriberInterface
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
     public function __construct(
         EventByHostResolver $eventByHostResolver,
         DDayGuesser $dayGuesser,
@@ -54,7 +58,8 @@ class VisioCheckinSubscriber implements EventSubscriberInterface
         ScanRepositoryInterface $scanRepository,
         SheetRepositoryInterface $sheetRepository,
         TokenStorageInterface $tokenStorage,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->eventByHostResolver = $eventByHostResolver;
         $this->dayGuesser = $dayGuesser;
@@ -63,6 +68,7 @@ class VisioCheckinSubscriber implements EventSubscriberInterface
         $this->sheetRepository = $sheetRepository;
         $this->tokenStorage = $tokenStorage;
         $this->dateTime = $dateTime;
+        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     public function onKernelRequest(GetResponseEvent $responseEvent): void
@@ -83,7 +89,7 @@ class VisioCheckinSubscriber implements EventSubscriberInterface
 
         $participant = $sheet->getUserParticipant($token->getUser());
 
-        if (!$participant instanceof Participant || !$participant->isVisio()) {
+        if (!$participant instanceof Participant || !$this->isParticipantVisio->isSatisfiedBy($participant)) {
             return;
         }
 
