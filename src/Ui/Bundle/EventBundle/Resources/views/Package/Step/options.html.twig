@@ -10,46 +10,51 @@
     {{ form_errors(form) }}
 
     {% for groupKey, group in view.products.groups %}
-        <div class="content-header clearfix">
-            <h2 class="pull-left">{{ group.label }}</h2>
-        </div>
-
         {% set displaySeeMore = not loop.first and form.vars.valid %}
 
-        <section class="section">
-            <div class="object object--collection style--style-1"></div>
-            {% if displaySeeMore %}
-                <p class="text-center">
-                    <a href="#"
-                        data-toggle-visibility="true"
-                        data-element-id-to-hide="group-key-{{ groupKey }}"
-                        data-element-clickable-to-hide="true"
-                        class="btn btn-primary"
-                    >
-                        {{ 'package.product.seeMore'|transchoice(group.options|length, {'%count%': group.options|length}) }}
-                    </a>
-                </p>
-            {% endif %}
-            <table class="table table-striped" {% if displaySeeMore %}style="display: none;" id="group-key-{{ groupKey }}"{% endif %}>
-                <thead>
-                    <tr>
-                        <th>{{ 'package.product.unitPriceLabel'|trans }}</th>
-                        <th>{{ 'package.product.label'|trans }}</th>
-                        <th class="text-center">{{ 'package.product.quantity'|trans }}</th>
-                        <th class="text-center">{{ 'package.product.total'|trans }}</th>
-                    </tr>
-                </thead>
+        <div {% if displaySeeMore %}data-toggle-visibility data-toggle-visibility-display-type="inline"{% endif %}>
+            <div class="content-header clearfix">
+                <h2 class="pull-left">
+                    {{ group.label }}
 
-                <tbody>
-                    {% for option in group.options %}
-                        {{ include('EventBundle:Package/Step:product_row.html.twig', {
-                            product: option,
-                            quantityForm: form.children[option.id] is defined ? form.children[option.id] : null
-                        }) }}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
+                    {% if displaySeeMore %}
+                        <a href="#" class="btn btn-primary" data-toggle-visibility-hide style="display: none;">{{ 'package.product.seeLess'|trans }}</a>
+                    {% endif %}
+                </h2>
+            </div>
+
+            <section class="section">
+                <div class="object object--collection style--style-1"></div>
+
+                {% if displaySeeMore %}
+                    <p class="text-center">
+                        <a href="#" class="btn btn-primary" data-toggle-visibility-show>
+                            {{ 'package.product.seeMore'|transchoice(group.options|length, {'%count%': group.options|length}) }}
+                        </a>
+                    </p>
+                {% endif %}
+
+                <table class="table table-striped" {% if displaySeeMore %}style="display: none;" data-toggle-visibility-element-to-open{% endif %}>
+                    <thead>
+                        <tr>
+                            <th>{{ 'package.product.unitPriceLabel'|trans }}</th>
+                            <th>{{ 'package.product.label'|trans }}</th>
+                            <th class="text-center">{{ 'package.product.quantity'|trans }}</th>
+                            <th class="text-center">{{ 'package.product.total'|trans }}</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for option in group.options %}
+                            {{ include('EventBundle:Package/Step:product_row.html.twig', {
+                                product: option,
+                                quantityForm: form.children[option.id] is defined ? form.children[option.id] : null
+                            }) }}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </div>
     {% endfor %}
 
     <div class="row">
