@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input;
 
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\NestedQueryTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonContraryOperatorInterface;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorContains;
@@ -33,6 +34,8 @@ class TextTransformer implements InputTransformerInterface
                 'query' => self::getFilterQuery($field),
             ],
         ];
+
+        $query = NestedQueryTransformer::transformIfNeeded($field, $query);
 
         if (self::isContraryComparisonOperator($field)) {
             $query = [

@@ -87,6 +87,7 @@ class SheetController extends Controller
 
         if (null !== $request->query->get('reset')) {
             $sheetFilter->clear($event);
+            $this->get('session')->remove($this->getRulesKey($event));
 
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
