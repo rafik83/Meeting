@@ -340,6 +340,9 @@ form.extra_parameter_update.children.name.label: Nom
 form.extra_parameter_update.children.submit.label: Enregistrer
 form.extra_parameter_update.children.value.label: Valeur
 form.field.private: 'Champ privé'
+form.filter.email.label: Email
+form.filter.firstName.label: Prénom
+form.filter.lastName.label: Nom
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'
 form.filter_admin.role.all: 'Tous les types'

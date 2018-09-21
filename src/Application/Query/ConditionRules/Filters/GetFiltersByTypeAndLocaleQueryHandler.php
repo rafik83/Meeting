@@ -10,32 +10,49 @@
 
 namespace Proximum\Vimeet\Application\Query\ConditionRules\Filters;
 
-use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Domain\ConditionRules\ComparisonOperatorsByType;
 
 class GetFiltersByTypeAndLocaleQueryHandler
 {
-    /** @var FileSystemAdapterInterface */
-    private $fileSystemAdapter;
+    private const TRANSLATION_KEY = 'form.filter.%s.label';
+    private const USER_FIELDS = [
+        'firstName' => ['type' => 'string'],
+        'lastName' => ['type' => 'string'],
+        'email' => ['type' => 'string'],
+    ];
 
-    /** @var string */
-    private $fallbackLocale;
+    /** @var TranslatorInterface */
+    private $translator;
 
-    public function __construct(FileSystemAdapterInterface $fileSystemAdapter, string $fallbackLocale)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->fileSystemAdapter = $fileSystemAdapter;
-        $this->fallbackLocale = $fallbackLocale;
+        $this->translator = $translator;
     }
 
     public function handle(GetFiltersByTypeAndLocaleQuery $query): array
     {
-        $file = sprintf('%s/../../../../Domain/ConditionRules/Rules/%s.json', __DIR__, $query->type);
-
-        if (!$this->fileSystemAdapter->exists($file)) {
-            return [];
+        if ('user' === $query->type) {
+            return $this->getFilters(self::USER_FIELDS, $query->locale);
         }
 
-        $content = json_decode(file_get_contents($file), true);
+        throw new \InvalidArgumentException(sprintf('Query type "%s" is not available.', $query->type));
+    }
 
-        return $content[$query->locale] ?? $content[$this->fallbackLocale] ?? [];
+    private function getFilters(array $fields, string $locale): array
+    {
+        $filters = [];
+
+        foreach ($fields as $id => $field) {
+            $type = $field['type'];
+            $filters[] = [
+                'id' => $id,
+                'label' => $this->translator->trans(sprintf(self::TRANSLATION_KEY, $id), [], 'forms', $locale),
+                'type' => $type,
+                'operators' => ComparisonOperatorsByType::OPERATORS[$type] ?? [],
+            ];
+        }
+
+        return $filters;
     }
 }

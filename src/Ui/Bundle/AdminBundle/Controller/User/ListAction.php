@@ -83,7 +83,7 @@ class ListAction
             new GetUserEventListViewsQuery($event, $page, $locale, $this->getRules($event))
         );
 
-        $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $locale));
+        $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $request->getLocale()));
 
         return new Response(
             $this->engine->render(
