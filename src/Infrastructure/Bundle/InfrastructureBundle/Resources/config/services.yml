@@ -5813,6 +5813,8 @@ services:
     #
     domain.meeting.visio_guesser:
           class: Proximum\Vimeet\Domain\Meeting\VisioGuesser
+          arguments:
+              - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
     # Form extension

@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
@@ -29,9 +30,7 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
         $extraData->getValue()->willReturn('true');
 
         $participant = $this->prophesize(Participant::class);
-        $participant->isVisio()->willReturn(true);
         $participant2 = $this->prophesize(Participant::class);
-        $participant2->isVisio()->willReturn(false);
 
         $sheet1337 = $this->prophesize(Sheet::class);
         $sheet1337->getId()->willReturn(1337);
@@ -206,9 +205,14 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null);
 
+        $isParticipantVisio = $this->prophesize(IsParticipantVisio::class);
+        $isParticipantVisio->isSatisfiedBy($participant->reveal())->willReturn(true);
+        $isParticipantVisio->isSatisfiedBy($participant2->reveal())->willReturn(false);
+
         $elasticDocumentsToUserEventListViewsTranformer = new ElasticDocumentsToUserEventListViewsTransformer(
             $sheetRepository->reveal(),
-            $extraDataRepository->reveal()
+            $extraDataRepository->reveal(),
+            $isParticipantVisio->reveal()
         );
         $this->assertEquals($expectedResult, $elasticDocumentsToUserEventListViewsTranformer->handle($documents, 'fr'));
     }

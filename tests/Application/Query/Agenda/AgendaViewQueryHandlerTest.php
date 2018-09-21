@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
 use Proximum\Vimeet\Application\View\Agenda\ParticipantView;
+use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -130,6 +131,9 @@ class AgendaViewQueryHandlerTest extends TestCase
         $property->setValue($user, 1);
         $property->setAccessible(false);
 
+        $getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
+        $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant)->willReturn('Europe/Paris');
+
         // Handler
         $handler = new AgendaViewQueryHandler(
             $dayRepository->reveal(),
@@ -142,7 +146,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             $meetingRepository->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $this->validationRequiredChecker->reveal(),
-            $this->extraDataRepository->reveal()
+            $this->extraDataRepository->reveal(),
+            $getTimezoneHelper->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant, 'fr', $user));
 
@@ -235,6 +240,9 @@ class AgendaViewQueryHandlerTest extends TestCase
             ->willReturn(null)
         ;
 
+        $getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
+        $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant2)->willReturn('Europe/Paris');
+
         // Handler
         $handler = new AgendaViewQueryHandler(
             $dayRepository->reveal(),
@@ -247,7 +255,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             $meetingRepository->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $this->validationRequiredChecker->reveal(),
-            $this->extraDataRepository->reveal()
+            $this->extraDataRepository->reveal(),
+            $getTimezoneHelper->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user));
 
