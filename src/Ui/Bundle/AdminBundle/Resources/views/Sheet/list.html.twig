@@ -67,12 +67,22 @@
                 </div>
                 <div class="col-md-12">
                     <div class="pull-right">
+                        <a class="btn btn-primary" href="{{ path('admin_sheet', {'event': event.id, 'resetQuery': 1 }) }}">{{ 'admin.filters.reset'|trans }}</a>
                         <button type="submit" class="btn btn-primary" id="submit-rules">{{ 'admin.filter'|trans }}</button>
                     </div>
                 </div>
             </form>
         </div>
     </h1>
+
+    <div class="row filters">
+        <div class="col-md-12 text-center">
+            {{ include('AdminBundle:Common:filters_summary.html.twig', {
+                filters:   filters_summary,
+                resetLink: path('admin_sheet', { 'event': event.id, 'reset': true })
+            }) }}
+        </div>
+    </div>
 
     {{ form_start(filter_form) }}
         {{ include('AdminBundle:Sheet/Partial:filters.html.twig', { 'form': filter_form }) }}

@@ -27,14 +27,6 @@
                         {{ form_widget(filter_form.orderBy, {'attr': {'class': 'hide'}}) }}
                     </div>
                 </div>
-                <div class="row filters">
-                    <div class="col-md-12 text-center">
-                        {{ include('AdminBundle:Common:filters_summary.html.twig', {
-                            filters:   filters_summary,
-                            resetLink: path('admin_sheet', { 'event': event.id, 'reset': true })
-                        }) }}
-                    </div>
-                </div>
                 <div class="col-md-6">
                     {{ form_row(form.enabled, {'inline': true}) }}
                     {{ form_row(form.validationState, {'inline': true}) }}

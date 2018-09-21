@@ -87,6 +87,11 @@ class SheetController extends Controller
 
         if (null !== $request->query->get('reset')) {
             $sheetFilter->clear($event);
+
+            return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
+        }
+
+        if (1 === $request->query->getInt('resetQuery')) {
             $this->get('session')->remove($this->getRulesKey($event));
 
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
@@ -161,7 +166,7 @@ class SheetController extends Controller
         ]);
 
         $sheetFilterView = $sheetFilterForm->createView();
-        $filters = $this->get(QueryBus::class)->handle(new GetFiltersByTypeAndLocaleQuery('sheet', $locale));
+        $queryBuilderFilters = $this->get(QueryBus::class)->handle(new GetFiltersByTypeAndLocaleQuery('sheet', $locale));
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
             'locale'           => $locale,
@@ -177,7 +182,7 @@ class SheetController extends Controller
             'batch_form'       => $batchForm->createView(),
             'filter_form'      => $sheetFilterView,
             'rules'            => $this->get('session')->get($this->getRulesKey($event)),
-            'filters'          => $filters,
+            'filters'          => $queryBuilderFilters,
         ]);
     }
 
