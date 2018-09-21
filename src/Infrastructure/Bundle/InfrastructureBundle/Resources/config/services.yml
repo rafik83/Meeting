@@ -2186,12 +2186,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive }
 
-    Proximum\Vimeet\Application\Command\Event\ToggleParticipantVisioCommandHandler:
-        arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ToggleParticipantVisioCommand }
-
     command.event.configuration.background.remove_image_handler:
         class: Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImageHandler
         arguments:

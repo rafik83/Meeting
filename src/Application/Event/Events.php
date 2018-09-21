@@ -53,7 +53,6 @@ final class Events
     public const REQUEST_UPDATE_MESSAGE = 'meeting_request.update.message';
     public const MEETING_UPDATE_MESSAGE = 'meeting.update.message';
     public const EVENT_PRE_REGISTERED = 'event.preregistered';
-    public const EVENT_VISIO_UPDATED = 'event.visio.updated';
     public const EVENT_LOCALE_CHANGED = 'event.locale_changed';
     public const EVENT_KEY_DATES_UPDATED = 'event.key_dates.updated';
     public const EVENT_SHEETS_DUPLICATED = 'event.sheets.updated';

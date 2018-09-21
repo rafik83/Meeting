@@ -363,12 +363,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Event\VisioUpdatedEventSubscriber:
-        arguments:
-            - '@adapter.job_queue_adapter'
-        tags:
-            - { name: kernel.event_subscriber }
-
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Event\VisioCheckinSubscriber:
         arguments:
             - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'

@@ -12,13 +12,6 @@ services:
         tags:
             - { name: console.command }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\ToggleParticipantVisioCommand:
-        arguments:
-            - '@vimeet_infrastructure.repository.event_repository'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-        tags:
-            - { name: console.command }
-
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\OMZ\ExportUserCommand:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
