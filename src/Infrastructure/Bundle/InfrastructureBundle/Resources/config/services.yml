@@ -2708,6 +2708,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Meeting\ParticipantExtraDataRepository'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
     # Security Component

@@ -156,6 +156,7 @@ class AgendaController extends Controller
             'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
             'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
             'participant' => $participant,
+            'isVisio' => $this->get(IsParticipantVisio::class)->isSatisfiedBy($participant)
         ]);
     }
 

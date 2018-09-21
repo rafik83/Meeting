@@ -112,6 +112,7 @@ class UnavailabilityController extends Controller
             'form_unavailability' => $createFormView->formView,
             'tipTranslationViews' => $tipTranslationViews,
             'timezone' => $timezone,
+            'isVisio' => $this->get(IsParticipantVisio::class)->isSatisfiedBy($participant),
         ]);
     }
 
