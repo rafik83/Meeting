@@ -17,12 +17,19 @@ use Proximum\Vimeet\Domain\ConditionRules\ComparisonOperatorsByType;
 class GetFiltersByTypeAndLocaleQueryHandler
 {
     private const TRANSLATION_KEY = 'form.filter.%s.label';
-    private const USER_FIELDS = [
-        TypesMapping::USER_EVENT_VIEW_FIRSTNAME => ['type' => 'string'],
-        TypesMapping::USER_EVENT_VIEW_LASTNAME => ['type' => 'string'],
-        TypesMapping::USER_EVENT_VIEW_EMAIL => ['type' => 'string'],
-        TypesMapping::USER_EVENT_VIEW_IS_VISIO => ['type' => 'boolean'],
-        TypesMapping::USER_EVENT_VIEW_IS_VISIO_TESTED => ['type' => 'boolean'],
+    private const FIELDS = [
+        'user' => [
+            TypesMapping::USER_EVENT_VIEW_FIRSTNAME => ['type' => 'string'],
+            TypesMapping::USER_EVENT_VIEW_LASTNAME => ['type' => 'string'],
+            TypesMapping::USER_EVENT_VIEW_EMAIL => ['type' => 'string'],
+            TypesMapping::USER_EVENT_VIEW_IS_VISIO => ['type' => 'boolean'],
+            TypesMapping::USER_EVENT_VIEW_IS_VISIO_TESTED => ['type' => 'boolean'],
+        ],
+        'sheet' => [
+            'sheetName' => ['type' => 'string'],
+            'participants.lastname' => ['type' => 'string'],
+            'participants.email'=> ['type' => 'string'],
+        ],
     ];
 
     /** @var TranslatorInterface */
@@ -35,11 +42,11 @@ class GetFiltersByTypeAndLocaleQueryHandler
 
     public function handle(GetFiltersByTypeAndLocaleQuery $query): array
     {
-        if ('user' === $query->type) {
-            return $this->getFilters(self::USER_FIELDS, $query->locale);
+        if (!array_key_exists($query->type, self::FIELDS)) {
+            throw new \InvalidArgumentException(sprintf('Query type "%s" is not available.', $query->type));
         }
 
-        throw new \InvalidArgumentException(sprintf('Query type "%s" is not available.', $query->type));
+        return $this->getFilters(self::FIELDS[$query->type], $query->locale);
     }
 
     private function getFilters(array $fields, string $locale): array

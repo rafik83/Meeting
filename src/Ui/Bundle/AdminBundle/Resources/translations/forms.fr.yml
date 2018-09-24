@@ -347,6 +347,9 @@ form.filter.firstName.label: Prénom
 form.filter.isVisio.label: Est visio
 form.filter.isVisioTested.label: Visio testée
 form.filter.lastName.label: Nom
+form.filter.participants.email.label: Email du participant
+form.filter.participants.lastname.label: Nom du participant
+form.filter.sheetName.label: Nom de la fiche
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'
 form.filter_admin.role.all: 'Tous les types'
