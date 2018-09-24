@@ -16,15 +16,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ChangeOldMailAddressMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.changeMailOld.subject';
+    public const SUBJECT = 'mail.changeMailOld.subject';
+    public const TEMPLATE = 'MailBundle:Mail:ChangeMail/oldMail.html.twig';
 
-    /**
-     * @var string
-     */
-    protected $template = 'MailBundle:Mail:ChangeMail/oldMail.html.twig';
+    /** @var string */
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

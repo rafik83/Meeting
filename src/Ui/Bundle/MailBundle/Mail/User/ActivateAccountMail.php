@@ -17,15 +17,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ActivateAccountMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.activateAccount.subject';
+    public const SUBJECT = 'mail.activateAccount.subject';
+    public const TEMPLATE = 'MailBundle:Mail:User/activateAccount.html.twig';
 
-    /**
-     * @var string
-     */
-    protected $template = 'MailBundle:Mail:User/activateAccount.html.twig';
+    /** @var string */
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

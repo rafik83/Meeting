@@ -18,11 +18,14 @@ use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class SheetGroupCreatedMail extends UserMail
 {
-    /** @var string */
-    protected $subject = 'mail.sheet.group.created.subject';
+    public const SUBJECT = 'mail.sheet.group.created.subject';
+    public const TEMPLATE = 'MailBundle:Mail:Sheet/groupCreated.html.twig';
 
     /** @var string */
-    protected $template = 'MailBundle:Mail:Sheet/groupCreated.html.twig';
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /** @var string */
     protected $messageId = Events::SHEET_GROUP_CREATED;

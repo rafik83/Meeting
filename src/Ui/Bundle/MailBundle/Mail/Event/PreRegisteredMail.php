@@ -18,15 +18,18 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class PreRegisteredMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.event.preregister.subject';
+    public const SUBJECT = 'mail.event.preregister.subject';
+    public const TEMPLATE = 'MailBundle:Mail:Event/preregister.html.twig';
 
     /**
      * @var string
      */
-    protected $template = 'MailBundle:Mail:Event/preregister.html.twig';
+    protected $subject = self::SUBJECT;
+
+    /**
+     * @var string
+     */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

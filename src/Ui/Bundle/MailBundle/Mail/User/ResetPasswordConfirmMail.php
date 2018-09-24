@@ -17,15 +17,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ResetPasswordConfirmMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.confirmResetPassword.subject';
+    public const SUBJECT = 'mail.confirmResetPassword.subject';
+    public const TEMPLATE = 'MailBundle:Mail:User/resetPasswordConfirm.html.twig';
 
-    /**
-     * @var string
-     */
-    protected $template = 'MailBundle:Mail:User/resetPasswordConfirm.html.twig';
+    /** @var string */
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

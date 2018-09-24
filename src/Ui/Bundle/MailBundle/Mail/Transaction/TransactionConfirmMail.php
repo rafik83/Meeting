@@ -18,15 +18,14 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class TransactionConfirmMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.transaction.confirm.subject';
+    public const SUBJECT = 'mail.transaction.confirm.subject';
+    public const TEMPLATE = 'MailBundle:Mail:Transaction/transactionConfirm.html.twig';
 
-    /**
-     * @var string
-     */
-    protected $template = 'MailBundle:Mail:Transaction/transactionConfirm.html.twig';
+    /** @var string */
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

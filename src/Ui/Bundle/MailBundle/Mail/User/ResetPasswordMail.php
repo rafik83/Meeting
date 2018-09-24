@@ -17,15 +17,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ResetPasswordMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.resetPassword.subject';
+    public const SUBJECT = 'mail.resetPassword.subject';
+    public const TEMPLATE = 'MailBundle:Mail:User/resetPassword.html.twig';
 
-    /**
-     * @var string
-     */
-    protected $template = 'MailBundle:Mail:User/resetPassword.html.twig';
+    /** @var string */
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

@@ -17,11 +17,14 @@ use Proximum\Vimeet\Domain\View\Happening\HappeningParticipationView;
 
 class HappeningParticipationAutomaticallyUpdatedMail extends AbstractMail
 {
-    /** @var string */
-    protected $subject = 'mail.happening.participation.subject';
+    public const SUBJECT = 'mail.happening.participation.subject';
+    public const TEMPLATE = 'MailBundle:Mail:Happening/participation.html.twig';
 
     /** @var string */
-    protected $template = 'MailBundle:Mail:Happening/participation.html.twig';
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /** @var string */
     protected $messageId = Events::HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED;

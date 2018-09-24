@@ -17,15 +17,14 @@ use Proximum\Vimeet\Domain\Model\Order;
 
 class OrderConfirmMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.orderConfirm.subject';
+    public const SUBJECT = 'mail.orderConfirm.subject';
+    public const TEMPLATE = 'MailBundle:Mail:Order/orderConfirm.html.twig';
 
-    /**
-     * @var string
-     */
-    protected $template = 'MailBundle:Mail:Order/orderConfirm.html.twig';
+    /** @var string */
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

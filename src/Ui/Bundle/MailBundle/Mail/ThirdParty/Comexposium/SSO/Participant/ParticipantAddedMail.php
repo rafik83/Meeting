@@ -16,11 +16,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ParticipantAddedMail extends UserMail
 {
-    /** @var string */
-    protected $subject = 'mail.thirdParty.comexposium.sso.participantAdded.subject';
+    public const SUBJECT = 'mail.thirdParty.comexposium.sso.participantAdded.subject';
+    public const TEMPLATE = 'MailBundle:Mail:ThirdParty/Comexposium/SSO/Participant/participantAdded.html.twig';
 
     /** @var string */
-    protected $template = 'MailBundle:Mail:ThirdParty/Comexposium/SSO/Participant/participantAdded.html.twig';
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /** @var string */
     protected $messageId = 'comexposium.sso.participant_added';
