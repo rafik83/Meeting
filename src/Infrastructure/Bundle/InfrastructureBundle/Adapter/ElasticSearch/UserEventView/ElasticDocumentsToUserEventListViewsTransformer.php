@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventSheetsListView;
+use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
 
 class ElasticDocumentsToUserEventListViewsTransformer
 {
@@ -47,8 +48,8 @@ class ElasticDocumentsToUserEventListViewsTransformer
         foreach ($documents as $document) {
             $data = $document->getData();
 
-            foreach ($data['sheets'] as $sheetData) {
-                $id = $sheetData['id'];
+            foreach ($data[TypesMapping::USER_EVENT_VIEW_SHEETS] as $sheetData) {
+                $id = $sheetData[TypesMapping::USER_EVENT_VIEW_SHEETS_ID];
                 $sheetIds[$id] = $id;
             }
         }
@@ -62,10 +63,10 @@ class ElasticDocumentsToUserEventListViewsTransformer
         foreach ($documents as $document) {
             $data = $document->getData();
 
-            $extraData = $this->extraDataRepository->getExtraDataForEventIdNameAndUserId(
-                $data['eventId'],
+            $extraDataVisioTested = $this->extraDataRepository->getExtraDataForEventIdNameAndUserId(
+                $data[TypesMapping::USER_EVENT_VIEW_EVENT_ID],
                 Type::VISIO_TESTED,
-                $data['userId']
+                $data[TypesMapping::USER_EVENT_VIEW_USER_ID]
             );
 
             $userEventSheetsListViews = [];
@@ -89,24 +90,24 @@ class ElasticDocumentsToUserEventListViewsTransformer
                         $sheet->attend(),
                         $sheet->hasGroup(),
                         $sheet->getGroupTitle(),
-                        $sheet->isInCatalog(),
+                        $sheet->isInInternalCatalog(),
                         $sheet->getFollowerName(),
                         $sheet->getCommercialStatus(),
                         $sheet->getCommercialStatusLabel(),
                         $participant ? $participant->isVisio() : false,
-                        $extraData instanceof ExtraData ? (bool)$extraData->getValue() : false
+                        $extraDataVisioTested instanceof ExtraData ? (bool)$extraDataVisioTested->getValue() : false
                     );
                 }
             }
 
             if (!empty($userEventSheetsListViews)) {
                 $userEventListViews[] = new UserEventListView(
-                    $data['eventId'],
-                    $data['userId'],
-                    $data['firstName'],
-                    $data['lastName'],
-                    $data['email'],
-                    $data['locale'],
+                    $data[TypesMapping::USER_EVENT_VIEW_EVENT_ID],
+                    $data[TypesMapping::USER_EVENT_VIEW_USER_ID],
+                    $data[TypesMapping::USER_EVENT_VIEW_FIRSTNAME],
+                    $data[TypesMapping::USER_EVENT_VIEW_LASTNAME],
+                    $data[TypesMapping::USER_EVENT_VIEW_EMAIL],
+                    $data[TypesMapping::USER_EVENT_VIEW_LOCALE],
                     $userEventSheetsListViews
                 );
             }

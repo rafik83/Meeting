@@ -33,7 +33,7 @@ class UserEventView
     /** @var string */
     public $locale;
 
-    /** @var array */
+    /** @var array of ['id' => $sheetId] */
     private $sheets = [];
 
     public function __construct(

@@ -99,18 +99,20 @@ class UserEventViewsFactory
             if (!$userEventViews[$userId]->hasSheetId($sheetId)) {
                 $userEventViews[$userId]->addSheet(['id' => $sheetId]);
             }
-        } else {
-            $userEventViews[$userId] = new UserEventView(
-                $eventId,
-                $userId,
-                $firstName,
-                $lastName,
-                $email,
-                $locale,
-                [
-                    ['id' => $sheetId],
-                ]
-            );
+
+            return;
         }
+
+        $userEventViews[$userId] = new UserEventView(
+            $eventId,
+            $userId,
+            $firstName,
+            $lastName,
+            $email,
+            $locale,
+            [
+                ['id' => $sheetId],
+            ]
+        );
     }
 }

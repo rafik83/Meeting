@@ -14,36 +14,46 @@ use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 
 final class TypesMapping
 {
+    public const USER_EVENT_VIEW_ID = 'id';
+    public const USER_EVENT_VIEW_EVENT_ID = 'eventId';
+    public const USER_EVENT_VIEW_USER_ID = 'userId';
+    public const USER_EVENT_VIEW_FIRSTNAME = 'firstName';
+    public const USER_EVENT_VIEW_LASTNAME = 'lastName';
+    public const USER_EVENT_VIEW_EMAIL = 'email';
+    public const USER_EVENT_VIEW_LOCALE = 'locale';
+    public const USER_EVENT_VIEW_SHEETS = 'sheets';
+    public const USER_EVENT_VIEW_SHEETS_ID = 'id';
+
     public const AVAILABLE_TYPES = [
         UserEventView::class => [
             'type' => 'user_event',
             'properties' => [
-                'id' => [
+                self::USER_EVENT_VIEW_ID => [
                     'type' => 'string',
                 ],
-                'eventId' => [
+                self::USER_EVENT_VIEW_EVENT_ID => [
                     'type' => 'integer',
                 ],
-                'userId' => [
+                self::USER_EVENT_VIEW_USER_ID => [
                     'type' => 'integer',
                 ],
-                'firstName' => [
+                self::USER_EVENT_VIEW_FIRSTNAME => [
                     'type' => 'string',
                 ],
-                'lastName' => [
+                self::USER_EVENT_VIEW_LASTNAME => [
                     'type' => 'string',
                 ],
-                'email' => [
+                self::USER_EVENT_VIEW_EMAIL => [
                     'type' => 'string',
                     'analyzer' => 'emailAnalyzer',
                 ],
-                'locale' => [
+                self::USER_EVENT_VIEW_LOCALE => [
                     'type' => 'string',
                 ],
-                'sheets' => [
+                self::USER_EVENT_VIEW_SHEETS => [
                     'type' => 'nested',
                     'properties' => [
-                        'id' => ['type' => 'integer'],
+                        self::USER_EVENT_VIEW_SHEETS_ID => ['type' => 'integer'],
                     ],
                 ],
             ],
