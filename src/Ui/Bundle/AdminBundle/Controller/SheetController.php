@@ -117,8 +117,8 @@ class SheetController extends Controller
             ));
         }
 
-        if ('POST' === $request->getMethod() && $request->request->get('rules')) {
-            $this->get('session')->set($this->getRulesKey($event), $request->request->get('rules'));
+        if ($request->query->get('rules')) {
+            $this->get('session')->set($this->getRulesKey($event), $request->query->get('rules'));
         }
 
         $locale = $event->getAvailableLocale($request->getLocale());
@@ -169,7 +169,7 @@ class SheetController extends Controller
         $queryBuilderFilters = $this->get(QueryBus::class)->handle(new GetFiltersByTypeAndLocaleQuery('sheet', $locale));
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
-            'locale'           => $locale,
+            'locale'           => $request->getLocale(),
             'event'            => $event,
             'typesByEvent'     => $this->getTypesByEvent($types, $request->getLocale()),
             'sheets'           => $sheets,

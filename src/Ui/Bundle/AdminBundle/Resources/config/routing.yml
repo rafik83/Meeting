@@ -739,7 +739,7 @@ admin_sheet:
     path: /event/{event}/sheet
     requirements:
         event: \d+
-    methods: [GET, POST]
+    methods: [GET]
     defaults: { _controller: AdminBundle:Sheet:list }
 admin_sheet_details:
     path: /event/{event}/sheet/{sheet}
