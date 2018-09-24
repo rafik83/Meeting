@@ -258,6 +258,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.session'
             - '@router'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanEventEntranceAction:
         arguments:

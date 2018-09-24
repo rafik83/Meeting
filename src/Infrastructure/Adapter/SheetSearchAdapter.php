@@ -235,9 +235,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetListView(Event $event, array $filters, string $locale): array
+    public function getSheetListView(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): array
     {
-        $results = $this->getSearchResults($event, $filters, $locale);
+        $results = $this->getSearchResults($event, $filters, $locale, $condition);
 
         return array_map(function (Result $result) {
             return new SheetListView($result->id, $result->sheetName, $result->ownerEmail);
@@ -445,14 +445,21 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      * @param Event  $event
      * @param array  $filters
      * @param string $locale
+     * @param null|RuleInterface $condition
      *
      * @return Result[]
      */
-    private function getSearchResults(Event $event, array $filters, string $locale): array
+    private function getSearchResults(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): array
     {
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+        $queryToArray = ['query' => $builder->getQuery()->toArray()];
 
-        $query = new Query($builder->getQuery());
+        if ($condition instanceof Condition) {
+            $queryToArray['query']['bool']['must'][] = $this->conditionRulesTransformer->transform($condition);
+        }
+
+        $query = new Query();
+        $query->setRawQuery($queryToArray);
         $query->addSort(['sheetName' => 'asc']);
 
         $options = ['size' => ElasticSearchConstant::LONG_RESULTS_NUMBER];

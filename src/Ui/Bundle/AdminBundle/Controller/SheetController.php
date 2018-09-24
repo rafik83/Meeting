@@ -21,13 +21,12 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery;
-use Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
-use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
+use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -87,12 +86,7 @@ class SheetController extends Controller
 
         if (null !== $request->query->get('reset')) {
             $sheetFilter->clear($event);
-
-            return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
-        }
-
-        if (1 === $request->query->getInt('resetQuery')) {
-            $this->get('session')->remove($this->getRulesKey($event));
+            $this->get(RuleStorageInterface::class)->removeRules($event, 'sheet');
 
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
@@ -118,7 +112,7 @@ class SheetController extends Controller
         }
 
         if ($request->query->get('rules')) {
-            $this->get('session')->set($this->getRulesKey($event), $request->query->get('rules'));
+            $this->get(RuleStorageInterface::class)->saveRules($event, 'sheet', $request->query->get('rules'));
         }
 
         $locale = $event->getAvailableLocale($request->getLocale());
@@ -132,7 +126,7 @@ class SheetController extends Controller
                 self::SHEETS_PER_PAGE, // number of sheets by page
                 $locale,
                 $this->getUser(),
-                $this->getRules($event)
+                $this->get(RuleStorageInterface::class)->getRules($event, 'sheet')
             );
             /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);
@@ -181,25 +175,9 @@ class SheetController extends Controller
             ),
             'batch_form'       => $batchForm->createView(),
             'filter_form'      => $sheetFilterView,
-            'rules'            => $this->get('session')->get($this->getRulesKey($event)),
+            'rules'            => $this->get(RuleStorageInterface::class)->getRulesQuery($event, 'sheet'),
             'filters'          => $queryBuilderFilters,
         ]);
-    }
-
-    private function getRules(Event $event): ?RuleInterface
-    {
-        $rules = json_decode($this->get('session')->get($this->getRulesKey($event)), true);
-
-        if ($rules) {
-            return $this->get(QueryBus::class)->handle(new GetConditionRulesQuery($rules));
-        }
-
-        return null;
-    }
-
-    private function getRulesKey(Event $event): string
-    {
-        return sprintf('rules_sheets_%s', $event->getId());
     }
 
     /**

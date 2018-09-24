@@ -14,9 +14,8 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery;
-use Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery;
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery;
-use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
+use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,18 +41,23 @@ class ListAction
     /** @var UrlGeneratorInterface */
     private $urlGenerator;
 
+    /** @var RuleStorageInterface */
+    private $ruleStorageInterface;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
         QueryBusInterface $queryBus,
         SessionInterface $session,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        RuleStorageInterface $ruleStorageInterface
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
         $this->session = $session;
         $this->urlGenerator = $urlGenerator;
+        $this->ruleStorageInterface = $ruleStorageInterface;
     }
 
     public function __invoke(Request $request, Event $event): Response
@@ -68,7 +72,7 @@ class ListAction
         $locale = $event->getAvailableLocale($request->getLocale());
 
         if (1 === $request->query->getInt('reset')) {
-            $this->session->remove($this->getRulesKey($event));
+            $this->ruleStorageInterface->removeRules($event, 'user');
 
             return new RedirectResponse(
                 $this->urlGenerator->generate('admin_users_list', ['event' => $event->getId()])
@@ -76,11 +80,16 @@ class ListAction
         }
 
         if ($request->query->get('rules')) {
-            $this->session->set($this->getRulesKey($event), $request->query->get('rules'));
+            $this->ruleStorageInterface->saveRules($event, 'user', $request->query->get('rules'));
         }
 
         $userEventListViews = $this->queryBus->handle(
-            new GetUserEventListViewsQuery($event, $page, $locale, $this->getRules($event))
+            new GetUserEventListViewsQuery(
+                $event,
+                $page,
+                $locale,
+                $this->ruleStorageInterface->getRules($event, 'user')
+            )
         );
 
         $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $request->getLocale()));
@@ -92,26 +101,10 @@ class ListAction
                     'event' => $event,
                     'userEventListViews' => $userEventListViews,
                     'filters' => $filters,
-                    'rules' => $this->session->get($this->getRulesKey($event)),
+                    'rules' => $this->ruleStorageInterface->getRulesQuery($event, 'user'),
                     'locale' => $request->getLocale(),
                 ]
             )
         );
-    }
-
-    private function getRules(Event $event): ?RuleInterface
-    {
-        $rules = json_decode($this->session->get($this->getRulesKey($event)), true);
-
-        if ($rules) {
-            return $this->queryBus->handle(new GetConditionRulesQuery($rules));
-        }
-
-        return null;
-    }
-
-    private function getRulesKey(Event $event): string
-    {
-        return sprintf('rules_%s', $event->getId());
     }
 }

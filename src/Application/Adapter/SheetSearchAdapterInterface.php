@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface SheetSearchAdapterInterface
@@ -84,10 +85,11 @@ interface SheetSearchAdapterInterface
      * @param Event  $event
      * @param array  $filters
      * @param string $locale
+     * @param null|RuleInterface $condition
      *
      * @return SheetListView[]
      */
-    public function getSheetListView(Event $event, array $filters, string $locale): array;
+    public function getSheetListView(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): array;
 
     /**
      * @param Event  $event

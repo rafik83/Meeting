@@ -5291,6 +5291,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
 
+    Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface: '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleSessionStorage'
+    Proximum\Vimeet\Domain\ConditionRules\Storage\RuleSessionStorage:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.session'
+
     #
     # Transaction
     #
