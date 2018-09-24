@@ -51,3 +51,5 @@ services:
             - .:/srv
         networks:
             - proxy
+        depends_on:
+            - database
