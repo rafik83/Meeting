@@ -25,5 +25,8 @@ final class ComparisonOperatorsByType
             'ends_with',
             'not_ends_with',
         ],
+        'boolean' => [
+            'equal',
+        ],
     ];
 }

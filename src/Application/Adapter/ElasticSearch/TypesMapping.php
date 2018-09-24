@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Elastica\Persister;
+namespace Proximum\Vimeet\Application\Adapter\ElasticSearch;
 
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 
@@ -23,6 +23,8 @@ final class TypesMapping
     public const USER_EVENT_VIEW_LOCALE = 'locale';
     public const USER_EVENT_VIEW_SHEETS = 'sheets';
     public const USER_EVENT_VIEW_SHEETS_ID = 'id';
+    public const USER_EVENT_VIEW_IS_VISIO = 'isVisio';
+    public const USER_EVENT_VIEW_IS_VISIO_TESTED = 'isVisioTested';
 
     public const AVAILABLE_TYPES = [
         UserEventView::class => [
@@ -49,6 +51,12 @@ final class TypesMapping
                 ],
                 self::USER_EVENT_VIEW_LOCALE => [
                     'type' => 'string',
+                ],
+                self::USER_EVENT_VIEW_IS_VISIO => [
+                    'type' => 'boolean',
+                ],
+                self::USER_EVENT_VIEW_IS_VISIO_TESTED => [
+                    'type' => 'boolean',
                 ],
                 self::USER_EVENT_VIEW_SHEETS => [
                     'type' => 'nested',

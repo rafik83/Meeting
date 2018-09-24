@@ -46,7 +46,7 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
         $sheet1337->attend()->willReturn(false);
         $sheet1337->hasGroup()->willReturn(true);
         $sheet1337->getGroupTitle()->willReturn('My sheets group');
-        $sheet1337->isInCatalog()->willReturn(false);
+        $sheet1337->isInInternalCatalog()->willReturn(false);
         $sheet1337->getFollowerName()->willReturn(null);
         $sheet1337->getCommercialStatus()->willReturn('verbal_agreement');
         $sheet1337->getCommercialStatusLabel()->willReturn('success');
@@ -66,7 +66,7 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
         $sheet4556->attend()->willReturn(true);
         $sheet4556->hasGroup()->willReturn(false);
         $sheet4556->getGroupTitle()->willReturn(null);
-        $sheet4556->isInCatalog()->willReturn(true);
+        $sheet4556->isInInternalCatalog()->willReturn(true);
         $sheet4556->getFollowerName()->willReturn('Henry MICHOU');
         $sheet4556->getCommercialStatus()->willReturn('verbal_agreement');
         $sheet4556->getCommercialStatusLabel()->willReturn('success');

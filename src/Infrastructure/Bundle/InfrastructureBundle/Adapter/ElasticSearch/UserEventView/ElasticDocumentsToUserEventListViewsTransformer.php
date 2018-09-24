@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
+use Elastica\Document;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -17,7 +19,6 @@ use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventSheetsListView;
-use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
 
 class ElasticDocumentsToUserEventListViewsTransformer
 {
@@ -36,8 +37,8 @@ class ElasticDocumentsToUserEventListViewsTransformer
     }
 
     /**
-     * @param \Elastica\Document[] $documents
-     * @param string               $locale
+     * @param Document[] $documents
+     * @param string     $locale
      *
      * @return UserEventListView[]
      */

@@ -340,8 +340,12 @@ form.extra_parameter_update.children.name.label: Nom
 form.extra_parameter_update.children.submit.label: Enregistrer
 form.extra_parameter_update.children.value.label: Valeur
 form.field.private: 'Champ privé'
+form.filter.boolean.no.label: Non
+form.filter.boolean.yes.label: Oui
 form.filter.email.label: Email
 form.filter.firstName.label: Prénom
+form.filter.isVisio.label: Est visio
+form.filter.isVisioTested.label: Visio testée
 form.filter.lastName.label: Nom
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'
