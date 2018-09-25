@@ -270,6 +270,18 @@
         </a>
     </li>
     <li class="dropdown-submenu">
+        <a href="{{ path('admin_event_transactional_mail_list', {'event': event.id}) }}">
+            {{ 'admin.transactional.notification.link'|trans }}
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_event_transactional_mail_list', {'event': event.id}) }}">
+                    {{ 'admin.transactional.mail.link'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="dropdown-submenu">
         <a href="#">{{ 'admin.event.template.link'|trans }}</a>
         <ul class="dropdown-menu">
             <li>

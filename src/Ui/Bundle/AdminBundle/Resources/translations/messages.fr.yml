@@ -1067,6 +1067,7 @@ admin.transaction.state.cancelled: Annulé
 admin.transaction.state.paid: Réglé
 admin.transaction.state.pending: 'En attente'
 admin.transaction.update: 'Modifier une transaction'
+admin.transactional.mail.link: 'Emails transactionnels'
 admin.transactional.mail.list.column.key: 'Titre BO de l''email'
 admin.transactional.mail.list.column.title: 'Sujet de l''email'
 admin.transactional.mail.list.column.type: 'Types associés'
@@ -1088,6 +1089,7 @@ admin.transactional.mail.list.key.mail_user_complete_profile: 'Invitation en tan
 admin.transactional.mail.list.key.mail_user_registered: 'Inscription'
 admin.transactional.mail.list.key.mail_user_reset_password: 'Demande de mot de passe oublié'
 admin.transactional.mail.list.title: 'Liste des emails transactionnels'
+admin.transactional.notification.link: 'Notifications'
 admin.type.action.confirmDelete: 'Etes-vous sûr de vouloir supprimer ce type ?'
 admin.type.already_exists: 'Un type de participation au titre identique existe déjà'
 admin.type.badge.configuration.link: 'Configuration du e-badge'
