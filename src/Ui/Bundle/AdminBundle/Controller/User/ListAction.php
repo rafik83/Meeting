@@ -75,8 +75,8 @@ class ListAction
             );
         }
 
-        if ('POST' === $request->getMethod() && $request->request->get('rules')) {
-            $this->session->set($this->getRulesKey($event), $request->request->get('rules'));
+        if ($request->query->get('rules')) {
+            $this->session->set($this->getRulesKey($event), $request->query->get('rules'));
         }
 
         $userEventListViews = $this->queryBus->handle(

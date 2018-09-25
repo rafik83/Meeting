@@ -63,7 +63,7 @@ class GetFiltersByTypeAndLocaleQueryHandler
             ];
 
             if ('boolean' === $type) {
-                $filter = array_merge($filter, $this->getBooleanExtraParameters($locale));
+                $filter = array_merge($filter, $this->getExtraParametersForBooleanField($locale));
             }
 
             $filters[] = $filter;
@@ -72,14 +72,14 @@ class GetFiltersByTypeAndLocaleQueryHandler
         return $filters;
     }
 
-    private function getBooleanExtraParameters(string $locale): array
+    private function getExtraParametersForBooleanField(string $locale): array
     {
         return [
-            'type' => 'integer',
+            'type' => 'boolean',
             'input' => 'radio',
             'values' => [
-                0 => $this->translate('boolean.no', $locale),
-                1 => $this->translate('boolean.yes', $locale),
+                'false' => $this->translate('boolean.no', $locale),
+                'true' => $this->translate('boolean.yes', $locale),
             ],
         ];
     }
