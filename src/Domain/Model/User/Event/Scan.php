@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\User\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Scan\Type;
 
 class Scan
 {
@@ -77,9 +78,14 @@ class Scan
         return $this->createdAt;
     }
 
-    public function getType(): string
+    public function isEventEntrance(): bool
     {
-        return $this->type;
+        return Type::TYPE_EVENT_ENTRANCE === $this->type;
+    }
+
+    public function isHappeningEntrance(): bool
+    {
+        return Type::TYPE_HAPPENING_ENTRANCE === $this->type;
     }
 
     public function getObjectId(): ?int
