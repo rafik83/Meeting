@@ -347,6 +347,7 @@ form.filter.firstName.label: Prénom
 form.filter.isVisio.label: Est visio
 form.filter.isVisioTested.label: Visio testée
 form.filter.lastName.label: Nom
+form.filter.spotReference.label: Lieux attribué
 form.filter.participants.email.label: Email du participant
 form.filter.participants.lastname.label: Nom du participant
 form.filter.sheetName.label: Nom de la fiche
