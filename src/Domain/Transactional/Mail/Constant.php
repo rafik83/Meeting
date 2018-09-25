@@ -70,27 +70,37 @@ final class Constant
     public const TRANSACTIONAL_MAIL_LIST = [
         self::TRANSACTIONAL_MAIL_KEY_PRE_REGISTERED => [
             'subject' => PreRegisteredMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%urlEventAccountParticipant%',
+            ],
             'template' => PreRegisteredMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_ACTIVATE_ACCOUNT => [
             'subject' => User\ActivateAccountMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%urlEventActivateAccount%',
+            ],
             'template' => User\ActivateAccountMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_CHANGE_NEW_MAIL => [
             'subject' => User\ChangeNewMailAddressMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%urlEventActivateNewMail%',
+            ],
             'template' => User\ChangeNewMailAddressMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_CHANGE_OLD_MAIL => [
             'subject' => User\ChangeOldMailAddressMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%newMail%',
+            ],
             'template' => User\ChangeOldMailAddressMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_COMPLETE_PROFILE => [
             'subject' => User\CompleteProfileMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%urlEventActivateAccountAlreadyKnown%',
+            ],
             'template' => User\CompleteProfileMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_REGISTERED => [
@@ -100,7 +110,9 @@ final class Constant
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_RESET_PASSWORD => [
             'subject' => User\ResetPasswordMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%urlEventCreateNewPassword%',
+            ],
             'template' => User\ResetPasswordMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_CHANGED_PASSWORD_CONFIRMED => [
@@ -110,38 +122,63 @@ final class Constant
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_TYPE_CHANGED => [
             'subject' => Sheet\SheetChangeTypeMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%fromType%',
+                '%toType%',
+                '%urlEventSheetLocale%',
+            ],
             'template' => Sheet\SheetChangeTypeMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_GROUP_CREATED => [
             'subject' => Sheet\SheetGroupCreatedMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%urlEventSheetGroupIndex%',
+            ],
             'template' => Sheet\SheetGroupCreatedMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_PARTICIPANT_ADDED_CONFIRMATION => [
             'subject' => Sheet\AddParticipantMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%guestEmail%',
+            ],
             'template' => Sheet\AddParticipantMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_THIRD_PARTY_COMEXPOSIUM_PARTICIPANT_ADDED_CONFIRMATION => [
             'subject' => ParticipantAddedMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%urlEvent%',
+            ],
             'template' => ParticipantAddedMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED => [
             'subject' => HappeningParticipationAutomaticallyUpdatedMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%happeningParticipationChanges%'
+            ],
             'template' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE
         ],
         self::TRANSACTIONAL_MAIL_KEY_ORDER_CONFIRMED => [
             'subject' => OrderConfirmMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%orderDate%',
+                '%orderNumber%',
+                '%urlEventProForma%',
+            ],
             'template' => OrderConfirmMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_TRANSACTION_CONFIRMED => [
             'subject' => TransactionConfirmMail::SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%transactionTotal%',
+            ],
             'template' => TransactionConfirmMail::TEMPLATE,
         ],
+    ];
+
+    public const TRANSACTIONAL_MAIL_GENERIC_PARAMETERS = [
+        '%event%',
+        '%firstName%',
+        '%lastName%',
+        '%participationType%'
     ];
 }
