@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Sheet\GetSheetIdsByFiltersQuery;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
+use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\ExtraData;
@@ -53,6 +54,9 @@ class ExportUploadedObjectsBySheetsAction
     /** var \DateTimeInterface */
     private $datetime;
 
+    /** @var RuleStorageInterface */
+    private $ruleStorage;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         SheetFilterSubmittedDataGetter $sheetFilterSubmittedDataGetter,
@@ -61,7 +65,8 @@ class ExportUploadedObjectsBySheetsAction
         FlashBagInterface $flashBag,
         JobQueueInterface $jobQueue,
         QueryBusInterface $queryBus,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $datetime,
+        RuleStorageInterface $ruleStorage
     ) {
         $this->sheetFilterSubmittedDataGetter = $sheetFilterSubmittedDataGetter;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
@@ -71,6 +76,7 @@ class ExportUploadedObjectsBySheetsAction
         $this->jobQueue = $jobQueue;
         $this->queryBus = $queryBus;
         $this->datetime = $datetime;
+        $this->ruleStorage = $ruleStorage;
     }
 
     public function __invoke(Request $request, Event $event, AdminDomain $adminDomain): RedirectResponse
@@ -85,7 +91,14 @@ class ExportUploadedObjectsBySheetsAction
         $filters = $this->sheetFilterSubmittedDataGetter->handle($event, $adminDomain->getAdmin(), $locale);
 
         /** @var SheetIdsView $sheetIdsView */
-        $sheetIdsView = $this->queryBus->handle(new GetSheetIdsByFiltersQuery($event, $filters, $locale));
+        $sheetIdsView = $this->queryBus->handle(
+            new GetSheetIdsByFiltersQuery(
+                $event,
+                $filters,
+                $locale,
+                $this->ruleStorage->getRules($event, 'sheet')
+            )
+        );
 
         if (empty($sheetIdsView->sheetIds)) {
             $this->flashBag->add('error', 'flash.admin.event.export.uploaded_objects.error');

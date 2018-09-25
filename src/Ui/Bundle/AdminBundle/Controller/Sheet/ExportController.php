@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet;
 
 use Proximum\Vimeet\Application\Query\Sheet;
+use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter;
@@ -41,7 +42,8 @@ class ExportController extends Controller
         $exportQuery = new Sheet\Export\ExportQuery(
             $event,
             $this->getFilters($event, $adminDomain->getAdmin(), $locale),
-            $locale
+            $locale,
+            $this->get(RuleStorageInterface::class)->getRules($event, 'sheet')
         );
 
         return new CsvFileResponse(

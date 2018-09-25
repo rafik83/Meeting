@@ -221,10 +221,17 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetIds(Event $event, array $filters, string $locale): array
+    public function getSheetIds(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): array
     {
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
-        $query   = new Query($builder->getQuery());
+
+        $queryToArray = ['query' => $builder->getQuery()->toArray()];
+        if ($condition instanceof Condition) {
+            $queryToArray['query']['bool']['must'][] = $this->conditionRulesTransformer->transform($condition);
+        }
+
+        $query = new Query();
+        $query->setRawQuery($queryToArray);
         $query->setFields(['id']);
 
         return array_map(function (Result $sheet) {
@@ -247,9 +254,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetIdsView(Event $event, array $filters, string $locale): SheetIdsView
+    public function getSheetIdsView(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): SheetIdsView
     {
-        $results = $this->getSearchResults($event, $filters, $locale);
+        $results = $this->getSearchResults($event, $filters, $locale, $condition);
 
         $sheetIds = array_map(function (Result $result) {
             return $result->id;

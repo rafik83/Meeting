@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Sheet\Export;
 
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class ExportQuery
@@ -24,20 +25,23 @@ class ExportQuery
     /** @var string */
     public $locale;
 
+    /** @var null|RuleInterface */
+    public $condition;
+
     /** @var string */
     public $charset;
 
-    /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param string $locale
-     * @param string $charset
-     */
-    public function __construct(Event $event, array $filters, $locale, $charset = Charset::WINDOWS_1252)
-    {
-        $this->event   = $event;
+    public function __construct(
+        Event $event,
+        array $filters,
+        string $locale,
+        ?RuleInterface $condition = null,
+        string $charset = Charset::WINDOWS_1252
+    ) {
+        $this->event = $event;
         $this->filters = $filters;
         $this->locale  = $locale;
+        $this->condition = $condition;
         $this->charset = $charset;
     }
 }

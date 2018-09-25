@@ -76,10 +76,11 @@ interface SheetSearchAdapterInterface
      * @param Event  $event
      * @param array  $filters
      * @param string $locale
+     * @param null|RuleInterface $condition
      *
      * @return int[]
      */
-    public function getSheetIds(Event $event, array $filters, string $locale): array;
+    public function getSheetIds(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): array;
 
     /**
      * @param Event  $event
@@ -95,10 +96,11 @@ interface SheetSearchAdapterInterface
      * @param Event  $event
      * @param array  $filters
      * @param string $locale
+     * @param null|RuleInterface $condition
      *
      * @return SheetIdsView
      */
-    public function getSheetIdsView(Event $event, array $filters, string $locale): SheetIdsView;
+    public function getSheetIdsView(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): SheetIdsView;
 
     /**
      * @param Event  $event

@@ -57,7 +57,12 @@ class PrepareExportHandler
      */
     public function handle(PrepareExport $command): void
     {
-        $sheetIds = $this->sheetSearchAdapter->getSheetIds($command->event, $command->filters, $command->locale);
+        $sheetIds = $this->sheetSearchAdapter->getSheetIds(
+            $command->event,
+            $command->filters,
+            $command->locale,
+            $command->condition
+        );
 
         if (empty($sheetIds)) {
             throw new NoParticipantToExportException();
