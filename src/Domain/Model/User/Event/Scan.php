@@ -24,6 +24,12 @@ class Scan
     /** @var User */
     private $user;
 
+    /** @var string */
+    private $type;
+
+    /** @var int|null */
+    private $objectId;
+
     /** @var \DateTimeInterface */
     private $scannedAt;
 
@@ -34,12 +40,16 @@ class Scan
         Event $event,
         User $user,
         \DateTimeInterface $scannedAt,
-        \DateTimeInterface $createdAt
+        \DateTimeInterface $createdAt,
+        string $type,
+        ?int $objectId = null
     ) {
         $this->event = $event;
         $this->user = $user;
         $this->scannedAt = $scannedAt;
         $this->createdAt = $createdAt;
+        $this->type = $type;
+        $this->objectId = $objectId;
     }
 
     public function getId(): int
@@ -65,5 +75,15 @@ class Scan
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getObjectId(): ?int
+    {
+        return $this->objectId;
     }
 }

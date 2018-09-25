@@ -12,8 +12,9 @@ namespace Proximum\Vimeet\Application\Command\User\Event;
 
 use Proximum\Vimeet\Domain\Model\User\Event\Scan;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
+use Proximum\Vimeet\Domain\Scan\Type;
 
-class ScanCommandHandler
+class ScanEventEntranceCommandHandler
 {
     /** @var ScanRepositoryInterface */
     private $scanRepository;
@@ -29,14 +30,15 @@ class ScanCommandHandler
         $this->dateTime = $dateTime;
     }
 
-    public function handle(ScanCommand $command): void
+    public function handle(ScanEventEntranceCommand $command): void
     {
         $this->scanRepository->add(
             new Scan(
                 $command->event,
                 $command->user,
                 $command->scannedAt,
-                $this->dateTime
+                $this->dateTime,
+                Type::TYPE_EVENT_ENTRANCE
             )
         );
     }

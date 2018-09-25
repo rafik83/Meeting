@@ -259,7 +259,7 @@ services:
             - '@adapter.session'
             - '@router'
 
-    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction:
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanEventEntranceAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'

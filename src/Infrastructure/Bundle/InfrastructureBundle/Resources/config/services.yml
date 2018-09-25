@@ -567,13 +567,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImport }
 
-    Proximum\Vimeet\Application\Command\User\Event\ScanCommandHandler:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
-            - '@datetime'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ScanCommand }
-
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
