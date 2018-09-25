@@ -1841,3 +1841,14 @@ admin_event_availability_time_range_create:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange\CreateAction }
+
+#
+# Transactional
+#
+#### Mail
+admin_event_transactional_mail_list:
+    path: /event/{event}/transactional/mail/list
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\ListAction

@@ -1,0 +1,33 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
+{% block title 'admin.transactional.mail.list.title'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.transactional.mail.list.title'|trans }}</h1>
+    <h2>{{ 'admin.transactional.mail.list.generic.title'|trans }}</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="col-md-3">{{ 'admin.transactional.mail.list.column.key'|trans }}</th>
+            <th class="col-md-3">{{ 'admin.transactional.mail.list.column.title'|trans }}</th>
+            <th class="col-md-4">{{ 'admin.transactional.mail.list.column.type'|trans }}</th>
+            <th class="col-md-2"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for genericMail in list.genericMailViews %}
+            <tr>
+                <td>{{ ('admin.transactional.mail.list.key.' ~ genericMail.key)|trans }}</td>
+                <td>{{ genericMail.title }}</td>
+                <td>
+                    {{ 'admin.transactional.mail.list.column.type.options.all'|trans }}
+                </td>
+                <td class="text-right">
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

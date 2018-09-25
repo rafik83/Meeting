@@ -126,3 +126,19 @@ services:
             - '@Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingListViewQuery }
+
+    #
+    # Transactional
+    #
+    ### Mail
+    Proximum\Vimeet\Application\Query\Transactional\Mail\Generic\GenericMailViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transactional\Mail\Generic\GenericMailViewQuery }
+
+    Proximum\Vimeet\Application\Query\Transactional\Mail\TransactionalMailListViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Transactional\Mail\Generic\GenericMailViewQueryHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transactional\Mail\TransactionalMailListViewQuery }

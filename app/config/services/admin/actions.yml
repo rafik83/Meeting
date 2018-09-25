@@ -597,3 +597,13 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Adapter\CommandBusInterface'
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
+
+    #
+    # Transactional
+    #
+    #### Mail
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\ListAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating.engine.twig'
+            - '@adapter.authorization_checker'
