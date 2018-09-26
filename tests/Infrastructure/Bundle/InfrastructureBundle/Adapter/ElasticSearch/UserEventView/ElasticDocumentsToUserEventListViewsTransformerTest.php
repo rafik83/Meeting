@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Adapt
 
 use Elastica\Document;
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -26,11 +25,6 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
     {
         $extraData = $this->prophesize(ExtraData::class);
         $extraData->getValue()->willReturn('true');
-
-        $participant = $this->prophesize(Participant::class);
-        $participant->isVisio()->willReturn(true);
-        $participant2 = $this->prophesize(Participant::class);
-        $participant2->isVisio()->willReturn(false);
 
         $sheet1337 = $this->prophesize(Sheet::class);
         $sheet1337->getId()->willReturn(1337);
