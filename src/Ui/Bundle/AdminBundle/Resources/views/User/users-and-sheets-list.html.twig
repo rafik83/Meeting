@@ -19,8 +19,8 @@
             </div>
             <div class="col-md-12">
                 <div class="pull-right">
+                    <a class="btn btn-link" href="{{ path('admin_users_list', {'event': event.id, 'reset': 1 }) }}">{{ 'admin.filters.reset'|trans }}</a>
                     <button type="submit" class="btn btn-primary" id="submit-rules">{{ 'admin.filter'|trans }}</button>
-                    <a class="btn btn-primary" href="{{ path('admin_users_list', {'event': event.id, 'reset': 1 }) }}">{{ 'admin.filters.reset'|trans }}</a>
                 </div>
             </div>
         </form>
