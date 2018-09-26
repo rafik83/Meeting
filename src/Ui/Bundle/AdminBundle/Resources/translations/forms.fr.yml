@@ -66,7 +66,7 @@ form.badge_configuration.children.conditionedByPackage.label: 'Conditionné par 
 form.badge_configuration.children.conditionedByStates.label: 'Conditionné par "état de la fiche"'
 form.badge_configuration.children.footerColor.label: 'Couleur du footer'
 form.badge_configuration.children.footerTextColor.label: 'Couleur du texte du footer'
-form.badge_configuration.children.header.help: 'Par défaut le logo mobile de la langue par défaut'
+form.badge_configuration.children.header.help: 'Par défaut le header mobile de la langue par défaut'
 form.badge_configuration.children.header.label: 'Logo du header'
 form.badge_configuration.children.showFirstName.label: 'Affichage du prénom'
 form.badge_configuration.children.showFooterTypeOrCategory.choices.category: 'Catégorie de participation'
@@ -77,7 +77,7 @@ form.badge_configuration.children.showHeader.label: 'Affichage du logo en header
 form.badge_configuration.children.showLastName.label: 'Affichage du nom'
 form.badge_configuration.children.showPosition.label: 'Affichage de la fonction'
 form.badge_configuration.children.showQRCode.label: 'Affichage du QRCode'
-form.badge_configuration.children.showSheetTitle.label: 'Affichage du titre de la fiche de participation'
+form.badge_configuration.children.showSheetTitle.label: 'Affichage du nom de société'
 form.badge_configuration.children.submit.label: Enregistrer
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
@@ -275,8 +275,8 @@ form.event_update_design.children.headerButtonTextColor.label: 'Couleur du texte
 form.event_update_design.children.headerLeftColor.label: 'Couleur de gauche du Header'
 form.event_update_design.children.headerRightColor.label: 'Couleur de droite du Header'
 form.event_update_design.children.leftColor.label: 'Couleur de gauche des CTA'
-form.event_update_design.children.localizedImages.prototype.children.logo.label: 'Logo desktop'
-form.event_update_design.children.localizedImages.prototype.children.mobileLogo.label: 'Logo mobile'
+form.event_update_design.children.localizedImages.prototype.children.logo.label: 'Header desktop'
+form.event_update_design.children.localizedImages.prototype.children.mobileLogo.label: 'Header mobile'
 form.event_update_design.children.localizedImages.prototype.children.undefined: 'Non défini'
 form.event_update_design.children.removeBackgroundImage.label: 'Supprimer l''image de fond actuelle'
 form.event_update_design.children.rightColor.label: 'Couleur de droite des CTA'
@@ -774,8 +774,8 @@ form.sheet_batch.children.generateInvoice.label: 'Générer facture'
 form.sheet_batch.children.group.label: Entité
 form.sheet_batch.children.pending.label: 'En attente'
 form.sheet_batch.children.printPdf.label: 'Imprimer en PDF'
-form.sheet_batch.children.printPlanningAndBadge.label: 'Impression badge et planning'
 form.sheet_batch.children.printPlanning.label: Imprimer
+form.sheet_batch.children.printPlanningAndBadge.label: 'Impression badge et planning'
 form.sheet_batch.children.printPlanningOrderBy.label: 'Ordre de l''export'
 form.sheet_batch.children.refuse.label: Refuser
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'

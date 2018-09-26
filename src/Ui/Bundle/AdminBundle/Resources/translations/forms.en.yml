@@ -60,6 +60,8 @@ form.availability_time_range_create.children.begin.label: 'Start of the range'
 form.availability_time_range_create.children.end.label: 'End of the range'
 form.availability_time_range_create.children.name.label: 'Backoffice name'
 form.availability_time_range_create.children.submit.label: Save
+form.badge_configuration.children.header.help: 'By default the mobile header of the default language'
+form.badge_configuration.children.showSheetTitle.label: 'Showing the company name'
 form.billing_info_update.children.city.label: City
 form.billing_info_update.children.company.label: Company
 form.billing_info_update.children.country.label: Country
@@ -242,6 +244,8 @@ form.event_practical_info_update.children.organiserName.label: Organiser
 form.event_practical_info_update.children.organiserPhone.label: 'contact phone number'
 form.event_practical_info_update.children.organiserWebsite.label: website
 form.event_practical_info_update.children.submit.label: Save
+form.event_update_design.children.localizedImages.prototype.children.logo.label: 'Desktop header'
+form.event_update_design.children.localizedImages.prototype.children.mobileLogo.label: 'Mobile header'
 form.event_update.children.analyticsCode.label: 'analytics code'
 form.event_update.children.backgroundColor.label: 'background color'
 form.event_update.children.backgroundImage.label: 'background image'
