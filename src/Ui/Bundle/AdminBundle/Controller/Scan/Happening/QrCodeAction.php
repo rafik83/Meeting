@@ -31,14 +31,19 @@ class QrCodeAction
     /** @var QueryBusInterface */
     private $queryBus;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     public function __construct(
         EngineInterface $engine,
         QueryBusInterface $queryBus,
-        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
+        \DateTimeInterface $dateTime
     ) {
         $this->engine = $engine;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
+        $this->dateTime = $dateTime;
     }
 
     public function __invoke(Request $request, Event $event, Happening $happening)
@@ -63,6 +68,7 @@ class QrCodeAction
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'event' => $event,
             'identifiers' => $identifiers->list,
+            'date' => $this->dateTime,
         ]);
     }
 }

@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 export default class Spool {
-    constructor() {
+    constructor(dateDiffInMilliSeconds) {
+        this.dateDiffInMilliSeconds = dateDiffInMilliSeconds;
         this.spool = JSON.parse(localStorage.getItem('spool')) || [];
     }
 
@@ -25,9 +26,12 @@ export default class Spool {
     }
 
     add(identifier) {
+        let date = new Date();
+        date = new Date(date.getTime() - this.dateDiffInMilliSeconds);
+
         this.spool.push({
             identifier: identifier,
-            scannedAt: new Date(),
+            scannedAt: date.toISOString(),
             locked: false
         });
         this.save();

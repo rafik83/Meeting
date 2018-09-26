@@ -8,13 +8,19 @@ class Checkin extends Component {
     constructor() {
         super();
 
+        this.element = document.querySelector('#checkin');
+
+        const currentDate = new Date();
+        const serverDate = new Date(this.element.dataset.serverDate);
+        const dateDiffInMilliSeconds = currentDate.getTime() - serverDate.getTime();
+
         this.state = {
             participants: [],
             search: null,
-            checkin: false
+            checkin: false,
+            dateDiffInMilliSeconds: dateDiffInMilliSeconds
         };
 
-        this.element = document.querySelector('#checkin');
         this.handleCheckin = this.handleCheckin.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
     }
@@ -38,7 +44,7 @@ class Checkin extends Component {
     }
 
     handleCheckin(identifier, index) {
-        let spool = new Spool();
+        let spool = new Spool(this.state.dateDiffInMilliSeconds);
         let participants = this.state.participants;
 
         db.table('identifiers').get(identifier).then(result => {

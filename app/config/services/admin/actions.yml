@@ -449,6 +449,7 @@ services:
             - '@adapter.authorization_checker'
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@datetime'
 
     #
     # OMZ
@@ -615,6 +616,7 @@ services:
         - '@templating.engine.twig'
         - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
         - '@adapter.authorization_checker'
+        - '@datetime'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\ScanAction:
         arguments:

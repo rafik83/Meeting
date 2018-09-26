@@ -8,14 +8,19 @@ class QrCode extends Component {
     constructor() {
         super();
 
+        this.element = document.querySelector('#qrcode');
+
+        const currentDate = new Date();
+        const serverDate = new Date(this.element.dataset.serverDate);
+        const dateDiffInMilliSeconds = currentDate.getTime() - serverDate.getTime();
+
         this.state = {
             display: false,
             error: false,
             nbImportedIdentifiers: 0,
-            result: null
+            result: null,
+            dateDiffInMilliSeconds: dateDiffInMilliSeconds
         };
-
-        this.element = document.querySelector('#qrcode');
 
         this.handleScan = this.handleScan.bind(this);
         this.handleError = this.handleError.bind(this);
@@ -37,7 +42,7 @@ class QrCode extends Component {
 
     handleScan(identifier) {
         if (identifier) {
-            let spool = new Spool();
+            let spool = new Spool(this.state.dateDiffInMilliSeconds);
 
             db.table('identifiers').get(identifier).then(result => {
                 if (result) {
@@ -61,7 +66,6 @@ class QrCode extends Component {
     }
 
     renderResult(result) {
-        console.log(this.element.dataset);
         return (
             <div>
                 <div className="panel panel-default">
