@@ -60,6 +60,12 @@
                     <small>
                         <a href="mailto:{{ userEventListView.email }}">{{ userEventListView.email }}</a>
                     </small>
+
+                    {% if userEventListView.isVisio %}
+                        <span class="label {{ userEventListView.visioTested ? 'label-success' : 'label-info' }}">
+                            <i class="glyphicon glyphicon glyphicon-facetime-video" data-toggle="tooltip" data-placement="top" title="{{ ('admin.sheet.user.' ~ (userEventListView.visioTested ? 'test_performed' : 'test_not_performed'))|trans }}"></i>
+                        </span>
+                    {% endif %}
                 </td>
 
                 <td rowspan="{{ rowSpanValue }}">{{ userEventListView.locale|language }}</td>
@@ -76,15 +82,6 @@
                             {% if userEventSheetListView.hasGroup %}
                                 <span class="label label-success">
                                     <i class="glyphicon glyphicon-duplicate" data-toggle="tooltip" data-placement="top" title="{{ userEventSheetListView.groupTitle }}"></i>
-                                </span>
-                            {% endif %}
-
-                            {% if userEventSheetListView.isVisio %}
-                                {% set tooltip = userEventSheetListView.visioTested ? 'test_performed' : 'test_not_performed' %}
-                                {% set label = userEventSheetListView.visioTested ? 'label-success' : 'label-info' %}
-
-                                <span class="label {{ label }}">
-                                    <i class="glyphicon glyphicon glyphicon-facetime-video" data-toggle="tooltip" data-placement="top" title="{{ ('admin.sheet.user.' ~ tooltip)|trans }}"></i>
                                 </span>
                             {% endif %}
 

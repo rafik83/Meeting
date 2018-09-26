@@ -63,12 +63,6 @@ class UserEventSheetsListView
     /** @var string */
     public $commercialStatusLabel;
 
-    /** @var bool */
-    public $isVisio;
-
-    /** @var bool */
-    public $visioTested;
-
     public function __construct(
         int $id,
         ?string $title,
@@ -86,9 +80,7 @@ class UserEventSheetsListView
         bool $isInCatalog,
         ?string $followerName,
         string $commercialStatus,
-        string $commercialStatusLabel,
-        bool $isVisio = false,
-        bool $visioTested = false
+        string $commercialStatusLabel
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -107,7 +99,5 @@ class UserEventSheetsListView
         $this->followerName = $followerName;
         $this->commercialStatus = $commercialStatus;
         $this->commercialStatusLabel = $commercialStatusLabel;
-        $this->isVisio = $isVisio;
-        $this->visioTested = $visioTested;
     }
 }

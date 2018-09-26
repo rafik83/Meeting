@@ -110,6 +110,8 @@ class UserEventViewsFactory
             $lastName,
             $email,
             $locale,
+            $isVisio = false, // @todo
+            $isVisioTested = false, // @todo
             [
                 ['id' => $sheetId],
             ]

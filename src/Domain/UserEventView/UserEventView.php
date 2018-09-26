@@ -36,6 +36,12 @@ class UserEventView
     /** @var array of ['id' => $sheetId] */
     private $sheets = [];
 
+    /** @var bool */
+    public $isVisio;
+
+    /** @var bool */
+    public $isVisioTested;
+
     public function __construct(
         int $eventId,
         int $userId,
@@ -43,6 +49,8 @@ class UserEventView
         ?string $lastName,
         string $email,
         string $locale,
+        bool $isVisio,
+        bool $isVisioTested,
         array $sheets
     ) {
         $this->id = self::generateId($eventId, $userId);
@@ -52,6 +60,8 @@ class UserEventView
         $this->lastName = $lastName;
         $this->email = $email;
         $this->locale = $locale;
+        $this->isVisio = $isVisio;
+        $this->isVisioTested = $isVisioTested;
 
         $this->addSheets($sheets);
     }

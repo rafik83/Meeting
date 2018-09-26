@@ -10,13 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
+use Elastica\Document;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
-use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventSheetsListView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer;
@@ -50,8 +49,6 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
         $sheet1337->getFollowerName()->willReturn(null);
         $sheet1337->getCommercialStatus()->willReturn('verbal_agreement');
         $sheet1337->getCommercialStatusLabel()->willReturn('success');
-        $sheet1337->getParticipantByUserId(1)->willReturn($participant);
-        $sheet1337->getParticipantByUserId(2)->willReturn($participant2);
 
         $sheet4556 = $this->prophesize(Sheet::class);
         $sheet4556->getId()->willReturn(4556);
@@ -70,10 +67,9 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
         $sheet4556->getFollowerName()->willReturn('Henry MICHOU');
         $sheet4556->getCommercialStatus()->willReturn('verbal_agreement');
         $sheet4556->getCommercialStatusLabel()->willReturn('success');
-        $sheet4556->getParticipantByUserId(2)->willReturn($participant2);
 
         $documents = [
-            new \Elastica\Document(
+            new Document(
                 '42_1',
                 [
                     'eventId' => 42,
@@ -82,12 +78,14 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
                     'lastName' => 'DALLAS',
                     'email' => 'korben.dallas@fifth.element',
                     'locale' => 'en',
+                    'isVisio' => false,
+                    'isVisioTested' => false,
                     'sheets' => [
                         ['id' => 1337]
                     ],
                 ]
             ),
-            new \Elastica\Document(
+            new Document(
                 '42_2',
                 [
                     'eventId' => 42,
@@ -96,6 +94,8 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
                     'lastName' => 'Ekbat de Sebat',
                     'email' => 'leeloo@fifth.element',
                     'locale' => 'fr',
+                    'isVisio' => true,
+                    'isVisioTested' => true,
                     'sheets' => [
                         ['id' => 1337],
                         ['id' => 4556],
@@ -112,6 +112,8 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
                 'DALLAS',
                 'korben.dallas@fifth.element',
                 'en',
+                false,
+                false,
                 [
                     new UserEventSheetsListView(
                         1337,
@@ -130,9 +132,7 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
                         false,
                         null,
                         'verbal_agreement',
-                        'success',
-                        true,
-                        true
+                        'success'
                     ),
                 ]
             ),
@@ -143,6 +143,8 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
                 'Ekbat de Sebat',
                 'leeloo@fifth.element',
                 'fr',
+                true,
+                true,
                 [
                     new UserEventSheetsListView(
                         1337,
@@ -161,9 +163,7 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
                         false,
                         null,
                         'verbal_agreement',
-                        'success',
-                        false,
-                        false
+                        'success'
                     ),
                     new UserEventSheetsListView(
                         4556,
@@ -182,15 +182,12 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
                         true,
                         'Henry MICHOU',
                         'verbal_agreement',
-                        'success',
-                        false,
-                        false
+                        'success'
                     ),
                 ]
             ),
         ];
 
-        $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository
             ->getSheetsByIdsWithTypesAndCategories([1337, 4556], 'fr')
@@ -198,17 +195,8 @@ class ElasticDocumentsToUserEventListViewsTransformerTest extends TestCase
             ->willReturn([1337 => $sheet1337->reveal(), 4556 => $sheet4556->reveal()])
         ;
 
-        $extraDataRepository->getExtraDataForEventIdNameAndUserId(42, Type::VISIO_TESTED, 1)
-            ->shouldBeCalled()
-            ->willReturn($extraData);
-
-        $extraDataRepository->getExtraDataForEventIdNameAndUserId(42, Type::VISIO_TESTED, 2)
-            ->shouldBeCalled()
-            ->willReturn(null);
-
         $elasticDocumentsToUserEventListViewsTranformer = new ElasticDocumentsToUserEventListViewsTransformer(
-            $sheetRepository->reveal(),
-            $extraDataRepository->reveal()
+            $sheetRepository->reveal()
         );
         $this->assertEquals($expectedResult, $elasticDocumentsToUserEventListViewsTranformer->handle($documents, 'fr'));
     }

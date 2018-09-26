@@ -70,6 +70,8 @@ class UserEventViewsFactoryTest extends TestCase
                 'BLANC',
                 'michel@example.net',
                 'fr',
+                false,
+                false,
                 [
                     ['id' => 42],
                     ['id' => 43],
@@ -82,6 +84,8 @@ class UserEventViewsFactoryTest extends TestCase
                 'HENRY',
                 'chloe@example.net',
                 'en',
+                false,
+                false,
                 [
                     ['id' => 42],
                 ]
@@ -93,6 +97,8 @@ class UserEventViewsFactoryTest extends TestCase
                 'DUPOND',
                 'julie@example.net',
                 'fr',
+                false,
+                false,
                 [
                     ['id' => 43],
                 ]
@@ -104,6 +110,8 @@ class UserEventViewsFactoryTest extends TestCase
                 null,
                 'hello@example.net',
                 'en',
+                false,
+                false,
                 [
                     ['id' => 1456],
                 ]
