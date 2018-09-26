@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantVisioToggledEvent;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
@@ -19,14 +22,19 @@ class UpdateVisioHandler
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     /** @var \DateTimeInterface */
     private $datetime;
 
     public function __construct(
         ExtraDataRepositoryInterface $extraDataRepository,
+        DelayedEventDispatcherInterface $delayedEventDispatcher,
         \DateTimeInterface $datetime
     ) {
         $this->extraDataRepository = $extraDataRepository;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
         $this->datetime = $datetime;
     }
 
@@ -56,5 +64,10 @@ class UpdateVisioHandler
         if (false === $updateVisio->visio && $extraData instanceof ExtraData) {
             $this->extraDataRepository->remove($extraData);
         }
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::PARTICIPANT_VISIO_TOGGLED,
+            new ParticipantVisioToggledEvent($updateVisio->participant, $updateVisio->visio)
+        );
     }
 }

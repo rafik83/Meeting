@@ -80,6 +80,7 @@ final class Events
     public const PARTICIPANT_ADDED = 'participant.added';
     public const PARTICIPANT_UPDATED = 'participant.updated';
     public const PARTICIPANT_REMOVED = 'participant.removed';
+    public const PARTICIPANT_VISIO_TOGGLED = 'participant.visio.toggled';
     public const PARTICIPANT_CREATED_BY_GROUP_MANAGER = 'participant.created_by_group_manager';
     public const PARTICIPANT_REMOVED_BY_GROUP_MANAGER = 'participant.removed_by_group_manager';
     public const HAPPENING_PARTICIPATED = 'happening.participated';

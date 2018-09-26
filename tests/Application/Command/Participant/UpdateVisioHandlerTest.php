@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Participant\UpdateVisio;
 use Proximum\Vimeet\Application\Command\Participant\UpdateVisioHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantVisioToggledEvent;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
@@ -48,8 +51,17 @@ class UpdateVisioHandlerTest extends TestCase
         )
             ->shouldBeCalled();
 
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $delayedEventDispatcher
+            ->dispatch(
+                Events::PARTICIPANT_VISIO_TOGGLED,
+                new ParticipantVisioToggledEvent($participant->reveal(), true)
+            )
+            ->shouldBeCalled()
+        ;
+
         $command = new UpdateVisio($participant->reveal(), true);
-        $handler = new UpdateVisioHandler($extraDataRepository->reveal(), $now);
+        $handler = new UpdateVisioHandler($extraDataRepository->reveal(), $delayedEventDispatcher->reveal(), $now);
 
         $handler->handle($command);
     }
@@ -73,8 +85,17 @@ class UpdateVisioHandlerTest extends TestCase
         $extraDataRepository->remove($extraData->reveal())
             ->shouldBeCalled();
 
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $delayedEventDispatcher
+            ->dispatch(
+                Events::PARTICIPANT_VISIO_TOGGLED,
+                new ParticipantVisioToggledEvent($participant->reveal(), false)
+            )
+            ->shouldBeCalled()
+        ;
+
         $command = new UpdateVisio($participant->reveal(), false);
-        $handler = new UpdateVisioHandler($extraDataRepository->reveal(), $now);
+        $handler = new UpdateVisioHandler($extraDataRepository->reveal(), $delayedEventDispatcher->reveal(), $now);
 
         $handler->handle($command);
     }

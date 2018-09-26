@@ -1489,6 +1489,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateVisioHandler
         arguments:
             - '@repository.user.event.extra_data_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateVisio }

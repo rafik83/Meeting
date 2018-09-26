@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEven
 use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedByGroupManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantVisioToggledEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -52,6 +53,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             Events::PARTICIPANT_CREATED_BY_GROUP_MANAGER => 'onParticipantCreatedByGroupManager',
             Events::PARTICIPANT_REMOVED_BY_GROUP_MANAGER => 'onParticipantRemovedByGroupManager',
             Events::PARTICIPANT_REMOVED => 'onParticipantRemoved',
+            Events::PARTICIPANT_VISIO_TOGGLED => 'onParticipantVisioToggled',
             Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreatedByGroupManager',
             Events::REGISTRATION_STEP => 'onRegistrationStepCompleted',
         ];
@@ -66,6 +68,16 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
     {
         $this->commandBus->handle(
             new OnParticipantAdded($participantAddedEvent->participant, $participantAddedEvent->adderOfTheParticipant)
+        );
+    }
+
+    public function onParticipantVisioToggled(ParticipantVisioToggledEvent $participantVisioToggledEvent): void
+    {
+        $this->commandBus->handle(
+            new Update(
+                $participantVisioToggledEvent->participant->getUser(),
+                $participantVisioToggledEvent->participant->getSheet()->getEvent()
+            )
         );
     }
 
