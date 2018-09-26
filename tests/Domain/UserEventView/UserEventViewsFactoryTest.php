@@ -12,7 +12,10 @@ namespace Proximum\Vimeet\Tests\Domain\UserEventView;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEvent\UserEventViewRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory;
 
@@ -98,7 +101,7 @@ class UserEventViewsFactoryTest extends TestCase
                 'julie@example.net',
                 'fr',
                 false,
-                false,
+                true,
                 [
                     ['id' => 43],
                 ]
@@ -110,7 +113,7 @@ class UserEventViewsFactoryTest extends TestCase
                 null,
                 'hello@example.net',
                 'en',
-                false,
+                true,
                 false,
                 [
                     ['id' => 1456],
@@ -124,7 +127,26 @@ class UserEventViewsFactoryTest extends TestCase
         $userEventViewRepository = $this->prophesize(UserEventViewRepositoryInterface::class);
         $userEventViewRepository->getByEvent($event->reveal())->shouldBeCalled()->willReturn($results);
 
-        $userEventViewsFactory = new UserEventViewsFactory($userEventViewRepository->reveal());
+        $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+
+        $extraDataVisioUser99 = $this->prophesize(ExtraData::class);
+        $extraDataRepository
+            ->getExtraDataForEventIdAndNameIndexedByUserId(777, Type::IS_PARTICIPANT_VISIO)
+            ->shouldBeCalled()
+            ->willReturn([99 => $extraDataVisioUser99->reveal()])
+        ;
+
+        $extraDataVisioTestedUser34 = $this->prophesize(ExtraData::class);
+        $extraDataRepository
+            ->getExtraDataForEventIdAndNameIndexedByUserId(777, Type::VISIO_TESTED)
+            ->shouldBeCalled()
+            ->willReturn([34 => $extraDataVisioTestedUser34->reveal()])
+        ;
+
+        $userEventViewsFactory = new UserEventViewsFactory(
+            $userEventViewRepository->reveal(),
+            $extraDataRepository->reveal()
+        );
         $userEventViews = $userEventViewsFactory->getByEvent($event->reveal());
 
         $this->assertEquals($expectedUserEventViews, $userEventViews);

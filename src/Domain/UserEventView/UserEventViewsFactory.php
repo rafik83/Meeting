@@ -12,16 +12,34 @@ namespace Proximum\Vimeet\Domain\UserEventView;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEvent\UserEventViewRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class UserEventViewsFactory
 {
     /** @var UserEventViewRepositoryInterface */
     private $userEventViewRepository;
 
-    public function __construct(UserEventViewRepositoryInterface $userEventViewRepository)
-    {
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
+
+    /** @var bool */
+    private $isEventDataPreloaded = false;
+
+    /** @var ExtraData[] indexed by User id */
+    private $preloadedExtraDataVisioIndexedByUserId = [];
+
+    /** @var ExtraData[] indexed by User id */
+    private $preloadedExtraDataVisioTestedIndexedByUserId = [];
+
+    public function __construct(
+        UserEventViewRepositoryInterface $userEventViewRepository,
+        ExtraDataRepositoryInterface $extraDataRepository
+    ) {
         $this->userEventViewRepository = $userEventViewRepository;
+        $this->extraDataRepository = $extraDataRepository;
     }
 
     /**
@@ -29,6 +47,8 @@ class UserEventViewsFactory
      */
     public function getByEvent(Event $event): array
     {
+        $this->preloadEvent($event);
+
         return $this->getUserEventViews($event, $this->userEventViewRepository->getByEvent($event));
     }
 
@@ -110,11 +130,53 @@ class UserEventViewsFactory
             $lastName,
             $email,
             $locale,
-            $isVisio = false, // @todo
-            $isVisioTested = false, // @todo
+            $this->isVisio($eventId, $userId),
+            $this->isVisioTested($eventId, $userId),
             [
                 ['id' => $sheetId],
             ]
         );
+    }
+
+    private function isVisio(int $eventId, int $userId): bool
+    {
+        if ($this->isEventDataPreloaded) {
+            return isset($this->preloadedExtraDataVisioIndexedByUserId[$userId]);
+        }
+
+        return null !== $this->hasUserEventExtraData($eventId, $userId, Type::IS_PARTICIPANT_VISIO);
+    }
+
+    private function isVisioTested(int $eventId, int $userId): bool
+    {
+        if ($this->isEventDataPreloaded) {
+            return isset($this->preloadedExtraDataVisioTestedIndexedByUserId[$userId]);
+        }
+
+        return null !== $this->hasUserEventExtraData($eventId, $userId, Type::VISIO_TESTED);
+    }
+
+    private function hasUserEventExtraData(int $eventId, int $userId, string $name): bool
+    {
+        return null !== $this->extraDataRepository->getExtraDataForEventIdNameAndUserId($eventId, $name, $userId);
+    }
+
+    private function preloadEvent(Event $event): void
+    {
+        $this->preloadEventUsersIsVisio($event);
+        $this->preloadEventUsersIsVisioTested($event);
+        $this->isEventDataPreloaded = true;
+    }
+
+    private function preloadEventUsersIsVisio(Event $event): void
+    {
+        $this->preloadedExtraDataVisioIndexedByUserId = $this->extraDataRepository
+            ->getExtraDataForEventIdAndNameIndexedByUserId($event->getId(), Type::IS_PARTICIPANT_VISIO);
+    }
+
+    private function preloadEventUsersIsVisioTested(Event $event): void
+    {
+        $this->preloadedExtraDataVisioTestedIndexedByUserId = $this->extraDataRepository
+            ->getExtraDataForEventIdAndNameIndexedByUserId($event->getId(), Type::VISIO_TESTED);
     }
 }

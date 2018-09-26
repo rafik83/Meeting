@@ -2644,6 +2644,7 @@ services:
     Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository'
+            - '@repository.user.event.extra_data_repository'
 
     #
     # Token component

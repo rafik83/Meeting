@@ -56,16 +56,19 @@
                     <small><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEventListView.userId }) }}" target="_blank">{{ userEventListView.userId }}</a></small>
                 </td>
                 <td rowspan="{{ rowSpanValue }}" nowrap>
-                    <strong>{{ userEventListView.lastName }}</strong> {{ userEventListView.firstName }}<br>
-                    <small>
-                        <a href="mailto:{{ userEventListView.email }}">{{ userEventListView.email }}</a>
-                    </small>
+                    <strong>{{ userEventListView.lastName }}</strong> {{ userEventListView.firstName }}
 
                     {% if userEventListView.isVisio %}
                         <span class="label {{ userEventListView.visioTested ? 'label-success' : 'label-info' }}">
                             <i class="glyphicon glyphicon glyphicon-facetime-video" data-toggle="tooltip" data-placement="top" title="{{ ('admin.sheet.user.' ~ (userEventListView.visioTested ? 'test_performed' : 'test_not_performed'))|trans }}"></i>
                         </span>
                     {% endif %}
+
+                    <br>
+
+                    <small>
+                        <a href="mailto:{{ userEventListView.email }}">{{ userEventListView.email }}</a>
+                    </small>
                 </td>
 
                 <td rowspan="{{ rowSpanValue }}">{{ userEventListView.locale|language }}</td>
