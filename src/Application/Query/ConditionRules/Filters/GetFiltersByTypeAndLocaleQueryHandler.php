@@ -19,16 +19,31 @@ class GetFiltersByTypeAndLocaleQueryHandler
     private const TRANSLATION_KEY = 'form.filter.%s.label';
     private const FIELDS = [
         'user' => [
-            TypesMapping::USER_EVENT_VIEW_FIRSTNAME => ['type' => 'string'],
-            TypesMapping::USER_EVENT_VIEW_LASTNAME => ['type' => 'string'],
-            TypesMapping::USER_EVENT_VIEW_EMAIL => ['type' => 'string'],
-            TypesMapping::USER_EVENT_VIEW_IS_VISIO => ['type' => 'boolean'],
-            TypesMapping::USER_EVENT_VIEW_IS_VISIO_TESTED => ['type' => 'boolean'],
+            TypesMapping::USER_EVENT_VIEW_FIRSTNAME => [
+                'type' => 'string',
+                'optgroup' => 'optgroup.participantInfo',
+            ],
+            TypesMapping::USER_EVENT_VIEW_LASTNAME => [
+                'type' => 'string',
+                'optgroup' => 'optgroup.participantInfo',
+            ],
+            TypesMapping::USER_EVENT_VIEW_EMAIL => [
+                'type' => 'string',
+                'optgroup' => 'optgroup.participantInfo',
+            ],
+            TypesMapping::USER_EVENT_VIEW_IS_VISIO => [
+                'type' => 'boolean',
+                'optgroup' => 'optgroup.participantManagement',
+            ],
+            TypesMapping::USER_EVENT_VIEW_IS_VISIO_TESTED => [
+                'type' => 'boolean',
+                'optgroup' => 'optgroup.participantManagement',
+            ],
         ],
         'sheet' => [
-            'sheetName' => ['type' => 'string'],
-            'participants.lastname' => ['type' => 'string'],
-            'participants.email'=> ['type' => 'string'],
+            'sheetName' => ['type' => 'string', 'optgroup' => 'optgroup.sheetInfo'],
+            'participants.lastname' => ['type' => 'string', 'optgroup' => 'optgroup.participantInfo'],
+            'participants.email'=> ['type' => 'string', 'optgroup' => 'optgroup.participantInfo'],
         ],
     ];
 
@@ -59,6 +74,7 @@ class GetFiltersByTypeAndLocaleQueryHandler
                 'id' => $id,
                 'label' => $this->translate($id, $locale),
                 'type' => $type,
+                'optgroup' => $this->translate($field['optgroup'], $locale),
                 'operators' => ComparisonOperatorsByType::OPERATORS[$type] ?? [],
             ];
 
