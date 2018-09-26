@@ -249,10 +249,22 @@
              </a>
          </li>
      {% endif %}
-     <li>
+     <li class="dropdown-submenu">
         <a href="{{ path('admin_event_qr_code_reader', { 'event': event.id }) }}">
             {{ 'admin.event.access_control'|trans }}
         </a>
+         <ul class="dropdown-menu">
+             <li>
+                 <a href="{{ path('admin_event_qr_code_reader', { 'event': event.id }) }}">
+                     {{ 'admin.event.access.entrance'|trans }}
+                 </a>
+             </li>
+             <li>
+                 <a href="{{ path('admin_event_access_happening_list', { 'event': event.id }) }}">
+                     {{ 'admin.event.access.happening.list'|trans }}
+                 </a>
+             </li>
+         </ul>
     </li>
 {% endif %}
 

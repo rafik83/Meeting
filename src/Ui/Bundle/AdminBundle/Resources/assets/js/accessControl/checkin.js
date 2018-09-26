@@ -107,10 +107,12 @@ class Checkin extends Component {
                                     }
                                 </td>
                                 <td>
-                                    <a href={participant.badgeUrl} target={'_blank'}
-                                        className={'btn btn-info'}>
-                                        {this.element.dataset.printBadge}
-                                    </a>
+                                    {this.element.dataset.showPrintBadge === 'true' &&
+                                        <a href={participant.badgeUrl} target={'_blank'}
+                                           className={'btn btn-info'}>
+                                            {this.element.dataset.printBadge}
+                                        </a>
+                                    }
                                 </td>
                             </tr>
                         ))}

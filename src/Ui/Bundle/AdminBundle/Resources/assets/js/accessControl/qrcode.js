@@ -61,6 +61,7 @@ class QrCode extends Component {
     }
 
     renderResult(result) {
+        console.log(this.element.dataset);
         return (
             <div>
                 <div className="panel panel-default">
@@ -78,7 +79,7 @@ class QrCode extends Component {
 
                         {!result && <div className={'alert alert-danger'}>{this.element.dataset.notFound}</div>}
 
-                        {result &&
+                        {result && this.element.dataset.showPrintBadge === 'true' &&
                             <a className={"btn btn-default btn-lg mg-right"} href={result.badgeUrl} target={"_blank"}>
                                 {this.element.dataset.printBadge}
                             </a>
@@ -97,8 +98,9 @@ class QrCode extends Component {
 
         return (
             <Fragment>
-                {nbImportedIdentifiers > 0 &&
-                    <p>
+                {this.element.dataset.showNumberOfAvailableIdentifiers === 'true'
+                    && nbImportedIdentifiers > 0
+                    && <p>
                         {this.element.dataset.numberOfAvailableIdentifiers} : {nbImportedIdentifiers}
                     </p>
                 }
@@ -106,6 +108,7 @@ class QrCode extends Component {
                 {display &&
                     <QrReader
                         delay={300}
+                        style={{ maxWidth: '600px', width: '100%' }}
                         onScan={this.handleScan}
                         onError={this.handleError} />
                 }

@@ -29,4 +29,11 @@ interface ScanRepositoryInterface
     public function getScanDateByUsersAndEvent(array $users, Event $event, \DateTimeInterface $dateTime): array;
 
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool;
+
+    public function hasScanForUserEventTypeAndObjectId(
+        User $user,
+        Event $event,
+        string $scanType,
+        int $objectId
+    ): bool;
 }

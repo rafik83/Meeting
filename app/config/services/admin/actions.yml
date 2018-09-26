@@ -599,3 +599,26 @@ services:
             - '@Proximum\Vimeet\Application\Adapter\CommandBusInterface'
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
+
+    #
+    # Scan
+    #
+    #### Happening
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\ListAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.authorization_checker'
+            - '@templating.engine.twig'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\QrCodeAction:
+        arguments:
+        - '@templating.engine.twig'
+        - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+        - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\ScanAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.authorization_checker'
+

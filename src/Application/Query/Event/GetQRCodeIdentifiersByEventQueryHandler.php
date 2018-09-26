@@ -83,11 +83,14 @@ class GetQRCodeIdentifiersByEventQueryHandler
             }
         }
 
-        $scansIndexedByUserId = $this->scanRepository->getScanDateByUsersAndEvent(
-            $users,
-            $query->event,
-            $this->dateTime
-        );
+        $scansIndexedByUserId = $query->getPreviousScan ?
+            $this->scanRepository->getScanDateByUsersAndEvent(
+                $users,
+                $query->event,
+                $this->dateTime
+            )
+            : []
+        ;
 
         $qrCodePayloadListView = [];
 

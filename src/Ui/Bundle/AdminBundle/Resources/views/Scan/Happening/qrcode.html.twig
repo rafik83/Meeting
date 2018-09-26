@@ -1,0 +1,33 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'admin.event.access_control'|trans }}: {{ happening.title(locale) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/qrcode.js') }}"></script>
+    <script src="{{ asset('assets/js/spool.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <h1 class="page-header">
+        <a href="{{ path('admin_event_access_happening_list', {'event': event.id}) }}" class="btn btn-default">&lt;</a>
+        {{ happening.title(locale) }}
+    </h1>
+
+    <div class="template-builder-menu-wrapper">
+        <div
+            id="qrcode"
+            data-scan-endpoint="{{ path('admin_event_access_happening_scan', {'event': event.id, 'happening': happening.id }) }}"
+            data-identifiers="{{ identifiers|json_encode }}"
+            data-not-found="{{ 'admin.event.qrcode.notfound'|trans }}"
+            data-close="{{ 'admin.common.close'|trans }}"
+            data-title="{{ 'admin.event.qrcode.title'|trans }}"
+            data-show-print-badge="false"
+            data-print-badge="{{ 'admin.event.qrcode.printBadge'|trans }}"
+            data-show-number-of-available-identifiers="false"
+            data-number-of-available-identifiers="{{ 'admin.event.qrcode.number_of_available_badge'|trans }}">
+        </div>
+    </div>
+{% endblock %}
