@@ -55,7 +55,6 @@ class MeetingViewQueryHandlerTest extends TestCase
         $participant1     = ParticipantFactory::create($sheet1);
         $participant2     = ParticipantFactory::create($sheet1);
         $participant3     = ParticipantFactory::create($sheet2);
-        $participant3->setVisio(true);
         $participant4     = ParticipantFactory::create($sheet3);
         $participant5     = ParticipantFactory::create($sheet3);
 

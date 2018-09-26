@@ -48,10 +48,8 @@ class CreateHandlerTest extends TestCase
         $participant2 = $this->prophesize(Participant::class);
         $participant1->getUser()->willReturn($user1->reveal());
         $participant1->getData()->willReturn(['6789' => ['content' => 'data1']]);
-        $participant1->isVisio()->willReturn(true);
         $participant2->getUser()->willReturn($user2->reveal());
         $participant2->getData()->willReturn(['6789' => ['content' => 'data2']]);
-        $participant2->isVisio()->willReturn(false);
         $participant1->isRegistrationComplete()->willReturn(true);
         $participant1->getRegistrationStep()->willReturn(2);
         $participant2->isRegistrationComplete()->willReturn(false);
@@ -92,14 +90,12 @@ class CreateHandlerTest extends TestCase
         $participantRepository->add(Argument::that(function (Participant $input) use ($user1) {
             return $input->getData() === ['6789' => ['content' => 'data1']]
                 && $input->getUser() === $user1->reveal()
-                && true === $input->isVisio()
                 && 2 === $input->getRegistrationStep()
                 && true === $input->isRegistrationComplete();
         }))->shouldBeCalled();
         $participantRepository->add(Argument::that(function (Participant $input) use ($user2) {
             return $input->getData() === ['6789' => ['content' => 'data2']]
             && $input->getUser() === $user2->reveal()
-            && false === $input->isVisio()
             && 1 === $input->getRegistrationStep()
             && false === $input->isRegistrationComplete();
         }))->shouldBeCalled();

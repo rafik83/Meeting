@@ -50,4 +50,6 @@ final class Type
     public const PROTECTED_KEY = 'protected_key';
 
     public const VISIO_TESTED = 'visio_tested';
+
+    public const IS_PARTICIPANT_VISIO = 'is_participant_visio';
 }

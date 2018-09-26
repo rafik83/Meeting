@@ -18,10 +18,6 @@ Proximum\Vimeet\Domain\Model\Participant:
             type: boolean
         imported:
             type: boolean
-        visio:
-            type: boolean
-            options:
-                default: false
         hasRequestAssigned:
             type: boolean
             options:

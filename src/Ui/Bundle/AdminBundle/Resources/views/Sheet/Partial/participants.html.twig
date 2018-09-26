@@ -34,7 +34,7 @@
                                     }) }}">
                                 <label for="is-visio-{{ participant.id }}">
                                     {{ 'admin.sheet.details.participant.visio'|trans }}
-                                    <input type="checkbox" id="is-visio-{{ participant.id }}" name="is-visio" {{ participant.isVisio }}>
+                                    <input type="checkbox" id="is-visio-{{ participant.id }}" name="is-visio" {{ participant.visio ? "checked" : '' }}>
                                 </label>
                             </form>
                         </div>

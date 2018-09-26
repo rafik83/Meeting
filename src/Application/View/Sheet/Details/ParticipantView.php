@@ -17,8 +17,6 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class ParticipantView
 {
-    const VISIO_CHECKED = 'checked';
-
     /** @var int */
     public $id;
 
@@ -71,13 +69,5 @@ class ParticipantView
         $this->agendaConfirmationStatus  = $agendaConfirmationStatus;
         $this->phoneValidationStatusView = $phoneValidationStatusView;
         $this->availabilityConfirmationView = $availabilityConfirmationView;
-    }
-
-    /**
-     * @return string
-     */
-    public function isVisio()
-    {
-        return true === $this->visio ? self::VISIO_CHECKED : '';
     }
 }

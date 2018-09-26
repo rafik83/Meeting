@@ -49,8 +49,7 @@ class UserToParticipant
             $sheet,
             $user,
             $this->getTemplateData($sheet, $user),
-            true,
-            $sheet->getEvent()->getConfiguration()->isVisio()
+            true
         );
         $this->participantRepository->add($participant);
 

@@ -10,35 +10,51 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Application\Exception\Participant\ParticipantException;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class UpdateVisioHandler
 {
-    /** @var ParticipantRepositoryInterface */
-    private $participantRepository;
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
 
-    /**
-     * VisioHandler constructor.
-     *
-     * @param ParticipantRepositoryInterface $participantRepository
-     */
-    public function __construct(ParticipantRepositoryInterface $participantRepository)
-    {
-        $this->participantRepository = $participantRepository;
+    /** @var \DateTimeInterface */
+    private $datetime;
+
+    public function __construct(
+        ExtraDataRepositoryInterface $extraDataRepository,
+        \DateTimeInterface $datetime
+    ) {
+        $this->extraDataRepository = $extraDataRepository;
+        $this->datetime = $datetime;
     }
 
-    /**
-     * @param UpdateVisio $updateVisio
-     *
-     * @throws ParticipantException
-     */
-    public function handle(UpdateVisio $updateVisio)
+    public function handle(UpdateVisio $updateVisio): void
     {
-        $participant = $updateVisio->participant;
+        $event = $updateVisio->participant->getEvent();
+        $user = $updateVisio->participant->getUser();
 
-        $participant->setVisio($updateVisio->visio);
+        $extraData = $this->extraDataRepository->getExtraDataForEventNameAndUser(
+            $event,
+            Type::IS_PARTICIPANT_VISIO,
+            $user
+        );
 
-        $this->participantRepository->set($participant);
+        if (true === $updateVisio->visio && !$extraData instanceof ExtraData) {
+            $this->extraDataRepository->add(
+                new ExtraData(
+                    $user,
+                    $event,
+                    Type::IS_PARTICIPANT_VISIO,
+                    true,
+                    $this->datetime
+                )
+            );
+        }
+
+        if (false === $updateVisio->visio && $extraData instanceof ExtraData) {
+            $this->extraDataRepository->remove($extraData);
+        }
     }
 }
