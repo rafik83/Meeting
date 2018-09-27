@@ -33,11 +33,13 @@ class ListViewQueryHandler
             return $one->getBegin() <=> $another->getBegin();
         });
 
+        $locale = $query->event->getAvailableLocale($query->locale);
+
         $happeningViews = [];
         foreach ($happenings as $happening) {
             $happeningViews[] = new HappeningView(
                 $happening->getId(),
-                $happening->getTitle($query->event->getAvailableLocale($query->locale)),
+                $happening->getTitle($locale),
                 $happening->getBegin()
             );
         }
