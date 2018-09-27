@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import QrReader from 'react-qr-reader';
 import db from '../vendor/db';
 import Spool from './spool';
+import dateDiffCalculator from './dateDiffCalculator';
 
 class QrCode extends Component {
     constructor() {
@@ -10,16 +11,12 @@ class QrCode extends Component {
 
         this.element = document.querySelector('#qrcode');
 
-        const currentDate = new Date();
-        const serverDate = new Date(this.element.dataset.serverDate);
-        const dateDiffInMilliSeconds = currentDate.getTime() - serverDate.getTime();
-
         this.state = {
             display: false,
             error: false,
             nbImportedIdentifiers: 0,
             result: null,
-            dateDiffInMilliSeconds: dateDiffInMilliSeconds
+            dateDiffInMilliSeconds: dateDiffCalculator(this.element.dataset.serverDate)
         };
 
         this.handleScan = this.handleScan.bind(this);

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import db from '../vendor/db';
 import Spool from './spool';
+import dateDiffCalculator from './dateDiffCalculator';
 
 class Checkin extends Component {
     constructor() {
@@ -10,15 +11,11 @@ class Checkin extends Component {
 
         this.element = document.querySelector('#checkin');
 
-        const currentDate = new Date();
-        const serverDate = new Date(this.element.dataset.serverDate);
-        const dateDiffInMilliSeconds = currentDate.getTime() - serverDate.getTime();
-
         this.state = {
             participants: [],
             search: null,
             checkin: false,
-            dateDiffInMilliSeconds: dateDiffInMilliSeconds
+            dateDiffInMilliSeconds: dateDiffCalculator(this.element.dataset.serverDate)
         };
 
         this.handleCheckin = this.handleCheckin.bind(this);
