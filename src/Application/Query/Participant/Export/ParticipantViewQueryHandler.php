@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\View\Participant\Export\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User\Event\Scan;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
@@ -192,7 +193,7 @@ class ParticipantViewQueryHandler
                 $hasHappening = $this->happeningParticipationRepository->findByHappeningAndUser(
                     $happening,
                     $participant->getUser()
-                ) instanceof Happening;
+                ) instanceof HappeningParticipation;
 
                 $result = true === $hasHappening ? $this->translator->trans('admin.participant.export.fields.happening.subscribe', [], null, $locale) : null;
             }

@@ -101,6 +101,7 @@ class ExportQueryHandlerTest extends TestCase
 
         $this->day = $this->prophesize(Event\Day::class);
         $this->event->getDays()->willReturn([$this->day->reveal()]);
+        $this->event->getAvailableLocale('fr')->willReturn('fr');
 
         $this->day->getId()->willReturn(123);
         $dateTime = new \DateTime('2018-10-10 10:00:00.000');

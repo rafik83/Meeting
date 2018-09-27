@@ -112,6 +112,7 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $this->dateTime2 = new \DateTime('2017-10-10 13:39:34.000');
         $this->sheet->getCreatedAt()->willReturn($this->dateTime);
         $this->event->getTimeZone()->willReturn('Europe/Paris');
+        $this->event->getAvailableLocale('fr')->willReturn('fr');
         $this->day = $this->prophesize(Event\Day::class);
         $this->day2 = $this->prophesize(Event\Day::class);
         $this->day->getId()->willReturn(123);
@@ -222,7 +223,6 @@ class ParticipantViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null)
         ;
-
 
         $query = new ParticipantViewQuery(
             $this->event->reveal(),
