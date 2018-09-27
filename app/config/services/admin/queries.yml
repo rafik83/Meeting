@@ -106,6 +106,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@vimeet_infrastructure.repository.happening_repository'
 
     #
     # Meeting

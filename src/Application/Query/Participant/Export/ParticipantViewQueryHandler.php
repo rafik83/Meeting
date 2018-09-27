@@ -13,10 +13,14 @@ namespace Proximum\Vimeet\Application\Query\Participant\Export;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\View\Participant\Export\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\User\Event\Scan;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
+use Proximum\Vimeet\Domain\Scan\Type;
 use Proximum\Vimeet\Domain\Sheet\HasRemainingToPay;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\BooleanObject;
@@ -43,13 +47,17 @@ class ParticipantViewQueryHandler
     /** @var ScanRepositoryInterface */
     private $scanRepository;
 
+    /** @var HappeningRepositoryInterface */
+    private $happeningRepository;
+
     public function __construct(
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         TemplateDataFactory $templateDataFactory,
         HasRemainingToPay $hasRemainingToPay,
         TranslatorInterface $translator,
         ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
-        ScanRepositoryInterface $scanRepository
+        ScanRepositoryInterface $scanRepository,
+        HappeningRepositoryInterface $happeningRepository
     ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->templateDataFactory = $templateDataFactory;
@@ -57,6 +65,7 @@ class ParticipantViewQueryHandler
         $this->translator = $translator;
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
         $this->scanRepository = $scanRepository;
+        $this->happeningRepository = $happeningRepository;
     }
 
     public function handle(ParticipantViewQuery $query): ParticipantView
@@ -70,6 +79,11 @@ class ParticipantViewQueryHandler
 
         $attributableProducts = $this->prepareAttributableProducts($query->participant);
         $daysChecking = $this->prepareDaysChecking($query->participant, $query->event);
+        $happeningChecking = $this->prepareHappeningChecking(
+            $query->participant,
+            $query->event,
+            $query->event->getAvailableLocale($query->locale)
+        );
 
         $view = new ParticipantView(
             $query->participant->getSheet()->getId(),
@@ -88,7 +102,8 @@ class ParticipantViewQueryHandler
             $participantProductId,
             $daysChecking,
             $attributableProducts,
-            $registrationData
+            $registrationData,
+            $happeningChecking
         );
 
         return $view;
@@ -154,5 +169,37 @@ class ParticipantViewQueryHandler
         }
 
         return $days;
+    }
+
+    private function prepareHappeningChecking(Participant $participant, Event $event, string $locale): array
+    {
+        $happenings = $this->happeningRepository->findListByEvent($event, $locale);
+        $happeningColumns = [];
+
+        foreach ($happenings as $happening) {
+            $result = null;
+
+            $scan = $this->scanRepository->getScanForUserEventTypeAndObjectId(
+                $participant->getUser(),
+                $event,
+                Type::TYPE_HAPPENING_ENTRANCE,
+                $happening->getId()
+            );
+
+            if ($scan instanceof Scan) {
+                $result = $scan->getScannedAt()->format('d/m/Y H:i');
+            } else {
+                $hasHappening = $this->happeningParticipationRepository->findByHappeningAndUser(
+                    $happening,
+                    $participant->getUser()
+                ) instanceof Happening;
+
+                $result = true === $hasHappening ? $this->translator->trans('admin.participant.export.fields.happening.subscribe', [], null, $locale) : null;
+            }
+
+            $happeningColumns[sprintf('happening_%d', $happening->getId())] = $result;
+        }
+
+        return $happeningColumns;
     }
 }

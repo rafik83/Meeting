@@ -36,4 +36,11 @@ interface ScanRepositoryInterface
         string $scanType,
         int $objectId
     ): bool;
+
+    public function getScanForUserEventTypeAndObjectId(
+        User $user,
+        Event $event,
+        string $scanType,
+        int $objectId
+    ): ?Scan;
 }

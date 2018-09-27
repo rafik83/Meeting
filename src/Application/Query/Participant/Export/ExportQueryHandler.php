@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Participant\Export;
 use Proximum\Vimeet\Application\View\Participant\Export\ParticipantListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -32,16 +33,21 @@ class ExportQueryHandler
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
+    /** @var HappeningRepositoryInterface */
+    private $happeningRepository;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         ParticipantViewQueryHandler $participantViewQueryHandler,
         TemplateDataFactory $templateDataFactory,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        HappeningRepositoryInterface $happeningRepository
     ) {
         $this->participantRepository = $participantRepository;
         $this->participantViewQueryHandler = $participantViewQueryHandler;
         $this->templateDataFactory = $templateDataFactory;
         $this->productRepository = $productRepository;
+        $this->happeningRepository = $happeningRepository;
     }
 
     /**
@@ -59,6 +65,7 @@ class ExportQueryHandler
 
         $productColumns = $this->prepareProductColumns($exportQuery->event);
         $dayColumns = $this->prepareDayColumns($exportQuery->event);
+        $happeningColumns = $this->prepareHappeningColumns($exportQuery->event, $exportQuery->locale);
 
         foreach ($participants as $participant) {
             if (!isset($typesHandled[$participant->getSheet()->getType()->getId()])) {
@@ -73,7 +80,11 @@ class ExportQueryHandler
             }
 
             $participantViews[] = $this->participantViewQueryHandler->handle(
-                new ParticipantViewQuery($exportQuery->event, $participant, $exportQuery->locale)
+                new ParticipantViewQuery(
+                    $exportQuery->event,
+                    $participant,
+                    $exportQuery->event->getAvailableLocale($exportQuery->locale)
+                )
             );
         }
 
@@ -82,7 +93,8 @@ class ExportQueryHandler
             $participantViews,
             $dayColumns,
             $registrationColumns,
-            $productColumns
+            $productColumns,
+            $happeningColumns
         );
     }
 
@@ -135,5 +147,17 @@ class ExportQueryHandler
         }
 
         return $days;
+    }
+
+    private function prepareHappeningColumns(Event $event, string $locale): array
+    {
+        $happenings = $this->happeningRepository->findListByEvent($event, $locale);
+        $happeningColumns = [];
+
+        foreach ($happenings as $happening) {
+            $happeningColumns[sprintf('happening_%d', $happening->getId())] = $happening->getTitle($locale);
+        }
+
+        return $happeningColumns;
     }
 }

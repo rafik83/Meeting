@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Participant\Export\ParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\Export\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\Export\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
@@ -24,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\HasRemainingToPay;
@@ -228,13 +230,30 @@ class ParticipantViewQueryHandlerTest extends TestCase
             'fr'
         );
 
+        $scan = $this->prophesize(User\Event\Scan::class);
+        $scan->getScannedAt()->willReturn(new \DateTime('2018-10-09 13:38:34.000'));
+
+        $happening = $this->prophesize(Happening::class);
+        $happening->getId()->willReturn(1);
+        $happening->getTitle('fr')->willReturn('Conférence');
+
+        $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
+        $happeningRepository->findListByEvent($this->event->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn([$happening]);
+
+        $this->scanRepository->getScanForUserEventTypeAndObjectId($this->user->reveal(), $this->event->reveal(), \Proximum\Vimeet\Domain\Scan\Type::TYPE_HAPPENING_ENTRANCE, 1)
+            ->shouldBeCalled()
+            ->willReturn($scan);
+
         $handler = new ParticipantViewQueryHandler(
             $this->happeningParticipationRepository->reveal(),
             $this->templateDataFactory->reveal(),
             $this->hasRemainingToPay->reveal(),
             $this->translator->reveal(),
             $this->productAttributedToParticipantRepository->reveal(),
-            $this->scanRepository->reveal()
+            $this->scanRepository->reveal(),
+            $happeningRepository->reveal()
         );
 
         $result = $handler->handle($query);
@@ -263,6 +282,9 @@ class ParticipantViewQueryHandlerTest extends TestCase
                 'AZERTY1' => 'Oui',
                 'AZERTY2' => 'Femme',
                 'AZERTY3' => 'this is a test',
+            ],
+            [
+                'happening_1' => '09/10/2018 13:38'
             ]
         );
 

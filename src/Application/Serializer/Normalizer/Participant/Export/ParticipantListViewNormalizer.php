@@ -73,6 +73,10 @@ class ParticipantListViewNormalizer implements NormalizerInterface
             );
         }
 
+        foreach ($participantListView->registrationColumns as $key => $registrationColumn) {
+            $firstLine[$key] = $this->convertCharset($registrationColumn);
+        }
+
         foreach ($participantListView->dayColumns as $key => $dayColumn) {
             $firstLine[$key] = $this->convertCharset(
                 $this->translator->trans(
@@ -84,14 +88,13 @@ class ParticipantListViewNormalizer implements NormalizerInterface
             );
         }
 
+        foreach ($participantListView->happeningColumns as $key => $happeningColumns) {
+            $firstLine[$key] = $this->convertCharset($happeningColumns);
+        }
+
         foreach ($participantListView->productColumns as $key => $productColumn) {
             $firstLine[$key] = $this->convertCharset($productColumn);
         }
-
-        foreach ($participantListView->registrationColumns as $key => $registrationColumn) {
-            $firstLine[$key] = $this->convertCharset($registrationColumn);
-        }
-
 
         $result[] = $firstLine;
 

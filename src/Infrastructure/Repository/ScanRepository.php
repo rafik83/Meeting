@@ -187,4 +187,29 @@ class ScanRepository implements ScanRepositoryInterface
                 ->getSingleScalarResult() > 1
         ;
     }
+
+    public function getScanForUserEventTypeAndObjectId(
+        User $user,
+        Event $event,
+        string $scanType,
+        int $objectId
+    ): ?Scan {
+        return $this->entityManager->createQueryBuilder()
+            ->select('scan')
+            ->from(Scan::class, 'scan')
+            ->where('scan.event = :event')
+            ->andWhere('scan.user = :user')
+            ->andWhere('scan.type = :type')
+            ->andWhere('scan.objectId = :objectId')
+            ->setParameters([
+                'event' => $event,
+                'user' => $user,
+                'type' => $scanType,
+                'objectId' => $objectId,
+            ])
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }
