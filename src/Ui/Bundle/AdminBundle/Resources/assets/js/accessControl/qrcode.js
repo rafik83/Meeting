@@ -22,6 +22,9 @@ class QrCode extends Component {
         this.handleScan = this.handleScan.bind(this);
         this.handleError = this.handleError.bind(this);
         this.handleReset = this.handleReset.bind(this);
+
+        this.spool = new Spool(dateDiffCalculator(this.element.dataset.serverDate));
+        this.spool.init();
     }
 
     componentDidMount() {
@@ -39,11 +42,9 @@ class QrCode extends Component {
 
     handleScan(identifier) {
         if (identifier) {
-            let spool = new Spool(this.state.dateDiffInMilliSeconds);
-
             db.table('identifiers').get(identifier).then(result => {
                 if (result) {
-                    spool.add(identifier);
+                    this.spool.add(identifier);
                     this.setState({ display: false, error: false, result: result });
                 } else {
                     this.setState({ display: false, error: true, result: null });

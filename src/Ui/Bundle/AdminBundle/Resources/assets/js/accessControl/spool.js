@@ -68,9 +68,10 @@ export default class Spool {
     save() {
         localStorage.setItem('spool', JSON.stringify(this.spool));
     }
-}
 
-window.setInterval(() => {
-    let spool = new Spool();
-    spool.consume();
-}, 200);
+    init() {
+        window.setInterval(() => {
+            this.consume();
+        }, 200);
+    }
+}

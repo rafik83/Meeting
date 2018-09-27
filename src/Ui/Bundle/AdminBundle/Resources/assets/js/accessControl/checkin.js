@@ -20,6 +20,8 @@ class Checkin extends Component {
 
         this.handleCheckin = this.handleCheckin.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.spool = new Spool(dateDiffCalculator(this.element.dataset.serverDate));
+        this.spool.init();
     }
 
     handleSearch(e) {
@@ -41,13 +43,12 @@ class Checkin extends Component {
     }
 
     handleCheckin(identifier, index) {
-        let spool = new Spool(this.state.dateDiffInMilliSeconds);
         let participants = this.state.participants;
 
         db.table('identifiers').get(identifier).then(result => {
             if (result) {
                 participants[index].checkin = new Date();
-                spool.add(identifier);
+                this.spool.add(identifier);
 
                 this.setState({ participants, checkin: true });
             }
