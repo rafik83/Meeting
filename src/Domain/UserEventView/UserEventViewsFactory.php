@@ -144,7 +144,7 @@ class UserEventViewsFactory
             return isset($this->preloadedExtraDataVisioIndexedByUserId[$userId]);
         }
 
-        return null !== $this->hasUserEventExtraData($eventId, $userId, Type::IS_PARTICIPANT_VISIO);
+        return $this->hasUserEventExtraData($eventId, $userId, Type::IS_PARTICIPANT_VISIO);
     }
 
     private function isVisioTested(int $eventId, int $userId): bool
@@ -153,7 +153,7 @@ class UserEventViewsFactory
             return isset($this->preloadedExtraDataVisioTestedIndexedByUserId[$userId]);
         }
 
-        return null !== $this->hasUserEventExtraData($eventId, $userId, Type::VISIO_TESTED);
+        return $this->hasUserEventExtraData($eventId, $userId, Type::VISIO_TESTED);
     }
 
     private function hasUserEventExtraData(int $eventId, int $userId, string $name): bool
