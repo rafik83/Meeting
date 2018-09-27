@@ -77,6 +77,5 @@ class ScanAction
         }
 
         return new JsonResponse('ok');
-
     }
 }

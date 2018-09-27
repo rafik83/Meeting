@@ -46,9 +46,9 @@ class ListViewQueryHandlerTest extends TestCase
 
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
         $happeningRepository->findByEvent($event->reveal())->shouldBeCalled()->willReturn([
+            $happening3->reveal(),
             $happening1->reveal(),
             $happening2->reveal(),
-            $happening3->reveal(),
         ]);
 
         $query = new ListViewQuery($event->reveal(), $locale);
