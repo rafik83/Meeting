@@ -605,5 +605,10 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\ListAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating.engine.twig'
+            - '@templating'
+            - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\CustomizeAction:
+        arguments:
+            - '@templating'
             - '@adapter.authorization_checker'

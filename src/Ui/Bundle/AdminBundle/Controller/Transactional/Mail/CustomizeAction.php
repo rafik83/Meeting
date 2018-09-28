@@ -44,9 +44,11 @@ class CustomizeAction
             throw new AccessDeniedException('Access denied');
         }
 
+        $data = Constant::TRANSACTIONAL_MAIL_LIST[$transactionalMailType];
 
+        dump($data);
 
-        return $this->engine->renderResponse('', [
+        return $this->engine->renderResponse('AdminBundle:Transactional/Mail:customize.html.twig', [
             'event' => $event,
         ]);
     }

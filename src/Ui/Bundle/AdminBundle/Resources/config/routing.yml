@@ -1852,3 +1852,11 @@ admin_event_transactional_mail_list:
         event: \d+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\ListAction
+
+admin_event_transaction_mail_customize:
+    path: /event/{event}/transactional/mail/customize/{transactionalMailType}
+    requirements:
+        event: \d+
+        transactionalMailType: \w+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\CustomizeAction

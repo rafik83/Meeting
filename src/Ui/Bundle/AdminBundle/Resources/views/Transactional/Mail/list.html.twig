@@ -25,6 +25,9 @@
                     {{ 'admin.transactional.mail.list.column.type.options.all'|trans }}
                 </td>
                 <td class="text-right">
+                    <a href="{{ path('admin_event_transaction_mail_customize', {'event': event.id, 'transactionalMailType': genericMail.key}) }}"
+                       class="btn btn-primary"
+                    >Personnaliser</a>
                 </td>
             </tr>
         {% endfor %}
