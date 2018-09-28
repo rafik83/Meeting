@@ -3,7 +3,9 @@
 
 <script type="text/javascript">
     function vimeet_cmxp_login() {
-        comexposiumCap.openCap('login', 'login');
+        if (-1 === location.hash.indexOf('#reset-password')) {
+            comexposiumCap.openCap('login', 'login');
+        }
     }
 
     $(document).ready(function () {
