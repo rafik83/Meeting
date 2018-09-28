@@ -42,6 +42,26 @@ final class Constant
     public const TRANSACTIONAL_MAIL_KEY_SHEET_TYPE_CHANGED = 'mail_sheet_type_changed';
     public const TRANSACTIONAL_MAIL_KEY_SHEET_GROUP_CREATED = 'mail_sheet_group_created';
 
+    public const TRANSACTIONAL_MAIL_KEY_SHEET_REFUSED = 'mail_sheet_refused';
+    public const TRANSACTIONAL_MAIL_SHEET_REFUSED_SUBJECT = 'mail.sheet.refused.subject';
+    public const TRANSACTIONAL_MAIL_SHEET_REFUSED_TEMPLATE = 'MailBundle:Mail:Sheet/sheetRefused.html.twig';
+
+    public const TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATED = 'mail_sheet_validated';
+    public const TRANSACTIONAL_MAIL_SHEET_VALIDATED_SUBJECT = 'mail.sheet.validated.subject';
+    public const TRANSACTIONAL_MAIL_SHEET_VALIDATED_TEMPLATE = 'MailBundle:Mail:Sheet/sheetValidated.html.twig';
+
+    public const TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_VALIDATE = 'mail_sheet_validation_validate';
+    public const TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_SUBJECT = 'mail.sheet.validation.validate.subject';
+    public const TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_TEMPLATE = 'MailBundle:Mail:Sheet/sheetValidationValidate.html.twig';
+
+    public const TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_DRAFT = 'mail_sheet_validation_draft';
+    public const TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_SUBJECT = 'mail.sheet.validation.draft.subject';
+    public const TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_TEMPLATE = 'MailBundle:Mail:Sheet/sheetValidationDraft.html.twig';
+
+    public const TRANSACTIONAL_MAIL_KEY_SHEET_INVOICED = 'mail_sheet_invoiced';
+    public const TRANSACTIONAL_MAIL_SHEET_INVOICED_SUBJECT = 'mail.sheet.invoiced.subject';
+    public const TRANSACTIONAL_MAIL_SHEET_INVOICED_TEMPLATE = 'MailBundle:Mail:Invoice/sheetInvoiced.html.twig';
+
     /*
      * Participant
      */
@@ -73,6 +93,7 @@ final class Constant
             'availableParameters' => [
                 '%urlEventAccountParticipant%',
             ],
+            'isCustomizableByType' => true,
             'template' => PreRegisteredMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_ACTIVATE_ACCOUNT => [
@@ -80,6 +101,7 @@ final class Constant
             'availableParameters' => [
                 '%urlEventActivateAccount%',
             ],
+            'isCustomizableByType' => false,
             'template' => User\ActivateAccountMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_CHANGE_NEW_MAIL => [
@@ -87,6 +109,7 @@ final class Constant
             'availableParameters' => [
                 '%urlEventActivateNewMail%',
             ],
+            'isCustomizableByType' => false,
             'template' => User\ChangeNewMailAddressMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_CHANGE_OLD_MAIL => [
@@ -94,6 +117,7 @@ final class Constant
             'availableParameters' => [
                 '%newMail%',
             ],
+            'isCustomizableByType' => false,
             'template' => User\ChangeOldMailAddressMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_COMPLETE_PROFILE => [
@@ -101,11 +125,13 @@ final class Constant
             'availableParameters' => [
                 '%urlEventActivateAccountAlreadyKnown%',
             ],
+            'isCustomizableByType' => true,
             'template' => User\CompleteProfileMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_REGISTERED => [
             'subject' => User\RegisterAccountMail::SUBJECT,
             'availableParameters' => [],
+            'isCustomizableByType' => false,
             'template' => User\RegisterAccountMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_RESET_PASSWORD => [
@@ -113,11 +139,13 @@ final class Constant
             'availableParameters' => [
                 '%urlEventCreateNewPassword%',
             ],
+            'isCustomizableByType' => false,
             'template' => User\ResetPasswordMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_CHANGED_PASSWORD_CONFIRMED => [
             'subject' => User\ResetPasswordConfirmMail::SUBJECT,
             'availableParameters' => [],
+            'isCustomizableByType' => false,
             'template' => User\ResetPasswordConfirmMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_TYPE_CHANGED => [
@@ -127,13 +155,45 @@ final class Constant
                 '%toType%',
                 '%urlEventSheetLocale%',
             ],
+            'isCustomizableByType' => true,
             'template' => Sheet\SheetChangeTypeMail::TEMPLATE,
+        ],
+        self::TRANSACTIONAL_MAIL_KEY_SHEET_REFUSED => [
+            'subject' => self::TRANSACTIONAL_MAIL_SHEET_REFUSED_SUBJECT,
+            'availableParameters' => [],
+            'isCustomizableByType' => true,
+            'template' => self::TRANSACTIONAL_MAIL_SHEET_REFUSED_TEMPLATE,
+        ],
+        self::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATED => [
+            'subject' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATED_SUBJECT,
+            'availableParameters' => [],
+            'isCustomizableByType' => true,
+            'template' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATED_TEMPLATE,
+        ],
+        self::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_VALIDATE => [
+            'subject' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_SUBJECT,
+            'availableParameters' => [],
+            'isCustomizableByType' => true,
+            'template' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_TEMPLATE,
+        ],
+        self::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_DRAFT => [
+            'subject' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_SUBJECT,
+            'availableParameters' => [],
+            'isCustomizableByType' => true,
+            'template' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_TEMPLATE,
+        ],
+        self::TRANSACTIONAL_MAIL_KEY_SHEET_INVOICED => [
+            'subject' => self::TRANSACTIONAL_MAIL_SHEET_INVOICED_SUBJECT,
+            'availableParameters' => [],
+            'isCustomizableByType' => true,
+            'template' => self::TRANSACTIONAL_MAIL_SHEET_INVOICED_TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_GROUP_CREATED => [
             'subject' => Sheet\SheetGroupCreatedMail::SUBJECT,
             'availableParameters' => [
                 '%urlEventSheetGroupIndex%',
             ],
+            'isCustomizableByType' => false,
             'template' => Sheet\SheetGroupCreatedMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_PARTICIPANT_ADDED_CONFIRMATION => [
@@ -141,6 +201,7 @@ final class Constant
             'availableParameters' => [
                 '%guestEmail%',
             ],
+            'isCustomizableByType' => true,
             'template' => Sheet\AddParticipantMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_THIRD_PARTY_COMEXPOSIUM_PARTICIPANT_ADDED_CONFIRMATION => [
@@ -148,6 +209,7 @@ final class Constant
             'availableParameters' => [
                 '%urlEvent%',
             ],
+            'isCustomizableByType' => true,
             'template' => ParticipantAddedMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED => [
@@ -155,6 +217,7 @@ final class Constant
             'availableParameters' => [
                 '%happeningParticipationChanges%'
             ],
+            'isCustomizableByType' => true,
             'template' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE
         ],
         self::TRANSACTIONAL_MAIL_KEY_ORDER_CONFIRMED => [
@@ -164,6 +227,7 @@ final class Constant
                 '%orderNumber%',
                 '%urlEventProForma%',
             ],
+            'isCustomizableByType' => true,
             'template' => OrderConfirmMail::TEMPLATE,
         ],
         self::TRANSACTIONAL_MAIL_KEY_TRANSACTION_CONFIRMED => [
@@ -171,6 +235,7 @@ final class Constant
             'availableParameters' => [
                 '%transactionTotal%',
             ],
+            'isCustomizableByType' => true,
             'template' => TransactionConfirmMail::TEMPLATE,
         ],
     ];
@@ -179,6 +244,10 @@ final class Constant
         '%event%',
         '%firstName%',
         '%lastName%',
-        '%participationType%'
+        '%participationType%',
+    ];
+
+    public const TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS = [
+        '%participationType%',
     ];
 }
