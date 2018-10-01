@@ -166,8 +166,8 @@ class ParticipantListViewNormalizer implements NormalizerInterface
             $data[$dayKey] = $checkin;
         }
 
-        foreach ($participantView->happeningChecking as $dayKey => $happening) {
-            $data[$dayKey] = $happening;
+        foreach ($participantView->happeningChecking as $happeningKey => $happening) {
+            $data[$happeningKey] = $happening;
         }
 
         foreach ($participantListView->registrationColumns as $key => $registrationColumn) {

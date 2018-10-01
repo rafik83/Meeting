@@ -591,7 +591,7 @@ admin.participant_import_result.title.label: 'Resultat de l''importation des par
 admin.participant_import.title: 'Importer les participants'
 admin.participant.export.fields.day_checkin: 'Venu %date%'
 admin.participant.export.fields.happening_subscriber: 'Inscrit sous-évènement'
-admin.participant.export.fields.happening.subscribe: 'Inscrit'
+admin.participant.export.fields.happening.participate: 'Inscrit'
 admin.participant.export.fields.participant_created_at: 'Création Participant'
 admin.participant.export.fields.participant_email: 'Email Participant'
 admin.participant.export.fields.participant_id: 'ID Participant'

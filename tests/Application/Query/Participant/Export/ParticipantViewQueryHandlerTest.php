@@ -271,7 +271,7 @@ class ParticipantViewQueryHandlerTest extends TestCase
             true,
             12345,
             [
-                'day_123' => '09/10/2017 13:39',
+                'day_123' => '09/10/2017 15:39',
                 'day_124' => null,
             ],
             [
@@ -284,7 +284,7 @@ class ParticipantViewQueryHandlerTest extends TestCase
                 'AZERTY3' => 'this is a test',
             ],
             [
-                'happening_1' => '09/10/2018 13:38'
+                'happening_1' => '09/10/2018 15:38'
             ]
         );
 

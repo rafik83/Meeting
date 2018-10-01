@@ -79,7 +79,7 @@ class ParticipantViewQueryHandler
         ;
 
         $attributableProducts = $this->prepareAttributableProducts($query->participant);
-        $daysChecking = $this->prepareDaysChecking($query->participant, $query->event);
+        $daysChecking = $this->prepareDaysChecking($query->participant, $query->event, $query->locale);
         $happeningChecking = $this->prepareHappeningChecking(
             $query->participant,
             $query->event,
@@ -159,14 +159,15 @@ class ParticipantViewQueryHandler
         return $registrationData;
     }
 
-    private function prepareDaysChecking(Participant $participant, Event $event): array
+    private function prepareDaysChecking(Participant $participant, Event $event, string $locale): array
     {
         $days = [];
+        $dateFormatter = $this->getDateFormatter($locale, $event->getTimeZone());
 
         foreach ($event->getDays() as $day) {
             $check = $this->scanRepository->getUserFirstCheckinTodayByEvent($participant->getUser(), $event, $day->getBegin());
 
-            $days[sprintf('day_%d', $day->getId())] = $check !== null ? $check->getScannedAt()->format('d/m/Y H:i') : null;
+            $days[sprintf('day_%d', $day->getId())] = $check !== null ? $dateFormatter->format($check->getScannedAt()->getTimestamp()) : null;
         }
 
         return $days;
@@ -176,6 +177,8 @@ class ParticipantViewQueryHandler
     {
         $happenings = $this->happeningRepository->findListByEvent($event, $locale);
         $happeningColumns = [];
+
+        $dateFormatter = $this->getDateFormatter($locale, $event->getTimeZone());
 
         foreach ($happenings as $happening) {
             $result = null;
@@ -188,19 +191,29 @@ class ParticipantViewQueryHandler
             );
 
             if ($scan instanceof Scan) {
-                $result = $scan->getScannedAt()->format('d/m/Y H:i');
+                $result = $dateFormatter->format($scan->getScannedAt()->getTimestamp());
             } else {
                 $hasHappening = $this->happeningParticipationRepository->findByHappeningAndUser(
                     $happening,
                     $participant->getUser()
                 ) instanceof HappeningParticipation;
 
-                $result = true === $hasHappening ? $this->translator->trans('admin.participant.export.fields.happening.subscribe', [], null, $locale) : null;
+                $result = true === $hasHappening ? $this->translator->trans('admin.participant.export.fields.happening.participate', [], null, $locale) : null;
             }
 
             $happeningColumns[sprintf('happening_%d', $happening->getId())] = $result;
         }
 
         return $happeningColumns;
+    }
+
+    private function getDateFormatter(string $locale, string $timezone): \IntlDateFormatter
+    {
+        return \IntlDateFormatter::create(
+            $locale,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::SHORT,
+            $timezone
+        );
     }
 }

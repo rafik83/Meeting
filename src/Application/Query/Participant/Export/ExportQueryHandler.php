@@ -65,7 +65,10 @@ class ExportQueryHandler
 
         $productColumns = $this->prepareProductColumns($exportQuery->event);
         $dayColumns = $this->prepareDayColumns($exportQuery->event);
-        $happeningColumns = $this->prepareHappeningColumns($exportQuery->event, $exportQuery->locale);
+        $happeningColumns = $this->prepareHappeningColumns(
+            $exportQuery->event,
+            $exportQuery->event->getAvailableLocale($exportQuery->locale)
+        );
 
         foreach ($participants as $participant) {
             if (!isset($typesHandled[$participant->getSheet()->getType()->getId()])) {
