@@ -610,5 +610,22 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\CustomizeAction:
         arguments:
-            - '@templating'
+            - '@templating.engine.twig'
             - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\UpdateCustomizedAction:
+        arguments:
+            - '@templating.engine.twig'
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'

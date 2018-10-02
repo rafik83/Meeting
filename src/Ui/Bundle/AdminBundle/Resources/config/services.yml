@@ -320,6 +320,12 @@ services:
             tags:
                 - { name: form.type }
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail\CustomizeTranslationType:
+        arguments:
+            - '@ui.helper.messaging_message_placeholder_helper'
+        tags:
+        - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail\CustomizeTranslationType }
+
     #
     # Value Resolver
     #

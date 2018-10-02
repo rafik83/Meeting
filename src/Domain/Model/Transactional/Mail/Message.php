@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model\Transactional\Mail;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 
@@ -90,18 +91,62 @@ class Message
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getTranslations(): ArrayCollection
+    public function getTranslations(): Collection
     {
         return $this->translations;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Type[]
      */
-    public function getAssociatedParticipationTypes(): ArrayCollection
+    public function getAssociatedParticipationTypes(): array
     {
-        return $this->associatedParticipationTypes;
+        return $this->associatedParticipationTypes->toArray();
+    }
+
+    public function setTranslation(string $locale, string $subject, string $content): void
+    {
+        $this->translations->set(
+            $locale,
+            new MessageTranslation(
+                $subject,
+                $content,
+                $locale,
+                $this
+            )
+        );
+    }
+
+    public function hasTranslation(string $locale): bool
+    {
+        return $this->translations->containsKey($locale);
+    }
+
+    public function getTranslation(string $locale): MessageTranslation
+    {
+        return $this->translations->get($locale);
+    }
+
+    public function translate(string $locale, string $subject, string $content): void
+    {
+        if ($this->hasTranslation($locale)) {
+            $this->getTranslation($locale)->set($subject, $content);
+        } else {
+            $this->setTranslation($locale, $subject, $content);
+        }
+    }
+
+    public function update(array $associatedParticipationTypes): void
+    {
+        $this->associatedParticipationTypes = new ArrayCollection($associatedParticipationTypes);
+    }
+
+    public function updateTranslations(array $translations): void
+    {
+        foreach ($translations as $locale => $translation) {
+            $this->translate($locale, $translation['subject'], $translation['content']);
+        }
     }
 }

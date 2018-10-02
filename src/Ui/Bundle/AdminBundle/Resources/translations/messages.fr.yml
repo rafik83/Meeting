@@ -1067,6 +1067,7 @@ admin.transaction.state.cancelled: Annulé
 admin.transaction.state.paid: Réglé
 admin.transaction.state.pending: 'En attente'
 admin.transaction.update: 'Modifier une transaction'
+admin.transactional.mail.action.customize: 'Personnaliser'
 admin.transactional.mail.link: 'Emails transactionnels'
 admin.transactional.mail.list.column.key: 'Titre BO de l''email'
 admin.transactional.mail.list.column.title: 'Sujet de l''email'

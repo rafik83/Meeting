@@ -12,23 +12,25 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\Transactional\Mail\Customize;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Command\Transactional\Mail\UpdateCustomized;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
 use Proximum\Vimeet\Domain\Repository\Transactional\Mail\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail\CustomizeType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail\UpdateCustomizedType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use function array_key_exists;
 
-class CustomizeAction
+class UpdateCustomizedAction
 {
     /** @var EngineInterface */
     private $engine;
@@ -66,25 +68,30 @@ class CustomizeAction
     ) {
         $this->engine = $engine;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->messageRepository = $messageRepository;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->router = $router;
+        $this->messageRepository = $messageRepository;
         $this->typeRepository = $typeRepository;
     }
 
-    public function __invoke(Request $request, Event $event, string $transactionalMailType): Response
-    {
+    public function __invoke(
+        Request $request,
+        Event $event,
+        string $transactionalMailType,
+        Message $message
+    ): Response {
         if (!array_key_exists($transactionalMailType, Constant::TRANSACTIONAL_MAIL_LIST)
             || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || $message->getType() !== $transactionalMailType
+            || $message->getEvent() !== $event
         ) {
             throw new AccessDeniedException('Access denied');
         }
 
         $data = Constant::TRANSACTIONAL_MAIL_LIST[$transactionalMailType];
-
         $remainingTypes = [];
 
         if ($data['isCustomizableByType']) {
@@ -92,8 +99,12 @@ class CustomizeAction
 
             $remainingTypes = $this->typeRepository->getTypesByEvent($event);
 
-            foreach ($messages as $message) {
-                foreach ($message->getAssociatedParticipationTypes() as $type) {
+            foreach ($messages as $oneMessage) {
+                if ($oneMessage === $message) {
+                    continue;
+                }
+
+                foreach ($oneMessage->getAssociatedParticipationTypes() as $type) {
                     if (isset($remainingTypes[$type->getId()])) {
                         unset($remainingTypes[$type->getId()]);
                     }
@@ -119,8 +130,8 @@ class CustomizeAction
             }
         }
 
-        $customize = new Customize($event, $transactionalMailType, $data);
-        $form = $this->formFactory->create(CustomizeType::class, $customize, [
+        $customize = new UpdateCustomized($message, $data);
+        $form = $this->formFactory->create(UpdateCustomizedType::class, $customize, [
             'isCustomizableByType' => $data['isCustomizableByType'],
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'remainingTypes' => $remainingTypes,
@@ -135,7 +146,7 @@ class CustomizeAction
             ]));
         }
 
-        return $this->engine->renderResponse('AdminBundle:Transactional/Mail:customize.html.twig', [
+        return $this->engine->renderResponse('AdminBundle:Transactional/Mail:updateCustomized.html.twig', [
             'form' => $form->createView(),
             'transactionalMailType' => $transactionalMailType,
             'event' => $event,

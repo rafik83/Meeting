@@ -1,0 +1,14 @@
+Proximum\Vimeet\Application\Command\Transactional\Mail\UpdateCustomized:
+    properties:
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        subject:
+                            - NotBlank: ~
+                        content:
+                            - NotBlank: ~
+    constraints:
+        - Expression:
+              expression: "this.hasNoAssociatedTypesConflict()"
+              message: "validators.allowDepositMissingData"

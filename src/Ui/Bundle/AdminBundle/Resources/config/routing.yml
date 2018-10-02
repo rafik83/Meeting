@@ -1860,3 +1860,12 @@ admin_event_transaction_mail_customize:
         transactionalMailType: \w+
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\CustomizeAction
+
+admin_event_transaction_mail_update_customized:
+    path: /event/{event}/transactional/mail/customize/{transactionalMailType}/update/{message}
+    requirements:
+        event: \d+
+        transactionalMailType: \w+
+        message: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\UpdateCustomizedAction

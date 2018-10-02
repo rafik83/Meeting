@@ -27,7 +27,7 @@
                 <td class="text-right">
                     <a href="{{ path('admin_event_transaction_mail_customize', {'event': event.id, 'transactionalMailType': genericMail.key}) }}"
                        class="btn btn-primary"
-                    >Personnaliser</a>
+                    >{{ 'admin.transactional.mail.action.customize'|trans }}</a>
                 </td>
             </tr>
         {% endfor %}
