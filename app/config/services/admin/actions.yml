@@ -589,6 +589,7 @@ services:
             - '@router'
             - '@adapter.authorization_checker'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
     # Meeting
