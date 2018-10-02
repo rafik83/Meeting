@@ -54,4 +54,23 @@ class MessageRepository implements MessageRepositoryInterface
             ->getResult()
         ;
     }
+
+    /**
+     * @param Event $event
+     *
+     * @return Message[]
+     */
+    public function findByEvent(Event $event): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('message')
+            ->from(Message::class, 'message')
+            ->where('message.event = :event')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

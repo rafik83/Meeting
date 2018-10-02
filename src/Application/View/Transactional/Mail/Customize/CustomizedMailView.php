@@ -1,16 +1,16 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) Proximum
+ * Copyright (C) vimeet
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Transactional\Mail\Generic;
+namespace Proximum\Vimeet\Application\View\Transactional\Mail\Customize;
 
-class GenericMailView
+class CustomizedMailView
 {
     /** @var string */
     public $key;
@@ -24,12 +24,17 @@ class GenericMailView
     /** @var string[] */
     public $associatedTypeTitles;
 
+    /** @var int */
+    public $messageId;
+
     public function __construct(
+        int $messageId,
         string $key,
         string $subject,
         bool $isCustomizableByTypes,
         array $associatedTypeTitles
     ) {
+        $this->messageId = $messageId;
         $this->key = $key;
         $this->subject = $subject;
         $this->isCustomizableByTypes = $isCustomizableByTypes;

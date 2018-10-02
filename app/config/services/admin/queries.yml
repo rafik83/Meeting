@@ -131,6 +131,8 @@ services:
     # Transactional
     #
     ### Mail
+    Proximum\Vimeet\Application\Query\Transactional\Mail\Customize\CustomizedMailViewQueryHandler: ~
+
     Proximum\Vimeet\Application\Query\Transactional\Mail\Generic\GenericMailViewQueryHandler:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
@@ -140,5 +142,8 @@ services:
     Proximum\Vimeet\Application\Query\Transactional\Mail\TransactionalMailListViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Query\Transactional\Mail\Generic\GenericMailViewQueryHandler'
+            - '@Proximum\Vimeet\Application\Query\Transactional\Mail\Customize\CustomizedMailViewQueryHandler'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transactional\Mail\TransactionalMailListViewQuery }

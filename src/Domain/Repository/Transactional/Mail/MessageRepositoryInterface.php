@@ -26,4 +26,11 @@ interface MessageRepositoryInterface
      * @return Message[]
      */
     public function findByEventAndType(Event $event, string $transactionalMailType): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return Message[]
+     */
+    public function findByEvent(Event $event): array;
 }

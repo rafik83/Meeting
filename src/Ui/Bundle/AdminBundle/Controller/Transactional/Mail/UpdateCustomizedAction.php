@@ -110,24 +110,6 @@ class UpdateCustomizedAction
                     }
                 }
             }
-
-            if (empty($remainingTypes)) {
-                $this->flashBag->add('error', 'flash.admin.transactional.mail.customize.customizableByType.empty.error');
-
-                return new RedirectResponse($this->router->generate('admin_event_transactional_mail_list', [
-                    'event' => $event->getId(),
-                ]));
-            }
-        } else {
-            $messages = $this->messageRepository->findByEventAndType($event, $transactionalMailType);
-
-            if (!empty($messages)) {
-                $this->flashBag->add('error', 'flash.admin.transactional.mail.customize.notCustomizableByType.error');
-
-                return new RedirectResponse($this->router->generate('admin_event_transactional_mail_list', [
-                    'event' => $event->getId(),
-                ]));
-            }
         }
 
         $customize = new UpdateCustomized($message, $data);

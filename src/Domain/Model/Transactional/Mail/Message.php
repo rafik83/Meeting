@@ -149,4 +149,9 @@ class Message
             $this->translate($locale, $translation['subject'], $translation['content']);
         }
     }
+
+    public function getSubject(string $locale): string
+    {
+        return $this->getTranslation($locale)->getSubject();
+    }
 }
