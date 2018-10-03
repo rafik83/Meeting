@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Query\Participant\Export;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\View\Participant\Export\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User\Event\Scan;
@@ -79,7 +78,7 @@ class ParticipantViewQueryHandler
         ;
 
         $attributableProducts = $this->prepareAttributableProducts($query->participant);
-        $daysChecking = $this->prepareDaysChecking($query->participant, $query->event, $query->locale);
+        $daysChecking = $this->prepareDaysChecking($query->participant, $query->event);
         $happeningChecking = $this->prepareHappeningChecking(
             $query->participant,
             $query->event,
@@ -159,15 +158,14 @@ class ParticipantViewQueryHandler
         return $registrationData;
     }
 
-    private function prepareDaysChecking(Participant $participant, Event $event, string $locale): array
+    private function prepareDaysChecking(Participant $participant, Event $event): array
     {
         $days = [];
-        $dateFormatter = $this->getDateFormatter($locale, $event->getTimeZone());
 
         foreach ($event->getDays() as $day) {
             $check = $this->scanRepository->getUserFirstCheckinTodayByEvent($participant->getUser(), $event, $day->getBegin());
 
-            $days[sprintf('day_%d', $day->getId())] = $check !== null ? $dateFormatter->format($check->getScannedAt()->getTimestamp()) : null;
+            $days[sprintf('day_%d', $day->getId())] = $check !== null ? $this->getDateFormattedByTimezone($check->getScannedAt(), $event->getTimeZone()) : null;
         }
 
         return $days;
@@ -177,8 +175,6 @@ class ParticipantViewQueryHandler
     {
         $happenings = $this->happeningRepository->findListByEvent($event, $locale);
         $happeningColumns = [];
-
-        $dateFormatter = $this->getDateFormatter($locale, $event->getTimeZone());
 
         foreach ($happenings as $happening) {
             $result = null;
@@ -191,7 +187,7 @@ class ParticipantViewQueryHandler
             );
 
             if ($scan instanceof Scan) {
-                $result = $dateFormatter->format($scan->getScannedAt()->getTimestamp());
+                $result = $this->getDateFormattedByTimezone($scan->getScannedAt(), $event->getTimeZone());
             } else {
                 $hasHappening = $this->happeningParticipationRepository->findByHappeningAndUser(
                     $happening,
@@ -207,13 +203,11 @@ class ParticipantViewQueryHandler
         return $happeningColumns;
     }
 
-    private function getDateFormatter(string $locale, string $timezone): \IntlDateFormatter
+    private function getDateFormattedByTimezone(\DateTimeInterface $dateTime, string $timezone): string
     {
-        return \IntlDateFormatter::create(
-            $locale,
-            \IntlDateFormatter::SHORT,
-            \IntlDateFormatter::SHORT,
-            $timezone
-        );
+        return (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTimezone(new \DateTimeZone($timezone))
+            ->format('d/m/Y H:i');
     }
 }
