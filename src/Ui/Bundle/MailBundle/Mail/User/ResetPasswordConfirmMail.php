@@ -19,6 +19,7 @@ class ResetPasswordConfirmMail extends UserMail
 {
     public const SUBJECT = 'mail.confirmResetPassword.subject';
     public const TEMPLATE = 'MailBundle:Mail:User/resetPasswordConfirm.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:User/resetPasswordConfirm_full_text.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;

@@ -19,6 +19,7 @@ class HappeningParticipationAutomaticallyUpdatedMail extends AbstractMail
 {
     public const SUBJECT = 'mail.happening.participation.subject';
     public const TEMPLATE = 'MailBundle:Mail:Happening/participation.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Happening/participation_full_text.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;

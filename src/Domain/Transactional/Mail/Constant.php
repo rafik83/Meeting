@@ -45,22 +45,27 @@ final class Constant
     public const TRANSACTIONAL_MAIL_KEY_SHEET_REFUSED = 'mail_sheet_refused';
     public const TRANSACTIONAL_MAIL_SHEET_REFUSED_SUBJECT = 'mail.sheet.refused.subject';
     public const TRANSACTIONAL_MAIL_SHEET_REFUSED_TEMPLATE = 'MailBundle:Mail:Sheet/sheetRefused.html.twig';
+    public const TRANSACTIONAL_MAIL_SHEET_REFUSED_TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Sheet/sheetRefused_full_text.html.twig';
 
     public const TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATED = 'mail_sheet_validated';
     public const TRANSACTIONAL_MAIL_SHEET_VALIDATED_SUBJECT = 'mail.sheet.validated.subject';
     public const TRANSACTIONAL_MAIL_SHEET_VALIDATED_TEMPLATE = 'MailBundle:Mail:Sheet/sheetValidated.html.twig';
+    public const TRANSACTIONAL_MAIL_SHEET_VALIDATED_TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Sheet/sheetValidated_full_text.html.twig';
 
     public const TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_VALIDATE = 'mail_sheet_validation_validate';
     public const TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_SUBJECT = 'mail.sheet.validation.validate.subject';
     public const TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_TEMPLATE = 'MailBundle:Mail:Sheet/sheetValidationValidate.html.twig';
+    public const TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Sheet/sheetValidationValidate_full_text.html.twig';
 
     public const TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_DRAFT = 'mail_sheet_validation_draft';
     public const TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_SUBJECT = 'mail.sheet.validation.draft.subject';
     public const TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_TEMPLATE = 'MailBundle:Mail:Sheet/sheetValidationDraft.html.twig';
+    public const TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Sheet/sheetValidationDraft_full_text.html.twig';
 
     public const TRANSACTIONAL_MAIL_KEY_SHEET_INVOICED = 'mail_sheet_invoiced';
     public const TRANSACTIONAL_MAIL_SHEET_INVOICED_SUBJECT = 'mail.sheet.invoiced.subject';
     public const TRANSACTIONAL_MAIL_SHEET_INVOICED_TEMPLATE = 'MailBundle:Mail:Invoice/sheetInvoiced.html.twig';
+    public const TRANSACTIONAL_MAIL_SHEET_INVOICED_TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Invoice/sheetInvoiced_full_text.html.twig';
 
     /*
      * Participant
@@ -95,6 +100,7 @@ final class Constant
             ],
             'isCustomizableByType' => true,
             'template' => PreRegisteredMail::TEMPLATE,
+            'template_full_text' => PreRegisteredMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_ACTIVATE_ACCOUNT => [
             'subject' => User\ActivateAccountMail::SUBJECT,
@@ -103,6 +109,7 @@ final class Constant
             ],
             'isCustomizableByType' => false,
             'template' => User\ActivateAccountMail::TEMPLATE,
+            'template_full_text' => User\ActivateAccountMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_CHANGE_NEW_MAIL => [
             'subject' => User\ChangeNewMailAddressMail::SUBJECT,
@@ -111,6 +118,7 @@ final class Constant
             ],
             'isCustomizableByType' => false,
             'template' => User\ChangeNewMailAddressMail::TEMPLATE,
+            'template_full_text' => User\ChangeNewMailAddressMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_CHANGE_OLD_MAIL => [
             'subject' => User\ChangeOldMailAddressMail::SUBJECT,
@@ -119,6 +127,7 @@ final class Constant
             ],
             'isCustomizableByType' => false,
             'template' => User\ChangeOldMailAddressMail::TEMPLATE,
+            'template_full_text' => User\ChangeOldMailAddressMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_COMPLETE_PROFILE => [
             'subject' => User\CompleteProfileMail::SUBJECT,
@@ -127,12 +136,14 @@ final class Constant
             ],
             'isCustomizableByType' => true,
             'template' => User\CompleteProfileMail::TEMPLATE,
+            'template_full_text' => User\CompleteProfileMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_REGISTERED => [
             'subject' => User\RegisterAccountMail::SUBJECT,
             'availableParameters' => [],
             'isCustomizableByType' => false,
             'template' => User\RegisterAccountMail::TEMPLATE,
+            'template_full_text' => User\RegisterAccountMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_RESET_PASSWORD => [
             'subject' => User\ResetPasswordMail::SUBJECT,
@@ -141,12 +152,14 @@ final class Constant
             ],
             'isCustomizableByType' => false,
             'template' => User\ResetPasswordMail::TEMPLATE,
+            'template_full_text' => User\ResetPasswordMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_USER_CHANGED_PASSWORD_CONFIRMED => [
             'subject' => User\ResetPasswordConfirmMail::SUBJECT,
             'availableParameters' => [],
             'isCustomizableByType' => false,
             'template' => User\ResetPasswordConfirmMail::TEMPLATE,
+            'template_full_text' => User\ResetPasswordConfirmMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_TYPE_CHANGED => [
             'subject' => Sheet\SheetChangeTypeMail::SUBJECT,
@@ -157,36 +170,48 @@ final class Constant
             ],
             'isCustomizableByType' => true,
             'template' => Sheet\SheetChangeTypeMail::TEMPLATE,
+            'template_full_text' => Sheet\SheetChangeTypeMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_REFUSED => [
             'subject' => self::TRANSACTIONAL_MAIL_SHEET_REFUSED_SUBJECT,
             'availableParameters' => [],
             'isCustomizableByType' => true,
             'template' => self::TRANSACTIONAL_MAIL_SHEET_REFUSED_TEMPLATE,
+            'template_full_text' => self::TRANSACTIONAL_MAIL_SHEET_REFUSED_TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATED => [
             'subject' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATED_SUBJECT,
             'availableParameters' => [],
             'isCustomizableByType' => true,
             'template' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATED_TEMPLATE,
+            'template_full_text' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATED_TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_VALIDATE => [
             'subject' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%urlSheet%',
+            ],
             'isCustomizableByType' => true,
             'template' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_TEMPLATE,
+            'template_full_text' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_DRAFT => [
             'subject' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%urlSheet%',
+            ],
             'isCustomizableByType' => true,
             'template' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_TEMPLATE,
+            'template_full_text' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_INVOICED => [
             'subject' => self::TRANSACTIONAL_MAIL_SHEET_INVOICED_SUBJECT,
-            'availableParameters' => [],
+            'availableParameters' => [
+                '%invoiceLinks%',
+            ],
             'isCustomizableByType' => true,
             'template' => self::TRANSACTIONAL_MAIL_SHEET_INVOICED_TEMPLATE,
+            'template_full_text' => self::TRANSACTIONAL_MAIL_SHEET_INVOICED_TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_SHEET_GROUP_CREATED => [
             'subject' => Sheet\SheetGroupCreatedMail::SUBJECT,
@@ -195,6 +220,7 @@ final class Constant
             ],
             'isCustomizableByType' => false,
             'template' => Sheet\SheetGroupCreatedMail::TEMPLATE,
+            'template_full_text' => Sheet\SheetGroupCreatedMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_PARTICIPANT_ADDED_CONFIRMATION => [
             'subject' => Sheet\AddParticipantMail::SUBJECT,
@@ -203,6 +229,7 @@ final class Constant
             ],
             'isCustomizableByType' => true,
             'template' => Sheet\AddParticipantMail::TEMPLATE,
+            'template_full_text' => Sheet\AddParticipantMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_THIRD_PARTY_COMEXPOSIUM_PARTICIPANT_ADDED_CONFIRMATION => [
             'subject' => ParticipantAddedMail::SUBJECT,
@@ -211,6 +238,7 @@ final class Constant
             ],
             'isCustomizableByType' => true,
             'template' => ParticipantAddedMail::TEMPLATE,
+            'template_full_text' => ParticipantAddedMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED => [
             'subject' => HappeningParticipationAutomaticallyUpdatedMail::SUBJECT,
@@ -218,7 +246,8 @@ final class Constant
                 '%happeningParticipationChanges%'
             ],
             'isCustomizableByType' => true,
-            'template' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE
+            'template' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE,
+            'template_full_text' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_ORDER_CONFIRMED => [
             'subject' => OrderConfirmMail::SUBJECT,
@@ -229,6 +258,7 @@ final class Constant
             ],
             'isCustomizableByType' => true,
             'template' => OrderConfirmMail::TEMPLATE,
+            'template_full_text' => OrderConfirmMail::TEMPLATE_FULL_TEXT,
         ],
         self::TRANSACTIONAL_MAIL_KEY_TRANSACTION_CONFIRMED => [
             'subject' => TransactionConfirmMail::SUBJECT,
@@ -237,6 +267,7 @@ final class Constant
             ],
             'isCustomizableByType' => true,
             'template' => TransactionConfirmMail::TEMPLATE,
+            'template_full_text' => TransactionConfirmMail::TEMPLATE_FULL_TEXT,
         ],
     ];
 
