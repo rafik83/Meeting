@@ -65,7 +65,8 @@ class ScanEventEntranceAction
                 new ScanEventEntranceCommand(
                     $event,
                     $user,
-                    new \DateTime($data['scannedAt'])
+                    (new \DateTime($data['scannedAt']))
+                        ->setTimezone(new \DateTimeZone(date_default_timezone_get()))
                 )
             );
         } catch (\Exception $e) {
