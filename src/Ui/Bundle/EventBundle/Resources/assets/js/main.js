@@ -250,7 +250,7 @@ function init (target) {
     });
 
     [].forEach.call(target.querySelectorAll('[data-toggle-visibility]'), function (element) {
-        new ToggleVisibility(element, target);
+        new ToggleVisibility(element);
     });
 }
 
