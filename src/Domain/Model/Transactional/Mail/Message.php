@@ -54,7 +54,7 @@ class Message
         $this->event = $event;
         $this->type = $type;
         $this->createdAt = $createdAt;
-        $this->associatedParticipationTypes = $associatedParticipationTypes;
+        $this->associatedParticipationTypes = new ArrayCollection($associatedParticipationTypes);
         $this->translations = new ArrayCollection();
     }
 
@@ -152,6 +152,19 @@ class Message
 
     public function getSubject(string $locale): string
     {
+        if (!$this->hasTranslation($locale)) {
+            return '';
+        }
+
         return $this->getTranslation($locale)->getSubject();
+    }
+
+    public function getContent(string $locale): string
+    {
+        if (!$this->hasTranslation($locale)) {
+            return '';
+        }
+
+        return $this->getTranslation($locale)->getContent();
     }
 }
