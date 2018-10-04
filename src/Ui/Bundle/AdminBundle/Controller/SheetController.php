@@ -149,7 +149,7 @@ class SheetController extends Controller
             }),
             'event' => $event,
             'types' => $types,
-            'locale' => $locale,
+            'locale' => $request->getLocale(),
             'action' => $this->generateUrl(
                 'admin_sheet_batch',
                 [
