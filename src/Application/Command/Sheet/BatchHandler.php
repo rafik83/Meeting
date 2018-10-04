@@ -12,14 +12,11 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanning;
-use Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningAndBadge;
-use Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningAndBadgeHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningHandler;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Planning\PlanningOrderedBy;
 
 class BatchHandler
 {
@@ -68,9 +65,6 @@ class BatchHandler
     /** @var BatchDuplicateSheetsHandler */
     private $batchDuplicateSheetsHandler;
 
-    /** @var PrintPlanningAndBadgeHandler */
-    private $planningAndBadgeHandler;
-
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
         BatchValidateHandler $batchValidateHandler,
@@ -86,8 +80,7 @@ class BatchHandler
         BatchPendingHandler $batchPendingHandler,
         BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler,
         PrintPlanningHandler $printPlanningHandler,
-        BatchDuplicateSheetsHandler $batchDuplicateSheetsHandler,
-        PrintPlanningAndBadgeHandler $planningAndBadgeHandler
+        BatchDuplicateSheetsHandler $batchDuplicateSheetsHandler
     ) {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
         $this->batchValidateHandler = $batchValidateHandler;
@@ -104,7 +97,6 @@ class BatchHandler
         $this->batchPdfJobCreatorHandler = $batchPdfJobCreatorHandler;
         $this->printPlanningHandler = $printPlanningHandler;
         $this->batchDuplicateSheetsHandler = $batchDuplicateSheetsHandler;
-        $this->planningAndBadgeHandler = $planningAndBadgeHandler;
     }
 
     /**
@@ -202,14 +194,15 @@ class BatchHandler
             );
         }
 
-        if ($batch->printPlanningAndBadge) {
-            return $this->planningAndBadgeHandler->handle(
-                new PrintPlanningAndBadge(
+        if ($batch->printPlanningAndBadge && null !== $batch->printPlanningOrderBy) {
+            return $this->printPlanningHandler->handle(
+                new PrintPlanning(
                     $batch->event,
                     $batch->ids,
                     $batch->admin,
-                    PlanningOrderedBy::ORDER_BY_PARTICIPANT_LAST_NAME,
-                    $batch->locale
+                    $batch->printPlanningOrderBy,
+                    $batch->locale,
+                    true
                 )
             );
         }

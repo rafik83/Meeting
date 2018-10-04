@@ -51,12 +51,17 @@ class PrintPlanningHandler
             $eventExtraDataSheetIds,
             $command->orderBy,
             $command->admin->getEmail(),
-            $command->admin->getLocale()
+            $command->admin->getLocale(),
+            $command->withBadge
         );
 
         return new BatchResult(
             $command->ids,
-            $command->getMessage() . 'printPlanning.success'
+            sprintf(
+                '%s%s.success',
+                $command->getMessage(),
+                $command->withBadge ? 'printPlanningAndBadge' : 'printPlanning'
+            )
         );
     }
 }

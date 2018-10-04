@@ -40,7 +40,7 @@ class PrintPlanningHandlerTest extends TestCase
         $extraDataRepository->add($extraData)->shouldBeCalled();
 
         $jobQueue
-            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr')
+            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr', false)
             ->shouldBeCalled()
         ;
 
@@ -50,10 +50,45 @@ class PrintPlanningHandlerTest extends TestCase
             $dateTime
         );
 
-        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr');
+        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr', false);
         $result = $handler->handle($command);
 
         $expected = new BatchResult($sheetIds, $command->getMessage() . 'printPlanning.success');
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testHandleWithBadge(): void
+    {
+        $event = $this->prophesize(Event::class);
+        $sheetIds = [11, 12, 13, 14, 15, 16];
+        $admin = $this->prophesize(Admin::class);
+        $admin->getEmail()->shouldBeCalled()->willReturn('email@example.net');
+        $orderBy = PlanningOrderedBy::ORDER_BY_SHEET_TITLE;
+        $admin->getLocale()->willReturn('fr');
+
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+        $dateTime = new \DateTime();
+
+        $extraData = new Event\ExtraData($event->reveal(), Type::ADMIN_SHEET_BATCH_IDS, '11,12,13,14,15,16', $dateTime);
+        $extraDataRepository->add($extraData)->shouldBeCalled();
+
+        $jobQueue
+            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr', true)
+            ->shouldBeCalled()
+        ;
+
+        $handler = new PrintPlanningHandler(
+            $jobQueue->reveal(),
+            $extraDataRepository->reveal(),
+            $dateTime
+        );
+
+        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr', true);
+        $result = $handler->handle($command);
+
+        $expected = new BatchResult($sheetIds, $command->getMessage() . 'printPlanningAndBadge.success');
 
         $this->assertEquals($expected, $result);
     }
