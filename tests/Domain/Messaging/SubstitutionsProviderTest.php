@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
 use Proximum\Vimeet\Domain\Model\Messaging\Compose;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -131,6 +132,60 @@ class SubstitutionsProviderTest extends TestCase
             [
                 Compose::TAG_PARTICIPANT => 'Henri Désiré Landru',
                 Compose::LINK_AGENDA     => 'url-to-event-agenda',
+            ],
+            $this->substitutionProvider->getSubstitutions($recipient->reveal(), $sheet->reveal(), $locale, $placeholders)
+        );
+    }
+
+    public function testGetSubstitutionForSheetSpot()
+    {
+        $recipient = $this->prophesize(Participant::class);
+        $sheet     = $this->prophesize(Sheet::class);
+        $event     = $this->prophesize(Event::class);
+        $sheet->getEvent()->willReturn($event->reveal());
+        $sheet->getId()->willReturn(1);
+        $locale    = 'fr';
+        $event->getAvailableLocale($locale)->willReturn($locale);
+        $sheet->hasSpot()->shouldBeCalled()->willReturn(true);
+        $spot = $this->prophesize(Spot::class);
+        $spot->getReference()->shouldBeCalled()->willReturn('A123');
+        $sheet->getSpot()->willReturn($spot->reveal());
+
+        $placeholders = [Compose::TAG_PARTICIPANT, Compose::LINK_AGENDA, Compose::TAG_SHEET_SPOT];
+        $this->participantInfoGuesser->guessParticipantCompleteName($recipient->reveal(), $locale)->willReturn('Henri Désiré Landru');
+        $this->eventUrlGenerator->generateEventAbsoluteUrl($event->reveal(), 'event_agenda', ['sheet' => 1, '_locale' => 'fr'])->willReturn('url-to-event-agenda');
+
+        $this->assertEquals(
+            [
+                Compose::TAG_PARTICIPANT => 'Henri Désiré Landru',
+                Compose::LINK_AGENDA     => 'url-to-event-agenda',
+                Compose::TAG_SHEET_SPOT => 'A123',
+            ],
+            $this->substitutionProvider->getSubstitutions($recipient->reveal(), $sheet->reveal(), $locale, $placeholders)
+        );
+    }
+
+    public function testGetSubstitutionWithoutSheetSpot()
+    {
+        $recipient = $this->prophesize(Participant::class);
+        $sheet     = $this->prophesize(Sheet::class);
+        $event     = $this->prophesize(Event::class);
+        $sheet->getEvent()->willReturn($event->reveal());
+        $sheet->getId()->willReturn(1);
+        $locale    = 'fr';
+        $event->getAvailableLocale($locale)->willReturn($locale);
+        $sheet->hasSpot()->shouldBeCalled()->willReturn(false);
+        $sheet->getSpot()->shouldNotBeCalled();
+
+        $placeholders = [Compose::TAG_PARTICIPANT, Compose::LINK_AGENDA, Compose::TAG_SHEET_SPOT];
+        $this->participantInfoGuesser->guessParticipantCompleteName($recipient->reveal(), $locale)->willReturn('Henri Désiré Landru');
+        $this->eventUrlGenerator->generateEventAbsoluteUrl($event->reveal(), 'event_agenda', ['sheet' => 1, '_locale' => 'fr'])->willReturn('url-to-event-agenda');
+
+        $this->assertEquals(
+            [
+                Compose::TAG_PARTICIPANT => 'Henri Désiré Landru',
+                Compose::LINK_AGENDA     => 'url-to-event-agenda',
+                Compose::TAG_SHEET_SPOT => '',
             ],
             $this->substitutionProvider->getSubstitutions($recipient->reveal(), $sheet->reveal(), $locale, $placeholders)
         );

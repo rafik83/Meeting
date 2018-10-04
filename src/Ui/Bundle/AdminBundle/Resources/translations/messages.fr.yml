@@ -485,6 +485,7 @@ admin.messaging.message.compose.tags.label: Tags
 admin.messaging.message.compose.tags.participant: 'Prénom et nom du participant'
 admin.messaging.message.compose.tags.participationType: 'Type de participation'
 admin.messaging.message.compose.tags.sheetPlanning: 'Planning de la participation'
+admin.messaging.message.compose.tags.sheetSpot: 'Lieu attribué à la fiche'
 admin.messaging.message.content: Contenu
 admin.messaging.message.create.title: 'Créer un nouveau message'
 admin.messaging.message.createdAt: 'Créé le'
