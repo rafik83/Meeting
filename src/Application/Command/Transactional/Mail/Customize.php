@@ -31,18 +31,22 @@ class Customize implements Command
     /** @var array */
     public $translations;
 
-    public function __construct(Event $event, string $transactionalMailType, array $data)
-    {
+    public function __construct(
+        Event $event,
+        string $transactionalMailType,
+        array $data,
+        array $genericTranslations = []
+    ) {
         $this->event = $event;
         $this->transactionalMailType = $transactionalMailType;
         $this->data = $data;
         $this->associatedTypes = [];
         $this->translations = [];
 
-        foreach ($event->getLocales() as $locale) {
+        foreach ($genericTranslations as $locale => $genericTranslation) {
             $this->translations[$locale] = [
-                'subject' => '',
-                'content' => '',
+                'subject' => $genericTranslation['subject'],
+                'content' => $genericTranslation['content'],
             ];
         }
     }

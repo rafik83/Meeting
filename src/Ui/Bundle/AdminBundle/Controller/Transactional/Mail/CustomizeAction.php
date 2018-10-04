@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Translation\TranslatorInterface;
 use function array_key_exists;
 
 class CustomizeAction
@@ -54,9 +55,13 @@ class CustomizeAction
     /** @var TypeRepositoryInterface */
     private $typeRepository;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     public function __construct(
         EngineInterface $engine,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
+        TranslatorInterface $translator,
         MessageRepositoryInterface $messageRepository,
         TypeRepositoryInterface $typeRepository,
         FormFactoryInterface $formFactory,
@@ -72,6 +77,7 @@ class CustomizeAction
         $this->flashBag = $flashBag;
         $this->router = $router;
         $this->typeRepository = $typeRepository;
+        $this->translator = $translator;
     }
 
     public function __invoke(Request $request, Event $event, string $transactionalMailType): Response
@@ -119,7 +125,13 @@ class CustomizeAction
             }
         }
 
-        $customize = new Customize($event, $transactionalMailType, $data);
+        $customize = new Customize(
+            $event,
+            $transactionalMailType,
+            $data,
+            $this->getTemplateTranslations($event, $transactionalMailType)
+        );
+
         $form = $this->formFactory->create(CustomizeType::class, $customize, [
             'isCustomizableByType' => $data['isCustomizableByType'],
             'locale' => $event->getAvailableLocale($request->getLocale()),
@@ -140,5 +152,35 @@ class CustomizeAction
             'transactionalMailType' => $transactionalMailType,
             'event' => $event,
         ]);
+    }
+
+    /**
+     * Prepare the translations of the template by locale to populate the form with the generics values
+     *
+     * @param Event  $event
+     * @param string $transactionalMailType
+     *
+     * @return array indexed by locale with translation of subject and content
+     */
+    private function getTemplateTranslations(Event $event, string $transactionalMailType): array
+    {
+        $templateTranslations = [];
+
+        foreach ($event->getLocales() as $locale) {
+            $templateTranslations[$locale] = [
+                'subject' => $this->translator->trans(
+                    Constant::TRANSACTIONAL_MAIL_LIST[$transactionalMailType]['subject'],
+                    [],
+                    'mail',
+                    $locale
+                ),
+                'content' => $this->engine->render(
+                    Constant::TRANSACTIONAL_MAIL_LIST[$transactionalMailType]['template_full_text'],
+                    ['locale' => $locale]
+                )
+            ];
+        }
+
+        return $templateTranslations;
     }
 }

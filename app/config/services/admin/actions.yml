@@ -612,6 +612,7 @@ services:
         arguments:
             - '@templating.engine.twig'
             - '@adapter.authorization_checker'
+            - '@translator'
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@form.factory'
