@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Template\Exception\UploadNotAllowedOnFirstStepOfRegistrationTemplateException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Domain\View\TypeView;
@@ -403,6 +404,16 @@ class RegisterController extends Controller
         string $locale
     ) {
         $data = array_filter($data, function ($value) { return null !== $value; });
+
+        if (\count($registrationTemplate->getFirstBlock()->getUploadAndImageObjects())) {
+            throw new UploadNotAllowedOnFirstStepOfRegistrationTemplateException(
+                'Upload not allowed on first step of registration template'
+            );
+        }
+
+        if (null === $sheet) {
+            return $data;
+        }
 
         $uploadedAndImageObjects = $registrationTemplate->getUploadAndImageObjects();
 
