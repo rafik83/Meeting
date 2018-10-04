@@ -208,6 +208,7 @@ final class Constant
             'subject' => self::TRANSACTIONAL_MAIL_SHEET_INVOICED_SUBJECT,
             'availableParameters' => [
                 '%invoiceLinks%',
+                '%ordersLink%',
             ],
             'isCustomizableByType' => true,
             'template' => self::TRANSACTIONAL_MAIL_SHEET_INVOICED_TEMPLATE,
