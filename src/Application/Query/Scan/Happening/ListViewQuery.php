@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Event;
+namespace Proximum\Vimeet\Application\Query\Scan\Happening;
 
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class GetQRCodeIdentifiersByEventQuery implements Query
+class ListViewQuery implements Query
 {
     /** @var Event */
     public $event;
@@ -21,16 +21,9 @@ class GetQRCodeIdentifiersByEventQuery implements Query
     /** @var string */
     public $locale;
 
-    /** @var bool */
-    public $getPreviousScan;
-
-    public function __construct(
-        Event $event,
-        string $locale,
-        bool $getPreviousScan = true
-    ) {
+    public function __construct(Event $event, string $locale)
+    {
         $this->event = $event;
         $this->locale = $locale;
-        $this->getPreviousScan = $getPreviousScan;
     }
 }

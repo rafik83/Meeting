@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\User\Event\ScanCommand;
+use Proximum\Vimeet\Application\Command\User\Event\ScanEventEntranceCommand;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -82,7 +82,7 @@ class CheckInAction
 
         if ('POST' === $request->getMethod()) {
             $this->commandBus->handle(
-                new ScanCommand(
+                new ScanEventEntranceCommand(
                     $event,
                     $userDomain->getUser(),
                     $this->dateTime

@@ -3,20 +3,25 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import db from '../vendor/db';
 import Spool from './spool';
+import dateDiffCalculator from './dateDiffCalculator';
 
 class Checkin extends Component {
     constructor() {
         super();
 
+        this.element = document.querySelector('#checkin');
+
         this.state = {
             participants: [],
             search: null,
-            checkin: false
+            checkin: false,
+            dateDiffInMilliSeconds: dateDiffCalculator(this.element.dataset.serverDate)
         };
 
-        this.element = document.querySelector('#checkin');
         this.handleCheckin = this.handleCheckin.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.spool = new Spool(dateDiffCalculator(this.element.dataset.serverDate));
+        this.spool.init();
     }
 
     handleSearch(e) {
@@ -38,13 +43,12 @@ class Checkin extends Component {
     }
 
     handleCheckin(identifier, index) {
-        let spool = new Spool();
         let participants = this.state.participants;
 
         db.table('identifiers').get(identifier).then(result => {
             if (result) {
                 participants[index].checkin = new Date();
-                spool.add(identifier);
+                this.spool.add(identifier);
 
                 this.setState({ participants, checkin: true });
             }
@@ -107,10 +111,12 @@ class Checkin extends Component {
                                     }
                                 </td>
                                 <td>
-                                    <a href={participant.badgeUrl} target={'_blank'}
-                                        className={'btn btn-info'}>
-                                        {this.element.dataset.printBadge}
-                                    </a>
+                                    {this.element.dataset.showPrintBadge === 'true' &&
+                                        <a href={participant.badgeUrl} target={'_blank'}
+                                           className={'btn btn-info'}>
+                                            {this.element.dataset.printBadge}
+                                        </a>
+                                    }
                                 </td>
                             </tr>
                         ))}

@@ -3,23 +3,28 @@ import ReactDOM from 'react-dom';
 import QrReader from 'react-qr-reader';
 import db from '../vendor/db';
 import Spool from './spool';
+import dateDiffCalculator from './dateDiffCalculator';
 
 class QrCode extends Component {
     constructor() {
         super();
 
+        this.element = document.querySelector('#qrcode');
+
         this.state = {
             display: false,
             error: false,
             nbImportedIdentifiers: 0,
-            result: null
+            result: null,
+            dateDiffInMilliSeconds: dateDiffCalculator(this.element.dataset.serverDate)
         };
-
-        this.element = document.querySelector('#qrcode');
 
         this.handleScan = this.handleScan.bind(this);
         this.handleError = this.handleError.bind(this);
         this.handleReset = this.handleReset.bind(this);
+
+        this.spool = new Spool(dateDiffCalculator(this.element.dataset.serverDate));
+        this.spool.init();
     }
 
     componentDidMount() {
@@ -37,11 +42,9 @@ class QrCode extends Component {
 
     handleScan(identifier) {
         if (identifier) {
-            let spool = new Spool();
-
             db.table('identifiers').get(identifier).then(result => {
                 if (result) {
-                    spool.add(identifier);
+                    this.spool.add(identifier);
                     this.setState({ display: false, error: false, result: result });
                 } else {
                     this.setState({ display: false, error: true, result: null });
@@ -78,7 +81,7 @@ class QrCode extends Component {
 
                         {!result && <div className={'alert alert-danger'}>{this.element.dataset.notFound}</div>}
 
-                        {result &&
+                        {result && this.element.dataset.showPrintBadge === 'true' &&
                             <a className={"btn btn-default btn-lg mg-right"} href={result.badgeUrl} target={"_blank"}>
                                 {this.element.dataset.printBadge}
                             </a>
@@ -97,8 +100,9 @@ class QrCode extends Component {
 
         return (
             <Fragment>
-                {nbImportedIdentifiers > 0 &&
-                    <p>
+                {this.element.dataset.showNumberOfAvailableIdentifiers === 'true'
+                    && nbImportedIdentifiers > 0
+                    && <p>
                         {this.element.dataset.numberOfAvailableIdentifiers} : {nbImportedIdentifiers}
                     </p>
                 }
@@ -106,6 +110,7 @@ class QrCode extends Component {
                 {display &&
                     <QrReader
                         delay={300}
+                        style={{ maxWidth: '600px', width: '100%' }}
                         onScan={this.handleScan}
                         onError={this.handleError} />
                 }

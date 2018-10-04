@@ -19,10 +19,12 @@ use Proximum\Vimeet\Application\Query\Participant\Export\ParticipantViewQueryHan
 use Proximum\Vimeet\Application\View\Participant\Export\ParticipantListView;
 use Proximum\Vimeet\Application\View\Participant\Export\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -83,18 +85,23 @@ class ExportQueryHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $day;
 
+    /** @var ObjectProphecy */
+    private $happeningRepository;
+
     public function setUp()
     {
         $this->participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $this->participantViewQueryHandler = $this->prophesize(ParticipantViewQueryHandler::class);
         $this->templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $this->productRepository = $this->prophesize(ProductRepositoryInterface::class);
+        $this->happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
 
         $this->event = $this->prophesize(Event::class);
         $this->event->getFallback()->willReturn('en');
 
         $this->day = $this->prophesize(Event\Day::class);
         $this->event->getDays()->willReturn([$this->day->reveal()]);
+        $this->event->getAvailableLocale('fr')->willReturn('fr');
 
         $this->day->getId()->willReturn(123);
         $dateTime = new \DateTime('2018-10-10 10:00:00.000');
@@ -213,13 +220,23 @@ class ExportQueryHandlerTest extends TestCase
             ->willReturn($view3->reveal())
         ;
 
+        $happening = $this->prophesize(Happening::class);
+        $happening->getId()->willReturn(1);
+        $happening->getTitle('fr')->willReturn('Conférence');
+
+        $this->happeningRepository
+            ->findListByEvent($this->event->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn([$happening->reveal()]);
+
         $query = new ExportQuery($this->event->reveal(), [1, 2, 3], 'fr');
 
         $handler = new ExportQueryHandler(
             $this->participantRepository->reveal(),
             $this->participantViewQueryHandler->reveal(),
             $this->templateDataFactory->reveal(),
-            $this->productRepository->reveal()
+            $this->productRepository->reveal(),
+            $this->happeningRepository->reveal()
         );
 
         $result = $handler->handle($query);
@@ -242,6 +259,9 @@ class ExportQueryHandlerTest extends TestCase
                 'participant_123' => 'product1',
                 'option_124' => 'product2',
                 'option_125' => 'product3',
+            ],
+            [
+                'happening_1' => 'Conférence'
             ]
         );
 

@@ -106,6 +106,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@vimeet_infrastructure.repository.happening_repository'
 
     #
     # Meeting
@@ -127,3 +128,13 @@ services:
             - '@Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingListViewQuery }
+
+    #
+    # Scan
+    #
+    #### Happening
+    Proximum\Vimeet\Application\Query\Scan\Happening\ListViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Scan\Happening\ListViewQuery }

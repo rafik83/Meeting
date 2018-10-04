@@ -327,3 +327,10 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ScanEventEntranceCommand }
+
+    Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappeningHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappening }

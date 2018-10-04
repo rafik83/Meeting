@@ -8,20 +8,21 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Command\User\Event\ScanEventEntranceCommand;
+use Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappening;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierToUserQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class ScanEventEntranceAction
+class ScanAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -33,18 +34,20 @@ class ScanEventEntranceAction
     private $queryBus;
 
     public function __construct(
-        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CommandBusInterface $commandBus,
-        QueryBusInterface $queryBus
+        QueryBusInterface $queryBus,
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
         $this->queryBus = $queryBus;
     }
 
-    public function __invoke(Request $request, Event $event): JsonResponse
+    public function __invoke(Request $request, Event $event, Happening $happening)
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_HOST')
+            || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+        ) {
             throw new AccessDeniedException('Access denied');
         }
 
@@ -62,9 +65,10 @@ class ScanEventEntranceAction
 
         try {
             $this->commandBus->handle(
-                new ScanEventEntranceCommand(
+                new ScanHappening(
                     $event,
                     $user,
+                    $happening,
                     (new \DateTime($data['scannedAt']))
                         ->setTimezone(new \DateTimeZone(date_default_timezone_get()))
                 )
