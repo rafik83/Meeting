@@ -12,12 +12,14 @@ function FilterBuilder(hiddenInput, builder, submitRules) {
 
 FilterBuilder.prototype.init = function(builder) {
     var locale = builder.getAttribute('data-locale');
+    var filters = JSON.parse(builder.getAttribute('data-filters'));
+    var rules = builder.getAttribute('data-rules') ? JSON.parse(builder.getAttribute('data-rules')) : '';
 
     this.builder.queryBuilder({
         lang_code: locale,
         lang: 'fr' === locale ? frTranslations : {}, // default jQuery-QueryBuilder included language is 'en'
-        filters: JSON.parse(builder.getAttribute('data-filters')),
-        rules: builder.getAttribute('data-rules') ? JSON.parse(builder.getAttribute('data-rules')) : ''
+        filters: filters,
+        rules: rules
     });
 };
 

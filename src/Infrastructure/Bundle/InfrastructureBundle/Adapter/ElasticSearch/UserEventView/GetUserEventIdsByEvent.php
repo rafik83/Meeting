@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
+use Elastica\Query;
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchConstant;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventIdsByEventInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter;
-use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
 
 class GetUserEventIdsByEvent implements GetUserEventIdsByEventInterface
 {
@@ -29,14 +30,14 @@ class GetUserEventIdsByEvent implements GetUserEventIdsByEventInterface
 
     public function handle(Event $event): array
     {
-        $query = new \Elastica\Query(
+        $query = new Query(
             [
                 'query' => [
                     'bool' => [
                         'must' => [
                             [
                                 'term' => [
-                                    'eventId' => [
+                                    TypesMapping::USER_EVENT_VIEW_EVENT_ID => [
                                         'value' => $event->getId(),
                                     ],
                                 ],

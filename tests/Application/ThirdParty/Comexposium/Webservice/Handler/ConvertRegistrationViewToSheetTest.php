@@ -41,9 +41,6 @@ class ConvertRegistrationViewToSheetTest extends TestCase
     {
         $dateTime = new \DateTime();
         $event = $this->prophesize(Event::class);
-        $configuration = $this->prophesize(Event\Configuration::class);
-        $configuration->isVisio()->shouldBeCalled()->willReturn(false);
-        $event->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
         $type = $this->prophesize(Type::class);
 
         $registrationView = new RegistrationView(

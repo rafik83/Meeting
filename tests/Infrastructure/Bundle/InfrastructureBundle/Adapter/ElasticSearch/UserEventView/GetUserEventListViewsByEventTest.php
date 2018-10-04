@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
+use Elastica\Document;
+use Elastica\Query;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
@@ -36,7 +38,7 @@ class GetUserEventListViewsByEventTest extends TestCase
 
         $event->getId()->willReturn(42);
 
-        $expectedQuery = new \Elastica\Query(
+        $expectedQuery = new Query(
             [
                 'query' => [
                     'bool' => [
@@ -73,7 +75,7 @@ class GetUserEventListViewsByEventTest extends TestCase
         );
 
         $documents = [
-            new \Elastica\Document(
+            new Document(
                 '42_1',
                 [
                     'eventId' => 42,
@@ -87,7 +89,7 @@ class GetUserEventListViewsByEventTest extends TestCase
                     ],
                 ]
             ),
-            new \Elastica\Document(
+            new Document(
                 '42_2',
                 [
                     'eventId' => 42,
@@ -112,6 +114,8 @@ class GetUserEventListViewsByEventTest extends TestCase
                 'DALLAS',
                 'korben.dallas@fifth.element',
                 'en',
+                false,
+                false,
                 [['id' => 1337]]
             ),
             new UserEventListView(
@@ -121,6 +125,8 @@ class GetUserEventListViewsByEventTest extends TestCase
                 'Ekbat de Sebat',
                 'leeloo@fifth.element',
                 'fr',
+                false,
+                false,
                 [
                     ['id' => 1337],
                     ['id' => 4556],

@@ -160,8 +160,7 @@ class AddHandler
             $add->sheet,
             $user,
             $templateData->getData(),
-            false,
-            $add->sheet->getEvent()->getConfiguration()->isVisio()
+            false
         );
         $this->participantRepository->add($participant);
 

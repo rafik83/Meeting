@@ -10,12 +10,15 @@
 
 namespace Proximum\Vimeet\Infrastructure\Elastica\Persister;
 
+use Elastica\Client;
+use Elastica\Document;
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchPersisterInterface;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 
 class ElasticaPersister implements ElasticSearchPersisterInterface
 {
-    /** @var \Elastica\Client */
+    /** @var Client */
     private $client;
 
     /** @var ElasticaMapping */
@@ -28,7 +31,7 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
     private $serializer;
 
     public function __construct(
-        \Elastica\Client $client,
+        Client $client,
         ElasticaMapping $mapping,
         string $index,
         SerializerAdapterInterface $serializer
@@ -99,7 +102,7 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
     }
 
     /**
-     * @param \Elastica\Document[] $objects
+     * @param Document[] $objects
      */
     private function getDocuments(string $identifierProperty, array &$objects): array
     {
@@ -110,7 +113,7 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
                 throw new \InvalidArgumentException('Missing identifier column');
             }
 
-            $documents[] = new \Elastica\Document($object->$identifierProperty, $this->serializer->normalize($object));
+            $documents[] = new Document($object->$identifierProperty, $this->serializer->normalize($object));
         }
 
         return $documents;

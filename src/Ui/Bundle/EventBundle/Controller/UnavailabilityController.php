@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Availability\ConfirmationType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateForm;
@@ -64,7 +65,7 @@ class UnavailabilityController extends Controller
             'sheet'       => $sheet->getId(),
         ]);
 
-        $timezone = GetTimezoneHelper::getTimezoneByEventAndParticipant($eventDomain->getEvent(), $participant);
+        $timezone = $this->get(GetTimezoneHelper::class)->getTimezoneByEventAndParticipant($eventDomain->getEvent(), $participant);
 
         /** @var CreateFormView $createFormView */
         $createFormView = $this->get('handler.unavailability.create_form_handler')->handle(
@@ -99,7 +100,7 @@ class UnavailabilityController extends Controller
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
         $timezone = $eventDomain->getEvent()->getTimeZone();
-        if ($participant->isVisio() && $participant->getTimezone()) {
+        if ($this->get(IsParticipantVisio::class)->isSatisfiedBy($participant) && $participant->getTimezone()) {
             $timezone = $participant->getTimezone();
         }
 
@@ -111,6 +112,7 @@ class UnavailabilityController extends Controller
             'form_unavailability' => $createFormView->formView,
             'tipTranslationViews' => $tipTranslationViews,
             'timezone' => $timezone,
+            'isVisio' => $this->get(IsParticipantVisio::class)->isSatisfiedBy($participant),
         ]);
     }
 
@@ -140,7 +142,7 @@ class UnavailabilityController extends Controller
 
         $participant = $sheet->getUserParticipant($userDomain->getUser());
         $timezone = $participant instanceof Participant
-            ? GetTimezoneHelper::getTimezoneByEventAndParticipant($eventDomain->getEvent(), $participant)
+            ? $this->get(GetTimezoneHelper::class)->getTimezoneByEventAndParticipant($eventDomain->getEvent(), $participant)
             : $event->getTimeZone()
         ;
 

@@ -68,6 +68,8 @@ class UpdateHandlerTest extends TestCase
                 'Dallas',
                 'Korben.dallas@fifth.element',
                 'fr',
+                false,
+                false,
                 [['id' => 999]]
             ),
         ];

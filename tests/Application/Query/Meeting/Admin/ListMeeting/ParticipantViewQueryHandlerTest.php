@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
@@ -35,7 +36,6 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $isParticipantPresentToMeeting = $this->prophesize(IsParticipantPresentToMeeting::class);
 
         $participant->getId()->shouldBeCalled()->willReturn(12);
-        $participant->isVisio()->shouldBeCalled()->willReturn(false);
         $participant->getUser()->shouldBeCalled()->willReturn($user->reveal());
         $locale = 'fr';
 
@@ -53,10 +53,14 @@ class ParticipantViewQueryHandlerTest extends TestCase
 
         $query = new ParticipantViewQuery($participant->reveal(), $event->reveal(), $meeting->reveal(), $slot->reveal(), $locale);
 
+        $isParticipantVisio = $this->prophesize(IsParticipantVisio::class);
+        $isParticipantVisio->isSatisfiedBy($participant->reveal())->willReturn(false);
+
         $handler = new ParticipantViewQueryHandler(
             $participantInfoGuesser->reveal(),
             $scanRepository->reveal(),
-            $isParticipantPresentToMeeting->reveal()
+            $isParticipantPresentToMeeting->reveal(),
+            $isParticipantVisio->reveal()
         );
 
         $result = $handler->handle($query);

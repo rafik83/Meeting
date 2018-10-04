@@ -303,6 +303,13 @@ form.extra_parameter_update.children.name.label: name
 form.extra_parameter_update.children.submit.label: register
 form.extra_parameter_update.children.value.label: value
 form.field.private: 'Private field'
+form.filter.boolean.no.label: No
+form.filter.boolean.yes.label: Yes
+form.filter.email.label: Email
+form.filter.firstName.label: Firstname
+form.filter.isVisio.label: Is visio
+form.filter.isVisioTested.label: Visio tested
+form.filter.lastName.label: Lastname
 form.filter_admin.children.submit.label: Filter
 form.filter_admin.event.all: 'all events'
 form.filter_admin.role.all: 'all types'
