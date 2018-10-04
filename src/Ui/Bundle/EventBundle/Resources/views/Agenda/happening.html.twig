@@ -1,5 +1,5 @@
 {% set timezone = happening.timeZone %}
-{% if participant.visio and participant.timezone %}
+{% if isVisio and participant.timezone %}
     {% set timezone = participant.timezone %}
 {% endif %}
 

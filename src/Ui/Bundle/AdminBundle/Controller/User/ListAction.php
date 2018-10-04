@@ -75,15 +75,15 @@ class ListAction
             );
         }
 
-        if ('POST' === $request->getMethod() && $request->request->get('rules')) {
-            $this->session->set($this->getRulesKey($event), $request->request->get('rules'));
+        if ($request->query->get('rules')) {
+            $this->session->set($this->getRulesKey($event), $request->query->get('rules'));
         }
 
         $userEventListViews = $this->queryBus->handle(
             new GetUserEventListViewsQuery($event, $page, $locale, $this->getRules($event))
         );
 
-        $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $locale));
+        $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $request->getLocale()));
 
         return new Response(
             $this->engine->render(

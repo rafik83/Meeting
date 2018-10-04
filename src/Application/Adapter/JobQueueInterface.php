@@ -194,6 +194,4 @@ interface JobQueueInterface
     public function exportParticipantsForEvent(Event $event, Admin $admin, string $locale, Event\ExtraData $extraData): void;
 
     public function exportUploadedObjectsBySheets(Event $event, Admin $admin, Event\ExtraData $extraData): void;
-
-    public function toggleParticipantVisioForEvent(Event $event, bool $visio): void;
 }

@@ -189,20 +189,20 @@ admin.event.paymentConditions.typeWithSpecificPaymentConditions: 'Liste des type
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
-admin.event.qrcode.notfound: 'Participant inconnu'
-admin.event.qrcode.number_of_available_badge: 'Nombre de participants'
-admin.event.qrcode.printBadge: 'Imprimer badge et planning'
-admin.event.qrcode.title: 'Résultat du scan'
-admin.event.qrcode.no_result: 'Pas de résultat'
-admin.event.qrcode.checkin: 'Checkin'
-admin.event.qrcode.lastName: 'Nom'
-admin.event.qrcode.firstName: 'Prénom'
-admin.event.qrcode.type: 'Type de participation'
+admin.event.qrcode.checkin: Checkin
 admin.event.qrcode.date_checkin: 'Date de checkin'
-admin.event.qrcode.search: 'Rechercher'
+admin.event.qrcode.firstName: Prénom
+admin.event.qrcode.lastName: Nom
+admin.event.qrcode.no_result: 'Pas de résultat'
+admin.event.qrcode.notfound: 'Participant inconnu'
+admin.event.qrcode.number_of_available_badge: 'Nombre de badge possible'
+admin.event.qrcode.printBadge: 'Imprimer badge et planning'
 admin.event.qrcode.scan_participants: 'Scan des participants'
-admin.event.qrcode.sheet: 'Fiche'
+admin.event.qrcode.search: Rechercher
 admin.event.qrcode.search_by_name: 'Rechercher un participant par nom...'
+admin.event.qrcode.sheet: Fiche
+admin.event.qrcode.title: 'Résultat du scan'
+admin.event.qrcode.type: 'Type de participation'
 admin.event.registration.template_builder.remove_confirm: 'Confirmez-vous la suppression de cet élément ?'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
@@ -267,7 +267,7 @@ admin.extraParameter.type.leni_predefined_filters: 'LENI filtres de l''API (GET)
 admin.extraParameter.type.leni_save_endpoint: 'LENI Save endpoint'
 admin.extraParameter.type.leni_sending_request: 'LENI Paramètre SendingRequests'
 admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
-admin.extraParameter.type.tech_event_configuration: "Configuration TechEvent"
+admin.extraParameter.type.tech_event_configuration: 'Configuration TechEvent'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés'
 admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
 admin.extraParameter.update.title: 'Modification du paramètre supplémentaire %type%'
@@ -586,13 +586,13 @@ admin.participant_import_result.errors: 'Liste des erreurs dans le fichier'
 admin.participant_import_result.file_participations: 'Nombre de participations dans le fichier'
 admin.participant_import_result.title.label: 'Resultat de l''importation des participants'
 admin.participant_import.title: 'Importer les participants'
+admin.participant.export.fields.day_checkin: 'Venu %date%'
 admin.participant.export.fields.happening_subscriber: 'Inscrit sous-évènement'
 admin.participant.export.fields.participant_created_at: 'Création Participant'
 admin.participant.export.fields.participant_email: 'Email Participant'
 admin.participant.export.fields.participant_id: 'ID Participant'
 admin.participant.export.fields.participant_type: 'Type Participant'
 admin.participant.export.fields.participation_paid: 'Etat de paiement'
-admin.participant.export.fields.day_checkin: 'Venu %date%'
 admin.participant.export.fields.participation_paid.not_paid: 'Pas payé'
 admin.participant.export.fields.participation_paid.paid: Payé
 admin.participant.export.fields.planning.meeting: '%spotRef% - %sheetMet%'
@@ -855,6 +855,7 @@ admin.sheet.export.fields.remaining_to_pay: 'Reste à payer TTC'
 admin.sheet.export.fields.sheet_enable: 'Fiche active'
 admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.sheet_state: Etat
+admin.sheet.export.fields.sheet_spot: 'Lieu attribué'
 admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.total_excluded_vat: 'Total HT'
 admin.sheet.export.fields.type: Type
@@ -879,8 +880,6 @@ admin.sheet.import.button.label: Importer
 admin.sheet.imported.all.label: 'Peu importe'
 admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.isOwner: Propriétaire
-admin.sheet.user.test_not_performed: Test non effectué
-admin.sheet.user.test_performed: Test effectué
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
 admin.sheet.list.filters.label: 'Filtres avancés'
@@ -915,6 +914,8 @@ admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
 admin.sheet.type: Type
+admin.sheet.user.test_not_performed: 'Test non effectué'
+admin.sheet.user.test_performed: 'Test effectué'
 admin.sheet.validate: Valider
 admin.sheet.validateSheets: 'Valider les fiches'
 admin.sheet.validationState: 'Statut fiche'

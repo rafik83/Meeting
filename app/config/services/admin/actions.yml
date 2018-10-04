@@ -589,6 +589,7 @@ services:
             - '@router'
             - '@adapter.authorization_checker'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
     # Meeting
@@ -597,3 +598,4 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Adapter\CommandBusInterface'
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'

@@ -324,7 +324,7 @@ class UpdateMeetingRequestHandlerTest extends TestCase
      */
     public function createParticipantMock(Sheet $sheet, User $user, $id)
     {
-        $participant = new Participant($sheet, $user, [], false, true);
+        $participant = new Participant($sheet, $user, [], false);
         $reflection  = new \ReflectionClass(Participant::class);
 
         $property = $reflection->getProperty('id');

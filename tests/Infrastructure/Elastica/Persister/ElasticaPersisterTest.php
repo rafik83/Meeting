@@ -10,12 +10,17 @@
 
 namespace Proximum\Vimeet\Tests\Infrastructure\Elastica\Persister;
 
+use Elastica\Bulk\ResponseSet;
+use Elastica\Client;
+use Elastica\Document;
+use Elastica\Index;
+use Elastica\Type;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaMapping;
 use Proximum\Vimeet\Infrastructure\Elastica\Persister\ElasticaPersister;
-use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
 
 class ElasticaPersisterTest extends TestCase
 {
@@ -30,6 +35,8 @@ class ElasticaPersisterTest extends TestCase
             'DALLAS',
             'korben.dallas@example.net',
             'fr',
+            false,
+            false,
             [['id' => 1337]]
         );
         $normalizedUserEventView = [
@@ -39,25 +46,25 @@ class ElasticaPersisterTest extends TestCase
             'locale' => 'fr',
         ];
 
-        $response = $this->prophesize(\Elastica\Bulk\ResponseSet::class);
+        $response = $this->prophesize(ResponseSet::class);
         $response->getData()->shouldBeCalled()->willReturn(['response' => 'ok']);
 
-        $elasticaType = $this->prophesize(\Elastica\Type::class);
+        $elasticaType = $this->prophesize(Type::class);
 
         $elasticaType
-            ->addDocuments([new \Elastica\Document('42_3', $normalizedUserEventView)])
+            ->addDocuments([new Document('42_3', $normalizedUserEventView)])
             ->shouldBeCalled()
             ->willReturn($response->reveal())
         ;
 
-        $elasticaIndex = $this->prophesize(\Elastica\Index::class);
+        $elasticaIndex = $this->prophesize(Index::class);
         $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
 
         $elasticaIndex->refresh()->shouldBeCalled();
 
         $elasticaType->getIndex()->willReturn($elasticaIndex->reveal());
 
-        $client = $this->prophesize(\Elastica\Client::class);
+        $client = $this->prophesize(Client::class);
         $client->getIndex($index)->shouldBeCalled()->willReturn($elasticaIndex->reveal());
 
         $elasticaMapping = $this->prophesize(ElasticaMapping::class);
@@ -86,15 +93,15 @@ class ElasticaPersisterTest extends TestCase
         $index = 'app_prod';
         $identifiers = ['1_2', '42_1337'];
 
-        $response = $this->prophesize(\Elastica\Bulk\ResponseSet::class);
+        $response = $this->prophesize(ResponseSet::class);
         $response->getData()->shouldBeCalled()->willReturn(['response' => 'ok']);
 
-        $elasticaType = $this->prophesize(\Elastica\Type::class);
-        $elasticaIndex = $this->prophesize(\Elastica\Index::class);
+        $elasticaType = $this->prophesize(Type::class);
+        $elasticaIndex = $this->prophesize(Index::class);
 
         $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
 
-        $client = $this->prophesize(\Elastica\Client::class);
+        $client = $this->prophesize(Client::class);
         $client->getIndex($index)->shouldBeCalled()->willReturn($elasticaIndex->reveal());
         $client
             ->deleteIds($identifiers, $index, $elasticaType->reveal())

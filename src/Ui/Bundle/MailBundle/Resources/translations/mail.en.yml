@@ -27,7 +27,7 @@ mail.event.export.no_uploaded_objects.subject: 'No files could be exported accor
 mail.event.export.uploaded_objects_password.subject: 'Password of the zip file of the selected cards of the event "%event%"'
 mail.event.export.uploaded_objects_zip.link.click: 'Download zip file'
 mail.event.export.uploaded_objects_zip.subject: 'Download the zip file of the selected cards of the "%event%" event'
-mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %event% has been taken into account and will be reviewed by the %event% team as soon as possible. You will receive a confirmation email when your registration has been validated by the organizer"
+mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %event% has been taken into account and will be reviewed by the %event% team as soon as possible. You will receive a confirmation email when your registration has been validated."
 mail.event.preregister.end: ''
 mail.event.preregister.link: 'Your member area'
 mail.event.preregister.subject: 'You are pre-registered to %event%'

@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Event\EventByHostResolver;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Event\VisioCheckinSubscriber;
@@ -58,7 +59,6 @@ class VisioCheckinSubscriberTest extends TestCase
             ->willReturn($token);
 
         $participant = $this->prophesize(Participant::class);
-        $participant->isVisio()->shouldBeCalled()->willReturn(true);
 
         $sheetRepository->getSheetById(1)
             ->shouldBeCalled()
@@ -89,6 +89,9 @@ class VisioCheckinSubscriberTest extends TestCase
             HttpKernelInterface::MASTER_REQUEST
         );
 
+        $isParticipantVisio = $this->prophesize(IsParticipantVisio::class);
+        $isParticipantVisio->isSatisfiedBy($participant->reveal())->willReturn(true);
+
         $subscriber = new VisioCheckinSubscriber(
             $eventByHostResolver->reveal(),
             $dayGuesser->reveal(),
@@ -96,7 +99,8 @@ class VisioCheckinSubscriberTest extends TestCase
             $scanRepository->reveal(),
             $sheetRepository->reveal(),
             $tokenStorage->reveal(),
-            $date
+            $date,
+            $isParticipantVisio->reveal()
         );
 
         $subscriber->onKernelRequest($responseEvent);

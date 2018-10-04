@@ -57,7 +57,7 @@ catalog.preview.participant_positions_see_more: 'see more'
 catalog.search.no-filter-to-refine: 'No result'
 catalog.seeMore: 'See more'
 catalog.selectItemsFromNomenclatures.more: '... and %count% more'
-catalog.selectItemsFromNomenclatures.select: 'Select'
+catalog.selectItemsFromNomenclatures.select: Select
 catalog.selectItemsFromNomenclatures.unSelectAll: 'Unselect all'
 catalog.sheet.export.csv: Export
 catalog.sheet.result.total: '{0} No result|{1} 1 result|]1,Inf[ %total% results'
@@ -126,18 +126,18 @@ event.user_event_phone.validate.ignore: Ignore
 event.user_event_phone.validate.returnToPhone: 'Update my phone number'
 event.user_event_phone.validate.success: 'Your phone number is successfully confirmed'
 event.user_event_phone.validate.title: 'phone number validation'
-event.visio.test.audio: 'Audio'
+event.visio.test.audio: Audio
 event.visio.test.description: 'When prompted, allow us to use your camera and audio hardware. This test will last for 30 seconds.'
 event.visio.test.error.network.api: 'Can not connect to the video conference server. Please check your connection or your browser configuration to allow access to your camera and audio equipment.'
-event.visio.test.quality: 'Quality:'
 event.visio.test.loading: 'Please wait...'
-event.visio.test.network: 'Network'
+event.visio.test.network: Network
+event.visio.test.quality: 'Quality:'
 event.visio.test.screenSharing: 'Screen sharing'
 event.visio.test.start: 'Start the test'
 event.visio.test.testInProgress: 'Test in progress'
 event.visio.test.testSuccessful: 'Successful test!'
 event.visio.test.title: 'Test your configuration for video meeting'
-event.visio.test.video: 'Video'
+event.visio.test.video: Video
 gender.man: Mr
 gender.woman: Mrs
 group.home.link.create_sheet: 'Create a profile'
@@ -207,7 +207,7 @@ meetingRequest.mobile.filters.state.title: 'My meetings'
 modal.back: Back
 modal.close: Close
 modal.loading.error: 'A problem occurred while loading, you can close the modal'
-modal.submit: 'Submit'
+modal.submit: Submit
 multiple_sheets.modal.close: close
 multiple_sheets.request.filter.reset: 'Reset all the filters'
 multiple_sheets.request.list.no-preference: 'No preferences'
@@ -361,6 +361,7 @@ package.product.quantityMax: 'Maximum quantity reached'
 package.product.quantityMaxInformation: 'Max: %quantityMax%'
 package.product.quantityMin: 'Maximum minimum reached'
 package.product.seeMore: '{0}|{1} See the option|]1, Inf[ See the %count% options'
+package.product.seeLess: 'Close'
 package.product.selectedParticipants: 'Selected participants:'
 package.product.selectOptions: 'Select your options'
 package.product.subjectedToValidationHelp: 'Subject to validation'

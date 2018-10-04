@@ -12,12 +12,21 @@ namespace Proximum\Vimeet\Domain\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 
 class GetTimezoneHelper
 {
-    public static function getTimezoneByEventAndParticipant(Event $event, Participant $participant): string
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
+    public function __construct(IsParticipantVisio $isParticipantVisio)
     {
-        if ($participant->isVisio() && $participant->getTimezone()) {
+        $this->isParticipantVisio = $isParticipantVisio;
+    }
+
+    public function getTimezoneByEventAndParticipant(Event $event, Participant $participant): string
+    {
+        if ($this->isParticipantVisio->isSatisfiedBy($participant) && $participant->getTimezone()) {
             return $participant->getTimezone();
         }
 

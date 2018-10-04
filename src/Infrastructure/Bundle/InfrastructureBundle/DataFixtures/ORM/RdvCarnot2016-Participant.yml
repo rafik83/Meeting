@@ -1,3 +1,14 @@
+Proximum\Vimeet\Domain\Model\User\Event\ExtraData:
+    # Elao participant
+    elao_participant_tes_visio:
+        __construct: false
+        name: 'is_participant_visio'
+        value: 'true'
+        user: '@user_test'
+        event: '@event_rdv_carnot_2016'
+        createdAt: "<date('2016-10-18 16:00:00', 'Europe/Paris', 'UTC')>"
+        updatedAt: "<date('2016-10-18 16:00:00', 'Europe/Paris', 'UTC')>"
+
 Proximum\Vimeet\Domain\Model\Participant:
     # Elao participant
     participant_test:
@@ -12,7 +23,6 @@ Proximum\Vimeet\Domain\Model\Participant:
             4b674gba: { gender: "man" }
             3b759fbb: { telephone: "+33069090909" }
             6c4a3a4f: { items: ["position34"] }
-        visio: true
 
     # Proximum participants
     proximum_participant_visiteur:

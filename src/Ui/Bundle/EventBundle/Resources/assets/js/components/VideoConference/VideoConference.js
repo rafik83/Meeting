@@ -1,11 +1,8 @@
 'use strict';
 
 var TokboxInstance = require('./TokboxInstance').TokboxInstance;
-var CHROME_EXTENSION_ID = require('./TokboxInstance').CHROME_EXTENSION_ID;
+var CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL;
 var openTokLayout = require('opentok-layout-js');
-
-var CHROME_EXTENSION_IS_INSTALLED = 'CHROME_EXTENSION_IS_INSTALLED';
-
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var $ = require('jquery');
@@ -67,7 +64,7 @@ function VideoConference(element) {
     }.bind(this), 20);
   }.bind(this);
 
-  this.startScreenSharingButton.addEventListener('click', this.preScreenshare.bind(this));
+  this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
   this.endScreenSharingButton.addEventListener('click', this.endScreenshare.bind(this));
 
   this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
@@ -77,13 +74,6 @@ function VideoConference(element) {
   document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
-
-  // check if chrome extension already installed
-  if (this.isChrome()) {
-    this.isChromeExtensionInstall(function(response) {
-      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, response === true ? '1' : '0');
-    });
-  }
 
   // Init
   this.init();
@@ -229,59 +219,35 @@ VideoConference.prototype.showError = function(error) {
 };
 
 /**
- * Handle installation of screensharing extension if needed
- */
-VideoConference.prototype.preScreenshare = function () {
-  if (this.session === null) {
-    alert('You cannot start screensharing outside of a session');
-    return;
-  }
-
-  if (this.isChrome()) {
-    var isInstalled = parseInt(localStorage.getItem(CHROME_EXTENSION_IS_INSTALLED));
-
-    if (isInstalled === '1') {
-      this.screenshare();
-      return;
-    }
-
-    this.installChromeExtension(function () {
-      console.log('chrome extension installation succeeded, start screensharing');
-      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, '1');
-      this.screenshare();
-    }.bind(this), function(error) {
-      alert('Installation fail : ' + error);
-      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, '0');
-    });
-
-    return;
-  }
-
-  // otherwise start screensharing directly
-  this.screenshare();
-};
-
-/**
  * Start screensharing
  */
 VideoConference.prototype.screenshare = function() {
+  if (this.session === null) {
+      alert('You cannot start screensharing outside of a session');
+      return;
+  }
+
   TokboxInstance.checkScreenSharingCapability(function(response) {
     if (!response.supported || response.extensionRegistered === false) {
       alert(this.notCompatibleBrowserMessage);
-    } else if (response.extensionInstalled === false && (response.extensionRequired)) {
-      alert(this.installScreenSharingExtensionMessage);
-    } else {
-      // start screensharing
-      var publisher = this.publisher.create({
-        videoSource: 'screen',
-        publishAudio: true
-      });
-
-      this.session.publish(publisher, this.handlePublishScreensharing.bind(this));
-
-      // stop screensharing
-      publisher.on('mediaStopped', this.handleStopScreensharing.bind(this));
+      return;
     }
+
+    if (response.extensionRegistered && response.extensionInstalled === false) {
+      this.installChromeExtension();
+      return;
+    }
+
+    // start screensharing
+    var publisher = this.publisher.create({
+      videoSource: 'screen',
+      publishAudio: true
+    });
+
+    this.session.publish(publisher, this.handlePublishScreensharing.bind(this));
+
+    // stop screensharing
+    publisher.on('mediaStopped', this.handleStopScreensharing.bind(this));
   }.bind(this));
 };
 
@@ -379,48 +345,9 @@ VideoConference.prototype.toggleVideo = function() {
   }
 };
 
-/**
- * @returns {boolean}
- */
-VideoConference.prototype.isChrome = function () {
-  return /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-};
-
-/**
- * Check if chrome extension is installed by send it a message
- *
- * @param callback
- */
-VideoConference.prototype.isChromeExtensionInstall = function (callback) {
-  if (!chrome || !chrome.runtime) {
-      callback(false);
-  }
-
-  chrome.runtime.sendMessage(
-    CHROME_EXTENSION_ID,
-    { type: 'isInstalled' },
-    function(response) {
-      callback(response);
-    }
-  );
-};
-
-/**
- * Show prompt install chrome extension
- *
- * @param successCallback
- * @param errorCallback
- */
-VideoConference.prototype.installChromeExtension = function (successCallback, errorCallback) {
-  chrome.webstore.install(
-    null, // pick up using link rel="chrome-webstore-item"
-    function() {
-      successCallback();
-    },
-    function(error) {
-      errorCallback(error);
-    }
-  );
+VideoConference.prototype.installChromeExtension = function () {
+    alert(this.installScreenSharingExtensionMessage);
+    window.open(CHROME_EXTENSION_URL, '_blank');
 };
 
 VideoConference.prototype.saveParticipantPresence = function() {
@@ -440,6 +367,10 @@ VideoConference.prototype.saveParticipantPresence = function() {
 };
 
 VideoConference.prototype.countDownBeforeEnd = function() {
+    if (!this.countDownContainer) {
+      return;
+    }
+
     var _this = this;
 
     var meetingEndTime = parseInt(this.meetingEndTime);

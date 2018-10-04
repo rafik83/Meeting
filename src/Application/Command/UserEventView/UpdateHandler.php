@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Application\Command\UserEventView;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchPersisterInterface;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory;
-use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
 
 class UpdateHandler
 {

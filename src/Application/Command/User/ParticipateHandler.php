@@ -126,8 +126,7 @@ class ParticipateHandler
             $sheet,
             $participate->user,
             $participantData,
-            true,
-            $sheet->getEvent()->getConfiguration()->isVisio()
+            true
         );
         $this->participantRepository->add($participant);
 

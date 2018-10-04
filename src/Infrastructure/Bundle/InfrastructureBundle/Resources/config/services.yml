@@ -1481,7 +1481,9 @@ services:
     command.participant.update_visio_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateVisioHandler
         arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@repository.user.event.extra_data_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateVisio }
     command.register.participant_step_handler:
@@ -2178,12 +2180,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive }
 
-    Proximum\Vimeet\Application\Command\Event\ToggleParticipantVisioCommandHandler:
-        arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ToggleParticipantVisioCommand }
-
     command.event.configuration.background.remove_image_handler:
         class: Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImageHandler
         arguments:
@@ -2193,8 +2189,7 @@ services:
 
     Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQueryHandler:
         arguments:
-            - '@adapter.file_system_adapter'
-            - '%locale%'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
@@ -2642,6 +2637,7 @@ services:
     Proximum\Vimeet\Domain\UserEventView\UserEventViewsFactory:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository'
+            - '@repository.user.event.extra_data_repository'
 
     #
     # Token component
@@ -2706,6 +2702,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Meeting\ParticipantExtraDataRepository'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
     # Security Component
@@ -3770,6 +3767,7 @@ services:
             - '@query.sheet.detail.participant.agenda_confirmation_status_query_handler'
             - '@query.sheet.detail.participant.phone_validation_status_query_handler'
             - '@query.sheet.detail.participant.availability_confirmation_status_query_handler'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     query.sheet.detail.participant.agenda_confirmation_status_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQueryHandler
@@ -3885,6 +3883,7 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.user.agenda.phone.validation_required_checker'
             - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
 
@@ -4565,7 +4564,6 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@repository.user.event.extra_data_repository'
 
     #
     # Command
@@ -5169,6 +5167,9 @@ services:
     Proximum\Vimeet\Domain\Event\EventByHostResolver:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+    Proximum\Vimeet\Domain\Event\GetTimezoneHelper:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
     domain.event.has_sheet:
         class: Proximum\Vimeet\Domain\Event\HasSheet
         arguments:
@@ -5658,6 +5659,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@domain.meeting.slot.slot_availability'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     query.planner.meeting_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Planner\MeetingViewQueryHandler
@@ -5797,6 +5799,8 @@ services:
     #
     domain.meeting.visio_guesser:
           class: Proximum\Vimeet\Domain\Meeting\VisioGuesser
+          arguments:
+              - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
     # Form extension

@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
 use Proximum\Vimeet\Application\View\Sheet\Details\SheetParticipantsView;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class ParticipantDetailQueryHandler
@@ -36,24 +37,21 @@ class ParticipantDetailQueryHandler
     /** @var AvailabilityConfirmationStatusQueryHandler */
     private $availabilityConfirmationStatusQueryHandler;
 
-    /**
-     * ParticipantDetailQueryHandler constructor.
-     *
-     * @param TemplateDataFactory                        $templateDataFactory
-     * @param AgendaConfirmationStatusQueryHandler       $agendaConfirmationStatusQueryHandler
-     * @param PhoneValidationStatusQueryHandler          $phoneValidationStatusQueryHandler
-     * @param AvailabilityConfirmationStatusQueryHandler $availabilityConfirmationStatusQueryHandler
-     */
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         AgendaConfirmationStatusQueryHandler $agendaConfirmationStatusQueryHandler,
         PhoneValidationStatusQueryHandler $phoneValidationStatusQueryHandler,
-        AvailabilityConfirmationStatusQueryHandler $availabilityConfirmationStatusQueryHandler
+        AvailabilityConfirmationStatusQueryHandler $availabilityConfirmationStatusQueryHandler,
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->templateDataFactory = $templateDataFactory;
         $this->agendaConfirmationStatusQueryHandler = $agendaConfirmationStatusQueryHandler;
         $this->phoneValidationStatusQueryHandler = $phoneValidationStatusQueryHandler;
         $this->availabilityConfirmationStatusQueryHandler = $availabilityConfirmationStatusQueryHandler;
+        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     /**
@@ -86,7 +84,7 @@ class ParticipantDetailQueryHandler
                     $query->locale
                 ),
                 $participant->isOwnerParticipant(),
-                $participant->isVisio(),
+                $this->isParticipantVisio->isSatisfiedBy($participant),
                 $this->agendaConfirmationStatusQueryHandler->handle(
                     new AgendaConfirmationStatusQuery($participant, $query->event)
                 ),

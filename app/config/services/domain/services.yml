@@ -58,6 +58,10 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
 
+    Proximum\Vimeet\Domain\Participant\IsParticipantVisio:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+
     #
     # Availability Time Range
     #

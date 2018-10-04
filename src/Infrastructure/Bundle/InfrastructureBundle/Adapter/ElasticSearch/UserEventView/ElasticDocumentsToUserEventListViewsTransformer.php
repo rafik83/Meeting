@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
+use Elastica\Document;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
-use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventSheetsListView;
 
@@ -23,20 +22,14 @@ class ElasticDocumentsToUserEventListViewsTransformer
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /** @var ExtraDataRepositoryInterface */
-    private $extraDataRepository;
-
-    public function __construct(
-        SheetRepositoryInterface $sheetRepository,
-        ExtraDataRepositoryInterface $extraDataRepository
-    ) {
+    public function __construct(SheetRepositoryInterface $sheetRepository)
+    {
         $this->sheetRepository = $sheetRepository;
-        $this->extraDataRepository = $extraDataRepository;
     }
 
     /**
-     * @param \Elastica\Document[] $documents
-     * @param string               $locale
+     * @param Document[] $documents
+     * @param string     $locale
      *
      * @return UserEventListView[]
      */
@@ -47,8 +40,8 @@ class ElasticDocumentsToUserEventListViewsTransformer
         foreach ($documents as $document) {
             $data = $document->getData();
 
-            foreach ($data['sheets'] as $sheetData) {
-                $id = $sheetData['id'];
+            foreach ($data[TypesMapping::USER_EVENT_VIEW_SHEETS] as $sheetData) {
+                $id = $sheetData[TypesMapping::USER_EVENT_VIEW_SHEETS_ID];
                 $sheetIds[$id] = $id;
             }
         }
@@ -57,56 +50,54 @@ class ElasticDocumentsToUserEventListViewsTransformer
             array_values($sheetIds),
             $locale
         );
+
         $userEventListViews = [];
 
         foreach ($documents as $document) {
             $data = $document->getData();
-
-            $extraData = $this->extraDataRepository->getExtraDataForEventIdNameAndUserId(
-                $data['eventId'],
-                Type::VISIO_TESTED,
-                $data['userId']
-            );
-
+            $userId = $data[TypesMapping::USER_EVENT_VIEW_USER_ID];
             $userEventSheetsListViews = [];
 
-            foreach ($data['sheets'] as $sheetData) {
-                if (isset($sheetsIndexedById[$sheetData['id']])) {
-                    $sheet = $sheetsIndexedById[$sheetData['id']];
-                    $participant = $sheet->getParticipantByUserId($data['userId']);
+            foreach ($data[TypesMapping::USER_EVENT_VIEW_SHEETS] as $sheetData) {
+                $id = $sheetData[TypesMapping::USER_EVENT_VIEW_SHEETS_ID];
 
-                    $userEventSheetsListViews[] = new UserEventSheetsListView(
-                        $sheet->getId(),
-                        $sheet->getTitle(),
-                        $data['userId'] === $sheet->getOwnerId(),
-                        $sheet->getTypeTitle($locale),
-                        $sheet->getCategoriesTitles($locale),
-                        $sheet->isEnabled(),
-                        $sheet->getState(),
-                        $sheet->getValidationState(),
-                        $sheet->getCompleteness(),
-                        Sheet::getCompletenessStatus($sheet->getCompleteness()),
-                        $sheet->attend(),
-                        $sheet->hasGroup(),
-                        $sheet->getGroupTitle(),
-                        $sheet->isInCatalog(),
-                        $sheet->getFollowerName(),
-                        $sheet->getCommercialStatus(),
-                        $sheet->getCommercialStatusLabel(),
-                        $participant ? $participant->isVisio() : false,
-                        $extraData instanceof ExtraData ? (bool)$extraData->getValue() : false
-                    );
+                if (!isset($sheetsIndexedById[$id])) {
+                    continue;
                 }
+
+                $sheet = $sheetsIndexedById[$id];
+
+                $userEventSheetsListViews[] = new UserEventSheetsListView(
+                    $sheet->getId(),
+                    $sheet->getTitle(),
+                    $userId === $sheet->getOwnerId(),
+                    $sheet->getTypeTitle($locale),
+                    $sheet->getCategoriesTitles($locale),
+                    $sheet->isEnabled(),
+                    $sheet->getState(),
+                    $sheet->getValidationState(),
+                    $sheet->getCompleteness(),
+                    Sheet::getCompletenessStatus($sheet->getCompleteness()),
+                    $sheet->attend(),
+                    $sheet->hasGroup(),
+                    $sheet->getGroupTitle(),
+                    $sheet->isInInternalCatalog(),
+                    $sheet->getFollowerName(),
+                    $sheet->getCommercialStatus(),
+                    $sheet->getCommercialStatusLabel()
+                );
             }
 
             if (!empty($userEventSheetsListViews)) {
                 $userEventListViews[] = new UserEventListView(
-                    $data['eventId'],
-                    $data['userId'],
-                    $data['firstName'],
-                    $data['lastName'],
-                    $data['email'],
-                    $data['locale'],
+                    $data[TypesMapping::USER_EVENT_VIEW_EVENT_ID],
+                    $data[TypesMapping::USER_EVENT_VIEW_USER_ID],
+                    $data[TypesMapping::USER_EVENT_VIEW_FIRSTNAME],
+                    $data[TypesMapping::USER_EVENT_VIEW_LASTNAME],
+                    $data[TypesMapping::USER_EVENT_VIEW_EMAIL],
+                    $data[TypesMapping::USER_EVENT_VIEW_LOCALE],
+                    $data[TypesMapping::USER_EVENT_VIEW_IS_VISIO],
+                    $data[TypesMapping::USER_EVENT_VIEW_IS_VISIO_TESTED],
                     $userEventSheetsListViews
                 );
             }

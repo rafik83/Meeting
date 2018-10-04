@@ -1446,7 +1446,7 @@ admin_users_list:
     path: /event/{event}/users/list
     requirements:
         event: \d+
-    methods: [GET, POST]
+    methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\ListAction }
 
 admin_user_event_scan:
