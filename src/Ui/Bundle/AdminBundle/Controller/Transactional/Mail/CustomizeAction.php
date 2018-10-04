@@ -151,6 +151,11 @@ class CustomizeAction
             'form' => $form->createView(),
             'transactionalMailType' => $transactionalMailType,
             'event' => $event,
+            'availableParameters' => array_merge(
+                Constant::TRANSACTIONAL_MAIL_GENERIC_PARAMETERS,
+                $data['isCustomizableByType'] ? Constant::TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS : [],
+                $data['availableParameters']
+            )
         ]);
     }
 

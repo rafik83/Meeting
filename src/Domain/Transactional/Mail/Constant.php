@@ -166,7 +166,7 @@ final class Constant
             'availableParameters' => [
                 '%fromType%',
                 '%toType%',
-                '%urlEventSheetLocale%',
+                '%urlEventSheet%',
             ],
             'isCustomizableByType' => true,
             'template' => Sheet\SheetChangeTypeMail::TEMPLATE,
@@ -198,7 +198,7 @@ final class Constant
         self::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_DRAFT => [
             'subject' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_SUBJECT,
             'availableParameters' => [
-                '%urlSheet%',
+                '%urlEventSheet%',
             ],
             'isCustomizableByType' => true,
             'template' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_TEMPLATE,
@@ -276,7 +276,6 @@ final class Constant
         '%event%',
         '%firstName%',
         '%lastName%',
-        '%participationType%',
     ];
 
     public const TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS = [

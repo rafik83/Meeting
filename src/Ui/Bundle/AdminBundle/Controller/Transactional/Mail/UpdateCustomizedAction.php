@@ -19,9 +19,7 @@ use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
 use Proximum\Vimeet\Domain\Repository\Transactional\Mail\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail\CustomizeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail\UpdateCustomizedType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -123,6 +121,8 @@ class UpdateCustomizedAction
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($customize);
 
+            $this->flashBag->add('success', 'flash.admin.transactional.mail.customize.success');
+
             return new RedirectResponse($this->router->generate('admin_event_transactional_mail_list', [
                 'event' => $event->getId(),
             ]));
@@ -132,6 +132,11 @@ class UpdateCustomizedAction
             'form' => $form->createView(),
             'transactionalMailType' => $transactionalMailType,
             'event' => $event,
+            'availableParameters' => array_merge(
+                Constant::TRANSACTIONAL_MAIL_GENERIC_PARAMETERS,
+                $data['isCustomizableByType'] ? Constant::TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS : [],
+                $data['availableParameters']
+            )
         ]);
     }
 }
