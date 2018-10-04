@@ -636,6 +636,13 @@ event_package_summary:
         sheet: \d+
     methods: [GET, POST]
 
+event_visio_checkin:
+    path: /sheet/{sheet}/checkin
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction }
+    requirements:
+        sheet: \d+
+    methods: [GET, POST]
+
 event_package_summary_fill_billing_info:
     path: /sheet/{sheet}/package/summary/fill-billing-info
     defaults: { _controller: EventBundle:Package:fillBillingInfo }
