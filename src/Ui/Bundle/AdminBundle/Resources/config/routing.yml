@@ -551,6 +551,14 @@ admin_meeting_list:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\ListAction }
 
+admin_meeting_participants_presence:
+    path: /event/{event}/meeting/slot/{meetingSlot}/participants/presence
+    requirements:
+        event: \d+
+        meetingSlot: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\GetParticipantPresenceAction }
+
 admin_meeting_update_status:
     path: /event/{event}/meeting/{meeting}/update/status
     requirements:

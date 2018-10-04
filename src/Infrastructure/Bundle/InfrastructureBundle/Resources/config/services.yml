@@ -4312,6 +4312,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery }
 
+    Proximum\Vimeet\Application\Query\Meeting\ParticipantPresenceQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Meeting\IsParticipantPresentToMeeting'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\ParticipantPresenceQuery }
+
     query.meeting.participants_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQueryHandler
         arguments:
