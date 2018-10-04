@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class ScanCommand implements Command
+class ScanEventEntranceCommand implements Command
 {
     /** @var Event */
     public $event;

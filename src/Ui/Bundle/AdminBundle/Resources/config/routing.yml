@@ -1454,7 +1454,7 @@ admin_user_event_scan:
     requirements:
         event: \d+
     methods: [POST]
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanEventEntranceAction }
 
 admin_users_details:
     path: /event/{event}/users/{user}

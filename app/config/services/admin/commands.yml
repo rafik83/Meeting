@@ -317,3 +317,13 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\CancelAll }
+
+    #
+    # Scan
+    #
+    Proximum\Vimeet\Application\Command\User\Event\ScanEventEntranceCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ScanEventEntranceCommand }
