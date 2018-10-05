@@ -6429,6 +6429,30 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyGetterAdapter'
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyPasswordGetterAdapter'
 
+    Proximum\Vimeet\Infrastructure\Encryption\SheetProtectedKeyGetterAdapter:
+        arguments:
+            - '@repository.sheet.extra_data_repository'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\ProtectedKeyAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetProtectedKeyPasswordGetterAdapter'
+            - '@datetime'
+
+    Proximum\Vimeet\Infrastructure\Encryption\SheetProtectedKeyPasswordGetterAdapter:
+        arguments:
+            - '%secret%'
+
+    Proximum\Vimeet\Infrastructure\Encryption\SheetEncryptFileAdapter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetKeyGetter'
+
+    Proximum\Vimeet\Infrastructure\Encryption\SheetDecryptFileAdapter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetKeyGetter'
+
+    Proximum\Vimeet\Infrastructure\Encryption\SheetKeyGetter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetProtectedKeyGetterAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetProtectedKeyPasswordGetterAdapter'
+
     #
     # Guard
     #
