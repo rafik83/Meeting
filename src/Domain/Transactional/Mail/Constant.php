@@ -97,6 +97,7 @@ final class Constant
             'subject' => PreRegisteredMail::SUBJECT,
             'availableParameters' => [
                 '%urlEventAccountParticipant%',
+                '%urlEventAccountParticipantWithCTA%',
             ],
             'isCustomizableByType' => true,
             'template' => PreRegisteredMail::TEMPLATE,
@@ -106,6 +107,7 @@ final class Constant
             'subject' => User\ActivateAccountMail::SUBJECT,
             'availableParameters' => [
                 '%urlEventActivateAccount%',
+                '%urlEventActivateAccountWithCTA%',
             ],
             'isCustomizableByType' => false,
             'template' => User\ActivateAccountMail::TEMPLATE,
@@ -115,6 +117,7 @@ final class Constant
             'subject' => User\ChangeNewMailAddressMail::SUBJECT,
             'availableParameters' => [
                 '%urlEventActivateNewMail%',
+                '%urlEventActivateNewMailWithCTA%',
             ],
             'isCustomizableByType' => false,
             'template' => User\ChangeNewMailAddressMail::TEMPLATE,
@@ -133,6 +136,7 @@ final class Constant
             'subject' => User\CompleteProfileMail::SUBJECT,
             'availableParameters' => [
                 '%urlEventActivateAccountAlreadyKnown%',
+                '%urlEventActivateAccountAlreadyKnownWithCTA%',
             ],
             'isCustomizableByType' => true,
             'template' => User\CompleteProfileMail::TEMPLATE,
@@ -149,6 +153,7 @@ final class Constant
             'subject' => User\ResetPasswordMail::SUBJECT,
             'availableParameters' => [
                 '%urlEventCreateNewPassword%',
+                '%urlEventCreateNewPasswordWithCTA%',
             ],
             'isCustomizableByType' => false,
             'template' => User\ResetPasswordMail::TEMPLATE,
@@ -167,6 +172,7 @@ final class Constant
                 '%fromType%',
                 '%toType%',
                 '%urlEventSheet%',
+                '%urlEventSheetWithCTA%',
             ],
             'isCustomizableByType' => true,
             'template' => Sheet\SheetChangeTypeMail::TEMPLATE,
@@ -190,6 +196,7 @@ final class Constant
             'subject' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_SUBJECT,
             'availableParameters' => [
                 '%urlSheet%',
+                '%urlSheetWithCTA%',
             ],
             'isCustomizableByType' => true,
             'template' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_TEMPLATE,
@@ -199,6 +206,7 @@ final class Constant
             'subject' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_SUBJECT,
             'availableParameters' => [
                 '%urlEventSheet%',
+                '%urlEventSheetWithCTA%',
             ],
             'isCustomizableByType' => true,
             'template' => self::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_TEMPLATE,
@@ -218,6 +226,7 @@ final class Constant
             'subject' => Sheet\SheetGroupCreatedMail::SUBJECT,
             'availableParameters' => [
                 '%urlEventSheetGroupIndex%',
+                '%urlEventSheetGroupIndexWithCTA%',
             ],
             'isCustomizableByType' => false,
             'template' => Sheet\SheetGroupCreatedMail::TEMPLATE,
@@ -236,6 +245,7 @@ final class Constant
             'subject' => ParticipantAddedMail::SUBJECT,
             'availableParameters' => [
                 '%urlEvent%',
+                '%urlEventWithCTA%',
             ],
             'isCustomizableByType' => true,
             'template' => ParticipantAddedMail::TEMPLATE,
@@ -256,6 +266,7 @@ final class Constant
                 '%orderDate%',
                 '%orderNumber%',
                 '%urlEventProForma%',
+                '%urlEventProFormaWithCTA%',
             ],
             'isCustomizableByType' => true,
             'template' => OrderConfirmMail::TEMPLATE,
