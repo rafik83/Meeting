@@ -627,7 +627,7 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $localizations = explode(',', $filters['localization']);
+        $localizations = explode('|', $filters['localization']);
 
         $boolQuery = new BoolQuery();
 
