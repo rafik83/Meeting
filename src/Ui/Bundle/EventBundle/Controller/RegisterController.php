@@ -209,13 +209,13 @@ class RegisterController extends Controller
             )
         );
 
-        $participantBlock = $registrationTemplate->getFirstBlock();
+        $registrationTemplateFirstStep = $registrationTemplate->getFirstBlock();
 
         // Add or update UserEvent type
         $this->get('components.user.type_resolver')->resolve($user, $event, $type);
 
-        $form = $this->createForm(BlockType::class, $participantBlock, [
-            'block'   => $participantBlock,
+        $form = $this->createForm(BlockType::class, $registrationTemplateFirstStep, [
+            'block'   => $registrationTemplateFirstStep,
             'locale'  => $locale,
             'country' => $event->getCountry(),
         ]);
@@ -227,7 +227,7 @@ class RegisterController extends Controller
                 null,
                 $registrationTemplate,
                 $form,
-                $participantBlock->getData()
+                $registrationTemplateFirstStep->getData()
             );
 
             $participate = new Participate(
@@ -266,9 +266,9 @@ class RegisterController extends Controller
             'event'           => $eventDomain->getEvent(),
             'typeView'        => $typeView,
             'form'            => $form->createView(),
-            'stepTitle'       => $participantBlock->getTitle($locale),
+            'stepTitle'       => $registrationTemplateFirstStep->getTitle($locale),
             'stepDescription' => $this->get('markdown')
-                ->toHtml($participantBlock->getDescription($locale)),
+                ->toHtml($registrationTemplateFirstStep->getDescription($locale)),
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
         ]);
     }
@@ -311,19 +311,19 @@ class RegisterController extends Controller
             $participant->setData($preFillUserDataView->templateData->getData());
         }
 
-        $participantBlock = $registrationTemplate->getBlock((int) $step);
+        $registrationTemplateStep = $registrationTemplate->getBlock((int) $step);
 
-        if (null === $participantBlock) {
+        if (null === $registrationTemplateStep) {
             throw $this->createNotFoundException('Unknown step');
         }
 
         $data = [
-            'block' => $participantBlock,
+            'block' => $registrationTemplateStep,
             'locale' => $locale,
             'country' => $eventDomain->getEvent()->getCountry(),
         ];
 
-        $form = $this->createForm(BlockType::class, $participantBlock, $data);
+        $form = $this->createForm(BlockType::class, $registrationTemplateStep, $data);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = $this->handleData(
@@ -332,7 +332,7 @@ class RegisterController extends Controller
                 $participant->getSheet(),
                 $registrationTemplate,
                 $form,
-                $participantBlock->getData()
+                $registrationTemplateStep->getData()
             );
 
             if ($form->isValid()) {
@@ -371,9 +371,9 @@ class RegisterController extends Controller
             'form'            => $form->createView(),
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
             'stepNumber'      => $step,
-            'stepTitle'       => $participantBlock->getTitle($locale),
+            'stepTitle'       => $registrationTemplateStep->getTitle($locale),
             'stepDescription' => $this->get('markdown')
-                ->toHtml($participantBlock->getDescription($locale)),
+                ->toHtml($registrationTemplateStep->getDescription($locale)),
             'participant'     => $participant,
             'participantCard' => $participantCard,
         ]);
