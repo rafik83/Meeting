@@ -266,6 +266,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
     private function buildCountries(TemplateData $templateData, array $locales): array
     {
+        sort($locales);
+
         $countryCode = $this->getCountryCode($templateData);
 
         if (null === $countryCode) {
