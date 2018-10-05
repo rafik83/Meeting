@@ -999,8 +999,7 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveImage }
     Proximum\Vimeet\Application\Command\Sheet\SaveTreeToFileSystemCommandHandler:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
-            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetDecryptFileAdapter'
+            - '@Proximum\Vimeet\Application\Command\Encryption\DecryptHandler'
             - '@adapter.file_system_adapter'
             - '%shared_uploaded_files%'
             - '%infrastructure.encrypted_files_path%'
@@ -1459,9 +1458,8 @@ services:
     command.participant.upload_file_handler:
         class: Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Command\Encryption\EncryptHandler'
             - '@adapter.local_file_storage'
-            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventEncryptFileAdapter'
-            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetEncryptFileAdapter'
             - '%infrastructure.encrypted_files_path%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile }

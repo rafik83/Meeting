@@ -11,35 +11,30 @@
 namespace Proximum\Vimeet\Application\Command\Participant\Upload;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
-use Proximum\Vimeet\Application\Adapter\SheetEncryptFileInterface;
-use Proximum\Vimeet\Application\Adapter\UserEventEncryptFileInterface;
+use Proximum\Vimeet\Application\Command\Encryption\Encrypt;
+use Proximum\Vimeet\Application\Command\Encryption\EncryptHandler;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadFileHandler
 {
+    /** @var EncryptHandler */
+    private $encryptHandler;
+
     /** @var FileStorageInterface */
     private $fileStorage;
-
-    /** @var UserEventEncryptFileInterface */
-    private $userEventEncryptFile;
-
-    /** @var SheetEncryptFileInterface */
-    private $sheetEncryptFile;
 
     /** @var string */
     private $encryptedFilesPath;
 
     public function __construct(
+        EncryptHandler $encryptHandler,
         FileStorageInterface $fileStorage,
-        UserEventEncryptFileInterface $userEventEncryptFile,
-        SheetEncryptFileInterface $sheetEncryptFile,
         string $encryptedFilesPath
     ) {
+        $this->encryptHandler = $encryptHandler;
         $this->fileStorage = $fileStorage;
-        $this->userEventEncryptFile = $userEventEncryptFile;
-        $this->sheetEncryptFile = $sheetEncryptFile;
         $this->encryptedFilesPath = $encryptedFilesPath;
     }
 
@@ -109,20 +104,15 @@ class UploadFileHandler
         $initialFilename = $this->encryptedFilesPath . $path;
         $encryptedFilename = $initialFilename . '_encrypted';
 
-        if ($uploadFile->isSheetData()) {
-            $this->sheetEncryptFile->encryptFile(
+        $this->encryptHandler->handle(
+            new Encrypt(
                 $uploadFile->getSheet(),
-                $initialFilename,
-                $encryptedFilename
-            );
-        } else {
-            $this->userEventEncryptFile->encryptFile(
-                $uploadFile->getEvent(),
                 $uploadFile->getUser(),
+                $uploadFile->isSheetData(),
                 $initialFilename,
                 $encryptedFilename
-            );
-        }
+            )
+        );
 
         $this->fileStorage->remove($initialFilename, true);
         $this->fileStorage->rename($encryptedFilename, $initialFilename, true);
