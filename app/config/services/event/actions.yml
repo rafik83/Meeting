@@ -41,6 +41,7 @@ services:
             - '@adapter.authorization_checker'
             - '@template.template_data_factory'
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetDecryptFileAdapter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@serializer.normalizer.data_uri'
             - '@templating.engine.twig'

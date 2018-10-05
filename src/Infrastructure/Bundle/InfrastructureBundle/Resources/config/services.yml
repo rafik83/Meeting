@@ -1000,6 +1000,7 @@ services:
     Proximum\Vimeet\Application\Command\Sheet\SaveTreeToFileSystemCommandHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetDecryptFileAdapter'
             - '@adapter.file_system_adapter'
             - '%shared_uploaded_files%'
             - '%infrastructure.encrypted_files_path%'

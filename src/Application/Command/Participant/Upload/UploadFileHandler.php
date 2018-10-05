@@ -110,15 +110,15 @@ class UploadFileHandler
         $encryptedFilename = $initialFilename . '_encrypted';
 
         if ($uploadFile->isSheetData()) {
-            $this->userEventEncryptFile->encryptFile(
-                $uploadFile->getEvent(),
-                $uploadFile->getUser(),
+            $this->sheetEncryptFile->encryptFile(
+                $uploadFile->getSheet(),
                 $initialFilename,
                 $encryptedFilename
             );
         } else {
-            $this->sheetEncryptFile->encryptFile(
-                $uploadFile->getSheet(),
+            $this->userEventEncryptFile->encryptFile(
+                $uploadFile->getEvent(),
+                $uploadFile->getUser(),
                 $initialFilename,
                 $encryptedFilename
             );

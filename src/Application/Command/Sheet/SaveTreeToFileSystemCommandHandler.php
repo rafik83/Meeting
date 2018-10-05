@@ -11,14 +11,17 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\SheetDecryptFileInterface;
 use Proximum\Vimeet\Application\Adapter\UserEventDecryptFileInterface;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectView;
-use Proximum\Vimeet\Domain\Model\User;
 
 class SaveTreeToFileSystemCommandHandler
 {
     /** @var UserEventDecryptFileInterface */
     private $userEventDecryptFile;
+
+    /** @var SheetDecryptFileInterface */
+    private $sheetDecryptFile;
 
     /** @var FileSystemAdapterInterface */
     private $fileSystemAdapter;
@@ -34,6 +37,7 @@ class SaveTreeToFileSystemCommandHandler
 
     public function __construct(
         UserEventDecryptFileInterface $userEventDecryptFile,
+        SheetDecryptFileInterface $sheetDecryptFile,
         FileSystemAdapterInterface $fileSystemAdapter,
         string $sharedUploadedFiles,
         string $encryptedFilesPath,
@@ -44,6 +48,7 @@ class SaveTreeToFileSystemCommandHandler
         $this->sharedUploadedFiles = $sharedUploadedFiles;
         $this->encryptedFilesPath = $encryptedFilesPath;
         $this->webDir = $webDir;
+        $this->sheetDecryptFile = $sheetDecryptFile;
     }
 
     public function handle(SaveTreeToFileSystemCommand $command): string
@@ -77,18 +82,25 @@ class SaveTreeToFileSystemCommandHandler
 
     private function handleCryptedFile(UploadedObjectView $uploadedObjectView, string $destinationPath): void
     {
-        $owner = $uploadedObjectView->user instanceof User ? $uploadedObjectView->user : $uploadedObjectView->sheet->getOwner();
         $originalPath = $this->encryptedFilesPath . $uploadedObjectView->path;
 
         if (!$this->fileSystemAdapter->exists($originalPath)) {
             return;
         }
 
-        $this->userEventDecryptFile->decryptFile(
-            $uploadedObjectView->sheet->getEvent(),
-            $owner,
-            $originalPath,
-            $destinationPath
-        );
+        if ($uploadedObjectView->isSheetData) {
+            $this->sheetDecryptFile->decryptFile(
+                $uploadedObjectView->sheet,
+                $originalPath,
+                $destinationPath
+            );
+        } else {
+            $this->userEventDecryptFile->decryptFile(
+                $uploadedObjectView->sheet->getEvent(),
+                $uploadedObjectView->user,
+                $originalPath,
+                $destinationPath
+            );
+        }
     }
 }

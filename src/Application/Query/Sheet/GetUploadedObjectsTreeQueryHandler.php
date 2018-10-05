@@ -90,7 +90,9 @@ class GetUploadedObjectsTreeQueryHandler
                 $sheet->getRegistrationData()[$object->getKey()]['path'],
                 $this->sheetUploadObjectFilename($sheet, $object->getKey()),
                 $object->isCrypted(),
-                $sheet
+                $sheet,
+                null,
+                true
             )
         );
 
@@ -116,7 +118,8 @@ class GetUploadedObjectsTreeQueryHandler
                         $this->participantUploadObjectFilename($sheet, $participant, $object->getKey()),
                         $object->isCrypted(),
                         $sheet,
-                        $participant->getUser()
+                        $participant->getUser(),
+                        false
                     )
                 );
 

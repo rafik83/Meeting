@@ -12,7 +12,9 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Adapter\SheetDecryptFileInterface;
 use Proximum\Vimeet\Application\Adapter\UserEventDecryptFileInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\RemoveDecryptedFileEvent;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -41,6 +43,9 @@ class DownloadFileAction
     /** @var UserEventDecryptFileInterface */
     private $userEventDecryptFile;
 
+    /** @var SheetDecryptFileInterface */
+    private $sheetDecryptFile;
+
     /** @var DelayedEventDispatcherInterface */
     private $delayedEventDispatcher;
 
@@ -60,6 +65,7 @@ class DownloadFileAction
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         TemplateDataFactory $templateDataFactory,
         UserEventDecryptFileInterface $userEventDecryptFile,
+        SheetDecryptFileInterface $sheetDecryptFile,
         DelayedEventDispatcherInterface $delayedEventDispatcher,
         DataUriNormalizer $dataUriNormalizer,
         EngineInterface $engine,
@@ -70,6 +76,7 @@ class DownloadFileAction
         $this->templateDataFactory = $templateDataFactory;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
         $this->userEventDecryptFile = $userEventDecryptFile;
+        $this->sheetDecryptFile = $sheetDecryptFile;
         $this->dataUriNormalizer = $dataUriNormalizer;
         $this->engine = $engine;
         $this->encryptedFilesPath = $encryptedFilesPath;
@@ -104,12 +111,20 @@ class DownloadFileAction
                 $filename = sprintf('decrypted_%s', end($directoryStructure));
                 $downloadPath = $this->encryptedFilesPath . $filename;
 
-                $this->userEventDecryptFile->decryptFile(
-                    $sheet->getEvent(),
-                    $user,
-                    $this->encryptedFilesPath . $uploadObject->getPath(),
-                    $downloadPath
-                );
+                if ($uploadObject->hasTag(Tag::SHEET_DATA)) {
+                    $this->sheetDecryptFile->decryptFile(
+                        $sheet,
+                        $this->encryptedFilesPath . $uploadObject->getPath(),
+                        $downloadPath
+                    );
+                } else {
+                    $this->userEventDecryptFile->decryptFile(
+                        $sheet->getEvent(),
+                        $user,
+                        $this->encryptedFilesPath . $uploadObject->getPath(),
+                        $downloadPath
+                    );
+                }
 
                 $this->delayedEventDispatcher->dispatch(
                     Events::REMOVE_DECRYPTED_FILE,

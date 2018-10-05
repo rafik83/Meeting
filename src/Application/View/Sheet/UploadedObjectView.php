@@ -30,17 +30,22 @@ class UploadedObjectView
     /** @var null|User */
     public $user;
 
+    /** @var bool */
+    public $isSheetData;
+
     public function __construct(
         string $path,
         string $filename,
         bool $crypted,
         Sheet $sheet,
-        ?User $user = null
+        ?User $user,
+        bool $isSheetData
     ) {
         $this->path = $path;
         $this->filename = $filename;
         $this->crypted = $crypted;
         $this->sheet = $sheet;
         $this->user = $user;
+        $this->isSheetData = $isSheetData;
     }
 }
