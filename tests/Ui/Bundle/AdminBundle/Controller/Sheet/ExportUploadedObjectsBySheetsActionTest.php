@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Sheet\GetSheetIdsByFiltersQuery;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
+use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Event\ExtraData\Type;
@@ -79,6 +80,11 @@ class ExportUploadedObjectsBySheetsActionTest extends TestCase
 
         $extraDataRepository->add($extraData);
 
+        $ruleStorage = $this->prophesize(RuleStorageInterface::class);
+        $ruleStorage->getRules($event->reveal(), 'sheet')
+            ->shouldBeCalled()
+            ->willReturn(null);
+
         $jobQueue->exportUploadedObjectsBySheets($event->reveal(), $admin->removeEvent(), $extraData);
         $flashBag->add('success', 'flash.admin.event.export.uploaded_objects.success')->shouldBeCalled();
 
@@ -90,7 +96,8 @@ class ExportUploadedObjectsBySheetsActionTest extends TestCase
             $flashBag->reveal(),
             $jobQueue->reveal(),
             $queryBus->reveal(),
-            $datetime
+            $datetime,
+            $ruleStorage->reveal()
         );
         $action($request->reveal(), $event->reveal(), $adminDomain->reveal());
     }

@@ -4522,6 +4522,7 @@ services:
         arguments:
              - '@fos_elastica.finder.app.sheet'
              - '@fos_elastica.index.app.sheet'
+             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
 
     #
     # Elastica
@@ -5289,6 +5290,12 @@ services:
         class: Proximum\Vimeet\Domain\Event\LastEventParticipation
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
+
+    Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface: '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleSessionStorage'
+    Proximum\Vimeet\Domain\ConditionRules\Storage\RuleSessionStorage:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.session'
 
     #
     # Transaction

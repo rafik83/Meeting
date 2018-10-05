@@ -42,6 +42,7 @@ class GetFiltersByTypeAndLocaleQueryHandler
         ],
         'sheet' => [
             'sheetName' => ['type' => 'string', 'optgroup' => 'optgroup.sheetInfo'],
+            'spotReference'=> ['type' => 'string', 'optgroup' => 'optgroup.sheetInfo'],
             'participants.lastname' => ['type' => 'string', 'optgroup' => 'optgroup.participantInfo'],
             'participants.email'=> ['type' => 'string', 'optgroup' => 'optgroup.participantInfo'],
         ],

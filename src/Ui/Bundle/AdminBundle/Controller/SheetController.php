@@ -20,16 +20,19 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
+use Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
+use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Infrastructure\Adapter\QueryBus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
@@ -83,6 +86,7 @@ class SheetController extends Controller
 
         if (null !== $request->query->get('reset')) {
             $sheetFilter->clear($event);
+            $this->get(RuleStorageInterface::class)->removeRules($event, 'sheet');
 
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
@@ -107,6 +111,12 @@ class SheetController extends Controller
             ));
         }
 
+        if ($request->query->get('rules')) {
+            $this->get(RuleStorageInterface::class)->saveRules($event, 'sheet', $request->query->get('rules'));
+        }
+
+        $locale = $event->getAvailableLocale($request->getLocale());
+
         // Pagination
         try {
             $query = new PaginatedSheetListViewQuery(
@@ -114,8 +124,9 @@ class SheetController extends Controller
                 $filters,
                 $selectedSheetsPage,
                 self::SHEETS_PER_PAGE, // number of sheets by page
-                $event->getAvailableLocale($request->getLocale()),
-                $this->getUser()
+                $locale,
+                $this->getUser(),
+                $this->get(RuleStorageInterface::class)->getRules($event, 'sheet')
             );
             /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);
@@ -131,7 +142,7 @@ class SheetController extends Controller
         ));
 
         // Batch
-        $batch = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()));
+        $batch = new Batch($event, $this->getUser(), $locale);
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids' => $sheets->map(function (SheetListView $listView) {
                 return $listView->id;
@@ -149,8 +160,10 @@ class SheetController extends Controller
         ]);
 
         $sheetFilterView = $sheetFilterForm->createView();
+        $queryBuilderFilters = $this->get(QueryBus::class)->handle(new GetFiltersByTypeAndLocaleQuery('sheet', $locale));
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
+            'locale'           => $request->getLocale(),
             'event'            => $event,
             'typesByEvent'     => $this->getTypesByEvent($types, $request->getLocale()),
             'sheets'           => $sheets,
@@ -162,6 +175,8 @@ class SheetController extends Controller
             ),
             'batch_form'       => $batchForm->createView(),
             'filter_form'      => $sheetFilterView,
+            'rules'            => $this->get(RuleStorageInterface::class)->getRulesQuery($event, 'sheet'),
+            'filters'          => $queryBuilderFilters,
         ]);
     }
 

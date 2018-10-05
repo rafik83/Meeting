@@ -161,6 +161,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'hasInvoice' => $this->invoiceRepository->hasInvoice($sheet),
                     'attend' => $sheet->attend(),
                     'hasGroup' => $sheet->hasGroup(),
+                    'spotReference' => $sheet->hasSpot() ? $sheet->getSpot()->getReference() : null,
                     'hasSpot' => $sheet->hasSpot(),
                     'availableSlotIds' => $this->buildAvailableSlots($sheet),
                     'reminderDate' => $this->getReminderDate($sheet),

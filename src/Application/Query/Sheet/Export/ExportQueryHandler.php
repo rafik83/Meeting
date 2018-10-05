@@ -43,7 +43,8 @@ class ExportQueryHandler
         $sheetIdsView = $this->sheetSearchAdapter->getSheetIdsView(
             $exportQuery->event,
             $exportQuery->filters,
-            $exportQuery->locale
+            $exportQuery->locale,
+            $exportQuery->condition
         );
 
         return $this->serializerAdapter->serialize($sheetIdsView, 'csv', [

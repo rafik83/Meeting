@@ -137,7 +137,6 @@ class SheetSearchQueryBuilder
         // Remove empty filters before apply elastica filters
         $this->discardEmptyFilters($filters);
 
-        $this->filterByText($filters);
         $this->filterByState($filters);
         $this->filterByValidationState($filters);
         $this->filterByEnabled($filters);
@@ -221,24 +220,6 @@ class SheetSearchQueryBuilder
     /**
      * @param array $filters
      */
-    protected function filterByText(array &$filters)
-    {
-        if (empty($filters['text']) || null === $filters['text']) {
-            return;
-        }
-
-        if (false !== strpos($filters['text'], '@')) {
-            $this->filterByParticipantEmail($filters['text']);
-
-            return;
-        }
-
-        $this->filterBySheetNameOrParticipantLastname($filters['text']);
-    }
-
-    /**
-     * @param array $filters
-     */
     protected function filterByContent(array &$filters)
     {
         if (!isset($filters[SearchFields::FILTER_CONTENT])
@@ -269,54 +250,6 @@ class SheetSearchQueryBuilder
         ;
 
         $this->query->addMust($multiMatch);
-    }
-
-    /**
-     * @param string $text
-     */
-    protected function filterBySheetNameOrParticipantLastname($text)
-    {
-        $filterBySheetNameOrParticipantLastnameQuery = new BoolQuery();
-
-        $matchSheetName = new Match();
-        $matchSheetName
-            ->setFieldQuery('sheetName', $text)
-            ->setFieldFuzziness('sheetName', 'AUTO');
-
-        $filterBySheetNameOrParticipantLastnameQuery->addShould($matchSheetName);
-
-        $matchLastname = new Match();
-        $matchLastname
-            ->setFieldQuery('participants.lastname', $text)
-            ->setFieldFuzziness('participants.lastname', 'AUTO');
-
-        $boolQuery = new BoolQuery();
-        $boolQuery->addMust($matchLastname);
-
-        $nestedParticipants = new Nested();
-        $nestedParticipants->setQuery($boolQuery)->setPath('participants');
-
-        $filterBySheetNameOrParticipantLastnameQuery->addShould($nestedParticipants);
-
-        $this->query->addMust($filterBySheetNameOrParticipantLastnameQuery);
-    }
-
-    /**
-     * @param string $email
-     */
-    protected function filterByParticipantEmail($email)
-    {
-        $matchEmail = new Match();
-        $matchEmail
-            ->setFieldQuery('participants.email', $email);
-
-        $boolQuery = new BoolQuery();
-        $boolQuery->addMust($matchEmail);
-
-        $nested = new Nested();
-        $nested->setQuery($boolQuery)->setPath('participants');
-
-        $this->query->addMust($nested);
     }
 
     /**

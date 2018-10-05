@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Participant\Export\PrepareExport;
+use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Exception\Participant\Export\NoParticipantToExportException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter;
@@ -40,18 +41,23 @@ class PrepareExportAction
     /** @var FlashBagInterface */
     private $flashBag;
 
+    /** @var RuleStorageInterface */
+    private $ruleStorage;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         SheetFilterSubmittedDataGetter $sheetFilterSubmittedDataGetter,
         CommandBusInterface $commandBus,
         RouterInterface $router,
-        FlashBagInterface $flashBag
+        FlashBagInterface $flashBag,
+        RuleStorageInterface $ruleStorage
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->sheetFilterSubmittedDataGetter = $sheetFilterSubmittedDataGetter;
         $this->commandBus = $commandBus;
         $this->router = $router;
         $this->flashBag = $flashBag;
+        $this->ruleStorage = $ruleStorage;
     }
 
     /**
@@ -76,7 +82,8 @@ class PrepareExportAction
             $event,
             $this->sheetFilterSubmittedDataGetter->handle($event, $adminDomain->getAdmin(), $locale),
             $adminDomain->getAdmin(),
-            $locale
+            $locale,
+            $this->ruleStorage->getRules($event, 'sheet')
         );
 
         try {

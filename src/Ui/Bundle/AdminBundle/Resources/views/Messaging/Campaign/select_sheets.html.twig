@@ -60,7 +60,21 @@
 
         <div class="col-md-6 well">
             {{ form_start(filter_form) }}
-                {{ form_row(filter_form.text) }}
+                <div class="filter-form">
+                    <div class="col-md-12">
+                        <input type="hidden" name="rules" id="rules"/>
+                        <div id="builder"
+                             data-locale="{{ locale }}"
+                             data-rules="{{ rules }}"
+                             data-filters="{{ filters|json_encode }}">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-primary" id="submit-rules">{{ 'admin.filter'|trans }}</button>
+                        </div>
+                    </div>
+                </div>
                 {{ form_row(filter_form.country) }}
                 {{ form_row(filter_form.validationState, {'inline': true}) }}
                 {{ form_row(filter_form.state, {'inline': true}) }}

@@ -57,12 +57,6 @@ abstract class AbstractFilterType extends AbstractType
         $event = $options['event'];
 
         $builder
-            ->add('text', SheetTextSearchType::class, [
-                'label' => 'form.sheet_filter.children.text_search.label',
-                'attr'  => [
-                    'placeholder' => 'form.sheet_filter.children.text_search.label',
-                ],
-            ])
             ->add('validationState', ValidationStateChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.validationState.label',
                 'required' => false,

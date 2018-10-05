@@ -7,6 +7,7 @@
 {% block content %}
     <h1 class="page-header">
         {{ 'admin.sheet.title.count'|transchoice(sheets.total, {'%count%': sheets.total}) }}
+
         {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
             <div class="dropdown pull-right" data-toggle="tooltip" data-placement="top" title="{{ 'admin.sheet.export.help'|trans }}">
                 <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -55,28 +56,34 @@
         {% endif %}
     </h1>
 
+    <div class="row filters">
+        <div class="col-md-12 text-center">
+            {{ include('AdminBundle:Common:filters_summary.html.twig', {
+                filters:   filters_summary,
+                resetLink: path('admin_sheet', { 'event': event.id, 'reset': true })
+            }) }}
+        </div>
+    </div>
+
     {{ form_start(filter_form) }}
-        <div class="row filters">
-            <div class="col-md-offset-4 col-md-4">
-                <div class="input-group col-md-12">
-                    {{ form_widget(filter_form.text) }}
+        <div class="row">
+            <div class="filter-form">
+                <div class="col-md-12">
+                    <input type="hidden" name="rules" id="rules"/>
+                    <div id="builder"
+                         data-locale="{{ locale }}"
+                         data-rules="{{ rules }}"
+                         data-filters="{{ filters|json_encode }}">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-primary" id="submit-rules">{{ 'admin.filter'|trans }}</button>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4 text-right">
-                {{ macro.choice_as_dropdown(filter_form.orderBy, true, true, false, false, false) }}
-                {{ form_widget(filter_form.orderBy, {'attr': {'class': 'hide'}}) }}
-            </div>
         </div>
-
-        <div class="row filters">
-            <div class="col-md-12 text-center">
-                {{ include('AdminBundle:Common:filters_summary.html.twig', {
-                    filters:   filters_summary,
-                    resetLink: path('admin_sheet', { 'event': event.id, 'reset': true })
-                }) }}
-            </div>
-        </div>
-
+        <br/>
         {{ include('AdminBundle:Sheet/Partial:filters.html.twig', { 'form': filter_form }) }}
     {{ form_end(filter_form) }}
 

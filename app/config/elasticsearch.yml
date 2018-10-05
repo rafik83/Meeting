@@ -156,6 +156,8 @@ fos_elastica:
                             type: boolean
                         hasSpot:
                             type: boolean
+                        spotReference:
+                            type: String
                         attend:
                             type: boolean
                         hasGroup:

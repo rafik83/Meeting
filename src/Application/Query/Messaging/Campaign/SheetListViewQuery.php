@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Messaging\Campaign;
 
+use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class SheetListViewQuery
@@ -23,15 +24,18 @@ class SheetListViewQuery
     /** @var string */
     public $locale;
 
-    /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param string $locale
-     */
-    public function __construct(Event $event, array $filters, $locale)
-    {
-        $this->event   = $event;
+    /** @var null|RuleInterface */
+    public $condition;
+
+    public function __construct(
+        Event $event,
+        array $filters,
+        $locale,
+        ?RuleInterface $condition = null
+    ) {
+        $this->event = $event;
         $this->filters = $filters;
-        $this->locale  = $locale;
+        $this->locale = $locale;
+        $this->condition = $condition;
     }
 }

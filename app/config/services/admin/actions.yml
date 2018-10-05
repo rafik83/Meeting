@@ -258,6 +258,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.session'
             - '@router'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanEventEntranceAction:
         arguments:
@@ -418,6 +419,7 @@ services:
             - '@adapter.job_queue_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DownloadUploadedObjectsZipAction:
         arguments:
@@ -567,6 +569,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
             - '@session.flash_bag'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface'
 
     #
     # Order
