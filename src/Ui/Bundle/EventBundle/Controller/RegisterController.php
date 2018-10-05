@@ -222,7 +222,6 @@ class RegisterController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = $this->handleData(
-                $event,
                 $user,
                 null,
                 $registrationTemplate,
@@ -327,7 +326,6 @@ class RegisterController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = $this->handleData(
-                $eventDomain->getEvent(),
                 $userDomain->getUser(),
                 $participant->getSheet(),
                 $registrationTemplate,
@@ -397,7 +395,6 @@ class RegisterController extends Controller
     }
 
     private function handleData(
-        Event $event,
         User $user,
         ?Sheet $sheet,
         TemplateData $registrationTemplate,
@@ -426,10 +423,11 @@ class RegisterController extends Controller
                     try {
                         $data = $this->get('tactician.commandbus')->handle(
                             new UploadFile(
-                                $event,
-                                $object->hasTag(Tag::SHEET_DATA) ? $sheet->getOwner() : $user,
+                                $sheet,
+                                $user,
                                 $object,
-                                $data
+                                $data,
+                                $object->hasTag(Tag::SHEET_DATA)
                             )
                         );
                     } catch (UploadFileException $exception) {
