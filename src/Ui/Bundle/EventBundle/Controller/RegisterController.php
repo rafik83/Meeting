@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\View\Register\PreFillUserDataView;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\Exception\UploadNotAllowedOnFirstStepOfRegistrationTemplateException;
@@ -223,10 +224,10 @@ class RegisterController extends Controller
             $data = $this->handleData(
                 $event,
                 $user,
+                null,
                 $registrationTemplate,
                 $form,
-                $participantBlock->getData(),
-                $request->getLocale()
+                $participantBlock->getData()
             );
 
             $participate = new Participate(
@@ -328,10 +329,10 @@ class RegisterController extends Controller
             $data = $this->handleData(
                 $eventDomain->getEvent(),
                 $userDomain->getUser(),
+                $participant->getSheet(),
                 $registrationTemplate,
                 $form,
-                $participantBlock->getData(),
-                $request->getLocale()
+                $participantBlock->getData()
             );
 
             if ($form->isValid()) {
@@ -398,10 +399,10 @@ class RegisterController extends Controller
     private function handleData(
         Event $event,
         User $user,
+        ?Sheet $sheet,
         TemplateData $registrationTemplate,
         FormInterface $form,
-        array $data,
-        string $locale
+        array $data
     ) {
         $data = array_filter($data, function ($value) { return null !== $value; });
 
@@ -421,21 +422,15 @@ class RegisterController extends Controller
             if ($form->has($key) && null !== $form->get($key)->get('file')->getData()) {
                 $file = $form->get($key)->get('file')->getData();
 
-                $owner = $user;
-
-                if ($object->hasTag(Tag::SHEET_DATA)) {
-                    try {
-                        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
-                        $owner = $sheet->getOwner();
-                    } catch (\Exception $exception) {
-                        $owner = $user;
-                    }
-                }
-
                 if ($file instanceof UploadedFile) {
                     try {
                         $data = $this->get('tactician.commandbus')->handle(
-                            new UploadFile($event, $owner, $object, $data)
+                            new UploadFile(
+                                $event,
+                                $object->hasTag(Tag::SHEET_DATA) ? $sheet->getOwner() : $user,
+                                $object,
+                                $data
+                            )
                         );
                     } catch (UploadFileException $exception) {
                         $form->get($key)->get('file')->addError(new FormError($exception->getMessage()));
