@@ -229,6 +229,12 @@ services:
         tags:
             - { name: form.type }
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeOwnerType:
+        arguments:
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeOwnerType }
+
     form_type_sheet.predefined_filters_choice_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\PredefinedFiltersChoiceType
         arguments:

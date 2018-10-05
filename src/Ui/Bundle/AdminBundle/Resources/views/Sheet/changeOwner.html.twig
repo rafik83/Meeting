@@ -1,0 +1,10 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.sheet.changeOwner.title'|trans({'%sheetTitle%': sheet.title}) %}
+
+{% block form_title 'admin.sheet.changeOwner.title'|trans({'%sheetTitle%': sheet.title}) %}
+
+{% block form_content %}
+{% endblock %}
+
+{% block goback_link path('admin_sheet_details', {event: event.id, sheet: sheet.id}) %}

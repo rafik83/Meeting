@@ -427,6 +427,15 @@ services:
             - '@adapter.file_system_adapter'
             - '%shared_uploaded_files%'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\ChangeOwnerAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@router'
+
     #
     # Availability Time Range
     #

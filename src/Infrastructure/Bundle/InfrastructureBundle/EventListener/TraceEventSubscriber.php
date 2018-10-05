@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\CommercialStatusChanged;
 use Proximum\Vimeet\Application\Event\Sheet\Order\OrdersCancelledEvent;
+use Proximum\Vimeet\Application\Event\Sheet\OwnerChangedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
@@ -215,6 +216,17 @@ class TraceEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    public function onSheetOwnerChanged(OwnerChangedEvent $event): void
+    {
+        $this->addTrace(
+            $event->sheet,
+            Trace::SHEET_OWNER_CHANGED,
+            $this->dateTime,
+            $event->comment,
+            $event->admin
+        );
+    }
+
     /**
      * @param TraceableInterface $traceable
      * @param string             $action
@@ -258,6 +270,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
             Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreateByGroupManager',
             Events::SHEET_SET_COMMERCIAL_STATUS   => 'onSheetCommercialStatusChanged',
             Events::SHEET_ORDERS_CANCELLED        => 'onOrdersCancelled',
+            Events::SHEET_OWNER_CHANGED           => 'onSheetOwnerChanged',
         ];
     }
 }

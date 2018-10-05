@@ -76,5 +76,12 @@
                 </div>
             </div>
         {% endif %}
+        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+            <div class="pull-right">
+                <a href="{{ path('admin_sheet_change_owner', {'event': event.id, 'sheet': sheet.id}) }}" class="btn btn-warning">
+                    {{ 'admin.sheet.changeOwner.link'|trans }}
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>

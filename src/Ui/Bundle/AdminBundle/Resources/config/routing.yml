@@ -833,6 +833,14 @@ admin_sheet_update_participant_visio:
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:updateVisio }
 
+admin_sheet_change_owner:
+    path: /event/{event}/sheet/{sheet}/change/owner
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\ChangeOwnerAction
+
 #
 # Order
 #
