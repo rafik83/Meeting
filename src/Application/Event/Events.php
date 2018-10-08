@@ -98,8 +98,6 @@ final class Events
     public const USER_AGENDA_CONFIRMED = 'user.agenda.confirmed';
     public const USER_EVENT_TOKEN_AGENDA_CONFIRMATION_CREATED = 'user_event_token.agenda_confirmation.created';
     public const USER_AGENDA_CONFIRMATION_STATUS_UPDATED = 'user_event_token.agenda_confirmation.updated';
-    public const USER_REMOVED_AS_OWNER_OF_SHEET = 'user.sheet.removed_as_owner';
-    public const USER_ASSIGNED_AS_OWNER_OF_SHEET = 'user.sheet.assigned_as_owner';
     public const MASS_UNAVAILABILITY_DISPATCHED = 'mass.unavailability.dispatched';
     public const SLOT_GENERATED = 'slot.generated';
     public const SLOT_TOGGLE_LOCKED = 'slot.toggle.locked';
