@@ -11,4 +11,4 @@ Proximum\Vimeet\Application\Command\Transactional\Mail\UpdateCustomized:
     constraints:
         - Expression:
               expression: "this.hasNoAssociatedTypesConflict()"
-              message: "validators.allowDepositMissingData"
+              message: "validators.transactional.mail.typeNotEmpty"
