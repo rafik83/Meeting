@@ -6,6 +6,14 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {{ 'admin.sheet.details.owner_not_participant.title'|trans }}
+
+                    {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                        <div class="pull-right">
+                            <a href="{{ path('admin_sheet_change_owner', {'event': event.id, 'sheet': sheet.id}) }}" class="btn btn-xs btn-default">
+                                {{ 'admin.sheet.changeOwner.link'|trans }}
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="panel-body">
                     {{ details.participants.owner.firstName }}  {{ details.participants.owner.lastName }}<br>
@@ -24,6 +32,12 @@
 
                     {% if participant.isOwner %}
                         ({{ 'admin.sheet.details.owner.title'|trans }})
+
+                        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                            <a href="{{ path('admin_sheet_change_owner', {'event': event.id, 'sheet': sheet.id}) }}" class="btn btn-xs btn-default">
+                                {{ 'admin.sheet.changeOwner.link'|trans }}
+                            </a>
+                        {% endif %}
                     {% endif %}
 
                     {% if not event.configuration.isVisio %}
@@ -74,13 +88,6 @@
                         {{ include('AdminBundle:Sheet/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
                     {% endfor %}
                 </div>
-            </div>
-        {% endif %}
-        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
-            <div class="pull-right">
-                <a href="{{ path('admin_sheet_change_owner', {'event': event.id, 'sheet': sheet.id}) }}" class="btn btn-warning">
-                    {{ 'admin.sheet.changeOwner.link'|trans }}
-                </a>
             </div>
         {% endif %}
     </div>
