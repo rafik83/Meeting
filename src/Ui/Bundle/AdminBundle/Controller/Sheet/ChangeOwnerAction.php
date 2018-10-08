@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeOwnerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +25,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Templating\EngineInterface;
 
 class ChangeOwnerAction
 {
@@ -114,10 +114,10 @@ class ChangeOwnerAction
             );
         }
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->engine->render(self::TEMPLATE, [
             'form' => $form->createView(),
             'event' => $event,
             'sheet' => $sheet,
-        ]);
+        ]));
     }
 }
