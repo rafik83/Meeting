@@ -415,3 +415,9 @@ services:
             - '@adapter.file_system_adapter'
         tags:
             - { name: kernel.event_subscriber }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\User\UserEventSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: kernel.event_subscriber }

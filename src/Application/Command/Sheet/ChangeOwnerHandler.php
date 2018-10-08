@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\OwnerChangedEvent;
+use Proximum\Vimeet\Application\Event\User\UserRemovedAsOwnerEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
@@ -21,8 +22,10 @@ class ChangeOwnerHandler
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
+
     /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
+
     /** @var TranslatorInterface */
     private $translator;
 
@@ -63,6 +66,16 @@ class ChangeOwnerHandler
         $this->eventDispatcher->dispatch(
             Events::SHEET_OWNER_CHANGED,
             new OwnerChangedEvent($command->sheet, $command->admin, $previousOwner, $traceComment)
+        );
+
+        $this->eventDispatcher->dispatch(
+            Events::USER_REMOVED_AS_OWNER_OF_SHEET,
+            new UserRemovedAsOwnerEvent($command->sheet, $previousOwner)
+        );
+
+        $this->eventDispatcher->dispatch(
+            Events::USER_ASSIGNED_AS_OWNER_OF_SHEET,
+            new UserRemovedAsOwnerEvent($command->sheet, $command->owner->getUser())
         );
     }
 }
