@@ -19,8 +19,11 @@ ParticipantPresence.prototype.getParticipantPresence = function () {
 
     $.get(this.endpoint, function(response) {
         Object.values(response).map(function(participant) {
-            var backgroundColor = participant.present ? '#28a745': '#c9302c';
-            element.querySelector('#participant-' + participant.id).style = 'background-color: ' + backgroundColor;
+            var className = participant.present ? 'present': 'absent';
+            element.querySelector('#participant-' + participant.id).setAttribute(
+                'class',
+                'badge badge-pill badge-' + className
+            );
         });
     });
 };
