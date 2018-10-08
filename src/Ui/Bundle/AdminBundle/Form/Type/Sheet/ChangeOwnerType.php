@@ -22,11 +22,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ChangeOwnerType extends AbstractType
 {
     /** @var ParticipantInfoGuesser */
-    private $guesser;
+    private $participantInfoGuesser;
 
-    public function __construct(ParticipantInfoGuesser $guesser)
+    public function __construct(ParticipantInfoGuesser $participantInfoGuesser)
     {
-        $this->guesser = $guesser;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -41,7 +41,7 @@ class ChangeOwnerType extends AbstractType
                 'multiple' => false,
                 'choices' => $sheet->getParticipantsArray(),
                 'choice_label' => function (Participant $participant) use ($locale) {
-                    return $this->guesser->guessParticipantCompleteName($participant, $locale);
+                    return $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
                 },
             ])
         ;

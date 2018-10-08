@@ -73,7 +73,8 @@ class ChangeOwnerAction
     ): Response {
         if (!$this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $event)
             || !$this->authorizationChecker->isGranted('PERMISSION_SHEET_ACCESS', $sheet)
-            || !$this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+            || !$this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
+        ) {
             throw new AccessDeniedException('Access denied!');
         }
 
