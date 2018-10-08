@@ -102,6 +102,8 @@ class ChangeOwnerAction
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($command);
 
+            $this->flashBag->add('success', 'flash.sheet.change_owner.success');
+
             return new RedirectResponse($this->router->generate(
                 'admin_sheet_details',
                 [

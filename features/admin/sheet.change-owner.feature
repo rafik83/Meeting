@@ -18,5 +18,6 @@ Feature: Sheet change owner
     And I select "0" from "change_owner[owner]"
     And I press "form.change_owner.children.submit.label"
     Then I should be on this page "/fr/event/1/sheet/1"
+    And I should see "flash.sheet.change_owner.success"
     And I should not see "admin.sheet.details.owner_not_participant.title"
     And I should see "admin.sheet.details.owner.title"
