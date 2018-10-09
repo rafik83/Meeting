@@ -78,4 +78,13 @@ class ConfigureDates
         $this->registrationCloseDate            = $event->getConfiguration()->getRegistrationCloseDate();
         $this->enableBadgeForParticipantDate    = $event->getConfiguration()->getEnableBadgeForParticipantDate();
     }
+
+    public function addCatalogOnlineDateButEventHasNoDate(): bool
+    {
+        if ($this->event->hasDay()) {
+            return true;
+        }
+
+        return $this->catalogOnlineDate === null;
+    }
 }

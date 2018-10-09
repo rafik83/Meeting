@@ -24,6 +24,7 @@ validators.emailAlreadyExist: 'Cet email est déjà utilisé, vous ne pouvez pas
 validators.emailDoesNotExist: 'L''email saisi n''existe pas'
 validators.event.archive.alreadyArchived: 'L''événement est déjà archivé'
 validators.event.archive.dayNotDefined: 'Les jours de l''événement ne sont pas définis et l''événement ne peut être archivé'
+validators.event.configureDates.addCatalogOnlineDateButEventHasNoDate: 'Vous devez définir les dates de l''événement avant de pouvoir définir une date de mise en ligne du catalogue'
 validators.event.day.slotOutOfDay: 'Le créneau du %day% débute à %begin% et finit à %end%, il est en dehors des jours proposés, il faut le modifier ou modifier les jours pour pouvoir valider'
 validators.event.domain.unique: 'Ce nom de domaine est déjà utilisé sur un autre événement'
 validators.event.extraParameter.alreadyExistForThisTypeAndEvent: 'Un paramètre externe existe déjà pour ce type et cet événement, vous devez le supprimer avant de pouvoir en créer un nouveau avec ce type'
