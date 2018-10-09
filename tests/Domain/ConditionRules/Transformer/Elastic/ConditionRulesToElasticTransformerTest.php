@@ -30,17 +30,17 @@ class ConditionRulesToElasticTransformerTest extends TestCase
         $condition = new Condition(
             new LogicalOperatorAnd,
             [
-                new Field('Activity', new ComparisonOperatorEqual, 'text', 'A1'),
+                new Field('spotReference', new ComparisonOperatorEqual, 'text', 'A1'),
                 new Condition(
                     new LogicalOperatorOr,
                     [
-                        new Field('Sector', new ComparisonOperatorContains, 'text', 'S1'),
-                        new Field('Universe', new ComparisonOperatorBeginsWith(), 'text', 'U'),
+                        new Field('sheetName', new ComparisonOperatorContains, 'text', 'S1'),
+                        new Field('spotReference', new ComparisonOperatorBeginsWith(), 'text', 'U'),
                         new Condition(
                             new LogicalOperatorAnd,
                             [
-                                new Field('LastName', new ComparisonOperatorNotContains(), 'text', 'test'),
-                                new Field('FirstName', new ComparisonOperatorNotNull, 'text', 'mathieu'),
+                                new Field('lastName', new ComparisonOperatorNotContains(), 'text', 'test'),
+                                new Field('firstName', new ComparisonOperatorNotNull, 'text', 'mathieu'),
                             ]
                         ),
                     ]
@@ -53,7 +53,7 @@ class ConditionRulesToElasticTransformerTest extends TestCase
                 'must' => [
                     [
                         'match' => [
-                            'Activity' => 'A1',
+                            'spotReference' => 'A1',
                         ],
                     ],
                     [
@@ -61,14 +61,14 @@ class ConditionRulesToElasticTransformerTest extends TestCase
                             'should' => [
                                 [
                                     'query_string' => [
-                                        'default_field' => 'Sector',
+                                        'default_field' => 'sheetName.raw',
                                         'query' => '*S1*',
                                         'default_operator' => 'AND',
                                     ],
                                 ],
                                 [
                                     'query_string' => [
-                                        'default_field' => 'Universe',
+                                        'default_field' => 'spotReference',
                                         'query' => 'U*',
                                         'default_operator' => 'AND',
                                     ],
@@ -80,7 +80,7 @@ class ConditionRulesToElasticTransformerTest extends TestCase
                                                 'bool' => [
                                                     'must_not' => [
                                                         'query_string' => [
-                                                            'default_field' => 'LastName',
+                                                            'default_field' => 'lastName',
                                                             'query' => '*test*',
                                                             'default_operator' => 'AND',
                                                         ]
@@ -93,7 +93,7 @@ class ConditionRulesToElasticTransformerTest extends TestCase
                                                         'bool' => [
                                                             'must' => [
                                                                 'exists' => [
-                                                                    'field' => 'FirstName',
+                                                                    'field' => 'firstName',
                                                                 ]
                                                             ]
                                                         ]
