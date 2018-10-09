@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input;
 
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\NestedQueryTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\QueryKeyTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
@@ -31,7 +32,7 @@ class NullableTransformer implements InputTransformerInterface
                     'bool' => [
                         $operator => [
                             'exists' => [
-                                'field' => $field->getField(),
+                                'field' => QueryKeyTransformer::getQueryKey($field),
                             ],
                         ],
                     ],

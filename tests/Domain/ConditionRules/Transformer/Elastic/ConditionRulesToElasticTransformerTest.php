@@ -52,9 +52,8 @@ class ConditionRulesToElasticTransformerTest extends TestCase
             'bool' => [
                 'must' => [
                     [
-                        'query_string' => [
-                            'default_field' => 'Activity',
-                            'query' => 'A1',
+                        'match' => [
+                            'Activity' => 'A1',
                         ],
                     ],
                     [
@@ -64,12 +63,14 @@ class ConditionRulesToElasticTransformerTest extends TestCase
                                     'query_string' => [
                                         'default_field' => 'Sector',
                                         'query' => '*S1*',
+                                        'default_operator' => 'AND',
                                     ],
                                 ],
                                 [
                                     'query_string' => [
                                         'default_field' => 'Universe',
                                         'query' => 'U*',
+                                        'default_operator' => 'AND',
                                     ],
                                 ],
                                 [
@@ -81,6 +82,7 @@ class ConditionRulesToElasticTransformerTest extends TestCase
                                                         'query_string' => [
                                                             'default_field' => 'LastName',
                                                             'query' => '*test*',
+                                                            'default_operator' => 'AND',
                                                         ]
                                                     ]
                                                 ]

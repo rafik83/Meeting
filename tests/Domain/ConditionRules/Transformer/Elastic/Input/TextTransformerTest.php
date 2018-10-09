@@ -29,7 +29,8 @@ class TextTransformerTest extends TestCase
                 'must_not' => [
                     'query_string' => [
                         'default_field' => 'LastName',
-                        'query' => '*marchois*'
+                        'query' => '*marchois*',
+                        'default_operator' => 'AND',
                     ]
                 ]
             ]
@@ -45,7 +46,8 @@ class TextTransformerTest extends TestCase
                 'query' => [
                     'query_string' => [
                         'default_field' => 'participants.firstName',
-                        'query' => '*hieu'
+                        'query' => '*hieu',
+                        'default_operator' => 'AND'
                     ]
                 ]
             ]

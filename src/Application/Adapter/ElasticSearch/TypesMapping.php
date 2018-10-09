@@ -25,6 +25,10 @@ final class TypesMapping
     public const USER_EVENT_VIEW_SHEETS_ID = 'id';
     public const USER_EVENT_VIEW_IS_VISIO = 'isVisio';
     public const USER_EVENT_VIEW_IS_VISIO_TESTED = 'isVisioTested';
+    public const SHEET_VIEW_SHEET_NAME = 'sheetName';
+    public const SHEET_VIEW_SPOT_REFERENCE = 'spotReference';
+    public const SHEET_VIEW_PARTICIPANTS_LASTNAME = 'participants.lastname';
+    public const SHEET_VIEW_PARTICIPANTS_EMAIL = 'participants.email';
 
     public const AVAILABLE_TYPES = [
         UserEventView::class => [
@@ -65,6 +69,36 @@ final class TypesMapping
                     ],
                 ],
             ],
+        ],
+    ];
+
+    public const SEARCH_MAPPING = [
+        self::SHEET_VIEW_SHEET_NAME => [
+            'path' => 'sheetName.raw',
+        ],
+        self::SHEET_VIEW_SPOT_REFERENCE => [
+            'path' => self::SHEET_VIEW_SPOT_REFERENCE,
+        ],
+        self::SHEET_VIEW_PARTICIPANTS_LASTNAME => [
+            'path' => self::SHEET_VIEW_PARTICIPANTS_LASTNAME,
+        ],
+        self::SHEET_VIEW_PARTICIPANTS_EMAIL => [
+            'path' => self::SHEET_VIEW_PARTICIPANTS_EMAIL,
+        ],
+        self::USER_EVENT_VIEW_FIRSTNAME => [
+            'path' => self::USER_EVENT_VIEW_FIRSTNAME,
+        ],
+        self::USER_EVENT_VIEW_LASTNAME => [
+            'path' => self::USER_EVENT_VIEW_LASTNAME,
+        ],
+        self::USER_EVENT_VIEW_EMAIL => [
+            'path' => self::USER_EVENT_VIEW_EMAIL,
+        ],
+        self::USER_EVENT_VIEW_IS_VISIO => [
+            'path' => self::USER_EVENT_VIEW_IS_VISIO,
+        ],
+        self::USER_EVENT_VIEW_IS_VISIO_TESTED => [
+            'path' => self::USER_EVENT_VIEW_IS_VISIO_TESTED,
         ],
     ];
 
