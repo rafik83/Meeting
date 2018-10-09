@@ -47,19 +47,7 @@ class FilterType extends AbstractType
             ->add('enabled', EnabledChoiceType::class, [
                 'label' => 'form.order_filter.children.sheet.enabled.label',
             ])
-            ->add('cancelled', ChoiceType::class, [
-                'choices' => [
-                    'cancelled' => 'cancelled',
-                    'notCancelled' => 'notCancelled',
-                    'all' => 'all',
-                ],
-                'select2' => true,
-                'label' => false,
-                'choice_translation_domain' => 'messages',
-                'choice_label' => function ($currentChoice) {
-                    return sprintf('event.sheet.order.cancelled.%s', $currentChoice);
-                },
-            ])
+            ->add('cancelled', CancelledChoiceType::class)
         ;
     }
 
