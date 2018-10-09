@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\EnabledChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -44,7 +45,20 @@ class FilterType extends AbstractType
                 },
             ])
             ->add('enabled', EnabledChoiceType::class, [
-                'label'       => 'form.order_filter.children.sheet.enabled.label',
+                'label' => 'form.order_filter.children.sheet.enabled.label',
+            ])
+            ->add('cancelled', ChoiceType::class, [
+                'choices' => [
+                    'cancelled' => 'cancelled',
+                    'notCancelled' => 'notCancelled',
+                    'all' => 'all',
+                ],
+                'select2' => true,
+                'label' => false,
+                'choice_translation_domain' => 'messages',
+                'choice_label' => function ($currentChoice) {
+                    return sprintf('event.sheet.order.cancelled.%s', $currentChoice);
+                },
             ])
         ;
     }
@@ -65,6 +79,7 @@ class FilterType extends AbstractType
     {
         return [
             'enabled' => true,
+            'cancelled' => 'notCancelled',
         ];
     }
 }
