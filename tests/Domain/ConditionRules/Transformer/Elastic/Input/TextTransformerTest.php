@@ -21,14 +21,14 @@ class TextTransformerTest extends TestCase
     public function testTransform(): void
     {
         $result1 = TextTransformer::transform(
-            new Field('LastName', new ComparisonOperatorNotContains(), 'text', 'marchois')
+            new Field('lastName', new ComparisonOperatorNotContains(), 'text', 'marchois')
         );
 
         $expectedResult1 = [
             'bool' => [
                 'must_not' => [
                     'query_string' => [
-                        'default_field' => 'LastName',
+                        'default_field' => 'lastName',
                         'query' => '*marchois*',
                         'default_operator' => 'AND',
                     ]
@@ -37,7 +37,7 @@ class TextTransformerTest extends TestCase
         ];
 
         $result2 = TextTransformer::transform(
-            new Field('participants.firstName', new ComparisonOperatorEndsWith(), 'text', 'hieu')
+            new Field('participants.lastname', new ComparisonOperatorEndsWith(), 'text', 'hieu')
         );
 
         $expectedResult2 = [
@@ -45,7 +45,7 @@ class TextTransformerTest extends TestCase
                 'path' => 'participants',
                 'query' => [
                     'query_string' => [
-                        'default_field' => 'participants.firstName',
+                        'default_field' => 'participants.lastname',
                         'query' => '*hieu',
                         'default_operator' => 'AND'
                     ]
