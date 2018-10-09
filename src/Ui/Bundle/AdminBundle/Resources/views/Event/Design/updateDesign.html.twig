@@ -17,13 +17,18 @@
                 <div class="col-md-9">
                     <label>{{ 'form.event_update_design.children.localizedImages.prototype.children.logo.label'|trans({}, 'forms') }}</label>
                     {% if event.localizedLogo(locale) %}
-                        <img src="{{ asset(event.localizedLogo(locale)) }}" class="img-responsive"/>
+                        <div style="background-image: linear-gradient(to right, {{ event.configuration.headerLeftColor }}, {{ event.configuration.headerRightColor }});">
+                            <img src="{{ asset(event.localizedLogo(locale)) }}" class="img-responsive"/>
+                        </div>
                     {% else %}
                         {{ 'form.event_update_design.children.localizedImages.prototype.children.undefined'|trans({}, 'forms') }}
                     {% endif %}<br>
                     <label>{{ 'form.event_update_design.children.localizedImages.prototype.children.mobileLogo.label'|trans({}, 'forms') }}</label>
+
                     {% if event.localizedMobileLogo(locale) %}
-                        <img src="{{ asset(event.localizedMobileLogo(locale)) }}" class="img-responsive"/>
+                        <div style="background-image: linear-gradient(to right, {{ event.configuration.headerLeftColor }}, {{ event.configuration.headerRightColor }});">
+                            <img src="{{ asset(event.localizedMobileLogo(locale)) }}" class="img-responsive"/>
+                        </div>
                     {% else %}
                         {{ 'form.event_update_design.children.localizedImages.prototype.children.undefined'|trans({}, 'forms') }}
                     {% endif %}
