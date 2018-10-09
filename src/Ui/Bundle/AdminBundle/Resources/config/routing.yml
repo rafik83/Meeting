@@ -1869,3 +1869,11 @@ admin_event_transaction_mail_update_customized:
         message: \d+
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\UpdateCustomizedAction
+
+admin_event_transaction_mail_delete:
+    path: /event/{event}/transactional/mail/{message}/delete
+    requirements:
+        event: \d+
+        message: \d+
+    methods: [DELETE]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\DeleteAction

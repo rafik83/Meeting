@@ -73,4 +73,10 @@ class MessageRepository implements MessageRepositoryInterface
             ->getResult()
             ;
     }
+
+    public function remove(Message $message): void
+    {
+        $this->entityManager->remove($message);
+        $this->entityManager->flush($message);
+    }
 }
