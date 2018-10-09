@@ -1,5 +1,9 @@
 {% extends 'EventBundle::base.html.twig' %}
 
+{% block head_link %}
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/alpphdcgnkkpafmlhllecaganiekhjcp">
+{% endblock %}
+
 {% block body %}
     {% set participantPresenceAction = null %}
     {% if participant is defined and meeting is defined and sheet is defined %}
@@ -14,9 +18,11 @@
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-participant-presence-action="{{ participantPresenceAction }}"
-         data-meeting-start-time="{{ meetingView.begin.timestamp }}"
-         data-meeting-end-time="{{ meetingView.end.timestamp }}"
-         data-current-time="{{ currentTime }}"
+         {% if meetingView is defined %}
+             data-meeting-start-time="{{ meetingView.begin.timestamp }}"
+             data-meeting-end-time="{{ meetingView.end.timestamp }}"
+             data-current-time="{{ currentTime }}"
+         {% endif %}
     >
         <div class="layout-container"></div>
         <div class="publisher-container"></div>
@@ -35,12 +41,14 @@
             {% endif %}
         </div>
 
+        {% if meetingView is defined %}
         <div class="timer-container">
             <div class="timer">
                 {{ 'meeting.video.endingAt'|trans }}
                 <span class="countdown"></span>
             </div>
         </div>
+        {% endif %}
 
         <div class="buttons-container">
             <button id="toggle-audio" class="btn">
