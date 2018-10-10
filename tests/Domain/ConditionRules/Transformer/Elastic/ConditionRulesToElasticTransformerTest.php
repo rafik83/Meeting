@@ -61,7 +61,7 @@ class ConditionRulesToElasticTransformerTest extends TestCase
                             'should' => [
                                 [
                                     'query_string' => [
-                                        'default_field' => 'sheetName.raw',
+                                        'default_field' => 'sheetName',
                                         'query' => '*S1*',
                                         'default_operator' => 'AND',
                                     ],

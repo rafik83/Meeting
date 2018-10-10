@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Adapter\ElasticSearch;
 
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotEqual;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 
 final class TypesMapping
@@ -74,7 +76,15 @@ final class TypesMapping
 
     public const SEARCH_MAPPING = [
         self::SHEET_VIEW_SHEET_NAME => [
-            'path' => 'sheetName.raw',
+            'path' => self::SHEET_VIEW_SHEET_NAME,
+            'rules' => [
+                ComparisonOperatorEqual::class => [
+                    'path' => 'sheetName.raw',
+                ],
+                ComparisonOperatorNotEqual::class => [
+                    'path' => 'sheetName.raw'
+                ],
+            ],
         ],
         self::SHEET_VIEW_SPOT_REFERENCE => [
             'path' => self::SHEET_VIEW_SPOT_REFERENCE,
