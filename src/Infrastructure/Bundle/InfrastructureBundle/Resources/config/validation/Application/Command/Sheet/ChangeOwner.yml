@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Sheet\ChangeOwner:
+    properties:
+        owner:
+            - NotNull: ~

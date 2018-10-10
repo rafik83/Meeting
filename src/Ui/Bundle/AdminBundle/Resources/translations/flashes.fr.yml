@@ -216,6 +216,7 @@ flash.schedule.days.success: 'Les jours de l''événement ont été définis ave
 flash.schedule.slot.generate.missingDay: 'Les jours de l''événement doivent être configurés avant les créneaux'
 flash.schedule.slot.generate.success: '%count% créneau a été ajouté|%count% créneaux ont été ajoutés'
 flash.sheet.add_participant.success: 'Le participant a bien été ajouté'
+flash.sheet.change_owner.success: 'Le propriétaire de la fiche a été changé'
 flash.sheet.delete_participant.access_denied: 'Vous n''avez pas les droits pour effectuer cette action'
 flash.sheet.delete_participant.success: 'Le participant a bien été supprimé'
 flash.sheet.template.preview.non_unique_exception: 'Vous ne pouvez pas utiliser plusieurs fois le même objet'

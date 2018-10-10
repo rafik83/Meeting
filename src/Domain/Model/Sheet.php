@@ -1253,4 +1253,9 @@ class Sheet implements TraceableInterface
 
         return $duplicatedSheet;
     }
+
+    public function changeOwner(User $owner): void
+    {
+        $this->owner = $owner;
+    }
 }

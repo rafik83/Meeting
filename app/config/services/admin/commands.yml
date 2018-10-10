@@ -199,6 +199,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Sheet\PrepareSheetsIndex }
 
+    Proximum\Vimeet\Application\Command\Sheet\ChangeOwnerHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\ChangeOwner }
+
     #
     # Availability Time Range
     #

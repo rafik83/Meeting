@@ -33,6 +33,7 @@ class Trace
     public const PENDING                        = 'pending';
     public const SET_COMMERCIAL_STATUS          = 'set_commercial_status';
     public const ORDERS_CANCELLED               = 'orders_cancelled';
+    public const SHEET_OWNER_CHANGED            = 'sheet_owner_changed';
 
     const ACTIONS_REQUIRED_TRANSLATION = [
         self::SET_COMMERCIAL_STATUS,
