@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input;
 
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\QueryKeyTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 class RadioTransformer implements InputTransformerInterface
@@ -22,7 +23,7 @@ class RadioTransformer implements InputTransformerInterface
 
         return [
             'term' => [
-                $field->getField() => $field->getValue(),
+                QueryKeyTransformer::getQueryKey($field) => $field->getValue(),
             ],
         ];
     }

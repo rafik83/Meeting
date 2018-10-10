@@ -11,13 +11,16 @@
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input;
 
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\NestedQueryTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\QueryKeyTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonContraryOperatorInterface;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorContains;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEndsWith;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotContains;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotEndsWith;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotEqual;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 class TextTransformer implements InputTransformerInterface
@@ -28,13 +31,7 @@ class TextTransformer implements InputTransformerInterface
             return [];
         }
 
-        $query = [
-            'query_string' => [
-                'default_field' => $field->getField(),
-                'query' => self::getFilterQuery($field),
-            ],
-        ];
-
+        $query = self::getQuery($field);
         $query = NestedQueryTransformer::transformIfNeeded($field, $query);
 
         if (self::isContraryComparisonOperator($field)) {
@@ -46,6 +43,27 @@ class TextTransformer implements InputTransformerInterface
         }
 
         return $query;
+    }
+
+    private static function getQuery(Field $field): array
+    {
+        if ($field->getComparisonOperator() instanceof ComparisonOperatorEqual
+            || $field->getComparisonOperator() instanceof ComparisonOperatorNotEqual
+        ) {
+            return [
+                'match' => [
+                    QueryKeyTransformer::getQueryKey($field) => self::getFilterQuery($field),
+                ],
+            ];
+        }
+
+        return [
+            'query_string' => [
+                'default_field' => QueryKeyTransformer::getQueryKey($field),
+                'query' => self::getFilterQuery($field),
+                'default_operator' => 'AND',
+            ],
+        ];
     }
 
     private static function isContraryComparisonOperator(Field $field): bool

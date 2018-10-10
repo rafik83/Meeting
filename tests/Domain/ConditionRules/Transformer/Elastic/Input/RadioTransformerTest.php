@@ -19,11 +19,11 @@ class RadioTransformerTest extends TestCase
 {
     public function testTransform()
     {
-        $field = new Field('areYouADeveloper', new ComparisonOperatorEqual(), 'radio', 'yes');
+        $field = new Field('isVisio', new ComparisonOperatorEqual(), 'radio', 'yes');
         $this->assertEquals(
             [
                 'term' => [
-                    'areYouADeveloper' => 'yes',
+                    'isVisio' => 'yes',
                 ],
             ],
             RadioTransformer::transform($field)
@@ -32,7 +32,7 @@ class RadioTransformerTest extends TestCase
 
     public function testSupports()
     {
-        $field = new Field('areYouADeveloper', new ComparisonOperatorEqual(), 'radio', 'yes');
+        $field = new Field('isVisio', new ComparisonOperatorEqual(), 'radio', 'yes');
         $this->assertTrue(RadioTransformer::supports($field));
     }
 }

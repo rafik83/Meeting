@@ -333,6 +333,15 @@ table th.sort-up:after {
   width: 100% !important;
 }
 
+.rule-value-container input.form-control {
+  width: 370px !important;
+}
+
+.query-builder .rules-group-container {
+  border: 1px solid #ddd !important;
+  background: #f5f5f5 !important;
+}
+
 .badge-present {
   background-color: #28a745;
 }

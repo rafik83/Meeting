@@ -41,10 +41,22 @@ class GetFiltersByTypeAndLocaleQueryHandler
             ],
         ],
         'sheet' => [
-            'sheetName' => ['type' => 'string', 'optgroup' => 'optgroup.sheetInfo'],
-            'spotReference'=> ['type' => 'string', 'optgroup' => 'optgroup.sheetInfo'],
-            'participants.lastname' => ['type' => 'string', 'optgroup' => 'optgroup.participantInfo'],
-            'participants.email'=> ['type' => 'string', 'optgroup' => 'optgroup.participantInfo'],
+            TypesMapping::SHEET_VIEW_SHEET_NAME => [
+                'type' => 'string',
+                'optgroup' => 'optgroup.sheetInfo'
+            ],
+            TypesMapping::SHEET_VIEW_SPOT_REFERENCE => [
+                'type' => 'string',
+                'optgroup' => 'optgroup.sheetInfo'
+            ],
+            TypesMapping::SHEET_VIEW_PARTICIPANTS_LASTNAME => [
+                'type' => 'string',
+                'optgroup' => 'optgroup.participantInfo'
+            ],
+            TypesMapping::SHEET_VIEW_PARTICIPANTS_EMAIL => [
+                'type' => 'string',
+                'optgroup' => 'optgroup.participantInfo'
+            ],
         ],
     ];
 
