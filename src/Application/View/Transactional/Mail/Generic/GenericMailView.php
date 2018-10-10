@@ -16,13 +16,23 @@ class GenericMailView
     public $key;
 
     /** @var string */
-    public $title;
+    public $subject;
+
+    /** @var bool */
+    public $isCustomizableByTypes;
+
+    /** @var string[] */
+    public $associatedTypeTitles;
 
     public function __construct(
         string $key,
-        string $title
+        string $subject,
+        bool $isCustomizableByTypes,
+        array $associatedTypeTitles
     ) {
         $this->key = $key;
-        $this->title = $title;
+        $this->subject = $subject;
+        $this->isCustomizableByTypes = $isCustomizableByTypes;
+        $this->associatedTypeTitles = $associatedTypeTitles;
     }
 }

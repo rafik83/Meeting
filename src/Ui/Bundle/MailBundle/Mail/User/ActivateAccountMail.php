@@ -19,6 +19,7 @@ class ActivateAccountMail extends UserMail
 {
     public const SUBJECT = 'mail.activateAccount.subject';
     public const TEMPLATE = 'MailBundle:Mail:User/activateAccount.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:User/activateAccount_full_text.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;

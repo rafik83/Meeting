@@ -20,6 +20,7 @@ class SheetGroupCreatedMail extends UserMail
 {
     public const SUBJECT = 'mail.sheet.group.created.subject';
     public const TEMPLATE = 'MailBundle:Mail:Sheet/groupCreated.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Sheet/groupCreated_full_text.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;

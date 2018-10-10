@@ -20,6 +20,7 @@ class PreRegisteredMail extends UserMail
 {
     public const SUBJECT = 'mail.event.preregister.subject';
     public const TEMPLATE = 'MailBundle:Mail:Event/preregister.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Event/preregister_full_text.html.twig';
 
     /**
      * @var string

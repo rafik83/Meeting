@@ -18,6 +18,7 @@ class ParticipantAddedMail extends UserMail
 {
     public const SUBJECT = 'mail.thirdParty.comexposium.sso.participantAdded.subject';
     public const TEMPLATE = 'MailBundle:Mail:ThirdParty/Comexposium/SSO/Participant/participantAdded.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:ThirdParty/Comexposium/SSO/Participant/participantAdded_full_text.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;

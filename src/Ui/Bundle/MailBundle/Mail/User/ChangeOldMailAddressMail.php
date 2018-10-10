@@ -18,6 +18,7 @@ class ChangeOldMailAddressMail extends UserMail
 {
     public const SUBJECT = 'mail.changeMailOld.subject';
     public const TEMPLATE = 'MailBundle:Mail:ChangeMail/oldMail.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:ChangeMail/oldMail_full_text.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;

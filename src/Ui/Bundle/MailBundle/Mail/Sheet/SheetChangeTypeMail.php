@@ -21,6 +21,7 @@ class SheetChangeTypeMail extends UserMail
 {
     public const SUBJECT = 'mail.sheet.change_type.subject';
     public const TEMPLATE = 'MailBundle:Mail:Sheet/changeType.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Sheet/changeType_full_text.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;

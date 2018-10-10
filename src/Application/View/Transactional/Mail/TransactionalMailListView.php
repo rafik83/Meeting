@@ -10,15 +10,13 @@
 
 namespace Proximum\Vimeet\Application\View\Transactional\Mail;
 
-use Proximum\Vimeet\Application\View\Transactional\Mail\Generic\GenericMailView;
-
 class TransactionalMailListView
 {
-    /** @var GenericMailView[] */
-    public $genericMailViews;
+    /** @var MailView[] */
+    public $mailViews;
 
-    public function __construct(array $genericMailViews = [])
+    public function __construct(array $mailViews = [])
     {
-        $this->genericMailViews = $genericMailViews;
+        $this->mailViews = $mailViews;
     }
 }

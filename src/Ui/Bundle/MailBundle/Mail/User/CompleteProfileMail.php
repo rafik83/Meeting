@@ -19,6 +19,7 @@ class CompleteProfileMail extends UserMail
 {
     public const SUBJECT = 'mail.completeProfile.subject';
     public const TEMPLATE = 'MailBundle:Mail:User/completeProfile.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:User/completeProfile_full_text.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;
