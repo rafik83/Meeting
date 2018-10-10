@@ -17,15 +17,15 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class RegisterAccountMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.register.subject';
+    public const SUBJECT = 'mail.register.subject';
+    public const TEMPLATE = 'MailBundle:Mail:User/register.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:User/register_full_text.html.twig';
 
-    /**
-     * @var string
-     */
-    protected $template = 'MailBundle:Mail:User/register.html.twig';
+    /** @var string */
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

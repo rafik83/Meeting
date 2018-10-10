@@ -1,0 +1,49 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title %}
+{{ 'admin.transactional.mail.action.customize'|trans }} :  {{ ('admin.transactional.mail.list.key.' ~ transactionalMailType)|trans }}
+{% endblock title %}
+
+{% block content %}
+    <h1 class="page-header">
+        <a href="{{ path('admin_event_transactional_mail_list', {event: event.id}) }}" class="btn btn-link" title="{{ 'admin.goback.link'|trans }}">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+        </a>
+        {{ 'admin.transactional.mail.action.customize'|trans }} :  {{ ('admin.transactional.mail.list.key.' ~ transactionalMailType)|trans }}
+    </h1>
+
+    {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
+    {{ form_errors(form) }}
+    {% if form.associatedTypes is defined %}
+        <div class="col-md-12">
+            {{ form_row(form.associatedTypes ) }}
+        </div>
+        <hr />
+    {% endif %}
+    <div class="col-md-8">
+        {{ form_row(form.translations) }}
+    </div>
+    <div class="well col-md-4">
+        <h4>{{ 'admin.transactional.mail.substitution.parameter.list.title'|trans }}</h4>
+        <ul>
+            {% for parameter in availableParameters %}
+                <li><b>{{ parameter }}</b>: {{ ('admin.transactional.mail.substitution.parameter.description.' ~ parameter)|trans }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="form-group submit-section">
+        <div class="text-right">
+            {{ form_row(form.submit) }}
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/tinymce/tinymce.js') }}"></script>
+    <script src="{{ asset('assets/tinymce/pages/messaging-message-tinymce.js') }}"></script>
+{% endblock %}
