@@ -125,7 +125,10 @@ class MeetingController extends Controller
         $this->checkAccess($event, $meeting);
 
         $meetingUpdateSlotView = $this->get('query.agenda.admin.meeting_update_slot_view_query_handler')->handle(
-            new MeetingUpdateSlotViewQuery($meeting)
+            new MeetingUpdateSlotViewQuery(
+                $meeting,
+                $this->checkVisio($meeting->getRequest())
+            )
         );
 
         return new JsonResponse($meetingUpdateSlotView);

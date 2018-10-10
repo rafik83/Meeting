@@ -17,11 +17,14 @@ class MeetingUpdateSlotViewQuery
     /** @var Meeting */
     public $meeting;
 
-    /**
-     * @param Meeting $meeting
-     */
-    public function __construct(Meeting $meeting)
-    {
+    /** @var bool */
+    public $visio;
+
+    public function __construct(
+        Meeting $meeting,
+        bool $visio = false
+    ) {
         $this->meeting = $meeting;
+        $this->visio = $visio;
     }
 }

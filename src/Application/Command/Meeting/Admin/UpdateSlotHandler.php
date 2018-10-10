@@ -72,11 +72,11 @@ class UpdateSlotHandler
 
         // Get available slots
         $meetingUpdateSlotView = $this->meetingUpdateSlotViewQueryHandler->handle(
-            new MeetingUpdateSlotViewQuery($updateSlot->meeting)
+            new MeetingUpdateSlotViewQuery($updateSlot->meeting, $updateSlot->visio)
         );
 
         // Check if selected slot is in available slots
-        if (false === in_array($updateSlot->slot->getId(), $meetingUpdateSlotView->availableSlotsId)) {
+        if (false === \in_array($updateSlot->slot->getId(), $meetingUpdateSlotView->availableSlotsId, true)) {
             throw new SlotNotAvailableForThisMeetingException();
         }
 
@@ -85,8 +85,8 @@ class UpdateSlotHandler
             $updateSlot->slot,
             $updateSlot->meeting->countParticipants(),
             $updateSlot->meeting,
-            null,
-            null,
+            $updateSlot->meeting->getFromSheet(),
+            $updateSlot->meeting->getToSheet(),
             $updateSlot->visio
         );
 
