@@ -58,23 +58,21 @@ class MeetingRequestViewQueryHandler
         $this->router           = $router;
     }
 
-    /**
-     * @param MeetingRequestViewQuery $query
-     *
-     * @return MeetingRequestView
-     */
     public function handle(MeetingRequestViewQuery $query): MeetingRequestView
     {
-        $sheet        = $this->getViewedSheet($query);
-        $userSheet    = $query->sheet;
-        $rules        = $this->ruleRepository->getBySeerTypeAndSeeableType($userSheet->getType(), $sheet->getType());
+        $otherSheet = $query->meetingRequest->getSheetMet($query->sheet);
+        $userSheet = $query->sheet;
+        $rules = $this->ruleRepository->getBySeerTypeAndSeeableType(
+            $userSheet->getType(),
+            $otherSheet->getType()
+        );
         $composedRule = null;
 
         if (!empty($rules)) {
             $composedRule = $this->ruleComposer->compose($rules);
         }
 
-        $previews = $this->preview->getPreview($sheet, $query->locale, $composedRule);
+        $previews = $this->preview->getPreview($otherSheet, $query->locale, $composedRule);
 
         $isSheetSeeable = !empty($rules);
 
@@ -84,17 +82,18 @@ class MeetingRequestViewQueryHandler
             $validatePhoneLink = $this->router->generate('event_user_phone_redirect_to_validation', [
                 'sheet'       => $query->sheet->getId(),
                 'participant' => $participant->getId(),
-                'redirectTo' => $this->router->generate('event_meeting_list_request', [
-                    'sheet' => $query->sheet->getId(),
+                'redirectTo' => $this->router->generate('event_catalog_complete_sheet', [
+                    'sheet' => $userSheet->getId(),
+                    'sheetToDisplay' => $otherSheet->getId(),
                 ]),
             ]);
         }
 
         return new MeetingRequestView(
-            $sheet,
-            $this->sheetInfoGuesser->guessSheetTitle($sheet, $query->locale),
+            $otherSheet,
+            $this->sheetInfoGuesser->guessSheetTitle($otherSheet, $query->locale),
             $this->getFilterState($query),
-            !$query->showCategory ? $sheet->getTypeTitle($query->locale) : $sheet->getCategoriesTitles($query->locale),
+            !$query->showCategory ? $otherSheet->getTypeTitle($query->locale) : $otherSheet->getCategoriesTitles($query->locale),
             $query->meetingRequest->getCreatedAt(),
             $query->meetingRequest,
             $previews,
@@ -130,21 +129,5 @@ class MeetingRequestViewQueryHandler
         }
 
         return $query->meetingRequest->getState();
-    }
-
-    /**
-     * Guess what sheet need to be displayed
-     *
-     * @param MeetingRequestViewQuery $query
-     *
-     * @return Sheet
-     */
-    private function getViewedSheet(MeetingRequestViewQuery $query)
-    {
-        if ($query->meetingRequest->getFromSheet() === $query->sheet) {
-            return $query->meetingRequest->getToSheet();
-        }
-
-        return $query->meetingRequest->getFromSheet();
     }
 }
