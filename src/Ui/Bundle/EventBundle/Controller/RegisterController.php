@@ -23,8 +23,10 @@ use Proximum\Vimeet\Application\View\Register\PreFillUserDataView;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Template\Exception\UploadNotAllowedOnFirstStepOfRegistrationTemplateException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Domain\View\TypeView;
@@ -207,25 +209,24 @@ class RegisterController extends Controller
             )
         );
 
-        $participantBlock = $registrationTemplate->getFirstBlock();
+        $registrationTemplateFirstStep = $registrationTemplate->getFirstBlock();
 
         // Add or update UserEvent type
         $this->get('components.user.type_resolver')->resolve($user, $event, $type);
 
-        $form = $this->createForm(BlockType::class, $participantBlock, [
-            'block'   => $participantBlock,
+        $form = $this->createForm(BlockType::class, $registrationTemplateFirstStep, [
+            'block'   => $registrationTemplateFirstStep,
             'locale'  => $locale,
             'country' => $event->getCountry(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = $this->handleData(
-                $event,
                 $user,
+                null,
                 $registrationTemplate,
                 $form,
-                $participantBlock->getData(),
-                $request->getLocale()
+                $registrationTemplateFirstStep->getData()
             );
 
             $participate = new Participate(
@@ -264,9 +265,9 @@ class RegisterController extends Controller
             'event'           => $eventDomain->getEvent(),
             'typeView'        => $typeView,
             'form'            => $form->createView(),
-            'stepTitle'       => $participantBlock->getTitle($locale),
+            'stepTitle'       => $registrationTemplateFirstStep->getTitle($locale),
             'stepDescription' => $this->get('markdown')
-                ->toHtml($participantBlock->getDescription($locale)),
+                ->toHtml($registrationTemplateFirstStep->getDescription($locale)),
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
         ]);
     }
@@ -309,28 +310,27 @@ class RegisterController extends Controller
             $participant->setData($preFillUserDataView->templateData->getData());
         }
 
-        $participantBlock = $registrationTemplate->getBlock((int) $step);
+        $registrationTemplateStep = $registrationTemplate->getBlock((int) $step);
 
-        if (null === $participantBlock) {
+        if (null === $registrationTemplateStep) {
             throw $this->createNotFoundException('Unknown step');
         }
 
         $data = [
-            'block' => $participantBlock,
+            'block' => $registrationTemplateStep,
             'locale' => $locale,
             'country' => $eventDomain->getEvent()->getCountry(),
         ];
 
-        $form = $this->createForm(BlockType::class, $participantBlock, $data);
+        $form = $this->createForm(BlockType::class, $registrationTemplateStep, $data);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = $this->handleData(
-                $eventDomain->getEvent(),
                 $userDomain->getUser(),
+                $participant->getSheet(),
                 $registrationTemplate,
                 $form,
-                $participantBlock->getData(),
-                $request->getLocale()
+                $registrationTemplateStep->getData()
             );
 
             if ($form->isValid()) {
@@ -369,9 +369,9 @@ class RegisterController extends Controller
             'form'            => $form->createView(),
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
             'stepNumber'      => $step,
-            'stepTitle'       => $participantBlock->getTitle($locale),
+            'stepTitle'       => $registrationTemplateStep->getTitle($locale),
             'stepDescription' => $this->get('markdown')
-                ->toHtml($participantBlock->getDescription($locale)),
+                ->toHtml($registrationTemplateStep->getDescription($locale)),
             'participant'     => $participant,
             'participantCard' => $participantCard,
         ]);
@@ -395,14 +395,23 @@ class RegisterController extends Controller
     }
 
     private function handleData(
-        Event $event,
         User $user,
+        ?Sheet $sheet,
         TemplateData $registrationTemplate,
         FormInterface $form,
-        array $data,
-        string $locale
+        array $data
     ) {
         $data = array_filter($data, function ($value) { return null !== $value; });
+
+        if (\count($registrationTemplate->getFirstBlock()->getUploadAndImageObjects())) {
+            throw new UploadNotAllowedOnFirstStepOfRegistrationTemplateException(
+                'Upload not allowed on first step of registration template'
+            );
+        }
+
+        if (null === $sheet) {
+            return $data;
+        }
 
         $uploadedAndImageObjects = $registrationTemplate->getUploadAndImageObjects();
 
@@ -410,21 +419,16 @@ class RegisterController extends Controller
             if ($form->has($key) && null !== $form->get($key)->get('file')->getData()) {
                 $file = $form->get($key)->get('file')->getData();
 
-                $owner = $user;
-
-                if ($object->hasTag(Tag::SHEET_DATA)) {
-                    try {
-                        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
-                        $owner = $sheet->getOwner();
-                    } catch (\Exception $exception) {
-                        $owner = $user;
-                    }
-                }
-
                 if ($file instanceof UploadedFile) {
                     try {
                         $data = $this->get('tactician.commandbus')->handle(
-                            new UploadFile($event, $owner, $object, $data)
+                            new UploadFile(
+                                $sheet,
+                                $user,
+                                $object,
+                                $data,
+                                $object->hasTag(Tag::SHEET_DATA)
+                            )
                         );
                     } catch (UploadFileException $exception) {
                         $form->get($key)->get('file')->addError(new FormError($exception->getMessage()));

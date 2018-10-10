@@ -1,0 +1,22 @@
+Proximum\Vimeet\Domain\Model\Transactional\Mail\MessageTranslation:
+    type:  entity
+    table: transactional_mail_message_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        subject:
+            type: string
+        content:
+            type: text
+        locale:
+            type: string
+    manyToOne:
+        message:
+            targetEntity: Proximum\Vimeet\Domain\Model\Transactional\Mail\Message
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false

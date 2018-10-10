@@ -18,15 +18,15 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class AddParticipantMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.sheet.add_participant_confirmation.subject';
+    public const SUBJECT = 'mail.sheet.add_participant_confirmation.subject';
+    public const TEMPLATE = 'MailBundle:Mail:Sheet/Invitation/addParticipantConfirmation.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Sheet/Invitation/addParticipantConfirmation_full_text.html.twig';
 
-    /**
-     * @var string
-     */
-    protected $template = 'MailBundle:Mail:Sheet/Invitation/addParticipantConfirmation.html.twig';
+    /** @var string */
+    protected $subject = self::TEMPLATE;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

@@ -27,8 +27,7 @@ class UserEventEncryptFileAdapter implements UserEventEncryptFileInterface
 
     public function encryptFile(Event $event, User $user, string $initialFilePath, string $encryptedFilePath): void
     {
-        $userKey = $this->userEventKeyGetter->getKeyByEventAndUser($event, $user);
-
-        File::encryptFile($initialFilePath, $encryptedFilePath, $userKey);
+        $key = $this->userEventKeyGetter->getKeyByEventAndUser($event, $user);
+        File::encryptFile($initialFilePath, $encryptedFilePath, $key);
     }
 }

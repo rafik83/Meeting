@@ -34,7 +34,7 @@ tinymce.on('addEditor', function(e){
 tinymce.init({
     branding: false,
     selector: "textarea:not(.no-tiny)",
-    width: '80%',
+    width: '100%',
     menubar: false,
     height: 500,
     plugins: ['lists link textcolor colorpicker code'],

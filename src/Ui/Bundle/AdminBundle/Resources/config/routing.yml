@@ -551,6 +551,14 @@ admin_meeting_list:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\ListAction }
 
+admin_meeting_participants_presence:
+    path: /event/{event}/meeting/slot/{meetingSlot}/participants/presence
+    requirements:
+        event: \d+
+        meetingSlot: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\GetParticipantPresenceAction }
+
 admin_meeting_update_status:
     path: /event/{event}/meeting/{meeting}/update/status
     requirements:
@@ -832,6 +840,14 @@ admin_sheet_update_participant_visio:
         participant: \d+
     methods: [POST]
     defaults: { _controller: AdminBundle:Sheet:updateVisio }
+
+admin_sheet_change_owner:
+    path: /event/{event}/sheet/{sheet}/change/owner
+    requirements:
+        event: \d+
+        sheet: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\ChangeOwnerAction
 
 #
 # Order
@@ -1869,3 +1885,39 @@ admin_event_availability_time_range_create:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange\CreateAction }
+
+#
+# Transactional
+#
+#### Mail
+admin_event_transactional_mail_list:
+    path: /event/{event}/transactional/mail/list
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\ListAction
+
+admin_event_transaction_mail_customize:
+    path: /event/{event}/transactional/mail/customize/{transactionalMailType}
+    requirements:
+        event: \d+
+        transactionalMailType: \w+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\CustomizeAction
+
+admin_event_transaction_mail_update_customized:
+    path: /event/{event}/transactional/mail/customize/{transactionalMailType}/update/{message}
+    requirements:
+        event: \d+
+        transactionalMailType: \w+
+        message: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\UpdateCustomizedAction
+
+admin_event_transaction_mail_delete:
+    path: /event/{event}/transactional/mail/{message}/delete
+    requirements:
+        event: \d+
+        message: \d+
+    methods: [DELETE]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\DeleteAction

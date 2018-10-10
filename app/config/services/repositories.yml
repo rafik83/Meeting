@@ -43,3 +43,7 @@ services:
     Proximum\Vimeet\Infrastructure\Repository\Meeting\ParticipantExtraDataRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'

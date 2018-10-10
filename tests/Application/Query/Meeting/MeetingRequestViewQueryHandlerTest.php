@@ -50,11 +50,13 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $meetingRequest->getToSheet()->willReturn($sheet2->reveal());
         $meetingRequest->getState()->willReturn(Request::STATE_SENT);
         $meetingRequest->hasMessage()->willReturn(true);
+        $meetingRequest->getSheetMet($sheet->reveal())->shouldBeCalled()->willReturn($sheet2->reveal());
         $participant->getId()->willReturn(1);
         $sheet->getId()->willReturn(1);
         $sheet->getType()->willReturn($type1->reveal());
         $sheet->getUserParticipant($user)->willReturn($participant->reveal());
         $sheet2->getType()->willReturn($type2->reveal());
+        $sheet2->getId()->willReturn(1337);
         $sheet2->getCategoriesTitles('fr')->shouldBeCalled()->willReturn('category');
         $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), $locale)->willReturn('sheet name');
         $ruleRepository->getBySeerTypeAndSeeableType($type1->reveal(), $type2->reveal())->shouldBeCalled()
@@ -64,12 +66,20 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $router->generate('event_user_phone_redirect_to_validation', [
             'sheet'       => 1,
             'participant' => 1,
-            'redirectTo' => 'redirectLink',
+            'redirectTo' => 'redirectLink/from/1/to/1337',
         ])->shouldBeCalled()->willReturn('validatePhoneLink');
 
-        $router->generate('event_meeting_list_request', [
-            'sheet' => 1,
-        ])->shouldBeCalled()->willReturn('redirectLink');
+        $router
+            ->generate(
+                'event_catalog_complete_sheet',
+                [
+                    'sheet'          => 1,
+                    'sheetToDisplay' => 1337,
+                ]
+            )
+            ->shouldBeCalled()
+            ->willReturn('redirectLink/from/1/to/1337')
+        ;
 
         $handler = new MeetingRequestViewQueryHandler(
             $preview->reveal(),

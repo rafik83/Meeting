@@ -104,7 +104,7 @@ class OmzUserNormalizer extends AbstractNormalizer implements NormalizerInterfac
     private function getOmzUserViewRawData(OmzUserView $userView)
     {
         return [
-            self::COL_USER_ID             => $userView->userId,
+            self::COL_USER_ID             => $userView->participantId,
             self::COL_COMPANY             => $userView->companyName,
             self::COL_DESCRIPTION         => $userView->description,
             self::COL_PARTICIPATION_TYPE  => $userView->participationType,

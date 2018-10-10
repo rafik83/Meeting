@@ -17,15 +17,15 @@ use Proximum\Vimeet\Domain\Model\Participant;
 
 class CompleteProfileMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.completeProfile.subject';
+    public const SUBJECT = 'mail.completeProfile.subject';
+    public const TEMPLATE = 'MailBundle:Mail:User/completeProfile.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:User/completeProfile_full_text.html.twig';
 
-    /**
-     * @var string
-     */
-    protected $template = 'MailBundle:Mail:User/completeProfile.html.twig';
+    /** @var string */
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

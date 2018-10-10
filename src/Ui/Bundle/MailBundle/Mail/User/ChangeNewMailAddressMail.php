@@ -17,15 +17,15 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class ChangeNewMailAddressMail extends UserMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = 'mail.changeMailNew.subject';
+    public const SUBJECT = 'mail.changeMailNew.subject';
+    public const TEMPLATE = 'MailBundle:Mail:ChangeMail/newMail.html.twig';
+    public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:ChangeMail/newMail_full_text.html.twig';
 
-    /**
-     * @var string
-     */
-    protected $template = 'MailBundle:Mail:ChangeMail/newMail.html.twig';
+    /** @var string */
+    protected $subject = self::SUBJECT;
+
+    /** @var string */
+    protected $template = self::TEMPLATE;
 
     /**
      * @var string

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessageHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
+use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 
 class MessageFactory
 {
@@ -48,8 +49,8 @@ class MessageFactory
                 $command = new CreateMessage(
                     $event,
                     Events::SHEET_REFUSED,
-                    'mail.sheet.refused.subject',
-                    'MailBundle:Mail:Sheet/sheetRefused.html.twig',
+                    Constant::TRANSACTIONAL_MAIL_SHEET_REFUSED_SUBJECT,
+                    Constant::TRANSACTIONAL_MAIL_SHEET_REFUSED_TEMPLATE,
                     $sendEmailToTeam
                 );
                 break;
@@ -57,8 +58,8 @@ class MessageFactory
                 $command = new CreateMessage(
                     $event,
                     Events::SHEET_VALIDATED,
-                    'mail.sheet.validated.subject',
-                    'MailBundle:Mail:Sheet/sheetValidated.html.twig',
+                    Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATED_SUBJECT,
+                    Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATED_TEMPLATE,
                     $sendEmailToTeam
                 );
                 break;
@@ -66,8 +67,8 @@ class MessageFactory
                 $command = new CreateMessage(
                     $event,
                     Events::SHEET_VALIDATION_VALIDATE,
-                    'mail.sheet.validation.validate.subject',
-                    'MailBundle:Mail:Sheet/sheetValidationValidate.html.twig',
+                    Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_SUBJECT,
+                    Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_TEMPLATE,
                     $sendEmailToTeam
                 );
                 break;
@@ -75,8 +76,8 @@ class MessageFactory
                 $command = new CreateMessage(
                     $event,
                     Events::SHEET_VALIDATION_DRAFT,
-                    'mail.sheet.validation.draft.subject',
-                    'MailBundle:Mail:Sheet/sheetValidationDraft.html.twig',
+                    Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_SUBJECT,
+                    Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_TEMPLATE,
                     $sendEmailToTeam
                 );
                 break;
@@ -84,8 +85,8 @@ class MessageFactory
                 $command = new CreateMessage(
                     $event,
                     Events::SHEET_INVOICED,
-                    'mail.sheet.invoiced.subject',
-                    'MailBundle:Mail:Invoice/sheetInvoiced.html.twig',
+                    Constant::TRANSACTIONAL_MAIL_SHEET_INVOICED_SUBJECT,
+                    Constant::TRANSACTIONAL_MAIL_SHEET_INVOICED_TEMPLATE,
                     $sendEmailToTeam,
                     true
                 );

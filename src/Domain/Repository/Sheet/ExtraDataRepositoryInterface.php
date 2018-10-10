@@ -47,4 +47,6 @@ interface ExtraDataRepositoryInterface
      * @return bool
      */
     public function hasExtraDataForSheet(Sheet $sheet, string $name): bool;
+
+    public function getExtraDataForSheet(Sheet $sheet, string $name): ?ExtraData;
 }

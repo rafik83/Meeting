@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Application\Command\OMZ;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
+use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
+use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserListView;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserView;
@@ -44,15 +46,9 @@ class PrepareContentHandler
     /** @var UserInfoGuesser */
     private $userInfoGuesser;
 
-    /**
-     * @param UserRepositoryInterface      $userRepository
-     * @param SheetRepositoryInterface     $sheetRepository
-     * @param GroupNameResolver            $groupNameResolver
-     * @param TypeNameResolver             $typeNameResolver
-     * @param UserInfoGuesser              $userInfoGuesser
-     * @param ParticipantPlanningFormatter $participantPlanningFormatter
-     * @param SerializerAdapterInterface   $serializer
-     */
+    /** @var QRCodeIdentifierQueryHandler */
+    private $QRCodeIdentifierQueryHandler;
+
     public function __construct(
         UserRepositoryInterface $userRepository,
         SheetRepositoryInterface $sheetRepository,
@@ -60,15 +56,17 @@ class PrepareContentHandler
         TypeNameResolver $typeNameResolver,
         UserInfoGuesser $userInfoGuesser,
         ParticipantPlanningFormatter $participantPlanningFormatter,
+        QRCodeIdentifierQueryHandler $QRCodeIdentifierQueryHandler,
         SerializerAdapterInterface $serializer
     ) {
-        $this->userRepository               = $userRepository;
-        $this->sheetRepository              = $sheetRepository;
-        $this->groupNameResolver            = $groupNameResolver;
-        $this->typeNameResolver             = $typeNameResolver;
-        $this->userInfoGuesser              = $userInfoGuesser;
+        $this->userRepository = $userRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->groupNameResolver = $groupNameResolver;
+        $this->typeNameResolver = $typeNameResolver;
+        $this->userInfoGuesser = $userInfoGuesser;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
-        $this->serializer                   = $serializer;
+        $this->QRCodeIdentifierQueryHandler = $QRCodeIdentifierQueryHandler;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -96,7 +94,7 @@ class PrepareContentHandler
             $userInfo = $this->userInfoGuesser->getUserInfoFromParticipant($user, $userLocale, $userSheets);
 
             $usersViews[] = new OmzUserView(
-                $user->getId(),
+                $this->QRCodeIdentifierQueryHandler->handle(new QRCodeIdentifierQuery($event, $user)),
                 $this->groupNameResolver->resolve($event, $user, $userSheets),
                 null,
                 $this->typeNameResolver->resolveWithPreloadedSheets($userSheets, $event->getFallback()),

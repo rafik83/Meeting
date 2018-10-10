@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
-use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileException;
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
@@ -54,10 +53,7 @@ class UpdateCompanyHandler
         $this->uploadFileHandler = $uploadFileHandler;
     }
 
-    /**
-     * @param UpdateCompany $updateCompany
-     */
-    public function handle(UpdateCompany $updateCompany)
+    public function handle(UpdateCompany $updateCompany): void
     {
         $participant = $updateCompany->participant;
         $sheet = $updateCompany->sheet;
@@ -68,15 +64,18 @@ class UpdateCompanyHandler
             $templateObject = $templateData->getObject($key);
 
             if ($templateObject instanceof UploadObject) {
-                try {
-                    $companyData = $this
-                        ->uploadFileHandler
-                        ->handle(
-                            new UploadFile($sheet->getEvent(), $sheet->getOwner(), $templateObject, $companyData)
+                $companyData = $this
+                    ->uploadFileHandler
+                    ->handle(
+                        new UploadFile(
+                            $sheet,
+                            $updateCompany->user,
+                            $templateObject,
+                            $companyData,
+                            $templateObject->hasTag(Tag::SHEET_DATA)
                         )
-                    ;
-                } catch (UploadFileException $exception) {
-                }
+                    )
+                ;
 
                 continue;
             }

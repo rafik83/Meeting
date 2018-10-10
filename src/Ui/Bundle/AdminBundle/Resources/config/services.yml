@@ -229,6 +229,12 @@ services:
         tags:
             - { name: form.type }
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeOwnerType:
+        arguments:
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeOwnerType }
+
     form_type_sheet.predefined_filters_choice_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\PredefinedFiltersChoiceType
         arguments:
@@ -320,6 +326,12 @@ services:
             tags:
                 - { name: form.type }
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail\CustomizeTranslationType:
+        arguments:
+            - '@ui.helper.messaging_message_placeholder_helper'
+        tags:
+            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail\CustomizeTranslationType }
+
     #
     # Value Resolver
     #
@@ -407,5 +419,11 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\RemoveDecryptedFileSubscriber:
         arguments:
             - '@adapter.file_system_adapter'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\User\UserEventSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: kernel.event_subscriber }
