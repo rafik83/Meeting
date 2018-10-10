@@ -244,6 +244,7 @@ services:
             - '@domain.service.sheets_group.type_name_resolver'
             - '@components.user.user_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
+            - '@Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler'
             - '@adapter.serializer_adapter'
 
     Proximum\Vimeet\Application\Command\OMZ\NotifyHandler:
@@ -326,6 +327,23 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\CancelAll }
+
+    #
+    # Transactional
+    #
+    #### Mail
+    Proximum\Vimeet\Application\Command\Transactional\Mail\CustomizeHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transactional\Mail\Customize }
+
+    Proximum\Vimeet\Application\Command\Transactional\Mail\UpdateCustomizedHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transactional\Mail\UpdateCustomized }
 
     #
     # Scan

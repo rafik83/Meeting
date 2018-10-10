@@ -28,6 +28,7 @@ class MeetingParticipantPresenceAction
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
+
     /** @var IsParticipantVisio */
     private $isParticipantVisio;
 

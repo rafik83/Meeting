@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Infrastructure\Encryption;
 
-use Defuse\Crypto\Key;
 use Defuse\Crypto\KeyProtectedByPassword;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;

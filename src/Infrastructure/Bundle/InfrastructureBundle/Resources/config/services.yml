@@ -999,7 +999,7 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\RemoveImage }
     Proximum\Vimeet\Application\Command\Sheet\SaveTreeToFileSystemCommandHandler:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
+            - '@Proximum\Vimeet\Application\Command\Encryption\DecryptHandler'
             - '@adapter.file_system_adapter'
             - '%shared_uploaded_files%'
             - '%infrastructure.encrypted_files_path%'
@@ -1458,8 +1458,8 @@ services:
     command.participant.upload_file_handler:
         class: Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Command\Encryption\EncryptHandler'
             - '@adapter.local_file_storage'
-            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventEncryptFileAdapter'
             - '%infrastructure.encrypted_files_path%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile }
@@ -4312,6 +4312,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery }
 
+    Proximum\Vimeet\Application\Query\Meeting\ParticipantPresenceQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Meeting\IsParticipantPresentToMeeting'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\ParticipantPresenceQuery }
+
     query.meeting.participants_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQueryHandler
         arguments:
@@ -6428,6 +6436,30 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyGetterAdapter'
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyPasswordGetterAdapter'
+
+    Proximum\Vimeet\Infrastructure\Encryption\SheetProtectedKeyGetterAdapter:
+        arguments:
+            - '@repository.sheet.extra_data_repository'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\ProtectedKeyAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetProtectedKeyPasswordGetterAdapter'
+            - '@datetime'
+
+    Proximum\Vimeet\Infrastructure\Encryption\SheetProtectedKeyPasswordGetterAdapter:
+        arguments:
+            - '%secret%'
+
+    Proximum\Vimeet\Infrastructure\Encryption\SheetEncryptFileAdapter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetKeyGetter'
+
+    Proximum\Vimeet\Infrastructure\Encryption\SheetDecryptFileAdapter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetKeyGetter'
+
+    Proximum\Vimeet\Infrastructure\Encryption\SheetKeyGetter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetProtectedKeyGetterAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetProtectedKeyPasswordGetterAdapter'
 
     #
     # Guard

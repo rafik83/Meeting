@@ -1,0 +1,30 @@
+Proximum\Vimeet\Domain\Model\Transactional\Mail\Message:
+    type:  entity
+    table: transactional_mail_message
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        type:
+            type: string
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Transactional\Mail\MessageTranslation
+            mappedBy: message
+            indexBy: locale
+            cascade: ['persist', 'remove']
+    manyToMany:
+        associatedParticipationTypes:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            joinTable:
+                name: transactional_mail_message_associated_type

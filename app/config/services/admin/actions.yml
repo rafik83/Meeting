@@ -23,6 +23,11 @@ services:
             - '@form.factory'
             - '@datetime'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\GetParticipantPresenceAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.authorization_checker'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\UpdateStatusAction:
         arguments:
             - '@adapter.authorization_checker'
@@ -614,6 +619,47 @@ services:
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
+    # Transactional
+    #
+    #### Mail
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\ListAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
+            - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\CustomizeAction:
+        arguments:
+            - '@templating.engine.twig'
+            - '@adapter.authorization_checker'
+            - '@translator'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\UpdateCustomizedAction:
+        arguments:
+            - '@templating.engine.twig'
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\DeleteAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@security.csrf.token_manager'
+            - '@session.flash_bag'
+
+    #
     # Scan
     #
     #### Happening
@@ -635,4 +681,3 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.authorization_checker'
-

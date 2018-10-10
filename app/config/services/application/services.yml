@@ -10,3 +10,13 @@ services:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@adapter.job_queue_adapter'
             - '@vimeet_infrastructure.repository.sheet_repository'
+
+    Proximum\Vimeet\Application\Command\Encryption\EncryptHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetEncryptFileAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventEncryptFileAdapter'
+
+    Proximum\Vimeet\Application\Command\Encryption\DecryptHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\SheetDecryptFileAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'

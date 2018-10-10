@@ -1,0 +1,99 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
+{% block title 'admin.transactional.mail.list.title'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.transactional.mail.list.title'|trans }}</h1>
+    <h2>{{ 'admin.transactional.mail.list.generic.title'|trans }}</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="col-md-3">{{ 'admin.transactional.mail.list.column.key'|trans }}</th>
+            <th class="col-md-3">{{ 'admin.transactional.mail.list.column.title'|trans }}</th>
+            <th class="col-md-4">{{ 'admin.transactional.mail.list.column.type'|trans }}</th>
+            <th class="col-md-2"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="info">
+            <td colspan="4">
+                {{ 'admin.transactional.mail.action.notCustomizeByType'|trans }}
+            </td>
+        </tr>
+        {% set previous = null %}
+        {% for mail in list.mailViews %}
+            {% if previous is not null and not previous.isCustomizableByType and mail.isCustomizableByType %}
+                <tr class="info">
+                    <td colspan="4">
+                        {{ 'admin.transactional.mail.action.customizeByType'|trans }}
+                    </td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td rowspan="{{ mail.numberOfElements }}">
+                    {{ ('admin.transactional.mail.list.key.' ~ mail.key)|trans }}
+                </td>
+                <td>{{ mail.genericMailView.subject }}</td>
+                <td>
+                    {% if not mail.isGenericCustomizable %}
+                        {{ 'admin.transactional.mail.list.column.type.options.none'|trans }}
+                    {% else %}
+                        {% if not mail.genericMailView.isCustomizableByTypes %}
+                            {{ 'admin.transactional.mail.list.column.type.options.all'|trans }}
+                        {% elseif mail.customizedMailViews is empty %}
+                            {{ 'admin.transactional.mail.list.column.type.options.all'|trans }}
+                        {% else %}
+                            <ul>
+                                {% for type in mail.genericMailView.associatedTypeTitles %}
+                                    <li>{{ type }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td class="text-right">
+                    {% if mail.isGenericCustomizable %}
+                        <a href="{{ path('admin_event_transaction_mail_customize', {'event': event.id, 'transactionalMailType': mail.key}) }}"
+                           class="btn btn-primary"
+                        >{{ 'admin.transactional.mail.action.customize'|trans }}</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% for customizedMail in mail.customizedMailViews %}
+                <tr>
+                    <td>{{ customizedMail.subject }}</td>
+                    <td>
+                        {% if customizedMail.isCustomizableByTypes %}
+                            <ul>
+                                {% for type in customizedMail.associatedTypeTitles %}
+                                    <li>{{ type }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            {{ 'admin.transactional.mail.list.column.type.options.all'|trans }}
+                        {% endif %}
+                    </td>
+                    <td class="text-right">
+                        <a href="{{ path('admin_event_transaction_mail_update_customized', {'event': event.id, 'transactionalMailType': mail.key, 'message': customizedMail.messageId}) }}"
+                           class="btn btn-primary"
+                        >{{ 'admin.transactional.mail.action.customize'|trans }}</a>
+                        {{ delete_button(
+                            path('admin_event_transaction_mail_delete', {'event': event.id, 'message': customizedMail.messageId}),
+                            'admin.transactional.mail.action.delete'|trans,
+                            {
+                                'class' : 'btn btn-danger btn-sm',
+                                'data-confirm': 'admin.transactional.mail.action.delete.confirm'|trans
+                            },
+                            customizedMail.getIntention
+                        )
+                        }}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% set previous = mail %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

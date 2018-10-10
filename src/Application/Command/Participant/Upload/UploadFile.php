@@ -11,13 +11,14 @@
 namespace Proximum\Vimeet\Application\Command\Participant\Upload;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadableObjectInterface;
 
 class UploadFile
 {
-    /** @var Event */
-    private $event;
+    /** @var Sheet */
+    private $sheet;
 
     /** @var User */
     private $user;
@@ -28,21 +29,31 @@ class UploadFile
     /** @var array */
     private $data;
 
+    /** @var bool */
+    private $isSheetData;
+
     public function __construct(
-        Event $event,
+        Sheet $sheet,
         User $user,
         UploadableObjectInterface $object,
-        array $data
+        array $data,
+        bool $isSheetData
     ) {
+        $this->sheet = $sheet;
         $this->object = $object;
         $this->data = $data;
-        $this->event = $event;
         $this->user = $user;
+        $this->isSheetData = $isSheetData;
+    }
+
+    public function getSheet(): Sheet
+    {
+        return $this->sheet;
     }
 
     public function getEvent(): Event
     {
-        return $this->event;
+        return $this->sheet->getEvent();
     }
 
     public function getUser(): User
@@ -58,5 +69,10 @@ class UploadFile
     public function getData(): array
     {
         return $this->data;
+    }
+
+    public function isSheetData(): bool
+    {
+        return $this->isSheetData;
     }
 }

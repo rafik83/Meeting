@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -43,7 +44,9 @@ class FilterPartType extends AbstractType
                     return $choice;
                 },
             ])
-            ->add('enabled', HiddenType::class);
+            ->add('enabled', HiddenType::class)
+            ->add('cancelled', CancelledChoiceType::class)
+        ;
     }
 
     /**

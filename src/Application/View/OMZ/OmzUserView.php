@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Application\View\OMZ;
 
 class OmzUserView
 {
-    /** @var int */
-    public $userId;
+    /** @var string */
+    public $participantId;
 
     /** @var string */
     public $companyName;
@@ -57,7 +57,7 @@ class OmzUserView
     /**
      * OmzUserView constructor.
      *
-     * @param int    $userId
+     * @param string $participantId
      * @param string $companyName
      * @param string $description
      * @param string $participationType
@@ -73,7 +73,7 @@ class OmzUserView
      * @param string $planning
      */
     public function __construct(
-        $userId,
+        $participantId,
         $companyName,
         $description,
         $participationType,
@@ -88,19 +88,19 @@ class OmzUserView
         $mobilePhoneNumber,
         $planning
     ) {
-        $this->userId            = $userId;
-        $this->companyName       = $companyName;
-        $this->description       = $description;
+        $this->participantId = $participantId;
+        $this->companyName = $companyName;
+        $this->description = $description;
         $this->participationType = $participationType;
-        $this->gender            = $gender;
-        $this->firstname         = $firstname;
-        $this->lastname          = $lastname;
-        $this->position          = $position;
-        $this->phonePrefix       = $phonePrefix;
-        $this->phoneNumber       = $phoneNumber;
-        $this->email             = $email;
+        $this->gender = $gender;
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+        $this->position = $position;
+        $this->phonePrefix = $phonePrefix;
+        $this->phoneNumber = $phoneNumber;
+        $this->email = $email;
         $this->mobilePhonePrefix = $mobilePhonePrefix;
         $this->mobilePhoneNumber = $mobilePhoneNumber;
-        $this->planning          = $planning;
+        $this->planning = $planning;
     }
 }
