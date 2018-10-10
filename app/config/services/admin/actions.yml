@@ -23,6 +23,11 @@ services:
             - '@form.factory'
             - '@datetime'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\GetParticipantPresenceAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.authorization_checker'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\UpdateStatusAction:
         arguments:
             - '@adapter.authorization_checker'

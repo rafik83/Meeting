@@ -95,6 +95,7 @@ class ListAction
             'form' => $form->createView(),
             'hasPrevious' => !empty($slots) && reset($slots) !== $currentSlot,
             'hasNext' => !empty($slots) && end($slots) !== $currentSlot,
+            'currentSlot' => $currentSlot,
         ]);
     }
 

@@ -23,7 +23,8 @@ var $ = require('jquery'),
     SelectPreviousNextMover = require('./components/_SelectPreviousNextMover'),
     RadioGroupAjax = require('./components/_RadioGroupAjax'),
     FilterBuilder = require('./components/_FilterBuilder'),
-    ButtonGroupDefaultStateChanger = require('./components/_ButtonGroupDefaultStateChanger')
+    ButtonGroupDefaultStateChanger = require('./components/_ButtonGroupDefaultStateChanger'),
+    ParticipantPresence = require('./components/_ParticipantPresence')
 ;
 
 require('bootstrap');
@@ -188,6 +189,10 @@ function init(target) {
             target.querySelector('#builder'),
             target.querySelector('#submit-rules')
         );
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-participant-presence-endpoint]'), function (element) {
+        new ParticipantPresence(element);
     });
 }
 
