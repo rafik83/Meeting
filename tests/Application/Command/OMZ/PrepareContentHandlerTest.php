@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Command\OMZ\PrepareContent;
 use Proximum\Vimeet\Application\Command\OMZ\PrepareContentHandler;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
+use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
+use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler;
 use Proximum\Vimeet\Application\Serializer\Normalizer\OMZ\OmzUserNormalizer;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserListView;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserView;
@@ -65,7 +67,7 @@ class PrepareContentHandlerTest extends TestCase
 
         $expectedPlanning = 'normalizer@elao.com';
         $omzUserView = new OmzUserView(
-            null,
+            '0000133700007',
             'group name',
             null,
             'type name',
@@ -84,16 +86,12 @@ class PrepareContentHandlerTest extends TestCase
 
         $expectedNormalizedDatas = 'normalizer@elao.com';
 
-        $command = new PrepareContent($event);
-        $handler = new PrepareContentHandler(
-            $userRepository->reveal(),
-            $sheetRepository->reveal(),
-            $groupNameResolver->reveal(),
-            $typeNameResolver->reveal(),
-            $userInfoGuesser->reveal(),
-            $participantPlanningFormatter->reveal(),
-            $serializer->reveal()
-        );
+        $QRCodeIdentifierQueryHandler = $this->prophesize(QRCodeIdentifierQueryHandler::class);
+        $QRCodeIdentifierQueryHandler
+            ->handle(new QRCodeIdentifierQuery($event, $user))
+            ->shouldBeCalled()
+            ->willReturn('0000133700007')
+        ;
 
         $participantPlanningFormatter->preloadPlanningHandlerForEvent($event)->shouldBeCalled();
 
@@ -112,6 +110,18 @@ class PrepareContentHandlerTest extends TestCase
         $serializer->serialize($omzUserListView, 'csv', ['csv_delimiter' => ';', 'charset' => 'Windows-1252'])
             ->shouldBeCalled()
             ->willReturn($expectedNormalizedDatas);
+
+        $command = new PrepareContent($event);
+        $handler = new PrepareContentHandler(
+            $userRepository->reveal(),
+            $sheetRepository->reveal(),
+            $groupNameResolver->reveal(),
+            $typeNameResolver->reveal(),
+            $userInfoGuesser->reveal(),
+            $participantPlanningFormatter->reveal(),
+            $QRCodeIdentifierQueryHandler->reveal(),
+            $serializer->reveal()
+        );
 
         $resultNormalizedDatas = $handler->handle($command);
 
