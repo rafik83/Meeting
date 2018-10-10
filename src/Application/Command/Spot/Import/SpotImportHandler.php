@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Spot\Import;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 
@@ -53,7 +54,7 @@ class SpotImportHandler
      */
     public function handle(SpotImport $spotImport): File
     {
-        $fileContent = file_get_contents($spotImport->file);
+        $fileContent = Charset::convertString(file_get_contents($spotImport->file), $spotImport->charset, Charset::UTF_8);
 
         $filePath = $this
             ->fileStorage
