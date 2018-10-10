@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Transactional\Mail\Customize;
 
+use Proximum\Vimeet\Domain\Intention\IntentionType;
+
 class CustomizedMailView
 {
     /** @var string */
@@ -39,5 +41,10 @@ class CustomizedMailView
         $this->subject = $subject;
         $this->isCustomizableByTypes = $isCustomizableByTypes;
         $this->associatedTypeTitles = $associatedTypeTitles;
+    }
+
+    public function getIntention(): string
+    {
+        return IntentionType::INTENTION_REMOVE_CUSTOMIZED_MAIL;
     }
 }

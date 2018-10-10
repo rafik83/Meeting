@@ -1067,6 +1067,8 @@ admin.transaction.state.cancelled: Annulé
 admin.transaction.state.paid: Réglé
 admin.transaction.state.pending: 'En attente'
 admin.transaction.update: 'Modifier une transaction'
+admin.transactional.mail.action.delete: Supprimer
+admin.transactional.mail.action.delete.confirm: 'Êtes vous sûr de vouloir supprimer cette personnalisation ?'
 admin.transactional.mail.action.customize: 'Personnaliser'
 admin.transactional.mail.action.notCustomizeByType: 'Non personnalisable par type'
 admin.transactional.mail.action.customizeByType: 'Personnalisable par type'

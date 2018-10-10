@@ -630,3 +630,11 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\DeleteAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@security.csrf.token_manager'
+            - '@session.flash_bag'

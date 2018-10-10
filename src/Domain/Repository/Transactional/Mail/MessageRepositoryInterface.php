@@ -33,4 +33,6 @@ interface MessageRepositoryInterface
      * @return Message[]
      */
     public function findByEvent(Event $event): array;
+
+    public function remove(Message $message): void;
 }

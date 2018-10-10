@@ -79,6 +79,16 @@
                         <a href="{{ path('admin_event_transaction_mail_update_customized', {'event': event.id, 'transactionalMailType': mail.key, 'message': customizedMail.messageId}) }}"
                            class="btn btn-primary"
                         >{{ 'admin.transactional.mail.action.customize'|trans }}</a>
+                        {{ delete_button(
+                            path('admin_event_transaction_mail_delete', {'event': event.id, 'message': customizedMail.messageId}),
+                            'admin.transactional.mail.action.delete'|trans,
+                            {
+                                'class' : 'btn btn-danger btn-sm',
+                                'data-confirm': 'admin.transactional.mail.action.delete.confirm'|trans
+                            },
+                            customizedMail.getIntention
+                        )
+                        }}
                     </td>
                 </tr>
             {% endfor %}
