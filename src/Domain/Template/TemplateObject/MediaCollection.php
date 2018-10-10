@@ -107,8 +107,8 @@ class MediaCollection extends TemplateObject
     {
         $default = $this->getDefault();
 
-        if (null !== $default) {
-            $pad = $default - count($this->medias);
+        if (!empty($default)) {
+            $pad = $default - \count($this->medias);
             while ($pad-- > 0) {
                 $this->medias[] = new Media($this, null, null, null);
             }

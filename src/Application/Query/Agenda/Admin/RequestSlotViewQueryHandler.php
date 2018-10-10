@@ -58,7 +58,7 @@ class RequestSlotViewQueryHandler
             false
         );
 
-        if (0 === count($slots)) {
+        if (0 === \count($slots)) {
             throw new NoSlotAvailableException();
         }
 
@@ -77,7 +77,7 @@ class RequestSlotViewQueryHandler
             }
         }
 
-        if (0 === count($availableSlotsId)) {
+        if (0 === \count($availableSlotsId)) {
             throw new NoSpotAvailableException();
         }
 
