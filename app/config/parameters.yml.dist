@@ -65,6 +65,7 @@ parameters:
 
     tokbox_api_key: ~
     tokbox_api_secret: ~
+    visio_screen_sharing_chrome_extension: https://chrome.google.com/webstore/detail/alpphdcgnkkpafmlhllecaganiekhjcp
 
     planner_files_path: '%kernel.root_dir%/../var/planner'
     planner_command: 'curl -v -X POST http://optaplanner:8080/job/NameOfTheBuildYouShouldChangeIt/build --user vimeet:PasswordYouShouldChangeIt --data-urlencode json=''{"parameter": [{"name":"INPUT", "value":"%%filename%%"}]}'''

@@ -52,6 +52,7 @@ twig:
         "%kernel.project_dir%/src/Ui/Resources/views": Ui
     globals:
         admin_menu_color: "%admin_menu_color%"
+        visio_screen_sharing_chrome_extension: "%visio_screen_sharing_chrome_extension%"
 
 # Doctrine Configuration
 doctrine:
