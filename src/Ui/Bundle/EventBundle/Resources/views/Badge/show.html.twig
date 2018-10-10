@@ -29,8 +29,6 @@
 
         .ebadge-participation-type {
             overflow: hidden;
-            min-height: 11mm;
-            line-height: 8mm;
             display: block;
             text-align: center;
             width: 100%;
@@ -92,10 +90,20 @@
         }
 
         @media print {
+            * {
+                font-family: RobotoRegular, HelveticaNeue, Helvetica, sans-serif !important;
+            }
+
+            .container-fluid {
+                padding: 0;
+                margin: 0;
+            }
+
             .ebadge {
                 position: relative;
-                width: 105mm;
-                height: 148mm;
+                width: 50%;
+                height: 138mm;
+                font-size: 24px;
             }
 
             .ebadge-logo {
@@ -118,6 +126,10 @@
 
             .ebadge-participation-type {
                 bottom: 0;
+            }
+
+            .ebadge-qrcode-token {
+                font-size: 12px;
             }
         }
     </style>
