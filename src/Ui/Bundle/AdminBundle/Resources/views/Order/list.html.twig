@@ -17,8 +17,9 @@
     </h1>
 
     {{ form_start(filterPartForm) }}
-        {{ form_row(filterPartForm.product, { 'group_attr': { 'class': 'col-md-8' } }) }}
+        {{ form_row(filterPartForm.product, { 'group_attr': { 'class': 'col-md-7' } }) }}
         {{ form_row(filterPartForm.enabled) }}
+        {{ form_row(filterPartForm.cancelled, { 'group_attr': { 'class': 'col-md-3' } }) }}
 
         <div class="col-md-2">
             <button type="submit" id="submit" name="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>

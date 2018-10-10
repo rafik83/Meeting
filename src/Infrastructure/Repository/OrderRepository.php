@@ -119,6 +119,12 @@ class OrderRepository implements OrderRepositoryInterface
                 ->setParameter('enable', $filters['enabled']);
         }
 
+        if (isset($filters['cancelled']) && $filters['cancelled'] !== 'all') {
+            $queryBuilder
+                ->andWhere('_order.cancelled = :cancelled')
+                ->setParameter('cancelled', $filters['cancelled'] === 'cancelled');
+        }
+
         return $this->paginator->paginate($queryBuilder, $page, $limit, '_order', 'id');
     }
 

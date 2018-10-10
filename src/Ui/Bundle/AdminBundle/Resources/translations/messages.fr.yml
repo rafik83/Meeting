@@ -1341,6 +1341,9 @@ event.sheet.listOrders.title: 'Liste de vos commandes'
 event.sheet.order.alphabetic: Alphabétique
 event.sheet.order.completeness: Complétude
 event.sheet.order.createdAt: 'Date d''inscription'
+event.sheet.order.cancelled.all: Tous les commandes
+event.sheet.order.cancelled.cancelled: Commandes annulées
+event.sheet.order.cancelled.notCancelled: Commandes non annulées
 event.sheet.package.column.choices: Choix
 event.sheet.package.column.description: Description
 event.sheet.package.column.label: Intitulé
