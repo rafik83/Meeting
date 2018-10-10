@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateException;
 use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateNomenclatureCheckboxesMustBeOfDepthOneException;
 use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateObjectMustHaveAtLeastOneSetterTagException;
+use Proximum\Vimeet\Domain\Template\Exception\UploadNotAllowedOnFirstStepOfRegistrationTemplateException;
 use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -61,6 +62,15 @@ class RegistrationTemplateValidatorTranslated
                 $this->translator->trans(
                     'template.registration.nomenclatureCheckboxesMustBeOfDepthOne',
                     ['%objectsLabel%' => implode(', ', $objectsLabel)],
+                    'templates'
+                ),
+                422
+            );
+        } catch (UploadNotAllowedOnFirstStepOfRegistrationTemplateException $exception) {
+            throw new RegistrationTemplateException(
+                $this->translator->trans(
+                    'template.registration.uploadNotAllowedOnFirstStepOfRegistrationTemplate',
+                    [],
                     'templates'
                 ),
                 422

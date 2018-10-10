@@ -71,7 +71,7 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
         ];
 
         $participant = $this->prophesize(Participant::class);
-        $participant->getIdAndFullName()->shouldBeCalled()->willReturn('1-mathieu-marchois');
+        $participant->getIdAndFullName()->shouldBeCalled()->willReturn('1-jean-paul-sartre');
         $participant->getUser()->willReturn($user->reveal());
         $participant->getData()
             ->shouldBeCalled()
@@ -84,7 +84,7 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
             ]);
 
         $participant2 = $this->prophesize(Participant::class);
-        $participant2->getIdAndFullName()->shouldBeCalled()->willReturn('2-richard-hanna');
+        $participant2->getIdAndFullName()->shouldBeCalled()->willReturn('2-simone-de-beauvoir');
         $participant2->getUser()->willReturn($user2->reveal());
         $participant2->getData()
             ->shouldBeCalled()
@@ -110,8 +110,8 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
         $sheet2->getParticipantsArray()->shouldBeCalled()->willReturn([$participant->reveal(), $participant2->reveal()]);
 
         $transliteratorAdapter->urlize([1, 'Title 1'])->shouldBeCalled()->willReturn('1-title-1');
-        $transliteratorAdapter->urlize([2, 'Title 2', '1-mathieu-marchois'])->shouldBeCalled()->willReturn('2-title-2-1-mathieu-marchois');
-        $transliteratorAdapter->urlize([2, 'Title 2', '2-richard-hanna'])->shouldBeCalled()->willReturn('2-title-2-2-richard-hanna');
+        $transliteratorAdapter->urlize([2, 'Title 2', '1-jean-paul-sartre'])->shouldBeCalled()->willReturn('2-title-2-1-jean-paul-sartre');
+        $transliteratorAdapter->urlize([2, 'Title 2', '2-simone-de-beauvoir'])->shouldBeCalled()->willReturn('2-title-2-2-simone-de-beauvoir');
 
         $handler = new GetUploadedObjectsTreeQueryHandler($templateDataFactory->reveal(), $transliteratorAdapter->reveal());
 
@@ -119,16 +119,30 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
 
         $node1 = new UploadedObjectNodeView('Mb7d3M765e-label-1');
         $node1->addUploadedObjectView(
-            new UploadedObjectView('/path/to/file1', '1-title-1.jpg', true, $sheet1->reveal())
+            new UploadedObjectView('/path/to/file1', '1-title-1.jpg', true, $sheet1->reveal(), null, true)
         );
 
         $transliteratorAdapter->urlize(['Med79Mea70', 'Label 2'])->shouldBeCalled()->willReturn('Med79Mea70-label-2');
         $node2 = new UploadedObjectNodeView('Med79Mea70-label-2');
         $node2->addUploadedObjectView(
-            new UploadedObjectView('/path/to/file2', '2-title-2-1-mathieu-marchois.jpg', false, $sheet2->reveal(), $user->reveal())
+            new UploadedObjectView(
+                '/path/to/file2',
+                '2-title-2-1-jean-paul-sartre.jpg',
+                false,
+                $sheet2->reveal(),
+                $user->reveal(),
+                false
+            )
         );
         $node2->addUploadedObjectView(
-            new UploadedObjectView('/path/to/file3', '2-title-2-2-richard-hanna.jpg', false, $sheet2->reveal(), $user2->reveal())
+            new UploadedObjectView(
+                '/path/to/file3',
+                '2-title-2-2-simone-de-beauvoir.jpg',
+                false,
+                $sheet2->reveal(),
+                $user2->reveal(),
+                false
+            )
         );
 
         $expectedResult = new UploadedObjectsTreeView();

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
-use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileException;
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
@@ -48,10 +47,7 @@ class UpdateProfileHandler
         $this->uploadFileHandler = $uploadFileHandler;
     }
 
-    /**
-     * @param UpdateProfile $updateProfile
-     */
-    public function handle(UpdateProfile $updateProfile)
+    public function handle(UpdateProfile $updateProfile): void
     {
         $participant = $updateProfile->participant;
         $participantData = $updateProfile->participant->getData();
@@ -61,20 +57,18 @@ class UpdateProfileHandler
             $templateObject = $templateData->getObject($key);
 
             if ($templateObject instanceof UploadObject) {
-                try {
-                    $participantData = $this
-                        ->uploadFileHandler
-                        ->handle(
-                            new UploadFile(
-                                $participant->getSheet()->getEvent(),
-                                $participant->getUser(),
-                                $templateObject,
-                                $participantData
-                            )
+                $participantData = $this
+                    ->uploadFileHandler
+                    ->handle(
+                        new UploadFile(
+                            $participant->getSheet(),
+                            $participant->getUser(),
+                            $templateObject,
+                            $participantData,
+                            $templateObject->hasTag(Tag::SHEET_DATA)
                         )
-                    ;
-                } catch (UploadFileException $exception) {
-                }
+                    )
+                ;
 
                 continue;
             }

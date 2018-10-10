@@ -8,44 +8,39 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\View\Sheet;
+namespace Proximum\Vimeet\Application\Command\Encryption;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class UploadedObjectView
+class Encrypt
 {
-    /** @var string */
-    public $path;
-
-    /** @var string */
-    public $filename;
-
-    /** @var bool */
-    public $crypted;
-
     /** @var Sheet */
     public $sheet;
 
-    /** @var null|User */
+    /** @var User */
     public $user;
 
     /** @var bool */
     public $isSheetData;
 
+    /** @var string */
+    public $initialFilePath;
+
+    /** @var string */
+    public $encryptedFilePath;
+
     public function __construct(
-        string $path,
-        string $filename,
-        bool $crypted,
         Sheet $sheet,
-        ?User $user,
-        bool $isSheetData
+        User $user,
+        bool $isSheetData,
+        string $initialFilePath,
+        string $encryptedFilePath
     ) {
-        $this->path = $path;
-        $this->filename = $filename;
-        $this->crypted = $crypted;
         $this->sheet = $sheet;
         $this->user = $user;
         $this->isSheetData = $isSheetData;
+        $this->initialFilePath = $initialFilePath;
+        $this->encryptedFilePath = $encryptedFilePath;
     }
 }

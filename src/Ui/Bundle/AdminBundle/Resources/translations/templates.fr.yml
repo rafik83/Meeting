@@ -53,6 +53,7 @@ template.registration.sheetTags: 'Tags de fiche'
 template.registration.tag: Tags
 template.registration.templateObjectMustHaveAtLeastOneSetterTag: 'Au moins un type d''information (tag "sheet_data" ou "participant_data") doit être assigné pour le ou les champs suivants : %objectsLabel%'
 template.registration.uploadFormatRequired: 'Au moins un format d''upload doit être sélectionné'
+template.registration.uploadNotAllowedOnFirstStepOfRegistrationTemplate: 'Il n''est pas possible d''avoir un champs d''upload ou d''image sur la première étape d''inscription'
 template.required.title: Requis
 template.sheet_template.tags: 'Tags de présentation'
 template.style.default: 'Par défaut'
