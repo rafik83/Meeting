@@ -87,16 +87,16 @@ class MeetingUpdateSlotViewQueryHandlerTest extends TestCase
             ->willReturn([$slot1, $slot2]);
 
         $spotRepository
-            ->hasSpotsForSlotAndParticipantsQuantity($slot1, 2, $meeting, null, null, false)
+            ->hasSpotsForSlotAndParticipantsQuantity($slot1, 2, $meeting, $fromSheet, $toSheet, true)
             ->shouldBeCalled()
             ->willReturn(true);
 
         $spotRepository
-            ->hasSpotsForSlotAndParticipantsQuantity($slot2, 2, $meeting, null, null, false)
+            ->hasSpotsForSlotAndParticipantsQuantity($slot2, 2, $meeting, $fromSheet, $toSheet, true)
             ->shouldBeCalled()
             ->willReturn(true);
 
-        $meetingUpdateSpotViewQuery        = new MeetingUpdateSlotViewQuery($meeting);
+        $meetingUpdateSpotViewQuery        = new MeetingUpdateSlotViewQuery($meeting, true);
         $meetingUpdateSpotViewQueryHandler = new MeetingUpdateSlotViewQueryHandler(
             $spotRepository->reveal(),
             $meetingSlotRepository->reveal()

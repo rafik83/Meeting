@@ -114,7 +114,7 @@ class UpdateSlotHandlerTest extends TestCase
         $meetingUpdateSlotViewQueryHandler = $this->prophesize(MeetingUpdateSlotViewQueryHandler::class);
 
         $meetingUpdateSlotViewQueryHandler
-            ->handle(new MeetingUpdateSlotViewQuery($meeting))
+            ->handle(new MeetingUpdateSlotViewQuery($meeting, false))
             ->shouldBeCalled()
             ->willReturn(new MeetingUpdateSlotView([67, 76]));
 
@@ -122,8 +122,8 @@ class UpdateSlotHandlerTest extends TestCase
             $slot2,
             2,
             $meeting,
-            null,
-            null,
+            $this->fromSheet,
+            $this->toSheet,
             false
         )->shouldBeCalled()->willReturn([$spot2]);
 
@@ -183,7 +183,7 @@ class UpdateSlotHandlerTest extends TestCase
 
         $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
 
-        $updateSlot = new UpdateSlot($meeting, $slot2);
+        $updateSlot = new UpdateSlot($meeting, $slot2, false);
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
@@ -220,14 +220,14 @@ class UpdateSlotHandlerTest extends TestCase
         $meetingUpdateSlotViewQueryHandler = $this->prophesize(MeetingUpdateSlotViewQueryHandler::class);
 
         $meetingUpdateSlotViewQueryHandler
-            ->handle(new MeetingUpdateSlotViewQuery($meeting))
+            ->handle(new MeetingUpdateSlotViewQuery($meeting, false))
             ->shouldBeCalled()
             // not returned 404 ($slot2)
             ->willReturn(new MeetingUpdateSlotView([67]));
 
         $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
 
-        $updateSlot = new UpdateSlot($meeting, $slot2);
+        $updateSlot = new UpdateSlot($meeting, $slot2, false);
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
@@ -266,7 +266,7 @@ class UpdateSlotHandlerTest extends TestCase
         $meetingUpdateSlotViewQueryHandler = $this->prophesize(MeetingUpdateSlotViewQueryHandler::class);
 
         $meetingUpdateSlotViewQueryHandler
-            ->handle(new MeetingUpdateSlotViewQuery($meeting))
+            ->handle(new MeetingUpdateSlotViewQuery($meeting, true))
             ->shouldBeCalled()
             ->willReturn(new MeetingUpdateSlotView([67, 76]));
 
@@ -277,12 +277,12 @@ class UpdateSlotHandlerTest extends TestCase
             $slot2,
             2,
             $meeting,
-            null,
-            null,
-            false
+            $this->fromSheet,
+            $this->toSheet,
+            true
         )->shouldBeCalled()->willReturn([]);
 
-        $updateSlot = new UpdateSlot($meeting, $slot2);
+        $updateSlot = new UpdateSlot($meeting, $slot2, true);
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
@@ -324,7 +324,7 @@ class UpdateSlotHandlerTest extends TestCase
         $meetingUpdateSlotViewQueryHandler = $this->prophesize(MeetingUpdateSlotViewQueryHandler::class);
 
         $meetingUpdateSlotViewQueryHandler
-            ->handle(new MeetingUpdateSlotViewQuery($meeting))
+            ->handle(new MeetingUpdateSlotViewQuery($meeting, true))
             ->shouldBeCalled()
             ->willReturn(new MeetingUpdateSlotView([67, 76]));
 
@@ -332,14 +332,14 @@ class UpdateSlotHandlerTest extends TestCase
             $slot2,
             2,
             $meeting,
-            null,
-            null,
-            false
+            $this->fromSheet,
+            $this->toSheet,
+            true
         )->shouldBeCalled()->willReturn([$spot2]);
 
         $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
 
-        $updateSlot = new UpdateSlot($meeting, $slot2);
+        $updateSlot = new UpdateSlot($meeting, $slot2, true);
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
