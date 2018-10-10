@@ -35,15 +35,19 @@ class TextTransformerTest extends TestCase
             ]
         ];
 
-
         $result2 = TextTransformer::transform(
-            new Field('FirstName', new ComparisonOperatorEndsWith(), 'text', 'hieu')
+            new Field('participants.firstName', new ComparisonOperatorEndsWith(), 'text', 'hieu')
         );
 
         $expectedResult2 = [
-            'query_string' => [
-                'default_field' => 'FirstName',
-                'query' => '*hieu'
+            'nested' => [
+                'path' => 'participants',
+                'query' => [
+                    'query_string' => [
+                        'default_field' => 'participants.firstName',
+                        'query' => '*hieu'
+                    ]
+                ]
             ]
         ];
 

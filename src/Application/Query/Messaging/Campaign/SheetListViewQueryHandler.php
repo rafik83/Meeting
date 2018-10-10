@@ -34,7 +34,7 @@ class SheetListViewQueryHandler
     {
         $filters = array_merge($query->filters, $this->getDefaultFilters());
 
-        return $this->sheetSearchAdapter->getSheetListView($query->event, $filters, $query->locale);
+        return $this->sheetSearchAdapter->getSheetListView($query->event, $filters, $query->locale, $query->condition);
     }
 
     /**

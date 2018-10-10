@@ -205,8 +205,7 @@ class UpdateProfileHandlerTest extends TestCase
                     'extension' => 'png',
                 ],
             ],
-            $owner = true,
-            true
+            $owner = true
         );
 
         // Mock
@@ -231,8 +230,7 @@ class UpdateProfileHandlerTest extends TestCase
             $sheetWithParticipant,
             $user,
             $resultParticipant,
-            $owner = true,
-            true
+            $owner = true
         );
 
         $uploadFileHandler
@@ -484,8 +482,7 @@ class UpdateProfileHandlerTest extends TestCase
                 '1efb9cbb' => ['telephone' => '+11111111'],
                 '3b759fbb' => ['telephone' => '+22222222'],
             ],
-            $owner = true,
-            true
+            $owner = true
         );
 
         // Mock
@@ -504,8 +501,7 @@ class UpdateProfileHandlerTest extends TestCase
                 '1efb9cbb' => ['telephone' => 'phone'],
                 '3b759fbb' => ['telephone' => 'mobile'],
             ],
-            $owner = true,
-            true
+            $owner = true
         );
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();

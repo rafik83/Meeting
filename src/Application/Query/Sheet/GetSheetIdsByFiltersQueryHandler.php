@@ -28,7 +28,8 @@ class GetSheetIdsByFiltersQueryHandler
         return $this->sheetSearchAdapter->getSheetIdsView(
             $query->event,
             $query->filters,
-            $query->locale
+            $query->locale,
+            $query->condition
         );
     }
 }

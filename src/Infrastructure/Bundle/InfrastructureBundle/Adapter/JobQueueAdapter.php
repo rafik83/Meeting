@@ -39,7 +39,6 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\Exp
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Participant\Export\ExportParticipantCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningAndBadgeCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
@@ -63,7 +62,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function printPlanning(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale): void
+    public function printPlanning(Event\ExtraData $extraData, string $orderBy, string $emailToNotify, string $locale, bool $withBadge = false): void
     {
         $job = new Job(
             GeneratePlanningCommand::NAME,
@@ -72,24 +71,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 sprintf('--orderBy=%s', $orderBy),
                 sprintf('--emailToNotify=%s', $emailToNotify),
                 sprintf('--locale=%s', $locale),
-            ]
-        );
-
-        $this->setJob($job);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function printPlanningAndBadge(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale): void
-    {
-        $job = new Job(
-            GeneratePlanningAndBadgeCommand::NAME,
-            [
-                sprintf('--sheetIdsExtraData=%s', $extraData->getId()),
-                sprintf('--orderBy=%s', $orderBy),
-                sprintf('--emailToNotify=%s', $emailToNotify),
-                sprintf('--locale=%s', $locale),
+                sprintf('--withBadge=%s', (int)$withBadge),
             ]
         );
 
@@ -436,18 +418,6 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             $admin->getId(),
         ]);
 
-        $this->setJob($job);
-    }
-
-    public function toggleParticipantVisioForEvent(Event $event, bool $visio): void
-    {
-        $job = new Job(
-            ToggleParticipantVisioCommand::NAME,
-            [
-                $event->getId(),
-                (int) $visio,
-            ]
-        );
         $this->setJob($job);
     }
 }

@@ -369,12 +369,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Event\VisioUpdatedEventSubscriber:
-        arguments:
-            - '@adapter.job_queue_adapter'
-        tags:
-            - { name: kernel.event_subscriber }
-
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Event\VisioCheckinSubscriber:
         arguments:
             - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
@@ -384,6 +378,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@security.token_storage'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
         tags:
             - { name: kernel.event_subscriber }
 

@@ -106,6 +106,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@vimeet_infrastructure.repository.happening_repository'
 
     #
     # Meeting
@@ -115,6 +116,7 @@ services:
             - '@template.participant_info_guesser'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
             - '@Proximum\Vimeet\Domain\Meeting\IsParticipantPresentToMeeting'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     Proximum\Vimeet\Application\Query\Meeting\Admin\ListMeeting\MeetingViewQueryHandler:
         arguments:
@@ -147,3 +149,13 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transactional\Mail\TransactionalMailListViewQuery }
+
+    #
+    # Scan
+    #
+    #### Happening
+    Proximum\Vimeet\Application\Query\Scan\Happening\ListViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Scan\Happening\ListViewQuery }

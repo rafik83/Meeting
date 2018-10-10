@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\MailRecipientInterface;
 use Proximum\Vimeet\Domain\Model\Messaging\Compose;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
@@ -164,6 +165,8 @@ class SubstitutionsProvider
                 return $recipient->getFullname();
             case Compose::TAG_SHEET_PLANNING:
                 return $this->handleSheetPlanning($sheet, $locale, $recipient);
+            case Compose::TAG_SHEET_SPOT:
+                return $sheet->hasSpot() ? $sheet->getSpot()->getReference() : '';
             case Compose::TAG_CTA_AGENDA_CONFIRMATION:
                 return $this->agendaConfirmationCTASubstitution->getCTA($recipient, $sheet, $locale);
             case Compose::TAG_CTA_TEST_VISIO_CONFIGURATION:

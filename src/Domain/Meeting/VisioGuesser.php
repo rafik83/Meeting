@@ -13,9 +13,18 @@ namespace Proximum\Vimeet\Domain\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 
 class VisioGuesser
 {
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
+    public function __construct(IsParticipantVisio $isParticipantVisio)
+    {
+        $this->isParticipantVisio = $isParticipantVisio;
+    }
+
     /**
      * @param Meeting $meeting
      *
@@ -40,15 +49,10 @@ class VisioGuesser
         return $this->isParticipantVisio($participants);
     }
 
-    /**
-     * @param Participant[] $participants
-     *
-     * @return bool
-     */
-    public function isParticipantVisio(array $participants)
+    public function isParticipantVisio(array $participants): bool
     {
         foreach ($participants as $participant) {
-            if ($participant->isVisio()) {
+            if ($this->isParticipantVisio->isSatisfiedBy($participant)) {
                 return true;
             }
         }

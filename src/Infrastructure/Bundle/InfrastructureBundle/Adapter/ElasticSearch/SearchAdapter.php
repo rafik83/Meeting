@@ -11,6 +11,9 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch;
 
 use Elastica\Client;
+use Elastica\Query;
+use Elastica\ResultSet;
+use Elastica\Search;
 
 class SearchAdapter
 {
@@ -26,9 +29,9 @@ class SearchAdapter
         $this->index = $index;
     }
 
-    public function handleQuery(string $type, \Elastica\Query $query): \Elastica\ResultSet
+    public function handleQuery(string $type, Query $query): ResultSet
     {
-        $search = new \Elastica\Search($this->client);
+        $search = new Search($this->client);
         $search->addIndex($this->index);
         $search->addType($type);
         $search->setQuery($query);

@@ -47,7 +47,8 @@ class ParticipantListViewNormalizerTest extends TestCase
                 'AZERTY1' => 'content1',
                 'AZERTY2' => 'content2',
                 'AZERTY3' => 'content4',
-            ]
+            ],
+            []
         );
 
         $participantView = new ParticipantView(
@@ -72,7 +73,8 @@ class ParticipantListViewNormalizerTest extends TestCase
             [
                 'AZERTY1' => 'content1',
                 'AZERTY8' => 'content8',
-            ]
+            ],
+            []
         );
 
         $participantListView = new ParticipantListView(
@@ -102,9 +104,9 @@ class ParticipantListViewNormalizerTest extends TestCase
                 'option_126' => 'option product 3',
                 'option_127' => 'option product 4',
                 'option_128' => 'option product 5',
-            ]
+            ],
+            []
         );
-
 
         $translator = new Translator('fr');
         $translatorAdapter = new TranslatorAdapter($translator);
@@ -123,10 +125,10 @@ class ParticipantListViewNormalizerTest extends TestCase
         );
         $result = $serializer->serialize($participantListView, 'csv');
 
-        $expected = "sheet_id,participant_type,sheet_name,sheet_enable,user_id,participant_id,participant_email,participant_created_at,happening_subscriber,participation_paid,day_123,participant_122,participant_123,option_124,option_125,option_126,option_127,option_128,AZERTY1,AZERTY2,AZERTY3,AZERTY4,AZERTY5,AZERTY6,AZERTY7,AZERTY8
-admin.participant.export.fields.sheet_id,admin.participant.export.fields.participant_type,admin.participant.export.fields.sheet_name,admin.participant.export.fields.sheet_enable,admin.participant.export.fields.user_id,admin.participant.export.fields.participant_id,admin.participant.export.fields.participant_email,admin.participant.export.fields.participant_created_at,admin.participant.export.fields.happening_subscriber,admin.participant.export.fields.participation_paid,admin.participant.export.fields.day_checkin,\"participant product 1\",\"participant product 2\",\"option product 1\",\"option product 2\",\"option product 3\",\"option product 4\",\"option product 5\",\"Field 1\",\"Field 2\",\"Field 3\",\"Field 4\",\"Field 5\",\"Field 6\",\"Field 7\",\"Field 8\"
-124,typeTitle1,sheetTitle1,admin.participant.export.yes,1244,12445,email1@example.net,10/10/2017,admin.participant.export.yes,admin.participant.export.fields.participation_paid.paid,,admin.participant.export.no,admin.participant.export.no,admin.participant.export.yes,admin.participant.export.no,admin.participant.export.no,admin.participant.export.yes,admin.participant.export.no,content1,,,,,,,content8
-123,typeTitle1,sheetTitle1,admin.participant.export.yes,1234,12345,email1@example.net,10/10/2017,admin.participant.export.yes,admin.participant.export.fields.participation_paid.paid,\"10/10/2018 10:00\",admin.participant.export.no,admin.participant.export.yes,admin.participant.export.yes,admin.participant.export.yes,admin.participant.export.no,admin.participant.export.no,admin.participant.export.no,content1,content2,content4,,,,,
+        $expected = "sheet_id,participant_type,sheet_name,sheet_enable,user_id,participant_id,participant_email,participant_created_at,happening_subscriber,participation_paid,AZERTY1,AZERTY2,AZERTY3,AZERTY4,AZERTY5,AZERTY6,AZERTY7,AZERTY8,day_123,participant_122,participant_123,option_124,option_125,option_126,option_127,option_128
+admin.participant.export.fields.sheet_id,admin.participant.export.fields.participant_type,admin.participant.export.fields.sheet_name,admin.participant.export.fields.sheet_enable,admin.participant.export.fields.user_id,admin.participant.export.fields.participant_id,admin.participant.export.fields.participant_email,admin.participant.export.fields.participant_created_at,admin.participant.export.fields.happening_subscriber,admin.participant.export.fields.participation_paid,\"Field 1\",\"Field 2\",\"Field 3\",\"Field 4\",\"Field 5\",\"Field 6\",\"Field 7\",\"Field 8\",admin.participant.export.fields.day_checkin,\"participant product 1\",\"participant product 2\",\"option product 1\",\"option product 2\",\"option product 3\",\"option product 4\",\"option product 5\"
+124,typeTitle1,sheetTitle1,admin.participant.export.yes,1244,12445,email1@example.net,10/10/2017,admin.participant.export.yes,admin.participant.export.fields.participation_paid.paid,content1,,,,,,,content8,,admin.participant.export.no,admin.participant.export.no,admin.participant.export.yes,admin.participant.export.no,admin.participant.export.no,admin.participant.export.yes,admin.participant.export.no
+123,typeTitle1,sheetTitle1,admin.participant.export.yes,1234,12345,email1@example.net,10/10/2017,admin.participant.export.yes,admin.participant.export.fields.participation_paid.paid,content1,content2,content4,,,,,,\"10/10/2018 10:00\",admin.participant.export.no,admin.participant.export.yes,admin.participant.export.yes,admin.participant.export.yes,admin.participant.export.no,admin.participant.export.no,admin.participant.export.no
 ";
 
         $this->assertEquals($expected, $result);

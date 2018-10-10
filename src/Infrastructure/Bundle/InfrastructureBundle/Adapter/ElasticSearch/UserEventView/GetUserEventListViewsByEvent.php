@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
+use Elastica\Query;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\UserEventView\GetUserEventListViewsByEventInterface;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\ConditionRulesTransformerInterface;
 use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
@@ -17,7 +19,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter;
-use Proximum\Vimeet\Infrastructure\Elastica\Persister\TypesMapping;
 
 class GetUserEventListViewsByEvent implements GetUserEventListViewsByEventInterface
 {
@@ -42,28 +43,29 @@ class GetUserEventListViewsByEvent implements GetUserEventListViewsByEventInterf
 
     public function handle(Event $event, int $page, string $locale, ?Condition $condition): PaginatedResult
     {
-        $initialQuery[] = [
+        $conditions = [];
+        $conditions[] = [
             'term' => [
-                'eventId' => [
+                TypesMapping::USER_EVENT_VIEW_EVENT_ID => [
                     'value' => $event->getId(),
                 ],
             ],
         ];
 
         if ($condition) {
-            $initialQuery[] = $this->conditionRulesTransformer->transform($condition);
+            $conditions[] = $this->conditionRulesTransformer->transform($condition);
         }
 
-        $query = new \Elastica\Query(
+        $query = new Query(
             [
                 'query' => [
                     'bool' => [
-                        'must' => $initialQuery,
+                        'must' => $conditions,
                     ],
                 ],
                 'sort' => [
-                    ['lastName' => 'asc'],
-                    ['firstName' => 'asc'],
+                    [TypesMapping::USER_EVENT_VIEW_LASTNAME => 'asc'],
+                    [TypesMapping::USER_EVENT_VIEW_FIRSTNAME => 'asc'],
                 ],
                 'from' => ($page - 1) * self::RESULTS_NUMBER_BY_PAGE,
                 'size' => self::RESULTS_NUMBER_BY_PAGE,

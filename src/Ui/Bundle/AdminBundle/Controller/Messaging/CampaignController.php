@@ -10,13 +10,17 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectMessage;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SelectRecipients;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Send;
+use Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery;
+use Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery;
+use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\CreateCampaignType;
@@ -66,7 +70,16 @@ class CampaignController extends Controller
             $filters = $filterForm->getData();
         }
 
-        $query = new SheetListViewQuery($event, $filters, $locale);
+        $rules = null;
+        if ($request->query->get('rules')) {
+            $rules = $this->get(QueryBusInterface::class)->handle(
+                new GetConditionRulesQuery(
+                    json_decode($request->query->get('rules'), true)
+                )
+            );
+        }
+
+        $query = new SheetListViewQuery($event, $filters, $locale, $rules);
         $sheets = $this->get('tactician.commandbus.query')->handle($query);
         $filterFormView = $filterForm->createView();
 
@@ -87,9 +100,15 @@ class CampaignController extends Controller
             ]);
         }
 
+        $filters = $this->get(QueryBusInterface::class)
+            ->handle(new GetFiltersByTypeAndLocaleQuery('sheet', $request->getLocale()));
+
         return $this->render('AdminBundle:Messaging\Campaign:select_sheets.html.twig', [
             'event' => $event,
             'sheets' => $sheets,
+            'filters' => $filters,
+            'locale' => $request->getLocale(),
+            'rules' => $request->query->get('rules'),
             'filter_form' => $filterFormView,
             'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $event, $locale),
             'create_campaign_form' => $createCampaignForm->createView(),

@@ -105,8 +105,7 @@ class UpdateAvatarHandlerTest extends TestCase
                 '541f84d4' => ['text' => 'truc'],
                 'cb66008e' => ['image' => ''],
             ],
-            $owner = true,
-            true
+            $owner = true
         );
 
         // Mock
@@ -122,8 +121,7 @@ class UpdateAvatarHandlerTest extends TestCase
                 '541f84d4' => ['text' => 'foo'],
                 'cb66008e' => ['image' => 'path/to/file'],
             ],
-            $owner = true,
-            true
+            $owner = true
         );
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
@@ -241,8 +239,7 @@ class UpdateAvatarHandlerTest extends TestCase
                 '541f84d4' => ['text' => 'truc'],
                 'cb66008e' => ['image' => ''],
             ],
-            $owner = true,
-            true
+            $owner = true
         );
 
         // Mock
@@ -258,8 +255,7 @@ class UpdateAvatarHandlerTest extends TestCase
                 '541f84d4' => ['text' => 'foo'],
                 'cb66008e' => ['image' => 'path/to/file'],
             ],
-            $owner = true,
-            true
+            $owner = true
         );
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();

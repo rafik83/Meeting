@@ -89,6 +89,29 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function getExtraDataForEventIdAndNameIndexedByUserId(int $eventId, string $name): array
+    {
+        /** @var ExtraData[] $results */
+        $results = $this->entityManager->createQueryBuilder()
+            ->select('extraData')
+            ->from(ExtraData::class, 'extraData')
+            ->where('extraData.event = :eventId')
+            ->andWhere('extraData.name = :name')
+            ->setParameter('eventId', $eventId)
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $extraDataIndexedByUserId = [];
+
+        foreach ($results as $result) {
+            $extraDataIndexedByUserId[$result->getUser()->getId()] = $result;
+        }
+
+        return $extraDataIndexedByUserId;
+    }
+
     /**
      * {@inheritdoc}
      */

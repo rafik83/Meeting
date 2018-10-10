@@ -54,6 +54,9 @@ class ParticipantView
     /** @var string[] */
     public $daysChecking;
 
+    /** @var string[] */
+    public $happeningChecking;
+
     public function __construct(
         int $sheetId,
         string $typeTitle,
@@ -68,7 +71,8 @@ class ParticipantView
         ?int $participantProductId,
         array $daysChecking,
         array $attributableProducts,
-        array $registrationData
+        array $registrationData,
+        array $happeningChecking
     ) {
         $this->sheetId = $sheetId;
         $this->typeTitle = $typeTitle;
@@ -84,5 +88,6 @@ class ParticipantView
         $this->attributableProducts = $attributableProducts;
         $this->registrationData = $registrationData;
         $this->daysChecking = $daysChecking;
+        $this->happeningChecking = $happeningChecking;
     }
 }

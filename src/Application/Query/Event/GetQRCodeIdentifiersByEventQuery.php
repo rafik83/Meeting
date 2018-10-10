@@ -21,9 +21,16 @@ class GetQRCodeIdentifiersByEventQuery implements Query
     /** @var string */
     public $locale;
 
-    public function __construct(Event $event, string $locale)
-    {
+    /** @var bool */
+    public $getPreviousScan;
+
+    public function __construct(
+        Event $event,
+        string $locale,
+        bool $getPreviousScan = true
+    ) {
         $this->event = $event;
         $this->locale = $locale;
+        $this->getPreviousScan = $getPreviousScan;
     }
 }

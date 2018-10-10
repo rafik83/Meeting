@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input;
 
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\NestedQueryTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
@@ -37,6 +38,8 @@ class NullableTransformer implements InputTransformerInterface
                 ],
             ],
         ];
+
+        $query = NestedQueryTransformer::transformIfNeeded($field, $query);
 
         return $query;
     }

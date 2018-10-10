@@ -12,10 +12,11 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\User\Event\ScanCommand;
+use Proximum\Vimeet\Application\Command\User\Event\ScanEventEntranceCommand;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -45,13 +46,17 @@ class CheckInAction
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
     public function __construct(
         DDayGuesser $dayGuesser,
         EngineInterface $engine,
         CommandBusInterface $commandBus,
         UrlGeneratorInterface $urlGenerator,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->dayGuesser = $dayGuesser;
         $this->engine = $engine;
@@ -59,6 +64,7 @@ class CheckInAction
         $this->urlGenerator = $urlGenerator;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->dateTime = $dateTime;
+        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     public function __invoke(Request $request, Sheet $sheet, UserDomain $userDomain): Response
@@ -69,14 +75,14 @@ class CheckInAction
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
             || !$participant instanceof Participant
-            || !$participant->isVisio()
+            || !$this->isParticipantVisio->isSatisfiedBy($participant)
             || false === $this->dayGuesser->isItDDay($event)) {
             throw new AccessDeniedException();
         }
 
         if ('POST' === $request->getMethod()) {
             $this->commandBus->handle(
-                new ScanCommand(
+                new ScanEventEntranceCommand(
                     $event,
                     $userDomain->getUser(),
                     $this->dateTime

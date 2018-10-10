@@ -1,31 +1,49 @@
-function ToggleVisibility(element, document)
+function ToggleVisibility(element)
 {
     this.element = element;
-    this.elementToHideId = this.element.getAttribute('data-element-id-to-hide');
-    this.elementClickableToHide = this.element.getAttribute('data-element-clickable-to-hide');
-    this.elementToHide = document.getElementById(this.elementToHideId);
+    this.hideButton = this.element.querySelector('[data-toggle-visibility-hide]');
+    this.showButton = this.element.querySelector('[data-toggle-visibility-show]');
+    this.elementToOpen = this.element.querySelector('[data-toggle-visibility-element-to-open]');
     this.displayType = this.element.getAttribute('data-toggle-visibility-display-type');
 
     if (this.displayType === 'undefined' || this.displayType === null) {
         this.displayType = 'block';
     }
 
-    this.element.addEventListener('click', this.onClick.bind(this));
+    this.showButton.addEventListener('click', this.handleShow.bind(this));
+    this.hideButton.addEventListener('click', this.handleHide.bind(this));
 }
 
-ToggleVisibility.prototype.onClick = function (event)
+ToggleVisibility.prototype.handleShow = function (event)
 {
     event.preventDefault();
 
-    if (this.elementToHide.style.display === 'none') {
-        this.elementToHide.style.display = this.displayType;
-    } else {
-        this.elementToHide.style.display = 'none';
-    }
+    this.show(this.elementToOpen);
+    this.hide(this.showButton);
+    this.show(this.hideButton);
+};
 
-    if (this.elementClickableToHide === 'true') {
-        this.element.style.display = 'none';
-    }
+ToggleVisibility.prototype.handleHide = function (event)
+{
+    event.preventDefault();
+
+    this.hide(this.elementToOpen);
+    this.hide(this.hideButton);
+    this.show(this.showButton);
+};
+
+ToggleVisibility.prototype.show = function (element)
+{
+    if (!element) return;
+
+    element.style.display = this.displayType;
+};
+
+ToggleVisibility.prototype.hide = function (element)
+{
+    if (!element) return;
+
+    element.style.display = 'none';
 };
 
 module.exports = ToggleVisibility;

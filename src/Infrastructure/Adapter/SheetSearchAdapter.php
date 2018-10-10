@@ -27,6 +27,9 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\ConditionRulesTransformerInterface;
+use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
+use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
@@ -35,22 +38,25 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ForeignCh
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
-    const NOMENCLATURE_ITEMS_WEIGHT = 1.1;
+    public const NOMENCLATURE_ITEMS_WEIGHT = 1.1;
 
-    /**
-     * @var PaginatedFinderInterface Elastica finder
-     */
+    /** @var PaginatedFinderInterface Elastica finder */
     private $finder;
 
-    /**
-     * @var SearchableInterface
-     */
+    /** @var SearchableInterface */
     private $searchable;
 
-    public function __construct(PaginatedFinderInterface $finder, SearchableInterface $searchable)
-    {
-        $this->finder     = $finder;
+    /** @var ConditionRulesTransformerInterface */
+    private $conditionRulesTransformer;
+
+    public function __construct(
+        PaginatedFinderInterface $finder,
+        SearchableInterface $searchable,
+        ConditionRulesTransformerInterface $conditionRulesTransformer
+    ) {
+        $this->finder = $finder;
         $this->searchable = $searchable;
+        $this->conditionRulesTransformer = $conditionRulesTransformer;
     }
 
     /**
@@ -162,7 +168,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         bool $getAggregations,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?RuleInterface $condition = null
     ): PaginatedResult {
         $query = $this->getQueryToFind(
             $event,
@@ -185,6 +192,14 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             );
         }
 
+        $queryToArray = $query->toArray();
+        if ($condition instanceof Condition) {
+            $queryToArray['query']['bool']['must'][] = $this->conditionRulesTransformer->transform($condition);
+        }
+
+        $query = new Query();
+        $query->setRawQuery($queryToArray);
+
         try {
             $result = $this->finder->findPaginated($query)->setMaxPerPage($limit)->setCurrentPage($page);
         } catch (NotValidCurrentPageException $exception) {
@@ -206,10 +221,17 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetIds(Event $event, array $filters, string $locale): array
+    public function getSheetIds(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): array
     {
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
-        $query   = new Query($builder->getQuery());
+
+        $queryToArray = ['query' => $builder->getQuery()->toArray()];
+        if ($condition instanceof Condition) {
+            $queryToArray['query']['bool']['must'][] = $this->conditionRulesTransformer->transform($condition);
+        }
+
+        $query = new Query();
+        $query->setRawQuery($queryToArray);
         $query->setFields(['id']);
 
         return array_map(function (Result $sheet) {
@@ -220,9 +242,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetListView(Event $event, array $filters, string $locale): array
+    public function getSheetListView(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): array
     {
-        $results = $this->getSearchResults($event, $filters, $locale);
+        $results = $this->getSearchResults($event, $filters, $locale, $condition);
 
         return array_map(function (Result $result) {
             return new SheetListView($result->id, $result->sheetName, $result->ownerEmail);
@@ -232,9 +254,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetIdsView(Event $event, array $filters, string $locale): SheetIdsView
+    public function getSheetIdsView(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): SheetIdsView
     {
-        $results = $this->getSearchResults($event, $filters, $locale);
+        $results = $this->getSearchResults($event, $filters, $locale, $condition);
 
         $sheetIds = array_map(function (Result $result) {
             return $result->id;
@@ -430,14 +452,21 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      * @param Event  $event
      * @param array  $filters
      * @param string $locale
+     * @param null|RuleInterface $condition
      *
      * @return Result[]
      */
-    private function getSearchResults(Event $event, array $filters, string $locale): array
+    private function getSearchResults(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): array
     {
         $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+        $queryToArray = ['query' => $builder->getQuery()->toArray()];
 
-        $query = new Query($builder->getQuery());
+        if ($condition instanceof Condition) {
+            $queryToArray['query']['bool']['must'][] = $this->conditionRulesTransformer->transform($condition);
+        }
+
+        $query = new Query();
+        $query->setRawQuery($queryToArray);
         $query->addSort(['sheetName' => 'asc']);
 
         $options = ['size' => ElasticSearchConstant::LONG_RESULTS_NUMBER];

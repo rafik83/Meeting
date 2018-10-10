@@ -56,11 +56,6 @@ class Participant implements MailRecipientInterface
     private $imported = false;
 
     /**
-     * @var bool
-     */
-    private $visio = false;
-
-    /**
      * The participant is assigned to accepted request
      *
      * @var bool
@@ -80,20 +75,12 @@ class Participant implements MailRecipientInterface
     /** @var string */
     private $timezone;
 
-    /**
-     * @param Sheet $sheet
-     * @param User  $user
-     * @param array $data
-     * @param bool  $active
-     * @param bool  $visio
-     */
-    public function __construct(Sheet $sheet, User $user, array $data, $active, bool $visio = false)
+    public function __construct(Sheet $sheet, User $user, array $data, $active)
     {
         $this->sheet  = $sheet;
         $this->user   = $user;
         $this->data   = $data;
         $this->active = $active;
-        $this->visio = $visio;
     }
 
     /**
@@ -260,22 +247,6 @@ class Participant implements MailRecipientInterface
     }
 
     /**
-     * @return bool
-     */
-    public function isVisio()
-    {
-        return $this->visio;
-    }
-
-    /**
-     * @param bool $visio
-     */
-    public function setVisio($visio)
-    {
-        $this->visio = $visio;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getFullname()
@@ -370,8 +341,7 @@ class Participant implements MailRecipientInterface
             $sheet,
             $participant->getUser(),
             $participant->getData(),
-            $participant->isActive(),
-            $sheet->getEvent()->getConfiguration()->isVisio()
+            $participant->isActive()
         );
 
         $duplicatedParticipant->setImported(true);

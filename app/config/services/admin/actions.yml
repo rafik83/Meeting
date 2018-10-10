@@ -258,8 +258,9 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.session'
             - '@router'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface'
 
-    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction:
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanEventEntranceAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
@@ -418,6 +419,7 @@ services:
             - '@adapter.job_queue_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DownloadUploadedObjectsZipAction:
         arguments:
@@ -449,6 +451,7 @@ services:
             - '@adapter.authorization_checker'
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@datetime'
 
     #
     # OMZ
@@ -566,6 +569,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
             - '@session.flash_bag'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface'
 
     #
     # Order
@@ -589,6 +593,7 @@ services:
             - '@router'
             - '@adapter.authorization_checker'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
     # Meeting
@@ -597,6 +602,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Adapter\CommandBusInterface'
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
     # Transactional
@@ -638,3 +644,26 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
             - '@security.csrf.token_manager'
             - '@session.flash_bag'
+
+    #
+    # Scan
+    #
+    #### Happening
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\ListAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.authorization_checker'
+            - '@templating.engine.twig'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\QrCodeAction:
+        arguments:
+        - '@templating.engine.twig'
+        - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+        - '@adapter.authorization_checker'
+        - '@datetime'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\ScanAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.authorization_checker'

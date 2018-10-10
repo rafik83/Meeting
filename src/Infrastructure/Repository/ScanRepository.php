@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\Scan;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
+use Proximum\Vimeet\Domain\Scan\Type;
 
 class ScanRepository implements ScanRepositoryInterface
 {
@@ -50,12 +51,14 @@ class ScanRepository implements ScanRepositoryInterface
                 ->from(Scan::class, 'scan')
                 ->where('scan.event = :event')
                 ->andWhere('scan.user = :user')
+                ->andWhere('scan.type = :type')
                 ->andWhere('scan.scannedAt >= :startAt and scan.scannedAt <= :endAt')
                 ->setParameters([
                     'event' => $event,
                     'user' => $user,
                     'startAt' => $begin,
                     'endAt' => $end,
+                    'type' => Type::TYPE_EVENT_ENTRANCE,
                 ])
                 ->addOrderBy('scan.createdAt', 'asc')
                 ->setMaxResults(1)
@@ -80,12 +83,14 @@ class ScanRepository implements ScanRepositoryInterface
                 ->from(Scan::class, 'scan')
                 ->where('scan.event = :event')
                 ->andWhere('scan.user = :user')
+                ->andWhere('scan.type = :type')
                 ->andWhere('scan.scannedAt >= :startAt and scan.scannedAt <= :endAt')
                 ->setParameters([
                     'event' => $event,
                     'user' => $user,
                     'startAt' => $begin,
                     'endAt' => $end,
+                    'type' => Type::TYPE_EVENT_ENTRANCE,
                 ])
                 ->getQuery()
                 ->getSingleScalarResult() > 0;
@@ -107,12 +112,14 @@ class ScanRepository implements ScanRepositoryInterface
                 ->from(Scan::class, 'scan')
                 ->where('scan.event = :event')
                 ->andWhere('scan.user in (:users)')
+                ->andWhere('scan.type = :type')
                 ->andWhere('scan.scannedAt >= :startAt and scan.scannedAt <= :endAt')
                 ->setParameters([
                     'event' => $event,
                     'users' => $users,
                     'startAt' => $begin,
                     'endAt' => $end,
+                    'type' => Type::TYPE_EVENT_ENTRANCE,
                 ])
                 ->getQuery()
                 ->getResult();
@@ -129,9 +136,13 @@ class ScanRepository implements ScanRepositoryInterface
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool
     {
         $begin = (new \DateTime())
-            ->setTimestamp($meetingSlot->getBegin()->getTimestamp());
+            ->setTimestamp($meetingSlot->getBegin()->getTimestamp())
+            ->setTime(0, 0, 0)
+        ;
         $end = (new \DateTime())
-            ->setTimestamp($meetingSlot->getEnd()->getTimestamp());
+            ->setTimestamp($meetingSlot->getEnd()->getTimestamp())
+            ->setTime(23, 59, 59)
+        ;
 
         return
             (int) $this->entityManager->createQueryBuilder()
@@ -139,14 +150,66 @@ class ScanRepository implements ScanRepositoryInterface
             ->from(Scan::class, 'scan')
             ->where('scan.event = :event')
             ->andWhere('scan.user = :user')
+            ->andWhere('scan.type = :type')
             ->andWhere('scan.scannedAt >= :startAt and scan.scannedAt <= :endAt')
             ->setParameters([
                 'event' => $event,
                 'user' => $user,
-                'startAt' => $begin->setTime(0, 0, 0),
-                'endAt' => $end->setTime(23, 59, 59),
+                'startAt' => $begin,
+                'endAt' => $end,
+                'type' => Type::TYPE_EVENT_ENTRANCE,
             ])
             ->getQuery()
             ->getSingleScalarResult() > 0;
+    }
+
+    public function hasScanForUserEventTypeAndObjectId(
+        User $user,
+        Event $event,
+        string $scanType,
+        int $objectId
+    ): bool {
+        return $this->entityManager->createQueryBuilder()
+                ->select('count(scan.id)')
+                ->from(Scan::class, 'scan')
+                ->where('scan.event = :event')
+                ->andWhere('scan.user = :user')
+                ->andWhere('scan.type = :type')
+                ->andWhere('scan.objectId = :objectId')
+                ->setParameters([
+                    'event' => $event,
+                    'user' => $user,
+                    'type' => $scanType,
+                    'objectId' => $objectId,
+                ])
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getSingleScalarResult() > 1
+        ;
+    }
+
+    public function getScanForUserEventTypeAndObjectId(
+        User $user,
+        Event $event,
+        string $scanType,
+        int $objectId
+    ): ?Scan {
+        return $this->entityManager->createQueryBuilder()
+            ->select('scan')
+            ->from(Scan::class, 'scan')
+            ->where('scan.event = :event')
+            ->andWhere('scan.user = :user')
+            ->andWhere('scan.type = :type')
+            ->andWhere('scan.objectId = :objectId')
+            ->setParameters([
+                'event' => $event,
+                'user' => $user,
+                'type' => $scanType,
+                'objectId' => $objectId,
+            ])
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 }

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Event\Event\LocaleChangedEvent;
-use Proximum\Vimeet\Application\Event\Event\VisioUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
@@ -74,13 +73,6 @@ class UpdateHandler
             $update->disabledEmailChanging,
             $update->disabledPasswordChanging
         );
-
-        if ($event->getConfiguration()->isVisio() !== $update->visio) {
-            $this->eventDispatcher->dispatch(
-                Events::EVENT_VISIO_UPDATED,
-                new VisioUpdatedEvent($update)
-            );
-        }
 
         $event->getConfiguration()->setVisio($update->visio);
 

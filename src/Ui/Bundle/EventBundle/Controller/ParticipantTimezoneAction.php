@@ -43,18 +43,23 @@ class ParticipantTimezoneAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
+    /** @var GetTimezoneHelper */
+    private $getTimezoneHelper;
+
     public function __construct(
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         UrlGeneratorInterface $urlGenerator,
-        AuthorizationCheckerAdapterInterface $authorizationChecker
+        AuthorizationCheckerAdapterInterface $authorizationChecker,
+        GetTimezoneHelper $getTimezoneHelper
     ) {
         $this->engine = $engine;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->urlGenerator = $urlGenerator;
         $this->authorizationChecker = $authorizationChecker;
+        $this->getTimezoneHelper = $getTimezoneHelper;
     }
 
     public function __invoke(Request $request, Sheet $sheet, Participant $participant): Response
@@ -64,7 +69,7 @@ class ParticipantTimezoneAction
             throw new AccessDeniedException();
         }
 
-        $timezone = GetTimezoneHelper::getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
+        $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
         $command = new ParticipantTimezone($participant, $timezone);
         $form = $this->formFactory->create(ParticipantTimezoneType::class, $command);
 

@@ -31,14 +31,19 @@ class QRCodeReaderAction
     /** @var QueryBusInterface */
     private $queryBus;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         EngineInterface $engine,
-        QueryBusInterface $queryBus
+        QueryBusInterface $queryBus,
+        \DateTimeInterface $dateTime
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
+        $this->dateTime = $dateTime;
     }
 
     public function __invoke(Request $request, Event $event): Response
@@ -59,6 +64,7 @@ class QRCodeReaderAction
             $this->engine->render('@Admin/Event/qrCodeReader.html.twig', [
                 'event' => $event,
                 'identifiers' => $identifiers->list,
+                'date' => $this->dateTime,
             ])
         );
     }

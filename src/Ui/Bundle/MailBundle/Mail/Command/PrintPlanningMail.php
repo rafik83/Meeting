@@ -39,15 +39,9 @@ class PrintPlanningMail extends AbstractMail
     /** @var int */
     public $fileId;
 
-    /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param string $fileHash
-     * @param int    $fileId
-     * @param string $orderBy
-     */
+    /** @var bool */
+    public $withBadge;
+
     public function __construct(
         Event $event,
         $sender,
@@ -55,13 +49,15 @@ class PrintPlanningMail extends AbstractMail
         $locale,
         $fileHash,
         $fileId,
-        $orderBy
+        $orderBy,
+        bool $withBadge = false
     ) {
         parent::__construct($sender, $receiver, $locale);
 
-        $this->event     = $event;
-        $this->fileHash  = $fileHash;
-        $this->fileId    = $fileId;
-        $this->orderBy   = $orderBy;
+        $this->event = $event;
+        $this->fileHash = $fileHash;
+        $this->fileId = $fileId;
+        $this->orderBy = $orderBy;
+        $this->withBadge = $withBadge;
     }
 }

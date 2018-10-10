@@ -1,17 +1,19 @@
 {% import "MailBundle:Mail:macros.html.twig" as macros %}
 <html>
 <body>
-{{ 'mail.planning.print.intro'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% set transKey = mail.withBadge ? 'printWithBadge' : 'print'  %}
+
+{{ ('mail.planning.'~ transKey ~'.intro')|trans({}, 'mail', mail.locale)|html|nl2br }}
 <br>
 {{ 'mail.planning.print.orderBy.text'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {{ ('mail.planning.print.orderBy.' ~ mail.orderBy)|trans({}, 'mail', mail.locale)|html|nl2br }}
 
 <br>
 
-{{ 'mail.planning.print.link.intro'|trans({}, 'mail', mail.locale)|html|nl2br }}<br>
+{{ ('mail.planning.'~ transKey ~'.link.intro')|trans({}, 'mail', mail.locale)|html|nl2br }}<br>
 
 {{ macros.button(
-    'mail.planning.print.link.click'|trans({}, 'mail', mail.locale),
+    ('mail.planning.'~ transKey ~'.link.click')|trans({}, 'mail', mail.locale),
     url('admin_planning_export_link', {'event': mail.event.id, 'hash': mail.fileHash, 'file': mail.fileId})
 ) }}
 </body>

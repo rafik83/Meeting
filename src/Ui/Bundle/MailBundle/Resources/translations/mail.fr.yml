@@ -29,7 +29,7 @@ mail.event.export.no_uploaded_objects.subject: 'Aucun fichier n''a pu être expo
 mail.event.export.uploaded_objects_password.subject: 'Mot de passe du fichier zip des fiches sélectionnées de l''événement "%event%"'
 mail.event.export.uploaded_objects_zip.link.click: 'Télécharger le fichier zip'
 mail.event.export.uploaded_objects_zip.subject: 'Télécharger le fichier zip des fiches sélectionnées de l''événement "%event%"'
-mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription au programme B2B Meetings de \"%event%\" a bien été prise en compte et sera examinée dans les plus brefs délais par nos équipes.\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
+mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription à l'événement \"%event%\" a bien été prise en compte et sera examinée dans les plus brefs délais par nos équipes.\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée définitivement."
 mail.event.preregister.end: ''
 mail.event.preregister.link: 'Votre profil participant'
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
@@ -68,15 +68,15 @@ mail.planner.import.intro: "Bonjour, \n\n L'import du fichier pour les planifica
 mail.planner.import.subject: 'Import des planifications'
 mail.planner.import.subject.error: 'Erreur lors de l''import des planifications'
 mail.planning.print.intro: 'Voici le fichier de plannings demandé'
-mail.planning.printWithBadge.intro: 'Voici le fichier de plannings et badges demandé'
 mail.planning.print.link.click: 'Fichier de planning'
-mail.planning.printWidthBadge.link.click: 'Fichier de planning et badge'
 mail.planning.print.link.intro: 'Vous pouvez imprimer les plannings en cliquant ici :'
-mail.planning.printWithBadge.link.intro: 'Vous pouvez imprimer les plannings et badges en cliquant ici :'
 mail.planning.print.orderBy.participant_last_name: 'par nom de famille du participant'
 mail.planning.print.orderBy.sheet_title: 'par nom de société'
 mail.planning.print.orderBy.text: 'Le fichier est trié'
 mail.planning.print.subject: 'Fichier de plannings'
+mail.planning.printWidthBadge.link.click: 'Fichier de planning et badge'
+mail.planning.printWithBadge.intro: 'Voici le fichier de plannings et badges demandé'
+mail.planning.printWithBadge.link.intro: 'Vous pouvez imprimer les plannings et badges en cliquant ici :'
 mail.planning.printWithBadge.subject: 'Fichier de plannings et badges'
 mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace membre \"%event%\" est créé. \n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site \"%event%\".\n\nBien cordialement,"
 mail.register.subject: 'Votre compte d''accès à l''espace membre de %event% est créé'

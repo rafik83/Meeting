@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Scan\Type;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
 
@@ -126,7 +127,8 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
                         $event->reveal(),
                         $user2->reveal(),
                         $checkin,
-                        new \DateTime('2018-09-18 08:40:00')
+                        new \DateTime('2018-09-18 08:40:00'),
+                        Type::TYPE_EVENT_ENTRANCE
                     ),
                 ]
             )

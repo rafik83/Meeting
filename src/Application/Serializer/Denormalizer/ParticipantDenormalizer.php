@@ -393,8 +393,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $sheet,
             $user,
             $participantData,
-            false,
-            $sheet->getEvent()->getConfiguration()->isVisio()
+            false
         );
         $participant->setImported(true);
         $this->participantRepository->add($participant);

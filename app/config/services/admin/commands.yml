@@ -334,3 +334,20 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Transactional\Mail\UpdateCustomized }
+
+    #
+    # Scan
+    #
+    Proximum\Vimeet\Application\Command\User\Event\ScanEventEntranceCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ScanEventEntranceCommand }
+
+    Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappeningHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappening }

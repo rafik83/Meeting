@@ -136,7 +136,10 @@ class PrepareLeniApiCallHandler
 
         if (!$saveModeEnabled || null === $leniUserParameter || null === $leniEventParameter) {
             throw new \LogicException(
-                'Can not call PrepareLeniApiCallHandler if send mode is not enabled or event has not LENI_USER and LENI_EVENT'
+                sprintf(
+                    'Can not call PrepareLeniApiCallHandler if send mode is not enabled or event has not LENI_USER and LENI_EVENT for event %d',
+                    $event->getId()
+                )
             );
         }
 

@@ -58,7 +58,7 @@ catalog.preview.participant_positions_see_more: 'voir plus'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
 catalog.seeMore: 'Voir plus'
 catalog.selectItemsFromNomenclatures.more: '... et %count% autres'
-catalog.selectItemsFromNomenclatures.select: 'Sélectionner'
+catalog.selectItemsFromNomenclatures.select: Sélectionner
 catalog.selectItemsFromNomenclatures.unSelectAll: 'Tout désélectionner'
 catalog.sheet.export.csv: Exporter
 catalog.sheet.result.total: '{0} Aucun résultat|{1} 1 résultat|]1,Inf[ %total% résultats'
@@ -99,9 +99,9 @@ event.meeting.request.closed: 'Les demandes de rendez-vous sont terminées'
 event.meeting.request.locked: 'Planification en cours - Les demandes sont verrouillées'
 event.meeting.request.transformIntoMeeting.error: 'Le RDV ne peut pas être positionné faute de disponibilités communes.'
 event.meeting.request.transformIntoMeeting.success: 'RDV positionné pour %participants% le %date% à %time% : %spot%.'
+event.participant.define_timezone: 'Définir mon fuseau horaire'
 event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez-vous'
 event.registration_not_open: 'Les inscriptions ne sont pas encore ouvertes'
-event.participant.define_timezone: 'Définir mon fuseau horaire'
 event.sheet.export.fields.event_name: 'Nom de l''événement'
 event.sheet.export.fields.participant_email: 'Email participant'
 event.sheet.export.fields.participant_firstname: Prénom
@@ -129,20 +129,20 @@ event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléph
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
 event.visio.agenda_access: 'Cliquez ici pour accéder à votre agenda'
-event.visio.welcome: 'Bienvenue sur %event%'
-event.visio.test.audio: 'Audio'
+event.visio.test.audio: Audio
 event.visio.test.description: 'Lorsque vous y êtes invité, permettez-nous d''utiliser votre appareil photo et votre matériel audio. Ce test durera environ 30 secondes.'
 event.visio.test.edge: 'Votre navigateur, Edge, n''est pas compatible pour effectuer tous les tests de qualité de l''audio / vidéo. Merci d''utiliser Chrome ou Firefox.'
 event.visio.test.error.network.api: 'Impossible de se connecter au serveur de visio conférence. Veuillez vérifier votre connexion ou la configuration de votre navigateur web afin d''autoriser l''accès à votre appareil photo et votre matériel audio.'
-event.visio.test.quality: 'Qualité :'
 event.visio.test.loading: 'Merci de patienter...'
-event.visio.test.network: 'Réseau'
+event.visio.test.network: Réseau
+event.visio.test.quality: 'Qualité :'
 event.visio.test.screenSharing: 'Partage d''écran'
 event.visio.test.start: 'Démarrer le test'
 event.visio.test.testInProgress: 'Test en cours'
 event.visio.test.testSuccessful: 'Test réussi !'
 event.visio.test.title: 'Test de votre configuration rendez-vous visio'
-event.visio.test.video: 'Vidéo'
+event.visio.test.video: Vidéo
+event.visio.welcome: 'Bienvenue sur %event%'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'
@@ -199,8 +199,8 @@ login.forgot_password: 'Mot de passe oublié ?'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
 meeting.video.end: 'Arrêter le RDV'
+meeting.video.endingAt: 'Fin du rendez-vous dans'
 meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video ou annulé le lancement du partage d'écran.\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques ou le lancement du partage d'écran."
-meeting.video.endingAt: "Fin du rendez-vous dans"
 meeting.video.installScreenSharingExtensionMessage: 'Merci d''installer notre extension de partage d''écran.'
 meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
 meeting.video.screenshare: 'Partage d''écran'
@@ -213,7 +213,7 @@ meetingRequest.mobile.filters.state.title: 'Gestion RDV'
 modal.back: Retour
 modal.close: Fermer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
-modal.submit: 'Valider'
+modal.submit: Valider
 multiple_sheets.modal.close: Fermer
 multiple_sheets.request.filter.reset: 'Réinitialiser les filtres'
 multiple_sheets.request.list.no-preference: 'Pas de préférence'
@@ -370,6 +370,7 @@ package.product.quantityMax: 'Quantité maximum atteinte'
 package.product.quantityMaxInformation: 'Max : %quantityMax%'
 package.product.quantityMin: 'Quantité minimum atteinte'
 package.product.seeMore: '{0}|{1} Voir l''option|]1, Inf[ Voir les %count% options'
+package.product.seeLess: 'Fermer'
 package.product.selectedParticipants: 'Participants sélectionnés :'
 package.product.selectOptions: 'Sélectionner vos options'
 package.product.subjectedToValidationHelp: 'Sous réserve de validation'
@@ -444,7 +445,7 @@ sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
 sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
-sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication sur la plateforme des participants aux rendez-vous BtoB. Votre fiche de présentation sera validée dans les 48h.\n\nVous pourrez toujours la modifier ultérieurement"
+sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication sur la plateforme des participants aux rendez-vous. Votre fiche de présentation sera validée dans les 48h.\n\nVous pourrez toujours la modifier ultérieurement"
 sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
 sheet.welcome.packageContent: 'CHOISISSEZ VOTRE FORMULE'
 sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'

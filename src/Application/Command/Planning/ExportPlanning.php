@@ -24,17 +24,20 @@ class ExportPlanning
     /** @var string */
     public $locale;
 
-    /**
-     * @param array  $sheetIds
-     * @param string $orderBy
-     * @param string $emailToNotify
-     * @param string $locale
-     */
-    public function __construct(array $sheetIds, $orderBy, $emailToNotify, $locale)
-    {
-        $this->sheetIds      = $sheetIds;
-        $this->orderBy       = $orderBy;
+    /** @var bool */
+    public $withBadge;
+
+    public function __construct(
+        array $sheetIds,
+        string $orderBy,
+        string $emailToNotify,
+        string $locale,
+        bool $withBadge = false
+    ) {
+        $this->sheetIds = $sheetIds;
+        $this->orderBy = $orderBy;
         $this->emailToNotify = $emailToNotify;
-        $this->locale        = $locale;
+        $this->locale = $locale;
+        $this->withBadge = $withBadge;
     }
 }

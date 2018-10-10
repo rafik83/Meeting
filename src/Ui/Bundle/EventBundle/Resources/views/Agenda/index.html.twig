@@ -45,7 +45,7 @@
                     <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
                 </div>
             {% endif %}
-            {% if participant.visio and participant.timezone %}
+            {% if isVisio and participant.timezone %}
                 <div class="pull-right mg-tp" style="margin-right: 5px;">
                     <a href="{{ path('event_participant_timezone', { 'sheet': sheet.id, 'participant': participant.id }) }}" class="btn btn-primary">
                         <i class="icon-Horaire"></i>
@@ -70,19 +70,19 @@
                     <div class="meets">
                         {% if day.isSheetAttendingTheEvent %}
                             {% for happening in day.happenings %}
-                                {{ include('EventBundle:Agenda:happening.html.twig', {'sheet': agenda.sheet, 'happening': happening, 'participant': participant, isUserAloneParticipant: agenda.isUserAloneParticipant }) }}
+                                {{ include('EventBundle:Agenda:happening.html.twig', {'isVisio': isVisio, 'sheet': agenda.sheet, 'happening': happening, 'participant': participant, isUserAloneParticipant: agenda.isUserAloneParticipant }) }}
                             {% endfor %}
 
                             {% for unavailability in day.unavailabilities %}
-                                {{ include('EventBundle:Agenda:unavailability.html.twig', {'sheetId': agenda.sheet.id, 'participant': participant, 'unavailability': unavailability, 'participantId': agenda.participant.id }) }}
+                                {{ include('EventBundle:Agenda:unavailability.html.twig', {'isVisio': isVisio, 'sheetId': agenda.sheet.id, 'participant': participant, 'unavailability': unavailability, 'participantId': agenda.participant.id }) }}
                             {% endfor %}
 
                             {% for mass in day.masses %}
-                                {{ include('EventBundle:Agenda:mass.html.twig', {'mass': mass, 'participant': participant}) }}
+                                {{ include('EventBundle:Agenda:mass.html.twig', {'isVisio': isVisio, 'mass': mass, 'participant': participant}) }}
                             {% endfor %}
 
                             {% for meeting in day.meetings %}
-                                {{ include('EventBundle:Agenda:meeting.html.twig', {'sheetId': agenda.sheet.id, 'participant': participant, 'participantId': agenda.participant.id, 'meeting': meeting }) }}
+                                {{ include('EventBundle:Agenda:meeting.html.twig', {'isVisio': isVisio, 'sheetId': agenda.sheet.id, 'participant': participant, 'participantId': agenda.participant.id, 'meeting': meeting }) }}
                             {% endfor %}
 
                             {% for availableSlotView in day.availableSlotViews %}
@@ -95,7 +95,7 @@
                                 </div>
                             {% endfor %}
                         {% else %}
-                            {{ include('EventBundle:Unavailability/CancelAttendance:cancelAttendanceUnavailability.html.twig', {'cancelAttendanceUnavailability': day.cancelAttendanceUnavailabilityView, 'participant': participant }) }}
+                            {{ include('EventBundle:Unavailability/CancelAttendance:cancelAttendanceUnavailability.html.twig', {'isVisio': isVisio, 'cancelAttendanceUnavailability': day.cancelAttendanceUnavailabilityView, 'participant': participant }) }}
                         {% endif %}
                     </div>
                     <div class="layout"></div>

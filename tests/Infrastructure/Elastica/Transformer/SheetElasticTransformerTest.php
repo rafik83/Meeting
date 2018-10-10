@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Balance;
@@ -78,6 +79,8 @@ class SheetElasticTransformerTest extends TestCase
         $user2 = $this->prophesize(User::class);
         $user2->getEmail()->willReturn('user2@email.com');
 
+        $spot = $this->prophesize(Spot::class);
+        $spot->getReference()->willReturn('A21');
         $event = $this->prophesize(Event::class);
         $event->getId()->willReturn(66);
         $event->getLocales()->willReturn(['fr', 'en']);
@@ -132,6 +135,7 @@ class SheetElasticTransformerTest extends TestCase
         $sheet->attend()->willReturn(true);
         $sheet->hasGroup()->willReturn(true);
         $sheet->hasSpot()->willReturn(true);
+        $sheet->getSpot()->willReturn($spot->reveal());
         $sheet->getAvailableSlots()->willReturn(
             [
                 $availableSlot1->reveal(),
@@ -397,6 +401,7 @@ class SheetElasticTransformerTest extends TestCase
                 'content_fr' => 'Ma description',
                 'content_en' => 'My description',
                 'filledFilter' => [],
+                'spotReference' => 'A21',
                 'nestedTaggedData' => [
                     [
                         'tag' => 'sheet_generic_tag_2',

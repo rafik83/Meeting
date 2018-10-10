@@ -43,10 +43,7 @@ class GeneratePlanningCommand extends Command
         $this->extraDataRepository = $extraDataRepository;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName(self::NAME)
@@ -55,28 +52,28 @@ class GeneratePlanningCommand extends Command
             ->addOption('orderBy', null, InputOption::VALUE_REQUIRED, 'OrderBy Sheet name or participant last name')
             ->addOption('emailToNotify', null, InputOption::VALUE_REQUIRED, 'email to notify at the end of the command')
             ->addOption('locale', null, InputOption::VALUE_REQUIRED, 'locale for the mail of notification')
+            ->addOption('withBadge', null, InputOption::VALUE_REQUIRED, 'add badge to impression')
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         if (null === $input->getOption('orderBy')
             || null === $input->getOption('sheetIdsExtraData')
             || null === $input->getOption('emailToNotify')
             || null === $input->getOption('locale')
+            || null === $input->getOption('withBadge')
         ) {
             $output->writeln('<error>The orderBy, sheetIdsExtraData, emailToNotify and locale options are mandatory and can not be null</error>');
 
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The orderBy, sheetIdsExtraData, emailToNotify and locale options are mandatory and can not be null, arguments passed: orderBy=%s types=%s emailToNotify=%s locale=%s',
+                    'The orderBy, sheetIdsExtraData, emailToNotify and locale options are mandatory and can not be null, arguments passed: orderBy=%s types=%s emailToNotify=%s locale=%s withBadge=%s',
                     $input->getOption('orderBy'),
                     $input->getOption('sheetIdsExtraData'),
                     $input->getOption('emailToNotify'),
-                    $input->getOption('locale')
+                    $input->getOption('locale'),
+                    $input->getOption('withBadge')
                 )
             );
         }
@@ -93,7 +90,8 @@ class GeneratePlanningCommand extends Command
                 explode(',', $sheetIdsExtraData->getValue()),
                 $input->getOption('orderBy'),
                 $input->getOption('emailToNotify'),
-                $input->getOption('locale')
+                $input->getOption('locale'),
+                (bool)$input->getOption('withBadge')
             )
         );
     }

@@ -7,6 +7,13 @@ Proximum\Vimeet\Domain\Model\User\Event\Scan:
             generator:
                 strategy: AUTO
     fields:
+        type:
+            type: string
+            options:
+                default: 'event_entrance'
+        objectId:
+            type: integer
+            nullable: true
         scannedAt:
             type: datetime
         createdAt:

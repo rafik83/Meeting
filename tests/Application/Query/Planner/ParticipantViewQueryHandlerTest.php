@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Account;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -128,11 +129,17 @@ class ParticipantViewQueryHandlerTest extends TestCase
             new SlotAvailabilityView(SlotAvailability::HAPPENING_UNAVAILABILITY)
         );
 
+        $isParticipantVisio = $this->prophesize(IsParticipantVisio::class);
+        $isParticipantVisio->isSatisfiedBy($participant1)->willReturn(true);
+        $isParticipantVisio->isSatisfiedBy($participant2)->willReturn(true);
+        $isParticipantVisio->isSatisfiedBy($participant3)->willReturn(false);
+
         // Handler
         $handler = new ParticipantViewQueryHandler(
             $participantRepository->reveal(),
             $slotRepository->reveal(),
-            $slotAvailability->reveal()
+            $slotAvailability->reveal(),
+            $isParticipantVisio->reveal()
         );
 
         $result = $handler->handle(
@@ -141,8 +148,8 @@ class ParticipantViewQueryHandlerTest extends TestCase
 
         // Expected
         $expected = [
-            new ParticipantView(1, 1, 'firstName1 lastName1', $sheetView, [$slotView2]),
-            new ParticipantView(2, 2, 'firstName2 lastName2', $sheetView2, []),
+            new ParticipantView(1, 1, 'firstName1 lastName1', $sheetView, [$slotView2], true),
+            new ParticipantView(2, 2, 'firstName2 lastName2', $sheetView2, [], true),
             new ParticipantView(3, 3, 'firstName3 lastName3', $sheetView2, [$slotView, $slotView2]),
         ];
 

@@ -1446,7 +1446,7 @@ admin_users_list:
     path: /event/{event}/users/list
     requirements:
         event: \d+
-    methods: [GET, POST]
+    methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\ListAction }
 
 admin_user_event_scan:
@@ -1454,7 +1454,7 @@ admin_user_event_scan:
     requirements:
         event: \d+
     methods: [POST]
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanAction }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanEventEntranceAction }
 
 admin_users_details:
     path: /event/{event}/users/{user}
@@ -1463,6 +1463,34 @@ admin_users_details:
     requirements:
         event: \d+
         user: \d+
+
+
+#
+# Scan
+#
+#### Happening
+admin_event_access_happening_list:
+    path: /event/{event}/access/happening/list
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\ListAction
+
+admin_event_access_happening_qrcode:
+    path: /event/{event}/access/happening/{happening}/qrcode
+    requirements:
+        event: \d+
+        happening: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\QrCodeAction
+
+admin_event_access_happening_scan:
+    path: /event/{event}/access/happening/{happening}/scan
+    requirements:
+        event: \d+
+        happening: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\ScanAction
 
 # Dashboard
 admin_dashboard:

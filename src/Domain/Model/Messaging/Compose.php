@@ -16,6 +16,7 @@ class Compose
     public const TAG_PARTICIPANT        = '%participant%';
     public const TAG_PARTICIPATION_TYPE = '%participationType%';
     public const TAG_SHEET_PLANNING     = '%sheetPlanning%';
+    public const TAG_SHEET_SPOT         = '%sheetSpot%';
 
     // CTA
     public const TAG_CTA_AGENDA_CONFIRMATION = '%agendaConfirmationCTA%';
@@ -51,6 +52,7 @@ class Compose
             self::TAG_PARTICIPANT,
             self::TAG_PARTICIPATION_TYPE,
             self::TAG_SHEET_PLANNING,
+            self::TAG_SHEET_SPOT,
             self::TAG_CTA_AGENDA_CONFIRMATION,
             self::TAG_CTA_EBADGE,
             self::TAG_CTA_TEST_VISIO_CONFIGURATION,

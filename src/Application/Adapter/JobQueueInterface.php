@@ -35,15 +35,7 @@ interface JobQueueInterface
      */
     public function sendEmailing(Event $event, array $sheetIds, $emailName, $sendEmailToTeam = false);
 
-    /**
-     * @param Event\ExtraData $extraData     which contains the value of the sheetIds
-     * @param string          $orderBy
-     * @param string          $emailToNotify
-     * @param string          $locale
-     */
-    public function printPlanning(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale): void;
-
-    public function printPlanningAndBadge(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale): void;
+    public function printPlanning(Event\ExtraData $extraData, string $orderBy, string $emailToNotify, string $locale, bool $withBadge = false): void;
 
     /**
      * @param Event  $event
@@ -202,6 +194,4 @@ interface JobQueueInterface
     public function exportParticipantsForEvent(Event $event, Admin $admin, string $locale, Event\ExtraData $extraData): void;
 
     public function exportUploadedObjectsBySheets(Event $event, Admin $admin, Event\ExtraData $extraData): void;
-
-    public function toggleParticipantVisioForEvent(Event $event, bool $visio): void;
 }

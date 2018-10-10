@@ -13,8 +13,6 @@ namespace Proximum\Vimeet\Application\Query\Agenda;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
@@ -63,6 +61,9 @@ class AgendaViewQueryHandler
     /** @var ExtraDataRepository */
     private $extraDataRepository;
 
+    /** @var GetTimezoneHelper */
+    private $getTimezoneHelper;
+
     public function __construct(
         DayRepositoryInterface $dayRepository,
         SheetRepositoryInterface $sheetRepository,
@@ -74,7 +75,8 @@ class AgendaViewQueryHandler
         MeetingRepositoryInterface $meetingRepository,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         ValidationRequiredChecker $validationRequiredChecker,
-        ExtraDataRepository $extraDataRepository
+        ExtraDataRepository $extraDataRepository,
+        GetTimezoneHelper $getTimezoneHelper
     ) {
         $this->dayRepository                    = $dayRepository;
         $this->sheetRepository                  = $sheetRepository;
@@ -87,6 +89,7 @@ class AgendaViewQueryHandler
         $this->meetingPublishedAccessChecker    = $meetingPublishedAccessChecker;
         $this->validationRequiredChecker = $validationRequiredChecker;
         $this->extraDataRepository = $extraDataRepository;
+        $this->getTimezoneHelper = $getTimezoneHelper;
     }
 
     /**
@@ -110,7 +113,7 @@ class AgendaViewQueryHandler
             : false
         ;
 
-        $timezone = GetTimezoneHelper::getTimezoneByEventAndParticipant($query->event, $query->participant);
+        $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($query->event, $query->participant);
 
         $participants = $this->participantViewQueryHandler->handle(
             new ParticipantViewQuery($sheet->getParticipants()->toArray(), $query->locale)

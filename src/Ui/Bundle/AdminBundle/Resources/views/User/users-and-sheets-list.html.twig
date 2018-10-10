@@ -8,7 +8,7 @@
     <h1 class="page-header">{{ userEventListViews.paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
 
     <div class="row">
-        <form class="filter-form" method="post">
+        <form class="filter-form" method="get">
             <div class="col-md-12">
                 <input type="hidden" name="rules" id="rules"/>
                 <div id="builder"
@@ -19,8 +19,8 @@
             </div>
             <div class="col-md-12">
                 <div class="pull-right">
+                    <a class="btn btn-link" href="{{ path('admin_users_list', {'event': event.id, 'reset': 1 }) }}">{{ 'admin.filters.reset'|trans }}</a>
                     <button type="submit" class="btn btn-primary" id="submit-rules">{{ 'admin.filter'|trans }}</button>
-                    <a class="btn btn-primary" href="{{ path('admin_users_list', {'event': event.id, 'reset': 1 }) }}">{{ 'admin.filters.reset'|trans }}</a>
                 </div>
             </div>
         </form>
@@ -56,7 +56,16 @@
                     <small><a href="{{ path('admin_users_details', {'event': event.id, 'user': userEventListView.userId }) }}" target="_blank">{{ userEventListView.userId }}</a></small>
                 </td>
                 <td rowspan="{{ rowSpanValue }}" nowrap>
-                    <strong>{{ userEventListView.lastName }}</strong> {{ userEventListView.firstName }}<br>
+                    <strong>{{ userEventListView.lastName }}</strong> {{ userEventListView.firstName }}
+
+                    {% if userEventListView.isVisio %}
+                        <span class="label {{ userEventListView.visioTested ? 'label-success' : 'label-info' }}">
+                            <i class="glyphicon glyphicon glyphicon-facetime-video" data-toggle="tooltip" data-placement="top" title="{{ ('admin.sheet.user.' ~ (userEventListView.visioTested ? 'test_performed' : 'test_not_performed'))|trans }}"></i>
+                        </span>
+                    {% endif %}
+
+                    <br>
+
                     <small>
                         <a href="mailto:{{ userEventListView.email }}">{{ userEventListView.email }}</a>
                     </small>
@@ -76,15 +85,6 @@
                             {% if userEventSheetListView.hasGroup %}
                                 <span class="label label-success">
                                     <i class="glyphicon glyphicon-duplicate" data-toggle="tooltip" data-placement="top" title="{{ userEventSheetListView.groupTitle }}"></i>
-                                </span>
-                            {% endif %}
-
-                            {% if userEventSheetListView.isVisio %}
-                                {% set tooltip = userEventSheetListView.visioTested ? 'test_performed' : 'test_not_performed' %}
-                                {% set label = userEventSheetListView.visioTested ? 'label-success' : 'label-info' %}
-
-                                <span class="label {{ label }}">
-                                    <i class="glyphicon glyphicon glyphicon-facetime-video" data-toggle="tooltip" data-placement="top" title="{{ ('admin.sheet.user.' ~ tooltip)|trans }}"></i>
                                 </span>
                             {% endif %}
 

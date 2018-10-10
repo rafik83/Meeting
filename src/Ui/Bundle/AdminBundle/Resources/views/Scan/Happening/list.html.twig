@@ -1,0 +1,16 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.happening.title'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.event.access.happening.list'|trans }}</h1>
+
+    {% for happening in list.happenings %}
+        <a href="{{ path('admin_event_access_happening_qrcode', {'event': event.id, 'happening': happening.id}) }}">
+            <div class="breadcrumb">
+                <h3>{{ happening.title }}</h3>
+                <p>{{ happening.begin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</p>
+            </div>
+        </a>
+    {% endfor %}
+{% endblock %}

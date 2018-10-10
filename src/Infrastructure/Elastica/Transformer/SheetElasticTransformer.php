@@ -161,6 +161,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'hasInvoice' => $this->invoiceRepository->hasInvoice($sheet),
                     'attend' => $sheet->attend(),
                     'hasGroup' => $sheet->hasGroup(),
+                    'spotReference' => $sheet->hasSpot() ? $sheet->getSpot()->getReference() : null,
                     'hasSpot' => $sheet->hasSpot(),
                     'availableSlotIds' => $this->buildAvailableSlots($sheet),
                     'reminderDate' => $this->getReminderDate($sheet),
@@ -265,6 +266,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
     private function buildCountries(TemplateData $templateData, array $locales): array
     {
+        $locales = array_values($locales);
         $countryCode = $this->getCountryCode($templateData);
 
         if (null === $countryCode) {

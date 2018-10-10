@@ -93,7 +93,11 @@ class PaginatedSheetListViewQueryHandler
             $query->page,
             $query->limit,
             $query->locale,
-            false
+            false,
+            [],
+            [],
+            [],
+            $query->condition
         );
 
         $sheets->results = $this->sheetRepository->findFullSheets($sheets->results);
