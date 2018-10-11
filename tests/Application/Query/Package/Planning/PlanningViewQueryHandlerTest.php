@@ -106,9 +106,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $package->setPlans([$planProduct]);
         $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
-        $group = new PackageGroup($package, 1);
-        $group->setOptions([$optionProduct]);
-        $package->setGroupsOptions([$group]);
+        $package->setGroupsOptions([[$optionProduct]]);
 
         $type->setPackage($package);
 
@@ -244,9 +242,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $package->setPlans([$planProduct]);
         $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
-        $group = new PackageGroup($package, 1);
-        $group->setOptions([$optionProduct]);
-        $package->setGroupsOptions([$group]);
+        $package->setGroupsOptions([[$optionProduct]]);
 
         $type->setPackage($package);
 
@@ -382,9 +378,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $package->setPlans([$planProduct]);
         $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
-        $group = new PackageGroup($package, 1);
-        $group->setOptions([$optionProduct]);
-        $package->setGroupsOptions([$group]);
+        $package->setGroupsOptions([[$optionProduct]]);
 
         $type->setPackage($package);
 
@@ -520,9 +514,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $package->setPlans([$planProduct]);
         $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
-        $group = new PackageGroup($package, 1);
-        $group->setOptions([$optionProduct]);
-        $package->setGroupsOptions([$group]);
+        $package->setGroupsOptions([[$optionProduct]]);
 
         $type->setPackage($package);
 
@@ -645,9 +637,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $package->setPlans([$planProduct]);
         $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
-        $group = new PackageGroup($package, 1);
-        $group->setOptions([$optionProduct]);
-        $package->setGroupsOptions([$group]);
+        $package->setGroupsOptions([[$optionProduct]]);
 
         $type->setPackage($package);
 

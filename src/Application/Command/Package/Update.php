@@ -32,9 +32,6 @@ class Update implements Command
     /** @var Model\Options */
     public $options;
 
-    /**
-     * @param Package $package
-     */
     public function __construct(Package $package)
     {
         $plansLabels                  = [];

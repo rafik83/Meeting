@@ -589,14 +589,32 @@ class Package
      */
     public function setGroupsOptions(array $groupOptions)
     {
+        $alreadyUsedOptions = [];
+
         foreach ($groupOptions as $rank => $options) {
+            $options = (array) $options;
+
+            /** @var Product $option */
+            foreach ($options as $key => $option) {
+                $optionId = $option->getId();
+
+                if (isset($alreadyUsedOptions[$optionId])) {
+                    unset($options[$key]);
+                    continue;
+                }
+
+                $alreadyUsedOptions[$optionId] = true;
+            }
+
+            $options = array_values($options);
+
             if (!$this->groups->containsKey($rank)) {
                 $this->groups->set($rank, new PackageGroup($this, $rank));
             }
 
             /** @var PackageGroup $packageGroup */
             $packageGroup = $this->groups->get($rank);
-            $packageGroup->setOptions(is_array($options) ? $options : []);
+            $packageGroup->setOptions($options);
         }
 
         return $this;
