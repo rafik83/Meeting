@@ -54,6 +54,9 @@ class Type
     // TechEvent
     public const TYPE_TECH_EVENT_CONFIGURATION = 'tech_event_configuration';
 
+    // Crisp
+    public const TYPE_CRISP_SITE_ID = 'crisp_site_id';
+
     public const TYPES = [
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
@@ -74,5 +77,6 @@ class Type
         self::TYPE_COMEXPOSIUM_SSO_SESSION_SALON,
         self::TYPE_COMEXPOSIUM_SSO_APPLICATION,
         self::TYPE_TECH_EVENT_CONFIGURATION,
+        self::TYPE_CRISP_SITE_ID,
     ];
 }

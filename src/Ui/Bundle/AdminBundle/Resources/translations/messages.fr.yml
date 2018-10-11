@@ -272,6 +272,7 @@ admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
 admin.extraParameter.type.tech_event_configuration: 'Configuration TechEvent'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés'
 admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
+admin.extraParameter.type.crisp_site_id: Crisp site ID
 admin.extraParameter.update.title: 'Modification du paramètre supplémentaire %type%'
 admin.filter: Filtrer
 admin.filter_by: 'Filtrer par'
