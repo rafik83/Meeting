@@ -360,8 +360,8 @@ package.product.quantity: Quantity
 package.product.quantityMax: 'Maximum quantity reached'
 package.product.quantityMaxInformation: 'Max: %quantityMax%'
 package.product.quantityMin: 'Maximum minimum reached'
+package.product.seeLess: Close
 package.product.seeMore: '{0}|{1} See the option|]1, Inf[ See the %count% options'
-package.product.seeLess: 'Close'
 package.product.selectedParticipants: 'Selected participants:'
 package.product.selectOptions: 'Select your options'
 package.product.subjectedToValidationHelp: 'Subject to validation'
