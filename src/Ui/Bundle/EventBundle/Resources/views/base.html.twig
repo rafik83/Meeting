@@ -43,6 +43,10 @@
             </div>
         {% endblock body %}
 
+        {% if event is defined %}
+            {{ render(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Crisp\\ChatAction', {'event': event})) }}
+        {% endif %}
+
         {% block javascripts %}
             <script src="{{ asset('assets/js/main.js') }}"></script>
         {% endblock %}

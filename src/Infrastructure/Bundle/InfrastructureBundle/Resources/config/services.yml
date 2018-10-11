@@ -3566,6 +3566,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
 
+    Proximum\Vimeet\Application\Query\Event\ExtraParameter\GetExtraParameterQueryHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\ExtraParameter\GetExtraParameterQuery }
+
 
     Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQueryHandler:
         arguments:
