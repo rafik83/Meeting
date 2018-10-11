@@ -1,3 +1,16 @@
 {% if siteId %}
-    <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="{{ siteId }}";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+    <script type="text/javascript">
+        {% if app.user %}
+            CRISP_RUNTIME_CONFIG = {
+                locale : "{{ app.user.locale }}"
+            };
+        {% endif %}
+
+        window.$crisp=[];window.CRISP_WEBSITE_ID="{{ siteId }}";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
+
+        {% if app.user %}
+            $crisp.push(["set", "user:email", ["{{ app.user.email }}"]]);
+            $crisp.push(["set", "user:nickname", ["{{ app.user.fullname }}"]]);
+        {% endif %}
+    </script>
 {% endif %}
