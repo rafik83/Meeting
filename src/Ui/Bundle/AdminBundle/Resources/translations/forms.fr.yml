@@ -316,7 +316,7 @@ form.event_update.children.visio.label: 'Evenement dématérialisé'
 form.event_update.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
 form.extra_parameter_create.children.name.label: Nom
-form.extra_parameter_create.children.type.choices.crisp_site_id: Site Crisp ID
+form.extra_parameter_create.children.type.choices.crisp_site_id: Crisp site ID
 form.extra_parameter_create.children.submit.label: Enregistrer
 form.extra_parameter_create.children.type.choices.comexposium_event_reference: 'Comexposium : Référence manifestation'
 form.extra_parameter_create.children.type.choices.comexposium_exhibitor_type_id: 'Comexposium : Id du type de participation Exposant concerné'
