@@ -20,3 +20,45 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Encryption\SheetDecryptFileAdapter'
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
+
+    #
+    # Transactional
+    #
+    ### Mail
+    #### Substitution
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\ParticipantFullNameSubstitution:
+        arguments:
+            - '@template.participant_info_guesser'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\EventSubstitution: ~
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserFirstNameSubstitution:
+        arguments:
+            - '@template.participant_info_guesser'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserLastNameSubstitution:
+        arguments:
+            - '@template.participant_info_guesser'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TypeTitleSubstitution: ~
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionsProviders:
+        calls:
+        - ['registerSubstitution', ['%%event%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\EventSubstitution']]
+        - ['registerSubstitution', ['%%firstname%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserFirstNameSubstitution']]
+        - ['registerSubstitution', ['%%firstName%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserFirstNameSubstitution']]
+        - ['registerSubstitution', ['%%lastname%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserLastNameSubstitution']]
+        - ['registerSubstitution', ['%%lastName%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserLastNameSubstitution']]
+        - ['registerSubstitution', ['%%participant%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\ParticipantFullNameSubstitution']]
+        - ['registerSubstitution', ['%%participationType%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TypeTitleSubstitution']]
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionsProviders'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@query.mail.participant_mail_view_query_handler'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
+            - '@event_sender'

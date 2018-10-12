@@ -56,6 +56,26 @@ class MessageRepository implements MessageRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getOneByEventAndType(Event $event, string $transactionalMailType): ?Message
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('message')
+            ->from(Message::class, 'message')
+            ->where('message.event = :event')
+            ->andWhere('message.type = :type')
+            ->setParameter('event', $event)
+            ->setParameter('type', $transactionalMailType)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+    /**
      * @param Event $event
      *
      * @return Message[]

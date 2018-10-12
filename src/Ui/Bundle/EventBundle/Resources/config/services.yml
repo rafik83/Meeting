@@ -369,6 +369,7 @@ services:
             - '@adapter.mailer_adapter'
             - '@event_sender'
             - '@query.mail.participant_mail_view_query_handler'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.submit_sheet_mail_event_subscriber:

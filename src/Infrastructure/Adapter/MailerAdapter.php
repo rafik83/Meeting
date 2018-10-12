@@ -46,13 +46,18 @@ class MailerAdapter implements MailerInterface
     {
         /** @var \Twig_Template $template */
         $template = $this->twig->loadTemplate($mail->getTemplate());
-        $body     = $template->render(['mail' => $mail]);
-        $subject  = $this->translator->trans(
-            $mail->getSubject(),
-            $mail->getSubjectParameters(),
-            'mail',
-            $mail->getLocale()
-        );
+        $body = $template->render(['mail' => $mail]);
+
+        if ($mail->hasToTranslateSubject()) {
+            $subject  = $this->translator->trans(
+                $mail->getSubject(),
+                $mail->getSubjectParameters(),
+                'mail',
+                $mail->getLocale()
+            );
+        } else {
+            $subject = $mail->getSubject();
+        }
 
         $message = new \Swift_Message($subject);
         $message->setFrom($mail->getSender());

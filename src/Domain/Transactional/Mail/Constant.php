@@ -289,6 +289,12 @@ final class Constant
         '%lastName%',
     ];
 
+    public const TRANSACTIONAL_MAIL_LEGACY_GENERIC_PARAMETERS = [
+        '%firstname%',
+        '%lastname%',
+        '%participant%',
+    ];
+
     public const TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS = [
         '%participationType%',
     ];

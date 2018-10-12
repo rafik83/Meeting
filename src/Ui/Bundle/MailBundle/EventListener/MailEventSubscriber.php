@@ -11,6 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
+use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMail;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
@@ -65,21 +68,19 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     private $participantMailViewQueryHandler;
 
-    /**
-     * MailEventSubscriber constructor.
-     *
-     * @param MailerInterface                 $mailer
-     * @param EventSender                     $sender
-     * @param ParticipantMailViewQueryHandler $participantMailViewQueryHandler
-     */
+    /** @var PrepareHandler */
+    private $prepareHandler;
+
     public function __construct(
         MailerInterface $mailer,
         EventSender $sender,
-        ParticipantMailViewQueryHandler $participantMailViewQueryHandler
+        ParticipantMailViewQueryHandler $participantMailViewQueryHandler,
+        PrepareHandler $prepareHandler
     ) {
         $this->mailer                          = $mailer;
         $this->sender                          = $sender;
         $this->participantMailViewQueryHandler = $participantMailViewQueryHandler;
+        $this->prepareHandler = $prepareHandler;
     }
 
     /**
@@ -299,17 +300,15 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserPreRegistered(PreRegisterEvent $event)
     {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $event->getUser())
-        );
+        $mail = $this->prepareHandler->handle(new PrepareUserRegisteredMail(
+            $event->getEvent(),
+            $event->getUser(),
+            $event->getLocale()
+        ));
 
-        $mail = new PreRegisteredMail(
-            $event->getParticipant(),
-            $this->sender->generate($event->getParticipant()->getSheet()->getEvent()),
-            $event->getUser()->getEmail(),
-            $event->getLocale(),
-            $participantMailView
-        );
+        if (!$mail instanceof AbstractMail) {
+            return;
+        }
 
         $this->mailer->send($mail);
     }
