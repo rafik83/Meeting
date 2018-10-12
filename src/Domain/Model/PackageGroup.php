@@ -31,12 +31,12 @@ class PackageGroup
     private $rank;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection of PackageGroupTranslation
      */
     private $translations;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection of PackageOptionRank
      */
     private $optionRanks;
 
@@ -163,7 +163,10 @@ class PackageGroup
      */
     public function setOptions(array $options)
     {
+        $alreadyUsedOptions = [];
+
         // Remove delete options and update rank
+        /** @var PackageOptionRank $optionRank */
         foreach ($this->optionRanks as $optionRank) {
             $rank = array_search($optionRank->getOption(), $options);
             if (false === $rank) {
@@ -171,6 +174,16 @@ class PackageGroup
             } else {
                 $optionRank->setRank($rank);
             }
+
+            $optionId = $optionRank->getOption()->getId();
+
+            if (isset($alreadyUsedOptions[$optionId])) {
+                // Remove duplicated option
+                $this->optionRanks->removeElement($optionRank);
+                continue;
+            }
+
+            $alreadyUsedOptions[$optionId] = true;
         }
 
         // Add new option
