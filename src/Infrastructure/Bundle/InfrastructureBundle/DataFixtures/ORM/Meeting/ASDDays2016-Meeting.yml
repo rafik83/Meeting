@@ -33,6 +33,9 @@ Proximum\Vimeet\Domain\Model\Meeting:
         spot: '@asddays_spot_1'
         event: '@event_asddays_2016'
         status: 'not_confirmed'
+        blockedSpot: false
+        blockedSlot: false
+        createdtype: 'admin'
     asddays_meeting_02:
         __construct: false
         request: '@meeting_request_02'
@@ -45,6 +48,9 @@ Proximum\Vimeet\Domain\Model\Meeting:
         spot: '@asddays_spot_1'
         event: '@event_asddays_2016'
         status: 'not_confirmed'
+        blockedSpot: false
+        blockedSlot: false
+        createdtype: 'admin'
 
 Proximum\Vimeet\Domain\Model\Unavailability:
     unavailability_01:

@@ -24,6 +24,10 @@ class Meeting implements MessageSubjectInterface
     public const STATUS_CONFIRMED = 'confirmed';
     public const STATUS_CANCELED = 'canceled';
 
+    public const CREATED_BY_ALGO = 'algo';
+    public const CREATED_BY_ADMIN = 'admin';
+    public const CREATED_BY_PARTICIPANT = 'participant';
+
     public const STATUS_LIST = [
         self::STATUS_CANCELED,
         self::STATUS_NOT_CONFIRMED,
@@ -95,10 +99,8 @@ class Meeting implements MessageSubjectInterface
      */
     private $blockedSlot = false;
 
-    /**
-     * @var bool
-     */
-    private $isCreatedByParticipants = false;
+    /** @var string */
+    private $createdType;
 
     /**
      * @var string
@@ -107,21 +109,6 @@ class Meeting implements MessageSubjectInterface
      */
     private $status;
 
-    /**
-     * Meeting constructor.
-     *
-     * @param Request            $request
-     * @param MeetingSlot        $slot
-     * @param Sheet              $fromSheet
-     * @param array              $fromParticipants
-     * @param Sheet              $toSheet
-     * @param array              $toParticipants
-     * @param \DateTimeInterface $createdAt
-     * @param Spot               $spot
-     * @param Event              $event
-     * @param bool               $blockedSpot
-     * @param bool               $blockedSlot
-     */
     public function __construct(
         Request $request,
         MeetingSlot $slot,
@@ -132,8 +119,9 @@ class Meeting implements MessageSubjectInterface
         \DateTimeInterface $createdAt,
         Spot $spot,
         Event $event,
-        $blockedSpot = false,
-        $blockedSlot = false
+        bool $blockedSpot = false,
+        bool $blockedSlot = false,
+        string $createdType =  self::CREATED_BY_ADMIN
     ) {
         $this->request = $request;
         $this->slot = $slot;
@@ -147,6 +135,7 @@ class Meeting implements MessageSubjectInterface
         $this->blockedSlot = $blockedSlot;
         $this->event = $event;
         $this->status = self::STATUS_NOT_CONFIRMED;
+        $this->createdType = $createdType;
     }
 
     /**
@@ -427,22 +416,19 @@ class Meeting implements MessageSubjectInterface
         return [];
     }
 
-    /**
-     * @return Meeting
-     */
-    public function setCreatedByParticipant()
+    public function getCreatedType(): string
     {
-        $this->isCreatedByParticipants = true;
-
-        return $this;
+        return $this->createdType;
     }
 
-    /**
-     * @return bool
-     */
+    public function setCreatedType(string $createdType): void
+    {
+        $this->createdType = $createdType;
+    }
+
     public function isCreatedByParticipants(): bool
     {
-        return $this->isCreatedByParticipants;
+        return $this->createdType === self::CREATED_BY_PARTICIPANT;
     }
 
     /**

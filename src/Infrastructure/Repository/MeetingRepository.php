@@ -101,7 +101,7 @@ class MeetingRepository implements MeetingRepositoryInterface
                 $meeting->getCreatedAt(),
                 $meeting->getSlot()->getBegin(),
                 $meeting->getSlot()->getEnd(),
-                $meeting->isCreatedByParticipants()
+                $meeting->getCreatedType()
             );
         }, $pagination->results);
 
@@ -787,8 +787,9 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->from(Meeting::class, 'meeting')
             ->where('meeting.event = :event')
             ->andWhere('meeting.createdAt BETWEEN :begin AND :end')
-            ->andWhere('meeting.isCreatedByParticipants = FALSE')
+            ->andWhere('meeting.createdType != :createdType')
             ->andWhere('meeting.state = :state')
+            ->setParameter('createdType', Meeting::CREATED_BY_PARTICIPANT)
             ->setParameter('event', $event)
             ->setParameter('begin', $begin)
             ->setParameter('end', $end)
@@ -808,8 +809,9 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->select('COUNT(meeting.id)')
             ->from(Meeting::class, 'meeting')
             ->where('meeting.event = :event')
-            ->andWhere('meeting.isCreatedByParticipants = TRUE')
+            ->andWhere('meeting.createdType = :createdType')
             ->andWhere('meeting.state = :state')
+            ->setParameter('createdType', Meeting::CREATED_BY_PARTICIPANT)
             ->setParameter('event', $event)
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 

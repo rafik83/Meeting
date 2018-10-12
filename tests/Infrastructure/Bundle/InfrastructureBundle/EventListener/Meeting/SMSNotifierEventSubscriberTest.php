@@ -42,8 +42,7 @@ class SMSNotifierEventSubscriberTest extends TestCase
         $smsTwo            = $this->prophesize(SMS::class);
 
         $meetingCreatedEvent = new MeetingCreatedEvent(
-            $meeting->reveal(),
-            [$fromSheet->reveal(), $toSheet->reveal()]
+            $meeting->reveal()
         );
 
         $meeting->isCreatedByParticipants()->willReturn(true);

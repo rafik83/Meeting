@@ -83,7 +83,10 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [],
             $datetime,
             $spot,
-            $event
+            $event,
+            false,
+            false,
+            Meeting::CREATED_BY_ADMIN
         );
 
         $meetingRepository->add($meeting)->shouldBeCalled();
