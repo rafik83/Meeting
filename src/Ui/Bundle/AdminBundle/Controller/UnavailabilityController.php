@@ -24,6 +24,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\Crea
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\UpdateType as UpdateCategoryType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass\CreateType as CreateMassType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass\UpdateType as UpdateMassType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,13 +73,7 @@ class UnavailabilityController extends Controller
         return $this->redirectToRoute('admin_unavailability_mass_list', ['event' => $event->getId()]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function createMassAction(Request $request, Event $event)
+    public function createMassAction(Request $request, AdminDomain $adminDomain, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -90,8 +85,10 @@ class UnavailabilityController extends Controller
         }
 
         $create = new CreateMass($event, $day);
-        $form   = $this->createForm(CreateMassType::class, $create, [
-            'event'  => $event,
+        $form = $this->createForm(CreateMassType::class, $create, [
+            'event' => $event,
+            'user' => $adminDomain->getAdmin(),
+            'locale' => $request->getLocale(),
             'submit' => true,
         ]);
 
@@ -110,14 +107,7 @@ class UnavailabilityController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Mass    $mass
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateMassAction(Request $request, Event $event, Mass $mass)
+    public function updateMassAction(Request $request, AdminDomain $adminDomain, Event $event, Mass $mass): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -127,7 +117,9 @@ class UnavailabilityController extends Controller
 
         $update = new UpdateMass($mass);
         $form = $this->createForm(UpdateMassType::class, $update, [
-            'event'  => $event,
+            'event' => $event,
+            'user' => $adminDomain->getAdmin(),
+            'locale' => $request->getLocale(),
             'submit' => true,
         ]);
 

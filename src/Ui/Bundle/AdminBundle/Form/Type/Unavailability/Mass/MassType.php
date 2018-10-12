@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DataRangeType;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\ChoiceType as CategoryChoiceType;
 use Symfony\Component\Form\AbstractType as BaseAbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -42,6 +44,13 @@ abstract class MassType extends BaseAbstractType
             ->add('category', CategoryChoiceType::class, [
                 'event'    => $options['event'],
                 'required' => true,
+            ])
+            ->add('types', TypeChoiceType::class, [
+                'event' => $options['event'],
+                'user' => $options['user'],
+                'locale' => $options['locale'],
+                'expanded' => true,
+                'multiple' => true,
             ])
             ->add('begin', DateTimePickerType::class, [
                 'format'        => 'd/m/Y H:i',
@@ -100,7 +109,9 @@ abstract class MassType extends BaseAbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired('event');
+        $resolver->setRequired(['event', 'user', 'locale']);
         $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setAllowedTypes('user', Admin::class);
+        $resolver->setAllowedTypes('locale', 'string');
     }
 }

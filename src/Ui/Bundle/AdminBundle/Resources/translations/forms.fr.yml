@@ -1104,6 +1104,7 @@ form.unavailability_mass_create.children.timeSlots.prototype.children.from.label
 form.unavailability_mass_create.children.timeSlots.prototype.children.to.label: Fin
 form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_create.children.translations.prototype.children.title.label: Titre
+form.unavailability_mass_create.children.types.label: Types de participation
 form.unavailability_mass_update.children.begin.label: Début
 form.unavailability_mass_update.children.blocking.label: Bloquant
 form.unavailability_mass_update.children.category.label: Catégorie
@@ -1118,6 +1119,7 @@ form.unavailability_mass_update.children.timeSlots.prototype.children.from.label
 form.unavailability_mass_update.children.timeSlots.prototype.children.to.label: Fin
 form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_update.children.translations.prototype.children.title.label: Titre
+form.unavailability_mass_update.children.types.label: Types de participation
 form.unavailability.mass.children.blocking.answer.false: Non
 form.unavailability.mass.children.blocking.answer.true: Oui
 form.update_admin.children.email.label: Email
