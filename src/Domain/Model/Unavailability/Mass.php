@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Model\Unavailability;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Unavailability\InvalidTimeSlotException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
 class Mass implements TimeRangeInterface
@@ -69,6 +70,9 @@ class Mass implements TimeRangeInterface
      */
     private $timeSlots;
 
+    /** @var ArrayCollection of Type */
+    private $types;
+
     /**
      * @param Event              $event
      * @param Category           $category
@@ -78,6 +82,7 @@ class Mass implements TimeRangeInterface
      * @param bool               $blocking
      * @param bool               $dispatch
      * @param array              $timeSlots
+     * @param Type[]             $types
      */
     public function __construct(
         Event $event,
@@ -87,7 +92,8 @@ class Mass implements TimeRangeInterface
         \DateTimeInterface $end,
         $blocking,
         $dispatch = false,
-        array $timeSlots = []
+        array $timeSlots = [],
+        array $types = []
     ) {
         if ($begin >= $end) {
             throw new InvalidTimeSlotException('Begin date must be lesser than end date.');
@@ -102,6 +108,7 @@ class Mass implements TimeRangeInterface
         $this->blocking     = $blocking;
         $this->dispatch     = $dispatch;
         $this->timeSlots    = new ArrayCollection();
+        $this->types        = new ArrayCollection($types);
 
         $this->setTimeSlots($timeSlots);
     }
@@ -192,23 +199,15 @@ class Mass implements TimeRangeInterface
         return $this->category;
     }
 
-    /**
-     * @param Category           $category
-     * @param string             $name
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     * @param bool               $blocking
-     * @param bool               $dispatch
-     * @param array              $timeSlots
-     */
     public function update(
         Category $category,
-        $name,
+        string $name,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
-        $blocking,
-        $dispatch = false,
-        array $timeSlots = []
+        bool $blocking,
+        bool $dispatch = false,
+        array $timeSlots = [],
+        array $types = []
     ) {
         $this->category = $category;
         $this->name     = $name;
@@ -216,6 +215,7 @@ class Mass implements TimeRangeInterface
         $this->end      = $end;
         $this->blocking = $blocking;
         $this->dispatch = $dispatch;
+        $this->types    = new ArrayCollection($types);
 
         $this->setTimeSlots($timeSlots);
     }
@@ -302,5 +302,13 @@ class Mass implements TimeRangeInterface
     {
         $this->begin = $begin;
         $this->end = $end;
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes(): array
+    {
+        return $this->types->toArray();
     }
 }
