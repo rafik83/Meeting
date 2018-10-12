@@ -2221,6 +2221,7 @@ services:
         arguments:
             - '@repository.user.event.extra_data_repository'
             - '@datetime'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\SetVisioTested }
 

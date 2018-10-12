@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEven
 use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedByGroupManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantVisioTestedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantVisioToggledEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -56,6 +57,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             Events::PARTICIPANT_VISIO_TOGGLED => 'onParticipantVisioToggled',
             Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreatedByGroupManager',
             Events::REGISTRATION_STEP => 'onRegistrationStepCompleted',
+            Events::PARTICIPANT_VISIO_TESTED => 'onParticipantVisioTested',
         ];
     }
 
@@ -77,6 +79,16 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
             new Update(
                 $participantVisioToggledEvent->participant->getUser(),
                 $participantVisioToggledEvent->participant->getSheet()->getEvent()
+            )
+        );
+    }
+
+    public function onParticipantVisioTested(ParticipantVisioTestedEvent $participantVisioTestedEvent): void
+    {
+        $this->commandBus->handle(
+            new Update(
+                $participantVisioTestedEvent->user,
+                $participantVisioTestedEvent->event
             )
         );
     }
