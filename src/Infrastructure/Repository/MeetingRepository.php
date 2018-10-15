@@ -778,7 +778,7 @@ class MeetingRepository implements MeetingRepositoryInterface
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
-    public function countBetweenDatesByEvent(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end): int
+    public function countBetweenDatesByEventAndType(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, string $type): int
     {
         $queryBuilder = $this
             ->entityManager
@@ -787,9 +787,9 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->from(Meeting::class, 'meeting')
             ->where('meeting.event = :event')
             ->andWhere('meeting.createdAt BETWEEN :begin AND :end')
-            ->andWhere('meeting.createdType != :createdType')
             ->andWhere('meeting.state = :state')
-            ->setParameter('createdType', Meeting::CREATED_BY_PARTICIPANT)
+            ->andWhere('meeting.createdType = :createdType')
+            ->setParameter('createdType', $type)
             ->setParameter('event', $event)
             ->setParameter('begin', $begin)
             ->setParameter('end', $end)
@@ -798,10 +798,29 @@ class MeetingRepository implements MeetingRepositoryInterface
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
+    public function countUpstreamByEventAndType(Event $event, \DateTimeInterface $date, string $type): int
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.id)')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.event = :event')
+            ->andWhere('meeting.createdAt < :date')
+            ->andWhere('meeting.state = :state')
+            ->andWhere('meeting.createdType = :createdType')
+            ->setParameter('event', $event)
+            ->setParameter('date', $date)
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setParameter('createdType', $type);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function countCreatedByParticipantByEvent(Event $event): int
+    public function countCreatedByEventAndType(Event $event, string $type): int
     {
         $queryBuilder = $this
             ->entityManager
@@ -811,7 +830,7 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->where('meeting.event = :event')
             ->andWhere('meeting.createdType = :createdType')
             ->andWhere('meeting.state = :state')
-            ->setParameter('createdType', Meeting::CREATED_BY_PARTICIPANT)
+            ->setParameter('createdType', $type)
             ->setParameter('event', $event)
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 

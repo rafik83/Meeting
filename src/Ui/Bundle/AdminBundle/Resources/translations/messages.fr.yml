@@ -404,11 +404,13 @@ admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce re
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.dashboard.approvedRequest: Acceptées
 admin.meeting.dashboard.createdByParticipant: 'Créés par les participants'
-admin.meeting.dashboard.createdDayD: 'Créés le jour de l’événement par l''organisateur'
+admin.meeting.dashboard.createdByAlgo: 'RDV algo'
+admin.meeting.dashboard.createdDayD.admin: 'RDV admin les jours J'
+admin.meeting.dashboard.createdDayD.participant: 'RDV par les participant les jours J'
 admin.meeting.dashboard.liveMeeting: 'Rendez-vous live'
 admin.meeting.dashboard.meeting: Rendez-vous
 admin.meeting.dashboard.pendingRequest: 'En attentes'
-admin.meeting.dashboard.plannedMeeting: 'Positionnés en amont'
+admin.meeting.dashboard.plannedMeeting: 'RDV admin en amont'
 admin.meeting.dashboard.refusedRequest: Refusées
 admin.meeting.dashboard.request: 'Demandes de rendez-vous'
 admin.meeting.export.fields.day: Jour

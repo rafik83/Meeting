@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Dashboard;
 
 use Proximum\Vimeet\Application\View\Dashboard\DashboardMeetingView;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
@@ -33,17 +34,40 @@ class DashboardMeetingViewQueryHandler
     public function handle(DashboardMeetingViewQuery $query): DashboardMeetingView
     {
         $allMeetings = $this->meetingRepository->countByEvent($query->event);
-        $meetingCreatedDayD = 0;
+        $meetingCreatedDayDByParticipant = 0;
+        $meetingCreatedDayDByAdmin = 0;
+        $meetingCreatedUpstreamByAdmin = 0;
 
         if ($query->event->hasDay()) {
-            $meetingCreatedDayD = $this->meetingRepository->countBetweenDatesByEvent(
+            $firstDay = $query->event->getFirstDay()->getBegin();
+            $lastDay = $query->event->getLastDay()->getEnd();
+
+            $meetingCreatedDayDByAdmin = $this->meetingRepository->countBetweenDatesByEventAndType(
                 $query->event,
-                $query->event->getFirstDay()->getBegin(),
-                $query->event->getLastDay()->getEnd()
+                $firstDay,
+                $lastDay,
+                Meeting::CREATED_BY_ADMIN
+            );
+
+            $meetingCreatedDayDByParticipant = $this->meetingRepository->countBetweenDatesByEventAndType(
+                $query->event,
+                $firstDay,
+                $lastDay,
+                Meeting::CREATED_BY_PARTICIPANT
+            );
+
+            $meetingCreatedUpstreamByAdmin = $this->meetingRepository->countUpstreamByEventAndType(
+                $query->event,
+                $firstDay,
+                Meeting::CREATED_BY_ADMIN
             );
         }
 
-        $meetingCreatedByParticipant = $this->meetingRepository->countCreatedByParticipantByEvent($query->event);
+        $meetingCreatedByParticipant = $this->meetingRepository
+            ->countCreatedByEventAndType($query->event, Meeting::CREATED_BY_PARTICIPANT);
+
+        $meetingCreatedByAlgo = $this->meetingRepository
+            ->countCreatedByEventAndType($query->event, Meeting::CREATED_BY_ALGO);
 
         $approvedRequest = $this->requestRepository->countApprovedByEvent($query->event);
         $pendingRequest = $this->requestRepository->countPendingByEvent($query->event);
@@ -51,8 +75,11 @@ class DashboardMeetingViewQueryHandler
 
         return new DashboardMeetingView(
             $allMeetings,
-            $meetingCreatedDayD,
+            $meetingCreatedDayDByAdmin,
+            $meetingCreatedDayDByParticipant,
             $meetingCreatedByParticipant,
+            $meetingCreatedByAlgo,
+            $meetingCreatedUpstreamByAdmin,
             $approvedRequest,
             $pendingRequest,
             $refusedRequest
