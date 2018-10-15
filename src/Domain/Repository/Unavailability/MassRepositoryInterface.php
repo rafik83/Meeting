@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository\Unavailability;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 
 interface MassRepositoryInterface
@@ -33,10 +34,14 @@ interface MassRepositoryInterface
      */
     public function findByEvent(Event $event, $locale = null);
 
+    public function findByType(Type $type, string $locale);
+
     /**
      * @param Event $event
      *
      * @return Mass[]
+     *
+     * @deprecated
      */
     public function findDispatchByEvent(Event $event);
 
@@ -44,13 +49,22 @@ interface MassRepositoryInterface
      * @param Event $event
      *
      * @return Mass[]
+     *
+     * @deprecated
      */
     public function findBlockingByEvent(Event $event);
+
+    /**
+     * @return Mass[]
+     */
+    public function findBlockingByType(Type $type);
 
     /**
      * @param Event $event
      *
      * @return Mass[]
+     *
+     * @deprecated
      */
     public function findNotDispatchedByEvent(Event $event);
 

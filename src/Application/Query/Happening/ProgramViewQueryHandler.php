@@ -71,7 +71,7 @@ class ProgramViewQueryHandler
         $masses = [];
 
         if (null === $programViewQuery->category) {
-            $masses = $this->massRepository->findByEvent($programViewQuery->event, $programViewQuery->locale);
+            $masses = $this->massRepository->findByType($programViewQuery->sheet->getType(), $programViewQuery->locale);
         }
 
         $dayViews = [];

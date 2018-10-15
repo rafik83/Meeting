@@ -133,7 +133,8 @@ class AgendaViewQueryHandler
                 $participant->getUser(),
                 $query->event
             );
-            $masses = $this->massUnavailabilityRepository->findByEvent($query->event, $query->locale);
+
+            $masses = $this->massUnavailabilityRepository->findByType($query->sheet->getType(), $query->locale);
 
             $happeningParticipations = $this
                 ->happeningParticipationRepository

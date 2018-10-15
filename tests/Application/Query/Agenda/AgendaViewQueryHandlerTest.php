@@ -106,7 +106,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $unavailabilityRepository->findByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([$unavailability]);
 
         $massUnavailabilityRepository     = $this->prophesize(MassRepositoryInterface::class);
-        $massUnavailabilityRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([$mass]);
+        $massUnavailabilityRepository->findByType($sheet->getType(), 'fr')->shouldBeCalled()->willReturn([$mass]);
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
         $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], []);
         $dayViewQueryHandler
@@ -207,7 +207,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $unavailabilityRepository->findByUserAndEvent($user2, $event)->shouldBeCalled()->willReturn([$unavailability]);
 
         $massUnavailabilityRepository     = $this->prophesize(MassRepositoryInterface::class);
-        $massUnavailabilityRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([$mass]);
+        $massUnavailabilityRepository->findByType($sheet->getType(), 'fr')->shouldBeCalled()->willReturn([$mass]);
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
         $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], []);
         $dayViewQueryHandler
