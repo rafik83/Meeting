@@ -427,6 +427,8 @@ admin.meeting.export.fields.spot: Lieu
 admin.meeting.export.fields.to_sheet_id: 'ID demandé'
 admin.meeting.export.fields.to_sheet_name: 'Nom fiche demandé'
 admin.meeting.export.fields.to_sheet_participant_fullname: 'Prénom Nom utilisateurs demandés'
+admin.meeting.export.fields.created_type: 'Planifié par'
+admin.meeting.export.fields.status: 'Vérification RDV'
 admin.meeting.export.fields.to_sheet_participants: 'Participants demandés'
 admin.meeting.export.fields.to_sheet_title: 'Titre fiche demandée'
 admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandés'
@@ -444,6 +446,12 @@ admin.meeting.list.noResult: 'Aucun RDV positionné'
 admin.meeting.list.participant.absent: Absent
 admin.meeting.list.participant.present: Présent
 admin.meeting.list.title: 'RDV positionnés'
+admin.meeting.list.createdType.algo: 'planner'
+admin.meeting.list.createdType.admin: 'admin'
+admin.meeting.list.createdType.participant: 'participants'
+admin.meeting.list.status.canceled: "N'a pas eu lieu"
+admin.meeting.list.status.not_confirmed: 'Non confirmé'
+admin.meeting.list.status.confirmed: 'Confirmé'
 admin.menu.link: Menu
 admin.messaging_campaign.recipients.billing_contact: 'Contact facturation de la fiche'
 admin.messaging_campaign.recipients.participants: 'Tous les participants de la fiche'
