@@ -38,6 +38,8 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
     const COL_REQUEST_STATE          = 'state';
     const COL_REQUEST_CREATED_AT     = 'createdAt';
     const COL_REQUEST_UPDATED_AT     = 'updatedAt';
+    const COL_CREATED_TYPE           = 'createdType';
+    const COL_SLOT                   = 'slot';
 
     /** @var TranslatorInterface */
     private $translator;
@@ -69,6 +71,8 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
         );
 
         foreach ($meetingRequestListView->meetingRequests as $meetingRequest) {
+            $createdType = $meetingRequest->createdType ? $this->convertCharset($this->translator->trans(self::TRANSLATION_COL_PREFIX . self::COL_CREATED_TYPE . '.' . $meetingRequest->createdType, [], self::TRANSLATION_DOMAIN, $locale)) : null;
+
             $data[] = [
                 $this->colTrans(self::COL_REQUEST_ID, $locale)             => $meetingRequest->id,
                 $this->colTrans(self::COL_MEETING_ID, $locale)             => $meetingRequest->meetingId,
@@ -87,6 +91,8 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
                 $this->colTrans(self::COL_REQUEST_STATE, $locale)          => $this->convertCharset($this->translator->trans(self::TRANSLATION_STATE_PREFIX . $meetingRequest->state, [], self::TRANSLATION_DOMAIN, $locale)),
                 $this->colTrans(self::COL_REQUEST_CREATED_AT, $locale)     => $this->formatDate($dateFormatter, $meetingRequest->createdAt),
                 $this->colTrans(self::COL_REQUEST_UPDATED_AT, $locale)     => $this->formatDate($dateFormatter, $meetingRequest->updatedAt),
+                $this->colTrans(self::COL_CREATED_TYPE, $locale)           => $createdType,
+                $this->colTrans(self::COL_SLOT, $locale)                   => null !== $meetingRequest->slot ? $this->formatDate($dateFormatter, $meetingRequest->slot) : null
             ];
         }
 

@@ -78,6 +78,8 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             $sheetView2->reveal(),
             Request::STATE_REFUSED,
             $dateTime,
+            $dateTime,
+            'algo',
             $dateTime
         );
         $this->assertEquals($expected, $result);
@@ -131,6 +133,8 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             $sheetView2->reveal(),
             Request::STATE_PLANNED,
             $dateTime,
+            $dateTime,
+            'algo',
             $dateTime
         );
         $this->assertEquals($expected, $result);

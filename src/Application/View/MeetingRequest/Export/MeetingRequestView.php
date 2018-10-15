@@ -33,15 +33,12 @@ class MeetingRequestView
     /** @var SheetView */
     public $toSheet;
 
-    /**
-     * @param int                $id
-     * @param int|null           $meetingId
-     * @param SheetView          $fromSheet
-     * @param SheetView          $toSheet
-     * @param string             $state
-     * @param \DateTimeInterface $createdAt
-     * @param \DateTimeInterface $updatedAt
-     */
+    /** @var null|string */
+    public $createdType;
+
+    /** @var null|\DateTime */
+    public $slot;
+
     public function __construct(
         int $id,
         int $meetingId = null,
@@ -49,7 +46,9 @@ class MeetingRequestView
         SheetView $toSheet,
         string $state,
         \DateTimeInterface $createdAt,
-        \DateTimeInterface $updatedAt
+        \DateTimeInterface $updatedAt,
+        ?string $createdType,
+        ?\DateTime $slot
     ) {
         $this->id = $id;
         $this->meetingId = $meetingId;
@@ -58,5 +57,7 @@ class MeetingRequestView
         $this->state = $state;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+        $this->createdType = $createdType;
+        $this->slot = $slot;
     }
 }
