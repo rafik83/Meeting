@@ -13,7 +13,8 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
-use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActivateAccountMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
@@ -36,13 +37,11 @@ use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetChangeTypeMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail as UserActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\CompleteProfileMail as UserCompleteProfileMail;
@@ -212,20 +211,18 @@ class MailEventSubscriber implements EventSubscriberInterface
     /**
      * @param UserActivateAccountEvent $event
      */
-    public function onUserActivateAccount(UserActivateAccountEvent $event)
+    public function onUserActivateAccount(UserActivateAccountEvent $event): void
     {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $event->getFromUser())
-        );
-
-        $mail = new UserActivateAccountMail(
+        $mail = $this->prepareHandler->handle(new PrepareActivateAccountMailView(
             $event->getEvent(),
-            $this->sender->generate($event->getEvent()),
-            $event->getUser()->getEmail(),
+            $event->getUser(),
             $event->getUser()->getLocale(),
-            $event->getActivateAccountToken()->getToken(),
-            $participantMailView
-        );
+            $event->getActivateAccountToken()
+        ));
+
+        if (!$mail instanceof AbstractMail) {
+            return;
+        }
 
         $this->mailer->send($mail);
     }
@@ -300,7 +297,7 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserPreRegistered(PreRegisterEvent $event)
     {
-        $mail = $this->prepareHandler->handle(new PrepareUserRegisteredMail(
+        $mail = $this->prepareHandler->handle(new PrepareUserRegisteredMailView(
             $event->getEvent(),
             $event->getUser(),
             $event->getLocale()

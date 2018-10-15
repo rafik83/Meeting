@@ -11,78 +11,34 @@
 namespace Proximum\Vimeet\Application\Components\Transactional\Mail;
 
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
-use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
-use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
-use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler;
-use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
-use Proximum\Vimeet\Domain\Repository\Transactional\Mail\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountCustomizedMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountMail;
 
 class PrepareHandler
 {
-    /** @var MessageRepositoryInterface */
-    private $messageRepository;
+    /** @var PrepareRegisterAccountMail */
+    private $prepareRegisterAccountMail;
 
-    /** @var ParticipantMailViewQueryHandler */
-    private $participantMailViewQueryHandler;
-
-    /** @var EventSender */
-    private $eventSenderGuesser;
-
-    /** @var SubstitutionHandler */
-    private $substitutionHandler;
+    /** @var PrepareActivateAccountMail */
+    private $prepareActivateAccountMail;
 
     public function __construct(
-        MessageRepositoryInterface $messageRepository,
-        ParticipantMailViewQueryHandler $participantMailViewQueryHandler,
-        SubstitutionHandler $substitutionHandler,
-        EventSender $eventSenderGuesser
+        PrepareRegisterAccountMail $prepareRegisterAccountMail,
+        PrepareActivateAccountMail $prepareActivateAccountMail
     ) {
-        $this->messageRepository = $messageRepository;
-        $this->participantMailViewQueryHandler = $participantMailViewQueryHandler;
-        $this->eventSenderGuesser = $eventSenderGuesser;
-        $this->substitutionHandler = $substitutionHandler;
+        $this->prepareRegisterAccountMail = $prepareRegisterAccountMail;
+        $this->prepareActivateAccountMail = $prepareActivateAccountMail;
     }
 
     public function handle(AbstractPrepareMail $prepareMail): ?AbstractMail
     {
         switch ($prepareMail->type) {
             case Constant::TRANSACTIONAL_MAIL_KEY_USER_REGISTERED:
-                $message = $this->messageRepository->getOneByEventAndType(
-                    $prepareMail->event,
-                    $prepareMail->type
-                );
-
-                if ($message instanceof Message) {
-                    $result = $this->substitutionHandler->handle($prepareMail, $message);
-
-                    return new RegisterAccountCustomizedMail(
-                        $prepareMail->event,
-                        $this->eventSenderGuesser->generate($prepareMail->event),
-                        $prepareMail->user->getEmail(),
-                        $prepareMail->locale,
-                        $result->subject,
-                        $result->content
-                    );
-                }
-
-                $participantMailView = $this->participantMailViewQueryHandler->handle(
-                    new ParticipantMailViewQuery($prepareMail->sheet, $prepareMail->user)
-                );
-
-                $mail = new RegisterAccountMail(
-                    $prepareMail->event,
-                    $this->eventSenderGuesser->generate($prepareMail->event),
-                    $prepareMail->user->getEmail(),
-                    $prepareMail->locale,
-                    $participantMailView
-                );
-
-                return $mail;
+                return $this->prepareRegisterAccountMail->prepare($prepareMail);
+            case Constant::TRANSACTIONAL_MAIL_KEY_USER_ACTIVATE_ACCOUNT:
+                return $this->prepareActivateAccountMail->prepare($prepareMail);
             default: return null;
         }
     }

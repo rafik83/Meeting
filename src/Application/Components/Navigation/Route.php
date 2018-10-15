@@ -27,6 +27,10 @@ final class Route
         'event_sheet_update',
     ];
 
+    public const PARTICIPANT = [
+        'event_account_participant',
+    ];
+
     public const CATALOG_INDEX = 'event_catalog_index';
     public const CATALOG_VIEW_OTHER_SHEET = 'event_catalog_complete_sheet';
     public const CATALOG_MEETING_REQUEST = 'event_catalog_sheet_meeting_request';

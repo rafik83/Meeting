@@ -40,30 +40,25 @@ class SubstitutionHandler
                 : []
         );
 
-        foreach ($availableParameters as $availableParameter) {
-            $foundInSubject = strpos($subject, $availableParameter);
-            $foundInContent = strpos($content, $availableParameter);
+        $subjectSubstitutions = [];
+        $contentSubstitutions = [];
+
+        foreach ($availableParameters as $placeholder) {
+            $foundInSubject = strpos($subject, $placeholder);
+            $foundInContent = strpos($content, $placeholder);
 
             if (false !== $foundInSubject || false !== $foundInContent) {
                 try {
                     $substitute = $this->substitutionsProviders
-                        ->getSubstitution($availableParameter)
+                        ->getSubstitution($placeholder)
                         ->substitute($prepareMail);
 
                     if (false !== $foundInSubject) {
-                        $subject = str_replace(
-                            $availableParameter,
-                            $substitute,
-                            $subject
-                        );
+                        $subjectSubstitutions[$placeholder] = $substitute;
                     }
 
                     if (false !== $foundInContent) {
-                        $content = str_replace(
-                            $availableParameter,
-                            $substitute,
-                            $content
-                        );
+                        $contentSubstitutions[$placeholder] = $substitute;
                     }
                 } catch (UndefinedSubstitutionProviderException $exception) {
                     continue;
@@ -71,6 +66,27 @@ class SubstitutionHandler
             }
         }
 
-        return new SubstitutionResult($subject, $content);
+        foreach ($subjectSubstitutions as $placeholder => $subjectSubstitution) {
+            $subject = str_replace(
+                $placeholder,
+                $subjectSubstitution,
+                $subject
+            );
+        }
+
+        foreach ($contentSubstitutions as $placeholder => $contentSubstitution) {
+            $content = str_replace(
+                $placeholder,
+                $contentSubstitution,
+                $content
+            );
+        }
+
+        return new SubstitutionResult(
+            $subject,
+            $content,
+            $subjectSubstitutions,
+            $contentSubstitutions
+        );
     }
 }

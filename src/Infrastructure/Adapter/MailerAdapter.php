@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 
 class MailerAdapter implements MailerInterface
 {
@@ -48,6 +49,9 @@ class MailerAdapter implements MailerInterface
         $template = $this->twig->loadTemplate($mail->getTemplate());
         $body = $template->render(['mail' => $mail]);
 
+        if ($mail instanceof AddParticipantMail) {
+            dump($mail);die();
+        }
         if ($mail->hasToTranslateSubject()) {
             $subject  = $this->translator->trans(
                 $mail->getSubject(),

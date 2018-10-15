@@ -23,7 +23,7 @@ class AddParticipantMail extends UserMail
     public const TEMPLATE_FULL_TEXT = 'MailBundle:Mail:Sheet/Invitation/addParticipantConfirmation_full_text.html.twig';
 
     /** @var string */
-    protected $subject = self::TEMPLATE;
+    protected $subject = self::SUBJECT;
 
     /** @var string */
     protected $template = self::TEMPLATE;

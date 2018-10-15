@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 
-class PrepareUserRegisteredMail extends AbstractPrepareMail
+class PrepareUserRegisteredMailView extends AbstractPrepareMail
 {
     public function __construct(
         Event $event,
