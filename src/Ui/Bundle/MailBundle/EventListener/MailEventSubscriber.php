@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActivateAccountMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareParticipantAddedMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
@@ -160,20 +161,19 @@ class MailEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetAddParticipantEvent $event
      */
-    public function onSheetAddParticipant(SheetAddParticipantEvent $event)
+    public function onSheetAddParticipant(SheetAddParticipantEvent $event): void
     {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $event->getGuest()->getUser())
-        );
-
-        $mail = new AddParticipantMail(
+        $mail = $this->prepareHandler->handle(new PrepareParticipantAddedMailView(
             $event->getSheet()->getEvent(),
-            $this->sender->generate($event->getSheet()->getEvent()),
-            $event->getUser()->getEmail(),
+            $event->getUser(),
             $event->getUser()->getLocale(),
-            $event->getGuest()->getUser(),
-            $participantMailView
-        );
+            $event->getSheet(),
+            $event->getGuest()
+        ));
+
+        if (!$mail instanceof AbstractMail) {
+            return;
+        }
 
         $this->mailer->send($mail);
     }

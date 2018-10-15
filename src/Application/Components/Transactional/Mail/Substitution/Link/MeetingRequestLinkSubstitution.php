@@ -14,9 +14,8 @@ use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstituteInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
-use Proximum\Vimeet\Domain\Model\Participant;
 
-class ParticipantAccountLinkSubstitution implements SubstituteInterface
+class MeetingRequestLinkSubstitution implements SubstituteInterface
 {
     /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
@@ -32,24 +31,12 @@ class ParticipantAccountLinkSubstitution implements SubstituteInterface
             return '';
         }
 
-        $participant = null;
-
-        if (method_exists($prepareMail, 'getParticipant')) {
-            $participant = $prepareMail->getParticipant();
-        } else {
-            $participant = $prepareMail->sheet->getUserParticipant($prepareMail->user);
-        }
-
-        if (!$participant instanceof Participant) {
-            return '';
-        }
-
         return $this->eventUrlGenerator->generateEventAbsoluteUrl(
             $prepareMail->event,
-            Route::PARTICIPANT_ACCOUNT,
+            Route::MEETING_REQUEST_LIST,
             [
-                'sheet' => $prepareMail->sheet->getId(),
-                'participant' => $participant->getId(),
+                'sheet'   => $prepareMail->sheet->getId(),
+                '_locale' => $prepareMail->event->getAvailableLocale($prepareMail->locale),
             ]
         );
     }

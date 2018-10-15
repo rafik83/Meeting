@@ -12,16 +12,16 @@ namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare;
 
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler;
-use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActivateAccountMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareParticipantAddedMailView;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
 use Proximum\Vimeet\Domain\Repository\Transactional\Mail\MessageRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountCustomizedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantCustomizedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 
-class PrepareActivateAccountMail
+class PrepareParticipantAddedMail
 {
     /** @var MessageRepositoryInterface */
     private $messageRepository;
@@ -47,17 +47,18 @@ class PrepareActivateAccountMail
         $this->participantMailViewQueryHandler = $participantMailViewQueryHandler;
     }
 
-    public function prepare(PrepareActivateAccountMailView $prepareMail): ?AbstractMail
+    public function prepare(PrepareParticipantAddedMailView $prepareMail): ?AbstractMail
     {
-        $message = $this->messageRepository->getOneByEventAndType(
+        $message = $this->messageRepository->getOneByEventAndTypeAndAssociatedType(
             $prepareMail->event,
-            $prepareMail->type
+            $prepareMail->type,
+            $prepareMail->sheet->getType()
         );
 
         if ($message instanceof Message) {
             $result = $this->substitutionHandler->handle($prepareMail, $message);
 
-            return new RegisterAccountCustomizedMail(
+            return new AddParticipantCustomizedMail(
                 $prepareMail->event,
                 $this->eventSenderGuesser->generate($prepareMail->event),
                 $prepareMail->user->getEmail(),
@@ -71,14 +72,15 @@ class PrepareActivateAccountMail
             new ParticipantMailViewQuery($prepareMail->sheet, $prepareMail->user)
         );
 
-        $mail = new ActivateAccountMail(
+        $mail = new AddParticipantMail(
             $prepareMail->event,
             $this->eventSenderGuesser->generate($prepareMail->event),
             $prepareMail->user->getEmail(),
             $prepareMail->locale,
-            $prepareMail->getActivateAccountToken()->getToken(),
+            $prepareMail->guest->getUser(),
             $participantMailView
         );
+
 
         return $mail;
     }

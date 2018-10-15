@@ -1,22 +1,21 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) Proximum
+ * Copyright (C) vimeet
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link;
 
-use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstituteInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class ParticipantAccountLinkSubstitution implements SubstituteInterface
+class ValidateMobilePhoneLinkSubstitution implements SubstituteInterface
 {
     /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
@@ -32,24 +31,19 @@ class ParticipantAccountLinkSubstitution implements SubstituteInterface
             return '';
         }
 
-        $participant = null;
+        $userParticipant = $prepareMail->sheet->getUserParticipant($prepareMail->user);
 
-        if (method_exists($prepareMail, 'getParticipant')) {
-            $participant = $prepareMail->getParticipant();
-        } else {
-            $participant = $prepareMail->sheet->getUserParticipant($prepareMail->user);
-        }
-
-        if (!$participant instanceof Participant) {
+        if (!$userParticipant instanceof Participant) {
             return '';
         }
 
         return $this->eventUrlGenerator->generateEventAbsoluteUrl(
             $prepareMail->event,
-            Route::PARTICIPANT_ACCOUNT,
+            'event_user_phone_validate',
             [
-                'sheet' => $prepareMail->sheet->getId(),
-                'participant' => $participant->getId(),
+                'sheet'       => $prepareMail->sheet->getId(),
+                'participant' => $userParticipant->getId(),
+                '_locale'     => $prepareMail->event->getAvailableLocale($prepareMail->locale),
             ]
         );
     }

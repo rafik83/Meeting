@@ -31,12 +31,17 @@ class SubstitutionHandler
         $subject = $message->getSubject($locale);
         $content = $message->getContent($locale);
 
+        $sheetParameters = array_merge(
+            Constant::TRANSACTIONAL_MAIL_EDITOR_PARAMETERS,
+            Constant::TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS
+        );
+
         $availableParameters = array_merge(
             Constant::TRANSACTIONAL_MAIL_GENERIC_PARAMETERS,
             Constant::TRANSACTIONAL_MAIL_LEGACY_GENERIC_PARAMETERS,
             Constant::TRANSACTIONAL_MAIL_LIST[$prepareMail->type]['availableParameters'],
             Constant::TRANSACTIONAL_MAIL_LIST[$prepareMail->type]['isCustomizableByType']
-                ? Constant::TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS
+                ? $sheetParameters
                 : []
         );
 

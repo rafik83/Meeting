@@ -22,14 +22,18 @@ final class Route
     public const USER_EVENT_AUTHENTICATION_TOKEN_LOGIN = 'vimeet_event_authentication_token_login';
 
     public const SHEET = [
-        'event_sheet_default',
+        self::SHEET_DEFAULT,
         'event_sheet_locale',
         'event_sheet_update',
     ];
 
+    public const SHEET_DEFAULT = 'event_sheet_default';
+
     public const PARTICIPANT = [
-        'event_account_participant',
+        self::PARTICIPANT_ACCOUNT,
     ];
+
+    public const PARTICIPANT_ACCOUNT = 'event_account_participant';
 
     public const CATALOG_INDEX = 'event_catalog_index';
     public const CATALOG_VIEW_OTHER_SHEET = 'event_catalog_complete_sheet';
@@ -52,20 +56,28 @@ final class Route
     ];
 
     public const ORDER = [
-        'event_order_list',
+        self::ORDER_LIST,
         'event_pro_forma',
         'event_order_summary_total',
     ];
 
+    public const ORDER_LIST = 'event_order_list';
+
     public const AGENDA = [
-        'event_agenda',
+        self::AGENDA_DEFAULT,
         'event_agenda_participant',
         'event_unavailability_create',
     ];
 
+    public const AGENDA_DEFAULT = 'event_agenda';
+    public const AGENDA_CONFIRMATION = 'event_user_event_token_confirm_agenda';
+
     public const PROGRAM = 'happening_program';
     public const BADGE = 'event_sheet_user_badge';
+    public const BADGE_DOWNLOAD =' event_sheet_user_badge_download';
     public const NOTIFICATION = 'event_notification_list';
+
+    public const VISIO_TEST_CONFIGURATION = 'event_video_conference_create_network_test';
 
     public static function isSheet(string $route): bool
     {

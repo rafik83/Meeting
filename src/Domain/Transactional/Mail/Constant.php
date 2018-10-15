@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Transactional\Mail;
 
+use Proximum\Vimeet\Domain\Model\Messaging\Compose;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
@@ -297,5 +298,23 @@ final class Constant
 
     public const TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS = [
         '%participationType%',
+    ];
+
+    public const TRANSACTIONAL_MAIL_EDITOR_PARAMETERS = [
+        Compose::TAG_SHEET_PLANNING,
+        Compose::TAG_SHEET_SPOT,
+        Compose::TAG_CTA_AGENDA_CONFIRMATION,
+        Compose::TAG_CTA_EBADGE,
+        Compose::TAG_CTA_TEST_VISIO_CONFIGURATION,
+        Compose::LINK_SHEET,
+        Compose::LINK_PACKAGE,
+        Compose::LINK_ORDERS,
+        Compose::LINK_AGENDA,
+        Compose::LINK_PROGRAM,
+        Compose::LINK_CATALOG,
+        Compose::LINK_MEETING_REQUEST,
+        Compose::LINK_ACTIVACTE_ACCOUNT,
+        Compose::LINK_EXPORT_MEETING_SHEET,
+        Compose::LINK_VALIDATE_MOBILE_PHONE,
     ];
 }

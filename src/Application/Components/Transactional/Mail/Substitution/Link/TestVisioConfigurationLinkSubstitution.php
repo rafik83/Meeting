@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet project.
+ * This file is part of the vimeet project.
  *
- * Copyright (C) Proximum
+ * Copyright (C) vimeet
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,9 +14,8 @@ use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstituteInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
-use Proximum\Vimeet\Domain\Model\Participant;
 
-class ParticipantAccountLinkSubstitution implements SubstituteInterface
+class TestVisioConfigurationLinkSubstitution implements SubstituteInterface
 {
     /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
@@ -28,28 +27,11 @@ class ParticipantAccountLinkSubstitution implements SubstituteInterface
 
     public function substitute(AbstractPrepareMail $prepareMail): string
     {
-        if (!$prepareMail->hasSheet()) {
-            return '';
-        }
-
-        $participant = null;
-
-        if (method_exists($prepareMail, 'getParticipant')) {
-            $participant = $prepareMail->getParticipant();
-        } else {
-            $participant = $prepareMail->sheet->getUserParticipant($prepareMail->user);
-        }
-
-        if (!$participant instanceof Participant) {
-            return '';
-        }
-
         return $this->eventUrlGenerator->generateEventAbsoluteUrl(
             $prepareMail->event,
-            Route::PARTICIPANT_ACCOUNT,
+            Route::VISIO_TEST_CONFIGURATION,
             [
-                'sheet' => $prepareMail->sheet->getId(),
-                'participant' => $participant->getId(),
+                '_locale' => $prepareMail->event->getAvailableLocale($prepareMail->locale),
             ]
         );
     }
