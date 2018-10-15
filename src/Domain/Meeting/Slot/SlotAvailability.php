@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 class SlotAvailability
 {
@@ -34,6 +35,10 @@ class SlotAvailability
     const SLOT_AVAILABLE                    = 'slot_available';
     const MASS_ASSIGNMENT_UNAVAILABILITY    = 'mass_assignment_unavailability';
     const MEETING_ON_OTHER_SHEET            = 'meeting_on_other_sheet';
+
+    const ASSIGNMENT_DISABLED   = 'disabled';
+    const ASSIGNMENT_FOUND      = 'found';
+    const ASSIGNMENT_NOT_FOUND  = 'not_found';
 
     /**
      * @var HappeningParticipationRepositoryInterface
@@ -211,16 +216,11 @@ class SlotAvailability
         }
     }
 
-    /**
-     * @param MeetingSlot $slot
-     *
-     * @return bool
-     */
-    public function isUsable(MeetingSlot $slot)
+    public function isUsable(Sheet $sheet, MeetingSlot $slot): bool
     {
         $this->autoLoading($slot->getEvent());
 
-        return !$this->isMassUnavailabilityNotUsable($slot);
+        return !$this->hasMassUnavailabilityOnSameSlot($sheet, $slot);
     }
 
     /**
@@ -249,7 +249,7 @@ class SlotAvailability
             return new SlotAvailabilityView(self::HAPPENING_UNAVAILABILITY);
         }
 
-        if (false !== ($assignment = $this->hasMassUnavailability($slot, $participant))) {
+        if (false !== ($assignment = $this->getMassUnavailability($slot, $participant))) {
             // result can be true or MassAssignment, if true, change it to null to send it to the object
             if (!$assignment instanceof MassAssignment) {
                 $assignment = null;
@@ -324,23 +324,7 @@ class SlotAvailability
 
         /** @var Unavailability $unavailability */
         foreach ($this->unavailabilitySortByUser[$participant->getUser()->getId()] as $unavailability) {
-            if ($slot->getBegin() >= $unavailability->getBegin() && $slot->getBegin() < $unavailability->getEnd()) {
-                return true;
-            }
-
-            if ($slot->getEnd() > $unavailability->getBegin() && $slot->getEnd() <= $unavailability->getEnd()) {
-                return true;
-            }
-
-            if ($slot->getBegin() >= $unavailability->getBegin() && $slot->getEnd() <= $unavailability->getEnd()) {
-                return true;
-            }
-
-            if ($unavailability->getBegin() >= $slot->getBegin() && $unavailability->getBegin() < $slot->getEnd()) {
-                return true;
-            }
-
-            if ($unavailability->getEnd() > $slot->getBegin() && $unavailability->getEnd() <= $slot->getEnd()) {
+            if (TimeOverlap::overlap($unavailability, $slot)) {
                 return true;
             }
         }
@@ -348,43 +332,22 @@ class SlotAvailability
         return false;
     }
 
-    /**
-     * @param MeetingSlot $slot
-     *
-     * @return bool
-     */
-    private function isMassUnavailabilityNotUsable(MeetingSlot $slot)
+    private function hasMassUnavailabilityOnSameSlot(Sheet $sheet, MeetingSlot $slot): bool
     {
         foreach ($this->massUnavailability as $mass) {
-            if ($slot->getBegin() >= $mass->getBegin() && $slot->getBegin() < $mass->getEnd()) {
-                return $mass->isBlocking() && !$mass->isDispatch();
+            if (!$mass->hasType($sheet->getType())) {
+                continue;
             }
 
-            if ($slot->getEnd() > $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
-                return $mass->isBlocking() && !$mass->isDispatch();
-            }
-
-            if ($slot->getBegin() >= $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
-                return $mass->isBlocking() && !$mass->isDispatch();
-            }
-
-            if ($mass->getBegin() >= $slot->getBegin() && $mass->getBegin() < $slot->getEnd()) {
-                return $mass->isBlocking() && !$mass->isDispatch();
-            }
-
-            if ($mass->getEnd() > $slot->getBegin() && $mass->getEnd() <= $slot->getEnd()) {
-                return $mass->isBlocking() && !$mass->isDispatch();
+            if (TimeOverlap::overlap($slot, $mass)) {
+                return $mass->isBlockingAndNotDispatch();
             }
         }
 
         return false;
     }
 
-    /**
-     * @param Participant $participant
-     * @param Mass        $mass
-     */
-    private function getDispatch(Participant $participant, Mass $mass)
+    private function getDispatch(Participant $participant, Mass $mass): ?MassAssignment
     {
         if (null !== $this->massAssignment) {
             if (!isset($this->massAssignmentSortByUser[$participant->getUser()->getId()])) {
@@ -405,19 +368,20 @@ class SlotAvailability
     }
 
     /**
-     * @param MeetingSlot $slot
-     * @param Participant $participant
-     *
-     * @return bool
+     * @return bool|MassAssignment
      */
-    private function hasMassUnavailability(MeetingSlot $slot, Participant $participant)
+    private function getMassUnavailability(MeetingSlot $slot, Participant $participant)
     {
         foreach ($this->massUnavailability as $mass) {
+            if (!$mass->hasType($participant->getSheet()->getType())) {
+                continue;
+            }
+
             if ($mass->isDispatch()) {
                 $assignment = $this->getDispatch($participant, $mass);
 
                 if (null !== $assignment) {
-                    $assignmentResult = $this->hasDispatchUnavailability($assignment, $slot);
+                    $assignmentResult = $this->getDispatchUnavailability($assignment, $slot);
 
                     if (self::ASSIGNMENT_DISABLED === $assignmentResult) {
                         return false;
@@ -431,23 +395,7 @@ class SlotAvailability
                 }
             }
 
-            if ($slot->getBegin() >= $mass->getBegin() && $slot->getBegin() < $mass->getEnd()) {
-                return true;
-            }
-
-            if ($slot->getEnd() > $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
-                return true;
-            }
-
-            if ($slot->getBegin() >= $mass->getBegin() && $slot->getEnd() <= $mass->getEnd()) {
-                return true;
-            }
-
-            if ($mass->getBegin() >= $slot->getBegin() && $mass->getBegin() < $slot->getEnd()) {
-                return true;
-            }
-
-            if ($mass->getEnd() > $slot->getBegin() && $mass->getEnd() <= $slot->getEnd()) {
+            if (TimeOverlap::overlap($slot, $mass)) {
                 return true;
             }
         }
@@ -455,36 +403,13 @@ class SlotAvailability
         return false;
     }
 
-    const ASSIGNMENT_DISABLED   = 'disabled';
-    const ASSIGNMENT_FOUND      = 'found';
-    const ASSIGNMENT_NOT_FOUND  = 'not_found';
-
     /**
-     * @param MassAssignment $massAssignment
-     * @param MeetingSlot    $slot
-     *
-     * @return string
+     * @return string self::ASSIGNMENT_NOT_FOUND|self::ASSIGNMENT_FOUND|self::ASSIGNMENT_DISABLED
      */
-    private function hasDispatchUnavailability(MassAssignment $massAssignment, MeetingSlot $slot)
+    private function getDispatchUnavailability(MassAssignment $massAssignment, MeetingSlot $slot): string
     {
-        if ($slot->getBegin() >= $massAssignment->getBegin() && $slot->getBegin() < $massAssignment->getEnd()) {
+        if (TimeOverlap::overlap($slot, $massAssignment)) {
             return $massAssignment->isEnabled() ? self::ASSIGNMENT_FOUND : self::ASSIGNMENT_DISABLED;
-        }
-
-        if ($slot->getEnd() > $massAssignment->getBegin() && $slot->getEnd() <= $massAssignment->getEnd()) {
-            return $massAssignment->isEnabled() ? self::ASSIGNMENT_FOUND : self::ASSIGNMENT_DISABLED;
-        }
-
-        if ($slot->getBegin() >= $massAssignment->getBegin() && $slot->getEnd() <= $massAssignment->getEnd()) {
-            return $massAssignment->isEnabled() ? self::ASSIGNMENT_FOUND : self::ASSIGNMENT_DISABLED;
-        }
-
-        if ($massAssignment->getBegin() >= $slot->getBegin() && $massAssignment->getBegin() < $slot->getEnd()) {
-            return $massAssignment->isEnabled() ? self::ASSIGNMENT_FOUND : self::ASSIGNMENT_DISABLED;
-        }
-
-        if ($massAssignment->getEnd() > $slot->getBegin() && $massAssignment->getEnd() <= $slot->getEnd()) {
-            return $massAssignment->isEnabled() ? self::ASSIGNMENT_DISABLED : self::ASSIGNMENT_DISABLED;
         }
 
         return self::ASSIGNMENT_NOT_FOUND;
@@ -536,44 +461,19 @@ class SlotAvailability
         return null;
     }
 
-    /**
-     * @param MeetingSlot $slot
-     * @param Participant $participant
-     *
-     * @return bool
-     */
-    private function hasHappening(MeetingSlot $slot, Participant $participant)
+    private function hasHappening(MeetingSlot $slot, Participant $participant): bool
     {
         if (!isset($this->happeningsSortByParticipant[$participant->getUser()->getId()])) {
             return false;
         }
 
-        /** @var HappeningParticipation $happening */
-        foreach ($this->happeningsSortByParticipant[$participant->getUser()->getId()] as $happening) {
-            $happeningBegin = $happening->getHappening()->getBegin();
-            $happeningEnd = $happening->getHappening()->getEnd();
-
-            if ($happening->getUser() !== $participant->getUser()) {
+        /** @var HappeningParticipation $happeningParticipation */
+        foreach ($this->happeningsSortByParticipant[$participant->getUser()->getId()] as $happeningParticipation) {
+            if ($happeningParticipation->getUser() !== $participant->getUser()) {
                 continue;
             }
 
-            if ($slot->getBegin() >= $happeningBegin && $slot->getBegin() < $happeningEnd) {
-                return true;
-            }
-
-            if ($slot->getEnd() > $happeningBegin && $slot->getEnd() <= $happeningEnd) {
-                return true;
-            }
-
-            if ($slot->getBegin() >= $happeningBegin && $slot->getEnd() < $happeningEnd) {
-                return true;
-            }
-
-            if ($happeningBegin >= $slot->getBegin() && $happeningBegin < $slot->getEnd()) {
-                return true;
-            }
-
-            if ($happeningEnd > $slot->getBegin() && $happeningEnd <= $slot->getEnd()) {
+            if (TimeOverlap::overlap($slot, $happeningParticipation->getHappening())) {
                 return true;
             }
         }

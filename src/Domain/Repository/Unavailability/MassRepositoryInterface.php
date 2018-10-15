@@ -49,8 +49,6 @@ interface MassRepositoryInterface
      * @param Event $event
      *
      * @return Mass[]
-     *
-     * @deprecated
      */
     public function findBlockingByEvent(Event $event);
 

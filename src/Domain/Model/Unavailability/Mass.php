@@ -311,4 +311,14 @@ class Mass implements TimeRangeInterface
     {
         return $this->types->toArray();
     }
+
+    public function hasType(Type $type): bool
+    {
+        return \in_array($type, $this->getTypes(), true);
+    }
+
+    public function isBlockingAndNotDispatch(): bool
+    {
+        return $this->isBlocking() && !$this->isDispatch();
+    }
 }

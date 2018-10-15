@@ -106,7 +106,7 @@ class IndicatorCalculator
             $slotUsables = [];
 
             foreach ($this->slots as $slot) {
-                if ($this->slotAvailability->isUsable($slot)) {
+                if ($this->slotAvailability->isUsable($sheet, $slot)) {
                     $slotUsables[] = $slot;
                 }
             }

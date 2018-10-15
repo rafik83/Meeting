@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
@@ -482,9 +483,17 @@ class SlotAvailabilityTest extends TestCase
     public function testIsAvailableFalseAsParticipantHasMassUnavailabilityInsideSlot()
     {
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
-        $beginM   = new \DateTime('2016-10-12 09:30:00.000');
-        $endM     = new \DateTime('2016-10-12 09:45:00.000');
-        $mass     = new Mass($this->event, $category, 'name', $beginM, $endM, true);
+        $mass = new Mass(
+            $this->event,
+            $category,
+            'name',
+            new \DateTime('2016-10-12 09:30:00.000'),
+            new \DateTime('2016-10-12 09:45:00.000'),
+            true,
+            false,
+            [],
+            [$this->sheet->getType()]
+        );
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
@@ -527,8 +536,10 @@ class SlotAvailabilityTest extends TestCase
         $participant->getId()->willReturn(654321);
         $participant->getUser()->willReturn($user->reveal());
         $participant->getSheet()->willReturn($this->sheet);
-        $mass       = new Mass($this->event, $category, 'name', $beginM, $endM, true, true);
+
+        $mass = new Mass($this->event, $category, 'name', $beginM, $endM, true, true, [], [$this->sheet->getType()]);
         $assignment = new Unavailability\MassAssignment($mass, $user->reveal(), $beginMa, $endMa);
+
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
@@ -572,7 +583,7 @@ class SlotAvailabilityTest extends TestCase
         $participant->getUser()->willReturn($user->reveal());
         $participant->getSheet()->willReturn($this->sheet);
 
-        $mass       = new Mass($this->event, $category, 'name', $beginM, $endM, true, true);
+        $mass = new Mass($this->event, $category, 'name', $beginM, $endM, true, true, [], [$this->sheet->getType()]);
         $assignment = new Unavailability\MassAssignment($mass, $user->reveal(), $beginMa, $endMa);
         $assignment->disable();
 
@@ -613,9 +624,18 @@ class SlotAvailabilityTest extends TestCase
     public function testIsAvailableFalseAsParticipantHasMassUnavailabilityOutsideSlot()
     {
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
-        $beginM   = new \DateTime('2016-10-12 08:30:00.000');
-        $endM     = new \DateTime('2016-10-12 10:45:00.000');
-        $mass     = new Mass($this->event, $category, 'name', $beginM, $endM, true);
+        $mass = new Mass(
+            $this->event,
+            $category,
+            'name',
+            new \DateTime('2016-10-12 08:30:00.000'),
+            new \DateTime('2016-10-12 10:45:00.000'),
+            true,
+            false,
+            [],
+            [$this->sheet->getType()]
+        );
+
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->meetingRepository->getAllByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
@@ -1029,5 +1049,82 @@ class SlotAvailabilityTest extends TestCase
 
         // Assert
         $this->assertEquals($expected, $result);
+    }
+
+    public function testIsUsable()
+    {
+        $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
+
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getType()->willReturn($type->reveal());
+
+        $slot1 = $this->prophesize(MeetingSlot::class);
+        $slot1->getEvent()->willReturn($event->reveal());
+        $slot1->getBegin()->willReturn(new \DateTime('2018-10-15 09:00:00'));
+        $slot1->getEnd()->willReturn(new \DateTime('2018-10-15 10:00:00'));
+
+        $slot2 = $this->prophesize(MeetingSlot::class);
+        $slot2->getEvent()->willReturn($event->reveal());
+        $slot2->getBegin()->willReturn(new \DateTime('2018-10-15 09:30:00'));
+        $slot2->getEnd()->willReturn(new \DateTime('2018-10-15 10:20:00'));
+
+        $category = $this->prophesize(Category::class);
+        $mass1 = new Mass(
+            $event->reveal(),
+            $category->reveal(),
+            'Mass 1',
+            new \DateTime('2018-10-15 10:00:00'),
+            new \DateTime('2018-10-15 11:00:00'),
+            true,
+            false,
+            [],
+            [$type->reveal()]
+        );
+        $mass2 = new Mass(
+            $event->reveal(),
+            $category->reveal(),
+            'Mass 2',
+            new \DateTime('2018-10-15 09:00:00'),
+            new \DateTime('2018-10-15 11:00:00'),
+            false,
+            false,
+            [],
+            [$type->reveal()]
+        );
+        $mass3 = new Mass(
+            $event->reveal(),
+            $category->reveal(),
+            'Mass 3',
+            new \DateTime('2018-10-15 09:00:00'),
+            new \DateTime('2018-10-15 10:00:00'),
+            true,
+            false,
+            [],
+            []
+        );
+
+        $this
+            ->massUnavailabilityRepository
+            ->findBlockingByEvent($event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$mass1, $mass2, $mass3])
+        ;
+
+        $this->happeningParticipationRepository->getByEvent($event->reveal())->shouldBeCalled()->willReturn([]);
+        $this->meetingRepository->getAllByEvent($event->reveal())->shouldBeCalled()->willReturn([]);
+        $this->unavailabilityRepository->getByEvent($event->reveal())->shouldBeCalled()->willReturn([]);
+        $this->massAssignmentRepository->findByEvent($event->reveal())->shouldBeCalled()->willReturn([]);
+
+        $slotAvailability = new SlotAvailability(
+            $this->happeningParticipationRepository->reveal(),
+            $this->unavailabilityRepository->reveal(),
+            $this->massUnavailabilityRepository->reveal(),
+            $this->meetingRepository->reveal(),
+            $this->massAssignmentRepository->reveal()
+        );
+
+        $this->assertTrue($slotAvailability->isUsable($sheet->reveal(), $slot1->reveal()));
+        $this->assertFalse($slotAvailability->isUsable($sheet->reveal(), $slot2->reveal()));
     }
 }
