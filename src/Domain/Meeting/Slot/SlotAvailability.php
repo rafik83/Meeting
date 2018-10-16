@@ -223,13 +223,7 @@ class SlotAvailability
         return !$this->hasMassUnavailabilityOnSameSlot($sheet, $slot);
     }
 
-    /**
-     * @param MeetingSlot $slot
-     * @param Participant $participant
-     *
-     * @return SlotAvailabilityView
-     */
-    public function getSlotAvailability(MeetingSlot $slot, Participant $participant)
+    public function getSlotAvailability(MeetingSlot $slot, Participant $participant): SlotAvailabilityView
     {
         $this->autoLoading($participant->getSheet()->getEvent());
 
@@ -279,7 +273,7 @@ class SlotAvailability
      *
      * @param Event $event
      */
-    public function autoLoading(Event $event)
+    private function autoLoading(Event $event): void
     {
         if (null === $this->happenings) {
             $this->happenings = $this->happeningParticipationRepository->getByEvent($event);
