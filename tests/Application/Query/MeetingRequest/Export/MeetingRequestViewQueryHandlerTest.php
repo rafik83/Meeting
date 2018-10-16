@@ -91,7 +91,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
     public function testHandle()
     {
         $dateTime = new \DateTime();
-        $slot =  new \DateTime();
+        $slotBeginDate =  new \DateTime();
         $request = $this->prophesize(Request::class);
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet2 = $this->prophesize(Sheet::class);
@@ -120,7 +120,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $request->getMeeting()->willReturn($meeting->reveal());
         $meeting->getCreatedType()->willReturn(Meeting::CREATED_BY_ADMIN);
         $meeting->getSlot()->willReturn($meetingSlot);
-        $meetingSlot->getBegin()->willReturn($slot);
+        $meetingSlot->getBegin()->willReturn($slotBeginDate);
 
         // Mock
         $this->sheetViewQueryHandler
@@ -147,7 +147,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             $dateTime,
             $dateTime,
             Meeting::CREATED_BY_ADMIN,
-            $slot
+            $slotBeginDate
         );
         $this->assertEquals($expected, $result);
     }

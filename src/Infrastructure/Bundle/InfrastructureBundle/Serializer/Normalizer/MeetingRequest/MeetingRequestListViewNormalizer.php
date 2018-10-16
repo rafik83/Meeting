@@ -92,7 +92,7 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
                 $this->colTrans(self::COL_REQUEST_CREATED_AT, $locale)     => $this->formatDate($dateFormatter, $meetingRequest->createdAt),
                 $this->colTrans(self::COL_REQUEST_UPDATED_AT, $locale)     => $this->formatDate($dateFormatter, $meetingRequest->updatedAt),
                 $this->colTrans(self::COL_CREATED_TYPE, $locale)           => $createdType,
-                $this->colTrans(self::COL_SLOT, $locale)                   => null !== $meetingRequest->slot ? $this->formatDate($dateFormatter, $meetingRequest->slot) : null
+                $this->colTrans(self::COL_SLOT, $locale)                   => null !== $meetingRequest->slotBeginDate ? $this->formatDate($dateFormatter, $meetingRequest->slotBeginDate) : null
             ];
         }
 

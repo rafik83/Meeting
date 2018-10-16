@@ -20,7 +20,7 @@ export.meeting_request.state.planned: Planifiée
 export.meeting_request.state.refused: Refusée
 export.meeting_request.state.sent: Envoyée
 export.meeting_request.col.createdType: Planifié par
-export.meeting_request.col.createdType.algo: Planner
+export.meeting_request.col.createdType.planner: Planner
 export.meeting_request.col.createdType.admin: Admin
 export.meeting_request.col.createdType.participant: Participant
 export.meeting_request.col.slot: Date et heure du début de créneau

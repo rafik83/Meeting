@@ -37,7 +37,7 @@ class MeetingRequestView
     public $createdType;
 
     /** @var null|\DateTime */
-    public $slot;
+    public $slotBeginDate;
 
     public function __construct(
         int $id,
@@ -48,7 +48,7 @@ class MeetingRequestView
         \DateTimeInterface $createdAt,
         \DateTimeInterface $updatedAt,
         ?string $createdType,
-        ?\DateTime $slot
+        ?\DateTime $slotBeginDate
     ) {
         $this->id = $id;
         $this->meetingId = $meetingId;
@@ -58,6 +58,6 @@ class MeetingRequestView
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
         $this->createdType = $createdType;
-        $this->slot = $slot;
+        $this->slotBeginDate = $slotBeginDate;
     }
 }
