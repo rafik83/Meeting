@@ -5401,6 +5401,8 @@ services:
             - '@repository.unavailability.mass_assignment_repository'
             - '@adapter.job_queue_adapter'
 
+    Proximum\Vimeet\Domain\Unavailability\Mass\FilterMassUnavailabilitiesBySheetsType: ~
+
     #
     # Filter
     #
