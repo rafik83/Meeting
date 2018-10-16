@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic;
 
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\ConditionRulesTransformerInterface;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer;
@@ -64,6 +65,10 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
 
         if (RadioTransformer::supports($field)) {
             return RadioTransformer::transform($field);
+        }
+
+        if (TaggedNomenclatureTransformer::supports($field)) {
+            return TaggedNomenclatureTransformer::transform($field);
         }
 
         return [];

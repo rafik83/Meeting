@@ -15,11 +15,13 @@ use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOper
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorContains;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEndsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorIn;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorInterface;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotContains;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotEndsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotEqual;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotIn;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
@@ -76,6 +78,10 @@ class ConditionRulesParser
                 return new ComparisonOperatorEqual();
             case 'not_equal':
                 return new ComparisonOperatorNotEqual();
+            case 'in':
+                return new ComparisonOperatorIn();
+            case 'not_in':
+                return new ComparisonOperatorNotIn();
             case 'contains':
                 return new ComparisonOperatorContains();
             case 'not_contains':

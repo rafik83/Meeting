@@ -101,7 +101,7 @@ class GetFiltersByTypeAndLocaleQueryHandler
                 'id' => TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE.'.'.$nomenclatureFilterView->id,
                 'label' => $nomenclatureFilterView->title,
                 'type' => 'string',
-                'input' => 'select',
+                'input' => 'checkbox',
                 'optgroup' => $this->translate('optgroup.nomenclature', $locale),
                 'values' => $nomenclatureFilterView->items,
                 'operators' => ComparisonOperatorsByType::OPERATORS['nomenclature'] ?? [],
