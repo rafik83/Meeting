@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActivateAccountMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareParticipantAddedMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PreparePreRegisterMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareTransactionConfirmMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserCompleteProfileMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivateAccountEvent;
@@ -46,26 +47,19 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeOldMailAddressMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\CompleteProfileMail as UserCompleteProfileMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordMail as UserResetPasswordMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MailEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var MailerInterface
-     */
+    /** @var MailerInterface */
     private $mailer;
 
-    /**
-     * @var EventSender
-     */
+    /** @var EventSender */
     private $sender;
 
-    /**
-     * @var ParticipantMailViewQueryHandler
-     */
+    /** @var ParticipantMailViewQueryHandler */
     private $participantMailViewQueryHandler;
 
     /** @var PrepareHandler */
@@ -86,20 +80,19 @@ class MailEventSubscriber implements EventSubscriberInterface
     /**
      * @param TransactionConfirmedEvent $event
      */
-    public function onTransactionConfirmed(TransactionConfirmedEvent $event)
+    public function onTransactionConfirmed(TransactionConfirmedEvent $event): void
     {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getTransaction()->getSheet(), $event->getUser())
-        );
-
-        $mail = new TransactionConfirmMail(
-            $event->getTransaction(),
+        $mail = $this->prepareHandler->handle(new PrepareTransactionConfirmMailView(
+            $event->getTransaction()->getSheet()->getEvent(),
             $event->getUser(),
-            $this->sender->generate($event->getTransaction()->getSheet()->getEvent()),
-            $event->getUser()->getEmail(),
             $event->getUser()->getLocale(),
-            $participantMailView
-        );
+            $event->getTransaction()->getSheet(),
+            $event->getTransaction()
+        ));
+
+        if (!$mail instanceof AbstractMail) {
+            return;
+        }
 
         $this->mailer->send($mail);
     }

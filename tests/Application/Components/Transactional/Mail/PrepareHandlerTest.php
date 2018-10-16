@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareAct
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
@@ -32,6 +33,7 @@ class PrepareHandlerTest extends TestCase
         $prepareParticipantAddedMail,
         $preparePreRegisterMail,
         $prepareUserCompleteProfileMail,
+        $prepareTransactionTotalMail,
         $user,
         $event
     ;
@@ -49,6 +51,7 @@ class PrepareHandlerTest extends TestCase
         $this->prepareParticipantAddedMail = $this->prophesize(PrepareParticipantAddedMail::class);
         $this->preparePreRegisterMail = $this->prophesize(PreparePreRegisterMail::class);
         $this->prepareUserCompleteProfileMail = $this->prophesize(PrepareUserCompleteProfileMail::class);
+        $this->prepareTransactionTotalMail = $this->prophesize(PrepareTransactionConfirmMail::class);
     }
 
     public function testPrepareRegisterAccountMail()
@@ -65,13 +68,15 @@ class PrepareHandlerTest extends TestCase
         $this->prepareParticipantAddedMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->preparePreRegisterMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareUserCompleteProfileMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareTransactionTotalMail->prepare(Argument::any())->shouldNotBeCalled();
 
         $handler = new PrepareHandler(
             $this->prepareRegisterAccountMail->reveal(),
             $this->prepareActivateAccountMail->reveal(),
             $this->prepareParticipantAddedMail->reveal(),
             $this->preparePreRegisterMail->reveal(),
-            $this->prepareUserCompleteProfileMail->reveal()
+            $this->prepareUserCompleteProfileMail->reveal(),
+            $this->prepareTransactionTotalMail->reveal()
         );
 
         $result = $handler->handle($mail);

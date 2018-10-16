@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareAct
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
@@ -36,18 +37,23 @@ class PrepareHandler
     /** @var PrepareUserCompleteProfileMail */
     private $prepareUserCompleteProfileMail;
 
+    /** @var PrepareTransactionConfirmMail */
+    private $prepareTransactionConfirmMail;
+
     public function __construct(
         PrepareRegisterAccountMail $prepareRegisterAccountMail,
         PrepareActivateAccountMail $prepareActivateAccountMail,
         PrepareParticipantAddedMail $prepareParticipantAddedMail,
         PreparePreRegisterMail $preparePreRegisterMail,
-        PrepareUserCompleteProfileMail $prepareUserCompleteProfileMail
+        PrepareUserCompleteProfileMail $prepareUserCompleteProfileMail,
+        PrepareTransactionConfirmMail $prepareTransactionConfirmMail
     ) {
         $this->prepareRegisterAccountMail = $prepareRegisterAccountMail;
         $this->prepareActivateAccountMail = $prepareActivateAccountMail;
         $this->prepareParticipantAddedMail = $prepareParticipantAddedMail;
         $this->preparePreRegisterMail = $preparePreRegisterMail;
         $this->prepareUserCompleteProfileMail = $prepareUserCompleteProfileMail;
+        $this->prepareTransactionConfirmMail = $prepareTransactionConfirmMail;
     }
 
     public function handle(AbstractPrepareMail $prepareMail): ?AbstractMail
@@ -63,6 +69,8 @@ class PrepareHandler
                 return $this->preparePreRegisterMail->prepare($prepareMail);
             case Constant::TRANSACTIONAL_MAIL_KEY_USER_COMPLETE_PROFILE:
                 return $this->prepareUserCompleteProfileMail->prepare($prepareMail);
+            case Constant::TRANSACTIONAL_MAIL_KEY_TRANSACTION_CONFIRMED:
+                return $this->prepareTransactionConfirmMail->prepare($prepareMail);
             default: return null;
         }
     }
