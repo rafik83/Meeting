@@ -24,7 +24,7 @@ class Meeting implements MessageSubjectInterface
     public const STATUS_CONFIRMED = 'confirmed';
     public const STATUS_CANCELED = 'canceled';
 
-    public const CREATED_BY_ALGO = 'algo';
+    public const CREATED_BY_PLANNER = 'planner';
     public const CREATED_BY_ADMIN = 'admin';
     public const CREATED_BY_PARTICIPANT = 'participant';
 

@@ -66,8 +66,8 @@ class DashboardMeetingViewQueryHandler
         $meetingCreatedByParticipant = $this->meetingRepository
             ->countCreatedByEventAndType($query->event, Meeting::CREATED_BY_PARTICIPANT);
 
-        $meetingCreatedByAlgo = $this->meetingRepository
-            ->countCreatedByEventAndType($query->event, Meeting::CREATED_BY_ALGO);
+        $meetingCreatedByPlanner = $this->meetingRepository
+            ->countCreatedByEventAndType($query->event, Meeting::CREATED_BY_PLANNER);
 
         $approvedRequest = $this->requestRepository->countApprovedByEvent($query->event);
         $pendingRequest = $this->requestRepository->countPendingByEvent($query->event);
@@ -78,7 +78,7 @@ class DashboardMeetingViewQueryHandler
             $meetingCreatedDayDByAdmin,
             $meetingCreatedDayDByParticipant,
             $meetingCreatedByParticipant,
-            $meetingCreatedByAlgo,
+            $meetingCreatedByPlanner,
             $meetingCreatedUpstreamByAdmin,
             $approvedRequest,
             $pendingRequest,

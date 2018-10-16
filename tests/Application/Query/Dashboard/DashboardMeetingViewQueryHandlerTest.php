@@ -53,7 +53,7 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
             ->willReturn(10)
         ;
         $this->meetingRepository
-            ->countCreatedByEventAndType($this->event->reveal(), Meeting::CREATED_BY_ALGO)
+            ->countCreatedByEventAndType($this->event->reveal(), Meeting::CREATED_BY_PLANNER)
             ->shouldBeCalled()
             ->willReturn(10)
         ;
@@ -111,7 +111,7 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
         $this->meetingRepository
             ->countCreatedByEventAndType(
                 $this->event->reveal(),
-                Meeting::CREATED_BY_ALGO
+                Meeting::CREATED_BY_PLANNER
             )
             ->shouldBeCalled()
             ->willReturn(30)

@@ -336,7 +336,7 @@ class ImportHandler
             $event,
             $meetingResult->isBlockedSpot,
             $meetingResult->isBlockedSlot,
-            Meeting::CREATED_BY_ALGO
+            Meeting::CREATED_BY_PLANNER
         );
 
         $this->entityManagerAdapter->persist($meeting);

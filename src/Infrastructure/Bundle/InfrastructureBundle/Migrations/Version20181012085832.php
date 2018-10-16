@@ -16,7 +16,7 @@ class Version20181012085832 extends AbstractMigration
 
         $this->addSql('ALTER TABLE meeting ADD created_type VARCHAR(255) NOT NULL');
         $this->addSql("UPDATE meeting SET created_type = 'participant' WHERE is_created_by_participants = 1");
-        $this->addSql("UPDATE meeting SET created_type = 'algo' WHERE is_created_by_participants = 0");
+        $this->addSql("UPDATE meeting SET created_type = 'planner' WHERE is_created_by_participants = 0");
         $this->addSql('ALTER TABLE meeting DROP is_created_by_participants');
     }
 

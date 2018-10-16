@@ -404,7 +404,7 @@ admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce re
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.dashboard.approvedRequest: Acceptées
 admin.meeting.dashboard.createdByParticipant: 'Créés par les participants'
-admin.meeting.dashboard.createdByAlgo: 'RDV algo'
+admin.meeting.dashboard.createdByPlanner: 'RDV algo'
 admin.meeting.dashboard.createdDayD.admin: 'RDV admin les jours J'
 admin.meeting.dashboard.createdDayD.participant: 'RDV par les participant les jours J'
 admin.meeting.dashboard.liveMeeting: 'Rendez-vous live'
