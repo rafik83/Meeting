@@ -12,7 +12,7 @@
         {{ 'admin.transactional.mail.action.customize'|trans }} :  {{ ('admin.transactional.mail.list.key.' ~ transactionalMailType)|trans }}
     </h1>
 
-    {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
+    {{ form_start(form, { 'attr': { 'class': 'with-submit-section'} }) }}
     {{ form_errors(form) }}
     {% if form.associatedTypes is defined %}
         <div class="col-md-12">
@@ -20,16 +20,24 @@
         </div>
         <hr />
     {% endif %}
-    <div class="col-md-8">
-        {{ form_row(form.translations) }}
+    <div class="col-md-12">
+        <h4>{{ 'admin.transactional.mail.enabled.title'|trans }}</h4>
+        {{ form_row(form.enabled) }}
+        <hr />
     </div>
-    <div class="well col-md-4">
-        <h4>{{ 'admin.transactional.mail.substitution.parameter.list.title'|trans }}</h4>
-        <ul>
-            {% for parameter in availableParameters %}
-                <li><b>{{ parameter }}</b>: {{ ('admin.transactional.mail.substitution.parameter.description.' ~ parameter)|trans }}</li>
-            {% endfor %}
-        </ul>
+    <div id="message-wysiwyg-section" style="margin-bottom: 200px; display: {{ message.isEnabled ? 'block' : 'none' }}">
+        <div class="col-md-8">
+            {{ form_row(form.translations) }}
+            <div class="mg-bt">&nbsp;</div>
+        </div>
+        <div class="well col-md-4">
+            <h4>{{ 'admin.transactional.mail.substitution.parameter.list.title'|trans }}</h4>
+            <ul>
+                {% for parameter in availableParameters %}
+                    <li>{{ parameter }}: {{ ('admin.transactional.mail.substitution.parameter.description.' ~ parameter)|trans }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
     <div class="form-group submit-section">
@@ -37,6 +45,8 @@
             {{ form_row(form.submit) }}
         </div>
     </div>
+
+    <div class="mg-bt">&nbsp;</div>
 
     {{ form_rest(form) }}
     {{ form_end(form) }}

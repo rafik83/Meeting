@@ -34,6 +34,7 @@ class CustomizeHandlerTest extends TestCase
             $event->reveal(),
             Constant::TRANSACTIONAL_MAIL_KEY_SHEET_REFUSED,
             $date,
+            true,
             [
                 $type1->reveal(),
                 $type2->reveal()
@@ -58,6 +59,7 @@ class CustomizeHandlerTest extends TestCase
                 ],
             ]
         );
+        $command->enabled = true;
         $command->associatedTypes = [
             $type1->reveal(),
             $type2->reveal(),
