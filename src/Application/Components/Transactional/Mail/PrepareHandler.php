@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Transactional\Mail;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
@@ -28,14 +29,19 @@ class PrepareHandler
     /** @var PrepareParticipantAddedMail */
     private $prepareParticipantAddedMail;
 
+    /** @var PreparePreRegisterMail */
+    private $preparePreRegisterMail;
+
     public function __construct(
         PrepareRegisterAccountMail $prepareRegisterAccountMail,
         PrepareActivateAccountMail $prepareActivateAccountMail,
-        PrepareParticipantAddedMail $prepareParticipantAddedMail
+        PrepareParticipantAddedMail $prepareParticipantAddedMail,
+        PreparePreRegisterMail $preparePreRegisterMail
     ) {
         $this->prepareRegisterAccountMail = $prepareRegisterAccountMail;
         $this->prepareActivateAccountMail = $prepareActivateAccountMail;
         $this->prepareParticipantAddedMail = $prepareParticipantAddedMail;
+        $this->preparePreRegisterMail = $preparePreRegisterMail;
     }
 
     public function handle(AbstractPrepareMail $prepareMail): ?AbstractMail
@@ -47,6 +53,8 @@ class PrepareHandler
                 return $this->prepareActivateAccountMail->prepare($prepareMail);
             case Constant::TRANSACTIONAL_MAIL_KEY_PARTICIPANT_ADDED_CONFIRMATION:
                 return $this->prepareParticipantAddedMail->prepare($prepareMail);
+            case Constant::TRANSACTIONAL_MAIL_KEY_PRE_REGISTERED:
+                return $this->preparePreRegisterMail->prepare($prepareMail);
             default: return null;
         }
     }

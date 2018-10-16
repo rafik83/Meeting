@@ -195,8 +195,16 @@ services:
             - '@event_sender'
             - '@query.mail.participant_mail_view_query_handler'
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
+            - '@event_sender'
+            - '@query.mail.participant_mail_view_query_handler'
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail'

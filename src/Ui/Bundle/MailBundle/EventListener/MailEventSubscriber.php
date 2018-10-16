@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActivateAccountMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareParticipantAddedMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PreparePreRegisterMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
@@ -295,12 +296,14 @@ class MailEventSubscriber implements EventSubscriberInterface
      *
      * @param PreRegisterEvent $event
      */
-    public function onUserPreRegistered(PreRegisterEvent $event)
+    public function onUserPreRegistered(PreRegisterEvent $event): void
     {
-        $mail = $this->prepareHandler->handle(new PrepareUserRegisteredMailView(
+        $mail = $this->prepareHandler->handle(new PreparePreRegisterMailView(
             $event->getEvent(),
             $event->getUser(),
-            $event->getLocale()
+            $event->getLocale(),
+            $event->getSheet(),
+            $event->getParticipant()
         ));
 
         if (!$mail instanceof AbstractMail) {
@@ -313,19 +316,17 @@ class MailEventSubscriber implements EventSubscriberInterface
     /**
      * @param UserRegisteredEvent $event
      */
-    public function onUserRegistered(UserRegisteredEvent $event)
+    public function onUserRegistered(UserRegisteredEvent $event): void
     {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery(null, $event->getUser())
-        );
-
-        $mail = new RegisterAccountMail(
+        $mail = $this->prepareHandler->handle(new PrepareUserRegisteredMailView(
             $event->getEvent(),
-            $this->sender->generate($event->getEvent()),
-            $event->getUser()->getEmail(),
-            $event->getLocale(),
-            $participantMailView
-        );
+            $event->getUser(),
+            $event->getLocale()
+        ));
+
+        if (!$mail instanceof AbstractMail) {
+            return;
+        }
 
         $this->mailer->send($mail);
     }
