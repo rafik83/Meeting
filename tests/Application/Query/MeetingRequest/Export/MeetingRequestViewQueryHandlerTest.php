@@ -118,7 +118,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $request->getToParticipantsArray()->willReturn([$participant1->reveal()]);
 
         $request->getMeeting()->willReturn($meeting->reveal());
-        $meeting->getCreatedType()->willReturn('admin');
+        $meeting->getCreatedType()->willReturn(Meeting::CREATED_BY_ADMIN);
         $meeting->getSlot()->willReturn($meetingSlot);
         $meetingSlot->getBegin()->willReturn($slot);
 
@@ -146,7 +146,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             Request::STATE_PLANNED,
             $dateTime,
             $dateTime,
-            'admin',
+            Meeting::CREATED_BY_ADMIN,
             $slot
         );
         $this->assertEquals($expected, $result);
