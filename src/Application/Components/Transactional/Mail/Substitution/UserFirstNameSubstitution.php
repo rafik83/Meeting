@@ -32,7 +32,7 @@ class UserFirstNameSubstitution implements SubstituteInterface
 
         $userParticipant = $prepareMail->sheet->getUserParticipant($prepareMail->user);
 
-        if ($userParticipant instanceof Participant) {
+        if (!$userParticipant instanceof Participant) {
             return $prepareMail->user->getFirstName();
         }
 

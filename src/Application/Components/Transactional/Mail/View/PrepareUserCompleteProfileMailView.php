@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 
-class PreparePreRegisterMailView extends AbstractPrepareMail
+class PrepareUserCompleteProfileMailView extends AbstractPrepareMail
 {
     /** @var Participant */
     public $participant;
@@ -31,7 +31,7 @@ class PreparePreRegisterMailView extends AbstractPrepareMail
         parent::__construct(
             $event,
             $user,
-            Constant::TRANSACTIONAL_MAIL_KEY_PRE_REGISTERED,
+            Constant::TRANSACTIONAL_MAIL_KEY_USER_COMPLETE_PROFILE,
             $locale,
             $sheet
         );

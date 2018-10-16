@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActivateAccountMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareParticipantAddedMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PreparePreRegisterMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserCompleteProfileMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
@@ -40,14 +41,12 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSend
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetChangeTypeMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\CompleteProfileMail as UserCompleteProfileMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordMail as UserResetPasswordMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -274,19 +273,19 @@ class MailEventSubscriber implements EventSubscriberInterface
     /**
      * @param UserCompleteProfileEvent $event
      */
-    public function onUserCompleteProfile(UserCompleteProfileEvent $event)
+    public function onUserCompleteProfile(UserCompleteProfileEvent $event): void
     {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getParticipant()->getSheet(), $event->getUser())
-        );
-
-        $mail = new UserCompleteProfileMail(
-            $event->getParticipant(),
-            $this->sender->generate($event->getEvent()),
-            $event->getUser()->getEmail(),
+        $mail = $this->prepareHandler->handle(new PrepareUserCompleteProfileMailView(
+            $event->getEvent(),
+            $event->getUser(),
             $event->getLocale(),
-            $participantMailView
-        );
+            $event->getParticipant()->getSheet(),
+            $event->getParticipant()
+        ));
+
+        if (!$mail instanceof AbstractMail) {
+            return;
+        }
 
         $this->mailer->send($mail);
     }
@@ -300,7 +299,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $mail = $this->prepareHandler->handle(new PreparePreRegisterMailView(
             $event->getEvent(),
-            $event->getUser(),
+            $event->getParticipant()->getUser(),
             $event->getLocale(),
             $event->getSheet(),
             $event->getParticipant()

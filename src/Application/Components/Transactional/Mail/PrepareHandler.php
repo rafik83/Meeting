@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareAct
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 
@@ -32,16 +33,21 @@ class PrepareHandler
     /** @var PreparePreRegisterMail */
     private $preparePreRegisterMail;
 
+    /** @var PrepareUserCompleteProfileMail */
+    private $prepareUserCompleteProfileMail;
+
     public function __construct(
         PrepareRegisterAccountMail $prepareRegisterAccountMail,
         PrepareActivateAccountMail $prepareActivateAccountMail,
         PrepareParticipantAddedMail $prepareParticipantAddedMail,
-        PreparePreRegisterMail $preparePreRegisterMail
+        PreparePreRegisterMail $preparePreRegisterMail,
+        PrepareUserCompleteProfileMail $prepareUserCompleteProfileMail
     ) {
         $this->prepareRegisterAccountMail = $prepareRegisterAccountMail;
         $this->prepareActivateAccountMail = $prepareActivateAccountMail;
         $this->prepareParticipantAddedMail = $prepareParticipantAddedMail;
         $this->preparePreRegisterMail = $preparePreRegisterMail;
+        $this->prepareUserCompleteProfileMail = $prepareUserCompleteProfileMail;
     }
 
     public function handle(AbstractPrepareMail $prepareMail): ?AbstractMail
@@ -55,6 +61,8 @@ class PrepareHandler
                 return $this->prepareParticipantAddedMail->prepare($prepareMail);
             case Constant::TRANSACTIONAL_MAIL_KEY_PRE_REGISTERED:
                 return $this->preparePreRegisterMail->prepare($prepareMail);
+            case Constant::TRANSACTIONAL_MAIL_KEY_USER_COMPLETE_PROFILE:
+                return $this->prepareUserCompleteProfileMail->prepare($prepareMail);
             default: return null;
         }
     }

@@ -49,9 +49,6 @@ class MailerAdapter implements MailerInterface
         $template = $this->twig->loadTemplate($mail->getTemplate());
         $body = $template->render(['mail' => $mail]);
 
-        if ($mail instanceof AddParticipantMail) {
-            dump($mail);die();
-        }
         if ($mail->hasToTranslateSubject()) {
             $subject  = $this->translator->trans(
                 $mail->getSubject(),

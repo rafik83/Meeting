@@ -26,13 +26,19 @@ class ParticipantFullNameSubstitution implements SubstituteInterface
 
     public function substitute(AbstractPrepareMail $prepareMail): string
     {
-        if (!$prepareMail->hasSheet()) {
+        if (!$prepareMail->hasSheet() && !method_exists($prepareMail, 'getParticipant')) {
             return $prepareMail->user->getFullname();
         }
 
-        $userParticipant = $prepareMail->sheet->getUserParticipant($prepareMail->user);
+        if (method_exists($prepareMail, 'getParticipant')) {
+            $userParticipant = $prepareMail->getParticipant();
+        } elseif (property_exists($prepareMail, 'participant')) {
+            $userParticipant = $prepareMail->participant;
+        } else {
+            $userParticipant = $prepareMail->sheet->getUserParticipant($prepareMail->user);
+        }
 
-        if ($userParticipant instanceof Participant) {
+        if (!$userParticipant instanceof Participant) {
             return $prepareMail->user->getFullname();
         }
 

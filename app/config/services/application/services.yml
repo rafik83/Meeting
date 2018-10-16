@@ -87,6 +87,10 @@ services:
         arguments:
             - '@adapter.event_url_generator'
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ValidateMobilePhoneLinkSubstitution:
         arguments:
             - '@adapter.event_url_generator'
@@ -133,6 +137,11 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\TestVisioConfigurationLinkSubstitution'
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventActivateAccountAlreadyKnownCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\GuestEmailSubstitution: ~
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionsProviders:
@@ -169,6 +178,8 @@ services:
         - ['registerSubstitution', ['%%downloadEbadgeCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\DownloadEbadgeCTASubstitution']]
         - ['registerSubstitution', ['%%testVisioConfigurationLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\TestVisioConfigurationLinkSubstitution']]
         - ['registerSubstitution', ['%%testVisioConfigurationCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\TestVisioConfigurationCTASubstitution']]
+        - ['registerSubstitution', ['%%urlEventActivateAccountAlreadyKnown%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution']]
+        - ['registerSubstitution', ['%%urlEventActivateAccountAlreadyKnownWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventActivateAccountAlreadyKnownCTASubstitution']]
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler:
         arguments:
@@ -202,9 +213,17 @@ services:
             - '@event_sender'
             - '@query.mail.participant_mail_view_query_handler'
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
+            - '@event_sender'
+            - '@query.mail.participant_mail_view_query_handler'
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail'
