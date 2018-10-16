@@ -30,7 +30,11 @@ class SheetPlanningSubstitution implements SubstituteInterface
             return '';
         }
 
-        $participant = $prepareMail->sheet->getUserParticipant($prepareMail->user);
+        if (method_exists($prepareMail, 'getParticipant')) {
+            $participant = $prepareMail->getParticipant();
+        } else {
+            $participant = $prepareMail->sheet->getUserParticipant($prepareMail->user);
+        }
 
         $sheetPlanning = $this->sheetPlanningViewQueryHandler->handle(
             new SheetPlanningViewQuery(
