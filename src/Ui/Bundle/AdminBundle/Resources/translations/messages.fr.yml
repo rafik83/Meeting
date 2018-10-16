@@ -446,7 +446,7 @@ admin.meeting.list.noResult: 'Aucun RDV positionné'
 admin.meeting.list.participant.absent: Absent
 admin.meeting.list.participant.present: Présent
 admin.meeting.list.title: 'RDV positionnés'
-admin.meeting.list.createdType.algo: 'planner'
+admin.meeting.list.createdType.planner: 'planner'
 admin.meeting.list.createdType.admin: 'admin'
 admin.meeting.list.createdType.participant: 'participants'
 admin.meeting.list.status.canceled: "N'a pas eu lieu"
