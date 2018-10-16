@@ -31,6 +31,7 @@ final class TypesMapping
     public const SHEET_VIEW_SPOT_REFERENCE = 'spotReference';
     public const SHEET_VIEW_PARTICIPANTS_LASTNAME = 'participants.lastname';
     public const SHEET_VIEW_PARTICIPANTS_EMAIL = 'participants.email';
+    public const SHEET_VIEW_TAGGED_NOMENCLATURE = 'nestedTaggedData';
 
     public const AVAILABLE_TYPES = [
         UserEventView::class => [
@@ -94,6 +95,9 @@ final class TypesMapping
         ],
         self::SHEET_VIEW_PARTICIPANTS_EMAIL => [
             'path' => self::SHEET_VIEW_PARTICIPANTS_EMAIL,
+        ],
+        self::SHEET_VIEW_TAGGED_NOMENCLATURE => [
+            'path' => self::SHEET_VIEW_TAGGED_NOMENCLATURE,
         ],
         self::USER_EVENT_VIEW_FIRSTNAME => [
             'path' => self::USER_EVENT_VIEW_FIRSTNAME,

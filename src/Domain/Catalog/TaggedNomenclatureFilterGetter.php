@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Catalog;
 
+use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\Filter\TaggedNomenclatureFilterRepositoryInterface;
@@ -66,6 +67,29 @@ class TaggedNomenclatureFilterGetter
         }
 
         asort($nomenclatureItems);
+
+        return $nomenclatureItems;
+    }
+
+    public function getNomenclaturesItemsByEvent(Event $event, string $locale): array
+    {
+        $taggedNomenclatureFilter = $this->taggedNomenclatureFilterRepository->getByEvent($event);
+        $nomenclatureIds = null === $taggedNomenclatureFilter ? [] : $taggedNomenclatureFilter->getNomenclaturesId();
+
+        $nomenclatures = $this->nomenclatureRepository->findByEventAndIds(
+            $event,
+            $nomenclatureIds
+        );
+
+        $nomenclatureItems = [];
+
+        foreach ($nomenclatures as $nomenclature) {
+            $nomenclatureItems[] = new NomenclatureFilterView(
+                $nomenclature->getId(),
+                $nomenclature->getTitle(),
+                $nomenclature->getLabels($locale)
+            );
+        }
 
         return $nomenclatureItems;
     }

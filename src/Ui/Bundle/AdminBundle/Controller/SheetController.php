@@ -160,7 +160,9 @@ class SheetController extends Controller
         ]);
 
         $sheetFilterView = $sheetFilterForm->createView();
-        $queryBuilderFilters = $this->get(QueryBus::class)->handle(new GetFiltersByTypeAndLocaleQuery('sheet', $locale));
+        $queryBuilderFilters = $this->get(QueryBus::class)->handle(
+            new GetFiltersByTypeAndLocaleQuery('sheet', $locale, $event)
+        );
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
             'locale'           => $request->getLocale(),

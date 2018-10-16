@@ -13,21 +13,17 @@ namespace Proximum\Vimeet\Application\Query\ConditionRules\Filters;
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class GetFiltersByTypeAndLocaleQuery implements Query
+class GetNomenclatureFiltersByEventQuery implements Query
 {
-    /** @var string */
-    public $type;
+    /** @var Event */
+    public $event;
 
     /** @var string */
     public $locale;
 
-    /** @var null|Event */
-    public $event;
-
-    public function __construct(string $type, string $locale, ?Event $event = null)
+    public function __construct(Event $event, string $locale)
     {
-        $this->type = $type;
-        $this->locale = $locale;
         $this->event = $event;
+        $this->locale = $locale;
     }
 }
