@@ -15,79 +15,39 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Repository\MeetingSlotRepository;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class IndicatorCalculator
 {
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /**
-     * @var MeetingSlotRepository
-     */
+    /** @var MeetingSlotRepositoryInterface */
     private $slotRepository;
 
-    /**
-     * @var null|MeetingSlot[]
-     */
-    private $slots = null;
-
-    /**
-     * @var null|MeetingSlot[]
-     */
-    private $slotsUsable = null;
-
-    /**
-     * @var PlanningQuantityGuesser
-     */
+    /** @var PlanningQuantityGuesser */
     private $planningQuantityGuesser;
 
-    /**
-     * @var SlotAvailability
-     */
+    /** @var SlotAvailability */
     private $slotAvailability;
 
-    /**
-     * @param RequestRepositoryInterface $requestRepository
-     * @param MeetingSlotRepository      $slotRepository
-     * @param PlanningQuantityGuesser    $planningQuantityGuesser
-     * @param SlotAvailability           $slotAvailability
-     */
+    /** @var null|MeetingSlot[] cached Event slots */
+    private $slots = null;
+
     public function __construct(
         RequestRepositoryInterface $requestRepository,
-        MeetingSlotRepository $slotRepository,
+        MeetingSlotRepositoryInterface $slotRepository,
         PlanningQuantityGuesser $planningQuantityGuesser,
         SlotAvailability $slotAvailability
     ) {
-        $this->requestRepository        = $requestRepository;
-        $this->slotRepository           = $slotRepository;
-        $this->planningQuantityGuesser  = $planningQuantityGuesser;
-        $this->slotAvailability         = $slotAvailability;
+        $this->requestRepository = $requestRepository;
+        $this->slotRepository = $slotRepository;
+        $this->planningQuantityGuesser = $planningQuantityGuesser;
+        $this->slotAvailability = $slotAvailability;
     }
 
-    /**
-     * Avoid calling the db for the number of slots by preloading it
-     *
-     * @param MeetingSlot[] $slots
-     */
-    public function preloadSlot(array $slots)
+    public function getIndicator(Sheet $sheet): IndicatorView
     {
-        $this->slots = $slots;
-    }
-
-    /**
-     * @param Sheet $sheet
-     *
-     * @return IndicatorView
-     */
-    public function getIndicator(Sheet $sheet)
-    {
-        if (null === $this->slots) {
-            $this->slots = $this->slotRepository->findByEvent($sheet->getEvent());
-        }
-
         $participantsCount       = $sheet->countParticipants();
         $pendingPropositionCount = $this->requestRepository->countPendingPropositionReceivedBySheet($sheet);
         $planningQuantity        = $this->planningQuantityGuesser->guess($sheet);
@@ -102,26 +62,16 @@ class IndicatorCalculator
                 'isToAttending'   => true,
             ]);
 
-        if (null === $this->slotsUsable) {
-            $slotUsables = [];
-
-            foreach ($this->slots as $slot) {
-                if ($this->slotAvailability->isUsable($sheet, $slot)) {
-                    $slotUsables[] = $slot;
-                }
-            }
-
-            $this->slotsUsable = $slotUsables;
-        }
+        $usableSlots = $this->getUsableSlots($sheet);
 
         $massUnavaibilitiesCount = 0;
 
-        foreach ($sheet->getParticipants()->toArray() as $participant) {
-            foreach ($this->slotsUsable as $slotUsable) {
-                $slotAvailability = $this->slotAvailability->getSlotAvailability($slotUsable, $participant);
+        foreach ($sheet->getParticipantsArray() as $participant) {
+            foreach ($usableSlots as $usableSlot) {
+                $slotAvailability = $this->slotAvailability->getSlotAvailability($usableSlot, $participant);
 
                 if (!$slotAvailability->isAvailable() && !$slotAvailability->isMeeting()) {
-                    $unavailabilities[] = $slotUsable;
+                    $unavailabilities[] = $usableSlot;
                 }
 
                 if ($slotAvailability->isMassUnavaibility()) {
@@ -133,7 +83,7 @@ class IndicatorCalculator
         $unavailabilitiesCount = \count($unavailabilities);
 
         return new IndicatorView(
-            \count($this->slotsUsable),
+            \count($usableSlots),
             $participantsCount,
             $unavailabilitiesCount,
             $planningQuantity,
@@ -141,5 +91,25 @@ class IndicatorCalculator
             $pendingPropositionCount,
             $massUnavaibilitiesCount
         );
+    }
+
+    /**
+     * @return MeetingSlot[]
+     */
+    private function getUsableSlots(Sheet $sheet): array
+    {
+        if (null === $this->slots) {
+            $this->slots = $this->slotRepository->findByEvent($sheet->getEvent());
+        }
+
+        $usableSlots = [];
+
+        foreach ($this->slots as $slot) {
+            if ($this->slotAvailability->isUsable($sheet, $slot)) {
+                $usableSlots[] = $slot;
+            }
+        }
+
+        return $usableSlots;
     }
 }
