@@ -27,5 +27,6 @@ class RegisterAccountCustomizedMail extends AbstractCustomizedMail
 
         $this->subject = $subject;
         $this->content = $content;
+        $this->sendToEmailTeam = true;
     }
 }
