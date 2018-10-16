@@ -34,7 +34,6 @@ class DashboardMeetingViewQueryHandler
     public function handle(DashboardMeetingViewQuery $query): DashboardMeetingView
     {
         $allMeetings = $this->meetingRepository->countByEvent($query->event);
-        $meetingCreatedDayDByParticipant = 0;
         $meetingCreatedDayDByAdmin = 0;
         $meetingCreatedUpstreamByAdmin = 0;
 
@@ -47,13 +46,6 @@ class DashboardMeetingViewQueryHandler
                 $firstDay,
                 $lastDay,
                 Meeting::CREATED_BY_ADMIN
-            );
-
-            $meetingCreatedDayDByParticipant = $this->meetingRepository->countBetweenDatesByEventAndType(
-                $query->event,
-                $firstDay,
-                $lastDay,
-                Meeting::CREATED_BY_PARTICIPANT
             );
 
             $meetingCreatedUpstreamByAdmin = $this->meetingRepository->countUpstreamByEventAndType(
@@ -76,7 +68,6 @@ class DashboardMeetingViewQueryHandler
         return new DashboardMeetingView(
             $allMeetings,
             $meetingCreatedDayDByAdmin,
-            $meetingCreatedDayDByParticipant,
             $meetingCreatedByParticipant,
             $meetingCreatedByPlanner,
             $meetingCreatedUpstreamByAdmin,

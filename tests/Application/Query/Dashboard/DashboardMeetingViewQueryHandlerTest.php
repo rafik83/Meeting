@@ -45,7 +45,6 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
 
         $this->meetingRepository->countByEvent($this->event->reveal())->shouldBeCalled()->willReturn(200);
         $this->meetingRepository->countBetweenDatesByEventAndType(Argument::any(), Argument::any(), Argument::any(), Meeting::CREATED_BY_ADMIN)->shouldNotBeCalled();
-        $this->meetingRepository->countBetweenDatesByEventAndType(Argument::any(), Argument::any(), Argument::any(), Meeting::CREATED_BY_PARTICIPANT)->shouldNotBeCalled();
 
         $this->meetingRepository
             ->countCreatedByEventAndType($this->event->reveal(), Meeting::CREATED_BY_PARTICIPANT)
@@ -71,7 +70,6 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
 
         $expected = new DashboardMeetingView(
             200,
-            0,
             0,
             10,
             10,
@@ -101,10 +99,6 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
         $this->meetingRepository->countByEvent($this->event->reveal())->shouldBeCalled()->willReturn(200);
 
         $this->meetingRepository->countBetweenDatesByEventAndType($this->event->reveal(), $dateTime1, $dateTime2, Meeting::CREATED_BY_ADMIN)
-            ->shouldBeCalled()
-            ->willReturn(20);
-
-        $this->meetingRepository->countBetweenDatesByEventAndType($this->event->reveal(), $dateTime1, $dateTime2, Meeting::CREATED_BY_PARTICIPANT)
             ->shouldBeCalled()
             ->willReturn(20);
 
@@ -142,7 +136,6 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
 
         $expected = new DashboardMeetingView(
             200,
-            20,
             20,
             40,
             30,

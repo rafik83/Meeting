@@ -37,9 +37,6 @@ class DashboardMeetingView
     public $meetingCreatedByParticipant;
 
     /** @var int */
-    public $meetingCreatedDayDByParticipant;
-
-    /** @var int */
     public $meetingCreatedDayDByAdmin;
 
     /** @var int */
@@ -48,7 +45,6 @@ class DashboardMeetingView
     public function __construct(
         int $allMeetings = 0,
         int $meetingCreatedDayDByAdmin = 0,
-        int $meetingCreatedDayDByParticipant = 0,
         int $meetingCreatedByParticipant = 0,
         int $meetingCreatedByPlanner = 0,
         int $meetingCreatedUpstreamByAdmin = 0,
@@ -57,7 +53,6 @@ class DashboardMeetingView
         int $refusedRequest = 0
     ) {
         $this->meeting = $allMeetings;
-        $this->meetingCreatedDayDByParticipant = $meetingCreatedDayDByParticipant;
         $this->meetingCreatedDayDByAdmin = $meetingCreatedDayDByAdmin;
         $this->meetingCreatedByParticipant = $meetingCreatedByParticipant;
         $this->meetingCreatedByPlanner = $meetingCreatedByPlanner;
