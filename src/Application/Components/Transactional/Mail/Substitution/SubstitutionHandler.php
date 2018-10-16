@@ -32,7 +32,7 @@ class SubstitutionHandler
         $content = $message->getContent($locale);
 
         $sheetParameters = array_merge(
-            Constant::TRANSACTIONAL_MAIL_EDITOR_PARAMETERS,
+            Constant::getEditorPlaceholders(),
             Constant::TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS
         );
 
