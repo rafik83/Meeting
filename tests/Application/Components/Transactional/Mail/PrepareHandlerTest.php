@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
@@ -34,6 +35,7 @@ class PrepareHandlerTest extends TestCase
         $preparePreRegisterMail,
         $prepareUserCompleteProfileMail,
         $prepareTransactionTotalMail,
+        $prepareOrderConfirmedMail,
         $user,
         $event
     ;
@@ -52,6 +54,7 @@ class PrepareHandlerTest extends TestCase
         $this->preparePreRegisterMail = $this->prophesize(PreparePreRegisterMail::class);
         $this->prepareUserCompleteProfileMail = $this->prophesize(PrepareUserCompleteProfileMail::class);
         $this->prepareTransactionTotalMail = $this->prophesize(PrepareTransactionConfirmMail::class);
+        $this->prepareOrderConfirmedMail = $this->prophesize(PrepareOrderConfirmedMail::class);
     }
 
     public function testPrepareRegisterAccountMail()
@@ -69,6 +72,7 @@ class PrepareHandlerTest extends TestCase
         $this->preparePreRegisterMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareUserCompleteProfileMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareTransactionTotalMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareOrderConfirmedMail->prepare(Argument::any())->shouldNotBeCalled();
 
         $handler = new PrepareHandler(
             $this->prepareRegisterAccountMail->reveal(),
@@ -76,7 +80,8 @@ class PrepareHandlerTest extends TestCase
             $this->prepareParticipantAddedMail->reveal(),
             $this->preparePreRegisterMail->reveal(),
             $this->prepareUserCompleteProfileMail->reveal(),
-            $this->prepareTransactionTotalMail->reveal()
+            $this->prepareTransactionTotalMail->reveal(),
+            $this->prepareOrderConfirmedMail->reveal()
         );
 
         $result = $handler->handle($mail);

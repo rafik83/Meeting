@@ -265,7 +265,7 @@ final class Constant
             'subject' => OrderConfirmMail::SUBJECT,
             'availableParameters' => [
                 '%orderDate%',
-                '%orderNumber%',
+                '%orderNumero%',
                 '%urlEventProForma%',
                 '%urlEventProFormaWithCTA%',
             ],

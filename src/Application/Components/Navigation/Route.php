@@ -57,11 +57,12 @@ final class Route
 
     public const ORDER = [
         self::ORDER_LIST,
-        'event_pro_forma',
+        self::ORDER_PRO_FORMA,
         'event_order_summary_total',
     ];
 
     public const ORDER_LIST = 'event_order_list';
+    public const ORDER_PRO_FORMA = 'event_pro_forma';
 
     public const AGENDA = [
         self::AGENDA_DEFAULT,

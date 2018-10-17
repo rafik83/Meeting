@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActivateAccountMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareOrderConfirmedMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareParticipantAddedMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PreparePreRegisterMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareTransactionConfirmMailView;
@@ -134,19 +135,19 @@ class MailEventSubscriber implements EventSubscriberInterface
      *
      * @param OrderConfirmEvent $event
      */
-    public function onOrderConfirmed(OrderConfirmEvent $event)
+    public function onOrderConfirmed(OrderConfirmEvent $event): void
     {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getOrder()->getSheet(), $event->getUser())
-        );
-
-        $mail = new OrderConfirmMail(
-            $this->sender->generate($event->getEvent()),
-            $event->getUser()->getEmail(),
+        $mail = $this->prepareHandler->handle(new PrepareOrderConfirmedMailView(
+            $event->getEvent(),
+            $event->getUser(),
             $event->getUser()->getLocale(),
-            $event->getOrder(),
-            $participantMailView
-        );
+            $event->getOrder()->getSheet(),
+            $event->getOrder()
+        ));
+
+        if (!$mail instanceof AbstractMail) {
+            return;
+        }
 
         $this->mailer->send($mail);
     }

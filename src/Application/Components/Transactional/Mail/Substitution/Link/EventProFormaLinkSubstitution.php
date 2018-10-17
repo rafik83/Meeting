@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link;
 
+use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstituteInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
-use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Order;
 
-class EventActivateAccountAlreadyKnownLinkSubstitution implements SubstituteInterface
+class EventProFormaLinkSubstitution implements SubstituteInterface
 {
     /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
@@ -27,29 +28,22 @@ class EventActivateAccountAlreadyKnownLinkSubstitution implements SubstituteInte
 
     public function substitute(AbstractPrepareMail $prepareMail): string
     {
-        if (!$prepareMail->hasSheet()) {
+        if (!$prepareMail->hasSheet() || !method_exists($prepareMail, 'getOrder')) {
             return '';
         }
 
-        $participant = null;
+        $order = $prepareMail->getOrder();
 
-        if (method_exists($prepareMail, 'getParticipant')) {
-            $participant = $prepareMail->getParticipant();
-        } elseif (property_exists($prepareMail, 'participant')) {
-            $participant = $prepareMail->participant;
-        } else {
-            $participant = $prepareMail->sheet->getUserParticipant($prepareMail->user);
-        }
-
-        if (!$participant instanceof Participant) {
+        if (!$order instanceof Order) {
             return '';
         }
 
         return $this->eventUrlGenerator->generateEventAbsoluteUrl(
             $prepareMail->event,
-            'event_activate_account_already_known',
+            Route::ORDER_PRO_FORMA,
             [
-                'participant' => $participant->getId(),
+                'sheet' => $prepareMail->sheet->getId(),
+                'order' => $order->getId(),
                 '_locale' => $prepareMail->event->getAvailableLocale($prepareMail->locale),
             ]
         );

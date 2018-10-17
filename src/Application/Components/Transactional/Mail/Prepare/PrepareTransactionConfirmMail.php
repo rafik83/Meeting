@@ -11,42 +11,14 @@
 namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare;
 
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
-use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareTransactionConfirmMailView;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
-use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
-use Proximum\Vimeet\Domain\Repository\Transactional\Mail\MessageRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmCustomizedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 
-class PrepareTransactionConfirmMail
+class PrepareTransactionConfirmMail extends AbstractPrepareMailService
 {
-    /** @var MessageRepositoryInterface */
-    private $messageRepository;
-
-    /** @var SubstitutionHandler */
-    private $substitutionHandler;
-
-    /** @var EventSender */
-    private $eventSenderGuesser;
-
-    /** @var ParticipantMailViewQueryHandler */
-    private $participantMailViewQueryHandler;
-
-    public function __construct(
-        MessageRepositoryInterface $messageRepository,
-        SubstitutionHandler $substitutionHandler,
-        EventSender $eventSenderGuesser,
-        ParticipantMailViewQueryHandler $participantMailViewQueryHandler
-    ) {
-        $this->messageRepository = $messageRepository;
-        $this->substitutionHandler = $substitutionHandler;
-        $this->eventSenderGuesser = $eventSenderGuesser;
-        $this->participantMailViewQueryHandler = $participantMailViewQueryHandler;
-    }
-
     public function prepare(PrepareTransactionConfirmMailView $prepareMail): ?AbstractMail
     {
         $message = $this->messageRepository->getOneByEventAndTypeAndAssociatedType(

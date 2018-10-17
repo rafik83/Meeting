@@ -11,25 +11,26 @@
 namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare;
 
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
-use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareOrderConfirmedMailView;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
 use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountCustomizedMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmedCustomizedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 
-class PrepareRegisterAccountMail extends AbstractPrepareMailService
+class PrepareOrderConfirmedMail extends AbstractPrepareMailService
 {
-    public function prepare(PrepareUserRegisteredMailView $prepareMail): ?AbstractMail
+    public function prepare(PrepareOrderConfirmedMailView $prepareMail): ?AbstractMail
     {
-        $message = $this->messageRepository->getOneByEventAndType(
+        $message = $this->messageRepository->getOneByEventAndTypeAndAssociatedType(
             $prepareMail->event,
-            $prepareMail->type
+            $prepareMail->type,
+            $prepareMail->sheet->getType()
         );
 
         if ($message instanceof Message) {
             $result = $this->substitutionHandler->handle($prepareMail, $message);
 
-            return new RegisterAccountCustomizedMail(
+            return new OrderConfirmedCustomizedMail(
                 $prepareMail->event,
                 $this->eventSenderGuesser->generate($prepareMail->event),
                 $prepareMail->user->getEmail(),
@@ -43,11 +44,11 @@ class PrepareRegisterAccountMail extends AbstractPrepareMailService
             new ParticipantMailViewQuery($prepareMail->sheet, $prepareMail->user)
         );
 
-        $mail = new RegisterAccountMail(
-            $prepareMail->event,
+        $mail = new OrderConfirmMail(
             $this->eventSenderGuesser->generate($prepareMail->event),
             $prepareMail->user->getEmail(),
             $prepareMail->locale,
+            $prepareMail->order,
             $participantMailView
         );
 

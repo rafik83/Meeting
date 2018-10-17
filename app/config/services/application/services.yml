@@ -146,7 +146,20 @@ services:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution'
             - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventProFormaLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventProFormaCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventProFormaLinkSubstitution'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\GuestEmailSubstitution: ~
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\OrderNumeroSubstitution: ~
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\OrderDateSubstitution: ~
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionsProviders:
         calls:
@@ -157,6 +170,8 @@ services:
         - ['registerSubstitution', ['%%lastName%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserLastNameSubstitution']]
         - ['registerSubstitution', ['%%participant%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\ParticipantFullNameSubstitution']]
         - ['registerSubstitution', ['%%guestEmail%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\GuestEmailSubstitution']]
+        - ['registerSubstitution', ['%%orderNumero%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\OrderNumeroSubstitution']]
+        - ['registerSubstitution', ['%%orderDate%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\OrderDateSubstitution']]
         - ['registerSubstitution', ['%%transactionTotal%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TransactionTotalSubstitution']]
         - ['registerSubstitution', ['%%participationType%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TypeTitleSubstitution']]
         - ['registerSubstitution', ['%%urlEventAccountParticipant%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ParticipantAccountLinkSubstitution']]
@@ -185,52 +200,41 @@ services:
         - ['registerSubstitution', ['%%testVisioConfigurationCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\TestVisioConfigurationCTASubstitution']]
         - ['registerSubstitution', ['%%urlEventActivateAccountAlreadyKnown%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution']]
         - ['registerSubstitution', ['%%urlEventActivateAccountAlreadyKnownWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventActivateAccountAlreadyKnownCTASubstitution']]
+        - ['registerSubstitution', ['%%urlEventProForma%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventProFormaLinkSubstitution']]
+        - ['registerSubstitution', ['%%urlEventProFormaWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventProFormaCTASubstitution']]
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionsProviders'
 
-    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail:
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService:
+        abstract:  true
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
             - '@event_sender'
             - '@query.mail.participant_mail_view_query_handler'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
-            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
-            - '@event_sender'
-            - '@query.mail.participant_mail_view_query_handler'
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
-            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
-            - '@event_sender'
-            - '@query.mail.participant_mail_view_query_handler'
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
-            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
-            - '@event_sender'
-            - '@query.mail.participant_mail_view_query_handler'
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
-            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
-            - '@event_sender'
-            - '@query.mail.participant_mail_view_query_handler'
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
-            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
-            - '@event_sender'
-            - '@query.mail.participant_mail_view_query_handler'
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler:
         arguments:
@@ -240,3 +244,4 @@ services:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail'
