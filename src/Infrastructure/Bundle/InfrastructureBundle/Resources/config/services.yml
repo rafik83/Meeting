@@ -2493,12 +2493,6 @@ services:
     #
     # Sheet Component
     #
-    vimeet_infrastructure.application.components.sheet.manager:
-        class: Proximum\Vimeet\Application\Components\Sheet\SheetManager
-        arguments:
-            - '@vimeet_infrastructure.repository.type_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
     vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
         arguments:
