@@ -139,4 +139,9 @@ class AbstractMail
     {
         return $this->sendToEmailTeam;
     }
+
+    public function hasToTranslateSubject(): bool
+    {
+        return true;
+    }
 }

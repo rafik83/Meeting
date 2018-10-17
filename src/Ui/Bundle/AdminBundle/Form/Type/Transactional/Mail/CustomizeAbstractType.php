@@ -56,6 +56,9 @@ class CustomizeAbstractType extends AbstractType
             ->add('translations', CollectionType::class, [
                 'entry_type' => CustomizeTranslationType::class,
                 'label' => false,
+                'entry_options' => [
+                    'isCustomizableByType' => $isCustomizableByType,
+                ],
             ])
         ;
     }

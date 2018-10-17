@@ -1,0 +1,91 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Components\Transactional\Mail;
+
+use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountMail;
+
+class PrepareHandlerTest extends TestCase
+{
+    /** @var ObjectProphecy */
+    private $prepareRegisterAccountMail,
+        $prepareActivateAccountMail,
+        $prepareParticipantAddedMail,
+        $preparePreRegisterMail,
+        $prepareUserCompleteProfileMail,
+        $prepareTransactionTotalMail,
+        $prepareOrderConfirmedMail,
+        $user,
+        $event
+    ;
+
+    /** @var string */
+    private $locale;
+
+    public function setUp()
+    {
+        $this->event = $this->prophesize(Event::class);
+        $this->user = $this->prophesize(User::class);
+        $this->locale = 'fr';
+        $this->prepareRegisterAccountMail = $this->prophesize(PrepareRegisterAccountMail::class);
+        $this->prepareActivateAccountMail = $this->prophesize(PrepareActivateAccountMail::class);
+        $this->prepareParticipantAddedMail = $this->prophesize(PrepareParticipantAddedMail::class);
+        $this->preparePreRegisterMail = $this->prophesize(PreparePreRegisterMail::class);
+        $this->prepareUserCompleteProfileMail = $this->prophesize(PrepareUserCompleteProfileMail::class);
+        $this->prepareTransactionTotalMail = $this->prophesize(PrepareTransactionConfirmMail::class);
+        $this->prepareOrderConfirmedMail = $this->prophesize(PrepareOrderConfirmedMail::class);
+    }
+
+    public function testPrepareRegisterAccountMail()
+    {
+        $mail = new PrepareUserRegisteredMailView(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $this->locale
+        );
+        $preparedMail = $this->prophesize(RegisterAccountMail::class);
+
+        $this->prepareRegisterAccountMail->prepare($mail)->shouldBeCalled()->willReturn($preparedMail->reveal());
+        $this->prepareActivateAccountMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareParticipantAddedMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->preparePreRegisterMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareUserCompleteProfileMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareTransactionTotalMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareOrderConfirmedMail->prepare(Argument::any())->shouldNotBeCalled();
+
+        $handler = new PrepareHandler(
+            $this->prepareRegisterAccountMail->reveal(),
+            $this->prepareActivateAccountMail->reveal(),
+            $this->prepareParticipantAddedMail->reveal(),
+            $this->preparePreRegisterMail->reveal(),
+            $this->prepareUserCompleteProfileMail->reveal(),
+            $this->prepareTransactionTotalMail->reveal(),
+            $this->prepareOrderConfirmedMail->reveal()
+        );
+
+        $result = $handler->handle($mail);
+
+        $this->assertInstanceOf(RegisterAccountMail::class, $result);
+    }
+}

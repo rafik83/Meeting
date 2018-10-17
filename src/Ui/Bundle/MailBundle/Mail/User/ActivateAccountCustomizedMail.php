@@ -1,0 +1,31 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
+
+use Proximum\Vimeet\Application\Components\Mail\AbstractCustomizedMail;
+use Proximum\Vimeet\Domain\Model\Event;
+
+class ActivateAccountCustomizedMail extends AbstractCustomizedMail
+{
+    public function __construct(
+        Event $event,
+        string $sender,
+        string $receiver,
+        string $locale,
+        string $subject,
+        string $content
+    ) {
+        parent::__construct($event, $sender, $receiver, $locale);
+
+        $this->subject = $subject;
+        $this->content = $content;
+    }
+}
