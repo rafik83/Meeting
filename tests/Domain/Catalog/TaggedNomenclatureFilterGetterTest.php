@@ -18,6 +18,7 @@ class TaggedNomenclatureFilterGetterTest extends TestCase
     public function testGetNomenclaturesItemsByEvent()
     {
         $event = $this->prophesize(Event::class);
+        $event->getAvailableLocale('fr')->willReturn('fr');
 
         $nomenclatureItem1 = $this->prophesize(NomenclatureItem::class);
         $nomenclatureItem1->getKey()->shouldBeCalled()->willReturn('u58b57c0ecbdb3');

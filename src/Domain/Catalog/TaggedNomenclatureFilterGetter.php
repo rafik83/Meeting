@@ -88,12 +88,13 @@ class TaggedNomenclatureFilterGetter
         );
 
         $nomenclatureItems = [];
+        $availableLocale = $event->getAvailableLocale($locale);
 
         foreach ($nomenclatures as $nomenclature) {
             $nomenclatureItems[] = new NomenclatureFilterView(
                 $nomenclature->getId(),
                 $nomenclature->getTitle(),
-                $this->buildNomenclature($nomenclature->getLastLevel(), $locale),
+                $this->buildNomenclature($nomenclature->getLastLevel(), $availableLocale),
                 $tagsByNomenclatureId[$nomenclature->getId()] ?? []
             );
         }

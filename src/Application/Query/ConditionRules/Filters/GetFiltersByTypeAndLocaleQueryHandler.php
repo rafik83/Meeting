@@ -100,7 +100,7 @@ class GetFiltersByTypeAndLocaleQueryHandler
         /** @var NomenclatureFilterView $nomenclatureFilterView */
         foreach ($nomenclatureFilterViews as $nomenclatureFilterView) {
             $filter = [
-                'id' => TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE.'.'.$nomenclatureFilterView->id,
+                'id' => sprintf('%s.%s', TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE, $nomenclatureFilterView->id),
                 'label' => $nomenclatureFilterView->title,
                 'type' => 'string',
                 'input' => 'checkbox',
