@@ -407,7 +407,11 @@ class PackageController extends Controller
     {
         if ($sheet->getEvent() !== $eventDomain->getEvent()) {
             throw $this->createNotFoundException(
-                sprintf('Sheet %s not present on Event %s')
+                sprintf(
+                    'Sheet %s not present on Event %s',
+                    $sheet->getId(),
+                    $eventDomain->getEvent()->getId()
+                )
             );
         }
 
