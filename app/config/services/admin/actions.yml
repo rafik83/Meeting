@@ -689,3 +689,11 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.authorization_checker'
+
+    #
+    # Static Formulation
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
