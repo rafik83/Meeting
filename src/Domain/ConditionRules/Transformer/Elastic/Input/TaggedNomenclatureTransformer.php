@@ -26,12 +26,8 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
         $tags = ['sheet_test', 'sheet_test2'];
 
         $query = [
-            'bool' => [
-                'must' => [
-                    self::buildTagQuery($tags),
-                    self::buildKeysQuery((array) $field->getValue()),
-                ]
-            ]
+            self::buildTagQuery($tags),
+            self::buildKeysQuery((array) $field->getValue()),
         ];
 
         if (self::isContraryComparisonOperator($field)) {
