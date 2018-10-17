@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\ConditionRules\Filters;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\ConditionRules\ComparisonOperatorsByType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -66,13 +66,15 @@ class GetFiltersByTypeAndLocaleQueryHandler
     /** @var TranslatorInterface */
     private $translator;
 
-    /** @var QueryBusInterface */
-    private $queryBus;
+    /** @var TaggedNomenclatureFilterGetter */
+    private $taggedNomenclatureFilterGetter;
 
-    public function __construct(TranslatorInterface $translator, QueryBusInterface $queryBus)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter
+    ) {
         $this->translator = $translator;
-        $this->queryBus = $queryBus;
+        $this->taggedNomenclatureFilterGetter = $taggedNomenclatureFilterGetter;
     }
 
     public function handle(GetFiltersByTypeAndLocaleQuery $query): array
@@ -83,7 +85,7 @@ class GetFiltersByTypeAndLocaleQueryHandler
 
         $filters = $this->getFilters(self::FIELDS[$query->type], $query->locale);
 
-        if ($query->event instanceof Event) {
+        if ('sheet' === $query->type) {
             $filters = array_merge($filters, $this->getNomenclatureFilters($query->event, $query->locale));
         }
 
@@ -93,7 +95,7 @@ class GetFiltersByTypeAndLocaleQueryHandler
     private function getNomenclatureFilters(Event $event, string $locale): array
     {
         $filters = [];
-        $nomenclatureFilterViews = $this->queryBus->handle(new GetNomenclatureFiltersByEventQuery($event, $locale));
+        $nomenclatureFilterViews = $this->taggedNomenclatureFilterGetter->getNomenclaturesItemsByEvent($event, $locale);
 
         /** @var NomenclatureFilterView $nomenclatureFilterView */
         foreach ($nomenclatureFilterViews as $nomenclatureFilterView) {
@@ -104,6 +106,7 @@ class GetFiltersByTypeAndLocaleQueryHandler
                 'input' => 'checkbox',
                 'optgroup' => $this->translate('optgroup.nomenclature', $locale),
                 'values' => $nomenclatureFilterView->items,
+                'tags' => $nomenclatureFilterView->tags,
                 'operators' => ComparisonOperatorsByType::OPERATORS['nomenclature'] ?? [],
             ];
 

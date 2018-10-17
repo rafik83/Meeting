@@ -2183,15 +2183,9 @@ services:
     Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQueryHandler:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
-
-    Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetNomenclatureFiltersByEventHandler:
-        arguments:
             - '@catalog.tagged_nomenclature_filter_getter'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetNomenclatureFiltersByEventQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
     Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQueryHandler:
         tags:

@@ -13,10 +13,14 @@ class NomenclatureFilterView
     /** @var array */
     public $items;
 
-    public function __construct(int $id, string $title, array $items)
+    /** @var array */
+    public $tags;
+
+    public function __construct(int $id, string $title, array $items, array $tags)
     {
         $this->id = $id;
         $this->title = $title;
         $this->items = $items;
+        $this->tags = $tags;
     }
 }

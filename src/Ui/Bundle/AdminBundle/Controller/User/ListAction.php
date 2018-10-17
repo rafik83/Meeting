@@ -92,7 +92,7 @@ class ListAction
             )
         );
 
-        $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $request->getLocale()));
+        $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery($event, 'user', $request->getLocale()));
 
         return new Response(
             $this->engine->render(

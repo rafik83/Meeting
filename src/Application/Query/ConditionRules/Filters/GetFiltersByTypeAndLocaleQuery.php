@@ -15,19 +15,19 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class GetFiltersByTypeAndLocaleQuery implements Query
 {
+    /** @var null|Event */
+    public $event;
+
     /** @var string */
     public $type;
 
     /** @var string */
     public $locale;
 
-    /** @var null|Event */
-    public $event;
-
-    public function __construct(string $type, string $locale, ?Event $event = null)
+    public function __construct(Event $event, string $type, string $locale)
     {
+        $this->event = $event;
         $this->type = $type;
         $this->locale = $locale;
-        $this->event = $event;
     }
 }

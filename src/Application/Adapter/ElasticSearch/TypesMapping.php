@@ -97,7 +97,15 @@ final class TypesMapping
             'path' => self::SHEET_VIEW_PARTICIPANTS_EMAIL,
         ],
         self::SHEET_VIEW_TAGGED_NOMENCLATURE => [
-            'path' => self::SHEET_VIEW_TAGGED_NOMENCLATURE.'.values.value',
+            'path' => self::SHEET_VIEW_TAGGED_NOMENCLATURE,
+            'rules' => [
+                'key' => [
+                    'path' => self::SHEET_VIEW_TAGGED_NOMENCLATURE.'.values.value',
+                ],
+                'tag' => [
+                    'path' => self::SHEET_VIEW_TAGGED_NOMENCLATURE.'.tag'
+                ],
+            ],
         ],
         self::USER_EVENT_VIEW_FIRSTNAME => [
             'path' => self::USER_EVENT_VIEW_FIRSTNAME,

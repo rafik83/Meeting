@@ -73,12 +73,18 @@ class TaggedNomenclatureFilterGetter
 
     public function getNomenclaturesItemsByEvent(Event $event, string $locale): array
     {
-        $taggedNomenclatureFilter = $this->taggedNomenclatureFilterRepository->getByEvent($event);
-        $nomenclatureIds = null === $taggedNomenclatureFilter ? [] : $taggedNomenclatureFilter->getNomenclaturesId();
+        $taggedNomenclatureFilters = $this->taggedNomenclatureFilterRepository->getByEvent($event);
+        $tagsByNomenclatureId = [];
+
+        foreach ($taggedNomenclatureFilters as $taggedNomenclatureFilter) {
+            foreach ($taggedNomenclatureFilter->getNomenclaturesId() as $nomenclatureId) {
+                $tagsByNomenclatureId[$nomenclatureId][] = $taggedNomenclatureFilter->getTag();
+            }
+        }
 
         $nomenclatures = $this->nomenclatureRepository->findByEventAndIds(
             $event,
-            $nomenclatureIds
+            array_keys($tagsByNomenclatureId)
         );
 
         $nomenclatureItems = [];
@@ -87,7 +93,8 @@ class TaggedNomenclatureFilterGetter
             $nomenclatureItems[] = new NomenclatureFilterView(
                 $nomenclature->getId(),
                 $nomenclature->getTitle(),
-                $nomenclature->getLabels($locale)
+                $this->buildNomenclature($nomenclature->getLastLevel(), $locale),
+                $tagsByNomenclatureId[$nomenclature->getId()] ?? []
             );
         }
 

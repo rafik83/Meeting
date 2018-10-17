@@ -76,7 +76,7 @@ class TaggedNomenclatureFilterRepository implements TaggedNomenclatureFilterRepo
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
-    public function getByEvent(Event $event): ?TaggedNomenclatureFilter
+    public function getByEvent(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -84,9 +84,8 @@ class TaggedNomenclatureFilterRepository implements TaggedNomenclatureFilterRepo
             ->select('taggedNomenclatureFilter')
             ->from(TaggedNomenclatureFilter::class, 'taggedNomenclatureFilter')
             ->where('taggedNomenclatureFilter.event = :event')
-            ->setParameter('event', $event)
-            ->setMaxResults(1);
+            ->setParameter('event', $event);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 }

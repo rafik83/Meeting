@@ -34,5 +34,5 @@ interface TaggedNomenclatureFilterRepositoryInterface
      */
     public function getByEventAndTag(Event $event, $tag);
 
-    public function getByEvent(Event $event): ?TaggedNomenclatureFilter;
+    public function getByEvent(Event $event): array;
 }
