@@ -480,20 +480,20 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypesByUser(Event $event, User $user)
+    public function getTypesByUserIds(Event $event, array $userIds): array
     {
-        $queryBuilder = $this
+        return $this
             ->entityManager
             ->createQueryBuilder()
             ->select('type')
-            ->from('Entity:Type', 'type')
-            ->join('Entity:Sheet', 'sheet', 'WITH', 'sheet.type = type')
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
-            ->setParameter('user', $user)
-            ->where('type.event = :event')
-            ->setParameter('event', $event);
-
-        return $queryBuilder->getQuery()->getResult();
+            ->from(Type::class, 'type')
+            ->join(Sheet::class, 'sheet', 'WITH', 'type.event = :event AND sheet.type = type AND sheet.enable = true')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user IN (:userIds)')
+            ->setParameter('userIds', $userIds)
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**

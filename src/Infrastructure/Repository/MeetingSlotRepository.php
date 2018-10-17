@@ -17,22 +17,25 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 {
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
+
+    /** @var TypeRepositoryInterface */
+    private $typeRepository;
 
     /**
      * MeetingSlotRepository constructor.
      *
      * @param EntityManager $entityManager
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, TypeRepositoryInterface $typeRepository)
     {
         $this->entityManager = $entityManager;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
@@ -138,10 +141,12 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         array $participants,
         $ignoreMeetings = false,
         Meeting $exceptedMeeting = null
-    ) {
+    ): array {
         $userIds = array_map(function (Participant $participant) {
             return $participant->getUser()->getId();
         }, $participants);
+
+        $usersTypes = $this->typeRepository->getTypesByUserIds($event, $userIds);
 
         $queryBuilder = $this
             ->entityManager
@@ -203,13 +208,14 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             )');
 
         // No blocking mass unvailabilities during this slot
-        // @todo: check mass types
         $queryBuilder
             ->andWhere('NOT EXISTS (
                 SELECT mass.id FROM Entity:Unavailability\Mass mass
-                WHERE mass.blocking = true
+                JOIN mass.types massType
+                WHERE mass.event = :event
+                AND mass.blocking = true
                 AND mass.dispatch = false
-                AND mass.event = :event
+                AND massType IN (:usersTypes)
                 AND (
                     slot.begin >= mass.begin AND slot.begin < mass.end
                     OR slot.end > mass.begin AND slot.end <= mass.end
@@ -231,6 +237,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 
         $queryBuilder
             ->setParameter('userIds', $userIds)
+            ->setParameter('usersTypes', $usersTypes)
         ;
 
         return $queryBuilder->getQuery()->getResult();

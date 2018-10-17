@@ -159,12 +159,11 @@ interface TypeRepositoryInterface
     public function getSeeableTypeIdsByUser(User $user);
 
     /**
-     * @param Event $event
-     * @param User  $user
+     * @param int[] $userIds
      *
      * @return Type[]
      */
-    public function getTypesByUser(Event $event, User $user);
+    public function getTypesByUserIds(Event $event, array $userIds): array;
 
     /**
      * @param Event     $event
