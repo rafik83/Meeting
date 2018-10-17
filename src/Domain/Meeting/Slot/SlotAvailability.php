@@ -329,6 +329,7 @@ class SlotAvailability
     private function hasMassUnavailabilityOnSameSlot(Sheet $sheet, MeetingSlot $slot): bool
     {
         foreach ($this->massUnavailability as $mass) {
+            // @todo: check all sheet users multiplesheets type ?
             if (!$mass->hasType($sheet->getType())) {
                 continue;
             }
@@ -367,6 +368,7 @@ class SlotAvailability
     private function getMassUnavailability(MeetingSlot $slot, Participant $participant)
     {
         foreach ($this->massUnavailability as $mass) {
+            // @todo: check all participant sheets type ?
             if (!$mass->hasType($participant->getSheet()->getType())) {
                 continue;
             }

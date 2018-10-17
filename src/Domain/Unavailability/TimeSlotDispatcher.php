@@ -76,6 +76,7 @@ class TimeSlotDispatcher
             throw new UnableToDispatchException('No time slot available on this mass unavailability.');
         }
 
+        // @todo: check mass types
         $users = $this->userRepository->findByEventWithoutDispatch($mass->getEvent(), $mass);
 
         foreach ($users as $index => $user) {

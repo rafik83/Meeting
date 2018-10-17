@@ -203,6 +203,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             )');
 
         // No blocking mass unvailabilities during this slot
+        // @todo: check mass types
         $queryBuilder
             ->andWhere('NOT EXISTS (
                 SELECT mass.id FROM Entity:Unavailability\Mass mass

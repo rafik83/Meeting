@@ -134,6 +134,7 @@ class AgendaViewQueryHandler
                 $query->event
             );
 
+            // @todo: get all masses for all sheets types of this user
             $masses = $this->massUnavailabilityRepository->findByType($query->sheet->getType(), $query->locale);
 
             $happeningParticipations = $this
