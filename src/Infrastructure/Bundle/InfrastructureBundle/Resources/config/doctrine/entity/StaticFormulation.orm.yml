@@ -1,0 +1,27 @@
+Proximum\Vimeet\Domain\Model\StaticFormulation:
+    type:  entity
+    table: static_formulation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        key:
+            type: string
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\StaticFormulationTranslation
+            mappedBy: staticFormulation
+            indexBy: locale
+            cascade: ["persist", "remove"]
+    manyToMany:
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            joinTable:
+                name: static_formulation_type
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
