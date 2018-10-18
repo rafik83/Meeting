@@ -48,7 +48,7 @@ class TaggedNomenclatureTransformerTest extends TestCase
                     'path' => 'nestedTaggedData',
                     'query' => [
                         'bool' => [
-                            'should' => [
+                            'must' => [
                                 [
                                     'term' => [
                                         'nestedTaggedData.tag' => [

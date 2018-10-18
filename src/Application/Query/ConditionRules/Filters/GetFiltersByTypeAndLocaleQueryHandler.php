@@ -106,7 +106,6 @@ class GetFiltersByTypeAndLocaleQueryHandler
                 'input' => 'checkbox',
                 'optgroup' => $this->translate('optgroup.nomenclature', $locale),
                 'values' => $nomenclatureFilterView->items,
-                'tags' => $nomenclatureFilterView->tags,
                 'operators' => ComparisonOperatorsByType::OPERATORS['nomenclature'] ?? [],
             ];
 

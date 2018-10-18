@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\ConditionRules\Transformer\Elastic;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer;
@@ -29,7 +30,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ConditionRulesToElasticTransformerTest extends TestCase
 {
-
     public function testTransform(): void
     {
         $event = $this->prophesize(Event::class);
@@ -125,6 +125,7 @@ class ConditionRulesToElasticTransformerTest extends TestCase
 
         $nullableTransformer = new NullableTransformer();
         $taggedNomenclatureTransformer = $this->prophesize(TaggedNomenclatureTransformer::class);
+        $taggedNomenclatureTransformer->supports(Argument::any())->shouldBeCalled()->willReturn(false);
         $radioTransformer = new RadioTransformer();
         $textTransformer = new TextTransformer();
 

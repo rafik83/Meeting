@@ -80,6 +80,15 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
 
     private function buildFieldQuery(Condition $condition, Field $field): array
     {
+        if ($this->taggedNomenclatureTransformer->supports($field)) {
+            $this->taggedNomenclatureTransformer->setEventAndLocale(
+                $condition->getEvent(),
+                $condition->getLocale()
+            );
+
+            return $this->taggedNomenclatureTransformer->transform($field);
+        }
+
         if ($this->nullableTransformer->supports($field)) {
             return $this->nullableTransformer->transform($field);
         }
@@ -90,15 +99,6 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
 
         if ($this->radioTransformer->supports($field)) {
             return $this->radioTransformer->transform($field);
-        }
-
-        if ($this->taggedNomenclatureTransformer->supports($field)) {
-            $this->taggedNomenclatureTransformer->setEventAndLocale(
-                $condition->getEvent(),
-                $condition->getLocale()
-            );
-
-            return $this->taggedNomenclatureTransformer->transform($field);
         }
 
         return [];

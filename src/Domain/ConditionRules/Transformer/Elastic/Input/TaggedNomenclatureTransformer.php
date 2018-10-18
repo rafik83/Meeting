@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
 use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotIn;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotNull;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 use Proximum\Vimeet\Domain\Model\Event;
 
@@ -47,20 +49,30 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
 
         $tags = $this->getTagsByNomenclatureId($field);
 
-        $query = [
-            $this->buildTagQuery($tags),
-            $this->buildKeysQuery((array) $field->getValue()),
-        ];
-
-        if ($this->isContraryComparisonOperator($field)) {
-            $query = [
-                'bool' => [
-                    'must_not' => $query,
-                ],
+        // Not null or null query
+        if ($this->isNullableComparisonOperator($field)) {
+            return [
+                $this->buildNestedNullableQuery($field, $tags)
             ];
         }
 
-        return $query;
+        return [
+            $this->buildNestedTagQuery($tags),
+            $this->buildNestedKeysQuery($field, (array) $field->getValue()),
+        ];
+    }
+
+    private function buildNestedNullableQuery(Field $field, array $tags): array
+    {
+        $operator = $field->getComparisonOperator() instanceof ComparisonOperatorNull ? 'must_not' : 'must';
+
+        return [
+            'bool' => [
+                $operator => [
+                    $this->buildNestedTagQuery($tags),
+                ],
+            ],
+        ];
     }
 
     private function getTagsByNomenclatureId(Field $field): array
@@ -84,15 +96,14 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
         return $tags;
     }
 
-    private function buildTagQuery(array $tags): array
+    private function buildNestedTagQuery(array $tags): array
     {
-        $tagMappingPath = TypesMapping::SEARCH_MAPPING[TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE]['rules']['tag']['path'];
         $query = [];
 
         foreach ($tags as $tag) {
-            $query['bool']['should'][] = [
+            $query['bool']['must'][] = [
                 'term' => [
-                    $tagMappingPath => [
+                    $this->getTagSearchMapping() => [
                         'value' => $tag,
                     ],
                 ],
@@ -107,27 +118,46 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
         ];
     }
 
-    private function buildKeysQuery(array $keys): array
+    private function buildNestedKeysQuery(Field $field, array $keys): array
     {
-        $keyMappingPath = TypesMapping::SEARCH_MAPPING[TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE]['rules']['key']['path'];
-        $query = [];
+        $nestedQuery = [];
 
         foreach ($keys as $key) {
-            $query['bool']['should'][] = [
+            $nestedQuery['bool']['should'][] = [
                 'term' => [
-                    $keyMappingPath => [
+                    $this->getKeysSearchMapping() => [
                         'value' => $key,
                     ],
                 ],
             ];
         }
 
-        return [
+        $query = [
             'nested' => [
                 'path' => sprintf('%s.values', TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE),
-                'query' => $query,
+                'query' => $nestedQuery,
             ],
         ];
+
+        if ($this->isContraryComparisonOperator($field)) {
+            return [
+                'bool' => [
+                    'must_not' => $query,
+                ],
+            ];
+        }
+
+        return $query;
+    }
+
+    private function getKeysSearchMapping(): string
+    {
+        return TypesMapping::SEARCH_MAPPING[TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE]['rules']['key']['path'];
+    }
+
+    private function getTagSearchMapping(): string
+    {
+        return TypesMapping::SEARCH_MAPPING[TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE]['rules']['tag']['path'];
     }
 
     public function supports(Field $field): bool
@@ -137,6 +167,13 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
 
     private function isContraryComparisonOperator(Field $field): bool
     {
-        return $field->getComparisonOperator() instanceof ComparisonOperatorNotIn;
+        return $field->getComparisonOperator() instanceof ComparisonOperatorNotIn
+            || $field->getComparisonOperator() instanceof ComparisonOperatorNotNull;
+    }
+
+    private function isNullableComparisonOperator(Field $field): bool
+    {
+        return $field->getComparisonOperator() instanceof ComparisonOperatorNull
+            || $field->getComparisonOperator() instanceof ComparisonOperatorNotNull;
     }
 }
