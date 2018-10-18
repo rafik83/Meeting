@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
@@ -28,17 +29,13 @@ use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 class SlotAvailability
 {
-    const HAPPENING_UNAVAILABILITY          = 'happening_unavailability';
-    const UNAVAILABILITY                    = 'unavailability';
-    const MEETING_UNAVAILABILITY            = 'meeting_unavailability';
-    const MASS_UNAVAILABILITY               = 'mass_unavailability';
-    const SLOT_AVAILABLE                    = 'slot_available';
-    const MASS_ASSIGNMENT_UNAVAILABILITY    = 'mass_assignment_unavailability';
-    const MEETING_ON_OTHER_SHEET            = 'meeting_on_other_sheet';
-
-    const ASSIGNMENT_DISABLED   = 'disabled';
-    const ASSIGNMENT_FOUND      = 'found';
-    const ASSIGNMENT_NOT_FOUND  = 'not_found';
+    const HAPPENING_UNAVAILABILITY = 'happening_unavailability';
+    const UNAVAILABILITY = 'unavailability';
+    const MEETING_UNAVAILABILITY = 'meeting_unavailability';
+    const MASS_UNAVAILABILITY = 'mass_unavailability';
+    const SLOT_AVAILABLE = 'slot_available';
+    const MASS_ASSIGNMENT_UNAVAILABILITY = 'mass_assignment_unavailability';
+    const MEETING_ON_OTHER_SHEET = 'meeting_on_other_sheet';
 
     /**
      * @var HappeningParticipationRepositoryInterface
@@ -64,6 +61,9 @@ class SlotAvailability
      * @var MassAssignmentRepositoryInterface
      */
     private $massAssignmentRepository;
+
+    /** @var GetParticipantTypes */
+    private $getParticipantTypes;
 
     /**
      * @var HappeningParticipation[]
@@ -123,27 +123,20 @@ class SlotAvailability
      */
     private $massAssignmentSortByUser = [];
 
-    /**
-     * SlotAvailability constructor.
-     *
-     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
-     * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
-     * @param MassRepositoryInterface                   $massUnavailabilityRepository
-     * @param MeetingRepositoryInterface                $meetingRepositoryInterface
-     * @param MassAssignmentRepositoryInterface         $massAssignmentRepository
-     */
     public function __construct(
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         MassRepositoryInterface $massUnavailabilityRepository,
         MeetingRepositoryInterface $meetingRepositoryInterface,
-        MassAssignmentRepositoryInterface $massAssignmentRepository
+        MassAssignmentRepositoryInterface $massAssignmentRepository,
+        GetParticipantTypes $getParticipantTypes
     ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
-        $this->unavailabilityRepository         = $unavailabilityRepository;
-        $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
-        $this->meetingRepositoryInterface       = $meetingRepositoryInterface;
-        $this->massAssignmentRepository         = $massAssignmentRepository;
+        $this->unavailabilityRepository = $unavailabilityRepository;
+        $this->massUnavailabilityRepository = $massUnavailabilityRepository;
+        $this->meetingRepositoryInterface = $meetingRepositoryInterface;
+        $this->massAssignmentRepository = $massAssignmentRepository;
+        $this->getParticipantTypes = $getParticipantTypes;
     }
 
     /**
@@ -328,14 +321,26 @@ class SlotAvailability
 
     private function hasMassUnavailabilityOnSameSlot(Sheet $sheet, MeetingSlot $slot): bool
     {
+        $participantTypes = [];
+        $participants = $sheet->getParticipantsArray();
+
+        foreach ($participants as $participant) {
+            $participantTypes[$participant->getId()] = $this->getParticipantTypes->handle($participant);
+        }
+
         foreach ($this->massUnavailability as $mass) {
-            // @todo: check all sheet users multiplesheets type ?
-            if (!$mass->hasType($sheet->getType())) {
+            if (!TimeOverlap::overlap($slot, $mass)) {
                 continue;
             }
 
-            if (TimeOverlap::overlap($slot, $mass)) {
-                return $mass->isBlockingAndNotDispatch();
+            foreach ($participants as $participant) {
+                if (!$mass->hasAtLeastOneType($participantTypes[$participant->getId()])) {
+                    continue 2;
+                }
+            }
+
+            if ($mass->isBlockingAndNotDispatch()) {
+                return true;
             }
         }
 
@@ -368,8 +373,7 @@ class SlotAvailability
     private function getMassUnavailability(MeetingSlot $slot, Participant $participant)
     {
         foreach ($this->massUnavailability as $mass) {
-            // @todo: check all participant sheets type ?
-            if (!$mass->hasType($participant->getSheet()->getType())) {
+            if (!TimeOverlap::overlap($slot, $mass)) {
                 continue;
             }
 
@@ -377,38 +381,16 @@ class SlotAvailability
                 $assignment = $this->getDispatch($participant, $mass);
 
                 if (null !== $assignment) {
-                    $assignmentResult = $this->getDispatchUnavailability($assignment, $slot);
-
-                    if (self::ASSIGNMENT_DISABLED === $assignmentResult) {
-                        return false;
-                    }
-
-                    if (self::ASSIGNMENT_FOUND === $assignmentResult) {
-                        return $assignment;
-                    }
-
-                    continue;
+                    return $assignment->isEnabled() ? $assignment : false;
                 }
             }
 
-            if (TimeOverlap::overlap($slot, $mass)) {
+            if ($mass->hasAtLeastOneType($this->getParticipantTypes->handle($participant))) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    /**
-     * @return string self::ASSIGNMENT_NOT_FOUND|self::ASSIGNMENT_FOUND|self::ASSIGNMENT_DISABLED
-     */
-    private function getDispatchUnavailability(MassAssignment $massAssignment, MeetingSlot $slot): string
-    {
-        if (TimeOverlap::overlap($slot, $massAssignment)) {
-            return $massAssignment->isEnabled() ? self::ASSIGNMENT_FOUND : self::ASSIGNMENT_DISABLED;
-        }
-
-        return self::ASSIGNMENT_NOT_FOUND;
     }
 
     /**

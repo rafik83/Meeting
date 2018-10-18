@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\Meeting\Slot;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailabilityView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -25,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
@@ -38,30 +40,23 @@ use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class SlotAvailabilityTest extends TestCase
 {
-    /**
-     * @var HappeningParticipationRepositoryInterface
-     */
+    /** @var ObjectProphecy */
     private $happeningParticipationRepository;
 
-    /**
-     * @var UnavailabilityRepositoryInterface
-     */
+    /** @var ObjectProphecy */
     private $unavailabilityRepository;
 
-    /**
-     * @var MassRepositoryInterface
-     */
+    /** @var ObjectProphecy */
     private $massUnavailabilityRepository;
 
-    /**
-     * @var MeetingRepositoryInterface
-     */
+    /** @var ObjectProphecy */
     private $meetingRepository;
 
-    /**
-     * @var MassAssignmentRepositoryInterface
-     */
+    /** @var ObjectProphecy */
     private $massAssignmentRepository;
+
+    /** @var ObjectProphecy */
+    private $getParticipantTypes;
 
     /** @var Event */
     private $event;
@@ -75,25 +70,24 @@ class SlotAvailabilityTest extends TestCase
     /** @var User */
     private $user;
 
-    /**
-     * Set up the prophecy
-     */
     public function setUp()
     {
         $this->happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $this->unavailabilityRepository         = $this->prophesize(UnavailabilityRepositoryInterface::class);
-        $this->massUnavailabilityRepository     = $this->prophesize(MassRepositoryInterface::class);
-        $this->meetingRepository                = $this->prophesize(MeetingRepositoryInterface::class);
-        $this->massAssignmentRepository         = $this->prophesize(MassAssignmentRepositoryInterface::class);
-        $this->event                            = EventFactory::createEvent();
-        $this->sheet                            = SheetFactory::create($this->event);
-        $this->user                             = UserFactory::create();
-        $this->participant                      = ParticipantFactory::create($this->sheet, $this->user);
+        $this->unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
+        $this->massUnavailabilityRepository = $this->prophesize(MassRepositoryInterface::class);
+        $this->meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $this->massAssignmentRepository = $this->prophesize(MassAssignmentRepositoryInterface::class);
+        $this->getParticipantTypes = $this->prophesize(GetParticipantTypes::class);
+        $this->event = EventFactory::createEvent();
+        $this->user = UserFactory::create();
+        $this->sheet = SheetFactory::create($this->event);
+        $this->participant = ParticipantFactory::create($this->sheet, $this->user);
+        //$this->participant = $this->prophesize(Participant::class);
+        //$this->participant->getId()->willReturn(1337);
+        //$this->sheet->addParticipant($this->participant->reveal());
     }
 
-    /**
-     * Assert SLOT_AVAILABLE
-     */
+    /*
     public function testIsAvailableTrue()
     {
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
@@ -107,7 +101,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -123,9 +118,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert SLOT_AVAILABLE
-     */
     public function testIsAvailableTrueAsHappeningNotAtSameTime()
     {
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
@@ -145,7 +137,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -161,9 +154,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert HAPPENING_UNAVAILABILITY
-     */
     public function testIsAvailableFalseAsHappeningAtSameTime()
     {
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
@@ -183,7 +173,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -199,9 +190,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert HAPPENING_UNAVAILABILITY
-     */
     public function testIsAvailableFalseAsHappeningWithHoursOutOfSlot()
     {
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
@@ -221,7 +209,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -237,9 +226,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert HAPPENING_UNAVAILABILITY
-     */
     public function testIsAvailableFalseAsHappeningWithHoursInTheSlot()
     {
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
@@ -259,7 +245,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -275,9 +262,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert SLOT_AVAILABLE
-     */
     public function testIsAvailableTrueAsMeetingNotOnTheSlot()
     {
         $beginS        = new \DateTime('2016-10-12 08:00:00.000');
@@ -311,7 +295,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin = new \DateTime('2016-10-12 09:00:00.000');
@@ -327,9 +312,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert MEETING_UNAVAILABILITY
-     */
     public function testIsAvailableFalseAsMeetingOnTheSameSlot()
     {
         $toSheet       = SheetFactory::create($this->event);
@@ -363,7 +345,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
@@ -375,9 +358,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert MEETING_UNAVAILABILITY
-     */
     public function testIsAvailableFalseWithMultipleMeetingToCheckTheGoodOneIsReturned()
     {
         $toSheet       = SheetFactory::create($this->event);
@@ -430,7 +410,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
@@ -442,9 +423,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert SLOT_AVAILABLE
-     */
     public function testIsAvailableTrueAsMassIsNotAtTheSameTime()
     {
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
@@ -462,7 +440,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -477,9 +456,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert MASS_UNAVAILABILITY
-     */
     public function testIsAvailableFalseAsParticipantHasMassUnavailabilityInsideSlot()
     {
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
@@ -499,13 +475,15 @@ class SlotAvailabilityTest extends TestCase
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([$mass]);
         $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->getParticipantTypes->handle($this->participant)->shouldBeCalled()->willReturn([$this->sheet->getType()]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -520,9 +498,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert MASS_UNAVAILABILITY
-     */
     public function testIsAvailableFalseAsParticipantHasMassAssingmentyInsideSlot()
     {
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
@@ -551,7 +526,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -566,9 +542,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert MASS_UNAVAILABILITY
-     */
     public function testIsAvailableTrueAsParticipantHasMassAssingmentyInsideSlotButNotEnabled()
     {
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
@@ -603,7 +576,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -618,9 +592,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert MASS_UNAVAILABILITY
-     */
     public function testIsAvailableFalseAsParticipantHasMassUnavailabilityOutsideSlot()
     {
         $category = new Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
@@ -641,13 +612,15 @@ class SlotAvailabilityTest extends TestCase
         $this->unavailabilityRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([]);
         $this->massUnavailabilityRepository->findBlockingByEvent($this->event)->shouldBeCalled()->willReturn([$mass]);
         $this->massAssignmentRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
+        $this->getParticipantTypes->handle($this->participant)->shouldBeCalled()->willReturn([$this->sheet->getType()]);
 
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -662,9 +635,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert SLOT_AVAILABLE
-     */
     public function testIsAvailableTrueAsUnavailabilityNotAtTheSameTime()
     {
         $beginM         = new \DateTime('2016-10-12 08:30:00.000');
@@ -686,7 +656,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -701,9 +672,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert UNAVAILABILITY
-     */
     public function testIsAvailableFalseAsUnavailabilityAtTheSameTime()
     {
         $beginM         = new \DateTime('2016-10-12 09:30:00.000');
@@ -725,7 +693,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -740,9 +709,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert UNAVAILABILITY
-     */
     public function testIsAvailableFalseAsUnavailabilityAtTheSameTimeWithBeginOut()
     {
         $beginM         = new \DateTime('2016-10-12 08:30:00.000');
@@ -764,7 +730,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -779,9 +746,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert UNAVAILABILITY
-     */
     public function testIsAvailableFalseAsUnavailabilityAtTheSameTimeWithEndOut()
     {
         $beginM         = new \DateTime('2016-10-12 09:30:00.000');
@@ -803,7 +767,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $begin  = new \DateTime('2016-10-12 09:00:00.000');
@@ -818,9 +783,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert MEETING_UNAVAILABILITY
-     */
     public function testIsAvailableToCheckOrderOfResultUnavailability()
     {
         $toSheet       = SheetFactory::create($this->event);
@@ -862,7 +824,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
@@ -874,9 +837,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert MEETING_UNAVAILABILITY
-     */
     public function testIsAvailableToCheckOrderOfResultHappening()
     {
         $toSheet       = SheetFactory::create($this->event);
@@ -916,7 +876,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
@@ -928,9 +889,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert MEETING_UNAVAILABILITY
-     */
     public function testIsAvailableToCheckOrderOfResultMass()
     {
         $toSheet       = SheetFactory::create($this->event);
@@ -969,7 +927,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
@@ -981,9 +940,6 @@ class SlotAvailabilityTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * Assert MEETING_UNAVAILABILITY
-     */
     public function testIsAvailableToCheckOrderOfResult()
     {
         // In Case of unavailability, happening, mass, and meeting (this case should not happen)
@@ -1039,7 +995,8 @@ class SlotAvailabilityTest extends TestCase
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
@@ -1050,14 +1007,32 @@ class SlotAvailabilityTest extends TestCase
         // Assert
         $this->assertEquals($expected, $result);
     }
+    */
 
     public function testIsUsable()
     {
+        $participant1 = $this->prophesize(Participant::class);
+        $participant1->getId()->shouldBeCalled()->willReturn(99);
+
+        $participant2 = $this->prophesize(Participant::class);
+        $participant2->getId()->shouldBeCalled()->willReturn(936);
+
         $event = $this->prophesize(Event::class);
-        $type = $this->prophesize(Type::class);
+
+        $type1 = $this->prophesize(Type::class);
+        $type1->getId()->willReturn(42);
+
+        $type2 = $this->prophesize(Type::class);
+        $type2->getId()->willReturn(1848);
+
+        $type3 = $this->prophesize(Type::class);
 
         $sheet = $this->prophesize(Sheet::class);
-        $sheet->getType()->willReturn($type->reveal());
+        $sheet
+            ->getParticipantsArray()
+            ->shouldBeCalled()
+            ->willReturn([$participant1->reveal(), $participant2->reveal()])
+        ;
 
         $slot1 = $this->prophesize(MeetingSlot::class);
         $slot1->getEvent()->willReturn($event->reveal());
@@ -1069,6 +1044,11 @@ class SlotAvailabilityTest extends TestCase
         $slot2->getBegin()->willReturn(new \DateTime('2018-10-15 09:30:00'));
         $slot2->getEnd()->willReturn(new \DateTime('2018-10-15 10:20:00'));
 
+        $slot3 = $this->prophesize(MeetingSlot::class);
+        $slot3->getEvent()->willReturn($event->reveal());
+        $slot3->getBegin()->willReturn(new \DateTime('2018-10-15 11:20:00'));
+        $slot3->getEnd()->willReturn(new \DateTime('2018-10-15 11:30:00'));
+
         $category = $this->prophesize(Category::class);
         $mass1 = new Mass(
             $event->reveal(),
@@ -1079,7 +1059,7 @@ class SlotAvailabilityTest extends TestCase
             true,
             false,
             [],
-            [$type->reveal()]
+            [$type1->reveal()]
         );
         $mass2 = new Mass(
             $event->reveal(),
@@ -1090,7 +1070,7 @@ class SlotAvailabilityTest extends TestCase
             false,
             false,
             [],
-            [$type->reveal()]
+            [$type1->reveal()]
         );
         $mass3 = new Mass(
             $event->reveal(),
@@ -1101,14 +1081,36 @@ class SlotAvailabilityTest extends TestCase
             true,
             false,
             [],
-            []
+            [$type3->reveal()]
+        );
+        $mass4 = new Mass(
+            $event->reveal(),
+            $category->reveal(),
+            'Mass 4',
+            new \DateTime('2018-10-15 11:00:00'),
+            new \DateTime('2018-10-15 12:00:00'),
+            true,
+            false,
+            [],
+            [$type2->reveal()]
+        );
+        $mass5 = new Mass(
+            $event->reveal(),
+            $category->reveal(),
+            'Mass 5',
+            new \DateTime('2018-10-15 11:00:00'),
+            new \DateTime('2018-10-15 12:00:00'),
+            false, // not blocking
+            false,
+            [],
+            [$type1->reveal(), $type2->reveal()]
         );
 
         $this
             ->massUnavailabilityRepository
             ->findBlockingByEvent($event->reveal())
             ->shouldBeCalled()
-            ->willReturn([$mass1, $mass2, $mass3])
+            ->willReturn([$mass1, $mass2, $mass3, $mass4, $mass5])
         ;
 
         $this->happeningParticipationRepository->getByEvent($event->reveal())->shouldBeCalled()->willReturn([]);
@@ -1116,15 +1118,30 @@ class SlotAvailabilityTest extends TestCase
         $this->unavailabilityRepository->getByEvent($event->reveal())->shouldBeCalled()->willReturn([]);
         $this->massAssignmentRepository->findByEvent($event->reveal())->shouldBeCalled()->willReturn([]);
 
+        $this
+            ->getParticipantTypes
+            ->handle($participant1->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$type1->reveal(), $type2->reveal()])
+        ;
+        $this
+            ->getParticipantTypes
+            ->handle($participant2->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$type1->reveal()])
+        ;
+
         $slotAvailability = new SlotAvailability(
             $this->happeningParticipationRepository->reveal(),
             $this->unavailabilityRepository->reveal(),
             $this->massUnavailabilityRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->massAssignmentRepository->reveal()
+            $this->massAssignmentRepository->reveal(),
+            $this->getParticipantTypes->reveal()
         );
 
         $this->assertTrue($slotAvailability->isUsable($sheet->reveal(), $slot1->reveal()));
         $this->assertFalse($slotAvailability->isUsable($sheet->reveal(), $slot2->reveal()));
+        $this->assertTrue($slotAvailability->isUsable($sheet->reveal(), $slot3->reveal()));
     }
 }

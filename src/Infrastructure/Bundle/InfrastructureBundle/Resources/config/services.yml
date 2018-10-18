@@ -5805,6 +5805,7 @@ services:
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@repository.unavailability.mass_assignment_repository'
+            - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
 
     #
     # Visio Guesser

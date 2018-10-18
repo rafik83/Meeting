@@ -323,6 +323,20 @@ class Mass implements TimeRangeInterface
         return false;
     }
 
+    /**
+     * @param Type[] $types
+     */
+    public function hasAtLeastOneType(array $types): bool
+    {
+        foreach ($types as $type) {
+            if ($this->hasType($type)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function isBlockingAndNotDispatch(): bool
     {
         return $this->isBlocking() && !$this->isDispatch();
