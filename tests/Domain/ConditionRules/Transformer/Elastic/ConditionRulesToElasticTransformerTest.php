@@ -12,6 +12,10 @@ namespace Proximum\Vimeet\Tests\Domain\ConditionRules\Transformer\Elastic;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorContains;
@@ -110,7 +114,12 @@ class ConditionRulesToElasticTransformerTest extends TestCase
             ]
         ];
 
-        $transformer = new ConditionRulesToElasticTransformer();
+        $nullableTransformer = new NullableTransformer();
+        $taggedNomenclatureTransformer = new TaggedNomenclatureTransformer();
+        $radioTransformer = new RadioTransformer();
+        $textTransformer = new TextTransformer();
+
+        $transformer = new ConditionRulesToElasticTransformer($nullableTransformer, $radioTransformer, $taggedNomenclatureTransformer, $textTransformer);
         $result = $transformer->transform($condition);
 
         $this->assertSame($expectedResult, $result);

@@ -22,6 +22,30 @@ use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 
 class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInterface
 {
+    /** @var NullableTransformer */
+    private $nullableTransformer;
+
+    /** @var RadioTransformer */
+    private $radioTransformer;
+
+    /** @var TaggedNomenclatureTransformer */
+    private $taggedNomenclatureTransformer;
+
+    /** @var TextTransformer */
+    private $textTransformer;
+
+    public function __construct(
+        NullableTransformer $nullableTransformer,
+        RadioTransformer $radioTransformer,
+        TaggedNomenclatureTransformer $taggedNomenclatureTransformer,
+        TextTransformer $textTransformer
+    ) {
+        $this->nullableTransformer = $nullableTransformer;
+        $this->radioTransformer = $radioTransformer;
+        $this->taggedNomenclatureTransformer = $taggedNomenclatureTransformer;
+        $this->textTransformer = $textTransformer;
+    }
+
     public function transform(Condition $condition): array
     {
         $queries = [];
@@ -55,20 +79,20 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
 
     private function buildFieldQuery(Field $field): array
     {
-        if (NullableTransformer::supports($field)) {
-            return NullableTransformer::transform($field);
+        if ($this->nullableTransformer->supports($field)) {
+            return $this->nullableTransformer->transform($field);
         }
 
-        if (TextTransformer::supports($field)) {
-            return TextTransformer::transform($field);
+        if ($this->textTransformer->supports($field)) {
+            return $this->textTransformer->transform($field);
         }
 
-        if (RadioTransformer::supports($field)) {
-            return RadioTransformer::transform($field);
+        if ($this->radioTransformer->supports($field)) {
+            return $this->radioTransformer->transform($field);
         }
 
-        if (TaggedNomenclatureTransformer::supports($field)) {
-            return TaggedNomenclatureTransformer::transform($field);
+        if ($this->taggedNomenclatureTransformer->supports($field)) {
+            return $this->taggedNomenclatureTransformer->transform($field);
         }
 
         return [];

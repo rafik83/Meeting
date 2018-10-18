@@ -23,7 +23,8 @@ class TaggedNomenclatureTransformerTest extends TestCase
 {
     public function testTransform(): void
     {
-        $result = TaggedNomenclatureTransformer::transform(
+        $taggedNomenclatureTransformer = new TaggedNomenclatureTransformer();
+        $result = $taggedNomenclatureTransformer->transform(
             new Field('nestedTaggedData.273', new ComparisonOperatorIn(), 'checkbox', ['57eced1b99305', '57eced1b994ef'])
         );
 

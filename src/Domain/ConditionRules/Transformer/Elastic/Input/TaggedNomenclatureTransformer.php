@@ -16,9 +16,9 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 class TaggedNomenclatureTransformer implements InputTransformerInterface
 {
-    public static function transform(Field $field): array
+    public function transform(Field $field): array
     {
-        if (!self::supports($field)) {
+        if (!$this->supports($field)) {
             return [];
         }
 
@@ -26,11 +26,11 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
         $tags = ['sheet_test', 'sheet_test2'];
 
         $query = [
-            self::buildTagQuery($tags),
-            self::buildKeysQuery((array) $field->getValue()),
+            $this->buildTagQuery($tags),
+            $this->buildKeysQuery((array) $field->getValue()),
         ];
 
-        if (self::isContraryComparisonOperator($field)) {
+        if ($this->isContraryComparisonOperator($field)) {
             $query = [
                 'bool' => [
                     'must_not' => $query,
@@ -41,7 +41,7 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
         return $query;
     }
 
-    private static function buildTagQuery(array $tags): array
+    private function buildTagQuery(array $tags): array
     {
         $tagMappingPath = TypesMapping::SEARCH_MAPPING[TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE]['rules']['tag']['path'];
         $query = [];
@@ -64,7 +64,7 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
         ];
     }
 
-    private static function buildKeysQuery(array $keys): array
+    private function buildKeysQuery(array $keys): array
     {
         $keyMappingPath = TypesMapping::SEARCH_MAPPING[TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE]['rules']['key']['path'];
         $query = [];
@@ -87,12 +87,12 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
         ];
     }
 
-    public static function supports(Field $field): bool
+    public function supports(Field $field): bool
     {
         return false !== stripos($field->getField(), TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE);
     }
 
-    private static function isContraryComparisonOperator(Field $field): bool
+    private function isContraryComparisonOperator(Field $field): bool
     {
         return $field->getComparisonOperator() instanceof ComparisonOperatorNotIn;
     }
