@@ -21,13 +21,11 @@ class MeetingRequestListView
     /** @var string */
     public $locale;
 
-    /**
-     * @param MeetingRequestView[] $meetingRequests
-     * @param string               $timeZone
-     * @param string               $locale
-     */
-    public function __construct(array $meetingRequests, string $timeZone, string $locale)
-    {
+    public function __construct(
+        array $meetingRequests,
+        string $timeZone,
+        string $locale
+    ) {
         $this->meetingRequests = $meetingRequests;
         $this->timeZone = $timeZone;
         $this->locale = $locale;
