@@ -30,4 +30,9 @@ class GenericStaticFormulationView
         $this->title = $title;
         $this->typeTitles = $typeTitles;
     }
+
+    public function hasNoneTypeRemaining(): bool
+    {
+        return empty($this->typeTitles);
+    }
 }

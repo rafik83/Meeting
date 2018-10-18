@@ -7,7 +7,7 @@ Proximum\Vimeet\Domain\Model\StaticFormulation:
             generator:
                 strategy: AUTO
     fields:
-        key:
+        staticFormulationKey:
             type: string
     oneToMany:
         translations:

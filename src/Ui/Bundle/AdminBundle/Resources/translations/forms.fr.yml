@@ -936,6 +936,9 @@ form.spot_import.children.charset.label: 'Encodage du fichier'
 form.spot_import.children.file.label: 'Fichier des lieux'
 form.spot_import.children.submit.label: 'Importer les lieux'
 form.spot.import.confirm: 'L''import de nouveaux lieux supprimera les lieux existants sur cet événement. Voulez vous importer les lieux ?'
+form.static_formulation_create.children.submit.label: 'Personnaliser'
+form.static_formulation_create.children.types.label: 'Types de participation associés'
+form.static_formulation_create.children.translations.prototype.children.title.label: 'Titre de la formulation'
 form.template_add_locale.children.locale.label: Langue
 form.template_add_locale.children.submit.label: Valider
 form.template_registration_update.children.submit.label: Enregistrer

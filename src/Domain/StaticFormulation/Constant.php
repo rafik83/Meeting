@@ -36,7 +36,7 @@ class Constant
             'label' => 'navigation.category.package',
         ],
         self::STATIC_FORMULATION_KEY_AGENDA => [
-            'label' => '',
+            'label' => 'navigation.category.planning',
         ],
         self::STATIC_FORMULATION_KEY_PROGRAM => [
             'label' => 'navigation.category.program',

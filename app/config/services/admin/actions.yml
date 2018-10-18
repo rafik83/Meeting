@@ -696,4 +696,17 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\ListAction:
         arguments:
             - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.router'
+            - '@templating'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'

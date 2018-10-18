@@ -27,15 +27,15 @@ class StaticFormulation
     private $translations;
 
     /** @var string */
-    private $key;
+    private $staticFormulationKey;
 
     public function __construct(
         Event $event,
-        string $key,
+        string $staticFormulationKey,
         array $types = []
     ) {
         $this->event = $event;
-        $this->key = $key;
+        $this->staticFormulationKey = $staticFormulationKey;
         $this->types = new ArrayCollection($types);
         $this->translations = new ArrayCollection();
     }
@@ -57,7 +57,7 @@ class StaticFormulation
     }
 
     /**
-     * @return array
+     * @return Type[]
      */
     public function getTypes(): array
     {
@@ -86,6 +86,20 @@ class StaticFormulation
      */
     public function getKey(): string
     {
-        return $this->key;
+        return $this->staticFormulationKey;
+    }
+
+    public function getTitle(string $locale): string
+    {
+        if ($this->hasTranslation($locale)) {
+            return $this->translations->get($locale)->getTitle();
+        }
+
+        return '';
+    }
+
+    public function hasTranslation(string $locale): bool
+    {
+        return $this->translations->containsKey($locale);
     }
 }

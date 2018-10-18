@@ -184,6 +184,8 @@ flash.event.schedule.meeting.update.success: 'Le rendez-vous a été mis à jour
 flash.event.schedule.unavailability.add.success: 'Votre indisponibilité a bien été ajoutée'
 flash.event.schedule.unavailability.remove.success: 'L''indisponibilité a bien été supprimée'
 flash.event.schedule.unavailability.update.success: 'L''indisponibilité a bien été mise à jour'
+flash.event.staticFormulation.created.success: 'Personnalisation de la formulation statique créée'
+flash.event.staticFormulation.type.empty.error: 'Tous les types de participations sont déjà rattachés à une personnalisation'
 flash.meeting_request.approved.success: 'Vous avez bien validé la proposition de rendez-vous'
 flash.meeting_request.cancelled.success: 'Vous avez bien annulé la demande de rendez-vous'
 flash.meeting_request.create.success: 'Votre demande de rendez-vous a bien été transmise'

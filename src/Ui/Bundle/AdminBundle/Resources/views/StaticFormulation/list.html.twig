@@ -1,7 +1,63 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title 'admin.transactional.mail.list.title'|trans %}
+{% block title 'admin.staticFormulation.list.title'|trans %}
 
 {% block content %}
-
+    <h1 class="page-header">{{ 'admin.staticFormulation.list.title'|trans }}</h1>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="col-md-3">{{ 'admin.staticFormulation.list.column.origin'|trans }}</th>
+            <th class="col-md-3">{{ 'admin.staticFormulation.list.column.title'|trans }}</th>
+            <th class="col-md-4">{{ 'admin.staticFormulation.list.column.type'|trans }}</th>
+            <th class="col-md-2"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for staticFormulation in list.staticFormulationViews %}
+            <tr>
+                <td rowspan="{{ staticFormulation.numberOfElements }}">
+                    {{ staticFormulation.genericStaticFormulationView.title}}
+                </td>
+                <td>{{ staticFormulation.genericStaticFormulationView.title}}</td>
+                <td>
+                    {% if staticFormulation.customizedStaticFormulationViews is empty %}
+                        {{ 'admin.staticFormulation.type.all'|trans }}
+                    {% else %}
+                        {% if not staticFormulation.genericStaticFormulationView.hasNoneTypeRemaining %}
+                        <ul>
+                            {% for type in staticFormulation.genericStaticFormulationView.typeTitles %}
+                                <li>{{ type }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                            {{ 'admin.staticFormulation.type.none'|trans }}
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td class="text-right">
+                    {% if not staticFormulation.genericStaticFormulationView.hasNoneTypeRemaining %}
+                        <a href="{{ path('admin_event_static_formulation_create', {'event': event.id, 'key': staticFormulation.key}) }}"
+                           class="btn btn-primary"
+                        >{{ 'admin.staticFormulation.action.create'|trans }}</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% for customizedStaticFormulation in staticFormulation.customizedStaticFormulationViews %}
+                <tr>
+                    <td>{{ customizedStaticFormulation.title }}</td>
+                    <td>
+                        <ul>
+                            {% for type in customizedStaticFormulation.typeTitles %}
+                                <li>{{ type }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td class="text-right">
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
