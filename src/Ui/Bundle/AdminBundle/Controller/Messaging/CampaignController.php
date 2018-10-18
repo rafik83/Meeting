@@ -74,6 +74,8 @@ class CampaignController extends Controller
         if ($request->query->get('rules')) {
             $rules = $this->get(QueryBusInterface::class)->handle(
                 new GetConditionRulesQuery(
+                    $event,
+                    $locale,
                     json_decode($request->query->get('rules'), true)
                 )
             );

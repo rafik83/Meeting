@@ -11,19 +11,41 @@
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
+use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
+use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotIn;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class TaggedNomenclatureTransformer implements InputTransformerInterface
 {
+    /** @var TaggedNomenclatureFilterGetter */
+    private $taggedNomenclatureFilterGetter;
+
+    /** @var Event */
+    private $event;
+
+    /** @var string */
+    private $locale;
+
+    public function __construct(TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter)
+    {
+        $this->taggedNomenclatureFilterGetter = $taggedNomenclatureFilterGetter;
+    }
+
+    public function setEventAndLocale(Event $event, string $locale): void
+    {
+        $this->event = $event;
+        $this->locale = $locale;
+    }
+
     public function transform(Field $field): array
     {
-        if (!$this->supports($field)) {
+        if (!$this->supports($field) || !$this->event || !$this->locale) {
             return [];
         }
 
-        // todo: retrieve real tags
-        $tags = ['sheet_test', 'sheet_test2'];
+        $tags = $this->getTagsByNomenclatureId($field);
 
         $query = [
             $this->buildTagQuery($tags),
@@ -39,6 +61,27 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
         }
 
         return $query;
+    }
+
+    private function getTagsByNomenclatureId(Field $field): array
+    {
+        $tags = [];
+        $fields = explode('.', $field->getField());
+        $nomenclatureId = (int) end($fields);
+
+        $nomenclatureFilterViews = $this->taggedNomenclatureFilterGetter->getNomenclaturesItemsByEvent(
+            $this->event,
+            $this->locale
+        );
+
+        /** @var NomenclatureFilterView $nomenclatureFilterView */
+        foreach ($nomenclatureFilterViews as $id => $nomenclatureFilterView) {
+            if ($nomenclatureId === $id) {
+                $tags = array_merge($tags, $nomenclatureFilterView->tags);
+            }
+        }
+
+        return $tags;
     }
 
     private function buildTagQuery(array $tags): array

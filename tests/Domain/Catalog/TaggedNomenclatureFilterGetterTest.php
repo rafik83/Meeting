@@ -71,9 +71,9 @@ class TaggedNomenclatureFilterGetterTest extends TestCase
         $result = $taggedNomenclatureFilterGetter->getNomenclaturesItemsByEvent($event->reveal(), 'fr');
 
         $expectedResult = [
-            new NomenclatureFilterView(1, 'mbappe', ['u58b57c0ecbdb3' => 'dribble'], [0 => 'tag', 1 => 'tag2']),
-            new NomenclatureFilterView(2, 'neymar', ['u58b57c0ecbdb3' => 'dribble', 'u58b57c0ecbf13' => 'vista'], [0 => 'tag']),
-            new NomenclatureFilterView(3, 'ronaldo', ['u58b57c0ecbf56' => 'puissance', 'u58b57c0ecbf55' => 'plongeons'], [0 => 'tag2']),
+            1 => new NomenclatureFilterView(1, 'mbappe', ['u58b57c0ecbdb3' => 'dribble'], [0 => 'tag', 1 => 'tag2']),
+            2 => new NomenclatureFilterView(2, 'neymar', ['u58b57c0ecbdb3' => 'dribble', 'u58b57c0ecbf13' => 'vista'], [0 => 'tag']),
+            3 => new NomenclatureFilterView(3, 'ronaldo', ['u58b57c0ecbf56' => 'puissance', 'u58b57c0ecbf55' => 'plongeons'], [0 => 'tag2']),
         ];
 
         $this->assertEquals($result, $expectedResult);

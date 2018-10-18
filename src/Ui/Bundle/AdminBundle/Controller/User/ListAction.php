@@ -88,7 +88,7 @@ class ListAction
                 $event,
                 $page,
                 $locale,
-                $this->ruleStorageInterface->getRules($event, 'user')
+                $this->ruleStorageInterface->getRules($event, $locale, 'user')
             )
         );
 

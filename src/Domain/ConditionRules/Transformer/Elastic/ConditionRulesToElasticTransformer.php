@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorAnd;
 use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInterface
 {
@@ -52,20 +53,20 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
         $operator = $this->getOperator($condition);
 
         foreach ($condition->getRules() as $rule) {
-            $queries['bool'][$operator][] = $this->buildQueries($rule);
+            $queries['bool'][$operator][] = $this->buildQueries($condition, $rule);
         }
 
         return $queries;
     }
 
-    private function buildQueries(RuleInterface $rule): array
+    private function buildQueries(Condition $condition, RuleInterface $rule): array
     {
         if ($rule instanceof Condition) {
             $subQueries = [];
             $operator = $this->getOperator($rule);
 
             foreach ($rule->getRules() as $subRule) {
-                $subQueries['bool'][$operator][] = $this->buildQueries($subRule);
+                $subQueries['bool'][$operator][] = $this->buildQueries($condition, $subRule);
             }
 
             return $subQueries;
@@ -74,10 +75,10 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
         /** @var Field $field */
         $field = $rule;
 
-        return $this->buildFieldQuery($field);
+        return $this->buildFieldQuery($condition, $field);
     }
 
-    private function buildFieldQuery(Field $field): array
+    private function buildFieldQuery(Condition $condition, Field $field): array
     {
         if ($this->nullableTransformer->supports($field)) {
             return $this->nullableTransformer->transform($field);
@@ -92,6 +93,11 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
         }
 
         if ($this->taggedNomenclatureTransformer->supports($field)) {
+            $this->taggedNomenclatureTransformer->setEventAndLocale(
+                $condition->getEvent(),
+                $condition->getLocale()
+            );
+
             return $this->taggedNomenclatureTransformer->transform($field);
         }
 

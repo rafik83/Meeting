@@ -126,7 +126,7 @@ class SheetController extends Controller
                 self::SHEETS_PER_PAGE, // number of sheets by page
                 $locale,
                 $this->getUser(),
-                $this->get(RuleStorageInterface::class)->getRules($event, 'sheet')
+                $this->get(RuleStorageInterface::class)->getRules($event, $locale, 'sheet')
             );
             /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);

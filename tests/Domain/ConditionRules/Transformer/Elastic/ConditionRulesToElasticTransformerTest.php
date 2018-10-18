@@ -25,22 +25,31 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorAnd;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorOr;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class ConditionRulesToElasticTransformerTest extends TestCase
 {
 
     public function testTransform(): void
     {
+        $event = $this->prophesize(Event::class);
+
         $condition = new Condition(
+            $event->reveal(),
+            'fr',
             new LogicalOperatorAnd,
             [
                 new Field('spotReference', new ComparisonOperatorEqual, 'text', 'A1'),
                 new Condition(
+                    $event->reveal(),
+                    'fr',
                     new LogicalOperatorOr,
                     [
                         new Field('sheetName', new ComparisonOperatorContains, 'text', 'S1'),
                         new Field('spotReference', new ComparisonOperatorBeginsWith(), 'text', 'U'),
                         new Condition(
+                            $event->reveal(),
+                            'fr',
                             new LogicalOperatorAnd,
                             [
                                 new Field('lastName', new ComparisonOperatorNotContains(), 'text', 'test'),
@@ -115,11 +124,11 @@ class ConditionRulesToElasticTransformerTest extends TestCase
         ];
 
         $nullableTransformer = new NullableTransformer();
-        $taggedNomenclatureTransformer = new TaggedNomenclatureTransformer();
+        $taggedNomenclatureTransformer = $this->prophesize(TaggedNomenclatureTransformer::class);
         $radioTransformer = new RadioTransformer();
         $textTransformer = new TextTransformer();
 
-        $transformer = new ConditionRulesToElasticTransformer($nullableTransformer, $radioTransformer, $taggedNomenclatureTransformer, $textTransformer);
+        $transformer = new ConditionRulesToElasticTransformer($nullableTransformer, $radioTransformer, $taggedNomenclatureTransformer->reveal(), $textTransformer);
         $result = $transformer->transform($condition);
 
         $this->assertSame($expectedResult, $result);
