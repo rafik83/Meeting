@@ -59,7 +59,7 @@ class UserLastNameSubstitutionTest extends TestCase
 
         $prepareMail = new PreparePreRegisterMailView($event->reveal(), $user->reveal(), $locale, $sheet->reveal(), $participant->reveal());
 
-        $sheet->getUserParticipant($prepareMail->user)->shouldBeCalled()->willReturn($prepareMail->user);
+        $sheet->getUserParticipant($prepareMail->user)->shouldBeCalled()->willReturn(null);
 
         $substitution = new UserLastNameSubstitution($this->participantInfoGuesser->reveal());
 
