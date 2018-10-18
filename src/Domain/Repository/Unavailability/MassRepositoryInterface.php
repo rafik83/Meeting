@@ -34,14 +34,23 @@ interface MassRepositoryInterface
      */
     public function findByEvent(Event $event, $locale = null);
 
+    /**
+     * @deprecated use findByTypes
+     */
     public function findByType(Type $type, string $locale);
+
+    /**
+     * @param Type[] $types
+     * @param string $locale
+     *
+     * @return Mass[]
+     */
+    public function findByTypes(array $types, string $locale): array;
 
     /**
      * @param Event $event
      *
      * @return Mass[]
-     *
-     * @deprecated
      */
     public function findDispatchByEvent(Event $event);
 
@@ -61,8 +70,6 @@ interface MassRepositoryInterface
      * @param Event $event
      *
      * @return Mass[]
-     *
-     * @deprecated
      */
     public function findNotDispatchedByEvent(Event $event);
 

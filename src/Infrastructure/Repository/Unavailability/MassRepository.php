@@ -92,6 +92,22 @@ class MassRepository implements MassRepositoryInterface
         ;
     }
 
+    public function findByTypes(array $types, string $locale): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('mass')
+            ->from(Mass::class, 'mass')
+            ->join('mass.types', 'type', 'WITH', 'type IN (:types)')
+            ->join('mass.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('types', $types)
+            ->setParameter('locale', $locale)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     /**
      * {@inheritdoc}
      */
