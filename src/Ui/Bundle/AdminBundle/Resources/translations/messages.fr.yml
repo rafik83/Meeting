@@ -984,6 +984,8 @@ admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'
 admin.spot.visio.no: Non
 admin.spot.visio.yes: Oui
+admin.staticFormulation.action.remove: 'Supprimer'
+admin.staticFormulation.action.remove.confirm: 'Êtes vous sûr de vouloir supprimer cette personnalisation'
 admin.staticFormulation.action.create: 'Personnaliser'
 admin.staticFormulation.action.update: 'Mettre à jour'
 admin.staticFormulation.link: 'Formulation statique'

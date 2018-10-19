@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
 {% block title 'admin.staticFormulation.list.title'|trans %}
 
 {% block content %}
@@ -54,6 +56,19 @@
                         </ul>
                     </td>
                     <td class="text-right">
+                        {{ delete_button(
+                            path('admin_event_static_formulation_remove', {
+                                'event': event.id,
+                                'staticFormulation': customizedStaticFormulation.staticFormulationId
+                            }),
+                            'admin.staticFormulation.action.remove'|trans,
+                            {
+                                'class' : 'btn btn-danger btn-sm',
+                                'data-confirm': 'admin.staticFormulation.action.remove.confirm'|trans
+                            },
+                            customizedStaticFormulation.getIntention
+                        )
+                        }}
                     </td>
                 </tr>
             {% endfor %}

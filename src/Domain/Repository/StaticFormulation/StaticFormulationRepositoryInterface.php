@@ -32,4 +32,6 @@ interface StaticFormulationRepositoryInterface
      * @return StaticFormulation[]
      */
     public function findByEventAndKey(Event $event, string $key): array;
+
+    public function remove(StaticFormulation $staticFormulation): void;
 }

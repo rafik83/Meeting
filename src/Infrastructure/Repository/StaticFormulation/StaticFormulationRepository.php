@@ -77,4 +77,10 @@ class StaticFormulationRepository implements StaticFormulationRepositoryInterfac
             ->getResult()
             ;
     }
+
+    public function remove(StaticFormulation $staticFormulation): void
+    {
+        $this->entityManager->remove($staticFormulation);
+        $this->entityManager->flush($staticFormulation);
+    }
 }

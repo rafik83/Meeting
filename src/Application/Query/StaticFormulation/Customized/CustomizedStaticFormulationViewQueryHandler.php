@@ -26,6 +26,7 @@ class CustomizedStaticFormulationViewQueryHandler
 
         return new CustomizedStaticFormulationView(
             $query->staticFormulation->getKey(),
+            $query->staticFormulation->getId(),
             $query->staticFormulation->getTitle($query->locale),
             $types
         );

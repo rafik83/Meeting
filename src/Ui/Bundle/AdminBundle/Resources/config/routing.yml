@@ -1932,6 +1932,14 @@ admin_event_static_formulation_list:
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\ListAction
 
+admin_event_static_formulation_remove:
+    path: /event/{event}/static-formulation/{staticFormulation}/remove
+    requirements:
+        event: \d+
+        staticFormulation: \d+
+    methods: [DELETE]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\DeleteAction
+
 admin_event_static_formulation_create:
     path: /event/{event}/static-formulation/{key}/create
     requirements:

@@ -699,6 +699,14 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\DeleteAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
+            - '@security.csrf.token_manager'
+            - '@session.flash_bag'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\CreateAction:
         arguments:
             - '@adapter.authorization_checker'
@@ -710,3 +718,4 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
+
