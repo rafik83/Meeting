@@ -22,16 +22,15 @@ jobs:
             - package-master-{{ checksum "package-lock.json" }}
             - package-master
       - restore_cache:
-          key: dockerize-{{ arch }}-v0.6.0
-
+          key: dockerize-{{ arch }}-v0.6.1
       - run:
           name: "install dockerize if not found in cache"
           command:
                 if \[ -f /usr/local/bin/dockerize \]; then
                     echo "dockerize found; skipping installation";
                     else wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz
-            && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
-            && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz;
+                        && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
+                        && rm dockerize-linux-amd64-v0.6.1.tar.gz;
                     fi
       - run:
           name: "[build] install the project"
