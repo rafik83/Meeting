@@ -62,11 +62,6 @@ interface MassRepositoryInterface
     public function findBlockingByEvent(Event $event);
 
     /**
-     * @return Mass[]
-     */
-    public function findBlockingByType(Type $type);
-
-    /**
      * @param Event $event
      *
      * @return Mass[]

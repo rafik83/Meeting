@@ -109,10 +109,10 @@ class AgendaSheetViewQueryHandler
      */
     public function handle(AgendaSheetViewQuery $query)
     {
-        $meetings                = $this->meetingRepositoryInterface->findBySheet($query->sheet);
+        $meetings = $this->meetingRepositoryInterface->findBySheet($query->sheet);
         $happeningParticipations = $this->happeningParticipationRepository->findBySheet($query->sheet);
-        $assignment              = $this->massAssignmentRepository->findBySheet($query->sheet);
-        $masses                  = $this->massUnavailabilityRepository->findBlockingByType($query->sheet->getType());
+        $assignment = $this->massAssignmentRepository->findBySheet($query->sheet);
+        $masses = $this->massUnavailabilityRepository->findBlockingByEvent($query->sheet->getEvent());
 
         $unavailabilites = $this->unavailabilityRepository->findBySheet($query->sheet);
         $indicatorView   = $this->indicatorCalculator->getIndicator($query->sheet);

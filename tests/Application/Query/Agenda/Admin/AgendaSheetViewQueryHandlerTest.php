@@ -80,7 +80,7 @@ class AgendaSheetViewQueryHandlerTest extends TestCase
         $meetingRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$meeting]);
         $happeningParticipationRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$happeningParticipation]);
         $massAssignmentRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$assignment]);
-        $massUnavailabilityRepository->findBlockingByType($sheet->getType())->shouldBeCalled()->willReturn([$mass]);
+        $massUnavailabilityRepository->findBlockingByEvent($event)->shouldBeCalled()->willReturn([$mass]);
         $unavailabilityRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$unavailability]);
 
         $queryTest = new AgendaParticipantViewQuery(

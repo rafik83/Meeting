@@ -159,20 +159,6 @@ class MassRepository implements MassRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function findBlockingByType(Type $type)
-    {
-        return $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('mass')
-            ->from(Mass::class, 'mass')
-            ->join('mass.types', 'type', 'with', 'type = :type AND mass.blocking = true')
-            ->setParameter('type', $type)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
     /**
      * {@inheritdoc}
      */
