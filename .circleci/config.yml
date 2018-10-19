@@ -21,12 +21,25 @@ jobs:
             - package-{{ .Branch }}-{{ checksum "package-lock.json" }}
             - package-master-{{ checksum "package-lock.json" }}
             - package-master
+      - restore_cache:
+          key: dockerize-{{ arch }}-v0.6.0
+
+      - run:
+          name: "install dockerize if not found in cache"
+          command:
+                if \[ -f /usr/local/bin/dockerize \]; then
+                    echo "dockerize found; skipping installation";
+                    else wget   https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+            && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+            && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz;
+                    fi
       - run:
           name: "[build] install the project"
           command: |
             docker network create proxy
             cp app/config/parameters_circle.yml app/config/parameters.yml
             docker-compose -p vimeet up -d
+            dockerize -wait tcp://database:3306 -timeout 1m
             docker-compose -p vimeet exec php make install-app@test
             docker-compose -p vimeet exec php make install-db@test
             docker-compose -p vimeet exec php make install-dep
@@ -50,3 +63,7 @@ jobs:
           key: package-{{ .Branch }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
+      - save_cache:
+          key: dockerize-{{ arch }}-v0.6.0
+          paths:
+            - /usr/local/bin/dockerize
