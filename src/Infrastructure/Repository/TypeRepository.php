@@ -86,7 +86,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countByEvent(Event $event)
+    public function countByEvent(Event $event): int
     {
         $queryBuilder = $this
             ->entityManager

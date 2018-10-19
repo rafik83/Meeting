@@ -45,7 +45,7 @@ interface TypeRepositoryInterface
      *
      * @return int
      */
-    public function countByEvent(Event $event);
+    public function countByEvent(Event $event): int;
 
     /**
      * @param Event     $event

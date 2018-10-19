@@ -337,10 +337,7 @@ class Mass implements TimeRangeInterface
         return false;
     }
 
-    /**
-     * @return Type[]
-     */
-    public function countTypes(): array
+    public function countTypes(): int
     {
         return $this->types->count();
     }
