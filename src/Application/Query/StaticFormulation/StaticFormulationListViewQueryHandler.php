@@ -71,7 +71,7 @@ class StaticFormulationListViewQueryHandler
         $staticFormulations = [];
         $generics = [];
         foreach (Constant::STATIC_FORMULATION_LIST as $key => $data) {
-            $typesUsed = $mails[$key]['typesUsed'] ?? [];
+            $typesUsed = $customized[$key]['typesUsed'] ?? [];
             $remainingTypes = array_filter($types, function (Type $type) use ($typesUsed) {
                 return !isset($typesUsed[$type->getId()]);
             });
