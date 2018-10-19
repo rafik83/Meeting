@@ -349,3 +349,8 @@ table th.sort-up:after {
 .badge-absent {
   background-color: #c9302c;
 }
+
+div.rule-value-container .select2-search__field {
+  width: 300px !important;
+  max-width: 300px !important;
+}
