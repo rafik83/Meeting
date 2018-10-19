@@ -15,10 +15,12 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
+use Proximum\Vimeet\Domain\Unavailability\Mass\IsMassUnavailabilityAssignedToAllTypes;
 
 class TimeSlotDispatcher
 {
@@ -31,40 +33,58 @@ class TimeSlotDispatcher
     /** @var MassAssignmentRepositoryInterface */
     private $massAssignmentRepository;
 
-    /** @var User[] */
-    private $usersDispatched = [];
+    /** @var TypeRepositoryInterface */
+    private $typeRepository;
+
+    /** @var IsMassUnavailabilityAssignedToAllTypes */
+    private $isMassUnavailabilityAssignedToAllTypes;
 
     /** @var JobQueueInterface */
     private $jobQueueInterface;
 
-    /**
-     * TimeSlotDispatcher constructor.
-     *
-     * @param UserRepositoryInterface           $userRepository
-     * @param MassRepositoryInterface           $massRepository
-     * @param MassAssignmentRepositoryInterface $massAssignmentRepository
-     * @param JobQueueInterface                 $jobQueueInterface
-     */
+    /** @var User[] */
+    private $usersDispatched = [];
+
     public function __construct(
         UserRepositoryInterface $userRepository,
         MassRepositoryInterface $massRepository,
         MassAssignmentRepositoryInterface $massAssignmentRepository,
+        TypeRepositoryInterface $typeRepository,
+        IsMassUnavailabilityAssignedToAllTypes $isMassUnavailabilityAssignedToAllTypes,
         JobQueueInterface $jobQueueInterface
     ) {
-        $this->userRepository           = $userRepository;
-        $this->massRepository           = $massRepository;
+        $this->userRepository = $userRepository;
+        $this->massRepository = $massRepository;
         $this->massAssignmentRepository = $massAssignmentRepository;
-        $this->jobQueueInterface        = $jobQueueInterface;
+        $this->typeRepository = $typeRepository;
+        $this->isMassUnavailabilityAssignedToAllTypes = $isMassUnavailabilityAssignedToAllTypes;
+        $this->jobQueueInterface = $jobQueueInterface;
+    }
+
+    /**
+     * @throws UnableToDispatchException
+     */
+    public function dispatchAll(Event $event)
+    {
+        $this->usersDispatched = [];
+
+        $unavailabilities = $this->massRepository->findDispatchByEvent($event);
+
+        foreach ($unavailabilities as $unavailability) {
+            $this->dispatch($event, $unavailability);
+        }
+
+        if (!empty($this->usersDispatched)) {
+            $this->jobQueueInterface->aggregateUsersFullUnavailability($event, $this->usersDispatched);
+        }
     }
 
     /**
      * Dispatch time slots of a mass unavailbilty between all participants of the event
      *
-     * @param Mass $mass
-     *
      * @throws UnableToDispatchException
      */
-    public function dispatch(Mass $mass)
+    private function dispatch(Event $event, Mass $mass)
     {
         if (!$mass->isDispatch()) {
             throw new UnableToDispatchException('Dispatch is not enabled on this mass unavailability.');
@@ -76,11 +96,21 @@ class TimeSlotDispatcher
             throw new UnableToDispatchException('No time slot available on this mass unavailability.');
         }
 
-        // @todo: check mass types
         $users = $this->userRepository->findByEventWithoutDispatch($mass->getEvent(), $mass);
 
+        $isMassUnavailabilityAssignedToAllTypes = $this->isMassUnavailabilityAssignedToAllTypes->handle($event, $mass);
+
         foreach ($users as $index => $user) {
-            $timeSlot   = $timeSlots[$index % \count($timeSlots)];
+            if (!$isMassUnavailabilityAssignedToAllTypes) {
+                $userTypes = $this->typeRepository->getTypesByUserIds($mass->getEvent(), [$user->getId()]);
+
+                if (!$mass->hasAtLeastOneType($userTypes)) {
+                    continue;
+                }
+            }
+
+            $timeSlot = $timeSlots[$index % \count($timeSlots)];
+
             $assignment = new MassAssignment(
                 $mass,
                 $user,
@@ -91,26 +121,6 @@ class TimeSlotDispatcher
             $this->massAssignmentRepository->add($assignment);
 
             $this->usersDispatched[$user->getId()] = $user;
-        }
-    }
-
-    /**
-     * @param Event $event
-     *
-     * @throws UnableToDispatchException
-     */
-    public function dispatchAll(Event $event)
-    {
-        $this->usersDispatched = [];
-
-        $unavailabilities = $this->massRepository->findDispatchByEvent($event);
-
-        foreach ($unavailabilities as $unavailability) {
-            $this->dispatch($unavailability);
-        }
-
-        if (!empty($this->usersDispatched)) {
-            $this->jobQueueInterface->aggregateUsersFullUnavailability($event, $this->usersDispatched);
         }
     }
 }

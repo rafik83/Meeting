@@ -5395,9 +5395,15 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.unavailability.mass_repository'
             - '@repository.unavailability.mass_assignment_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Domain\Unavailability\Mass\IsMassUnavailabilityAssignedToAllTypes'
             - '@adapter.job_queue_adapter'
 
     Proximum\Vimeet\Domain\Unavailability\Mass\FilterMassUnavailabilitiesBySheetsType: ~
+
+    Proximum\Vimeet\Domain\Unavailability\Mass\IsMassUnavailabilityAssignedToAllTypes:
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
 
     #
     # Filter
