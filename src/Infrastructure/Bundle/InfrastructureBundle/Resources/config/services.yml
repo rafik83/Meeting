@@ -2103,6 +2103,10 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\SendCode }
 
+    Proximum\Vimeet\Application\Command\User\BatchHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Batch }
+
     command.user.phone.validate_code_handler:
         class: Proximum\Vimeet\Application\Command\User\Phone\ValidateCodeHandler
         arguments:

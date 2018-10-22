@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Batch
+class Batch implements Command
 {
     /** @var Event */
     public $event;

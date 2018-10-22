@@ -11,9 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\Command\User\Batch;
+use Proximum\Vimeet\Application\Command\User\BatchHandler;
 use Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery;
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery;
 use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
@@ -39,8 +40,8 @@ class ListAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var SessionInterface */
-    private $session;
+    /** @var CommandBusInterface */
+    private $commandBus;
 
     /** @var UrlGeneratorInterface */
     private $urlGenerator;
@@ -55,7 +56,7 @@ class ListAction
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
         QueryBusInterface $queryBus,
-        SessionInterface $session,
+        CommandBusInterface $commandBus,
         UrlGeneratorInterface $urlGenerator,
         RuleStorageInterface $ruleStorageInterface,
         FormFactoryInterface $formFactory
@@ -63,7 +64,7 @@ class ListAction
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
-        $this->session = $session;
+        $this->commandBus = $commandBus;
         $this->urlGenerator = $urlGenerator;
         $this->ruleStorageInterface = $ruleStorageInterface;
         $this->formFactory = $formFactory;
@@ -112,7 +113,11 @@ class ListAction
 
         $batchForm->handleRequest($request);
         if ($batchForm->isSubmitted() && $batchForm->isValid()) {
-            dump($batch);die;
+            $this->commandBus->handle($batch);
+
+            return new RedirectResponse(
+                $this->urlGenerator->generate('admin_users_list', ['event' => $event->getId()])
+            );
         }
 
         return new Response(
