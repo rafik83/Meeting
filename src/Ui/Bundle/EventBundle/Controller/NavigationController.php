@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\StaticFormulation\Constant;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -70,12 +71,45 @@ class NavigationController extends Controller
         $submenuView = null;
 
         if (null !== $user && false === $registration) {
+            $staticFormulationsIndexByCategories = [];
+
+            if (null !== $sheet) {
+                $staticFormulations = $this
+                    ->get('Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository')
+                    ->findByEventAndTypeAndLocale(
+                        $event,
+                        $sheet->getType(),
+                        $locale
+                    )
+                ;
+                $staticFormulationsIndexByCategories = [];
+
+                foreach ($staticFormulations as $staticFormulation) {
+                    $key = Constant::STATIC_FORMULATION_LIST[$staticFormulation->getKey()]['categoryKey'];
+                    $staticFormulationsIndexByCategories[$key] = $staticFormulation;
+                }
+            }
+
+
             $menuView = $this->get('tactician.commandbus.query')->handle(
-                new MenuViewQuery($event, $locale, $sheet, $user)
+                new MenuViewQuery(
+                    $event,
+                    $locale,
+                    $sheet,
+                    $user,
+                    $staticFormulationsIndexByCategories
+                )
             );
 
             $submenuView = $this->get('tactician.commandbus.query')->handle(
-                new SubmenuViewQuery($event, $locale, $route, $sheet, $user)
+                new SubmenuViewQuery(
+                    $event,
+                    $locale,
+                    $route,
+                    $sheet,
+                    $user,
+                    $staticFormulationsIndexByCategories
+                )
             );
         }
 

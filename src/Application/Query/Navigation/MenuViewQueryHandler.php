@@ -15,9 +15,7 @@ use Proximum\Vimeet\Application\View\Navigation\MenuView;
 
 class MenuViewQueryHandler
 {
-    /**
-     * @var CategoryViewQueryHandler
-     */
+    /** @var CategoryViewQueryHandler */
     private $categoryViewQueryHandler;
 
     /**
@@ -33,7 +31,7 @@ class MenuViewQueryHandler
      *
      * @return MenuView
      */
-    public function handle(MenuViewQuery $menuViewQuery)
+    public function handle(MenuViewQuery $menuViewQuery): MenuView
     {
         if (null === $menuViewQuery->sheet || null === $menuViewQuery->user) {
             return new MenuView([]);
@@ -44,7 +42,11 @@ class MenuViewQueryHandler
         foreach (Category::$categories as $category) {
             $categoryView = $this->categoryViewQueryHandler->handle(
                 new CategoryViewQuery(
-                    $menuViewQuery->sheet, $menuViewQuery->user, $category, $menuViewQuery->locale
+                    $menuViewQuery->sheet,
+                    $menuViewQuery->user,
+                    $category,
+                    $menuViewQuery->locale,
+                    $menuViewQuery->staticFormulationsIndexByCategories[$category] ?? null
                 )
             );
 

@@ -31,49 +31,31 @@ use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 
 class CategoryViewQueryHandler
 {
-    /**
-     * @var MemberSpaceViewQueryHandler
-     */
+    /** @var MemberSpaceViewQueryHandler */
     private $memberSpaceViewQueryHandler;
 
-    /**
-     * @var BillingViewQueryHandler
-     */
+    /** @var BillingViewQueryHandler */
     private $billingViewQueryHandler;
 
-    /**
-     * @var CatalogViewQueryHandler
-     */
+    /** @var CatalogViewQueryHandler */
     private $catalogViewQueryHandler;
 
-    /**
-     * @var MeetingViewQueryHandler
-     */
+    /** @var MeetingViewQueryHandler */
     private $meetingViewQueryHandler;
 
-    /**
-     * @var PlanningViewQueryHandler
-     */
+    /** @var PlanningViewQueryHandler */
     private $planningViewQueryHandler;
 
-    /**
-     * @var SheetViewQueryHandler
-     */
+    /** @var SheetViewQueryHandler */
     private $sheetViewQueryHandler;
 
-    /**
-     * @var PackageViewQueryHandler
-     */
+    /** @var PackageViewQueryHandler */
     private $packageViewQueryHandler;
 
-    /**
-     * @var ProgramViewQueryHandler
-     */
+    /** @var ProgramViewQueryHandler */
     private $programViewQueryHandler;
 
     /**
-     * CategoryViewQueryHandler constructor.
-     *
      * @param MemberSpaceViewQueryHandler $memberSpaceViewQueryHandler
      * @param BillingViewQueryHandler     $billingViewQueryHandler
      * @param CatalogViewQueryHandler     $catalogViewQueryHandler
@@ -108,56 +90,64 @@ class CategoryViewQueryHandler
      *
      * @return CategoryView|null
      */
-    public function handle(CategoryViewQuery $categoryViewQuery)
+    public function handle(CategoryViewQuery $categoryViewQuery): ?CategoryView
     {
         switch ($categoryViewQuery->categoryType) {
             case Category::MEMBER_SPACE:
                 return $this->memberSpaceViewQueryHandler->handle(new MemberSpaceViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
-                    $categoryViewQuery->locale
+                    $categoryViewQuery->locale,
+                    $categoryViewQuery->staticFormulation
                 ));
             case Category::BILLING:
                 return $this->billingViewQueryHandler->handle(new BillingViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
-                    $categoryViewQuery->locale
+                    $categoryViewQuery->locale,
+                    $categoryViewQuery->staticFormulation
                 ));
             case Category::SHEET:
                 return $this->sheetViewQueryHandler->handle(new SheetViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
-                    $categoryViewQuery->locale
+                    $categoryViewQuery->locale,
+                    $categoryViewQuery->staticFormulation
                 ));
             case Category::CATALOG:
                 return $this->catalogViewQueryHandler->handle(new CatalogViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
-                    $categoryViewQuery->locale
+                    $categoryViewQuery->locale,
+                    $categoryViewQuery->staticFormulation
                 ));
             case Category::PLANNING:
                 return $this->planningViewQueryHandler->handle(new PlanningViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
-                    $categoryViewQuery->locale
+                    $categoryViewQuery->locale,
+                    $categoryViewQuery->staticFormulation
                 ));
             case Category::MEETING:
                 return $this->meetingViewQueryHandler->handle(new MeetingViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
-                    $categoryViewQuery->locale
+                    $categoryViewQuery->locale,
+                    $categoryViewQuery->staticFormulation
                 ));
             case Category::PACKAGE:
                 return $this->packageViewQueryHandler->handle(new PackageViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
-                    $categoryViewQuery->locale
+                    $categoryViewQuery->locale,
+                    $categoryViewQuery->staticFormulation
                 ));
             case Category::PROGRAM:
                 return $this->programViewQueryHandler->handle(new ProgramViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
-                    $categoryViewQuery->locale
+                    $categoryViewQuery->locale,
+                    $categoryViewQuery->staticFormulation
                 ));
         }
 

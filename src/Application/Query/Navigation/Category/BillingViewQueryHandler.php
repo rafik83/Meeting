@@ -17,14 +17,10 @@ use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class BillingViewQueryHandler
 {
-    /**
-     * @var NavigationBuilderInterface
-     */
+    /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
     /**
-     * BillingViewQueryHandler constructor.
-     *
      * @param NavigationBuilderInterface $navigationBuilder
      */
     public function __construct(NavigationBuilderInterface $navigationBuilder)
@@ -60,6 +56,12 @@ class BillingViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::BILLING, Category::BILLING_ICON, $linksView, false);
+        $categoryTitle = Category::BILLING;
+
+        if (null !== $billingQuery->staticFormulation) {
+            $categoryTitle = $billingQuery->staticFormulation->getTitle($billingQuery->locale);
+        }
+
+        return new CategoryView($categoryTitle, Category::BILLING_ICON, $linksView, false);
     }
 }
