@@ -23,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository;
 
 class NavigationController extends Controller
 {
@@ -75,7 +76,7 @@ class NavigationController extends Controller
 
             if (null !== $sheet) {
                 $staticFormulations = $this
-                    ->get('Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository')
+                    ->get(StaticFormulationRepository::class)
                     ->findByEventAndTypeAndLocale(
                         $event,
                         $sheet->getType(),
