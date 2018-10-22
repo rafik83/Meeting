@@ -13,10 +13,14 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
+use Proximum\Vimeet\Application\Command\User\Batch;
 use Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery;
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery;
 use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\BatchType;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,13 +48,17 @@ class ListAction
     /** @var RuleStorageInterface */
     private $ruleStorageInterface;
 
+    /** @var FormFactoryInterface */
+    private $formFactory;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
         QueryBusInterface $queryBus,
         SessionInterface $session,
         UrlGeneratorInterface $urlGenerator,
-        RuleStorageInterface $ruleStorageInterface
+        RuleStorageInterface $ruleStorageInterface,
+        FormFactoryInterface $formFactory
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
@@ -58,6 +66,7 @@ class ListAction
         $this->session = $session;
         $this->urlGenerator = $urlGenerator;
         $this->ruleStorageInterface = $ruleStorageInterface;
+        $this->formFactory = $formFactory;
     }
 
     public function __invoke(Request $request, Event $event): Response
@@ -94,11 +103,18 @@ class ListAction
 
         $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $request->getLocale()));
 
+        $batchForm = $this->formFactory->create(BatchType::class, new Batch($event, $locale), [
+            'ids' => $userEventListViews->paginatedResult->map(function(UserEventListView $eventListView) {
+                return $eventListView->userId;
+            })
+        ]);
+
         return new Response(
             $this->engine->render(
                 '@Admin/User/users-and-sheets-list.html.twig',
                 [
                     'event' => $event,
+                    'batchForm' => $batchForm->createView(),
                     'userEventListViews' => $userEventListViews,
                     'filters' => $filters,
                     'rules' => $this->ruleStorageInterface->getRulesQuery($event, 'user'),
