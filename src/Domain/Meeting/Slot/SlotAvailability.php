@@ -339,6 +339,7 @@ class SlotAvailability
                 }
             }
 
+            // NB: we do not check dispatched mass unavailability because they can be upated to be usable
             if ($mass->isBlockingAndNotDispatch()) {
                 return true;
             }
@@ -381,6 +382,10 @@ class SlotAvailability
                 $assignment = $this->getDispatch($participant, $mass);
 
                 if (null !== $assignment) {
+                    if (!TimeOverlap::overlap($slot, $assignment)) {
+                        continue;
+                    }
+
                     return $assignment->isEnabled() ? $assignment : false;
                 }
             }
