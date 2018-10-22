@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Command\User\Batch;
-use Proximum\Vimeet\Application\Command\User\BatchHandler;
+use Proximum\Vimeet\Application\Command\User\Batch\Batch;
+use Proximum\Vimeet\Application\Command\User\Batch\BatchCampaignResult;
 use Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery;
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery;
 use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
@@ -113,10 +113,14 @@ class ListAction
 
         $batchForm->handleRequest($request);
         if ($batchForm->isSubmitted() && $batchForm->isValid()) {
-            $this->commandBus->handle($batch);
+            /** @var BatchCampaignResult $result */
+            $result = $this->commandBus->handle($batch);
 
             return new RedirectResponse(
-                $this->urlGenerator->generate('admin_users_list', ['event' => $event->getId()])
+                $this->urlGenerator->generate('admin_messaging_campaign_select_message', [
+                    'event' => $event->getId(),
+                    'campaign' => $result->campaign->getId(),
+                ])
             );
         }
 

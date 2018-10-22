@@ -1,11 +1,11 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Command\User;
+namespace Proximum\Vimeet\Application\Command\User\Batch;
 
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Batch implements Command
+class BatchCampaign implements Command
 {
     /** @var Event */
     public $event;
@@ -19,9 +19,11 @@ class Batch implements Command
     /** @var string */
     public $campaignTitle;
 
-    public function __construct(Event $event, string $locale)
+    public function __construct(Event $event, string $locale, array $ids, string $campaignTitle)
     {
         $this->event = $event;
         $this->locale = $locale;
+        $this->ids = $ids;
+        $this->campaignTitle = $campaignTitle;
     }
 }
