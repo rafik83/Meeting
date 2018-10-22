@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User;
 use Proximum\Vimeet\Application\Command\User\Batch;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -30,7 +32,9 @@ class BatchType extends AbstractType
                 'multiple' => true,
                 'label' => false,
                 'translation_domain' => false,
-            ]);
+            ])
+            ->add('campaignTitle', TextType::class)
+            ->add('sendMail', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -39,5 +43,10 @@ class BatchType extends AbstractType
             ->setRequired(['ids'])
             ->setAllowedTypes('ids', ['array'])
             ->setDefaults(['data_class' => Batch::class]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return 'user_batch';
     }
 }

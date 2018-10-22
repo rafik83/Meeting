@@ -35,6 +35,11 @@
         <div class="col-md-4">
             {% embed 'AdminBundle:Common:batch.html.twig' %}
                 {% block actions %}
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#sendMail">
+                            {{ 'admin.users.batch.sendMail'|trans }}
+                        </a>
+                    </li>
                 {% endblock %}
             {% endembed %}
         </div>
@@ -176,6 +181,26 @@
     {% else %}
         <div class="text-danger">{{ 'admin.zero-result'|trans }}</div>
     {% endif %}
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="sendMail">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{ 'admin.users.batch.sendMail'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(batchForm.campaignTitle) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
+                    {{ form_widget(batchForm.sendMail) }}
+                </div>
+            </div>
+        </div>
+    </div>
     {{ form_end(batchForm) }}
 
     {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}

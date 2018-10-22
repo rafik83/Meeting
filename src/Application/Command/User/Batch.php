@@ -15,6 +15,9 @@ class Batch
     /** @var array */
     public $ids;
 
+    /** @var string */
+    public $campaignTitle;
+
     public function __construct(Event $event, string $locale)
     {
         $this->event = $event;

@@ -776,6 +776,8 @@ form.sheet_attendance_choice.children.attend.choice.cancel: Annuler
 form.sheet_attendance_choice.children.attend.label: 'Venue de la fiche'
 form.sheet_attendance_choice.children.submit.confirm: 'Êtes vous sûr de cette modification ?'
 form.sheet_attendance_choice.children.submit.label: 'Confirmer la modification'
+form.user_batch.children.sendMail.label: Créer la campagne
+form.user_batch.children.campaignTitle.label: Nom de la campagne
 form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner

@@ -103,11 +103,17 @@ class ListAction
 
         $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $request->getLocale()));
 
-        $batchForm = $this->formFactory->create(BatchType::class, new Batch($event, $locale), [
+        $batch = new Batch($event, $locale);
+        $batchForm = $this->formFactory->create(BatchType::class, $batch, [
             'ids' => $userEventListViews->paginatedResult->map(function(UserEventListView $eventListView) {
                 return $eventListView->userId;
             })
         ]);
+
+        $batchForm->handleRequest($request);
+        if ($batchForm->isSubmitted() && $batchForm->isValid()) {
+            dump($batch);die;
+        }
 
         return new Response(
             $this->engine->render(
