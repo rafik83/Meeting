@@ -2110,6 +2110,10 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Batch\Batch }
 
     Proximum\Vimeet\Application\Command\User\Batch\BatchCampaignHandler:
+        arguments:
+            - '@sheet.sheet_guesser'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Batch\BatchCampaign }
 
