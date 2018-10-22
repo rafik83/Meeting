@@ -597,6 +597,14 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     #
+    # Crisp
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Crisp\ChatAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating.engine.twig'
+
+    #
     # Visio
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction:

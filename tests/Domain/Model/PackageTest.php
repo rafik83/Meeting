@@ -26,15 +26,39 @@ class PackageTest extends TestCase
 
         $package = new Package($event, 'my event', $dateTime);
 
-        $option1 = Product::createOption($event, 'option 1', 'option1.jpg', 100, 20, 1, 1, 1, true);
-        $option2 = Product::createOption($event, 'option 2', 'option2.jpg', 100, 20, 1, 1, 1, true);
-        $option3 = Product::createOption($event, 'option 3', 'option3.jpg', 100, 20, 1, 1, 1, true);
-        $option4 = Product::createOption($event, 'option 4', 'option4.jpg', 100, 20, 1, 1, 1, true);
-        $option5 = Product::createOption($event, 'option 5', 'option5.jpg', 100, 20, 1, 1, 1, true);
+        $option1 = $this->prophesize(Product::class);
+        $option1->getId()->willReturn(1);
+        $option1->isOption()->willReturn(true);
+
+        $option2 = $this->prophesize(Product::class);
+        $option2->getId()->willReturn(2);
+        $option2->isOption()->willReturn(true);
+
+        $option3 = $this->prophesize(Product::class);
+        $option3->getId()->willReturn(3);
+        $option3->isOption()->willReturn(true);
+
+        $option4 = $this->prophesize(Product::class);
+        $option4->getId()->willReturn(4);
+        $option4->isOption()->willReturn(true);
+
+        $option5 = $this->prophesize(Product::class);
+        $option5->getId()->willReturn(5);
+        $option5->isOption()->willReturn(true);
 
         $package->setGroups([
-            [$option1, $option3],
-            [$option2, $option5, $option4],
+            [
+                $option1->reveal(),
+                $option3->reveal()
+            ],
+            [
+                $option2->reveal(),
+                $option5->reveal(),
+                $option4->reveal(),
+                // duplicated options
+                $option1->reveal(),
+                $option2->reveal()
+            ],
         ], [
             ['fr' => 'Group 1'],
             ['fr' => 'Group 2'],
@@ -42,8 +66,8 @@ class PackageTest extends TestCase
 
         // Expected
         $groups = [
-            (new PackageGroup($package, 0))->translate('fr', 'Group 1')->setOptions([$option1, $option3]),
-            (new PackageGroup($package, 1))->translate('fr', 'Group 2')->setOptions([$option2, $option5, $option4]),
+            (new PackageGroup($package, 0))->translate('fr', 'Group 1')->setOptions([$option1->reveal(), $option3->reveal()]),
+            (new PackageGroup($package, 1))->translate('fr', 'Group 2')->setOptions([$option2->reveal(), $option5->reveal(), $option4->reveal()]),
         ];
 
         $this->assertEquals($groups, $package->getGroups());

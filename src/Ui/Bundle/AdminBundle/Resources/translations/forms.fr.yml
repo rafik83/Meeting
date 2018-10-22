@@ -118,7 +118,7 @@ form.category_update.children.types.label: 'Sélectionner les types de participa
 form.change_mail.children.mail.label: 'Saisir votre nouvel email'
 form.change_mail.children.submit.label: Envoyer
 form.change_owner.children.owner.label: 'Choisir un propriétaire'
-form.change_owner.children.submit.label: 'Changer'
+form.change_owner.children.submit.label: Changer
 form.change_password_admin.children.currentPassword.label: 'Mot de passe actuel'
 form.change_password_admin.children.plainPassword.children.first.label: 'Nouveau mot de passe'
 form.change_password_admin.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
@@ -324,6 +324,7 @@ form.extra_parameter_create.children.type.choices.comexposium_sso_enabled: 'Acti
 form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexposium SSO Salon'
 form.extra_parameter_create.children.type.choices.comexposium_sso_session_salon: 'Comexposium SSO Session Salon'
 form.extra_parameter_create.children.type.choices.comexposium_visitor_type_id: 'Comexposium : Id du type de participation Visiteur concerné'
+form.extra_parameter_create.children.type.choices.crisp_site_id: 'Crisp site ID'
 form.extra_parameter_create.children.type.choices.leni_event: 'Code Event LENI'
 form.extra_parameter_create.children.type.choices.leni_get_endpoint: 'LENI Get endpoint'
 form.extra_parameter_create.children.type.choices.leni_mode: 'LENI Mode (save, get ou both)'
@@ -342,23 +343,6 @@ form.extra_parameter_update.children.name.label: Nom
 form.extra_parameter_update.children.submit.label: Enregistrer
 form.extra_parameter_update.children.value.label: Valeur
 form.field.private: 'Champ privé'
-form.filter.boolean.no.label: Non
-form.filter.boolean.yes.label: Oui
-form.filter.email.label: Email
-form.filter.firstName.label: Prénom
-form.filter.isVisio.label: Est visio
-form.filter.isVisioTested.label: Visio testée
-form.filter.lastName.label: Nom
-form.filter.spotReference.label: Lieux attribué
-form.filter.participants.email.label: Email du participant
-form.filter.participants.lastname.label: Nom du participant
-form.filter.sheetName.label: Nom de la fiche
-form.filter.optgroup.participantInfo.label: Info participant
-form.filter.optgroup.participantManagement.label: Gestion participant
-form.filter.optgroup.sheetInfo.label: Info fiche
-form.filter.participants.email.label: Email du participant
-form.filter.participants.lastname.label: Nom du participant
-form.filter.sheetName.label: Nom de la fiche
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'
 form.filter_admin.role.all: 'Tous les types'
@@ -379,7 +363,21 @@ form.filter_spot_type.children.reference.label: Identifiant
 form.filter_spot_type.children.seatCapacity.label: 'Places assises'
 form.filter_spot_type.children.size.label: 'Taille en m²'
 form.filter_spot_type.children.submit.label: Filtrer
+form.filter.boolean.no.label: Non
+form.filter.boolean.yes.label: Oui
+form.filter.email.label: Email
+form.filter.firstName.label: Prénom
+form.filter.isVisio.label: 'Est visio'
+form.filter.isVisioTested.label: 'Visio testée'
 form.filter.label: Filtrer
+form.filter.lastName.label: Nom
+form.filter.optgroup.participantInfo.label: 'Info participant'
+form.filter.optgroup.participantManagement.label: 'Gestion participant'
+form.filter.optgroup.sheetInfo.label: 'Info fiche'
+form.filter.participants.email.label: 'Email du participant'
+form.filter.participants.lastname.label: 'Nom du participant'
+form.filter.sheetName.label: 'Nom de la fiche'
+form.filter.spotReference.label: 'Lieux attribué'
 form.forgotten_password.children.email.label: 'Entrez votre email'
 form.forgotten_password.children.submit.label: Envoyez
 form.generate_slot.children.recipes.label_add: 'Ajouter une plage'
@@ -1030,14 +1028,14 @@ form.transactional_mail_customize.children.associatedTypes.label: 'Types associ�
 form.transactional_mail_customize.children.enabled.label: 'Activé'
 form.transactional_mail_customize.children.submit.label: 'Personnaliser'
 form.transactional_mail_customize.children.translations.label: 'Traductions du contenu'
-form.transactional_mail_customize.children.translations.prototype.children.content.label: 'Contenu'
-form.transactional_mail_customize.children.translations.prototype.children.subject.label: 'Sujet'
+form.transactional_mail_customize.children.translations.prototype.children.content.label: Contenu
+form.transactional_mail_customize.children.translations.prototype.children.subject.label: Sujet
 form.transactional_mail_update_customized.children.associatedTypes.label: 'Types associés'
 form.transactional_mail_update_customized.children.enabled.label: 'Activé'
 form.transactional_mail_update_customized.children.submit.label: 'Mettre à jour'
 form.transactional_mail_update_customized.children.translations.label: 'Traductions du contenu'
-form.transactional_mail_update_customized.children.translations.prototype.children.content.label: 'Contenu'
-form.transactional_mail_update_customized.children.translations.prototype.children.subject.label: 'Sujet'
+form.transactional_mail_update_customized.children.translations.prototype.children.content.label: Contenu
+form.transactional_mail_update_customized.children.translations.prototype.children.subject.label: Sujet
 form.type_create.children.hidden.label: Caché
 form.type_create.children.package.label: 'Template de forfait de participation'
 form.type_create.children.rank.label: Position
