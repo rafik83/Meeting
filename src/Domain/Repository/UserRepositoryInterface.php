@@ -106,7 +106,7 @@ interface UserRepositoryInterface
 
     /**
      * @param Event $event
-     * @param Mass  $mass
+     * @param Mass  $mass with dispatch=true
      *
      * @return User[]
      */

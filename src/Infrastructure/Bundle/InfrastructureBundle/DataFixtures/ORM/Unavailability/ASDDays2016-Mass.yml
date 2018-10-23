@@ -11,6 +11,20 @@ Proximum\Vimeet\Domain\Model\Unavailability\Mass:
             - <(new DateTime('2016-10-12 10:00:00'))>
             - <(new DateTime('2016-10-12 11:00:00'))>
             - true
+            - false
+            - []
+            - ['@event_asddays_2016_type_fournisseur']
+    asd_days_unavailability_mass_type_donneur_ordre:
+        __construct:
+            - '@event_asddays_2016'
+            - '@asd_days_unavailability_category_big_meal'
+            - 'Lunch'
+            - <(new DateTime('2016-10-12 10:00:00'))>
+            - <(new DateTime('2016-10-12 11:00:00'))>
+            - true
+            - false
+            - []
+            - ['@event_asddays_2016_type_donneur_ordre']
     asd_days_unavailability_mass_dispatched:
         __construct:
             - '@event_asddays_2016'
@@ -20,19 +34,34 @@ Proximum\Vimeet\Domain\Model\Unavailability\Mass:
             - <(new DateTime('2016-10-12 12:00:00'))>
             - true
             - true
+            - []
+            - ['@event_asddays_2016_type_fournisseur']
+
 Proximum\Vimeet\Domain\Model\Unavailability\MassTranslation:
     asd_days_unavailability_mass_big_meal_fr:
         __construct:
             - '@asd_days_unavailability_mass_big_meal'
             - 'fr'
-            - 'cocktail'
+            - 'Cocktail'
             - 'description'
     asd_days_unavailability_mass_big_meal_en:
         __construct:
             - '@asd_days_unavailability_mass_big_meal'
             - 'en'
-            - 'cocktail'
+            - 'Cocktail'
             - 'description'
+    asd_days_unavailability_mass_type_donneur_ordre_fr:
+        __construct:
+            - '@asd_days_unavailability_mass_type_donneur_ordre'
+            - 'fr'
+            - 'Repas'
+            - 'Ma description'
+    asd_days_unavailability_mass_type_donneur_ordre_en:
+        __construct:
+            - '@asd_days_unavailability_mass_type_donneur_ordre'
+            - 'en'
+            - 'Lunch'
+            - 'My description'
 
 Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment:
     asd_days_unavaibility_mass_assignment:

@@ -86,7 +86,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countByEvent(Event $event)
+    public function countByEvent(Event $event): int
     {
         $queryBuilder = $this
             ->entityManager
@@ -420,14 +420,6 @@ class TypeRepository implements TypeRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getSeeableTypeIdsBySheet(Sheet $sheet)
-    {
-        return $this->seeableTypeByRules($this->rulesBySheets([$sheet]));
-    }
-
-    /**
      * @param User|int $user
      *
      * @return array
@@ -488,37 +480,20 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypesByUser(Event $event, User $user)
+    public function getTypesByUserIds(Event $event, array $userIds): array
     {
-        $queryBuilder = $this
+        return $this
             ->entityManager
             ->createQueryBuilder()
             ->select('type')
-            ->from('Entity:Type', 'type')
-            ->join('Entity:Sheet', 'sheet', 'WITH', 'sheet.type = type')
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
-            ->setParameter('user', $user)
-            ->where('type.event = :event')
-            ->setParameter('event', $event);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAllTypesByUser(User $user)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('type')
-            ->from('Entity:Type', 'type')
-            ->join('Entity:Sheet', 'sheet', 'WITH', 'sheet.type = type')
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
-            ->setParameter('user', $user);
-
-        return $queryBuilder->getQuery()->getResult();
+            ->from(Type::class, 'type')
+            ->join(Sheet::class, 'sheet', 'WITH', 'type.event = :event AND sheet.type = type AND sheet.enable = true')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user IN (:userIds)')
+            ->setParameter('userIds', $userIds)
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**

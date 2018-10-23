@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository\Unavailability;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 
 interface MassRepositoryInterface
@@ -32,6 +33,19 @@ interface MassRepositoryInterface
      * @return Mass[]
      */
     public function findByEvent(Event $event, $locale = null);
+
+    /**
+     * @deprecated use findByTypes
+     */
+    public function findByType(Type $type, string $locale);
+
+    /**
+     * @param Type[] $types
+     * @param string $locale
+     *
+     * @return Mass[]
+     */
+    public function findByTypes(array $types, string $locale): array;
 
     /**
      * @param Event $event

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
@@ -64,6 +65,9 @@ class AgendaViewQueryHandler
     /** @var GetTimezoneHelper */
     private $getTimezoneHelper;
 
+    /** @var GetParticipantTypes */
+    private $getParticipantTypes;
+
     public function __construct(
         DayRepositoryInterface $dayRepository,
         SheetRepositoryInterface $sheetRepository,
@@ -76,20 +80,22 @@ class AgendaViewQueryHandler
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         ValidationRequiredChecker $validationRequiredChecker,
         ExtraDataRepository $extraDataRepository,
-        GetTimezoneHelper $getTimezoneHelper
+        GetTimezoneHelper $getTimezoneHelper,
+        GetParticipantTypes $getParticipantTypes
     ) {
-        $this->dayRepository                    = $dayRepository;
-        $this->sheetRepository                  = $sheetRepository;
-        $this->dayViewQueryHandler              = $dayViewQueryHandler;
+        $this->dayRepository = $dayRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->dayViewQueryHandler = $dayViewQueryHandler;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
-        $this->unavailabilityRepository         = $unavailabilityRepository;
-        $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
-        $this->participantViewQueryHandler      = $participantViewQueryHandler;
-        $this->meetingRepository                = $meetingRepository;
-        $this->meetingPublishedAccessChecker    = $meetingPublishedAccessChecker;
+        $this->unavailabilityRepository = $unavailabilityRepository;
+        $this->massUnavailabilityRepository = $massUnavailabilityRepository;
+        $this->participantViewQueryHandler = $participantViewQueryHandler;
+        $this->meetingRepository = $meetingRepository;
+        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
         $this->validationRequiredChecker = $validationRequiredChecker;
         $this->extraDataRepository = $extraDataRepository;
         $this->getTimezoneHelper = $getTimezoneHelper;
+        $this->getParticipantTypes = $getParticipantTypes;
     }
 
     /**
@@ -133,7 +139,11 @@ class AgendaViewQueryHandler
                 $participant->getUser(),
                 $query->event
             );
-            $masses = $this->massUnavailabilityRepository->findByEvent($query->event, $query->locale);
+
+            $masses = $this->massUnavailabilityRepository->findByTypes(
+                $this->getParticipantTypes->handle($participant),
+                $query->locale
+            );
 
             $happeningParticipations = $this
                 ->happeningParticipationRepository

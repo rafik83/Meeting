@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Update;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\UpdateHandler;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
@@ -24,6 +25,8 @@ class UpdateHandlerTest extends TestCase
     public function testHandle()
     {
         $event       = EventFactory::createEvent();
+        $type1       = $this->prophesize(Type::class);
+        $type2       = $this->prophesize(Type::class);
         $oldCategory = new Category($event, 'Conference', 'old title', '#AABBCC', '#CCBBAA');
         $category    = new Category($event, 'Conference', 'title', '#123123', '#312312');
         $oldBegin    = new \DateTime('2016-10-10 10:00:00.000');
@@ -38,7 +41,10 @@ class UpdateHandlerTest extends TestCase
             'old name',
             $oldBegin,
             $oldEnd,
-            false
+            false,
+            false,
+            [],
+            [$type1->reveal(), $type2->reveal()]
         );
         $existing->createTranslation('fr', 'vieux titre', 'vieille description');
         $existing->createTranslation('en', 'old title', 'old description');
@@ -50,7 +56,10 @@ class UpdateHandlerTest extends TestCase
             'name',
             $begin,
             $end,
-            true
+            true,
+            false,
+            [],
+            [$type2->reveal()]
         );
         $expected->createTranslation('fr', 'titre', 'description');
         $expected->createTranslation('en', 'title', 'description');
@@ -70,6 +79,7 @@ class UpdateHandlerTest extends TestCase
         $update->end          = $end;
         $update->name         = 'name';
         $update->blocking     = true;
+        $update->types        = [$type2->reveal()];
         $update->translations = [
             'fr' => [
                 'title'       => 'titre',

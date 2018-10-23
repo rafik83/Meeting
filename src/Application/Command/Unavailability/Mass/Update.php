@@ -32,6 +32,9 @@ class Update extends Base
         $this->name      = $mass->getName();
         $this->category  = $mass->getCategory();
         $this->dispatch  = $mass->isDispatch();
+
+        $this->types = $mass->getTypes();
+
         $this->timeSlots = array_map(function (MassTimeSlot $timeSlot) {
             return ['from' => $timeSlot->getFrom(), 'to' => $timeSlot->getTo()];
         }, $mass->getTimeSlots());

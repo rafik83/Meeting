@@ -62,6 +62,10 @@ services:
         arguments:
             - '@repository.user.event.extra_data_repository'
 
+    Proximum\Vimeet\Domain\Participant\GetParticipantTypes:
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+
     #
     # Availability Time Range
     #

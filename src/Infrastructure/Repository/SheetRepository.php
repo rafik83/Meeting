@@ -665,28 +665,6 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getUserSheetsByTypes(User $user, array $types)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet')
-            ->from(Sheet::class, 'sheet')
-            ->join(
-                'sheet.participants',
-                'participant',
-                'WITH',
-                'participant.user = :user AND sheet.enable = true AND sheet.type IN (:types)'
-            )
-            ->setParameter('user', $user)
-            ->setParameter('types', $types);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getIdsByEvent(Event $event)
     {
         $queryBuilder = $this

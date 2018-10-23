@@ -116,7 +116,7 @@ class ProgramViewQueryHandlerTest extends TestCase
         $happeningParticipationQueryHandler->handle($expected, $sheet, $user);
 
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
-        $massRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([]);
+        $massRepository->findByType($sheet->getType(), 'fr')->shouldBeCalled()->willReturn([]);
 
         $fullHappeningQueryHandler = $this->prophesize(FullHappeningQueryHandler::class);
         $fullHappeningQueryHandler->handle(new FullHappeningQuery($expected, $event))->shouldBeCalled();

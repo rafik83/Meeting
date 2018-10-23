@@ -128,6 +128,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\MeetingSlotRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.meeting.message_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Meeting\MessageRepository
         arguments:
@@ -2494,12 +2495,6 @@ services:
     #
     # Sheet Component
     #
-    vimeet_infrastructure.application.components.sheet.manager:
-        class: Proximum\Vimeet\Application\Components\Sheet\SheetManager
-        arguments:
-            - '@vimeet_infrastructure.repository.type_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
     vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
         arguments:
@@ -3884,6 +3879,7 @@ services:
             - '@domain.user.agenda.phone.validation_required_checker'
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+            - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
 
@@ -5400,7 +5396,15 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.unavailability.mass_repository'
             - '@repository.unavailability.mass_assignment_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Domain\Unavailability\Mass\IsMassUnavailabilityAssignedToAllTypes'
             - '@adapter.job_queue_adapter'
+
+    Proximum\Vimeet\Domain\Unavailability\Mass\FilterMassUnavailabilitiesBySheetsType: ~
+
+    Proximum\Vimeet\Domain\Unavailability\Mass\IsMassUnavailabilityAssignedToAllTypes:
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
 
     #
     # Filter
@@ -5808,6 +5812,7 @@ services:
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@repository.unavailability.mass_assignment_repository'
+            - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
 
     #
     # Visio Guesser
@@ -5911,6 +5916,8 @@ services:
             - '@query.planning.day_view_query_handler'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Domain\Unavailability\Mass\FilterMassUnavailabilitiesBySheetsType'
+
     ###### Formatter
     planning.formatter.unallocated_formatter:
         class: Proximum\Vimeet\Application\Components\Planning\Formatter\UnallocatedFormatter
