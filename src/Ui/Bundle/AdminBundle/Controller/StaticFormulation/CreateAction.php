@@ -92,6 +92,7 @@ class CreateAction
         $staticFormulations = $this->staticFormulationRepository->findByEventAndKey($event, $key);
         $remainingTypes = $this->typeRepository->getTypesByEvent($event);
 
+        // Allow only the remaining types to be attached to this new static formulation for this key
         foreach ($staticFormulations as $staticFormulation) {
             foreach ($staticFormulation->getTypes() as $type) {
                 if (isset($remainingTypes[$type->getId()])) {
