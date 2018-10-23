@@ -2,8 +2,8 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Catalog;
 
-use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Filter\TaggedNomenclatureFilter;
@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
 class TaggedNomenclatureFilterGetterTest extends TestCase
 {
-
     public function testGetNomenclaturesItemsByEvent()
     {
         $event = $this->prophesize(Event::class);

@@ -11,8 +11,7 @@
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
-use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
-use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
+use Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotIn;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNull;
@@ -21,8 +20,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class TaggedNomenclatureTransformer implements InputTransformerInterface
 {
-    /** @var TaggedNomenclatureFilterGetter */
-    private $taggedNomenclatureFilterGetter;
+    /** @var GetTagsByNomenclature */
+    private $getTagsByNomenclature;
 
     /** @var Event */
     private $event;
@@ -30,9 +29,9 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
     /** @var string */
     private $locale;
 
-    public function __construct(TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter)
+    public function __construct(GetTagsByNomenclature $getTagsByNomenclature)
     {
-        $this->taggedNomenclatureFilterGetter = $taggedNomenclatureFilterGetter;
+        $this->getTagsByNomenclature = $getTagsByNomenclature;
     }
 
     public function setEventAndLocale(Event $event, string $locale): void
@@ -47,7 +46,8 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
             return [];
         }
 
-        $tags = $this->getTagsByNomenclatureId($field);
+        $getTagsByNomenclature = $this->getTagsByNomenclature;
+        $tags = $getTagsByNomenclature($field, $this->event, $this->locale);
 
         // Not null or null query
         if ($this->isNullableComparisonOperator($field)) {
@@ -73,27 +73,6 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
                 ],
             ],
         ];
-    }
-
-    private function getTagsByNomenclatureId(Field $field): array
-    {
-        $tags = [];
-        $fields = explode('.', $field->getField());
-        $nomenclatureId = (int) end($fields);
-
-        $nomenclatureFilterViews = $this->taggedNomenclatureFilterGetter->getNomenclaturesItemsByEvent(
-            $this->event,
-            $this->locale
-        );
-
-        /** @var NomenclatureFilterView $nomenclatureFilterView */
-        foreach ($nomenclatureFilterViews as $id => $nomenclatureFilterView) {
-            if ($nomenclatureId === $id) {
-                $tags = array_merge($tags, $nomenclatureFilterView->tags);
-            }
-        }
-
-        return $tags;
     }
 
     private function buildNestedTagQuery(array $tags): array

@@ -11,14 +11,9 @@
 namespace Proximum\Vimeet\Tests\Domain\ConditionRules\Transformer\Elastic\Input;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
-use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
+use Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer;
-use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer;
-use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEndsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorIn;
-use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotContains;
-use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotIn;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 use Proximum\Vimeet\Domain\Model\Event;
 
@@ -26,21 +21,16 @@ class TaggedNomenclatureTransformerTest extends TestCase
 {
     public function testTransform(): void
     {
-        $nomenclatureFilterViews = [
-            1 => new NomenclatureFilterView(1, 'mbappe', ['u58b57c0ecbdb3' => 'dribble'], [0 => 'tag', 1 => 'tag2']),
-        ];
-
         $event = $this->prophesize(Event::class);
-        $taggedNomenclatureFilterGetter = $this->prophesize(TaggedNomenclatureFilterGetter::class);
-        $taggedNomenclatureFilterGetter->getNomenclaturesItemsByEvent($event->reveal(), 'fr')
+        $field = new Field('nestedTaggedData.1', new ComparisonOperatorIn(), 'checkbox', ['57eced1b99305', '57eced1b994ef']);
+        $getTagsByNomenclature = $this->prophesize(GetTagsByNomenclature::class);
+        $getTagsByNomenclature->__invoke($field, $event->reveal(), 'fr')
             ->shouldBeCalled()
-            ->willReturn($nomenclatureFilterViews);
+            ->willReturn([0 => 'tag', 1 => 'tag2']);
 
-        $taggedNomenclatureTransformer = new TaggedNomenclatureTransformer($taggedNomenclatureFilterGetter->reveal());
+        $taggedNomenclatureTransformer = new TaggedNomenclatureTransformer($getTagsByNomenclature->reveal());
         $taggedNomenclatureTransformer->setEventAndLocale($event->reveal(), 'fr');
-        $result = $taggedNomenclatureTransformer->transform(
-            new Field('nestedTaggedData.1', new ComparisonOperatorIn(), 'checkbox', ['57eced1b99305', '57eced1b994ef'])
-        );
+        $result = $taggedNomenclatureTransformer->transform($field);
 
         $expectedResult = [
             [
