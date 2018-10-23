@@ -1,4 +1,7 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% block content %}
-{% endblock %}
+{% block form_title %}
+    {{ 'admin.staticFormulation.action.update'|trans }}: {{ staticFormulationTitle }}
+{% endblock form_title %}
+
+{% block goback_link path('admin_event_static_formulation_list', {'event': event.id}) %}

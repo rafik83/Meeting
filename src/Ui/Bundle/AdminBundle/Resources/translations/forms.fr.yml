@@ -939,6 +939,9 @@ form.spot.import.confirm: 'L''import de nouveaux lieux supprimera les lieux exis
 form.static_formulation_create.children.submit.label: 'Personnaliser'
 form.static_formulation_create.children.types.label: 'Types de participation associés'
 form.static_formulation_create.children.translations.prototype.children.title.label: 'Titre de la formulation'
+form.static_formulation_update.children.submit.label: 'Mettre à jour'
+form.static_formulation_update.children.translations.prototype.children.title.label: 'Titre de la formulation'
+form.static_formulation_update.children.types.label: 'Types de participation restants'
 form.template_add_locale.children.locale.label: Langue
 form.template_add_locale.children.submit.label: Valider
 form.template_registration_update.children.submit.label: Enregistrer

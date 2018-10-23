@@ -64,6 +64,11 @@ class StaticFormulation
         return $this->types->toArray();
     }
 
+    public function update(array $types): void
+    {
+        $this->types = new ArrayCollection($types);
+    }
+
     /**
      * @return StaticFormulationTranslation[]
      */

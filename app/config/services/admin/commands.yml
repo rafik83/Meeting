@@ -370,3 +370,9 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\StaticFormulation\Create }
+
+    Proximum\Vimeet\Application\Command\StaticFormulation\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\StaticFormulation\Update }
