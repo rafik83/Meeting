@@ -19,7 +19,8 @@ class BatchCampaignHandlerTest extends TestCase
         $user1 = $this->prophesize(User::class);
         $user2 = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
-        $campaign = $this->prophesize(Campaign::class);
+        $date = new \DateTime();
+
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findOneById(1)
             ->shouldBeCalled()
@@ -27,16 +28,19 @@ class BatchCampaignHandlerTest extends TestCase
         $userRepository->findOneById(2)
             ->shouldBeCalled()
             ->willReturn($user2->reveal());
-        $campaign->addUser($user1->reveal())->shouldBeCalled();
-        $campaign->addUser($user2->reveal())->shouldBeCalled();
+
+        $campaign = new Campaign($event->reveal(), 'test', [], $date);
+        $campaign->addUser($user1->reveal());
+        $campaign->addUser($user2->reveal());
+        $campaign->addRecipient(Campaign::RECIPIENT_USER);
+        $campaign->addRecipient(Campaign::RECIPIENT_USER);
 
         $campaignRepository = $this->prophesize(CampaignRepositoryInterface::class);
-        $campaignRepository->add($campaign->reveal())->shouldBeCalled();
-        $date = new \DateTime();
+        $campaignRepository->add($campaign)->shouldBeCalled();
 
         $handler = new BatchCampaignHandler($userRepository->reveal(), $campaignRepository->reveal(), $date);
         $result = $handler->handle(new BatchCampaign($event->reveal(), 'fr', [1, 2], 'test'));
 
-        $this->assertEquals($result, new BatchCampaignResult($campaign->reveal()));
+        $this->assertEquals($result, new BatchCampaignResult($campaign));
     }
 }
