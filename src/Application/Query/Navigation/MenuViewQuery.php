@@ -30,26 +30,26 @@ class MenuViewQuery
     public $user;
 
     /** @var StaticFormulation[] */
-    public $staticFormulationsIndexByCategories;
+    public $staticFormulationsIndexedByCategories;
 
     /**
      * @param Event               $event
      * @param string              $locale
      * @param null|Sheet          $sheet
      * @param null|User           $user
-     * @param StaticFormulation[] $staticFormulationsIndexByCategories
+     * @param StaticFormulation[] $staticFormulationsIndexedByCategories
      */
     public function __construct(
         Event $event,
         $locale,
         Sheet $sheet = null,
         User $user = null,
-        array $staticFormulationsIndexByCategories = []
+        array $staticFormulationsIndexedByCategories = []
     ) {
         $this->event  = $event;
         $this->locale = $locale;
         $this->sheet  = $sheet;
         $this->user   = $user;
-        $this->staticFormulationsIndexByCategories = $staticFormulationsIndexByCategories;
+        $this->staticFormulationsIndexedByCategories = $staticFormulationsIndexedByCategories;
     }
 }

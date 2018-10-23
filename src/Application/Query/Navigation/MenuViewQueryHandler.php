@@ -46,7 +46,7 @@ class MenuViewQueryHandler
                     $menuViewQuery->user,
                     $category,
                     $menuViewQuery->locale,
-                    $menuViewQuery->staticFormulationsIndexByCategories[$category] ?? null
+                    $menuViewQuery->staticFormulationsIndexedByCategories[$category] ?? null
                 )
             );
 
