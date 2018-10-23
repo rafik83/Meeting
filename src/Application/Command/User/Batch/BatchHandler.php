@@ -25,6 +25,6 @@ class BatchHandler
             );
         }
 
-        throw new \Exception('Invalid batch handler');
+        throw new \Exception('No handler found');
     }
 }
