@@ -20,7 +20,6 @@ use Proximum\Vimeet\Domain\StaticFormulation\Constant;
 
 class UpdateHandlerTest extends TestCase
 {
-
     public function testHandle()
     {
         $key = Constant::STATIC_FORMULATION_KEY_AGENDA;
