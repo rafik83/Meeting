@@ -41,8 +41,7 @@ class OverlappedTimeRangeMerger
 
             foreach ($timeRangesMerged as $timeRangeMerged) {
                 if (TimeOverlap::overlap($timeRangeMerged, $timeRange)
-                    || $timeRangeMerged->getEnd() == $timeRange->getBegin()
-                    || $timeRangeMerged->getBegin() == $timeRange->getEnd()
+                    || TimeOverlap::touch($timeRangeMerged, $timeRange)
                 ) {
                     $overlapped = true;
                     $timeRangeMerged->merge($timeRange);
