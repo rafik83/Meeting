@@ -17,9 +17,10 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class Campaign
 {
-    const RECIPIENT_SHEET_OWNER     = 'sheet_owner';
-    const RECIPIENT_PARTICIPANTS    = 'participants';
-    const RECIPIENT_BILLING_CONTACT = 'billing_contact';
+    public const RECIPIENT_SHEET_OWNER = 'sheet_owner';
+    public const RECIPIENT_PARTICIPANTS = 'participants';
+    public const RECIPIENT_BILLING_CONTACT = 'billing_contact';
+    public const RECIPIENT_USER = 'user';
 
     /** @var int */
     private $id;
@@ -179,6 +180,7 @@ class Campaign
             self::RECIPIENT_SHEET_OWNER,
             self::RECIPIENT_PARTICIPANTS,
             self::RECIPIENT_BILLING_CONTACT,
+            self::RECIPIENT_USER,
         ];
     }
 

@@ -39,6 +39,7 @@ class BatchCampaignHandler
             }
 
             $campaign->addUser($user);
+            $campaign->addRecipient(Campaign::RECIPIENT_USER);
         }
 
         $this->campaignRepository->add($campaign);

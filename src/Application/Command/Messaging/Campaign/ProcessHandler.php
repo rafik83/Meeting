@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
 
@@ -67,8 +68,10 @@ class ProcessHandler
     public function handle(Process $command)
     {
         $campaign = $command->getCampaign();
+        $sheets = $campaign->getSheets();
+        $users = $campaign->getUsers();
 
-        if (!$sheets = $campaign->getSheets()) {
+        if (!$sheets && !$users) {
             throw new CampaignSendingFailedException('flash.messaging.campaign.send.failure.no_sheet');
         }
 
@@ -80,7 +83,8 @@ class ProcessHandler
             throw new CampaignSendingFailedException('flash.messaging.campaign.send.failure.no_recipient');
         }
 
-        $this->mailer->send($message, $this->getReceivers($sheets, $recipients, $campaign->getMessage()));
+        $receivers = $users ? $this->getUsersReceivers($users, $message) : $this->getSheetsReceivers($sheets, $recipients, $message);
+        $this->mailer->send($message, $receivers);
 
         $campaign->markAsProcessed();
         $this->campaignRepository->set($campaign);
@@ -96,7 +100,7 @@ class ProcessHandler
      * @return array An array where keys are receivers email addresses
      *               and values {@link MailRecipientInterface} instances
      */
-    private function getReceivers(array $sheets, array $recipients, Message $message)
+    private function getSheetsReceivers(array $sheets, array $recipients, Message $message)
     {
         $event                 = $message->getEvent();
         $sendToParticipants    = \in_array(Campaign::RECIPIENT_PARTICIPANTS, $recipients, true);
@@ -154,6 +158,26 @@ class ProcessHandler
             foreach ($this->billingInfoRepository->getBySheets($sheets) as $billingInfo) {
                 $addReceivers($billingInfo->getSheet(), [$billingInfo]);
             }
+        }
+
+        return $receivers;
+    }
+
+    private function getUsersReceivers(array $users, Message $message): array
+    {
+        $event = $message->getEvent();
+        $receivers = [];
+
+        /** @var User $user */
+        foreach ($users as $user) {
+            $receiverLocale = $event->getAvailableLocale($user->getLocale());
+            $receiverView = new ReceiverView(
+                $user->getEmail(),
+                [],
+                $receiverLocale
+            );
+
+            $receivers[$user->getEmail()] = $receiverView;
         }
 
         return $receivers;
