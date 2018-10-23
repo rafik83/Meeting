@@ -88,4 +88,16 @@ class TimeOverlap
 
         return $dateTime;
     }
+
+    /**
+     * @param TimeRangeInterface $one
+     * @param TimeRangeInterface $another
+     *
+     * @return bool
+     */
+    public static function touch(TimeRangeInterface $one, TimeRangeInterface $another)
+    {
+        return $one->getEnd() == $another->getBegin()
+            || $one->getBegin() == $another->getEnd();
+    }
 }
