@@ -2,29 +2,29 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Batch;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class BatchCampaignHandler
 {
-    /** @var SheetGuesser */
-    private $sheetGuesser;
-
     /** @var UserRepositoryInterface */
     private $userRepository;
+
+    /** @var CampaignRepositoryInterface */
+    private $campaignRepository;
 
     /** @var \DateTimeInterface */
     private $datetime;
 
     public function __construct(
-        SheetGuesser $sheetGuesser,
         UserRepositoryInterface $userRepository,
+        CampaignRepositoryInterface $campaignRepository,
         \DateTimeInterface $datetime
     ) {
-        $this->sheetGuesser = $sheetGuesser;
         $this->userRepository = $userRepository;
+        $this->campaignRepository = $campaignRepository;
         $this->datetime = $datetime;
     }
 
@@ -38,14 +38,10 @@ class BatchCampaignHandler
                 continue;
             }
 
-            try {
-                $sheet = $this->sheetGuesser->getUserSheet($user, $batch->event, $batch->locale);
-            } catch (\Exception $exception) {
-                continue;
-            }
-
-            $campaign->addSheet($sheet);
+            $campaign->addUser($user);
         }
+
+        $this->campaignRepository->add($campaign);
 
         return new BatchCampaignResult($campaign);
     }

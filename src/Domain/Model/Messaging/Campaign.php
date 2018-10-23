@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Model\Messaging;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class Campaign
 {
@@ -34,6 +35,9 @@ class Campaign
 
     /** @var ArrayCollection|Sheet[] */
     private $sheets;
+
+    /** @var ArrayCollection|User[] */
+    private $users;
 
     /** @var Message|null */
     private $message;
@@ -67,7 +71,8 @@ class Campaign
         $this->filters   = $filters;
         $this->createdAt = $createdAt;
 
-        $this->sheets     = new ArrayCollection();
+        $this->sheets = new ArrayCollection();
+        $this->users = new ArrayCollection();
         $this->recipients = [];
     }
 
@@ -209,5 +214,17 @@ class Campaign
     public function markAsProcessed(\DateTimeInterface $processedAt = null)
     {
         $this->processedAt = $processedAt ?: new \DateTime();
+    }
+
+    public function getUsers(): iterable
+    {
+        return $this->users->toArray();
+    }
+
+    public function addUser(User $user): void
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
     }
 }

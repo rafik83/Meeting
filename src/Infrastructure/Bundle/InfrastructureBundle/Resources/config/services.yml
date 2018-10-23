@@ -2111,8 +2111,8 @@ services:
 
     Proximum\Vimeet\Application\Command\User\Batch\BatchCampaignHandler:
         arguments:
-            - '@sheet.sheet_guesser'
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.messaging.campaign_repository'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Batch\BatchCampaign }
