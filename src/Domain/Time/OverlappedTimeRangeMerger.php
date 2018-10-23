@@ -19,6 +19,10 @@ class OverlappedTimeRangeMerger
      */
     public function merge(array $timeRanges): array
     {
+        if (\count($timeRanges) <= 1) {
+            return $timeRanges;
+        }
+
         // We need to sort the time ranges first
         // To avoid having a first time range created which begins at 10:00 and ends at 13:00
         // Then another which begins at 14:00 and ends at 15:00

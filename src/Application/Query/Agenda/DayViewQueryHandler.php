@@ -14,7 +14,10 @@ use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
+use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
+use Proximum\Vimeet\Domain\Time\OverlappedTimeRangeMerger;
 use Proximum\Vimeet\Domain\Time\TimeOverlap;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class DayViewQueryHandler
 {
@@ -39,15 +42,9 @@ class DayViewQueryHandler
     /** @var AgendaCollisionManager */
     private $agendaCollisionManager;
 
-    /**
-     * @param HappeningViewQueryHandler                      $happeningHandler
-     * @param UnavailabilityViewQueryHandler                 $unavailabilityHandler
-     * @param MassUnavailabilityViewQueryHandler             $massHandler
-     * @param MeetingViewQueryHandler                        $meetingHandler
-     * @param CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler
-     * @param AvailableSlotsByParticipantAndDayQueryHandler  $availableSlotsByParticipantAndDayQueryHandler
-     * @param AgendaCollisionManager                         $agendaCollisionManager
-     */
+    /** @var OverlappedTimeRangeMerger */
+    private $overlappedTimeRangeMerger;
+
     public function __construct(
         HappeningViewQueryHandler $happeningHandler,
         UnavailabilityViewQueryHandler $unavailabilityHandler,
@@ -55,31 +52,27 @@ class DayViewQueryHandler
         MeetingViewQueryHandler $meetingHandler,
         CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler,
         AvailableSlotsByParticipantAndDayQueryHandler $availableSlotsByParticipantAndDayQueryHandler,
-        AgendaCollisionManager $agendaCollisionManager
+        AgendaCollisionManager $agendaCollisionManager,
+        OverlappedTimeRangeMerger $overlappedTimeRangeMerger
     ) {
-        $this->happeningHandler                               = $happeningHandler;
-        $this->unavailabilityHandler                          = $unavailabilityHandler;
-        $this->massHandler                                    = $massHandler;
-        $this->meetingHandler                                 = $meetingHandler;
+        $this->happeningHandler = $happeningHandler;
+        $this->unavailabilityHandler = $unavailabilityHandler;
+        $this->massHandler = $massHandler;
+        $this->meetingHandler = $meetingHandler;
         $this->cancelAttendanceUnavailabilityViewQueryHandler = $cancelAttendanceUnavailabilityViewQueryHandler;
-        $this->availableSlotsByParticipantAndDayQueryHandler  = $availableSlotsByParticipantAndDayQueryHandler;
-        $this->agendaCollisionManager                         = $agendaCollisionManager;
+        $this->availableSlotsByParticipantAndDayQueryHandler = $availableSlotsByParticipantAndDayQueryHandler;
+        $this->agendaCollisionManager = $agendaCollisionManager;
+        $this->overlappedTimeRangeMerger = $overlappedTimeRangeMerger;
     }
 
-    /**
-     * @param DayViewQuery $query
-     *
-     * @return DayView
-     */
     public function handle(DayViewQuery $query): DayView
     {
         $cancelAttendanceView = null;
-        $happeningViews       = [];
-        $unavailabilities     = [];
-        $masses               = [];
-        $meetings             = [];
-        $availableSlotViews   = [];
-        $cancelAttendanceView = null;
+        $happeningViews = [];
+        $unavailabilityViews = [];
+        $masses = [];
+        $meetings = [];
+        $availableSlotViews = [];
 
         if ($query->currentSheet->attend()) {
             foreach ($query->happenings as $happening) {
@@ -96,7 +89,7 @@ class DayViewQueryHandler
 
             foreach ($query->unavailabilities as $unavailability) {
                 if (TimeOverlap::overlap($unavailability, $query->day)) {
-                    $unavailabilities[] = $this->unavailabilityHandler->handle(
+                    $unavailabilityViews[] = $this->unavailabilityHandler->handle(
                         new UnavailabilityViewQuery($unavailability, $query->event, $query->day)
                     );
                 }
@@ -151,7 +144,7 @@ class DayViewQueryHandler
         $this->agendaCollisionManager->handleCollision(
             $meetings,
             $happeningViews,
-            $unavailabilities,
+            $unavailabilityViews,
             $masses
         );
 
@@ -164,7 +157,33 @@ class DayViewQueryHandler
             $this->agendaCollisionManager->getMassViews(),
             $this->agendaCollisionManager->getMeetingViews(),
             $availableSlotViews,
-            $cancelAttendanceView
+            $cancelAttendanceView,
+            $this->isUnavailableForThisDay($query->day, $unavailabilityViews)
         );
+    }
+
+    /**
+     * @param UnavailabilityView[] $unavailabilityViews
+     */
+    private function isUnavailableForThisDay(TimeRangeView $day, array $unavailabilityViews): bool
+    {
+        $unavailabilityTimeRangeViews = [];
+
+        foreach ($unavailabilityViews as $unavailabilityView) {
+            $unavailabilityTimeRangeViews[] = new TimeRangeView(
+                $unavailabilityView->getBegin(),
+                $unavailabilityView->getEnd()
+            );
+        }
+
+        $mergedUnavailabilityTimeRangeViews = $this->overlappedTimeRangeMerger->merge($unavailabilityTimeRangeViews);
+
+        foreach ($mergedUnavailabilityTimeRangeViews as $unavailabilityTimeRangeView) {
+            if (TimeOverlap::contains($day, $unavailabilityTimeRangeView)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
