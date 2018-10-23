@@ -94,15 +94,8 @@ class UpdateAction
         $remainingTypes = $this->typeRepository->getTypesByEvent($event);
 
         foreach ($staticFormulations as $customizedStaticFormulation) {
-            if ($customizedStaticFormulation->getId() === $staticFormulation->getId()) {
-                continue;
-            }
-
-            foreach ($customizedStaticFormulation->getTypes() as $type) {
-                if (isset($remainingTypes[$type->getId()])) {
-                    unset($remainingTypes[$type->getId()]);
-                }
-            }
+            $sortRemainingTypes = new SortRemainingTypes($customizedStaticFormulation, $remainingTypes);
+            $sortRemainingTypes->sort($staticFormulation);
         }
 
         $locale = $event->getAvailableLocale($request->getLocale());
