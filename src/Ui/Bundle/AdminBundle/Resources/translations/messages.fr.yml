@@ -404,11 +404,13 @@ admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce re
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.dashboard.approvedRequest: Acceptées
 admin.meeting.dashboard.createdByParticipant: 'Créés par les participants'
-admin.meeting.dashboard.createdDayD: 'Créés le jour de l’événement par l''organisateur'
+admin.meeting.dashboard.createdByPlanner: 'RDV algo'
+admin.meeting.dashboard.createdDayD.admin: 'RDV admin les jours J'
+admin.meeting.dashboard.createdDayD.participant: 'RDV par les participant les jours J'
 admin.meeting.dashboard.liveMeeting: 'Rendez-vous live'
 admin.meeting.dashboard.meeting: Rendez-vous
 admin.meeting.dashboard.pendingRequest: 'En attentes'
-admin.meeting.dashboard.plannedMeeting: 'Positionnés en amont'
+admin.meeting.dashboard.plannedMeeting: 'RDV admin en amont'
 admin.meeting.dashboard.refusedRequest: Refusées
 admin.meeting.dashboard.request: 'Demandes de rendez-vous'
 admin.meeting.export.fields.day: Jour
@@ -425,6 +427,8 @@ admin.meeting.export.fields.spot: Lieu
 admin.meeting.export.fields.to_sheet_id: 'ID demandé'
 admin.meeting.export.fields.to_sheet_name: 'Nom fiche demandé'
 admin.meeting.export.fields.to_sheet_participant_fullname: 'Prénom Nom utilisateurs demandés'
+admin.meeting.export.fields.created_type: 'Planifié par'
+admin.meeting.export.fields.status: 'Vérification RDV'
 admin.meeting.export.fields.to_sheet_participants: 'Participants demandés'
 admin.meeting.export.fields.to_sheet_title: 'Titre fiche demandée'
 admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandés'
@@ -432,7 +436,7 @@ admin.meeting.link: Rendez-vous
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
 admin.meeting.list.column.head.fromParticipants: 'Participants du demandeur'
-admin.meeting.list.column.head.isCreatedByParticipants: 'Créé par les participants'
+admin.meeting.list.column.head.createdType: 'Créé par les %type%'
 admin.meeting.list.column.head.slot: Créneau
 admin.meeting.list.column.head.spot: Lieu
 admin.meeting.list.column.head.to: À
@@ -442,6 +446,12 @@ admin.meeting.list.noResult: 'Aucun RDV positionné'
 admin.meeting.list.participant.absent: Absent
 admin.meeting.list.participant.present: Présent
 admin.meeting.list.title: 'RDV positionnés'
+admin.meeting.list.createdType.planner: 'planner'
+admin.meeting.list.createdType.admin: 'admin'
+admin.meeting.list.createdType.participant: 'participants'
+admin.meeting.list.status.canceled: "N'a pas eu lieu"
+admin.meeting.list.status.not_confirmed: 'Non confirmé'
+admin.meeting.list.status.confirmed: 'Confirmé'
 admin.menu.link: Menu
 admin.messaging_campaign.recipients.billing_contact: 'Contact facturation de la fiche'
 admin.messaging_campaign.recipients.participants: 'Tous les participants de la fiche'

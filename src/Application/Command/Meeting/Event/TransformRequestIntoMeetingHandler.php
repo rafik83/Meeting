@@ -183,10 +183,11 @@ class TransformRequestIntoMeetingHandler
             $transformableMeeting->toParticipants,
             $this->dateTime,
             $transformableMeeting->spot,
-            $query->event
+            $query->event,
+            false,
+            false,
+            Meeting::CREATED_BY_PARTICIPANT
         );
-
-        $meeting->setCreatedByParticipant();
 
         $this->meetingRepository->add($meeting);
 

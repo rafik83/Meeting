@@ -107,7 +107,10 @@ class TransformRequestIntoMeetingHandler
             $transformRequestIntoMeeting->meetingRequest->getParticipants($toSheet),
             $this->dateTime,
             $spot,
-            $transformRequestIntoMeeting->event
+            $transformRequestIntoMeeting->event,
+            false,
+            false,
+            Meeting::CREATED_BY_ADMIN
         );
 
         $this->meetingRepository->add($meeting);

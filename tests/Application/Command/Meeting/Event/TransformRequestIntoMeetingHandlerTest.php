@@ -85,10 +85,11 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$toParticipant->reveal()],
             $datetime,
             $spot->reveal(),
-            $event
+            $event,
+            false,
+            false,
+            Meeting::CREATED_BY_PARTICIPANT
         );
-
-        $expectedMeeting->setCreatedByParticipant();
 
         // Mock
 
@@ -246,10 +247,11 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$toParticipant->reveal()],
             $datetime,
             $spot->reveal(),
-            $event
+            $event,
+            false,
+            false,
+            Meeting::CREATED_BY_PARTICIPANT
         );
-
-        $expectedMeeting->setCreatedByParticipant();
 
         $meetingRepository->add($expectedMeeting)->shouldBeCalled();
 
@@ -471,10 +473,11 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$toParticipant2->reveal()],
             $datetime,
             $spot->reveal(),
-            $event
+            $event,
+            false,
+            false,
+            Meeting::CREATED_BY_PARTICIPANT
         );
-
-        $expectedMeeting->setCreatedByParticipant();
 
         $this->assertEquals($expectedMeeting, $meeting);
     }

@@ -16,7 +16,7 @@ class DashboardMeetingView
     public $meeting;
 
     /** @var int */
-    public $plannedMeeting;
+    public $meetingCreatedUpstreamByAdmin;
 
     /** @var int */
     public $liveMeeting;
@@ -37,28 +37,26 @@ class DashboardMeetingView
     public $meetingCreatedByParticipant;
 
     /** @var int */
-    public $meetingCreatedDayD;
+    public $meetingCreatedDayDByAdmin;
 
-    /**
-     * @param int $allMeetings
-     * @param int $meetingCreatedDayD
-     * @param int $meetingCreatedByParticipant
-     * @param int $approvedRequest
-     * @param int $pendingRequest
-     * @param int $refusedRequest
-     */
+    /** @var int */
+    public $meetingCreatedByPlanner;
+
     public function __construct(
         int $allMeetings = 0,
-        int $meetingCreatedDayD = 0,
+        int $meetingCreatedDayDByAdmin = 0,
         int $meetingCreatedByParticipant = 0,
+        int $meetingCreatedByPlanner = 0,
+        int $meetingCreatedUpstreamByAdmin = 0,
         int $approvedRequest = 0,
         int $pendingRequest = 0,
         int $refusedRequest = 0
     ) {
         $this->meeting = $allMeetings;
-        $this->meetingCreatedDayD = $meetingCreatedDayD;
+        $this->meetingCreatedDayDByAdmin = $meetingCreatedDayDByAdmin;
         $this->meetingCreatedByParticipant = $meetingCreatedByParticipant;
-        $this->plannedMeeting = $allMeetings - $meetingCreatedDayD - $meetingCreatedByParticipant;
+        $this->meetingCreatedByPlanner = $meetingCreatedByPlanner;
+        $this->meetingCreatedUpstreamByAdmin = $meetingCreatedUpstreamByAdmin;
 
         $this->approvedRequest = $approvedRequest;
         $this->pendingRequest = $pendingRequest;

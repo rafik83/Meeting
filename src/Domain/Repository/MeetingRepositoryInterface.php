@@ -278,17 +278,18 @@ interface MeetingRepositoryInterface
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
+     * @param string             $type
      *
      * @return int
      */
-    public function countBetweenDatesByEvent(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end): int;
+    public function countBetweenDatesByEventAndType(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end, string $type): int;
+
+    public function countUpstreamByEventAndType(Event $event, \DateTimeInterface $date, string $type): int;
 
     /**
-     * Meetings created on event by the participants
-     *
-     * @param Event $event
+     * Meetings created on event by the type
      *
      * @return int
      */
-    public function countCreatedByParticipantByEvent(Event $event): int;
+    public function countCreatedByEventAndType(Event $event, string $type): int;
 }
