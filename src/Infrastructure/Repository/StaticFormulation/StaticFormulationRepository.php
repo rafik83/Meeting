@@ -83,15 +83,14 @@ class StaticFormulationRepository implements StaticFormulationRepositoryInterfac
     /**
      * {@inheritdoc}
      */
-    public function findByEventAndTypeAndLocale(Event $event, Type $type, string $locale): array
+    public function findByTypeAndLocale(Type $type, string $locale): array
     {
         return $this->entityManager
             ->createQueryBuilder()
             ->select('static_formulation, translation')
             ->from(StaticFormulation::class, 'static_formulation')
-            ->join('static_formulation.types', 'type', 'WITH', 'static_formulation.event = :event AND type = :type')
+            ->join('static_formulation.types', 'type', 'WITH', 'type = :type')
             ->join('static_formulation.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->setParameter('event', $event)
             ->setParameter('type', $type)
             ->setParameter('locale', $locale)
             ->getQuery()

@@ -72,22 +72,21 @@ class NavigationController extends Controller
         $submenuView = null;
 
         if (null !== $user && false === $registration) {
-            $staticFormulationsIndexByCategories = [];
+            $staticFormulationsIndexedByCategories = [];
 
             if (null !== $sheet) {
                 $staticFormulations = $this
                     ->get(StaticFormulationRepository::class)
-                    ->findByEventAndTypeAndLocale(
-                        $event,
+                    ->findByTypeAndLocale(
                         $sheet->getType(),
                         $locale
                     )
                 ;
-                $staticFormulationsIndexByCategories = [];
+                $staticFormulationsIndexedByCategories = [];
 
                 foreach ($staticFormulations as $staticFormulation) {
                     $key = Constant::STATIC_FORMULATION_LIST[$staticFormulation->getKey()]['categoryKey'];
-                    $staticFormulationsIndexByCategories[$key] = $staticFormulation;
+                    $staticFormulationsIndexedByCategories[$key] = $staticFormulation;
                 }
             }
 
@@ -98,7 +97,7 @@ class NavigationController extends Controller
                     $locale,
                     $sheet,
                     $user,
-                    $staticFormulationsIndexByCategories
+                    $staticFormulationsIndexedByCategories
                 )
             );
 
@@ -109,7 +108,7 @@ class NavigationController extends Controller
                     $route,
                     $sheet,
                     $user,
-                    $staticFormulationsIndexByCategories
+                    $staticFormulationsIndexedByCategories
                 )
             );
         }

@@ -37,11 +37,10 @@ interface StaticFormulationRepositoryInterface
     public function remove(StaticFormulation $staticFormulation): void;
 
     /**
-     * @param Event  $event
      * @param Type   $type
      * @param string $locale
      *
      * @return StaticFormulation[]
      */
-    public function findByEventAndTypeAndLocale(Event $event, Type $type, string $locale): array;
+    public function findByTypeAndLocale(Type $type, string $locale): array;
 }
