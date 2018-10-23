@@ -528,4 +528,125 @@ class DayViewQueryHandlerTest extends TestCase
         ));
         $this->assertEquals($expected, $result);
     }
+
+    public function testDayIsFullUnavailable()
+    {
+        $day1 = new TimeRangeView(new \DateTime('2018-10-25 10:00:00'), new \DateTime('2018-10-25 19:00:00'));
+        $day2 = new TimeRangeView(new \DateTime('2018-10-26 09:00:00'), new \DateTime('2018-10-26 17:00:00'));
+
+        $unavailability1 = new Unavailability(
+            $this->user,
+            $this->event,
+            new \DateTime('2018-10-25 10:00:00'),
+            new \DateTime('2018-10-25 19:00:00')
+        );
+        $unavailability2 = new Unavailability(
+            $this->user,
+            $this->event,
+            new \DateTime('2018-10-26 12:00:00'),
+            new \DateTime('2018-10-26 14:00:00')
+        );
+
+        $this
+            ->availableSlotsByParticipantAndDayQueryHandler
+            ->handle(new AvailableSlotsByParticipantAndDayQuery($this->event, $this->participant, $day1))
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+        $this
+            ->availableSlotsByParticipantAndDayQueryHandler
+            ->handle(new AvailableSlotsByParticipantAndDayQuery($this->event, $this->participant, $day2))
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $unavailabilityView1 = $this->prophesize(UnavailabilityView::class);
+        $unavailabilityView2 = $this->prophesize(UnavailabilityView::class);
+
+        $this
+            ->unavailabilityHandler
+            ->handle(new UnavailabilityViewQuery($unavailability1, $this->event, $day1))
+            ->shouldBeCalled()
+            ->willReturn($unavailabilityView1->reveal())
+        ;
+        $this
+            ->unavailabilityHandler
+            ->handle(new UnavailabilityViewQuery($unavailability2, $this->event, $day2))
+            ->shouldBeCalled()
+            ->willReturn($unavailabilityView2->reveal())
+        ;
+
+        $this
+            ->agendaCollisionManager
+            ->getHappeningViews()
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this
+            ->agendaCollisionManager
+            ->getUnavailabilityViews()
+            ->shouldBeCalled()
+            ->willReturn([$unavailabilityView1], [$unavailabilityView2])
+        ;
+
+        $this->agendaCollisionManager
+            ->getMassViews()
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this
+            ->agendaCollisionManager
+            ->getMeetingViews()
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this
+            ->agendaCollisionManager
+            ->handleCollision([], [], [$unavailabilityView1->reveal()], [])
+            ->shouldBeCalled()
+        ;
+
+        $this
+            ->agendaCollisionManager
+            ->handleCollision([], [], [$unavailabilityView2->reveal()], [])
+            ->shouldBeCalled()
+        ;
+
+        // Day 1 is full unavailable
+        $this->assertTrue(
+            $this->dayViewQueryHandler->handle(
+                new DayViewQuery(
+                    $day1,
+                    $this->sheet,
+                    $this->event,
+                    $this->participant,
+                    $this->user,
+                    false,
+                    'fr',
+                    [],
+                    [$unavailability1, $unavailability2]
+                )
+            )->isFullUnavailable()
+        );
+
+        // Day 2 is not full unavailable
+        $this->assertFalse(
+            $this->dayViewQueryHandler->handle(
+                new DayViewQuery(
+                    $day2,
+                    $this->sheet,
+                    $this->event,
+                    $this->participant,
+                    $this->user,
+                    false,
+                    'fr',
+                    [],
+                    [$unavailability1, $unavailability2]
+                )
+            )->isFullUnavailable()
+        );
+    }
 }

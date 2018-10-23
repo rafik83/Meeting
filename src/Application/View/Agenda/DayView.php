@@ -112,4 +112,9 @@ class DayView
     {
         return null === $this->cancelAttendanceUnavailabilityView;
     }
+
+    public function isFullUnavailable(): bool
+    {
+        return false;
+    }
 }
