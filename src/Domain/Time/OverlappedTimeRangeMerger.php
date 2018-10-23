@@ -8,10 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Unavailability\SystemGenerator;
-
-use Proximum\Vimeet\Domain\Time\AbstractTimeRange;
-use Proximum\Vimeet\Domain\Time\TimeOverlap;
+namespace Proximum\Vimeet\Domain\Time;
 
 class OverlappedTimeRangeMerger
 {
@@ -31,33 +28,33 @@ class OverlappedTimeRangeMerger
             return $first->getBegin() > $second->getBegin();
         });
 
-        $timeRangesCollapsed = [];
+        $timeRangesMerged = [];
 
         foreach ($timeRanges as $timeRange) {
-            if (empty($timeRangesCollapsed)) {
-                $timeRangesCollapsed[] = $timeRange;
+            if (empty($timeRangesMerged)) {
+                $timeRangesMerged[] = $timeRange;
 
                 continue;
             }
 
             $overlapped = false;
 
-            foreach ($timeRangesCollapsed as $timeRangeCollapsed) {
-                if (TimeOverlap::overlap($timeRangeCollapsed, $timeRange)
-                    || $timeRangeCollapsed->getEnd() == $timeRange->getBegin()
-                    || $timeRangeCollapsed->getBegin() == $timeRange->getEnd()
+            foreach ($timeRangesMerged as $timeRangeMerged) {
+                if (TimeOverlap::overlap($timeRangeMerged, $timeRange)
+                    || $timeRangeMerged->getEnd() == $timeRange->getBegin()
+                    || $timeRangeMerged->getBegin() == $timeRange->getEnd()
                 ) {
                     $overlapped = true;
-                    $timeRangeCollapsed->merge($timeRange);
+                    $timeRangeMerged->merge($timeRange);
                     break;
                 }
             }
 
             if (false === $overlapped) {
-                $timeRangesCollapsed[] = $timeRange;
+                $timeRangesMerged[] = $timeRange;
             }
         }
 
-        return $timeRangesCollapsed;
+        return $timeRangesMerged;
     }
 }

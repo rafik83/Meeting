@@ -25,6 +25,8 @@ use Proximum\Vimeet\Domain\Repository\CartRowParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\AbstractTimeRange;
+use Proximum\Vimeet\Domain\Time\OverlappedTimeRangeMerger;
+use Proximum\Vimeet\Domain\Time\OverlappedTimeRangeTruncater;
 use Proximum\Vimeet\Domain\Time\TimeRangeNotAccessibleView;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
