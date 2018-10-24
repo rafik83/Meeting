@@ -5,7 +5,8 @@
 {% block title 'admin.users.title'|trans %}
 
 {% block content %}
-    <h1 class="page-header">{{ userEventListViews.paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
+    {% set users = userEventListViews.paginatedResult %}
+    <h1 class="page-header">{{ users.total }} {{ 'admin.users.title'|trans }}</h1>
 
     <div class="row">
         <form class="filter-form" method="get">
@@ -26,9 +27,10 @@
         </form>
     </div>
     <br/>
-    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}
+    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': users }) }}
 
-    {{ form_start(batchForm, { 'attr': { 'data-batch': true }}) }}
+    {% set usersLimit = (users.results|length < users.limit) ? users.results|length : users.limit %}
+    {{ form_start(batchForm, { 'attr': { 'data-batch': true, 'data-page-items': usersLimit }}) }}
     {{ form_errors(batchForm) }}
 
     <div class="row filters">
@@ -45,7 +47,25 @@
         </div>
     </div>
 
-    {% if userEventListViews.paginatedResult.total > 0 %}
+    <div id="batch-selection-helper" class="batch-helper alert alert-info text-center hide no-select" role="alert" data-page-items="{{ usersLimit }}" data-all-items="{{ users.total }}">
+        <p>
+            <span class="batch-helper-message"
+                  data-all-selected-label="{{ 'admin.user.batch.allSelected.label'|trans({'%users%': users.total})|html }}"
+                  data-page-selected-label="{{ 'admin.user.batch.selection.label'|trans({'%users%': usersLimit})|html }}">
+                {{ 'admin.user.batch.selection.label'|trans({'%users%': usersLimit})|html }}
+            </span>
+            <span id="batch-select-all" class="batch-helper-select-all"
+                  data-is-select-all-enabled="{{ users.total > users.limit ? 1 : 0 }}"
+                  data-all-label="{{ 'admin.user.batch.selectionAll.label'|trans({'%allUsers%': users.total})|html }}"
+                  data-cancel-label="{{ 'admin.user.batch.cancelSelection.label'|trans }}">
+                {% if users.total > users.limit %}
+                    {{ 'admin.user.batch.selectionAll.label'|trans({'%allUsers%': users.total})|html }}
+                {% endif %}
+            </span>
+        </p>
+    </div>
+
+    {% if users.total > 0 %}
         <table class="table table-hover">
             <thead>
             <tr>
@@ -69,7 +89,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for userEventListView in userEventListViews.paginatedResult.results %}
+            {% for userEventListView in users.results %}
                 {% set rowSpanValue = userEventListView.userEventSheetsListViews|length %}
                 <tr>
                     <td rowspan="{{ rowSpanValue }}">
@@ -203,5 +223,5 @@
     </div>
     {{ form_end(batchForm) }}
 
-    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': userEventListViews.paginatedResult }) }}
+    {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': users }) }}
 {% endblock %}

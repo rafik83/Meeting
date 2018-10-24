@@ -135,14 +135,14 @@ Batch.prototype.toggle = function ()
  */
 Batch.prototype.toggleHelper = function (forceToggle) {
     var force = forceToggle || false;
-    var sheetsPerPage = parseInt(this.element.dataset.pageSheets);
+    var itemsPerPage = parseInt(this.element.dataset.pageItems);
 
     if (this.batchSelectionHelper !== null) {
         if (force === true) {
             this.batchSelectionHelper.toggle(); // show or hide batch selection helper;
-        } else if (this.count() !== sheetsPerPage) {
+        } else if (this.count() !== itemsPerPage) {
             this.batchSelectionHelper.disable();
-        } else if (this.count() === sheetsPerPage) {
+        } else if (this.count() === itemsPerPage) {
             this.batchSelectionHelper.enable();
         }
     }

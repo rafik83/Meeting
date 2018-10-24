@@ -1216,6 +1216,10 @@ admin.update_content.terms-of-sale.title: 'Modifier les conditions générales d
 admin.user.company-information: 'Informations de société'
 admin.user.contact-information: Coordonnées
 admin.user.events: Evénements
+admin.user.batch.allSelected.label: 'Tous les <strong>%users%</strong> utilisateurs de l''évenement sont seléctionnés.'
+admin.user.batch.cancelSelection.label: 'Annuler la sélection complète'
+admin.user.batch.selection.label: 'Les <strong>%users%</strong> utilisateurs de cette page sont sélectionnés.'
+admin.user.batch.selectionAll.label: 'Sélectionner les <strong>%allUsers%</strong> utilisateurs correspondants à vos filtres.'
 admin.users.details: 'Voir le compte'
 admin.users.batch.sendMail: Envoyer un mail
 admin.users.email: Email
