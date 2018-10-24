@@ -32,3 +32,6 @@ hautelook_alice:
     seed: 1
     persist_once: false
     loading_limit: 5
+
+snc_redis:
+    clients: ~
