@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\StaticFormulation\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\StaticFormulation;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\StaticFormulation\StaticFormulationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\StaticFormulation\UpdateType;
@@ -90,20 +91,15 @@ class UpdateAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $staticFormulations = $this->staticFormulationRepository->findByEventAndKey($event, $key);
         $remainingTypes = $this->typeRepository->getTypesByEvent($event);
-
-        foreach ($staticFormulations as $customizedStaticFormulation) {
-            $sortRemainingTypes = new SortRemainingTypes($customizedStaticFormulation, $remainingTypes);
-            $sortRemainingTypes->sort($staticFormulation);
-        }
+        $sortedRemainingTypes = $this->sortRemainingTypes($remainingTypes, $staticFormulation, $event, $key);
 
         $locale = $event->getAvailableLocale($request->getLocale());
         $command = new Update($staticFormulation);
         $form = $this->formFactory->create(UpdateType::class, $command, [
             'submit' => true,
             'locale' => $locale,
-            'remainingTypes' => $remainingTypes,
+            'remainingTypes' => $sortedRemainingTypes,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -120,5 +116,27 @@ class UpdateAction
             'event' => $event,
             'staticFormulationTitle' => $staticFormulation->getTitle($locale),
         ]));
+    }
+
+    /**
+     * @return Type[]
+     */
+    private function sortRemainingTypes(array $remainingTypes, StaticFormulation $staticFormulation, Event $event, string $key): array
+    {
+        $staticFormulations = $this->staticFormulationRepository->findByEventAndKey($event, $key);
+
+        foreach ($staticFormulations as $customizedStaticFormulation) {
+            if ($customizedStaticFormulation->getId() === $staticFormulation->getId()) {
+                continue;
+            }
+
+            foreach ($customizedStaticFormulation->getTypes() as $type) {
+                if (isset($remainingTypes[$type->getId()])) {
+                    unset($remainingTypes[$type->getId()]);
+                }
+            }
+        }
+
+        return $remainingTypes;
     }
 }
