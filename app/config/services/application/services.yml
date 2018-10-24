@@ -20,3 +20,228 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Encryption\SheetDecryptFileAdapter'
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
+
+    #
+    # Transactional
+    #
+    ### Mail
+    #### Substitution
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\ParticipantFullNameSubstitution:
+        arguments:
+            - '@template.participant_info_guesser'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\EventSubstitution: ~
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserFirstNameSubstitution:
+        arguments:
+            - '@template.participant_info_guesser'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserLastNameSubstitution:
+        arguments:
+            - '@template.participant_info_guesser'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TypeTitleSubstitution: ~
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ParticipantAccountLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TransactionTotalSubstitution:
+        arguments:
+            - '@adapter.intl_adapter'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\ParticipantAccountCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ParticipantAccountLinkSubstitution'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ActivateAccountLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+            - '@components.token.user.activate_account_token_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\ActivateAccountCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ActivateAccountLinkSubstitution'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SpotReferenceSubstitution: ~
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\AgendaLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\CatalogLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ProgramLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\MeetingRequestLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\OrdersLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ValidateMobilePhoneLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ExportMeetingLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\PackageLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\SheetLinkCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SheetPlanningSubstitution:
+        arguments:
+            - '@query.sheet.planning.sheet_planning_view_query_handler'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\AgendaConfirmationLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+            - '@domain.token.user_event_token_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\AgendaConfirmationCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\AgendaConfirmationLinkSubstitution'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\DownloadEbadgeCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@adapter.event_url_generator'
+            - '@domain.token.user_event_token_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\TestVisioConfigurationLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\TestVisioConfigurationCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\TestVisioConfigurationLinkSubstitution'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventActivateAccountAlreadyKnownCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventProFormaLinkSubstitution:
+        arguments:
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventProFormaCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventProFormaLinkSubstitution'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\GuestEmailSubstitution: ~
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\OrderNumeroSubstitution: ~
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\OrderDateSubstitution: ~
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionsProviders:
+        calls:
+        - ['registerSubstitution', ['%%event%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\EventSubstitution']]
+        - ['registerSubstitution', ['%%firstname%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserFirstNameSubstitution']]
+        - ['registerSubstitution', ['%%firstName%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserFirstNameSubstitution']]
+        - ['registerSubstitution', ['%%lastname%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserLastNameSubstitution']]
+        - ['registerSubstitution', ['%%lastName%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserLastNameSubstitution']]
+        - ['registerSubstitution', ['%%participant%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\ParticipantFullNameSubstitution']]
+        - ['registerSubstitution', ['%%guestEmail%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\GuestEmailSubstitution']]
+        - ['registerSubstitution', ['%%orderNumero%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\OrderNumeroSubstitution']]
+        - ['registerSubstitution', ['%%orderDate%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\OrderDateSubstitution']]
+        - ['registerSubstitution', ['%%transactionTotal%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TransactionTotalSubstitution']]
+        - ['registerSubstitution', ['%%participationType%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TypeTitleSubstitution']]
+        - ['registerSubstitution', ['%%urlEventAccountParticipant%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ParticipantAccountLinkSubstitution']]
+        - ['registerSubstitution', ['%%urlEventAccountParticipantWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\ParticipantAccountCTASubstitution']]
+        - ['registerSubstitution', ['%%urlEventActivateAccount%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ActivateAccountLinkSubstitution']]
+        - ['registerSubstitution', ['%%urlEventActivateAccountWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\ActivateAccountCTASubstitution']]
+        - ['registerSubstitution', ['%%sheetSpot%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SpotReferenceSubstitution']]
+        - ['registerSubstitution', ['%%sheetLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution']]
+        - ['registerSubstitution', ['%%urlSheet%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution']]
+        - ['registerSubstitution', ['%%urlEventSheet%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution']]
+        - ['registerSubstitution', ['%%urlEventSheetWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\SheetLinkCTASubstitution']]
+        - ['registerSubstitution', ['%%packageLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\PackageLinkSubstitution']]
+        - ['registerSubstitution', ['%%ordersLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\OrdersLinkSubstitution']]
+        - ['registerSubstitution', ['%%agendaLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\AgendaLinkSubstitution']]
+        - ['registerSubstitution', ['%%programLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ProgramLinkSubstitution']]
+        - ['registerSubstitution', ['%%catalogLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\CatalogLinkSubstitution']]
+        - ['registerSubstitution', ['%%meetingRequestLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\MeetingRequestLinkSubstitution']]
+        - ['registerSubstitution', ['%%activateAccountLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ActivateAccountLinkSubstitution']]
+        - ['registerSubstitution', ['%%exportMeetingSheetLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ExportMeetingLinkSubstitution']]
+        - ['registerSubstitution', ['%%validateMobilePhoneLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ValidateMobilePhoneLinkSubstitution']]
+        - ['registerSubstitution', ['%%sheetPlanning%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SheetPlanningSubstitution']]
+        - ['registerSubstitution', ['%%agendaConfirmationCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\AgendaConfirmationCTASubstitution']]
+        - ['registerSubstitution', ['%%agendaConfirmationLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\AgendaConfirmationLinkSubstitution']]
+        - ['registerSubstitution', ['%%downloadEbadgeCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\DownloadEbadgeCTASubstitution']]
+        - ['registerSubstitution', ['%%testVisioConfigurationLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\TestVisioConfigurationLinkSubstitution']]
+        - ['registerSubstitution', ['%%testVisioConfigurationCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\TestVisioConfigurationCTASubstitution']]
+        - ['registerSubstitution', ['%%urlEventActivateAccountAlreadyKnown%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution']]
+        - ['registerSubstitution', ['%%urlEventActivateAccountAlreadyKnownWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventActivateAccountAlreadyKnownCTASubstitution']]
+        - ['registerSubstitution', ['%%urlEventProForma%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventProFormaLinkSubstitution']]
+        - ['registerSubstitution', ['%%urlEventProFormaWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventProFormaCTASubstitution']]
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionsProviders'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService:
+        abstract:  true
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
+            - '@event_sender'
+            - '@query.mail.participant_mail_view_query_handler'
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
+
+    Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail'

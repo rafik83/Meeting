@@ -38,7 +38,7 @@ class MessagePlaceholderHelper
      *
      * @return array
      */
-    public function getPlaceholderData()
+    public function getPlaceholderData(): array
     {
         $placeholders = ['labels' => [], 'tags' => [], 'links' => []];
 
@@ -64,6 +64,29 @@ class MessagePlaceholderHelper
     }
 
     /**
+     * Generic Placeholders that do not require Sheet
+     *
+     * @return array
+     */
+    public function getGenericPlaceholderData(): array
+    {
+        $placeholders = ['labels' => [], 'tags' => []];
+
+        foreach (self::getMenuLabels() as $key => $label) {
+            $placeholders['labels'][$key] = $this->translator->trans($label);
+        }
+
+        foreach (self::TAG_LABELS as $placeholder => $label) {
+            $placeholders['tags'][] = [
+                'value' => $placeholder,
+                'text'  => $this->translator->trans($label),
+            ];
+        }
+
+        return $placeholders;
+    }
+
+    /**
      * @return string[] With menu name as key, and menu label as value
      */
     private static function getMenuLabels()
@@ -77,19 +100,24 @@ class MessagePlaceholderHelper
     /**
      * @return string[] With tag placeholder as key, and tag label as value
      */
-    private static function getTagLabels()
+    private static function getTagLabels(): array
     {
-        return [
-            Compose::TAG_EVENT_NAME              => 'admin.messaging.message.compose.tags.eventName',
-            Compose::TAG_PARTICIPANT             => 'admin.messaging.message.compose.tags.participant',
-            Compose::TAG_PARTICIPATION_TYPE      => 'admin.messaging.message.compose.tags.participationType',
-            Compose::TAG_SHEET_PLANNING          => 'admin.messaging.message.compose.tags.sheetPlanning',
-            Compose::TAG_SHEET_SPOT => 'admin.messaging.message.compose.tags.sheetSpot',
-            Compose::TAG_CTA_AGENDA_CONFIRMATION => 'admin.messaging.message.compose.tags.cta.agendaConfirmation',
-            Compose::TAG_CTA_EBADGE => 'admin.messaging.message.compose.tags.cta.ebadge',
-            Compose::TAG_CTA_TEST_VISIO_CONFIGURATION => 'admin.messaging.message.compose.tags.cta.test_visio_configuration',
-        ];
+        return array_merge(self::TAG_LABELS, self::TAG_WITH_SHEET_LABELS);
     }
+
+    public const TAG_LABELS = [
+        Compose::TAG_EVENT_NAME => 'admin.messaging.message.compose.tags.eventName',
+        Compose::TAG_PARTICIPANT => 'admin.messaging.message.compose.tags.participant',
+    ];
+
+    public const TAG_WITH_SHEET_LABELS = [
+        Compose::TAG_PARTICIPATION_TYPE => 'admin.messaging.message.compose.tags.participationType',
+        Compose::TAG_SHEET_PLANNING => 'admin.messaging.message.compose.tags.sheetPlanning',
+        Compose::TAG_SHEET_SPOT => 'admin.messaging.message.compose.tags.sheetSpot',
+        Compose::TAG_CTA_AGENDA_CONFIRMATION => 'admin.messaging.message.compose.tags.cta.agendaConfirmation',
+        Compose::TAG_CTA_EBADGE => 'admin.messaging.message.compose.tags.cta.ebadge',
+        Compose::TAG_CTA_TEST_VISIO_CONFIGURATION => 'admin.messaging.message.compose.tags.cta.test_visio_configuration',
+    ];
 
     /**
      * Label examples: 'Presentation sheet', 'Fiche de présentation', 'Package', 'Forfait', etc.
