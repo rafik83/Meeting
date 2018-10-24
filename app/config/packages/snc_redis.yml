@@ -1,0 +1,11 @@
+snc_redis:
+    clients:
+        session:
+            type: predis
+            alias: session
+            dsn: '%redis_dsn%'
+            logging: '%kernel.debug%'
+    session:
+        client: session
+        prefix: vimeet_session
+        ttl: 86400
