@@ -91,15 +91,15 @@ class UpdateAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $remainingTypes = $this->typeRepository->getTypesByEvent($event);
-        $sortedRemainingTypes = $this->sortRemainingTypes($remainingTypes, $staticFormulation, $event, $key);
+        $remainingTypesBeforeRemoval = $this->typeRepository->getTypesByEvent($event);
+        $remainingTypes = $this->removeUsedRemainingTypes($remainingTypesBeforeRemoval, $staticFormulation, $event, $key);
 
         $locale = $event->getAvailableLocale($request->getLocale());
         $command = new Update($staticFormulation);
         $form = $this->formFactory->create(UpdateType::class, $command, [
             'submit' => true,
             'locale' => $locale,
-            'remainingTypes' => $sortedRemainingTypes,
+            'remainingTypes' => $remainingTypes,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -121,7 +121,7 @@ class UpdateAction
     /**
      * @return Type[]
      */
-    private function sortRemainingTypes(array $remainingTypes, StaticFormulation $staticFormulation, Event $event, string $key): array
+    private function removeUsedRemainingTypes(array $remainingTypes, StaticFormulation $staticFormulation, Event $event, string $key): array
     {
         $staticFormulations = $this->staticFormulationRepository->findByEventAndKey($event, $key);
 
