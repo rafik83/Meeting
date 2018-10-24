@@ -1893,13 +1893,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
+
     command.messaging.campaign.process_handler:
         class: Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler
         arguments:
-            - '@repository.billing_info_repository'
             - '@repository.messaging.campaign_repository'
             - '@adapter.sendgrid_api_adapter'
-            - '@domain.messaging.substitutions_provider'
+            - '@Proximum\Vimeet\Domain\Messaging\GetUsersReceivers'
+            - '@Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Process }
 
@@ -5858,6 +5859,16 @@ services:
     domain.messaging.sendgrid_api_client:
         class: Proximum\Vimeet\Domain\Messaging\SendGridApiClient
         factory: ['@domain.messaging.sendgrid_api_client.factory', 'createClient']
+
+    Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers:
+        arguments:
+            - '@repository.billing_info_repository'
+            - '@domain.messaging.substitutions_provider'
+
+    Proximum\Vimeet\Domain\Messaging\GetUsersReceivers:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
+            - '@sheet.sheet_guesser'
 
     domain.messaging.substitutions_provider:
         class: Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider

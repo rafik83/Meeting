@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution
 
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
 use Proximum\Vimeet\Domain\Exception\Messaging\UndefinedSubstitutionProviderException;
-use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
+use Proximum\Vimeet\Domain\Model\MessageInterface;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 
 class SubstitutionHandler
@@ -25,7 +25,7 @@ class SubstitutionHandler
         $this->substitutionsProviders = $substitutionsProviders;
     }
 
-    public function handle(AbstractPrepareMail $prepareMail, Message $message): SubstitutionResult
+    public function handle(AbstractPrepareMail $prepareMail, MessageInterface $message): SubstitutionResult
     {
         $locale = $prepareMail->event->getAvailableLocale($prepareMail->locale);
         $subject = $message->getSubject($locale);
@@ -36,14 +36,22 @@ class SubstitutionHandler
             Constant::TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS
         );
 
-        $availableParameters = array_merge(
-            Constant::TRANSACTIONAL_MAIL_GENERIC_PARAMETERS,
-            Constant::TRANSACTIONAL_MAIL_LEGACY_GENERIC_PARAMETERS,
-            Constant::TRANSACTIONAL_MAIL_LIST[$prepareMail->type]['availableParameters'],
-            Constant::TRANSACTIONAL_MAIL_LIST[$prepareMail->type]['isCustomizableByType']
-                ? $sheetParameters
-                : []
-        );
+        if (!$prepareMail->type) {
+            $availableParameters = array_merge(
+                Constant::TRANSACTIONAL_MAIL_GENERIC_PARAMETERS,
+                Constant::TRANSACTIONAL_MAIL_LEGACY_GENERIC_PARAMETERS,
+                $sheetParameters
+            );
+        } else {
+            $availableParameters = array_merge(
+                Constant::TRANSACTIONAL_MAIL_GENERIC_PARAMETERS,
+                Constant::TRANSACTIONAL_MAIL_LEGACY_GENERIC_PARAMETERS,
+                Constant::TRANSACTIONAL_MAIL_LIST[$prepareMail->type]['availableParameters'],
+                Constant::TRANSACTIONAL_MAIL_LIST[$prepareMail->type]['isCustomizableByType']
+                    ? $sheetParameters
+                    : []
+            );
+        }
 
         $subjectSubstitutions = [];
         $contentSubstitutions = [];
