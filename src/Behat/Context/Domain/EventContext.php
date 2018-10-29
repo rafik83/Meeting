@@ -98,7 +98,7 @@ class EventContext implements Context
         $event = $this->getEvent();
 
         $this->eventContextProxy->getAccessManager()->setRegistrationOpenDate(
-            new \Datetime('now + 1 day'), $event
+            new \DateTime('now + 1 day'), $event
         );
     }
 
@@ -122,10 +122,10 @@ class EventContext implements Context
         $event = $this->getEvent();
 
         $this->eventContextProxy->getAccessManager()->setRegistrationOpenDate(
-            new \Datetime(), $event
+            new \DateTime(), $event
         );
         $this->eventContextProxy->getAccessManager()->setRegistrationCloseDate(
-            new \Datetime('now + 1 day'), $event
+            new \DateTime('now + 1 day'), $event
         );
     }
 

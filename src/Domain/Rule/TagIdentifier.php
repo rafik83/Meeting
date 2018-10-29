@@ -64,7 +64,7 @@ class TagIdentifier
             return $this->extractTags($who->getRegistrationTemplate());
         }
 
-        throw new NotImplementedException(sprintf('No method for %', get_class($who)));
+        throw new NotImplementedException(sprintf('No method for %s', \get_class($who)));
     }
 
     /**

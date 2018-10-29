@@ -26,10 +26,10 @@ class CategoryViewQueryHandlerTest extends TestCase
         $locale = 'fr';
 
         $categoryOne = new Category($event);
-        $categoryOne->translate($locale, 'category1', 'description');
+        $categoryOne->translate($locale, 'category1');
 
         $categoryTwo = new Category($event);
-        $categoryTwo->translate($locale, 'category2', 'description');
+        $categoryTwo->translate($locale, 'category2');
 
         $visibleCategories = [
             '1' => $categoryOne,
