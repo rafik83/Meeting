@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Tests\Application\Components\Transactional\Mail\Substi
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Adapter\EngineInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\SheetLinkCTASubstitution;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserCompleteProfileMailView;
+use Proximum\Vimeet\Domain\Adapter\TemplatingAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -39,7 +39,7 @@ class SheetLinkCTASubstitutionTest extends TestCase
         );
 
         $sheetLinkSubstitution = $this->prophesize(SheetLinkSubstitution::class);
-        $engine = $this->prophesize(EngineInterface::class);
+        $engine = $this->prophesize(TemplatingAdapterInterface::class);
         $sheetLinkSubstitution->substitute($mail)->shouldBeCalled()->willReturn('');
         $engine->render(Argument::any())->shouldNotBeCalled();
 
@@ -65,7 +65,7 @@ class SheetLinkCTASubstitutionTest extends TestCase
         );
 
         $sheetLinkSubstitution = $this->prophesize(SheetLinkSubstitution::class);
-        $engine = $this->prophesize(EngineInterface::class);
+        $engine = $this->prophesize(TemplatingAdapterInterface::class);
         $sheetLinkSubstitution->substitute($mail)->shouldBeCalled()->willReturn('https://super-event.vimeet.proximum/fr/sheet/123');
         $engine
             ->render('MailBundle:Mail:CTA/cta.html.twig', [

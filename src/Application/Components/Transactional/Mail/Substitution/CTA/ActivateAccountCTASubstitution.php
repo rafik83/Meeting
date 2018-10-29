@@ -10,25 +10,25 @@
 
 namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA;
 
-use Proximum\Vimeet\Application\Adapter\EngineInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ActivateAccountLinkSubstitution;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstituteInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
+use Proximum\Vimeet\Domain\Adapter\TemplatingAdapterInterface;
 
 class ActivateAccountCTASubstitution implements SubstituteInterface
 {
     /** @var ActivateAccountLinkSubstitution */
     private $activateAccountLinkSubstitution;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var TemplatingAdapterInterface */
+    private $templating;
 
     public function __construct(
         ActivateAccountLinkSubstitution $activateAccountLinkSubstitution,
-        EngineInterface $engine
+        TemplatingAdapterInterface $templating
     ) {
         $this->activateAccountLinkSubstitution = $activateAccountLinkSubstitution;
-        $this->engine = $engine;
+        $this->templating = $templating;
     }
 
     public function substitute(AbstractPrepareMail $prepareMail): string
@@ -39,7 +39,7 @@ class ActivateAccountCTASubstitution implements SubstituteInterface
             return '';
         }
 
-        return $this->engine->render('MailBundle:Mail:CTA/cta.html.twig', [
+        return $this->templating->render('MailBundle:Mail:CTA/cta.html.twig', [
             'label' => 'mail.activateAccount.activate',
             'link' => $link,
             'locale' => $prepareMail->locale

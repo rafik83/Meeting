@@ -14,21 +14,22 @@ use Proximum\Vimeet\Application\Adapter\EngineInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstituteInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
+use Proximum\Vimeet\Domain\Adapter\TemplatingAdapterInterface;
 
 class EventActivateAccountAlreadyKnownCTASubstitution implements SubstituteInterface
 {
     /** @var EventActivateAccountAlreadyKnownLinkSubstitution */
     private $eventActivateAccountAlreadyKnownLinkSubstitution;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var TemplatingAdapterInterface */
+    private $templating;
 
     public function __construct(
         EventActivateAccountAlreadyKnownLinkSubstitution $eventActivateAccountAlreadyKnownLinkSubstitution,
-        EngineInterface $engine
+        TemplatingAdapterInterface $templating
     ) {
         $this->eventActivateAccountAlreadyKnownLinkSubstitution = $eventActivateAccountAlreadyKnownLinkSubstitution;
-        $this->engine = $engine;
+        $this->templating = $templating;
     }
 
     public function substitute(AbstractPrepareMail $prepareMail): string
@@ -39,7 +40,7 @@ class EventActivateAccountAlreadyKnownCTASubstitution implements SubstituteInter
             return '';
         }
 
-        return $this->engine->render('MailBundle:Mail:CTA/cta.html.twig', [
+        return $this->templating->render('MailBundle:Mail:CTA/cta.html.twig', [
             'label' => 'mail.completeProfile.link',
             'link' => $link,
             'locale' => $prepareMail->locale
