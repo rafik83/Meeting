@@ -28,6 +28,7 @@ class BatchHandlerTest extends TestCase
 
         $batch = new Batch($event->reveal(), 'fr');
         $batch->campaignTitle = 'test';
+        $batch->isCampaignCreation = true;
         $batch->ids = [1, 2];
         $batch->locale = 'fr';
 

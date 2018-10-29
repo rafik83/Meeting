@@ -115,6 +115,8 @@ class ListAction
 
         $batchForm->handleRequest($request);
         if ($batchForm->isSubmitted() && $batchForm->isValid()) {
+            $batch->isCampaignCreation = $batchForm->get('sendMail')->isClicked();
+
             /** @var BatchCampaignResult $result */
             $result = $this->commandBus->handle($batch);
 

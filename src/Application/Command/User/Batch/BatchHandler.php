@@ -29,7 +29,7 @@ class BatchHandler
             );
         }
 
-        if ($batch->campaignTitle) {
+        if ($batch->isCampaignCreation && $batch->campaignTitle) {
             return $this->batchCampaignHandler->handle(
                 new BatchCampaign(
                     $batch->event,

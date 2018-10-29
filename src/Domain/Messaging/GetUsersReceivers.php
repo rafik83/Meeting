@@ -35,7 +35,7 @@ class GetUsersReceivers
             try {
                 $sheet = $this->sheetGuesser->getUserSheet($user, $event, $locale);
             } catch (\Exception $exception) {
-                $sheet = null;
+                continue;
             }
 
             $substitutionResult = $this->substitutionHandler->handle(

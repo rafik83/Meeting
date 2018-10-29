@@ -20,6 +20,9 @@ class Batch implements Command
     /** @var array */
     public $ids;
 
+    /** @var bool */
+    public $isCampaignCreation;
+
     /** @var string */
     public $campaignTitle;
 
