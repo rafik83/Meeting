@@ -719,3 +719,14 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
             - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'

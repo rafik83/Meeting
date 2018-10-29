@@ -1947,3 +1947,12 @@ admin_event_static_formulation_create:
         key: \w+
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\CreateAction
+
+admin_event_static_formulation_update:
+    path: /event/{event}/static-formulation/{key}/update/{staticFormulation}
+    requirements:
+        event: \d+
+        key: \w+
+        staticFormulation: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\UpdateAction

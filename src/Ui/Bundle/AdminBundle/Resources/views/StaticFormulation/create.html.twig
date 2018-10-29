@@ -1,5 +1,7 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
+{% block goback_link path('admin_event_static_formulation_list', {'event': event.id}) %}
+
 {% block form_title %}
     {{ 'admin.staticFormulation.action.create'|trans }}:  {{ originTitle }}
 {% endblock form_title %}
