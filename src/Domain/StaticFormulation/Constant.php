@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\StaticFormulation;
 
+use Proximum\Vimeet\Application\Components\Navigation\Category;
+
 class Constant
 {
     public const STATIC_FORMULATION_KEY_SHEET = 'sheet';
@@ -25,30 +27,39 @@ class Constant
     public const STATIC_FORMULATION_LIST = [
         self::STATIC_FORMULATION_KEY_SHEET => [
             'label' => 'navigation.category.sheet',
+            'categoryKey' => Category::SHEET,
         ],
         self::STATIC_FORMULATION_KEY_CATALOG => [
             'label' => 'navigation.category.catalog',
+            'categoryKey' => Category::CATALOG,
         ],
         self::STATIC_FORMULATION_KEY_MEETING_REQUEST => [
             'label' => 'navigation.category.meeting',
+            'categoryKey' => Category::MEETING,
         ],
         self::STATIC_FORMULATION_KEY_PACKAGE => [
             'label' => 'navigation.category.package',
+            'categoryKey' => Category::PACKAGE,
         ],
         self::STATIC_FORMULATION_KEY_AGENDA => [
             'label' => 'navigation.category.planning',
+            'categoryKey' => Category::AGENDA,
         ],
         self::STATIC_FORMULATION_KEY_PROGRAM => [
             'label' => 'navigation.category.program',
+            'categoryKey' => Category::PROGRAM,
         ],
         self::STATIC_FORMULATION_KEY_BILLING => [
             'label' => 'navigation.category.billing',
+            'categoryKey' => Category::BILLING,
         ],
         self::STATIC_FORMULATION_KEY_MEMBER_SPACE => [
             'label' => 'navigation.category.member_space',
+            'categoryKey' => Category::MEMBER_SPACE,
         ],
         self::STATIC_FORMULATION_KEY_BADGE => [
             'label' => 'navigation.category.badge',
+            'categoryKey' => Category::BADGE,
         ],
     ];
 }

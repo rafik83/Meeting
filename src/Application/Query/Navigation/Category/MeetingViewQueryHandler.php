@@ -21,19 +21,13 @@ use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class MeetingViewQueryHandler
 {
-    /**
-     * @var DateTimeInterface
-     */
+    /** @var DateTimeInterface */
     private $dateTime;
 
-    /**
-     * @var NavigationBuilderInterface
-     */
+    /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
     /**
-     * MeetingViewQueryHandler constructor.
-     *
      * @param DateTimeInterface          $dateTime
      * @param NavigationBuilderInterface $navigationBuilder
      */
@@ -61,7 +55,7 @@ class MeetingViewQueryHandler
         if (null === $catalogOnlineDate) {
             $linksView[] = new LinkView('navigation.links.incoming', null);
         } elseif ($catalogOnlineDate < $this->dateTime) {
-            if (!$meetingViewQuery->sheet->isInCatalog()) {
+            if (!$meetingViewQuery->sheet->isInInternalCatalog()) {
                 // catalog opened but sheet not in catalog
                 $linksView[] = new LinkView('navigation.links.catalog.sheet_not_in_catalog');
             } else {
@@ -122,6 +116,12 @@ class MeetingViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::MEETING, Category::MEETING_ICON, $linksView, true);
+        $categoryTitle = Category::MEETING;
+
+        if (null !== $meetingViewQuery->staticFormulation) {
+            $categoryTitle = $meetingViewQuery->staticFormulation->getTitle($meetingViewQuery->locale);
+        }
+
+        return new CategoryView($categoryTitle, Category::MEETING_ICON, $linksView, true);
     }
 }

@@ -54,9 +54,15 @@ class PackageSubmenuButtonViewQueryHandler
                 $route = 'event_order_summary_total';
             }
 
+            $subMenuTitle = 'navigation.category.package';
+
+            if (null !== $query->staticFormulation) {
+                $subMenuTitle = $query->staticFormulation->getTitle($query->locale);
+            }
+
             return new SubmenuButtonView(
                 Category::PACKAGE_ICON,
-                'navigation.category.package',
+                $subMenuTitle,
                 $this->navigationBuilder->getRoute($route, ['sheet' => $query->sheet->getId()]),
                 Route::isPackage($query->route),
                 true === $hasProductsInCart

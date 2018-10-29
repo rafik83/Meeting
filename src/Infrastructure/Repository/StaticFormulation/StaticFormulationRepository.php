@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\StaticFormulation;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\StaticFormulation;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\StaticFormulation\StaticFormulationRepositoryInterface;
 
 class StaticFormulationRepository implements StaticFormulationRepositoryInterface
@@ -28,21 +29,25 @@ class StaticFormulationRepository implements StaticFormulationRepositoryInterfac
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function add(StaticFormulation $staticFormulation): void
     {
         $this->entityManager->persist($staticFormulation);
         $this->entityManager->flush($staticFormulation);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function set(StaticFormulation $staticFormulation): void
     {
         $this->entityManager->flush($staticFormulation);
     }
 
     /**
-     * @param Event $event
-     *
-     * @return StaticFormulation[]
+     * {@inheritdoc}
      */
     public function findByEvent(Event $event): array
     {
@@ -58,10 +63,7 @@ class StaticFormulationRepository implements StaticFormulationRepositoryInterfac
     }
 
     /**
-     * @param Event  $event
-     * @param string $key
-     *
-     * @return StaticFormulation[]
+     * {@inheritdoc}
      */
     public function findByEventAndKey(Event $event, string $key): array
     {
@@ -75,9 +77,30 @@ class StaticFormulationRepository implements StaticFormulationRepositoryInterfac
             ->setParameter('key', $key)
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function findByTypeAndLocale(Type $type, string $locale): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('static_formulation, translation')
+            ->from(StaticFormulation::class, 'static_formulation')
+            ->join('static_formulation.types', 'type', 'WITH', 'type = :type')
+            ->join('static_formulation.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('type', $type)
+            ->setParameter('locale', $locale)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function remove(StaticFormulation $staticFormulation): void
     {
         $this->entityManager->remove($staticFormulation);
