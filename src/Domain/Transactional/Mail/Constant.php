@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Transactional\Mail;
 
+use Proximum\Vimeet\Domain\Model\Messaging\Compose;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
@@ -264,7 +265,7 @@ final class Constant
             'subject' => OrderConfirmMail::SUBJECT,
             'availableParameters' => [
                 '%orderDate%',
-                '%orderNumber%',
+                '%orderNumero%',
                 '%urlEventProForma%',
                 '%urlEventProFormaWithCTA%',
             ],
@@ -289,7 +290,18 @@ final class Constant
         '%lastName%',
     ];
 
+    public const TRANSACTIONAL_MAIL_LEGACY_GENERIC_PARAMETERS = [
+        '%firstname%',
+        '%lastname%',
+        '%participant%',
+    ];
+
     public const TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS = [
         '%participationType%',
     ];
+
+    public static function getEditorPlaceholders(): array
+    {
+        return Compose::getAllPlaceholders();
+    }
 }

@@ -59,8 +59,6 @@ class TransactionConfirmMail extends UserMail
     protected $lastname;
 
     /**
-     * TransactionConfirmEvent constructor.
-     *
      * @param Transaction         $transaction
      * @param User                $user
      * @param string              $sender
