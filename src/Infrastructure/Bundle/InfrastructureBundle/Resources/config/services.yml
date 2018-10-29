@@ -3860,6 +3860,7 @@ services:
             - '@query.agenda.cancel_attendance_unavailability_view_query_handler'
             - '@query.agenda.available_sheets.available_slots_by_participant_and_day_query_handler'
             - '@components:agenda.agenda_collision_manager'
+            - '@Proximum\Vimeet\Domain\Time\OverlappedTimeRangeMerger'
     query.agenda.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler
         arguments:

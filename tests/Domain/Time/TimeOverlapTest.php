@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Domain\Time;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Time\TimeOverlap;
 use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class TimeOverlapTest extends TestCase
 {
@@ -196,5 +197,29 @@ class TimeOverlapTest extends TestCase
         $haystack->getEnd()->willReturn(new \DateTime('2017-11-20 09:40:00'));
 
         $this->assertTrue(TimeOverlap::overlap($needle->reveal(), $haystack->reveal()));
+    }
+
+    public function testTouch()
+    {
+        $this->assertTrue(
+            TimeOverlap::touch(
+                new TimeRangeView(new \DateTime('2017-11-20 09:00:00'), new \DateTime('2017-11-20 10:00:00')),
+                new TimeRangeView(new \DateTime('2017-11-20 10:00:00'), new \DateTime('2017-11-20 11:00:00'))
+            )
+        );
+
+        $this->assertTrue(
+            TimeOverlap::touch(
+                new TimeRangeView(new \DateTime('2017-11-20 10:00:00'), new \DateTime('2017-11-20 11:00:00')),
+                new TimeRangeView(new \DateTime('2017-11-20 09:00:00'), new \DateTime('2017-11-20 10:00:00'))
+            )
+        );
+
+        $this->assertFalse(
+            TimeOverlap::touch(
+                new TimeRangeView(new \DateTime('2017-11-20 10:00:00'), new \DateTime('2017-11-20 11:00:00')),
+                new TimeRangeView(new \DateTime('2017-11-20 11:05:00'), new \DateTime('2017-11-20 12:00:00'))
+            )
+        );
     }
 }
