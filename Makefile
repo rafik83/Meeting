@@ -114,12 +114,6 @@ install-db@test:
 	bin/console doctrine:database:create --if-not-exists --env=test
 	bin/console doctrine:schema:update --force --env=test
 
-install-sessions:
-	bin/console doctrine:migrations:execute 20160829173500 --up --no-interaction
-
-install-sessions@test:
-	bin/console doctrine:migrations:execute 20160829173500 --up --no-interaction --env=test
-
 install-db-fixtures:
 	bin/console doctrine:fixtures:load -n
 
