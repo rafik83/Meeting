@@ -25,6 +25,8 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 class TextTransformer implements InputTransformerInterface
 {
+    private const CLEAN_SEARCH_FIELD_REGEX = '/[\+\-\/=&|:\?!^(){}\[\]><"~]/';
+
     public static function transform(Field $field): array
     {
         if (!self::supports($field)) {
@@ -73,16 +75,18 @@ class TextTransformer implements InputTransformerInterface
 
     private static function getFilterQuery(Field $field): ?string
     {
+        $cleanValue = preg_replace(self::CLEAN_SEARCH_FIELD_REGEX, ' ', $field->getValue());
+
         switch (\get_class($field->getComparisonOperator())) {
             case ComparisonOperatorEndsWith::class:
             case ComparisonOperatorNotEndsWith::class:
-                return sprintf('*%s', $field->getValue());
+                return sprintf('*%s', $cleanValue);
             case ComparisonOperatorBeginsWith::class:
             case ComparisonOperatorNotBeginsWith::class:
-                return sprintf('%s*', $field->getValue());
+                return sprintf('%s*', $cleanValue);
             case ComparisonOperatorContains::class:
             case ComparisonOperatorNotContains::class:
-                return sprintf('*%s*', $field->getValue());
+                return sprintf('*%s*', $cleanValue);
             default:
                 return $field->getValue();
         }
