@@ -59,13 +59,7 @@ class Campaign
     /** @var \DateTimeInterface|null */
     private $processedAt;
 
-    /**
-     * @param Event              $event
-     * @param string             $title
-     * @param array              $filters
-     * @param \DateTimeInterface $createdAt
-     */
-    public function __construct(Event $event, $title, $filters, \DateTimeInterface $createdAt)
+    public function __construct(Event $event, $title, $filters, \DateTimeInterface $createdAt, ?string $recipient = null)
     {
         $this->event     = $event;
         $this->title     = $title;
@@ -75,6 +69,10 @@ class Campaign
         $this->sheets = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->recipients = [];
+
+        if ($recipient) {
+            $this->recipients[] = $recipient;
+        }
     }
 
     /**
@@ -180,7 +178,6 @@ class Campaign
             self::RECIPIENT_SHEET_OWNER,
             self::RECIPIENT_PARTICIPANTS,
             self::RECIPIENT_BILLING_CONTACT,
-            self::RECIPIENT_USER,
         ];
     }
 

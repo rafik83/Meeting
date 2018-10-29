@@ -22,18 +22,13 @@ class BatchCampaignHandlerTest extends TestCase
         $date = new \DateTime();
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findOneById(1)
+        $userRepository->findByIds([1, 2])
             ->shouldBeCalled()
-            ->willReturn($user1->reveal());
-        $userRepository->findOneById(2)
-            ->shouldBeCalled()
-            ->willReturn($user2->reveal());
+            ->willReturn([$user1->reveal(), $user2->reveal()]);
 
-        $campaign = new Campaign($event->reveal(), 'test', [], $date);
+        $campaign = new Campaign($event->reveal(), 'test', [], $date, Campaign::RECIPIENT_USER);
         $campaign->addUser($user1->reveal());
         $campaign->addUser($user2->reveal());
-        $campaign->addRecipient(Campaign::RECIPIENT_USER);
-        $campaign->addRecipient(Campaign::RECIPIENT_USER);
 
         $campaignRepository = $this->prophesize(CampaignRepositoryInterface::class);
         $campaignRepository->add($campaign)->shouldBeCalled();

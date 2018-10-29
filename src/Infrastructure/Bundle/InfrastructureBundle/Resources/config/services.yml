@@ -2107,7 +2107,7 @@ services:
     Proximum\Vimeet\Application\Command\User\Batch\BatchHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Command\User\Batch\BatchCampaignHandler'
-            - '@vimeet_infrastructure.repository.user_repository'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserIdsByEvent'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Batch\Batch }
 
@@ -3736,6 +3736,14 @@ services:
             - '@vimeet_infrastructure.repository.category_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserIdsByEvent:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserIdsByEventQuery }
 
     #
     # Program query

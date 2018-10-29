@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserIdsByEvent;
 
 class BatchHandlerTest extends TestCase
 {
@@ -19,7 +20,7 @@ class BatchHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $campaign = $this->prophesize(Campaign::class);
 
-        $userRepositoryInterface = $this->prophesize(UserRepositoryInterface::class);
+        $getUserIdsByEvent = $this->prophesize(GetUserIdsByEvent::class);
         $batchCampaignHandler = $this->prophesize(BatchCampaignHandler::class);
         $batchCampaignHandler->handle(new BatchCampaign($event->reveal(), 'fr', [1, 2], 'test'))
             ->shouldBeCalled()
@@ -30,7 +31,7 @@ class BatchHandlerTest extends TestCase
         $batch->ids = [1, 2];
         $batch->locale = 'fr';
 
-        $handler = new BatchHandler($batchCampaignHandler->reveal(), $userRepositoryInterface->reveal());
+        $handler = new BatchHandler($batchCampaignHandler->reveal(), $getUserIdsByEvent->reveal());
         $result = $handler->handle($batch);
 
         $this->assertEquals($result, new BatchCampaignResult($campaign->reveal()));
@@ -44,7 +45,7 @@ class BatchHandlerTest extends TestCase
     {
         $event = $this->prophesize(Event::class);
 
-        $userRepositoryInterface = $this->prophesize(UserRepositoryInterface::class);
+        $getUserIdsByEvent = $this->prophesize(GetUserIdsByEvent::class);
         $batchCampaignHandler = $this->prophesize(BatchCampaignHandler::class);
         $batchCampaignHandler->handle(new BatchCampaign($event->reveal(), 'fr', [1, 2], 'test'))
             ->shouldNotBeCalled();
@@ -53,7 +54,7 @@ class BatchHandlerTest extends TestCase
         $batch->ids = [1, 2];
         $batch->locale = 'fr';
 
-        $handler = new BatchHandler($batchCampaignHandler->reveal(), $userRepositoryInterface->reveal());
+        $handler = new BatchHandler($batchCampaignHandler->reveal(), $getUserIdsByEvent->reveal());
         $handler->handle($batch);
     }
 }

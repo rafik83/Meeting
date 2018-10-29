@@ -2,31 +2,31 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Batch;
 
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserIdsByEventQuery;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserIdsByEvent;
 
 class BatchHandler
 {
     /** @var BatchCampaignHandler */
     private $batchCampaignHandler;
 
-    /** @var UserRepositoryInterface */
-    private $userRepository;
+    /** @var GetUserIdsByEvent */
+    private $getUserIdsByEvent;
 
     public function __construct(
         BatchCampaignHandler $batchCampaignHandler,
-        UserRepositoryInterface $userRepository
+        GetUserIdsByEvent $getUserIdsByEvent
     ) {
         $this->batchCampaignHandler = $batchCampaignHandler;
-        $this->userRepository = $userRepository;
+        $this->getUserIdsByEvent = $getUserIdsByEvent;
     }
 
     public function handle(Batch $batch): BatchResultInterface
     {
         if (Batch::SELECTION_TYPE_ALL === $batch->selectionType) {
-            $batch->ids = array_map(function (User $user) {
-                return $user->getId();
-            }, $this->userRepository->findWithEnabledSheetByEvent($batch->event));
+            $batch->ids = $this->getUserIdsByEvent->handle(
+                new GetUserIdsByEventQuery($batch->event, $batch->locale, $batch->condition)
+            );
         }
 
         if ($batch->campaignTitle) {

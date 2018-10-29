@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Command\User\Batch;
 
 use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class Batch implements Command
@@ -25,9 +26,13 @@ class Batch implements Command
     /** @var string */
     public $selectionType;
 
-    public function __construct(Event $event, string $locale)
+    /** @var null|Condition */
+    public $condition;
+
+    public function __construct(Event $event, string $locale, ?Condition $condition = null)
     {
         $this->event = $event;
         $this->locale = $locale;
+        $this->condition = $condition;
     }
 }

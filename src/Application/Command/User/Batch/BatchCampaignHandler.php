@@ -4,7 +4,6 @@ namespace Proximum\Vimeet\Application\Command\User\Batch;
 
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class BatchCampaignHandler
@@ -30,16 +29,11 @@ class BatchCampaignHandler
 
     public function handle(BatchCampaign $batch): BatchCampaignResult
     {
-        $campaign = new Campaign($batch->event, $batch->campaignTitle, [], $this->datetime);
+        $campaign = new Campaign($batch->event, $batch->campaignTitle, [], $this->datetime, Campaign::RECIPIENT_USER);
+        $users = $this->userRepository->findByIds($batch->ids);
 
-        foreach ($batch->ids as $id) {
-            $user = $this->userRepository->findOneById($id);
-            if (!$user instanceof User) {
-                continue;
-            }
-
+        foreach ($users as $user) {
             $campaign->addUser($user);
-            $campaign->addRecipient(Campaign::RECIPIENT_USER);
         }
 
         $this->campaignRepository->add($campaign);

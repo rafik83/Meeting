@@ -93,18 +93,20 @@ class ListAction
             $this->ruleStorageInterface->saveRules($event, 'user', $request->query->get('rules'));
         }
 
+        $rules = $this->ruleStorageInterface->getRules($event, 'user');
+
         $userEventListViews = $this->queryBus->handle(
             new GetUserEventListViewsQuery(
                 $event,
                 $page,
                 $locale,
-                $this->ruleStorageInterface->getRules($event, 'user')
+                $rules
             )
         );
 
         $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $request->getLocale()));
 
-        $batch = new Batch($event, $locale);
+        $batch = new Batch($event, $locale, $rules);
         $batchForm = $this->formFactory->create(BatchType::class, $batch, [
             'ids' => $userEventListViews->paginatedResult->map(function(UserEventListView $eventListView) {
                 return $eventListView->userId;
