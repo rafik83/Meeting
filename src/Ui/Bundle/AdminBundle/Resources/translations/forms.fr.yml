@@ -1031,11 +1031,13 @@ form.transaction.children.transaction_mode.bank_check: Chèque
 form.transaction.children.transaction_mode.bank_transfer: Virement
 form.transaction.children.transaction_mode.paypal: Paypal
 form.transactional_mail_customize.children.associatedTypes.label: 'Types associés'
-form.transactional_mail_customize.children.submit.label: Personnaliser
+form.transactional_mail_customize.children.enabled.label: 'Activé'
+form.transactional_mail_customize.children.submit.label: 'Personnaliser'
 form.transactional_mail_customize.children.translations.label: 'Traductions du contenu'
 form.transactional_mail_customize.children.translations.prototype.children.content.label: Contenu
 form.transactional_mail_customize.children.translations.prototype.children.subject.label: Sujet
 form.transactional_mail_update_customized.children.associatedTypes.label: 'Types associés'
+form.transactional_mail_update_customized.children.enabled.label: 'Activé'
 form.transactional_mail_update_customized.children.submit.label: 'Mettre à jour'
 form.transactional_mail_update_customized.children.translations.label: 'Traductions du contenu'
 form.transactional_mail_update_customized.children.translations.prototype.children.content.label: Contenu

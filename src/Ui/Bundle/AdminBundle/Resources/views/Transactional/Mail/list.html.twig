@@ -63,7 +63,12 @@
             </tr>
             {% for customizedMail in mail.customizedMailViews %}
                 <tr>
-                    <td>{{ customizedMail.subject }}</td>
+                    <td>
+                        {{ customizedMail.subject }}
+                        {% if not customizedMail.isEnabled %}
+                            <label class="label label-danger">{{ 'admin.transactional.mail.list.disabled'|trans }}</label>
+                        {% endif %}
+                    </td>
                     <td>
                         {% if customizedMail.isCustomizableByTypes %}
                             <ul>
