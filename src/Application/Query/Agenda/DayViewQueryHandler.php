@@ -163,7 +163,10 @@ class DayViewQueryHandler
     }
 
     /**
+     * @param TimeRangeView        $day
      * @param UnavailabilityView[] $unavailabilityViews
+     *
+     * @return bool
      */
     private function isUnavailableForThisDay(TimeRangeView $day, array $unavailabilityViews): bool
     {
