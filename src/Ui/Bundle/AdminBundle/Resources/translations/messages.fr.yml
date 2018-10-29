@@ -994,6 +994,17 @@ admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'
 admin.spot.visio.no: Non
 admin.spot.visio.yes: Oui
+admin.staticFormulation.action.remove: 'Supprimer'
+admin.staticFormulation.action.remove.confirm: 'Êtes vous sûr de vouloir supprimer cette personnalisation'
+admin.staticFormulation.action.create: 'Personnaliser'
+admin.staticFormulation.action.update: 'Mettre à jour'
+admin.staticFormulation.link: 'Formulation statique'
+admin.staticFormulation.list.title: 'Formulation statique'
+admin.staticFormulation.list.column.origin: 'Titre d''origine'
+admin.staticFormulation.list.column.title: 'Titre'
+admin.staticFormulation.list.column.type: 'Types de participation associés'
+admin.staticFormulation.type.all: Tous
+admin.staticFormulation.type.none: Aucun
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'
 admin.template.action.addLanguage: 'Ajouter une langue'

@@ -47,3 +47,9 @@ services:
     Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Domain\Repository\StaticFormulation\StaticFormulationRepositoryInterface: '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'

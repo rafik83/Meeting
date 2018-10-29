@@ -5205,6 +5205,7 @@ services:
             - '@domain.event.catalog.external.search-facet.duplicator'
             - '@domain.event.catalog.external.visibility.duplicator'
             - '@domain.event.message.duplicator'
+            - '@Proximum\Vimeet\Domain\Event\StaticFormulation\Duplicator'
 
     domain.event.content.duplicator:
         class: Proximum\Vimeet\Domain\Event\Content\Duplicator
@@ -5296,6 +5297,10 @@ services:
         arguments:
             - '@repository.messaging.message_repository'
             - '@datetime'
+
+    Proximum\Vimeet\Domain\Event\StaticFormulation\Duplicator:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
 
     domain.event.last_event_participation:
         class: Proximum\Vimeet\Domain\Event\LastEventParticipation

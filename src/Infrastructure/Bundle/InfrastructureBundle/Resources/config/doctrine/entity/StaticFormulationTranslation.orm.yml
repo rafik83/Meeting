@@ -1,0 +1,19 @@
+Proximum\Vimeet\Domain\Model\StaticFormulationTranslation:
+    type:  entity
+    table: static_formulation_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        locale:
+            type: string
+        title:
+            type: string
+    manyToOne:
+        staticFormulation:
+            targetEntity: Proximum\Vimeet\Domain\Model\StaticFormulation
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE
