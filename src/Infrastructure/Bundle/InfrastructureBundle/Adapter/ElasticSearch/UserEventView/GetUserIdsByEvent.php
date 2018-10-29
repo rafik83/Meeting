@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchConstant;
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserIdsByEventQuery;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\ConditionRulesTransformerInterface;
-use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter;
 
@@ -24,19 +23,14 @@ class GetUserIdsByEvent
     /** @var SearchAdapter */
     private $searchAdapter;
 
-    /** @var ElasticDocumentsToUserEventListViewsTransformer */
-    private $elasticDocumentsToUserEventListViewsTranformer;
-
     /** @var ConditionRulesTransformerInterface */
     private $conditionRulesTransformer;
 
     public function __construct(
         SearchAdapter $searchAdapter,
-        ElasticDocumentsToUserEventListViewsTransformer $elasticDocumentsToUserEventListViewsTranformer,
         ConditionRulesTransformerInterface $conditionRulesTransformer
     ) {
         $this->searchAdapter = $searchAdapter;
-        $this->elasticDocumentsToUserEventListViewsTranformer = $elasticDocumentsToUserEventListViewsTranformer;
         $this->conditionRulesTransformer = $conditionRulesTransformer;
     }
 
@@ -72,12 +66,10 @@ class GetUserIdsByEvent
             ]
         );
 
-        $resultSet = $this->searchAdapter->handleQuery(TypesMapping::getTypeByClass(UserEventView::class), $query);
-        $results = $this->elasticDocumentsToUserEventListViewsTranformer->handle($resultSet->getDocuments(), $getUserIdsQuery->locale);
+        $documents = $this->searchAdapter->handleQuery(TypesMapping::getTypeByClass(UserEventView::class), $query);
 
-        /** @var UserEventListView $result */
-        foreach ($results as $result) {
-            $ids[] = $result->userId;
+        foreach ($documents->getDocuments() as $document) {
+            $ids[] = $document->getData()[TypesMapping::USER_EVENT_VIEW_USER_ID];
         }
 
         return $ids;

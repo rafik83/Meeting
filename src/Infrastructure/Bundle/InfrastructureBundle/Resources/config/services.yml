@@ -3740,7 +3740,6 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserIdsByEvent:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
-            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\ElasticDocumentsToUserEventListViewsTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserIdsByEventQuery }
