@@ -29,12 +29,16 @@ class UpdateCustomized implements Command
     /** @var Message */
     public $message;
 
+    /** @var bool */
+    public $enabled;
+
     public function __construct(Message $message, array $data)
     {
         $this->data = $data;
         $this->associatedTypes = $message->getAssociatedParticipationTypes();
 
         $this->translations = [];
+        $this->enabled = $message->isEnabled();
 
         foreach ($message->getEvent()->getLocales() as $locale) {
             $this->translations[$locale] = [

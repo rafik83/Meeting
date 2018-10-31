@@ -15,9 +15,9 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 class RadioTransformer implements InputTransformerInterface
 {
-    public static function transform(Field $field): array
+    public function transform(Field $field): array
     {
-        if (!self::supports($field)) {
+        if (!$this->supports($field)) {
             return [];
         }
 
@@ -28,7 +28,7 @@ class RadioTransformer implements InputTransformerInterface
         ];
     }
 
-    public static function supports(Field $field): bool
+    public function supports(Field $field): bool
     {
         return 'radio' === $field->getInput();
     }

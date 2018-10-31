@@ -67,38 +67,53 @@
                             </span>
                         </p>
                     </header>
-                    <div class="meets">
-                        {% if day.isSheetAttendingTheEvent %}
-                            {% for happening in day.happenings %}
-                                {{ include('EventBundle:Agenda:happening.html.twig', {'isVisio': isVisio, 'sheet': agenda.sheet, 'happening': happening, 'participant': participant, isUserAloneParticipant: agenda.isUserAloneParticipant }) }}
-                            {% endfor %}
-
-                            {% for unavailability in day.unavailabilities %}
-                                {{ include('EventBundle:Agenda:unavailability.html.twig', {'isVisio': isVisio, 'sheetId': agenda.sheet.id, 'participant': participant, 'unavailability': unavailability, 'participantId': agenda.participant.id }) }}
-                            {% endfor %}
-
-                            {% for mass in day.masses %}
-                                {{ include('EventBundle:Agenda:mass.html.twig', {'isVisio': isVisio, 'mass': mass, 'participant': participant}) }}
-                            {% endfor %}
-
-                            {% for meeting in day.meetings %}
-                                {{ include('EventBundle:Agenda:meeting.html.twig', {'isVisio': isVisio, 'sheetId': agenda.sheet.id, 'participant': participant, 'participantId': agenda.participant.id, 'meeting': meeting }) }}
-                            {% endfor %}
-
-                            {% for availableSlotView in day.availableSlotViews %}
-                                <div class="meet available"
-                                     data-beginHour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}"
-                                     data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
-                                     data-slot-id="{{ availableSlotView.id }}"
-                                >
-                                    <header><div class="content"></div></header>
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            {{ include('EventBundle:Unavailability/CancelAttendance:cancelAttendanceUnavailability.html.twig', {'isVisio': isVisio, 'cancelAttendanceUnavailability': day.cancelAttendanceUnavailabilityView, 'participant': participant }) }}
+                    <div {% if day.isUnavailableForThisDay %}data-toggle-visibility data-toggle-visibility-display-type="inline"{% endif %}>
+                        {% if day.isUnavailableForThisDay %}
+                            <p>
+                                <a href="#" class="btn btn-gray" data-toggle-visibility-show>
+                                    {{ 'agenda.day.see'|trans }}
+                                </a>
+                                <a href="#" class="btn btn-gray" data-toggle-visibility-hide style="display: none;">
+                                    {{ 'agenda.day.hide'|trans }}
+                                </a>
+                            </p>
                         {% endif %}
+
+                        <div {% if day.isUnavailableForThisDay %}data-toggle-visibility-element-to-open{% endif %}>
+                            <div class="meets">
+                                {% if day.isSheetAttendingTheEvent %}
+                                    {% for happening in day.happenings %}
+                                        {{ include('EventBundle:Agenda:happening.html.twig', {'isVisio': isVisio, 'sheet': agenda.sheet, 'happening': happening, 'participant': participant, isUserAloneParticipant: agenda.isUserAloneParticipant }) }}
+                                    {% endfor %}
+
+                                    {% for unavailability in day.unavailabilities %}
+                                        {{ include('EventBundle:Agenda:unavailability.html.twig', {'isVisio': isVisio, 'sheetId': agenda.sheet.id, 'participant': participant, 'unavailability': unavailability, 'participantId': agenda.participant.id }) }}
+                                    {% endfor %}
+
+                                    {% for mass in day.masses %}
+                                        {{ include('EventBundle:Agenda:mass.html.twig', {'isVisio': isVisio, 'mass': mass, 'participant': participant}) }}
+                                    {% endfor %}
+
+                                    {% for meeting in day.meetings %}
+                                        {{ include('EventBundle:Agenda:meeting.html.twig', {'isVisio': isVisio, 'sheetId': agenda.sheet.id, 'participant': participant, 'participantId': agenda.participant.id, 'meeting': meeting }) }}
+                                    {% endfor %}
+
+                                    {% for availableSlotView in day.availableSlotViews %}
+                                        <div class="meet available"
+                                             data-beginHour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}"
+                                             data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
+                                             data-slot-id="{{ availableSlotView.id }}"
+                                        >
+                                            <header><div class="content"></div></header>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    {{ include('EventBundle:Unavailability/CancelAttendance:cancelAttendanceUnavailability.html.twig', {'isVisio': isVisio, 'cancelAttendanceUnavailability': day.cancelAttendanceUnavailabilityView, 'participant': participant }) }}
+                                {% endif %}
+                            </div>
+                            <div class="layout"></div>
+                        </div>
                     </div>
-                    <div class="layout"></div>
                 </div>
             {% endfor %}
         </div>

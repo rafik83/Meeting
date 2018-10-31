@@ -27,16 +27,16 @@ class TextTransformer implements InputTransformerInterface
 {
     private const CLEAN_SEARCH_FIELD_REGEX = '/[\+\-\/=&|:\?!^(){}\[\]><"~]/';
 
-    public static function transform(Field $field): array
+    public function transform(Field $field): array
     {
-        if (!self::supports($field)) {
+        if (!$this->supports($field)) {
             return [];
         }
 
-        $query = self::getQuery($field);
+        $query = $this->getQuery($field);
         $query = NestedQueryTransformer::transformIfNeeded($field, $query);
 
-        if (self::isContraryComparisonOperator($field)) {
+        if ($this->isContraryComparisonOperator($field)) {
             $query = [
                 'bool' => [
                     'must_not' => $query,
@@ -47,14 +47,14 @@ class TextTransformer implements InputTransformerInterface
         return $query;
     }
 
-    private static function getQuery(Field $field): array
+    private function getQuery(Field $field): array
     {
         if ($field->getComparisonOperator() instanceof ComparisonOperatorEqual
             || $field->getComparisonOperator() instanceof ComparisonOperatorNotEqual
         ) {
             return [
                 'match' => [
-                    QueryKeyTransformer::getQueryKey($field) => self::getFilterQuery($field),
+                    QueryKeyTransformer::getQueryKey($field) => $this->getFilterQuery($field),
                 ],
             ];
         }
@@ -62,18 +62,18 @@ class TextTransformer implements InputTransformerInterface
         return [
             'query_string' => [
                 'default_field' => QueryKeyTransformer::getQueryKey($field),
-                'query' => self::getFilterQuery($field),
+                'query' => $this->getFilterQuery($field),
                 'default_operator' => 'AND',
             ],
         ];
     }
 
-    private static function isContraryComparisonOperator(Field $field): bool
+    private function isContraryComparisonOperator(Field $field): bool
     {
         return $field->getComparisonOperator() instanceof ComparisonContraryOperatorInterface;
     }
 
-    private static function getFilterQuery(Field $field): ?string
+    private function getFilterQuery(Field $field): ?string
     {
         $cleanValue = preg_replace(self::CLEAN_SEARCH_FIELD_REGEX, ' ', $field->getValue());
 
@@ -92,7 +92,7 @@ class TextTransformer implements InputTransformerInterface
         }
     }
 
-    public static function supports(Field $field): bool
+    public function supports(Field $field): bool
     {
         return 'text' === $field->getInput();
     }

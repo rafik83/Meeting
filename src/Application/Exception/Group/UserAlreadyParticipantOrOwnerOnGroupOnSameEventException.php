@@ -22,6 +22,8 @@ class UserAlreadyParticipantOrOwnerOnGroupOnSameEventException extends GroupExce
      */
     public function __construct($email = null)
     {
+        parent::__construct();
+
         $this->email = $email;
     }
 }

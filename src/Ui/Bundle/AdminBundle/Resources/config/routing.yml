@@ -1921,3 +1921,38 @@ admin_event_transaction_mail_delete:
         message: \d+
     methods: [DELETE]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\DeleteAction
+
+#
+# Static Formulation
+#
+admin_event_static_formulation_list:
+    path: /event/{event}/static-formulation
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\ListAction
+
+admin_event_static_formulation_remove:
+    path: /event/{event}/static-formulation/{staticFormulation}/remove
+    requirements:
+        event: \d+
+        staticFormulation: \d+
+    methods: [DELETE]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\DeleteAction
+
+admin_event_static_formulation_create:
+    path: /event/{event}/static-formulation/{key}/create
+    requirements:
+        event: \d+
+        key: \w+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\CreateAction
+
+admin_event_static_formulation_update:
+    path: /event/{event}/static-formulation/{key}/update/{staticFormulation}
+    requirements:
+        event: \d+
+        key: \w+
+        staticFormulation: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\UpdateAction

@@ -17,7 +17,7 @@ interface RuleStorageInterface
 {
     public function getRulesQuery(Event $event, string $type): ?string;
 
-    public function getRules(Event $event, string $type): ?RuleInterface;
+    public function getRules(Event $event, string $locale, string $type): ?RuleInterface;
 
     public function saveRules(Event $event, string $type, string $rules): void;
 

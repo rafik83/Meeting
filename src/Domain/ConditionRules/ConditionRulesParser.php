@@ -15,11 +15,13 @@ use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOper
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorContains;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEndsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorIn;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorInterface;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotContains;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotEndsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotEqual;
+use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotIn;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNull;
 use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
@@ -28,30 +30,41 @@ use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorAn
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorInterface;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorOr;
 use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class ConditionRulesParser
 {
-    public static function parse(array $condition): RuleInterface
+    public static function parse(Event $event, string $locale, array $condition): RuleInterface
     {
         $buildRules = [];
 
         foreach ($condition['rules'] as $rule) {
-            $buildRules[] = self::rulesBuilder($rule);
+            $buildRules[] = self::rulesBuilder($event, $locale, $rule);
         }
 
-        return new Condition(self::getLogicalOperator($condition), $buildRules);
+        return new Condition(
+            $event,
+            $locale,
+            self::getLogicalOperator($condition),
+            $buildRules
+        );
     }
 
-    private static function rulesBuilder(array $initialRule): RuleInterface
+    private static function rulesBuilder(Event $event, string $locale, array $initialRule): RuleInterface
     {
         if (isset($initialRule['rules'])) {
             $subBuildRules = [];
 
             foreach ($initialRule['rules'] as $subInitialRule) {
-                $subBuildRules[] = self::rulesBuilder($subInitialRule);
+                $subBuildRules[] = self::rulesBuilder($event, $locale, $subInitialRule);
             }
 
-            return new Condition(self::getLogicalOperator($initialRule), $subBuildRules);
+            return new Condition(
+                $event,
+                $locale,
+                self::getLogicalOperator($initialRule),
+                $subBuildRules
+            );
         }
 
         return new Field(
@@ -76,6 +89,10 @@ class ConditionRulesParser
                 return new ComparisonOperatorEqual();
             case 'not_equal':
                 return new ComparisonOperatorNotEqual();
+            case 'in':
+                return new ComparisonOperatorIn();
+            case 'not_in':
+                return new ComparisonOperatorNotIn();
             case 'contains':
                 return new ComparisonOperatorContains();
             case 'not_contains':

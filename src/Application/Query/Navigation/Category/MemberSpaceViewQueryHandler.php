@@ -18,19 +18,13 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class MemberSpaceViewQueryHandler
 {
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var NavigationBuilderInterface
-     */
+    /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
     /**
-     * MemberSpaceViewQueryHandler constructor.
-     *
      * @param TemplateDataFactory        $templateDataFactory
      * @param NavigationBuilderInterface $navigationBuilder
      */
@@ -45,7 +39,7 @@ class MemberSpaceViewQueryHandler
      *
      * @return null|CategoryView
      */
-    public function handle(MemberSpaceViewQuery $memberSpaceQuery)
+    public function handle(MemberSpaceViewQuery $memberSpaceQuery): ?CategoryView
     {
         $participant = $memberSpaceQuery->sheet->getUserParticipant($memberSpaceQuery->user);
 
@@ -87,6 +81,12 @@ class MemberSpaceViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::MEMBER_SPACE, Category::MEMBER_SPACE_ICON, $linksView, false);
+        $categoryTitle = Category::MEMBER_SPACE;
+
+        if (null !== $memberSpaceQuery->staticFormulation) {
+            $categoryTitle = $memberSpaceQuery->staticFormulation->getTitle($memberSpaceQuery->locale);
+        }
+
+        return new CategoryView($categoryTitle, Category::MEMBER_SPACE_ICON, $linksView, false);
     }
 }

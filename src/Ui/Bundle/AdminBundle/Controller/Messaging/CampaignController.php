@@ -74,6 +74,8 @@ class CampaignController extends Controller
         if ($request->query->get('rules')) {
             $rules = $this->get(QueryBusInterface::class)->handle(
                 new GetConditionRulesQuery(
+                    $event,
+                    $locale,
                     json_decode($request->query->get('rules'), true)
                 )
             );
@@ -101,7 +103,7 @@ class CampaignController extends Controller
         }
 
         $filters = $this->get(QueryBusInterface::class)
-            ->handle(new GetFiltersByTypeAndLocaleQuery('sheet', $request->getLocale()));
+            ->handle(new GetFiltersByTypeAndLocaleQuery($event, 'sheet', $request->getLocale()));
 
         return $this->render('AdminBundle:Messaging\Campaign:select_sheets.html.twig', [
             'event' => $event,

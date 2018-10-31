@@ -34,6 +34,11 @@
                     {{ 'admin.event.paymentConditions.link'|trans }}
                 </a>
             </li>
+            <li>
+                <a href="{{ path('admin_event_static_formulation_list', { 'event': event.id }) }}">
+                    {{ 'admin.staticFormulation.link'|trans }}
+                </a>
+            </li>
             {% endif %}
             <li>
                 <a href="{{ path('admin_event_practical_info_update', { 'event': event.id }) }}">

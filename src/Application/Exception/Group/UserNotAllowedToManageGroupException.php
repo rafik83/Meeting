@@ -22,6 +22,8 @@ class UserNotAllowedToManageGroupException extends GroupException
      */
     public function __construct($email)
     {
+        parent::__construct();
+
         $this->email = $email;
     }
 }

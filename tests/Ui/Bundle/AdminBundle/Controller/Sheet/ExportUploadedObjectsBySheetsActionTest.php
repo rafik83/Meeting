@@ -81,7 +81,7 @@ class ExportUploadedObjectsBySheetsActionTest extends TestCase
         $extraDataRepository->add($extraData);
 
         $ruleStorage = $this->prophesize(RuleStorageInterface::class);
-        $ruleStorage->getRules($event->reveal(), 'sheet')
+        $ruleStorage->getRules($event->reveal(), 'fr', 'sheet')
             ->shouldBeCalled()
             ->willReturn(null);
 

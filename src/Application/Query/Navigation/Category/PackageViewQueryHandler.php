@@ -18,19 +18,13 @@ use Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory;
 
 class PackageViewQueryHandler
 {
-    /**
-     * @var FunnelFactory
-     */
+    /** @var FunnelFactory */
     private $funnelFactory;
 
-    /**
-     * @var NavigationBuilderInterface
-     */
+    /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
     /**
-     * PackageViewQueryHandler constructor.
-     *
      * @param FunnelFactory              $funnelFactory
      * @param NavigationBuilderInterface $navigationBuilder
      */
@@ -105,6 +99,12 @@ class PackageViewQueryHandler
             ])
         );
 
-        return new CategoryView(Category::PACKAGE, Category::PACKAGE_ICON, $linksView, false);
+        $categoryTitle = Category::PACKAGE;
+
+        if (null !== $packageQuery->staticFormulation) {
+            $categoryTitle = $packageQuery->staticFormulation->getTitle($packageQuery->locale);
+        }
+
+        return new CategoryView($categoryTitle, Category::PACKAGE_ICON, $linksView, false);
     }
 }

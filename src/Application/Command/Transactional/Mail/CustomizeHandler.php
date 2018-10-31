@@ -35,6 +35,7 @@ class CustomizeHandler
             $command->event,
             $command->transactionalMailType,
             $this->dateTime,
+            $command->enabled,
             $command->associatedTypes
         );
 

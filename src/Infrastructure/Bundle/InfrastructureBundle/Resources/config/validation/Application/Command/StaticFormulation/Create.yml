@@ -1,0 +1,11 @@
+Proximum\Vimeet\Application\Command\StaticFormulation\Create:
+    properties:
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+        types:
+            - NotBlank: ~
+

@@ -29,11 +29,15 @@ class CustomizedMailView
     /** @var int */
     public $messageId;
 
+    /** @var bool */
+    public $isEnabled;
+
     public function __construct(
         int $messageId,
         string $key,
         string $subject,
         bool $isCustomizableByTypes,
+        bool $isEnabled,
         array $associatedTypeTitles
     ) {
         $this->messageId = $messageId;
@@ -41,6 +45,7 @@ class CustomizedMailView
         $this->subject = $subject;
         $this->isCustomizableByTypes = $isCustomizableByTypes;
         $this->associatedTypeTitles = $associatedTypeTitles;
+        $this->isEnabled = $isEnabled;
     }
 
     public function getIntention(): string

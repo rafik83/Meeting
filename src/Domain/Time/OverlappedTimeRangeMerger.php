@@ -8,10 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Unavailability\SystemGenerator;
-
-use Proximum\Vimeet\Domain\Time\AbstractTimeRange;
-use Proximum\Vimeet\Domain\Time\TimeOverlap;
+namespace Proximum\Vimeet\Domain\Time;
 
 class OverlappedTimeRangeMerger
 {
@@ -22,6 +19,10 @@ class OverlappedTimeRangeMerger
      */
     public function merge(array $timeRanges): array
     {
+        if (\count($timeRanges) <= 1) {
+            return $timeRanges;
+        }
+
         // We need to sort the time ranges first
         // To avoid having a first time range created which begins at 10:00 and ends at 13:00
         // Then another which begins at 14:00 and ends at 15:00
@@ -31,33 +32,32 @@ class OverlappedTimeRangeMerger
             return $first->getBegin() > $second->getBegin();
         });
 
-        $timeRangesCollapsed = [];
+        $timeRangesMerged = [];
 
         foreach ($timeRanges as $timeRange) {
-            if (empty($timeRangesCollapsed)) {
-                $timeRangesCollapsed[] = $timeRange;
+            if (empty($timeRangesMerged)) {
+                $timeRangesMerged[] = $timeRange;
 
                 continue;
             }
 
             $overlapped = false;
 
-            foreach ($timeRangesCollapsed as $timeRangeCollapsed) {
-                if (TimeOverlap::overlap($timeRangeCollapsed, $timeRange)
-                    || $timeRangeCollapsed->getEnd() == $timeRange->getBegin()
-                    || $timeRangeCollapsed->getBegin() == $timeRange->getEnd()
+            foreach ($timeRangesMerged as $timeRangeMerged) {
+                if (TimeOverlap::overlap($timeRangeMerged, $timeRange)
+                    || TimeOverlap::touch($timeRangeMerged, $timeRange)
                 ) {
                     $overlapped = true;
-                    $timeRangeCollapsed->merge($timeRange);
+                    $timeRangeMerged->merge($timeRange);
                     break;
                 }
             }
 
             if (false === $overlapped) {
-                $timeRangesCollapsed[] = $timeRange;
+                $timeRangesMerged[] = $timeRange;
             }
         }
 
-        return $timeRangesCollapsed;
+        return $timeRangesMerged;
     }
 }

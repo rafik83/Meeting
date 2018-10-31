@@ -61,9 +61,15 @@ class AgendaSubmenuViewQueryHandler
         $buttonViews = [];
 
         if ($this->agendaAccessChecker->allowedToAccess($query->event)) {
+            $agendaTitle = 'agenda.title';
+
+            if (isset($query->staticFormulationsIndexedByCategory[Category::PLANNING])) {
+                $agendaTitle = $query->staticFormulationsIndexedByCategory[Category::PLANNING]->getTitle($query->locale);
+            }
+
             $buttonViews[] = new SubmenuButtonView(
                 Category::AGENDA_ICON,
-                'agenda.title',
+                $agendaTitle,
                 $this->navigationBuilder->getRoute('event_agenda', ['sheet' => $query->sheet->getId()]),
                 Route::isAgenda($query->route),
                 false,
@@ -72,9 +78,15 @@ class AgendaSubmenuViewQueryHandler
         }
 
         if ($this->happeningsAccessChecker->allowedToAccess($query->event)) {
+            $programTitle = 'program.title';
+
+            if (isset($query->staticFormulationsIndexedByCategory[Category::PROGRAM])) {
+                $programTitle = $query->staticFormulationsIndexedByCategory[Category::PROGRAM]->getTitle($query->locale);
+            }
+
             $buttonViews[] = new SubmenuButtonView(
                 Category::PROGRAM_ICON,
-                'program.title',
+                $programTitle,
                 $this->navigationBuilder->getRoute('happening_program', ['sheet' => $query->sheet->getId()]),
                 Route::isProgram($query->route),
                 false,

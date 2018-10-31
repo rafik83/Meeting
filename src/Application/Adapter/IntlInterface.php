@@ -29,4 +29,12 @@ interface IntlInterface
      * @return array
      */
     public function getLocales(): array;
+
+    /**
+     * @param string      $currency
+     * @param string|null $locale
+     *
+     * @return string|null
+     */
+    public function currencySymbol(string $currency, ?string $locale = null): ?string;
 }

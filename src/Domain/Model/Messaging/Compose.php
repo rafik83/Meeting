@@ -34,12 +34,36 @@ class Compose
     public const LINK_EXPORT_MEETING_SHEET  = '%exportMeetingSheetLink%';
     public const LINK_VALIDATE_MOBILE_PHONE = '%validateMobilePhoneLink%';
 
+    public const LINK_PLACEHOLDERS = [
+        self::LINK_ACTIVACTE_ACCOUNT,
+        self::LINK_AGENDA,
+        self::LINK_CATALOG,
+        self::LINK_MEETING_REQUEST,
+        self::LINK_ORDERS,
+        self::LINK_PACKAGE,
+        self::LINK_PROGRAM,
+        self::LINK_SHEET,
+        self::LINK_EXPORT_MEETING_SHEET,
+        self::LINK_VALIDATE_MOBILE_PHONE,
+    ];
+
+    public const TAG_PLACEHOLDERS = [
+        self::TAG_EVENT_NAME,
+        self::TAG_PARTICIPANT,
+        self::TAG_PARTICIPATION_TYPE,
+        self::TAG_SHEET_PLANNING,
+        self::TAG_SHEET_SPOT,
+        self::TAG_CTA_AGENDA_CONFIRMATION,
+        self::TAG_CTA_EBADGE,
+        self::TAG_CTA_TEST_VISIO_CONFIGURATION,
+    ];
+
     /**
      * @return string[]
      */
     public static function getAllPlaceholders(): array
     {
-        return array_merge(self::getTagPlaceholders(), self::getLinkPlaceholders());
+        return array_merge(self::TAG_PLACEHOLDERS, self::LINK_PLACEHOLDERS);
     }
 
     /**
@@ -47,16 +71,7 @@ class Compose
      */
     private static function getTagPlaceholders(): array
     {
-        return [
-            self::TAG_EVENT_NAME,
-            self::TAG_PARTICIPANT,
-            self::TAG_PARTICIPATION_TYPE,
-            self::TAG_SHEET_PLANNING,
-            self::TAG_SHEET_SPOT,
-            self::TAG_CTA_AGENDA_CONFIRMATION,
-            self::TAG_CTA_EBADGE,
-            self::TAG_CTA_TEST_VISIO_CONFIGURATION,
-        ];
+        return self::TAG_PLACEHOLDERS;
     }
 
     /**
@@ -64,17 +79,6 @@ class Compose
      */
     private static function getLinkPlaceholders(): array
     {
-        return [
-            self::LINK_ACTIVACTE_ACCOUNT,
-            self::LINK_AGENDA,
-            self::LINK_CATALOG,
-            self::LINK_MEETING_REQUEST,
-            self::LINK_ORDERS,
-            self::LINK_PACKAGE,
-            self::LINK_PROGRAM,
-            self::LINK_SHEET,
-            self::LINK_EXPORT_MEETING_SHEET,
-            self::LINK_VALIDATE_MOBILE_PHONE,
-        ];
+        return self::LINK_PLACEHOLDERS;
     }
 }

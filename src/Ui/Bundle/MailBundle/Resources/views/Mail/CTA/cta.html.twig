@@ -1,0 +1,6 @@
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{{ macros.button(
+    label|trans({}, 'mail', locale),
+    link
+) }}

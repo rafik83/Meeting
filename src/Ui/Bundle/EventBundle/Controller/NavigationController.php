@@ -16,12 +16,14 @@ use Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\StaticFormulation\Constant;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository;
 
 class NavigationController extends Controller
 {
@@ -70,12 +72,44 @@ class NavigationController extends Controller
         $submenuView = null;
 
         if (null !== $user && false === $registration) {
+            $staticFormulationsIndexedByCategories = [];
+
+            if (null !== $sheet) {
+                $staticFormulations = $this
+                    ->get(StaticFormulationRepository::class)
+                    ->findByTypeAndLocale(
+                        $sheet->getType(),
+                        $locale
+                    )
+                ;
+                $staticFormulationsIndexedByCategories = [];
+
+                foreach ($staticFormulations as $staticFormulation) {
+                    $key = Constant::STATIC_FORMULATION_LIST[$staticFormulation->getKey()]['categoryKey'];
+                    $staticFormulationsIndexedByCategories[$key] = $staticFormulation;
+                }
+            }
+
+
             $menuView = $this->get('tactician.commandbus.query')->handle(
-                new MenuViewQuery($event, $locale, $sheet, $user)
+                new MenuViewQuery(
+                    $event,
+                    $locale,
+                    $sheet,
+                    $user,
+                    $staticFormulationsIndexedByCategories
+                )
             );
 
             $submenuView = $this->get('tactician.commandbus.query')->handle(
-                new SubmenuViewQuery($event, $locale, $route, $sheet, $user)
+                new SubmenuViewQuery(
+                    $event,
+                    $locale,
+                    $route,
+                    $sheet,
+                    $user,
+                    $staticFormulationsIndexedByCategories
+                )
             );
         }
 

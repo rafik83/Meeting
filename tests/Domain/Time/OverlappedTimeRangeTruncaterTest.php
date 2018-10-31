@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Domain\Unavailability\SystemGenerator;
+namespace Proximum\Vimeet\Tests\Domain\Time;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater;
+use Proximum\Vimeet\Domain\Time\OverlappedTimeRangeTruncater;
 use Proximum\Vimeet\Domain\Time\TimeRangeNotAccessibleView;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 

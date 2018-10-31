@@ -40,6 +40,7 @@ class CustomizedMailViewQueryHandlerTest extends TestCase
             $event->reveal(),
             $type,
             $date,
+            true,
             [
                 $type15->reveal(),
                 $type16->reveal(),
@@ -66,6 +67,7 @@ class CustomizedMailViewQueryHandlerTest extends TestCase
             12,
             $type,
             'Subject in french',
+            true,
             true,
             [
                 15 => 'type15',

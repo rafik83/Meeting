@@ -15,6 +15,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CustomizeTranslationType extends AbstractType
 {
@@ -38,8 +39,18 @@ class CustomizeTranslationType extends AbstractType
             ->add('subject', TextType::class)
             ->add('content', TextareaType::class, [
                 'attr' => [
-                    'data-placeholders' => json_encode($this->placeholderHelper->getPlaceholderData()),
+                    'data-placeholders' => $options['isCustomizableByType']
+                        ? json_encode($this->placeholderHelper->getPlaceholderData())
+                        : json_encode($this->placeholderHelper->getGenericPlaceholderData())
+                    ,
                 ],
             ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setDefined('isCustomizableByType')
+        ;
     }
 }

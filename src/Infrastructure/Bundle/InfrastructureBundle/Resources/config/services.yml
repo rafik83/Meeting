@@ -2184,6 +2184,7 @@ services:
     Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQueryHandler:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@catalog.tagged_nomenclature_filter_getter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
@@ -2191,7 +2192,23 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery }
 
-    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer'
+
+    Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
+        arguments:
+            - '@catalog.tagged_nomenclature_filter_getter'
+
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer: ~
 
     command.product.remove.remove_handler:
         class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler
@@ -3860,6 +3877,7 @@ services:
             - '@query.agenda.cancel_attendance_unavailability_view_query_handler'
             - '@query.agenda.available_sheets.available_slots_by_participant_and_day_query_handler'
             - '@components:agenda.agenda_collision_manager'
+            - '@Proximum\Vimeet\Domain\Time\OverlappedTimeRangeMerger'
     query.agenda.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler
         arguments:
@@ -5205,6 +5223,7 @@ services:
             - '@domain.event.catalog.external.search-facet.duplicator'
             - '@domain.event.catalog.external.visibility.duplicator'
             - '@domain.event.message.duplicator'
+            - '@Proximum\Vimeet\Domain\Event\StaticFormulation\Duplicator'
 
     domain.event.content.duplicator:
         class: Proximum\Vimeet\Domain\Event\Content\Duplicator
@@ -5296,6 +5315,10 @@ services:
         arguments:
             - '@repository.messaging.message_repository'
             - '@datetime'
+
+    Proximum\Vimeet\Domain\Event\StaticFormulation\Duplicator:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
 
     domain.event.last_event_participation:
         class: Proximum\Vimeet\Domain\Event\LastEventParticipation

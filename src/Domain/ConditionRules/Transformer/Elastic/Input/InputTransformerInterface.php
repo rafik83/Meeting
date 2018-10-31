@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 interface InputTransformerInterface
 {
-    public static function transform(Field $field): array;
+    public function transform(Field $field): array;
 
-    public static function supports(Field $field): bool;
+    public function supports(Field $field): bool;
 }

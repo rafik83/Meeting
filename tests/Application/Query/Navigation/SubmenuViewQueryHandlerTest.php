@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\StaticFormulation;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
@@ -44,19 +45,25 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $user = new User('email@email.com', 'salt', 'password', 'fr');
 
         $sheet = $this->prophesize(Sheet::class);
-        $sheet->isInCatalog()->shouldBeCalled()->willReturn(true);
+        $sheet->isInInternalCatalog()->shouldBeCalled()->willReturn(true);
         $sheet->getId()->shouldBeCalled()->willReturn(1);
 
         $locale = 'fr';
         $route = 'event_catalog_index';
 
-        $query = new CatalogSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route);
+        $catalogFormulation = $this->prophesize(StaticFormulation::class);
+        $catalogFormulation->getTitle('fr')->shouldBeCalled()->willReturn('CVThèque');
+        $staticFormulations = [
+            Category::CATALOG => $catalogFormulation->reveal()
+        ];
+
+        $query = new CatalogSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route, $staticFormulations);
 
         // Expected
         $expectedSubmenuButtonViews = [
             new SubmenuButtonView(
                 Category::CATALOG_ICON,
-                'navigation.category.catalog',
+                'CVThèque',
                 'navigation.category.catalog.link',
                 true,
                 false,
@@ -129,6 +136,50 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
     }
 
+    public function testSheetHandleWithStaticFormulation()
+    {
+        $datetime = new \DateTime();
+        $event = EventFactory::createEvent();
+        $type = new Type($event);
+        $user = new User('email@email.com', 'salt', 'password', 'fr');
+        $package = new Package($event, 'package', $datetime);
+        $type->setPackage($package);
+
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getId()->shouldBeCalled()->willReturn(2);
+
+        $locale = 'fr';
+        $route = 'event_catalog_index';
+        $staticFormulation = $this->prophesize(StaticFormulation::class);
+        $staticFormulation->getTitle('fr')->shouldBeCalled()->willReturn('Ma fiche');
+
+        $query = new SheetSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route, $staticFormulation->reveal());
+
+        // Expected
+        $expectedSubmenuButtonViews = [
+            new SubmenuButtonView(
+                Category::SHEET_ICON,
+                'Ma fiche',
+                'sheet.title.link',
+                false,
+                false,
+                true
+            ),
+        ];
+
+        // Mock
+        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
+
+        $navigationBuilder->getRoute('event_sheet_default', ['sheet' => 2])->shouldBeCalled()
+            ->willReturn('sheet.title.link');
+
+        $handler = new SheetSubmenuViewQueryHandler($navigationBuilder->reveal());
+
+        $menuButtonViews = $handler->handle($query);
+
+        $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
+    }
+
     public function testAgendaHandle()
     {
         $datetime = new \DateTime();
@@ -145,7 +196,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $locale = 'fr';
         $route = 'event_agenda';
 
-        $query = new AgendaSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route);
+        $query = new AgendaSubmenuViewQuery($user, $event, $locale, $sheet->reveal(), $route, []);
 
         // Expected
         $expectedSubmenuButtonViews = [

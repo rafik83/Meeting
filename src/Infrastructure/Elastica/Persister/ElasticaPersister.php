@@ -59,11 +59,16 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
 
         $this->mapping->setMapping($elasticaType, $typeMapping['properties']);
 
+        $response = null;
         foreach (array_chunk($objects, 100, false) as $chunkObjects) {
             $response = $elasticaType->addDocuments($this->getDocuments($identifierProperty, $chunkObjects));
         }
 
         $elasticaType->getIndex()->refresh();
+
+        if (null === $response) {
+            return [];
+        }
 
         return $response->getData();
     }
