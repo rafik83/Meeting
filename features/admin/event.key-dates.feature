@@ -4,6 +4,7 @@ Feature: I can manage key dates for an event
   Scenario: I can see and update key dates for an event
     Given the database is purged
     And the event "Concert de Francky Vincent" is created
+    And this event occurs the "2016-10-12" from "08:00" to "20:00"
     When I am logged as admin
     And I go to this page "/fr/event/1/dates"
     Then the response status code should be 200

@@ -1,0 +1,6 @@
+Proximum\Vimeet\Application\Command\Event\ConfigureDates:
+    properties:
+        catalogOnlineDate:
+            - Expression:
+                  expression: "this.addCatalogOnlineDateButEventHasNoDate()"
+                  message: "validators.event.configureDates.addCatalogOnlineDateButEventHasNoDate"
