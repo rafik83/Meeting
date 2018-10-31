@@ -30,6 +30,8 @@ class GetUserIdsByEventTest extends TestCase
         $event = $this->prophesize(Event::class);
 
         $condition = new Condition(
+            $event->reveal(),
+            'fr',
             new LogicalOperatorAnd,
             [ new Field('field', new ComparisonOperatorEqual, 'text', 'A1') ]
         );
