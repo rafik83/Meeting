@@ -88,11 +88,11 @@ class ListAction
                 $event,
                 $page,
                 $locale,
-                $this->ruleStorageInterface->getRules($event, 'user')
+                $this->ruleStorageInterface->getRules($event, $locale, 'user')
             )
         );
 
-        $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $request->getLocale()));
+        $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery($event, 'user', $request->getLocale()));
 
         return new Response(
             $this->engine->render(

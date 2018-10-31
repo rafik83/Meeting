@@ -18,13 +18,13 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 class NullableTransformer implements InputTransformerInterface
 {
-    public static function transform(Field $field): array
+    public function transform(Field $field): array
     {
-        if (!self::supports($field)) {
+        if (!$this->supports($field)) {
             return [];
         }
 
-        $operator = self::isContraryComparisonOperator($field) ? 'must' : 'must_not';
+        $operator = $this->isContraryComparisonOperator($field) ? 'must' : 'must_not';
 
         $query = [
             'constant_score' => [
@@ -45,13 +45,13 @@ class NullableTransformer implements InputTransformerInterface
         return $query;
     }
 
-    public static function supports(Field $field): bool
+    public function supports(Field $field): bool
     {
         return $field->getComparisonOperator() instanceof ComparisonOperatorNotNull ||
             $field->getComparisonOperator() instanceof ComparisonOperatorNull;
     }
 
-    private static function isContraryComparisonOperator(Field $field): bool
+    private function isContraryComparisonOperator(Field $field): bool
     {
         return $field->getComparisonOperator() instanceof ComparisonOperatorNotNull;
     }

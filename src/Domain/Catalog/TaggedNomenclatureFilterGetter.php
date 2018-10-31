@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Catalog;
 
+use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\Filter\TaggedNomenclatureFilterRepositoryInterface;
@@ -66,6 +67,38 @@ class TaggedNomenclatureFilterGetter
         }
 
         asort($nomenclatureItems);
+
+        return $nomenclatureItems;
+    }
+
+    public function getNomenclaturesItemsByEvent(Event $event, string $locale): array
+    {
+        $taggedNomenclatureFilters = $this->taggedNomenclatureFilterRepository->getByEvent($event);
+        $tagsByNomenclatureId = [];
+
+        foreach ($taggedNomenclatureFilters as $taggedNomenclatureFilter) {
+            foreach ($taggedNomenclatureFilter->getNomenclaturesId() as $nomenclatureId) {
+                $tagsByNomenclatureId[$nomenclatureId][] = $taggedNomenclatureFilter->getTag();
+            }
+        }
+
+        $nomenclatures = $this->nomenclatureRepository->findByEventAndIds(
+            $event,
+            array_keys($tagsByNomenclatureId)
+        );
+
+        $nomenclatureItems = [];
+        $availableLocale = $event->getAvailableLocale($locale);
+
+        foreach ($nomenclatures as $nomenclature) {
+            $nomenclatureId = $nomenclature->getId();
+            $nomenclatureItems[$nomenclatureId] = new NomenclatureFilterView(
+                $nomenclatureId,
+                $nomenclature->getTitle(),
+                $this->buildNomenclature($nomenclature->getLastLevel(), $availableLocale),
+                $tagsByNomenclatureId[$nomenclature->getId()] ?? []
+            );
+        }
 
         return $nomenclatureItems;
     }

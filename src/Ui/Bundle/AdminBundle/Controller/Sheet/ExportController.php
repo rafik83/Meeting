@@ -43,7 +43,7 @@ class ExportController extends Controller
             $event,
             $this->getFilters($event, $adminDomain->getAdmin(), $locale),
             $locale,
-            $this->get(RuleStorageInterface::class)->getRules($event, 'sheet')
+            $this->get(RuleStorageInterface::class)->getRules($event, $locale, 'sheet')
         );
 
         return new CsvFileResponse(

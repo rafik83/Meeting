@@ -2184,6 +2184,7 @@ services:
     Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQueryHandler:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@catalog.tagged_nomenclature_filter_getter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
@@ -2191,7 +2192,23 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery }
 
-    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer'
+
+    Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
+        arguments:
+            - '@catalog.tagged_nomenclature_filter_getter'
+
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer: ~
 
     command.product.remove.remove_handler:
         class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler

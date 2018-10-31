@@ -20,7 +20,9 @@ class TextTransformerTest extends TestCase
 {
     public function testTransform(): void
     {
-        $result1 = TextTransformer::transform(
+        $textTransformer = new TextTransformer();
+
+        $result1 = $textTransformer->transform(
             new Field('lastName', new ComparisonOperatorNotContains(), 'text', 'marchois')
         );
 
@@ -36,7 +38,7 @@ class TextTransformerTest extends TestCase
             ]
         ];
 
-        $result2 = TextTransformer::transform(
+        $result2 = $textTransformer->transform(
             new Field('participants.lastname', new ComparisonOperatorEndsWith(), 'text', 'hieu')
         );
 

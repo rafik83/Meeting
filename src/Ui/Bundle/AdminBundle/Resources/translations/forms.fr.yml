@@ -372,6 +372,7 @@ form.filter.isVisioTested.label: 'Visio testée'
 form.filter.label: Filtrer
 form.filter.lastName.label: Nom
 form.filter.optgroup.participantInfo.label: 'Info participant'
+form.filter.optgroup.nomenclature.label: 'Nomenclatures'
 form.filter.optgroup.participantManagement.label: 'Gestion participant'
 form.filter.optgroup.sheetInfo.label: 'Info fiche'
 form.filter.participants.email.label: 'Email du participant'
