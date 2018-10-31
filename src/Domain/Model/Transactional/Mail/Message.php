@@ -13,9 +13,10 @@ namespace Proximum\Vimeet\Domain\Model\Transactional\Mail;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MessageInterface;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Message
+class Message implements MessageInterface
 {
     /** @var int|null */
     private $id;

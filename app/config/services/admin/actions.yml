@@ -261,9 +261,10 @@ services:
             - '@adapter.authorization_checker'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.session'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router'
             - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface'
+            - '@form.factory'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanEventEntranceAction:
         arguments:

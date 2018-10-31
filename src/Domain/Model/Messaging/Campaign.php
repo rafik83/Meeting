@@ -13,12 +13,14 @@ namespace Proximum\Vimeet\Domain\Model\Messaging;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class Campaign
 {
-    const RECIPIENT_SHEET_OWNER     = 'sheet_owner';
-    const RECIPIENT_PARTICIPANTS    = 'participants';
-    const RECIPIENT_BILLING_CONTACT = 'billing_contact';
+    public const RECIPIENT_SHEET_OWNER = 'sheet_owner';
+    public const RECIPIENT_PARTICIPANTS = 'participants';
+    public const RECIPIENT_BILLING_CONTACT = 'billing_contact';
+    public const RECIPIENT_USER = 'user';
 
     /** @var int */
     private $id;
@@ -34,6 +36,9 @@ class Campaign
 
     /** @var ArrayCollection|Sheet[] */
     private $sheets;
+
+    /** @var ArrayCollection|User[] */
+    private $users;
 
     /** @var Message|null */
     private $message;
@@ -54,21 +59,20 @@ class Campaign
     /** @var \DateTimeInterface|null */
     private $processedAt;
 
-    /**
-     * @param Event              $event
-     * @param string             $title
-     * @param array              $filters
-     * @param \DateTimeInterface $createdAt
-     */
-    public function __construct(Event $event, $title, $filters, \DateTimeInterface $createdAt)
+    public function __construct(Event $event, $title, $filters, \DateTimeInterface $createdAt, ?string $recipient = null)
     {
         $this->event     = $event;
         $this->title     = $title;
         $this->filters   = $filters;
         $this->createdAt = $createdAt;
 
-        $this->sheets     = new ArrayCollection();
+        $this->sheets = new ArrayCollection();
+        $this->users = new ArrayCollection();
         $this->recipients = [];
+
+        if ($recipient) {
+            $this->recipients[] = $recipient;
+        }
     }
 
     /**
@@ -209,5 +213,17 @@ class Campaign
     public function markAsProcessed(\DateTimeInterface $processedAt = null)
     {
         $this->processedAt = $processedAt ?: new \DateTime();
+    }
+
+    public function getUsers(): iterable
+    {
+        return $this->users->toArray();
+    }
+
+    public function addUser(User $user): void
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
     }
 }

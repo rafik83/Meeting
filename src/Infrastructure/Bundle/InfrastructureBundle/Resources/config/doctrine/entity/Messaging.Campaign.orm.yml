@@ -50,3 +50,16 @@ Proximum\Vimeet\Domain\Model\Messaging\Campaign:
                     sheet_id:
                         referencedColumnName: id
                         onDelete: CASCADE
+        users:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            indexBy: id
+            joinTable:
+                name: messaging_campaign_user
+                joinColumns:
+                    campaign_id:
+                        referencedColumnName: id
+                        onDelete: CASCADE
+                inverseJoinColumns:
+                    user_id:
+                        referencedColumnName: id
+                        onDelete: CASCADE

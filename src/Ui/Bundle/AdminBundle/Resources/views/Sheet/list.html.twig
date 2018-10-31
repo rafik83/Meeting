@@ -89,7 +89,7 @@
 
     {% set sheetsLimit = (sheets.results|length < sheets.limit) ? sheets.results|length : sheets.limit %}
 
-    {{ form_start(batch_form, { 'attr': { 'data-batch': true, 'data-page-sheets': sheetsLimit } }) }}
+    {{ form_start(batch_form, { 'attr': { 'data-batch': true, 'data-page-items': sheetsLimit } }) }}
     {{ form_errors(batch_form) }}
 
     <div class="row filters">
@@ -193,7 +193,7 @@
 
     {% set hasCategories = filter_form.categories is defined ? filter_form.categories.vars.choices|length > 1 : false %}
 
-    <div id="batch-selection-helper" class="batch-helper alert alert-info text-center hide no-select" role="alert" data-page-sheets="{{ sheetsLimit }}" data-all-sheets="{{ sheets.total }}">
+    <div id="batch-selection-helper" class="batch-helper alert alert-info text-center hide no-select" role="alert" data-page-items="{{ sheetsLimit }}" data-all-items="{{ sheets.total }}">
         <p>
             <span class="batch-helper-message"
                   data-all-selected-label="{{ 'admin.sheet.batch.allSelected.label'|trans({'%sheets%': sheets.total})|html }}"

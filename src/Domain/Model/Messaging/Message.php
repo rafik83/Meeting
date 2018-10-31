@@ -12,8 +12,9 @@ namespace Proximum\Vimeet\Domain\Model\Messaging;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MessageInterface;
 
-class Message
+class Message implements MessageInterface
 {
     /**
      * @var int
@@ -191,7 +192,7 @@ class Message
      *
      * @return string
      */
-    public function getSubject($locale)
+    public function getSubject($locale): string
     {
         return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getSubject() : '';
     }
@@ -203,7 +204,7 @@ class Message
      *
      * @return string
      */
-    public function getContent($locale)
+    public function getContent($locale): string
     {
         return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getContent() : '';
     }
