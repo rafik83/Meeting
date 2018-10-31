@@ -665,4 +665,9 @@ class Package
     {
         return $this->planningSelectable;
     }
+
+    public function setPlanningSelectable(bool $planningSelectable): void
+    {
+        $this->planningSelectable = $planningSelectable;
+    }
 }
