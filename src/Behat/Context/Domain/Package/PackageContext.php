@@ -120,4 +120,18 @@ class PackageContext implements Context
 
         $this->packageContextProxy->getPackageManager()->setOptions($package, $options);
     }
+
+    /**
+     * @Given /^in this package, planning is not selectable$/
+     */
+    public function inThisPackagePlanningIsNotSelectable()
+    {
+        $package = $this->packageContextProxy->getStorage()->get('package');
+
+        if (null === $package) {
+            throw new \InvalidArgumentException('Missing Package');
+        }
+
+        $this->packageContextProxy->getPackageManager()->setPlanningNotSelectable($package);
+    }
 }
