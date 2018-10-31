@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
 
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 
 abstract class Base
@@ -57,6 +58,9 @@ abstract class Base
      * @var array
      */
     public $timeSlots = [];
+
+    /** @var Type[] */
+    public $types = [];
 
     /**
      * Check if timeSlots are include in begin and end dates.

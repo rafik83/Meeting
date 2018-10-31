@@ -41,3 +41,9 @@ Proximum\Vimeet\Domain\Model\Unavailability\Mass:
             targetEntity: Proximum\Vimeet\Domain\Model\Unavailability\Category
             joinColumn:
                 onDelete: CASCADE
+    manyToMany:
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            cascade: ["persist"]
+            joinTable:
+                name: mass_unavailability_types

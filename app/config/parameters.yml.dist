@@ -28,6 +28,8 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            LcTdBOetSYwmhWirRZHleWO8FJknzXLu
 
+    redis_dsn: 'redis://localhost'
+
     sendgrid_api_key: ~
 
     domain: vimeet.proximum

@@ -11,15 +11,16 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Campaign;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Process;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler;
+use Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers;
+use Proximum\Vimeet\Domain\Messaging\GetUsersReceivers;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
-use Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -49,17 +50,22 @@ class ProcessHandlerTest extends TestCase
         $twig = $this->prophesize(\Twig_Environment::class);
         $twig->load($message->getTemplate())->willReturn($template);
 
-        $mailer                = new SendGridApiAdapter(
+        $mailer = new SendGridApiAdapter(
             $this->prophesize(SendGridApiClient::class)->reveal(),
             $twig->reveal(),
             $this->getEventSender()
         );
 
+        $sheetReceiver = $this->prophesize(GetSheetsReceivers::class);
+        $sheetReceiver->__invoke(Argument::any(), Argument::any(), Argument::any())
+            ->shouldBeCalled()
+            ->willReturn([]);
+
         $handler = new ProcessHandler(
-            $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
-            $this->prophesize(SubstitutionsProvider::class)->reveal()
+            $this->prophesize(GetUsersReceivers::class)->reveal(),
+            $sheetReceiver->reveal()
         );
 
         $handler->handle(new Process($campaign));
@@ -82,10 +88,10 @@ class ProcessHandlerTest extends TestCase
         );
 
         $handler = new ProcessHandler(
-            $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
-            $this->prophesize(SubstitutionsProvider::class)->reveal()
+            $this->prophesize(GetUsersReceivers::class)->reveal(),
+            $this->prophesize(GetSheetsReceivers::class)->reveal()
         );
 
         $handler->handle(new Process($campaign));
@@ -109,10 +115,10 @@ class ProcessHandlerTest extends TestCase
         );
 
         $handler = new ProcessHandler(
-            $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
-            $this->prophesize(SubstitutionsProvider::class)->reveal()
+            $this->prophesize(GetUsersReceivers::class)->reveal(),
+            $this->prophesize(GetSheetsReceivers::class)->reveal()
         );
 
         $handler->handle(new Process($campaign));
@@ -137,10 +143,10 @@ class ProcessHandlerTest extends TestCase
         );
 
         $handler = new ProcessHandler(
-            $this->prophesize(BillingInfoRepositoryInterface::class)->reveal(),
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
-            $this->prophesize(SubstitutionsProvider::class)->reveal()
+            $this->prophesize(GetUsersReceivers::class)->reveal(),
+            $this->prophesize(GetSheetsReceivers::class)->reveal()
         );
 
         $handler->handle(new Process($campaign));

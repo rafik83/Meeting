@@ -38,16 +38,16 @@ services:
     #
     # System Unavailability
     #
-    Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater: ~
-    Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger: ~
+    Proximum\Vimeet\Domain\Time\OverlappedTimeRangeTruncater: ~
+    Proximum\Vimeet\Domain\Time\OverlappedTimeRangeMerger: ~
 
     Proximum\Vimeet\Domain\Unavailability\SystemGenerator\Generator:
         arguments:
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger'
-            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater'
+            - '@Proximum\Vimeet\Domain\Time\OverlappedTimeRangeMerger'
+            - '@Proximum\Vimeet\Domain\Time\OverlappedTimeRangeTruncater'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@Proximum\Vimeet\Infrastructure\Repository\CartRowParticipantRepository'
 
@@ -62,13 +62,17 @@ services:
         arguments:
             - '@repository.user.event.extra_data_repository'
 
+    Proximum\Vimeet\Domain\Participant\GetParticipantTypes:
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+
     #
     # Availability Time Range
     #
     Proximum\Vimeet\Domain\AvailabilityTimeRange\Product\ParticipantProductWithAvailabilityTimeRangeChecker:
         arguments:
-            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger'
-            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater'
+            - '@Proximum\Vimeet\Domain\Time\OverlappedTimeRangeMerger'
+            - '@Proximum\Vimeet\Domain\Time\OverlappedTimeRangeTruncater'
             - '@vimeet_infrastructure.repository.participant_repository'
 
     #

@@ -361,3 +361,18 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappening }
+
+    #
+    # Static Formulation
+    #
+    Proximum\Vimeet\Application\Command\StaticFormulation\CreateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\StaticFormulation\Create }
+
+    Proximum\Vimeet\Application\Command\StaticFormulation\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\StaticFormulation\Update }

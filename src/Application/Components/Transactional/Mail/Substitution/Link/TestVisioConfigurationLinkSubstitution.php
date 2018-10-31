@@ -1,0 +1,38 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) vimeet
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link;
+
+use Proximum\Vimeet\Application\Components\Navigation\Route;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstituteInterface;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
+
+class TestVisioConfigurationLinkSubstitution implements SubstituteInterface
+{
+    /** @var EventUrlGeneratorInterface */
+    private $eventUrlGenerator;
+
+    public function __construct(EventUrlGeneratorInterface $eventUrlGenerator)
+    {
+        $this->eventUrlGenerator = $eventUrlGenerator;
+    }
+
+    public function substitute(AbstractPrepareMail $prepareMail): string
+    {
+        return $this->eventUrlGenerator->generateEventAbsoluteUrl(
+            $prepareMail->event,
+            Route::VISIO_TEST_CONFIGURATION,
+            [
+                '_locale' => $prepareMail->event->getAvailableLocale($prepareMail->locale),
+            ]
+        );
+    }
+}

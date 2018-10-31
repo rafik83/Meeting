@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
+use Proximum\Vimeet\Application\Components\Mail\AbstractCustomizedMail;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\AddParticipantMail;
 
 class MailerAdapter implements MailerInterface
 {
@@ -46,13 +48,18 @@ class MailerAdapter implements MailerInterface
     {
         /** @var \Twig_Template $template */
         $template = $this->twig->loadTemplate($mail->getTemplate());
-        $body     = $template->render(['mail' => $mail]);
-        $subject  = $this->translator->trans(
-            $mail->getSubject(),
-            $mail->getSubjectParameters(),
-            'mail',
-            $mail->getLocale()
-        );
+        $body = $template->render(['mail' => $mail]);
+
+        if ($mail->hasToTranslateSubject()) {
+            $subject  = $this->translator->trans(
+                $mail->getSubject(),
+                $mail->getSubjectParameters(),
+                'mail',
+                $mail->getLocale()
+            );
+        } else {
+            $subject = $mail->getSubject();
+        }
 
         $message = new \Swift_Message($subject);
         $message->setFrom($mail->getSender());
@@ -61,7 +68,9 @@ class MailerAdapter implements MailerInterface
             $message->addTo($receiver);
         }
 
-        if (true === $mail->sendToEmailTeam() && $mail instanceof UserMail) {
+        if (true === $mail->sendToEmailTeam()
+            && ($mail instanceof UserMail || $mail instanceof AbstractCustomizedMail)
+        ) {
             $message->setBcc($mail->getEvent()->getEmailTeam());
         }
 

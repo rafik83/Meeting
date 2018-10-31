@@ -36,6 +36,7 @@ class UpdateCustomizedHandlerTest extends TestCase
             $event->reveal(),
             Constant::TRANSACTIONAL_MAIL_KEY_SHEET_REFUSED,
             $date,
+            false,
             [
                 $type1->reveal(),
                 $type2->reveal()
@@ -44,10 +45,7 @@ class UpdateCustomizedHandlerTest extends TestCase
         $message->translate('fr', 'Nouveau sujet', 'Nouveau contenu');
         $message->translate('en', 'origin subject', 'origin content');
 
-        $message->update([
-            $type1->reveal(),
-            $type3->reveal(),
-        ]);
+        $message->update([$type1->reveal(), $type3->reveal(),], true);
         $message->updateTranslations([
             'fr' => [
                 'subject' => 'Nouveau sujet',
@@ -65,6 +63,7 @@ class UpdateCustomizedHandlerTest extends TestCase
             $message,
             Constant::TRANSACTIONAL_MAIL_LIST[Constant::TRANSACTIONAL_MAIL_KEY_SHEET_REFUSED]
         );
+        $command->enabled = false;
         $command->associatedTypes = [
             $type1->reveal(),
             $type2->reveal(),

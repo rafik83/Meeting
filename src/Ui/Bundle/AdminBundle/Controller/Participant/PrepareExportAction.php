@@ -83,7 +83,7 @@ class PrepareExportAction
             $this->sheetFilterSubmittedDataGetter->handle($event, $adminDomain->getAdmin(), $locale),
             $adminDomain->getAdmin(),
             $locale,
-            $this->ruleStorage->getRules($event, 'sheet')
+            $this->ruleStorage->getRules($event, $locale, 'sheet')
         );
 
         try {

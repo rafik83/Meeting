@@ -11,7 +11,12 @@
 namespace Proximum\Vimeet\Tests\Domain\ConditionRules\Transformer\Elastic;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorContains;
@@ -21,22 +26,30 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorAnd;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorOr;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class ConditionRulesToElasticTransformerTest extends TestCase
 {
-
     public function testTransform(): void
     {
+        $event = $this->prophesize(Event::class);
+
         $condition = new Condition(
+            $event->reveal(),
+            'fr',
             new LogicalOperatorAnd,
             [
                 new Field('spotReference', new ComparisonOperatorEqual, 'text', 'A1'),
                 new Condition(
+                    $event->reveal(),
+                    'fr',
                     new LogicalOperatorOr,
                     [
                         new Field('sheetName', new ComparisonOperatorContains, 'text', 'S1'),
                         new Field('spotReference', new ComparisonOperatorBeginsWith(), 'text', 'U'),
                         new Condition(
+                            $event->reveal(),
+                            'fr',
                             new LogicalOperatorAnd,
                             [
                                 new Field('lastName', new ComparisonOperatorNotContains(), 'text', 'test'),
@@ -110,7 +123,13 @@ class ConditionRulesToElasticTransformerTest extends TestCase
             ]
         ];
 
-        $transformer = new ConditionRulesToElasticTransformer();
+        $nullableTransformer = new NullableTransformer();
+        $taggedNomenclatureTransformer = $this->prophesize(TaggedNomenclatureTransformer::class);
+        $taggedNomenclatureTransformer->supports(Argument::any())->shouldBeCalled()->willReturn(false);
+        $radioTransformer = new RadioTransformer();
+        $textTransformer = new TextTransformer();
+
+        $transformer = new ConditionRulesToElasticTransformer($nullableTransformer, $radioTransformer, $taggedNomenclatureTransformer->reveal(), $textTransformer);
         $result = $transformer->transform($condition);
 
         $this->assertSame($expectedResult, $result);

@@ -34,6 +34,9 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\JobQueueBundle\JMSJobQueueBundle(),
 
+            // Redis
+            new Snc\RedisBundle\SncRedisBundle(),
+
             // Sentry
             new Sentry\SentryBundle\SentryBundle(),
 

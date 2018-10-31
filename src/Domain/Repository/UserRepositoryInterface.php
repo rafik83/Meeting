@@ -44,6 +44,8 @@ interface UserRepositoryInterface
 
     public function findOneById(int $id): ?User;
 
+    public function findByIds(array $ids): array;
+
     /**
      * @return User[]
      */
@@ -106,7 +108,7 @@ interface UserRepositoryInterface
 
     /**
      * @param Event $event
-     * @param Mass  $mass
+     * @param Mass  $mass with dispatch=true
      *
      * @return User[]
      */

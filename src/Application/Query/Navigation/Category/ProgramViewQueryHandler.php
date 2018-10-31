@@ -91,6 +91,17 @@ class ProgramViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::PROGRAM, Category::PROGRAM_ICON, $linksView, true);
+        $categoryTitle = Category::PROGRAM;
+
+        if (null !== $programViewQuery->staticFormulation) {
+            $categoryTitle = $programViewQuery->staticFormulation->getTitle($programViewQuery->locale);
+        }
+
+        return new CategoryView(
+            $categoryTitle,
+            Category::PROGRAM_ICON,
+            $linksView,
+            true
+        );
     }
 }

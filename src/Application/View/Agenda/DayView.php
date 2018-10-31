@@ -43,6 +43,9 @@ class DayView
      */
     public $availableSlotViews;
 
+    /** @var bool */
+    public $isUnavailableForThisDay;
+
     /**
      * @param \DateTimeInterface                      $begin
      * @param \DateTimeInterface                      $end
@@ -53,6 +56,7 @@ class DayView
      * @param MeetingView[]                           $meetings
      * @param array                                   $availableSlotViews
      * @param CancelAttendanceUnavailabilityView|null $cancelAttendanceUnavailabilityView
+     * @param bool                                    $isUnavailableForThisDay
      */
     public function __construct(
         \DateTimeInterface $begin,
@@ -63,17 +67,19 @@ class DayView
         array $masses,
         array $meetings,
         array $availableSlotViews,
-        CancelAttendanceUnavailabilityView $cancelAttendanceUnavailabilityView = null
+        ?CancelAttendanceUnavailabilityView $cancelAttendanceUnavailabilityView = null,
+        $isUnavailableForThisDay = false
     ) {
-        $this->begin                              = $begin;
-        $this->end                                = $end;
-        $this->scale                              = $scale;
-        $this->happenings                         = $happenings;
-        $this->unavailabilities                   = $unavailabilities;
-        $this->masses                             = $masses;
-        $this->meetings                           = $meetings;
+        $this->begin = $begin;
+        $this->end = $end;
+        $this->scale = $scale;
+        $this->happenings = $happenings;
+        $this->unavailabilities = $unavailabilities;
+        $this->masses = $masses;
+        $this->meetings = $meetings;
         $this->cancelAttendanceUnavailabilityView = $cancelAttendanceUnavailabilityView;
         $this->availableSlotViews = $availableSlotViews;
+        $this->isUnavailableForThisDay = $isUnavailableForThisDay;
     }
 
     /**

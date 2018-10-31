@@ -24,6 +24,8 @@ class TypeAlreadyExistsException extends \Exception
      */
     public function __construct(array $locales)
     {
+        parent::__construct();
+
         $this->message = sprintf('Type title for "%s" already exists.', implode(', ', $locales));
         $this->locales = $locales;
     }

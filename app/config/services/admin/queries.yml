@@ -159,3 +159,17 @@ services:
             - '@vimeet_infrastructure.repository.happening_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Scan\Happening\ListViewQuery }
+
+    #
+    # Static Formulation
+    #
+    Proximum\Vimeet\Application\Query\StaticFormulation\StaticFormulationListViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@Proximum\Vimeet\Application\Query\StaticFormulation\Customized\CustomizedStaticFormulationViewQueryHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\StaticFormulation\StaticFormulationListViewQuery }
+
+    Proximum\Vimeet\Application\Query\StaticFormulation\Customized\CustomizedStaticFormulationViewQueryHandler: ~

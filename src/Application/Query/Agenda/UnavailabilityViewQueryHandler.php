@@ -15,12 +15,7 @@ use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 class UnavailabilityViewQueryHandler
 {
-    /**
-     * @param UnavailabilityViewQuery $query
-     *
-     * @return UnavailabilityView
-     */
-    public function handle(UnavailabilityViewQuery $query)
+    public function handle(UnavailabilityViewQuery $query): UnavailabilityView
     {
         $begin = TimeOverlap::ceil($query->day->getBegin(), $query->unavailability->getBegin());
         $end = TimeOverlap::floor($query->day->getEnd(), $query->unavailability->getEnd());

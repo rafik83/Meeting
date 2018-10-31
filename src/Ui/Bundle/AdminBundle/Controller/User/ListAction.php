@@ -11,12 +11,17 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Adapter\SessionInterface;
+use Proximum\Vimeet\Application\Command\User\Batch\Batch;
+use Proximum\Vimeet\Application\Command\User\Batch\BatchCampaignResult;
 use Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery;
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery;
 use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\BatchType;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,8 +40,8 @@ class ListAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var SessionInterface */
-    private $session;
+    /** @var CommandBusInterface */
+    private $commandBus;
 
     /** @var UrlGeneratorInterface */
     private $urlGenerator;
@@ -44,20 +49,25 @@ class ListAction
     /** @var RuleStorageInterface */
     private $ruleStorageInterface;
 
+    /** @var FormFactoryInterface */
+    private $formFactory;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
         QueryBusInterface $queryBus,
-        SessionInterface $session,
+        CommandBusInterface $commandBus,
         UrlGeneratorInterface $urlGenerator,
-        RuleStorageInterface $ruleStorageInterface
+        RuleStorageInterface $ruleStorageInterface,
+        FormFactoryInterface $formFactory
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
-        $this->session = $session;
+        $this->commandBus = $commandBus;
         $this->urlGenerator = $urlGenerator;
         $this->ruleStorageInterface = $ruleStorageInterface;
+        $this->formFactory = $formFactory;
     }
 
     public function __invoke(Request $request, Event $event): Response
@@ -83,22 +93,47 @@ class ListAction
             $this->ruleStorageInterface->saveRules($event, 'user', $request->query->get('rules'));
         }
 
+        $rules = $this->ruleStorageInterface->getRules($event, $locale, 'user');
+
         $userEventListViews = $this->queryBus->handle(
             new GetUserEventListViewsQuery(
                 $event,
                 $page,
                 $locale,
-                $this->ruleStorageInterface->getRules($event, 'user')
+                $rules
             )
         );
 
-        $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery('user', $request->getLocale()));
+        $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery($event, 'user', $request->getLocale()));
+
+        $batch = new Batch($event, $locale, $rules);
+        $batchForm = $this->formFactory->create(BatchType::class, $batch, [
+            'ids' => $userEventListViews->paginatedResult->map(function(UserEventListView $eventListView) {
+                return $eventListView->userId;
+            })
+        ]);
+
+        $batchForm->handleRequest($request);
+        if ($batchForm->isSubmitted() && $batchForm->isValid()) {
+            $batch->isCampaignCreation = $batchForm->get('sendMail')->isClicked();
+
+            /** @var BatchCampaignResult $result */
+            $result = $this->commandBus->handle($batch);
+
+            return new RedirectResponse(
+                $this->urlGenerator->generate('admin_messaging_campaign_select_message', [
+                    'event' => $event->getId(),
+                    'campaign' => $result->campaign->getId(),
+                ])
+            );
+        }
 
         return new Response(
             $this->engine->render(
                 '@Admin/User/users-and-sheets-list.html.twig',
                 [
                     'event' => $event,
+                    'batchForm' => $batchForm->createView(),
                     'userEventListViews' => $userEventListViews,
                     'filters' => $filters,
                     'rules' => $this->ruleStorageInterface->getRulesQuery($event, 'user'),

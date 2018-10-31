@@ -58,6 +58,12 @@ class SheetViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::SHEET, Category::SHEET_ICON, $linksView, true);
+        $categoryTitle = Category::SHEET;
+
+        if (null !== $sheetQuery->staticFormulation) {
+            $categoryTitle = $sheetQuery->staticFormulation->getTitle($sheetQuery->locale);
+        }
+
+        return new CategoryView($categoryTitle, Category::SHEET_ICON, $linksView, true);
     }
 }

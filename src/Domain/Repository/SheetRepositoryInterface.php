@@ -318,14 +318,6 @@ interface SheetRepositoryInterface
     public function getSheetsNotPendingById(array $ids): array;
 
     /**
-     * @param User  $user
-     * @param array $types
-     *
-     * @return Sheet[]
-     */
-    public function getUserSheetsByTypes(User $user, array $types);
-
-    /**
      * @param Event $event
      *
      * @return array

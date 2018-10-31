@@ -56,7 +56,9 @@ class MeetingRequestViewQueryHandler
             $toSheet,
             $query->request->hasMeeting() ? Request::STATE_PLANNED : $query->request->getState(),
             $query->request->getCreatedAt(),
-            $query->request->getStateUpdatedAt()
+            $query->request->getStateUpdatedAt(),
+            $query->request->getMeeting() ? $query->request->getMeeting()->getCreatedType() : null,
+            $query->request->getMeeting() ? $query->request->getMeeting()->getSlot()->getBegin() : null
         );
     }
 }

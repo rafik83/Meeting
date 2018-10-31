@@ -23,10 +23,9 @@ Proximum\Vimeet\Domain\Model\Meeting:
             type: boolean
             options:
                 default: false
-        isCreatedByParticipants:
-            type: boolean
-            options:
-                default: false
+        createdType:
+            type: string
+            nullable: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

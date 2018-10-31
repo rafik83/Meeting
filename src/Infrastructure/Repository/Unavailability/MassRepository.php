@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Unavailability;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 
@@ -73,6 +74,38 @@ class MassRepository implements MassRepositoryInterface
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findByType(Type $type, string $locale)
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('mass')
+            ->from(Mass::class, 'mass')
+            ->join('mass.types', 'type', 'WITH', 'type = :type')
+            ->join('mass.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('type', $type)
+            ->setParameter('locale', $locale)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByTypes(array $types, string $locale): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('mass')
+            ->from(Mass::class, 'mass')
+            ->join('mass.types', 'type', 'WITH', 'type IN (:types)')
+            ->join('mass.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->setParameter('types', $types)
+            ->setParameter('locale', $locale)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**

@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail;
 
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\CheckboxesType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -53,9 +55,19 @@ class CustomizeAbstractType extends AbstractType
         }
 
         $builder
+            ->add('enabled', CheckboxType::class, [
+                'required' => false,
+                'attr' =>  [
+                    'data-toggle-visibility' => 'true',
+                    'data-element-id-to-hide' => 'message-wysiwyg-section',
+                ],
+            ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => CustomizeTranslationType::class,
                 'label' => false,
+                'entry_options' => [
+                    'isCustomizableByType' => $isCustomizableByType,
+                ],
             ])
         ;
     }

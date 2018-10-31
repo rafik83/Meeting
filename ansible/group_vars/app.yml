@@ -10,6 +10,7 @@ app_options:
   mysql_version:         '5.6'
   elasticsearch:         true
   elasticsearch_version: '1.7'
+  redis:                 true
 
 app_patterns:
 
@@ -124,6 +125,7 @@ app_patterns:
     - imagick
     - soap
     - gd
+    - redis
 
   php_applications: []
 

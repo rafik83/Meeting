@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\View\MeetingRequest\Export\MeetingRequestView;
 use Proximum\Vimeet\Application\View\MeetingRequest\Export\SheetView;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -55,6 +56,8 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $request->getFromParticipantsArray()->willReturn([]);
         $request->getToParticipantsArray()->willReturn([$participant1->reveal()]);
 
+        $request->getMeeting()->willReturn(null);
+
         // Mock
         $this->sheetViewQueryHandler
             ->handle(new SheetViewQuery($sheet1->reveal(), [], 'fr'))
@@ -78,7 +81,9 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             $sheetView2->reveal(),
             Request::STATE_REFUSED,
             $dateTime,
-            $dateTime
+            $dateTime,
+            null,
+            null
         );
         $this->assertEquals($expected, $result);
     }
@@ -86,14 +91,18 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
     public function testHandle()
     {
         $dateTime = new \DateTime();
+        $slotBeginDate =  new \DateTime();
         $request = $this->prophesize(Request::class);
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet2 = $this->prophesize(Sheet::class);
-        $meeting = $this->prophesize(Meeting::class);
         $participant1 = $this->prophesize(Participant::class);
 
         $sheetView1 = $this->prophesize(SheetView::class);
         $sheetView2 = $this->prophesize(SheetView::class);
+
+        $meeting = $this->prophesize(Meeting::class);
+
+        $meetingSlot = $this->prophesize(MeetingSlot::class);
 
         $request->getFromSheet()->willReturn($sheet1->reveal());
         $request->getToSheet()->willReturn($sheet2->reveal());
@@ -107,6 +116,11 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
 
         $request->getFromParticipantsArray()->willReturn([]);
         $request->getToParticipantsArray()->willReturn([$participant1->reveal()]);
+
+        $request->getMeeting()->willReturn($meeting->reveal());
+        $meeting->getCreatedType()->willReturn(Meeting::CREATED_BY_ADMIN);
+        $meeting->getSlot()->willReturn($meetingSlot);
+        $meetingSlot->getBegin()->willReturn($slotBeginDate);
 
         // Mock
         $this->sheetViewQueryHandler
@@ -131,7 +145,9 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             $sheetView2->reveal(),
             Request::STATE_PLANNED,
             $dateTime,
-            $dateTime
+            $dateTime,
+            Meeting::CREATED_BY_ADMIN,
+            $slotBeginDate
         );
         $this->assertEquals($expected, $result);
     }

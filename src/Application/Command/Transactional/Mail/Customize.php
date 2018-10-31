@@ -31,6 +31,9 @@ class Customize implements Command
     /** @var array */
     public $translations;
 
+    /** @var bool */
+    public $enabled;
+
     public function __construct(
         Event $event,
         string $transactionalMailType,
@@ -42,6 +45,7 @@ class Customize implements Command
         $this->data = $data;
         $this->associatedTypes = [];
         $this->translations = [];
+        $this->enabled = true;
 
         foreach ($genericTranslations as $locale => $genericTranslation) {
             $this->translations[$locale] = [
