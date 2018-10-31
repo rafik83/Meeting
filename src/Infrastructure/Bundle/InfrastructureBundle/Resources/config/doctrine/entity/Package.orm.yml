@@ -20,6 +20,10 @@ Proximum\Vimeet\Domain\Model\Package:
         maxParticipant:
             type: integer
             nullable: true
+        planningSelectable:
+            type: boolean
+            options:
+                default: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
