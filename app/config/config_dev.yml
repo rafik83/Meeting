@@ -1,6 +1,7 @@
 imports:
     - { resource: config.yml }
     - { resource: services_dev.yml }
+    - { resource: packages/snc_redis.yml }
 
 framework:
     router:
