@@ -36,6 +36,8 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
     const COL_HOUR_BEGIN                      = 'hour_begin';
     const COL_HOUR_END                        = 'hour_end';
     const COL_SPOT                            = 'spot';
+    const COL_CREATED_TYPE                    = 'created_type';
+    const COL_STATUS                          = 'status';
     const EXPORT_BASE_KEY                     = 'admin.meeting.export.fields.';
 
     /**
@@ -152,6 +154,9 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
         $fromSheetParticipantsFullName = $this->getSheetParticipantsFullName($fromSheetParticipants, $locale);
         $toSheetParticipantsFullName   = $this->getSheetParticipantsFullName($toSheetParticipants, $locale);
 
+        $createdType = $this->translator->trans(sprintf('admin.meeting.list.createdType.%s', $rawMeeting->getCreatedType()));
+        $status = $this->translator->trans(sprintf('admin.meeting.list.status.%s', $rawMeeting->getStatus()));
+
         $rawData = [
             self::COL_MEETING_ID                      => $rawMeeting->getId(),
             self::COL_FROM_SHEET_ID                   => $rawMeeting->getFromSheet()->getId(),
@@ -168,6 +173,8 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
             self::COL_HOUR_BEGIN                      => $this->timeFormatter->format($meeting['meetingBegin']),
             self::COL_HOUR_END                        => $this->timeFormatter->format($meeting['meetingEnd']),
             self::COL_SPOT                            => $meeting['spotReference'],
+            self::COL_CREATED_TYPE                    => $createdType,
+            self::COL_STATUS                          => $status,
         ];
 
         return $rawData;
@@ -243,6 +250,8 @@ class EventMeetingsNormalizer extends AbstractNormalizer implements NormalizerIn
             self::COL_HOUR_BEGIN,
             self::COL_HOUR_END,
             self::COL_SPOT,
+            self::COL_CREATED_TYPE,
+            self::COL_STATUS,
         ];
     }
 

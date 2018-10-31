@@ -10,25 +10,25 @@
 
 namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA;
 
-use Proximum\Vimeet\Application\Adapter\EngineInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ParticipantAccountLinkSubstitution;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstituteInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
+use Proximum\Vimeet\Domain\Adapter\TemplatingAdapterInterface;
 
 class ParticipantAccountCTASubstitution implements SubstituteInterface
 {
     /** @var ParticipantAccountLinkSubstitution */
     private $participantAccountLinkSubstitution;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var TemplatingAdapterInterface */
+    private $templating;
 
     public function __construct(
         ParticipantAccountLinkSubstitution $participantAccountLinkSubstitution,
-        EngineInterface $engine
+        TemplatingAdapterInterface $templating
     ) {
         $this->participantAccountLinkSubstitution = $participantAccountLinkSubstitution;
-        $this->engine = $engine;
+        $this->templating = $templating;
     }
 
     public function substitute(AbstractPrepareMail $prepareMail): string
@@ -39,7 +39,7 @@ class ParticipantAccountCTASubstitution implements SubstituteInterface
             return '';
         }
 
-        return $this->engine->render('MailBundle:Mail:CTA/cta.html.twig', [
+        return $this->templating->render('MailBundle:Mail:CTA/cta.html.twig', [
             'label' => 'mail.event.preregister.link',
             'link' => $link,
             'locale' => $prepareMail->locale

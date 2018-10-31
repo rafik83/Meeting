@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\TypeTemplatesView;
@@ -46,7 +45,7 @@ interface TypeRepositoryInterface
      *
      * @return int
      */
-    public function countByEvent(Event $event);
+    public function countByEvent(Event $event): int;
 
     /**
      * @param Event     $event
@@ -160,26 +159,11 @@ interface TypeRepositoryInterface
     public function getSeeableTypeIdsByUser(User $user);
 
     /**
-     * @param Sheet $sheet
-     *
-     * @return array
-     */
-    public function getSeeableTypeIdsBySheet(Sheet $sheet);
-
-    /**
-     * @param Event $event
-     * @param User  $user
+     * @param int[] $userIds
      *
      * @return Type[]
      */
-    public function getTypesByUser(Event $event, User $user);
-
-    /**
-     * @param User $user
-     *
-     * @return Type[]
-     */
-    public function getAllTypesByUser(User $user);
+    public function getTypesByUserIds(Event $event, array $userIds): array;
 
     /**
      * @param Event     $event

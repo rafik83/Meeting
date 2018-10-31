@@ -49,7 +49,8 @@ class UpdateHandler
             $update->end,
             $update->blocking,
             $update->dispatch,
-            $update->timeSlots
+            $update->timeSlots,
+            $update->types
         );
 
         foreach ($update->translations as $locale => $translation) {

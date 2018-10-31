@@ -28,5 +28,11 @@ final class ComparisonOperatorsByType
         'boolean' => [
             'equal',
         ],
+        'nomenclature' => [
+            'in',
+            'not_in',
+            'is_null',
+            'is_not_null'
+        ]
     ];
 }

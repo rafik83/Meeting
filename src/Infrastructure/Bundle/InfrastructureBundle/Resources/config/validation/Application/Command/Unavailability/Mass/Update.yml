@@ -26,3 +26,6 @@ Proximum\Vimeet\Application\Command\Unavailability\Mass\Update:
             - Expression:
                 expression: "this.areTimeSlotsValid()"
                 message: "validators.unavailability.timeSlotsExceedRange"
+        types:
+            - Count:
+                  min: 1

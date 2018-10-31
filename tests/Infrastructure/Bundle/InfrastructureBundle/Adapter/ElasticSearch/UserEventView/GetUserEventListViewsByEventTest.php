@@ -32,8 +32,12 @@ class GetUserEventListViewsByEventTest extends TestCase
         $event = $this->prophesize(Event::class);
 
         $condition = new Condition(
+            $event->reveal(),
+            'fr',
             new LogicalOperatorAnd,
-            [ new Field('field', new ComparisonOperatorEqual, 'text', 'A1') ]
+            [
+                new Field('field', new ComparisonOperatorEqual, 'text', 'A1')
+            ]
         );
 
         $event->getId()->willReturn(42);

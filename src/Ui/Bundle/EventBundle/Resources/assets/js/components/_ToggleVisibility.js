@@ -10,6 +10,7 @@ function ToggleVisibility(element)
         this.displayType = 'block';
     }
 
+    this.hide(this.elementToOpen);
     this.showButton.addEventListener('click', this.handleShow.bind(this));
     this.hideButton.addEventListener('click', this.handleHide.bind(this));
 }

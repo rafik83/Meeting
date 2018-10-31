@@ -40,21 +40,27 @@ class Message implements MessageInterface
     /** @var ArrayCollection of Type */
     private $associatedParticipationTypes;
 
+    /** @var bool */
+    private $enabled;
+
     /**
      * @param Event              $event
      * @param string             $type
      * @param \DateTimeInterface $createdAt
+     * @param bool               $enabled
      * @param Type[]             $associatedParticipationTypes
      */
     public function __construct(
         Event $event,
         string $type,
         \DateTimeInterface $createdAt,
+        bool $enabled = true,
         array $associatedParticipationTypes = []
     ) {
         $this->event = $event;
         $this->type = $type;
         $this->createdAt = $createdAt;
+        $this->enabled = $enabled;
         $this->associatedParticipationTypes = new ArrayCollection($associatedParticipationTypes);
         $this->translations = new ArrayCollection();
     }
@@ -139,9 +145,10 @@ class Message implements MessageInterface
         }
     }
 
-    public function update(array $associatedParticipationTypes): void
+    public function update(array $associatedParticipationTypes, bool $enabled = true): void
     {
         $this->associatedParticipationTypes = new ArrayCollection($associatedParticipationTypes);
+        $this->enabled = $enabled;
     }
 
     public function updateTranslations(array $translations): void
@@ -167,5 +174,13 @@ class Message implements MessageInterface
         }
 
         return $this->getTranslation($locale)->getContent();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
     }
 }

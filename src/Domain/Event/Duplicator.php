@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Event\Product\Duplicator as ProductDuplicator;
 use Proximum\Vimeet\Domain\Event\RegistrationTemplate\Duplicator as RegistrationTemplateDuplicator;
 use Proximum\Vimeet\Domain\Event\Rule\Duplicator as RuleDuplicator;
 use Proximum\Vimeet\Domain\Event\SheetTemplate\Duplicator as SheetTemplateDuplicator;
+use Proximum\Vimeet\Domain\Event\StaticFormulation\Duplicator as StaticFormulationDuplicator;
 use Proximum\Vimeet\Domain\Event\Tip\Duplicator as TipDuplicator;
 use Proximum\Vimeet\Domain\Event\Type\Duplicator as TypeDuplicator;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -79,6 +80,9 @@ class Duplicator
     /** @var MessageDuplicator */
     private $messageDuplicator;
 
+    /** @var StaticFormulationDuplicator */
+    private $staticFormulationDuplicator;
+
     /**
      * @param ContentDuplicator              $contentDuplicator
      * @param BillingConfigurationDuplicator $billingConfigurationDuplicator
@@ -96,6 +100,7 @@ class Duplicator
      * @param ExternalSearchFacetDuplicator  $externalSearchFacetDuplicator
      * @param CatalogVisibilityDuplicator    $catalogVisibilityDuplicator
      * @param MessageDuplicator              $messageDuplicator
+     * @param StaticFormulationDuplicator    $staticFormulationDuplicator
      */
     public function __construct(
         ContentDuplicator $contentDuplicator,
@@ -113,7 +118,8 @@ class Duplicator
         InternalSearchFacetDuplicator $internalSearchFacetDuplicator,
         ExternalSearchFacetDuplicator $externalSearchFacetDuplicator,
         CatalogVisibilityDuplicator $catalogVisibilityDuplicator,
-        MessageDuplicator $messageDuplicator
+        MessageDuplicator $messageDuplicator,
+        StaticFormulationDuplicator $staticFormulationDuplicator
     ) {
         $this->contentDuplicator              = $contentDuplicator;
         $this->billingConfigurationDuplicator = $billingConfigurationDuplicator;
@@ -131,6 +137,7 @@ class Duplicator
         $this->externalSearchFacetDuplicator  = $externalSearchFacetDuplicator;
         $this->catalogVisibilityDuplicator    = $catalogVisibilityDuplicator;
         $this->messageDuplicator              = $messageDuplicator;
+        $this->staticFormulationDuplicator = $staticFormulationDuplicator;
     }
 
     /**
@@ -156,5 +163,6 @@ class Duplicator
         $this->externalSearchFacetDuplicator->duplicate($event);
         $this->catalogVisibilityDuplicator->duplicate($event, $duplicatorDataStorage);
         $this->messageDuplicator->duplicate($event);
+        $this->staticFormulationDuplicator->duplicate($event, $duplicatorDataStorage);
     }
 }

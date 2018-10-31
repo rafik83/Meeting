@@ -96,7 +96,7 @@ class ExportUploadedObjectsBySheetsAction
                 $event,
                 $filters,
                 $locale,
-                $this->ruleStorage->getRules($event, 'sheet')
+                $this->ruleStorage->getRules($event, $locale, 'sheet')
             )
         );
 

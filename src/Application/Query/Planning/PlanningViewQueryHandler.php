@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInt
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Unavailability\Mass\FilterMassUnavailabilitiesBySheetsType;
 
 class PlanningViewQueryHandler
 {
@@ -73,17 +74,9 @@ class PlanningViewQueryHandler
     /** @var array */
     private $happeningParticipations = [];
 
-    /**
-     * @param DayRepositoryInterface                    $dayRepository
-     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
-     * @param UnavailabilityRepositoryInterface         $unavailabilityRepository
-     * @param MassRepositoryInterface                   $massUnavailabilityRepository
-     * @param MassAssignmentRepositoryInterface         $assignmentRepository
-     * @param MeetingRepositoryInterface                $meetingRepository
-     * @param DayViewQueryHandler                       $dayViewQueryHandler
-     * @param UserRepositoryInterface                   $userRepository
-     * @param SheetRepositoryInterface                  $sheetRepository
-     */
+    /** @var FilterMassUnavailabilitiesBySheetsType */
+    private $filterMassUnavailabilitiesBySheetsType;
+
     public function __construct(
         DayRepositoryInterface $dayRepository,
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
@@ -93,24 +86,21 @@ class PlanningViewQueryHandler
         MeetingRepositoryInterface $meetingRepository,
         DayViewQueryHandler $dayViewQueryHandler,
         UserRepositoryInterface $userRepository,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        FilterMassUnavailabilitiesBySheetsType $filterMassUnavailabilitiesBySheetsType
     ) {
-        $this->dayRepository                    = $dayRepository;
+        $this->dayRepository = $dayRepository;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
-        $this->unavailabilityRepository         = $unavailabilityRepository;
-        $this->assignmentRepository             = $assignmentRepository;
-        $this->massUnavailabilityRepository     = $massUnavailabilityRepository;
-        $this->meetingRepository                = $meetingRepository;
-        $this->dayViewQueryHandler              = $dayViewQueryHandler;
-        $this->userRepository                   = $userRepository;
-        $this->sheetRepository                  = $sheetRepository;
+        $this->unavailabilityRepository = $unavailabilityRepository;
+        $this->assignmentRepository = $assignmentRepository;
+        $this->massUnavailabilityRepository = $massUnavailabilityRepository;
+        $this->meetingRepository = $meetingRepository;
+        $this->dayViewQueryHandler = $dayViewQueryHandler;
+        $this->userRepository = $userRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->filterMassUnavailabilitiesBySheetsType = $filterMassUnavailabilitiesBySheetsType;
     }
 
-    /**
-     * @param PlanningViewQuery $query
-     *
-     * @return PlanningView
-     */
     public function handle(PlanningViewQuery $query): PlanningView
     {
         $eventId = $query->event->getId();
@@ -128,6 +118,13 @@ class PlanningViewQueryHandler
         $days = [];
         $userAvailableLocale = $query->event->getAvailableLocale($query->locale);
 
+        $sheets = $this->sheetRepository->getSheetsByUserAndEventWhereUserIsParticipant($query->user, $query->event);
+        $isUserMultipleSheet = \count($sheets) > 1;
+        $filteredMassUnavailabilitiesBySheetsType = $this->filterMassUnavailabilitiesBySheetsType->handle(
+            $this->masses[$eventId],
+            $sheets
+        );
+
         foreach ($this->eventDays[$eventId] as $day) {
             $days[] = $this->dayViewQueryHandler->handle(
                 new DayViewQuery(
@@ -137,14 +134,12 @@ class PlanningViewQueryHandler
                     $userAvailableLocale,
                     $this->unavailabilities[$eventId][$query->user->getId()],
                     $this->happeningParticipations[$eventId][$query->user->getId()],
-                    $this->masses[$eventId],
+                    $filteredMassUnavailabilitiesBySheetsType,
                     $this->assignments[$eventId][$query->user->getId()],
                     $this->meetings[$eventId][$query->user->getId()]
                 )
             );
         }
-
-        $isUserMultipleSheet = $this->sheetRepository->isUserParticipantMultipleSheetsInEvent($query->user, $query->event);
 
         return new PlanningView($days, $query->event->getTimeZone(), $isUserMultipleSheet);
     }

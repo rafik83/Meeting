@@ -21,19 +21,13 @@ use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class CatalogViewQueryHandler
 {
-    /**
-     * @var DateTimeInterface
-     */
+    /** @var DateTimeInterface */
     private $dateTime;
 
-    /**
-     * @var NavigationBuilderInterface
-     */
+    /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
     /**
-     * CatalogViewQueryHandler constructor.
-     *
      * @param DateTimeInterface          $dateTime
      * @param NavigationBuilderInterface $navigationBuilder
      */
@@ -56,8 +50,15 @@ class CatalogViewQueryHandler
             ->getConfiguration()
             ->getCatalogOnlineDate();
 
+
+        $categoryTitle = Category::CATALOG;
+
+        if (null !== $catalogViewQuery->staticFormulation) {
+            $categoryTitle = $catalogViewQuery->staticFormulation->getTitle($catalogViewQuery->locale);
+        }
+
         return new CategoryView(
-            Category::CATALOG,
+            $categoryTitle,
             Category::CATALOG_ICON,
             [
                 $this->getLinkView(

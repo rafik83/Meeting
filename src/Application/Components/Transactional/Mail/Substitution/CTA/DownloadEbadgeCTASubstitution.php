@@ -10,18 +10,18 @@
 
 namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA;
 
-use Proximum\Vimeet\Application\Adapter\EngineInterface;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstituteInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
+use Proximum\Vimeet\Domain\Adapter\TemplatingAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Token\UserEventTokenGenerator;
 use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 
 class DownloadEbadgeCTASubstitution implements SubstituteInterface
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var TemplatingAdapterInterface */
+    private $templating;
 
     /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
@@ -30,11 +30,11 @@ class DownloadEbadgeCTASubstitution implements SubstituteInterface
     private $userEventTokenGenerator;
 
     public function __construct(
-        EngineInterface $engine,
+        TemplatingAdapterInterface $templating,
         EventUrlGeneratorInterface $eventUrlGenerator,
         UserEventTokenGenerator $userEventTokenGenerator
     ) {
-        $this->engine = $engine;
+        $this->templating = $templating;
         $this->eventUrlGenerator = $eventUrlGenerator;
         $this->userEventTokenGenerator = $userEventTokenGenerator;
     }
@@ -57,7 +57,7 @@ class DownloadEbadgeCTASubstitution implements SubstituteInterface
             ]
         );
 
-        return $this->engine->render(
+        return $this->templating->render(
             'MailBundle:Mail:CTA/cta.html.twig',
             [
                 'link' => $link,

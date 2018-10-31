@@ -53,7 +53,7 @@ services:
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\ParticipantAccountCTASubstitution:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ParticipantAccountLinkSubstitution'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@adapter.templating_adapter'
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ActivateAccountLinkSubstitution:
         arguments:
@@ -63,7 +63,7 @@ services:
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\ActivateAccountCTASubstitution:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ActivateAccountLinkSubstitution'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@adapter.templating_adapter'
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SpotReferenceSubstitution: ~
 
@@ -110,7 +110,7 @@ services:
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\SheetLinkCTASubstitution:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@adapter.templating_adapter'
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SheetPlanningSubstitution:
         arguments:
@@ -123,12 +123,12 @@ services:
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\AgendaConfirmationCTASubstitution:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@adapter.templating_adapter'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\AgendaConfirmationLinkSubstitution'
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\DownloadEbadgeCTASubstitution:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@adapter.templating_adapter'
             - '@adapter.event_url_generator'
             - '@domain.token.user_event_token_generator'
 
@@ -138,13 +138,13 @@ services:
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\TestVisioConfigurationCTASubstitution:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@adapter.templating_adapter'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\TestVisioConfigurationLinkSubstitution'
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventActivateAccountAlreadyKnownCTASubstitution:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@adapter.templating_adapter'
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventProFormaLinkSubstitution:
         arguments:
@@ -153,7 +153,7 @@ services:
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventProFormaCTASubstitution:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventProFormaLinkSubstitution'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\EngineAdapter'
+            - '@adapter.templating_adapter'
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\GuestEmailSubstitution: ~
 

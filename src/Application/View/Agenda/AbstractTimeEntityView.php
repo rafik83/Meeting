@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
-abstract class AbstractTimeEntityView
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
+
+abstract class AbstractTimeEntityView implements TimeRangeInterface
 {
     /** @var \DateTimeInterface */
     public $begin;

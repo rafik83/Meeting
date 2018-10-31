@@ -128,6 +128,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\MeetingSlotRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@vimeet_infrastructure.repository.type_repository'
     vimeet_infrastructure.repository.meeting.message_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Meeting\MessageRepository
         arguments:
@@ -2199,6 +2200,7 @@ services:
     Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQueryHandler:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@catalog.tagged_nomenclature_filter_getter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
@@ -2206,7 +2208,23 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery }
 
-    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer'
+
+    Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
+        arguments:
+            - '@catalog.tagged_nomenclature_filter_getter'
+
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer: ~
 
     command.product.remove.remove_handler:
         class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler
@@ -2510,12 +2528,6 @@ services:
     #
     # Sheet Component
     #
-    vimeet_infrastructure.application.components.sheet.manager:
-        class: Proximum\Vimeet\Application\Components\Sheet\SheetManager
-        arguments:
-            - '@vimeet_infrastructure.repository.type_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
     vimeet_infrastructure.application.components.sheet.sheet_info_guesser:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser
         arguments:
@@ -3888,6 +3900,7 @@ services:
             - '@query.agenda.cancel_attendance_unavailability_view_query_handler'
             - '@query.agenda.available_sheets.available_slots_by_participant_and_day_query_handler'
             - '@components:agenda.agenda_collision_manager'
+            - '@Proximum\Vimeet\Domain\Time\OverlappedTimeRangeMerger'
     query.agenda.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler
         arguments:
@@ -3907,6 +3920,7 @@ services:
             - '@domain.user.agenda.phone.validation_required_checker'
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+            - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
 
@@ -5232,6 +5246,7 @@ services:
             - '@domain.event.catalog.external.search-facet.duplicator'
             - '@domain.event.catalog.external.visibility.duplicator'
             - '@domain.event.message.duplicator'
+            - '@Proximum\Vimeet\Domain\Event\StaticFormulation\Duplicator'
 
     domain.event.content.duplicator:
         class: Proximum\Vimeet\Domain\Event\Content\Duplicator
@@ -5323,6 +5338,10 @@ services:
         arguments:
             - '@repository.messaging.message_repository'
             - '@datetime'
+
+    Proximum\Vimeet\Domain\Event\StaticFormulation\Duplicator:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
 
     domain.event.last_event_participation:
         class: Proximum\Vimeet\Domain\Event\LastEventParticipation
@@ -5423,7 +5442,15 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.unavailability.mass_repository'
             - '@repository.unavailability.mass_assignment_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Domain\Unavailability\Mass\IsMassUnavailabilityAssignedToAllTypes'
             - '@adapter.job_queue_adapter'
+
+    Proximum\Vimeet\Domain\Unavailability\Mass\FilterMassUnavailabilitiesBySheetsType: ~
+
+    Proximum\Vimeet\Domain\Unavailability\Mass\IsMassUnavailabilityAssignedToAllTypes:
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
 
     #
     # Filter
@@ -5831,6 +5858,7 @@ services:
             - '@repository.unavailability.mass_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@repository.unavailability.mass_assignment_repository'
+            - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
 
     #
     # Visio Guesser
@@ -5944,6 +5972,8 @@ services:
             - '@query.planning.day_view_query_handler'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Domain\Unavailability\Mass\FilterMassUnavailabilitiesBySheetsType'
+
     ###### Formatter
     planning.formatter.unallocated_formatter:
         class: Proximum\Vimeet\Application\Components\Planning\Formatter\UnallocatedFormatter

@@ -27,6 +27,10 @@ class PrepareRegisterAccountMail extends AbstractPrepareMailService
         );
 
         if ($message instanceof Message) {
+            if (!$message->isEnabled()) {
+                return null;
+            }
+
             $result = $this->substitutionHandler->handle($prepareMail, $message);
 
             return new RegisterAccountCustomizedMail(

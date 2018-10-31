@@ -409,7 +409,7 @@ admin.meeting.export.fields.to_user_ids: 'Requested Users ID'
 admin.meeting.link: Meetings
 admin.meeting.list.column.head.createdAt: 'Created at'
 admin.meeting.list.column.head.from: From
-admin.meeting.list.column.head.isCreatedByParticipants: 'Created by participants'
+admin.meeting.list.column.head.createdType: 'Created by %type%'
 admin.meeting.list.column.head.slot: Slot
 admin.meeting.list.column.head.to: To
 admin.meeting.list.details: details

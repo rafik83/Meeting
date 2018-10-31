@@ -12,7 +12,10 @@ namespace Proximum\Vimeet\Application\Query\ConditionRules\Filters;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
+use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\ConditionRules\ComparisonOperatorsByType;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class GetFiltersByTypeAndLocaleQueryHandler
 {
@@ -63,9 +66,15 @@ class GetFiltersByTypeAndLocaleQueryHandler
     /** @var TranslatorInterface */
     private $translator;
 
-    public function __construct(TranslatorInterface $translator)
-    {
+    /** @var TaggedNomenclatureFilterGetter */
+    private $taggedNomenclatureFilterGetter;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter
+    ) {
         $this->translator = $translator;
+        $this->taggedNomenclatureFilterGetter = $taggedNomenclatureFilterGetter;
     }
 
     public function handle(GetFiltersByTypeAndLocaleQuery $query): array
@@ -74,7 +83,38 @@ class GetFiltersByTypeAndLocaleQueryHandler
             throw new \InvalidArgumentException(sprintf('Query type "%s" is not available.', $query->type));
         }
 
-        return $this->getFilters(self::FIELDS[$query->type], $query->locale);
+        $filters = $this->getFilters(self::FIELDS[$query->type], $query->locale);
+
+        if ('sheet' === $query->type) {
+            $filters = array_merge($filters, $this->getNomenclatureFilters($query->event, $query->locale));
+        }
+
+        return $filters;
+    }
+
+    private function getNomenclatureFilters(Event $event, string $locale): array
+    {
+        $filters = [];
+        $nomenclatureFilterViews = $this->taggedNomenclatureFilterGetter->getNomenclaturesItemsByEvent($event, $locale);
+
+        /** @var NomenclatureFilterView $nomenclatureFilterView */
+        foreach ($nomenclatureFilterViews as $nomenclatureFilterView) {
+            $filter = [
+                'id' => sprintf('%s.%s', TypesMapping::SHEET_VIEW_TAGGED_NOMENCLATURE, $nomenclatureFilterView->id),
+                'label' => $nomenclatureFilterView->title,
+                'type' => 'string',
+                'input' => 'select',
+                'plugin' => 'select2',
+                'multiple' => true,
+                'optgroup' => $this->translate('optgroup.nomenclature', $locale),
+                'values' => $nomenclatureFilterView->items,
+                'operators' => ComparisonOperatorsByType::OPERATORS['nomenclature'] ?? [],
+            ];
+
+            $filters[] = $filter;
+        }
+
+        return $filters;
     }
 
     private function getFilters(array $fields, string $locale): array

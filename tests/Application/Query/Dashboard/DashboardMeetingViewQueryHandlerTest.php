@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Dashboard\DashboardMeetingViewQuery;
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardMeetingViewQueryHandler;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardMeetingView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
@@ -43,12 +44,19 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
         $this->event->hasDay()->shouldBeCalled()->willReturn(false);
 
         $this->meetingRepository->countByEvent($this->event->reveal())->shouldBeCalled()->willReturn(200);
-        $this->meetingRepository->countBetweenDatesByEvent(Argument::any())->shouldNotBeCalled();
+        $this->meetingRepository->countBetweenDatesByEventAndType(Argument::any(), Argument::any(), Argument::any(), Meeting::CREATED_BY_ADMIN)->shouldNotBeCalled();
+
         $this->meetingRepository
-            ->countCreatedByParticipantByEvent($this->event->reveal())
+            ->countCreatedByEventAndType($this->event->reveal(), Meeting::CREATED_BY_PARTICIPANT)
             ->shouldBeCalled()
-            ->willReturn(0)
+            ->willReturn(10)
         ;
+        $this->meetingRepository
+            ->countCreatedByEventAndType($this->event->reveal(), Meeting::CREATED_BY_PLANNER)
+            ->shouldBeCalled()
+            ->willReturn(10)
+        ;
+        $this->meetingRepository->countUpstreamByEventAndType($this->event->reveal(), Meeting::CREATED_BY_ADMIN)->shouldNotBeCalled();
         $this->requestRepository->countApprovedByEvent($this->event->reveal())->shouldBeCalled()->willReturn(300);
         $this->requestRepository->countPendingByEvent($this->event->reveal())->shouldBeCalled()->willReturn(25);
         $this->requestRepository->countRefusedByEvent($this->event->reveal())->shouldBeCalled()->willReturn(250);
@@ -63,6 +71,8 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
         $expected = new DashboardMeetingView(
             200,
             0,
+            10,
+            10,
             0,
             300,
             25,
@@ -87,20 +97,31 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
         $this->event->getLastDay()->shouldBeCalled()->willReturn($day2->reveal());
 
         $this->meetingRepository->countByEvent($this->event->reveal())->shouldBeCalled()->willReturn(200);
+
+        $this->meetingRepository->countBetweenDatesByEventAndType($this->event->reveal(), $dateTime1, $dateTime2, Meeting::CREATED_BY_ADMIN)
+            ->shouldBeCalled()
+            ->willReturn(20);
+
         $this->meetingRepository
-            ->countBetweenDatesByEvent(
+            ->countCreatedByEventAndType(
                 $this->event->reveal(),
-                $dateTime1,
-                $dateTime2
+                Meeting::CREATED_BY_PLANNER
             )
             ->shouldBeCalled()
             ->willReturn(30)
         ;
         $this->meetingRepository
-            ->countCreatedByParticipantByEvent($this->event->reveal())
+            ->countCreatedByEventAndType(
+                $this->event->reveal(),
+                Meeting::CREATED_BY_PARTICIPANT
+            )
             ->shouldBeCalled()
-            ->willReturn(15)
+            ->willReturn(40)
         ;
+
+        $this->meetingRepository->countUpstreamByEventAndType($this->event->reveal(), $dateTime1, Meeting::CREATED_BY_ADMIN)
+            ->shouldBeCalled()
+            ->willReturn(140);
 
         $this->requestRepository->countApprovedByEvent($this->event->reveal())->shouldBeCalled()->willReturn(300);
         $this->requestRepository->countPendingByEvent($this->event->reveal())->shouldBeCalled()->willReturn(25);
@@ -115,8 +136,10 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
 
         $expected = new DashboardMeetingView(
             200,
+            20,
+            40,
             30,
-            15,
+            140,
             300,
             25,
             250

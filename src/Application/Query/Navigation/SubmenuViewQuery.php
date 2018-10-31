@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Navigation;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\StaticFormulation;
 use Proximum\Vimeet\Domain\Model\User;
 
 class SubmenuViewQuery
@@ -41,19 +42,30 @@ class SubmenuViewQuery
      */
     public $user;
 
+    /** @var StaticFormulation[] */
+    public $staticFormulationsIndexByCategories;
+
     /**
-     * @param Event      $event
-     * @param string     $locale
-     * @param string     $route
-     * @param null|Sheet $sheet
-     * @param null|User  $user
+     * @param Event               $event
+     * @param string              $locale
+     * @param string              $route
+     * @param null|Sheet          $sheet
+     * @param null|User           $user
+     * @param StaticFormulation[] $staticFormulationsIndexByCategories
      */
-    public function __construct(Event $event, $locale, $route, Sheet $sheet = null, User $user = null)
-    {
-        $this->event  = $event;
+    public function __construct(
+        Event $event,
+        $locale,
+        $route,
+        Sheet $sheet = null,
+        User $user = null,
+        array $staticFormulationsIndexByCategories = []
+    ) {
+        $this->event = $event;
         $this->locale = $locale;
-        $this->route  = $route;
-        $this->sheet  = $sheet;
-        $this->user   = $user;
+        $this->route = $route;
+        $this->sheet = $sheet;
+        $this->user = $user;
+        $this->staticFormulationsIndexByCategories = $staticFormulationsIndexByCategories;
     }
 }

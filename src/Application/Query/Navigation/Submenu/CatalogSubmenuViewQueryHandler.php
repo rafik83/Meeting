@@ -51,19 +51,31 @@ class CatalogSubmenuViewQueryHandler
 
         $catalogOnlineDate = $query->event->getConfiguration()->getCatalogOnlineDate();
 
-        if (null !== $catalogOnlineDate && $catalogOnlineDate <= $this->datetime && $query->sheet->isInCatalog()) {
+        if (null !== $catalogOnlineDate && $catalogOnlineDate <= $this->datetime && $query->sheet->isInInternalCatalog()) {
+            $catalogTitle = 'navigation.category.catalog';
+
+            if (isset($query->staticFormulationsIndexedByCategory[Category::CATALOG])) {
+                $catalogTitle = $query->staticFormulationsIndexedByCategory[Category::CATALOG]->getTitle($query->locale);
+            }
+
             $buttonViews[] = new SubmenuButtonView(
                 Category::CATALOG_ICON,
-                'navigation.category.catalog',
+                $catalogTitle,
                 $this->navigationBuilder->getRoute('event_catalog_index', ['sheet' => $query->sheet->getId()]),
                 Route::isCatalog($query->route),
                 false,
                 true
             );
 
+            $meetingTitle = 'navigation.category.meeting';
+
+            if (isset($query->staticFormulationsIndexedByCategory[Category::MEETING])) {
+                $meetingTitle = $query->staticFormulationsIndexedByCategory[Category::MEETING]->getTitle($query->locale);
+            }
+
             $buttonViews[] = new SubmenuButtonView(
                 Category::MEETING_ICON,
-                'navigation.category.meeting',
+                $meetingTitle,
                 $this->navigationBuilder->getRoute('event_meeting_list_request', [
                     'sheet' => $query->sheet->getId(),
                 ]),

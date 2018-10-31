@@ -12,6 +12,8 @@ account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
 agenda.availability.available_sheets: '{1} Voir le participant disponible|]1,Inf[ Voir les %availableSheets% participants disponibles'
 agenda.availability.available_sheets_with_proposition: '{1} Voir une proposition de RDV|]1,Inf[ Voir les %availableSheets% propositions de RDV'
+agenda.day.see: 'Voir la journée'
+agenda.day.hide: 'Cacher cette journée'
 agenda.meeting.details: Details
 agenda.participant.view: 'Agenda de %participant%'
 agenda.title: 'Mon agenda'

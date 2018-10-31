@@ -36,9 +36,15 @@ class BadgeSubmenuViewQueryHandler
             return null;
         }
 
+        $badgeTitle = Category::BADGE;
+
+        if (null !== $query->staticFormulation) {
+            $badgeTitle = $query->staticFormulation->getTitle($query->locale);
+        }
+
         return new SubmenuButtonView(
             Category::BADGE_ICON,
-            Category::BADGE,
+            $badgeTitle,
             $this->router->generate(
                 'event_sheet_user_badge',
                 [

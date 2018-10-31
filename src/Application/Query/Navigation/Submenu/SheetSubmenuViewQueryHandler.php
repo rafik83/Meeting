@@ -41,9 +41,15 @@ class SheetSubmenuViewQueryHandler
     {
         $buttonViews = [];
 
+        $subMenuTitle = 'sheet.title';
+
+        if (null !== $query->staticFormulation) {
+            $subMenuTitle = $query->staticFormulation->getTitle($query->locale);
+        }
+
         $buttonViews[] = new SubmenuButtonView(
             Category::SHEET_ICON,
-            'sheet.title',
+            $subMenuTitle,
             $this->navigationBuilder->getRoute('event_sheet_default', ['sheet' => $query->sheet->getId()]),
             Route::isSheet($query->route),
             false,

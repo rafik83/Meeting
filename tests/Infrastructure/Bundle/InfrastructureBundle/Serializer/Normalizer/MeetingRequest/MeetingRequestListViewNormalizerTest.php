@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\View\MeetingRequest\Export\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\MeetingRequest\Export\MeetingRequestView;
 use Proximum\Vimeet\Application\View\MeetingRequest\Export\SheetView;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\MeetingRequest\MeetingRequestListViewNormalizer;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
@@ -27,12 +28,13 @@ class MeetingRequestListViewNormalizerTest extends TestCase
     public function testNormalization()
     {
         $date = new \DateTime('2017-10-10 10:00:00');
+        $slotBeginDate = new \DateTime('2017-10-10 10:20:00');
         $fromSheet1 = new SheetView(15, 'sheet title 1', 'type title 1', 'category title 1', [8, 9], ['toto', 'tata']);
         $fromSheet2 = new SheetView(16, 'sheet title 2', 'type title 2', null, [], []);
         $toSheet1 = new SheetView(17, 'sheet title 3', 'type title 3', null, [11], ['jean']);
         $toSheet2 = new SheetView(18, 'sheet title 4', 'type title 1', 'category title 1', [91], ['Paul']);
-        $meetingRequestView1 = new MeetingRequestView(58, 8, $fromSheet1, $toSheet1, 'planned', $date, $date);
-        $meetingRequestView2 = new MeetingRequestView(80, null, $fromSheet2, $toSheet2, 'refused', $date, $date);
+        $meetingRequestView1 = new MeetingRequestView(58, 8, $fromSheet1, $toSheet1, 'planned', $date, $date, Meeting::CREATED_BY_PLANNER, $slotBeginDate);
+        $meetingRequestView2 = new MeetingRequestView(80, null, $fromSheet2, $toSheet2, 'refused', $date, $date, Meeting::CREATED_BY_PARTICIPANT, $slotBeginDate);
         $meetingRequests = [
             $meetingRequestView1,
             $meetingRequestView2,
@@ -142,6 +144,26 @@ class MeetingRequestListViewNormalizerTest extends TestCase
             ->willReturn('trans.export.meeting_request.state.refused')
         ;
 
+        $translator
+            ->trans('export.meeting_request.col.createdType.planner', [], 'export', 'fr')
+            ->shouldBeCalled()
+            ->willReturn('trans.export.meeting_request.col.createdType.planner');
+
+        $translator
+            ->trans('export.meeting_request.col.slot', [], 'export', 'fr')
+            ->shouldBeCalled()
+            ->willReturn('trans.export.meeting_request.col.createdType.slot');
+
+        $translator
+            ->trans('export.meeting_request.col.createdType', [], 'export', 'fr')
+            ->shouldBeCalled()
+            ->willReturn('trans.export.meeting_request.col.createdType');
+
+        $translator
+            ->trans('export.meeting_request.col.createdType.participant', [], 'export', 'fr')
+            ->shouldBeCalled()
+            ->willReturn('trans.export.meeting_request.col.createdType.participant');
+
         $normalizer = new MeetingRequestListViewNormalizer($translator->reveal());
         $result = $normalizer->normalize($meetingRequestListView, 'csv', ['csv_delimiter' => ';']);
 
@@ -164,6 +186,8 @@ class MeetingRequestListViewNormalizerTest extends TestCase
                 'trans.export.meeting_request.col.state' => 'trans.export.meeting_request.state.planned',
                 'trans.export.meeting_request.col.createdAt' => '10/10/2017 12:00',
                 'trans.export.meeting_request.col.updatedAt' => '10/10/2017 12:00',
+                'trans.export.meeting_request.col.createdType' => 'trans.export.meeting_request.col.createdType.planner',
+                'trans.export.meeting_request.col.createdType.slot' => '10/10/2017 12:20',
             ],
             [
                 'trans.export.meeting_request.col.requestId' => 80,
@@ -183,6 +207,8 @@ class MeetingRequestListViewNormalizerTest extends TestCase
                 'trans.export.meeting_request.col.state' => 'trans.export.meeting_request.state.refused',
                 'trans.export.meeting_request.col.createdAt' => '10/10/2017 12:00',
                 'trans.export.meeting_request.col.updatedAt' => '10/10/2017 12:00',
+                'trans.export.meeting_request.col.createdType' => 'trans.export.meeting_request.col.createdType.participant',
+                'trans.export.meeting_request.col.createdType.slot' => '10/10/2017 12:20'
             ],
         ];
 
@@ -192,12 +218,13 @@ class MeetingRequestListViewNormalizerTest extends TestCase
     public function testNormalize()
     {
         $date = new \DateTime('2017-10-10 10:00:00');
+        $slotBeginDate = new \DateTime('2017-10-10 10:20:00');
         $fromSheet1 = new SheetView(15, 'sheet title 1', 'type title 1', 'category title 1', [8, 9], ['toto', 'tata']);
         $fromSheet2 = new SheetView(16, 'sheet title 2', 'type title 2', null, [], []);
         $toSheet1 = new SheetView(17, 'sheet title 3', 'type title 3', null, [11], ['jean']);
         $toSheet2 = new SheetView(18, 'sheet title 4', 'type title 1', 'category title 1', [91], ['Paul']);
-        $meetingRequestView1 = new MeetingRequestView(58, 8, $fromSheet1, $toSheet1, 'planned', $date, $date);
-        $meetingRequestView2 = new MeetingRequestView(80, null, $fromSheet2, $toSheet2, 'refused', $date, $date);
+        $meetingRequestView1 = new MeetingRequestView(58, 8, $fromSheet1, $toSheet1, 'planned', $date, $date, Meeting::CREATED_BY_PARTICIPANT, $slotBeginDate);
+        $meetingRequestView2 = new MeetingRequestView(80, null, $fromSheet2, $toSheet2, 'refused', $date, $date, Meeting::CREATED_BY_ADMIN, $slotBeginDate);
         $meetingRequests = [
             $meetingRequestView1,
             $meetingRequestView2,
@@ -222,9 +249,9 @@ class MeetingRequestListViewNormalizerTest extends TestCase
 
         $result = $serializer->serialize($meetingRequestListView, 'csv', ['csv_delimiter' => ';']);
 
-        $expected = 'export.meeting_request.col.requestId;export.meeting_request.col.meetingId;export.meeting_request.col.fromSheetId;export.meeting_request.col.fromSheetTitle;export.meeting_request.col.fromSheetType;export.meeting_request.col.fromSheetCategory;export.meeting_request.col.fromParticipantIds;export.meeting_request.col.fromParticipantNames;export.meeting_request.col.toSheetId;export.meeting_request.col.toSheetTitle;export.meeting_request.col.toSheetType;export.meeting_request.col.toSheetCategory;export.meeting_request.col.toParticipantIds;export.meeting_request.col.toParticipantNames;export.meeting_request.col.state;export.meeting_request.col.createdAt;export.meeting_request.col.updatedAt
-58;8;15;"sheet title 1";"type title 1";"category title 1";8,9;toto,tata;17;"sheet title 3";"type title 3";;11;jean;export.meeting_request.state.planned;"10/10/2017 12:00";"10/10/2017 12:00"
-80;;16;"sheet title 2";"type title 2";;;;18;"sheet title 4";"type title 1";"category title 1";91;Paul;export.meeting_request.state.refused;"10/10/2017 12:00";"10/10/2017 12:00"
+        $expected = 'export.meeting_request.col.requestId;export.meeting_request.col.meetingId;export.meeting_request.col.fromSheetId;export.meeting_request.col.fromSheetTitle;export.meeting_request.col.fromSheetType;export.meeting_request.col.fromSheetCategory;export.meeting_request.col.fromParticipantIds;export.meeting_request.col.fromParticipantNames;export.meeting_request.col.toSheetId;export.meeting_request.col.toSheetTitle;export.meeting_request.col.toSheetType;export.meeting_request.col.toSheetCategory;export.meeting_request.col.toParticipantIds;export.meeting_request.col.toParticipantNames;export.meeting_request.col.state;export.meeting_request.col.createdAt;export.meeting_request.col.updatedAt;export.meeting_request.col.createdType;export.meeting_request.col.slot
+58;8;15;"sheet title 1";"type title 1";"category title 1";8,9;toto,tata;17;"sheet title 3";"type title 3";;11;jean;export.meeting_request.state.planned;"10/10/2017 12:00";"10/10/2017 12:00";export.meeting_request.col.createdType.participant;"10/10/2017 12:20"
+80;;16;"sheet title 2";"type title 2";;;;18;"sheet title 4";"type title 1";"category title 1";91;Paul;export.meeting_request.state.refused;"10/10/2017 12:00";"10/10/2017 12:00";export.meeting_request.col.createdType.admin;"10/10/2017 12:20"
 ';
 
         $this->assertEquals($expected, $result);

@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
@@ -34,6 +35,7 @@ use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInt
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Unavailability\Mass\FilterMassUnavailabilitiesBySheetsType;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class PlanningViewQueryHandlerTest extends TestCase
@@ -49,6 +51,8 @@ class PlanningViewQueryHandlerTest extends TestCase
         $endDay2   = new \DateTime('2016-10-13 18:00');
         $day1      = new Day($event, $beginDay1, $endDay1);
         $day2      = new Day($event, $beginDay2, $endDay2);
+
+        $sheet = $this->prophesize(Sheet::class);
 
         $category        = $this->prophesize(Category::class);
         $begin1          = new \DateTime('2016-10-12 11:00');
@@ -101,7 +105,11 @@ class PlanningViewQueryHandlerTest extends TestCase
         $userRepository->findWithEnabledSheetByEvent($event)->shouldNotBeCalled();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $sheetRepository->isUserParticipantMultipleSheetsInEvent($user->reveal(), $event)->shouldBeCalled()->willReturn(true);
+        $sheetRepository
+            ->getSheetsByUserAndEventWhereUserIsParticipant($user->reveal(), $event)
+            ->shouldBeCalled()
+            ->willReturn([$sheet->reveal()])
+        ;
 
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
 
@@ -114,7 +122,7 @@ class PlanningViewQueryHandlerTest extends TestCase
                     'fr',
                     [$unavailability1->reveal(), $unavailability2->reveal()],
                     [$happening->reveal()],
-                    [$mass1, $mass2],
+                    [$mass2],
                     [$assignment],
                     [$meeting->reveal()]
                 )
@@ -131,13 +139,20 @@ class PlanningViewQueryHandlerTest extends TestCase
                     'fr',
                     [$unavailability1->reveal(), $unavailability2->reveal()],
                     [$happening->reveal()],
-                    [$mass1, $mass2],
+                    [$mass2],
                     [$assignment],
                     [$meeting->reveal()]
                 )
             )
             ->shouldBeCalled()
             ->willReturn(new DayView($beginDay2, $endDay2, [], [], [], [], []));
+
+        $filterMassUnavailabilitiesBySheetsType = $this->prophesize(FilterMassUnavailabilitiesBySheetsType::class);
+        $filterMassUnavailabilitiesBySheetsType
+            ->handle([$mass1, $mass2], [$sheet->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$mass2])
+        ;
 
         $query   = new PlanningViewQuery($event, $user->reveal(), $locale);
         $handler = new PlanningViewQueryHandler(
@@ -149,7 +164,8 @@ class PlanningViewQueryHandlerTest extends TestCase
             $meetingRepository->reveal(),
             $dayViewQueryHandler->reveal(),
             $userRepository->reveal(),
-            $sheetRepository->reveal()
+            $sheetRepository->reveal(),
+            $filterMassUnavailabilitiesBySheetsType->reveal()
         );
         $result  = $handler->handle($query);
 
@@ -160,7 +176,7 @@ class PlanningViewQueryHandlerTest extends TestCase
                 new DayView($beginDay2, $endDay2, [], [], [], [], []),
             ],
             'Europe/Paris',
-            true
+            false
         );
 
         // Assert
@@ -250,8 +266,15 @@ class PlanningViewQueryHandlerTest extends TestCase
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findWithEnabledSheetByEvent($event)->shouldNotBeCalled();
 
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet2 = $this->prophesize(Sheet::class);
+
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $sheetRepository->isUserParticipantMultipleSheetsInEvent($user->reveal(), $event)->shouldBeCalled()->willReturn(true);
+        $sheetRepository
+            ->getSheetsByUserAndEventWhereUserIsParticipant($user->reveal(), $event)
+            ->shouldBeCalled()
+            ->willReturn([$sheet1->reveal(), $sheet2->reveal()])
+        ;
 
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
 
@@ -289,6 +312,13 @@ class PlanningViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new DayView($beginDay2, $endDay2, [], [], [], [], []));
 
+        $filterMassUnavailabilitiesBySheetsType = $this->prophesize(FilterMassUnavailabilitiesBySheetsType::class);
+        $filterMassUnavailabilitiesBySheetsType
+            ->handle([$mass1, $mass2], [$sheet1->reveal(), $sheet2->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$mass1, $mass2])
+        ;
+
         $handler = new PlanningViewQueryHandler(
             $dayRepository->reveal(),
             $happeningParticipationRepository->reveal(),
@@ -298,7 +328,8 @@ class PlanningViewQueryHandlerTest extends TestCase
             $meetingRepository->reveal(),
             $dayViewQueryHandler->reveal(),
             $userRepository->reveal(),
-            $sheetRepository->reveal()
+            $sheetRepository->reveal(),
+            $filterMassUnavailabilitiesBySheetsType->reveal()
         );
         $users = [$user->reveal(), $user1->reveal()];
         $handler->preloadForEventAndUsers($event, $users);
@@ -390,8 +421,13 @@ class PlanningViewQueryHandlerTest extends TestCase
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findWithEnabledSheetByEvent($event)->shouldBeCalled()->willReturn([$user1]);
 
+        $sheet = $this->prophesize(Sheet::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $sheetRepository->isUserParticipantMultipleSheetsInEvent($user1->reveal(), $event)->shouldBeCalled()->willReturn(false);
+        $sheetRepository
+            ->getSheetsByUserAndEventWhereUserIsParticipant($user1->reveal(), $event)
+            ->shouldBeCalled()
+            ->willReturn([$sheet->reveal()])
+        ;
 
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
         $dayView1            = new DayView($beginDay1, $endDay1, [], [], [], [], []);
@@ -431,6 +467,13 @@ class PlanningViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($dayView2);
 
+        $filterMassUnavailabilitiesBySheetsType = $this->prophesize(FilterMassUnavailabilitiesBySheetsType::class);
+        $filterMassUnavailabilitiesBySheetsType
+            ->handle([$mass1, $mass2], [$sheet->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$mass1, $mass2])
+        ;
+
         $query   = new PlanningViewQuery($event, $user1->reveal(), $locale);
         $handler = new PlanningViewQueryHandler(
             $dayRepository->reveal(),
@@ -441,7 +484,8 @@ class PlanningViewQueryHandlerTest extends TestCase
             $meetingRepository->reveal(),
             $dayViewQueryHandler->reveal(),
             $userRepository->reveal(),
-            $sheetRepository->reveal()
+            $sheetRepository->reveal(),
+            $filterMassUnavailabilitiesBySheetsType->reveal()
         );
         $handler->preloadForEvent($event);
         $result = $handler->handle($query);

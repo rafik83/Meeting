@@ -52,22 +52,9 @@ class MeetingView
      */
     public $sheetToId;
 
-    /**
-     * @var bool
-     */
-    public $isCreatedByParticipants;
+    /** @var string */
+    public $createdType;
 
-    /**
-     * @param int                $id
-     * @param int                $sheetFromId
-     * @param int                $sheetToId
-     * @param string             $sheetNameFrom
-     * @param string             $sheetNameTo
-     * @param \DateTimeInterface $createdAt
-     * @param \DateTimeInterface $slotBegin
-     * @param \DateTimeInterface $slotEnd
-     * @param bool               $isCreatedByParticipants
-     */
     public function __construct(
         int $id,
         int $sheetFromId,
@@ -77,7 +64,7 @@ class MeetingView
         \DateTimeInterface $createdAt,
         \DateTimeInterface $slotBegin,
         \DateTimeInterface $slotEnd,
-        bool $isCreatedByParticipants
+        string $createdType
     ) {
         $this->id                      = $id;
         $this->sheetFromId             = $sheetFromId;
@@ -87,6 +74,6 @@ class MeetingView
         $this->createdAt               = $createdAt;
         $this->slotBegin               = $slotBegin;
         $this->slotEnd                 = $slotEnd;
-        $this->isCreatedByParticipants = $isCreatedByParticipants;
+        $this->createdType = $createdType;
     }
 }
