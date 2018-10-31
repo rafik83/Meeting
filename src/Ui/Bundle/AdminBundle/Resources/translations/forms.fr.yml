@@ -1045,6 +1045,8 @@ form.transactional_mail_update_customized.children.submit.label: 'Mettre à jour
 form.transactional_mail_update_customized.children.translations.label: 'Traductions du contenu'
 form.transactional_mail_update_customized.children.translations.prototype.children.content.label: Contenu
 form.transactional_mail_update_customized.children.translations.prototype.children.subject.label: Sujet
+form.type_content_define_terms_of_sale.children.enabled.label: 'Activer la personnalisation des conditions générales de vente pour ce type'
+form.type_content_define_terms_of_sale.children.submit.label: 'Valider'
 form.type_create.children.hidden.label: Caché
 form.type_create.children.package.label: 'Template de forfait de participation'
 form.type_create.children.rank.label: Position

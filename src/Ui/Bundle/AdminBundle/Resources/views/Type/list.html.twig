@@ -80,6 +80,13 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="{{ path('admin_type_content_define_terms_of_sale', {'event': event.id, 'type': type.id}) }}"
+                                   class="btn-sm"
+                                >
+                                    {{ 'admin.type_content_define_terms_of_sale.link'|trans }}
+                                </a>
+                            </li>
+                            <li>
                                 {{ macro.delete_button(
                                 path('admin_type_remove', { 'event': event.id, 'type': type.id }),
                                 'admin.type.remove.link'|trans,

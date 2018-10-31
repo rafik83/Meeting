@@ -12,6 +12,20 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     #
+    # Type Content
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Content\DefineTermsOfSaleAction:
+        arguments:
+            - '@repository.event.content_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Type\ContentRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@router'
+            - '@templating'
+
+
+    #
     # Meeting
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\ListAction:
