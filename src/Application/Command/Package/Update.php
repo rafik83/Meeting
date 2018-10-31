@@ -56,7 +56,8 @@ class Update implements Command
             $package->isParticipantAndPlanningEnabled(),
             $package->getMaxParticipant(),
             $package->getParticipants(),
-            $package->getPlanning()
+            $package->getPlanning(),
+            $package->isPlanningSelectable()
         );
         $this->options                = new Model\Options(
             $optionsLabels,
