@@ -75,4 +75,17 @@ class TaggedNomenclatureFilterRepository implements TaggedNomenclatureFilterRepo
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    public function getByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('taggedNomenclatureFilter')
+            ->from(TaggedNomenclatureFilter::class, 'taggedNomenclatureFilter')
+            ->where('taggedNomenclatureFilter.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

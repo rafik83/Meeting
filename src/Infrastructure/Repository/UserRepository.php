@@ -110,6 +110,19 @@ class UserRepository implements UserRepositoryInterface
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
+    public function findByIds(array $ids): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->where('user.id IN (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     /**
      * {@inheritdoc}
      */

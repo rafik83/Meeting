@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
@@ -42,7 +43,8 @@ class SubmenuViewQueryHandler
                 $submenuViewQuery->event,
                 $submenuViewQuery->locale,
                 $submenuViewQuery->sheet,
-                $submenuViewQuery->route
+                $submenuViewQuery->route,
+                $submenuViewQuery->staticFormulationsIndexByCategories[Category::BADGE] ?? null
             )
         );
 
@@ -56,7 +58,8 @@ class SubmenuViewQueryHandler
                     $submenuViewQuery->event,
                     $submenuViewQuery->locale,
                     $submenuViewQuery->sheet,
-                    $submenuViewQuery->route
+                    $submenuViewQuery->route,
+                    $submenuViewQuery->staticFormulationsIndexByCategories[Category::SHEET] ?? null
                 )
             );
 
@@ -69,7 +72,8 @@ class SubmenuViewQueryHandler
                 $submenuViewQuery->event,
                 $submenuViewQuery->locale,
                 $submenuViewQuery->sheet,
-                $submenuViewQuery->route
+                $submenuViewQuery->route,
+                $submenuViewQuery->staticFormulationsIndexByCategories
             )
         );
 
@@ -81,14 +85,20 @@ class SubmenuViewQueryHandler
                 $submenuViewQuery->event,
                 $submenuViewQuery->locale,
                 $submenuViewQuery->sheet,
-                $submenuViewQuery->route
+                $submenuViewQuery->route,
+                $submenuViewQuery->staticFormulationsIndexByCategories
             )
         );
 
         $buttonsViews = array_merge($buttonsViews, $agendaButtonViews);
 
         $packageSubmenuButtonView = $this->queryBus->handle(
-            new PackageSubmenuButtonViewQuery($submenuViewQuery->sheet, $submenuViewQuery->route)
+            new PackageSubmenuButtonViewQuery(
+                $submenuViewQuery->sheet,
+                $submenuViewQuery->route,
+                $submenuViewQuery->locale,
+                $submenuViewQuery->staticFormulationsIndexByCategories[Category::PACKAGE] ?? null
+            )
         );
 
         if (null !== $packageSubmenuButtonView) {

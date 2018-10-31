@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorAnd;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorOr;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class ConditionRulesParserTest extends TestCase
 {
@@ -71,16 +72,24 @@ class ConditionRulesParserTest extends TestCase
             ],
         ];
 
+        $event = $this->prophesize(Event::class);
+
         $expectedResult = new Condition(
+            $event->reveal(),
+            'fr',
             new LogicalOperatorAnd,
             [
                 new Field('Activity', new ComparisonOperatorEqual, 'text', 'A1'),
                 new Condition(
+                    $event->reveal(),
+                    'fr',
                     new LogicalOperatorOr,
                     [
                         new Field('Sector', new ComparisonOperatorContains, 'checkbox', ['S1', 'S3']),
                         new Field('Universe', new ComparisonOperatorEqual, 'text', 'U4'),
                         new Condition(
+                            $event->reveal(),
+                            'fr',
                             new LogicalOperatorAnd,
                             [
                                 new Field('LastName', new ComparisonOperatorNull, 'text', ''),
@@ -92,7 +101,7 @@ class ConditionRulesParserTest extends TestCase
             ]
         );
 
-        $result = ConditionRulesParser::parse($conditions);
+        $result = ConditionRulesParser::parse($event->reveal(), 'fr', $conditions);
 
         $this->assertEquals($expectedResult, $result);
     }

@@ -8,10 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Unavailability\SystemGenerator;
-
-use Proximum\Vimeet\Domain\Time\AbstractTimeRange;
-use Proximum\Vimeet\Domain\Time\TimeOverlap;
+namespace Proximum\Vimeet\Domain\Time;
 
 /**
  * This class is used to truncate a timeRange that overlaps other array of timeRanges

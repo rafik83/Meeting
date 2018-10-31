@@ -24,7 +24,7 @@ class UpdateCustomizedHandler
 
     public function handle(UpdateCustomized $command): void
     {
-        $command->message->update($command->associatedTypes);
+        $command->message->update($command->associatedTypes, $command->enabled);
         $command->message->updateTranslations($command->translations);
 
         $this->messageRepository->update($command->message);

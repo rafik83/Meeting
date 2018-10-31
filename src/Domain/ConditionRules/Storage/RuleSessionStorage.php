@@ -35,12 +35,12 @@ class RuleSessionStorage implements RuleStorageInterface
         return $this->session->get(sprintf('%s_rules_%d', $type, $event->getId()));
     }
 
-    public function getRules(Event $event, string $type): ?RuleInterface
+    public function getRules(Event $event, string $locale, string $type): ?RuleInterface
     {
         $rules = json_decode($this->getRulesQuery($event, $type), true);
 
         if ($rules) {
-            return $this->queryBus->handle(new GetConditionRulesQuery($rules));
+            return $this->queryBus->handle(new GetConditionRulesQuery($event, $locale, $rules));
         }
 
         return null;

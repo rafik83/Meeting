@@ -9,7 +9,11 @@ function ToggleVisibility(element, document)
         this.displayType = 'block';
     }
 
-    this.element.addEventListener('click', this.onClick.bind(this));
+    if ('input' === this.element.tagName.toLowerCase()) {
+        this.element.addEventListener('change', this.onClick.bind(this));
+    } else {
+        this.element.addEventListener('click', this.onClick.bind(this));
+    }
 }
 
 ToggleVisibility.prototype.onClick = function (event)

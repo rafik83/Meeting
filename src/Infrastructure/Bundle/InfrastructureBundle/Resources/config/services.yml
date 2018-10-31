@@ -1894,13 +1894,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
+
     command.messaging.campaign.process_handler:
         class: Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler
         arguments:
-            - '@repository.billing_info_repository'
             - '@repository.messaging.campaign_repository'
             - '@adapter.sendgrid_api_adapter'
-            - '@domain.messaging.substitutions_provider'
+            - '@Proximum\Vimeet\Domain\Messaging\GetUsersReceivers'
+            - '@Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Process }
 
@@ -2104,6 +2105,21 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\SendCode }
 
+    Proximum\Vimeet\Application\Command\User\Batch\BatchHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\User\Batch\BatchCampaignHandler'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserIdsByEvent'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Batch\Batch }
+
+    Proximum\Vimeet\Application\Command\User\Batch\BatchCampaignHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.messaging.campaign_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Batch\BatchCampaign }
+
     command.user.phone.validate_code_handler:
         class: Proximum\Vimeet\Application\Command\User\Phone\ValidateCodeHandler
         arguments:
@@ -2184,6 +2200,7 @@ services:
     Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQueryHandler:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@catalog.tagged_nomenclature_filter_getter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
@@ -2191,7 +2208,23 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery }
 
-    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer'
+
+    Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
+        arguments:
+            - '@catalog.tagged_nomenclature_filter_getter'
+
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer: ~
 
     command.product.remove.remove_handler:
         class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler
@@ -3716,6 +3749,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserEventListViewsQuery }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserIdsByEvent:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\SearchAdapter'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserIdsByEventQuery }
+
     #
     # Program query
     #
@@ -3860,6 +3900,7 @@ services:
             - '@query.agenda.cancel_attendance_unavailability_view_query_handler'
             - '@query.agenda.available_sheets.available_slots_by_participant_and_day_query_handler'
             - '@components:agenda.agenda_collision_manager'
+            - '@Proximum\Vimeet\Domain\Time\OverlappedTimeRangeMerger'
     query.agenda.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler
         arguments:
@@ -5205,6 +5246,7 @@ services:
             - '@domain.event.catalog.external.search-facet.duplicator'
             - '@domain.event.catalog.external.visibility.duplicator'
             - '@domain.event.message.duplicator'
+            - '@Proximum\Vimeet\Domain\Event\StaticFormulation\Duplicator'
 
     domain.event.content.duplicator:
         class: Proximum\Vimeet\Domain\Event\Content\Duplicator
@@ -5296,6 +5338,10 @@ services:
         arguments:
             - '@repository.messaging.message_repository'
             - '@datetime'
+
+    Proximum\Vimeet\Domain\Event\StaticFormulation\Duplicator:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
 
     domain.event.last_event_participation:
         class: Proximum\Vimeet\Domain\Event\LastEventParticipation
@@ -5849,6 +5895,16 @@ services:
     domain.messaging.sendgrid_api_client:
         class: Proximum\Vimeet\Domain\Messaging\SendGridApiClient
         factory: ['@domain.messaging.sendgrid_api_client.factory', 'createClient']
+
+    Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers:
+        arguments:
+            - '@repository.billing_info_repository'
+            - '@domain.messaging.substitutions_provider'
+
+    Proximum\Vimeet\Domain\Messaging\GetUsersReceivers:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
+            - '@sheet.sheet_guesser'
 
     domain.messaging.substitutions_provider:
         class: Proximum\Vimeet\Domain\Messaging\SubstitutionsProvider

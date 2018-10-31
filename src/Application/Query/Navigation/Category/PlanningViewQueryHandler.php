@@ -75,7 +75,13 @@ class PlanningViewQueryHandler
             $linkViews[] = $schedulePublishDateLinkView;
         }
 
-        return new CategoryView(Category::PLANNING, Category::PLANNING_ICON, $linkViews, true);
+        $categoryTitle = Category::PLANNING;
+
+        if (null !== $planningQuery->staticFormulation) {
+            $categoryTitle = $planningQuery->staticFormulation->getTitle($planningQuery->locale);
+        }
+
+        return new CategoryView($categoryTitle, Category::PLANNING_ICON, $linkViews, true);
     }
 
     /**

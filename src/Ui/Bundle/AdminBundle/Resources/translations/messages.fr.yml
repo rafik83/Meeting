@@ -994,6 +994,17 @@ admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'
 admin.spot.visio.no: Non
 admin.spot.visio.yes: Oui
+admin.staticFormulation.action.remove: 'Supprimer'
+admin.staticFormulation.action.remove.confirm: 'Êtes vous sûr de vouloir supprimer cette personnalisation'
+admin.staticFormulation.action.create: 'Personnaliser'
+admin.staticFormulation.action.update: 'Mettre à jour'
+admin.staticFormulation.link: 'Formulation statique'
+admin.staticFormulation.list.title: 'Formulation statique'
+admin.staticFormulation.list.column.origin: 'Titre d''origine'
+admin.staticFormulation.list.column.title: 'Titre'
+admin.staticFormulation.list.column.type: 'Types de participation associés'
+admin.staticFormulation.type.all: Tous
+admin.staticFormulation.type.none: Aucun
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'
 admin.template.action.addLanguage: 'Ajouter une langue'
@@ -1094,7 +1105,10 @@ admin.transactional.mail.action.customizeByType: 'Personnalisable par type'
 admin.transactional.mail.action.delete: Supprimer
 admin.transactional.mail.action.delete.confirm: 'Êtes vous sûr de vouloir supprimer cette personnalisation ?'
 admin.transactional.mail.action.notCustomizeByType: 'Non personnalisable par type'
+admin.transactional.mail.action.customizeByType: 'Personnalisable par type'
+admin.transactional.mail.enabled.title: 'Souhaitez vous activer ou désactiver cet email transactionnel'
 admin.transactional.mail.link: 'Emails transactionnels'
+admin.transactional.mail.list.disabled: 'Désactivé'
 admin.transactional.mail.list.column.key: 'Titre BO de l''email'
 admin.transactional.mail.list.column.title: 'Sujet de l''email'
 admin.transactional.mail.list.column.type: 'Types associés'
@@ -1226,7 +1240,12 @@ admin.update_content.terms-of-sale.title: 'Modifier les conditions générales d
 admin.user.company-information: 'Informations de société'
 admin.user.contact-information: Coordonnées
 admin.user.events: Evénements
+admin.user.batch.allSelected.label: 'Tous les <strong>%users%</strong> utilisateurs de l''évenement sont seléctionnés.'
+admin.user.batch.cancelSelection.label: 'Annuler la sélection complète'
+admin.user.batch.selection.label: 'Les <strong>%users%</strong> utilisateurs de cette page sont sélectionnés.'
+admin.user.batch.selectionAll.label: 'Sélectionner les <strong>%allUsers%</strong> utilisateurs correspondants à vos filtres.'
 admin.users.details: 'Voir le compte'
+admin.users.batch.sendMail: Envoyer un mail
 admin.users.email: Email
 admin.users.firstName: Prénom
 admin.users.id: Id

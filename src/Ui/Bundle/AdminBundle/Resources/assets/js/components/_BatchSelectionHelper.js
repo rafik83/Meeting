@@ -7,7 +7,7 @@
 function BatchSelectionHelper(batchForm) {
     this.batchForm = batchForm;
     this.helper = document.getElementById('batch-selection-helper');
-    this.inputSelectionType = batchForm.querySelector('input[name="sheet_batch[selectionType]"]');
+    this.inputSelectionType = batchForm.querySelector('input[name="'+this.batchForm.name+'[selectionType]"]');
 
     this.helper.querySelector('.batch-helper-select-all')
         .addEventListener('click', this.toggleSelectionState.bind(this));
@@ -50,7 +50,7 @@ BatchSelectionHelper.prototype.selectAll = function (helper) {
         helper.innerHTML = helper.dataset.cancelLabel;
     }
 
-    this.triggerChange(this.helper.dataset.allSheets);
+    this.triggerChange(this.helper.dataset.allItems);
 };
 
 /**

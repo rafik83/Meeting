@@ -30,4 +30,12 @@ class IntlAdapter implements IntlInterface
     {
         return Intl::getLocaleBundle()->getLocales();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function currencySymbol(string $currency, ?string $locale = null): ?string
+    {
+        return Intl::getCurrencyBundle()->getCurrencySymbol($currency, $locale);
+    }
 }

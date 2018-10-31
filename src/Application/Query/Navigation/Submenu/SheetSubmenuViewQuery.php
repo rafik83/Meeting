@@ -13,50 +13,50 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\StaticFormulation;
 use Proximum\Vimeet\Domain\Model\User;
 
 class SheetSubmenuViewQuery implements Query
 {
-    /**
-     * @var User
-     */
+    /** @var User */
     public $user;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $route;
 
+    /** @var null|StaticFormulation */
+    public $staticFormulation;
+
     /**
-     * SheetSubmenuViewQuery constructor.
-     *
-     * @param User   $user
-     * @param Event  $event
-     * @param string $locale
-     * @param Sheet  $sheet
-     * @param string $route
+     * @param User                   $user
+     * @param Event                  $event
+     * @param string                 $locale
+     * @param Sheet                  $sheet
+     * @param string                 $route
+     * @param null|StaticFormulation $staticFormulation
      */
-    public function __construct(User $user, Event $event, $locale, Sheet $sheet, $route)
-    {
+    public function __construct(
+        User $user,
+        Event $event,
+        $locale,
+        Sheet $sheet,
+        $route,
+        ?StaticFormulation $staticFormulation = null
+    ) {
         $this->user   = $user;
         $this->event  = $event;
         $this->locale = $locale;
         $this->sheet  = $sheet;
         $this->route  = $route;
+        $this->staticFormulation = $staticFormulation;
     }
 }

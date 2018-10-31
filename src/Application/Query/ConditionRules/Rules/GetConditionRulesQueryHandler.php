@@ -17,6 +17,6 @@ class GetConditionRulesQueryHandler
 {
     public function handle(GetConditionRulesQuery $query): RuleInterface
     {
-        return ConditionRulesParser::parse($query->rules);
+        return ConditionRulesParser::parse($query->event, $query->locale, $query->rules);
     }
 }

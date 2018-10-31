@@ -29,6 +29,7 @@ class CustomizedMailViewQueryHandler
             $query->message->getType(),
             $query->message->getSubject($locale),
             Constant::TRANSACTIONAL_MAIL_LIST[$query->message->getType()]['isCustomizableByType'],
+            $query->message->isEnabled(),
             $types
         );
     }

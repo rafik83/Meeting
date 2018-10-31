@@ -27,6 +27,7 @@ use Proximum\Vimeet\Domain\Event\Product\Duplicator as ProductDuplicator;
 use Proximum\Vimeet\Domain\Event\RegistrationTemplate\Duplicator as RegistrationTemplateDuplicator;
 use Proximum\Vimeet\Domain\Event\Rule\Duplicator as RuleDuplicator;
 use Proximum\Vimeet\Domain\Event\SheetTemplate\Duplicator as SheetTemplateDuplicator;
+use Proximum\Vimeet\Domain\Event\StaticFormulation\Duplicator as StaticFormulationDuplicator;
 use Proximum\Vimeet\Domain\Event\Tip\Duplicator as TipDuplicator;
 use Proximum\Vimeet\Domain\Event\Type\Duplicator as TypeDuplicator;
 use Proximum\Vimeet\Domain\Model\Event\Content;
@@ -87,6 +88,9 @@ class DuplicatorTest extends TestCase
         $messageDuplicator = $this->prophesize(MessageDuplicator::class);
         $messageDuplicator->duplicate($event)->shouldBeCalled();
 
+        $staticFormulationDuplicator = $this->prophesize(StaticFormulationDuplicator::class);
+        $staticFormulationDuplicator->duplicate($event, $duplicatorDataStorage)->shouldBeCalled();
+
         (new Duplicator(
             $contentDuplicator->reveal(),
             $billingConfigurationDuplicator->reveal(),
@@ -103,7 +107,8 @@ class DuplicatorTest extends TestCase
             $internalSearchFacetDuplicator->reveal(),
             $externalSearchFacetDuplicator->reveal(),
             $catalogVisibilityDuplicator->reveal(),
-            $messageDuplicator->reveal()
+            $messageDuplicator->reveal(),
+            $staticFormulationDuplicator->reveal()
         ))->duplicate($event);
     }
 }
