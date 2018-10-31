@@ -34,7 +34,7 @@ class Package
     private $planning;
 
     /** @var bool */
-    private $planningSelectable;
+    private $planningSelectable = true;
 
     /** @var ArrayCollection */
     private $groups;
