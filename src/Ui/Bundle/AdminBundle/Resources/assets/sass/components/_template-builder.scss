@@ -61,6 +61,10 @@
                 }
             }
 
+            .block-collection {
+                background-color: #5bc0de;
+            }
+
             >.block-buttons {
                 position: absolute;
                 left: 0;
@@ -80,6 +84,7 @@
             border-radius: 4px;
             padding: 10px;
             margin: 15px;
+            background-color: #fff;
 
             >.block-buttons {
                 border-bottom: 1px solid #eee;
