@@ -1,0 +1,28 @@
+{% set config = {
+    style: null
+}|merge(config|default({})) %}
+
+<div class="block" data-block="collection" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+    {{ include('AdminBundle:Template/Block:configure.html.twig', {}, false) }}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block-inner block-collection">
+                {% for uid, item in children[0]|default([]) %}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+                        'uid': uid,
+                        'config': item.config,
+                        'children': item.children|default([]),
+                        'locale': locale,
+                        'fallback': fallback|default(false),
+                        'nomenclatures': nomenclatures,
+                        'sheet_tags': sheet_tags,
+                        'products': products,
+                        'sheet_template_tags': sheet_template_tags|default([]),
+                        'uploadFormats': uploadFormats|default([]),
+                    }, false) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
