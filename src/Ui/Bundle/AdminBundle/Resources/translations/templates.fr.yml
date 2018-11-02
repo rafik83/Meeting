@@ -1,6 +1,7 @@
 template.action.close: Fermer
 template.action.save: Enregistrer
 template.block.configure: Configurer
+template.block.configure.objects_collection.title: Configurer la collection d'objets
 template.block.configure.objects_collection.maxItems: Nombre de lignes maximum
 template.block.configure.style: Style
 template.block.configure.title: Titre
