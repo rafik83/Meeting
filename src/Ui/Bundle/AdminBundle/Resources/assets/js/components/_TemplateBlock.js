@@ -12,6 +12,7 @@ var $        = require('jquery'),
 function TemplateBlock(element, builder)
 {
   this.element = element;
+  this.inner = element.querySelector('.block-inner');
   this.builder = builder;
   this.config = JSON.parse(this.element.getAttribute('data-config'));
   this.configureModal = element.querySelector('.configure-modal');
@@ -113,16 +114,30 @@ TemplateBlock.prototype.closeConfigureModal = function ()
 TemplateBlock.prototype.fill = function ()
 {
   this.form.set('style', this.config.style);
+
+  if (this.isObjectsCollection()) {
+      this.form.set('title', this.config.title);
+      this.form.set('maxItems', this.config.maxItems);
+  }
 };
 
 TemplateBlock.prototype.save = function ()
 {
   this.config.style = this.form.get('style');
+
+  if (this.isObjectsCollection()) {
+      this.config.title = this.form.get('title');
+      this.config.maxItems = this.form.get('maxItems');
+  }
 };
 
 TemplateBlock.prototype.isObjectsCollection = function (element)
 {
-    return element.classList.contains('block-collection');
+  if (!element) {
+    element = this.inner;
+  }
+
+  return element.classList.contains('block-collection');
 };
 
 TemplateBlock.prototype.sortable = function (element)

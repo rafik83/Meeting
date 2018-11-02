@@ -152,6 +152,12 @@ TemplateBuilder.prototype.addBlock = function (element)
 
     // Enable block behavior
     this.block(element);
+
+    // Open configure modal
+    if (element.templateBlock.isObjectsCollection()) {
+        element.templateBlock.fill();
+        element.templateBlock.openConfigureModal();
+    }
 };
 
 TemplateBuilder.prototype.addObject = function (element)

@@ -1,6 +1,9 @@
 template.action.close: Fermer
 template.action.save: Enregistrer
 template.block.configure: Configurer
+template.block.configure.objects_collection.maxItems: Nombre de lignes maximum
+template.block.configure.style: Style
+template.block.configure.title: Titre
 template.block.remove_confirm: 'Confirmez vous la suppression de cet élément ?'
 template.boolean.filter.active: 'Activer le filtre'
 template.boolean.filter.label: 'Libellé du filtre'
