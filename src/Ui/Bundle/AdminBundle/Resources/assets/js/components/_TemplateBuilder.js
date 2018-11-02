@@ -175,7 +175,7 @@ TemplateBuilder.prototype.addObject = function (element)
 TemplateBuilder.prototype.block = function (element)
 {
     // Create block
-    element.templateBlock = new TemplateBlock(element, this);
+    element.templateBlock = new TemplateBlock(element, this, this.locale);
 };
 
 TemplateBuilder.prototype.object = function (element)

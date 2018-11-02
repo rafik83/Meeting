@@ -7,12 +7,14 @@ var $        = require('jquery'),
  *
  * @param element
  * @param builder
+ * @param locale
  * @constructor
  */
-function TemplateBlock(element, builder)
+function TemplateBlock(element, builder, locale)
 {
   this.element = element;
   this.inner = element.querySelector('.block-inner');
+  this.locale = locale;
   this.builder = builder;
   this.config = JSON.parse(this.element.getAttribute('data-config'));
   this.configureModal = element.querySelector('.configure-modal');
@@ -116,7 +118,7 @@ TemplateBlock.prototype.fill = function ()
   this.form.set('style', this.config.style);
 
   if (this.isObjectsCollection()) {
-      this.form.set('title', this.config.title);
+      this.form.set('label', this.config.label[this.locale]);
       this.form.set('maxItems', this.config.maxItems);
   }
 };
@@ -126,7 +128,7 @@ TemplateBlock.prototype.save = function ()
   this.config.style = this.form.get('style');
 
   if (this.isObjectsCollection()) {
-      this.config.title = this.form.get('title');
+      this.config.label[this.locale] = this.form.get('label');
       this.config.maxItems = this.form.get('maxItems');
   }
 };

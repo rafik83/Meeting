@@ -68,21 +68,12 @@ class Block extends AbstractChild
         $this->setOption('enabled', $enabled);
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getLabel($locale)
+    public function getLabel(string $locale): string
     {
         return $this->getOption('label', $locale);
     }
 
-    /**
-     * @param string $label
-     * @param string $locale
-     */
-    public function setLabel($label, $locale)
+    public function setLabel(string $label, string $locale): void
     {
         $this->setOption('label', $label, $locale);
     }

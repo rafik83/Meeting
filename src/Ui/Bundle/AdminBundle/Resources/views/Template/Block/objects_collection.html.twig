@@ -2,7 +2,7 @@
 
 {% set config = {
     style: null,
-    title: '',
+    label: { (locale): '' },
     maxItems: 10
 }|merge(config|default({})) %}
 
@@ -39,7 +39,10 @@
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label class="form-label">{{ 'template.block.configure.title'|trans }}</label>
-                                        <input type="text" class="form-control" name="title" />
+                                        <input type="text" class="form-control" name="label" />
+                                        {% if fallback|default(false) and locale != fallback and config.label[fallback] is defined %}
+                                            <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
+                                        {% endif %}
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">{{ 'template.block.configure.style'|trans }}</label>
