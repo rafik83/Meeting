@@ -120,10 +120,21 @@ TemplateBlock.prototype.save = function ()
   this.config.style = this.form.get('style');
 };
 
+TemplateBlock.prototype.isObjectsCollection = function (element)
+{
+    return element.classList.contains('block-collection');
+};
+
 TemplateBlock.prototype.sortable = function (element)
 {
+  var elementsCanBeAdded = ['block-reference', 'object-reference', 'block-inner'];
+
+  if (this.isObjectsCollection(element)) {
+      elementsCanBeAdded = ['object-reference'];
+  }
+
   new Sortable(element, {
-    group: { name: 'block-list', pull: true, put: ['block-reference', 'object-reference', 'block-inner'] },
+    group: { name: 'block-list', pull: true, put: elementsCanBeAdded },
     handle: '.move-button',
     onStart: function () {
       this.builder.closeMenu();
