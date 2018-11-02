@@ -89,6 +89,7 @@ class DefineTermsOfSaleAction
         return new Response($this->engine->render('AdminBundle:Type/Content:define_terms_of_sale.html.twig', [
             'event' => $event,
             'type'  => $type,
+            'contentDefined' => $content instanceof Type\Content,
             'typeTitle' => $type->getTitle($event->getAvailableLocale($request->getLocale())),
             'form'  => $form->createView(),
         ]));
