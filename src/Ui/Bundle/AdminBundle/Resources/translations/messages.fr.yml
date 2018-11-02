@@ -1184,6 +1184,7 @@ admin.type.badge.example.position: 'Directeur des badges '
 admin.type.badge.example.sheetTitle: 'Exemple de titre de Fiche'
 admin.type.create.link: Ajouter
 admin.type.create.title: 'Ajouter un type de participation'
+admin.type.content.specificTermsOfSale: 'CGV particulières'
 admin.type.hidden: Caché
 admin.type.id: Id
 admin.type.link: 'Types de participation'

@@ -38,6 +38,19 @@
                                 {{ 'admin.type.specificPaymentConditions'|trans }}
                             </span>
                         {% endif %}
+                        &nbsp;
+                    {% endif %}
+                    {% if type.hasSpecificTermsOfSale %}
+                        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                            <a href="{{ path('admin_type_content_define_terms_of_sale', {'event': event.id, 'type': type.id}) }}" class="label label-info">
+                                <i class="glyphicon glyphicon-education"></i> {{ 'admin.type.content.specificTermsOfSale'|trans }}
+                            </a>
+                        {% else %}
+                            <span class="label label-info">
+                                <i class="glyphicon glyphicon-education"></i> {{ 'admin.type.content.specificTermsOfSale'|trans }}
+                            </span>
+                        {% endif %}
+                        &nbsp;
                     {% endif %}
                     {% if type.hidden %}
                         <span class="label label-default">

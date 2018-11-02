@@ -13,30 +13,25 @@ namespace Proximum\Vimeet\Application\Query\Type;
 use Proximum\Vimeet\Application\View\Type\TypeListsView;
 use Proximum\Vimeet\Application\View\Type\TypeListView;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\Type\ContentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class TypeViewQueryHandler
 {
-    /**
-     * @var TypeRepositoryInterface
-     */
+    /** @var TypeRepositoryInterface */
     private $typeRepository;
 
-    /**
-     * TypeViewQueryHandler constructor.
-     *
-     * @param TypeRepositoryInterface $typeRepository
-     */
-    public function __construct(TypeRepositoryInterface $typeRepository)
-    {
+    /** @var ContentRepositoryInterface */
+    private $contentRepository;
+
+    public function __construct(
+        TypeRepositoryInterface $typeRepository,
+        ContentRepositoryInterface $contentRepository
+    ) {
         $this->typeRepository = $typeRepository;
+        $this->contentRepository = $contentRepository;
     }
 
-    /**
-     * @param TypeViewQuery $query
-     *
-     * @return TypeListsView
-     */
     public function handle(TypeViewQuery $query): TypeListsView
     {
         $typeResults = $this->typeRepository->paginate(
@@ -45,6 +40,13 @@ class TypeViewQueryHandler
             $query->event->getId(),
             $query->locale
         );
+
+        $contents = $this->contentRepository->hasContentByAssociatedTypes(
+            Type\Content::TYPE_TERMS_OF_SALE,
+            $typeResults->results
+        );
+
+        $contentIndexedByTypeId = $this->indexContentByTypeId($contents);
 
         $typeListsView = new TypeListsView();
 
@@ -58,12 +60,24 @@ class TypeViewQueryHandler
                 (null !== $type->getRegistrationTemplate()) ? $type->getRegistrationTemplate()->getTitle() : '',
                 (null !== $type->getSheetTemplate()) ? $type->getSheetTemplate()->getTitle() : '',
                 (null !== $type->getPackage()) ? $type->getPackage()->getTitle() : '',
-                null !== $type->getPaymentConditions()
+                null !== $type->getPaymentConditions(),
+                isset($contentIndexedByTypeId[$type->getId()])
             );
         }
 
         $typeListsView->results = $typeResults;
 
         return $typeListsView;
+    }
+
+    private function indexContentByTypeId(array $contents): array
+    {
+        $indexedContent = [];
+
+        foreach ($contents as $content) {
+            $indexedContent[$content['associatedParticipationTypeId']] = true;
+        }
+
+        return $indexedContent;
     }
 }

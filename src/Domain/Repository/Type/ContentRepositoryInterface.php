@@ -19,5 +19,25 @@ interface ContentRepositoryInterface
 
     public function findByTypeAndAssociatedParticipationType(string $type, Type $associatedParticipationType): ?Type\Content;
 
+    /**
+     * @param string $type
+     * @param Type[] $associatedParticipationTypes
+     *
+     * @return array of $associatedParticipationType id that have content
+     *
+     * Example of result:
+     * [
+     *     [
+     *         'contentId' => 1,
+     *         'associatedParticipationTypeId' => 123,
+     *     ]
+     *     [
+     *         'contentId' => 2,
+     *         'associatedParticipationTypeId' => 124,
+     *     ]
+     * ]
+     */
+    public function hasContentByAssociatedTypes(string $type, array $associatedParticipationTypes): array;
+
     public function remove(Type\Content $content): void;
 }

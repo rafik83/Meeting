@@ -3484,6 +3484,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Type\TypeViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Type\ContentRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\TypeViewQuery }
 

@@ -66,4 +66,24 @@ class ContentRepository implements ContentRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    public function hasContentByAssociatedTypes(string $type, array $associatedParticipationTypes): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('content.id AS contentId, associatedParticipationType.id AS associatedParticipationTypeId')
+            ->from(Content::class, 'content')
+            ->join(
+                'content.associatedParticipationType',
+                'associatedParticipationType',
+                'WITH',
+                'content.type = :type AND content.associatedParticipationType IN (:associatedParticipationTypes)'
+            )
+            ->setParameter('associatedParticipationTypes', $associatedParticipationTypes)
+            ->setParameter('type', $type)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

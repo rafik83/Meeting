@@ -36,9 +36,10 @@ class TypeListView
     /** @var bool */
     public $hasSpecificPaymentConditions;
 
+    /** @var bool */
+    public $hasSpecificTermsOfSale;
+
     /**
-     * TypeListView constructor.
-     *
      * @param int    $id
      * @param int    $position
      * @param string $title
@@ -47,6 +48,7 @@ class TypeListView
      * @param string $sheetTemplate
      * @param string $package
      * @param bool   $hasSpecificPaymentConditions
+     * @param bool   $hasSpecificTermsOfSale
      */
     public function __construct(
         $id,
@@ -56,7 +58,8 @@ class TypeListView
         $registrationTemplate,
         $sheetTemplate,
         $package,
-        bool $hasSpecificPaymentConditions = false
+        bool $hasSpecificPaymentConditions = false,
+        bool $hasSpecificTermsOfSale = false
     ) {
         $this->id                           = $id;
         $this->position                     = $position;
@@ -66,5 +69,6 @@ class TypeListView
         $this->sheetTemplate                = $sheetTemplate;
         $this->package                      = $package;
         $this->hasSpecificPaymentConditions = $hasSpecificPaymentConditions;
+        $this->hasSpecificTermsOfSale = $hasSpecificTermsOfSale;
     }
 }
