@@ -197,7 +197,8 @@ TemplateBuilder.prototype.save = function ()
             if (xhr.status === OK) {
                 var config = JSON.parse(xhr.response);
             } else {
-                alert('error');
+                var response = JSON.parse(xhr.response);
+                alert(response.error ? response.error : 'Error !');
             }
 
             this.saveButton.stop();

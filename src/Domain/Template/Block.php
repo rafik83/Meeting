@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Domain\Template;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
+use Proximum\Vimeet\Domain\Template\Exception\TemplateException;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadableObjectInterface;
 
 class Block extends AbstractChild
@@ -28,6 +30,11 @@ class Block extends AbstractChild
     public function getComponent()
     {
         return 'block';
+    }
+
+    public function isObjectsCollection(): bool
+    {
+        return $this->getType() === 'objects_collection';
     }
 
     /**
@@ -68,12 +75,12 @@ class Block extends AbstractChild
         $this->setOption('enabled', $enabled);
     }
 
-    public function getLabel(string $locale): string
+    public function getLabel($locale)
     {
         return $this->getOption('label', $locale);
     }
 
-    public function setLabel(string $label, string $locale): void
+    public function setLabel($label, $locale)
     {
         $this->setOption('label', $label, $locale);
     }
@@ -105,6 +112,12 @@ class Block extends AbstractChild
      */
     public function addChild($column, $name, AbstractChild $child)
     {
+        if ($this->isObjectsCollection()) {
+            if ($child instanceof Block) {
+                throw new ObjectsCollectionBlockCanNotContainOtherBlockException();
+            }
+        }
+
         $this->children[$column][$name] = $child;
 
         return $this;

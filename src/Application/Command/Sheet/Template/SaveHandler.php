@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\Template\SheetTemplateUpdatedEvent;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplatePreviewResolver;
 
 /**
@@ -28,6 +29,9 @@ class SaveHandler
     /** @var TemplatePreviewResolver */
     private $templatePreviewResolver;
 
+    /** @var TemplateDataFactory */
+    private $templateDataFactory;
+
     /** @var JobQueueInterface */
     private $jobQueue;
 
@@ -37,11 +41,13 @@ class SaveHandler
     public function __construct(
         SheetTemplateRepositoryInterface $templateRepository,
         TemplatePreviewResolver $templatePreviewResolver,
+        TemplateDataFactory $templateDataFactory,
         JobQueueInterface $jobQueue,
         DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->templateRepository = $templateRepository;
         $this->templatePreviewResolver = $templatePreviewResolver;
+        $this->templateDataFactory = $templateDataFactory;
         $this->jobQueue = $jobQueue;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
@@ -52,6 +58,7 @@ class SaveHandler
     public function handle(Save $save)
     {
         $save->template->setValue($save->value);
+        $templateData = $this->templateDataFactory->createFromTemplate($save->template);
 
         $this->templateRepository->set($save->template);
 
