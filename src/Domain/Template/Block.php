@@ -13,8 +13,10 @@ namespace Proximum\Vimeet\Domain\Template;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainForbiddenObjectsException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
-use Proximum\Vimeet\Domain\Template\Exception\TemplateException;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadableObjectInterface;
 
 class Block extends AbstractChild
@@ -109,13 +111,14 @@ class Block extends AbstractChild
      * @param AbstractChild $child
      *
      * @return Block
+     *
+     * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
+     * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
      */
     public function addChild($column, $name, AbstractChild $child)
     {
         if ($this->isObjectsCollection()) {
-            if ($child instanceof Block) {
-                throw new ObjectsCollectionBlockCanNotContainOtherBlockException();
-            }
+            $this->handleObjectsCollection($child);
         }
 
         $this->children[$column][$name] = $child;
@@ -717,5 +720,22 @@ class Block extends AbstractChild
         }
 
         return $objects;
+    }
+
+    /**
+     * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
+     * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
+     */
+    private function handleObjectsCollection($child): void
+    {
+        if ($child instanceof Block) {
+            throw new ObjectsCollectionBlockCanNotContainOtherBlockException();
+        }
+
+        $acceptedObjectsInObjectsCollection = $child instanceof EditableText || $child instanceof Nomenclature;
+
+        if (!$acceptedObjectsInObjectsCollection) {
+            throw new ObjectsCollectionBlockCanNotContainForbiddenObjectsException();
+        }
     }
 }

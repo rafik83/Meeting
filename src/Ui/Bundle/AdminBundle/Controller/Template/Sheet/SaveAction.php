@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainForbiddenObjectsException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
@@ -63,6 +64,17 @@ class SaveAction
                 [
                     'error' => $this->translatorAdapter->trans(
                         'template.error.objectsCollectionBlockCanNotContainOtherBlock',
+                        [],
+                        'templates'
+                    ),
+                ],
+                500
+            );
+        } catch (ObjectsCollectionBlockCanNotContainForbiddenObjectsException $objectsCollectionBlockCanNotContainForbiddenObjectsException) {
+            return new JsonResponse(
+                [
+                    'error' => $this->translatorAdapter->trans(
+                        'template.error.objectsCollectionBlockCanNotContainForbiddenObjects',
                         [],
                         'templates'
                     ),

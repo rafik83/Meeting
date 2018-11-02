@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\Template\SheetTemplateUpdatedEvent;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainForbiddenObjectsException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplatePreviewResolver;
 
@@ -54,11 +56,14 @@ class SaveHandler
 
     /**
      * @param Save $save
+     *
+     * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
+     * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
      */
     public function handle(Save $save)
     {
         $save->template->setValue($save->value);
-        $templateData = $this->templateDataFactory->createFromTemplate($save->template);
+        $this->templateDataFactory->createFromTemplate($save->template);
 
         $this->templateRepository->set($save->template);
 
