@@ -31,13 +31,11 @@
                     {% if type.hasSpecificPaymentConditions %}
                         {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
                             <a href="{{ path('admin_type_payment_conditions', {'event': event.id, 'type': type.id}) }}" class="label label-info">
-                        {% else %}
-                            <span class="label label-info">
-                        {% endif %}
                                 {{ 'admin.type.specificPaymentConditions'|trans }}
-                        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
                             </a>
                         {% else %}
+                            <span class="label label-info">
+                                {{ 'admin.type.specificPaymentConditions'|trans }}
                             </span>
                         {% endif %}
                     {% endif %}
@@ -71,19 +69,19 @@
                                         {{ 'admin.type.paymentConditions.link'|trans }}
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ path('admin_type_content_define_terms_of_sale', {'event': event.id, 'type': type.id}) }}"
+                                       class="btn-sm"
+                                    >
+                                        {{ 'admin.type_content_define_terms_of_sale.link'|trans }}
+                                    </a>
+                                </li>
                             {% endif %}
                             <li>
                                 <a href="{{ path('admin_type_badge_configuration', {'event': event.id, 'type': type.id}) }}"
                                    class="btn-sm"
                                 >
                                     {{ 'admin.type.badge.configuration.link'|trans }}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ path('admin_type_content_define_terms_of_sale', {'event': event.id, 'type': type.id}) }}"
-                                   class="btn-sm"
-                                >
-                                    {{ 'admin.type_content_define_terms_of_sale.link'|trans }}
                                 </a>
                             </li>
                             <li>

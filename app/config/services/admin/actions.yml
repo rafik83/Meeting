@@ -16,6 +16,7 @@ services:
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Content\DefineTermsOfSaleAction:
         arguments:
+            - '@adapter.authorization_checker'
             - '@repository.event.content_repository'
             - '@Proximum\Vimeet\Infrastructure\Repository\Type\ContentRepository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
