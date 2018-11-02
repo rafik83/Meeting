@@ -2,7 +2,7 @@
     style: null
 }|merge(config|default({})) %}
 
-<div class="block" data-block="collection" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+<div class="block" data-block="objects_collection" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
     {{ include('AdminBundle:Template/Block:configure.html.twig', {}, false) }}
 
     <div class="row">
