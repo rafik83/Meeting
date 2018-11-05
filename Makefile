@@ -123,6 +123,10 @@ install-db-fixtures@test:
 install-dep:
 	yarn install
 
+clearcache:
+	bin/console cache:clear --env=dev
+	bin/console redis:flushdb --client=doctrine --no-interaction
+
 #########
 # Build #
 #########
