@@ -28,3 +28,11 @@ Proximum\Vimeet\Domain\Model\Type\PaymentConditions:
                 nullable: false
                 unique: true
                 onDelete: CASCADE
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type\PaymentConditionsTranslation
+            mappedBy: paymentConditions
+            joinColumn:
+                nullable: false
+                unique: true
+                onDelete: CASCADE

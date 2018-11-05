@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model\Type;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class PaymentConditions
@@ -35,14 +36,9 @@ class PaymentConditions
     /** @var array */
     private $paymentModes;
 
-    /**
-     * @param Type                    $type
-     * @param array                   $paymentModes
-     * @param bool                    $allowDeposit
-     * @param \DateTimeInterface|null $depositUntil
-     * @param float|null              $minimumForDeposit
-     * @param int|null                $deposit
-     */
+    /** @var PaymentConditionsTranslation[] */
+    private $translations;
+
     public function __construct(
         Type $type,
         array $paymentModes = [],
@@ -57,6 +53,7 @@ class PaymentConditions
         $this->depositUntil      = $depositUntil;
         $this->minimumForDeposit = $minimumForDeposit;
         $this->deposit           = $deposit;
+        $this->translations      = new ArrayCollection();
     }
 
     /**
@@ -134,5 +131,10 @@ class PaymentConditions
         $this->depositUntil      = $depositUntil;
         $this->minimumForDeposit = $minimumForDeposit;
         $this->deposit           = $deposit;
+    }
+
+    public function getTranslations(): array
+    {
+        return $this->translations->toArray();
     }
 }
