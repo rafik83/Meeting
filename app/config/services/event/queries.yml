@@ -45,3 +45,10 @@ services:
             - '@catalog.tagged_nomenclature_filter_getter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\NomenclatureTagViewQuery }
+
+    #
+    # Payment
+    #
+    Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQueryHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQuery }

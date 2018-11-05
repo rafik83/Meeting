@@ -17,18 +17,18 @@
                 <div class="payment--info-block">
                     <h2>{{ 'package.payment.billingAddress'|trans }}:</h2>
                     <ul>
-                        <li>{{ event.organiserName }}</li>
-                        <li>{{ event.billingAddress(locale)|nl2br }}</li>
-                        <li>{{ event.organiserEmail }}</li>
+                        <li>{{ view.organiserName }}</li>
+                        <li>{{ view.billingAddress|nl2br }}</li>
+                        <li>{{ view.organiserEmail }}</li>
                     </ul>
                 </div>
 
                 <div class="payment--info-block">
                     <h2>{{ 'package.payment.bankInfo'|trans }}:</h2>
-                    <div>{{ event.bankInfo(locale)|nl2br }}</div>
+                    <div>{{ view.bankInfo|nl2br }}</div>
                     <br>
                     <div>
-                        {{ event.paymentCondition(locale)|nl2br }}
+                        {{ view.paymentCondition|nl2br }}
                     </div>
                 </div>
             </div>

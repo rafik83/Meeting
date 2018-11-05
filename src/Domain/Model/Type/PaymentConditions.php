@@ -137,4 +137,40 @@ class PaymentConditions
     {
         return $this->translations->toArray();
     }
+
+    public function getBankInfo(string $locale): string
+    {
+        if (!$this->translations->containsKey($locale)) {
+            return '';
+        }
+
+        return $this->translations->get($locale)->getBankInfo();
+    }
+
+    public function getBillingAddress(string $locale): string
+    {
+        if (!$this->translations->containsKey($locale)) {
+            return '';
+        }
+
+        return $this->translations->get($locale)->getBillingAddress();
+    }
+
+    public function getPaymentCondition(string $locale): string
+    {
+        if (!$this->translations->containsKey($locale)) {
+            return '';
+        }
+
+        return $this->translations->get($locale)->getPaymentCondition();
+    }
+
+    public function getPaymentFooter(string $locale): string
+    {
+        if (!$this->translations->containsKey($locale)) {
+            return '';
+        }
+
+        return $this->translations->get($locale)->getPaymentFooter();
+    }
 }
