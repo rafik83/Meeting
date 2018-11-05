@@ -726,7 +726,7 @@ class Block extends AbstractChild
      * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
      * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
      */
-    private function handleObjectsCollection($child): void
+    private function handleObjectsCollection(AbstractChild $child): void
     {
         if ($child instanceof Block) {
             throw new ObjectsCollectionBlockCanNotContainOtherBlockException();

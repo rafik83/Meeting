@@ -33,7 +33,10 @@ class SaveAction
     /** @var TranslatorAdapter */
     private $translatorAdapter;
 
-    public function __construct(AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter, CommandBusInterface $commandBus, TranslatorAdapter $translatorAdapter
+    public function __construct(
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
+        CommandBusInterface $commandBus,
+        TranslatorAdapter $translatorAdapter
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
