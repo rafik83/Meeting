@@ -128,8 +128,9 @@ TemplateBlock.prototype.save = function ()
   this.config.style = this.form.get('style');
 
   if (this.isObjectsCollection()) {
+      var maxItems = parseInt(this.form.get('maxItems'));
       this.config.label[this.locale] = this.form.get('label');
-      this.config.maxItems = this.form.get('maxItems');
+      this.config.maxItems = maxItems > 0 ? maxItems : 10;
   }
 };
 
