@@ -49,7 +49,7 @@ class ParticipantAndPlanning
         $maxParticipant,
         array $participants = [],
         Product $planning = null,
-        $planningSelectable
+        bool $planningSelectable
     ) {
         foreach ($participants as $participant) {
             if (null !== $participant && !$participant->isParticipant()) {
