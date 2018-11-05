@@ -30,7 +30,6 @@ class UpdateHandlerTest extends TestCase
         $event    = EventFactory::createEvent();
         $event->setLocales(['fr', 'en']);
         $package  = new Package($event, 'Lorem ipsum', $dateTime);
-        $package->setPlanningSelectable(false);
 
         $plan1       = Product::createPlan($event, 'Plan 1', 'plan1.jpg', 100, 20, 1, 1);
         $plan2       = Product::createPlan($event, 'Plan 2', 'plan2.jpg', 400, 20, 1, 1);
@@ -56,7 +55,7 @@ class UpdateHandlerTest extends TestCase
             ['fr' => 'AAAA', 'en' => 'AAAA'],
             ['fr' => 'BBBB', 'en' => 'BBBB'],
         ]);
-        $expected->setPlanningSelectable(false);
+        $expected->setPlanningSelectable(true);
 
         $packageRepository->set(Argument::that(function (Package $package) use ($expected) {
             $this->assertEquals($expected->getTitle(), $package->getTitle());
@@ -99,7 +98,7 @@ class UpdateHandlerTest extends TestCase
             new Group(['fr' => 'AAAA', 'en' => 'AAAA'], [$option4, $option1]),
             new Group(['fr' => 'BBBB', 'en' => 'BBBB'], [$option2, $option3]),
         ];
-        $command->participantAndPlanning->planningSelectable = false;
+        $command->participantAndPlanning->planningSelectable = true;
 
         $handler = new UpdateHandler($packageRepository->reveal());
         $handler->handle($command);
