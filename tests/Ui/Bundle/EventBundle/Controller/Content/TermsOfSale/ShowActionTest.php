@@ -50,7 +50,7 @@ class ShowActionTest extends TestCase
         $this->response             = $this->prophesize(Response::class);
         $this->request              = $this->prophesize(Request::class);
         $this->eventDomain          = $this->prophesize(EventDomain::class);
-        $this->query                = new TermsOfSaleViewQuery($this->event, $this->eventLocale);
+        $this->query                = new TermsOfSaleViewQuery($this->event, $this->sheet, $this->eventLocale);
         $this->view                 = new TermsOfSaleView($this->content);
         $this->engine               = $this->prophesize(EngineInterface::class);
         $this->authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);

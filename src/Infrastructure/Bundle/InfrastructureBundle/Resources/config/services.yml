@@ -3507,6 +3507,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQueryHandler
         arguments:
             - '@repository.event.content_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Type\ContentRepository'
             - '@markdown'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQuery }
