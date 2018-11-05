@@ -684,16 +684,15 @@ event_package_payment_pay_remaining:
     path: /sheet/{sheet}/package/payment/pay-remaining
     requirements:
         sheet: \d+
-        transaction: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Payment:payRemaining }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\Payment\PayRemainingAction
 
 event_payment_info:
     path: /sheet/{sheet}/payment
     requirements:
         sheet: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Payment:paymentInfo }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\Payment\InfoAction
 
 #
 # Order

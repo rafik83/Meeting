@@ -68,6 +68,23 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     #
+    # Package Payment
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\Payment\PayRemainingAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@repository.transaction'
+            - '@router'
+            - '@order.balance'
+            - '@datetime'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\Payment\InfoAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+
+    #
     # Agenda
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ParticipantTimezoneAction:
