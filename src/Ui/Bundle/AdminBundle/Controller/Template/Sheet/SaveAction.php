@@ -71,7 +71,7 @@ class SaveAction
                         'templates'
                     ),
                 ],
-                500
+                422
             );
         } catch (ObjectsCollectionBlockCanNotContainForbiddenObjectsException $objectsCollectionBlockCanNotContainForbiddenObjectsException) {
             return new JsonResponse(
@@ -82,7 +82,7 @@ class SaveAction
                         'templates'
                     ),
                 ],
-                500
+                422
             );
         }
 
