@@ -55,6 +55,7 @@ class UpdateHandlerTest extends TestCase
             ['fr' => 'AAAA', 'en' => 'AAAA'],
             ['fr' => 'BBBB', 'en' => 'BBBB'],
         ]);
+        $expected->setPlanningSelectable(true);
 
         $packageRepository->set(Argument::that(function (Package $package) use ($expected) {
             $this->assertEquals($expected->getTitle(), $package->getTitle());
@@ -67,6 +68,7 @@ class UpdateHandlerTest extends TestCase
             $this->assertEquals($expected->getPlans(), $package->getPlans());
             $this->assertEquals($expected->getGroups(), $package->getGroups());
             $this->assertEquals($expected->getMaxParticipant(), $package->getMaxParticipant());
+            $this->assertEquals($expected->isPlanningSelectable(), $package->isPlanningSelectable());
 
             $groups = $expected->getGroups();
 
@@ -96,6 +98,7 @@ class UpdateHandlerTest extends TestCase
             new Group(['fr' => 'AAAA', 'en' => 'AAAA'], [$option4, $option1]),
             new Group(['fr' => 'BBBB', 'en' => 'BBBB'], [$option2, $option3]),
         ];
+        $command->participantAndPlanning->planningSelectable = true;
 
         $handler = new UpdateHandler($packageRepository->reveal());
         $handler->handle($command);
