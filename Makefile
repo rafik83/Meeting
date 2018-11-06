@@ -261,6 +261,16 @@ endif
 show-host:
 	printf "HOST ? ${HOST} ; IS_PROD ? ${IS_PROD}\n"
 
+migration-and-redis-flushdb@prod:
+	make migration@prod
+	make redis-flushdb@prod
+
+migration@prod:
+	bin/console doctrine:migrations:migrate --no-interaction --env=prod --no-debug
+
+redis-flushdb@prod:
+	bin/console redis:flushdb --client=doctrine --no-interaction --env=prod --no-debug
+
 # Do no allow targets in production
 ifeq ($(IS_PROD), no)
 
@@ -280,16 +290,6 @@ init-db@test:
 	bin/console doctrine:fixtures:load -n --env=test
 	bin/console cache:clear --env=test
 	bin/console vimeet:elasticsearch:index --env=test
-
-migration-and-redis-flushdb@prod:
-	make migration@prod
-	make redis-flushdb@prod
-
-migration@prod:
-	bin/console doctrine:migrations:migrate --no-interaction --env=prod --no-debug
-
-redis-flushdb@prod:
-	bin/console redis:flushdb --client=doctrine --no-interaction --env=prod --no-debug
 
 migrations:
 	bin/console doctrine:database:drop --force
