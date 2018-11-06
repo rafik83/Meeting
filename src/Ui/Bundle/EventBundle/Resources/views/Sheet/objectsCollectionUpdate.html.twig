@@ -1,0 +1,26 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{#{% form_theme form '@Ui/default.html.twig' %}#}
+
+{% block title %}
+    {{ event.title }}: {{ 'sheet.title'|trans }}
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+        {{ key }}
+        {#{{ form_start(form) }}#}
+            {#{{ form_errors(form) }}#}
+            {#{% for key, child in form if key != 'submit' %}#}
+                {#{{ form_row(child, {#}
+                    {#'sheet_uri': path('event_sheet_default', { 'sheet': sheet.id }),#}
+                    {#'nomenclature_label': label,#}
+                    {#'levelsArchitecture': levelsArchitecture#}
+                {#}) }}#}
+            {#{% endfor %}#}
+            {#<div class="text-right mg-bt mg-tp clearboth">#}
+                {#{{ form_widget(form.submit) }}#}
+            {#</div>#}
+        {#{{ form_end(form) }}#}
+    </section>
+{% endblock %}
