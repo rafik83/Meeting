@@ -89,9 +89,11 @@ class ObjectsCollectionUpdateAction
                 '@Event/Sheet/objectsCollectionUpdate.html.twig',
                 [
                     'event' => $event,
+                    'sheet' => $sheet,
                     'locale' => $locale,
                     'key' => $key,
                     'form' => $form->createView(),
+                    'label' => $block->getLabel($request->getLocale()),
                 ]
             )
         );

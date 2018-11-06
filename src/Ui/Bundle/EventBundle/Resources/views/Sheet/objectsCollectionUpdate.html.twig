@@ -8,19 +8,31 @@
 
 {% block content %}
     <section class="main">
-        {{ key }}
-        {{ form(form) }}
-            {#{{ form_errors(form) }}#}
-            {#{% for key, child in form if key != 'submit' %}#}
-                {#{{ form_row(child, {#}
-                    {#'sheet_uri': path('event_sheet_default', { 'sheet': sheet.id }),#}
-                    {#'nomenclature_label': label,#}
-                    {#'levelsArchitecture': levelsArchitecture#}
-                {#}) }}#}
-            {#{% endfor %}#}
-            {#<div class="text-right mg-bt mg-tp clearboth">#}
-                {#{{ form_widget(form.submit) }}#}
-            {#</div>#}
-        {#{{ form_end(form) }}#}
+        {% if label %}
+            <div class="content-header clearfix">
+                <h1 class="pull-left">
+                    {{ label }}
+                </h1>
+
+                <a href="{{ path('event_sheet_default', { 'sheet': sheet.id }) }}" class="btn btn-gray pull-right">
+                    <i class="icon-Retour"></i> {{ 'common.backToSheet'|trans }}
+                </a>
+            </div>
+        {% endif %}
+
+        <section class="object object--collection style--style-1 section">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {% for key, child in form if key != 'submit' %}
+                {{ form_row(child) }}
+            {% endfor %}
+
+            <div class="text-right mg-bt mg-tp clearboth">
+                {{ form_widget(form.submit) }}
+            </div>
+
+            {{ form_end(form) }}
+        </section>
     </section>
 {% endblock %}

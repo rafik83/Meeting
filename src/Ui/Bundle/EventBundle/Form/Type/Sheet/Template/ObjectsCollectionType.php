@@ -40,6 +40,6 @@ class ObjectsCollectionType extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return 'event_bundle_objects_collection_type';
+        return 'sheet_template_objects_collection_type';
     }
 }
