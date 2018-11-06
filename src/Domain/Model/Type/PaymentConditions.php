@@ -140,6 +140,7 @@ class PaymentConditions
 
     public function getBankInfo(string $locale): string
     {
+        dump($this->translations->getKeys());
         if (!$this->translations->containsKey($locale)) {
             return '';
         }

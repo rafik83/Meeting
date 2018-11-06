@@ -35,21 +35,23 @@
                 {{ form_end(form) }}
             </div>
 
+            {% if paymentInfoView is defined %}
             <div id="payment-info-block" class="info__content styled-form hide">
                 <h2>{{ 'order.transaction.howtopay'|trans }}</h2>
                 <ul>
-                    <li>{{ event.organiserName }}</li>
-                    <li>{{ event.billingAddress(app.request.locale)|nl2br }}</li>
-                    <li>{{ event.organiserEmail }}</li>
+                    <li>{{ paymentInfoView.organiserName }}</li>
+                    <li>{{ paymentInfoView.billingAddress|nl2br }}</li>
+                    <li>{{ paymentInfoView.organiserEmail }}</li>
                 </ul>
                 <div class="form-info">
                     <div>{{ 'package.payment.bankInfo'|trans }}:</div>
-                    <div>{{ event.bankInfo(app.request.locale)|nl2br }}</div>
+                    <div>{{ paymentInfoView.bankInfo|nl2br }}</div>
                 </div>
                 <div>
-                    {{ event.paymentCondition(app.request.locale)|nl2br }}
+                    {{ paymentInfoView.paymentCondition|nl2br }}
                 </div>
             </div>
+            {% endif %}
 
         </div>
     </section>

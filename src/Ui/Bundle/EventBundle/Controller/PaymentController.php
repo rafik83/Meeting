@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
+use Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQuery;
 use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -132,13 +134,16 @@ class PaymentController extends Controller
             }
         }
 
+        $paymentInfoView = $this->get(QueryBusInterface::class)->handle(new InfoViewQuery($sheet, $request->getLocale()));
+
         return $this->render('EventBundle:Payment:choice.html.twig', [
-            'event'   => $eventDomain->getEvent(),
-            'sheet'   => $sheet,
-            'form'    => $form->createView(),
-            'total'   => $total,
+            'event' => $eventDomain->getEvent(),
+            'sheet' => $sheet,
+            'form' => $form->createView(),
+            'total' => $total,
             'deposit' => $deposit,
-            'view'    => ['funnel' => $funnel],
+            'paymentInfoView' => $paymentInfoView,
+            'view' => ['funnel' => $funnel],
         ]);
     }
 
