@@ -1,26 +1,28 @@
-<div class="content-header">
-    <h2>{{ view.products.planningView.title }}</h2>
-</div>
-
-<section class="section">
-    <div class="object object--collection style--style-1"></div>
-    <div class="form--table--head">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>{{ 'package.planning.unitPrice'|trans }}</th>
-                <th>{{ 'package.planning.label'|trans }}</th>
-                <th class="text-center">{{ 'package.planning.quantity'|trans }}</th>
-                <th class="text-center">{{ 'package.planning.total'|trans }}</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            {{ include('EventBundle:Package/Step:product_row.html.twig', {
-                product: view.products.planningView,
-                quantityForm: form.planningQuantity
-            }) }}
-            </tbody>
-        </table>
+{% if form.planningQuantity is defined %}
+    <div class="content-header">
+        <h2>{{ view.products.planningView.title }}</h2>
     </div>
-</section>
+
+    <section class="section">
+        <div class="object object--collection style--style-1"></div>
+        <div class="form--table--head">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>{{ 'package.planning.unitPrice'|trans }}</th>
+                    <th>{{ 'package.planning.label'|trans }}</th>
+                    <th class="text-center">{{ 'package.planning.quantity'|trans }}</th>
+                    <th class="text-center">{{ 'package.planning.total'|trans }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {{ include('EventBundle:Package/Step:product_row.html.twig', {
+                    product: view.products.planningView,
+                    quantityForm: form.planningQuantity
+                }) }}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endif %}
