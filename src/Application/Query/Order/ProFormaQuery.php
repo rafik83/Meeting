@@ -10,32 +10,22 @@
 
 namespace Proximum\Vimeet\Application\Query\Order;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class ProFormaQuery
+class ProFormaQuery implements Query
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var Order
-     */
+    /** @var Order */
     public $order;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @param Sheet  $sheet
-     * @param Order  $order
-     * @param string $locale
-     */
-    public function __construct(Sheet $sheet, Order $order, $locale)
+    public function __construct(Sheet $sheet, Order $order, string $locale)
     {
         $this->sheet  = $sheet;
         $this->order  = $order;
