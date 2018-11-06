@@ -166,6 +166,31 @@ class Block extends AbstractChild
         }, []);
     }
 
+    public function getBlocksIndexedByUid()
+    {
+        return array_reduce($this->children, function (array $carry, array $column) {
+            foreach ($column as $childKey => $child) {
+
+                if ($child instanceof Block) {
+                    $carry = array_merge($carry, [$childKey => $child], $child->getBlocksIndexedByUid());
+                }
+            }
+
+            return $carry;
+        }, []);
+    }
+
+    public function getBlockByUid(string $uid): ?Block
+    {
+        $blocks = $this->getBlocksIndexedByUid();
+
+        if (isset($blocks[$uid])) {
+            return $blocks[$uid];
+        }
+
+        return null;
+    }
+
     /**
      * @param string $tag
      *

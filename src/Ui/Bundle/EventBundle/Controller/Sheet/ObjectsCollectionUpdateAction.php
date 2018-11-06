@@ -12,10 +12,13 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template\Block;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 
@@ -26,11 +29,17 @@ class ObjectsCollectionUpdateAction
 
     /** @var EngineInterface */
     private $engine;
+    /** @var TemplateDataFactory */
+    private $templateDataFactory;
 
-    public function __construct(AuthorizationCheckerAdapterInterface $authorizationChecker, EngineInterface $engine)
-    {
+    public function __construct(
+        AuthorizationCheckerAdapterInterface $authorizationChecker,
+        EngineInterface $engine,
+        TemplateDataFactory $templateDataFactory
+    ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
+        $this->templateDataFactory = $templateDataFactory;
     }
 
     public function __invoke(
@@ -47,6 +56,13 @@ class ObjectsCollectionUpdateAction
         }
 
         $event = $eventDomain->getEvent();
+
+        $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
+        $block = $templateData->getBlockByUid($key);
+
+        if (!$block instanceof Block || !$block->isObjectsCollection()) {
+            throw new NotFoundHttpException();
+        }
 
         return new Response(
             $this->engine->render(
