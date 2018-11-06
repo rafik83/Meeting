@@ -122,4 +122,11 @@ interface EventRepositoryInterface
      * @return Event[]
      */
     public function findEventsByDateRange(\DateTimeInterface $begin, \DateTimeInterface $end): array;
+
+    /**
+     * @param \DateTimeInterface $date
+     *
+     * @return Event[]
+     */
+    public function getEventThatOccursDuringTheGivenDay(\DateTimeInterface $date): array;
 }

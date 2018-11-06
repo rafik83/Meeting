@@ -45,3 +45,11 @@ services:
             - '@datetime'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Event\AvailableSlotCalculatorForCurrentEventCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.job_queue_adapter'
+            - '@datetime'
+        tags:
+            - { name: console.command }

@@ -337,4 +337,24 @@ class EventRepository implements EventRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function getEventThatOccursDuringTheGivenDay(\DateTimeInterface $date): array
+    {
+        $begin = clone $date;
+        $end = clone $date;
+        $begin->setTime(0, 0, 0, 0);
+        $end->setTime(23, 59, 59, 99);
+
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->join('event.days', 'day', 'WITH', 'day.endTime <= :end AND day.startTime >= :begin')
+            ->setParameter('begin', $begin)
+            ->setParameter('end', $end)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
