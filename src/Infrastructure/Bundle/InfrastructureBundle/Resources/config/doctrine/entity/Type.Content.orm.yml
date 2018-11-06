@@ -1,0 +1,25 @@
+Proximum\Vimeet\Domain\Model\Type\Content:
+    type:  entity
+    table: type_content
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        type:
+            type: string
+    manyToOne:
+        associatedParticipationType:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            joinColumn:
+                nullable: false
+                unique: true
+                onDelete: CASCADE
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type\ContentTranslation
+            mappedBy: content
+            indexBy: locale
+            cascade: ["all"]
+            orphanRemoval: true

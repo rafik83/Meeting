@@ -1,0 +1,19 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title (typeTitle ~ ': ' ~ 'admin.type_content_define_terms_of_sale.title'|trans) %}
+
+{% block form_content %}
+    {{ form_row(form.enabled, {'attr': {'data-element-id-to-hide': 'terms_of_sale_translations', 'data-toggle-visibility': true }}) }}
+    <hr/>
+    <div id="terms_of_sale_translations" {% if not contentDefined %}style="display: none"{% endif %}>
+        {{ form_row(form.translations) }}
+    </div>
+{% endblock %}
+
+{% block goback_link path('admin_type_list', {'event': event.id}) %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/tinymce/tinymce.js') }}"></script>
+    <script src="{{ asset('assets/tinymce/tip/tip.js') }}"></script>
+{% endblock %}

@@ -66,7 +66,11 @@ class ShowAction
         }
 
         $termsOfSaleView = $this->queryBus->handle(
-            new TermsOfSaleViewQuery($eventDomain->getEvent(), $request->getLocale())
+            new TermsOfSaleViewQuery(
+                $eventDomain->getEvent(),
+                $sheet,
+                $request->getLocale()
+            )
         );
 
         return $this->engine->renderResponse('EventBundle:Content:terms-of-sale.html.twig',

@@ -312,6 +312,14 @@ admin_type_payment_conditions:
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\PaymentConditionsAction }
 
+admin_type_content_define_terms_of_sale:
+    path: /event/{event}/type/{type}/content/terms-of-sale
+    requirements:
+        event: \d+
+        type: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Content\DefineTermsOfSaleAction
+
 #
 # Badge
 #

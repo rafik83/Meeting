@@ -1,0 +1,19 @@
+Proximum\Vimeet\Domain\Model\Type\ContentTranslation:
+    type:  entity
+    table: type_content_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        locale:
+            type: string
+        value:
+            type: text
+    manyToOne:
+        content:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type\Content
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE
