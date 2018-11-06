@@ -84,7 +84,7 @@ namespace :app_tasks do
   end
   task :redisflushdb, :roles => :app, :except => { :no_release => true } do
     capifony_pretty_print "--> Redis Doctrine flushdb"
-    invoke_command "make redis-flushdb@prod", :via => run_method
+    invoke_command "cd #{latest_release} && make redis-flushdb@prod", :via => run_method
     capifony_puts_ok
   end
 end
