@@ -12,27 +12,27 @@ namespace Proximum\Vimeet\Application\View\Package\Payment;
 
 class InfoView
 {
-    /** @var string */
+    /** @var string|null */
     public $organiserName;
 
-    /** @var string */
+    /** @var string|null */
     public $billingAddress;
 
-    /** @var string */
+    /** @var string|null */
     public $organiserEmail;
 
-    /** @var string */
+    /** @var string|null */
     public $bankInfo;
 
-    /** @var string */
+    /** @var string|null */
     public $paymentCondition;
 
     public function __construct(
-        string $organiserName,
-        string $billingAddress,
-        string $organiserEmail,
-        string $bankInfo,
-        string $paymentCondition
+        ?string $organiserName,
+        ?string $billingAddress,
+        ?string $organiserEmail,
+        ?string $bankInfo,
+        ?string $paymentCondition
     ) {
         $this->organiserName = $organiserName;
         $this->billingAddress = $billingAddress;
