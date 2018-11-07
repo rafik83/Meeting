@@ -48,6 +48,8 @@ class UpdateHandler
                 $command->deposit
             );
 
+            $paymentConditions->updateTranslations($command->translations);
+
             $this->paymentConditionsRepository->set($paymentConditions);
 
             return;
@@ -65,6 +67,8 @@ class UpdateHandler
             $command->minimumForDeposit,
             $command->deposit
         );
+
+        $paymentConditions->updateTranslations($command->translations);
 
         $this->paymentConditionsRepository->add($paymentConditions);
     }

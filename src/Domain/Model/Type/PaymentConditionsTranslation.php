@@ -83,4 +83,16 @@ class PaymentConditionsTranslation
     {
         return $this->paymentFooter;
     }
+
+    public function set(
+        string $bankInfo,
+        string $billingAddress,
+        string $paymentCondition,
+        string $paymentFooter
+    ): void {
+        $this->bankInfo = $bankInfo;
+        $this->billingAddress = $billingAddress;
+        $this->paymentCondition = $paymentCondition;
+        $this->paymentFooter = $paymentFooter;
+    }
 }

@@ -32,6 +32,10 @@ Proximum\Vimeet\Domain\Model\Type\PaymentConditions:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Type\PaymentConditionsTranslation
             mappedBy: paymentConditions
+            indexBy: locale
+            cascade:
+                - persist
+                - remove
             joinColumn:
                 nullable: false
                 unique: true

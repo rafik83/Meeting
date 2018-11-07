@@ -36,12 +36,13 @@ class Update implements Command
     /** @var array */
     public $paymentModes = [];
 
-    /**
-     * @param Type $type
-     */
+    /** @var array */
+    public $translations = [];
+
     public function __construct(Type $type)
     {
-        $this->type        = $type;
+        $this->type = $type;
+        $event = $type->getEvent();
         $paymentConditions = $type->getPaymentConditions();
 
         $this->specificPaymentConditions = $paymentConditions instanceof Type\PaymentConditions;
@@ -52,12 +53,31 @@ class Update implements Command
             $this->minimumForDeposit = $paymentConditions->getMinimumForDeposit();
             $this->deposit           = $paymentConditions->getDeposit();
             $this->paymentModes      = $paymentConditions->getPaymentModes();
+
+            /** @var Type\PaymentConditionsTranslation $translation */
+            foreach ($paymentConditions->getTranslations() as $translation) {
+                $this->translations[$translation->getLocale()] = [
+                    'bankInfo' => $translation->getBankInfo(),
+                    'billingAddress' => $translation->getBillingAddress(),
+                    'paymentCondition' => $translation->getPaymentCondition(),
+                    'paymentFooter' => $translation->getPaymentFooter(),
+                ];
+            }
+        }
+
+        // Pre-populate with event data
+        if (!$paymentConditions instanceof Type\PaymentConditions) {
+            foreach ($event->getLocales() as $locale) {
+                $this->translations[$locale] = [
+                    'bankInfo' => $event->getBankInfo($locale),
+                    'billingAddress' => $event->getBillingAddress($locale),
+                    'paymentCondition' => $event->getPaymentCondition($locale),
+                    'paymentFooter' => $event->getPaymentFooter($locale),
+                ];
+            }
         }
     }
 
-    /**
-     * @return bool
-     */
     public function isPaymentModesNotEmpty(): bool
     {
         return !empty($this->paymentModes);
