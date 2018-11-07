@@ -36,7 +36,7 @@ class PaymentConditions
     /** @var array */
     private $paymentModes;
 
-    /** @var PaymentConditionsTranslation[] */
+    /** @var ArrayCollection of PaymentConditionsTranslation */
     private $translations;
 
     public function __construct(

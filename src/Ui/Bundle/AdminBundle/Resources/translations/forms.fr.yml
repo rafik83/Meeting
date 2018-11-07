@@ -257,7 +257,6 @@ form.event_create.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event_duplicate.children.event.label: Événement
 form.event_duplicate.children.submit.label: Créer
 form.type_payment_conditions_update.children.translations.prototype.children.bankInfo.label: 'Bank information'
-form.type_payment_conditions_update.children.translations.prototype.children.bankInfo.placeholder: Iban...
 form.type_payment_conditions_update.children.translations.prototype.children.billingAddress.label: 'Adresse de paiement'
 form.type_payment_conditions_update.children.translations.prototype.children.paymentCondition.label: 'Conditions de paiement'
 form.type_payment_conditions_update.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
