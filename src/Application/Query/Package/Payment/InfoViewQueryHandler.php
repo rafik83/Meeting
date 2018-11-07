@@ -23,7 +23,7 @@ class InfoViewQueryHandler
         if ($paymentConditions instanceof PaymentConditions) {
             return new InfoView(
                 $event->getOrganiserName(),
-                $event->getBillingAddress($query->locale),
+                $paymentConditions->getBillingAddress($query->locale),
                 $event->getOrganiserEmail(),
                 $paymentConditions->getBankInfo($query->locale),
                 $paymentConditions->getPaymentCondition($query->locale)
