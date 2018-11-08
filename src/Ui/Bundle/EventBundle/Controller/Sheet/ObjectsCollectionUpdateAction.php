@@ -12,13 +12,19 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Template\ObjectsCollectionType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -32,6 +38,7 @@ class ObjectsCollectionUpdateAction
 
     /** @var EngineInterface */
     private $engine;
+
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
@@ -41,18 +48,23 @@ class ObjectsCollectionUpdateAction
     /** @var CommandBusInterface */
     private $commandBus;
 
+    /** @var RouterInterface */
+    private $router;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
         TemplateDataFactory $templateDataFactory,
         FormFactoryInterface $formFactory,
-        CommandBusInterface $commandBus
+        CommandBusInterface $commandBus,
+        RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
         $this->templateDataFactory = $templateDataFactory;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
+        $this->router = $router;
     }
 
     public function __invoke(
@@ -86,7 +98,33 @@ class ObjectsCollectionUpdateAction
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $collection = $form->getData();
 
+            foreach ($block->getObjects() as $uid => $object) {
+                $content = [];
+
+                foreach ($collection as $collectionRow) {
+                    if ($object instanceof EditableText) {
+                        $content[] = $collectionRow[$uid][EditableText::CONTENT] ?? null;
+                        continue;
+                    }
+
+                    if ($object instanceof Nomenclature) {
+                        $content[] = $collectionRow[$uid][Nomenclature::ITEMS] ?? null;
+                        continue;
+                    }
+
+                    $content[] = $collectionRow[$uid] ?? null;
+                }
+
+                if ($object instanceof ContentObjectInterface) {
+                    $object->setContentValue($content);
+                }
+            }
+
+            $this->commandBus->handle(new UpdateData($sheet, $templateData));
+
+            return new RedirectResponse($this->router->generate('event_sheet_default', ['sheet' => $sheet->getId()]));
         }
 
         return new Response(

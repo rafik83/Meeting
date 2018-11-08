@@ -9,6 +9,7 @@ services:
             - '@template.template_data_factory'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.router'
 
     #
     # Package

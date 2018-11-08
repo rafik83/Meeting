@@ -10,41 +10,29 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class UpdateData
+class UpdateData implements Command
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var TemplateData
-     */
+    /** @var TemplateData */
     public $templateData;
 
-    /**
-     * @var TemplateObject
-     */
+    /** @var null|TemplateObject */
     public $templateObject;
 
-    /**
-     * UpdateData constructor.
-     *
-     * @param Sheet          $sheet
-     * @param TemplateData   $templateData
-     * @param TemplateObject $templateObject
-     */
     public function __construct(
         Sheet $sheet,
         TemplateData $templateData,
-        TemplateObject $templateObject
+        ?TemplateObject $templateObject = null
     ) {
-        $this->sheet          = $sheet;
-        $this->templateData   = $templateData;
+        $this->sheet = $sheet;
+        $this->templateData = $templateData;
         $this->templateObject = $templateObject;
     }
 }
