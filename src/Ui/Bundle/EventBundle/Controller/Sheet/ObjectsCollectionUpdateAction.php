@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\Block;
+use Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\BlockToArray;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
@@ -51,12 +52,16 @@ class ObjectsCollectionUpdateAction
     /** @var RouterInterface */
     private $router;
 
+    /** @var BlockToArray */
+    private $blockToArray;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
         TemplateDataFactory $templateDataFactory,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
+        BlockToArray $blockToArray,
         RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
@@ -64,6 +69,7 @@ class ObjectsCollectionUpdateAction
         $this->templateDataFactory = $templateDataFactory;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
+        $this->blockToArray = $blockToArray;
         $this->router = $router;
     }
 
@@ -89,35 +95,7 @@ class ObjectsCollectionUpdateAction
             throw new NotFoundHttpException();
         }
 
-        $collection = [];
-
-        foreach ($block->getObjects() as $uid => $object) {
-            $initialData = $object->getData();
-
-            if ($object instanceof EditableText) {
-                if ($object->isTranslatable()) {
-                    $values = $initialData[EditableText::TEXT][$locale] ?? [];
-                } else {
-                    $values = $initialData[EditableText::TEXT] ?? [];
-                }
-
-                foreach ($values as $index => $value) {
-                    $collection[$index][$uid] = [EditableText::CONTENT => $value];
-                }
-
-                continue;
-            }
-
-            if ($object instanceof Nomenclature) {
-                $values = $initialData[Nomenclature::ITEMS] ?? [];
-
-                foreach ($values as $index => $value) {
-                    $collection[$index][$uid] = [Nomenclature::ITEMS => $value];
-                }
-
-                continue;
-            }
-        }
+        $collection = ($this->blockToArray)($block);
 
         $form = $this->formFactory->create(ObjectsCollectionType::class, $collection, [
             'block' => $block,
