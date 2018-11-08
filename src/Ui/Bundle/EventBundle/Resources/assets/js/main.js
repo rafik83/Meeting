@@ -52,7 +52,10 @@ function init (target) {
         });
     });
 
-    $('[data-collection]', target).collection();
+    $('[data-collection]', target)
+        .collection()
+        .on('collection:added', function (event, item) { init(item.element.get(0)); });
+
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
 
