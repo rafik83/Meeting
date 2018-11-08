@@ -24,9 +24,9 @@
             {{ form_start(form) }}
             {{ form_errors(form) }}
 
-            {% for key, child in form if key != 'submit' %}
-                {{ form_row(child) }}
-            {% endfor %}
+            {#<table class="table">#}
+                {{ form_row(form.objectsCollection) }}
+            {#</table>#}
 
             <div class="text-right mg-bt mg-tp clearboth">
                 {{ form_widget(form.submit) }}

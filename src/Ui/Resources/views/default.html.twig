@@ -296,3 +296,14 @@
 {% block boolean_item_row %}
     {{ form_row(form, { 'inline': true }) }}
 {% endblock %}
+
+{#{% block _sheet_template_objects_collection_type_objectsCollection_entry_row %}#}
+    {#<tr>#}
+        {#{% for key, child in form %}#}
+            {#<td>{{ form_widget(child) }}</td>#}
+        {#{% endfor %}#}
+        {#<td class="col-md-1 text-right">#}
+            {#{{ block('collection_delete_button') }}#}
+        {#</td>#}
+    {#</tr>#}
+{#{% endblock %}#}

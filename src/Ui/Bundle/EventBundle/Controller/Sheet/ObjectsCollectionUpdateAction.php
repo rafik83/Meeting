@@ -77,12 +77,17 @@ class ObjectsCollectionUpdateAction
             throw new NotFoundHttpException();
         }
 
-        $form = $this->formFactory->create(ObjectsCollectionType::class, [], [
+        $collection = [];
+
+        $form = $this->formFactory->create(ObjectsCollectionType::class, $collection, [
             'block' => $block,
-            'country' => $event->getCountry(),
             'locale' => $locale,
             'submit' => true,
         ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+
+        }
 
         return new Response(
             $this->engine->render(
