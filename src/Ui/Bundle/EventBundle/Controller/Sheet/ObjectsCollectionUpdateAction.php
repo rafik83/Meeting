@@ -152,7 +152,9 @@ class ObjectsCollectionUpdateAction
 
             $this->commandBus->handle(new UpdateData($sheet, $templateData));
 
-            return new RedirectResponse($this->router->generate('event_sheet_default', ['sheet' => $sheet->getId()]));
+            return new RedirectResponse(
+                $this->router->generate('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale])
+            );
         }
 
         return new Response(
