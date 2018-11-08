@@ -25,11 +25,13 @@
             {{ form_errors(form) }}
 
             {#<table class="table">#}
-                {{ form_row(form.objectsCollection) }}
+                {{ form_row(form) }}
             {#</table>#}
 
             <div class="text-right mg-bt mg-tp clearboth">
-                {{ form_widget(form.submit) }}
+                <button type="submit" class="btn btn-primary">
+                    {{ 'form.sheet_template_objects_collection_type.label_submit'|trans({}, 'forms') }}
+                </button>
             </div>
 
             {{ form_end(form) }}

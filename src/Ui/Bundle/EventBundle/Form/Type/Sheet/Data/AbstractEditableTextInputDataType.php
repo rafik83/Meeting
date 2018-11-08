@@ -58,7 +58,7 @@ abstract class AbstractEditableTextInputDataType extends AbstractType
             }
 
             $builder
-                ->add('content', TextareaType::class, [
+                ->add(EditableText::CONTENT, TextareaType::class, [
                     'placeholder'        => $text->getOption('placeholder', $locale),
                     'label'              => $showLabel ? $text->getOption('label', $locale) : false,
                     'attr'               => $attr,
@@ -68,7 +68,7 @@ abstract class AbstractEditableTextInputDataType extends AbstractType
             ;
         } else {
             $builder
-                ->add('content', TextType::class, [
+                ->add(EditableText::CONTENT, TextType::class, [
                     'label'              => $showLabel ? $text->getOption('label', $locale) : false,
                     'required'           => $text->getOption('required'),
                     'placeholder'        => $text->getOption('placeholder', $locale),
