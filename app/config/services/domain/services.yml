@@ -91,6 +91,7 @@ services:
     # Template
     #
     Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\BlockToArray: ~
+    Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\SetArrayContentToBlock: ~
 
     #
     # Key Dates

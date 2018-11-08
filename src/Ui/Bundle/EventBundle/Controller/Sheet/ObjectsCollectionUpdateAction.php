@@ -17,10 +17,8 @@ use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\BlockToArray;
+use Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\SetArrayContentToBlock;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
-use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
-use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Template\ObjectsCollectionType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -49,11 +47,14 @@ class ObjectsCollectionUpdateAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var RouterInterface */
-    private $router;
+    /** @var SetArrayContentToBlock */
+    private $setArrayContentToBlock;
 
     /** @var BlockToArray */
     private $blockToArray;
+
+    /** @var RouterInterface */
+    private $router;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
@@ -62,6 +63,7 @@ class ObjectsCollectionUpdateAction
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         BlockToArray $blockToArray,
+        SetArrayContentToBlock $setArrayContentToBlock,
         RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
@@ -70,6 +72,7 @@ class ObjectsCollectionUpdateAction
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->blockToArray = $blockToArray;
+        $this->setArrayContentToBlock = $setArrayContentToBlock;
         $this->router = $router;
     }
 
@@ -104,29 +107,7 @@ class ObjectsCollectionUpdateAction
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $collection = $form->getData();
-
-            foreach ($block->getObjects() as $uid => $object) {
-                $content = [];
-
-                foreach ($collection as $collectionRow) {
-                    if ($object instanceof EditableText) {
-                        $content[] = $collectionRow[$uid][EditableText::CONTENT] ?? null;
-                        continue;
-                    }
-
-                    if ($object instanceof Nomenclature) {
-                        $content[] = $collectionRow[$uid][Nomenclature::ITEMS] ?? null;
-                        continue;
-                    }
-
-                    $content[] = $collectionRow[$uid] ?? null;
-                }
-
-                if ($object instanceof ContentObjectInterface) {
-                    $object->setContentValue($content);
-                }
-            }
+            ($this->setArrayContentToBlock)($block, $form->getData());
 
             $this->commandBus->handle(new UpdateData($sheet, $templateData));
 
