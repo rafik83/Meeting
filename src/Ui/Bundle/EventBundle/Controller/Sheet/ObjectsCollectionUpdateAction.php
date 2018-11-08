@@ -91,6 +91,34 @@ class ObjectsCollectionUpdateAction
 
         $collection = [];
 
+        foreach ($block->getObjects() as $uid => $object) {
+            $initialData = $object->getData();
+
+            if ($object instanceof EditableText) {
+                if ($object->isTranslatable()) {
+                    $values = $initialData[EditableText::TEXT][$locale] ?? [];
+                } else {
+                    $values = $initialData[EditableText::TEXT] ?? [];
+                }
+
+                foreach ($values as $index => $value) {
+                    $collection[$index][$uid] = [EditableText::CONTENT => $value];
+                }
+
+                continue;
+            }
+
+            if ($object instanceof Nomenclature) {
+                $values = $initialData[Nomenclature::ITEMS] ?? [];
+
+                foreach ($values as $index => $value) {
+                    $collection[$index][$uid] = [Nomenclature::ITEMS => $value];
+                }
+
+                continue;
+            }
+        }
+
         $form = $this->formFactory->create(ObjectsCollectionType::class, $collection, [
             'block' => $block,
             'locale' => $locale,
