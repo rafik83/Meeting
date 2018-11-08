@@ -291,9 +291,9 @@ class TemplateDataFactory
     /**
      * @param TemplateObject $templateObject
      *
-     * @return string|null
+     * @return string|array|null
      */
-    private function getFirstNotEmptyContent(TemplateObject $templateObject): ? string
+    private function getFirstNotEmptyContent(TemplateObject $templateObject)
     {
         $translations = $templateObject->getTranslations();
 

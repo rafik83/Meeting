@@ -14,6 +14,9 @@ use Proximum\Vimeet\Domain\Template\TranslatableInterface;
 
 class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
+    public const CONTENT = 'content';
+    public const TEXT = 'text';
+
     /**
      * @param string|null locale
      *
@@ -28,36 +31,44 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
                 return null;
             }
 
-            return isset($this->data['text'][$thisLocale]) ? $this->data['text'][$thisLocale] : null;
+            if (isset($this->data[self::TEXT][$thisLocale])) {
+                $content = $this->data[self::TEXT][$thisLocale];
+
+                return \is_array($content) ? implode(', ', $content) : $content;
+            }
+
+            return null;
         }
 
-        if (isset($this->data['text'])) {
-            if (is_array($this->data['text'])) {
+        if (isset($this->data[self::TEXT])) {
+            if (\is_array($this->data[self::TEXT])) {
                 return null;
-            } else {
-                return $this->data['text'];
             }
+
+            $content = $this->data[self::TEXT];
+
+            return \is_array($content) ? implode(', ', $content) : $content;
         }
 
         return null;
     }
 
     /**
-     * @param string $content
+     * @param string|array $content
      *
      * @return EditableText
      */
     public function setContent($content)
     {
         if ($this->isTranslatable()) {
-            if (isset($this->data['text']) && is_array($this->data['text'])) {
-                $this->data['text'][$this->locale] = $content;
+            if (isset($this->data[self::TEXT]) && is_array($this->data[self::TEXT])) {
+                $this->data[self::TEXT][$this->locale] = $content;
             } else {
-                $this->data['text'] = [];
-                $this->data['text'][$this->locale] = $content;
+                $this->data[self::TEXT] = [];
+                $this->data[self::TEXT][$this->locale] = $content;
             }
         } else {
-            $this->data['text'] = $content;
+            $this->data[self::TEXT] = $content;
         }
 
         return $this;
@@ -76,12 +87,12 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isEmpty(): bool
     {
-        if (!isset($this->data['text'])) {
+        if (!isset($this->data[self::TEXT])) {
             return true;
         }
 
         if ($this->isTranslatable()) {
-            foreach ($this->data['text'] as $translatedText) {
+            foreach ($this->data[self::TEXT] as $translatedText) {
                 if ('' !== trim($translatedText)) {
                     return false;
                 }
@@ -90,7 +101,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
             return true;
         }
 
-        return '' === trim($this->data['text']);
+        return '' === trim($this->data[self::TEXT]);
     }
 
     /**
@@ -105,7 +116,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         $data = $this->getContent($locale);
 
         return null !== $data
-            ? ($this->isTranslatable() && \is_array($data) && \array_key_exists('content', $data) ? $data['content'] : $data)
+            ? ($this->isTranslatable() && \is_array($data) && \array_key_exists(self::CONTENT, $data) ? $data[self::CONTENT] : $data)
             : '';
     }
 
@@ -198,11 +209,11 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getFallbackContent()
     {
-        if ($this->isTranslatable() && isset($this->data['text']) && is_array($this->data['text'])
-            || isset($this->data['text']) && is_array($this->data['text'])
+        if ($this->isTranslatable() && isset($this->data[self::TEXT]) && is_array($this->data[self::TEXT])
+            || isset($this->data[self::TEXT]) && is_array($this->data[self::TEXT])
         ) {
-            return isset($this->data['text'][$this->getFallback()])
-                ? $this->data['text'][$this->getFallback()]
+            return isset($this->data[self::TEXT][$this->getFallback()])
+                ? $this->data[self::TEXT][$this->getFallback()]
                 : null;
         }
 
@@ -252,17 +263,17 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getTranslations(array $locales = [])
     {
-        if (!is_array($this->data) || !isset($this->data['text'])) {
+        if (!is_array($this->data) || !isset($this->data[self::TEXT])) {
             return [];
         }
 
-        if (!$this->isTranslatable() || !is_array($this->data['text'])) {
+        if (!$this->isTranslatable() || !is_array($this->data[self::TEXT])) {
             return [];
         }
 
         $translations = [];
 
-        foreach ($this->data['text'] as $locale => $content) {
+        foreach ($this->data[self::TEXT] as $locale => $content) {
             $translations[$locale] = $content;
         }
 
@@ -276,21 +287,21 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getTranslationsInput()
     {
-        if (!\is_array($this->data) || !isset($this->data['text'])) {
+        if (!\is_array($this->data) || !isset($this->data[self::TEXT])) {
             return [];
         }
 
-        if (!$this->isTranslatable() || !\is_array($this->data['text'])) {
+        if (!$this->isTranslatable() || !\is_array($this->data[self::TEXT])) {
             return [];
         }
 
         $translations = [];
 
-        foreach ($this->data['text'] as $locale => $content) {
-            if (\is_array($content) && array_key_exists('content', $content)) {
-                $translations[$locale]['content'] = $content['content'];
+        foreach ($this->data[self::TEXT] as $locale => $content) {
+            if (\is_array($content) && array_key_exists(self::CONTENT, $content)) {
+                $translations[$locale][self::CONTENT] = $content[self::CONTENT];
             } else {
-                $translations[$locale]['content'] = $content;
+                $translations[$locale][self::CONTENT] = $content;
             }
         }
 
@@ -320,13 +331,13 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
             throw new \LogicException(sprintf('Object %s is not translatable', $this->getKey()));
         }
 
-        $this->data['text'] = []; // erase previous untranslatable value
+        $this->data[self::TEXT] = []; // erase previous untranslatable value
 
         foreach ($translations as $locale => $translation) {
-            if (\is_array($translation) && array_key_exists('content', $translation)) {
-                $this->data['text'][$locale] = $translation['content'];
+            if (\is_array($translation) && array_key_exists(self::CONTENT, $translation)) {
+                $this->data[self::TEXT][$locale] = $translation[self::CONTENT];
             } else {
-                $this->data['text'][$locale] = $translation;
+                $this->data[self::TEXT][$locale] = $translation;
             }
         }
     }

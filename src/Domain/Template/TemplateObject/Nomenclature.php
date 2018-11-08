@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Template\TranslatableInterface;
 
 class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
+    public const ITEMS = 'items';
     public const SEMICOLON_ESCAPE_CHAR = '__VIMEET_SEMICOLON__';
 
     /**
@@ -54,7 +55,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function setItems(array $items)
     {
-        $this->data['items'] = $items;
+        $this->data[self::ITEMS] = $items;
 
         return $this;
     }
@@ -72,7 +73,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getItems()
     {
-        return isset($this->data['items']) ? $this->data['items'] : [];
+        return $this->data[self::ITEMS] ?? [];
     }
 
     /**

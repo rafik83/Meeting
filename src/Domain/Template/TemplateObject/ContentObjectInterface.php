@@ -30,7 +30,7 @@ interface ContentObjectInterface
     public function getContentLabel();
 
     /**
-     * @param string $value
+     * @param string|array $value
      */
     public function setContentValue($value);
 }
