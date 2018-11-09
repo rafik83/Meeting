@@ -1,42 +1,46 @@
-<div class="row block block--12 {{ 'style--' ~ item.style }}">
-    <div class="col-md-12">
-        {% set label = item.label(locale, fallback) %}
+{% set block = item %}
+{% set label = block.label(locale, fallback) %}
 
+<div class="row block block--12 {{ 'style--' ~ block.style }}">
+    <div class="col-md-12">
         {% if label %}
             <header>
                 <h2>{{ label }}</h2>
             </header>
         {% endif %}
 
-        {% for childUid, child in item.column(0) %}
-            {{ include('EventBundle:Sheet/' ~ child.component|capitalize ~ ':' ~ child.type ~ '.html.twig', {
-                'sheet': sheet,
-                'uid': childUid,
-                'item': child,
-                'locale': locale,
-                'fallback': fallback|default,
-                'taggedData': taggedData,
-                'nomenclatures': nomenclatures,
-                'participants': participants,
-                'isCatalog': isCatalog|default(false),
-                'userSheet': userSheet|default(false),
-                'meetingRequest' : meetingRequest|default(false),
-                'isMeetingPublished': isMeetingPublished|default(false),
-                'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
-                'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
-                'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
-                'isPhoneValidationRequired': isPhoneValidationRequired,
-                'phoneValidationLink': phoneValidationLink,
-                'hideMeetingRequest': hideMeetingRequest|default(false),
-                'canAddParticipant': canAddParticipant|default(false),
-            }, false) }}
-        {% endfor %}
+        <table class="table">
+            <thead>
+                <tr>
+                    {% for label in block.objectsLabel %}
+                        <th>{{ label }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in block.getObjectsContent %}
+                <tr>
+                    {% for column in row %}
+                        <td>
+                            {% if column is iterable %}
+                                {% for value in column %}
+                                    <span class="label label-default">{{ value }}</span>
+                                {% endfor %}
+                            {% else %}
+                                {{ column }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
         {% if not isCatalog %}
             <footer>
                 <a href="{{ path('event_sheet_objects_collection_update', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" class="edit-link">
                     <i class="icon-Note_2"></i>
-                    {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}
+                    {{ 'sheet.edit.object'|trans({ '%label%': block.label(locale, fallback) }) }}
                 </a>
             </footer>
         {% endif %}

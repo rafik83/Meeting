@@ -748,6 +748,56 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return string[]
+     */
+    public function getObjectsLabel(): array
+    {
+        $objectsLabel = [];
+
+        foreach ($this->getObjects() as $templateObject) {
+            $objectsLabel[] = $templateObject->getLabel($this->getLocale(), $this->getFallback());
+        }
+
+        return $objectsLabel;
+    }
+
+    public function getObjectsContent(): array
+    {
+        $locale = $this->getLocale();
+        $objectsContent = [];
+
+        foreach ($this->getObjects() as $uid => $object) {
+            $initialData = $object->getData();
+
+            if ($object instanceof EditableText) {
+                if ($object->isTranslatable()) {
+                    $values = $initialData[EditableText::TEXT][$locale] ?? [];
+                } else {
+                    $values = $initialData[EditableText::TEXT] ?? [];
+                }
+
+                foreach ($values as $index => $value) {
+                    $objectsContent[$index][$uid] = $value;
+                }
+
+                continue;
+            }
+
+            if ($object instanceof Nomenclature) {
+                $values = $initialData[Nomenclature::ITEMS] ?? [];
+
+                foreach ($values as $index => $value) {
+                    $objectsContent[$index][$uid] = $value;
+                }
+
+                continue;
+            }
+        }
+
+        return $objectsContent;
+    }
+
+    /**
      * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
      * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
      */
