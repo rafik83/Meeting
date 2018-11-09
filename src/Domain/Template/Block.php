@@ -761,8 +761,14 @@ class Block extends AbstractChild
         return $objectsLabel;
     }
 
-    public function getObjectsContent(): array
+    public function getObjectsCollectionContent(): array
     {
+        if (!$this->isObjectsCollection()) {
+            throw new \LogicException(
+                'getObjectsCollectionContent() method can not be used if block is not a objectsCollection'
+            );
+        }
+
         $locale = $this->getLocale();
         $objectsContent = [];
 
