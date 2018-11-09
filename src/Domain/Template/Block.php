@@ -808,6 +808,11 @@ class Block extends AbstractChild
         return $objectsContent;
     }
 
+    public function getMaxItems(): int
+    {
+        return (int) $this->getOption('maxItems');
+    }
+
     /**
      * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
      * @throws ObjectsCollectionBlockCanNotContainOtherBlockException

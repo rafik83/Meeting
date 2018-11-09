@@ -98,7 +98,7 @@ class ObjectsCollectionUpdateAction
             throw new NotFoundHttpException();
         }
 
-        $collection = ($this->blockToArray)($block);
+        $collection = [ObjectsCollectionType::OBJECTS_COLLECTION => ($this->blockToArray)($block)];
 
         $form = $this->formFactory->create(ObjectsCollectionType::class, $collection, [
             'block' => $block,
@@ -107,7 +107,7 @@ class ObjectsCollectionUpdateAction
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            ($this->setArrayContentToBlock)($block, $form->getData());
+            ($this->setArrayContentToBlock)($block, $form->getData()[ObjectsCollectionType::OBJECTS_COLLECTION]);
 
             $this->commandBus->handle(new UpdateData($sheet, $templateData));
 
