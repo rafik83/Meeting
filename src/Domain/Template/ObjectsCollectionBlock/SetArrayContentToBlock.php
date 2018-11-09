@@ -25,11 +25,19 @@ class SetArrayContentToBlock
             foreach ($data as $collectionRow) {
                 if ($object instanceof EditableText) {
                     $content[] = $collectionRow[$uid][EditableText::CONTENT] ?? null;
+
                     continue;
                 }
 
                 if ($object instanceof Nomenclature) {
-                    $content[] = $collectionRow[$uid][Nomenclature::ITEMS] ?? null;
+                    if ($object->isMultiple()) {
+                        $content[] = $collectionRow[$uid][Nomenclature::ITEMS] ?? null;
+
+                        continue;
+                    }
+
+                    $content[] = $collectionRow[$uid][Nomenclature::ITEM] ?? null;
+
                     continue;
                 }
 

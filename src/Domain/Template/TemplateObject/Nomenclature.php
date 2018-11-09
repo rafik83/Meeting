@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Template\TranslatableInterface;
 class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
     public const ITEMS = 'items';
+    public const ITEM = 'item';
     public const SEMICOLON_ESCAPE_CHAR = '__VIMEET_SEMICOLON__';
 
     /**

@@ -46,7 +46,11 @@ class BlockToArray
                 $values = $initialData[Nomenclature::ITEMS] ?? [];
 
                 foreach ($values as $index => $value) {
-                    $result[$index][$uid] = [Nomenclature::ITEMS => $value];
+                    if ($object->isMultiple()) {
+                        $result[$index][$uid] = [Nomenclature::ITEMS => $value];
+                    } else {
+                        $result[$index][$uid] = [Nomenclature::ITEM => $value];
+                    }
                 }
 
                 continue;
