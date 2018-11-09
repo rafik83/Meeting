@@ -787,7 +787,12 @@ class Block extends AbstractChild
                 $values = $initialData[Nomenclature::ITEMS] ?? [];
 
                 foreach ($values as $index => $value) {
-                    $objectsContent[$index][$uid] = $value;
+                    $objectsContent[$index][$uid] = array_map(
+                        function (string $key) use ($object) {
+                            return $object->getLabelForKey($key);
+                        },
+                        $value
+                    );
                 }
 
                 continue;
