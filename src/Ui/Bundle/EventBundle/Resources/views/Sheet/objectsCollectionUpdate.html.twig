@@ -21,15 +21,13 @@
         {% endif %}
 
         <section class="object object--collection style--style-1 section">
-            {{ form_start(form) }}
+            {{ form_start(form, { 'attr': { 'class': 'styled-form form' } }) }}
             {{ form_errors(form) }}
 
-            {#<table class="table">#}
-                {{ form_row(form.objectsCollection) }}
-            {#</table>#}
+            {{ form_row(form.objectsCollection) }}
 
             <div class="text-right mg-bt mg-tp clearboth">
-                {{ form_row(form.submit) }}
+                <input type="submit" value="{{ 'form.sheet_template_objects_collection_type.children.submit.label'|trans({}, 'forms') }}" class="btn btn-primary">
             </div>
 
             {{ form_end(form) }}

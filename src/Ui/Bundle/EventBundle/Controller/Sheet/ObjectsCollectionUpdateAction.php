@@ -103,7 +103,6 @@ class ObjectsCollectionUpdateAction
         $form = $this->formFactory->create(ObjectsCollectionType::class, $objectsCollection, [
             'block' => $block,
             'locale' => $locale,
-            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
