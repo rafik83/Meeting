@@ -24,15 +24,15 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getContent($locale = null)
     {
-        $thisLocale = null === $locale ? $this->locale : $locale;
+        $locale = $locale ?? $this->locale;
 
         if ($this->isTranslatable()) {
-            if (null === $thisLocale) {
+            if (null === $locale) {
                 return null;
             }
 
-            if (isset($this->data[self::TEXT][$thisLocale])) {
-                $content = $this->data[self::TEXT][$thisLocale];
+            if (isset($this->data[self::TEXT][$locale])) {
+                $content = $this->data[self::TEXT][$locale];
 
                 return \is_array($content) ? implode(', ', $content) : $content;
             }
@@ -41,10 +41,6 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         }
 
         if (isset($this->data[self::TEXT])) {
-            if (\is_array($this->data[self::TEXT])) {
-                return null;
-            }
-
             $content = $this->data[self::TEXT];
 
             return \is_array($content) ? implode(', ', $content) : $content;

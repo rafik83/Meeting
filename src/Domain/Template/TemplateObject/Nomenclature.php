@@ -372,7 +372,22 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         $allItemPaths = [];
 
         foreach ($this->getItems() as $item) {
-            $currentItemLabels = $this->getLabelsByItem($nomenclatureLabels, $item);
+            if(\is_array($item)) {
+                $currentItemLabels = [
+                    implode(
+                        ', ',
+                        array_map(
+                            function ($subItem) {
+                                return $this->getLabelForKey($subItem);
+                            },
+                            $item
+                        )
+                    ),
+                ];
+            } else {
+                $currentItemLabels = $this->getLabelsByItem($nomenclatureLabels, $item);
+            }
+
             $allItemPaths[] = $currentItemLabels;
             $currentItemLabelCount = \count($currentItemLabels);
             // Update $maxDepth if current item's depth is greater than current $maxDepth:
