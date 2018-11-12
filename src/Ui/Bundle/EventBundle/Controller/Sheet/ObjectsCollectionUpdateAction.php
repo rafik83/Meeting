@@ -98,9 +98,9 @@ class ObjectsCollectionUpdateAction
             throw new NotFoundHttpException();
         }
 
-        $collection = [ObjectsCollectionType::OBJECTS_COLLECTION => ($this->blockToArray)($block)];
+        $objectsCollection = $this->getObjectsCollection($block);
 
-        $form = $this->formFactory->create(ObjectsCollectionType::class, $collection, [
+        $form = $this->formFactory->create(ObjectsCollectionType::class, $objectsCollection, [
             'block' => $block,
             'locale' => $locale,
             'submit' => true,
@@ -129,5 +129,32 @@ class ObjectsCollectionUpdateAction
                 ]
             )
         );
+    }
+
+    private function getObjectsCollection(Block $block): array
+    {
+        $objectsCollectionData = ($this->blockToArray)($block);
+
+        if (empty($objectsCollectionData)) {
+            $objectsCollectionData = $this->createEmptyCollectionItem($block);
+        }
+
+        return [ObjectsCollectionType::OBJECTS_COLLECTION => $objectsCollectionData];
+    }
+
+    /**
+     * @param Block $block
+     *
+     * @return array example: [['uid123' => null, 'uid963' => null]]
+     */
+    private function createEmptyCollectionItem(Block $block): array
+    {
+        $objectsCollectionDataItem = [];
+
+        foreach (array_keys($block->getObjects()) as $uid) {
+            $objectsCollectionDataItem[$uid] = null;
+        }
+
+        return [$objectsCollectionDataItem];
     }
 }
