@@ -11,14 +11,14 @@
 
         <table class="table table-striped">
             <thead>
-                <tr>
-                    {% for label in block.objectsLabel %}
-                        <th>{{ label }}</th>
-                    {% endfor %}
-                </tr>
+            <tr>
+                {% for label in block.objectsLabel %}
+                    <th>{{ label }}</th>
+                {% endfor %}
+            </tr>
             </thead>
             <tbody>
-                {% for row in block.objectsCollectionContent %}
+            {% for row in block.objectsCollectionContent %}
                 <tr>
                     {% for column in row %}
                         <td>
@@ -30,17 +30,8 @@
                         </td>
                     {% endfor %}
                 </tr>
-                {% endfor %}
+            {% endfor %}
             </tbody>
         </table>
-
-        {% if not isCatalog %}
-            <footer>
-                <a href="{{ path('event_sheet_objects_collection_update', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" class="edit-link">
-                    <i class="icon-Note_2"></i>
-                    {{ 'sheet.edit.object'|trans({ '%label%': block.label(locale, fallback) }) }}
-                </a>
-            </footer>
-        {% endif %}
     </div>
 </div>
