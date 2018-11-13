@@ -145,7 +145,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isTextarea()
     {
-        return \in_array($this->getOption('type'), ['textarea', 'text'], true);
+        return 'textarea' === $this->getOption('type');
     }
 
     /**
