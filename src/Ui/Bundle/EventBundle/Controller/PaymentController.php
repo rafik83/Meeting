@@ -17,9 +17,7 @@ use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
 use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
-use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
-use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
@@ -145,46 +143,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     *
-     * @return RedirectResponse
-     */
-    public function payRemainingAction(EventDomain $eventDomain, Sheet $sheet)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        $paymentConditionsView = $this
-            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
-            ->handle(new PaymentConditionsViewQuery($sheet))
-        ;
-
-        if (!in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true)) {
-            throw $this->createAccessDeniedException('Paypal is not accessible for this sheet');
-        }
-
-        $remainingToPay = $this->get('order.balance')->getRemainingToPay($sheet);
-
-        if (0 >= $remainingToPay || !$eventDomain->getEvent()->getConfiguration()->isAllowedToPayRemaining()) {
-            return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
-        }
-
-        $transaction = Transaction::createForPaypal(
-            $sheet,
-            $this->getUser(),
-            AmountFormatter::centsToDecimalAmount($remainingToPay),
-            new \DateTime()
-        );
-
-        $this->get('repository.transaction')->add($transaction);
-
-        return $this->redirectToRoute('event_package_payment_prepare_paypal', [
-            'sheet'       => $sheet->getId(),
-            'transaction' => $transaction->getId(),
-        ]);
-    }
-
-    /**
      * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
@@ -224,24 +182,6 @@ class PaymentController extends Controller
         );
 
         return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
-    }
-
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     *
-     * @return Response
-     */
-    public function paymentInfoAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
-    {
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
-        return $this->render('EventBundle:Sheet:paymentInfo.html.twig', [
-            'event'  => $eventDomain->getEvent(),
-            'sheet'  => $sheet,
-            'locale' => $request->getLocale(),
-        ]);
     }
 
     /**
