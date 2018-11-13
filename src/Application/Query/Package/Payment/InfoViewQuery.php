@@ -8,27 +8,22 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Order;
+namespace Proximum\Vimeet\Application\Query\Package\Payment;
 
 use Proximum\Vimeet\Application\Query\Query;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class ProFormaQuery implements Query
+class InfoViewQuery implements Query
 {
     /** @var Sheet */
     public $sheet;
 
-    /** @var Order */
-    public $order;
-
     /** @var string */
     public $locale;
 
-    public function __construct(Sheet $sheet, Order $order, string $locale)
+    public function __construct(Sheet $sheet, string $locale)
     {
-        $this->sheet  = $sheet;
-        $this->order  = $order;
+        $this->sheet = $sheet;
         $this->locale = $locale;
     }
 }

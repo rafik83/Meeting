@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\Payment;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -27,10 +29,17 @@ class InfoAction
     /** @var EngineInterface */
     private $engine;
 
-    public function __construct(AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter, EngineInterface $engine)
-    {
+    /** @var QueryBusInterface */
+    private $queryBus;
+
+    public function __construct(
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
+        EngineInterface $engine,
+        QueryBusInterface $queryBus
+    ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->engine = $engine;
+        $this->queryBus = $queryBus;
     }
 
     /**
@@ -46,9 +55,12 @@ class InfoAction
             throw new AccessDeniedException('Access denied!');
         }
 
+        $view = $this->queryBus->handle(new InfoViewQuery($sheet, $request->getLocale()));
+
         return new Response($this->engine->render('EventBundle:Sheet:paymentInfo.html.twig', [
             'event'  => $eventDomain->getEvent(),
             'sheet'  => $sheet,
+            'view' => $view,
             'locale' => $request->getLocale(),
         ]));
     }
