@@ -152,13 +152,11 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getLabelForKey($givenKey, $locale = null)
     {
+        $locale = $locale ?? $this->getLocale();
+
         foreach ($this->nomenclature->getLastLevel() as $key => $nomenclatureItem) {
             if ($nomenclatureItem->getKey() === $givenKey) {
-                if (null !== $locale) {
-                    return $nomenclatureItem->getLabel($locale);
-                }
-
-                return $nomenclatureItem->getLabel($this->getLocale());
+                return $nomenclatureItem->getLabel($locale);
             }
         }
 
