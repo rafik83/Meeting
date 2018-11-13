@@ -21,11 +21,12 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\Type\ContentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class TypeViewQueryHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event = $this->prophesize(Event::class);
         $event->getId()->willReturn(12);
@@ -77,15 +78,24 @@ class TypeViewQueryHandlerTest extends TestCase
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
         $typeRepository->paginate(1, 20, 12, 'fr')->shouldBeCalled()->willReturn($paginatedResult);
 
+        $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
+        $contentRepository
+            ->hasContentByAssociatedTypes(Type\Content::TYPE_TERMS_OF_SALE, $paginatedResult->results)
+            ->shouldBeCalled()
+            ->willReturn([
+                ['contentId' => 12, 'associatedParticipationTypeId' => 18],
+            ])
+        ;
+
         $query = new TypeViewQuery(1, $event->reveal(), 'fr');
-        $handler = new TypeViewQueryHandler($typeRepository->reveal());
+        $handler = new TypeViewQueryHandler($typeRepository->reveal(), $contentRepository->reveal());
         $result = $handler->handle($query);
 
         $expected = new TypeListsView();
         $expected->types = [
-            new TypeListView(14, 3, 'Type 1', true, 'registration template 1', 'sheet template 2', 'package 2', false),
-            new TypeListView(17, 1, 'Type 2', false, 'registration template 2', 'sheet template 2', 'package 1', false),
-            new TypeListView(18, 2, 'Type 3', true, 'registration template 1', 'sheet template 1', 'package 2', true),
+            new TypeListView(14, 3, 'Type 1', true, 'registration template 1', 'sheet template 2', 'package 2', false, false),
+            new TypeListView(17, 1, 'Type 2', false, 'registration template 2', 'sheet template 2', 'package 1', false, false),
+            new TypeListView(18, 2, 'Type 3', true, 'registration template 1', 'sheet template 1', 'package 2', true, true),
         ];
         $expected->results = $paginatedResult;
 

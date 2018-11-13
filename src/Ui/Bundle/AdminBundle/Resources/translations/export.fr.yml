@@ -1,4 +1,8 @@
 export.meeting_request.col.createdAt: 'créée le'
+export.meeting_request.col.createdType: 'Planifié par'
+export.meeting_request.col.createdType.admin: Admin
+export.meeting_request.col.createdType.participant: Participant
+export.meeting_request.col.createdType.planner: Planner
 export.meeting_request.col.fromParticipantIds: 'ids participants demandeurs'
 export.meeting_request.col.fromParticipantNames: 'nom participants demandeurs'
 export.meeting_request.col.fromSheetCategory: 'categorie fiche demandeur'
@@ -7,6 +11,7 @@ export.meeting_request.col.fromSheetTitle: 'titre fiche demandeur'
 export.meeting_request.col.fromSheetType: 'type fiche demandeur'
 export.meeting_request.col.meetingId: 'ID RDV'
 export.meeting_request.col.requestId: 'ID demande'
+export.meeting_request.col.slot: 'Date et heure du début de créneau'
 export.meeting_request.col.state: état
 export.meeting_request.col.toParticipantIds: 'ids participants demandés'
 export.meeting_request.col.toParticipantNames: 'noms participants demandés'
@@ -19,11 +24,6 @@ export.meeting_request.state.approved: Acceptée
 export.meeting_request.state.planned: Planifiée
 export.meeting_request.state.refused: Refusée
 export.meeting_request.state.sent: Envoyée
-export.meeting_request.col.createdType: Planifié par
-export.meeting_request.col.createdType.planner: Planner
-export.meeting_request.col.createdType.admin: Admin
-export.meeting_request.col.createdType.participant: Participant
-export.meeting_request.col.slot: Date et heure du début de créneau
 gender.man: Monsieur
 gender.woman: Madame
 order.column.billing_info_city: ville

@@ -137,6 +137,12 @@ class PaymentConditionsActionTest extends TestCase
         ;
 
         $this->type->getPaymentConditions()->willReturn(null);
+        $this->type->getEvent()->shouldBeCalled()->willReturn($this->event->reveal());
+        $this->event->getLocales()->shouldBeCalled()->willReturn(['fr']);
+        $this->event->getBankInfo('fr')->shouldBeCalled()->willReturn('bank info');
+        $this->event->getBillingAddress('fr')->shouldBeCalled()->willReturn('billing address');
+        $this->event->getPaymentCondition('fr')->shouldBeCalled()->willReturn('payment condition');
+        $this->event->getPaymentFooter('fr')->shouldBeCalled()->willReturn('payment footer');
 
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
@@ -197,6 +203,12 @@ class PaymentConditionsActionTest extends TestCase
         ;
 
         $this->type->getPaymentConditions()->willReturn(null);
+        $this->type->getEvent()->shouldBeCalled()->willReturn($this->event->reveal());
+        $this->event->getLocales()->shouldBeCalled()->willReturn(['fr']);
+        $this->event->getBankInfo('fr')->shouldBeCalled()->willReturn('bank info');
+        $this->event->getBillingAddress('fr')->shouldBeCalled()->willReturn('billing address');
+        $this->event->getPaymentCondition('fr')->shouldBeCalled()->willReturn('payment condition');
+        $this->event->getPaymentFooter('fr')->shouldBeCalled()->willReturn('payment footer');
 
         $form = $this->prophesize(Form::class);
         $update = new Update($this->type->reveal());

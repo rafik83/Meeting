@@ -40,6 +40,7 @@ class UpdateHandler
         ;
 
         $update->package->setPlanning($update->participantAndPlanning->planning);
+        $update->package->setPlanningSelectable($update->participantAndPlanning->planningSelectable);
 
         foreach ($update->package->getEvent()->getLocales() as $locale) {
             $update->package->translate(

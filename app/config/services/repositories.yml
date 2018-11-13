@@ -14,6 +14,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\Type\ContentRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     Proximum\Vimeet\Infrastructure\Repository\Type\PaymentConditionsRepository:
         arguments:
             - '@doctrine.orm.entity_manager'

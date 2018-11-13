@@ -256,6 +256,10 @@ form.event_create.children.visio.label: 'Evenement dématérialisé'
 form.event_create.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event_duplicate.children.event.label: Événement
 form.event_duplicate.children.submit.label: Créer
+form.type_payment_conditions_update.children.translations.prototype.children.bankInfo.label: 'Bank information'
+form.type_payment_conditions_update.children.translations.prototype.children.billingAddress.label: 'Adresse de paiement'
+form.type_payment_conditions_update.children.translations.prototype.children.paymentCondition.label: 'Conditions de paiement'
+form.type_payment_conditions_update.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
@@ -371,8 +375,8 @@ form.filter.isVisio.label: 'Est visio'
 form.filter.isVisioTested.label: 'Visio testée'
 form.filter.label: Filtrer
 form.filter.lastName.label: Nom
+form.filter.optgroup.nomenclature.label: Nomenclatures
 form.filter.optgroup.participantInfo.label: 'Info participant'
-form.filter.optgroup.nomenclature.label: 'Nomenclatures'
 form.filter.optgroup.participantManagement.label: 'Gestion participant'
 form.filter.optgroup.sheetInfo.label: 'Info fiche'
 form.filter.participants.email.label: 'Email du participant'
@@ -539,6 +543,7 @@ form.package_update.children.participantAndPlanning.children.participants.label:
 form.package_update.children.participantAndPlanning.children.participants.label_add: 'Ajouter un produit participant'
 form.package_update.children.participantAndPlanning.children.participants.label_delete: '&times;'
 form.package_update.children.participantAndPlanning.children.planning.label: Planning
+form.package_update.children.participantAndPlanning.children.planningSelectable.label: 'Planning visible'
 form.package_update.children.plans.children.enabled.label: Activé
 form.package_update.children.plans.children.labels.label: 'Libellé de l''étape'
 form.package_update.children.plans.children.plans.label: Formules
@@ -777,8 +782,6 @@ form.sheet_attendance_choice.children.attend.choice.cancel: Annuler
 form.sheet_attendance_choice.children.attend.label: 'Venue de la fiche'
 form.sheet_attendance_choice.children.submit.confirm: 'Êtes vous sûr de cette modification ?'
 form.sheet_attendance_choice.children.submit.label: 'Confirmer la modification'
-form.user_batch.children.sendMail.label: Créer la campagne
-form.user_batch.children.campaignTitle.label: Nom de la campagne
 form.sheet_batch.children.accept.label: Accepter
 form.sheet_batch.children.addCatalog.label: 'Ajouter au catalogue'
 form.sheet_batch.children.assign.label: Assigner
@@ -939,9 +942,9 @@ form.spot_import.children.charset.label: 'Encodage du fichier'
 form.spot_import.children.file.label: 'Fichier des lieux'
 form.spot_import.children.submit.label: 'Importer les lieux'
 form.spot.import.confirm: 'L''import de nouveaux lieux supprimera les lieux existants sur cet événement. Voulez vous importer les lieux ?'
-form.static_formulation_create.children.submit.label: 'Personnaliser'
-form.static_formulation_create.children.types.label: 'Types de participation associés'
+form.static_formulation_create.children.submit.label: Personnaliser
 form.static_formulation_create.children.translations.prototype.children.title.label: 'Titre de la formulation'
+form.static_formulation_create.children.types.label: 'Types de participation associés'
 form.static_formulation_update.children.submit.label: 'Mettre à jour'
 form.static_formulation_update.children.translations.prototype.children.title.label: 'Titre de la formulation'
 form.static_formulation_update.children.types.label: 'Types de participation restants'
@@ -1034,17 +1037,19 @@ form.transaction.children.transaction_mode.bank_check: Chèque
 form.transaction.children.transaction_mode.bank_transfer: Virement
 form.transaction.children.transaction_mode.paypal: Paypal
 form.transactional_mail_customize.children.associatedTypes.label: 'Types associés'
-form.transactional_mail_customize.children.enabled.label: 'Activé'
-form.transactional_mail_customize.children.submit.label: 'Personnaliser'
+form.transactional_mail_customize.children.enabled.label: Activé
+form.transactional_mail_customize.children.submit.label: Personnaliser
 form.transactional_mail_customize.children.translations.label: 'Traductions du contenu'
 form.transactional_mail_customize.children.translations.prototype.children.content.label: Contenu
 form.transactional_mail_customize.children.translations.prototype.children.subject.label: Sujet
 form.transactional_mail_update_customized.children.associatedTypes.label: 'Types associés'
-form.transactional_mail_update_customized.children.enabled.label: 'Activé'
+form.transactional_mail_update_customized.children.enabled.label: Activé
 form.transactional_mail_update_customized.children.submit.label: 'Mettre à jour'
 form.transactional_mail_update_customized.children.translations.label: 'Traductions du contenu'
 form.transactional_mail_update_customized.children.translations.prototype.children.content.label: Contenu
 form.transactional_mail_update_customized.children.translations.prototype.children.subject.label: Sujet
+form.type_content_define_terms_of_sale.children.enabled.label: 'Activer la personnalisation des conditions générales de vente pour ce type'
+form.type_content_define_terms_of_sale.children.submit.label: Valider
 form.type_create.children.hidden.label: Caché
 form.type_create.children.package.label: 'Template de forfait de participation'
 form.type_create.children.rank.label: Position
@@ -1115,7 +1120,7 @@ form.unavailability_mass_create.children.timeSlots.prototype.children.from.label
 form.unavailability_mass_create.children.timeSlots.prototype.children.to.label: Fin
 form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_create.children.translations.prototype.children.title.label: Titre
-form.unavailability_mass_create.children.types.label: Types de participation
+form.unavailability_mass_create.children.types.label: 'Types de participation'
 form.unavailability_mass_update.children.begin.label: Début
 form.unavailability_mass_update.children.blocking.label: Bloquant
 form.unavailability_mass_update.children.category.label: Catégorie
@@ -1130,7 +1135,7 @@ form.unavailability_mass_update.children.timeSlots.prototype.children.from.label
 form.unavailability_mass_update.children.timeSlots.prototype.children.to.label: Fin
 form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_update.children.translations.prototype.children.title.label: Titre
-form.unavailability_mass_update.children.types.label: Types de participation
+form.unavailability_mass_update.children.types.label: 'Types de participation'
 form.unavailability.mass.children.blocking.answer.false: Non
 form.unavailability.mass.children.blocking.answer.true: Oui
 form.update_admin.children.email.label: Email
@@ -1177,6 +1182,8 @@ form.update_transaction.children.submit.label: Enregistrer
 form.update_unavailability.children.from.label: De
 form.update_unavailability.children.submit.label: Modifier
 form.update_unavailability.children.to.label: À
+form.user_batch.children.campaignTitle.label: 'Nom de la campagne'
+form.user_batch.children.sendMail.label: 'Créer la campagne'
 form.user_filter.children.participation.label: Participation
 form.user_filter.children.text_search.label: 'Nom, prénom ou email de l''utilisateur'
 form.user_filter.children.type.label: Type

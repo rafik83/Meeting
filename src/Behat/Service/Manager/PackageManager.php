@@ -128,4 +128,10 @@ class PackageManager
 
         $this->packageRepository->set($package);
     }
+
+    public function setPlanningNotSelectable(Package $package): void
+    {
+        $package->setPlanningSelectable(false);
+        $this->packageRepository->set($package);
+    }
 }

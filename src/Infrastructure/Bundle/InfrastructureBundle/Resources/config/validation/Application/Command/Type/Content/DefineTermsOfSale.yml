@@ -1,0 +1,10 @@
+Proximum\Vimeet\Application\Command\Type\Content\DefineTermsOfSale:
+    properties:
+        enabled:
+            - NotNull: ~
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        value:
+                            - NotBlank: ~

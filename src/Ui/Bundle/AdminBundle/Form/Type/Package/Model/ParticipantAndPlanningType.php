@@ -62,6 +62,9 @@ class ParticipantAndPlanningType extends AbstractType
                 },
                 'required' => false,
             ])
+            ->add('planningSelectable', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 

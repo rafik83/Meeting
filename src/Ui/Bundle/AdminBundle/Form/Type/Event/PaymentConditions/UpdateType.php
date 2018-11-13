@@ -21,14 +21,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdateType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /**
-         * @var Event
-         */
+        /** @var Event */
         $event = $options['event'];
 
         $builder
@@ -49,10 +44,7 @@ class UpdateType extends AbstractType
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['event']);
         $resolver->setAllowedTypes('event', Event::class);
@@ -61,10 +53,7 @@ class UpdateType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'event_payment_conditions_update';
     }

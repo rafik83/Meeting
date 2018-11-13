@@ -33,6 +33,9 @@ class Package
     /** @var null|Product */
     private $planning;
 
+    /** @var bool */
+    private $planningSelectable = true;
+
     /** @var ArrayCollection */
     private $groups;
 
@@ -656,5 +659,15 @@ class Package
         }
 
         return null;
+    }
+
+    public function isPlanningSelectable(): bool
+    {
+        return $this->planningSelectable;
+    }
+
+    public function setPlanningSelectable(bool $planningSelectable): void
+    {
+        $this->planningSelectable = $planningSelectable;
     }
 }

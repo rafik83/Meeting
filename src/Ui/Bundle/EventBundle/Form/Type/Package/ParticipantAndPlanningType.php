@@ -42,8 +42,8 @@ class ParticipantAndPlanningType extends AbstractType
         /** @var Sheet $sheet */
         $sheet = $options['sheet'];
         $locale = $options['locale'];
-
-        $participantProducts = $sheet->getPackage()->getParticipants();
+        $package = $sheet->getPackage();
+        $participantProducts = $package->getParticipants();
 
         foreach ($sheet->getParticipantsArray() as $participant) {
             $builder->add($participant->getId(), ChoiceType::class, [
@@ -67,15 +67,17 @@ class ParticipantAndPlanningType extends AbstractType
             $maxErrorMessage = 'package.planning.quantityMax.forParticipation';
         }
 
-        $builder->add('planningQuantity', QuantityAndParticipantsType::class, [
-            'label' => false,
-            'max' => $this->quantityMaxGuesser->getMaxPlanning($sheet),
-            'minMessage' => 'package.planning.quantityMin',
-            'maxMessage' => $maxErrorMessage,
-            'sheet' => $options['sheet'],
-            'locale' => $options['locale'],
-            'isAttributable' => false,
-        ]);
+        if ($package->isPlanningSelectable()) {
+            $builder->add('planningQuantity', QuantityAndParticipantsType::class, [
+                'label' => false,
+                'max' => $this->quantityMaxGuesser->getMaxPlanning($sheet),
+                'minMessage' => 'package.planning.quantityMin',
+                'maxMessage' => $maxErrorMessage,
+                'sheet' => $options['sheet'],
+                'locale' => $options['locale'],
+                'isAttributable' => false,
+            ]);
+        }
     }
 
     /**

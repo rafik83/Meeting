@@ -122,6 +122,15 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\PaymentConditions\Update }
 
     #
+    # Type Content
+    #
+    Proximum\Vimeet\Application\Command\Type\Content\DefineTermsOfSaleHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Type\ContentRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Content\DefineTermsOfSale }
+
+    #
     # Tip
     #
     command.tip.event.create_handler:

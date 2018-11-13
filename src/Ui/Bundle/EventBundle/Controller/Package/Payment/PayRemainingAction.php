@@ -75,7 +75,7 @@ class PayRemainingAction
 
         if (!in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true)) {
             if (empty($paymentConditionsView->paymentModes)) {
-                throw new AccessDeniedException('Paypal is not accessible for this sheet');
+                throw new AccessDeniedException('Paypal is not accessible for this sheet, and no other payment modes available');
             }
 
             return new RedirectResponse($this->router->generate('event_payment_info', [
