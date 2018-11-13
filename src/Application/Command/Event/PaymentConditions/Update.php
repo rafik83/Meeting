@@ -15,41 +15,24 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class Update implements Command
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $allowDeposit;
 
-    /**
-     * @var \DateTimeInterface|null
-     */
+    /** @var \DateTimeInterface|null */
     public $depositUntil;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $minimumForDeposit;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $deposit;
 
-    /**
-     * @var array
-     */
+    /** @var array*/
     public $paymentModes;
 
-    /**
-     * Update constructor.
-     *
-     * @param Event $event
-     */
     public function __construct(Event $event)
     {
         $this->event             = $event;
@@ -60,10 +43,7 @@ class Update implements Command
         $this->paymentModes      = $event->getConfiguration()->getPaymentModes();
     }
 
-    /**
-     * @return bool
-     */
-    public function isPaymentModesNotEmpty()
+    public function isPaymentModesNotEmpty(): bool
     {
         return !empty($this->paymentModes);
     }

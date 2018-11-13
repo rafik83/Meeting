@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Model\Type;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class PaymentConditions
@@ -35,14 +36,9 @@ class PaymentConditions
     /** @var array */
     private $paymentModes;
 
-    /**
-     * @param Type                    $type
-     * @param array                   $paymentModes
-     * @param bool                    $allowDeposit
-     * @param \DateTimeInterface|null $depositUntil
-     * @param float|null              $minimumForDeposit
-     * @param int|null                $deposit
-     */
+    /** @var ArrayCollection of PaymentConditionsTranslation */
+    private $translations;
+
     public function __construct(
         Type $type,
         array $paymentModes = [],
@@ -57,6 +53,7 @@ class PaymentConditions
         $this->depositUntil      = $depositUntil;
         $this->minimumForDeposit = $minimumForDeposit;
         $this->deposit           = $deposit;
+        $this->translations      = new ArrayCollection();
     }
 
     /**
@@ -115,13 +112,6 @@ class PaymentConditions
         return $this->paymentModes;
     }
 
-    /**
-     * @param array                   $paymentModes
-     * @param bool                    $allowDeposit
-     * @param \DateTimeInterface|null $depositUntil
-     * @param float|null              $minimumForDeposit
-     * @param int|null                $deposit
-     */
     public function update(
         array $paymentModes = [],
         bool $allowDeposit,
@@ -129,10 +119,72 @@ class PaymentConditions
         float $minimumForDeposit = null,
         int $deposit = null
     ) {
-        $this->paymentModes      = $paymentModes;
-        $this->allowDeposit      = $allowDeposit;
-        $this->depositUntil      = $depositUntil;
+        $this->paymentModes = $paymentModes;
+        $this->allowDeposit = $allowDeposit;
+        $this->depositUntil = $depositUntil;
         $this->minimumForDeposit = $minimumForDeposit;
-        $this->deposit           = $deposit;
+        $this->deposit = $deposit;
+    }
+
+    public function updateTranslations(array $translations): void
+    {
+        foreach ($translations as $locale => $translation) {
+            $this->translate(
+                $locale,
+                $translation['bankInfo'],
+                $translation['billingAddress'],
+                $translation['paymentCondition'],
+                $translation['paymentFooter']
+            );
+        }
+    }
+
+    public function hasTranslation(string $locale): bool
+    {
+        return $this->translations->containsKey($locale);
+    }
+
+    public function getTranslation(string $locale): PaymentConditionsTranslation
+    {
+        return $this->translations->get($locale);
+    }
+
+    public function translate(
+        string $locale,
+        string $bankInfo,
+        string $billingAddress,
+        string $paymentCondition,
+        string $paymentFooter
+    ): void {
+        if ($this->hasTranslation($locale)) {
+            $this->getTranslation($locale)->set($bankInfo, $billingAddress, $paymentCondition, $paymentFooter);
+        } else {
+            $this->setTranslation($locale, $bankInfo, $billingAddress, $paymentCondition, $paymentFooter);
+        }
+    }
+
+    public function setTranslation(
+        string $locale,
+        string $bankInfo,
+        string $billingAddress,
+        string $paymentCondition,
+        string $paymentFooter
+    ): void {
+        $this->translations->set(
+            $locale,
+            new PaymentConditionsTranslation(
+                $this,
+                $locale,
+                $bankInfo,
+                $billingAddress,
+                $paymentCondition,
+                $paymentFooter
+            )
+        );
+    }
+
+    public function getTranslations(): array
+    {
+        return $this->translations->toArray();
     }
 }

@@ -1,0 +1,26 @@
+Proximum\Vimeet\Domain\Model\Type\PaymentConditionsTranslation:
+    type:  entity
+    table: type_payment_conditions_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        locale:
+            type: string
+        bankInfo:
+            type: text
+        billingAddress:
+            type: text
+        paymentCondition:
+            type: text
+        paymentFooter:
+            type: text
+    manyToOne:
+        paymentConditions:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type\PaymentConditions
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
