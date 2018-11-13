@@ -69,6 +69,11 @@ class UpdateHandlerTest extends TestCase
         $paymentConditions->getPaymentModes()->willReturn([]);
         $paymentConditions->getTranslations()->willReturn([]);
         $this->type->getPaymentConditions()->willReturn($paymentConditions->reveal());
+        $this->event->getLocales()->shouldBeCalled()->willReturn(['fr']);
+        $paymentConditions->getBankInfo('fr')->shouldBeCalled()->willReturn('bank info');
+        $paymentConditions->getBillingAddress('fr')->shouldBeCalled()->willReturn('billing address');
+        $paymentConditions->getPaymentCondition('fr')->shouldBeCalled()->willReturn('payment condition');
+        $paymentConditions->getPaymentFooter('fr')->shouldBeCalled()->willReturn('payment footer');
 
         $this->paymentConditionsRepository->remove($paymentConditions->reveal())->shouldBeCalled();
         $this->paymentConditionsRepository->set(Argument::any())->shouldNotBeCalled();
@@ -103,6 +108,11 @@ class UpdateHandlerTest extends TestCase
             ->updateTranslations($translations)
             ->shouldBeCalled();
         $this->type->getPaymentConditions()->willReturn($paymentConditions->reveal());
+        $this->event->getLocales()->shouldBeCalled()->willReturn(['fr']);
+        $paymentConditions->getBankInfo('fr')->shouldBeCalled()->willReturn('bank info');
+        $paymentConditions->getBillingAddress('fr')->shouldBeCalled()->willReturn('billing address');
+        $paymentConditions->getPaymentCondition('fr')->shouldBeCalled()->willReturn('payment condition');
+        $paymentConditions->getPaymentFooter('fr')->shouldBeCalled()->willReturn('payment footer');
 
         $paymentConditions->update(
             [Mode::PAYMENT_PAYPAL],

@@ -54,13 +54,12 @@ class Update implements Command
             $this->deposit           = $paymentConditions->getDeposit();
             $this->paymentModes      = $paymentConditions->getPaymentModes();
 
-            /** @var Type\PaymentConditionsTranslation $translation */
-            foreach ($paymentConditions->getTranslations() as $translation) {
-                $this->translations[$translation->getLocale()] = [
-                    'bankInfo' => $translation->getBankInfo(),
-                    'billingAddress' => $translation->getBillingAddress(),
-                    'paymentCondition' => $translation->getPaymentCondition(),
-                    'paymentFooter' => $translation->getPaymentFooter(),
+            foreach ($event->getLocales() as $locale) {
+                $this->translations[$locale] = [
+                    'bankInfo' => $paymentConditions->getBankInfo($locale),
+                    'billingAddress' => $paymentConditions->getBillingAddress($locale),
+                    'paymentCondition' => $paymentConditions->getPaymentCondition($locale),
+                    'paymentFooter' => $paymentConditions->getPaymentFooter($locale),
                 ];
             }
         }
