@@ -305,6 +305,8 @@
             {{ form_errors(form) }}
             {{ form_widget(form) }}
         {% else %}
+            {% set group_class = group_class|default('styled-form form') %}
+
             <div {{ block('row_container_attributes') }}>
                 <div class="row">
                     <div class="col-md-10">
@@ -331,9 +333,8 @@
                             </div>
                         {% endif %}
                     </div>
-                    <div class="col-md-2 text-right">{{ block('collection_delete_button') }}</div>
+                    <div class="col-md-2 text-right" style="vertical-align: bottom">{{ block('collection_delete_button') }}</div>
                 </div>
-                <hr>
             </div>
         {% endif %}
     {% endspaceless %}
