@@ -13,7 +13,7 @@
             <thead>
             <tr>
                 {% for label in block.objectsLabel %}
-                    <th class="col-md-2>{{ label }}</th>
+                    <th class="col-md-2">{{ label }}</th>
                 {% endfor %}
             </tr>
             </thead>
@@ -22,11 +22,13 @@
                 <tr>
                     {% for column in row %}
                         <td>
-                            {% for value in column if column is iterable %}
-                                <span class="label label-default">{{ value }}</span>
+                            {% if column is iterable %}
+                                {% for value in column %}
+                                    <span class="label label-default">{{ value }}</span>
+                                {% endfor %}
                             {% else %}
                                 {{ column }}
-                            {% endfor %}
+                            {% endif %}
                         </td>
                     {% endfor %}
                 </tr>

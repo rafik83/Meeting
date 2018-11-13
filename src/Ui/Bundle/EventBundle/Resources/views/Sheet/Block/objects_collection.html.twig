@@ -22,11 +22,13 @@
                 <tr>
                     {% for column in row %}
                         <td>
-                            {% for value in column if column is iterable %}
-                                <span class="label label-default">{{ value }}</span>
+                            {% if column is iterable %}
+                                {% for value in column %}
+                                    <span class="label label-default">{{ value }}</span>
+                                {% endfor %}
                             {% else %}
                                 {{ column }}
-                            {% endfor %}
+                            {% endif %}
                         </td>
                     {% endfor %}
                 </tr>
