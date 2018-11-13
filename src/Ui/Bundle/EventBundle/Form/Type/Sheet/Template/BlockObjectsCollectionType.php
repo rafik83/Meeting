@@ -53,7 +53,7 @@ class BlockObjectsCollectionType extends AbstractType
     private function addText(
         string $uid,
         FormBuilderInterface $builder,
-        Template\TemplateObject $object,
+        Template\TemplateObject\EditableText $object,
         string $locale
     ) {
         $builder->add(

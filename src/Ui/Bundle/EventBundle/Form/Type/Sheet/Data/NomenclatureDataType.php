@@ -20,6 +20,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class NomenclatureDataType extends AbstractType
 {
@@ -100,6 +101,8 @@ class NomenclatureDataType extends AbstractType
         array $options,
         TemplateObject\Nomenclature $object
     ): void {
+        $constraints = $this->getConstraints($object, $options['data_class']);
+
         $form->add(
             'item',
             ChoiceType::class,
@@ -113,6 +116,7 @@ class NomenclatureDataType extends AbstractType
                 'choice_label'              => function (NomenclatureItem $item) use ($options) {
                     return $item->getLabel($options['locale']);
                 },
+                'constraints' => $constraints,
             ]
         );
     }
@@ -129,6 +133,8 @@ class NomenclatureDataType extends AbstractType
         array $options,
         TemplateObject\Nomenclature $object
     ): void {
+        $constraints = $this->getConstraints($object, $options['data_class']);
+
         $form->add(
             'items',
             CheckboxesType::class,
@@ -137,6 +143,7 @@ class NomenclatureDataType extends AbstractType
                 'locale'       => $options['locale'],
                 'label'        => $object->getOption('label', $options['locale']),
                 'required'     => $object->getOption('required'),
+                'constraints'  => $constraints,
             ]
         );
     }
@@ -155,6 +162,8 @@ class NomenclatureDataType extends AbstractType
     ): void {
         $key = $object->isMultiple() ? 'items' : 'item';
 
+        $constraints = $this->getConstraints($object, $options['data_class']);
+
         $form->add(
             $key,
             SinglesType::class,
@@ -165,7 +174,19 @@ class NomenclatureDataType extends AbstractType
                 'label'        => $object->getOption('label', $options['locale']),
                 'required'     => $object->getOption('required'),
                 'multiple'     => $object->isMultiple(),
+                'constraints'  => $constraints,
             ]
         );
+    }
+
+    private function getConstraints(TemplateObject\Nomenclature $nomenclatureObject, ?string $dataClass)
+    {
+        $constraints = [];
+
+        if (null === $dataClass && $nomenclatureObject->isRequired()) {
+            $constraints[] = new NotBlank();
+        }
+
+        return $constraints;
     }
 }

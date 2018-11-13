@@ -17,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 abstract class AbstractEditableTextInputDataType extends AbstractType
 {
@@ -44,6 +46,20 @@ abstract class AbstractEditableTextInputDataType extends AbstractType
         $showLabel = $options['showLabel'];
         $attr      = $text->hasMaxLength() ? ['maxlength' => $text->getMaxLength()] : [];
 
+        $dataClass = $options['data_class'];
+
+        $constraints = [];
+
+        if (null === $dataClass) {
+            if ($text->isRequired()) {
+                $constraints[] = new NotBlank();
+            }
+
+            if ($text->hasMaxLength()) {
+                $constraints[] = new Length(['max' => $text->getMaxLength()]);
+            }
+        }
+
         if ($text->isTextarea()) {
             $attr['rows'] = $options['rows'];
 
@@ -64,6 +80,7 @@ abstract class AbstractEditableTextInputDataType extends AbstractType
                     'attr'               => $attr,
                     'required'           => $text->getOption('required'),
                     'translation_domain' => false,
+                    'constraints'        => $constraints,
                 ])
             ;
         } else {
@@ -74,6 +91,7 @@ abstract class AbstractEditableTextInputDataType extends AbstractType
                     'placeholder'        => $text->getOption('placeholder', $locale),
                     'attr'               => $attr,
                     'translation_domain' => false,
+                    'constraints'        => $constraints,
                 ])
             ;
         }
