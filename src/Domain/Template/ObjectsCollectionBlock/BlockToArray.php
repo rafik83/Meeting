@@ -36,6 +36,10 @@ class BlockToArray
             }
         }
 
+        if (empty($result)) {
+            return $this->createEmptyCollectionItem($block);
+        }
+
         return $result;
     }
 
@@ -68,5 +72,21 @@ class BlockToArray
                 ? [Nomenclature::ITEMS => $value]
                 : [Nomenclature::ITEM => $value];
         }
+    }
+
+    /**
+     * @param Block $block
+     *
+     * @return array example: [['uid123' => null, 'uid963' => null]]
+     */
+    private function createEmptyCollectionItem(Block $block): array
+    {
+        $objectsCollectionDataItem = [];
+
+        foreach (array_keys($block->getObjects()) as $uid) {
+            $objectsCollectionDataItem[$uid] = null;
+        }
+
+        return [$objectsCollectionDataItem];
     }
 }

@@ -18,9 +18,15 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 
 class BlockToArrayTest extends TestCase
 {
-    public function testBlockToArray()
+    private $nameData;
+    private $descriptionTranslatableObject;
+    private $singleNomenclatureObject;
+    private $multipleNomenclatureObject;
+    private $objectsCollectionBlock;
+
+    public function setUp()
     {
-        $nameData = new EditableText(
+        $this->nameData = new EditableText(
             'name-uid',
             'editable-text',
             [
@@ -29,9 +35,8 @@ class BlockToArrayTest extends TestCase
             'fr',
             'fr'
         );
-        $nameData->setData(['text' => ['Name 1', 'Name 2']]);
 
-        $descriptionTranslatableObject = new EditableText(
+        $this->descriptionTranslatableObject = new EditableText(
             'description-uid',
             'editable-text',
             [
@@ -41,16 +46,8 @@ class BlockToArrayTest extends TestCase
             'fr',
             'fr'
         );
-        $descriptionTranslatableObject->setData(
-            [
-                'text' => [
-                    'fr' => ['Description fr 1', 'Description fr 2'],
-                    'en' => ['Description en 1', 'Description en 2'],
-                ],
-            ]
-        );
 
-        $singleNomenclatureObject = new Nomenclature(
+        $this->singleNomenclatureObject = new Nomenclature(
             'single-nomenclature-uid',
             'nomenclature',
             [
@@ -60,13 +57,8 @@ class BlockToArrayTest extends TestCase
             'fr',
             'fr'
         );
-        $singleNomenclatureObject->setData(
-            [
-                'items' => ['single-item-1', 'single-item-2'],
-            ]
-        );
 
-        $multipleNomenclatureObject = new Nomenclature(
+        $this->multipleNomenclatureObject = new Nomenclature(
             'multiple-nomenclature-uid',
             'nomenclature',
             [
@@ -76,17 +68,35 @@ class BlockToArrayTest extends TestCase
             'fr',
             'fr'
         );
-        $multipleNomenclatureObject->setData(
+
+        $this->objectsCollectionBlock = new Block('objects_collection', [], 'fr', 'fr');
+        $this->objectsCollectionBlock->addChild(1, 'description-uid', $this->descriptionTranslatableObject);
+        $this->objectsCollectionBlock->addChild(1, 'name-uid', $this->nameData);
+        $this->objectsCollectionBlock->addChild(1, 'single-nomenclature-uid', $this->singleNomenclatureObject);
+        $this->objectsCollectionBlock->addChild(1, 'multiple-nomenclature-uid', $this->multipleNomenclatureObject);
+    }
+
+    public function testBlockToArrayReturnExpectedData()
+    {
+        $this->nameData->setData(['text' => ['Name 1', 'Name 2']]);
+        $this->descriptionTranslatableObject->setData(
+            [
+                'text' => [
+                    'fr' => ['Description fr 1', 'Description fr 2'],
+                    'en' => ['Description en 1', 'Description en 2'],
+                ],
+            ]
+        );
+        $this->singleNomenclatureObject->setData(
+            [
+                'items' => ['single-item-1', 'single-item-2'],
+            ]
+        );
+        $this->multipleNomenclatureObject->setData(
             [
                 'items' => [['multiple-item-1', 'multiple-item-2'], ['multiple-item-2']],
             ]
         );
-
-        $objectsCollectionBlock = new Block('objects_collection', [], 'fr', 'fr');
-        $objectsCollectionBlock->addChild(1, 'description-uid', $descriptionTranslatableObject);
-        $objectsCollectionBlock->addChild(1, 'name-uid', $nameData);
-        $objectsCollectionBlock->addChild(1, 'single-nomenclature-uid', $singleNomenclatureObject);
-        $objectsCollectionBlock->addChild(1, 'multiple-nomenclature-uid', $multipleNomenclatureObject);
 
         $blockToArray = new BlockToArray();
 
@@ -115,7 +125,24 @@ class BlockToArrayTest extends TestCase
                     'multiple-nomenclature-uid' => ['items' => ['multiple-item-2']],
                 ]
             ],
-            $blockToArray($objectsCollectionBlock)
+            $blockToArray($this->objectsCollectionBlock)
+        );
+    }
+
+    public function testBlockToArrayReturnEmptyData()
+    {
+        $blockToArray = new BlockToArray();
+
+        $this->assertEquals(
+            [
+                [
+                    'name-uid' => null,
+                    'description-uid' => null,
+                    'single-nomenclature-uid' => null,
+                    'multiple-nomenclature-uid' => null,
+                ],
+            ],
+            $blockToArray($this->objectsCollectionBlock)
         );
     }
 }
