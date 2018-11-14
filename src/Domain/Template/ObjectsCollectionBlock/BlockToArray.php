@@ -50,6 +50,10 @@ class BlockToArray
 
         if ($object->isTranslatable()) {
             foreach ($values as $locale => $translationItems) {
+                if (!\is_array($translationItems)) {
+                    continue;
+                }
+
                 foreach ($translationItems as $index => $value) {
                     $result[$index][$uid]['translationsInput'][$locale] = [EditableText::CONTENT => $value];
                 }
