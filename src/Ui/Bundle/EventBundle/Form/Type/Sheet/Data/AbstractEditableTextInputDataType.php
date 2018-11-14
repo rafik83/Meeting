@@ -46,19 +46,7 @@ abstract class AbstractEditableTextInputDataType extends AbstractType
         $showLabel = $options['showLabel'];
         $attr      = $text->hasMaxLength() ? ['maxlength' => $text->getMaxLength()] : [];
 
-        $dataClass = $options['data_class'];
-
-        $constraints = [];
-
-        if (null === $dataClass) {
-            if ($text->isRequired()) {
-                $constraints[] = new NotBlank();
-            }
-
-            if ($text->hasMaxLength()) {
-                $constraints[] = new Length(['max' => $text->getMaxLength()]);
-            }
-        }
+        $constraints = $this->getConstraints($text, $options['data_class']);
 
         if ($text->isTextarea()) {
             $attr['rows'] = $options['rows'];
@@ -110,5 +98,22 @@ abstract class AbstractEditableTextInputDataType extends AbstractType
             'rows'       => 7,
             'showLabel'  => true,
         ]);
+    }
+
+    private function getConstraints(EditableText $text, ?string $dataClass): array
+    {
+        $constraints = [];
+
+        if (null === $dataClass) {
+            if ($text->isRequired()) {
+                $constraints[] = new NotBlank();
+            }
+
+            if ($text->hasMaxLength()) {
+                $constraints[] = new Length(['max' => $text->getMaxLength()]);
+            }
+        }
+
+        return $constraints;
     }
 }

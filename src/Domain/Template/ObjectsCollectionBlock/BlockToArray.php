@@ -22,41 +22,51 @@ class BlockToArray
             throw new \InvalidArgumentException('Given block is not an objects collection');
         }
 
-        $locale = $block->getLocale();
         $result = [];
 
         foreach ($block->getObjects() as $uid => $object) {
             $initialData = $object->getData();
 
             if ($object instanceof EditableText) {
-                if ($object->isTranslatable()) {
-                    $values = $initialData[EditableText::TEXT][$locale] ?? [];
-                } else {
-                    $values = $initialData[EditableText::TEXT] ?? [];
-                }
-
-                foreach ($values as $index => $value) {
-                    $result[$index][$uid] = [EditableText::CONTENT => $value];
-                }
-
-                continue;
+                $this->handleEditableText($result, $uid, $object, $initialData);
             }
 
             if ($object instanceof Nomenclature) {
-                $values = $initialData[Nomenclature::ITEMS] ?? [];
-
-                foreach ($values as $index => $value) {
-                    if ($object->isMultiple()) {
-                        $result[$index][$uid] = [Nomenclature::ITEMS => $value];
-                    } else {
-                        $result[$index][$uid] = [Nomenclature::ITEM => $value];
-                    }
-                }
-
-                continue;
+                $this->handleNomenclature($result, $uid, $object, $initialData);
             }
         }
 
         return $result;
+    }
+
+    private function handleEditableText(array &$result, string $uid, EditableText $object, array &$initialData): void
+    {
+        $initialData = $object->getData();
+        $values = $initialData[EditableText::TEXT] ?? [];
+
+        if ($object->isTranslatable()) {
+            foreach ($values as $locale => $translationItems) {
+                foreach ($translationItems as $index => $value) {
+                    $result[$index][$uid]['translationsInput'][$locale] = [EditableText::CONTENT => $value];
+                }
+            }
+
+            return;
+        }
+
+        foreach ($values as $index => $value) {
+            $result[$index][$uid] = [EditableText::CONTENT => $value];
+        }
+    }
+
+    private function handleNomenclature(array &$result, string $uid, Nomenclature $object, array &$initialData): void
+    {
+        $values = $initialData[Nomenclature::ITEMS] ?? [];
+
+        foreach ($values as $index => $value) {
+            $result[$index][$uid] = $object->isMultiple()
+                ? [Nomenclature::ITEMS => $value]
+                : [Nomenclature::ITEM => $value];
+        }
     }
 }

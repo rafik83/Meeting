@@ -94,13 +94,23 @@ class BlockToArrayTest extends TestCase
             [
                 [
                     'name-uid' => ['content' => 'Name 1'],
-                    'description-uid' => ['content' => 'Description fr 1'],
+                    'description-uid' => [
+                        'translationsInput' => [
+                            'fr' => ['content' => 'Description fr 1'],
+                            'en' => ['content' => 'Description en 1'],
+                        ],
+                    ],
                     'single-nomenclature-uid' => ['item' => 'single-item-1'],
                     'multiple-nomenclature-uid' => ['items' => ['multiple-item-1', 'multiple-item-2']],
                 ],
                 [
                     'name-uid' => ['content' => 'Name 2'],
-                    'description-uid' => ['content' => 'Description fr 2'],
+                    'description-uid' => [
+                        'translationsInput' => [
+                            'fr' => ['content' => 'Description fr 2'],
+                            'en' => ['content' => 'Description en 2'],
+                        ],
+                    ],
                     'single-nomenclature-uid' => ['item' => 'single-item-2'],
                     'multiple-nomenclature-uid' => ['items' => ['multiple-item-2']],
                 ]
