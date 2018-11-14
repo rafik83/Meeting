@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Domain\Template;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainForbiddenObjectsException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOneException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
@@ -833,6 +835,13 @@ class Block extends AbstractChild
 
         if (!$acceptedObjectsInObjectsCollection) {
             throw new ObjectsCollectionBlockCanNotContainForbiddenObjectsException();
+        }
+
+        if ($child instanceof Nomenclature
+            && $child->getNomenclatureModel() instanceof NomenclatureModel
+            && $child->getNomenclatureModel()->getDepth() > 1
+        ) {
+            throw new ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOneException();
         }
     }
 }

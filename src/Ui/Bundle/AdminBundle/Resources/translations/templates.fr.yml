@@ -13,6 +13,7 @@ template.content.title: Contenu
 template.defaultElement.title: 'Élément par défaut'
 template.error.objectsCollectionBlockCanNotContainOtherBlock: 'Un bloc collection d''objets ne peut contenir d''autres blocs'
 template.error.objectsCollectionBlockCanNotContainForbiddenObjects: 'Un bloc collection d''objets ne peut contenir que des objets texte modifiable et nomenclature'
+template.error.ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOne: 'Un bloc collection d''objets ne peut contenir d''objet nomenclature avec une nomenclature à plus d''un niveau'
 template.help.title: Aide
 template.hideLabel.title: 'Cacher le label'
 template.label.title: Label
