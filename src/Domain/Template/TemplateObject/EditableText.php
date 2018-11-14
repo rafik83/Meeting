@@ -318,6 +318,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
 
     /**
      * @param array $translations "['fr' => 'contenu', 'en' => 'content']"
+     * or for objects collection: "['fr' => ['contenu 1', 'contenu 2'], 'en' => ['content 1', 'content 2']]"
      *
      * @throws \LogicException
      */

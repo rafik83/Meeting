@@ -24,6 +24,7 @@ class SetArrayContentToBlockTest extends TestCase
             'name-uid',
             'editable-text',
             [
+                'translatable' => false,
                 'tags' => ['sheet_data'],
             ],
             'fr',
@@ -88,24 +89,34 @@ class SetArrayContentToBlockTest extends TestCase
         $objectsCollectionBlock->addChild(1, 'single-nomenclature-uid', $singleNomenclatureObject);
         $objectsCollectionBlock->addChild(1, 'multiple-nomenclature-uid', $multipleNomenclatureObject);
 
-        $data = [
+        $dataFromSubmittedForm = [
             // 0 => item 0 was removed
             1 => [
                 'name-uid' => ['content' => 'Updated Name 2'],
-                'description-uid' => ['content' => 'Updated Description fr 2'],
+                'description-uid' => [
+                    'translationsInput' => [
+                        'fr' => ['content' => 'Updated Description fr 2'],
+                        'en' => ['content' => 'Description en 2'],
+                    ],
+                ],
                 'single-nomenclature-uid' => ['item' => 'single-item-2'],
                 'multiple-nomenclature-uid' => ['items' => ['multiple-item-1', 'multiple-item-2']],
             ],
             2 => [
                 'name-uid' => ['content' => 'Name 3'],
-                'description-uid' => ['content' => 'Description fr 3'],
+                'description-uid' => [
+                    'translationsInput' => [
+                        'fr' => ['content' => 'Description fr 3'],
+                        'en' => ['content' => 'Description en 3'],
+                    ],
+                ],
                 'single-nomenclature-uid' => ['item' => 'single-item-1'],
                 'multiple-nomenclature-uid' => ['items' => ['multiple-item-1']],
-            ]
+            ],
         ];
 
         $setArrayContentToBlock = new SetArrayContentToBlock();
-        $setArrayContentToBlock($objectsCollectionBlock, $data);
+        $setArrayContentToBlock($objectsCollectionBlock, $dataFromSubmittedForm);
 
         $this->assertEquals(
             [
@@ -118,7 +129,7 @@ class SetArrayContentToBlockTest extends TestCase
             [
                 'text' => [
                     'fr' => ['Updated Description fr 2', 'Description fr 3'],
-                    'en' => ['Description en 2', '']
+                    'en' => ['Description en 2', 'Description en 3']
                 ],
             ],
             $descriptionTranslatableObject->getData()

@@ -23,6 +23,7 @@ class ObjectsCollectionType extends AbstractType
                 'entry_options' => [
                     'block' => $block,
                     'locale' => $block->getLocale(),
+                    'locales' => $options['locales'],
                     'label' => false,
                 ],
                 'allow_add' => true,
@@ -35,8 +36,9 @@ class ObjectsCollectionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
-            ->setRequired(['block', 'locale'])
+            ->setRequired(['block', 'locale', 'locales'])
             ->setAllowedTypes('locale', 'string')
+            ->setAllowedTypes('locales', 'array')
             ->setAllowedTypes('block', Block::class)
         ;
     }

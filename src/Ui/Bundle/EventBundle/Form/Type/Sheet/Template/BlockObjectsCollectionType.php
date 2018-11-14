@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Template;
 
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextTranslationType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,7 +30,7 @@ class BlockObjectsCollectionType extends AbstractType
 
         foreach ($block->getEditableObjects() as $uid => $object) {
             if ($object instanceof Template\TemplateObject\EditableText) {
-                $this->addText($uid, $builder, $object, $options['locale']);
+                $this->addText($uid, $builder, $object, $options['locale'], $options['locales']);
                 continue;
             }
 
@@ -45,8 +46,9 @@ class BlockObjectsCollectionType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['block', 'locale']);
+        $resolver->setRequired(['block', 'locale', 'locales']);
         $resolver->setAllowedTypes('locale', 'string');
+        $resolver->setAllowedTypes('locales', 'array');
         $resolver->setAllowedTypes('block', Template\Block::class);
     }
 
@@ -54,18 +56,24 @@ class BlockObjectsCollectionType extends AbstractType
         string $uid,
         FormBuilderInterface $builder,
         Template\TemplateObject\EditableText $object,
-        string $locale
+        string $locale,
+        array $locales
     ) {
-        $builder->add(
-            $uid,
-            EditableTextInputDataType::class,
-            [
-                'label' => false,
+        if ($object->isTranslatable()) {
+            $builder->add($uid, EditableTextTranslationType::class, [
+                'locales' => $locales,
                 'object' => $object,
-                'locale' => $locale,
+                'label' => $object->getOption('label', $locale),
                 'data_class' => null,
-            ]
-        );
+            ]);
+        } else {
+            $builder->add($uid, EditableTextInputDataType::class, [
+                'label' => false,
+                'locale' => $locale,
+                'object' => $object,
+                'data_class' => null,
+            ]);
+        }
     }
 
     private function addNomenclature(

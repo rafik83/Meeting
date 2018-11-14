@@ -103,6 +103,7 @@ class ObjectsCollectionUpdateAction
         $form = $this->formFactory->create(ObjectsCollectionType::class, $objectsCollection, [
             'block' => $block,
             'locale' => $locale,
+            'locales' => $event->getLocales(),
             'submit' => true,
         ]);
 

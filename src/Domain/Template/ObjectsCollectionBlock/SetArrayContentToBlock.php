@@ -22,26 +22,40 @@ class SetArrayContentToBlock
         foreach ($block->getObjects() as $uid => $object) {
             $content = [];
 
-            foreach ($data as $collectionRow) {
+            foreach ($data as $collectionItem) {
+                if (!isset($collectionItem[$uid])) {
+                    continue;
+                }
+
+                $collectionItemObjectField = $collectionItem[$uid];
+
                 if ($object instanceof EditableText) {
-                    $content[] = $collectionRow[$uid][EditableText::CONTENT] ?? null;
+                    if ($object->isTranslatable()) {
+                        foreach ($collectionItemObjectField['translationsInput'] as $locale => $translations) {
+                            $content[$locale][] = $translations[EditableText::CONTENT];
+                        }
+                    } else {
+                        $content[] = $collectionItemObjectField[EditableText::CONTENT] ?? null;
+                    }
 
                     continue;
                 }
 
                 if ($object instanceof Nomenclature) {
                     if ($object->isMultiple()) {
-                        $content[] = $collectionRow[$uid][Nomenclature::ITEMS] ?? null;
-
-                        continue;
+                        $content[] = $collectionItemObjectField[Nomenclature::ITEMS] ?? null;
+                    } else {
+                        $content[] = $collectionItemObjectField[Nomenclature::ITEM] ?? null;
                     }
-
-                    $content[] = $collectionRow[$uid][Nomenclature::ITEM] ?? null;
 
                     continue;
                 }
+            }
 
-                $content[] = $collectionRow[$uid] ?? null;
+            if ($object instanceof EditableText && $object->isTranslatable()) {
+                $object->setTranslations($content);
+
+                continue;
             }
 
             if ($object instanceof ContentObjectInterface) {
