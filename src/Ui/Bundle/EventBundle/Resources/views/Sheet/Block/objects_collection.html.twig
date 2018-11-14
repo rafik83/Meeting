@@ -38,7 +38,7 @@
 
         {% if not isCatalog %}
             <footer>
-                <a href="{{ path('event_sheet_objects_collection_update', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" class="edit-link">
+                <a href="{{ path('event_sheet_objects_collection_update', { 'sheet': sheet.id, 'key': uid }) }}" class="edit-link">
                     <i class="icon-Note_2"></i>
                     {{ 'sheet.edit.object'|trans({ '%label%': block.label(locale, fallback) }) }}
                 </a>

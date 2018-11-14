@@ -195,10 +195,9 @@ event_sheet_form:
     defaults: { _controller: EventBundle:Sheet:form }
 
 event_sheet_objects_collection_update:
-    path: /sheet/{sheet}/{locale}/objects-collection/{key}
+    path: /sheet/{sheet}/objects-collection/{key}
     requirements:
         sheet: \d+
-        locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ObjectsCollectionUpdateAction

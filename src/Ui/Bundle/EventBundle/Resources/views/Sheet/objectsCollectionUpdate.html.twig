@@ -20,7 +20,7 @@
                     {{ label }}
                 </h1>
 
-                <a href="{{ path('event_sheet_locale', { 'sheet': sheet.id, 'locale': locale }) }}" class="btn btn-gray pull-right">
+                <a href="{{ path('event_sheet_default', { 'sheet': sheet.id }) }}" class="btn btn-gray pull-right">
                     <i class="icon-Retour"></i> {{ 'common.backToSheet'|trans }}
                 </a>
             </div>

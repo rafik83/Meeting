@@ -80,7 +80,6 @@ class ObjectsCollectionUpdateAction
         Request $request,
         EventDomain $eventDomain,
         Sheet $sheet,
-        string $locale,
         string $key
     ): Response {
         if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')
@@ -90,7 +89,7 @@ class ObjectsCollectionUpdateAction
         }
 
         $event = $eventDomain->getEvent();
-
+        $locale = $request->getLocale();
         $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
         $block = $templateData->getBlockByUid($key);
 
@@ -112,7 +111,7 @@ class ObjectsCollectionUpdateAction
             $this->commandBus->handle(new UpdateData($sheet, $templateData));
 
             return new RedirectResponse(
-                $this->router->generate('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale])
+                $this->router->generate('event_sheet_default', ['sheet' => $sheet->getId()])
             );
         }
 
@@ -125,7 +124,7 @@ class ObjectsCollectionUpdateAction
                     'locale' => $locale,
                     'key' => $key,
                     'form' => $form->createView(),
-                    'label' => $block->getLabel($request->getLocale()),
+                    'label' => $block->getLabel($locale),
                 ]
             )
         );
