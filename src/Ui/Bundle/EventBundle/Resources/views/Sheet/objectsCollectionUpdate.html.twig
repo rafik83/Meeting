@@ -6,6 +6,12 @@
     {{ event.title }}: {{ 'sheet.title'|trans }}
 {% endblock %}
 
+{% block objects_collection_submit %}
+    <div class="text-right mg-bt mg-tp clearboth">
+        <button type="submit" class="btn btn-primary">{{ 'form.sheet_template_objects_collection_type.children.submit.label'|trans({}, 'forms') }}</button>
+    </div>
+{% endblock %}
+
 {% block content %}
     <section class="main">
         {% if label %}
@@ -23,11 +29,11 @@
         <section class="object object--collection style--style-1 section">
             {{ form_start(form) }}
 
+            {{ block('objects_collection_submit') }}
+
             {{ form_row(form.objectsCollection) }}
 
-            <div class="text-right mg-bt mg-tp clearboth">
-                {{ form_row(form.submit) }}
-            </div>
+            {{ block('objects_collection_submit') }}
 
             {{ form_end(form) }}
         </section>

@@ -104,7 +104,6 @@ class ObjectsCollectionUpdateAction
             'block' => $block,
             'locale' => $locale,
             'locales' => $event->getLocales(),
-            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
