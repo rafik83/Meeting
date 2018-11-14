@@ -52,6 +52,7 @@ class BlockObjectsCollectionContentTest extends TestCase
         );
 
         $singleNomenclatureModel = $this->prophesize(NomenclatureModel::class);
+        $singleNomenclatureModel->getDepth()->shouldBeCalled()->willReturn(1);
         $singleNomenclatureModel->getId()->shouldBeCalled()->willReturn(1969);
         $singleNomenclatureModel
             ->getLastLevel()
@@ -83,6 +84,7 @@ class BlockObjectsCollectionContentTest extends TestCase
 
         $multipleNomenclatureModel = $this->prophesize(NomenclatureModel::class);
         $multipleNomenclatureModel->getId()->shouldBeCalled()->willReturn(963);
+        $multipleNomenclatureModel->getDepth()->shouldBeCalled()->willReturn(1);
         $multipleNomenclatureModel
             ->getLastLevel()
             ->shouldBeCalled()

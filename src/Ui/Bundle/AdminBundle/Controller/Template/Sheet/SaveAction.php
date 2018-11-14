@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainForbiddenObjectsException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOneException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
@@ -63,29 +64,27 @@ class SaveAction
         try {
             $this->commandBus->handle(new Save($template, $config));
         } catch (ObjectsCollectionBlockCanNotContainOtherBlockException $objectsCollectionBlockCanNotContainOtherBlockException) {
-            return new JsonResponse(
-                [
-                    'error' => $this->translatorAdapter->trans(
-                        'template.error.objectsCollectionBlockCanNotContainOtherBlock',
-                        [],
-                        'templates'
-                    ),
-                ],
-                422
-            );
+            return $this->getJsonErrorResponse('template.error.objectsCollectionBlockCanNotContainOtherBlock');
         } catch (ObjectsCollectionBlockCanNotContainForbiddenObjectsException $objectsCollectionBlockCanNotContainForbiddenObjectsException) {
-            return new JsonResponse(
-                [
-                    'error' => $this->translatorAdapter->trans(
-                        'template.error.objectsCollectionBlockCanNotContainForbiddenObjects',
-                        [],
-                        'templates'
-                    ),
-                ],
-                422
-            );
+            return $this->getJsonErrorResponse('template.error.objectsCollectionBlockCanNotContainForbiddenObjects');
+        } catch (ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOneException $objectsCollectionBlockCanNotContainForbiddenObjectsException) {
+            return $this->getJsonErrorResponse('template.error.ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOne');
         }
 
         return new JsonResponse($config);
+    }
+
+    private function getJsonErrorResponse(string $message, array $parameters = []): JsonResponse
+    {
+        return new JsonResponse(
+            [
+                'error' => $this->translatorAdapter->trans(
+                    $message,
+                    $parameters,
+                    'templates'
+                ),
+            ],
+            422
+        );
     }
 }
