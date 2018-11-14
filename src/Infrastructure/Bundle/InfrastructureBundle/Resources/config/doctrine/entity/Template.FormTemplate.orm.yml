@@ -1,0 +1,32 @@
+Proximum\Vimeet\Domain\Model\Template\FormTemplate:
+    type:  entity
+    table: template_form
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        locales:
+            type: json_array
+        fallback:
+            type: string
+            length: 5
+        value:
+            type: json_array
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Template\FormTemplateTranslation
+            mappedBy: formTemplate
+            indexBy: locale
+            cascade: ["persist", "remove"]
