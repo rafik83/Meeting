@@ -57,3 +57,7 @@ services:
             - '@doctrine.orm.entity_manager'
 
     Proximum\Vimeet\Domain\Repository\StaticFormulation\StaticFormulationRepositoryInterface: '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
+
+    Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
