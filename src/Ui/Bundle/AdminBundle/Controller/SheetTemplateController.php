@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
-use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Update;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
@@ -28,7 +27,6 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -330,30 +328,6 @@ class SheetTemplateController extends Controller
             'template' => $template->getId(),
             'locale'   => $template->getFallback(),
         ]);
-    }
-
-    /**
-     * @param Request       $request
-     * @param SheetTemplate $template
-     * @param string        $locale
-     *
-     * @throws AccessDeniedException
-     *
-     * @return JsonResponse
-     */
-    public function saveAction(Request $request, SheetTemplate $template, $locale): JsonResponse
-    {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
-
-        if (!$template->hasLocale($locale)) {
-            return new JsonResponse(['error' => sprintf('Locale "%s" does not exist on this template', $locale)], 404);
-        }
-
-        $config = json_decode($request->getContent(), true);
-        $this->get('tactician.commandbus')->handle(new Save($template, $config));
-
-        return new JsonResponse($config);
     }
 
     /**

@@ -12,7 +12,13 @@ namespace Proximum\Vimeet\Domain\Template;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainForbiddenObjectsException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOneException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadableObjectInterface;
 
 class Block extends AbstractChild
@@ -28,6 +34,11 @@ class Block extends AbstractChild
     public function getComponent()
     {
         return 'block';
+    }
+
+    public function isObjectsCollection(): bool
+    {
+        return $this->getType() === 'objects_collection';
     }
 
     /**
@@ -68,20 +79,11 @@ class Block extends AbstractChild
         $this->setOption('enabled', $enabled);
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
     public function getLabel($locale)
     {
         return $this->getOption('label', $locale);
     }
 
-    /**
-     * @param string $label
-     * @param string $locale
-     */
     public function setLabel($label, $locale)
     {
         $this->setOption('label', $label, $locale);
@@ -111,9 +113,16 @@ class Block extends AbstractChild
      * @param AbstractChild $child
      *
      * @return Block
+     *
+     * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
+     * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
      */
     public function addChild($column, $name, AbstractChild $child)
     {
+        if ($this->isObjectsCollection()) {
+            $this->handleObjectsCollection($child);
+        }
+
         $this->children[$column][$name] = $child;
 
         return $this;
@@ -157,6 +166,31 @@ class Block extends AbstractChild
                 return $child instanceof Block;
             })));
         }, []);
+    }
+
+    public function getBlocksIndexedByUid()
+    {
+        return array_reduce($this->children, function (array $carry, array $column) {
+            foreach ($column as $childKey => $child) {
+
+                if ($child instanceof Block) {
+                    $carry = array_merge($carry, [$childKey => $child], $child->getBlocksIndexedByUid());
+                }
+            }
+
+            return $carry;
+        }, []);
+    }
+
+    public function getBlockByUid(string $uid): ?Block
+    {
+        $blocks = $this->getBlocksIndexedByUid();
+
+        if (isset($blocks[$uid])) {
+            return $blocks[$uid];
+        }
+
+        return null;
     }
 
     /**
@@ -713,5 +747,101 @@ class Block extends AbstractChild
         }
 
         return $objects;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getObjectsLabel(): array
+    {
+        $objectsLabel = [];
+
+        foreach ($this->getObjects() as $templateObject) {
+            $objectsLabel[] = $templateObject->getLabel($this->getLocale(), $this->getFallback());
+        }
+
+        return $objectsLabel;
+    }
+
+    public function getObjectsCollectionContent(): array
+    {
+        if (!$this->isObjectsCollection()) {
+            throw new \LogicException(
+                'getObjectsCollectionContent() method can not be used if block is not a objectsCollection'
+            );
+        }
+
+        $locale = $this->getLocale();
+        $objectsContent = [];
+
+        foreach ($this->getObjects() as $uid => $object) {
+            $initialData = $object->getData();
+
+            if ($object instanceof EditableText) {
+                if ($object->isTranslatable()) {
+                    $values = $initialData[EditableText::TEXT][$locale] ?? [];
+                } else {
+                    $values = $initialData[EditableText::TEXT] ?? [];
+                }
+
+                foreach ($values as $index => $value) {
+                    $objectsContent[$index][$uid] = $value;
+                }
+
+                continue;
+            }
+
+            if ($object instanceof Nomenclature) {
+                $values = $initialData[Nomenclature::ITEMS] ?? [];
+
+                foreach ($values as $index => $value) {
+                    if ($object->isMultiple()) {
+                        $objectsContent[$index][$uid] = array_map(
+                            function (string $key) use ($object) {
+                                return $object->getLabelForKey($key);
+                            },
+                            $value
+                        );
+
+                        continue;
+                    }
+
+                    $objectsContent[$index][$uid] = $object->getLabelForKey($value);
+                }
+
+                continue;
+            }
+        }
+
+        return $objectsContent;
+    }
+
+    public function getMaxItems(): int
+    {
+        return (int) $this->getOption('maxItems');
+    }
+
+    /**
+     * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
+     * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
+     */
+    private function handleObjectsCollection(AbstractChild $child): void
+    {
+        if ($child instanceof Block) {
+            throw new ObjectsCollectionBlockCanNotContainOtherBlockException();
+        }
+
+        $acceptedObjectsInObjectsCollection = $child instanceof EditableText || $child instanceof Nomenclature;
+
+        if (!$acceptedObjectsInObjectsCollection) {
+            throw new ObjectsCollectionBlockCanNotContainForbiddenObjectsException();
+        }
+
+        if ($child instanceof Nomenclature
+            && $child->getNomenclatureModel() instanceof NomenclatureModel
+            && $child->getNomenclatureModel()->getDepth() > 1
+        ) {
+            throw new ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOneException();
+        }
     }
 }

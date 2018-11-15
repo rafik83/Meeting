@@ -1019,6 +1019,7 @@ admin.template.action.print: 'Template d''impression'
 admin.template.action.save: Enregistrer
 admin.template.action.update: Modifier
 admin.template.action.updating: 'Sauvegarde en cours...'
+admin.template.block.objects_collection: Bloc collection d'objets
 admin.template.blocks: Blocs
 admin.template.objects: Objets
 admin.template.objectsListEmpty: 'Aucun objet disponible'

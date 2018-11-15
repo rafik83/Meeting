@@ -152,6 +152,12 @@ TemplateBuilder.prototype.addBlock = function (element)
 
     // Enable block behavior
     this.block(element);
+
+    // Open configure modal
+    if (element.templateBlock.isObjectsCollection()) {
+        element.templateBlock.fill();
+        element.templateBlock.openConfigureModal();
+    }
 };
 
 TemplateBuilder.prototype.addObject = function (element)
@@ -169,7 +175,7 @@ TemplateBuilder.prototype.addObject = function (element)
 TemplateBuilder.prototype.block = function (element)
 {
     // Create block
-    element.templateBlock = new TemplateBlock(element, this);
+    element.templateBlock = new TemplateBlock(element, this, this.locale);
 };
 
 TemplateBuilder.prototype.object = function (element)
@@ -191,7 +197,8 @@ TemplateBuilder.prototype.save = function ()
             if (xhr.status === OK) {
                 var config = JSON.parse(xhr.response);
             } else {
-                alert('error');
+                var response = JSON.parse(xhr.response);
+                alert(response.error ? response.error : 'Error !');
             }
 
             this.saveButton.stop();
