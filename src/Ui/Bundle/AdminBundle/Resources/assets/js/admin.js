@@ -24,7 +24,8 @@ var $ = require('jquery'),
     RadioGroupAjax = require('./components/_RadioGroupAjax'),
     FilterBuilder = require('./components/_FilterBuilder'),
     ButtonGroupDefaultStateChanger = require('./components/_ButtonGroupDefaultStateChanger'),
-    ParticipantPresence = require('./components/_ParticipantPresence')
+    ParticipantPresence = require('./components/_ParticipantPresence'),
+    ShowModal = require('./components/_ShowModal')
 ;
 
 require('bootstrap');
@@ -193,6 +194,10 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-participant-presence-endpoint]'), function (element) {
         new ParticipantPresence(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-show-modal'), function (element) {
+        new ShowModal(element);
     });
 }
 

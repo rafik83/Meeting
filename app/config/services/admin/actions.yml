@@ -171,6 +171,19 @@ services:
             - '@adapter.router'
             - '@templating'
 
+
+    #
+    # Form Template
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@form.factory'
+            - '@templating'
+
     #
     # Content
     #

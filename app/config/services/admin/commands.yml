@@ -328,6 +328,16 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Create }
 
     #
+    # Form Template
+    #
+    Proximum\Vimeet\Application\Command\Template\Form\CreateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\Create }
+
+    #
     # Order
     #
     Proximum\Vimeet\Application\Command\Order\CancelAllHandler:

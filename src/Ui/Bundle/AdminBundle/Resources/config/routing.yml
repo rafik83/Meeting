@@ -1088,6 +1088,16 @@ admin_template_registration_create:
         event: \d+
 
 #
+# Form Template
+#
+admin_template_form_list:
+    path: /event/{event}/template/form
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\ListAction
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
+#
 # Package
 #
 admin_package_list:

@@ -11,8 +11,16 @@
 namespace Proximum\Vimeet\Domain\Repository\Template;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 
 interface FormTemplateRepositoryInterface
 {
+    public function add(FormTemplate $template): void;
+
+    /**
+     * @param Event $event
+     *
+     * @return FormTemplate[]
+     */
     public function findByEvent(Event $event): array;
 }
