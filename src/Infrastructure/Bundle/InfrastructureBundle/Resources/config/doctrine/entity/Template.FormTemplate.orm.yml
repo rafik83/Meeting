@@ -18,6 +18,10 @@ Proximum\Vimeet\Domain\Model\Template\FormTemplate:
             type: json_array
         createdAt:
             type: datetime
+        published:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

@@ -18,6 +18,9 @@ class FormTemplate extends AbstractTemplate
     /** @var ArrayCollection of FormTemplateTranslation */
     private $translations;
 
+    /** @var bool */
+    private $published;
+
     public function __construct(
         Event $event,
         string $title,
@@ -29,6 +32,7 @@ class FormTemplate extends AbstractTemplate
         parent::__construct($title, $value, $locales, $fallback, $createdAt, $event);
 
         $this->translations = new ArrayCollection();
+        $this->published = false;
     }
 
     /**
@@ -43,5 +47,10 @@ class FormTemplate extends AbstractTemplate
     public function getFallback(): string
     {
         return $this->event ? $this->event->getFallback() : $this->fallback;
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->published;
     }
 }
