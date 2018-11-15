@@ -12,11 +12,11 @@
 }|merge(config|default({})) %}
 
 <div
-    class="object"
-    data-object="datetime"
-    data-uid="{{ uid|default('__UID__') }}"
-    data-config="{{ config|json_encode }}"
-    data-date-min-should-be-less-than-date-max-message="{{ 'template.registration.dateMinShouldBeLessThanDateMax'|trans }}">
+        class="object"
+        data-object="datetime"
+        data-uid="{{ uid|default('__UID__') }}"
+        data-config="{{ config|json_encode }}"
+        data-date-min-should-be-less-than-date-max-message="{{ 'template.registration.dateMinShouldBeLessThanDateMax'|trans }}">
     <ul class="block-buttons list-inline">
         <li class="object-title">{{ 'template.object.datetime'|trans }}</li>
         <li>
