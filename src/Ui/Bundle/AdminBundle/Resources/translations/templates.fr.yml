@@ -10,6 +10,8 @@ template.defaultElement.title: 'Élément par défaut'
 template.help.title: Aide
 template.hideLabel.title: 'Cacher le label'
 template.label.title: Label
+template.label.datetime.min: Date et heure minimum
+template.label.datetime.max: Date et heure maximum
 template.maxLength.title: 'Longueur max'
 template.media.default: 'Nombre de média par default'
 template.media.max: 'Nombre maximum de média'
@@ -26,6 +28,7 @@ template.object.boolean: 'Champs Oui / Non'
 template.object.button-link: Lien
 template.object.collection: Collection
 template.object.country: Pays
+template.object.datetime: 'Date / heure'
 template.object.editable-text: 'Texte modifiable'
 template.object.gender: Genre
 template.object.image: Image

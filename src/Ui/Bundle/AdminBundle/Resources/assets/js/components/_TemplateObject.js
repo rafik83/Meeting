@@ -14,7 +14,8 @@ var $ = require('jquery'),
   UrlObject = require('./templateObjects/_UrlObject'),
   BooleanObject = require('./templateObjects/_BooleanObject'),
   GenderObject = require('./templateObjects/_GenderObject'),
-  UploadObject = require('./templateObjects/_UploadObject')
+  UploadObject = require('./templateObjects/_UploadObject'),
+  DatetimeObject = require('./templateObjects/_DatetimeObject')
 ;
 
 /**
@@ -83,6 +84,8 @@ function TemplateObject(element, locale, builderType)
     this.object = new GenderObject(this.element, this.locale, this.builderType);
   } else if (this.type === 'upload') {
     this.object = new UploadObject(this.element, this.locale, this.builderType);
+  } else if (this.type === 'datetime') {
+    this.object = new DatetimeObject(this.element, this.locale, this.builderType);
   }
 
   this.object.fill();
