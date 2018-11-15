@@ -6,7 +6,7 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Create table TemplateForm - Type
+ * Create table between FormTemplate and Type
  */
 class Version20181115151123 extends AbstractMigration
 {
