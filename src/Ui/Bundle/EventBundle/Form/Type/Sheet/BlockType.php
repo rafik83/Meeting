@@ -21,6 +21,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\TelephoneDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\UrlDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\DatetimeDataType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -54,6 +55,8 @@ class BlockType extends AbstractType
                 $this->addGender($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\TemplateObject\BooleanObject) {
                 $this->addBoolean($key, $builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\TemplateObject\DateTime) {
+                $this->addDatetime($key, $builder, $object, $options['locale']);
             }
         }
     }
@@ -213,6 +216,19 @@ class BlockType extends AbstractType
         $locale
     ) {
         $builder->add($key, BooleanDataType::class, [
+            'object'  => $object,
+            'locale'  => $locale,
+            'label'   => false,
+        ]);
+    }
+
+    private function addDatetime(
+        $key,
+        FormBuilderInterface $builder,
+        Template\TemplateObject $object,
+        $locale
+    ): void {
+        $builder->add($key, DatetimeDataType::class, [
             'object'  => $object,
             'locale'  => $locale,
             'label'   => false,
