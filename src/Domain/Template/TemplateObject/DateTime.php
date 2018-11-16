@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class DateTime extends EditableObject implements ContentObjectInterface
+class DateTime extends EditableObject implements ContentObjectInterface, ExportableObjectInterface
 {
     public function setDate($date): void
     {
@@ -32,5 +32,15 @@ class DateTime extends EditableObject implements ContentObjectInterface
     public function setContentValue($value): void
     {
         $this->setDate($value);
+    }
+
+    public function getExportableContent(array $taggedData = [], ?string $locale = null): ?string
+    {
+        return $this->getLabel($locale);
+    }
+
+    public function getExportableFieldname($locale, $fallback): ?string
+    {
+        return $this->getContentValue();
     }
 }
