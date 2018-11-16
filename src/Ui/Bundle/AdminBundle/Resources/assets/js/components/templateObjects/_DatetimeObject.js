@@ -44,8 +44,8 @@ DatetimeObject.prototype.save = function ()
 {
     var dateMin = this.form.get('datetime_min');
     var dateMax = this.form.get('datetime_max');
-    var minTime = this.getTimeByFrenchFormat(dateMin);
-    var maxTime = this.getTimeByFrenchFormat(dateMax);
+    var minTime = this.getTimestampByInternationalFormat(dateMin);
+    var maxTime = this.getTimestampByInternationalFormat(dateMax);
 
     if ((dateMin && dateMax) && minTime > maxTime) {
         alert(this.dateMinShouldBeGreaterThanDateMaxMessage);
@@ -70,19 +70,23 @@ DatetimeObject.prototype.save = function ()
     return true;
 };
 
-DatetimeObject.prototype.getTimeByFrenchFormat = function (date)
+DatetimeObject.prototype.getTimestampByInternationalFormat = function (date)
 {
-    if (!date) {
+    if (!date || -1 === date.indexOf('/')) {
         return;
     }
 
     var splitDate = date.split('/');
     var splitYear = splitDate[2].split(' ');
+    var splitTime = splitYear[1].split(':');
+
     var day = splitDate[0];
     var month = splitDate[1];
     var year = splitYear[0];
+    var hours = splitTime[0];
+    var minutes = splitTime[1];
 
-    return new Date(year, month, day).getTime();
+    return new Date(year, month, day, hours, minutes).getTime();
 };
 
 module.exports = DatetimeObject;
