@@ -14,18 +14,32 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Domain\Model\StaticFormulation;
+use Proximum\Vimeet\Domain\Repository\Template\FormTemplateRepositoryInterface;
 
 class FormsViewQueryHandler
 {
-    public function __construct()
+    /** @var FormTemplateRepositoryInterface */
+    private $formTemplateRepository;
+
+    public function __construct(FormTemplateRepositoryInterface $formTemplateRepository)
     {
+        $this->formTemplateRepository = $formTemplateRepository;
     }
 
-    public function handle(FormsViewQuery $formsViewQuery)
+    public function handle(FormsViewQuery $formsViewQuery): ?CategoryView
     {
+        $type = $formsViewQuery->sheet->getType();
+        $formTemplateViews = $this->formTemplateRepository->getFormTemplateViewByType($type, $formsViewQuery->locale);
+
+        if (empty($formTemplateViews)) {
+            return null;
+        }
+
         $linksView = [];
 
-        $linksView[] = new LinkView('Mon formulaire', '/url');
+        foreach ($formTemplateViews as $formTemplateView) {
+            $linksView[] = new LinkView($formTemplateView->title, '/url');
+        }
 
         return new CategoryView(
             $this->getTitle($formsViewQuery->staticFormulation, $formsViewQuery->locale),

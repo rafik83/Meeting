@@ -4170,7 +4170,9 @@ services:
             - '@datetime'
             - '@navigation.navigation_builder'
 
-    Proximum\Vimeet\Application\Query\Navigation\Category\FormsViewQueryHandler: ~
+    Proximum\Vimeet\Application\Query\Navigation\Category\FormsViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
 
     query.navigation.category_meeting_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\MeetingViewQueryHandler
