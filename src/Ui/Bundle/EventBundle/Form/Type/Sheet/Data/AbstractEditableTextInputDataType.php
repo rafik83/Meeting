@@ -17,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 abstract class AbstractEditableTextInputDataType extends AbstractType
 {
@@ -44,6 +46,8 @@ abstract class AbstractEditableTextInputDataType extends AbstractType
         $showLabel = $options['showLabel'];
         $attr      = $text->hasMaxLength() ? ['maxlength' => $text->getMaxLength()] : [];
 
+        $constraints = $this->getConstraints($text, $options['data_class']);
+
         if ($text->isTextarea()) {
             $attr['rows'] = $options['rows'];
 
@@ -58,22 +62,24 @@ abstract class AbstractEditableTextInputDataType extends AbstractType
             }
 
             $builder
-                ->add('content', TextareaType::class, [
+                ->add(EditableText::CONTENT, TextareaType::class, [
                     'placeholder'        => $text->getOption('placeholder', $locale),
                     'label'              => $showLabel ? $text->getOption('label', $locale) : false,
                     'attr'               => $attr,
                     'required'           => $text->getOption('required'),
                     'translation_domain' => false,
+                    'constraints'        => $constraints,
                 ])
             ;
         } else {
             $builder
-                ->add('content', TextType::class, [
+                ->add(EditableText::CONTENT, TextType::class, [
                     'label'              => $showLabel ? $text->getOption('label', $locale) : false,
                     'required'           => $text->getOption('required'),
                     'placeholder'        => $text->getOption('placeholder', $locale),
                     'attr'               => $attr,
                     'translation_domain' => false,
+                    'constraints'        => $constraints,
                 ])
             ;
         }
@@ -92,5 +98,22 @@ abstract class AbstractEditableTextInputDataType extends AbstractType
             'rows'       => 7,
             'showLabel'  => true,
         ]);
+    }
+
+    private function getConstraints(EditableText $text, ?string $dataClass): array
+    {
+        $constraints = [];
+
+        if (null === $dataClass) {
+            if ($text->isRequired()) {
+                $constraints[] = new NotBlank();
+            }
+
+            if ($text->hasMaxLength()) {
+                $constraints[] = new Length(['max' => $text->getMaxLength()]);
+            }
+        }
+
+        return $constraints;
     }
 }

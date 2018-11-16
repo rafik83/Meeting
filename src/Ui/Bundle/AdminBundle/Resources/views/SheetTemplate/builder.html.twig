@@ -81,10 +81,13 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="blocks">
                         <div id="block-list" class="block-list">
+                            {{ include('AdminBundle:Template/Block:12.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
+                            {{ include('AdminBundle:Template/Block:6-6.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
                             {{ include('AdminBundle:Template/Block:8-4.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
                             {{ include('AdminBundle:Template/Block:4-8.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
-                            {{ include('AdminBundle:Template/Block:6-6.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
-                            {{ include('AdminBundle:Template/Block:12.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
+                            <hr>
+                            <p>{{ 'admin.template.block.objects_collection'|trans }}</p>
+                            {{ include('AdminBundle:Template/Block:objects_collection.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
                         </div>
                     </div>
 

@@ -1141,7 +1141,7 @@ admin_template_sheet_builder:
         locale: '[a-z]{2}(_[A-Z]{2})?'
 admin_template_sheet_save:
     path: /template/sheet/{template}/{locale}/save
-    defaults: { _controller: AdminBundle:SheetTemplate:save }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Sheet\SaveAction
     methods: [POST]
     requirements:
         template: \d+

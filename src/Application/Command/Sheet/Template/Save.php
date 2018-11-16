@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
-class Save
+class Save implements Command
 {
     /**
      * @var SheetTemplate
