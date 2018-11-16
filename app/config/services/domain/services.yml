@@ -94,6 +94,10 @@ services:
         arguments:
             - '@datetime'
 
+    #
+    # Template
+    #
+    Proximum\Vimeet\Domain\Template\Form\FormTemplateValidator: ~
 
     #
     # Badge

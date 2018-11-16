@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
@@ -127,6 +128,21 @@ class TemplateDataFactory
                 [],
                 $locale,
                 $registrationTemplate->getFallback()
+            )
+        ;
+    }
+
+    public function createFormTemplateFromTemplate(
+        FormTemplate $formTemplate,
+        string $locale
+    ): TemplateData {
+        return $this
+            ->loadNomenclatures($formTemplate->getEvent())
+            ->create(
+                $formTemplate->getValue(),
+                [],
+                $locale,
+                $formTemplate->getFallback()
             )
         ;
     }

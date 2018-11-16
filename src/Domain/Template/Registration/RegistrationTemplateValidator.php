@@ -36,7 +36,7 @@ class RegistrationTemplateValidator
             }
 
             if ($editableObject instanceof Nomenclature
-                && $editableObject->isCheckboxes()
+                && $editableObject->isMultiple()
                 && 1 !== $editableObject->getNomenclatureModel()->getDepth()
             ) {
                 $nomenclatureWithWrongDepth[] = $editableObject;

@@ -184,6 +184,19 @@ services:
             - '@form.factory'
             - '@templating'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\BuilderAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@repository.nomenclature_repository'
+            - '@sheet.template.completeness_calculator'
+            - '@session.flash_bag'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\SaveAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
     #
     # Content
     #

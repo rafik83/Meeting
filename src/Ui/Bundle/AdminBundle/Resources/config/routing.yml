@@ -1097,6 +1097,24 @@ admin_template_form_list:
     requirements:
         event: \d+
 
+admin_template_form_builder:
+    path: /event/{event}/template/form/builder/{template}/{locale}
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\BuilderAction
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        template: \d+
+        locale: \w+
+
+admin_template_form_save:
+    path: /event/{event}/template/form/builder/{template}/save/{locale}
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\SaveAction
+    methods: [POST]
+    requirements:
+        event: \d+
+        template: \d+
+        locale: \w+
+
 #
 # Package
 #

@@ -39,7 +39,7 @@
                 <td>{{ template.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td class="text-right">
                     <div class="btn-group">
-                        <a href="#" class="btn btn-default btn-sm">
+                        <a href="{{ path('admin_template_form_builder', {'event': event.id, 'template': template.id, 'locale': template.locale }) }}" class="btn btn-default btn-sm">
                             {{ 'admin.template.form.table.content.edit'|trans }}
                         </a>
                     </div>

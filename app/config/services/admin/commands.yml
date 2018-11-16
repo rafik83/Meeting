@@ -337,6 +337,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\Create }
 
+    Proximum\Vimeet\Application\Command\Template\Form\SaveHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Application\Components\Template\Form\FormTemplateValidatorTranslated'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\Save }
+
     #
     # Order
     #
