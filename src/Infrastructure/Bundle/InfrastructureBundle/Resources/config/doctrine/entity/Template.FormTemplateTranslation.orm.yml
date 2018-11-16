@@ -13,7 +13,7 @@ Proximum\Vimeet\Domain\Model\Template\FormTemplateTranslation:
             type: string
     manyToOne:
         formTemplate:
-            targetEntity: Proximum\Vimeet\Domain\Model\Template\FormTemplateTranslation
+            targetEntity: Proximum\Vimeet\Domain\Model\Template\FormTemplate
             inversedBy: translations
             joinColumn:
                 onDelete: CASCADE
