@@ -7,7 +7,7 @@
 
     <div
         class="container-fluid template-builder-container"
-        data-registration-template-builder="{{ path('admin_template_form_save', {
+        data-form-template-builder="{{ path('admin_template_form_save', {
             'event': event.id,
             'template': template.id,
             'locale': locale
@@ -50,21 +50,21 @@
         </button>
 
         <div data-template-block class="hide">
-            {{ include('AdminBundle:RegistrationTemplate:block.html.twig') }}
+            {{ include('AdminBundle:Template/Form:block.html.twig') }}
         </div>
 
         <div class="template-builder-body">
             <div class="template-container container-fluid block-inner">
-                {% for uid, item in registrationTemplate.value|default([]) %}
+                {% for uid, item in template.value|default([]) %}
                     {% if item.component == 'block' %}
-                        {{ include('AdminBundle:RegistrationTemplate:block.html.twig', {
+                        {{ include('AdminBundle:Template/Form:block.html.twig', {
                             'uid': uid,
                             'children': item.children,
                             'config': item.config,
                             'locale': locale,
                             'fallback': template.fallback,
                             'nomenclatures': nomenclatures,
-                            'registrationTemplateTagView': templateTagView,
+                            'templateTagView': templateTagView,
                             'uploadFormats': uploadFormats,
                         }, false) }}
                     {% endif %}
@@ -78,48 +78,48 @@
                     <div id="object-list" class="object-list">
                         {{ include('AdminBundle:Template/Object:text.html.twig', { 'locale': locale }, false) }}
                         {{ include('AdminBundle:Template/Object:editable-text.html.twig', {
-                            'isRegistrationTemplate': true,
+                            'isFormTemplate': true,
                             'locale': locale,
-                            'registrationTemplateTagView': templateTagView,
+                            'templateTagView': templateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:telephone.html.twig', {
-                            'isRegistrationTemplate': true,
+                            'isFormTemplate': true,
                             'locale': locale,
-                            'registrationTemplateTagView': templateTagView,
+                            'templateTagView': templateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:country.html.twig', {
-                            'isRegistrationTemplate': true,
+                            'isFormTemplate': true,
                             'locale': locale,
-                            'registrationTemplateTagView': templateTagView,
+                            'templateTagView': templateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:url.html.twig', {
-                            'isRegistrationTemplate': true,
+                            'isFormTemplate': true,
                             'locale': locale,
-                            'registrationTemplateTagView': templateTagView,
+                            'templateTagView': templateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:boolean.html.twig', {
                             'locale': locale,
-                            'registrationTemplateTagView': templateTagView,
+                            'templateTagView': templateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:gender.html.twig', {
                             'locale': locale,
-                            'registrationTemplateTagView': templateTagView,
+                            'templateTagView': templateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:upload.html.twig', {
                             'locale': locale,
                             'uploadFormats': uploadFormats|default([]),
-                            'registrationTemplateTagView': templateTagView,
+                            'templateTagView': templateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:image.html.twig', {
                             'locale': locale,
-                            'isRegistrationTemplate': true,
-                            'registrationTemplateTagView': templateTagView,
+                            'isFormTemplate': true,
+                            'templateTagView': templateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:nomenclature.html.twig', {
-                            'isRegistrationTemplate': true,
+                            'isFormTemplate': true,
                             'locale': locale,
                             'nomenclatures': nomenclatures,
-                            'registrationTemplateTagView': templateTagView,
+                            'templateTagView': templateTagView,
                         }, false) }}
                     </div>
                 </div>

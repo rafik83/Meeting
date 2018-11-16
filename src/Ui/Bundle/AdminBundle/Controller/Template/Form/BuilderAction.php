@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -86,6 +87,7 @@ class BuilderAction
             'locale' => $locale,
             'nomenclatures' => $nomenclatures,
             'template'  => $formTemplate,
+            'uploadFormats' => UploadObject::ALLOWED_FORMATS,
             'templateTagView' => Tag::getTemplateTagView(),
         ]));
     }

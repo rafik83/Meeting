@@ -60,9 +60,9 @@
                                 {{ 'template.required.title'|trans }}
                             </label>
                         </div>
-                        {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                        {{ include('AdminBundle:Template/Form:tagsSelect.html.twig', {
                             'config': config,
-                            'registrationTemplateTagView': registrationTemplateTagView,
+                            'templateTagView': templateTagView,
                         }, false) }}
                     </div>
                     <div class="modal-footer">

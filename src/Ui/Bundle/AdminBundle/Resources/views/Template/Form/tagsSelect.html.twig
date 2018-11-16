@@ -1,12 +1,12 @@
 {% trans_default_domain 'templates' %}
 
 <div data-template-tags-select
-     data-participant-tag="{{ registrationTemplateTagView.participantDataTag }}"
-     data-sheet-tag="{{ registrationTemplateTagView.sheetDataTag }}"
+     data-participant-tag="{{ templateTagView.participantDataTag }}"
+     data-sheet-tag="{{ templateTagView.sheetDataTag }}"
      data-at-least-one-data-field-must-be-checked-message="{{ 'template.registration.atLeastOneDataFieldMustBeChecked'|trans }}"
 >
     <select name="tags" multiple="multiple" class="hidden">
-        {% for tag in registrationTemplateTagView.allTags %}
+        {% for tag in templateTagView.allTags %}
             <option value="{{ tag }}" {% if tag in config.tags %}selected="selected"{% endif %}>{{ ('template.tag.' ~ tag)|trans }}</option>
         {% endfor %}
     </select>
@@ -20,8 +20,8 @@
             <label class="form-label">
                 <input
                     type="checkbox"
-                    name="{{ registrationTemplateTagView.sheetDataTag }}"
-                    {% if registrationTemplateTagView.sheetDataTag in config.tags %}checked="checked"{% endif %}
+                    name="{{ templateTagView.sheetDataTag }}"
+                    {% if templateTagView.sheetDataTag in config.tags %}checked="checked"{% endif %}
                 />
                 {{ 'template.registration.sheetData'|trans }}
             </label>
@@ -33,7 +33,7 @@
                 <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
             </label>
             <select class="form-control select2-builder" name="sheet_tags" multiple="multiple">
-                {% for tag in registrationTemplateTagView.sheetTags %}
+                {% for tag in templateTagView.sheetTags %}
                     <option value="{{ tag }}" {% if tag in config.tags %}selected="selected"{% endif %}>{{ ('template.tag.' ~ tag)|trans }}</option>
                 {% endfor %}
             </select>
@@ -43,8 +43,8 @@
             <label class="form-label">
                 <input
                     type="checkbox"
-                    name="{{ registrationTemplateTagView.participantDataTag }}"
-                    {% if registrationTemplateTagView.participantDataTag in config.tags %}checked="checked"{% endif %}
+                    name="{{ templateTagView.participantDataTag }}"
+                    {% if templateTagView.participantDataTag in config.tags %}checked="checked"{% endif %}
                 />
                 {{ 'template.registration.participantData'|trans }}
             </label>
@@ -56,7 +56,7 @@
                 <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
             </label>
             <select class="form-control select2-builder" name="participant_tags" multiple="multiple">
-                {% for tag in registrationTemplateTagView.participantTags %}
+                {% for tag in templateTagView.participantTags %}
                     <option value="{{ tag }}" {% if tag in config.tags %}selected="selected"{% endif %}>{{ ('template.tag.' ~ tag)|trans }}</option>
                 {% endfor %}
             </select>

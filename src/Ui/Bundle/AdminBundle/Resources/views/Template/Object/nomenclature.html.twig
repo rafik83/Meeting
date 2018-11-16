@@ -129,10 +129,10 @@
                                     </select>
                                 </div>
                                 {% endif %}
-                                {% if isRegistrationTemplate is defined and registrationTemplateTagView is defined %}
-                                    {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                {% if isFormTemplate is defined and templateTagView is defined %}
+                                    {{ include('AdminBundle:Template/Form:tagsSelect.html.twig', {
                                         'config': config,
-                                        'registrationTemplateTagView': registrationTemplateTagView,
+                                        'templateTagView': templateTagView,
                                     }, false) }}
                                 {% endif %}
                             </div>
