@@ -6,11 +6,17 @@
     required: false,
     placeholder: { (locale): '' },
     tags: [],
-    datetime_min: null,
-    datetime_max: null
+    datetime_min: '',
+    datetime_max: '',
+    format: 'datetime'
 }|merge(config|default({})) %}
 
-<div class="object" data-object="datetime" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+<div
+    class="object"
+    data-object="datetime"
+    data-uid="{{ uid|default('__UID__') }}"
+    data-config="{{ config|json_encode }}"
+    data-date-min-should-be-greater-than-date-max-message="{{ 'template.registration.dateMinShouldBeGreaterThanDateMax'|trans }}">
     <ul class="block-buttons list-inline">
         <li class="object-title">{{ 'template.object.datetime'|trans }}</li>
         <li>
@@ -38,10 +44,13 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.type.title'|trans }}</label>
-                                    <select class="form-control" name="type">
-                                        {% set types = { 'Date et heure': 'datetime', 'Date': 'date' } %}
+                                    <select class="form-control" name="format">
+                                        {% set types = {
+                                            'template.object.datetime.format.datetime': 'datetime',
+                                            'template.object.datetime.format.date': 'date'
+                                        } %}
                                         {% for label, value in types %}
-                                            <option value="{{ value }}">{{ label }}</option>
+                                            <option value="{{ value }}">{{ label|trans }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>

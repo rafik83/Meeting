@@ -29,6 +29,8 @@ template.object.button-link: Lien
 template.object.collection: Collection
 template.object.country: Pays
 template.object.datetime: 'Date / heure'
+template.object.datetime.format.date: 'Date'
+template.object.datetime.format.datetime: 'Date et heure'
 template.object.editable-text: 'Texte modifiable'
 template.object.gender: Genre
 template.object.image: Image
@@ -47,6 +49,7 @@ template.placeholder.title: Placeholder
 template.products.title: 'Produits liés'
 template.registration.atLeastOneDataFieldMustBeChecked: 'Au moins un des champs Type d''information doit être coché'
 template.registration.dataType: 'Type d''information'
+template.registration.dateMinShouldBeGreaterThanDateMax: 'La date / heure minimum doit être supérieure à la date / heure maximum'
 template.registration.nomenclatureCheckboxesMustBeOfDepthOne: 'Les nomenclatures assignées doivent être de niveau 1 pour pouvoir être à choix multiple pour le ou les champs suivants : %objectsLabel%'
 template.registration.optional: Optionnel
 template.registration.participantData: 'Information de participant'
