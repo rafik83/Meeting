@@ -23,6 +23,7 @@ class Constant
     public const STATIC_FORMULATION_KEY_BILLING = 'billing';
     public const STATIC_FORMULATION_KEY_BADGE = 'badge';
     public const STATIC_FORMULATION_KEY_MEMBER_SPACE = 'member_space';
+    public const STATIC_FORMULATION_KEY_FORMS = 'forms';
 
     public const STATIC_FORMULATION_LIST = [
         self::STATIC_FORMULATION_KEY_SHEET => [
@@ -60,6 +61,10 @@ class Constant
         self::STATIC_FORMULATION_KEY_BADGE => [
             'label' => 'navigation.category.badge',
             'categoryKey' => Category::BADGE,
+        ],
+        self::STATIC_FORMULATION_KEY_FORMS => [
+            'label' => 'navigation.category.forms',
+            'categoryKey' => Category::FORMS,
         ],
     ];
 }
