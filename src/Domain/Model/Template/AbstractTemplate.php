@@ -143,6 +143,11 @@ abstract class AbstractTemplate
         return $this->types->toArray();
     }
 
+    public function hasType(Type $type): bool
+    {
+        return \in_array($type, $this->getTypes(), true);
+    }
+
     /**
      * Get title
      *
