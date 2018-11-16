@@ -226,6 +226,7 @@ multiple_sheets.select_sheet: 'select a sheet'
 multiple_sheets.title: 'My profiles'
 navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
+navigation.category.forms: 'My venue'
 navigation.category.happening: 'Meeting administration'
 navigation.category.meeting: 'My meetings'
 navigation.category.member_space: 'Member area'
