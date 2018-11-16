@@ -48,6 +48,7 @@ class TemplateDataFactory
         'gender'                => TemplateObject\Gender::class,
         'boolean'               => TemplateObject\BooleanObject::class,
         'upload'                => TemplateObject\UploadObject::class,
+        'datetime'              => TemplateObject\DateTime::class,
     ];
 
     /**
