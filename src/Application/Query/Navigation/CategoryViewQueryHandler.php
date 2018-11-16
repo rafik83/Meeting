@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Query\Navigation\Category\BillingViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\BillingViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Category\CatalogViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\CatalogViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Navigation\Category\FormsViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Category\FormsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Category\MeetingViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\MeetingViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Navigation\Category\MemberSpaceViewQuery;
@@ -55,16 +57,9 @@ class CategoryViewQueryHandler
     /** @var ProgramViewQueryHandler */
     private $programViewQueryHandler;
 
-    /**
-     * @param MemberSpaceViewQueryHandler $memberSpaceViewQueryHandler
-     * @param BillingViewQueryHandler     $billingViewQueryHandler
-     * @param CatalogViewQueryHandler     $catalogViewQueryHandler
-     * @param MeetingViewQueryHandler     $meetingViewQueryHandler
-     * @param PlanningViewQueryHandler    $planningViewQueryHandler
-     * @param SheetViewQueryHandler       $sheetViewQueryHandler
-     * @param PackageViewQueryHandler     $packageViewQueryHandler
-     * @param ProgramViewQueryHandler     $programViewQueryHandler
-     */
+    /** @var FormsViewQueryHandler */
+    private $formsViewQueryHandler;
+
     public function __construct(
         MemberSpaceViewQueryHandler $memberSpaceViewQueryHandler,
         BillingViewQueryHandler $billingViewQueryHandler,
@@ -73,7 +68,8 @@ class CategoryViewQueryHandler
         PlanningViewQueryHandler $planningViewQueryHandler,
         SheetViewQueryHandler $sheetViewQueryHandler,
         PackageViewQueryHandler $packageViewQueryHandler,
-        ProgramViewQueryHandler $programViewQueryHandler
+        ProgramViewQueryHandler $programViewQueryHandler,
+        FormsViewQueryHandler $formsViewQueryHandler
     ) {
         $this->memberSpaceViewQueryHandler = $memberSpaceViewQueryHandler;
         $this->billingViewQueryHandler     = $billingViewQueryHandler;
@@ -83,6 +79,7 @@ class CategoryViewQueryHandler
         $this->sheetViewQueryHandler       = $sheetViewQueryHandler;
         $this->packageViewQueryHandler     = $packageViewQueryHandler;
         $this->programViewQueryHandler     = $programViewQueryHandler;
+        $this->formsViewQueryHandler       = $formsViewQueryHandler;
     }
 
     /**
@@ -144,6 +141,13 @@ class CategoryViewQueryHandler
                 ));
             case Category::PROGRAM:
                 return $this->programViewQueryHandler->handle(new ProgramViewQuery(
+                    $categoryViewQuery->sheet,
+                    $categoryViewQuery->user,
+                    $categoryViewQuery->locale,
+                    $categoryViewQuery->staticFormulation
+                ));
+            case Category::FORMS:
+                return $this->formsViewQueryHandler->handle(new FormsViewQuery(
                     $categoryViewQuery->sheet,
                     $categoryViewQuery->user,
                     $categoryViewQuery->locale,

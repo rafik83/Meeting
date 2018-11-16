@@ -236,6 +236,7 @@ multiple_sheets.title: 'Mes fiches'
 navigation.category.badge: Badge
 navigation.category.billing: Facturation
 navigation.category.catalog: Catalogue
+navigation.category.forms: 'Ma venue'
 navigation.category.happening: 'Gestion RDV'
 navigation.category.meeting: 'Gestion RDV'
 navigation.category.member_space: 'Espace membre'
