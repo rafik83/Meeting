@@ -1,5 +1,6 @@
-var Form = require('./../_Form'),
-  TemplateTaggableObject = require('./../_TemplateTaggableObject')
+var Form = require('./../template/_Form'),
+    TemplateTaggableObject = require('./../template/_TemplateTaggableObject'),
+    { isSheetTemplateBuilder } = require('./../template/_BuilderTypeChecker')
 ;
 
 /**
@@ -28,7 +29,7 @@ function NomenclatureObject(element, locale, builderType)
 
 NomenclatureObject.prototype.fill = function ()
 {
-  if (this.builderType !== 'registration') {
+  if (isSheetTemplateBuilder(this.builderType)) {
     this.form.set('style', this.config.style);
     this.form.set('objective', this.config.objective);
     this.form.set('help', this.config.help[this.locale]);
@@ -49,7 +50,7 @@ NomenclatureObject.prototype.save = function ()
       return false;
   }
 
-  if (this.builderType !== 'registration') {
+  if (isSheetTemplateBuilder(this.builderType)) {
     this.config.style = this.form.get('style');
     this.config.help[this.locale]  = this.form.get('help');
     this.config.objective = this.form.get('objective');

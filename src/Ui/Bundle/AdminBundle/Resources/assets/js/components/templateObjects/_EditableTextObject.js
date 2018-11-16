@@ -1,5 +1,5 @@
-var Form = require('./../_Form'),
-  TemplateTaggableObject = require('./../_TemplateTaggableObject');
+var Form = require('./../template/_Form'),
+  TemplateTaggableObject = require('./../template/_TemplateTaggableObject');
 
 /**
  * EditableTextObject

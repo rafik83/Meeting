@@ -1,6 +1,6 @@
 var $        = require('jquery'),
     Form     = require('./_Form'),
-    Sortable = require('./_Sortable');
+    Sortable = require('./../_Sortable');
 
 /**
  * Template Block
