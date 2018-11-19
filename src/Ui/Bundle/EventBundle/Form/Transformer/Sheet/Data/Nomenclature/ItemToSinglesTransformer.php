@@ -24,6 +24,14 @@ class ItemToSinglesTransformer extends AbstractTransformer
             return $value;
         }
 
+        if (\is_array($value)) {
+            $value = reset($value);
+
+            if (false === $value) {
+                $value = '';
+            }
+        }
+
         if (!\is_string($value)) {
             // A string is expected, therefore it is cast to string
             $value = (string) $value;

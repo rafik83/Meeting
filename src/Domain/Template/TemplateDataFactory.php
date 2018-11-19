@@ -23,6 +23,8 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\BuildNotImplementedException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainForbiddenObjectsException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
 class TemplateDataFactory
@@ -250,6 +252,10 @@ class TemplateDataFactory
      * @param string|null      $fallback
      *
      * @return TemplateData
+     *
+     * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
+     * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
+     * @throws \Exception
      */
     public function createFromTemplate(AbstractTemplate $template, array $data = [], $locale = null, $fallback = null)
     {
@@ -265,6 +271,11 @@ class TemplateDataFactory
      * @param string      $fallback
      *
      * @return TemplateData
+     *
+     * @throws ObjectNotFoundException
+     * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
+     * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
+     * @throws \Exception
      */
     public function create(array $template, array $data = [], ?string $locale = null, $fallback = null)
     {
@@ -296,9 +307,9 @@ class TemplateDataFactory
     /**
      * @param TemplateObject $templateObject
      *
-     * @return string|null
+     * @return string|array|null
      */
-    private function getFirstNotEmptyContent(TemplateObject $templateObject): ? string
+    private function getFirstNotEmptyContent(TemplateObject $templateObject)
     {
         $translations = $templateObject->getTranslations();
 

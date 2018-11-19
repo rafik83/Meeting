@@ -88,6 +88,12 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
+    # Template
+    #
+    Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\BlockToArray: ~
+    Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\SetArrayContentToBlock: ~
+
+    #
     # Key Dates
     #
     Proximum\Vimeet\Domain\KeyDates\Checker\EnableBadgeForParticipantDateAccessChecker:

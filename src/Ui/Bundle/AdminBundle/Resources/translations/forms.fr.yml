@@ -256,10 +256,6 @@ form.event_create.children.visio.label: 'Evenement dématérialisé'
 form.event_create.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event_duplicate.children.event.label: Événement
 form.event_duplicate.children.submit.label: Créer
-form.type_payment_conditions_update.children.translations.prototype.children.bankInfo.label: 'Bank information'
-form.type_payment_conditions_update.children.translations.prototype.children.billingAddress.label: 'Adresse de paiement'
-form.type_payment_conditions_update.children.translations.prototype.children.paymentCondition.label: 'Conditions de paiement'
-form.type_payment_conditions_update.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
@@ -1071,6 +1067,10 @@ form.type_payment_conditions_update.children.minimumForDeposit.label: 'Somme tot
 form.type_payment_conditions_update.children.paymentModes.label: 'Moyens de paiement'
 form.type_payment_conditions_update.children.specificPaymentConditions.label: 'Définir des conditions spécifiques de paiement pour ce type'
 form.type_payment_conditions_update.children.submit.label: Enregistrer
+form.type_payment_conditions_update.children.translations.prototype.children.bankInfo.label: 'Bank information'
+form.type_payment_conditions_update.children.translations.prototype.children.billingAddress.label: 'Adresse de paiement'
+form.type_payment_conditions_update.children.translations.prototype.children.paymentCondition.label: 'Conditions de paiement'
+form.type_payment_conditions_update.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
 form.type_template_field_update_lib_choice.children.choices.label: Choix
 form.type_template_field_update_lib_choice.children.choices.label_add: Ajouter
 form.type_template_field_update_lib_choice.children.choices.label_delete: Supprimer

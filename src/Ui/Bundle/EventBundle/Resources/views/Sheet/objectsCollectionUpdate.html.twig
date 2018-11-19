@@ -1,0 +1,41 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% form_theme form '@Ui/default.html.twig' %}
+
+{% block title %}
+    {{ event.title }}: {{ 'sheet.title'|trans }}
+{% endblock %}
+
+{% block objects_collection_submit %}
+    <div class="text-right mg-bt mg-tp clearboth">
+        <button type="submit" class="btn btn-primary">{{ 'form.sheet_template_objects_collection_type.children.submit.label'|trans({}, 'forms') }}</button>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+        {% if label %}
+            <div class="content-header clearfix">
+                <h1 class="pull-left">
+                    {{ label }}
+                </h1>
+
+                <a href="{{ path('event_sheet_default', { 'sheet': sheet.id }) }}" class="btn btn-gray pull-right">
+                    <i class="icon-Retour"></i> {{ 'common.backToSheet'|trans }}
+                </a>
+            </div>
+        {% endif %}
+
+        <section class="object object--collection style--style-1 section">
+            {{ form_start(form) }}
+
+            {{ block('objects_collection_submit') }}
+
+            {{ form_row(form.objectsCollection) }}
+
+            {{ block('objects_collection_submit') }}
+
+            {{ form_end(form) }}
+        </section>
+    </section>
+{% endblock %}

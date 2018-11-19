@@ -1031,6 +1031,7 @@ admin.template.form.table.content.create: 'Créer un template de formulaire'
 admin.template.form.table.content.edit: Modifier
 admin.template.form.action.create: Créer un template de formulaire
 admin.template.form.title: 'Templates de formulaire'
+admin.template.block.objects_collection: 'Bloc collection d''objets'
 admin.template.blocks: Blocs
 admin.template.objects: Objets
 admin.template.objectsListEmpty: 'Aucun objet disponible'

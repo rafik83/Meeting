@@ -7,11 +7,14 @@ var $        = require('jquery'),
  *
  * @param element
  * @param builder
+ * @param locale
  * @constructor
  */
-function TemplateBlock(element, builder)
+function TemplateBlock(element, builder, locale)
 {
   this.element = element;
+  this.inner = element.querySelector('.block-inner');
+  this.locale = locale;
   this.builder = builder;
   this.config = JSON.parse(this.element.getAttribute('data-config'));
   this.configureModal = element.querySelector('.configure-modal');
@@ -113,17 +116,43 @@ TemplateBlock.prototype.closeConfigureModal = function ()
 TemplateBlock.prototype.fill = function ()
 {
   this.form.set('style', this.config.style);
+
+  if (this.isObjectsCollection()) {
+      this.form.set('label', this.config.label[this.locale]);
+      this.form.set('maxItems', this.config.maxItems);
+  }
 };
 
 TemplateBlock.prototype.save = function ()
 {
   this.config.style = this.form.get('style');
+
+  if (this.isObjectsCollection()) {
+      var maxItems = parseInt(this.form.get('maxItems'));
+      this.config.label[this.locale] = this.form.get('label');
+      this.config.maxItems = maxItems > 0 ? maxItems : 10;
+  }
+};
+
+TemplateBlock.prototype.isObjectsCollection = function (element)
+{
+  if (!element) {
+    element = this.inner;
+  }
+
+  return element.classList.contains('block-collection');
 };
 
 TemplateBlock.prototype.sortable = function (element)
 {
+  var elementsCanBeAdded = ['block-reference', 'object-reference', 'block-inner'];
+
+  if (this.isObjectsCollection(element)) {
+      elementsCanBeAdded = ['object-reference'];
+  }
+
   new Sortable(element, {
-    group: { name: 'block-list', pull: true, put: ['block-reference', 'object-reference', 'block-inner'] },
+    group: { name: 'block-list', pull: true, put: elementsCanBeAdded },
     handle: '.move-button',
     onStart: function () {
       this.builder.closeMenu();

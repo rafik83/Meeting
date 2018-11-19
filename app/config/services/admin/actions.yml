@@ -138,6 +138,15 @@ services:
             - '@templating.engine.twig'
 
     #
+    # Sheet Template
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Sheet\SaveAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    #
     # Registration Template
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction:
