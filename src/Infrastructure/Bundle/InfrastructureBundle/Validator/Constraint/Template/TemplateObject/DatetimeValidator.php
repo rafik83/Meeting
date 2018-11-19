@@ -22,47 +22,32 @@ class DatetimeValidator extends TemplateObjectValidator
         parent::validate($value, $constraint);
 
         if ($value instanceof TemplateObject\DateTime) {
-            $dateConstraint = $value->displayHours() ? new Constraints\DateTime() : new Constraints\Date();
+            $constraints = [
+                $value->displayHours() ? new Constraints\DateTime() : new Constraints\Date(),
+            ];
 
-            if (null !== $value->getData()) {
-                $this->context
-                    ->getValidator()
-                    ->inContext($this->context)
-                    ->atPath(sprintf('%s.date', $constraint->key))
-                    ->validate($value->getContentValue(), $dateConstraint);
+            if ($value->getOptionDate('datetime_min')) {
+                $constraints[] = new Constraints\LessThanOrEqual($value->getOptionDate('datetime_min'));
             }
 
-            $this->checkDateInterval($value, $constraint);
+            if ($value->getOptionDate('datetime_max')) {
+                $constraints[] = new Constraints\GreaterThanOrEqual($value->getOptionDate('datetime_max'));
+            }
+
+            if (null !== $value->getData()) {
+                foreach ($constraints as $dateConstraint) {
+                    $this->context
+                        ->getValidator()
+                        ->inContext($this->context)
+                        ->atPath(sprintf('%s.date', $constraint->key))
+                        ->validate($value->getContentValue(), $dateConstraint);
+                }
+            }
         } else {
             $this->context
                 ->buildViolation('validators.field.notValid.datetime')
                 ->atPath(sprintf('%s.date', $constraint->key))
                 ->addViolation();
-        }
-    }
-
-    private function checkDateInterval(TemplateObject\DateTime $dateTime, Constraint $constraint): void
-    {
-        if ($dateTime->getDatetimeMin()) {
-            $this->context
-                ->getValidator()
-                ->inContext($this->context)
-                ->atPath(sprintf('%s.date', $constraint->key))
-                ->validate(
-                    $dateTime->getContentValue(),
-                    new Constraints\LessThanOrEqual($dateTime->getDatetimeMin())
-                );
-        }
-
-        if ($dateTime->getDatetimeMax()) {
-            $this->context
-                ->getValidator()
-                ->inContext($this->context)
-                ->atPath(sprintf('%s.date', $constraint->key))
-                ->validate(
-                    $dateTime->getContentValue(),
-                    new Constraints\GreaterThanOrEqual($dateTime->getDatetimeMax())
-                );
         }
     }
 

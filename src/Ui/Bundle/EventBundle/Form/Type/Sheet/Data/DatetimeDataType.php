@@ -24,7 +24,7 @@ class DatetimeDataType extends AbstractType
         $locale = $options['locale'];
 
         $builder
-            ->add('date', DateTimePickerType::class, [
+            ->add('datetime', DateTimePickerType::class, [
                 'label' => $datetime->getOption('label', $locale),
                 'required' => $datetime->getOption('required'),
                 'help' => $datetime->getOption('help')[$locale],

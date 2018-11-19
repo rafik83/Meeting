@@ -6,27 +6,27 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
 {
     private const INTERNATIONAL_FORMAT = 'd/m/Y H:i';
 
-    public function setDate($date): void
+    public function setDatetime($date): void
     {
-        $this->data['date'] = $date;
+        $this->data['datetime'] = $date instanceof \DateTime ? $date->format('Y-m-d H:i:s') : null;
     }
 
-    public function getDate(): ?\DateTime
+    public function getDatetime(): ?\DateTime
     {
-        return $this->data['date'] ?? null;
+        return new \DateTime($this->data['datetime']);
     }
 
-    public function getContentValue(): ?\DateTime
+    public function getContentValue(): ?string
     {
-        return $this->getDate() ?? null;
+        return $this->data['datetime'] ?? null;
     }
 
-    public function getContentValueLocalize($locale = null): ?\DateTime
+    public function getContentValueLocalize($locale = null): ?string
     {
         return $this->getContentValue();
     }
 
-    public function getContentLabel(): ?\DateTime
+    public function getContentLabel(): ?string
     {
         return $this->getContentValue();
     }
@@ -38,12 +38,17 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
 
     public function getExportableContent(array $taggedData = [], ?string $locale = null): ?string
     {
-        return $this->getLabel($locale);
+        if (!$this->getContentValue()) {
+            return null;
+        }
+
+        return (new \DateTime($this->getContentValue()))
+            ->setTimezone(new \DateTimeZone(date_default_timezone_get()));
     }
 
     public function getExportableFieldname($locale, $fallback): ?string
     {
-        return $this->getContentValue() ? $this->getContentValue()->format('d/m/Y H:i') : null;
+        return $this->getLabel($locale);
     }
 
     public function displayHours(): bool
@@ -51,17 +56,14 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
         return 'datetime' === $this->getOption('format');
     }
 
-    public function getDatetimeMin(): ?\DateTime
+    public function getOptionDate(string $date): ?\DateTime
     {
-        return $this->getOption('datetime_min')
-            ? \DateTime::createFromFormat(self::INTERNATIONAL_FORMAT, $this->getOption('datetime_min'))
-            : null;
-    }
-
-    public function getDatetimeMax(): ?\DateTime
-    {
-        return $this->getOption('datetime_max')
-            ? \DateTime::createFromFormat(self::INTERNATIONAL_FORMAT, $this->getOption('datetime_max'))
+        return $this->getOption($date)
+            ? \DateTime::createFromFormat(
+                self::INTERNATIONAL_FORMAT,
+                $this->getOption($date),
+                new \DateTimeZone(date_default_timezone_get())
+            )
             : null;
     }
 }
