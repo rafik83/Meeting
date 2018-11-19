@@ -9,22 +9,22 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
         $this->data['date'] = $date;
     }
 
-    public function getDate(): ?string
+    public function getDate(): ?\DateTime
     {
         return $this->data['date'] ?? null;
     }
 
-    public function getContentValue(): ?string
+    public function getContentValue(): ?\DateTime
     {
         return $this->getDate() ?? null;
     }
 
-    public function getContentValueLocalize($locale = null): ?string
+    public function getContentValueLocalize($locale = null): ?\DateTime
     {
         return $this->getContentValue();
     }
 
-    public function getContentLabel(): string
+    public function getContentLabel(): ?\DateTime
     {
         return $this->getContentValue();
     }
@@ -41,6 +41,11 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
 
     public function getExportableFieldname($locale, $fallback): ?string
     {
-        return $this->getContentValue();
+        return $this->getContentValue() ? $this->getContentValue()->format('d/m/Y H:i') : null;
+    }
+
+    public function displayHours(): bool
+    {
+        return 'datetime' === $this->getOption('format');
     }
 }
