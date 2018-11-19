@@ -88,7 +88,7 @@ class ListAction
             'event' => $event,
             'form' => $form->createView(),
             'formTemplateListView' => $formTemplateListView,
-            'formSubmittedButNotValid' => $form->isSubmitted() && $form->isValid(),
+            'formSubmittedButNotValid' => $form->isSubmitted() && !$form->isValid(),
         ]));
     }
 }
