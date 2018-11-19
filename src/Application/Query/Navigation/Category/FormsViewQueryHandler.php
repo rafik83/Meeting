@@ -53,7 +53,7 @@ class FormsViewQueryHandler
                 $this->router->generate('event_participant_fill_form', [
                     'sheet' => $sheet->getId(),
                     'participant' => $participant->getId(),
-                    'form' => $formTemplateView->formTemplateId,
+                    'formTemplate' => $formTemplateView->formTemplateId,
                 ])
             );
         }

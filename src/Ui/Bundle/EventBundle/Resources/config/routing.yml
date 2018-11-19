@@ -882,12 +882,12 @@ event_user_event_phone_validate_code_success:
 # Forms
 #
 event_participant_fill_form:
-    path: /sheet/{sheet}/participant/{participant}/form/{form}
+    path: /sheet/{sheet}/participant/{participant}/form/{formTemplate}
     methods: [GET]
     requirements:
         sheet: \d+
         participant: \d+
-        form: \d+
+        formTemplate: \d+
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Form\FillFormAction
 
 #
