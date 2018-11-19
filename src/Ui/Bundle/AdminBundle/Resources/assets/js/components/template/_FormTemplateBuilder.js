@@ -16,7 +16,7 @@ var LoadingButton = require('./../_LoadingButton'),
 function FormTemplateBuilder(element, builderType) {
     this.element = element;
     this.builderType = builderType;
-    this.url = element.getAttribute('data-form-template-builder');
+    this.url = element.getAttribute('data-save-url-template-builder');
     this.locale = element.getAttribute('data-locale');
     this.templateContainer = element.querySelector('.template-container');
 

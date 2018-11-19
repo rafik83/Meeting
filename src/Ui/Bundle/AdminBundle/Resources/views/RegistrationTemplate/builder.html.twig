@@ -7,7 +7,8 @@
 
     <div
         class="container-fluid template-builder-container"
-        data-registration-template-builder="{{ path('admin_template_registration_save', {
+        data-registration-template-builder="registration-builder"
+        data-save-url-template-builder="{{ path('admin_template_registration_save', {
             'registrationTemplate': registrationTemplate.id,
             'locale': locale
         }) }}"
