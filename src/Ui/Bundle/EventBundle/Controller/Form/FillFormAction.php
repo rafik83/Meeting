@@ -8,6 +8,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
@@ -29,10 +30,11 @@ class FillFormAction
     }
 
     public function __invoke(
+        Request $request,
         EventDomain $eventDomain,
         Sheet $sheet,
         Participant $participant,
-        FormTemplate $form
+        FormTemplate $formTemplate
     ): Response {
         if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)
@@ -40,14 +42,23 @@ class FillFormAction
             throw new AccessDeniedException();
         }
 
-        if (!$form->isPublished() || !$form->hasType($sheet->getType())) {
+        if (!$formTemplate->isPublished() || !$formTemplate->hasType($sheet->getType())) {
             throw new AccessDeniedException('This form is not available.');
         }
+
+        $event = $eventDomain->getEvent();
+        $locale = $request->getLocale();
+
+        $formTemplateTitle = $formTemplate->getTranslatedTitle($locale);
 
         return new Response(
             $this->engine->render(
                 '@Event/Form/fillForm.html.twig',
-                ['event' => $eventDomain->getEvent(), 'sheet' => $sheet]
+                [
+                    'event' => $event,
+                    'sheet' => $sheet,
+                    'formTemplateTitle' => $formTemplateTitle,
+                ]
             )
         );
     }

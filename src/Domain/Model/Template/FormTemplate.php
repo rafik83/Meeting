@@ -53,4 +53,9 @@ class FormTemplate extends AbstractTemplate
     {
         return $this->published;
     }
+
+    public function getTranslatedTitle(string $locale): string
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getTitle() : '';
+    }
 }
