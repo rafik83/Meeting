@@ -27,11 +27,11 @@ class DatetimeValidator extends TemplateObjectValidator
             ];
 
             if ($value->getOptionDate('datetime_min')) {
-                $constraints[] = new Constraints\LessThanOrEqual($value->getOptionDate('datetime_min'));
+                $constraints[] = new Constraints\GreaterThanOrEqual($value->getOptionDate('datetime_min'));
             }
 
             if ($value->getOptionDate('datetime_max')) {
-                $constraints[] = new Constraints\GreaterThanOrEqual($value->getOptionDate('datetime_max'));
+                $constraints[] = new Constraints\LessThanOrEqual($value->getOptionDate('datetime_max'));
             }
 
             if (null !== $value->getData()) {
@@ -40,7 +40,7 @@ class DatetimeValidator extends TemplateObjectValidator
                         ->getValidator()
                         ->inContext($this->context)
                         ->atPath(sprintf('%s.date', $constraint->key))
-                        ->validate($value->getContentValue(), $dateConstraint);
+                        ->validate($value->getDatetime(), $dateConstraint);
                 }
             }
         } else {

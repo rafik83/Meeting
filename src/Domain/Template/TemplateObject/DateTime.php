@@ -4,16 +4,25 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class DateTime extends EditableObject implements ContentObjectInterface, ExportableObjectInterface
 {
-    private const INTERNATIONAL_FORMAT = 'd/m/Y H:i';
+    private const DATE_FORMAT = 'd/m/Y';
+    private const DATETIME_FORMAT = 'd/m/Y H:i';
 
     public function setDatetime($date): void
     {
-        $this->data['datetime'] = $date instanceof \DateTime ? $date->format('Y-m-d H:i:s') : null;
+        $this->data['datetime'] = $date instanceof \DateTime ? $date->format(self::DATETIME_FORMAT) : null;
     }
 
     public function getDatetime(): ?\DateTime
     {
-        return new \DateTime($this->data['datetime']);
+        if (!$this->data['datetime']) {
+            return null;
+        }
+
+        return \DateTime::createFromFormat(
+            self::DATETIME_FORMAT,
+            $this->data['datetime'],
+            new \DateTimeZone(date_default_timezone_get())
+        );
     }
 
     public function getContentValue(): ?string
@@ -60,10 +69,15 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
     {
         return $this->getOption($date)
             ? \DateTime::createFromFormat(
-                self::INTERNATIONAL_FORMAT,
+                self::DATETIME_FORMAT,
                 $this->getOption($date),
                 new \DateTimeZone(date_default_timezone_get())
             )
             : null;
+    }
+
+    public function getDatepickerFormat(): string
+    {
+        return $this->displayHours() ? self::DATETIME_FORMAT : self::DATE_FORMAT;
     }
 }

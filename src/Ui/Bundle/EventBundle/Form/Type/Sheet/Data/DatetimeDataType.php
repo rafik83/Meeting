@@ -30,6 +30,7 @@ class DatetimeDataType extends AbstractType
                 'help' => $datetime->getOption('help')[$locale],
                 'translation_domain' => false,
                 'display_hour' => $datetime->displayHours(),
+                'format' => $datetime->getDatepickerFormat(),
             ])
         ;
     }
