@@ -1115,6 +1115,14 @@ admin_template_form_save:
         template: \d+
         locale: \w+
 
+admin_template_form_parameters:
+    path: /event/{event}/template/form/parameters/{template}
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\UpdateParametersAction
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        template: \d+
+
 #
 # Package
 #
