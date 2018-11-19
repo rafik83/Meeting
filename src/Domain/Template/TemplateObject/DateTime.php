@@ -4,6 +4,8 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class DateTime extends EditableObject implements ContentObjectInterface, ExportableObjectInterface
 {
+    private const INTERNATIONAL_FORMAT = 'd/m/Y H:i';
+
     public function setDate($date): void
     {
         $this->data['date'] = $date;
@@ -47,5 +49,19 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
     public function displayHours(): bool
     {
         return 'datetime' === $this->getOption('format');
+    }
+
+    public function getDatetimeMin(): ?\DateTime
+    {
+        return $this->getOption('datetime_min')
+            ? \DateTime::createFromFormat(self::INTERNATIONAL_FORMAT, $this->getOption('datetime_min'))
+            : null;
+    }
+
+    public function getDatetimeMax(): ?\DateTime
+    {
+        return $this->getOption('datetime_max')
+            ? \DateTime::createFromFormat(self::INTERNATIONAL_FORMAT, $this->getOption('datetime_max'))
+            : null;
     }
 }
