@@ -18,7 +18,7 @@ function DatetimeObject(element, locale, builderType)
     this.form = new Form(element);
     this.config = JSON.parse(this.element.getAttribute('data-config'));
     this.builderType = builderType;
-    this.dateMinShouldBeGreaterThanDateMaxMessage = this.element.getAttribute('data-date-min-should-be-greater-than-date-max-message');
+    this.dateMinShouldBeLessThanDateMaxMessage = this.element.getAttribute('data-date-min-should-be-less-than-date-max-message');
 
     this.templateTaggableObject = null;
 
@@ -48,7 +48,7 @@ DatetimeObject.prototype.save = function ()
     var maxTime = this.getTimestampByInternationalFormat(dateMax);
 
     if ((dateMin && dateMax) && minTime > maxTime) {
-        alert(this.dateMinShouldBeGreaterThanDateMaxMessage);
+        alert(this.dateMinShouldBeLessThanDateMaxMessage);
 
         return false;
     }
