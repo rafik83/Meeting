@@ -29,7 +29,8 @@ var $ = require('jquery'),
     IgnorePhoneConfirmation = require('./components/agenda/_IgnorePhoneConfirmation'),
     PackageParticipantProducts = require('./components/_PackageParticipantProducts'),
     CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField'),
-    VideoConferenceTest = require('./components/VideoConference/VideoTest')
+    VideoConferenceTest = require('./components/VideoConference/VideoTest'),
+    DateTimePicker = require('../../../../AdminBundle/Resources/assets/js/components/_DateTimePicker')
 ;
 
 require('bootstrap');
@@ -55,6 +56,10 @@ function init (target) {
     $('[data-collection]', target).collection();
     $('[data-toggle="tooltip"]', target).tooltip();
     $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
+
+    [].forEach.call($('[data-datatimepicker]'), function (element) {
+        new DateTimePicker(element);
+    });
 
     [].forEach.call(target.querySelectorAll('[data-company-info-update]'), function () {
         var anchor         = window.location.hash.substring(1);
