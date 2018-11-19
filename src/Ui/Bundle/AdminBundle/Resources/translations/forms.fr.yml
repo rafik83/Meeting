@@ -387,7 +387,7 @@ form.forgotten_password.children.email.label: 'Entrez votre email'
 form.forgotten_password.children.submit.label: Envoyez
 form.form_template_create.children.submit.label: Créer
 form.form_template_create.children.title.label: Titre backoffice
-form.form_template_create.children.translations.prototype.children.title.label: Titre traduit
+form.form_template_create.children.translations.label: Titre traduit
 form.generate_slot.children.recipes.label_add: 'Ajouter une plage'
 form.generate_slot.children.recipes.label_delete: '&times;'
 form.generate_slot.children.recipes.prototype.children.begin.label: De

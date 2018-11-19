@@ -30,7 +30,6 @@ class CreateType extends AbstractType
             ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => FormTemplateTranslationType::class,
-                'label' => false,
             ])
         ;
     }
@@ -41,8 +40,8 @@ class CreateType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         foreach ($view->children['translations'] as $translation) {
-            $translation->vars['label'] = ucfirst(Intl::getLocaleBundle()->getLocaleName(
-                $translation->vars['name'])
+            $translation->vars['label'] = ucfirst(
+                Intl::getLocaleBundle()->getLocaleName($translation->vars['name'])
             );
         }
     }
