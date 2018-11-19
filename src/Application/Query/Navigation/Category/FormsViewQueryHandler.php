@@ -38,7 +38,10 @@ class FormsViewQueryHandler
     {
         $sheet = $formsViewQuery->sheet;
         $type = $sheet->getType();
-        $formTemplateViews = $this->formTemplateRepository->getFormTemplateViewByType($type, $formsViewQuery->locale);
+        $formTemplateViews = $this->formTemplateRepository->getPublishedFormTemplateViewByType(
+            $type,
+            $formsViewQuery->locale
+        );
 
         if (empty($formTemplateViews)) {
             return null;

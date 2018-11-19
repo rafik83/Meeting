@@ -41,7 +41,7 @@ class FormTemplateRepository implements FormTemplateRepositoryInterface
         ;
     }
 
-    public function getFormTemplateViewByType(Type $type, string $locale): array
+    public function getPublishedFormTemplateViewByType(Type $type, string $locale): array
     {
         return $this
             ->entityManager
