@@ -75,7 +75,7 @@ class FormsViewQueryHandlerTest extends TestCase
 
         $this
             ->formTemplateRepository
-            ->getFormTemplateViewByType($this->type->reveal(), 'fr')
+            ->getPublishedFormTemplateViewByType($this->type->reveal(), 'fr')
             ->shouldBeCalled()
             ->willReturn([])
         ;
@@ -92,7 +92,7 @@ class FormsViewQueryHandlerTest extends TestCase
 
         $this
             ->formTemplateRepository
-            ->getFormTemplateViewByType($this->type->reveal(), 'fr')
+            ->getPublishedFormTemplateViewByType($this->type->reveal(), 'fr')
             ->shouldBeCalled()
             ->willReturn([$logisticForm, $pollForm])
         ;
@@ -169,7 +169,7 @@ class FormsViewQueryHandlerTest extends TestCase
 
         $this
             ->formTemplateRepository
-            ->getFormTemplateViewByType($this->type->reveal(), 'fr')
+            ->getPublishedFormTemplateViewByType($this->type->reveal(), 'fr')
             ->shouldBeCalled()
             ->willReturn([$logisticForm])
         ;
