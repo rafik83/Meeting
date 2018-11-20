@@ -75,6 +75,7 @@ class PrintTemplateResolver
         $printTemplateNodes       = $this->replaceObjects($printValue, $sheetTemplateDataObjects);
 
         return $this->templateDataFactory->create(
+            $sheet->getEvent(),
             $printTemplateNodes,
             $sheet->getData(),
             $locale,
