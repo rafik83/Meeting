@@ -28,7 +28,7 @@ use Symfony\Component\Templating\EngineInterface;
 class UpdateParametersAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
-    private $authorizationCheckerAdapter;
+    private $authorizationChecker;
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -46,14 +46,14 @@ class UpdateParametersAction
     private $router;
 
     public function __construct(
-        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
+        AuthorizationCheckerAdapterInterface $authorizationChecker,
         CommandBusInterface $commandBus,
         EngineInterface $engine,
         FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
         RouterInterface $router
     ) {
-        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
+        $this->authorizationChecker = $authorizationChecker;
         $this->commandBus = $commandBus;
         $this->engine = $engine;
         $this->flashBag = $flashBag;
@@ -63,8 +63,8 @@ class UpdateParametersAction
 
     public function __invoke(Request $request, Event $event, FormTemplate $formTemplate): Response
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
-            || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+        if (!$this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
+            || !$this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $event)
             || $event !== $formTemplate->getEvent()
         ) {
             throw new AccessDeniedException('Access denied');
