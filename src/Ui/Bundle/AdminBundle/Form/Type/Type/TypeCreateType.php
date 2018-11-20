@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Domain\Model;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\PackageChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\FormTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\RegistrationTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
@@ -46,6 +47,13 @@ class TypeCreateType extends AbstractType
                 'expanded'    => false,
                 'multiple'    => false,
                 'placeholder' => '',
+            ])
+            ->add('formTemplates', FormTemplateChoiceType::class, [
+                'event'       => $options['event'],
+                'required'    => true,
+                'expanded'    => true,
+                'multiple'    => true,
+                'placeholder' => ''
             ])
             ->add('package', PackageChoiceType::class, [
                 'currentEvent' => $options['event'],

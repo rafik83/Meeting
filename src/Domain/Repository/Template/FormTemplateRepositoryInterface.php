@@ -15,4 +15,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 interface FormTemplateRepositoryInterface
 {
     public function findByEvent(Event $event): array;
+
+    public function getBaseTemplates(): array;
 }
