@@ -43,7 +43,6 @@ class FormTemplate extends AbstractTemplate
         return $this->translations->toArray();
     }
 
-
     public function getFallback(): string
     {
         return $this->event ? $this->event->getFallback() : $this->fallback;

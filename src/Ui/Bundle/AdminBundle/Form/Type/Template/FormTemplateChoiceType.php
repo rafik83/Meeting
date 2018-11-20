@@ -30,10 +30,10 @@ class FormTemplateChoiceType extends AbstractType
         $resolver
             ->setRequired('event')
             ->setDefaults([
-                'choices'          => function (Options $options) {
+                'choices' => function (Options $options) {
                     return $this->getResults($options);
                 },
-                'choice_label'     => 'title',
+                'choice_label' => 'title',
                 'repositoryMethod' => function (FormTemplateRepositoryInterface $templateRepository) {
                     return $templateRepository->getBaseTemplates();
                 },
