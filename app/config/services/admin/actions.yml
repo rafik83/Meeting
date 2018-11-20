@@ -210,9 +210,10 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@router'
-            - '@form.factory'
             - '@templating'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@router'
 
     #
     # Content

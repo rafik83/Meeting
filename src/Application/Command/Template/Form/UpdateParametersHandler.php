@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Template\Form;
 
-use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\FormTemplateRepositoryInterface;
 
 class UpdateParametersHandler
@@ -18,31 +17,20 @@ class UpdateParametersHandler
     /** @var FormTemplateRepositoryInterface */
     private $formTemplateRepository;
 
-    /** @var \DateTimeInterface */
-    private $dateTime;
-
-    public function __construct(
-        FormTemplateRepositoryInterface $formTemplateRepository,
-        \DateTimeInterface $dateTime
-    ) {
+    public function __construct(FormTemplateRepositoryInterface $formTemplateRepository)
+    {
         $this->formTemplateRepository = $formTemplateRepository;
-        $this->dateTime = $dateTime;
     }
 
-    public function handle(Create $command): FormTemplate
+    public function handle(UpdateParameters $updateParameters): void
     {
-        $template = new FormTemplate(
-            $command->event,
-            $command->title,
-            [],
-            $command->event->getLocales(),
-            $command->event->getFallback(),
-            $this->dateTime
+        $formTemplate = $updateParameters->formTemplate;
+        $formTemplate->update(
+            $updateParameters->title,
+            $updateParameters->translations,
+            $updateParameters->published
         );
-        $template->translateTitles($command->translations);
 
-        $this->formTemplateRepository->add($template);
-
-        return $template;
+        $this->formTemplateRepository->update($formTemplate);
     }
 }

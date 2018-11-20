@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
@@ -29,14 +30,17 @@ class UpdateParametersAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
+    /** @var CommandBusInterface */
+    private $commandBus;
+
     /** @var EngineInterface */
     private $engine;
 
+    /** @var FlashBagInterface */
+    private $flashBag;
+
     /** @var FormFactoryInterface */
     private $formFactory;
-
-    /** @var CommandBusInterface */
-    private $commandBus;
 
     /** @var RouterInterface */
     private $router;
@@ -44,14 +48,16 @@ class UpdateParametersAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CommandBusInterface $commandBus,
-        RouterInterface $router,
+        EngineInterface $engine,
+        FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine
+        RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->formFactory = $formFactory;
-        $this->engine = $engine;
         $this->commandBus = $commandBus;
+        $this->engine = $engine;
+        $this->flashBag = $flashBag;
+        $this->formFactory = $formFactory;
         $this->router = $router;
     }
 
@@ -71,6 +77,8 @@ class UpdateParametersAction
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($updateParameters);
+
+            $this->flashBag->add('success', 'flash.admin.form.template.update_parameters.success');
 
             return new RedirectResponse($this->router->generate('admin_template_form_list', [
                 'event' => $event->getId()
