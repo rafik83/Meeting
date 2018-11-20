@@ -99,11 +99,11 @@ class TemplateDataFactory
         $templateData = $this
             ->loadNomenclatures($sheet->getEvent())
             ->create(
-                $sheet->getEvent(),
                 $sheet->getType()->getSheetTemplate()->getValue(),
                 $sheet->getData(),
                 $locale,
-                $sheet->getType()->getSheetTemplate()->getFallback()
+                $sheet->getType()->getSheetTemplate()->getFallback(),
+                $sheet->getEvent()
             );
 
         foreach ($templateData->getObjects() as $templateObject) {
@@ -126,11 +126,11 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($registrationTemplate->getEvent())
             ->create(
-                $registrationTemplate->getEvent(),
                 $registrationTemplate->getValue(),
                 [],
                 $locale,
-                $registrationTemplate->getFallback()
+                $registrationTemplate->getFallback(),
+                $registrationTemplate->getEvent()
             )
         ;
     }
@@ -168,11 +168,11 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($sheet->getEvent())
             ->create(
-                $sheet->getEvent(),
                 $sheet->getType()->getRegistrationTemplate()->getValue(),
                 $sheet->getRegistrationData(),
                 $locale,
-                $sheet->getType()->getRegistrationTemplate()->getFallback()
+                $sheet->getType()->getRegistrationTemplate()->getFallback(),
+                $sheet->getEvent()
             );
     }
 
@@ -189,11 +189,11 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($participant->getSheet()->getEvent())
             ->create(
-                $participant->getSheet()->getEvent(),
                 $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
                 $datas,
                 $locale,
-                $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
+                $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback(),
+                $participant->getSheet()->getEvent()
             );
     }
 
@@ -208,11 +208,11 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($participant->getSheet()->getEvent())
             ->create(
-                $participant->getSheet()->getEvent(),
                 $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
                 $participant->getData(),
                 $locale,
-                $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback()
+                $participant->getSheet()->getType()->getRegistrationTemplate()->getFallback(),
+                $participant->getSheet()->getEvent()
             );
     }
 
@@ -227,11 +227,11 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($sheet->getEvent())
             ->create(
-                $sheet->getEvent(),
                 $sheet->getType()->getRegistrationTemplate()->getValue(),
                 $sheet->getRegistrationData(),
                 $locale,
-                $sheet->getType()->getRegistrationTemplate()->getFallback()
+                $sheet->getType()->getRegistrationTemplate()->getFallback(),
+                $sheet->getEvent()
             );
     }
 
@@ -248,24 +248,24 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($template->getEvent())
             ->create(
-                $template->getEvent(),
                 $template->getValue(),
                 $data,
                 $locale,
-                $fallback
+                $fallback,
+                $template->getEvent()
             );
     }
 
     /**
-     * @param Event       $event
      * @param array       $template
      * @param array       $data
      * @param null|string $locale
      * @param string      $fallback
+     * @param null|Event  $event
      *
      * @return TemplateData
      */
-    public function create(Event $event, array $template, array $data = [], ?string $locale = null, $fallback = null)
+    public function create(array $template, array $data = [], ?string $locale = null, $fallback = null, ?Event $event = null)
     {
         $templateData = new TemplateData('root', [], $locale, $fallback);
 
@@ -321,16 +321,16 @@ class TemplateDataFactory
     }
 
     /**
-     * @param array  $config
-     * @param string $locale
-     * @param string $fallback
-     * @param Event  $event
+     * @param array         $config
+     * @param string        $locale
+     * @param string        $fallback
+     * @param null|Event    $event
      *
      * @throws \Exception
      *
      * @return array|Block
      */
-    private function doCreate(array $config, $locale, $fallback, Event $event)
+    private function doCreate(array $config, $locale, $fallback, ?Event $event = null)
     {
         if (!isset($config['component'])) {
             return $this->buildComponents($config, $locale, $fallback, $event);
@@ -348,14 +348,14 @@ class TemplateDataFactory
     }
 
     /**
-     * @param array  $config
-     * @param string $locale
-     * @param string $fallback
-     * @param Event  $event
+     * @param array         $config
+     * @param string        $locale
+     * @param string        $fallback
+     * @param null|Event    $event
      *
      * @return array
      */
-    private function buildComponents(array $config, $locale, $fallback, Event $event)
+    private function buildComponents(array $config, $locale, $fallback, ?Event $event = null)
     {
         return array_combine(array_keys($config), array_map(
             function (array $child, $key) use ($locale, $fallback, $event) {
@@ -367,16 +367,16 @@ class TemplateDataFactory
     }
 
     /**
-     * @param array  $config
-     * @param string $locale
-     * @param string $fallback
-     * @param Event  $event
+     * @param array         $config
+     * @param string        $locale
+     * @param string        $fallback
+     * @param null|Event    $event
      *
      * @throws \Exception
      *
      * @return Block
      */
-    private function buildBlock(array $config, $locale, $fallback, Event $event)
+    private function buildBlock(array $config, $locale, $fallback, ?Event $event = null)
     {
         $block = new Block($config['type'], $config['config'], $locale, $fallback);
 
@@ -417,7 +417,7 @@ class TemplateDataFactory
             }
         }
 
-        if ($object instanceof ContextEventInterface) {
+        if ($object instanceof ContextEventInterface && $event instanceof Event) {
             $object->setEvent($event);
         }
 

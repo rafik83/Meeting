@@ -427,7 +427,7 @@ class PrintTemplateResolverTest extends TestCase
         ;
 
         $templateDataFactory
-            ->create($event->reveal(), Argument::type('array'))
+            ->create(Argument::type('array'), [], null, null, $event->reveal())
             ->shouldBeCalled()
             ->willReturn($printTemplateData->reveal())
         ;

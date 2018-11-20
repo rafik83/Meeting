@@ -40,11 +40,11 @@ class TaggedInfoGuesser
     public function guess(AbstractTemplate $template, $data, $tag, $locale)
     {
         $templateData = $this->templateDataFactory->create(
-            $template->getEvent(),
             $template->getValue(),
             $data,
             $locale,
-            $template->getFallback()
+            $template->getFallback(),
+            $template->getEvent()
         );
 
         return $templateData->getTaggedDatas($tag);

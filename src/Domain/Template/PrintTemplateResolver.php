@@ -75,11 +75,11 @@ class PrintTemplateResolver
         $printTemplateNodes       = $this->replaceObjects($printValue, $sheetTemplateDataObjects);
 
         return $this->templateDataFactory->create(
-            $sheet->getEvent(),
             $printTemplateNodes,
             $sheet->getData(),
             $locale,
-            $sheetTemplate->getFallback()
+            $sheetTemplate->getFallback(),
+            $sheet->getEvent()
         );
     }
 
@@ -125,7 +125,7 @@ class PrintTemplateResolver
     private function getMissingObjects(Event $event, array $printValueResolved, array $sheetTemplateDataObjects): array
     {
         $missingObjects = [];
-        $sheetPrintTemplateData        = $this->templateDataFactory->create($event, $printValueResolved);
+        $sheetPrintTemplateData        = $this->templateDataFactory->create($printValueResolved, [], null, null, $event);
         $sheetPrintTemplateDataObjects = $sheetPrintTemplateData->getObjects();
 
         foreach ($sheetTemplateDataObjects as $key => $templateObject) {

@@ -58,7 +58,7 @@ class TaggedInfoGuesserTest extends TestCase
 
         // Mock
         $this->templateDataFactory
-            ->create($this->event->reveal(), [], [], 'fr', 'fr')
+            ->create([], [], 'fr', 'fr', $this->event->reveal())
             ->shouldBeCalled()
             ->willReturn($templateData)
         ;

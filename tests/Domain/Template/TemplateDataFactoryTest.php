@@ -77,7 +77,7 @@ class TemplateDataFactoryTest extends TestCase
         $event = $this->prophesize(Event::class);
 
         $factory      = new TemplateDataFactory($nomenclatureRepository->reveal());
-        $templateData = $factory->create($event->reveal(), $template, $data, 'fr', 'fr');
+        $templateData = $factory->create($template, $data, 'fr', 'fr', $event->reveal());
 
         // Assert objects are created
         $objects = $templateData->getObjects();
@@ -143,7 +143,7 @@ class TemplateDataFactoryTest extends TestCase
         $event = $this->prophesize(Event::class);
 
         $factory      = new TemplateDataFactory($nomenclatureRepository->reveal());
-        $templateData = $factory->create($event->reveal(), $template, $data, 'fr', 'fr');
+        $templateData = $factory->create($template, $data, 'fr', 'fr', $event->reveal());
 
         // Assert objects are created
         $objects = $templateData->getObjects();

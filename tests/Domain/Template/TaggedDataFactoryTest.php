@@ -62,8 +62,8 @@ class TaggedDataFactoryTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $factory           = new TemplateDataFactory($nomenclatureRepository->reveal());
-        $templateData      = $factory->create($event->reveal(), $template, $data, 'fr', 'fr');
-        $sheetTemplateData = $factory->create($event->reveal(), $template, $data, 'fr', 'fr');
+        $templateData      = $factory->create($template, $data, 'fr', 'fr', $event->reveal());
+        $sheetTemplateData = $factory->create($template, $data, 'fr', 'fr', $event->reveal());
 
         // Expected
         $expectedTaggedDataViewObject1 = new TaggedDataView(
