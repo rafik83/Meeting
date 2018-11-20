@@ -74,7 +74,7 @@ class ListAction
             'submit' => true,
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($create);
 
             return new RedirectResponse($this->router->generate('admin_template_form_list', [
