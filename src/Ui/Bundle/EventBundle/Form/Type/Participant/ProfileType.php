@@ -218,9 +218,9 @@ class ProfileType extends AbstractType
         $locale
     ): void {
         $builder->add($key, DatetimeDataType::class, [
-            'object'  => $object,
-            'locale'  => $locale,
-            'label'   => false,
+            'object' => $object,
+            'locale' => $locale,
+            'label' => false,
         ]);
     }
 }

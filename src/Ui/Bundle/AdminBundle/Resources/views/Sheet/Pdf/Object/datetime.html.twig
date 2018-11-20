@@ -1,1 +1,8 @@
-{# Not related to this PR #}
+{% if object.datetime %}
+    {% set format = 'none' %}
+    {% if object.displayHours %}
+        {% set format =  'short' %}
+    {% endif %}
+
+    {{ object.getDefaultLabel }}: {{ object.datetime|localizeddate('short', format, null, object.event.timezone) }}
+{% endif %}

@@ -56,9 +56,13 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
             return null;
         }
 
-        return (new \DateTime($this->getContentValue()))
-            ->setTimezone(new \DateTimeZone($this->getTimezone()))
-            ->format(self::DATETIME_FORMAT);
+        try {
+            return (new \DateTime($this->getContentValue()))
+                ->setTimezone(new \DateTimeZone($this->getTimezone()))
+                ->format(self::DATETIME_FORMAT);
+        } catch (\Exception $exception) {
+            return null;
+        }
     }
 
     public function getExportableFieldname($locale, $fallback): ?string

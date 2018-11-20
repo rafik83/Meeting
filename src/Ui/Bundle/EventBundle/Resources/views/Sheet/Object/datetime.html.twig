@@ -8,6 +8,6 @@
         <header>
             <h2>{{ item.label(locale, fallback) }}</h2>
         </header>
-        <p>{{ item.datetime|localizeddate('short', format) }}</p>
+        <p>{{ item.datetime|localizeddate('short', format, null, item.event.timezone) }}</p>
     </section>
 {% endif %}

@@ -333,29 +333,31 @@ class RegisterController extends Controller
                 $registrationTemplateStep->getData()
             );
 
-            $participantStep = new ParticipantStep(
-                $registrationTemplate,
-                $participant,
-                $step,
-                $locale,
-                $data
-            );
-            $this->get('tactician.commandbus')->handle($participantStep);
-
-            $nextStep = $registrationTemplate->getNextBlockPosition($step);
-
-            if ($nextStep) {
-                return $this->redirectToRoute(
-                    'event_participant_step',
-                    ['step' => $nextStep, 'participant' => $participant->getId()]
+            if ($form->isValid()) {
+                $participantStep = new ParticipantStep(
+                    $registrationTemplate,
+                    $participant,
+                    $step,
+                    $locale,
+                    $data
                 );
+                $this->get('tactician.commandbus')->handle($participantStep);
+
+                $nextStep = $registrationTemplate->getNextBlockPosition($step);
+
+                if ($nextStep) {
+                    return $this->redirectToRoute(
+                        'event_participant_step',
+                        ['step' => $nextStep, 'participant' => $participant->getId()]
+                    );
+                }
+
+                $this->container->get('session')->getFlashBag()->add('first_registration', true);
+
+                return $this->redirectToRoute('event_sheet_default', [
+                    'sheet' => $participant->getSheet()->getId(),
+                ]);
             }
-
-            $this->container->get('session')->getFlashBag()->add('first_registration', true);
-
-            return $this->redirectToRoute('event_sheet_default', [
-                'sheet' => $participant->getSheet()->getId(),
-            ]);
         }
 
         $participantCard = $this->get('tactician.commandbus.query')->handle(
