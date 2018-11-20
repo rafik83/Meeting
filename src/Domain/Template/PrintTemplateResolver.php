@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\View\Template\ResolvedPrintTemplateView;
@@ -44,7 +45,7 @@ class PrintTemplateResolver
         $sheetTemplateDataObjects = $sheetTemplateData->getObjects();
 
         $printValueResolved = $this->replaceObjects($printValue, $sheetTemplateDataObjects);
-        $missingObjects = $this->getMissingObjects($printValueResolved, $sheetTemplateDataObjects);
+        $missingObjects = $this->getMissingObjects($sheetTemplate->getEvent(), $printValueResolved, $sheetTemplateDataObjects);
 
         return new ResolvedPrintTemplateView($printValueResolved, $missingObjects);
     }
@@ -74,6 +75,7 @@ class PrintTemplateResolver
         $printTemplateNodes       = $this->replaceObjects($printValue, $sheetTemplateDataObjects);
 
         return $this->templateDataFactory->create(
+            $sheet->getEvent(),
             $printTemplateNodes,
             $sheet->getData(),
             $locale,
@@ -114,15 +116,16 @@ class PrintTemplateResolver
     }
 
     /**
+     * @param Event            $event
      * @param array            $printValueResolved
      * @param TemplateObject[] $sheetTemplateDataObjects
      *
      * @return array
      */
-    private function getMissingObjects(array $printValueResolved, array $sheetTemplateDataObjects): array
+    private function getMissingObjects(Event $event, array $printValueResolved, array $sheetTemplateDataObjects): array
     {
         $missingObjects = [];
-        $sheetPrintTemplateData        = $this->templateDataFactory->create($printValueResolved);
+        $sheetPrintTemplateData        = $this->templateDataFactory->create($event, $printValueResolved);
         $sheetPrintTemplateDataObjects = $sheetPrintTemplateData->getObjects();
 
         foreach ($sheetTemplateDataObjects as $key => $templateObject) {

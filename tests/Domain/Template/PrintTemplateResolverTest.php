@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Template;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\Template\PrintTemplateResolver;
@@ -31,8 +32,9 @@ class PrintTemplateResolverTest extends TestCase
     public function testResolve()
     {
         $locale = 'fr';
-
+        $event = $this->prophesize(Event::class);
         $sheetTemplate = $this->prophesize(SheetTemplate::class);
+        $sheetTemplate->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $sheetTemplate->getPrintValue()->willReturn(
             [
                 'Mc601Mc73f' => [
@@ -425,7 +427,7 @@ class PrintTemplateResolverTest extends TestCase
         ;
 
         $templateDataFactory
-            ->create(Argument::type('array'))
+            ->create($event->reveal(), Argument::type('array'))
             ->shouldBeCalled()
             ->willReturn($printTemplateData->reveal())
         ;

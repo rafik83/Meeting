@@ -2,10 +2,15 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class DateTime extends EditableObject implements ContentObjectInterface, ExportableObjectInterface
+use Proximum\Vimeet\Domain\Model\Event;
+
+class DateTime extends EditableObject implements ContentObjectInterface, ExportableObjectInterface, ContextEventInterface
 {
     private const DATE_FORMAT = 'd/m/Y';
     private const DATETIME_FORMAT = 'd/m/Y H:i';
+
+    /** @var Event */
+    private $event;
 
     public function setDatetime($date): void
     {
@@ -21,7 +26,7 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
         return \DateTime::createFromFormat(
             self::DATETIME_FORMAT,
             $this->data['datetime'],
-            new \DateTimeZone(date_default_timezone_get())
+            new \DateTimeZone($this->getTimezone())
         );
     }
 
@@ -42,7 +47,7 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
 
     public function setContentValue($value): void
     {
-        $this->setDate($value);
+        $this->setDatetime($value);
     }
 
     public function getExportableContent(array $taggedData = [], ?string $locale = null): ?string
@@ -52,7 +57,8 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
         }
 
         return (new \DateTime($this->getContentValue()))
-            ->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+            ->setTimezone(new \DateTimeZone($this->getTimezone()))
+            ->format(self::DATETIME_FORMAT);
     }
 
     public function getExportableFieldname($locale, $fallback): ?string
@@ -71,7 +77,7 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
             ? \DateTime::createFromFormat(
                 self::DATETIME_FORMAT,
                 $this->getOption($date),
-                new \DateTimeZone(date_default_timezone_get())
+                new \DateTimeZone($this->getTimezone())
             )
             : null;
     }
@@ -79,5 +85,20 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
     public function getDatepickerFormat(): string
     {
         return $this->displayHours() ? self::DATETIME_FORMAT : self::DATE_FORMAT;
+    }
+
+    public function getTimezone(): string
+    {
+        return $this->getEvent() ? $this->getEvent()->getTimeZone() : date_default_timezone_get();
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(Event $event): void
+    {
+        $this->event = $event;
     }
 }

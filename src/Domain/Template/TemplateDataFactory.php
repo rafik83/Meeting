@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\BuildNotImplementedException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ContextEventInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
 class TemplateDataFactory
@@ -98,6 +99,7 @@ class TemplateDataFactory
         $templateData = $this
             ->loadNomenclatures($sheet->getEvent())
             ->create(
+                $sheet->getEvent(),
                 $sheet->getType()->getSheetTemplate()->getValue(),
                 $sheet->getData(),
                 $locale,
@@ -124,6 +126,7 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($registrationTemplate->getEvent())
             ->create(
+                $registrationTemplate->getEvent(),
                 $registrationTemplate->getValue(),
                 [],
                 $locale,
@@ -165,6 +168,7 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($sheet->getEvent())
             ->create(
+                $sheet->getEvent(),
                 $sheet->getType()->getRegistrationTemplate()->getValue(),
                 $sheet->getRegistrationData(),
                 $locale,
@@ -185,6 +189,7 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($participant->getSheet()->getEvent())
             ->create(
+                $participant->getSheet()->getEvent(),
                 $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
                 $datas,
                 $locale,
@@ -203,6 +208,7 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($participant->getSheet()->getEvent())
             ->create(
+                $participant->getSheet()->getEvent(),
                 $participant->getSheet()->getType()->getRegistrationTemplate()->getValue(),
                 $participant->getData(),
                 $locale,
@@ -221,6 +227,7 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($sheet->getEvent())
             ->create(
+                $sheet->getEvent(),
                 $sheet->getType()->getRegistrationTemplate()->getValue(),
                 $sheet->getRegistrationData(),
                 $locale,
@@ -240,10 +247,17 @@ class TemplateDataFactory
     {
         return $this
             ->loadNomenclatures($template->getEvent())
-            ->create($template->getValue(), $data, $locale, $fallback);
+            ->create(
+                $template->getEvent(),
+                $template->getValue(),
+                $data,
+                $locale,
+                $fallback
+            );
     }
 
     /**
+     * @param Event       $event
      * @param array       $template
      * @param array       $data
      * @param null|string $locale
@@ -251,11 +265,11 @@ class TemplateDataFactory
      *
      * @return TemplateData
      */
-    public function create(array $template, array $data = [], ?string $locale = null, $fallback = null)
+    public function create(Event $event, array $template, array $data = [], ?string $locale = null, $fallback = null)
     {
         $templateData = new TemplateData('root', [], $locale, $fallback);
 
-        foreach ($this->doCreate($template, $locale, $fallback) as $name => $child) {
+        foreach ($this->doCreate($template, $locale, $fallback, $event) as $name => $child) {
             $templateData->addChild(0, $name, $child);
         }
 
@@ -310,23 +324,24 @@ class TemplateDataFactory
      * @param array  $config
      * @param string $locale
      * @param string $fallback
+     * @param Event  $event
      *
      * @throws \Exception
      *
      * @return array|Block
      */
-    private function doCreate(array $config, $locale, $fallback)
+    private function doCreate(array $config, $locale, $fallback, Event $event)
     {
         if (!isset($config['component'])) {
-            return $this->buildComponents($config, $locale, $fallback);
+            return $this->buildComponents($config, $locale, $fallback, $event);
         }
 
         if ('block' === $config['component']) {
-            return $this->buildBlock($config, $locale, $fallback);
+            return $this->buildBlock($config, $locale, $fallback, $event);
         }
 
         if ('object' === $config['component']) {
-            return $this->buildObject($config, $locale, $fallback);
+            return $this->buildObject($config, $locale, $fallback, $event);
         }
 
         throw new BuildNotImplementedException('config given is not a block nor an object');
@@ -336,16 +351,17 @@ class TemplateDataFactory
      * @param array  $config
      * @param string $locale
      * @param string $fallback
+     * @param Event  $event
      *
      * @return array
      */
-    private function buildComponents(array $config, $locale, $fallback)
+    private function buildComponents(array $config, $locale, $fallback, Event $event)
     {
         return array_combine(array_keys($config), array_map(
-            function (array $child, $key) use ($locale, $fallback) {
+            function (array $child, $key) use ($locale, $fallback, $event) {
                 $child['key'] = $key;
 
-                return $this->doCreate($child, $locale, $fallback);
+                return $this->doCreate($child, $locale, $fallback, $event);
             }, $config, array_keys($config)
         ));
     }
@@ -354,12 +370,13 @@ class TemplateDataFactory
      * @param array  $config
      * @param string $locale
      * @param string $fallback
+     * @param Event  $event
      *
      * @throws \Exception
      *
      * @return Block
      */
-    private function buildBlock(array $config, $locale, $fallback)
+    private function buildBlock(array $config, $locale, $fallback, Event $event)
     {
         $block = new Block($config['type'], $config['config'], $locale, $fallback);
 
@@ -367,7 +384,7 @@ class TemplateDataFactory
             $block->addColumn($column);
             foreach ($children as $key => $child) {
                 $child['key'] = $key;
-                $child        = $this->doCreate($child, $locale, $fallback);
+                $child        = $this->doCreate($child, $locale, $fallback, $event);
                 $block->addChild($column, $key, $child);
             }
         }
@@ -376,15 +393,16 @@ class TemplateDataFactory
     }
 
     /**
-     * @param array  $config
-     * @param string $locale
-     * @param string $fallback
+     * @param array       $config
+     * @param string      $locale
+     * @param string      $fallback
+     * @param null|Event  $event
      *
      * @throws NomenclatureNotFoundException
      *
      * @return mixed
      */
-    private function buildObject(array $config, $locale, $fallback)
+    private function buildObject(array $config, $locale, $fallback, ?Event $event = null)
     {
         $class  = $this->objects[$config['type']];
         $object = new $class($config['key'], $config['type'], $config['config'], $locale, $fallback);
@@ -397,6 +415,10 @@ class TemplateDataFactory
             if ($object->getNomenclatureId()) {
                 $object->setNomenclature($this->getNomenclature(intval($object->getNomenclatureId())));
             }
+        }
+
+        if ($object instanceof ContextEventInterface) {
+            $object->setEvent($event);
         }
 
         return $object;

@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Tests\Domain\Template;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TaggedInfoGuesser;
@@ -32,11 +34,16 @@ class TaggedInfoGuesserTest extends TestCase
     /** @var Telephone */
     private $phoneObject;
 
+    /** @var ObjectProphecy */
+    private $event;
+
     public function setUp()
     {
+        $this->event = $this->prophesize(Event::class);
+        $this->event->getFallback()->willReturn('fr');
         $this->templateDataFactory  = $this->prophesize(TemplateDataFactory::class);
         $this->dateTime             = new \DateTime('2017-01-01 10:00:00');
-        $this->registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $this->dateTime);
+        $this->registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $this->dateTime, $this->event->reveal());
         $this->phoneObject          = new Telephone('phone', 'telephone', ['tags' => ['participant_mobile']], 'fr', 'fr');
     }
 
@@ -51,7 +58,7 @@ class TaggedInfoGuesserTest extends TestCase
 
         // Mock
         $this->templateDataFactory
-            ->create([], [], 'fr', 'fr')
+            ->create($this->event->reveal(), [], [], 'fr', 'fr')
             ->shouldBeCalled()
             ->willReturn($templateData)
         ;

@@ -28,6 +28,8 @@ class TaggedInfoGuesser
     }
 
     /**
+     * @deprecated
+     *
      * @param AbstractTemplate $template
      * @param array            $data
      * @param string           $tag
@@ -38,6 +40,7 @@ class TaggedInfoGuesser
     public function guess(AbstractTemplate $template, $data, $tag, $locale)
     {
         $templateData = $this->templateDataFactory->create(
+            $template->getEvent(),
             $template->getValue(),
             $data,
             $locale,

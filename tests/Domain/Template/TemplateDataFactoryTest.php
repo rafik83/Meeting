@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\Template;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
@@ -73,9 +74,10 @@ class TemplateDataFactoryTest extends TestCase
         ];
 
         $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
+        $event = $this->prophesize(Event::class);
 
         $factory      = new TemplateDataFactory($nomenclatureRepository->reveal());
-        $templateData = $factory->create($template, $data, 'fr', 'fr');
+        $templateData = $factory->create($event->reveal(), $template, $data, 'fr', 'fr');
 
         // Assert objects are created
         $objects = $templateData->getObjects();
@@ -138,9 +140,10 @@ class TemplateDataFactoryTest extends TestCase
         ];
 
         $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
+        $event = $this->prophesize(Event::class);
 
         $factory      = new TemplateDataFactory($nomenclatureRepository->reveal());
-        $templateData = $factory->create($template, $data, 'fr', 'fr');
+        $templateData = $factory->create($event->reveal(), $template, $data, 'fr', 'fr');
 
         // Assert objects are created
         $objects = $templateData->getObjects();
