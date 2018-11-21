@@ -127,7 +127,8 @@
                     </p>
 
                     <div class="requests-list-scrollable">
-                        <table class="table-no-margin-bottom table table-bordered table-condensed table-hover">
+                        <table class="table-no-margin-bottom table table-condensed table-hover table-striped">
+                        <tbody>
                             <tr v-show="focusedSheet.requests && focusedSheet.requests.length === 0">
                                 <td>{{ 'admin.agenda.requestsList.zeroResult'|trans }}</td>
                             </tr>
@@ -150,9 +151,12 @@
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </a>
 
-                                    <a href="#" v-on:click="showAgendaForSheetId(request.sheetMetId)">
+                                    <a href="#" v-on:click="showAgendaForSheetId(request.sheetMetId)" v-show="!request.isOneOfSheetsNotAttend">
                                         ${ request.sheetMetTitle }
                                     </a>
+                                    <span v-show="request.isOneOfSheetsNotAttend" title="{{ 'event.sheet.attend.cancel'|trans }}">
+                                        ${ request.sheetMetTitle } <i class="glyphicon glyphicon-remove-circle"></i>
+                                    </span>
                                     <br>
 
                                     <i class="icon icon-Profil_1"></i>
@@ -165,6 +169,7 @@
                                     </a>
                                 </td>
                             </tr>
+                        </tbody>
                         </table>
                     </div>
                 </div>
