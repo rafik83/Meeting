@@ -121,6 +121,19 @@ class TaggedDataFactory
 
                 if ($object instanceof TemplateObject\Nomenclature) {
                     $value = implode(', ', $object->getNomenclatureLabelOfItems());
+                } elseif ($object instanceof TemplateObject\DateTime) {
+                    if (!$object->getDatetime() instanceof \DateTime) {
+                        $value = '';
+                    } else {
+                        $formatter = new \IntlDateFormatter(
+                            $locale,
+                            \IntlDateFormatter::SHORT,
+                            $object->displayHours() ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE,
+                            $sheet->getEvent()->getTimeZone()
+                        );
+
+                        $value = $formatter->format($object->getDatetime());
+                    }
                 } else {
                     $value = $object->getContentValueLocalize();
                 }
