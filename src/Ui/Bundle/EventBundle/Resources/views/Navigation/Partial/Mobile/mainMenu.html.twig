@@ -21,11 +21,18 @@
 
         {% if menuView and menuView.categoriesView %}
             {% for category in menuView.categoriesView %}
-                {% if category.isShowOnMobile and category.enabledLinkView %}
-                    <a href="{{ category.enabledLinkView.link }}" class="btn btn-primary btn-lg btn-inactive">
-                        <i class="{{ category.icon }}"></i>
-                        {{ category.title|trans }}
-                    </a>
+                {% if category.isShowOnMobile %}
+                    {% if category.isExpandedOnMobile %}
+                        {% for linkView in category.linksView if linkView.state %}
+                            <a href="{{ linkView.link }}" class="btn btn-primary btn-lg btn-inactive">
+                                <i class="{{ category.icon }}"></i> {{ linkView.label }}
+                            </a>
+                        {% endfor %}
+                    {% elseif category.enabledLinkView %}
+                        <a href="{{ category.enabledLinkView.link }}" class="btn btn-primary btn-lg btn-inactive">
+                            <i class="{{ category.icon }}"></i> {{ category.title|trans }}
+                        </a>
+                    {% endif %}
                 {% endif %}
             {% endfor %}
         {% endif %}

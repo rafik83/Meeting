@@ -12,40 +12,33 @@ namespace Proximum\Vimeet\Application\View\Navigation;
 
 class CategoryView
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $icon;
 
-    /**
-     * @var LinkView[]
-     */
+    /** @var LinkView[] */
     public $linksView;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isShowOnMobile;
 
-    /**
-     * CategoryView constructor.
-     *
-     * @param string     $title
-     * @param string     $icon
-     * @param LinkView[] $linksView
-     * @param bool       $isShowOnMobile
-     */
-    public function __construct(string $title, string $icon, array $linksView, bool $isShowOnMobile)
-    {
-        $this->title          = $title;
-        $this->icon           = $icon;
-        $this->linksView      = $linksView;
+    /** @var bool */
+    public $isExpandedOnMobile;
+
+    public function __construct(
+        string $title,
+        string $icon,
+        array $linksView,
+        bool $isShowOnMobile,
+        bool $isExpandedOnMobile = false
+    ) {
+        $this->title = $title;
+        $this->icon = $icon;
+        $this->linksView = $linksView;
         $this->isShowOnMobile = $isShowOnMobile;
+        $this->isExpandedOnMobile = $isExpandedOnMobile;
     }
 
     public function getEnabledLinkView(): ?LinkView

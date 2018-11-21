@@ -65,6 +65,7 @@ class FormsViewQueryHandler
             $this->getTitle($formsViewQuery->staticFormulation, $formsViewQuery->locale),
             Category::FORMS_ICON,
             $linksView,
+            true,
             true
         );
     }
