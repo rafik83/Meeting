@@ -67,6 +67,10 @@ class RequestViewQueryHandler
 
     private function isTransformableIntoMeeting(Request $request, bool $isVisio): bool
     {
+        if (!$request->isTransformableIntoMeeting()) {
+            return false;
+        }
+
         try {
             $this->requestSlotViewQueryHandler->handle(
                 new RequestSlotViewQuery($request, $isVisio)
