@@ -7,18 +7,27 @@
                         <thead>
                         <tr>
                             <td>
-                                <button class="btn btn-default btn-xs" v-on:click="showSheetFilter">
-                                    <i class="glyphicon glyphicon-filter"></i> {{ 'admin.agenda.filters.title.label'|trans }}
-                                    <span class="badge">${ countFilteredSheets }</span>
-                                </button>
-                                <button class="btn btn-default btn-xs" v-on:click="resetSheetFilter">
-                                    <i class="glyphicon glyphicon-remove"></i> {{ 'admin.agenda.filters.reset.label'|trans }}
-                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-default btn-xs" v-on:click="showSheetFilter">
+                                        <i class="glyphicon glyphicon-filter"></i> {{ 'admin.agenda.filters.title.label'|trans }}
+                                        <span class="badge">${ countFilteredSheets }</span>
+                                    </button>
+                                    <button class="btn btn-default btn-xs" v-on:click="resetSheetFilter" title="{{ 'admin.agenda.filters.reset.label'|trans }}">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </button>
+                                </div>
                                 <button class="btn btn-default btn-xs" v-on:click="showSort">
-                                    </i> {{ 'admin.agenda.sort.title.label'|trans }}
+                                    <i class="glyphicon glyphicon-sort"></i>  {{ 'admin.agenda.sort.title.label'|trans }}
                                 </button>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>
+                                <input class="col-xs-12" type="text" placeholder="{{ 'admin.agenda.filters.search'|trans }}" v-model:value="filterBySheetOrParticipantValue" v-on:keyup="filterBySheetOrParticipant" v-bind:value="filterBySheetOrParticipantValue" autofocus>
+                            </td>
+                        </tr>
+
                         <tr>
                             <td>
                                 {{ 'admin.agenda.indicators-caption'|trans }}
@@ -56,11 +65,6 @@
                                 </table>
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                <input class="col-xs-12" type="text" placeholder="{{ 'admin.agenda.filters.search'|trans }}" v-model:value="filterBySheetOrParticipantValue" v-on:keyup="filterBySheetOrParticipant" v-bind:value="filterBySheetOrParticipantValue" autofocus>
-                            </td>
-                        </tr>
                         </thead>
                     </table>
                 </div>
@@ -77,15 +81,14 @@
                                 <span class="label label-info pull-right" v-if="sheet.countParticipant > 1"><i class="icon icon-Profil_1"></i> ${ sheet.countParticipant }</span>
 
                                 <a v-bind:href="sheet.url" target="_blank" title="{{ 'admin.agenda.sheet.see'|trans }}" class="link-to-sheet"><span class="glyphicon"></span></a>
-                                <a href="#" class="sheet-title" v-bind:title="sheet.title" v-on:click="showAndFocusAgenda(sheet)">${
-                                    sheet.title }</a>
+                                <a href="#" class="sheet-title" v-bind:title="sheet.title" v-on:click="showAndFocusAgenda(sheet)">${ sheet.title }</a>
 
                                 <small>${ sheet.type }</small>
 
                                 <div v-if="sheet.hasFollower === true">
                                     <small>
                                         <span class="glyphicon glyphicon-arrow-right"></span>
-                                        &nbsp;${sheet.follower.firstName } ${ sheet.follower.lastName }
+                                        &nbsp;${ sheet.follower.firstName } ${ sheet.follower.lastName }
                                     </small>
                                 </div>
 
@@ -155,9 +158,11 @@
                                     <i class="icon icon-Profil_1"></i>
                                     ${ request.participantsName }
 
-                                    <span v-show="request.participants.length == 0">
-                                        {{ 'admin.agenda.requestsList.noPreference'|trans }}
-                                    </span>
+                                    <a href="#" title="{{ 'admin.agenda.request.updateParticipant.label'|trans }}" v-on:click="showParticipants(request)">
+                                        <span v-show="request.participants.length == 0" class="label label-danger">
+                                            {{ 'admin.agenda.requestsList.noPreference'|trans }}
+                                        </span>
+                                    </a>
                                 </td>
                             </tr>
                         </table>
