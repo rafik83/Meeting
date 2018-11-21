@@ -34,7 +34,8 @@ class FillFormAction
         EventDomain $eventDomain,
         Sheet $sheet,
         Participant $participant,
-        FormTemplate $formTemplate
+        FormTemplate $formTemplate,
+        int $step
     ): Response {
         if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)
