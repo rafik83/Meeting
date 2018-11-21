@@ -449,6 +449,8 @@ class Block extends AbstractChild
 
                 if ($object instanceof TemplateObject\Nomenclature) {
                     $tagged[$tag][] = implode(', ', $object->getNomenclatureLabelOfItems());
+                } elseif ($object instanceof TemplateObject\DateTime) {
+                    $tagged[$tag][] = $object->getFormattedDate($object->getLocale());
                 } else {
                     $tagged[$tag][] = $object->getContentValue();
                 }
