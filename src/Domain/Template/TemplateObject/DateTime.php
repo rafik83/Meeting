@@ -19,7 +19,7 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
 
     public function getDatetime(): ?\DateTime
     {
-        if (!$this->data['datetime']) {
+        if (empty($this->data['datetime'])) {
             return null;
         }
 
