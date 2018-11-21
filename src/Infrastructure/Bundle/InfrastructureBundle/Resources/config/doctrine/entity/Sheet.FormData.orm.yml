@@ -1,0 +1,22 @@
+Proximum\Vimeet\Domain\Model\Sheet\FormData:
+    type:  entity
+    table: sheet_form_data
+    id:
+        sheet:
+            associationKey: true
+        formTemplate:
+            associationKey: true
+    fields:
+        data:
+            type: json_array
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+        formTemplate:
+            targetEntity: Proximum\Vimeet\Domain\Model\Template\FormTemplate
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
