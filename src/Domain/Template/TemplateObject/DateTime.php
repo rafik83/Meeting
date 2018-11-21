@@ -105,4 +105,20 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
     {
         $this->event = $event;
     }
+
+    public function getFormattedDate(string $locale): ?string
+    {
+        if (!$this->getDatetime()) {
+            return null;
+        }
+
+        $formatter = new \IntlDateFormatter(
+            $locale,
+            \IntlDateFormatter::SHORT,
+            $this->displayHours() ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE,
+            $this->getTimezone()
+        );
+
+        return $formatter->format($this->getDatetime());
+    }
 }

@@ -125,14 +125,7 @@ class TaggedDataFactory
                     if (!$object->getDatetime() instanceof \DateTime) {
                         $value = '';
                     } else {
-                        $formatter = new \IntlDateFormatter(
-                            $locale,
-                            \IntlDateFormatter::SHORT,
-                            $object->displayHours() ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE,
-                            $sheet->getEvent()->getTimeZone()
-                        );
-
-                        $value = $formatter->format($object->getDatetime());
+                        $value = $object->getFormattedDate($locale);
                     }
                 } else {
                     $value = $object->getContentValueLocalize();
