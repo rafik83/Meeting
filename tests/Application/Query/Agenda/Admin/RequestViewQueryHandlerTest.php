@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Agenda\Admin;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQuery;
@@ -59,12 +60,36 @@ class RequestViewQueryHandlerTest extends TestCase
         $this->sheetMet = $this->prophesize(Sheet::class);
         $this->sheetMet->getId()->willReturn(42);
 
+        $participant1 = $this->prophesize(Participant::class);
+        $participant1->getId()->shouldBeCalled()->willReturn(11);
+
+        $participant2 = $this->prophesize(Participant::class);
+        $participant2->getId()->shouldBeCalled()->willReturn(22);
+
         $this->meetingRequest = $this->prophesize(Request::class);
         $this->meetingRequest->getSheetMet($this->sheet->reveal())->willReturn($this->sheetMet->reveal());
         $this->meetingRequest->getId()->willReturn(1337);
 
         $this->sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $this->sheetInfoGuesser
+            ->guessSheetTitle($this->sheetMet->reveal(), 'fr')
+            ->willReturn('Fifth Element Corp.')
+        ;
+
         $this->participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $this->participantInfoGuesser
+            ->guessParticipantCompleteName($participant1->reveal(), 'fr')
+            ->willReturn('Korben DALLAS')
+        ;
+        $this->participantInfoGuesser
+            ->guessParticipantCompleteName($participant2->reveal(), 'fr')
+            ->willReturn('Leeloo')
+        ;
+        $this->meetingRequest
+            ->getParticipants($this->sheet->reveal())
+            ->willReturn([$participant1->reveal(), $participant2->reveal()])
+        ;
+
         $this->requestSlotViewQueryHandler = $this->prophesize(RequestSlotViewQueryHandler::class);
         $this->visioGuesser = $this->prophesize(VisioGuesser::class);
 
@@ -78,38 +103,10 @@ class RequestViewQueryHandlerTest extends TestCase
 
     public function test_meeting_request_is_transformable_into_meeting()
     {
-        $participant1 = $this->prophesize(Participant::class);
-        $participant1->getId()->shouldBeCalled()->willReturn(11);
-        $this->participantInfoGuesser
-            ->guessParticipantCompleteName($participant1->reveal(), 'fr')
-            ->shouldBeCalled()
-            ->willReturn('Korben DALLAS')
-        ;
-
-        $participant2 = $this->prophesize(Participant::class);
-        $participant2->getId()->shouldBeCalled()->willReturn(22);
-        $this->participantInfoGuesser
-            ->guessParticipantCompleteName($participant2->reveal(), 'fr')
-            ->shouldBeCalled()
-            ->willReturn('Leeloo')
-        ;
-
         $this->visioGuesser
             ->hasMeetingRequestParticipantVisio($this->meetingRequest->reveal())
             ->shouldBeCalled()
             ->willReturn(false)
-        ;
-
-        $this->sheetInfoGuesser
-            ->guessSheetTitle($this->sheetMet->reveal(), 'fr')
-            ->shouldBeCalled()
-            ->willReturn('Fifth Element Corp.')
-        ;
-
-        $this->meetingRequest
-            ->getParticipants($this->sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn()
         ;
         $this->meetingRequest
             ->isTransformableIntoMeeting()
@@ -121,16 +118,9 @@ class RequestViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(false)
         ;
-        $this->meetingRequest
-            ->getParticipants($this->sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn([$participant1->reveal(), $participant2->reveal()])
-        ;
 
         $this->requestSlotViewQueryHandler
-            ->handle(
-                new RequestSlotViewQuery($this->meetingRequest->reveal(), false)
-            )
+            ->handle(new RequestSlotViewQuery($this->meetingRequest->reveal(), false))
             ->shouldBeCalled()
             ->willReturn([new RequestSlotView([333, 444])])
         ;
@@ -143,6 +133,83 @@ class RequestViewQueryHandlerTest extends TestCase
                 [new ParticipantView(11, 'Korben DALLAS'), new ParticipantView(22, 'Leeloo')],
                 true,
                 false
+            ),
+            $this->requestViewQueryHandler->handle(
+                new RequestViewQuery($this->meetingRequest->reveal(), $this->sheet->reveal(), 'fr')
+            )
+        );
+    }
+
+    public function test_meeting_request_is_not_transformable_into_meeting_because_no_slot_available()
+    {
+        $this->visioGuesser
+            ->hasMeetingRequestParticipantVisio($this->meetingRequest->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->meetingRequest
+            ->isTransformableIntoMeeting()
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->meetingRequest
+            ->isOneOfSheetsNotAttend()
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this->requestSlotViewQueryHandler
+            ->handle(new RequestSlotViewQuery($this->meetingRequest->reveal(), true))
+            ->shouldBeCalled()
+            ->willThrow(NoSlotAvailableException::class)
+        ;
+
+        $this->assertEquals(
+            new RequestView(
+                1337,
+                'Fifth Element Corp.',
+                42,
+                [new ParticipantView(11, 'Korben DALLAS'), new ParticipantView(22, 'Leeloo')],
+                false,
+                false
+            ),
+            $this->requestViewQueryHandler->handle(
+                new RequestViewQuery($this->meetingRequest->reveal(), $this->sheet->reveal(), 'fr')
+            )
+        );
+    }
+
+    public function test_meeting_request_is_not_transformable_into_meeting_because_one_of_sheets_not_attend()
+    {
+        $this->visioGuesser
+            ->hasMeetingRequestParticipantVisio($this->meetingRequest->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->meetingRequest
+            ->isTransformableIntoMeeting()
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+        $this->meetingRequest
+            ->isOneOfSheetsNotAttend()
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this->requestSlotViewQueryHandler
+            ->handle(new RequestSlotViewQuery($this->meetingRequest->reveal(), true))
+            ->shouldNotBeCalled()
+        ;
+
+        $this->assertEquals(
+            new RequestView(
+                1337,
+                'Fifth Element Corp.',
+                42,
+                [new ParticipantView(11, 'Korben DALLAS'), new ParticipantView(22, 'Leeloo')],
+                false,
+                true
             ),
             $this->requestViewQueryHandler->handle(
                 new RequestViewQuery($this->meetingRequest->reveal(), $this->sheet->reveal(), 'fr')
