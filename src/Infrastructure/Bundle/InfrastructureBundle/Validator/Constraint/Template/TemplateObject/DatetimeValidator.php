@@ -39,14 +39,14 @@ class DatetimeValidator extends TemplateObjectValidator
                     $this->context
                         ->getValidator()
                         ->inContext($this->context)
-                        ->atPath(sprintf('%s.date', $constraint->key))
+                        ->atPath(sprintf('%s.datetime', $constraint->key))
                         ->validate($value->getDatetime(), $dateConstraint);
                 }
             }
         } else {
             $this->context
                 ->buildViolation('validators.field.notValid.datetime')
-                ->atPath(sprintf('%s.date', $constraint->key))
+                ->atPath(sprintf('%s.datetime', $constraint->key))
                 ->addViolation();
         }
     }
@@ -57,7 +57,7 @@ class DatetimeValidator extends TemplateObjectValidator
             $this->context
                 ->getValidator()
                 ->inContext($this->context)
-                ->atPath(sprintf('%s.date', $constraint->key))
+                ->atPath(sprintf('%s.datetime', $constraint->key))
                 ->validate($object->getContentValue(), new Constraints\NotBlank());
         }
     }
