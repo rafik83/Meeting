@@ -1,0 +1,8 @@
+{% if taggedDataView.datetime %}
+    {% set format = 'none' %}
+    {% if taggedDataView.displayHours %}
+        {% set format =  'short' %}
+    {% endif %}
+
+    {{ taggedDataView.datetime|localizeddate('short', format, null, taggedDataView.event.timezone) }}
+{% endif %}
