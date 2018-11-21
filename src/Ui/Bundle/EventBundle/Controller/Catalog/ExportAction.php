@@ -114,7 +114,7 @@ class ExportAction
 
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
-            || !$sheet->isInCatalog()
+            || !$sheet->isInInternalCatalog()
             || !$this->catalogAccessChecker->allowedToAccess($event)
         ) {
             throw new AccessDeniedException('Access denied!');
