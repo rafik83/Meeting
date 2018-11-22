@@ -42,7 +42,7 @@ class FormTemplateChoiceType extends AbstractType
                     return $this->getResults($options);
                 },
                 'choice_label' => function (FormTemplate $template) {
-                    if ($template->isPublished()) {
+                    if (!$template->isPublished()) {
                         return sprintf(
                             '%s (%s)',
                             $template->getTitle(),
