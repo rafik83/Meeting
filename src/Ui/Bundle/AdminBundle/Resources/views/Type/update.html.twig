@@ -13,6 +13,10 @@
         {{ form_row(form.registrationTemplate) }}
     {% endif %}
 
+    {% if form.formTemplates is not empty %}
+        {{ form_row(form.formTemplates) }}
+    {% endif %}
+
     {% if form.package is defined %}
         {{ form_row(form.package) }}
     {% endif %}

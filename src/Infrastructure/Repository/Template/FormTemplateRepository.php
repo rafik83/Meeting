@@ -38,19 +38,4 @@ class FormTemplateRepository implements FormTemplateRepositoryInterface
             ->getResult()
         ;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBaseTemplates(): array
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('template')
-            ->from(FormTemplate::class, 'template')
-            ->where('template.event IS NULL');
-
-        return $queryBuilder->getQuery()->getResult();
-    }
 }

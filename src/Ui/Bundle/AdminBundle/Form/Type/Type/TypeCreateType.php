@@ -49,11 +49,12 @@ class TypeCreateType extends AbstractType
                 'placeholder' => '',
             ])
             ->add('formTemplates', FormTemplateChoiceType::class, [
-                'event'       => $options['event'],
-                'required'    => true,
-                'expanded'    => true,
-                'multiple'    => true,
-                'placeholder' => ''
+                'event' => $options['event'],
+                'required' => false,
+                'multiple' => true,
+                'attr'     => [
+                    'class' => 'select2',
+                ],
             ])
             ->add('package', PackageChoiceType::class, [
                 'currentEvent' => $options['event'],

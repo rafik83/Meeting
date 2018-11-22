@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\PackageChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\FormTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\RegistrationTemplateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
@@ -60,6 +61,14 @@ class TypeUpdateType extends AbstractType
                     'required'    => true,
                     'expanded'    => false,
                     'multiple'    => false,
+                ])
+                ->add('formTemplates', FormTemplateChoiceType::class, [
+                    'event' => $options['event'],
+                    'required' => false,
+                    'multiple' => true,
+                    'attr'     => [
+                        'class' => 'select2',
+                    ],
                 ])
                 ->add('package', PackageChoiceType::class, [
                     'currentEvent' => $options['event'],

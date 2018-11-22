@@ -98,6 +98,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\FormTemplateChoiceType
         arguments:
             - '@repository.template.form_template_repository'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
     form_type_template.registration_template_choice_type:

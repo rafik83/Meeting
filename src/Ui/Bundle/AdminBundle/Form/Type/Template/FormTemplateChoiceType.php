@@ -9,6 +9,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\FormTemplateRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -20,12 +22,18 @@ class FormTemplateChoiceType extends AbstractType
     /** @var FormTemplateRepositoryInterface */
     private $templateRepository;
 
-    public function __construct(FormTemplateRepositoryInterface $templateRepository)
-    {
+    /** @var TranslatorInterface */
+    private $translator;
+
+    public function __construct(
+        FormTemplateRepositoryInterface $templateRepository,
+        TranslatorInterface $translator
+    ) {
         $this->templateRepository = $templateRepository;
+        $this->translator = $translator;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
             ->setRequired('event')
@@ -33,46 +41,31 @@ class FormTemplateChoiceType extends AbstractType
                 'choices' => function (Options $options) {
                     return $this->getResults($options);
                 },
-                'choice_label' => 'title',
-                'repositoryMethod' => function (FormTemplateRepositoryInterface $templateRepository) {
-                    return $templateRepository->getBaseTemplates();
-                },
-                'repositoryMethodEvent' => function (Options $options) {
-                    return function (FormTemplateRepositoryInterface $templateRepository) use ($options) {
-                        return $templateRepository->findByEvent($options['event']);
-                    };
-                },
+                'choice_label' => function (FormTemplate $template) {
+                    if ($template->isPublished()) {
+                        return sprintf(
+                            '%s (%s)',
+                            $template->getTitle(),
+                            $this->translator->trans(
+                                'form.type_create.children.formTemplates.status.draft',
+                                [],
+                                'forms'
+                            )
+                        );
+                    }
+
+                    return $template->getTitle();
+                }
             ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }
 
-    /**
-     * @param Options $options
-     *
-     * @return array
-     */
     private function getResults(Options $options): array
     {
-        $baseTemplates  = $options['repositoryMethod']($this->templateRepository);
-        $eventTemplates = $options['repositoryMethodEvent']($this->templateRepository);
-
-        $templates = [];
-
-        if (!empty($baseTemplates)) {
-            $templates['form.type_template.registration.base'] = $baseTemplates;
-        }
-
-        if (!empty($eventTemplates)) {
-            $templates['form.type_template.registration.event'] = $eventTemplates;
-        }
-
-        return $templates;
+        return $this->templateRepository->findByEvent($options['event']);
     }
 }

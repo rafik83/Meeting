@@ -34,9 +34,3 @@ Proximum\Vimeet\Domain\Model\Template\FormTemplate:
             mappedBy: formTemplate
             indexBy: locale
             cascade: ["persist", "remove"]
-    manyToMany:
-        types:
-            targetEntity: Proximum\Vimeet\Domain\Model\Type
-            inversedBy: formTemplates
-            joinTable:
-                name: template_form_type
