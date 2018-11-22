@@ -13,7 +13,7 @@
         {{ form_row(form.registrationTemplate) }}
     {% endif %}
 
-    {% if form.formTemplates is not empty %}
+    {% if form.formTemplates is defined %}
         {{ form_row(form.formTemplates) }}
     {% endif %}
 
