@@ -34,3 +34,7 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ParticipantPresenceCommand }
+
+    Proximum\Vimeet\Application\Command\Template\Form\FillStepCommandHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\FillStepCommand }

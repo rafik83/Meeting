@@ -38,6 +38,17 @@ services:
             - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetRegistrationInfoQueryHandler'
 
     #
+    # Form Template
+    #
+    Proximum\Vimeet\Application\Query\Template\Form\FillStepQueryHandler:
+        arguments:
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\FormDataRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\FillStepQuery }
+
+    #
     # Catalog
     #
     Proximum\Vimeet\Application\Query\Catalog\NomenclatureTagViewQueryHandler:

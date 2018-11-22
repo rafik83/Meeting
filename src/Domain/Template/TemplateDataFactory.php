@@ -149,6 +149,22 @@ class TemplateDataFactory
         ;
     }
 
+    public function createFormTemplateWithData(
+        FormTemplate $formTemplate,
+        array $data,
+        string $locale
+    ): TemplateData {
+        return $this
+            ->loadNomenclatures($formTemplate->getEvent())
+            ->create(
+                $formTemplate->getValue(),
+                $data,
+                $locale,
+                $formTemplate->getFallback()
+            )
+        ;
+    }
+
     /**
      * @param Type        $type
      * @param null|string $locale

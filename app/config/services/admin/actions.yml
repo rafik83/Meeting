@@ -662,6 +662,10 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@router'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     #
     # Visio

@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant\Upload;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadableObjectInterface;
 
-class UploadFile
+class UploadFile implements Command
 {
     /** @var Sheet */
     private $sheet;

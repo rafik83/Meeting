@@ -883,7 +883,7 @@ event_user_event_phone_validate_code_success:
 #
 event_participant_fill_form:
     path: /sheet/{sheet}/participant/{participant}/form/{formTemplate}/step/{step}
-    methods: [GET]
+    methods: [GET, POST]
     requirements:
         sheet: \d+
         participant: \d+

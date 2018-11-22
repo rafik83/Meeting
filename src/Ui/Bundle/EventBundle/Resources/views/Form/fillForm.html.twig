@@ -1,5 +1,7 @@
 {% extends 'EventBundle::base.html.twig' %}
 
+{% form_theme form '@Ui/default.html.twig' %}
+
 {% block title formTemplateTitle ~ ' - ' ~ event.title %}
 
 {% block content %}
@@ -10,8 +12,40 @@
             </header>
 
             <div class="main__container">
-                <div class="styled-form">
-                    Under construction...
+                <div class="row">
+                    <div class="col-md-2">
+                        {% if blockStepView.currentStep > 1 %}
+                            <a href="{{ path('event_participant_fill_form', {
+                                'sheet': sheet.id,
+                                'participant': participant.id,
+                                'formTemplate': formTemplate.id,
+                                'step': blockStepView.currentStep - 1,
+                            }) }}" class="btn btn-primary"><</a>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-8 text-center">
+                        Étape {{ blockStepView.currentStep }} / {{ blockStepView.totalStep }}
+                    </div>
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-12">
+
+                        {{ form_start(form) }}
+
+                        {{ form_rest(form) }}
+
+                        <div class="validation text-center">
+                            <button type="submit" class="btn btn-primary">
+                                {% if blockStepView.currentStep != blockStepView.totalStep %}
+                                    <i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}
+                                {% else %}
+                                    <i class="icon-Valider_3"></i> {{ 'register.finalize'|trans }}
+                                {% endif %}
+                            </button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
                 </div>
             </div>
         </section>

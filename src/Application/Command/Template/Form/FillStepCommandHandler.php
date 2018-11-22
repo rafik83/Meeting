@@ -1,0 +1,19 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Template\Form;
+
+class FillStepCommandHandler
+{
+    public function handle(FillStepCommand $command): void
+    {
+
+    }
+}

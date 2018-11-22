@@ -411,7 +411,7 @@ class Block extends AbstractChild
         $blocks = $this->getBlocks();
         $index  = (int) $index - 1;
 
-        return isset($blocks[$index]) ? $blocks[$index] : null;
+        return $blocks[$index] ?? null;
     }
 
     /**
@@ -419,10 +419,10 @@ class Block extends AbstractChild
      *
      * @return int
      */
-    public function getBlocksCount()
+    public function getBlocksCount(): int
     {
-        return count(array_filter($this->getBlocks(), function (Block $block) {
-            return count($block->getObjects()) > 0;
+        return \count(array_filter($this->getBlocks(), function (Block $block) {
+            return \count($block->getObjects()) > 0;
         }));
     }
 
