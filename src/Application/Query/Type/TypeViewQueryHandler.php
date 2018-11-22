@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Type;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\View\FormTemplate\FormTemplateView;
 use Proximum\Vimeet\Application\View\Type\TypeListsView;
 use Proximum\Vimeet\Application\View\Type\TypeListView;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -24,12 +26,17 @@ class TypeViewQueryHandler
     /** @var ContentRepositoryInterface */
     private $contentRepository;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     public function __construct(
         TypeRepositoryInterface $typeRepository,
-        ContentRepositoryInterface $contentRepository
+        ContentRepositoryInterface $contentRepository,
+        TranslatorInterface $translator
     ) {
         $this->typeRepository = $typeRepository;
         $this->contentRepository = $contentRepository;
+        $this->translator = $translator;
     }
 
     public function handle(TypeViewQuery $query): TypeListsView
@@ -52,6 +59,22 @@ class TypeViewQueryHandler
 
         /** @var Type $type */
         foreach ($typeResults as $type) {
+            $formTemplateViews = [];
+
+            foreach ($type->getFormTemplates() as $formTemplate) {
+                $formTemplateViews[] = new FormTemplateView(
+                    $formTemplate->getTitle(),
+                    $formTemplate->isPublished()
+                        ? ''
+                        : sprintf('%s',$this->translator->trans(
+                            'admin.type.form.template.status.draft',
+                            [],
+                            'messages'
+                        )
+                    )
+                );
+            }
+
             $typeListsView->types[] = new TypeListView(
                 $type->getId(),
                 $type->getPosition(),
@@ -59,6 +82,7 @@ class TypeViewQueryHandler
                 $type->isHidden(),
                 (null !== $type->getRegistrationTemplate()) ? $type->getRegistrationTemplate()->getTitle() : '',
                 (null !== $type->getSheetTemplate()) ? $type->getSheetTemplate()->getTitle() : '',
+                $formTemplateViews,
                 (null !== $type->getPackage()) ? $type->getPackage()->getTitle() : '',
                 null !== $type->getPaymentConditions(),
                 isset($contentIndexedByTypeId[$type->getId()])

@@ -10,12 +10,14 @@
 
 namespace Proximum\Vimeet\Application\View\Type;
 
+use Proximum\Vimeet\Application\View\FormTemplate\FormTemplateView;
+
 class TypeListView
 {
     /** @var int */
     public $id;
 
-    /** @var int */
+    /** @var null|int */
     public $position;
 
     /** @var string */
@@ -30,6 +32,9 @@ class TypeListView
     /** @var string */
     public $sheetTemplate;
 
+    /** @var FormTemplateView[] */
+    public $formTemplateViews;
+
     /** @var string */
     public $package;
 
@@ -39,35 +44,26 @@ class TypeListView
     /** @var bool */
     public $hasSpecificTermsOfSale;
 
-    /**
-     * @param int    $id
-     * @param int    $position
-     * @param string $title
-     * @param bool   $hidden
-     * @param string $registrationTemplate
-     * @param string $sheetTemplate
-     * @param string $package
-     * @param bool   $hasSpecificPaymentConditions
-     * @param bool   $hasSpecificTermsOfSale
-     */
     public function __construct(
-        $id,
-        $position,
-        $title,
-        $hidden,
-        $registrationTemplate,
-        $sheetTemplate,
-        $package,
+        int $id,
+        ?int $position,
+        string $title,
+        bool $hidden,
+        string $registrationTemplate,
+        string $sheetTemplate,
+        array $formTemplateViews,
+        string $package,
         bool $hasSpecificPaymentConditions = false,
         bool $hasSpecificTermsOfSale = false
     ) {
-        $this->id                           = $id;
-        $this->position                     = $position;
-        $this->title                        = $title;
-        $this->hidden                       = $hidden;
-        $this->registrationTemplate         = $registrationTemplate;
-        $this->sheetTemplate                = $sheetTemplate;
-        $this->package                      = $package;
+        $this->id = $id;
+        $this->position = $position;
+        $this->title = $title;
+        $this->hidden = $hidden;
+        $this->registrationTemplate = $registrationTemplate;
+        $this->sheetTemplate = $sheetTemplate;
+        $this->formTemplateViews = $formTemplateViews;
+        $this->package = $package;
         $this->hasSpecificPaymentConditions = $hasSpecificPaymentConditions;
         $this->hasSpecificTermsOfSale = $hasSpecificTermsOfSale;
     }

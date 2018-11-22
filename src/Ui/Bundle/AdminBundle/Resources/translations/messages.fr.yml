@@ -1188,6 +1188,8 @@ admin.type.badge.example.sheetTitle: 'Exemple de titre de Fiche'
 admin.type.content.specificTermsOfSale: 'CGV particulières'
 admin.type.create.link: Ajouter
 admin.type.create.title: 'Ajouter un type de participation'
+admin.type.form.template: 'Formulaires'
+admin.type.form.template.status.draft: 'Brouillon'
 admin.type.hidden: Caché
 admin.type.id: Id
 admin.type.link: 'Types de participation'

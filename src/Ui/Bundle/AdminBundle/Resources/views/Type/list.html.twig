@@ -18,6 +18,7 @@
                 <th>{{ 'admin.type.register.link'|trans }}</th>
                 <th>{{ 'admin.type.registration.template'|trans }}</th>
                 <th>{{ 'admin.type.sheet.template'|trans }}</th>
+                <th>{{ 'admin.type.form.template'|trans }}</th>
                 <th>{{ 'admin.type.package'|trans }}</th>
                 <th class="col-md-1"></th>
             </tr>
@@ -66,6 +67,13 @@
                 </td>
                 <td>{{ type.registrationTemplate }}</td>
                 <td>{{ type.sheetTemplate }}</td>
+                <td>
+                    <ul style="list-style-type:disc">
+                        {% for template in type.formTemplateViews %}
+                            <li>{{ template.title }} <span class="label label-info">{{ template.status }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </td>
                 <td>{{ type.package }}</td>
                 <td class="text-right">
                     <div class="btn-group">
