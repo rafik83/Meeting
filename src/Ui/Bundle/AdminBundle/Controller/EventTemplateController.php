@@ -91,4 +91,9 @@ class EventTemplateController extends Controller
             'event'     => $event,
         ]);
     }
+
+    public function formTemplateAction()
+    {
+        return $this->render('AdminBundle:EventTemplate:formTemplate.html.twig');
+    }
 }

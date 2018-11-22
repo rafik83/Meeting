@@ -316,6 +316,11 @@
                     {{ 'admin.event.template.package'|trans }}
                 </a>
             </li>
+            <li>
+                <a href="{{ path('admin_event_template_form', { 'event': event.id }) }}">
+                    {{ 'admin.event.template.form'|trans }}
+                </a>
+            </li>
         </ul>
     </li>
 {% endif %}

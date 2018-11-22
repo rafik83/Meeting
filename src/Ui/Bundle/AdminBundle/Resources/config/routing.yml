@@ -1395,6 +1395,12 @@ admin_event_template_package:
     methods: [GET, POST]
     requirements:
         event: \d+
+admin_event_template_form:
+    path: /event/{event}/template/form
+    defaults: { _controller: AdminBundle:EventTemplate:formTemplate }
+    methods: [GET]
+    requirements:
+        event: \d+
 
 #
 # Unavailability
