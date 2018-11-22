@@ -13,9 +13,7 @@
         {{ form_row(form.registrationTemplate) }}
     {% endif %}
 
-    {% if form.formTemplates is defined %}
-        {{ form_row(form.formTemplates) }}
-    {% endif %}
+    {{ form_row(form.formTemplates) }}
 
     {% if form.package is defined %}
         {{ form_row(form.package) }}
