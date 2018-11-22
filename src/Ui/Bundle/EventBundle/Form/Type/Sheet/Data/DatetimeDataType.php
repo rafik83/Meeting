@@ -33,6 +33,8 @@ class DatetimeDataType extends AbstractType
                 'format' => $datetime->getDatepickerFormat(),
                 'model_timezone' => $datetime->getTimezone(),
                 'view_timezone' => $datetime->getTimezone(),
+                'min_date' => $datetime->getOptionDateFormattedForDatepicker('datetime_min'),
+                'max_date' => $datetime->getOptionDateFormattedForDatepicker('datetime_max'),
             ])
         ;
     }
