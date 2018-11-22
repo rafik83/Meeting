@@ -12,13 +12,13 @@
                                         <i class="glyphicon glyphicon-filter"></i> {{ 'admin.agenda.filters.title.label'|trans }}
                                         <span class="badge">${ countFilteredSheets }</span>
                                     </button>
+                                    <button class="btn btn-default btn-xs" v-on:click="showSort">
+                                        <i class="glyphicon glyphicon-sort"></i>  {{ 'admin.agenda.sort.title.label'|trans }}
+                                    </button>
                                     <button class="btn btn-default btn-xs" v-on:click="resetSheetFilter" title="{{ 'admin.agenda.filters.reset.label'|trans }}">
                                         <i class="glyphicon glyphicon-remove"></i>
                                     </button>
                                 </div>
-                                <button class="btn btn-default btn-xs" v-on:click="showSort">
-                                    <i class="glyphicon glyphicon-sort"></i>  {{ 'admin.agenda.sort.title.label'|trans }}
-                                </button>
                             </td>
                         </tr>
 
