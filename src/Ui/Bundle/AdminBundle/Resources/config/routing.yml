@@ -47,6 +47,14 @@ admin_update_admin:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Admin:update }
 
+admin_delete_admin:
+    path: /admin/delete/{type}/{admin}
+    requirements:
+        user: \d+
+        type: admin|operator
+    methods: [DELETE, GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\DeleteAction }
+
 #
 # Create Operator
 #

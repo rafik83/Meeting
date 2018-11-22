@@ -1,5 +1,5 @@
 {% extends 'AdminBundle::base.html.twig' %}
-
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
 {% block title 'admin.admin_list.title'|trans %}
 
 {% block content %}
@@ -71,6 +71,15 @@
                     {% else %}
                         <a href="{{ path('admin_update_admin', {'admin': admin.id}) }}" class="btn btn-default">{{ 'admin.admin_list.table.content.update'|trans }}</a>
                     {% endif %}
+                    {{ delete_button(
+                        path('admin_delete_admin', {'admin': admin.id, 'type': 'admin'}),
+                        'admin.remove'|trans,
+                        {
+                            'class' : 'btn btn-danger btn-sm',
+                            'data-confirm': 'admin.remove.confirmation'|trans
+                        },
+                        constant('Proximum\\Vimeet\\Domain\\Intention\\IntentionType::INTENTION_REMOVE_ADMIN')
+                    ) }}
                 </td>
             </tr>
         {% endfor %}

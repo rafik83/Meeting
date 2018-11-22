@@ -48,6 +48,12 @@ class AdminRepository implements AdminRepositoryInterface
         $this->entityManager->flush($admin);
     }
 
+    public function remove(Admin $admin): void
+    {
+        $this->entityManager->remove($admin);
+        $this->entityManager->flush($admin);
+    }
+
     /**
      * {@inheritdoc}
      */

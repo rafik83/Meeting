@@ -1099,6 +1099,8 @@ admin.transaction.mode.bank_check: Chèque
 admin.transaction.mode.bank_transfer: Virement
 admin.transaction.mode.paypal: Paypal
 admin.transaction.remove: Supprimer
+admin.remove: Supprimer
+admin.remove.confirmation: Etes vous sûr de vouloir supprimer cet utilisateur ?
 admin.transaction.state.cancelled: Annulé
 admin.transaction.state.paid: Réglé
 admin.transaction.state.pending: 'En attente'
