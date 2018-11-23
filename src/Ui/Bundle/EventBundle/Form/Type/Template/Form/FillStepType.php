@@ -126,12 +126,14 @@ class FillStepType extends AbstractType
                 'locales' => $locales,
                 'object' => $object,
                 'label' => $object->getOption('label', $locale),
+                'required' => $object->getRequired(),
             ]);
         } else {
             $builder->add($key, EditableTextInputDataType::class, [
                 'label'  => false,
                 'locale' => $locale,
                 'object' => $object,
+                'required' => $object->getRequired(),
             ]);
         }
     }

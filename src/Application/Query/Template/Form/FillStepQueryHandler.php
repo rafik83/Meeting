@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Template\Form;
 use Proximum\Vimeet\Application\View\Template\Form\BlockStepView;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Exception\BlockForGivenStepNotFoundException;
+use Proximum\Vimeet\Domain\Template\Exception\GivenStepIsRequiredAndNotFilledException;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableObject;
 
 
 class FillStepQueryHandler
@@ -47,6 +49,20 @@ class FillStepQueryHandler
 
         if (!$block instanceof Block) {
             throw new BlockForGivenStepNotFoundException($query->step);
+        }
+
+        if ($query->step !== 1) {
+            foreach ($templateData->getBlocks() as $level => $block) {
+                if (($level + 1) === $query->step) {
+                    break;
+                }
+
+                foreach ($block->getEditableObjects() as $object) {
+                    if (true === $object->getRequired() && $object->isEmpty()) {
+                        throw new GivenStepIsRequiredAndNotFilledException($level + 1);
+                    }
+                }
+            }
         }
 
         return new BlockStepView($block, $query->step, $templateData->getBlocksCount());

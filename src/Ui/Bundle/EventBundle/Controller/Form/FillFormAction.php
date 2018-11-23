@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Exception\BlockForGivenStepNotFoundException;
+use Proximum\Vimeet\Domain\Template\Exception\GivenStepIsRequiredAndNotFilledException;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Template\Form\FillStepType;
@@ -100,6 +101,13 @@ class FillFormAction
             );
         } catch (BlockForGivenStepNotFoundException $exception) {
             return new RedirectResponse($this->router->generate('event'));
+        } catch (GivenStepIsRequiredAndNotFilledException $exception) {
+            return new RedirectResponse($this->router->generate('event_participant_fill_form', [
+                'formTemplate' => $formTemplate->getId(),
+                'sheet' => $sheet->getId(),
+                'participant' => $participant->getId(),
+                'step' => $exception->step,
+            ]));
         }
 
         $form = $this->formFactory->create(FillStepType::class, $blockStepView->block, [
