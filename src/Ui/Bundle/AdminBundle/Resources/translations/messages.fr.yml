@@ -214,7 +214,6 @@ admin.event.see.link: Voir
 admin.event.settings.link: 'Paramètrages de l''événement'
 admin.event.sheet.comment.remove.confirm: 'Etes-vous sûr de vouloir supprimer ce commentaire ?'
 admin.event.sheet.index.title: 'Ré-indexer les fiches de l''événement'
-admin.event.template.form: 'Formulaires'
 admin.event.template.link: Templates
 admin.event.template.package: 'Forfait de participation'
 admin.event.template.registration: Inscription
@@ -1021,7 +1020,6 @@ admin.template.action.save: Enregistrer
 admin.template.action.update: Modifier
 admin.template.action.updating: 'Sauvegarde en cours...'
 admin.template.blocks: Blocs
-admin.template.form.title: 'Formulaires'
 admin.template.objects: Objets
 admin.template.objectsListEmpty: 'Aucun objet disponible'
 admin.template.preview.title: 'Aperçu du catalogue'
