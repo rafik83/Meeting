@@ -1025,10 +1025,12 @@ admin.template.blocks: Blocs
 admin.template.form.addBlock: 'Ajouter une étape'
 admin.template.form.addLocale: 'Ajouter une langue'
 admin.template.form.link: 'Template de formulaire'
+admin.template.form.state.draft: Brouillon
+admin.template.form.state.published: Publié
 admin.template.form.table.column.action: Action
 admin.template.form.table.column.createdAt: 'Créé le'
 admin.template.form.table.column.title: Titre
-admin.template.form.table.column.translatedTitle: 'Titre traduit'
+admin.template.form.table.column.translatedTitle: 'Titre front office'
 admin.template.form.table.content.create: 'Créer un template de formulaire'
 admin.template.form.table.content.edit: Modifier
 admin.template.form.table.content.parameters: Paramètres
