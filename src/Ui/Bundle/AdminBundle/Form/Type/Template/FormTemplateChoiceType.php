@@ -42,19 +42,18 @@ class FormTemplateChoiceType extends AbstractType
                     return $this->getResults($options);
                 },
                 'choice_label' => function (FormTemplate $template) {
-                    if (!$template->isPublished()) {
-                        return sprintf(
-                            '%s (%s)',
-                            $template->getTitle(),
-                            $this->translator->trans(
-                                'form.type_create.children.formTemplates.status.draft',
-                                [],
-                                'forms'
-                            )
-                        );
-                    }
-
-                    return $template->getTitle();
+                    return sprintf(
+                        '%s (%s)',
+                        $template->getTitle(),
+                        $this->translator->trans(
+                            $template->isPublished()
+                                ? 'form.type_create.children.formTemplates.status.published'
+                                : 'form.type_create.children.formTemplates.status.draft'
+                            ,
+                            [],
+                            'forms'
+                        )
+                    );
                 }
             ]);
     }
