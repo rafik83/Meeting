@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Type;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Type\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Type\TypeViewQueryHandler;
 use Proximum\Vimeet\Application\View\FormTemplate\FormTemplateView;
@@ -59,15 +58,8 @@ class TypeViewQueryHandlerTest extends TestCase
         $formTemplate2->getTitle()->willReturn('form template 2');
         $formTemplate2->isPublished()->willReturn(false);
 
-        $translator = $this->prophesize(TranslatorInterface::class);
-        $translator
-            ->trans('admin.type.form.template.status.draft', [], 'messages')
-            ->shouldBeCalled()
-            ->willReturn('Brouillon')
-        ;
-
-        $formTemplateView1 = new FormTemplateView('form template 1', '');
-        $formTemplateView2 = new FormTemplateView('form template 2', 'Brouillon');
+        $formTemplateView1 = new FormTemplateView('form template 1', true);
+        $formTemplateView2 = new FormTemplateView('form template 2', false);
 
         $type1->getId()->willReturn(14);
         $type1->getPosition()->willReturn(3);
@@ -113,7 +105,7 @@ class TypeViewQueryHandlerTest extends TestCase
         ;
 
         $query = new TypeViewQuery(1, $event->reveal(), 'fr');
-        $handler = new TypeViewQueryHandler($typeRepository->reveal(), $contentRepository->reveal(), $translator->reveal());
+        $handler = new TypeViewQueryHandler($typeRepository->reveal(), $contentRepository->reveal());
         $result = $handler->handle($query);
 
         $expected = new TypeListsView();

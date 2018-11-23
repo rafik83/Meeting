@@ -3490,7 +3490,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
             - '@Proximum\Vimeet\Infrastructure\Repository\Type\ContentRepository'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\TypeViewQuery }
 
