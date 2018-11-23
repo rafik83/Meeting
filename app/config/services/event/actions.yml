@@ -66,6 +66,7 @@ services:
             - '@router'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            -  '@session.flash_bag'
 
     #
     # Download file

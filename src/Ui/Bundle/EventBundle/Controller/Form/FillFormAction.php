@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
@@ -54,13 +55,17 @@ class FillFormAction
     /** @var CommandBusInterface */
     private $commandBus;
 
+    /** @var FlashBagInterface */
+    private $flashBag;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         EngineInterface $engine,
         QueryBusInterface $queryBus,
         RouterInterface $router,
         FormFactoryInterface $formFactory,
-        CommandBusInterface $commandBus
+        CommandBusInterface $commandBus,
+        FlashBagInterface $flashBag
     ) {
         $this->authorizationChecker = $authorizationCheckerAdapter;
         $this->engine = $engine;
@@ -68,6 +73,7 @@ class FillFormAction
         $this->router = $router;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
+        $this->flashBag = $flashBag;
     }
 
     public function __invoke(
@@ -131,6 +137,8 @@ class FillFormAction
                 $this->commandBus->handle($command);
 
                 if ($blockStepView->currentStep === $blockStepView->totalStep) {
+                    $this->flashBag->add('success', 'flash.form_template.fill_step_finished.success');
+
                     return new RedirectResponse($this->router->generate('event'));
                 }
 
