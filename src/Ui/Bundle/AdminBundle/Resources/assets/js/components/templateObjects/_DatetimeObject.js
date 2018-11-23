@@ -42,12 +42,24 @@ DatetimeObject.prototype.fill = function ()
 
 DatetimeObject.prototype.save = function ()
 {
+    this.config.format = this.form.get('format');
+
     var dateMin = this.form.get('datetime_min');
     var dateMax = this.form.get('datetime_max');
     var minTime = this.getTimestampByInternationalFormat(dateMin);
     var maxTime = this.getTimestampByInternationalFormat(dateMax);
 
-    if ((dateMin && dateMax) && minTime > maxTime) {
+    if ('date' === this.config.format) {
+        minTime.setHours(0);
+        minTime.setMinutes(0);
+        minTime.setSeconds(0);
+
+        maxTime.setHours(23);
+        maxTime.setMinutes(59);
+        maxTime.setSeconds(59);
+    }
+
+    if ((dateMin && dateMax) && minTime.getTime() > maxTime.getTime()) {
         alert(this.dateMinShouldBeLessThanDateMaxMessage);
 
         return false;
@@ -61,9 +73,8 @@ DatetimeObject.prototype.save = function ()
     this.config.help[this.locale]  = this.form.get('help');
     this.config.required           = this.form.get('required');
     this.config.tags               = this.form.get('tags');
-    this.config.format             = this.form.get('format');
-    this.config.datetime_min       = dateMin;
-    this.config.datetime_max       = dateMax;
+    this.config.datetime_min       = this.formatDate(minTime);
+    this.config.datetime_max       = this.formatDate(maxTime);
 
     this.form.bind('label', this.config.label[this.locale]);
 
@@ -86,7 +97,21 @@ DatetimeObject.prototype.getTimestampByInternationalFormat = function (date)
     var hours = splitTime[0];
     var minutes = splitTime[1];
 
-    return new Date(year, month, day, hours, minutes).getTime();
+    return new Date(year, month, day, hours, minutes);
+};
+
+DatetimeObject.prototype.formatDate = function (date)
+{
+    var hours = this.addPaddingZero(date.getHours());
+    var minutes = this.addPaddingZero(date.getMinutes());
+    var months = this.addPaddingZero(date.getMonth() + 1);
+
+    return date.getDate() + "/" + months + "/" +  + date.getFullYear() + " " + hours + ':' + minutes;
+};
+
+DatetimeObject.prototype.addPaddingZero = function (number)
+{
+    return number < 10 ? '0' + number : number;
 };
 
 module.exports = DatetimeObject;
