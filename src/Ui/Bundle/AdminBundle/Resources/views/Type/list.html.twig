@@ -67,6 +67,7 @@
                 </td>
                 <td>{{ type.registrationTemplate }}</td>
                 <td>{{ type.sheetTemplate }}</td>
+                <td>{{ type.package }}</td>
                 <td>
                     <ul style="list-style-type:disc">
                         {% for formTemplateView in type.formTemplateViews %}
@@ -78,7 +79,6 @@
                         {% endfor %}
                     </ul>
                 </td>
-                <td>{{ type.package }}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="{{ path('admin_type_update', { 'event': event.id, 'type': type.id }) }}">

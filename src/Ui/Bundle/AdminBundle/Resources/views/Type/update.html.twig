@@ -13,11 +13,11 @@
         {{ form_row(form.registrationTemplate) }}
     {% endif %}
 
-    {{ form_row(form.formTemplates) }}
-
     {% if form.package is defined %}
         {{ form_row(form.package) }}
     {% endif %}
+
+    {{ form_row(form.formTemplates) }}
 
     <div class="form-group">
         {{ form_label(form.hidden, null, { label_attr: { class: 'control-label col-md-3' }}) }}
