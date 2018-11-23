@@ -33,6 +33,11 @@ button, a {
         }
     }
 
+    &.btn-success, &.btn-danger {
+        border: none;
+        border-radius: 18px;
+    }
+
     &.btn-primary {
         @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
         color: $button-text-color !important;
