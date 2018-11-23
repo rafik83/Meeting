@@ -340,8 +340,11 @@ class EventRepository implements EventRepositoryInterface
 
     public function getEventThatOccursDuringTheGivenDay(\DateTimeInterface $date): array
     {
-        $begin = clone $date;
-        $end = clone $date;
+        $begin = new \DateTime();
+        $begin->setTimestamp($date->getTimestamp());
+        $end = new \DateTime();
+        $end->setTimestamp($date->getTimestamp());
+
         $begin->setTime(0, 0, 0, 0);
         $end->setTime(23, 59, 59, 99);
 
