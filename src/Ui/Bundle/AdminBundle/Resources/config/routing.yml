@@ -1088,6 +1088,42 @@ admin_template_registration_create:
         event: \d+
 
 #
+# Form Template
+#
+admin_template_form_list:
+    path: /event/{event}/template/form
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\ListAction
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
+admin_template_form_builder:
+    path: /event/{event}/template/form/builder/{template}/{locale}
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\BuilderAction
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        template: \d+
+        locale: \w+
+
+admin_template_form_save:
+    path: /event/{event}/template/form/builder/{template}/save/{locale}
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\SaveAction
+    methods: [POST]
+    requirements:
+        event: \d+
+        template: \d+
+        locale: \w+
+
+admin_template_form_parameters:
+    path: /event/{event}/template/form/parameters/{template}
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\UpdateParametersAction
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        template: \d+
+
+#
 # Package
 #
 admin_package_list:
@@ -1141,7 +1177,7 @@ admin_template_sheet_builder:
         locale: '[a-z]{2}(_[A-Z]{2})?'
 admin_template_sheet_save:
     path: /template/sheet/{template}/{locale}/save
-    defaults: { _controller: AdminBundle:SheetTemplate:save }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Sheet\SaveAction
     methods: [POST]
     requirements:
         template: \d+

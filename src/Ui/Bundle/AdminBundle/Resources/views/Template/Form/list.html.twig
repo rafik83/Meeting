@@ -1,0 +1,86 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.template.form.title'|trans %}
+
+{% block content %}
+    <div class="page-header">
+        <button type="button" class="btn btn-primary btn-primary pull-right" data-toggle="modal" data-target="#create-modal">
+            {{ 'admin.template.form.action.create'|trans }}
+        </button>
+        <h1>{{ 'admin.template.form.title'|trans }}</h1>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="col-md-4">{{ 'admin.template.form.table.column.title'|trans }}</th>
+            <th class="col-md-4">{{ 'admin.template.form.table.column.translatedTitle'|trans }}</th>
+            <th class="col-md-2">{{ 'admin.template.form.table.column.createdAt'|trans }}</th>
+            <th class="col-md-2 text-right">{{ 'admin.template.form.table.column.action'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for template in formTemplateListView.templates %}
+            <tr>
+                <td>
+                    {{ template.title }}
+                    {% if template.isPublished %}
+                        <span class="badge badge-pill badge-present">&nbsp;</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <ul>
+                    {% for locale, title in template.translatedTitles %}
+                        <li><b>{{ locale|locale(app.request.locale) }}</b>: {{ title }}</li>
+
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ template.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <a href="{{ path('admin_template_form_builder', {'event': event.id, 'template': template.id, 'locale': template.locale }) }}" class="btn btn-default btn-sm">
+                            {{ 'admin.template.form.table.content.edit'|trans }}
+                        </a>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="{{ path('admin_template_form_parameters', {'event': event.id, 'template': template.id }) }}" class="btn-sm">
+                                    {{ 'admin.template.form.table.content.parameters'|trans }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if form is defined %}
+        {{ form_start(form) }}
+        <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label" aria-hidden="true" {% if formSubmittedButNotValid %}data-show-modal=""{% endif %}>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="create-modal-label">{{ 'admin.template.action.create'|trans }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(form.title) }}
+                        {{ form_row(form.translations) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            {{ 'form.sheet_template_create.children.close.label'|trans({}, 'forms') }}
+                        </button>
+                        {{ form_widget(form.submit) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    {% endif %}
+{% endblock %}

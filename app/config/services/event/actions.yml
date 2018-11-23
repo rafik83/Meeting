@@ -1,5 +1,19 @@
 services:
     #
+    # Sheet
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ObjectsCollectionUpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@template.template_data_factory'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\BlockToArray'
+            - '@Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\SetArrayContentToBlock'
+            - '@adapter.router'
+
+    #
     # Package
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\SummaryAction:

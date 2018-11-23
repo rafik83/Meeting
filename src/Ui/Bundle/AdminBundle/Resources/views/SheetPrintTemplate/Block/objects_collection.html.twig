@@ -1,0 +1,34 @@
+{% trans_default_domain 'templates' %}
+
+{% set config = {
+    style: null,
+    label: { (locale): '' },
+    maxItems: 10
+}|merge(config|default({})) %}
+
+<div class="block" data-block="objects_collection" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+    <div class="block-buttons">
+        <ul class="list-unstyled">
+            <li>
+            <span class="btn btn-link move-button">
+                <i class="glyphicon glyphicon-move"></i>
+            </span>
+            </li>
+            <li>
+                <button class="btn btn-link delete-button" data-confirmation-message="{{ 'template.block.remove_confirm'|trans }}">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block-inner block-collection">
+                {% for uid, item in children[0]|default([]) %}
+                    {{ include('AdminBundle:SheetPrintTemplate:blockOrObject.html.twig', { uid: uid, item: item, locale: locale }, false) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -138,6 +138,15 @@ services:
             - '@templating.engine.twig'
 
     #
+    # Sheet Template
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Sheet\SaveAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    #
     # Registration Template
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction:
@@ -170,6 +179,41 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
             - '@templating'
+
+
+    #
+    # Form Template
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@form.factory'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\BuilderAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@repository.nomenclature_repository'
+            - '@sheet.template.completeness_calculator'
+            - '@session.flash_bag'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\SaveAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\UpdateParametersAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@router'
 
     #
     # Content

@@ -50,4 +50,9 @@ class FormTemplateTranslation
     {
         return $this->title;
     }
+
+    public function update(string $title): void
+    {
+        $this->title = $title;
+    }
 }

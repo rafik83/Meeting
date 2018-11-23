@@ -30,7 +30,7 @@
             <div class="block-inner">
                 {% for uid, item in children[0]|default([]) %}
                     {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
-                        'isRegistrationTemplate': true,
+                        'isFormTemplate': true,
                         'uid': uid,
                         'config': item.config,
                         'children': item.children|default([]),
@@ -38,7 +38,7 @@
                         'fallback': fallback|default(false),
                         'nomenclatures': nomenclatures,
                         'sheet_tags': [],
-                        'registrationTemplateTagView': registrationTemplateTagView,
+                        'templateTagView': templateTagView,
                         'products': [],
                         'uploadFormats': uploadFormats,
                     }, false) }}

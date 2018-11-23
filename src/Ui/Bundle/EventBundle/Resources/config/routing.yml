@@ -194,6 +194,14 @@ event_sheet_form:
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:form }
 
+event_sheet_objects_collection_update:
+    path: /sheet/{sheet}/objects-collection/{key}
+    requirements:
+        sheet: \d+
+        key: \w+
+    methods:  [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ObjectsCollectionUpdateAction
+
 event_sheet_update:
     path: /sheet/{sheet}/{locale}/{key}
     requirements:

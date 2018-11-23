@@ -1,12 +1,10 @@
 var guidGenerator = require('./_GuidGenerator'),
-    LoadingButton = require('./_LoadingButton'),
+    LoadingButton = require('./../_LoadingButton'),
     normalizeTemplate = require('./_NormalizeTemplate'),
-    Sortable      = require('./_Sortable'),
+    Sortable      = require('./../_Sortable'),
     TemplateBlock = require('./_TemplateBlock'),
     TemplateObject = require('./_TemplateObject')
 ;
-
-var builderType = 'sheet';
 
 /**
  * TemplateBuilder
@@ -14,17 +12,18 @@ var builderType = 'sheet';
  * @param element
  * @constructor
  */
-function TemplateBuilder(element)
+function TemplateBuilder(element, builderType)
 {
-    this.element    = element;
-    this.url        = element.getAttribute('data-template-builder');
-    this.menu       = element.querySelector('#template-menu');
+    this.element = element;
+    this.builderType = builderType;
+    this.url = element.getAttribute('data-template-builder');
+    this.menu = element.querySelector('#template-menu');
     this.openButton = element.querySelector('#template-menu-button');
-    this.locale     = element.getAttribute('data-locale');
-    this.wasOpen    = false;
-    this.open       = false;
-    this.drag       = false;
-    this.current    = null;
+    this.locale = element.getAttribute('data-locale');
+    this.wasOpen = false;
+    this.open = false;
+    this.drag = false;
+    this.current = null;
 
     var saveButton  = element.querySelector('#template-save-button');
     this.saveButton = new LoadingButton(saveButton, saveButton.getAttribute('data-loading-button'));
@@ -152,6 +151,12 @@ TemplateBuilder.prototype.addBlock = function (element)
 
     // Enable block behavior
     this.block(element);
+
+    // Open configure modal
+    if (element.templateBlock.isObjectsCollection()) {
+        element.templateBlock.fill();
+        element.templateBlock.openConfigureModal();
+    }
 };
 
 TemplateBuilder.prototype.addObject = function (element)
@@ -169,13 +174,13 @@ TemplateBuilder.prototype.addObject = function (element)
 TemplateBuilder.prototype.block = function (element)
 {
     // Create block
-    element.templateBlock = new TemplateBlock(element, this);
+    element.templateBlock = new TemplateBlock(element, this, this.locale);
 };
 
 TemplateBuilder.prototype.object = function (element)
 {
     // Create object
-    element.templateObject = new TemplateObject(element, this.locale, builderType);
+    element.templateObject = new TemplateObject(element, this.locale, this.builderType);
 };
 
 TemplateBuilder.prototype.save = function ()
@@ -191,7 +196,8 @@ TemplateBuilder.prototype.save = function ()
             if (xhr.status === OK) {
                 var config = JSON.parse(xhr.response);
             } else {
-                alert('error');
+                var response = JSON.parse(xhr.response);
+                alert(response.error ? response.error : 'Error !');
             }
 
             this.saveButton.stop();

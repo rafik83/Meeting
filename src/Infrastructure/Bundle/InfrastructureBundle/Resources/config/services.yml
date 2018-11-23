@@ -1223,6 +1223,7 @@ services:
         arguments:
             - '@repository.template.sheet_template_repository'
             - '@template.template_preview_resolver'
+            - '@template.template_data_factory'
             - '@adapter.job_queue_adapter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:

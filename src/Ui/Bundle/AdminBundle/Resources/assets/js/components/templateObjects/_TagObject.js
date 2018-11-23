@@ -1,5 +1,5 @@
 var $ = require('jquery'),
-  Form = require('./../_Form');
+  Form = require('./../template/_Form');
 
 /**
  * TagObject

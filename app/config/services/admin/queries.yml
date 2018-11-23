@@ -173,3 +173,12 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\StaticFormulation\StaticFormulationListViewQuery }
 
     Proximum\Vimeet\Application\Query\StaticFormulation\Customized\CustomizedStaticFormulationViewQueryHandler: ~
+
+    #
+    # Form Template
+    #
+    Proximum\Vimeet\Application\Query\Template\Form\FormTemplateListViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\FormTemplateListViewQuery }

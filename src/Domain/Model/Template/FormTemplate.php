@@ -43,6 +43,31 @@ class FormTemplate extends AbstractTemplate
         return $this->translations->toArray();
     }
 
+    public function translateTitles(array $translations): void
+    {
+        foreach ($translations as $locale => $translation) {
+            if ($this->hasTranslation($locale)) {
+                $this->translations->get($locale)->update($translation['title']);
+            } else {
+                $this->translations->set($locale, new FormTemplateTranslation($this, $locale, $translation['title']));
+            }
+        }
+    }
+
+    public function hasTranslation(string $locale): bool
+    {
+        return $this->translations->containsKey($locale);
+    }
+
+    public function getLocalizedTitle(string $locale): string
+    {
+        if (!$this->hasTranslation($locale)) {
+            return '';
+        }
+
+        return $this->translations->get($locale)->getTitle();
+    }
+
     public function getFallback(): string
     {
         return $this->event ? $this->event->getFallback() : $this->fallback;
@@ -51,5 +76,12 @@ class FormTemplate extends AbstractTemplate
     public function isPublished(): bool
     {
         return $this->published;
+    }
+
+    public function update(string $title, array $translations, bool $isPublished): void
+    {
+        $this->setTitle($title);
+        $this->translateTitles($translations);
+        $this->published = $isPublished;
     }
 }

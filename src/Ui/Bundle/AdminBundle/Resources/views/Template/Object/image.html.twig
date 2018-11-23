@@ -86,11 +86,11 @@
                                         </div>
                                     {% endif %}
                                 {% endif %}
-                                {% if isRegistrationTemplate is defined and isRegistrationTemplate == true and registrationTemplateTagView is defined %}
+                                {% if isFormTemplate is defined and isFormTemplate == true and templateTagView is defined %}
                                     <hr/>
-                                    {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                    {{ include('AdminBundle:Template/Form:tagsSelect.html.twig', {
                                         'config': config,
-                                        'registrationTemplateTagView': registrationTemplateTagView,
+                                        'templateTagView': templateTagView,
                                     }, false) }}
                                 {% elseif sheet_tags is defined %}
                                     <div class="form-group">

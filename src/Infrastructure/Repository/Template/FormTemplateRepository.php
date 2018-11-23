@@ -25,6 +25,17 @@ class FormTemplateRepository implements FormTemplateRepositoryInterface
         $this->entityManager = $entityManager;
     }
 
+    public function add(FormTemplate $template): void
+    {
+        $this->entityManager->persist($template);
+        $this->entityManager->flush($template);
+    }
+
+    public function update(FormTemplate $template): void
+    {
+        $this->entityManager->flush($template);
+    }
+
     public function findByEvent(Event $event): array
     {
         return $this

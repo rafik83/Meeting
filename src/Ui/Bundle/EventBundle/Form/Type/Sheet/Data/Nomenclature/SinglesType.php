@@ -28,6 +28,7 @@ class SinglesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $nomenclature = $options['nomenclature'];
+        $constraints = $options['constraints'];
 
         if (!$nomenclature instanceof Nomenclature) {
             throw new \Exception(sprintf('"%s" expected, "%s" given.', Nomenclature::class, \gettype($nomenclature)));
@@ -48,6 +49,7 @@ class SinglesType extends AbstractType
                     'placeholder'  => $options['placeholder'],
                     'nomenclature' => $nomenclature,
                     'multiple'     => $options['multiple'],
+                    'constraints'  => $constraints,
                 ])
             ;
         } elseif (2 === $nomenclature->getDepth()) {
@@ -57,6 +59,7 @@ class SinglesType extends AbstractType
                     'locale'       => $options['locale'],
                     'label'        => false,
                     'nomenclature' => $nomenclature,
+                    'constraints'  => $constraints,
                 ])
                 ->add('second', SingleType::class, [
                     'choices'      => $nomenclature->getSecondLevel(),
@@ -67,6 +70,7 @@ class SinglesType extends AbstractType
                     'choice_attr'  => function (NomenclatureItem $item) {
                         return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
                     },
+                    'constraints'  => $constraints,
                 ])
             ;
         } elseif (3 === $nomenclature->getDepth()) {
@@ -76,6 +80,7 @@ class SinglesType extends AbstractType
                     'locale'       => $options['locale'],
                     'label'        => false,
                     'nomenclature' => $nomenclature,
+                    'constraints'  => $constraints,
                 ])
                 ->add('second', SingleType::class, [
                     'choices'      => $nomenclature->getSecondLevel(),
@@ -85,6 +90,7 @@ class SinglesType extends AbstractType
                     'choice_attr' => function (NomenclatureItem $item) {
                         return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
                     },
+                    'constraints'  => $constraints,
                 ])
                 ->add('third', SingleType::class, [
                     'choices'      => $nomenclature->getThirdLevel(),
@@ -95,6 +101,7 @@ class SinglesType extends AbstractType
                     'choice_attr'  => function (NomenclatureItem $item) {
                         return $item->getParent() ? ['data-parent' => $item->getParent()->getKey()] : [];
                     },
+                    'constraints'  => $constraints,
                 ])
             ;
         } else {
@@ -110,6 +117,7 @@ class SinglesType extends AbstractType
         $resolver->setRequired(['locale', 'nomenclature', 'placeholder']);
         $resolver->setDefaults([
             'multiple' => false,
+            'constraints' => [],
         ]);
     }
 

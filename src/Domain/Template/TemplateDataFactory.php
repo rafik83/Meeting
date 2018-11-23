@@ -17,11 +17,14 @@ use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\BuildNotImplementedException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainForbiddenObjectsException;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
 class TemplateDataFactory
@@ -131,6 +134,21 @@ class TemplateDataFactory
         ;
     }
 
+    public function createFormTemplateFromTemplate(
+        FormTemplate $formTemplate,
+        string $locale
+    ): TemplateData {
+        return $this
+            ->loadNomenclatures($formTemplate->getEvent())
+            ->create(
+                $formTemplate->getValue(),
+                [],
+                $locale,
+                $formTemplate->getFallback()
+            )
+        ;
+    }
+
     /**
      * @param Type        $type
      * @param null|string $locale
@@ -234,6 +252,10 @@ class TemplateDataFactory
      * @param string|null      $fallback
      *
      * @return TemplateData
+     *
+     * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
+     * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
+     * @throws \Exception
      */
     public function createFromTemplate(AbstractTemplate $template, array $data = [], $locale = null, $fallback = null)
     {
@@ -249,6 +271,11 @@ class TemplateDataFactory
      * @param string      $fallback
      *
      * @return TemplateData
+     *
+     * @throws ObjectNotFoundException
+     * @throws ObjectsCollectionBlockCanNotContainForbiddenObjectsException
+     * @throws ObjectsCollectionBlockCanNotContainOtherBlockException
+     * @throws \Exception
      */
     public function create(array $template, array $data = [], ?string $locale = null, $fallback = null)
     {
@@ -280,9 +307,9 @@ class TemplateDataFactory
     /**
      * @param TemplateObject $templateObject
      *
-     * @return string|null
+     * @return string|array|null
      */
-    private function getFirstNotEmptyContent(TemplateObject $templateObject): ? string
+    private function getFirstNotEmptyContent(TemplateObject $templateObject)
     {
         $translations = $templateObject->getTranslations();
 
