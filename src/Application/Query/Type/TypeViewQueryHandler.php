@@ -65,13 +65,6 @@ class TypeViewQueryHandler
                 $formTemplateViews[] = new FormTemplateView(
                     $formTemplate->getTitle(),
                     $formTemplate->isPublished()
-                        ? ''
-                        : sprintf('%s',$this->translator->trans(
-                            'admin.type.form.template.status.draft',
-                            [],
-                            'messages'
-                        )
-                    )
                 );
             }
 

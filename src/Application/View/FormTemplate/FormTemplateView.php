@@ -14,12 +14,12 @@ class FormTemplateView
     /** @var string */
     public $title;
 
-    /** @var null|string */
-    public $status;
+    /** @var bool */
+    public $isPublished;
 
-    public function __construct(string $title, ?string $status)
+    public function __construct(string $title, bool $isPublished)
     {
         $this->title = $title;
-        $this->status = $status;
+        $this->isPublished = $isPublished;
     }
 }

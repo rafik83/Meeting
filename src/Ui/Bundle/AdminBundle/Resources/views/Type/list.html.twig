@@ -69,8 +69,12 @@
                 <td>{{ type.sheetTemplate }}</td>
                 <td>
                     <ul style="list-style-type:disc">
-                        {% for template in type.formTemplateViews %}
-                            <li>{{ template.title }} <span class="label label-info">{{ template.status }}</span></li>
+                        {% for formTemplateView in type.formTemplateViews %}
+                            <li>{{ formTemplateView.title }}
+                                <span class="label label-{{ formTemplateView.isPublished ? 'success' : 'danger' }}">
+                                    {{ (formTemplateView.isPublished ? 'admin.type.form.template.status.published' : 'admin.type.form.template.status.draft')|trans }}
+                                </span>
+                            </li>
                         {% endfor %}
                     </ul>
                 </td>
