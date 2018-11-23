@@ -107,9 +107,6 @@ class FillFormAction
             'country' => $event->getCountry(),
             'locale' => $locale,
             'locales' => $event->getLocales(),
-            'attr' => [
-                'novalidate' => 'novalidate',
-            ],
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

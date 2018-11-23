@@ -18,5 +18,6 @@ interface FormDataRepositoryInterface
 {
     public function add(FormData $formData): void;
     public function update(FormData $formData): void;
+    public function save(FormData $formData): void;
     public function getByUserAndFormTemplate(User $user, FormTemplate $formTemplate): ?FormData;
 }

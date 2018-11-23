@@ -4,3 +4,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Infrastructure\Repository\CartRowParticipantRepository'
             - '@template.participant_info_guesser'
+
+    Proximum\Vimeet\Application\Components\Template\Object\UploadObjectDownloadPathGetter:
+        arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@Proximum\Vimeet\Application\Command\Encryption\DecryptHandler'
+            - '%kernel.project_dir%/web'
+            - '%infrastructure.encrypted_files_path%'

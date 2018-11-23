@@ -33,7 +33,39 @@
 
                         {{ form_start(form) }}
 
-                        {{ form_rest(form) }}
+                        {{ form_errors(form) }}
+
+                        <div class="inputs">
+                            {% for child in form %}
+                                {{ form_row(child) }}
+
+                                {% set uploadObject = child.vars.value %}
+                                {% if uploadObject.isUploadAndHasPath is defined and uploadObject.isUploadAndHasPath %}
+                                    {% set parameters = {
+                                        'sheet': sheet.id,
+                                        'participant': participant.id,
+                                        'formTemplate': formTemplate.id,
+                                        'objectKey': uploadObject.key
+                                    } %}
+                                    {% set path = path('event_form_template_download_file', parameters) %}
+
+                                    <div class="text-center">
+                                        <a href="{{ path }}" download>
+                                            {% if uploadObject.isImageFormat %}
+                                                {{ render(controller(
+                                                    'Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Form\\DownloadFileAction',
+                                                    parameters|merge({'preview': true})
+                                                )) }}
+                                            {% endif %}
+
+                                            <i class="glyphicon glyphicon-download"></i>
+                                            {{ 'common.download'|trans }}
+                                        </a>
+                                        <hr>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
 
                         <div class="validation text-center">
                             <button type="submit" class="btn btn-primary">

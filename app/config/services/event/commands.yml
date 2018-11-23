@@ -36,5 +36,8 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ParticipantPresenceCommand }
 
     Proximum\Vimeet\Application\Command\Template\Form\FillStepCommandHandler:
+        arguments:
+              - '@Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository'
+              - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\FormDataRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\FillStepCommand }

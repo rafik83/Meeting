@@ -45,4 +45,9 @@ class FormData
     {
         return $this->data;
     }
+
+    public function updateData(array $data): void
+    {
+        $this->data = $data;
+    }
 }

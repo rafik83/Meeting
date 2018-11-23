@@ -8,31 +8,29 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Form;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Components\Template\Object\UploadObjectDownloadPathGetter;
+use Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQuery;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
-use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Normalizer\DataUriNormalizer;
+use Symfony\Component\Templating\EngineInterface;
 
 class DownloadFileAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
-
-    /** @var TemplateDataFactory */
-    private $templateDataFactory;
 
     /** @var DataUriNormalizer */
     private $dataUriNormalizer;
@@ -43,33 +41,42 @@ class DownloadFileAction
     /** @var UploadObjectDownloadPathGetter */
     private $uploadObjectDownloadPathGetter;
 
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        TemplateDataFactory $templateDataFactory,
         DataUriNormalizer $dataUriNormalizer,
         EngineInterface $engine,
-        UploadObjectDownloadPathGetter $uploadObjectDownloadPathGetter
+        UploadObjectDownloadPathGetter $uploadObjectDownloadPathGetter,
+        QueryBusInterface $queryBus
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->templateDataFactory = $templateDataFactory;
         $this->dataUriNormalizer = $dataUriNormalizer;
         $this->engine = $engine;
         $this->uploadObjectDownloadPathGetter = $uploadObjectDownloadPathGetter;
+        $this->queryBus = $queryBus;
     }
 
     public function __invoke(
         Request $request,
         Sheet $sheet,
         string $objectKey,
-        Participant $participant = null,
+        FormTemplate $formTemplate,
+        Participant $participant,
         bool $preview = false
     ): Response {
-        if (false === $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ||
-            false === $this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)) {
+        if (false === $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            || false === $this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)
+            || !$formTemplate->isPublished()
+            || !$formTemplate->hasType($sheet->getType())
+        ) {
             throw new AccessDeniedException();
         }
 
-        $templateData = $this->createTemplateData($sheet, $request->getLocale(), $participant);
+        $templateData = $this->queryBus->handle(
+            new FormTemplateDataQuery($formTemplate, $sheet, $participant, $request->getLocale())
+        );
 
         try {
             $downloadPath = $this->uploadObjectDownloadPathGetter->getDownloadPath(
@@ -80,9 +87,9 @@ class DownloadFileAction
             );
 
             if (true === $preview) {
-                return $this->engine->renderResponse('@Event/base64Image.html.twig', [
+                return new Response($this->engine->render('@Event/base64Image.html.twig', [
                     'file' => $this->dataUriNormalizer->normalize(new \SplFileInfo($downloadPath)),
-                ]);
+                ]));
             }
 
             return (new BinaryFileResponse($downloadPath))
@@ -90,23 +97,5 @@ class DownloadFileAction
         } catch (ObjectNotFoundException $exception) {
             throw new AccessDeniedException('Invalid object');
         }
-    }
-
-    private function createTemplateData(Sheet $sheet, string $locale, Participant $participant = null): TemplateData
-    {
-        if ($participant instanceof Participant) {
-            if ($participant->getSheet() !== $sheet) {
-                throw new AccessDeniedException('Invalid sheet');
-            }
-
-            $templateData = $this->templateDataFactory->createRegistrationFromParticipant(
-                $participant,
-                $locale
-            );
-        } else {
-            $templateData = $this->templateDataFactory->createRegistrationFromSheet($sheet);
-        }
-
-        return $templateData;
     }
 }

@@ -40,11 +40,16 @@ services:
     #
     # Form Template
     #
-    Proximum\Vimeet\Application\Query\Template\Form\FillStepQueryHandler:
+    Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQueryHandler:
         arguments:
             - '@template.template_data_factory'
             - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\FormDataRepository'
             - '@Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQuery }
+    Proximum\Vimeet\Application\Query\Template\Form\FillStepQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\FillStepQuery }
 

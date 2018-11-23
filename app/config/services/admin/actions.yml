@@ -656,18 +656,6 @@ services:
             - '@templating.engine.twig'
 
     #
-    # Form
-    #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Form\FillFormAction:
-        arguments:
-            - '@adapter.authorization_checker'
-            - '@templating.engine.twig'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@router'
-            - '@form.factory'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-
-    #
     # Visio
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction:

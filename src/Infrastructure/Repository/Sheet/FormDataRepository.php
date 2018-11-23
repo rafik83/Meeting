@@ -36,6 +36,12 @@ class FormDataRepository implements FormDataRepositoryInterface
         $this->entityManager->flush($formData);
     }
 
+    public function save(Sheet\FormData $formData): void
+    {
+        $this->entityManager->persist($formData);
+        $this->entityManager->flush($formData);
+    }
+
     public function getBySheetAndFormTemplate(Sheet $sheet, FormTemplate $formTemplate): ?Sheet\FormData
     {
         return $this->entityManager
