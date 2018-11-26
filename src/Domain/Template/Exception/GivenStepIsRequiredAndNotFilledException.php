@@ -19,6 +19,6 @@ class GivenStepIsRequiredAndNotFilledException extends TemplateException
     {
         $this->step = $step;
 
-        parent::__construct('template.block.GivenStepIsRequiredAndNotFilled');
+        parent::__construct('template.block.givenStepIsRequiredAndNotFilled');
     }
 }

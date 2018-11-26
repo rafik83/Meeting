@@ -14,8 +14,6 @@ use Proximum\Vimeet\Application\View\Template\Form\BlockStepView;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Exception\BlockForGivenStepNotFoundException;
 use Proximum\Vimeet\Domain\Template\Exception\GivenStepIsRequiredAndNotFilledException;
-use Proximum\Vimeet\Domain\Template\TemplateObject\EditableObject;
-
 
 class FillStepQueryHandler
 {
