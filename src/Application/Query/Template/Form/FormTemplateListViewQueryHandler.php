@@ -26,22 +26,23 @@ class FormTemplateListViewQueryHandler
 
     public function handle(FormTemplateListViewQuery $query): FormTemplateListView
     {
-        $templates = $this->formTemplateRepository->findByEvent($query->event);
+        $formTemplates = $this->formTemplateRepository->findByEvent($query->event);
+        $formTemplateViews= [];
 
-        $formTemplateViews = [];
-        foreach ($templates as $template) {
+        foreach ($formTemplates as $formTemplate) {
             $translatedTitles = [];
             foreach ($query->event->getLocales() as $locale) {
-                $translatedTitles[$locale] = $template->getLocalizedTitle($locale);
+                $translatedTitles[$locale] = $formTemplate->getLocalizedTitle($locale);
             }
 
             $formTemplateViews[] = new FormTemplateView(
-                $template->getId(),
-                $template->getTitle(),
-                $template->getFallback(),
-                $template->isPublished(),
+                $formTemplate->getId(),
+                $formTemplate->getTitle(),
+                $formTemplate->isPublished(),
+                $formTemplate->getCreatedAt(),
                 $translatedTitles,
-                $template->getCreatedAt()
+                $formTemplate->getFallback(),
+                $formTemplate->getTypes()
             );
         }
 

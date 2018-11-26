@@ -1029,6 +1029,7 @@ admin.template.form.table.column.action: Action
 admin.template.form.table.column.createdAt: 'Créé le'
 admin.template.form.table.column.title: Titre
 admin.template.form.table.column.translatedTitle: 'Titre traduit'
+admin.template.form.table.column.types: 'Types'
 admin.template.form.table.content.create: 'Créer un template de formulaire'
 admin.template.form.table.content.edit: Modifier
 admin.template.form.table.content.parameters: Paramètres

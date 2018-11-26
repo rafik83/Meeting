@@ -79,6 +79,7 @@ class ListAction
             if (!$form->isValid()) {
                 $formSubmittedButNotValid = true;
             } else {
+
                 $this->commandBus->handle($create);
 
                 return new RedirectResponse($this->router->generate('admin_template_form_list', [
