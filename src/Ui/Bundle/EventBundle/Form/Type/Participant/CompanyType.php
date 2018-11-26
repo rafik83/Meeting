@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\BooleanDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\DatetimeDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextTranslationType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\FileDataType;
@@ -48,6 +49,8 @@ class CompanyType extends AbstractType
                 $this->addBoolean($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\TemplateObject\UploadObject) {
                 $this->addFile($key, $builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\TemplateObject\DateTime) {
+                $this->addDatetime($key, $builder, $object, $options['locale']);
             }
         }
     }
@@ -201,6 +204,19 @@ class CompanyType extends AbstractType
             'object'                                  => $object,
             'placeholder'                             => $object->getOption('label')[$locale],
             'onMultipleUseSinglesInsteadOfCheckboxes' => true,
+        ]);
+    }
+
+    private function addDatetime(
+        $key,
+        FormBuilderInterface $builder,
+        Template\TemplateObject $object,
+        $locale
+    ): void {
+        $builder->add($key, DatetimeDataType::class, [
+            'object'  => $object,
+            'locale'  => $locale,
+            'label'   => false,
         ]);
     }
 }

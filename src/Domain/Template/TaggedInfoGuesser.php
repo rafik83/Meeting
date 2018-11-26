@@ -28,6 +28,8 @@ class TaggedInfoGuesser
     }
 
     /**
+     * @deprecated
+     *
      * @param AbstractTemplate $template
      * @param array            $data
      * @param string           $tag
@@ -41,7 +43,8 @@ class TaggedInfoGuesser
             $template->getValue(),
             $data,
             $locale,
-            $template->getFallback()
+            $template->getFallback(),
+            $template->getEvent()
         );
 
         return $templateData->getTaggedDatas($tag);

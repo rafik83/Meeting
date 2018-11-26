@@ -31,6 +31,26 @@ function DateTimePicker(element, customConfig)
 
     var allowDates = this.element.getAttribute('data-allow-dates');
     var allowHours = this.element.getAttribute('data-allow-hours');
+    var minDate = this.element.getAttribute('data-min-date');
+    var maxDate = this.element.getAttribute('data-max-date');
+
+    if (minDate) {
+        this.standardConfig = Object.assign(
+            this.standardConfig,
+            {
+                minDate: new Date(minDate)
+            }
+        );
+    }
+
+    if (maxDate) {
+        this.standardConfig = Object.assign(
+            this.standardConfig,
+            {
+                maxDate: new Date(maxDate)
+            }
+        );
+    }
 
     // In case of allowDates or allowHours not set, change the format of the picker
     if ((allowDates === null && allowHours !== null)

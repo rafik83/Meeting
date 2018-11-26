@@ -350,7 +350,7 @@ class CatalogController extends Controller
         $user = $userDomain->getUser();
         $event = $eventDomain->getEvent();
 
-        if (!$sheet->isInCatalog()) {
+        if (!$sheet->isInInternalCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
@@ -362,7 +362,7 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not found');
         }
 
-        if (!$sheetToDisplay->isInCatalog()) {
+        if (!$sheetToDisplay->isInInternalCatalog()) {
             throw $this->createAccessDeniedException('Sheet to display not in catalog');
         }
 

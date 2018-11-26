@@ -1,0 +1,13 @@
+{% if item.datetime %}
+    {% set format = 'none' %}
+    {% if item.displayHours %}
+        {% set format =  'short' %}
+    {% endif %}
+
+    <section id="object-{{ uid }}" class="object object--datetime section">
+        <header>
+            <h2>{{ item.label(locale, fallback) }}</h2>
+        </header>
+        <p>{{ item.datetime|localizeddate('short', format, null, item.event.timezone) }}</p>
+    </section>
+{% endif %}

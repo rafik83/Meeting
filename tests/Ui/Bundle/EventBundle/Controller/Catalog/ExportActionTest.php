@@ -170,7 +170,7 @@ class ExportActionTest extends TestCase
             ->willReturn(true)
         ;
 
-        $this->sheet->isInCatalog()->willReturn(false);
+        $this->sheet->isInInternalCatalog()->willReturn(false);
 
         $action = new ExportAction(
             $this->authorizationCheckerAdapter->reveal(),
@@ -201,7 +201,7 @@ class ExportActionTest extends TestCase
             ->willReturn(true)
         ;
 
-        $this->sheet->isInCatalog()->willReturn(true);
+        $this->sheet->isInInternalCatalog()->willReturn(true);
 
         $this->catalogAccessChecker->allowedToAccess($this->event->reveal())->shouldBeCalled()->willReturn(false);
 
@@ -233,7 +233,7 @@ class ExportActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true)
         ;
-        $this->sheet->isInCatalog()->willReturn(true);
+        $this->sheet->isInInternalCatalog()->willReturn(true);
         $this->catalogAccessChecker->allowedToAccess($this->event->reveal())->shouldBeCalled()->willReturn(true);
 
         $catalogFilterViewResult = $this->prophesize(CatalogFilterViewsResult::class);
@@ -275,7 +275,7 @@ class ExportActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true)
         ;
-        $this->sheet->isInCatalog()->willReturn(true);
+        $this->sheet->isInInternalCatalog()->willReturn(true);
         $this->catalogAccessChecker->allowedToAccess($this->event->reveal())->shouldBeCalled()->willReturn(true);
 
         $typeViews = [];
@@ -397,7 +397,7 @@ class ExportActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true)
         ;
-        $this->sheet->isInCatalog()->willReturn(true);
+        $this->sheet->isInInternalCatalog()->willReturn(true);
         $this->catalogAccessChecker->allowedToAccess($this->event->reveal())->shouldBeCalled()->willReturn(true);
 
         $typeViews = [];
