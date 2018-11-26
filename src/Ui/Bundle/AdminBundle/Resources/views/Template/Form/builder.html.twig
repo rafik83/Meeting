@@ -16,7 +16,12 @@
         data-locale="{{ locale }}"
     >
         <div class="template-builder-header">
-            <h1 class="pull-left">{{ template.title }}</h1>
+            <h1 class="pull-left">
+                <a href="{{ path('admin_template_form_list', {'event': event.id}) }}" class="btn btn-link" title="{{ 'admin.goback.link'|trans }}">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                </a>
+                {{ template.title }}
+            </h1>
 
             <div class="btn-toolbar" role="toolbar" aria-label="Template actions">
                 <div class="btn-group dropdown">
