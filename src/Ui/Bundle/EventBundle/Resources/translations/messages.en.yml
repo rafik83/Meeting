@@ -12,6 +12,8 @@ account.update.profile.title: Profile
 account.update.title: 'Edit my Account'
 agenda.availability.available_sheets: '{1} See available participant|]1,Inf[ See %availableSheets% available participants'
 agenda.availability.available_sheets_with_proposition: '{1}see a meeting request|]1,Inf[ see the %availableSheets% meeting requests'
+agenda.day.hide: 'Hide this day'
+agenda.day.see: 'Show the day'
 agenda.meeting.details: Details
 agenda.participant.view: 'Schedule of %participant%'
 agenda.title: 'My schedule'
@@ -23,6 +25,7 @@ availability.confirmation.action.add_unavailability: 'Add an unavailability'
 availability.confirmation.explanation.title: 'In order to have access to your meeting requests, please confirm your availability on your schedule.'
 availability.confirmation.title: 'Confirm your availabilities'
 'Bad credentials.': 'Bad credentials.'
+badge.title: 'My badge'
 billing_info.title: 'Billing information'
 catalog.action.meeting.proposition.approved: 'Approved proposal'
 catalog.action.meeting.proposition.show.refuse: 'Refused proposal'
@@ -98,6 +101,7 @@ event.meeting.request.closed: 'The meeting requests are now closed'
 event.meeting.request.locked: 'Planning processing - the meetings requests are locked'
 event.meeting.request.transformIntoMeeting.error: 'The meeting cannot be schedule for lack of common availabilities'
 event.meeting.request.transformIntoMeeting.success: 'The meeting is scheduled for %participants% on the %date% at %time% : %spot%.'
+event.participant.define_timezone: 'Set my time zone'
 event.registration_closed: 'Registrations are closed. If you are registered please connect to your account.'
 event.registration_not_open: 'Registrations are not opened yet.'
 event.sheet.export.fields.event_name: 'Event name'
@@ -126,8 +130,10 @@ event.user_event_phone.validate.ignore: Ignore
 event.user_event_phone.validate.returnToPhone: 'Update my phone number'
 event.user_event_phone.validate.success: 'Your phone number is successfully confirmed'
 event.user_event_phone.validate.title: 'phone number validation'
+event.visio.agenda_access: 'Click here to access your calendar'
 event.visio.test.audio: Audio
 event.visio.test.description: 'When prompted, allow us to use your camera and audio hardware. This test will last for 30 seconds.'
+event.visio.test.edge: 'Your browser, Edge, is not compatible to perform all audio / video quality tests. Thank you for using Chrome or Firefox.'
 event.visio.test.error.network.api: 'Can not connect to the video conference server. Please check your connection or your browser configuration to allow access to your camera and audio equipment.'
 event.visio.test.loading: 'Please wait...'
 event.visio.test.network: Network
@@ -138,6 +144,7 @@ event.visio.test.testInProgress: 'Test in progress'
 event.visio.test.testSuccessful: 'Successful test!'
 event.visio.test.title: 'Test your configuration for video meeting'
 event.visio.test.video: Video
+event.visio.welcome: 'Welcome on %event%'
 gender.man: Mr
 gender.woman: Mrs
 group.home.link.create_sheet: 'Create a profile'
@@ -194,6 +201,7 @@ login.forgot_password: 'Forgotten password?'
 login.forgotPassword: 'Forgotten password?'
 login.memberArea: 'Member area'
 meeting.video.end: 'End call'
+meeting.video.endingAt: 'End of the meeting in'
 meeting.video.error.userDeniedAccess: 'You have denied access to your audio/video devices or canceled the launch of the screen share. For video conferencing to work properly, please allow access to your devices or the launch of screen sharing.'
 meeting.video.installScreenSharingExtensionMessage: 'Thank you for setting our screen sharing extension.'
 meeting.video.notCompatibleBrowserMessage: 'Your browser is not compatible. Thank you for using Chrome or Firefox'
@@ -224,6 +232,7 @@ multiple_sheets.request.list.totalRequest: '{0} No meeting request |{1} one meet
 multiple_sheets.request.title: 'meetings management'
 multiple_sheets.select_sheet: 'select a sheet'
 multiple_sheets.title: 'My profiles'
+navigation.category.badge: Badge
 navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
 navigation.category.happening: 'Meeting administration'
@@ -239,6 +248,7 @@ navigation.links.billing.order_history: 'Orders & Transactions'
 navigation.links.catalog.available_date: 'Available on'
 navigation.links.catalog.incoming: 'Coming soon'
 navigation.links.catalog.sheet_not_in_catalog: 'Your participation is awaiting validation'
+navigation.links.contactUs: 'Contact us'
 navigation.links.happening.accept: 'Accepted requests'
 navigation.links.happening.approved: Approved
 navigation.links.happening.decline: 'Refused requests'

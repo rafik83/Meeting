@@ -1,12 +1,19 @@
 template.action.close: Close
 template.action.save: Save
 template.block.configure: configure
+template.block.configure.objects_collection.maxItems: 'Maximum number of lines'
+template.block.configure.objects_collection.title: 'Configure the object collection'
+template.block.configure.style: Style
+template.block.configure.title: Title
 template.block.remove_confirm: 'Do you confirm the remove of this element ?'
 template.boolean.filter.active: 'Activate the filter'
 template.boolean.filter.label: 'Filter label'
 template.collection.title: 'collection fields enabled'
 template.content.title: content
 template.defaultElement.title: 'element by default'
+template.error.objectsCollectionBlockCanNotContainForbiddenObjects: 'A collection block of objects can only contain editable text objects and nomenclature'
+template.error.ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOne: 'A collection object block can not contain a BOM object with a BOM greater than one level'
+template.error.objectsCollectionBlockCanNotContainOtherBlock: 'A collection object block can not contain other blocks'
 template.help.title: Support
 template.hideLabel.title: 'hide the label'
 template.label.title: label
