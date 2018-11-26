@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Admin\Delete;
+use Proximum\Vimeet\Application\Exception\Admin\AdminLinkedToPlannerJobException;
 use Proximum\Vimeet\Domain\Intention\IntentionType;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Security\Voter\AdminVoter;
@@ -60,6 +61,8 @@ class DeleteAction
             try {
                 $this->commandBus->handle(new Delete($admin));
                 $this->flashBag->add('success', 'flash.admin.remove.success');
+            } catch (AdminLinkedToPlannerJobException $exception) {
+                $this->flashBag->add('error', 'flash.admin.remove.planner_job.unauthorized');
             } catch (\Exception $exception) {
                 $this->flashBag->add('error', 'flash.admin.remove.unauthorized');
             }
