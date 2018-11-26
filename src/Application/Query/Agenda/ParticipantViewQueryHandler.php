@@ -33,7 +33,7 @@ class ParticipantViewQueryHandler
      *
      * @return ParticipantView[]
      */
-    public function handle(ParticipantViewQuery $query)
+    public function handle(ParticipantViewQuery $query): array
     {
         $participants = [];
 

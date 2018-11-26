@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileException;
 use Proximum\Vimeet\Application\Command\Template\Form\FillStepCommand;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Query\Participant\Sheet\ParticipantListViewQuery;
 use Proximum\Vimeet\Application\Query\Template\Form\FillStepQuery;
 use Proximum\Vimeet\Application\View\Template\Form\BlockStepView;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -157,7 +158,7 @@ class FillFormAction
                 [
                     'event' => $event,
                     'sheet' => $sheet,
-                    'participant' => $participant,
+                    'participantList' => $this->queryBus->handle(new ParticipantListViewQuery($sheet, $participant, $locale)),
                     'formTemplate' => $formTemplate,
                     'blockStepView' => $blockStepView,
                     'formTemplateTitle' => $formTemplateTitle,

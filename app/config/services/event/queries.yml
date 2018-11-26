@@ -38,6 +38,15 @@ services:
             - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetRegistrationInfoQueryHandler'
 
     #
+    # Participant
+    #
+    Proximum\Vimeet\Application\Query\Participant\Sheet\ParticipantListViewQueryHandler:
+        arguments:
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\Sheet\ParticipantListViewQuery }
+
+    #
     # Form Template
     #
     Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQueryHandler:

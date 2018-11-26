@@ -9,6 +9,29 @@
         <section class="main">
             <header>
                 <h1>{{ formTemplateTitle }}</h1>
+                <div class="dropdown pull-right">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <i class="icon-Info_1"></i>
+                            {{ 'form_template.fill_step.participant'|trans({'%participant%': participantList.currentParticipant.fullName }) }}
+                        {% if participantList.otherParticipants|length > 1 %}<span class="caret"></span>{% endif %}
+                    </button>
+                    {% if participantList.otherParticipants|length > 1 %}
+                        <ul class="dropdown-menu">
+                            {% for participantName in participantList.otherParticipants %}
+                                <li {% if participantName.id == participantList.currentParticipant.id %}class="active"{% endif %}>
+                                    <a href="{{ path('event_participant_fill_form', {
+                                        'participant': participantName.id,
+                                        'sheet': sheet.id,
+                                        'formTemplate': formTemplate.id,
+                                        'step': blockStepView.currentStep,
+                                    }) }}">
+                                        {{ 'form_template.fill_step.participant'|trans({'%participant%': participantName.fullName}) }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
             </header>
 
             <div class="main__container">
@@ -17,7 +40,7 @@
                         {% if blockStepView.currentStep > 1 %}
                             <a href="{{ path('event_participant_fill_form', {
                                 'sheet': sheet.id,
-                                'participant': participant.id,
+                                'participant': participantList.currentParticipant.id,
                                 'formTemplate': formTemplate.id,
                                 'step': blockStepView.currentStep - 1,
                             }) }}" class="btn btn-primary"><</a>
@@ -43,7 +66,7 @@
                                 {% if uploadObject.isUploadAndHasPath is defined and uploadObject.isUploadAndHasPath %}
                                     {% set parameters = {
                                         'sheet': sheet.id,
-                                        'participant': participant.id,
+                                        'participant': participantList.currentParticipant.id,
                                         'formTemplate': formTemplate.id,
                                         'objectKey': uploadObject.key
                                     } %}

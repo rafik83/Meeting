@@ -17,7 +17,10 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Template\Form\FillStepCommand;
+use Proximum\Vimeet\Application\Query\Participant\Sheet\ParticipantListViewQuery;
 use Proximum\Vimeet\Application\Query\Template\Form\FillStepQuery;
+use Proximum\Vimeet\Application\View\Participant\Sheet\ParticipantListView;
 use Proximum\Vimeet\Application\View\Template\Form\BlockStepView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -25,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Template\FormTemplateTranslation;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Exception\BlockForGivenStepNotFoundException;
 use Proximum\Vimeet\Domain\Template\Exception\GivenStepIsRequiredAndNotFilledException;
@@ -279,6 +283,12 @@ class FillFormActionTest extends TestCase
         $form->handleRequest($this->request)->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
+        $participantList = $this->prophesize(ParticipantListView::class);
+        $this->queryBus
+            ->handle(new ParticipantListViewQuery($this->sheet->reveal(), $this->participant->reveal(), 'en'))
+            ->shouldBeCalled()
+            ->willReturn($participantList)
+        ;
         $this
             ->engine
             ->render(
@@ -286,7 +296,7 @@ class FillFormActionTest extends TestCase
                 [
                     'event' => $this->event->reveal(),
                     'sheet' => $this->sheet->reveal(),
-                    'participant' => $this->participant->reveal(),
+                    'participantList' => $participantList,
                     'formTemplate' => $this->formTemplate,
                     'blockStepView' => $blockStepView,
                     'formTemplateTitle' => 'Logistic',
@@ -314,6 +324,7 @@ class FillFormActionTest extends TestCase
     {
         $this->publish($this->formTemplate);
         $this->setTypes($this->formTemplate, new ArrayCollection([$this->type->reveal()]));
+        $this->setId($this->formTemplate, 14);
         $this->setTranslations(
             $this->formTemplate,
             new ArrayCollection(
@@ -353,7 +364,35 @@ class FillFormActionTest extends TestCase
         ;
 
         $form->handleRequest($this->request)->shouldBeCalled()->willReturn($form->reveal());
-        $form->isSubmitted()->shouldBeCalled()->willReturn(false);
+        $form->isSubmitted()->shouldBeCalled()->willReturn(true);
+        $form->isValid()->shouldBeCalled()->willReturn(true);
+        $block->getData()->shouldBeCalled()->willReturn(['toto' => ['text' => 'titi']]);
+        $block->getUploadAndImageObjects()->shouldBeCalled()->willReturn([]);
+        $user = $this->prophesize(User::class);
+        $this->participant->getUser()->shouldBeCalled()->willReturn($user->reveal());
+        $this->sheet->getId()->shouldBeCalled()->willReturn(12);
+        $this->participant->getId()->shouldBeCalled()->willReturn(13);
+
+        $command = new FillStepCommand(
+            $this->formTemplate,
+            $this->sheet->reveal(),
+            $this->participant->reveal(),
+            $blockStepView
+        );
+        $this->commandBus->handle($command)->shouldBeCalled();
+
+        $this->router
+            ->generate('event_participant_fill_form',
+                [
+                     'sheet' => 12,
+                     'participant' => 13,
+                     'formTemplate' => 14,
+                     'step' => 2
+                ]
+            )
+            ->shouldBeCalled()
+            ->willReturn('/next-step')
+        ;
 
         $this->engine->render(Argument::any())->shouldNotBeCalled();
 

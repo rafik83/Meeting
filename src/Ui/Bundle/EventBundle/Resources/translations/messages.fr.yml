@@ -145,6 +145,8 @@ event.visio.test.testSuccessful: 'Test réussi !'
 event.visio.test.title: 'Test de votre configuration rendez-vous visio'
 event.visio.test.video: Vidéo
 event.visio.welcome: 'Bienvenue sur %event%'
+form_template.fill_step.participant: 'Formulaire pour %participant%'
+form_template.fill_step.step_title: 'Étape %currentStep% / %totalStep%'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'
@@ -477,4 +479,3 @@ user_event.confirm.agenda.already_confirmed: 'Agenda déjà confirmé'
 user_event.confirm.agenda.success: 'Merci d''avoir confirmé votre agenda'
 user_event.confirm.agenda.title: 'Confirmation de l''agenda'
 user.phone.confirmationCode.message: 'Saisir le code suivant pour confirmer : %code%'
-form_template.fill_step.step_title: 'Étape %currentStep% / %totalStep%'
