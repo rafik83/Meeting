@@ -27,7 +27,7 @@ class FormTemplateListViewQueryHandler
     public function handle(FormTemplateListViewQuery $query): FormTemplateListView
     {
         $formTemplates = $this->formTemplateRepository->findByEvent($query->event);
-        $formTemplateViews= [];
+        $formTemplateViews = [];
 
         foreach ($formTemplates as $formTemplate) {
             $translatedTitles = [];
