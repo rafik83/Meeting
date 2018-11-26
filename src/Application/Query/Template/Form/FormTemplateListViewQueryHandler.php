@@ -39,10 +39,10 @@ class FormTemplateListViewQueryHandler
                 $formTemplate->getId(),
                 $formTemplate->getTitle(),
                 $formTemplate->isPublished(),
-                $formTemplate->getCreatedAt(),
                 $translatedTitles,
+                $formTemplate->getTypes(),
                 $formTemplate->getFallback(),
-                $formTemplate->getTypes()
+                $formTemplate->getCreatedAt()
             );
         }
 

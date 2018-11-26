@@ -23,33 +23,33 @@ class FormTemplateView
     /** @var bool */
     public $isPublished;
 
-    /** @var \DateTimeInterface */
-    public $createdAt;
-
     /** @var string[] indexed by locale */
     public $translatedTitles;
+
+    /** @var Type[] */
+    public $types;
 
     /** @var string */
     public $locale;
 
-    /** @var Type[] */
-    public $types;
+    /** @var \DateTimeInterface */
+    public $createdAt;
 
     public function __construct(
         int $id,
         string $title,
         bool $isPublished,
-        \DateTimeInterface $createdAt,
         array $translatedTitles,
+        array $types,
         string $locale,
-        array $types
+        \DateTimeInterface $createdAt
     ) {
         $this->id = $id;
         $this->title = $title;
         $this->isPublished = $isPublished;
-        $this->createdAt = $createdAt;
         $this->translatedTitles = $translatedTitles;
-        $this->locale = $locale;
         $this->types = $types;
+        $this->locale = $locale;
+        $this->createdAt = $createdAt;
     }
 }

@@ -21,7 +21,6 @@
         </tr>
         </thead>
         <tbody>
-        {#{{ dump(formTemplateListView) }}#}
         {% for formTemplateView in formTemplateListView.templates %}
             <tr>
                 <td>
@@ -41,7 +40,7 @@
                 <td>
                     <ul>
                         {% for type in formTemplateView.types %}
-                            <li>{{ type.title(app.request.locale) }}</li>
+                            <li>{{ type.title(event.availableLocale(app.request.locale)) }}</li>
                         {% endfor %}
                     </ul>
                 </td>
