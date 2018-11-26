@@ -115,6 +115,7 @@ class FormsViewQueryHandlerTest extends TestCase
                     'sheet' => 1337,
                     'participant' => 42,
                     'formTemplate' => 1,
+                    'step' => 1,
                 ]
             )
             ->shouldBeCalled()
@@ -129,6 +130,7 @@ class FormsViewQueryHandlerTest extends TestCase
                     'sheet' => 1337,
                     'participant' => 42,
                     'formTemplate' => 2,
+                    'step' => 1,
                 ]
             )
             ->shouldBeCalled()
@@ -198,6 +200,7 @@ class FormsViewQueryHandlerTest extends TestCase
                     'sheet' => 1337,
                     'participant' => 42,
                     'formTemplate' => 1,
+                    'step' => 1,
                 ]
             )
             ->shouldBeCalled()
