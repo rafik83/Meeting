@@ -93,9 +93,13 @@ class CategoryRepository implements CategoryRepositoryInterface
             ->join('category.translations', 'translation', 'WITH', 'translation.locale = :locale')
             ->groupBy('category.id')
             ->orderBy('category.rank')
-            ->setParameter('event', $type->getEvent())
-            ->setParameter('type', $type)
-            ->setParameter('locale', $locale)
+            ->setParameters(
+                [
+                    'event' => $type->getEvent(),
+                    'type' => $type,
+                    'locale' => $locale,
+                ]
+            )
         ;
 
         return $queryBuilder->getQuery()->getResult();
