@@ -1,0 +1,19 @@
+Proximum\Vimeet\Domain\Model\Template\FormTemplateTranslation:
+    type:  entity
+    table: template_form_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        locale:
+            type: string
+    manyToOne:
+        formTemplate:
+            targetEntity: Proximum\Vimeet\Domain\Model\Template\FormTemplate
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

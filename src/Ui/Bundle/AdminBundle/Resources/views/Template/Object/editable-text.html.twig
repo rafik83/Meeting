@@ -93,7 +93,7 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.type.title'|trans }}</label>
                                     <select class="form-control" name="type">
-                                        {% if isRegistrationTemplate is defined %}
+                                        {% if isFormTemplate is defined %}
                                             {% set types = { 'Textarea': 'textarea', 'Texte': 'text' } %}
                                         {% else %}
                                             {% set types = { 'Title': 'title', 'Texte': 'text' } %}
@@ -104,10 +104,10 @@
                                     </select>
                                 </div>
 
-                                {% if isRegistrationTemplate is defined and registrationTemplateTagView is defined %}
-                                    {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                {% if isFormTemplate is defined and templateTagView is defined %}
+                                    {{ include('AdminBundle:Template/Form:tagsSelect.html.twig', {
                                         'config': config,
-                                        'registrationTemplateTagView': registrationTemplateTagView,
+                                        'templateTagView': templateTagView,
                                     }, false) }}
                                 {% else %}
                                     <div class="form-group">

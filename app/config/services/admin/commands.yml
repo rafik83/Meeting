@@ -328,6 +328,31 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Create }
 
     #
+    # Form Template
+    #
+    Proximum\Vimeet\Application\Command\Template\Form\CreateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\Create }
+
+    Proximum\Vimeet\Application\Command\Template\Form\SaveHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Application\Components\Template\Form\FormTemplateValidatorTranslated'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\Save }
+
+    Proximum\Vimeet\Application\Command\Template\Form\UpdateParametersHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\UpdateParameters }
+
+    #
     # Order
     #
     Proximum\Vimeet\Application\Command\Order\CancelAllHandler:

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateTagView;
+use Proximum\Vimeet\Domain\Template\View\TemplateTagView;
 
 final class Tag
 {
@@ -239,12 +239,14 @@ final class Tag
         );
     }
 
-    /**
-     * @return RegistrationTemplateTagView
-     */
-    public static function getRegistrationTemplateTagView(): RegistrationTemplateTagView
+    public static function getRegistrationTemplateTagView(): TemplateTagView
     {
-        return new RegistrationTemplateTagView(
+        return self::getTemplateTagView();
+    }
+
+    public static function getTemplateTagView(): TemplateTagView
+    {
+        return new TemplateTagView(
             self::getSheetParticipantGenericAndSettersTags(),
             self::PARTICIPANT_DATA,
             self::getParticipantTags(),

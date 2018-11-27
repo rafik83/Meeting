@@ -1,0 +1,12 @@
+Proximum\Vimeet\Application\Command\Template\Form\UpdateParameters:
+    properties:
+        title:
+            - NotBlank: ~
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title:
+                            - NotBlank: ~
+        published:
+            - Type: { type: boolean }

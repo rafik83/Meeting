@@ -2,9 +2,9 @@ var $ = require('jquery'),
     Confirm = require('./components/_Confirm'),
     CheckAllCheckbox = require('./components/_CheckAllCheckbox'),
     LoadingButton = require('./components/_LoadingButton'),
-    TemplateBuilder = require('./components/_TemplateBuilder'),
-    RegistrationTemplateBuilder = require('./components/_RegistrationTemplateBuilder'),
-    PrintTemplateBuilder = require('./components/_PrintTemplateBuilder'),
+    TemplateBuilder = require('./components/template/_TemplateBuilder'),
+    FormTemplateBuilder = require('./components/template/_FormTemplateBuilder'),
+    PrintTemplateBuilder = require('./components/template/_PrintTemplateBuilder'),
     Batch = require('./components/_Batch'),
     Slots = require('./components/_Slots'),
     SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
@@ -24,7 +24,8 @@ var $ = require('jquery'),
     RadioGroupAjax = require('./components/_RadioGroupAjax'),
     FilterBuilder = require('./components/_FilterBuilder'),
     ButtonGroupDefaultStateChanger = require('./components/_ButtonGroupDefaultStateChanger'),
-    ParticipantPresence = require('./components/_ParticipantPresence')
+    ParticipantPresence = require('./components/_ParticipantPresence'),
+    ShowModal = require('./components/_ShowModal')
 ;
 
 require('bootstrap');
@@ -91,10 +92,14 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-update]'), function (element) { new Update(element); });
     [].forEach.call(target.querySelectorAll('[data-check-all-checkbox]'), function (element) { new CheckAllCheckbox(element, element.getAttribute('data-check-all-checkbox')); });
-    [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
+    [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element, 'sheet') });
 
     [].forEach.call(target.querySelectorAll('[data-registration-template-builder]'), function (element) {
-        new RegistrationTemplateBuilder(element)
+        new FormTemplateBuilder(element, 'registration')
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-form-template-builder]'), function (element) {
+        new FormTemplateBuilder(element, 'form')
     });
 
     [].forEach.call(target.querySelectorAll('[data-print-template-builder]'), function (element) { new PrintTemplateBuilder(element) });
@@ -193,6 +198,10 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-participant-presence-endpoint]'), function (element) {
         new ParticipantPresence(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-show-modal'), function (element) {
+        new ShowModal(element);
     });
 }
 

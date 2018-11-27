@@ -1,20 +1,20 @@
 var $ = require('jquery'),
-  TextObject = require('./templateObjects/_TextObject'),
-  EditableTextObject = require('./templateObjects/_EditableTextObject'),
-  ButtonLinkObject = require('./templateObjects/_ButtonLinkObject'),
-  ParticipantObject = require('./templateObjects/_ParticipantObject'),
-  ImageObject = require('./templateObjects/_ImageObject'),
-  TagObject = require('./templateObjects/_TagObject'),
-  CollectionObject = require('./templateObjects/_CollectionObject'),
-  NomenclatureObject = require('./templateObjects/_NomenclatureObject'),
-  MediaObject = require('./templateObjects/_MediaObject'),
-  TagsObject = require('./templateObjects/_TagsObject'),
-  PhoneObject = require('./templateObjects/_PhoneObject'),
-  CountryObject = require('./templateObjects/_CountryObject'),
-  UrlObject = require('./templateObjects/_UrlObject'),
-  BooleanObject = require('./templateObjects/_BooleanObject'),
-  GenderObject = require('./templateObjects/_GenderObject'),
-  UploadObject = require('./templateObjects/_UploadObject')
+  TextObject = require('./../templateObjects/_TextObject'),
+  EditableTextObject = require('./../templateObjects/_EditableTextObject'),
+  ButtonLinkObject = require('./../templateObjects/_ButtonLinkObject'),
+  ParticipantObject = require('./../templateObjects/_ParticipantObject'),
+  ImageObject = require('./../templateObjects/_ImageObject'),
+  TagObject = require('./../templateObjects/_TagObject'),
+  CollectionObject = require('./../templateObjects/_CollectionObject'),
+  NomenclatureObject = require('./../templateObjects/_NomenclatureObject'),
+  MediaObject = require('./../templateObjects/_MediaObject'),
+  TagsObject = require('./../templateObjects/_TagsObject'),
+  PhoneObject = require('./../templateObjects/_PhoneObject'),
+  CountryObject = require('./../templateObjects/_CountryObject'),
+  UrlObject = require('./../templateObjects/_UrlObject'),
+  BooleanObject = require('./../templateObjects/_BooleanObject'),
+  GenderObject = require('./../templateObjects/_GenderObject'),
+  UploadObject = require('./../templateObjects/_UploadObject')
 ;
 
 /**
@@ -22,7 +22,7 @@ var $ = require('jquery'),
  *
  * @param element
  * @param locale
- * @param builderType the type of builder use to build the object (registration, sheet, print)
+ * @param builderType the type of builder use to build the object (registration, form, sheet, print)
  *
  * @constructor
  */

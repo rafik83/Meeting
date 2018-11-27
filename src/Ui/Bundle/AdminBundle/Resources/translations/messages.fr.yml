@@ -214,6 +214,7 @@ admin.event.see.link: Voir
 admin.event.settings.link: 'Paramètrages de l''événement'
 admin.event.sheet.comment.remove.confirm: 'Etes-vous sûr de vouloir supprimer ce commentaire ?'
 admin.event.sheet.index.title: 'Ré-indexer les fiches de l''événement'
+admin.event.template.form: 'Template de formulaire'
 admin.event.template.link: Templates
 admin.event.template.package: 'Forfait de participation'
 admin.event.template.registration: Inscription
@@ -1021,6 +1022,21 @@ admin.template.action.update: Modifier
 admin.template.action.updating: 'Sauvegarde en cours...'
 admin.template.block.objects_collection: 'Bloc collection d''objets'
 admin.template.blocks: Blocs
+admin.template.form.addBlock: 'Ajouter une étape'
+admin.template.form.addLocale: 'Ajouter une langue'
+admin.template.form.link: 'Template de formulaire'
+admin.template.form.state.draft: Brouillon
+admin.template.form.state.published: Publié
+admin.template.form.table.column.action: Action
+admin.template.form.table.column.createdAt: 'Créé le'
+admin.template.form.table.column.title: Titre
+admin.template.form.table.column.translatedTitle: 'Titre front office'
+admin.template.form.table.content.create: 'Créer un template de formulaire'
+admin.template.form.table.content.edit: Modifier
+admin.template.form.table.content.parameters: Paramètres
+admin.template.form.action.create: Créer un template de formulaire
+admin.template.form.title: 'Templates de formulaire'
+admin.template.form.update_parameters.title: 'Paramètres du template de formulaire'
 admin.template.objects: Objets
 admin.template.objectsListEmpty: 'Aucun objet disponible'
 admin.template.preview.title: 'Aperçu du catalogue'

@@ -30,3 +30,11 @@ services:
         arguments:
             - '@template.template_data_factory'
             - '@Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator'
+
+    #
+    # Form Template
+    #
+    Proximum\Vimeet\Application\Components\Template\Form\FormTemplateValidatorTranslated:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Template\Form\FormTemplateValidator'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
