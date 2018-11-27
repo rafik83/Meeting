@@ -39,7 +39,7 @@ class UploadObjectValidator extends TemplateObjectValidator
             $this->context
                 ->getValidator()
                 ->inContext($this->context)
-                ->atPath($constraint->key . '.file')
+                ->atPath(sprintf('%s.file', $constraint->key))
                 ->validate($content, new NotBlank());
         }
     }
