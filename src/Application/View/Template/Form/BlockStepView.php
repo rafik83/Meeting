@@ -23,10 +23,18 @@ class BlockStepView
     /** @var int */
     public $totalStep;
 
-    public function __construct(Block $block, int $currentStep, int $totalStep)
-    {
+    /** @var string */
+    public $description;
+
+    public function __construct(
+        Block $block,
+        string $description,
+        int $currentStep,
+        int $totalStep
+    ) {
         $this->block = $block;
         $this->currentStep = $currentStep;
         $this->totalStep = $totalStep;
+        $this->description = $description;
     }
 }

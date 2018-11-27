@@ -47,6 +47,9 @@
                     {% endif %}
                 </div>
                 {% endif %}
+                {% if blockStepView.description is not empty %}
+                    <p>{{ blockStepView.description|html }}</p>
+                {% endif %}
             </header>
 
             <div class="main__container">

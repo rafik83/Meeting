@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Template\Form;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\MarkdownAdapterInterface;
 use Proximum\Vimeet\Application\Query\Template\Form\FillStepQuery;
 use Proximum\Vimeet\Application\Query\Template\Form\FillStepQueryHandler;
 use Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQuery;
@@ -30,7 +31,7 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 class FillStepQueryHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
-    private $formTemplate, $sheet, $participant, $formTemplateDataQueryHandler;
+    private $formTemplate, $sheet, $participant, $formTemplateDataQueryHandler, $markdown;
 
     public function setup()
     {
@@ -38,6 +39,7 @@ class FillStepQueryHandlerTest extends TestCase
         $this->sheet = $this->prophesize(Sheet::class);
         $this->participant = $this->prophesize(Participant::class);
         $this->formTemplateDataQueryHandler = $this->prophesize(FormTemplateDataQueryHandler::class);
+        $this->markdown = $this->prophesize(MarkdownAdapterInterface::class);
     }
 
     public function testHandleBlockNotFound()
@@ -60,7 +62,7 @@ class FillStepQueryHandlerTest extends TestCase
             'fr',
             12
         );
-        $handler = new FillStepQueryHandler($this->formTemplateDataQueryHandler->reveal());
+        $handler = new FillStepQueryHandler($this->formTemplateDataQueryHandler->reveal(), $this->markdown->reveal());
         $handler->handle($query);
     }
 
@@ -101,7 +103,7 @@ class FillStepQueryHandlerTest extends TestCase
             'fr',
             3
         );
-        $handler = new FillStepQueryHandler($this->formTemplateDataQueryHandler->reveal());
+        $handler = new FillStepQueryHandler($this->formTemplateDataQueryHandler->reveal(), $this->markdown->reveal());
         $handler->handle($query);
     }
 
@@ -134,6 +136,9 @@ class FillStepQueryHandlerTest extends TestCase
         $block1->getEditableObjects()->shouldBeCalled()->willReturn([$object1->reveal()]);
         $block2->getEditableObjects()->shouldBeCalled()->willReturn([$object2->reveal(), $object3->reveal()]);
         $block->getEditableObjects()->shouldNotBeCalled();
+        $block->getDescription('fr')->shouldBeCalled()->willReturn('Ceci est une description en markdown');
+
+        $this->markdown->toHtml('Ceci est une description en markdown')->shouldBeCalled()->willReturn('Ceci est une description');
 
         $query = new FillStepQuery(
             $this->formTemplate->reveal(),
@@ -142,10 +147,10 @@ class FillStepQueryHandlerTest extends TestCase
             'fr',
             3
         );
-        $handler = new FillStepQueryHandler($this->formTemplateDataQueryHandler->reveal());
+        $handler = new FillStepQueryHandler($this->formTemplateDataQueryHandler->reveal(), $this->markdown->reveal());
         $result = $handler->handle($query);
 
-        $view = new BlockStepView($block->reveal(), 3, 5);
+        $view = new BlockStepView($block->reveal(), 'Ceci est une description', 3, 5);
 
         $this->assertEquals($view, $result);
     }

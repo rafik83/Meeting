@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Template\Form;
 
+use Proximum\Vimeet\Application\Adapter\MarkdownAdapterInterface;
 use Proximum\Vimeet\Application\View\Template\Form\BlockStepView;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Exception\BlockForGivenStepNotFoundException;
@@ -20,9 +21,15 @@ class FillStepQueryHandler
     /** @var FormTemplateDataQueryHandler */
     private $formTemplateDataQueryHandler;
 
-    public function __construct(FormTemplateDataQueryHandler $formTemplateDataQueryHandler)
-    {
+    /** @var MarkdownAdapterInterface */
+    private $markdownAdapter;
+
+    public function __construct(
+        FormTemplateDataQueryHandler $formTemplateDataQueryHandler,
+        MarkdownAdapterInterface $markdownAdapter
+    ) {
         $this->formTemplateDataQueryHandler = $formTemplateDataQueryHandler;
+        $this->markdownAdapter = $markdownAdapter;
     }
 
     /**
@@ -65,6 +72,11 @@ class FillStepQueryHandler
             }
         }
 
-        return new BlockStepView($block, $query->step, $templateData->getBlocksCount());
+        return new BlockStepView(
+            $block,
+            $this->markdownAdapter->toHtml($block->getDescription($query->locale)),
+            $query->step,
+            $templateData->getBlocksCount()
+        );
     }
 }

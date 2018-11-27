@@ -45,7 +45,7 @@ class FillStepCommandHandlerTest extends TestCase
         $country = $this->prophesize(Country::class);
 
         $block = $this->prophesize(Block::class);
-        $blockStepView = new BlockStepView($block->reveal(), 2, 4);
+        $blockStepView = new BlockStepView($block->reveal(), 'description', 2, 4);
         $block->getEditableObjects()->shouldBeCalled()->willReturn([
             '4321' => $text->reveal(),
             '789' => $nomenclature->reveal(),

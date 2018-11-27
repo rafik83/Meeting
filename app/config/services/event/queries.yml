@@ -59,6 +59,7 @@ services:
     Proximum\Vimeet\Application\Query\Template\Form\FillStepQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQueryHandler'
+            - '@markdown'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\FillStepQuery }
 
