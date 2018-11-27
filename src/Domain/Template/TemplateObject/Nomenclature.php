@@ -16,6 +16,8 @@ use Proximum\Vimeet\Domain\Template\TranslatableInterface;
 
 class Nomenclature extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
+    public const ITEMS = 'items';
+    public const ITEM = 'item';
     public const SEMICOLON_ESCAPE_CHAR = '__VIMEET_SEMICOLON__';
 
     /**
@@ -54,7 +56,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function setItems(array $items)
     {
-        $this->data['items'] = $items;
+        $this->data[self::ITEMS] = $items;
 
         return $this;
     }
@@ -72,7 +74,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getItems()
     {
-        return isset($this->data['items']) ? $this->data['items'] : [];
+        return $this->data[self::ITEMS] ?? [];
     }
 
     /**
@@ -150,13 +152,11 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getLabelForKey($givenKey, $locale = null)
     {
+        $locale = $locale ?? $this->getLocale();
+
         foreach ($this->nomenclature->getLastLevel() as $key => $nomenclatureItem) {
             if ($nomenclatureItem->getKey() === $givenKey) {
-                if (null !== $locale) {
-                    return $nomenclatureItem->getLabel($locale);
-                }
-
-                return $nomenclatureItem->getLabel($this->getLocale());
+                return $nomenclatureItem->getLabel($locale);
             }
         }
 
@@ -370,7 +370,22 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         $allItemPaths = [];
 
         foreach ($this->getItems() as $item) {
-            $currentItemLabels = $this->getLabelsByItem($nomenclatureLabels, $item);
+            if(\is_array($item)) {
+                $currentItemLabels = [
+                    implode(
+                        ', ',
+                        array_map(
+                            function ($subItem) {
+                                return $this->getLabelForKey($subItem);
+                            },
+                            $item
+                        )
+                    ),
+                ];
+            } else {
+                $currentItemLabels = $this->getLabelsByItem($nomenclatureLabels, $item);
+            }
+
             $allItemPaths[] = $currentItemLabels;
             $currentItemLabelCount = \count($currentItemLabels);
             // Update $maxDepth if current item's depth is greater than current $maxDepth:

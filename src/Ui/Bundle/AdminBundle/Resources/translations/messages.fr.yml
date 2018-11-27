@@ -150,7 +150,7 @@ admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
 admin.elasticsearch.index.confirm: 'Vous êtes sur le point de réindexer l''ensemble des événements. Êtes vous sur de vouloir réaliser cette action?'
 admin.event.access_control: 'Contrôle d''accès'
-admin.event.access.entrance: Entrée
+admin.event.access.entrance: Entrées
 admin.event.access.happening.list: Conférences
 admin.event.archive.link: Archivage
 admin.event.archive.title: 'Archiver l''événement %eventTitle%'
@@ -440,7 +440,7 @@ admin.meeting.list.column.head.from: De
 admin.meeting.list.column.head.fromParticipants: 'Participants du demandeur'
 admin.meeting.list.column.head.isCreatedByParticipants: 'Créé par les participants'
 admin.meeting.list.column.head.slot: Créneau
-admin.meeting.list.column.head.spot: Lieu
+admin.meeting.list.column.head.spot: Lieux
 admin.meeting.list.column.head.to: À
 admin.meeting.list.column.head.toParticipants: 'Participants du demandé'
 admin.meeting.list.createdType.admin: admin
@@ -1019,6 +1019,7 @@ admin.template.action.print: 'Template d''impression'
 admin.template.action.save: Enregistrer
 admin.template.action.update: Modifier
 admin.template.action.updating: 'Sauvegarde en cours...'
+admin.template.block.objects_collection: 'Bloc collection d''objets'
 admin.template.blocks: Blocs
 admin.template.objects: Objets
 admin.template.objectsListEmpty: 'Aucun objet disponible'

@@ -57,7 +57,7 @@ class EditableTextDataType extends AbstractType
         $fallback = $object instanceof EditableText && $object->getLocale() !== $object->getFallback() ? $object->getFallbackContent() : false;
 
         $builder
-            ->add('content', TextareaType::class, [
+            ->add(EditableText::CONTENT, TextareaType::class, [
                 'placeholder'         => $options['placeholder'],
                 'label'               => false,
                 'attr'                => $attributes,

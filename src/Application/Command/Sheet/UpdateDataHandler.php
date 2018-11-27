@@ -59,13 +59,10 @@ class UpdateDataHandler
         $this->eventDispatcher       = $eventDispatcher;
     }
 
-    /**
-     * @param UpdateData $command
-     */
-    public function handle(UpdateData $command)
+    public function handle(UpdateData $command): void
     {
         if ($command->templateObject instanceof MediaCollection &&
-            0 === count($command->templateObject->getMedias())
+            0 === \count($command->templateObject->getMedias())
         ) {
             $this->removeDataHandler->handle(new RemoveData(
                 $command->templateData,
@@ -74,7 +71,10 @@ class UpdateDataHandler
             ));
         }
 
-        $this->buyableObjectResolver->updateCart($command->sheet, $command->templateObject);
+        if (null !== $command->templateObject) {
+            $this->buyableObjectResolver->updateCart($command->sheet, $command->templateObject);
+        }
+
         $this->sheetRepository->set($command->sheet->setData($command->templateData->getData()));
 
         $sheetUpdatedEvent = new SheetUpdatedEvent($command->sheet);

@@ -78,7 +78,7 @@ class TaggedDataFactoryTest extends TestCase
             'editable-text',
             false, // translatable
             [],
-            '',
+            'Lorem ipsum ec74be5e fr',
             'sheet_generic_tag_1',
             false
         );

@@ -85,6 +85,8 @@ Run:
 All translations are stored on https://openl10n.vimeet.events (check 1password for access).
 If not exists, create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
 
+You need to install Docker on your machine (not available in the VM). You can install an [alias](https://github.com/manala/docker-images/tree/master/openl10n-cli#integration) to have the `openl10n` command.
+
 Synchronize translations files :
 
         ⇒ make trans-sync
