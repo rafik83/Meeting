@@ -30,7 +30,6 @@ use Proximum\Vimeet\Domain\Template\Exception\UploadNotAllowedOnFirstStepOfRegis
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Domain\View\TypeView;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
@@ -316,13 +315,13 @@ class RegisterController extends Controller
             throw $this->createNotFoundException('Unknown step');
         }
 
-        $data = [
+        $options = [
             'block' => $registrationTemplateStep,
             'locale' => $locale,
             'country' => $eventDomain->getEvent()->getCountry(),
         ];
 
-        $form = $this->createForm(BlockType::class, $registrationTemplateStep, $data);
+        $form = $this->createForm(BlockType::class, $registrationTemplateStep, $options);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = $this->handleData(
