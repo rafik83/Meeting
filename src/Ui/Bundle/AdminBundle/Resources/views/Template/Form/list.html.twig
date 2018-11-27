@@ -15,8 +15,8 @@
         <tr>
             <th class="col-md-4">{{ 'admin.template.form.table.column.title'|trans }}</th>
             <th class="col-md-4">{{ 'admin.template.form.table.column.translatedTitle'|trans }}</th>
-            <th class="col-md-3">{{ 'admin.template.form.table.column.createdAt'|trans }}</th>
-            <th class="col-md-1 text-right">{{ 'admin.template.form.table.column.action'|trans }}</th>
+            <th class="col-md-2">{{ 'admin.template.form.table.column.createdAt'|trans }}</th>
+            <th class="col-md-2 text-right">{{ 'admin.template.form.table.column.action'|trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -25,7 +25,9 @@
                 <td>
                     {{ template.title }}
                     {% if template.isPublished %}
-                        <span class="badge badge-pill badge-present">&nbsp;</span>
+                        <span class="label label-success">{{ 'admin.template.form.state.published'|trans }}</span>
+                    {% else %}
+                        <span class="label label-warning">{{ 'admin.template.form.state.draft'|trans }}</span>
                     {% endif %}
                 </td>
                 <td>
@@ -42,6 +44,16 @@
                         <a href="{{ path('admin_template_form_builder', {'event': event.id, 'template': template.id, 'locale': template.locale }) }}" class="btn btn-default btn-sm">
                             {{ 'admin.template.form.table.content.edit'|trans }}
                         </a>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="{{ path('admin_template_form_parameters', {'event': event.id, 'template': template.id }) }}" class="btn-sm">
+                                    {{ 'admin.template.form.table.content.parameters'|trans }}
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </td>
             </tr>
@@ -61,10 +73,11 @@
                     <div class="modal-body">
                         {{ form_row(form.title) }}
                         {{ form_row(form.translations) }}
+                        <p class="help-block"> {{ 'form.form_template_create.state.help'|trans({}, 'forms') }}</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
-                            {{ 'form.sheet_template_create.children.close.label'|trans({}, 'forms') }}
+                            {{ 'form.form_template_create.children.close.label'|trans({}, 'forms') }}
                         </button>
                         {{ form_widget(form.submit) }}
                     </div>

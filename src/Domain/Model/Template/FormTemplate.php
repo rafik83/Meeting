@@ -77,4 +77,11 @@ class FormTemplate extends AbstractTemplate
     {
         return $this->published;
     }
+
+    public function update(string $title, array $translations, bool $isPublished): void
+    {
+        $this->setTitle($title);
+        $this->translateTitles($translations);
+        $this->published = $isPublished;
+    }
 }
