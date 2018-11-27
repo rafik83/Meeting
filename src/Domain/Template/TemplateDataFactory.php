@@ -148,7 +148,8 @@ class TemplateDataFactory
                 $formTemplate->getValue(),
                 [],
                 $locale,
-                $formTemplate->getFallback()
+                $formTemplate->getFallback(),
+                $formTemplate->getEvent()
             )
         ;
     }
@@ -164,7 +165,8 @@ class TemplateDataFactory
                 $formTemplate->getValue(),
                 $data,
                 $locale,
-                $formTemplate->getFallback()
+                $formTemplate->getFallback(),
+                $formTemplate->getEvent()
             )
         ;
     }
