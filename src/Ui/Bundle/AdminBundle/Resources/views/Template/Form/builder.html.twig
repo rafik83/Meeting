@@ -111,16 +111,16 @@
                             'uploadFormats': uploadFormats|default([]),
                             'templateTagView': templateTagView,
                         }, false) }}
-                        {{ include('AdminBundle:Template/Object:image.html.twig', {
-                            'locale': locale,
-                            'isFormTemplate': true,
-                            'templateTagView': templateTagView,
-                        }, false) }}
                         {{ include('AdminBundle:Template/Object:nomenclature.html.twig', {
                             'isFormTemplate': true,
                             'locale': locale,
                             'nomenclatures': nomenclatures,
                             'templateTagView': templateTagView,
+                        }, false) }}
+                        {{ include('AdminBundle:Template/Object:datetime.html.twig', {
+                            'locale': locale,
+                            'isFormTemplate': true,
+                            'templateTagView': registrationTemplateTagView,
                         }, false) }}
                     </div>
                 </div>
