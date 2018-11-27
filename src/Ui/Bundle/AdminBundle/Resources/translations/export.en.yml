@@ -1,4 +1,8 @@
 export.meeting_request.col.createdAt: 'created at'
+export.meeting_request.col.createdType: 'Planned by'
+export.meeting_request.col.createdType.admin: Admin
+export.meeting_request.col.createdType.participant: Participant
+export.meeting_request.col.createdType.planner: Planner
 export.meeting_request.col.fromParticipantIds: 'participant asker ids'
 export.meeting_request.col.fromParticipantNames: 'participant asker name'
 export.meeting_request.col.fromSheetCategory: 'sheet asker category'
@@ -7,6 +11,7 @@ export.meeting_request.col.fromSheetTitle: 'sheet asker title'
 export.meeting_request.col.fromSheetType: 'sheet asker type'
 export.meeting_request.col.meetingId: 'ID meeting'
 export.meeting_request.col.requestId: 'ID meeting request'
+export.meeting_request.col.slot: 'Date and time of start of slot'
 export.meeting_request.col.state: state
 export.meeting_request.col.toParticipantIds: 'participant asked ids'
 export.meeting_request.col.toParticipantNames: 'participant asked name'

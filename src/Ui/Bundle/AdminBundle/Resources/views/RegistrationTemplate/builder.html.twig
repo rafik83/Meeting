@@ -112,6 +112,10 @@
                             'nomenclatures': nomenclatures,
                             'templateTagView': registrationTemplateTagView,
                         }, false) }}
+                        {{ include('AdminBundle:Template/Object:datetime.html.twig', {
+                            'locale': locale,
+                            'registrationTemplateTagView': registrationTemplateTagView,
+                        }, false) }}
                     </div>
                 </div>
             </div>

@@ -455,6 +455,8 @@ class Block extends AbstractChild
                     if ($block->hasTag($tag) && $block instanceof TemplateObject\ContentObjectInterface) {
                         if ($block instanceof TemplateObject\Nomenclature) {
                             $tagged[] = implode(', ', $block->getNomenclatureLabelOfItems());
+                        } elseif ($block instanceof TemplateObject\DateTime) {
+                            $tagged[] = $block->getFormattedDate($block->getLocale());
                         } else {
                             $tagged[] = $block->getContentValueLocalize();
                         }
@@ -481,6 +483,8 @@ class Block extends AbstractChild
 
                 if ($object instanceof TemplateObject\Nomenclature) {
                     $tagged[$tag][] = implode(', ', $object->getNomenclatureLabelOfItems());
+                } elseif ($object instanceof TemplateObject\DateTime) {
+                    $tagged[$tag][] = $object->getFormattedDate($object->getLocale());
                 } else {
                     $tagged[$tag][] = $object->getContentValue();
                 }

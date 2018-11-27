@@ -32,5 +32,6 @@ abstract class ParticipantDataValidator extends ConstraintValidator
         'text'          => TemplateObjectConstraint::class,
         'url'           => TemplateObject\UrlConstraint::class,
         'upload'        => TemplateObject\UploadObjectConstraint::class,
+        'datetime'      => TemplateObject\DatetimeConstraint::class,
     ];
 }
