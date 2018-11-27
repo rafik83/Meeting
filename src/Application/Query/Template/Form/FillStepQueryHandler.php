@@ -56,7 +56,7 @@ class FillStepQueryHandler
                 }
 
                 foreach ($block->getEditableObjects() as $object) {
-                    if (true === $object->getRequired() && $object->isEmpty()) {
+                    if (true === $object->getRequired() && true === $object->isEmpty()) {
                         throw new GivenStepIsRequiredAndNotFilledException($level + 1);
                     }
                 }

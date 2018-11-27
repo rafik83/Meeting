@@ -8,7 +8,20 @@
     <div class="main-content">
         <section class="main">
             <header>
-                <h1>{{ formTemplateTitle }}</h1>
+                <h1>
+                    {% if blockStepView.currentStep > 1 %}
+                        <a href="{{ path('event_participant_fill_form', {
+                            'sheet': sheet.id,
+                            'participant': participantList.currentParticipant.id,
+                            'formTemplate': formTemplate.id,
+                            'step': blockStepView.currentStep - 1,
+                        }) }}" class="btn btn-link">
+                            <span class="icon-Precedent_3"></span>
+                        </a>
+                    {% endif %}
+                    {{ formTemplateTitle }}
+                </h1>
+                &nbsp;- {{ 'form_template.fill_step.step_title'|trans({'%currentStep%': blockStepView.currentStep, '%totalStep%': blockStepView.totalStep }) }}
                 <div class="dropdown pull-right">
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                         <i class="icon-Info_1"></i>
@@ -36,22 +49,6 @@
 
             <div class="main__container">
                 <div class="row">
-                    <div class="col-md-2">
-                        {% if blockStepView.currentStep > 1 %}
-                            <a href="{{ path('event_participant_fill_form', {
-                                'sheet': sheet.id,
-                                'participant': participantList.currentParticipant.id,
-                                'formTemplate': formTemplate.id,
-                                'step': blockStepView.currentStep - 1,
-                            }) }}" class="btn btn-primary"><</a>
-                        {% endif %}
-                    </div>
-
-                    <div class="col-md-8 text-center">
-                        {{ 'form_template.fill_step.step_title'|trans({'%currentStep%': blockStepView.currentStep, '%totalStep%': blockStepView.totalStep }) }}
-                    </div>
-                    <div class="col-md-2">
-                    </div>
                     <div class="col-md-12">
 
                         {{ form_start(form) }}
