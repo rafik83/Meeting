@@ -22,15 +22,16 @@
                     {{ formTemplateTitle }}
                 </h1>
                 &nbsp;- {{ 'form_template.fill_step.step_title'|trans({'%currentStep%': blockStepView.currentStep, '%totalStep%': blockStepView.totalStep }) }}
+                {% if participantList.hasMoreThanOneParticipant %}
                 <div class="dropdown pull-right">
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                         <i class="icon-Info_1"></i>
                             {{ 'form_template.fill_step.participant'|trans({'%participant%': participantList.currentParticipant.fullName }) }}
-                        {% if participantList.otherParticipants|length > 1 %}<span class="caret"></span>{% endif %}
+                        {% if participantList.participants|length > 1 %}<span class="caret"></span>{% endif %}
                     </button>
-                    {% if participantList.otherParticipants|length > 1 %}
+                    {% if participantList.participants|length > 1 %}
                         <ul class="dropdown-menu">
-                            {% for participantName in participantList.otherParticipants %}
+                            {% for participantName in participantList.participants %}
                                 <li {% if participantName.id == participantList.currentParticipant.id %}class="active"{% endif %}>
                                     <a href="{{ path('event_participant_fill_form', {
                                         'participant': participantName.id,
@@ -45,6 +46,7 @@
                         </ul>
                     {% endif %}
                 </div>
+                {% endif %}
             </header>
 
             <div class="main__container">

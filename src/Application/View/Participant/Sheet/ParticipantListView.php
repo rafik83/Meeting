@@ -16,11 +16,16 @@ class ParticipantListView
     public $currentParticipant;
 
     /** @var ParticipantView[] */
-    public $otherParticipants;
+    public $participants;
 
-    public function __construct(ParticipantView $currentParticipant, array $otherParticipants)
+    public function __construct(ParticipantView $currentParticipant, array $participants)
     {
         $this->currentParticipant = $currentParticipant;
-        $this->otherParticipants = $otherParticipants;
+        $this->participants = $participants;
+    }
+
+    public function hasMoreThanOneParticipant(): bool
+    {
+        return \count($this->participants) > 1;
     }
 }
