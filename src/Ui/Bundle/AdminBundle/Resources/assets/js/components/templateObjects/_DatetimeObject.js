@@ -102,6 +102,10 @@ DatetimeObject.prototype.getTimestampByInternationalFormat = function (date)
 
 DatetimeObject.prototype.formatDate = function (date)
 {
+    if (typeof date === 'undefined' || date === null) {
+        return null;
+    }
+
     var hours = this.addPaddingZero(date.getHours());
     var minutes = this.addPaddingZero(date.getMinutes());
     var months = this.addPaddingZero(date.getMonth() + 1);
