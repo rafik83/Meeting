@@ -11,7 +11,10 @@
 namespace Proximum\Vimeet\Application\Command\Template\Form;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\FormData as SheetFormData;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\FormData as UserFormData;
 use Proximum\Vimeet\Domain\Repository\User\FormDataRepositoryInterface as UserFormDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\FormDataRepositoryInterface as SheetFormDataRepositoryInterface;
@@ -34,30 +37,8 @@ class FillStepCommandHandler
 
     public function handle(FillStepCommand $command): void
     {
-        $sheetFormData = $this->sheetFormDataRepository->getBySheetAndFormTemplate(
-            $command->sheet,
-            $command->formTemplate
-        );
-        $userFormData = $this->userFormDataRepository->getByUserAndFormTemplate(
-            $command->participant->getUser(),
-            $command->formTemplate
-        );
-
-        if (!$sheetFormData instanceof SheetFormData) {
-            $sheetFormData = new SheetFormData(
-                $command->sheet,
-                $command->formTemplate,
-                []
-            );
-        }
-
-        if (!$userFormData instanceof UserFormData) {
-            $userFormData = new UserFormData(
-                $command->participant->getUser(),
-                $command->formTemplate,
-                []
-            );
-        }
+        $sheetFormData = $this->getSheetFormData($command->sheet, $command->formTemplate);
+        $userFormData = $this->getUserFormData($command->participant->getUser(), $command->formTemplate);
 
         foreach ($command->blockStepView->block->getEditableObjects() as $key => $object) {
             if ($object->hasTag(Tag::SHEET_DATA)) {
@@ -77,5 +58,33 @@ class FillStepCommandHandler
 
         $this->userFormDataRepository->save($userFormData);
         $this->sheetFormDataRepository->save($sheetFormData);
+    }
+
+    private function getSheetFormData(Sheet $sheet, FormTemplate $formTemplate): SheetFormData
+    {
+        $sheetFormData = $this->sheetFormDataRepository->getBySheetAndFormTemplate(
+            $sheet,
+            $formTemplate
+        );
+
+        if (!$sheetFormData instanceof SheetFormData) {
+            $sheetFormData = new SheetFormData($sheet, $formTemplate, []);
+        }
+
+        return $sheetFormData;
+    }
+
+    private function getUserFormData(User $user, FormTemplate $formTemplate): UserFormData
+    {
+        $userFormData = $this->userFormDataRepository->getByUserAndFormTemplate(
+            $user,
+            $formTemplate
+        );
+
+        if (!$userFormData instanceof UserFormData) {
+            $userFormData = new UserFormData($user, $formTemplate, []);
+        }
+
+        return $userFormData;
     }
 }
