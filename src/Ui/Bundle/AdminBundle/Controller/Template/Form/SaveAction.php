@@ -37,23 +37,23 @@ class SaveAction
         $this->commandBus = $commandBus;
     }
 
-    public function __invoke(Request $request, Event $event, FormTemplate $formTemplate, string $locale): JsonResponse
+    public function __invoke(Request $request, Event $event, FormTemplate $template, string $locale): JsonResponse
     {
         if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
-            || $formTemplate->getEvent() !== $event
+            || $template->getEvent() !== $event
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
         ) {
             throw new AccessDeniedException('Access denied!');
         }
 
-        if (!$formTemplate->hasLocale($locale)) {
+        if (!$template->hasLocale($locale)) {
             return new JsonResponse(['error' => sprintf('Locale "%s" does not exist for this template', $locale)], 404);
         }
 
         $config = json_decode($request->getContent(), true);
 
         try {
-            $this->commandBus->handle(new Save($formTemplate, $config));
+            $this->commandBus->handle(new Save($template, $config));
         } catch (TemplateException $registrationTemplateException) {
             return new JsonResponse(
                 ['error' => $registrationTemplateException->getMessage()],
