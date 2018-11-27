@@ -81,10 +81,7 @@ abstract class AbstractBlockType extends AbstractType
         }
     }
 
-    protected function getObjects(array $options): array
-    {
-        return [];
-    }
+    abstract protected function getObjects(array $options): array;
 
     public function configureOptions(OptionsResolver $resolver)
     {
