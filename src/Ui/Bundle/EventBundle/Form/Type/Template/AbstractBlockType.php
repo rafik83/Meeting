@@ -78,6 +78,11 @@ abstract class AbstractBlockType extends AbstractType
                 $this->addDatetime($key, $builder, $object, $options['locale']);
                 continue;
             }
+
+            if ($object instanceof TemplateObject\Image) {
+                $this->addImage($key, $builder, $object, $options['locale']);
+                continue;
+            }
         }
     }
 
@@ -108,6 +113,15 @@ abstract class AbstractBlockType extends AbstractType
             'locale' => $locale,
             'object' => $object,
         ]);
+    }
+
+    protected function addImage(
+        string $key,
+        FormBuilderInterface $builder,
+        TemplateObject\Image $object,
+        string $locale
+    ): void {
+        // Imagine is not used in the parent context, children need to redefined it
     }
 
     protected function addText(
