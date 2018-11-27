@@ -51,13 +51,15 @@ class FillStepQueryHandler
 
         if ($query->step !== 1) {
             foreach ($templateData->getBlocks() as $level => $block) {
-                if (($level + 1) === $query->step) {
+                $formStep = $level+1; // levels start by 0, we add +1 so that the steps start by 1.
+
+                if ($formStep === $query->step) {
                     break;
                 }
 
                 foreach ($block->getEditableObjects() as $object) {
                     if (true === $object->getRequired() && true === $object->isEmpty()) {
-                        throw new GivenStepIsRequiredAndNotFilledException($level + 1);
+                        throw new GivenStepIsRequiredAndNotFilledException($formStep);
                     }
                 }
             }
