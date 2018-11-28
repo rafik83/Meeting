@@ -37,6 +37,6 @@ Proximum\Vimeet\Domain\Model\Template\FormTemplate:
     manyToMany:
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
-            inversedBy: formTemplates
+            mappedBy: formTemplates
             joinTable:
                 name: template_form_type

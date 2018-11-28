@@ -62,14 +62,6 @@ class TypeUpdateType extends AbstractType
                     'expanded'    => false,
                     'multiple'    => false,
                 ])
-                ->add('formTemplates', FormTemplateChoiceType::class, [
-                    'event' => $options['event'],
-                    'required' => false,
-                    'multiple' => true,
-                    'attr'     => [
-                        'class' => 'select2',
-                    ],
-                ])
                 ->add('package', PackageChoiceType::class, [
                     'currentEvent' => $options['event'],
                     'required'     => true,
@@ -92,6 +84,14 @@ class TypeUpdateType extends AbstractType
             ])
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
+            ])
+            ->add('formTemplates', FormTemplateChoiceType::class, [
+                'event' => $options['event'],
+                'required' => false,
+                'multiple' => true,
+                'attr'     => [
+                    'class' => 'select2',
+                ],
             ])
         ;
     }
