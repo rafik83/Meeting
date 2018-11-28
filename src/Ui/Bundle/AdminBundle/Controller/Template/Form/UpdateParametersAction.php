@@ -61,16 +61,16 @@ class UpdateParametersAction
         $this->router = $router;
     }
 
-    public function __invoke(Request $request, Event $event, FormTemplate $formTemplate): Response
+    public function __invoke(Request $request, Event $event, FormTemplate $template): Response
     {
         if (!$this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
             || !$this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $event)
-            || $event !== $formTemplate->getEvent()
+            || $event !== $template->getEvent()
         ) {
             throw new AccessDeniedException('Access denied');
         }
 
-        $updateParameters = new UpdateParameters($formTemplate);
+        $updateParameters = new UpdateParameters($template);
         $form = $this->formFactory->create(UpdateParametersType::class, $updateParameters, [
             'submit' => true,
         ]);
