@@ -6,7 +6,7 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Add deletedAt field
+ * Add deletedAt field on admin
  */
 class Version20181128090953 extends AbstractMigration
 {

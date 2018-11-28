@@ -507,13 +507,13 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         return $this->getFirstname() . ' ' . $this->getLastname();
     }
 
-    public function getDeletedAt(): ?\DateTime
-    {
-        return $this->deletedAt;
-    }
-
     public function setDeletedAt(\DateTimeInterface $deletedAt): void
     {
         $this->deletedAt = $deletedAt;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deletedAt instanceof \DateTime;
     }
 }

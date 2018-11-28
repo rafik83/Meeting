@@ -107,6 +107,7 @@ class AdminRepository implements AdminRepositoryInterface
             ->select('admin')
             ->from('Entity:Admin', 'admin')
             ->where('admin.email = :email')
+            ->andWhere('admin.deletedAt IS NULL')
             ->setParameter('email', $email)
             ->setMaxResults(1);
 
