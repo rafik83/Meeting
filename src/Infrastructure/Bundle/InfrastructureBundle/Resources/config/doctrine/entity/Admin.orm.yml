@@ -27,6 +27,9 @@ Proximum\Vimeet\Domain\Model\Admin:
         lastLoginAt:
             type: datetime
             nullable: true
+        deletedAt:
+            type: datetime
+            nullable: true
     manyToMany:
         events:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

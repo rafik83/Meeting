@@ -1044,7 +1044,7 @@ services:
     Proximum\Vimeet\Application\Command\Admin\DeleteHandler:
         arguments:
             - '@repository.admin_repository'
-            - '@vimeet_infrastructure.repository.planner_job_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Delete }
     command.admin.update_handler:

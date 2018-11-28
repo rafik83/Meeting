@@ -58,14 +58,8 @@ class DeleteAction
         if (!$this->authorizationChecker->isGranted(AdminVoter::DELETE, $admin)) {
             $this->flashBag->add('error', 'flash.admin.remove.unauthorized');
         } else {
-            try {
-                $this->commandBus->handle(new Delete($admin));
-                $this->flashBag->add('success', 'flash.admin.remove.success');
-            } catch (AdminLinkedToPlannerJobException $exception) {
-                $this->flashBag->add('error', 'flash.admin.remove.planner_job.unauthorized');
-            } catch (\Exception $exception) {
-                $this->flashBag->add('error', 'flash.admin.remove.unauthorized');
-            }
+            $this->commandBus->handle(new Delete($admin));
+            $this->flashBag->add('success', 'flash.admin.remove.success');
         }
 
         return new RedirectResponse(

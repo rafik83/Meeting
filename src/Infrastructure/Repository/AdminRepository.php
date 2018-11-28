@@ -123,6 +123,7 @@ class AdminRepository implements AdminRepositoryInterface
             ->createQueryBuilder()
             ->select('admin')
             ->from(Admin::class, 'admin', 'admin.id')
+            ->andWhere('admin.deletedAt IS NULL')
             ->orderBy('admin.lastname', 'ASC');
 
         if (isset($filters['role']) && null !== $filters['role'] && in_array($filters['role'], Admin::getAllRoles())) {
@@ -154,7 +155,8 @@ class AdminRepository implements AdminRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('admin')
-            ->from(Admin::class, 'admin');
+            ->from(Admin::class, 'admin')
+            ->where('admin.deletedAt IS NULL');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -176,6 +178,7 @@ class AdminRepository implements AdminRepositoryInterface
             ->join('admin.events', 'event', 'WITH', 'event = :event')
             ->setParameter('event', $event)
             ->where('admin.role IN (:roles)')
+            ->andWhere('admin.deletedAt IS NULL')
             ->setParameter('roles', [Admin::ROLE_ORGANIZER, Admin::ROLE_OPERATOR])
             ->orderBy('admin.lastname')
             ->addOrderBy('admin.firstname');
@@ -194,6 +197,7 @@ class AdminRepository implements AdminRepositoryInterface
             ->select('admin')
             ->from(Admin::class, 'admin', 'admin.id')
             ->where('admin.role IN (:role)')
+            ->andWhere('admin.deletedAt IS NULL')
             ->setParameter('role', [Admin::ROLE_OPERATOR, Admin::ROLE_PARTNER]);
 
         if (isset($filters['event'])) {
@@ -218,6 +222,7 @@ class AdminRepository implements AdminRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('admin')
+            ->where('admin.deletedAt IS NULL')
             ->from(Admin::class, 'admin', 'admin.id')
             ->join('admin.types', 'type', 'WITH', 'admin.role = :role AND type = :type')
             ->setParameter('type', $type)
@@ -236,6 +241,7 @@ class AdminRepository implements AdminRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('admin')
+            ->where('admin.deletedAt IS NULL')
             ->from(Admin::class, 'admin', 'admin.id')
             ->join('admin.events', 'event', 'WITH', 'event = :event AND admin.role = :role')
             ->setParameter('event', $event)
