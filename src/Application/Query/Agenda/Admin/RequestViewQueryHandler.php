@@ -61,8 +61,15 @@ class RequestViewQueryHandler
             $sheetMet->getId(),
             $this->getParticipantViews($query->request, $query->sheet, $query->locale),
             $isTransformableIntoMeeting,
-            $query->request->isOneOfSheetsNotAttend()
+            $query->request->isOneOfSheetsNotAttend(),
+            $this->hasNoPreferenceAndNotAlone($query->request, $query->sheet),
+            $this->hasNoPreferenceAndNotAlone($query->request, $sheetMet)
         );
+    }
+
+    private function hasNoPreferenceAndNotAlone(Request $request, Sheet $sheet): bool
+    {
+        return $request->hasNoPreference($sheet) && $sheet->countParticipants() >= 2;
     }
 
     private function isTransformableIntoMeeting(Request $request, bool $isVisio): bool

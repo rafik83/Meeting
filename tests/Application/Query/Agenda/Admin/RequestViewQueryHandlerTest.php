@@ -59,6 +59,7 @@ class RequestViewQueryHandlerTest extends TestCase
 
         $this->sheetMet = $this->prophesize(Sheet::class);
         $this->sheetMet->getId()->willReturn(42);
+        $this->sheetMet->countParticipants()->willReturn(2);
 
         $participant1 = $this->prophesize(Participant::class);
         $participant1->getId()->shouldBeCalled()->willReturn(11);
@@ -89,6 +90,14 @@ class RequestViewQueryHandlerTest extends TestCase
             ->getParticipants($this->sheet->reveal())
             ->willReturn([$participant1->reveal(), $participant2->reveal()])
         ;
+        $this->meetingRequest
+            ->getParticipants($this->sheet->reveal())
+            ->willReturn([$participant1->reveal(), $participant2->reveal()])
+        ;
+        $this->meetingRequest
+            ->getParticipants($this->sheet->reveal())
+            ->willReturn([$participant1->reveal(), $participant2->reveal()])
+        ;
 
         $this->requestSlotViewQueryHandler = $this->prophesize(RequestSlotViewQueryHandler::class);
         $this->visioGuesser = $this->prophesize(VisioGuesser::class);
@@ -103,6 +112,19 @@ class RequestViewQueryHandlerTest extends TestCase
 
     public function test_meeting_request_is_transformable_into_meeting()
     {
+        $this->sheet->countParticipants()->willReturn(1);
+
+        $this->meetingRequest
+            ->hasNoPreference($this->sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->meetingRequest
+            ->hasNoPreference($this->sheetMet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
         $this->visioGuesser
             ->hasMeetingRequestParticipantVisio($this->meetingRequest->reveal())
             ->shouldBeCalled()
@@ -132,6 +154,8 @@ class RequestViewQueryHandlerTest extends TestCase
                 42,
                 [new ParticipantView(11, 'Korben DALLAS'), new ParticipantView(22, 'Leeloo')],
                 true,
+                false,
+                false,
                 false
             ),
             $this->requestViewQueryHandler->handle(
@@ -142,6 +166,19 @@ class RequestViewQueryHandlerTest extends TestCase
 
     public function test_meeting_request_is_not_transformable_into_meeting_because_no_slot_available()
     {
+        $this->sheet->countParticipants()->willReturn(1);
+
+        $this->meetingRequest
+            ->hasNoPreference($this->sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->meetingRequest
+            ->hasNoPreference($this->sheetMet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
         $this->visioGuesser
             ->hasMeetingRequestParticipantVisio($this->meetingRequest->reveal())
             ->shouldBeCalled()
@@ -171,6 +208,8 @@ class RequestViewQueryHandlerTest extends TestCase
                 42,
                 [new ParticipantView(11, 'Korben DALLAS'), new ParticipantView(22, 'Leeloo')],
                 false,
+                false,
+                false,
                 false
             ),
             $this->requestViewQueryHandler->handle(
@@ -181,6 +220,19 @@ class RequestViewQueryHandlerTest extends TestCase
 
     public function test_meeting_request_is_not_transformable_into_meeting_because_one_of_sheets_not_attend()
     {
+        $this->sheet->countParticipants()->willReturn(2);
+
+        $this->meetingRequest
+            ->hasNoPreference($this->sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->meetingRequest
+            ->hasNoPreference($this->sheetMet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
         $this->visioGuesser
             ->hasMeetingRequestParticipantVisio($this->meetingRequest->reveal())
             ->shouldBeCalled()
@@ -209,7 +261,9 @@ class RequestViewQueryHandlerTest extends TestCase
                 42,
                 [new ParticipantView(11, 'Korben DALLAS'), new ParticipantView(22, 'Leeloo')],
                 false,
-                true
+                true,
+                true,
+                false
             ),
             $this->requestViewQueryHandler->handle(
                 new RequestViewQuery($this->meetingRequest->reveal(), $this->sheet->reveal(), 'fr')

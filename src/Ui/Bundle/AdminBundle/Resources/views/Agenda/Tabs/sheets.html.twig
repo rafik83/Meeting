@@ -162,8 +162,8 @@
                                     <i class="icon icon-Profil_1"></i>
                                     ${ request.participantsName }
 
-                                    <a href="#" title="{{ 'admin.agenda.request.updateParticipant.label'|trans }}" v-on:click="showParticipants(request)">
-                                        <span v-show="request.participants.length == 0" class="label label-danger">
+                                    <a href="#" title="{{ 'admin.agenda.request.updateParticipant.label'|trans }}" v-on:click="showParticipants(request)" v-show="request.isOneOfSheetsHasNoPreference">
+                                        <span class="label label-danger">
                                             {{ 'admin.agenda.requestsList.noPreference'|trans }}
                                         </span>
                                     </a>

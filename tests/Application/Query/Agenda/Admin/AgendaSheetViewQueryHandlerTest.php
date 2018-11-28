@@ -104,8 +104,8 @@ class AgendaSheetViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([$request1, $request2]);
 
-        $requestView1      = new RequestView(1, 'zzz', 1, [], true, true);
-        $requestView2      = new RequestView(2, 'aaa', 2, [], true, true);
+        $requestView1      = new RequestView(1, 'zzz', 1, [], true, false, true, true);
+        $requestView2      = new RequestView(2, 'aaa', 2, [], true, false, true, true);
         $requestViewQuery1 = new RequestViewQuery(
             $request1,
             $sheet,
