@@ -29,6 +29,7 @@ class SpotSatisfactionViewNormalizer implements NormalizerInterface
             'shared' => $spotSatisfactionView->shared,
             'visio' => $spotSatisfactionView->visio,
             'satisfaction' => $spotSatisfactionView->satisfaction,
+            'priority' => $spotSatisfactionView->priority,
         ];
     }
 

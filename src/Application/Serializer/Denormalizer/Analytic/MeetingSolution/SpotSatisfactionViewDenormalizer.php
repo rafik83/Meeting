@@ -25,6 +25,7 @@ class SpotSatisfactionViewDenormalizer implements DenormalizerInterface
             $data['reference'],
             $data['shared'],
             $data['visio'],
+            $data['priority'] ?? null,
             $data['satisfaction']
         );
     }
