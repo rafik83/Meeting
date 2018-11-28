@@ -14,51 +14,31 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
-use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\Happening\Category as HappeningCategory;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Happening\CategoryRepositoryInterface;
 
 class ProgramViewQueryHandler
 {
-    /**
-     * @var HappeningRepositoryInterface
-     */
-    private $happeningRepository;
-
-    /**
-     * @var HappeningsAccessChecker
-     */
+    /** @var HappeningsAccessChecker */
     private $happeningsAccessChecker;
 
-    /**
-     * @var NavigationBuilderInterface
-     */
+    /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
-    /**
-     * ProgramViewQueryHandler constructor.
-     *
-     * @param NavigationBuilderInterface   $navigationBuilder
-     * @param HappeningsAccessChecker      $happeningsAccessChecker
-     * @param HappeningRepositoryInterface $happeningRepository
-     */
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
+
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
         HappeningsAccessChecker $happeningsAccessChecker,
-        HappeningRepositoryInterface $happeningRepository
+        CategoryRepositoryInterface $categoryRepository
     ) {
-        $this->happeningRepository     = $happeningRepository;
         $this->happeningsAccessChecker = $happeningsAccessChecker;
-        $this->navigationBuilder       = $navigationBuilder;
+        $this->navigationBuilder = $navigationBuilder;
+        $this->categoryRepository = $categoryRepository;
     }
 
-    /**
-     * @param ProgramViewQuery $programViewQuery
-     *
-     * @return null|CategoryView
-     */
-    public function handle(ProgramViewQuery $programViewQuery)
+    public function handle(ProgramViewQuery $programViewQuery): ?CategoryView
     {
         if (!$this->happeningsAccessChecker->allowedToAccess($programViewQuery->sheet->getEvent())) {
             return null;
@@ -66,26 +46,18 @@ class ProgramViewQueryHandler
 
         $linksView = [];
 
-        $happenings = $this->happeningRepository->findListByEvent(
-            $programViewQuery->sheet->getEvent(),
+        $categoryListViews = $this->categoryRepository->getCategoryListViewByType(
+            $programViewQuery->sheet->getType(),
             $programViewQuery->locale
         );
 
-        $categories = [];
-
-        /** @var Happening $happening */
-        foreach ($happenings as $happening) {
-            $categories[$happening->getCategory()->getId()] = $happening->getCategory();
+        if (empty($categoryListViews)) {
+            return null;
         }
 
-        usort($categories, function (HappeningCategory $previousCategory, HappeningCategory $nextCategory) {
-            return strcmp($previousCategory->getRank(), $nextCategory->getRank());
-        });
-
-        /** @var Happening\Category $category */
-        foreach ($categories as $category) {
+        foreach ($categoryListViews as $categoryListView) {
             $linksView[] = new LinkView(
-                $category->getTitle($programViewQuery->locale),
+                $categoryListView->title,
                 $this->navigationBuilder->getRoute('happening_program', ['sheet' => $programViewQuery->sheet->getId()]),
                 null
             );

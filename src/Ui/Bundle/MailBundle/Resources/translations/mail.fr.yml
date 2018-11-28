@@ -74,7 +74,7 @@ mail.planning.print.orderBy.participant_last_name: 'par nom de famille du partic
 mail.planning.print.orderBy.sheet_title: 'par nom de société'
 mail.planning.print.orderBy.text: 'Le fichier est trié'
 mail.planning.print.subject: 'Fichier de plannings'
-mail.planning.printWidthBadge.link.click: 'Fichier de planning et badge'
+mail.planning.printWidthBadge.link.click: 'Fichier de plannings et badges'
 mail.planning.printWithBadge.intro: 'Voici le fichier de plannings et badges demandé'
 mail.planning.printWithBadge.link.intro: 'Vous pouvez imprimer les plannings et badges en cliquant ici :'
 mail.planning.printWithBadge.subject: 'Fichier de plannings et badges'

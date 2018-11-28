@@ -69,22 +69,17 @@ class ListAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $formSubmittedButNotValid = false;
         $create = new Create($event);
         $form = $this->formFactory->create(CreateType::class, $create, [
             'submit' => true,
         ]);
 
-        if ($form->handleRequest($request)->isSubmitted()) {
-            if (!$form->isValid()) {
-                $formSubmittedButNotValid = true;
-            } else {
-                $this->commandBus->handle($create);
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->commandBus->handle($create);
 
-                return new RedirectResponse($this->router->generate('admin_template_form_list', [
-                    'event' => $event->getId()
-                ]));
-            }
+            return new RedirectResponse($this->router->generate('admin_template_form_list', [
+                'event' => $event->getId()
+            ]));
         }
 
         $formTemplateListView = $this->queryBus->handle(new FormTemplateListViewQuery($event));
@@ -93,7 +88,7 @@ class ListAction
             'event' => $event,
             'form' => $form->createView(),
             'formTemplateListView' => $formTemplateListView,
-            'formSubmittedButNotValid' => $formSubmittedButNotValid,
+            'formSubmittedButNotValid' => $form->isSubmitted() && !$form->isValid(),
         ]));
     }
 }
