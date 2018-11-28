@@ -93,7 +93,7 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.type.title'|trans }}</label>
                                     <select class="form-control" name="type">
-                                        {% if isRegistrationTemplate is defined %}
+                                        {% if isFormTemplate is defined %}
                                             {% set types = { 'Textarea': 'textarea', 'Texte': 'text' } %}
                                         {% else %}
                                             {% set types = { 'Title': 'title', 'Texte': 'text' } %}

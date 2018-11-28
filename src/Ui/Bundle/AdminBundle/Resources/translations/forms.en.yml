@@ -60,8 +60,25 @@ form.availability_time_range_create.children.begin.label: 'Start of the range'
 form.availability_time_range_create.children.end.label: 'End of the range'
 form.availability_time_range_create.children.name.label: 'Backoffice name'
 form.availability_time_range_create.children.submit.label: Save
+form.badge_configuration.children.activated.label: 'The badge display is activated'
+form.badge_configuration.children.conditioned.label: 'Condition the display'
+form.badge_configuration.children.conditionedByPackage.label: 'Conditioned by "has settled its participation or has no package"'
+form.badge_configuration.children.conditionedByStates.label: 'Conditioned by "participation state" (pending, accept, validate, refuse)'
+form.badge_configuration.children.footerColor.label: 'Footer color'
+form.badge_configuration.children.footerTextColor.label: 'Footer text color'
 form.badge_configuration.children.header.help: 'By default the mobile header of the default language'
+form.badge_configuration.children.header.label: 'Header logo'
+form.badge_configuration.children.showFirstName.label: 'First name display'
+form.badge_configuration.children.showFooterTypeOrCategory.choices.category: 'Participation category'
+form.badge_configuration.children.showFooterTypeOrCategory.choices.none: None
+form.badge_configuration.children.showFooterTypeOrCategory.choices.type: 'Participation type'
+form.badge_configuration.children.showFooterTypeOrCategory.label: 'Footer display'
+form.badge_configuration.children.showHeader.label: 'Logo display in header'
+form.badge_configuration.children.showLastName.label: 'Last name display'
+form.badge_configuration.children.showPosition.label: 'Function display'
+form.badge_configuration.children.showQRCode.label: 'QRCode display'
 form.badge_configuration.children.showSheetTitle.label: 'Showing the company name'
+form.badge_configuration.children.submit.label: Save
 form.billing_info_update.children.city.label: City
 form.billing_info_update.children.company.label: Company
 form.billing_info_update.children.country.label: Country
@@ -100,6 +117,8 @@ form.category_update.children.translations.prototype.children.title.label: Title
 form.category_update.children.types.label: 'Select types of participation'
 form.change_mail.children.mail.label: 'Enter your new email'
 form.change_mail.children.submit.label: Send
+form.change_owner.children.owner.label: 'Choose an owner'
+form.change_owner.children.submit.label: Change
 form.change_password_admin.children.currentPassword.label: 'Current password'
 form.change_password_admin.children.plainPassword.children.first.label: 'New password'
 form.change_password_admin.children.plainPassword.children.second.label: 'Confirm new password'
@@ -198,6 +217,8 @@ form.event_configure_date.children.agendaOnlineDate.label: 'On line publishing o
 form.event_configure_date.children.catalogOnlineDate.label: 'Catalogue opening'
 form.event_configure_date.children.closeAnsweringMeetingRequestDate.label: 'Block answering meeting requests'
 form.event_configure_date.children.closeMeetingRequestDate.label: 'Block the meeting request'
+form.event_configure_date.children.enableBadgeForParticipantDate.help: 'activate the automatic sending of the badge by email'
+form.event_configure_date.children.enableBadgeForParticipantDate.label: 'Activate badge display for the participant'
 form.event_configure_date.children.happeningsOpenDate.label: 'opening of the registrations to the sub-events'
 form.event_configure_date.children.registrationCloseDate.label: 'Date of closing registrations'
 form.event_configure_date.children.registrationOpenDate.label: 'Date of opening of the registrations'
@@ -209,6 +230,8 @@ form.event_create.children.backgroundImage.label: 'background image'
 form.event_create.children.country.label: Country
 form.event_create.children.currency.label: Currency
 form.event_create.children.currency.placeholder: 'choose a currency for the event'
+form.event_create.children.disabledEmailChanging.label: 'Email change disabled'
+form.event_create.children.disabledPasswordChanging.label: 'Password change disabled'
 form.event_create.children.domain.help: 'Allowed characters: alphanumeric in lower case, "." and "-"'
 form.event_create.children.domain.label: 'domain (full label)'
 form.event_create.children.domain.placeholder: 'full label of domain of the event : *.vimeet.events'
@@ -244,8 +267,21 @@ form.event_practical_info_update.children.organiserName.label: Organiser
 form.event_practical_info_update.children.organiserPhone.label: 'contact phone number'
 form.event_practical_info_update.children.organiserWebsite.label: website
 form.event_practical_info_update.children.submit.label: Save
+form.event_update_design.children.backgroundColor.label: 'Background color'
+form.event_update_design.children.backgroundImage.label: 'Background image'
+form.event_update_design.children.headerButtonLeftColor.label: 'Left color of the Header buttons'
+form.event_update_design.children.headerButtonRightColor.label: 'Right color of the Header buttons'
+form.event_update_design.children.headerButtonTextColor.label: 'Text color of the Header buttons'
+form.event_update_design.children.headerLeftColor.label: 'Left color of the Header'
+form.event_update_design.children.headerRightColor.label: 'Right color of the Header'
+form.event_update_design.children.leftColor.label: 'Left color of the CTA (call to action buttons)'
 form.event_update_design.children.localizedImages.prototype.children.logo.label: 'Desktop header'
 form.event_update_design.children.localizedImages.prototype.children.mobileLogo.label: 'Mobile header'
+form.event_update_design.children.localizedImages.prototype.children.undefined: 'Not defined'
+form.event_update_design.children.removeBackgroundImage.label: 'Delete the current background image'
+form.event_update_design.children.rightColor.label: 'Right color of the CTA (call to action buttons)'
+form.event_update_design.children.submit.label: Save
+form.event_update_design.children.textColor.label: 'Text color'
 form.event_update.children.analyticsCode.label: 'analytics code'
 form.event_update.children.backgroundColor.label: 'background color'
 form.event_update.children.backgroundImage.label: 'background image'
@@ -286,6 +322,7 @@ form.extra_parameter_create.children.type.choices.comexposium_sso_enabled: 'Acti
 form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexposium event SSO'
 form.extra_parameter_create.children.type.choices.comexposium_sso_session_salon: 'Comexposium event SSO Session'
 form.extra_parameter_create.children.type.choices.comexposium_visitor_type_id: 'Id of the type of participation Visitor concerned'
+form.extra_parameter_create.children.type.choices.crisp_site_id: 'Crisp site ID'
 form.extra_parameter_create.children.type.choices.leni_event: 'Event LENI code'
 form.extra_parameter_create.children.type.choices.leni_get_endpoint: 'LENI Get endpoint'
 form.extra_parameter_create.children.type.choices.leni_mode: 'LENI Mode (save, get ou both)'
@@ -295,6 +332,7 @@ form.extra_parameter_create.children.type.choices.leni_predefined_filters: 'LENI
 form.extra_parameter_create.children.type.choices.leni_save_endpoint: 'LENI Save endpoint'
 form.extra_parameter_create.children.type.choices.leni_sending_request: 'LENI Paramètre SendingRequests'
 form.extra_parameter_create.children.type.choices.leni_user: 'User LENI code'
+form.extra_parameter_create.children.type.choices.tech_event_configuration: 'TechEvent configuration'
 form.extra_parameter_create.children.type.choices.vianeo_concerned_types_id: 'Vianeo : concerned types of participation Ids (separated by a comma)'
 form.extra_parameter_create.children.type.choices.vianeo_endpoint: 'Vianeo endpoint'
 form.extra_parameter_create.children.type.label: Type
@@ -331,6 +369,14 @@ form.filter.isVisio.label: 'Is visio'
 form.filter.isVisioTested.label: 'Visio tested'
 form.filter.label: Filter
 form.filter.lastName.label: Lastname
+form.filter.optgroup.nomenclature.label: Nomenclatures
+form.filter.optgroup.participantInfo.label: 'Participant info'
+form.filter.optgroup.participantManagement.label: 'Participant management'
+form.filter.optgroup.sheetInfo.label: 'Sheet information'
+form.filter.participants.email.label: 'Participant Email'
+form.filter.participants.lastname.label: 'Participant last name'
+form.filter.sheetName.label: 'Sheet name'
+form.filter.spotReference.label: 'Assigned spot'
 form.forgotten_password.children.email.label: 'Enter email address'
 form.forgotten_password.children.submit.label: Send
 form.generate_slot.children.recipes.label_add: 'Add a slot'
@@ -491,6 +537,7 @@ form.package_update.children.participantAndPlanning.children.participants.label:
 form.package_update.children.participantAndPlanning.children.participants.label_add: 'add a participant product'
 form.package_update.children.participantAndPlanning.children.participants.label_delete: '&times;'
 form.package_update.children.participantAndPlanning.children.planning.label: 'Package of meetings'
+form.package_update.children.participantAndPlanning.children.planningSelectable.label: 'Visible planning'
 form.package_update.children.plans.children.enabled.label: Activated
 form.package_update.children.plans.children.labels.label: 'Step title'
 form.package_update.children.plans.children.plans.label: Formulas
@@ -743,6 +790,7 @@ form.sheet_batch.children.group.label: group
 form.sheet_batch.children.pending.label: Pending
 form.sheet_batch.children.printPdf.label: 'Print to PDF'
 form.sheet_batch.children.printPlanning.label: Print
+form.sheet_batch.children.printPlanningAndBadge.label: 'Badge and planning printing'
 form.sheet_batch.children.printPlanningOrderBy.label: 'Export order'
 form.sheet_batch.children.refuse.label: refuse
 form.sheet_batch.children.removeCatalog.label: 'remove from the catalog'
@@ -886,6 +934,12 @@ form.spot_import.children.charset.label: 'file encoding'
 form.spot_import.children.file.label: 'spots file'
 form.spot_import.children.submit.label: 'import spots'
 form.spot.import.confirm: 'The import of new spots will delete the previous spots on this event. do you want to import the spots ?'
+form.static_formulation_create.children.submit.label: Customize
+form.static_formulation_create.children.translations.prototype.children.title.label: 'Formulation title'
+form.static_formulation_create.children.types.label: 'Associated types of participation'
+form.static_formulation_update.children.submit.label: Update
+form.static_formulation_update.children.translations.prototype.children.title.label: 'Formulation title'
+form.static_formulation_update.children.types.label: 'Types of participation remaining'
 form.template_add_locale.children.locale.label: language
 form.template_add_locale.children.submit.label: validate
 form.template_registration_update.children.submit.label: Save
@@ -974,6 +1028,20 @@ form.transaction.children.transaction_mode.bank_cash: Cash
 form.transaction.children.transaction_mode.bank_check: Cheque
 form.transaction.children.transaction_mode.bank_transfer: Transfer
 form.transaction.children.transaction_mode.paypal: Paypal
+form.transactional_mail_customize.children.associatedTypes.label: 'Associated types'
+form.transactional_mail_customize.children.enabled.label: Activated
+form.transactional_mail_customize.children.submit.label: Customize
+form.transactional_mail_customize.children.translations.label: 'Content translation'
+form.transactional_mail_customize.children.translations.prototype.children.content.label: Content
+form.transactional_mail_customize.children.translations.prototype.children.subject.label: Subject
+form.transactional_mail_update_customized.children.associatedTypes.label: 'Associated types'
+form.transactional_mail_update_customized.children.enabled.label: Activated
+form.transactional_mail_update_customized.children.submit.label: Update
+form.transactional_mail_update_customized.children.translations.label: 'Content translation'
+form.transactional_mail_update_customized.children.translations.prototype.children.content.label: Content
+form.transactional_mail_update_customized.children.translations.prototype.children.subject.label: Subject
+form.type_content_define_terms_of_sale.children.enabled.label: 'Activate the customization of the general terms of sale for this type'
+form.type_content_define_terms_of_sale.children.submit.label: Validate
 form.type_create.children.hidden.label: hidden
 form.type_create.children.package.label: 'Registration package template'
 form.type_create.children.rank.label: rank
@@ -992,6 +1060,10 @@ form.type_payment_conditions_update.children.minimumForDeposit.label: 'Total amo
 form.type_payment_conditions_update.children.paymentModes.label: 'payment modes'
 form.type_payment_conditions_update.children.specificPaymentConditions.label: 'Set specific payment conditions for this type'
 form.type_payment_conditions_update.children.submit.label: register
+form.type_payment_conditions_update.children.translations.prototype.children.bankInfo.label: 'Bank information'
+form.type_payment_conditions_update.children.translations.prototype.children.billingAddress.label: 'Payment address'
+form.type_payment_conditions_update.children.translations.prototype.children.paymentCondition.label: 'Payment terms'
+form.type_payment_conditions_update.children.translations.prototype.children.paymentFooter.label: Footer
 form.type_template_field_update_lib_choice.children.choices.label: choice
 form.type_template_field_update_lib_choice.children.choices.label_add: Add
 form.type_template_field_update_lib_choice.children.choices.label_delete: Delete
@@ -1044,6 +1116,7 @@ form.unavailability_mass_create.children.timeSlots.prototype.children.from.label
 form.unavailability_mass_create.children.timeSlots.prototype.children.to.label: End
 form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_create.children.translations.prototype.children.title.label: Title
+form.unavailability_mass_create.children.types.label: 'Participation types'
 form.unavailability_mass_update.children.begin.label: beginning
 form.unavailability_mass_update.children.blocking.label: blocking
 form.unavailability_mass_update.children.category.label: category
@@ -1058,6 +1131,7 @@ form.unavailability_mass_update.children.timeSlots.prototype.children.from.label
 form.unavailability_mass_update.children.timeSlots.prototype.children.to.label: end
 form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
 form.unavailability_mass_update.children.translations.prototype.children.title.label: Title
+form.unavailability_mass_update.children.types.label: 'Participation types'
 form.unavailability.mass.children.blocking.answer.false: 'No'
 form.unavailability.mass.children.blocking.answer.true: 'Yes'
 form.update_admin.children.email.label: Email
@@ -1104,6 +1178,8 @@ form.update_transaction.children.submit.label: Save
 form.update_unavailability.children.from.label: from
 form.update_unavailability.children.submit.label: Modify
 form.update_unavailability.children.to.label: To
+form.user_batch.children.campaignTitle.label: 'Campaign name'
+form.user_batch.children.sendMail.label: 'Create the campaign'
 form.user_filter.children.participation.label: Participation
 form.user_filter.children.text_search.label: 'Last name, first name or email of user'
 form.user_filter.children.type.label: Type

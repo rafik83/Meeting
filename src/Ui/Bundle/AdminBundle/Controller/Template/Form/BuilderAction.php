@@ -55,26 +55,26 @@ class BuilderAction
         $this->engine = $engine;
     }
 
-    public function __invoke(Request $request, Event $event, FormTemplate $formTemplate, string $locale): Response
+    public function __invoke(Request $request, Event $event, FormTemplate $template, string $locale): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
-            || $formTemplate->getEvent() !== $event
+            || $template->getEvent() !== $event
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
         ) {
             throw new AccessDeniedException('Access denied!');
         }
 
-        if (!$formTemplate->hasLocale($locale)) {
+        if (!$template->hasLocale($locale)) {
             throw new NotFoundHttpException(sprintf('Locale "%s" does not exist on this template', $locale));
         }
 
-        $completeness = $this->completenessCalculator->compute($formTemplate);
+        $completeness = $this->completenessCalculator->compute($template);
 
         $incomplete = array_keys(array_filter($completeness, function ($percent) {
             return $percent < 100;
         }));
 
-        $nomenclatures = $this->nomenclatureRepository->findByEvent($formTemplate->getEvent());
+        $nomenclatures = $this->nomenclatureRepository->findByEvent($template->getEvent());
 
         // Add warning if some locales translations are incomplete
         if (!empty($incomplete)) {
@@ -86,7 +86,7 @@ class BuilderAction
             'event' => $event,
             'locale' => $locale,
             'nomenclatures' => $nomenclatures,
-            'template'  => $formTemplate,
+            'template'  => $template,
             'uploadFormats' => UploadObject::ALLOWED_FORMATS,
             'templateTagView' => Tag::getTemplateTagView(),
         ]));
