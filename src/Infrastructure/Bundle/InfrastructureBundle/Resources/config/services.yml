@@ -211,10 +211,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Template\RegistrationTemplateRepository
         arguments:
             - '@doctrine.orm.entity_manager'
-    repository.template.form_template_repository:
-        class: Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository
-        arguments:
-            - '@doctrine.orm.entity_manager'
     repository.package_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\PackageRepository
         arguments:
