@@ -325,7 +325,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
-     * @return DateTimeInterface
+     * @return DateTimeInterface|null
      */
     public function getLastLoginAt()
     {

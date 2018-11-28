@@ -110,6 +110,38 @@ class AdminRepository implements AdminRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function list(array $filters): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('admin, event')
+            ->from(Admin::class, 'admin', 'admin.id')
+            ->leftJoin('admin.events', 'event')
+            ->orderBy('admin.lastname', 'ASC');
+
+        if (isset($filters['role']) && null !== $filters['role'] && \in_array($filters['role'], Admin::getAllRoles(), true)) {
+            $queryBuilder
+                ->where('admin.role = :role')
+                ->setParameter('role', $filters['role']);
+        }
+
+        if (isset($filters['event']) && null !== $filters['event']) {
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->orX(
+                    'event.id = :eventId',
+                    'admin.role = :role_event AND admin.events IS EMPTY'
+                ))
+                ->setParameter('eventId', $filters['event'])
+                ->setParameter('role_event', Admin::ROLE_SUPER_ADMIN);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function listPaginated($page, $limit, array $filters)
     {
         $queryBuilder = $this
@@ -180,12 +212,12 @@ class AdminRepository implements AdminRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getOperatorForOrganizer(Admin $admin, $page, $limit, array $filters)
+    public function getOperatorForOrganizer(Admin $admin, array $filters): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('admin')
+            ->select('admin, event')
             ->from(Admin::class, 'admin', 'admin.id')
             ->where('admin.role IN (:role)')
             ->setParameter('role', [Admin::ROLE_OPERATOR, Admin::ROLE_PARTNER]);
@@ -200,7 +232,7 @@ class AdminRepository implements AdminRepositoryInterface
                 ->setParameter('events', $admin->getEvents());
         }
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit, 'admin', 'id');
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

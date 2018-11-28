@@ -532,6 +532,7 @@ admin.nomenclature.table.title: Titre
 admin.nomenclature.title: Nomenclatures
 admin.operator_list.action.create: 'Créer un nouveau collaborateur'
 admin.operator_list.action.create.partner: 'Créer un nouveau partenaire'
+admin.operator_list.column.lastLoginAt.never: Jamais
 admin.operator_list.filter.empty_filter: 'Vider les filtres'
 admin.operator_list.link: 'Liste des collaborateurs'
 admin.operator_list.table.content.admin.events.none: Aucun
