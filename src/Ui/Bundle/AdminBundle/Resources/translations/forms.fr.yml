@@ -380,10 +380,16 @@ form.filter.participants.lastname.label: 'Nom du participant'
 form.filter.sheetName.label: 'Nom de la fiche'
 form.filter.spotReference.label: 'Lieux attribué'
 form.forgotten_password.children.email.label: 'Entrez votre email'
-form.forgotten_password.children.submit.label: Envoyez
+form.forgotten_password.children.submit.label: Enregistrer
+form.form_template_create.children.close.label: Annuler
 form.form_template_create.children.submit.label: Créer
 form.form_template_create.children.title.label: Titre backoffice
 form.form_template_create.children.translations.label: Titre traduit
+form.form_template_create.state.help: 'Par défaut le formulaire est en mode brouillon. Vous devrez cocher la case Publié pour que le formulaire soit accessible en ligne'
+form.form_template_update_parameters.children.published.label: Publié
+form.form_template_update_parameters.children.submit.label: Enregistrer
+form.form_template_update_parameters.children.title.label: Titre backoffice
+form.form_template_update_parameters.children.translations.label: Titre traduit
 form.generate_slot.children.recipes.label_add: 'Ajouter une plage'
 form.generate_slot.children.recipes.label_delete: '&times;'
 form.generate_slot.children.recipes.prototype.children.begin.label: De

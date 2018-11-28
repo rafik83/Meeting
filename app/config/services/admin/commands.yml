@@ -346,6 +346,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\Save }
 
+    Proximum\Vimeet\Application\Command\Template\Form\UpdateParametersHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\UpdateParameters }
+
     #
     # Order
     #

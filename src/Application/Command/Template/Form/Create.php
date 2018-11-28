@@ -18,8 +18,10 @@ class Create implements Command
     /** @var Event */
     public $event;
 
+    /** @var string */
     public $title;
 
+    /** @var array */
     public $translations;
 
     public function __construct(Event $event)

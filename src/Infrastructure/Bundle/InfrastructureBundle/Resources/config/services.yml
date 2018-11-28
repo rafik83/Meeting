@@ -4210,7 +4210,7 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.happenings_access_checker'
-            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository_happening.category_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ProgramViewQuery }
 
