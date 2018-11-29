@@ -8,7 +8,7 @@
     <h1 class="page-header">
         {{ 'admin.schedule.title'|trans }}
         {% if featureEventDatesToCurrentDateEnabled %}
-            <a href="{{ path('admin_update_event_dates_to_current_date', {'event' : event.id}) }}" class="btn btn-danger">Modifier à la date actuelle</a>
+            <a href="{{ path('admin_update_event_dates_to_current_date', {'event' : event.id}) }}" class="btn btn-danger">{{ 'admin.event.updateEventDates'|trans }}</a>
         {% endif %}
     </h1>
     <div class="mg-bt">
