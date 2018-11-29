@@ -20,6 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EventDatesController extends Controller
 {
+    private const BEGIN_DATE =  'beginDate';
+
     public function updateEventDatesAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
@@ -28,8 +30,8 @@ class EventDatesController extends Controller
             $this->createAccessDeniedException('Change event date is not available');
         }
 
-        $form = $this->createFormBuilder(['date' => $this->get('datetime')])
-            ->add('beginDate', DateTimePickerType::class, [
+        $form = $this->createFormBuilder([self::BEGIN_DATE => $this->get('datetime')])
+            ->add(self::BEGIN_DATE, DateTimePickerType::class, [
                 'display_hour' => false,
                 'view_timezone' => $event->getTimeZone(),
                 'format' => 'd/m/Y',
@@ -45,7 +47,7 @@ class EventDatesController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('command.event.update_event_dates_to_current_date_handler')->handle(
-                    new UpdateEventDatesToCurrentDate($event, $form->getData()['beginDate'])
+                    new UpdateEventDatesToCurrentDate($event, $form->getData()[self::BEGIN_DATE])
                 );
 
                 return $this->redirectToRoute('admin_schedule_slots', [
