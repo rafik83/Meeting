@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Group\Participant;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets;
 use Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheetsHandler;
@@ -48,7 +49,10 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $groupMock = $this->prophesize(Group::class);
 
         $sheetMock1 = $this->prophesize(Sheet::class);
+        $sheetMock1->countParticipants()->willReturn(1);
+
         $sheetMock2 = $this->prophesize(Sheet::class);
+        $sheetMock2->countParticipants()->willReturn(2);
 
         $userMock1 = $this->prophesize(User::class);
         $userMock2 = $this->prophesize(User::class);
@@ -106,24 +110,17 @@ class UpdateUsersSheetsHandlerTest extends TestCase
 
         $meetingRepositoryMock
             ->hasScheduledMeetingByParticipant($participantMock2->reveal())
-            ->shouldBeCalled()
-            ->willReturn(false);
+            ->shouldNotBeCalled()
+        ;
 
-        $sheetInfoGuesserCacheMock->guessSheetTitle($sheetMock1->reveal(), null)->shouldNotBeCalled();
+        $sheetInfoGuesserCacheMock
+            ->guessSheetTitle($sheetMock1->reveal(), null)
+            ->shouldBeCalled()
+            ->willReturn('Sheet title 1')
+        ;
         $sheetInfoGuesserCacheMock->guessSheetTitle($sheetMock2->reveal(), null)->shouldNotBeCalled();
 
-        $participantRepositoryMock->delete($participantMock2->reveal())->shouldBeCalled();
-
-        $delayedEventDispatcher
-            ->dispatch(
-                Events::PARTICIPANT_REMOVED_BY_GROUP_MANAGER,
-                new ParticipantRemovedByGroupManagerEvent(
-                    $userMock2->reveal(),
-                    $sheetMock1->reveal()
-                )
-            )
-            ->shouldBeCalled()
-        ;
+        $participantRepositoryMock->delete(Argument::any())->shouldNotBeCalled();
 
         $updateUsersSheets = new UpdateUsersSheets($groupMock->reveal(), $userParticipantViews);
 
@@ -143,7 +140,16 @@ class UpdateUsersSheetsHandlerTest extends TestCase
             $delayedEventDispatcher->reveal()
         );
 
-        $this->assertEquals([], $updateUsersSheetsHandler->handle($updateUsersSheets));
+        $this->assertEquals(
+            [
+                new UpdateUsersSheetsResultView(
+                    UpdateUsersSheetsResultView::SHEET_MUST_HAVE_AT_LEAST_ONE_PARTICIPANT,
+                    'Huguette Prairie',
+                    'Sheet title 1'
+                ),
+            ],
+            $updateUsersSheetsHandler->handle($updateUsersSheets)
+        );
     }
 
     public function testRemoveUserFromSheetWithParticipantHasMeeting()
@@ -160,7 +166,10 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $groupMock = $this->prophesize(Group::class);
 
         $sheetMock1 = $this->prophesize(Sheet::class);
+        $sheetMock1->countParticipants()->willReturn(2);
+
         $sheetMock2 = $this->prophesize(Sheet::class);
+        $sheetMock2->countParticipants()->willReturn(2);
 
         $userMock = $this->prophesize(User::class);
 
@@ -239,7 +248,10 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $groupMock = $this->prophesize(Group::class);
 
         $sheetMock1 = $this->prophesize(Sheet::class);
+        $sheetMock1->countParticipants()->willReturn(2);
+
         $sheetMock2 = $this->prophesize(Sheet::class);
+        $sheetMock2->countParticipants()->willReturn(3);
 
         $userMock = $this->prophesize(User::class);
 
@@ -317,7 +329,10 @@ class UpdateUsersSheetsHandlerTest extends TestCase
         $groupMock = $this->prophesize(Group::class);
 
         $sheetMock1 = $this->prophesize(Sheet::class);
+        $sheetMock1->countParticipants()->willReturn(1);
+
         $sheetMock2 = $this->prophesize(Sheet::class);
+        $sheetMock2->countParticipants()->willReturn(1);
 
         $userMock = $this->prophesize(User::class);
 
