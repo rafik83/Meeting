@@ -30,7 +30,7 @@ var $ = require('jquery'),
     PackageParticipantProducts = require('./components/_PackageParticipantProducts'),
     CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField'),
     VideoConferenceTest = require('./components/VideoConference/VideoTest'),
-    DateTimePicker = require('../../../../AdminBundle/Resources/assets/js/components/_DateTimePicker')
+    DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker')
 ;
 
 require('bootstrap');

@@ -1,5 +1,5 @@
 var options = require('../../../vueComponents/options'),
-    DateTimePicker = require('../../../components/_DateTimePicker'),
+    DateTimePicker = require('../../../../../../../../../../assets/js/components/DateTimePicker'),
     AgendaApiEndpoints = require('../../../components/_AgendaApiEndpoints'),
     moment = require('moment'),
     $ = require('jquery');
