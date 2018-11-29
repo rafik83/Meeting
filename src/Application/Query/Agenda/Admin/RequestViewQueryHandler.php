@@ -69,7 +69,7 @@ class RequestViewQueryHandler
 
     private function hasNoPreferenceAndNotAlone(Request $request, Sheet $sheet): bool
     {
-        return $request->hasNoPreference($sheet) && $sheet->countParticipants() >= 2;
+        return $request->hasNoPreference($sheet) && !$sheet->hasOnlyOneParticipant();
     }
 
     private function isTransformableIntoMeeting(Request $request, bool $isVisio): bool

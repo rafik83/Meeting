@@ -59,7 +59,7 @@ class RequestViewQueryHandlerTest extends TestCase
 
         $this->sheetMet = $this->prophesize(Sheet::class);
         $this->sheetMet->getId()->willReturn(42);
-        $this->sheetMet->countParticipants()->willReturn(2);
+        $this->sheetMet->hasOnlyOneParticipant()->willReturn(false);
 
         $participant1 = $this->prophesize(Participant::class);
         $participant1->getId()->shouldBeCalled()->willReturn(11);
@@ -112,7 +112,7 @@ class RequestViewQueryHandlerTest extends TestCase
 
     public function test_meeting_request_is_transformable_into_meeting()
     {
-        $this->sheet->countParticipants()->willReturn(1);
+        $this->sheet->hasOnlyOneParticipant()->willReturn(true);
 
         $this->meetingRequest
             ->hasNoPreference($this->sheet->reveal())
@@ -166,7 +166,7 @@ class RequestViewQueryHandlerTest extends TestCase
 
     public function test_meeting_request_is_not_transformable_into_meeting_because_no_slot_available()
     {
-        $this->sheet->countParticipants()->willReturn(1);
+        $this->sheet->hasOnlyOneParticipant()->willReturn(true);
 
         $this->meetingRequest
             ->hasNoPreference($this->sheet->reveal())
@@ -220,7 +220,7 @@ class RequestViewQueryHandlerTest extends TestCase
 
     public function test_meeting_request_is_not_transformable_into_meeting_because_one_of_sheets_not_attend()
     {
-        $this->sheet->countParticipants()->willReturn(2);
+        $this->sheet->hasOnlyOneParticipant()->willReturn(false);
 
         $this->meetingRequest
             ->hasNoPreference($this->sheet->reveal())
