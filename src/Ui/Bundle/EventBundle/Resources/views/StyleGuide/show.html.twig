@@ -1,0 +1,112 @@
+{% set icons = [
+    'icon-EtoilePleine',
+    'icon-LienTag',
+    'icon-Mosaique',
+    'icon-Liste',
+    'icon-DemandeRDV',
+    'icon-Rechercher',
+    'icon-Disconnect',
+    'icon-Societe',
+    'icon-Profil_1',
+    'icon-OMZ',
+    'icon-Preferences_1',
+    'icon-Menu_12',
+    'icon-Clef',
+    'icon-Travail',
+    'icon-enveloppe',
+    'icon-Image',
+    'icon-Langue',
+    'icon-Photo',
+    'icon-Video_1',
+    'icon-Video_2',
+    'icon-Badge_1',
+    'icon-Badge_2',
+    'icon-Contact_1',
+    'icon-Info_1',
+    'icon-Menu_1',
+    'icon-Alerter_1',
+    'icon-Fermer_1',
+    'icon-Fermer_3',
+    'icon-Fermer_4',
+    'icon-Ouvrir_1',
+    'icon-Ouvrir_3',
+    'icon-Ouvrir_4',
+    'icon-Reduire_1',
+    'icon-Reduire_3',
+    'icon-Reduire_4',
+    'icon-Valider_1',
+    'icon-Valider_3',
+    'icon-Valider_4',
+    'icon-Deverouiller_1',
+    'icon-Deverouiller_2',
+    'icon-Verouiller_1',
+    'icon-Verouiller_2',
+    'icon-Cocktail',
+    'icon-Dejeuner',
+    'icon-RDV',
+    'icon-Conference',
+    'icon-PresFlash_2',
+    'icon-Precedent_1',
+    'icon-Precedent_3',
+    'icon-Suivant_1',
+    'icon-Suivant_3',
+    'icon-Cafe_1',
+    'icon-Editer_1',
+    'icon-Message_1',
+    'icon-Voir_1',
+    'icon-Calendrier',
+    'icon-Document_1',
+    'icon-Inserer_1',
+    'icon-Inserer_2',
+    'icon-Note_1',
+    'icon-Note_2',
+    'icon-Paiement_1',
+    'icon-Panier_1',
+    'icon-Panier_2',
+    'icon-Horaire',
+    'icon-Localiser',
+    'icon-Effacer',
+    'icon-Appeler',
+    'icon-Retard',
+    'icon-Transferer',
+    'icon-Website',
+    'icon-Smartphone',
+    'icon-Actualiser',
+    'icon-Desktop',
+    'icon-Commentaire',
+    'icon-Coeur',
+    'icon-Etoile',
+    'icon-Retour',
+    'icon-Suivant'
+] %}
+
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'Styleguide' %}
+
+{% block content %}
+    <h2 id="styleguide-icons">Buttons</h2>
+
+    <div class="text-center">
+        <a href="#" class="btn btn-primary">Primary action</a>
+        <a href="#" class="btn btn-gray">Secondary action</a>
+        <a href="#" class="btn btn-link">Link action</a>
+    </div>
+
+    <hr>
+
+    <h2 id="styleguide-icons">Icons</h2>
+
+    <div class="row">
+        {% for icon in icons %}
+            <div class="col-md-2 text-center thumbnail mg-left">
+                <div><span class="{{ icon }}"></span></div>
+                <div>
+                    <a href="#" class="btn btn-gray"><i class="{{ icon }}"></i></a>
+                    <a href="#" class="btn btn-primary"><i class="{{ icon }}"></i></a>
+                </div>
+                <div>{{ icon }}</div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
