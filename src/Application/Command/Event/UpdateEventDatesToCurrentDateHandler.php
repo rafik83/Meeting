@@ -123,8 +123,8 @@ class UpdateEventDatesToCurrentDateHandler
 
         foreach ($this->formatPerDay($slots) as $dayNumber => $slots) {
             foreach ($slots as $slot) {
-                $slot->setBegin($command->beginDate, $this->update($command->beginDate, $slot->getBegin(), $dayNumber));
-                $slot->setEnd($command->beginDate, $this->update($command->beginDate, $slot->getEnd(), $dayNumber));
+                $slot->setBegin($this->update($command->beginDate, $slot->getBegin(), $dayNumber));
+                $slot->setEnd($this->update($command->beginDate, $slot->getEnd(), $dayNumber));
                 $this->meetingSlotRepository->set($slot);
             }
         }
