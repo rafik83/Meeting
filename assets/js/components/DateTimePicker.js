@@ -22,35 +22,16 @@ function DateTimePicker(element, customConfig)
             clear: 'glyphicon glyphicon-trash',
             close: 'glyphicon glyphicon-remove'
         },
+        useCurrent: false,
         format: 'DD/MM/YYYY HH:mm'
     };
 
     if (customConfig !== null) {
-       this.standardConfig = Object.assign(this.standardConfig, customConfig);
+        this.standardConfig = Object.assign(this.standardConfig, customConfig);
     }
 
     var allowDates = this.element.getAttribute('data-allow-dates');
     var allowHours = this.element.getAttribute('data-allow-hours');
-    var minDate = this.element.getAttribute('data-min-date');
-    var maxDate = this.element.getAttribute('data-max-date');
-
-    if (minDate) {
-        this.standardConfig = Object.assign(
-            this.standardConfig,
-            {
-                minDate: new Date(minDate)
-            }
-        );
-    }
-
-    if (maxDate) {
-        this.standardConfig = Object.assign(
-            this.standardConfig,
-            {
-                maxDate: new Date(maxDate)
-            }
-        );
-    }
 
     // In case of allowDates or allowHours not set, change the format of the picker
     if ((allowDates === null && allowHours !== null)
@@ -63,8 +44,19 @@ function DateTimePicker(element, customConfig)
             }
         );
     }
-    
+
     $(element).datetimepicker(this.standardConfig);
+
+    var minDate = this.element.getAttribute('data-min-date');
+    var maxDate = this.element.getAttribute('data-max-date');
+
+    if (minDate) {
+        $(element).data("DateTimePicker").minDate(new Date(minDate));
+    }
+
+    if (maxDate) {
+        $(element).data("DateTimePicker").maxDate(new Date(maxDate));
+    }
 
     if ($(this.element).hasClass("datetimepicker-range-element")) {
         this.bindRangeElement();

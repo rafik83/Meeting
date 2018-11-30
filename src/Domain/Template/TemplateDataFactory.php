@@ -135,7 +135,7 @@ class TemplateDataFactory
                 $registrationTemplate->getFallback(),
                 $registrationTemplate->getEvent()
             )
-        ;
+            ;
     }
 
     public function createFormTemplateFromTemplate(
@@ -148,10 +148,9 @@ class TemplateDataFactory
                 $formTemplate->getValue(),
                 [],
                 $locale,
-                $formTemplate->getFallback(),
-                $formTemplate->getEvent()
+                $formTemplate->getFallback()
             )
-        ;
+            ;
     }
 
     public function createFormTemplateWithData(
@@ -168,7 +167,7 @@ class TemplateDataFactory
                 $formTemplate->getFallback(),
                 $formTemplate->getEvent()
             )
-        ;
+            ;
     }
 
     /**
