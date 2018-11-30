@@ -12,55 +12,82 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use InvalidArgumentException;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Exception\Meeting\MeetingRequestCanNotBeMeetingException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSpotAvailableException;
 use Proximum\Vimeet\Application\View\Agenda\Admin\ParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\RequestView;
+use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class RequestViewQueryHandler
 {
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
-    /**
-     * RequestViewQueryHandler constructor.
-     *
-     * @param SheetInfoGuesser       $sheetInfoGuesser
-     * @param ParticipantInfoGuesser $participantInfoGuesser
-     */
+    /** @var RequestSlotViewQueryHandler */
+    private $requestSlotViewQueryHandler;
+
+    /** @var VisioGuesser */
+    private $visioGuesser;
+
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
-        ParticipantInfoGuesser $participantInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
+        VisioGuesser $visioGuesser
     ) {
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
+        $this->visioGuesser = $visioGuesser;
     }
 
-    /**
-     * @param RequestViewQuery $query
-     *
-     * @return RequestView
-     */
-    public function handle(RequestViewQuery $query)
+    public function handle(RequestViewQuery $query): RequestView
     {
         $sheetMet = $query->request->getSheetMet($query->sheet);
+
+        $isVisio = $this->visioGuesser->hasMeetingRequestParticipantVisio($query->request);
+        $isTransformableIntoMeeting = $this->isTransformableIntoMeeting($query->request, $isVisio);
 
         return new RequestView(
             $query->request->getId(),
             $this->sheetInfoGuesser->guessSheetTitle($sheetMet, $query->locale),
             $sheetMet->getId(),
             $this->getParticipantViews($query->request, $query->sheet, $query->locale),
-            $query->request->isTransformableIntoMeeting(),
-            $query->request->isOneOfSheetsNotAttend()
+            $isTransformableIntoMeeting,
+            $query->request->isOneOfSheetsNotAttend(),
+            $this->hasNoPreferenceAndNotAlone($query->request, $query->sheet),
+            $this->hasNoPreferenceAndNotAlone($query->request, $sheetMet)
         );
+    }
+
+    private function hasNoPreferenceAndNotAlone(Request $request, Sheet $sheet): bool
+    {
+        return $request->hasNoPreference($sheet) && !$sheet->hasOnlyOneParticipant();
+    }
+
+    private function isTransformableIntoMeeting(Request $request, bool $isVisio): bool
+    {
+        if (!$request->isTransformableIntoMeeting()) {
+            return false;
+        }
+
+        try {
+            $this->requestSlotViewQueryHandler->handle(
+                new RequestSlotViewQuery($request, $isVisio)
+            );
+
+            return true;
+        } catch (NoSlotAvailableException | NoSpotAvailableException | MeetingRequestCanNotBeMeetingException $e) {
+        }
+
+        return false;
     }
 
     /**
@@ -70,7 +97,7 @@ class RequestViewQueryHandler
      *
      * @return ParticipantView[]
      */
-    public function getParticipantViews(Request $request, Sheet $sheet, $locale)
+    private function getParticipantViews(Request $request, Sheet $sheet, $locale): array
     {
         $participantViews = [];
 

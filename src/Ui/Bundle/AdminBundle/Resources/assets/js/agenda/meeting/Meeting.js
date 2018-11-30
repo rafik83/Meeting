@@ -183,12 +183,19 @@ module.exports = {
          * Filters - Reset filteredSheet
          */
         resetSheetFilter: function () {
-            var child = this.$refs.sheetFilterModal;
-            if (typeof child !== 'undefined') {
-                child.reset();
+            var sheetFilterModal = this.$refs.sheetFilterModal;
+
+            if (typeof sheetFilterModal !== 'undefined') {
+                sheetFilterModal.reset();
                 this.hasUsedSheetFilter = false;
                 this.filteredSheets = [];
                 this.filterBySheetOrParticipantValue = '';
+            }
+
+            var sortModal = this.$refs.sortModal;
+
+            if (typeof sortModal !== 'undefined') {
+                sortModal.reset();
             }
         },
 
