@@ -36,6 +36,11 @@ Proximum\Vimeet\Domain\Model\Type:
         admins:
             targetEntity: Proximum\Vimeet\Domain\Model\Admin
             mappedBy: types
+        formTemplates:
+            targetEntity: Proximum\Vimeet\Domain\Model\Template\FormTemplate
+            mappedBy: types
+            joinTable:
+                name: template_form_type
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

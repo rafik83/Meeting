@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model\Template;
 
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 
@@ -47,7 +48,7 @@ abstract class AbstractTemplate
     protected $event;
 
     /**
-     * @var Type[]
+     * @var ArrayCollection of Type
      */
     protected $types;
 
@@ -82,6 +83,7 @@ abstract class AbstractTemplate
         $this->fallback  = $fallback;
         $this->createdAt = $createdAt;
         $this->event     = $event;
+        $this->types     = new ArrayCollection();
 
         foreach ($locales as $locale) {
             $this->addLocale($locale);
@@ -136,9 +138,9 @@ abstract class AbstractTemplate
     /**
      * @return Type[]
      */
-    public function getTypes()
+    public function getTypes(): array
     {
-        return $this->types;
+        return $this->types->toArray();
     }
 
     /**

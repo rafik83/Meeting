@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type\PaymentConditions;
@@ -63,6 +64,9 @@ class Type implements WhoInterface, TypeInterface
     /** @var ArrayCollection of PaymentConditions */
     private $paymentConditions;
 
+    /** @var ArrayCollection of FormTemplates */
+    private $formTemplates;
+
     /**
      * @param Event $event
      */
@@ -74,6 +78,7 @@ class Type implements WhoInterface, TypeInterface
         $this->admins             = new ArrayCollection();
         $this->validationCriteria = new ValidationCriteria(false);
         $this->paymentConditions  = new ArrayCollection();
+        $this->formTemplates      = new ArrayCollection();
     }
 
     /**
@@ -363,5 +368,13 @@ class Type implements WhoInterface, TypeInterface
         }
 
         return $paymentConditions;
+    }
+
+    /**
+     * @return FormTemplate[]
+     */
+    public function getFormTemplates(): array
+    {
+        return $this->formTemplates->toArray();
     }
 }
