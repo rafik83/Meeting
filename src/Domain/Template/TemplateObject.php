@@ -263,6 +263,11 @@ class TemplateObject extends AbstractChild
         return null !== $this->getOption('required') ? $this->getOption('required') : false;
     }
 
+    public function getVisibility(): ?string
+    {
+        return $this->getOption('visibility');
+    }
+
     /**
      * @return string
      */

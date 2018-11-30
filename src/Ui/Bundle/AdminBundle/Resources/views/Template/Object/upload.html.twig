@@ -3,6 +3,7 @@
 {% set config = {
     label: { (locale): 'template.object.upload'|trans },
     required: false,
+    visibility: null,
     crypted: false,
     help: { (locale): '' },
     tags: [],
@@ -51,6 +52,7 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
+                                {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
                                 <div class="form-group">
                                     <label class="form-label">
                                         <input type="checkbox" name="required" />

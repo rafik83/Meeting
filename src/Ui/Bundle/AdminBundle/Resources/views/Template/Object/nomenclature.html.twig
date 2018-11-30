@@ -7,6 +7,7 @@
     help: { (locale): '' },
     nomenclature: '',
     mode: nomenclature_mode,
+    visibility: null,
     objective: 'none',
     style: '',
     required: false,
@@ -57,6 +58,7 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
+                                {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
                                 {% if isFormTemplate is not defined %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.help.title'|trans }}</label>

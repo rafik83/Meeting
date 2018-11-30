@@ -7,6 +7,7 @@
     placeholder: { (locale): '' },
     hideLabel: false,
     required: false,
+    visibility: null,
     tag: null,
     tags: []
 }|merge(config|default({})) %}
@@ -47,6 +48,7 @@
                                 <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                             {% endif %}
                         </div>
+                        {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
                         <div class="form-group">
                             <label class="form-label">{{ 'template.placeholder.title'|trans }}</label>
                             <textarea class="form-control" name="placeholder"></textarea>

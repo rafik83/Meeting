@@ -31,6 +31,7 @@ UrlObject.prototype.fill = function ()
     this.form.set('placeholder', this.config.placeholder[this.locale]);
     this.form.set('required', this.config.required);
     this.form.set('tags', this.config.tags);
+    this.form.set('visibility', this.config.visibility);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -46,6 +47,7 @@ UrlObject.prototype.save = function ()
     this.config.placeholder[this.locale] = this.form.get('placeholder');
     this.config.required                 = this.form.get('required');
     this.config.tags                     = this.form.get('tags');
+    this.config.visibility               = this.form.get('visibility');
 
     this.form.bind('label', this.config.label[this.locale]);
 

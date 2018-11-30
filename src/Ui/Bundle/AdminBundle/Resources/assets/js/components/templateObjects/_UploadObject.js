@@ -40,6 +40,7 @@ UploadObject.prototype.fill = function ()
     this.form.set('tags', this.config.tags);
     this.form.set('filter[active]', this.config.filter.active);
     this.form.set('filter[label]', this.config.filter.label);
+    this.form.set('visibility', this.config.visibility);
     this.toggleDisplayLabelFilter(this.config.filter.active);
 
     this.form.bind('label', this.config.label[this.locale]);
@@ -65,6 +66,7 @@ UploadObject.prototype.save = function ()
     this.config.formats = this.form.get('formats');
     this.config.filter.label = this.form.get('filter[label]');
     this.config.filter.active = this.form.get('filter[active]');
+    this.config.visibility = this.form.get('visibility');
 
     this.form.bind('label', this.config.label[this.locale]);
 
