@@ -1033,6 +1033,7 @@ admin.template.form.table.column.action: Action
 admin.template.form.table.column.createdAt: 'Créé le'
 admin.template.form.table.column.title: Titre
 admin.template.form.table.column.translatedTitle: 'Titre front office'
+admin.template.form.table.column.types: 'Types'
 admin.template.form.table.content.create: 'Créer un template de formulaire'
 admin.template.form.table.content.edit: Modifier
 admin.template.form.table.content.parameters: Paramètres
@@ -1209,6 +1210,9 @@ admin.type.badge.example.sheetTitle: 'Exemple de titre de Fiche'
 admin.type.content.specificTermsOfSale: 'CGV particulières'
 admin.type.create.link: Ajouter
 admin.type.create.title: 'Ajouter un type de participation'
+admin.type.form.template: 'Formulaires'
+admin.type.form.template.status.draft: 'brouillon'
+admin.type.form.template.status.published: 'publié'
 admin.type.hidden: Caché
 admin.type.id: Id
 admin.type.link: 'Types de participation'

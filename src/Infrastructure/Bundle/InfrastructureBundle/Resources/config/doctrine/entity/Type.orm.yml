@@ -38,7 +38,9 @@ Proximum\Vimeet\Domain\Model\Type:
             mappedBy: types
         formTemplates:
             targetEntity: Proximum\Vimeet\Domain\Model\Template\FormTemplate
-            mappedBy: types
+            cascade: ["persist", "remove"]
+            inversedBy: types
+            orphanRemoval: true
             joinTable:
                 name: template_form_type
     manyToOne:

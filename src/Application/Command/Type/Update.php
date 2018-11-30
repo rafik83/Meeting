@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -39,6 +40,9 @@ class Update implements Command
     /** @var RegistrationTemplate */
     public $registrationTemplate;
 
+    /** @var FormTemplate[] */
+    public $formTemplates;
+
     /** @var string */
     public $locale;
 
@@ -54,6 +58,7 @@ class Update implements Command
         $this->sheetTemplate                       = $type->getSheetTemplate();
         $this->package                             = $type->getPackage();
         $this->registrationTemplate                = $type->getRegistrationTemplate();
+        $this->formTemplates                       = $type->getFormTemplates();
         $this->locale                              = $locale;
         $this->type                                = $type;
         $this->rank                                = $type->getPosition();
