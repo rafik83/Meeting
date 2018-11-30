@@ -76,7 +76,14 @@ class DateTimeToStringTransformer implements DataTransformerInterface
             return new TransformationFailedException();
         }
 
-        return \DateTime::createFromFormat($this->format, $value, new \DateTimeZone($this->viewTimezone))
-            ->setTimezone(new \DateTimeZone($this->modelTimezone));
+        $dateTime = \DateTime::createFromFormat($this->format, $value, new \DateTimeZone($this->viewTimezone));
+
+        if (false === $dateTime) {
+            throw new \LogicException(
+                sprintf('Can not create datetime with format "%s" and value "%s"', $this->format, $value)
+            );
+        }
+
+        return $dateTime->setTimezone(new \DateTimeZone($this->modelTimezone));
     }
 }

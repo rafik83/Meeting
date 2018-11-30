@@ -28,9 +28,6 @@ class UpdateEventDatesToCurrentDateHandler
     /** @var MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
 
-    /** @var \DateTimeInterface */
-    private $dateTime;
-
     /** @var MassAssignmentRepositoryInterface */
     private $massAssignmentRepository;
 
@@ -52,7 +49,6 @@ class UpdateEventDatesToCurrentDateHandler
     /**
      * @param EventRepositoryInterface          $eventRepository
      * @param MeetingSlotRepositoryInterface    $meetingSlotRepository
-     * @param \DateTimeInterface                $dateTime
      * @param MassAssignmentRepositoryInterface $massAssignmentRepository
      * @param UnavailabilityRepositoryInterface $unavailabilityRepository
      * @param HappeningRepositoryInterface      $happeningRepository
@@ -63,7 +59,6 @@ class UpdateEventDatesToCurrentDateHandler
     public function __construct(
         EventRepositoryInterface $eventRepository,
         MeetingSlotRepositoryInterface $meetingSlotRepository,
-        \DateTimeInterface $dateTime,
         MassAssignmentRepositoryInterface $massAssignmentRepository,
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         HappeningRepositoryInterface $happeningRepository,
@@ -73,7 +68,6 @@ class UpdateEventDatesToCurrentDateHandler
     ) {
         $this->eventRepository          = $eventRepository;
         $this->meetingSlotRepository    = $meetingSlotRepository;
-        $this->dateTime                 = $dateTime;
         $this->massAssignmentRepository = $massAssignmentRepository;
         $this->unavailabilityRepository = $unavailabilityRepository;
         $this->happeningRepository      = $happeningRepository;
@@ -98,93 +92,89 @@ class UpdateEventDatesToCurrentDateHandler
         $happenings       = $this->happeningRepository->findByEvent($command->event);
         $days             = $this->dayRepository->findByEvent($command->event);
 
-        $happeningsPerDay = $this->formatPerDay($happenings);
-        foreach ($happeningsPerDay as $dayNumber => $happenings) {
+        foreach ($this->formatPerDay($happenings) as $dayNumber => $happenings) {
             foreach ($happenings as $happening) {
-                $happening->setBegin($this->update($happening->getBegin(), $dayNumber));
-                $happening->setEnd($this->update($happening->getEnd(), $dayNumber));
+                $happening->setBegin($this->update($command->beginDate, $happening->getBegin(), $dayNumber));
+                $happening->setEnd($this->update($command->beginDate, $happening->getEnd(), $dayNumber));
                 $this->happeningRepository->set($happening);
             }
         }
 
-        $unavailabilitiesPerDay = $this->formatPerDay($unavailabilities);
-        foreach ($unavailabilitiesPerDay as $dayNumber => $unavailabilities) {
+        foreach ($this->formatPerDay($unavailabilities) as $dayNumber => $unavailabilities) {
             foreach ($unavailabilities as $unavailability) {
                 $unavailability->update(
-                    $this->update($unavailability->getBegin(), $dayNumber),
-                    $this->update($unavailability->getEnd(), $dayNumber)
+                    $this->update($command->beginDate, $unavailability->getBegin(), $dayNumber),
+                    $this->update($command->beginDate, $unavailability->getEnd(), $dayNumber)
                 );
                 $this->unavailabilityRepository->set($unavailability);
             }
         }
 
-        $massAssignmentsPerDay = $this->formatPerDay($massAssignments);
-        foreach ($massAssignmentsPerDay as $dayNumber => $massAssignments) {
+        foreach ($this->formatPerDay($massAssignments) as $dayNumber => $massAssignments) {
             foreach ($massAssignments as $massAssignment) {
                 $massAssignment->update(
-                    $this->update($massAssignment->getBegin(), $dayNumber),
-                    $this->update($massAssignment->getEnd(), $dayNumber),
+                    $this->update($command->beginDate, $massAssignment->getBegin(), $dayNumber),
+                    $this->update($command->beginDate, $massAssignment->getEnd(), $dayNumber),
                     $massAssignment->isEnabled()
                 );
                 $this->massAssignmentRepository->set($massAssignment);
             }
         }
 
-        $slotsPerDay = $this->formatPerDay($slots);
-        foreach ($slotsPerDay as $dayNumber => $slots) {
+        foreach ($this->formatPerDay($slots) as $dayNumber => $slots) {
             foreach ($slots as $slot) {
-                $slot->setBegin($this->update($slot->getBegin(), $dayNumber));
-                $slot->setEnd($this->update($slot->getEnd(), $dayNumber));
+                $slot->setBegin($this->update($command->beginDate, $slot->getBegin(), $dayNumber));
+                $slot->setEnd($this->update($command->beginDate, $slot->getEnd(), $dayNumber));
                 $this->meetingSlotRepository->set($slot);
             }
         }
 
         foreach ($days as $dayNumber => $day) {
-            $day->setStartTime($this->update($day->getStartTime(), $dayNumber));
-            $day->setEndTime($this->update($day->getEndTime(), $dayNumber));
+            $day->setStartTime($this->update($command->beginDate, $day->getStartTime(), $dayNumber));
+            $day->setEndTime($this->update($command->beginDate, $day->getEndTime(), $dayNumber));
             $this->dayRepository->set($day);
         }
 
-        $massesSortPerDay = $this->formatPerDay($masses);
-        foreach ($massesSortPerDay as $dayNumber => $massesPerDay) {
+        foreach ($this->formatPerDay($masses) as $dayNumber => $massesPerDay) {
             /** @var Mass $mass */
             foreach ($massesPerDay as $mass) {
                 $mass->setDates(
-                    $this->update($mass->getBegin(), $dayNumber),
-                    $this->update($mass->getEnd(), $dayNumber)
+                    $this->update($command->beginDate, $mass->getBegin(), $dayNumber),
+                    $this->update($command->beginDate, $mass->getEnd(), $dayNumber)
                 );
                 $this->massRepository->update($mass);
             }
         }
 
         $command->event->getConfiguration()->setDates(
-            $this->dateTime,
-            $this->dateTime,
-            $this->dateTime,
+            $command->beginDate,
+            $command->beginDate,
+            $command->beginDate,
             null,
             null,
             null,
-            $this->dateTime
+            $command->beginDate
         );
 
         $this->eventRepository->set($command->event);
     }
 
     /**
+     * @param \DateTime          $beginDate
      * @param \DateTimeInterface $dayDateTime
      * @param int                $dayNumber
      *
      * @return \DateTimeInterface
      */
-    private function update(\DateTimeInterface $dayDateTime, int $dayNumber = 0): \DateTimeInterface
+    private function update(\DateTime $beginDate, \DateTimeInterface $dayDateTime, int $dayNumber = 0): \DateTimeInterface
     {
-        $now = clone $this->dateTime;
+        $newDate = clone $beginDate;
 
         if ($dayNumber > 0) {
-            $now = $now->modify('+' . $dayNumber . ' day');
+            $newDate = $newDate->modify('+' . $dayNumber . ' day');
         }
 
-        return $now->setTime(
+        return $newDate->setTime(
             $dayDateTime->format('H'),
             $dayDateTime->format('i'),
             $dayDateTime->format('s')

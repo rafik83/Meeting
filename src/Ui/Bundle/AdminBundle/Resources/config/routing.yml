@@ -1376,7 +1376,7 @@ admin_schedule_days:
 admin_update_event_dates_to_current_date:
     path: /event/{event}/dates/update
     defaults: { _controller: AdminBundle:EventDates:updateEventDates }
-    methods: [GET]
+    methods: [GET, POST]
     requirements:
         event: \d+
 

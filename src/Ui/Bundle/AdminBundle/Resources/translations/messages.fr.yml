@@ -228,6 +228,8 @@ admin.event.unArchive.title: 'Désarchiver l''événement %eventTitle%'
 admin.event.update.link: Modifier
 admin.event.update.origin: 'Événement créé à partir de : '
 admin.event.update.title: 'Modifier l''événement'
+admin.event.updateEventDates: 'Modifier la date de l''événement'
+admin.event.updateEventDates.begin: 'Date de début d''événement'
 admin.event.vatMode.ati: TTC
 admin.event.vatMode.et: HT
 admin.events.link: 'Mes événements'

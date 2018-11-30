@@ -2271,7 +2271,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@datetime'
             - '@repository.unavailability.mass_assignment_repository'
             - '@vimeet_infrastructure.repository.unavailability_repository'
             - '@vimeet_infrastructure.repository.happening_repository'
