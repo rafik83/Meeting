@@ -125,7 +125,7 @@ install-dep:
 
 clearcache:
 	bin/console cache:clear --env=dev
-	bin/console redis:flushdb --client=doctrine --no-interaction
+	make redis-flushdb@vm
 
 #########
 # Build #
@@ -271,6 +271,9 @@ migration@prod:
 redis-flushdb@prod:
 	bin/console redis:flushdb --client=doctrine --no-interaction --env=prod --no-debug
 
+redis-flushdb@vm:
+	bin/console redis:flushdb --client=doctrine --no-interaction
+
 # Do no allow targets in production
 ifeq ($(IS_PROD), no)
 
@@ -287,7 +290,7 @@ init-db:
 init-db@test:
 	bin/console doctrine:schema:drop --force --env=test
 	bin/console doctrine:schema:create --env=test
-	bin/console doctrine:fixtures:load -n --env=test
+	bin/console doctrine:fixtures:load --no-interaction --env=test
 	bin/console cache:clear --env=test
 	bin/console vimeet:elasticsearch:index --env=test
 
@@ -387,7 +390,7 @@ post-import-db@vm:
 	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')"
 	bin/console doctrine:query:sql "UPDATE event SET email_team = CONCAT(id, '-emailteam@example.net')"
 	bin/console doctrine:query:sql "UPDATE user_event_phone SET phone = 'undefined'"
-	bin/console doctrine:migrations:migrate
+	bin/console doctrine:migrations:migrate --no-interaction
 	bin/console vimeet:event:build-guideline-asset
 	bin/console vimeet:elasticsearch:index --env=dev
 
@@ -400,7 +403,7 @@ sync-db-from-prod@preprod:
 	  scp vimeet-prod1:prod.sql prod.sql; \
 	  ssh vimeet-prod1 "rm prod.sql"; \
 	  scp prod.sql vimeet-preprod:prod.sql; \
-	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT('user-', id, '@example.net')\" && bin/console doctrine:query:sql \"UPDATE user_event_phone SET phone = 'undefined'\" && bin/console doctrine:query:sql \"UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')\" && bin/console doctrine:migrations:migrate && bin/console vimeet:event:build-guideline-asset && bin/console vimeet:elasticsearch:index --env=prod"; \
+	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT('user-', id, '@example.net')\" && bin/console doctrine:query:sql \"UPDATE user_event_phone SET phone = 'undefined'\" && bin/console doctrine:query:sql \"UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')\" && bin/console doctrine:migrations:migrate --no-interaction && bin/console vimeet:event:build-guideline-asset && bin/console vimeet:elasticsearch:index --env=prod"; \
 	fi
 
 endif

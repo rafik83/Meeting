@@ -707,6 +707,8 @@ class Request implements MessageSubjectInterface
      */
     public function isOneOfSheetsNotAttend()
     {
-        return false === $this->getFromSheet()->attend() || false === $this->getToSheet()->attend();
+        return !$this->getFromSheet()->attend() || !$this->getFromSheet()->isEnabled()
+            || !$this->getToSheet()->attend() || !$this->getToSheet()->isEnabled()
+        ;
     }
 }

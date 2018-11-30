@@ -600,6 +600,9 @@ services:
             - '@components.user.type_resolver'
             - '@session'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Security\Voter\AdminVoter:
+        tags:
+            - { name: security.voter }
     #
     # Services
     #

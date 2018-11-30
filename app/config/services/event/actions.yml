@@ -145,3 +145,10 @@ services:
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\EBadgePdfPrinter'
+
+    #
+    # Custom
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\StyleGuide\ShowAction:
+        arguments:
+            - '@templating'

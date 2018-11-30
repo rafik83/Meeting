@@ -10,9 +10,9 @@
             <sort-sheet-form :sort="formSort" :sheets="sheets"></sort-sheet-form>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="$emit('close-modal')">
+            <a href="#" class="btn btn-link" data-dismiss="modal" v-on:click="$emit('close-modal')">
                 {{ 'admin.common.close'|trans }}
-            </button>
+            </a>
             <button type="button" class="btn btn-primary" v-on:click="save()">
                 {{ 'admin.agenda.sort.submit.label'|trans }}
             </button>

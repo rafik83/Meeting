@@ -532,6 +532,7 @@ admin.nomenclature.table.title: Titre
 admin.nomenclature.title: Nomenclatures
 admin.operator_list.action.create: 'Créer un nouveau collaborateur'
 admin.operator_list.action.create.partner: 'Créer un nouveau partenaire'
+admin.operator_list.column.lastLoginAt.never: Jamais
 admin.operator_list.filter.empty_filter: 'Vider les filtres'
 admin.operator_list.link: 'Liste des collaborateurs'
 admin.operator_list.table.content.admin.events.none: Aucun
@@ -638,6 +639,7 @@ admin.planner.analytics.sheet.table.column.sheet: Fiche
 admin.planner.analytics.sheet.table.column.type: Type
 admin.planner.analytics.sheet.title: Fiches
 admin.planner.analytics.slotFillingRate.graph.legend: 'Taux de remplissage des mutualisés par créneau en %'
+admin.planner.analytics.spot.table.column.priority: Priorité
 admin.planner.analytics.spot.table.column.reference: Référence
 admin.planner.analytics.spot.table.column.satisfaction: Satisfaction
 admin.planner.analytics.spot.table.column.shared: Mutualisé
@@ -1031,6 +1033,7 @@ admin.template.form.table.column.action: Action
 admin.template.form.table.column.createdAt: 'Créé le'
 admin.template.form.table.column.title: Titre
 admin.template.form.table.column.translatedTitle: 'Titre front office'
+admin.template.form.table.column.types: 'Types'
 admin.template.form.table.content.create: 'Créer un template de formulaire'
 admin.template.form.table.content.edit: Modifier
 admin.template.form.table.content.parameters: Paramètres
@@ -1115,6 +1118,8 @@ admin.transaction.mode.bank_check: Chèque
 admin.transaction.mode.bank_transfer: Virement
 admin.transaction.mode.paypal: Paypal
 admin.transaction.remove: Supprimer
+admin.remove: Supprimer
+admin.remove.confirmation: Etes vous sûr de vouloir supprimer cet utilisateur ?
 admin.transaction.state.cancelled: Annulé
 admin.transaction.state.paid: Réglé
 admin.transaction.state.pending: 'En attente'
@@ -1205,6 +1210,9 @@ admin.type.badge.example.sheetTitle: 'Exemple de titre de Fiche'
 admin.type.content.specificTermsOfSale: 'CGV particulières'
 admin.type.create.link: Ajouter
 admin.type.create.title: 'Ajouter un type de participation'
+admin.type.form.template: 'Formulaires'
+admin.type.form.template.status.draft: 'brouillon'
+admin.type.form.template.status.published: 'publié'
 admin.type.hidden: Caché
 admin.type.id: Id
 admin.type.link: 'Types de participation'

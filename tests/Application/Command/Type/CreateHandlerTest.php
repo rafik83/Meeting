@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Type\CreateHandler;
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -35,6 +36,8 @@ class CreateHandlerTest extends TestCase
 
         $sheetTemplate        = new SheetTemplate('base toto', [], ['fr'], 'fr', $dateTime);
         $registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $dateTime);
+        $formTemplate1 = new FormTemplate($event, 'title1', [], ['fr'], 'fr', $dateTime);
+        $formTemplate2 = new FormTemplate($event, 'title2', [], ['fr'], 'fr', $dateTime);
 
         //Expected
         $expectedSheetTemplate         = new SheetTemplate('toto', [], ['fr'], 'fr', $dateTime);
@@ -49,6 +52,7 @@ class CreateHandlerTest extends TestCase
         $expectedType->setHidden(true);
         $expectedType->setRegistrationTemplate($expectedRegistrationTemplate);
         $expectedType->setPackage($package);
+        $expectedType->setFormTemplates([$formTemplate1, $formTemplate2]);
 
         //Command
         $create = new Create($event, 'fr');
@@ -57,6 +61,7 @@ class CreateHandlerTest extends TestCase
         $create->sheetTemplate        = $sheetTemplate;
         $create->registrationTemplate = $registrationTemplate;
         $create->package              = $package;
+        $create->formTemplates = [$formTemplate1, $formTemplate2];
         $create->hidden               = true;
 
         //Mock

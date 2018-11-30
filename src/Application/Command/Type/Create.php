@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Type;
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -33,6 +34,9 @@ class Create implements Command
 
     /** @var RegistrationTemplate */
     public $registrationTemplate;
+
+    /** @var FormTemplate[] */
+    public $formTemplates;
 
     /** @var array */
     public $validationCriteria = [];

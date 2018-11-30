@@ -182,3 +182,18 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\FormTemplateListViewQuery }
+
+    #
+    # Admin
+    #
+    Proximum\Vimeet\Application\Query\Admin\AdminListViewQueryHandler:
+        arguments:
+            - '@repository.admin_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Admin\AdminListViewQuery }
+
+    Proximum\Vimeet\Application\Query\Operator\OperatorListViewQueryHandler:
+        arguments:
+            - '@repository.admin_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Operator\OperatorListViewQuery }

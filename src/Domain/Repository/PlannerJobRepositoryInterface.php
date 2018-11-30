@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 
 interface PlannerJobRepositoryInterface
@@ -31,6 +32,8 @@ interface PlannerJobRepositoryInterface
      * @return null|PlannerJob
      */
     public function findLastByEvent(Event $event): ?PlannerJob;
+
+    public function countByAdmin(Admin $admin): int;
 
     /**
      * @param int $id

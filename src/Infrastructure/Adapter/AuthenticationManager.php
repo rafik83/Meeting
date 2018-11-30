@@ -60,6 +60,7 @@ class AuthenticationManager implements AuthenticationManagerInterface
                 || !$user->isAccountNonLocked()
                 || !$user->isCredentialsNonExpired()
                 || !$user->isEnabled()
+                || $user->isDeleted()
             ) {
                 throw new AuthenticationException();
             }

@@ -145,6 +145,7 @@ class FormsViewQueryHandlerTest extends TestCase
                     new LinkView('Logistique', '/url/to/form/1'),
                     new LinkView('Sondage', '/url/to/form/2'),
                 ],
+                true,
                 true
             ),
             $this->formsViewQueryHandler->handle($formsViewQuery)
@@ -214,6 +215,7 @@ class FormsViewQueryHandlerTest extends TestCase
                 [
                     new LinkView('Logistique', '/url/to/form/1'),
                 ],
+                true,
                 true
             ),
             $this->formsViewQueryHandler->handle($formsViewQuery)

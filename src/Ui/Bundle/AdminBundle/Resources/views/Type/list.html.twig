@@ -15,9 +15,9 @@
                 <th>{{ 'admin.type.id'|trans }}</th>
                 <th>{{ 'admin.type.title'|trans }}</th>
                 <th>{{ 'admin.type.position'|trans }}</th>
-                <th>{{ 'admin.type.register.link'|trans }}</th>
                 <th>{{ 'admin.type.registration.template'|trans }}</th>
                 <th>{{ 'admin.type.sheet.template'|trans }}</th>
+                <th>{{ 'admin.type.form.template'|trans }}</th>
                 <th>{{ 'admin.type.package'|trans }}</th>
                 <th class="col-md-1"></th>
             </tr>
@@ -28,6 +28,14 @@
                 <td>{{ type.id }}</td>
                 <td>
                     {{ type.title }}
+
+                    <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ path('event_register', {'typeView': type.id }) }}"
+                       title="{{ 'admin.type.register.link'|trans }}"
+                       target="_blank"
+                    >
+                        <i class="glyphicon glyphicon-link"></i>
+                    </a>
+
                     {% if type.hasSpecificPaymentConditions %}
                         {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
                             <a href="{{ path('admin_type_payment_conditions', {'event': event.id, 'type': type.id}) }}" class="label label-info">
@@ -59,14 +67,20 @@
                     {% endif %}
                 </td>
                 <td>{{ type.position }}</td>
-                <td>
-                    <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ path('event_register', {'typeView': type.id }) }}" target="_blank">
-                        {{ 'admin.type.register.link'|trans }}
-                    </a>
-                </td>
                 <td>{{ type.registrationTemplate }}</td>
                 <td>{{ type.sheetTemplate }}</td>
                 <td>{{ type.package }}</td>
+                <td>
+                    <ul>
+                        {% for formTemplateView in type.formTemplateViews %}
+                            <li>{{ formTemplateView.title }}
+                                <span class="label label-{{ formTemplateView.isPublished ? 'success' : 'danger' }}">
+                                    {{ (formTemplateView.isPublished ? 'admin.type.form.template.status.published' : 'admin.type.form.template.status.draft')|trans }}
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
                 <td class="text-right">
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="{{ path('admin_type_update', { 'event': event.id, 'type': type.id }) }}">

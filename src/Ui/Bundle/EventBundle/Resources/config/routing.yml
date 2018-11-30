@@ -968,3 +968,13 @@ event_sheet_user_badge_download:
         format: (html|pdf)
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\DownloadAction, format: 'pdf' }
+
+#
+# Custom
+#
+event_styleguide:
+    path: /styleguide
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\StyleGuide\ShowAction
+    defaults:
+        template: EventBundle:StyleGuide:index.html.twig

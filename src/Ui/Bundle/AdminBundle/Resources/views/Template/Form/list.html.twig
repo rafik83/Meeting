@@ -15,16 +15,17 @@
         <tr>
             <th class="col-md-4">{{ 'admin.template.form.table.column.title'|trans }}</th>
             <th class="col-md-4">{{ 'admin.template.form.table.column.translatedTitle'|trans }}</th>
+            <th class="col-md-2">{{ 'admin.template.form.table.column.types'|trans }}</th>
             <th class="col-md-2">{{ 'admin.template.form.table.column.createdAt'|trans }}</th>
             <th class="col-md-2 text-right">{{ 'admin.template.form.table.column.action'|trans }}</th>
         </tr>
         </thead>
         <tbody>
-        {% for template in formTemplateListView.templates %}
+        {% for formTemplateView in formTemplateListView.templates %}
             <tr>
                 <td>
-                    {{ template.title }}
-                    {% if template.isPublished %}
+                    {{ formTemplateView.title }}
+                    {% if formTemplateView.isPublished %}
                         <span class="label label-success">{{ 'admin.template.form.state.published'|trans }}</span>
                     {% else %}
                         <span class="label label-warning">{{ 'admin.template.form.state.draft'|trans }}</span>
@@ -32,16 +33,23 @@
                 </td>
                 <td>
                     <ul>
-                    {% for locale, title in template.translatedTitles %}
+                    {% for locale, title in formTemplateView.translatedTitles %}
                         <li><b>{{ locale|locale(app.request.locale) }}</b>: {{ title }}</li>
 
                     {% endfor %}
                     </ul>
                 </td>
-                <td>{{ template.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td>
+                    <ul>
+                        {% for type in formTemplateView.types %}
+                            <li>{{ type.title(event.availableLocale(app.request.locale)) }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ formTemplateView.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td class="text-right">
                     <div class="btn-group">
-                        <a href="{{ path('admin_template_form_builder', {'event': event.id, 'template': template.id, 'locale': template.locale }) }}" class="btn btn-default btn-sm">
+                        <a href="{{ path('admin_template_form_builder', {'event': event.id, 'template': formTemplateView.id, 'locale': formTemplateView.locale }) }}" class="btn btn-default btn-sm">
                             {{ 'admin.template.form.table.content.edit'|trans }}
                         </a>
                         <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -49,7 +57,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
-                                <a href="{{ path('admin_template_form_parameters', {'event': event.id, 'template': template.id }) }}" class="btn-sm">
+                                <a href="{{ path('admin_template_form_parameters', {'event': event.id, 'template': formTemplateView.id }) }}" class="btn-sm">
                                     {{ 'admin.template.form.table.content.parameters'|trans }}
                                 </a>
                             </li>

@@ -12,35 +12,32 @@ namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 
 class RequestView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $requestId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $sheetMetTitle;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $sheetMetId;
 
-    /**
-     * @var ParticipantView[]
-     */
+    /** @var ParticipantView[] */
     public $participants;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isTransformableIntoMeeting;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isOneOfSheetsNotAttend;
+
+    /** @var bool */
+    public $sheetHasNoPreference;
+
+    /** @var bool */
+    public $sheetMetHasNoPreference;
+
+    /** @var bool */
+    public $isOneOfSheetsHasNoPreference;
 
     /**
      * RequestView constructor.
@@ -51,20 +48,27 @@ class RequestView
      * @param ParticipantView[] $participants
      * @param bool              $isTransformableIntoMeeting
      * @param bool              $isOneOfSheetsNotAttend
+     * @param bool              $sheetHasNoPreference
+     * @param bool              $sheetMetHasNoPreference
      */
     public function __construct(
-        $requestId,
-        $sheetMetTitle,
-        $sheetMetId,
+        int $requestId,
+        string $sheetMetTitle,
+        int $sheetMetId,
         array $participants,
-        $isTransformableIntoMeeting,
-        $isOneOfSheetsNotAttend
+        bool $isTransformableIntoMeeting,
+        bool $isOneOfSheetsNotAttend,
+        bool $sheetHasNoPreference,
+        bool $sheetMetHasNoPreference
     ) {
-        $this->requestId                  = $requestId;
-        $this->sheetMetTitle              = $sheetMetTitle;
-        $this->sheetMetId                 = $sheetMetId;
-        $this->participants               = $participants;
+        $this->requestId = $requestId;
+        $this->sheetMetTitle = $sheetMetTitle;
+        $this->sheetMetId = $sheetMetId;
+        $this->participants = $participants;
         $this->isTransformableIntoMeeting = $isTransformableIntoMeeting;
-        $this->isOneOfSheetsNotAttend     = $isOneOfSheetsNotAttend;
+        $this->isOneOfSheetsNotAttend = $isOneOfSheetsNotAttend;
+        $this->sheetHasNoPreference = $sheetHasNoPreference;
+        $this->sheetMetHasNoPreference = $sheetMetHasNoPreference;
+        $this->isOneOfSheetsHasNoPreference = $this->sheetHasNoPreference || $this->sheetMetHasNoPreference;
     }
 }

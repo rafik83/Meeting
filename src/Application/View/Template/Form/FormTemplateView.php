@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Template\Form;
 
+use Proximum\Vimeet\Domain\Model\Type;
+
 class FormTemplateView
 {
     /** @var int */
@@ -21,28 +23,33 @@ class FormTemplateView
     /** @var bool */
     public $isPublished;
 
-    /** @var \DateTimeInterface */
-    public $createdAt;
-
     /** @var string[] indexed by locale */
     public $translatedTitles;
+
+    /** @var Type[] */
+    public $types;
 
     /** @var string */
     public $locale;
 
+    /** @var \DateTimeInterface */
+    public $createdAt;
+
     public function __construct(
         int $id,
         string $title,
-        string $locale,
         bool $isPublished,
         array $translatedTitles,
+        array $types,
+        string $locale,
         \DateTimeInterface $createdAt
     ) {
         $this->id = $id;
         $this->title = $title;
-        $this->locale = $locale;
         $this->isPublished = $isPublished;
         $this->translatedTitles = $translatedTitles;
+        $this->types = $types;
+        $this->locale = $locale;
         $this->createdAt = $createdAt;
     }
 }
