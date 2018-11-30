@@ -790,3 +790,20 @@ services:
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@templating'
+
+    #
+    # Admin
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

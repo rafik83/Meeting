@@ -49,6 +49,13 @@ interface AdminRepositoryInterface
     public function findByEmail($email);
 
     /**
+     * @param array $filters
+     *
+     * @return Admin[]
+     */
+    public function list(array $filters): array;
+
+    /**
      * @param int   $page
      * @param int   $limit
      * @param array $filters
@@ -71,13 +78,11 @@ interface AdminRepositoryInterface
 
     /**
      * @param Admin $admin
-     * @param int   $page
-     * @param int   $limit
      * @param array $filters
      *
-     * @return PaginatedResult
+     * @return Admin[]
      */
-    public function getOperatorForOrganizer(Admin $admin, $page, $limit, array $filters);
+    public function getOperatorForOrganizer(Admin $admin, array $filters): array;
 
     /**
      * @param Event $event

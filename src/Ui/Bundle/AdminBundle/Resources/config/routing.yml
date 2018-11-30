@@ -35,7 +35,7 @@ admin_update_password:
 admin_list_admin:
     path: /admin
     methods: [GET]
-    defaults: { _controller: AdminBundle:Admin:list }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\ListAction
 
 admin_create_admin:
     path: /admin/create
@@ -54,7 +54,7 @@ admin_update_admin:
 admin_list_operator:
     path: /operator
     methods: [GET]
-    defaults: { _controller: AdminBundle:Operator:list }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\ListAction
 
 admin_create_operator:
     path: /operator/create

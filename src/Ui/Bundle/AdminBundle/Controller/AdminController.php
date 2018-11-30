@@ -15,61 +15,13 @@ use Proximum\Vimeet\Application\Command\Admin\Update;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\CreateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\FilterAdminType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
 {
-    /**
-     * @param string $type
-     * @param array  $data
-     * @param array  $options
-     *
-     * @return Form|FormInterface
-     */
-    private function createFilterForm($type, $data, array $options = [])
-    {
-        return $this->get('form.factory')->createNamed('', $type, $data, $options);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function listAction(Request $request)
-    {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
-
-        $filters = [];
-        $filtered   = false;
-        $filterForm = $this->createFilterForm(
-            FilterAdminType::class,
-            [
-                'role'  => $request->query->get('role'),
-                'event' => $request->query->get('event'),
-            ]
-        );
-
-        if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {
-            $filters   = $filterForm->getData();
-            $filtered = true;
-        }
-        $admins = $this->get('repository.admin_repository')
-            ->listPaginated($request->query->get('page', 1), 20, $filters);
-
-        return $this->render('AdminBundle:Admin:list.html.twig', [
-            'admins'      => $admins,
-            'filter_form' => $filterForm->createView(),
-            'filtered'    => $filtered,
-        ]);
-    }
-
     /**
      * @param Request $request
      *

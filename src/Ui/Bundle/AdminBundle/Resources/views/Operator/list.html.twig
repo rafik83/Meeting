@@ -36,21 +36,27 @@
         </tr>
         </thead>
         <tbody>
-        {% for operator in operators %}
+        {% for operator in operatorList.operatorViews %}
             <tr>
-                <td>{{ operator.lastname }}</td>
-                <td>{{ operator.firstname }}</td>
+                <td>{{ operator.lastName }}</td>
+                <td>{{ operator.firstName }}</td>
                 <td>{{ operator.email }}</td>
-                <td>{{ operator.lastLoginAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td>
+                    {% if operator.hasNeverLoggedIn %}
+                        {{ 'admin.operator_list.column.lastLoginAt.never'|trans }}
+                    {% else %}
+                        {{ operator.lastLoginAt|localizeddate('medium', 'short', app.request.locale) }}
+                    {% endif %}
+                </td>
                 <td>
                     <ul>
-                        {% for event in operator.events %}
-                            <li>{{ event.title }}</li>
+                        {% for eventTitle in operator.events %}
+                            <li>{{ eventTitle }}</li>
                         {% endfor %}
                     </ul>
                 </td>
                 <td>
-                    {% if operator.partner %}
+                    {% if operator.isPartner %}
                         <a class="btn btn-default" href="{{ path('admin_update_partner', {
                             'partner': operator.id
                         }) }}">{{ 'admin.operator_list.table.content.update'|trans }}</a>
@@ -62,5 +68,4 @@
         {% endfor %}
         </tbody>
     </table>
-    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': operators}) }}
 {% endblock %}
