@@ -639,6 +639,7 @@ admin.planner.analytics.sheet.table.column.sheet: Fiche
 admin.planner.analytics.sheet.table.column.type: Type
 admin.planner.analytics.sheet.title: Fiches
 admin.planner.analytics.slotFillingRate.graph.legend: 'Taux de remplissage des mutualisés par créneau en %'
+admin.planner.analytics.spot.table.column.priority: Priorité
 admin.planner.analytics.spot.table.column.reference: Référence
 admin.planner.analytics.spot.table.column.satisfaction: Satisfaction
 admin.planner.analytics.spot.table.column.shared: Mutualisé

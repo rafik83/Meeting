@@ -27,19 +27,22 @@ class SpotSatisfactionView
     /** @var int */
     public $satisfaction;
 
-    /**
-     * @param int    $id
-     * @param string $reference
-     * @param bool   $shared
-     * @param bool   $visio
-     * @param int    $satisfaction
-     */
-    public function __construct(int $id, string $reference, bool $shared, bool $visio, int $satisfaction)
-    {
+    /** @var null|int */
+    public $priority;
+
+    public function __construct(
+        int $id,
+        string $reference,
+        bool $shared,
+        bool $visio,
+        ?int $priority,
+        int $satisfaction
+    ) {
         $this->id = $id;
         $this->reference = $reference;
         $this->shared = $shared;
         $this->visio = $visio;
+        $this->priority = $priority;
         $this->satisfaction = $satisfaction;
     }
 }
