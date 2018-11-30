@@ -70,6 +70,7 @@ final class Events
     public const REGISTRATION_STEP = 'user.registration.step';
     public const MUST_SELECT_PACKAGE = 'package.must_select_package';
     public const REGISTRATION_TEMPLATE_UPDATED = 'registration_template.updated';
+    public const FORM_TEMPLATE_UPDATED = 'form_template.updated';
     public const SHEET_TEMPLATE_UPDATED = 'sheet_template.updated';
     public const PACKAGE_STEP_DONE = 'package.step.done';
     public const TRANSACTION_CREATED = 'transaction.created';

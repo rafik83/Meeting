@@ -60,6 +60,9 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     private $lastLoginAt;
 
+    /** @var \DateTime */
+    private $deletedAt;
+
     /**
      * @param string            $email
      * @param string            $salt
@@ -325,7 +328,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     }
 
     /**
-     * @return DateTimeInterface
+     * @return DateTimeInterface|null
      */
     public function getLastLoginAt()
     {
@@ -502,5 +505,15 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     public function getDisplayName()
     {
         return $this->getFirstname() . ' ' . $this->getLastname();
+    }
+
+    public function setDeletedAt(\DateTimeInterface $deletedAt): void
+    {
+        $this->deletedAt = $deletedAt;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deletedAt instanceof \DateTime;
     }
 }

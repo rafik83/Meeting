@@ -377,4 +377,9 @@ class Type implements WhoInterface, TypeInterface
     {
         return $this->formTemplates->toArray();
     }
+
+    public function setFormTemplates(array $templates): void
+    {
+        $this->formTemplates = new ArrayCollection($templates);
+    }
 }

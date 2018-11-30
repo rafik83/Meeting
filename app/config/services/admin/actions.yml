@@ -180,6 +180,41 @@ services:
             - '@adapter.router'
             - '@templating'
 
+
+    #
+    # Form Template
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@form.factory'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\BuilderAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@repository.nomenclature_repository'
+            - '@sheet.template.completeness_calculator'
+            - '@session.flash_bag'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\SaveAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\UpdateParametersAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@router'
+
     #
     # Content
     #
@@ -271,6 +306,17 @@ services:
             - '@templating'
             - '@tactician.commandbus'
             - '@adapter.router'
+
+    #
+    # Admin
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\DeleteAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@security.csrf.token_manager'
+            - '@router.default'
+            - '@adapter.authorization_checker'
+            - '@session.flash_bag'
 
     #
     # User
@@ -763,3 +809,20 @@ services:
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@templating'
+
+    #
+    # Admin
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

@@ -609,12 +609,14 @@ class Sheet implements TraceableInterface
         return null !== $this->getUserParticipant($user);
     }
 
-    /**
-     * @return int
-     */
-    public function countParticipants()
+    public function countParticipants(): int
     {
         return $this->participants->count();
+    }
+
+    public function hasOnlyOneParticipant(): int
+    {
+        return 1 === $this->countParticipants();
     }
 
     /**

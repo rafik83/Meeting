@@ -34,6 +34,7 @@ class SpotSatisfactionViewQueryHandlerTest extends TestCase
         $spot->isVisio()->willReturn(true);
         $spot->hasSheets()->willReturn(false);
         $spot->getMeetingCapacity()->willReturn(2);
+        $spot->getPriority()->willReturn(8);
         $spot->getSpotUnavailabilities()->willReturn($unavailability);
 
         $handler = new SpotSatisfactionViewQueryHandler();
@@ -53,25 +54,25 @@ class SpotSatisfactionViewQueryHandlerTest extends TestCase
                 10,
                 8,
                 [],
-                new SpotSatisfactionView(1, 'ref', true, true, 40),
+                new SpotSatisfactionView(1, 'ref', true, true, 8, 40),
             ],
             [
                 7,
                 10,
                 [1, 2],
-                new SpotSatisfactionView(1, 'ref', true, true, 100),
+                new SpotSatisfactionView(1, 'ref', true, true, 8, 100),
             ],
             [
                 7,
                 0,
                 [1, 2, 3],
-                new SpotSatisfactionView(1, 'ref', true, true, 0),
+                new SpotSatisfactionView(1, 'ref', true, true, 8, 0),
             ],
             [
                 0,
                 10,
                 [],
-                new SpotSatisfactionView(1, 'ref', true, true, 500),
+                new SpotSatisfactionView(1, 'ref', true, true, 8, 500),
             ],
         ];
     }

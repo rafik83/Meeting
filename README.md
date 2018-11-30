@@ -85,6 +85,8 @@ Run:
 All translations are stored on https://openl10n.vimeet.events (check 1password for access).
 If not exists, create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
 
+You need to install Docker on your machine (not available in the VM). You can install an [alias](https://github.com/manala/docker-images/tree/master/openl10n-cli#integration) to have the `openl10n` command.
+
 Synchronize translations files :
 
         ⇒ make trans-sync
@@ -99,7 +101,7 @@ Remarks :
 - Translations on Openl10n are never deleted or updated with a `push` command. Only new translations will be added.
 - Your locale translations will be updated with a `pull` command (new, update or delete).
 
-## Commits
+### Commits
 
 Please provide the User Story Id in the commit message: `"1337 - Add a killing feature".
 You can ignore pre commit hooks with `-n` option: `$ git commit -n`
@@ -142,6 +144,10 @@ After a deploy, you will need to do manually some commands at prod or preprod ([
 - Rebuild events assets:
 
         ⇒ bin/console vimeet:event:build-guideline-asset
+
+### Styleguide
+
+http://(subdomain event).vimeet.proximum/app_dev.php/fr/styleguide
 
 ### Definition of Done
 

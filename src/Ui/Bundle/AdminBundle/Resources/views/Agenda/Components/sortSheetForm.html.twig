@@ -1,79 +1,33 @@
+{% set sortFields = {
+    'alphabetical': 'admin.agenda.sort.alphabetical.label',
+    'request': 'admin.agenda.sort.request.label',
+    'pendingRequest': 'admin.agenda.sort.pending_request.label',
+    'acceptedRequest': 'admin.agenda.sort.accepted_request.label',
+    'scheduledMeeting': 'admin.agenda.sort.scheduled_meeting.label',
+} %}
+
 <script type="x/template" id="sort-sheet-form">
     <form>
-        <div class="form-group">
-            <label for="selectedSort">{{ 'admin.agenda.sort.alphabetical.label'|trans }}</label>
-            <div class="radio">
-                <label>
-                    <input name="selectedSort" type="radio" value="alphabeticalAsc" v-model="sort.selected">
-                    {{ 'admin.agenda.sort.asc.label'|trans }}
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input name="selectedSort" type="radio" value="alphabeticalDesc" v-model="sort.selected">
-                    {{ 'admin.agenda.sort.desc.label'|trans }}
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="selectedSort">{{ 'admin.agenda.sort.request.label'|trans }}</label>
-            <div class="radio">
-                <label>
-                    <input name="selectedSort" type="radio" value="requestAsc" v-model="sort.selected">
-                    {{ 'admin.agenda.sort.asc.label'|trans }}
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input name="selectedSort" type="radio" value="requestDesc" v-model="sort.selected">
-                    {{ 'admin.agenda.sort.desc.label'|trans }}
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="selectedSort">{{ 'admin.agenda.sort.pending_request.label'|trans }}</label>
-            <div class="radio">
-                <label>
-                    <input name="selectedSort" type="radio" value="pendingRequestAsc" v-model="sort.selected">
-                    {{ 'admin.agenda.sort.asc.label'|trans }}
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input name="selectedSort" type="radio" value="pendingRequestDesc" v-model="sort.selected">
-                    {{ 'admin.agenda.sort.desc.label'|trans }}
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="selectedSort">{{ 'admin.agenda.sort.accepted_request.label'|trans }}</label>
-            <div class="radio">
-                <label>
-                    <input name="selectedSort" type="radio" value="acceptedRequestAsc" v-model="sort.selected">
-                    {{ 'admin.agenda.sort.asc.label'|trans }}
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input name="selectedSort" type="radio" value="acceptedRequestDesc" v-model="sort.selected">
-                    {{ 'admin.agenda.sort.desc.label'|trans }}
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="selectedSort">{{ 'admin.agenda.sort.scheduled_meeting.label'|trans }}</label>
-            <div class="radio">
-                <label>
-                    <input name="selectedSort" type="radio" value="scheduledMeetingAsc" v-model="sort.selected">
-                    {{ 'admin.agenda.sort.asc.label'|trans }}
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input name="selectedSort" type="radio" value="scheduledMeetingDesc" v-model="sort.selected">
-                    {{ 'admin.agenda.sort.desc.label'|trans }}
-                </label>
-            </div>
-        </div>
+        <table class="table table-striped table-hover">
+            <tbody>
+            {% for fieldName, fieldLabel in sortFields %}
+                <tr>
+                    <td class="col-md-6 text-right">
+                        <label for="selectedSort">{{ fieldLabel|trans }}</label>
+                    </td>
+                    <td class="col-md-6">
+                        <label class="radio-inline">
+                            <input name="selectedSort" type="radio" value="{{ fieldName ~ 'Asc' }}" v-model="sort.selected">
+                            {{ 'admin.agenda.sort.asc.label'|trans }}
+                        </label>
+                        <label class="radio-inline">
+                            <input name="selectedSort" type="radio" value="{{ fieldName ~ 'Desc' }}" v-model="sort.selected">
+                            {{ 'admin.agenda.sort.desc.label'|trans }}
+                        </label>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </form>
 </script>

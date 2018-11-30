@@ -1,0 +1,55 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Template\Form;
+
+use Proximum\Vimeet\Domain\Model\Type;
+
+class FormTemplateView
+{
+    /** @var int */
+    public $id;
+
+    /** @var string */
+    public $title;
+
+    /** @var bool */
+    public $isPublished;
+
+    /** @var string[] indexed by locale */
+    public $translatedTitles;
+
+    /** @var Type[] */
+    public $types;
+
+    /** @var string */
+    public $locale;
+
+    /** @var \DateTimeInterface */
+    public $createdAt;
+
+    public function __construct(
+        int $id,
+        string $title,
+        bool $isPublished,
+        array $translatedTitles,
+        array $types,
+        string $locale,
+        \DateTimeInterface $createdAt
+    ) {
+        $this->id = $id;
+        $this->title = $title;
+        $this->isPublished = $isPublished;
+        $this->translatedTitles = $translatedTitles;
+        $this->types = $types;
+        $this->locale = $locale;
+        $this->createdAt = $createdAt;
+    }
+}

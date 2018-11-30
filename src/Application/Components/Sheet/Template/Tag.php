@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
-use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateTagView;
+use Proximum\Vimeet\Domain\Template\View\TemplateTagView;
 
 final class Tag
 {
     private const GENERIC_TAGS_NUMBER = 99;
+    private const PARTICIPANTS_GENERIC_TAGS_NUMBER = 99;
 
     // Getter
     public const PARTICIPANT_FIRSTNAME       = 'participant_firstname';
@@ -96,25 +97,27 @@ final class Tag
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getParticipantTags(): array
     {
-        return [
-            self::PARTICIPANT_FIRSTNAME,
-            self::PARTICIPANT_LASTNAME,
-            self::PARTICIPANT_PHONE,
-            self::PARTICIPANT_MOBILE,
-            self::PARTICIPANT_POSITION,
-            self::PARTICIPANT_AVATAR,
-            self::PARTICIPANT_ADDRESS,
-            self::PARTICIPANT_ZIPCODE,
-            self::PARTICIPANT_CITY,
-            self::PARTICIPANT_COUNTRY,
-            self::PARTICIPANT_WEBSITE,
-            self::PARTICIPANT_GENDER,
-        ];
+        return
+            array_merge(
+                [
+                    self::PARTICIPANT_FIRSTNAME,
+                    self::PARTICIPANT_LASTNAME,
+                    self::PARTICIPANT_PHONE,
+                    self::PARTICIPANT_MOBILE,
+                    self::PARTICIPANT_POSITION,
+                    self::PARTICIPANT_AVATAR,
+                    self::PARTICIPANT_ADDRESS,
+                    self::PARTICIPANT_ZIPCODE,
+                    self::PARTICIPANT_CITY,
+                    self::PARTICIPANT_COUNTRY,
+                    self::PARTICIPANT_WEBSITE,
+                    self::PARTICIPANT_GENDER,
+                ],
+                self::getGenericParticipantTags()
+            )
+        ;
     }
 
     /**
@@ -197,6 +200,17 @@ final class Tag
         return $genericTags;
     }
 
+    public static function getGenericParticipantTags(): array
+    {
+        $genericTags = [];
+
+        for ($i = 1; $i <= self::PARTICIPANTS_GENERIC_TAGS_NUMBER; ++$i) {
+            $genericTags[] = 'participant_generic_tag_' . $i;
+        }
+
+        return $genericTags;
+    }
+
     /**
      * Theses tags are used on the sheet to populate info from outside of the registration to the sheet
      *
@@ -239,12 +253,14 @@ final class Tag
         );
     }
 
-    /**
-     * @return RegistrationTemplateTagView
-     */
-    public static function getRegistrationTemplateTagView(): RegistrationTemplateTagView
+    public static function getRegistrationTemplateTagView(): TemplateTagView
     {
-        return new RegistrationTemplateTagView(
+        return self::getTemplateTagView();
+    }
+
+    public static function getTemplateTagView(): TemplateTagView
+    {
+        return new TemplateTagView(
             self::getSheetParticipantGenericAndSettersTags(),
             self::PARTICIPANT_DATA,
             self::getParticipantTags(),

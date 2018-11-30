@@ -29,6 +29,8 @@ interface AdminRepositoryInterface
      */
     public function add(Admin $admin);
 
+    public function remove(Admin $admin): void;
+
     /**
      * @param Admin $admin
      */
@@ -47,6 +49,13 @@ interface AdminRepositoryInterface
      * @return Admin|null
      */
     public function findByEmail($email);
+
+    /**
+     * @param array $filters
+     *
+     * @return Admin[]
+     */
+    public function list(array $filters): array;
 
     /**
      * @param int   $page
@@ -71,13 +80,11 @@ interface AdminRepositoryInterface
 
     /**
      * @param Admin $admin
-     * @param int   $page
-     * @param int   $limit
      * @param array $filters
      *
-     * @return PaginatedResult
+     * @return Admin[]
      */
-    public function getOperatorForOrganizer(Admin $admin, $page, $limit, array $filters);
+    public function getOperatorForOrganizer(Admin $admin, array $filters): array;
 
     /**
      * @param Event $event

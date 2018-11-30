@@ -1,5 +1,5 @@
 {% extends 'AdminBundle::base.html.twig' %}
-
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
 {% block title 'admin.admin_list.title'|trans %}
 
 {% block content %}
@@ -36,45 +36,43 @@
         </tr>
         </thead>
         <tbody>
-        {% for admin in admins %}
+        {% for admin in adminList.adminViews %}
             <tr>
-                <td>{{ admin.lastname }}</td>
-                <td>{{ admin.firstname }}</td>
+                <td>{{ admin.lastName }}</td>
+                <td>{{ admin.firstName }}</td>
                 <td>{{ admin.email }}</td>
                 <td>{{ ('admin.role.' ~ admin.role)|trans }}</td>
                 <td>
-                    {% if admin.isSuperAdmin %}
-                        {% if admin.events|length == 0 %}
-                            {{ 'admin.admin_list.table.content.super_admin.events.all'|trans }}
-                        {% else %}
-                            <ul>
-                                {% for event in admin.events %}
-                                    <li>{{ event.title }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
+                    {% if admin.hasAllEvents %}
+                        {{ 'admin.admin_list.table.content.super_admin.events.all'|trans }}
+                    {% elseif admin.hasNoEvent %}
+                        {{ 'admin.admin_list.table.content.admin.events.none'|trans }}
                     {% else %}
-                        {% if admin.events|length == 0 %}
-                            {{ 'admin.admin_list.table.content.admin.events.none'|trans }}
-                        {% else %}
-                            <ul>
-                                {% for event in admin.events %}
-                                    <li>{{ event.title }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
+                        <ul>
+                            {% for eventTitle in admin.events %}
+                                <li>{{ eventTitle }}</li>
+                            {% endfor %}
+                        </ul>
                     {% endif %}
                 </td>
                 <td>
-                    {% if admin.partner %}
+                    {% if admin.isPartner %}
                         <a href="{{ path('admin_update_partner', {'partner': admin.id}) }}" class="btn btn-default">{{ 'admin.admin_list.table.content.update'|trans }}</a>
                     {% else %}
                         <a href="{{ path('admin_update_admin', {'admin': admin.id}) }}" class="btn btn-default">{{ 'admin.admin_list.table.content.update'|trans }}</a>
                     {% endif %}
+                    {{ delete_button(
+                        path('admin_delete_admin', {'admin': admin.id, 'type': 'admin'}),
+                        'admin.remove'|trans,
+                        {
+                            'class' : 'btn btn-danger btn-sm',
+                            'data-confirm': 'admin.remove.confirmation'|trans
+                        },
+                        constant('Proximum\\Vimeet\\Domain\\Intention\\IntentionType::INTENTION_REMOVE_ADMIN')
+                    ) }}
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': admins}) }}
 {% endblock %}

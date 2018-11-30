@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Type;
 
+use Proximum\Vimeet\Application\View\FormTemplate\FormTemplateView;
 use Proximum\Vimeet\Application\View\Type\TypeListsView;
 use Proximum\Vimeet\Application\View\Type\TypeListView;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -52,6 +53,15 @@ class TypeViewQueryHandler
 
         /** @var Type $type */
         foreach ($typeResults as $type) {
+            $formTemplateViews = [];
+
+            foreach ($type->getFormTemplates() as $formTemplate) {
+                $formTemplateViews[] = new FormTemplateView(
+                    $formTemplate->getTitle(),
+                    $formTemplate->isPublished()
+                );
+            }
+
             $typeListsView->types[] = new TypeListView(
                 $type->getId(),
                 $type->getPosition(),
@@ -59,6 +69,7 @@ class TypeViewQueryHandler
                 $type->isHidden(),
                 (null !== $type->getRegistrationTemplate()) ? $type->getRegistrationTemplate()->getTitle() : '',
                 (null !== $type->getSheetTemplate()) ? $type->getSheetTemplate()->getTitle() : '',
+                $formTemplateViews,
                 (null !== $type->getPackage()) ? $type->getPackage()->getTitle() : '',
                 null !== $type->getPaymentConditions(),
                 isset($contentIndexedByTypeId[$type->getId()])

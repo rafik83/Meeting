@@ -1041,6 +1041,12 @@ services:
             - '@vimeet_infrastructure.adapter.salt_generator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Create }
+    Proximum\Vimeet\Application\Command\Admin\DeleteHandler:
+        arguments:
+            - '@repository.admin_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Delete }
     command.admin.update_handler:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateHandler
         arguments:
@@ -4002,6 +4008,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
+            - '@query.agenda.admin.request_slot_view_query_handler'
+            - '@domain.meeting.visio_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQuery }
     query.agenda.agenda_participant_view_query_handler:
@@ -4210,7 +4218,7 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.happenings_access_checker'
-            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository_happening.category_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ProgramViewQuery }
 

@@ -15,60 +15,13 @@ use Proximum\Vimeet\Application\Command\Operator\Update;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Operator\CreateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Operator\FilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Operator\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OperatorController extends Controller
 {
-    /**
-     * @param string $type
-     * @param array  $data
-     * @param array  $options
-     *
-     * @return Form|FormInterface
-     */
-    private function createFilterForm($type, $data, array $options = [])
-    {
-        return $this->get('form.factory')->createNamed('', $type, $data, $options);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function listAction(Request $request)
-    {
-        $this->denyAccessUnlessGranted('ROLE_ORGANIZER');
-
-        $filters    = ['event' => $request->query->get('event')];
-        $filterForm = $this->createFilterForm(FilterType::class, $filters, [
-            'events' => $this->getUser()->getEvents(),
-        ]);
-
-        if ($filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid()) {
-            $filters = $filterForm->getData();
-        }
-
-        $operators = $this->get('repository.admin_repository')->getOperatorForOrganizer(
-            $this->getUser(),
-            $request->query->getInt('page', 1),
-            20,
-            $filters
-        );
-
-        return $this->render('AdminBundle:Operator:list.html.twig', [
-            'operators'   => $operators,
-            'filter_form' => $filterForm->createView(),
-            'filtered'    => $filterForm->isSubmitted() && $filterForm->isValid(),
-        ]);
-    }
-
     /**
      * @param Request $request
      *

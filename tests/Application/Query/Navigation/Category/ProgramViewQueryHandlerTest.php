@@ -16,84 +16,98 @@ use Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQueryHandle
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Happening\CategoryRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Happening\CategoryListView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class ProgramViewQueryHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function test_return_categories()
     {
         $eventFactory = new EventFactory();
-        $sheetFactory = new SheetFactory();
-        $user         = new User('test@test.com', 'azerty', 'password', 'fr');
-        $event        = $eventFactory->createEvent();
-        $sheet        = $sheetFactory->create($event, $user);
+        $user = new User('test@test.com', 'azerty', 'password', 'fr');
+        $event = $eventFactory::createEvent();
+        $type = new Type($event);
 
-        $programView = new ProgramViewQuery($sheet, $user, 'fr');
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event);
+        $sheet->getType()->shouldBeCalled()->willReturn($type);
+        $sheet->getId()->shouldBeCalled()->willReturn(1337);
 
-        $happeningCategoryOne = $this->createHappeningCategoryMock($event, 'picto1', 1);
-        $happeningCategoryTwo = $this->createHappeningCategoryMock($event, 'picto2', 2);
-
-        $happeningCategoryOne->setTranslation(
-            new Happening\CategoryTranslation($happeningCategoryOne, 'fr', 'title one')
-        );
-        $happeningCategoryTwo->setTranslation(
-            new Happening\CategoryTranslation($happeningCategoryTwo, 'fr', 'title two')
-        );
-
-        $happenings = [
-            new Happening($event, new \DateTime(), new \DateTime(), $happeningCategoryTwo, []),
-            new Happening($event, new \DateTime(), new \DateTime(), $happeningCategoryOne, []),
-        ];
-
-        //Expected
-        $linkViews = [
-            new LinkView('title two'),
-            new LinkView('title one'),
-        ];
-
-        $categoryViewExpected = new CategoryView('navigation.category.program', 'icon-PresFlash_2', $linkViews, true);
-
-        // Mocks
         $happeningsAccessChecker = $this->prophesize(HappeningsAccessChecker::class);
-        $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
-        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
-
         $happeningsAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
-        $happeningRepository->findListByEvent($event, 'fr')->shouldBeCalled()->willReturn($happenings);
+
+        $categoryRepository = $this->prophesize(CategoryRepositoryInterface::class);
+        $categoryRepository
+            ->getCategoryListViewByType($type, 'fr')
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    new CategoryListView(1, 'Conférences', 'picto1', 10, '#fff', '#000'),
+                    new CategoryListView(1, 'Remise des prix', 'picto2', 20, '#fff', '#000'),
+                ]
+            )
+        ;
+
+        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
+        $navigationBuilder
+            ->getRoute('happening_program', ['sheet' => 1337])
+            ->shouldBeCalled()
+            ->willReturn()
+        ;
 
         $programViewQueryHandler = new ProgramViewQueryHandler(
             $navigationBuilder->reveal(),
             $happeningsAccessChecker->reveal(),
-            $happeningRepository->reveal()
+            $categoryRepository->reveal()
         );
 
-        $categoryView = $programViewQueryHandler->handle($programView);
-        $this->assertEquals($categoryViewExpected, $categoryView);
+        $this->assertEquals(
+            new CategoryView(
+                'navigation.category.program',
+                'icon-PresFlash_2',
+                [
+                    new LinkView('Conférences'),
+                    new LinkView('Remise des prix'),
+                ],
+                true
+            ),
+            $programViewQueryHandler->handle(new ProgramViewQuery($sheet->reveal(), $user, 'fr'))
+        );
     }
 
-    /**
-     * @param Event  $event
-     * @param string $picto
-     * @param int    $id
-     *
-     * @return Happening\Category
-     */
-    public function createHappeningCategoryMock(Event $event, $picto, $id)
+    public function test_return_null()
     {
-        $category    = new Happening\Category($event, $picto, 1, '#FFFFFF', '#FFFFFF');
-        $reflection  = new \ReflectionClass(Happening\Category::class);
+        $eventFactory = new EventFactory();
+        $sheetFactory = new SheetFactory();
+        $user = new User('test@test.com', 'azerty', 'password', 'fr');
+        $event = $eventFactory::createEvent();
+        $type = new Type($event);
+        $sheet = $sheetFactory::create($event, $user, new \DateTime(), $type);
 
-        $property = $reflection->getProperty('id');
-        $property->setAccessible(true);
-        $property->setValue($category, $id);
-        $property->setAccessible(false);
+        $happeningsAccessChecker = $this->prophesize(HappeningsAccessChecker::class);
+        $happeningsAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
 
-        return $category;
+        $categoryRepository = $this->prophesize(CategoryRepositoryInterface::class);
+        $categoryRepository
+            ->getCategoryListViewByType($type, 'fr')
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
+
+        $programViewQueryHandler = new ProgramViewQueryHandler(
+            $navigationBuilder->reveal(),
+            $happeningsAccessChecker->reveal(),
+            $categoryRepository->reveal()
+        );
+
+        $this->assertNull($programViewQueryHandler->handle(new ProgramViewQuery($sheet, $user, 'fr')));
     }
 }

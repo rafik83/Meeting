@@ -73,6 +73,8 @@ class UpdateHandler
             $type->setPackage($update->package);
         }
 
+        $type->setFormTemplates($update->formTemplates);
+
         $localesTitleAlreadyExists = [];
 
         foreach ($update->translations as $locale => $translation) {

@@ -1,6 +1,6 @@
 {% trans_default_domain 'templates' %}
 
-{% set nomenclature_mode = isRegistrationTemplate is not defined ? 'checkboxes' : 'singles' %}
+{% set nomenclature_mode = isFormTemplate is not defined ? 'checkboxes' : 'singles' %}
 
 {% set config = {
     label: { (locale): 'template.object.nomenclature'|trans },
@@ -39,7 +39,7 @@
                                 <h4 class="modal-title">{{ 'template.object.nomenclature'|trans }}</h4>
                             </div>
                             <div class="modal-body">
-                                {% if isRegistrationTemplate is not defined %}
+                                {% if isFormTemplate is not defined %}
                                     <div class="form-group">
                                         <label class="form-label">{{ 'template.style.title'|trans }}</label>
                                         <select class="form-control" name="style" title="Style">
@@ -57,7 +57,7 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
-                                {% if isRegistrationTemplate is not defined %}
+                                {% if isFormTemplate is not defined %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.help.title'|trans }}</label>
                                     <textarea class="form-control" name="help"></textarea>
@@ -94,7 +94,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                {% if isRegistrationTemplate is not defined %}
+                                {% if isFormTemplate is not defined %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.nomenclature.objective.title'|trans }}</label>
                                     <div class="radio">
@@ -129,10 +129,10 @@
                                     </select>
                                 </div>
                                 {% endif %}
-                                {% if isRegistrationTemplate is defined and registrationTemplateTagView is defined %}
-                                    {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                {% if isFormTemplate is defined and templateTagView is defined %}
+                                    {{ include('AdminBundle:Template/Form:tagsSelect.html.twig', {
                                         'config': config,
-                                        'registrationTemplateTagView': registrationTemplateTagView,
+                                        'templateTagView': templateTagView,
                                     }, false) }}
                                 {% endif %}
                             </div>

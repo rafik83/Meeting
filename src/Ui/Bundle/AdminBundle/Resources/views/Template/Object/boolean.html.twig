@@ -60,9 +60,9 @@
                                     <label class="form-label">{{ 'template.boolean.filter.label'|trans }}</label>
                                     <input class="form-control" type="text" name="filter[label]" />
                                 </div>
-                                {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                {{ include('AdminBundle:Template/Form:tagsSelect.html.twig', {
                                     'config': config,
-                                    'registrationTemplateTagView': registrationTemplateTagView,
+                                    'templateTagView': templateTagView,
                                 }, false) }}
                             </div>
                             <div class="modal-footer">

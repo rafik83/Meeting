@@ -84,6 +84,7 @@ class CreateHandler
         $type->setSheetTemplate($this->getSheetTemplate($create, $type));
         $type->setRegistrationTemplate($this->getRegistrationTemplate($create, $type));
         $type->setPackage($create->package);
+        $type->setFormTemplates($create->formTemplates);
 
         $this->typeRepository->add($type);
 

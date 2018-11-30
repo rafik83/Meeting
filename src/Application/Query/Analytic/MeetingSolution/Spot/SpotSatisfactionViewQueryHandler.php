@@ -34,6 +34,7 @@ class SpotSatisfactionViewQueryHandler
             $query->spot->getReference(),
             !$query->spot->hasSheets(),
             $query->spot->isVisio(),
+            $query->spot->getPriority(),
             $satisfaction
         );
     }

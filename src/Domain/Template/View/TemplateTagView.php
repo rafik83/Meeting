@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Template\Registration;
+namespace Proximum\Vimeet\Domain\Template\View;
 
-class RegistrationTemplateTagView
+class TemplateTagView
 {
     /** @var array */
     public $allTags;

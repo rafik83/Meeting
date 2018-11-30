@@ -1,4 +1,4 @@
-var Form = require('./../_Form');
+var Form = require('./../template/_Form');
 
 /**
  * CollectionObject

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
@@ -64,6 +65,18 @@ class PlannerJobRepository implements PlannerJobRepositoryInterface
         ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    public function countByAdmin(Admin $admin): int
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('count(plannerJob.id)')
+            ->from(PlannerJob::class, 'plannerJob')
+            ->where('plannerJob.admin = :admin')
+            ->setParameter('admin', $admin->getId())
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
