@@ -1,4 +1,4 @@
-var Form = require('./../template/_Form');
+var Form = require('./../template/_Form'),
     TemplateTaggableObject = require('./../template/_TemplateTaggableObject')
 ;
 
