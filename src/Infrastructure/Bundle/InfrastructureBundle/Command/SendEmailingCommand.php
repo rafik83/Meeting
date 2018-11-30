@@ -10,9 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command;
 
-use Proximum\Vimeet\Application\Command\Messaging\Batch\Process;
-use Proximum\Vimeet\Application\Command\Messaging\Batch\ProcessHandler;
-use Proximum\Vimeet\Application\Components\Messaging\MessageFactory;
+use Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByType;
+use Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByTypeHandler;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -26,46 +25,25 @@ class SendEmailingCommand extends Command
     const BOOL_YES = 'YES';
     const BOOL_NO  = 'NO';
 
-    /**
-     * @var EventRepositoryInterface
-     */
+    /** @var EventRepositoryInterface */
     private $eventRepository;
 
-    /**
-     * @var MessageFactory
-     */
-    private $messageFactory;
-
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var ProcessHandler
-     */
-    private $processHandler;
+    /** @var SendEmailingByTypeHandler */
+    private $sendEmailingByTypeHandler;
 
-    /**
-     * SendEmailingCommand constructor.
-     *
-     * @param EventRepositoryInterface $eventRepository
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param MessageFactory           $messageFactory
-     * @param ProcessHandler           $processHandler
-     */
     public function __construct(
         EventRepositoryInterface $eventRepository,
         SheetRepositoryInterface $sheetRepository,
-        MessageFactory $messageFactory,
-        ProcessHandler $processHandler
+        SendEmailingByTypeHandler $sendEmailingByTypeHandler
     ) {
         parent::__construct(self::NAME);
 
         $this->eventRepository = $eventRepository;
-        $this->messageFactory  = $messageFactory;
         $this->sheetRepository = $sheetRepository;
-        $this->processHandler  = $processHandler;
+        $this->sendEmailingByTypeHandler = $sendEmailingByTypeHandler;
     }
 
     /**
@@ -97,8 +75,6 @@ class SendEmailingCommand extends Command
             throw new \InvalidArgumentException('Event not found.');
         }
 
-        $message = $this->messageFactory->create($event, $messageId, $sendEmailToTeam);
-
-        $this->processHandler->handle(new Process($message, $sheets));
+        $this->sendEmailingByTypeHandler->handle(new SendEmailingByType($event, $messageId, $sheets, $sendEmailToTeam));
     }
 }

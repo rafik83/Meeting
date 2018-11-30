@@ -1930,6 +1930,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessage }
 
+    Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByTypeHandler:
+        arguments:
+            - '@application.components.messaging.message_factory'
+            - '@command.messaging.batch.process_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByType }
+
     command.planner.import_handler:
         class: Proximum\Vimeet\Application\Command\Planner\ImportHandler
         arguments:
@@ -4663,8 +4670,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@application.components.messaging.message_factory'
-            - '@command.messaging.batch.process_handler'
+            - '@Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByTypeHandler'
         tags:
             - { name: console.command }
 
