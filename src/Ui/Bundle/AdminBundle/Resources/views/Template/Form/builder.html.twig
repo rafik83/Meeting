@@ -123,6 +123,11 @@
                             'nomenclatures': nomenclatures,
                             'templateTagView': templateTagView,
                         }, false) }}
+                        {{ include('AdminBundle:Template/Object:datetime.html.twig', {
+                            'locale': locale,
+                            'isFormTemplate': true,
+                            'templateTagView': templateTagView,
+                        }, false) }}
                     </div>
                 </div>
             </div>

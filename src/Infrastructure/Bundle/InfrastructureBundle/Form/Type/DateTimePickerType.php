@@ -42,6 +42,8 @@ class DateTimePickerType extends AbstractType
         $view->vars['group_attr']['style']         = 'position: relative;';
         $view->vars['attr']['data-allow-hours']    = $options['display_hour'];
         $view->vars['attr']['data-allow-dates']    = $options['display_date'];
+        $view->vars['attr']['data-min-date']       = $options['min_date'];
+        $view->vars['attr']['data-max-date']       = $options['max_date'];
     }
 
     /**
@@ -56,6 +58,8 @@ class DateTimePickerType extends AbstractType
             'display_date'   => true,
             'model_timezone' => date_default_timezone_get(),
             'view_timezone'  => date_default_timezone_get(),
+            'min_date'       => null,
+            'max_date'       => null,
         ]);
     }
 

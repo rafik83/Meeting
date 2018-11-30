@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Template;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Template\PrintTemplateResolver;
@@ -59,9 +60,10 @@ class TaggedDataFactoryTest extends TestCase
 
         $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
 
+        $event = $this->prophesize(Event::class);
         $factory           = new TemplateDataFactory($nomenclatureRepository->reveal());
-        $templateData      = $factory->create($template, $data, 'fr', 'fr');
-        $sheetTemplateData = $factory->create($template, $data, 'fr', 'fr');
+        $templateData      = $factory->create($template, $data, 'fr', 'fr', $event->reveal());
+        $sheetTemplateData = $factory->create($template, $data, 'fr', 'fr', $event->reveal());
 
         // Expected
         $expectedTaggedDataViewObject1 = new TaggedDataView(

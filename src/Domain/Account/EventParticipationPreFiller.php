@@ -100,6 +100,8 @@ class EventParticipationPreFiller
             return;
         }
 
-        $templateObject->setData($previousTemplateObject->getData());
+        if (!empty($previousTemplateObject->getData())) {
+            $templateObject->setData($previousTemplateObject->getData());
+        }
     }
 }

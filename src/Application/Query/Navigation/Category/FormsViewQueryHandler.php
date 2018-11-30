@@ -57,6 +57,7 @@ class FormsViewQueryHandler
                     'sheet' => $sheet->getId(),
                     'participant' => $participant->getId(),
                     'formTemplate' => $formTemplateView->formTemplateId,
+                    'step' => 1,
                 ])
             );
         }

@@ -1,0 +1,8 @@
+{% if item.datetime %}
+    {% set format = 'none' %}
+    {% if item.displayHours %}
+        {% set format =  'short' %}
+    {% endif %}
+
+    {{ item.getDefaultLabel }}: {{ item.datetime|localizeddate('short', format, null, item.event.timezone) }}
+{% endif %}

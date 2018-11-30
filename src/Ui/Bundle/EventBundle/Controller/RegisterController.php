@@ -30,7 +30,6 @@ use Proximum\Vimeet\Domain\Template\Exception\UploadNotAllowedOnFirstStepOfRegis
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Domain\View\TypeView;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
@@ -215,8 +214,9 @@ class RegisterController extends Controller
         $this->get('components.user.type_resolver')->resolve($user, $event, $type);
 
         $form = $this->createForm(BlockType::class, $registrationTemplateFirstStep, [
-            'block'   => $registrationTemplateFirstStep,
-            'locale'  => $locale,
+            'block' => $registrationTemplateFirstStep,
+            'locale' => $locale,
+            'locales' => $event->getLocales(),
             'country' => $event->getCountry(),
         ]);
 
@@ -291,7 +291,8 @@ class RegisterController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessIfWrongParticipant($eventDomain, $userDomain, $participant);
 
-        $locale               = $request->getLocale();
+        $locale = $request->getLocale();
+        $event = $eventDomain->getEvent();
         $registrationTemplate = $this->get('template.template_data_factory')
             ->createRegistrationFromParticipant($participant, $locale);
 
@@ -316,13 +317,14 @@ class RegisterController extends Controller
             throw $this->createNotFoundException('Unknown step');
         }
 
-        $data = [
+        $options = [
             'block' => $registrationTemplateStep,
             'locale' => $locale,
-            'country' => $eventDomain->getEvent()->getCountry(),
+            'country' => $event->getCountry(),
+            'locales' => $event->getLocales(),
         ];
 
-        $form = $this->createForm(BlockType::class, $registrationTemplateStep, $data);
+        $form = $this->createForm(BlockType::class, $registrationTemplateStep, $options);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = $this->handleData(
@@ -365,7 +367,7 @@ class RegisterController extends Controller
         );
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
-            'event'           => $eventDomain->getEvent(),
+            'event'           => $event,
             'form'            => $form->createView(),
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
             'stepNumber'      => $step,
@@ -389,7 +391,7 @@ class RegisterController extends Controller
             ->get('vimeet_infrastructure.repository.participant_repository')
             ->getAllParticipantForUser($event, $user);
 
-        if (1 <= count($participants)) {
+        if (1 <= \count($participants)) {
             throw $this->createAccessDeniedException('Participation already created');
         }
     }

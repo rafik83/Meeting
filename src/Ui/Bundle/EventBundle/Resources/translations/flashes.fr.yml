@@ -1,6 +1,7 @@
 flash.authentication_token.invalid_link: 'Lien invalide'
 flash.event.user_event_phone.confirmationNeeded: 'Afin de faire une demande de RDV, merci de confirmer votre numéro de téléphone mobile'
 flash.event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
+flash.form_template.fill_step_finished.success: 'Formulaire enregistré, merci !'
 flash.group.participant.update_success: '{0} Les attributions des fiches aux participants ont bien été mises à jour.|]0,Inf[ Les attributions des fiches aux participants ont été mises à jour sauf pour les participants suivants : %result%'
 flash.group.participant.update.participant_has_meeting_on_sheet: '%participantFullname% ne peut pas être supprimé de la fiche "%sheetTitle%" car ce participant a des rendez-vous.'
 flash.group.participant.update.participant_has_meeting_request_on_sheet: '%participantFullname% ne peut pas être supprimé de la fiche "%sheetTitle%" car ce participant est assigné à des demandes de rendez-vous.'

@@ -1,3 +1,4 @@
 Proximum\Vimeet\Domain\Template\Block:
     constraints:
+        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\FormTemplateBlockStepDataConstraint: { groups: [form_template_block_step] }
         - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\BlockConstraint: { groups: [block] }

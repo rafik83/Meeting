@@ -38,6 +38,32 @@ services:
             - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetRegistrationInfoQueryHandler'
 
     #
+    # Participant
+    #
+    Proximum\Vimeet\Application\Query\Participant\Sheet\ParticipantListViewQueryHandler:
+        arguments:
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\Sheet\ParticipantListViewQuery }
+
+    #
+    # Form Template
+    #
+    Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQueryHandler:
+        arguments:
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\FormDataRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQuery }
+    Proximum\Vimeet\Application\Query\Template\Form\FillStepQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQueryHandler'
+            - '@markdown'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\FillStepQuery }
+
+    #
     # Catalog
     #
     Proximum\Vimeet\Application\Query\Catalog\NomenclatureTagViewQueryHandler:

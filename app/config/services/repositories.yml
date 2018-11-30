@@ -61,3 +61,11 @@ services:
     Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\Sheet\FormDataRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'

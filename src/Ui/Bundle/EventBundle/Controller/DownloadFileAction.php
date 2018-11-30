@@ -11,18 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
-use Proximum\Vimeet\Application\Command\Encryption\Decrypt;
-use Proximum\Vimeet\Application\Command\Encryption\DecryptHandler;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\RemoveDecryptedFileEvent;
+use Proximum\Vimeet\Application\Components\Template\Object\UploadObjectDownloadPathGetter;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -40,42 +34,27 @@ class DownloadFileAction
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /** @var DecryptHandler */
-    private $decryptHandler;
-
-    /** @var DelayedEventDispatcherInterface */
-    private $delayedEventDispatcher;
-
     /** @var DataUriNormalizer */
     private $dataUriNormalizer;
-
-    /** @var string */
-    private $encryptedFilesPath;
 
     /** @var EngineInterface */
     private $engine;
 
-    /** @var string */
-    private $webDir;
+    /** @var UploadObjectDownloadPathGetter */
+    private $uploadObjectDownloadPathGetter;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         TemplateDataFactory $templateDataFactory,
-        DecryptHandler $decryptHandler,
-        DelayedEventDispatcherInterface $delayedEventDispatcher,
         DataUriNormalizer $dataUriNormalizer,
         EngineInterface $engine,
-        string $encryptedFilesPath,
-        string $webDir
+        UploadObjectDownloadPathGetter $uploadObjectDownloadPathGetter
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->templateDataFactory = $templateDataFactory;
-        $this->decryptHandler = $decryptHandler;
-        $this->delayedEventDispatcher = $delayedEventDispatcher;
         $this->dataUriNormalizer = $dataUriNormalizer;
         $this->engine = $engine;
-        $this->encryptedFilesPath = $encryptedFilesPath;
-        $this->webDir = $webDir;
+        $this->uploadObjectDownloadPathGetter = $uploadObjectDownloadPathGetter;
     }
 
     public function __invoke(
@@ -93,34 +72,12 @@ class DownloadFileAction
         $templateData = $this->createTemplateData($sheet, $request->getLocale(), $participant);
 
         try {
-            $uploadObject = $templateData->getObject($objectKey);
-            if (!$uploadObject instanceof UploadObject || null === $uploadObject->getPath()) {
-                throw new AccessDeniedException('Invalid object');
-            }
-
-            $downloadPath = $this->webDir . $uploadObject->getPath();
-
-            if ($uploadObject->isCrypted()) {
-                $user = $participant instanceof Participant ? $participant->getUser() : $sheet->getOwner();
-                $directoryStructure = explode('/', $uploadObject->getPath());
-                $filename = sprintf('decrypted_%s', end($directoryStructure));
-                $downloadPath = $this->encryptedFilesPath . $filename;
-
-                $this->decryptHandler->handle(
-                    new Decrypt(
-                        $sheet,
-                        $user,
-                        $uploadObject->hasTag(Tag::SHEET_DATA),
-                        $this->encryptedFilesPath . $uploadObject->getPath(),
-                        $downloadPath
-                    )
-                );
-
-                $this->delayedEventDispatcher->dispatch(
-                    Events::REMOVE_DECRYPTED_FILE,
-                    new RemoveDecryptedFileEvent($downloadPath)
-                );
-            }
+            $downloadPath = $this->uploadObjectDownloadPathGetter->getDownloadPath(
+                $templateData,
+                $objectKey,
+                $sheet,
+                $participant
+            );
 
             if (true === $preview) {
                 return $this->engine->renderResponse('@Event/base64Image.html.twig', [

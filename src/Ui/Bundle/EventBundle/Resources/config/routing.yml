@@ -289,7 +289,7 @@ event_sheet_download_file:
     path: /sheet/{sheet}/file/{objectKey}
     requirements:
         sheet: \d+
-        templateObject: \d+
+        objectKey: \w+
     methods:  [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\DownloadFileAction }
 
@@ -298,9 +298,18 @@ event_sheet_participant_download_file:
     requirements:
         sheet: \d+
         participant: \d+
-        templateObject: \d+
+        objectKey: \w+
     methods:  [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\DownloadFileAction }
+
+event_form_template_download_file:
+    path: /sheet/{sheet}/participant/{participant}/form/{formTemplate}/file/{objectKey}
+    requirements:
+        sheet: \d+
+        participant: \d+
+        formTemplate: \d+
+        objectKey: \w+
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Form\DownloadFileAction
 
 #
 # Sheets group
@@ -882,12 +891,13 @@ event_user_event_phone_validate_code_success:
 # Forms
 #
 event_participant_fill_form:
-    path: /sheet/{sheet}/participant/{participant}/form/{formTemplate}
-    methods: [GET]
+    path: /sheet/{sheet}/participant/{participant}/form/{formTemplate}/step/{step}
+    methods: [GET, POST]
     requirements:
         sheet: \d+
         participant: \d+
         formTemplate: \d+
+        step: \d+
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Form\FillFormAction
 
 #

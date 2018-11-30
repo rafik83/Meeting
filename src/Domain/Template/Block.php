@@ -411,7 +411,7 @@ class Block extends AbstractChild
         $blocks = $this->getBlocks();
         $index  = (int) $index - 1;
 
-        return isset($blocks[$index]) ? $blocks[$index] : null;
+        return $blocks[$index] ?? null;
     }
 
     /**
@@ -419,10 +419,10 @@ class Block extends AbstractChild
      *
      * @return int
      */
-    public function getBlocksCount()
+    public function getBlocksCount(): int
     {
-        return count(array_filter($this->getBlocks(), function (Block $block) {
-            return count($block->getObjects()) > 0;
+        return \count(array_filter($this->getBlocks(), function (Block $block) {
+            return \count($block->getObjects()) > 0;
         }));
     }
 
@@ -455,6 +455,8 @@ class Block extends AbstractChild
                     if ($block->hasTag($tag) && $block instanceof TemplateObject\ContentObjectInterface) {
                         if ($block instanceof TemplateObject\Nomenclature) {
                             $tagged[] = implode(', ', $block->getNomenclatureLabelOfItems());
+                        } elseif ($block instanceof TemplateObject\DateTime) {
+                            $tagged[] = $block->getFormattedDate($block->getLocale());
                         } else {
                             $tagged[] = $block->getContentValueLocalize();
                         }
@@ -481,6 +483,8 @@ class Block extends AbstractChild
 
                 if ($object instanceof TemplateObject\Nomenclature) {
                     $tagged[$tag][] = implode(', ', $object->getNomenclatureLabelOfItems());
+                } elseif ($object instanceof TemplateObject\DateTime) {
+                    $tagged[$tag][] = $object->getFormattedDate($object->getLocale());
                 } else {
                     $tagged[$tag][] = $object->getContentValue();
                 }

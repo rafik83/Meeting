@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Template\Form\FormTemplateView;
 
 interface FormTemplateRepositoryInterface
 {
+
     public function add(FormTemplate $template): void;
 
     public function update(FormTemplate $template): void;
