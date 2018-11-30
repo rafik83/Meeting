@@ -14,8 +14,8 @@ use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActivateAccountMailView;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
 use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountCustomizedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ActivateAccountMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountCustomizedMail;
 
 class PrepareActivateAccountMail extends AbstractPrepareMailService
 {
@@ -33,7 +33,7 @@ class PrepareActivateAccountMail extends AbstractPrepareMailService
 
             $result = $this->substitutionHandler->handle($prepareMail, $message);
 
-            return new RegisterAccountCustomizedMail(
+            return new ActivateAccountCustomizedMail(
                 $prepareMail->event,
                 $this->eventSenderGuesser->generate($prepareMail->event),
                 $prepareMail->user->getEmail(),
