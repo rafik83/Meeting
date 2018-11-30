@@ -308,6 +308,17 @@ services:
             - '@adapter.router'
 
     #
+    # Admin
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\DeleteAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@security.csrf.token_manager'
+            - '@router.default'
+            - '@adapter.authorization_checker'
+            - '@session.flash_bag'
+
+    #
     # User
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone\IgnoreConfirmationAction:

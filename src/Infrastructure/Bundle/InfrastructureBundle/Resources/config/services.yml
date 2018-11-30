@@ -1041,6 +1041,12 @@ services:
             - '@vimeet_infrastructure.adapter.salt_generator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Create }
+    Proximum\Vimeet\Application\Command\Admin\DeleteHandler:
+        arguments:
+            - '@repository.admin_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Delete }
     command.admin.update_handler:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateHandler
         arguments:

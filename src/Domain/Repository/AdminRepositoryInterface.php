@@ -29,6 +29,8 @@ interface AdminRepositoryInterface
      */
     public function add(Admin $admin);
 
+    public function remove(Admin $admin): void;
+
     /**
      * @param Admin $admin
      */
