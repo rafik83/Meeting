@@ -78,6 +78,11 @@ class FormTemplate extends AbstractTemplate
         return $this->published;
     }
 
+    public function getTranslatedTitle(string $locale): string
+    {
+        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getTitle() : '';
+    }
+
     public function update(string $title, array $translations, bool $isPublished): void
     {
         $this->setTitle($title);

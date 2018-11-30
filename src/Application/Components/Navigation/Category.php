@@ -42,6 +42,9 @@ final class Category
     const BADGE      = 'navigation.category.badge';
     const BADGE_ICON = 'icon-Badge_1';
 
+    const FORMS      = 'navigation.category.forms';
+    const FORMS_ICON = 'icon-Info_1';
+
     public static $categories = [
         self::MEMBER_SPACE,
         self::BILLING,
@@ -52,5 +55,6 @@ final class Category
         self::PLANNING,
         self::PROGRAM,
         self::BADGE,
+        self::FORMS,
     ];
 }

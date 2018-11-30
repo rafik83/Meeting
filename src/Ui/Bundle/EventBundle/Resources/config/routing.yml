@@ -879,6 +879,18 @@ event_user_event_phone_validate_code_success:
     defaults: { _controller: EventBundle:User/Phone/Validate:validateSuccess }
 
 #
+# Forms
+#
+event_participant_fill_form:
+    path: /sheet/{sheet}/participant/{participant}/form/{formTemplate}
+    methods: [GET]
+    requirements:
+        sheet: \d+
+        participant: \d+
+        formTemplate: \d+
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Form\FillFormAction
+
+#
 # VideoConference
 #
 event_video_video_meeting:

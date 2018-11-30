@@ -4166,6 +4166,8 @@ services:
             - '@query.navigation.category_sheet_view_query_handler'
             - '@query.navigation.category_package_view_query_handler'
             - '@query.navigation.category_program_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Navigation\Category\FormsViewQueryHandler'
+
     query.navigation.category_billing_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\BillingViewQueryHandler
         arguments:
@@ -4175,6 +4177,12 @@ services:
         arguments:
             - '@datetime'
             - '@navigation.navigation_builder'
+
+    Proximum\Vimeet\Application\Query\Navigation\Category\FormsViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
+            - '@adapter.router'
+
     query.navigation.category_meeting_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\MeetingViewQueryHandler
         arguments:

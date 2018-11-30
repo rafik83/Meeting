@@ -156,7 +156,15 @@ class StaticFormulationListViewQueryHandlerTest extends TestCase
             )->shouldBeCalled()
             ->willReturn('member space')
         ;
-
+        $translator
+            ->trans(
+                Constant::STATIC_FORMULATION_LIST[Constant::STATIC_FORMULATION_KEY_FORMS]['label'],
+                [],
+                'messages',
+                'fr'
+            )->shouldBeCalled()
+            ->willReturn('My venue')
+        ;
 
         $query = new StaticFormulationListViewQuery($event->reveal(), 'en');
         $handler = new StaticFormulationListViewQueryHandler(
@@ -276,6 +284,18 @@ class StaticFormulationListViewQueryHandlerTest extends TestCase
             ),
             []
         );
+        $view10 = new StaticFormulationView(
+            Constant::STATIC_FORMULATION_KEY_FORMS,
+            new GenericStaticFormulationView(
+                Constant::STATIC_FORMULATION_KEY_FORMS,
+                'My venue',
+                [
+                    'type 1',
+                    'type 2',
+                ]
+            ),
+            []
+        );
         $views = [
             $view1,
             $view2,
@@ -286,6 +306,7 @@ class StaticFormulationListViewQueryHandlerTest extends TestCase
             $view7,
             $view8,
             $view9,
+            $view10,
         ];
 
         $expected = new StaticFormulationListView($views);
