@@ -135,6 +135,7 @@
                                             <th>{{ 'admin.planner.analytics.spot.table.column.reference'|trans }}</th>
                                             <th>{{ 'admin.planner.analytics.spot.table.column.shared'|trans }}</th>
                                             <th>{{ 'admin.planner.analytics.spot.table.column.visio'|trans }}</th>
+                                            <th>{{ 'admin.planner.analytics.spot.table.column.priority'|trans }}</th>
                                             <th class="text-right">{{ 'admin.planner.analytics.spot.table.column.satisfaction'|trans }}</th>
                                         </tr>
                                     </thead>
@@ -144,6 +145,7 @@
                                                 <td>{{ spotSatisfaction.reference }}</td>
                                                 <td>{{ spotSatisfaction.shared ? '✔︎' : '' }}</td>
                                                 <td>{{ spotSatisfaction.visio ? '✔︎' : '' }}</td>
+                                                <td>{{ spotSatisfaction.priority ? spotSatisfaction.priority : '' }}</td>
                                                 <td class="text-right">{{ spotSatisfaction.satisfaction|round(2, 'floor') }}%</td>
                                             </tr>
                                         {% endfor %}

@@ -1,6 +1,8 @@
 var sortSheetForm = require('./../form/sortSheetForm'),
     options       = require('../../../vueComponents/options');
 
+var DEFAULT_SELECTED_SORT = 'alphabeticalAsc';
+
 module.exports = {
     template: '#sort-modal',
     delimiters: options.delimiters,
@@ -11,10 +13,10 @@ module.exports = {
     data: function () {
         return {
             formSort: {
-                selected: false
+                selected: DEFAULT_SELECTED_SORT
             },
             sort: {
-                selected: false
+                selected: DEFAULT_SELECTED_SORT
             }
         }
     },
@@ -26,9 +28,13 @@ module.exports = {
             this.$emit('close-modal');
         },
         reset: function () {
-            this.sort = {
-                selected: false
+            this.formSort = {
+                selected: DEFAULT_SELECTED_SORT
             };
+            this.sort = {
+                selected: DEFAULT_SELECTED_SORT
+            };
+            this.save();
         },
         setUsedSort: function() {
             Object.assign(this.sort, this.formSort);

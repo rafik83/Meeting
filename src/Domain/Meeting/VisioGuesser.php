@@ -25,30 +25,25 @@ class VisioGuesser
         $this->isParticipantVisio = $isParticipantVisio;
     }
 
-    /**
-     * @param Meeting $meeting
-     *
-     * @return bool
-     */
-    public function hasMeetingParticipantVisio(Meeting $meeting)
+    public function hasMeetingParticipantVisio(Meeting $meeting): bool
     {
         $participants = $meeting->getAllParticipants();
 
         return $this->isParticipantVisio($participants);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return bool
-     */
-    public function hasMeetingRequestParticipantVisio(Request $request)
+    public function hasMeetingRequestParticipantVisio(Request $request): bool
     {
         $participants = $request->getAllParticipants();
 
         return $this->isParticipantVisio($participants);
     }
 
+    /**
+     * @param Participant[] $participants
+     *
+     * @return bool
+     */
     public function isParticipantVisio(array $participants): bool
     {
         foreach ($participants as $participant) {
