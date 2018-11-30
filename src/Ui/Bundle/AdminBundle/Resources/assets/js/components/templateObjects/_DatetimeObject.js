@@ -36,6 +36,7 @@ DatetimeObject.prototype.fill = function ()
     this.form.set('format', this.config.format);
     this.form.set('datetime_min', this.config.datetime_min);
     this.form.set('datetime_max', this.config.datetime_max);
+    this.form.set('visibility', this.config.visibility);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -75,6 +76,7 @@ DatetimeObject.prototype.save = function ()
     this.config.tags               = this.form.get('tags');
     this.config.datetime_min       = this.formatDate(minTime);
     this.config.datetime_max       = this.formatDate(maxTime);
+    this.config.visibility         = this.form.get('visibility');
 
     this.form.bind('label', this.config.label[this.locale]);
 

@@ -61,6 +61,7 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
+                                {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
                                 <div class="form-group">
                                     <label class="form-label">
                                         {{ 'template.label.datetime.min'|trans }}
