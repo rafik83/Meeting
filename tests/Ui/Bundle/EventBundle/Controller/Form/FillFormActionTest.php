@@ -22,6 +22,7 @@ use Proximum\Vimeet\Application\Query\Participant\Sheet\ParticipantListViewQuery
 use Proximum\Vimeet\Application\Query\Template\Form\FillStepQuery;
 use Proximum\Vimeet\Application\View\Participant\Sheet\ParticipantListView;
 use Proximum\Vimeet\Application\View\Template\Form\BlockStepView;
+use Proximum\Vimeet\Application\View\Template\Form\BreadCrumbView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -253,7 +254,8 @@ class FillFormActionTest extends TestCase
         $this->event->getCountry()->willReturn('FR');
         $this->event->getLocales()->willReturn(['en', 'fr']);
         $block = $this->prophesize(Block::class);
-        $blockStepView = new BlockStepView($block->reveal(), 'description', 1, 3);
+        $breadCrumb = $this->prophesize(BreadCrumbView::class);
+        $blockStepView = new BlockStepView($block->reveal(), 'description', $breadCrumb->reveal());
 
         $this->queryBus
             ->handle(new FillStepQuery(
@@ -338,7 +340,8 @@ class FillFormActionTest extends TestCase
         $this->event->getCountry()->willReturn('FR');
         $this->event->getLocales()->willReturn(['en', 'fr']);
         $block = $this->prophesize(Block::class);
-        $blockStepView = new BlockStepView($block->reveal(), 'description', 1, 3);
+        $breadcrumb = new BreadCrumbView([], 1);
+        $blockStepView = new BlockStepView($block->reveal(), 'description', $breadcrumb);
 
         $this->queryBus
             ->handle(new FillStepQuery(

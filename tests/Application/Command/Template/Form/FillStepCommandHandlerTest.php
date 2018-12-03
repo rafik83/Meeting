@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Template\Form\FillStepCommand;
 use Proximum\Vimeet\Application\Command\Template\Form\FillStepCommandHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Template\Form\BlockStepView;
+use Proximum\Vimeet\Application\View\Template\Form\BreadCrumbView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\FormData as SheetFormData;
@@ -45,7 +46,8 @@ class FillStepCommandHandlerTest extends TestCase
         $country = $this->prophesize(Country::class);
 
         $block = $this->prophesize(Block::class);
-        $blockStepView = new BlockStepView($block->reveal(), 'description', 2, 4);
+        $breadCrumb = $this->prophesize(BreadCrumbView::class);
+        $blockStepView = new BlockStepView($block->reveal(), 'description', $breadCrumb->reveal());
         $block->getEditableObjects()->shouldBeCalled()->willReturn([
             '4321' => $text->reveal(),
             '789' => $nomenclature->reveal(),

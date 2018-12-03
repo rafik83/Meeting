@@ -17,24 +17,29 @@ class BlockStepView
     /** @var Block */
     public $block;
 
-    /** @var int */
-    public $currentStep;
-
-    /** @var int */
-    public $totalStep;
-
     /** @var string */
     public $description;
+
+    /** @var BreadCrumbView */
+    public $breadCrumb;
 
     public function __construct(
         Block $block,
         string $description,
-        int $currentStep,
-        int $totalStep
+        BreadCrumbView $breadCrumb
     ) {
         $this->block = $block;
-        $this->currentStep = $currentStep;
-        $this->totalStep = $totalStep;
         $this->description = $description;
+        $this->breadCrumb = $breadCrumb;
+    }
+
+    public function getCurrentStepIndex(): int
+    {
+        return $this->breadCrumb->currentStepIndex;
+    }
+
+    public function getTotalNumberOfStep(): int
+    {
+        return $this->breadCrumb->getTotalNumberOfStep();
     }
 }
