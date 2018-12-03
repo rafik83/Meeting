@@ -49,7 +49,8 @@
                                 'uid': uid, 'children': item.children, 'config': item.config, 'locale': locale,
                                 'fallback': template.fallback, 'nomenclatures': nomenclatures,
                                 'sheet_tags': sheet_tags, 'products': products,
-                                'sheet_template_tags': sheet_template_tags|default([])
+                                'sheet_template_tags': sheet_template_tags|default([]),
+                                'uploadFormats': uploadFormats
                             }, false) }}
                         {% elseif item.component == 'object' %}
                             {{ include('AdminBundle:Template/Object:' ~ item.type ~ '.html.twig', {
@@ -124,6 +125,10 @@
                                 'locale': locale,
                                 'sheet_tags': sheet_tags,
                                 'sheet_template_tags': sheet_template_tags|default([]),
+                            }, false) }}
+                            {{ include('AdminBundle:Template/Object:multi-upload.html.twig', {
+                                'locale': locale,
+                                'uploadFormats': uploadFormats
                             }, false) }}
                         </div>
                     </div>

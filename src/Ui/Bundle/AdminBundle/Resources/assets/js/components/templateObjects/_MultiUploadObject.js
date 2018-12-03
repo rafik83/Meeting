@@ -2,16 +2,7 @@ var Form = require('./../template/_Form'),
     TemplateTaggableObject = require('./../template/_TemplateTaggableObject')
 ;
 
-/**
- * UploadObject
- *
- * @param element
- * @param locale
- * @param builderType
- *
- * @constructor
- */
-function UploadObject(element, locale, builderType)
+function MultiUploadObject(element, locale, builderType)
 {
     this.element = element;
     this.locale = locale;
@@ -25,27 +16,23 @@ function UploadObject(element, locale, builderType)
     }
 
     this.uploadFormatRequiredMessage = this.element.getAttribute('data-upload-format-required-message');
-    this.filterActive = this.element.querySelector('input[name="filter[active]"');
-    this.filterLabel = this.element.querySelector('[data-upload-filter-label]');
-    this.filterActive.onchange = this.handleFilterActiveChanged.bind(this);
 }
 
-UploadObject.prototype.fill = function ()
+MultiUploadObject.prototype.fill = function ()
 {
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('help', this.config.help[this.locale]);
     this.form.set('required', this.config.required);
-    this.form.set('crypted', this.config.crypted);
     this.form.set('formats', this.config.formats);
+    this.form.set('max', this.config.max);
+    this.form.set('default', this.config.default);
+    this.form.set('titlePlaceholder', this.config.titlePlaceholder[this.locale]);
     this.form.set('tags', this.config.tags);
-    this.form.set('filter[active]', this.config.filter.active);
-    this.form.set('filter[label]', this.config.filter.label);
-    this.toggleDisplayLabelFilter(this.config.filter.active);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
 
-UploadObject.prototype.save = function ()
+MultiUploadObject.prototype.save = function ()
 {
     if (0 === this.form.get('formats').length) {
         alert(this.uploadFormatRequiredMessage);
@@ -60,25 +47,15 @@ UploadObject.prototype.save = function ()
     this.config.label[this.locale] = this.form.get('label');
     this.config.help[this.locale] = this.form.get('help');
     this.config.required  = this.form.get('required');
-    this.config.crypted = this.form.get('crypted');
-    this.config.tags = this.form.get('tags');
     this.config.formats = this.form.get('formats');
-    this.config.filter.label = this.form.get('filter[label]');
-    this.config.filter.active = this.form.get('filter[active]');
+    this.config.max = this.form.get('max');
+    this.config.default = this.form.get('default');
+    this.config.titlePlaceholder[this.locale]  = this.form.get('titlePlaceholder');
+    this.config.tags = this.form.get('tags');
 
     this.form.bind('label', this.config.label[this.locale]);
 
     return true;
 };
 
-UploadObject.prototype.handleFilterActiveChanged = function (event)
-{
-    this.toggleDisplayLabelFilter(event.target.checked);
-};
-
-UploadObject.prototype.toggleDisplayLabelFilter = function (displayed)
-{
-    this.filterLabel.style.display = displayed ? 'block' : 'none';
-};
-
-module.exports = UploadObject;
+module.exports = MultiUploadObject;
