@@ -35,4 +35,9 @@ class SubstitutionResult
         $this->subjectSubstitutions = $subjectSubstitutions;
         $this->contentSubstitutions = $contentSubstitutions;
     }
+
+    public function getAllSubstitutions(): array
+    {
+        return array_merge($this->contentSubstitutions, $this->subjectSubstitutions);
+    }
 }

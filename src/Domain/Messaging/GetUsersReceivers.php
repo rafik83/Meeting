@@ -50,7 +50,7 @@ class GetUsersReceivers
 
             $receiverView = new ReceiverView(
                 $user->getEmail(),
-                array_merge($substitutionResult->contentSubstitutions, $substitutionResult->subjectSubstitutions),
+                $substitutionResult->getAllSubstitutions(),
                 $locale
             );
 
