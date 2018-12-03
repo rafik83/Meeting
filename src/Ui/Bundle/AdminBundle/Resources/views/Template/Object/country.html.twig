@@ -8,7 +8,7 @@
     hideLabel: false,
     required: false,
     tag: null,
-    visibility: null,
+    visibility: 'editable',
     tags: []
 }|merge(config|default({})) %}
 
@@ -48,7 +48,9 @@
                                 <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                             {% endif %}
                         </div>
-                        {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
+                        {% if enableVisibility is defined and enableVisibility == true %}
+                            {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
+                        {% endif %}
                         <div class="form-group">
                             <label class="form-label">{{ 'template.placeholder.title'|trans }}</label>
                             <textarea class="form-control" name="placeholder"></textarea>

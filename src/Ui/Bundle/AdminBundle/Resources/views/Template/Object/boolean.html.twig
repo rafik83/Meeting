@@ -5,7 +5,7 @@
     style: '',
     required: false,
     tags: [],
-    visibility: null,
+    visibility: 'editable',
     filter: {
         'active': false,
         'label': ''
@@ -45,7 +45,9 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
-                                {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
+                                {% if enableVisibility is defined and enableVisibility == true %}
+                                    {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
+                                {% endif %}
                                 <div class="form-group">
                                     <label class="form-label">
                                         <input type="checkbox" name="required" />

@@ -9,7 +9,7 @@
     required: false,
     type: 'title',
     style: '',
-    visibility: null,
+    visibility: 'editable',
     translatable: false,
     tag: null,
     tags: [],
@@ -48,7 +48,9 @@
                                     </select>
                                 </div>
                                 <hr />
-                                {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
+                                {% if enableVisibility is defined and enableVisibility == true %}
+                                    {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
+                                {% endif %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.label.title'|trans }}</label>
                                     <input class="form-control" type="text" name="label" />
