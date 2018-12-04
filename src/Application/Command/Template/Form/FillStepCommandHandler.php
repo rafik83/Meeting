@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Template\Form;
 
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\FormData as SheetFormData;
@@ -21,6 +22,9 @@ use Proximum\Vimeet\Domain\Repository\Sheet\FormDataRepositoryInterface as Sheet
 
 class FillStepCommandHandler
 {
+    /** @var AuthorizationCheckerAdapterInterface */
+    private $authorizationCheckerAdapter;
+
     /** @var UserFormDataRepositoryInterface */
     private $userFormDataRepository;
 
@@ -28,9 +32,11 @@ class FillStepCommandHandler
     private $sheetFormDataRepository;
 
     public function __construct(
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         UserFormDataRepositoryInterface $userFormDataRepository,
         SheetFormDataRepositoryInterface $sheetFormDataRepository
     ) {
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->userFormDataRepository = $userFormDataRepository;
         $this->sheetFormDataRepository = $sheetFormDataRepository;
     }
@@ -40,7 +46,13 @@ class FillStepCommandHandler
         $sheetFormData = $this->getSheetFormData($command->sheet, $command->formTemplate);
         $userFormData = $this->getUserFormData($command->participant->getUser(), $command->formTemplate);
 
-        foreach ($command->blockStepView->block->getEditableObjects() as $key => $object) {
+        $objects = $command->blockStepView->block->getEditableObjects();
+
+        if ($this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN')) {
+            $objects = $command->blockStepView->block->getAdminObjects();
+        }
+
+        foreach ($objects as $key => $object) {
             if ($object->hasTag(Tag::SHEET_DATA)) {
                 $data = $sheetFormData->getData();
 

@@ -105,21 +105,28 @@
 
                         <div class="inputs">
                             {% for child in form %}
+                                {% set object = child.vars.value %}
+                                {% set isHidden = object.isVisibilityHidden is defined and object.isVisibilityHidden %}
+                                {% set isReadOnly = object.isVisibilityReadOnly is defined and object.isVisibilityReadOnly %}
+
+                                {% if isHidden or isReadOnly %}
+                                    <div class="alert alert-danger">
+                                {% endif %}
+
                                 {{ form_row(child) }}
 
-                                {% set uploadObject = child.vars.value %}
-                                {% if uploadObject.isUploadAndHasPath is defined and uploadObject.isUploadAndHasPath %}
+                                {% if object.isUploadAndHasPath is defined and object.isUploadAndHasPath %}
                                     {% set parameters = {
                                         'sheet': sheet.id,
                                         'participant': participantList.currentParticipant.id,
                                         'formTemplate': formTemplate.id,
-                                        'objectKey': uploadObject.key
+                                        'objectKey': object.key
                                     } %}
                                     {% set path = path('event_form_template_download_file', parameters) %}
 
                                     <div class="text-center">
                                         <a href="{{ path }}" download>
-                                            {% if uploadObject.isImageFormat %}
+                                            {% if object.isImageFormat %}
                                                 {{ render(controller(
                                                     'Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Form\\DownloadFileAction',
                                                     parameters|merge({'preview': true})
@@ -130,6 +137,9 @@
                                             {{ 'common.download'|trans }}
                                         </a>
                                         <hr>
+                                    </div>
+                                {% endif %}
+                                {% if isHidden or isReadOnly %}
                                     </div>
                                 {% endif %}
                             {% endfor %}

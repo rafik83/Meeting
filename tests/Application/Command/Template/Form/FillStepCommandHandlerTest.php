@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Template\Form;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Command\Template\Form\FillStepCommand;
 use Proximum\Vimeet\Application\Command\Template\Form\FillStepCommandHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
@@ -40,6 +41,8 @@ class FillStepCommandHandlerTest extends TestCase
         $participant->getUser()->shouldBeCalled()->willReturn($user->reveal());
         $sheetFormDataRepository = $this->prophesize(SheetFormDataRepositoryInterface::class);
         $userFormDataRepository = $this->prophesize(UserFormDataRepositoryInterface::class);
+        $authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
+        $authorizationChecker->isGranted('ROLE_PREVIOUS_ADMIN')->shouldBeCalled()->willReturn(false);
 
         $text = $this->prophesize(EditableText::class);
         $nomenclature = $this->prophesize(Nomenclature::class);
@@ -53,7 +56,6 @@ class FillStepCommandHandlerTest extends TestCase
             '789' => $nomenclature->reveal(),
             '4567' => $country->reveal(),
         ]);
-
 
         $sheetFormDataRepository
             ->getBySheetAndFormTemplate($sheet->reveal(), $formTemplate->reveal())
@@ -108,7 +110,7 @@ class FillStepCommandHandlerTest extends TestCase
         $sheetFormDataRepository->save($sheetFormDataExpected)->shouldBeCalled();
         $userFormDataRepository->save($userFormDataExpected)->shouldBeCalled();
 
-        $handler = new FillStepCommandHandler($userFormDataRepository->reveal(), $sheetFormDataRepository->reveal());
+        $handler = new FillStepCommandHandler($authorizationChecker->reveal(), $userFormDataRepository->reveal(), $sheetFormDataRepository->reveal());
         $handler->handle(new FillStepCommand(
             $formTemplate->reveal(),
             $sheet->reveal(),
