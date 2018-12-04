@@ -12,8 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Batch;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
-use Proximum\Vimeet\Application\Command\Messaging\Batch\Process;
+use Proximum\Vimeet\Application\Adapter\EmailingSenderInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByType;
 use Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByTypeHandler;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
@@ -114,7 +113,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $this->billingInfoRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
         $this->messageFactory = $this->prophesize(MessageFactory::class);
         $this->messageRepository = $this->prophesize(MessageRepositoryInterface::class);
-        $this->mailSender = $this->prophesize(SendGridApiAdapterInterface::class);
+        $this->mailSender = $this->prophesize(EmailingSenderInterface::class);
         $this->substitutionHandler = $this->prophesize(SubstitutionHandler::class);
         $this->dateTime = new \DateTime();
 

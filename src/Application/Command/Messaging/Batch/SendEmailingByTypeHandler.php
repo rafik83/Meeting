@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
-use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\EmailingSenderInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
 use Proximum\Vimeet\Application\Components\Messaging\MessageFactory;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler;
@@ -34,8 +34,8 @@ class SendEmailingByTypeHandler
     /** @var MessageRepositoryInterface */
     private $messageRepository;
 
-    /** @var SendGridApiAdapterInterface */
-    private $mailSender;
+    /** @var EmailingSenderInterface */
+    private $emailingSender;
 
     /** @var SubstitutionHandler */
     private $substitutionHandler;
@@ -47,14 +47,14 @@ class SendEmailingByTypeHandler
         BillingInfoRepositoryInterface $billingInfoRepository,
         MessageFactory $messageFactory,
         MessageRepositoryInterface $messageRepository,
-        SendGridApiAdapterInterface $mailSender,
+        EmailingSenderInterface $emailingSender,
         SubstitutionHandler $substitutionHandler,
         \DateTimeInterface $dateTime
     ) {
         $this->billingInfoRepository = $billingInfoRepository;
         $this->messageFactory = $messageFactory;
         $this->messageRepository = $messageRepository;
-        $this->mailSender = $mailSender;
+        $this->emailingSender = $emailingSender;
         $this->substitutionHandler = $substitutionHandler;
         $this->dateTime = $dateTime;
     }
@@ -125,7 +125,7 @@ class SendEmailingByTypeHandler
             }
         }
 
-        $this->mailSender->send($message, $receivers);
+        $this->emailingSender->send($message, $receivers);
     }
 
     /**

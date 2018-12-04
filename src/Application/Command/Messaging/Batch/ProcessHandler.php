@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
-use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\EmailingSenderInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
 use Proximum\Vimeet\Domain\Messaging\Emailing\SubstitutionResolver;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
@@ -20,9 +20,9 @@ use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 class ProcessHandler
 {
     /**
-     * @var SendGridApiAdapterInterface
+     * @var EmailingSenderInterface
      */
-    private $sendGridApiAdapter;
+    private $emailingSender;
 
     /**
      * @var SubstitutionResolver
@@ -34,20 +34,13 @@ class ProcessHandler
      */
     private $billingInfoRepository;
 
-    /**
-     * ProcessHandler constructor.
-     *
-     * @param SendGridApiAdapterInterface    $sendGridApiAdapter
-     * @param SubstitutionResolver           $substitutionResolver
-     * @param BillingInfoRepositoryInterface $billingInfoRepository
-     */
     public function __construct(
-        SendGridApiAdapterInterface $sendGridApiAdapter,
+        EmailingSenderInterface $emailingSender,
         SubstitutionResolver $substitutionResolver,
         BillingInfoRepositoryInterface $billingInfoRepository
     ) {
-        $this->sendGridApiAdapter    = $sendGridApiAdapter;
-        $this->substitutionResolver  = $substitutionResolver;
+        $this->emailingSender = $emailingSender;
+        $this->substitutionResolver = $substitutionResolver;
         $this->billingInfoRepository = $billingInfoRepository;
     }
 
@@ -56,7 +49,7 @@ class ProcessHandler
      */
     public function handle(Process $process)
     {
-        $this->sendGridApiAdapter->send($process->message, $this->getReceivers($process));
+        $this->emailingSender->send($process->message, $this->getReceivers($process));
     }
 
     /**

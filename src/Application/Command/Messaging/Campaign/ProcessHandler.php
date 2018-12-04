@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Campaign;
 
-use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\EmailingSenderInterface;
 use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers;
 use Proximum\Vimeet\Domain\Messaging\GetUsersReceivers;
@@ -21,7 +21,7 @@ class ProcessHandler
     /** @var CampaignRepositoryInterface */
     private $campaignRepository;
 
-    /** @var SendGridApiAdapterInterface */
+    /** @var EmailingSenderInterface */
     private $mailer;
 
     /** @var GetUsersReceivers */
@@ -32,7 +32,7 @@ class ProcessHandler
 
     public function __construct(
         CampaignRepositoryInterface $campaignRepository,
-        SendGridApiAdapterInterface $mailer,
+        EmailingSenderInterface $mailer,
         GetUsersReceivers $getUsersReceivers,
         GetSheetsReceivers $getSheetsReceivers
     ) {

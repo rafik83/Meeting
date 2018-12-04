@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Batch;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\EmailingSenderInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Batch\Process;
 use Proximum\Vimeet\Application\Command\Messaging\Batch\ProcessHandler;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
@@ -79,8 +79,8 @@ class ProcessHandlerTest extends TestCase
         $receiver3bis = new ReceiverView('emailBilling3@example.net', ['title' => 'test 3'], 'en');
 
         // Mock
-        $sendGridApiAdapter = $this->prophesize(SendGridApiAdapterInterface::class);
-        $sendGridApiAdapter
+        $emailingSender = $this->prophesize(EmailingSenderInterface::class);
+        $emailingSender
             ->send(
                 $message->reveal(),
                 [
@@ -108,7 +108,7 @@ class ProcessHandlerTest extends TestCase
 
         // Handler
         $handler = new ProcessHandler(
-            $sendGridApiAdapter->reveal(),
+            $emailingSender->reveal(),
             $substitutionResolver->reveal(),
             $billingInfoRepository->reveal()
         );
