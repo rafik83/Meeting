@@ -1932,8 +1932,12 @@ services:
 
     Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByTypeHandler:
         arguments:
+            - '@repository.billing_info_repository'
             - '@application.components.messaging.message_factory'
-            - '@command.messaging.batch.process_handler'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@adapter.sendgrid_api_adapter'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByType }
 
