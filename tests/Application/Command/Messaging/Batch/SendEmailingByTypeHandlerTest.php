@@ -164,7 +164,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         );
 
         $this->messageFactory
-            ->create($this->event->reveal(), $messageId, true)
+            ->create($this->event->reveal(), $messageId)
             ->shouldBeCalled()
             ->willReturn($defaultMessage->reveal())
         ;
@@ -298,8 +298,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
             new SendEmailingByType(
                 $this->event->reveal(),
                 $messageId,
-                [$this->sheet1->reveal(), $this->sheet2->reveal(), $this->sheet3->reveal()],
-                true
+                [$this->sheet1->reveal(), $this->sheet2->reveal(), $this->sheet3->reveal()]
             )
         );
     }
@@ -350,7 +349,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         ;
 
         $this->messageFactory
-            ->create($this->event->reveal(), $messageId, true)
+            ->create($this->event->reveal(), $messageId)
             ->shouldBeCalled()
             ->willReturn($defaultMessage->reveal())
         ;
@@ -444,8 +443,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
             new SendEmailingByType(
                 $this->event->reveal(),
                 $messageId,
-                [$this->sheet1->reveal(), $this->sheet3->reveal()],
-                true
+                [$this->sheet1->reveal(), $this->sheet3->reveal()]
             )
         );
     }

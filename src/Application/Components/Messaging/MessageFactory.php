@@ -19,30 +19,15 @@ use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 
 class MessageFactory
 {
-    /**
-     * @var CreateMessageHandler
-     */
+    /** @var CreateMessageHandler */
     private $createMessageHandler;
 
-    /**
-     * MessageFactory constructor.
-     *
-     * @param CreateMessageHandler $createMessageHandler
-     */
     public function __construct(CreateMessageHandler $createMessageHandler)
     {
         $this->createMessageHandler = $createMessageHandler;
     }
 
-    /**
-     * @param Event  $event
-     * @param string $messageId
-     * @param bool   $sendEmailToTeam
-     *
-     * @return Message
-     * @throw \InvalidArgumentException
-     */
-    public function create(Event $event, $messageId, $sendEmailToTeam = false)
+    public function create(Event $event, string $messageId): Message
     {
         switch ($messageId) {
             case Events::SHEET_REFUSED:
@@ -51,7 +36,7 @@ class MessageFactory
                     Constant::TRANSACTIONAL_MAIL_KEY_SHEET_REFUSED,
                     Constant::TRANSACTIONAL_MAIL_SHEET_REFUSED_SUBJECT,
                     Constant::TRANSACTIONAL_MAIL_SHEET_REFUSED_TEMPLATE,
-                    $sendEmailToTeam
+                    true
                 );
                 break;
             case Events::SHEET_VALIDATED:
@@ -60,7 +45,7 @@ class MessageFactory
                     Constant::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATED,
                     Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATED_SUBJECT,
                     Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATED_TEMPLATE,
-                    $sendEmailToTeam
+                    true
                 );
                 break;
             case Events::SHEET_VALIDATION_VALIDATE:
@@ -69,7 +54,7 @@ class MessageFactory
                     Constant::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_VALIDATE,
                     Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_SUBJECT,
                     Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATION_VALIDATE_TEMPLATE,
-                    $sendEmailToTeam
+                    true
                 );
                 break;
             case Events::SHEET_VALIDATION_DRAFT:
@@ -78,7 +63,7 @@ class MessageFactory
                     Constant::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATION_DRAFT,
                     Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_SUBJECT,
                     Constant::TRANSACTIONAL_MAIL_SHEET_VALIDATION_DRAFT_TEMPLATE,
-                    $sendEmailToTeam
+                    true
                 );
                 break;
             case Events::SHEET_INVOICED:
@@ -87,7 +72,7 @@ class MessageFactory
                     Constant::TRANSACTIONAL_MAIL_KEY_SHEET_INVOICED,
                     Constant::TRANSACTIONAL_MAIL_SHEET_INVOICED_SUBJECT,
                     Constant::TRANSACTIONAL_MAIL_SHEET_INVOICED_TEMPLATE,
-                    $sendEmailToTeam,
+                    true,
                     true
                 );
                 break;

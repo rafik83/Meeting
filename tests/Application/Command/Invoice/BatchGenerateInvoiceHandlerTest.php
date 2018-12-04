@@ -69,7 +69,7 @@ class BatchGenerateInvoiceHandlerTest extends TestCase
             ]
         );
 
-        $jobQueue->sendEmailing($event, [1], Events::SHEET_INVOICED, true)->shouldBeCalled();
+        $jobQueue->sendEmailing($event, [1], Events::SHEET_INVOICED)->shouldBeCalled();
 
         $command = new BatchGenerateInvoice($event, [1], $admin);
         $handler = new BatchGenerateInvoiceHandler(

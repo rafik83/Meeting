@@ -65,8 +65,7 @@ class SendEmailingByTypeHandler
 
         $defaultMessage = $this->messageFactory->create(
             $sendEmailingByType->event,
-            $sendEmailingByType->messageId,
-            $sendEmailingByType->sendEmailToTeam
+            $sendEmailingByType->messageId
         );
 
         $billingEmailIndexedBySheetId = [];

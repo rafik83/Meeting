@@ -40,7 +40,7 @@ class BatchRefuseHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue
-            ->sendEmailing($event->reveal(), [1337, 2001], 'sheet.refused', true)
+            ->sendEmailing($event->reveal(), [1337, 2001], 'sheet.refused')
             ->shouldBeCalled()
         ;
 
@@ -91,7 +91,7 @@ class BatchRefuseHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue
-            ->sendEmailing($event->reveal(), [1337], 'sheet.refused', true)
+            ->sendEmailing($event->reveal(), [1337], 'sheet.refused')
             ->shouldBeCalled()
         ;
 

@@ -21,9 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SendEmailingCommand extends Command
 {
-    const NAME     = 'vimeet:emailing:send';
-    const BOOL_YES = 'YES';
-    const BOOL_NO  = 'NO';
+    const NAME = 'vimeet:emailing:send';
 
     /** @var EventRepositoryInterface */
     private $eventRepository;
@@ -57,7 +55,7 @@ class SendEmailingCommand extends Command
             ->addArgument('eventId', InputArgument::REQUIRED, 'Event id')
             ->addArgument('emailingId', InputArgument::REQUIRED, 'Emailing ID')
             ->addArgument('sheetIds', InputArgument::REQUIRED, 'Sheet ids')
-            ->addArgument('sendEmailToTeam', InputArgument::OPTIONAL, 'Send email to team', self::BOOL_NO);
+        ;
     }
 
     /**
@@ -65,16 +63,15 @@ class SendEmailingCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $event           = $this->eventRepository->getById($input->getArgument('eventId'));
-        $sheetIds        = explode(',', $input->getArgument('sheetIds'));
-        $sheets          = $this->sheetRepository->findByIds($sheetIds);
-        $messageId       = $input->getArgument('emailingId');
-        $sendEmailToTeam = self::BOOL_YES === $input->getArgument('sendEmailToTeam') ? true : false;
+        $event = $this->eventRepository->getById($input->getArgument('eventId'));
+        $sheetIds = explode(',', $input->getArgument('sheetIds'));
+        $sheets = $this->sheetRepository->findByIds($sheetIds);
+        $messageId = $input->getArgument('emailingId');
 
         if (null === $event) {
             throw new \InvalidArgumentException('Event not found.');
         }
 
-        $this->sendEmailingByTypeHandler->handle(new SendEmailingByType($event, $messageId, $sheets, $sendEmailToTeam));
+        $this->sendEmailingByTypeHandler->handle(new SendEmailingByType($event, $messageId, $sheets));
     }
 }

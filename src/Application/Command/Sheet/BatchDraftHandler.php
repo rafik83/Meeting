@@ -66,7 +66,7 @@ class BatchDraftHandler
 
         if (!empty($batchPending->ids)) {
             // send email
-            $this->jobQueue->sendEmailing($batchPending->event, $batchPending->ids, Events::SHEET_VALIDATION_DRAFT, true);
+            $this->jobQueue->sendEmailing($batchPending->event, $batchPending->ids, Events::SHEET_VALIDATION_DRAFT);
 
             $this->batchJobQueue->createJob(
                 $batchPending->ids,

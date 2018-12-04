@@ -69,7 +69,7 @@ class BatchValidationValidateHandlerTest extends TestCase
 
         $jobQueue->indexSheets([1, 2, 3])->shouldBeCalled();
 
-        $jobQueue->sendEmailing($event, [1, 2, 3], Events::SHEET_VALIDATION_VALIDATE, true)->shouldBeCalled();
+        $jobQueue->sendEmailing($event, [1, 2, 3], Events::SHEET_VALIDATION_VALIDATE)->shouldBeCalled();
 
         $batchJobQueue->createJob([1, 2, 3], $admin)->shouldBeCalled();
 

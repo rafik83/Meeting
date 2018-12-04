@@ -42,12 +42,12 @@ class MessageFactoryTest extends TestCase
                 Constant::TRANSACTIONAL_MAIL_KEY_SHEET_VALIDATED,
                 'mail.sheet.validated.subject',
                 'MailBundle:Mail:Sheet/sheetValidated.html.twig',
-                false
+                true
             )
         )->shouldBeCalled();
 
         $factory = new MessageFactory($this->createMessageHandler->reveal());
-        $factory->create($this->event->reveal(), Events::SHEET_VALIDATED, false);
+        $factory->create($this->event->reveal(), Events::SHEET_VALIDATED);
     }
 
     public function testCreateSheetValidationValidate()
@@ -63,7 +63,7 @@ class MessageFactoryTest extends TestCase
         )->shouldBeCalled();
 
         $factory = new MessageFactory($this->createMessageHandler->reveal());
-        $factory->create($this->event->reveal(), Events::SHEET_VALIDATION_VALIDATE, true);
+        $factory->create($this->event->reveal(), Events::SHEET_VALIDATION_VALIDATE);
     }
 
     public function testCreateSheetValidationDraft()
@@ -79,7 +79,7 @@ class MessageFactoryTest extends TestCase
         )->shouldBeCalled();
 
         $factory = new MessageFactory($this->createMessageHandler->reveal());
-        $factory->create($this->event->reveal(), Events::SHEET_VALIDATION_DRAFT, true);
+        $factory->create($this->event->reveal(), Events::SHEET_VALIDATION_DRAFT);
     }
 
     public function testCreateSheetInvoiced()
@@ -90,13 +90,13 @@ class MessageFactoryTest extends TestCase
                 Constant::TRANSACTIONAL_MAIL_KEY_SHEET_INVOICED,
                 'mail.sheet.invoiced.subject',
                 'MailBundle:Mail:Invoice/sheetInvoiced.html.twig',
-                false,
+                true,
                 true
             )
         )->shouldBeCalled();
 
         $factory = new MessageFactory($this->createMessageHandler->reveal());
-        $factory->create($this->event->reveal(), Events::SHEET_INVOICED, false);
+        $factory->create($this->event->reveal(), Events::SHEET_INVOICED);
     }
 
     public function testCreateException()
@@ -105,6 +105,6 @@ class MessageFactoryTest extends TestCase
         $this->createMessageHandler->handle(Argument::any())->shouldNotBeCalled();
 
         $factory = new MessageFactory($this->createMessageHandler->reveal());
-        $factory->create($this->event->reveal(), 'other', false);
+        $factory->create($this->event->reveal(), 'other');
     }
 }

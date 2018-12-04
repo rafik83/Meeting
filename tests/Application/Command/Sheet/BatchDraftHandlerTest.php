@@ -70,7 +70,7 @@ class BatchDraftHandlerTest extends TestCase
 
         $batchJobQueue->createJob([1, 2, 3], $admin)->shouldBeCalled();
 
-        $jobQueue->sendEmailing($event, [1, 2, 3], Events::SHEET_VALIDATION_DRAFT, true)->shouldBeCalled();
+        $jobQueue->sendEmailing($event, [1, 2, 3], Events::SHEET_VALIDATION_DRAFT)->shouldBeCalled();
 
         // Handler
         $handler = new BatchDraftHandler(

@@ -24,14 +24,10 @@ class SendEmailingByType
     /** @var Sheet[] */
     public $sheets;
 
-    /** @var bool */
-    public $sendEmailToTeam;
-
-    public function __construct(Event $event, string $messageId, array $sheets, bool $sendEmailToTeam)
+    public function __construct(Event $event, string $messageId, array $sheets)
     {
         $this->event = $event;
         $this->messageId = $messageId;
         $this->sheets = $sheets;
-        $this->sendEmailToTeam = $sendEmailToTeam;
     }
 }
