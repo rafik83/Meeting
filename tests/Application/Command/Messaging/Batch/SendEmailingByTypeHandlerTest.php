@@ -19,7 +19,7 @@ use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
 use Proximum\Vimeet\Application\Components\Messaging\MessageFactory;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionResult;
-use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserCampaignMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareBatchSheetMailView;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
@@ -130,9 +130,10 @@ class SendEmailingByTypeHandlerTest extends TestCase
     public function test_send_both_default_and_custom_messages()
     {
         $messageId = 'sheet.validated';
+        $mailType = 'mail_sheet_validated';
 
         $defaultMessage = $this->prophesize(Message::class);
-        $defaultMessage->getName()->shouldBeCalled()->willReturn('mail_sheet_validated');
+        $defaultMessage->getName()->shouldBeCalled()->willReturn($mailType);
         $defaultMessage->isSendToEmailTeam()->willReturn(true);
         $defaultMessage->isSendEmailToBillingInfo()->willReturn(false);
 
@@ -146,7 +147,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $expectedCustomMessage = new Message(
             $this->event->reveal(),
             $this->dateTime,
-            'mail_sheet_validated',
+            $mailType,
             true,
             false
         );
@@ -172,7 +173,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $this->messageRepository
             ->getOneByEventAndTypeAndAssociatedType(
                 $this->event->reveal(),
-                'mail_sheet_validated',
+                $mailType,
                 $this->type1->reveal()
             )
             ->shouldBeCalled()
@@ -182,7 +183,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $this->messageRepository
             ->getOneByEventAndTypeAndAssociatedType(
                 $this->event->reveal(),
-                'mail_sheet_validated',
+                $mailType,
                 $this->type2->reveal()
             )
             ->shouldBeCalled()
@@ -191,9 +192,10 @@ class SendEmailingByTypeHandlerTest extends TestCase
 
         $this->substitutionHandler
             ->handle(
-                new PrepareUserCampaignMailView(
+                new PrepareBatchSheetMailView(
                     $this->event->reveal(),
                     $this->user1->reveal(),
+                    $mailType,
                     'en',
                     $this->sheet1->reveal()
                 ),
@@ -212,9 +214,10 @@ class SendEmailingByTypeHandlerTest extends TestCase
 
         $this->substitutionHandler
             ->handle(
-                new PrepareUserCampaignMailView(
+                new PrepareBatchSheetMailView(
                     $this->event->reveal(),
                     $this->user2->reveal(),
+                    $mailType,
                     'fr',
                     $this->sheet2->reveal()
                 ),
@@ -233,9 +236,10 @@ class SendEmailingByTypeHandlerTest extends TestCase
 
         $this->substitutionHandler
             ->handle(
-                new PrepareUserCampaignMailView(
+                new PrepareBatchSheetMailView(
                     $this->event->reveal(),
                     $this->user3->reveal(),
+                    $mailType,
                     'fr',
                     $this->sheet3->reveal()
                 ),
@@ -306,9 +310,10 @@ class SendEmailingByTypeHandlerTest extends TestCase
     public function test_send_message_with_copy_to_billing_email()
     {
         $messageId = 'sheet.validated';
+        $mailType = 'mail_sheet_validated';
 
         $defaultMessage = $this->prophesize(Message::class);
-        $defaultMessage->getName()->shouldBeCalled()->willReturn('mail_sheet_validated');
+        $defaultMessage->getName()->shouldBeCalled()->willReturn($mailType);
         $defaultMessage->isSendToEmailTeam()->willReturn(false);
         $defaultMessage->isSendEmailToBillingInfo()->willReturn(true);
 
@@ -322,7 +327,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $expectedCustomMessage = new Message(
             $this->event->reveal(),
             $this->dateTime,
-            'mail_sheet_validated',
+            $mailType,
             false,
             true
         );
@@ -357,7 +362,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $this->messageRepository
             ->getOneByEventAndTypeAndAssociatedType(
                 $this->event->reveal(),
-                'mail_sheet_validated',
+                $mailType,
                 $this->type1->reveal()
             )
             ->shouldBeCalled()
@@ -366,9 +371,10 @@ class SendEmailingByTypeHandlerTest extends TestCase
 
         $this->substitutionHandler
             ->handle(
-                new PrepareUserCampaignMailView(
+                new PrepareBatchSheetMailView(
                     $this->event->reveal(),
                     $this->user1->reveal(),
+                    $mailType,
                     'en',
                     $this->sheet1->reveal()
                 ),
@@ -387,9 +393,10 @@ class SendEmailingByTypeHandlerTest extends TestCase
 
         $this->substitutionHandler
             ->handle(
-                new PrepareUserCampaignMailView(
+                new PrepareBatchSheetMailView(
                     $this->event->reveal(),
                     $this->user3->reveal(),
+                    $mailType,
                     'fr',
                     $this->sheet3->reveal()
                 ),

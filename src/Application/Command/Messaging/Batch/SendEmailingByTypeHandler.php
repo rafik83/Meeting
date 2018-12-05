@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Adapter\EmailingSenderInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
 use Proximum\Vimeet\Application\Components\Messaging\MessageFactory;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler;
-use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserCampaignMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareBatchSheetMailView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -147,12 +147,7 @@ class SendEmailingByTypeHandler
         $locale = $event->getAvailableLocale($user->getLocale());
 
         $substitutionResult = $this->substitutionHandler->handle(
-            new PrepareUserCampaignMailView(
-                $event,
-                $user,
-                $locale,
-                $sheet
-            ),
+            new PrepareBatchSheetMailView($event, $user, $message->getName(), $locale, $sheet),
             $message
         );
         $substitutions = $substitutionResult->getAllSubstitutions();

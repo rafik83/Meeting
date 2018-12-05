@@ -183,6 +183,7 @@ services:
         - ['registerSubstitution', ['%%urlSheet%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution']]
         - ['registerSubstitution', ['%%urlEventSheet%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution']]
         - ['registerSubstitution', ['%%urlEventSheetWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\SheetLinkCTASubstitution']]
+        - ['registerSubstitution', ['%%urlSheetWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\SheetLinkCTASubstitution']]
         - ['registerSubstitution', ['%%packageLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\PackageLinkSubstitution']]
         - ['registerSubstitution', ['%%ordersLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\OrdersLinkSubstitution']]
         - ['registerSubstitution', ['%%agendaLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\AgendaLinkSubstitution']]
