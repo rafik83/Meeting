@@ -18,7 +18,7 @@ use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 class TemplateObject extends AbstractChild
 {
     public const VISIBILITY_EDITABLE = 'editable';
-    public const VISIBILITY_READ_ONLY = 'ready_only';
+    public const VISIBILITY_READ_ONLY = 'read_only';
     public const VISIBILITY_HIDDEN = 'hidden';
 
     /**

@@ -284,10 +284,20 @@ class Block extends AbstractChild
     /**
      * @return TemplateObject[]
      */
-    public function getHiddenObjects(): array
+    public function getHiddenAndReadOnlyObjects(): array
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
-            return $object->isVisibilityHidden();
+            return $object->isVisibilityHidden() || $object->isVisibilityReadOnly();
+        });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getReadOnlyObjects(): array
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object->isVisibilityReadOnly();
         });
     }
 
@@ -297,7 +307,9 @@ class Block extends AbstractChild
     public function getObjectsEditableByAdmin(): array
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
-            return ($object->isEditable() && $object->isVisibilityEditable()) || $object->isVisibilityHidden();
+            return ($object->isEditable() && $object->isVisibilityEditable())
+                || $object->isVisibilityHidden()
+                || $object->isVisibilityReadOnly();
         });
     }
 

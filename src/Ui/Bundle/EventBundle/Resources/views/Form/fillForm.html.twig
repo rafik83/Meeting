@@ -104,6 +104,19 @@
                         {{ form_errors(form) }}
 
                         <div class="inputs">
+                            {% if not is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                {% for object in blockStepView.block.getReadOnlyObjects|default([]) %}
+                                    {% if object.value and object.value|first is not empty %}
+                                        <div>
+                                            <b>{{ object.getDefaultLabel }}</b> :
+                                            {{ include('@Event/Participant/Object/' ~ object.type ~ '.html.twig', {
+                                                'object': object,
+                                            }, false) }}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
                             {% for child in form %}
                                 {% set object = child.vars.value %}
                                 {% set isHidden = object.isVisibilityHidden is defined and object.isVisibilityHidden %}

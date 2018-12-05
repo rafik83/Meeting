@@ -39,7 +39,7 @@ class FillStepType extends AbstractBlockType
         $objects = $blockStepView->block->getEditableObjects();
 
         if (true === $options['isAdmin']) {
-            $objects = array_merge($objects, $blockStepView->block->getHiddenObjects());
+            $objects = array_merge($objects, $blockStepView->block->getHiddenAndReadOnlyObjects());
         }
 
         return $objects;
