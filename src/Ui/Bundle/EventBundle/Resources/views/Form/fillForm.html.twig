@@ -110,7 +110,7 @@
                                 {% set isReadOnly = object.isVisibilityReadOnly is defined and object.isVisibilityReadOnly %}
 
                                 {% if isHidden or isReadOnly %}
-                                    <div class="alert alert-danger">
+                                    <div class="alert alert-danger reduce-padding">
                                 {% endif %}
 
                                 {{ form_row(child) }}
