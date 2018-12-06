@@ -42,12 +42,12 @@ class BreadCrumbViewQueryHandlerTest extends TestCase
         $object2B3 = $this->prophesize(EditableText::class);
 
         $blocks = [
-            0 => $block1->reveal(),
-            1 => $block2->reveal(),
-            2 => $block3->reveal(),
-            3 => $block4->reveal(),
+            1 => $block1->reveal(),
+            2 => $block2->reveal(),
+            3 => $block3->reveal(),
+            4 => $block4->reveal(),
         ];
-        $templateData->getBlocks()->shouldBeCalled()->willReturn($blocks);
+        $templateData->getBlocksAsSteps()->shouldBeCalled()->willReturn($blocks);
 
         $block1->getEditableObjects()->shouldBeCalled()->willReturn([$object1B1->reveal()]);
         $block2->getEditableObjects()->shouldBeCalled()->willReturn([$object1B2->reveal(), $object2B2->reveal()]);

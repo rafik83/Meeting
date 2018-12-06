@@ -21,9 +21,8 @@ class BreadCrumbViewQueryHandler
         $steps = [];
 
         $accessible = true;
-        foreach ($templateData->getBlocks() as $level => $block) {
+        foreach ($templateData->getBlocksAsSteps() as $formStep => $block) {
             $hasRemainingFields = false;
-            $formStep = $level + 1; // levels start by 0, we add +1 so that the steps start by 1.
 
             if ($accessible !== false) {
                 foreach ($block->getEditableObjects() as $object) {
