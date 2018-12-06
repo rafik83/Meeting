@@ -59,7 +59,7 @@ class SendEmailingByTypeHandler
         $this->dateTime = $dateTime;
     }
 
-    public function handle(SendEmailingByType $sendEmailingByType)
+    public function handle(SendEmailingByType $sendEmailingByType): void
     {
         $event = $sendEmailingByType->event;
 
