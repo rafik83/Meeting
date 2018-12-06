@@ -72,12 +72,6 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                {% if isFormTemplate is defined and templateTagView is defined %}
-                                    {{ include('AdminBundle:Template/Form:tagsSelect.html.twig', {
-                                        'config': config,
-                                        'templateTagView': templateTagView,
-                                    }, false) }}
-                                {% endif %}
                                 <div class="form-group">
                                     <label class="form-label">
                                         <input type="checkbox" name="required" />

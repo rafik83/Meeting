@@ -1,6 +1,4 @@
-var Form = require('./../template/_Form'),
-    TemplateTaggableObject = require('./../template/_TemplateTaggableObject')
-;
+var Form = require('./../template/_Form');
 
 function MultiUploadObject(element, locale, builderType)
 {
@@ -10,10 +8,6 @@ function MultiUploadObject(element, locale, builderType)
     this.config = JSON.parse(this.element.getAttribute('data-config'));
     this.templateTaggableObject = null;
     this.builderType = builderType;
-
-    if (element.querySelector('[data-template-tags-select]')) {
-        this.templateTaggableObject = new TemplateTaggableObject(element);
-    }
 
     this.uploadFormatRequiredMessage = this.element.getAttribute('data-upload-format-required-message');
 }
@@ -27,7 +21,6 @@ MultiUploadObject.prototype.fill = function ()
     this.form.set('max', this.config.max);
     this.form.set('default', this.config.default);
     this.form.set('titlePlaceholder', this.config.titlePlaceholder[this.locale]);
-    this.form.set('tags', this.config.tags);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -51,7 +44,6 @@ MultiUploadObject.prototype.save = function ()
     this.config.max = this.form.get('max');
     this.config.default = this.form.get('default');
     this.config.titlePlaceholder[this.locale]  = this.form.get('titlePlaceholder');
-    this.config.tags = this.form.get('tags');
 
     this.form.bind('label', this.config.label[this.locale]);
 
