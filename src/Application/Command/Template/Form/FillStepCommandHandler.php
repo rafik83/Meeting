@@ -49,7 +49,7 @@ class FillStepCommandHandler
         $objects = $command->blockStepView->block->getEditableObjects();
 
         if ($this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN')) {
-            $objects = $command->blockStepView->block->getAdminObjects();
+            $objects = $command->blockStepView->block->getObjectsEditableByAdmin();
         }
 
         foreach ($objects as $key => $object) {

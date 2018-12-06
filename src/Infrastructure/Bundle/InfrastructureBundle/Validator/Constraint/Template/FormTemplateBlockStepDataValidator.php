@@ -36,7 +36,7 @@ class FormTemplateBlockStepDataValidator extends ParticipantDataValidator
         $objects = $value->getEditableObjects();
 
         if ($this->authorizationChecker->isGranted('ROLE_PREVIOUS_ADMIN')) {
-            $objects = $value->getAdminObjects();
+            $objects = $value->getObjectsEditableByAdmin();
         }
 
         $validator = $this->context->getValidator()->inContext($this->context);

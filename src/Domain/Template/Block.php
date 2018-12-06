@@ -294,7 +294,7 @@ class Block extends AbstractChild
     /**
      * @return TemplateObject[]
      */
-    public function getAdminObjects(): array
+    public function getObjectsEditableByAdmin(): array
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
             return ($object->isEditable() && $object->isVisibilityEditable()) || $object->isVisibilityHidden();
