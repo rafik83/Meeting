@@ -13,8 +13,11 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Admin;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpotHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingMovedSpotEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -63,7 +66,8 @@ class UpdateSpotHandlerTest extends TestCase
         );
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $spotRepository    = $this->prophesize(SpotRepositoryInterface::class);
+        $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $expectedMeeting = new Meeting(
             $request,
@@ -90,9 +94,15 @@ class UpdateSpotHandlerTest extends TestCase
             false
         )->shouldBeCalled()->willReturn([$spot1, $spot2]);
 
+        $eventDispatcher->dispatch(Events::MEETING_MOVED_SPOT, new MeetingMovedSpotEvent($meeting));
+
         // Change Spot and block slot and spot
         $updateSpot        = new UpdateSpot($meeting, $spot2, true, true);
-        $updateSpotHandler = new UpdateSpotHandler($meetingRepository->reveal(), $spotRepository->reveal());
+        $updateSpotHandler = new UpdateSpotHandler(
+            $meetingRepository->reveal(),
+            $spotRepository->reveal(),
+            $eventDispatcher->reveal()
+        );
         $updateSpotHandler->handle($updateSpot);
     }
 
@@ -129,6 +139,7 @@ class UpdateSpotHandlerTest extends TestCase
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $meetingRepository->set(Argument::any())->shouldNotBeCalled();
         $spotRepository->getSpotsForSlotAndParticipantsQuantity()->shouldNotBeCalled();
@@ -136,7 +147,11 @@ class UpdateSpotHandlerTest extends TestCase
         $this->expectException(MeetingIsBlockedSpotException::class);
 
         $updateSpot        = new UpdateSpot($meeting, $spot2, true, true);
-        $updateSpotHandler = new UpdateSpotHandler($meetingRepository->reveal(), $spotRepository->reveal());
+        $updateSpotHandler = new UpdateSpotHandler(
+            $meetingRepository->reveal(),
+            $spotRepository->reveal(),
+            $eventDispatcher->reveal()
+        );
         $updateSpotHandler->handle($updateSpot);
     }
 
@@ -173,6 +188,7 @@ class UpdateSpotHandlerTest extends TestCase
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $meeting->getSlot(),
@@ -189,7 +205,11 @@ class UpdateSpotHandlerTest extends TestCase
 
         // Change Spot, select one not available
         $updateSpot        = new UpdateSpot($meeting, $spot2, false, false);
-        $updateSpotHandler = new UpdateSpotHandler($meetingRepository->reveal(), $spotRepository->reveal());
+        $updateSpotHandler = new UpdateSpotHandler(
+            $meetingRepository->reveal(),
+            $spotRepository->reveal(),
+            $eventDispatcher->reveal()
+        );
         $updateSpotHandler->handle($updateSpot);
     }
 }

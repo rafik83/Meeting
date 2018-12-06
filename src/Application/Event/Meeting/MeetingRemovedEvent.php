@@ -10,31 +10,41 @@
 
 namespace Proximum\Vimeet\Application\Event\Meeting;
 
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher\Event;
 
 class MeetingRemovedEvent extends Event
 {
-    /**
-     * @var Sheet[]
-     */
+    /** @var Sheet[] */
     private $sheets;
 
+    /** @var Participant[] */
+    private $participants;
+
     /**
-     * MeetingRemovedEvent constructor.
-     *
-     * @param Sheet[] $sheets
+     * @param Sheet[]       $sheets
+     * @param Participant[] $participants
      */
-    public function __construct(array $sheets)
+    public function __construct(array $sheets, array $participants = [])
     {
         $this->sheets = $sheets;
+        $this->participants = $participants;
     }
 
     /**
      * @return Sheet[]
      */
-    public function getSheets()
+    public function getSheets(): array
     {
         return $this->sheets;
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getParticipants(): array
+    {
+        return $this->participants;
     }
 }

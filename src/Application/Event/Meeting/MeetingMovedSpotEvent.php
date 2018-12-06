@@ -11,10 +11,9 @@
 namespace Proximum\Vimeet\Application\Event\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\EventDispatcher\Event;
 
-class MeetingMovedEvent extends Event
+class MeetingMovedSpotEvent extends Event
 {
     /** @var Meeting */
     private $meeting;
@@ -27,13 +26,5 @@ class MeetingMovedEvent extends Event
     public function getMeeting(): Meeting
     {
         return $this->meeting;
-    }
-
-    /**
-     * @return Sheet[]
-     */
-    public function getSheets(): array
-    {
-        return [$this->meeting->getFromSheet(), $this->meeting->getToSheet()];
     }
 }

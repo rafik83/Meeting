@@ -312,6 +312,14 @@ services:
             - '@datetime'
 
     #
+    # User Event
+    #
+    Proximum\Vimeet\Application\Command\User\Event\MeetingPlanningModifiedCommandHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
+
+    #
     # RegistrationTemplate
     #
     Proximum\Vimeet\Application\Command\Template\Registration\DuplicateHandler:

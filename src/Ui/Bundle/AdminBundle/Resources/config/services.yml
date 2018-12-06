@@ -416,6 +416,12 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Meeting\PlanningModifiedEventSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\User\Event\MeetingPlanningModifiedCommandHandler'
+        tags:
+            - { name: kernel.event_subscriber }
+
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Participant\ParticipantEventSubscriber:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'

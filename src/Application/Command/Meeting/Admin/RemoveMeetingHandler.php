@@ -36,8 +36,6 @@ class RemoveMeetingHandler
     private $eventDispatcher;
 
     /**
-     * RemoveMeetingViewQueryHandler constructor.
-     *
      * @param MeetingRepositoryInterface $meetingRepository
      * @param TranslatorInterface        $translator
      * @param DelayedEventDispatcher     $eventDispatcher
@@ -70,15 +68,19 @@ class RemoveMeetingHandler
 
         $this->meetingRepository->remove($query->meeting);
 
+        $participants = $query->meeting->getAllParticipants();
         $this->eventDispatcher->dispatch(
             Events::MEETING_REMOVED,
-            new MeetingRemovedEvent([
-                $query->meeting->getFromSheet(),
-                $query->meeting->getToSheet(),
-            ])
+            new MeetingRemovedEvent(
+                [
+                    $query->meeting->getFromSheet(),
+                    $query->meeting->getToSheet(),
+                ],
+                $participants
+            )
         );
 
-        foreach ($query->meeting->getAllParticipants() as $participant) {
+        foreach ($participants as $participant) {
             $this->eventDispatcher->dispatch(
                 Events::MEETING_UN_PARTICIPATE,
                 new MeetingUnParticipateEvent($participant)
