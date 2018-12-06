@@ -179,3 +179,9 @@
 .billing-info {
   margin-top: 25px;
 }
+
+.type-description {
+  h1:not(:first-child) {
+    margin-top: 20px;
+  }
+}
