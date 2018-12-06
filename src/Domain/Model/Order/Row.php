@@ -247,6 +247,11 @@ class Row
         return null !== $this->parentRow;
     }
 
+    public function detachParentRow(): void
+    {
+        $this->parentRow = null;
+    }
+
     /**
      * @return float
      */
@@ -342,5 +347,10 @@ class Row
         $this->label    = $label;
         $this->price    = $price;
         $this->quantity = $quantity;
+    }
+
+    public function isCustomRow(): bool
+    {
+        return null === $this->product;
     }
 }

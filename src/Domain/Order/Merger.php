@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Order;
 
 use Proximum\Vimeet\Domain\Exception\Order\OrderMergerException;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Order\Row;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Merger
@@ -54,7 +55,8 @@ class Merger
 
         // Remove products whose merged quantity return 0
         foreach ($orderMerged->getRows() as $row) {
-            if (0 === $row->getQuantity() && null !== $row->getId()) {
+            if (0 === $row->getQuantity() && !$row->isCustomRow()) {
+                $this->detachChildRow($orderMerged, $row);
                 $orderMerged->removeRow($row);
             }
         }
@@ -78,6 +80,15 @@ class Merger
         }
 
         return $this->merge($orders);
+    }
+
+    private function detachChildRow(Order $orderMerged, Row $parentRow): void
+    {
+        foreach ($orderMerged->getRows() as $row) {
+            if ($parentRow === $row->getParentRow()) {
+                $row->detachParentRow();
+            }
+        }
     }
 
     /**
