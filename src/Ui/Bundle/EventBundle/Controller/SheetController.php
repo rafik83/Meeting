@@ -301,6 +301,7 @@ class SheetController extends Controller
             'nomenclature'  => Data\NomenclatureDataType::class,
             'image'         => Data\ImageDataType::class,
             'tags'          => Data\ItemCollectionDataType::class,
+            'multi-upload'  => Data\MultiUploadDataType::class,
         ];
 
         if (!isset($types[$object->getType()])) {
