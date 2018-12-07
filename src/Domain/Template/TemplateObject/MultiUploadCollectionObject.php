@@ -36,7 +36,7 @@ class MultiUploadCollectionObject extends TemplateObject
         if (!empty($default)) {
             $pad = $default - \count($this->uploads);
             while ($pad-- > 0) {
-                $this->uploads[] = new MultiUploadObject($this, null, null);
+                $this->uploads[] = new MultiUploadObject(null, null);
             }
         }
     }
@@ -53,36 +53,18 @@ class MultiUploadCollectionObject extends TemplateObject
 
     public function setData(array $data)
     {
-        $data = array_merge(['uploads' => []], $data);
         $this->buildUploads($data);
         $this->padUploads();
 
         return parent::setData($data);
     }
 
-    public function getData()
-    {
-        $this->data['uploads'] = [];
-
-        return parent::getData();
-    }
-
     private function buildUploads(array $data): void
     {
         $this->uploads = array_map(
             function (array $upload) {
-                return new MultiUploadObject($this, $upload['title'], $upload['file']);
-            }, array_values($data['uploads'])
+                return new MultiUploadObject($upload['title'], $upload['path']);
+            }, array_values($data)
         );
-    }
-
-    public function getUploads(): array
-    {
-        return $this->uploads;
-    }
-
-    public function addUpload(UploadObject $uploadObject): void
-    {
-        $this->uploads[] = $uploadObject;
     }
 }

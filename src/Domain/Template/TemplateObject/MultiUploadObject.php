@@ -12,22 +12,21 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class MultiUploadObject
+class MultiUploadObject implements UploadableObjectInterface
 {
-    /** @var MultiUploadCollectionObject */
-    private $collection;
-
     /** @var null|string */
     private $title;
+
+    /** @var null|string */
+    private $path;
 
     /** @var null|UploadedFile */
     private $file;
 
-    public function __construct(MultiUploadCollectionObject $collection, ?string $title, ?UploadedFile $file)
+    public function __construct(?string $title, ?string $path)
     {
-        $this->collection = $collection;
         $this->title = $title;
-        $this->file = $file;
+        $this->path = $path;
     }
 
     public function getFile(): ?UploadedFile
@@ -50,8 +49,47 @@ class MultiUploadObject
         $this->title = $title;
     }
 
-    public function getCollection(): MultiUploadCollectionObject
+    public function getPath(): ?string
     {
-        return $this->collection;
+        return $this->path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentValue()
+    {
+        // TODO: Implement getContentValue() method.
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return string|null
+     */
+    public function getContentValueLocalize($locale = null)
+    {
+        // TODO: Implement getContentValueLocalize() method.
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentLabel()
+    {
+        // TODO: Implement getContentLabel() method.
+    }
+
+    /**
+     * @param string|array $value
+     */
+    public function setContentValue($value)
+    {
+        // TODO: Implement setContentValue() method.
+    }
+
+    public function hasTag($tag)
+    {
+        // TODO: Implement hasTag() method.
     }
 }
