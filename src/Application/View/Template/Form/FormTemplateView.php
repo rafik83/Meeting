@@ -29,6 +29,9 @@ class FormTemplateView
     /** @var Type[] */
     public $types;
 
+    /** @var string http|https */
+    public $url;
+
     /** @var string */
     public $locale;
 
@@ -41,6 +44,7 @@ class FormTemplateView
         bool $isPublished,
         array $translatedTitles,
         array $types,
+        string $url,
         string $locale,
         \DateTimeInterface $createdAt
     ) {
@@ -49,6 +53,7 @@ class FormTemplateView
         $this->isPublished = $isPublished;
         $this->translatedTitles = $translatedTitles;
         $this->types = $types;
+        $this->url = $url;
         $this->locale = $locale;
         $this->createdAt = $createdAt;
     }

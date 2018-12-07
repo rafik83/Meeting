@@ -13,9 +13,10 @@
     <table class="table">
         <thead>
         <tr>
-            <th class="col-md-4">{{ 'admin.template.form.table.column.title'|trans }}</th>
-            <th class="col-md-4">{{ 'admin.template.form.table.column.translatedTitle'|trans }}</th>
+            <th class="col-md-3">{{ 'admin.template.form.table.column.title'|trans }}</th>
+            <th class="col-md-3">{{ 'admin.template.form.table.column.translatedTitle'|trans }}</th>
             <th class="col-md-2">{{ 'admin.template.form.table.column.types'|trans }}</th>
+            <th class="col-md-2">{{ 'admin.template.form.table.column.url'|trans }}</th>
             <th class="col-md-2">{{ 'admin.template.form.table.column.createdAt'|trans }}</th>
             <th class="col-md-2 text-right">{{ 'admin.template.form.table.column.action'|trans }}</th>
         </tr>
@@ -35,7 +36,6 @@
                     <ul>
                     {% for locale, title in formTemplateView.translatedTitles %}
                         <li><b>{{ locale|locale(app.request.locale) }}</b>: {{ title }}</li>
-
                     {% endfor %}
                     </ul>
                 </td>
@@ -46,6 +46,7 @@
                         {% endfor %}
                     </ul>
                 </td>
+                <td>{{ formTemplateView.url }}</td>
                 <td>{{ formTemplateView.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td class="text-right">
                     <div class="btn-group">

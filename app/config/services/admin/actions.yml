@@ -215,6 +215,8 @@ services:
             - '@form.factory'
             - '@router'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Template\Form\ShowAction: ~
+
     #
     # Content
     #

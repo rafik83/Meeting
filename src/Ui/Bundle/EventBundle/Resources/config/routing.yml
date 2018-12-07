@@ -890,6 +890,13 @@ event_user_event_phone_validate_code_success:
 #
 # Forms
 #
+event_show_form_template:
+    path: /form/{formTemplate}
+    methods: [GET, POST]
+    requirements:
+        formTemplate: \d+
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Template\Form\ShowAction
+
 event_participant_fill_form:
     path: /sheet/{sheet}/participant/{participant}/form/{formTemplate}/step/{step}
     methods: [GET, POST]
