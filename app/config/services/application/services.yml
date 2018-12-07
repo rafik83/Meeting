@@ -83,6 +83,12 @@ services:
         arguments:
             - '@adapter.event_url_generator'
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\InvoicesLinksSubstitution:
+        arguments:
+            - '@repository.invoice.invoice_repository'
+            - '@components.invoice.invoice_url_view_query_handler'
+            - '@adapter.templating_adapter'
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\MeetingRequestLinkSubstitution:
         arguments:
             - '@adapter.event_url_generator'
@@ -183,6 +189,7 @@ services:
         - ['registerSubstitution', ['%%urlSheet%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution']]
         - ['registerSubstitution', ['%%urlEventSheet%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution']]
         - ['registerSubstitution', ['%%urlEventSheetWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\SheetLinkCTASubstitution']]
+        - ['registerSubstitution', ['%%urlSheetWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\SheetLinkCTASubstitution']]
         - ['registerSubstitution', ['%%packageLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\PackageLinkSubstitution']]
         - ['registerSubstitution', ['%%ordersLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\OrdersLinkSubstitution']]
         - ['registerSubstitution', ['%%agendaLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\AgendaLinkSubstitution']]
@@ -202,6 +209,7 @@ services:
         - ['registerSubstitution', ['%%urlEventActivateAccountAlreadyKnownWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventActivateAccountAlreadyKnownCTASubstitution']]
         - ['registerSubstitution', ['%%urlEventProForma%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventProFormaLinkSubstitution']]
         - ['registerSubstitution', ['%%urlEventProFormaWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventProFormaCTASubstitution']]
+        - ['registerSubstitution', ['%%invoiceLinks%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\InvoicesLinksSubstitution']]
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler:
         arguments:

@@ -100,7 +100,7 @@ class BatchGenerateInvoiceHandler
 
         if (!empty($sheetInvoicedViews)) {
             // send emailing
-            $this->jobQueue->sendEmailing($batchGenerateInvoice->event, $batchGenerateInvoice->sheetIds, Events::SHEET_INVOICED, true);
+            $this->jobQueue->sendEmailing($batchGenerateInvoice->event, $batchGenerateInvoice->sheetIds, Events::SHEET_INVOICED);
 
             $this->eventDispatcher->dispatch(
                 Events::SHEET_INVOICED,

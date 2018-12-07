@@ -39,7 +39,6 @@ interface MessageRepositoryInterface
     /**
      * @param Event  $event
      * @param string $transactionalMailType
-     *
      * @param Type   $associatedType
      *
      * @return Message|null

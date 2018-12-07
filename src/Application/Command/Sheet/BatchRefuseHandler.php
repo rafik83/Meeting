@@ -76,7 +76,7 @@ class BatchRefuseHandler
         if (!empty($disabledSheetsId)) {
             $this->sheetRepository->refuseBySheetsId($disabledSheetsId);
             $this->batchRefuseJobQueue->createJob($disabledSheetsId, $batchRefuse->admin);
-            $this->jobQueue->sendEmailing($event, $disabledSheetsId, Events::SHEET_REFUSED, true);
+            $this->jobQueue->sendEmailing($event, $disabledSheetsId, Events::SHEET_REFUSED);
         }
 
         if (!empty($batchDisableResult->ignoredSheetsMessage)) {

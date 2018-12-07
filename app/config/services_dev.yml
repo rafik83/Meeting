@@ -6,6 +6,11 @@ services:
 
     adapter.smssender_alias: '@infrastructure.adapter.monolog_smssender_adapter'
 
+    adapter.sendgrid_api_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\FakeEmailingSenderAdapter
+        arguments:
+            - '@logger'
+
     #
     # Fixture providers
     #

@@ -48,14 +48,15 @@ class CreateMessageHandler
         $this->translator = $translator;
     }
 
-    /**
-     * @param CreateMessage $command
-     *
-     * @return Message
-     */
-    public function handle(CreateMessage $command)
+    public function handle(CreateMessage $command): Message
     {
-        $message = new Message($command->event, $this->dateTime, $command->name, $command->sendToEmailTeam, $command->sendEmailToBillingInfo);
+        $message = new Message(
+            $command->event,
+            $this->dateTime,
+            $command->name,
+            $command->sendToEmailTeam,
+            $command->sendEmailToBillingInfo
+        );
 
         foreach ($command->event->getLocales() as $locale) {
             $emailSubject = $this->translator->trans(
