@@ -7,14 +7,9 @@
     {% endif %}
     <div class="section__content">
         <ul class="list list--medias">
-            {% for media in item.data['medias']|default([]) %}
+            {% for media in item.data|default([]) %}
                 <li>
-                    {% if media['type'] is defined and media['type'] == 'video' %}
-                        <i class="icon-Video_1"></i>
-                    {% else %}
-                        <i class="icon-Document_1"></i>
-                    {% endif %}
-                    <a href="{{ media['url'] }}" target="_blank">{{ media['title']|localize(locale, fallback) }}</a>
+                    <a href="{{ media['path'] }}" target="_blank">{{ media['title'] }}</a>
                 </li>
             {% endfor %}
         </ul>

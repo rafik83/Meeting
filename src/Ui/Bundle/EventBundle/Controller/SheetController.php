@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
@@ -388,6 +389,26 @@ class SheetController extends Controller
                         $newImage = $fileStorage->upload($file);
                         $object->setImage($newImage);
                     }
+                }
+
+                if ($object instanceof Template\TemplateObject\MultiUploadCollectionObject) {
+                    $uploadObjects = $form->get('uploads')->getData();
+                    $objectData = $object->getData();
+
+                    /** @var Template\TemplateObject\MultiUploadObject $uploadObject */
+                    foreach ($uploadObjects as $key => $uploadObject) {
+                        if ($uploadObject->getFile() instanceof UploadedFile) {
+                            $fileData = $this->get('command.participant.upload_file_handler')->handle(
+                                new UploadFile($sheet, $this->getUser(), $uploadObject, [], true)
+                            );
+
+                            $objectData[$key]['path'] = $fileData['path'];
+                        }
+
+                        $objectData[$key]['title'] = $uploadObject->getTitle();
+                    }
+
+                    $object->setData($objectData);
                 }
 
                 $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData, $object));
