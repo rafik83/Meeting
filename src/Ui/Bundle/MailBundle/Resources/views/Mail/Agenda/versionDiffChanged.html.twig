@@ -9,14 +9,19 @@
         '%event%': mail.event.title,
         '%participationType%': mail.participantType,
     }, 'mail', mail.locale)|html|nl2br }}
+    <br>
+    <br>
+    {{ mail.agendaModifications|nl2br }}
 
-    {{ mail.agendaModifications }}
-
+    <br>
+    <br>
     {{ macros.button(
-        'mail.agenda.version_diff_changed.link'|trans({}, 'mail', locale),
-        url('event_agenda', {'sheet': sheet.id})
+        'mail.agenda.version_diff_changed.link'|trans({}, 'mail', mail.locale),
+        eventUrl(mail.event, 'event_agenda', {'sheet': mail.sheet.id})
     ) }}
 
+    <br>
+    <br>
 
     {{ 'mail.agenda.version_diff_changed.end'|trans({
         '%firstname%': mail.firstname|capitalize,

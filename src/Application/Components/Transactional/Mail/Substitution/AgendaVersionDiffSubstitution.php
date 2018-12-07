@@ -28,9 +28,16 @@ class AgendaVersionDiffSubstitution implements SubstituteInterface
     public function substitute(AbstractPrepareMail $prepareMail): string
     {
         if ($prepareMail instanceof PrepareVersionDiffChangedMailView) {
-            return $prepareMail->getAgendaModifications();
+            return $this->changeNlToBr($prepareMail->getAgendaModifications());
         }
 
-        return $this->versionDiffVerbalizedGetter->getVerbalizedDiff($prepareMail->event, $prepareMail->user);
+        return $this->changeNlToBr(
+            $this->versionDiffVerbalizedGetter->getVerbalizedDiff($prepareMail->event, $prepareMail->user)
+        );
+    }
+
+    private function changeNlToBr(string $diff): string
+    {
+        return str_replace("\n", '<br>', $diff);
     }
 }
