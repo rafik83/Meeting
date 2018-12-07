@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject\Media;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -28,7 +29,9 @@ class UploadDataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class, ['placeholder' => $options['titlePlaceholder']])
+            ->add('title', TextType::class, [
+                'placeholder' => $options['titlePlaceholder'],
+            ])
             ->add('file', FileType::class)
         ;
     }
@@ -38,7 +41,7 @@ class UploadDataType extends AbstractType
         $resolver->setRequired(['collection']);
         $resolver->setDefaults([
             'titlePlaceholder' => null,
-            'data_class'  => UploadObject::class,
+            'data_class' => MultiUploadObject::class,
         ]);
     }
 }
