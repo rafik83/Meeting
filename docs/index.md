@@ -1,6 +1,6 @@
 # Vimeet documentation
 
-- [Availability Time Range (Plage de dipsonibilités)](AvailabilityTimeRange.md)
+- [Availability Time Range (Plage de disponibilités)](AvailabilityTimeRange.md)
 - [Jenkins](Jenkins.md)
 - [Règles du qui voit qui](Rules.md)
 - [Symfony update](SymfonyUpdate.md)
