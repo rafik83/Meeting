@@ -395,7 +395,7 @@ package.summary.order-list: 'Order list'
 package.summary.pageTitle: 'Summary of your registration package'
 package.summary.pay: 'Validate registration package'
 package.summary.promotion.button.label: Validate
-package.summary.promotion.label: 'Discount code'
+package.summary.promotion.label: 'Pack code'
 package.summary.seeTermsOfSale: 'View general sales conditions'
 package.summary.title: Summary
 package.summary.total.title: 'Registration package'
@@ -463,7 +463,7 @@ summary.column.unitPrice: 'Unit price'
 summary.group.option.title: Options
 summary.product.included: Included
 summary.promotionCode.free: Free
-summary.promotionCode.title: 'Discount code'
+summary.promotionCode.title: 'Pack code'
 summary.total: Total
 summary.totalByVat: 'Total subjected to %vatRate%%'
 summary.totalToPay: 'Total to pay'
