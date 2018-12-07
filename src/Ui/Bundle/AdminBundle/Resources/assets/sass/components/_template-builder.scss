@@ -113,11 +113,12 @@
         position: absolute;
         top: 50px;
         bottom: 0;
-        right: -400px;
+        right: -410px;
         transition: all 0.3s ease;
 
         .slide-menu-button {
             margin-top: 30px;
+            line-height: 100px;
         }
 
         &.slide-menu-container-open {
@@ -128,7 +129,7 @@
             height: 100%;
             padding: 20px;
             width: 400px;
-            margin-left: 30px;
+            margin-left: 2px;
             float: left;
             background-color: #fff;
             border-left: 1px solid #ccc;
