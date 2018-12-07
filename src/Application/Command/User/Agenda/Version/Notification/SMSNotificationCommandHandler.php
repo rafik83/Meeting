@@ -64,8 +64,10 @@ class SMSNotificationCommandHandler
         $agendaUrl = $this->eventUrlGenerator->generateEventAbsoluteUrl(
             $command->event,
             Route::AGENDA_DEFAULT,
-            ['sheet' => $command->sheet->getId(),
-             '_locale' => $command->event->getAvailableLocale($command->user->getLocale()), ]
+            [
+                'sheet' => $command->sheet->getId(),
+                '_locale' => $command->event->getAvailableLocale($command->user->getLocale()),
+            ]
         );
 
         $message = $startingSentence . "\n" . $command->verbalizedDiff . "\n" . $agendaUrl;
