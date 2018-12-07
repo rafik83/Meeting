@@ -528,6 +528,7 @@ services:
         arguments:
             - '@sonata.intl.templating.helper.locale'
             - '@markdown'
+            - '@adapter.event_url_generator'
         tags:
             - { name: 'twig.extension' }
 
