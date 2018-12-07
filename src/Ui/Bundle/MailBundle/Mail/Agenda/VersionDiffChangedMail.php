@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Agenda;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class VersionDiffChangedMail extends UserMail
@@ -42,14 +43,14 @@ class VersionDiffChangedMail extends UserMail
     /** @var string */
     private $agendaModifications;
 
-    /** @var string */
-    private $agendaLink;
+    /** @var Sheet */
+    private $sheet;
 
     public function __construct(
         Event $event,
         User $user,
+        Sheet $sheet,
         string $agendaModifications,
-        string $agendaLink,
         string $sender,
         string $receiver,
         string $locale,
@@ -57,8 +58,8 @@ class VersionDiffChangedMail extends UserMail
     ) {
         parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
 
+        $this->sheet = $sheet;
         $this->user = $user;
-        $this->agendaLink = $agendaLink;
         $this->agendaModifications = $agendaModifications;
     }
 
@@ -67,14 +68,14 @@ class VersionDiffChangedMail extends UserMail
         return $this->user;
     }
 
+    public function getSheet(): Sheet
+    {
+        return $this->sheet;
+    }
+
     public function getAgendaModifications(): string
     {
         return $this->agendaModifications;
-    }
-
-    public function getAgendaLink(): string
-    {
-        return $this->agendaLink;
     }
 
     /**

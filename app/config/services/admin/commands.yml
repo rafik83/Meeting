@@ -237,6 +237,26 @@ services:
             - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductsAttributedToParticipantRemoveAllBySheet'
 
     #
+    # User Agenda Version
+    #
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler:
+        arguments:
+            - '@adapter.smssender_alias'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@repository.user.user_event_phone_repository'
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler'
+            - '@adapter.mailer_adapter'
+
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\SendNotificationHandler:
+        arguments:
+            - '@domain.user.agenda.version.diff_verbalizer'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler'
+    #
     # Export OMZ
     #
     Proximum\Vimeet\Application\Command\OMZ\ScheduleExportHandler:

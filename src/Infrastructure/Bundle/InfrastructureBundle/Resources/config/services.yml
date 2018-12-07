@@ -2146,7 +2146,7 @@ services:
     command.user.agenda.version.notify_handler:
         class: Proximum\Vimeet\Application\Command\User\Agenda\Version\NotifyHandler
         arguments:
-            - '@command.user.agenda.version.send_notification_handler'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\SendNotificationHandler'
             - '@repository.user.agenda.version_repository'
             - '@domain.user.agenda.version.generator'
             - '@domain.user.agenda.version.diff_checker'
@@ -2162,15 +2162,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Agenda\Version\Purge }
-
-    command.user.agenda.version.send_notification_handler:
-        class: Proximum\Vimeet\Application\Command\User\Agenda\Version\SendNotificationHandler
-        arguments:
-            - '@domain.user.agenda.version.diff_verbalizer'
-            - '@adapter.smssender_alias'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@repository.user.user_event_phone_repository'
-            - '@adapter.event_url_generator'
 
     command.user.phone.update_black_list_handler:
         class: Proximum\Vimeet\Application\Command\User\Phone\UpdateBlackListHandler

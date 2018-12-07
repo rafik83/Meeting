@@ -79,6 +79,8 @@ class PrepareHandler
                 return $this->prepareTransactionConfirmMail->prepare($prepareMail);
             case Constant::TRANSACTIONAL_MAIL_KEY_ORDER_CONFIRMED:
                 return $this->prepareOrderConfirmedMail->prepare($prepareMail);
+            case Constant::TRANSACTIONAL_MAIL_KEY_AGENDA_VERSION_DIFF_CHANGED:
+                return $this->prepareOrderConfirmedMail->prepare($prepareMail);
             default: return null;
         }
     }

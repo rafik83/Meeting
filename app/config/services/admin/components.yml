@@ -38,3 +38,14 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\Template\Form\FormTemplateValidator'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    #
+    # User Agenda Version
+    #
+    Proximum\Vimeet\Application\Components\User\Agenda\Version\VersionDiffVerbalizedGetter:
+        arguments:
+            - '@repository.user.agenda.version_repository'
+            - '@domain.user.agenda.version.generator'
+            - '@domain.user.agenda.version.diff_checker'
+            - '@domain.user.agenda.version.diff_verbalizer'
+            - '@datetime'
