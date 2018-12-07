@@ -1,10 +1,10 @@
-#Règles
+# Règles
 
-##"Qui voit qui"
+## "Qui voit qui"
 
 Par défaut, personne ne voit personne. Les "Qui voit qui" ajoute une visibilité entre deux "Qui". Un qui peut être un type ou une catégorie. Les règles sont unidirectionnelles (A voit B différent de B voit A).
 
-##"Qui ne voit pas quoi"
+## "Qui ne voit pas quoi"
 
 Par défaut on voit tous. Les "Qui ne voit pas quoi" permettent de masquer des informations pour un type ou une catégorie.
 
