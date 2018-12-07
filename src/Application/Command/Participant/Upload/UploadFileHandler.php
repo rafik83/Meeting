@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Encryption\Encrypt;
 use Proximum\Vimeet\Application\Command\Encryption\EncryptHandler;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -71,7 +72,7 @@ class UploadFileHandler
             }
 
             $objectData = [
-                'path'=> $path,
+                'path' => $path,
                 'extension' => $clientOriginalExtension,
             ];
 
@@ -79,6 +80,10 @@ class UploadFileHandler
                 $objectData = [
                     'image' => $path,
                 ];
+            }
+
+            if ($object instanceof MultiUploadObject) {
+                return $objectData;
             }
 
             return array_merge(
