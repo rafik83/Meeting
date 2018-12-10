@@ -8,16 +8,16 @@
 
 ## Overview
 
-- Vimeet ➡️ [Create a job build in Jenkins](#Create-a-job-build-in-Jenkins) 
+- Vimeet [create a job build in Jenkins](#Create-a-job-build-in-Jenkins)
 - Jenkins run the job
-- At the end of the job, Jenkins post the result ➡️ to Vimeet via the [callback url](#callback)
+- At the end of the job, Jenkins post the result to Vimeet via the [callback url](#callback)
     
 ## Job
 
 Jobs are saved in this Github repository: [proximum/jenkins-config](https://github.com/proximum/jenkins-config/tree/master/jobs).
 We do not use the repository to add new job but the Jenkins UI available at http://10.11.0.95:8080/ (see the 1password for credentials).
 
-The shell tasks ran by this job is configured in [OptaPlanner_PROD_run](https://github.com/proximum/jenkins-config/blob/master/jobs/OptaPlanner_PROD_run/config.xml) job:
+The shell tasks ran by this job is configured in [OptaPlanner_PROD_run](https://github.com/proximum/jenkins-config/blob/master/jobs/OptaPlanner_PROD_run/config.xml) job, for example for planner:
 
     $ cd /var/www/proximum-optaplanner.project.local/htdocs/current
     $ sudo -u www-data java -jar -Dlogback.level.org.optaplanner=error planner.jar /var/www/proximum-optaplanner.project.local/htdocs/shared/planner/$INPUT
@@ -87,7 +87,7 @@ A sample of the payload received from Jenkins is described in this class:
 
 ## Planner job
 
-- Vimeet ➡️ Create a unsolved meetings xml file in a shared directory accessible by OptaPlanner
+- Vimeet create a unsolved meetings xml file in a shared directory accessible by OptaPlanner
 
 ```
     # app/config/parameters.yml
@@ -96,11 +96,11 @@ A sample of the payload received from Jenkins is described in this class:
 
 The export is made by this service: [ExportHandler](../src/Application/Command/Planner/ExportHandler.php)
 
-- Vimeet ➡️ [Create a job build in Jenkins](#Create-a-job-build-in-Jenkins). The build contains the path to the unsolved
+- Vimeet [create a job build in Jenkins](#Create-a-job-build-in-Jenkins). The build contains the path to the unsolved
 file in parameters input.
-- Jenkins run the Planner job
+- Jenkins run the Planner job (something like `$ java -jar planner.jar path/to/unsolved-meetings.xml`)
 - OptaPlanner create a solved meetings xml file in the same directory of the unsolved file
-- At the end of the job, Jenkins post the result ➡️ to Vimeet via the [callback url](#callback): `[admin url]/planner/callback`.
+- At the end of the job, Jenkins post the result to Vimeet via the [callback url](#callback): `[admin url]/planner/callback`.
 Then,
     - [SetStatusHandler](../src/Application/Command/Planner/Callback/SetStatusHandler.php) parse the Jenkins payload to
 identify the event and the solved file
