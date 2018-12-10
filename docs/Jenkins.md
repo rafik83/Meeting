@@ -1,6 +1,7 @@
 # Jenkins
 
 - [Overview](#overview)
+- [Cron](#cron)
 - [Job](#job)
 - [Create a job build in Jenkins](#Create-a-job-build-in-Jenkins)
 - [Callback](#callback)
@@ -15,6 +16,17 @@ Jenkins is used for two different tasks in Vimeet architecture:
     1. Vimeet [create a job build in Jenkins](#Create-a-job-build-in-Jenkins)
     2. Jenkins run the job
     3. At the end of the job, Jenkins post the result to Vimeet via the [callback url](#callback)
+
+## Cron
+
+To create a periodic job, specify the frequency and the Symfony command to run in the Jenkins job:
+
+- Timer trigger ("Ce qui déclenche le build" / "Construire périodiquement" / "Planning"): `H/10 * * * *` for a job ran every 10 minutes.
+- Build / Send files or execute commands over SSH / SSH Publishers / SSH server:
+    - Name: `web-apache-01`
+    - Transfers / Transfer set:
+        - Remote directory: `/var/www/proximum-vimeet.project.local/htdocs/current`
+        - Exec command: `/var/www/proximum-vimeet.project.local/htdocs/current/bin/console [whatever-Vimeet-command] --env=prod`
 
 ## Job
 
