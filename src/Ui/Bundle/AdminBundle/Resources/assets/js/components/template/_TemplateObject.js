@@ -58,7 +58,7 @@ function TemplateObject(element, locale, builderType)
       this.object = new TextObject(this.element, this.locale, this.builderType);
       break;
     case 'editable-text':
-      this.object = new TextObject(this.element, this.locale, this.builderType);
+      this.object = new EditableTextObject(this.element, this.locale, this.builderType);
       break;
     case 'button-link':
       this.object = new ButtonLinkObject(this.element, this.locale, this.builderType);
