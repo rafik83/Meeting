@@ -113,3 +113,11 @@ services:
             - '@Proximum\Vimeet\Domain\KeyDates\Checker\EnableBadgeForParticipantDateAccessChecker'
             - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
             - '@Proximum\Vimeet\Domain\Sheet\HasRemainingToPay'
+
+    #
+    # File
+    #
+    Proximum\Vimeet\Domain\File\FileFactory:
+        arguments:
+            - '@repository.file_repository'
+            - '@datetime'
