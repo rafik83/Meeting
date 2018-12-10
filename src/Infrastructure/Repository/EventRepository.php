@@ -360,4 +360,23 @@ class EventRepository implements EventRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @param \DateTimeInterface $today
+     *
+     * @return Event[]
+     */
+    public function getNotPastEventsWithAgendaPublished(\DateTimeInterface $today): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->join('event.days', 'day', 'WITH', 'event.configuration.schedulePublishDate < :datetime AND day.endTime > :datetime')
+            ->setParameter('datetime', $today)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

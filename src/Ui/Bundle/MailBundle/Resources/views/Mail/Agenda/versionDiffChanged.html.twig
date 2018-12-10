@@ -17,7 +17,14 @@
     <br>
     {{ macros.button(
         'mail.agenda.version_diff_changed.link'|trans({}, 'mail', mail.locale),
-        eventUrl(mail.event, 'event_agenda', {'sheet': mail.sheet.id})
+        eventUrl(
+            mail.event,
+            'event_agenda',
+            {
+                'sheet': mail.sheet.id,
+                '_locale': mail.event.getAvailableLocale(mail.locale)
+            }
+        )
     ) }}
 
     <br>

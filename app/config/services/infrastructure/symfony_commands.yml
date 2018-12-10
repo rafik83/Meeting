@@ -53,3 +53,19 @@ services:
             - '@datetime'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\User\Agenda\Version\NotifyVersionDiffCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\RecurrentNotificationOfChangedInVersionCommandHandler'
+            - '@datetime'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\User\Agenda\Version\NotifyVersionDiffDDayCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\RecurrentNotificationOfChangedInVersionCommandHandler'
+            - '@datetime'
+        tags:
+            - { name: console.command }

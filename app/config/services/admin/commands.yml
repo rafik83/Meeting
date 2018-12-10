@@ -256,6 +256,27 @@ services:
             - '@domain.user.agenda.version.diff_verbalizer'
             - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler'
             - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler'
+
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\NotifyUserOfChangedVersionCommandHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@sheet.sheet_guesser'
+            - '@repository.user.agenda.version_repository'
+            - '@domain.user.agenda.version.generator'
+            - '@domain.user.agenda.version.diff_checker'
+            - '@domain.user.agenda.version.diff_verbalizer'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler'
+            - '@datetime'
+
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\RecurrentNotificationOfChangedInVersionCommandHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '%agenda_version_diff_notification_time_in_minutes%'
+            - '%agenda_version_diff_dday_notification_time_in_minutes%'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\NotifyUserOfChangedVersionCommandHandler'
+            - '@datetime'
+
     #
     # Export OMZ
     #

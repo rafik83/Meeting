@@ -129,4 +129,11 @@ interface EventRepositoryInterface
      * @return Event[]
      */
     public function getEventThatOccursDuringTheGivenDay(\DateTimeInterface $date): array;
+
+    /**
+     * @param \DateTimeInterface $today
+     *
+     * @return Event[]
+     */
+    public function getNotPastEventsWithAgendaPublished(\DateTimeInterface $today): array;
 }

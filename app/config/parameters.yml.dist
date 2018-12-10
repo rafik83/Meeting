@@ -91,6 +91,9 @@ parameters:
     comexposium_username: comexposiumUsername
     comexposium_password: comexposiumPassword
 
+    agenda_version_diff_notification_time_in_minutes: 30
+    agenda_version_diff_dday_notification_time_in_minutes: 10
+
     # Features flag
     feature_video_conference_enabled: false
     feature_video_conference_date_security_enabled: false
