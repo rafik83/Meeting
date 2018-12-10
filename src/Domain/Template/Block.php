@@ -155,7 +155,7 @@ class Block extends AbstractChild
     }
 
     /**
-     * Get first levels blocks
+     * Get all blocks on 1 level
      *
      * @return Block[]
      */

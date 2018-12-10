@@ -19,6 +19,26 @@ class TemplateData extends Block
         return \is_array($normalizedConfig) ? $normalizedConfig : [];
     }
 
+    /**
+     * @return Block[]
+     */
+    public function getBlocksAsSteps(): array
+    {
+        $blocksAsSteps = [];
+        $step = 1;
+
+        foreach ($this->children as $column) {
+            foreach ($column as $child) {
+                if ($child instanceof Block) {
+                    $blocksAsSteps[$step] = $child;
+                    $step++;
+                }
+            }
+        }
+
+        return $blocksAsSteps;
+    }
+
     public function sanitizedDataWithoutType(array $types = []): void
     {
         if (empty($types)) {
