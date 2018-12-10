@@ -46,7 +46,7 @@ class MultiUploadCollectionObject extends TemplateObject
         return $this->getOption('default');
     }
 
-    public function getMax(): int
+    public function getMax(): ?int
     {
         return $this->getOption('max');
     }
@@ -66,5 +66,15 @@ class MultiUploadCollectionObject extends TemplateObject
                 return new MultiUploadObject($upload['title'], $upload['path']);
             }, array_values($data)
         );
+    }
+
+    public function getFormats(): ?array
+    {
+        return $this->getOption('formats');
+    }
+
+    public function getUploads(): array
+    {
+        return $this->uploads;
     }
 }

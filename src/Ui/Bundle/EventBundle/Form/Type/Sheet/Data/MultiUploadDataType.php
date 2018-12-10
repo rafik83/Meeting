@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadCollectionObject;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -18,10 +19,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MultiUploadDataType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    /** @var TranslatorInterface */
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var MultiUploadCollectionObject $uploadCollection */
         $uploadCollection = $options['object'];
@@ -32,26 +38,32 @@ class MultiUploadDataType extends AbstractType
                 'entry_options' => [
                     'label' => false,
                     'collection' => $options['data'],
-                    'required' => false,
+                    'required' => $uploadCollection->getRequired(),
                     'titlePlaceholder' => $uploadCollection->getTitlePlaceholder(),
                 ],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'label' => false,
+                'help' => $this->getHelp($uploadCollection->getFormats()),
                 'max' => $uploadCollection->getMax(),
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    private function getHelp(array $formats): string
+    {
+        return $this->translator->transChoice(
+            'common.required_formats',
+            \count($formats),
+            ['%format%' => implode(', ', $formats)]
+        );
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['locale', 'object']);
         $resolver->setDefaults([
             'data_class'  => MultiUploadCollectionObject::class,
             'placeholder' => null,
-            'help' => null,
-            'attr' => [
-                'data-product-selector' => (int) true,
-            ],
         ]);
     }
 }

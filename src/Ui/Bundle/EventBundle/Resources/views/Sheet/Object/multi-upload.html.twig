@@ -1,4 +1,4 @@
-<section id="object-{{ uid }}" class="object object--multi-upload section">
+<section id="object-{{ uid }}" class="object object--media section">
     {% set label = item.label(locale, fallback) %}
     {% if label %}
         <header>
@@ -9,7 +9,7 @@
         <ul class="list list--medias">
             {% for media in item.data|default([]) %}
                 <li>
-                    <a href="{{ media['path'] }}" target="_blank">{{ media['title'] }}</a>
+                    <a download href="{{ media['path'] }}" target="_blank">{{ media['title'] }}</a>
                 </li>
             {% endfor %}
         </ul>
