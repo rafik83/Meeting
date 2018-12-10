@@ -29,7 +29,7 @@ class FormTemplateView
     /** @var Type[] */
     public $types;
 
-    /** @var string http|https */
+    /** @var string */
     public $url;
 
     /** @var string */
