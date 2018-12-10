@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-class ExecAdapter
+use Proximum\Vimeet\Application\Adapter\ExecInterface;
+
+class ExecAdapter implements ExecInterface
 {
     /**
      * @param string     $command
