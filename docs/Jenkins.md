@@ -8,23 +8,23 @@
 
 ## Overview
 
-- Vimeet [create a job build in Jenkins](#Create-a-job-build-in-Jenkins)
-- Jenkins run the job
-- At the end of the job, Jenkins post the result to Vimeet via the [callback url](#callback)
+1. Vimeet [create a job build in Jenkins](#Create-a-job-build-in-Jenkins)
+2. Jenkins run the job
+3. At the end of the job, Jenkins post the result to Vimeet via the [callback url](#callback)
     
 ## Job
 
 Jobs are saved in this Github repository: [proximum/jenkins-config](https://github.com/proximum/jenkins-config/tree/master/jobs).
-We do not use the repository to add new job but the Jenkins UI available at http://10.11.0.95:8080/ (see the 1password for credentials).
+We do not use the repository to add new job but the Jenkins UI available at http://10.11.0.95:8080/ (accessible via the VPN, see the 1password for credentials).
 
-The shell tasks ran by this job is configured in [OptaPlanner_PROD_run](https://github.com/proximum/jenkins-config/blob/master/jobs/OptaPlanner_PROD_run/config.xml) job, for example for planner:
+The shell tasks ran by this job is configured in [OptaPlanner_PROD_run](https://github.com/proximum/jenkins-config/blob/master/jobs/OptaPlanner_PROD_run/config.xml) Jenkins job, for example for planner:
 
     $ cd /var/www/proximum-optaplanner.project.local/htdocs/current
     $ sudo -u www-data java -jar -Dlogback.level.org.optaplanner=error planner.jar /var/www/proximum-optaplanner.project.local/htdocs/shared/planner/$INPUT
 
 ## Create a job build in Jenkins
 
-Production (front1 and front2) and preproduction environments share the same instance of Jenkins.
+Vimeet production (front1 and front2) and preproduction environments share the same instance of Jenkins.
 It is not obvious but the URI `http://optaplanner:8080` is not OptaPlanner, but Jenkins.
 
 For calling Jenkins from Vimeet, we need these credentials:
@@ -34,8 +34,6 @@ For calling Jenkins from Vimeet, we need these credentials:
     jenkins_password: ****
     
 See the 1password for credentials.
-
-There are two jobs for depending on the environment: `OptaPlanner_PROD_run` or `OptaPlanner_PREPROD_run`.
 
 For calling OptaPlanner Jenkins job from Vimeet:
     
@@ -85,9 +83,11 @@ And the Symfony firewall let Jenkins call these routes:
 A sample of the payload received from Jenkins is described in this class:
 [AbstractSetStatus](../src/Application/ThirdParty/Jenkins/AbstractSetStatus.php)
 
+The security for these routes is disabled but the security is made by checking the content of the payload.
+
 ## Planner job
 
-- Vimeet create a unsolved meetings xml file in a shared directory accessible by OptaPlanner
+1. Vimeet create a unsolved meetings xml file in a shared directory accessible by OptaPlanner
 
 ```
     # app/config/parameters.yml
@@ -96,11 +96,11 @@ A sample of the payload received from Jenkins is described in this class:
 
 The export is made by this service: [ExportHandler](../src/Application/Command/Planner/ExportHandler.php)
 
-- Vimeet [create a job build in Jenkins](#Create-a-job-build-in-Jenkins). The build contains the path to the unsolved
-file in parameters input.
-- Jenkins run the Planner job (something like `$ java -jar planner.jar path/to/unsolved-meetings.xml`)
-- OptaPlanner create a solved meetings xml file in the same directory of the unsolved file
-- At the end of the job, Jenkins post the result to Vimeet via the [callback url](#callback): `[admin url]/planner/callback`.
+2. Vimeet [create a job build in Jenkins](#Create-a-job-build-in-Jenkins). The build contains the path to the unsolved
+file in parameters input. There are two jobs for creating a Planner job depending on the environment: `OptaPlanner_PROD_run` or `OptaPlanner_PREPROD_run`.
+3. Jenkins run the Planner job (something like `$ java -jar planner.jar path/to/unsolved-meetings.xml`)
+4. OptaPlanner create a solved meetings xml file in the same directory of the unsolved file
+5. At the end of the job, Jenkins post the result to Vimeet via the [callback url](#callback): `[admin url]/planner/callback`.
 Then,
     - [SetStatusHandler](../src/Application/Command/Planner/Callback/SetStatusHandler.php) parse the Jenkins payload to
 identify the event and the solved file
