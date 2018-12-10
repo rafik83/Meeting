@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class MultiUploadObject implements UploadableObjectInterface
+class MultiUploadObject
 {
     /** @var null|string */
     private $title;
@@ -52,44 +52,5 @@ class MultiUploadObject implements UploadableObjectInterface
     public function getPath(): ?string
     {
         return $this->path;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContentValue()
-    {
-        // TODO: Implement getContentValue() method.
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return string|null
-     */
-    public function getContentValueLocalize($locale = null)
-    {
-        // TODO: Implement getContentValueLocalize() method.
-    }
-
-    /**
-     * @return string
-     */
-    public function getContentLabel()
-    {
-        // TODO: Implement getContentLabel() method.
-    }
-
-    /**
-     * @param string|array $value
-     */
-    public function setContentValue($value)
-    {
-        // TODO: Implement setContentValue() method.
-    }
-
-    public function hasTag($tag)
-    {
-        // TODO: Implement hasTag() method.
     }
 }

@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
+use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUpload;
+use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection;
+use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
@@ -393,21 +395,8 @@ class SheetController extends Controller
 
                 if ($object instanceof Template\TemplateObject\MultiUploadCollectionObject) {
                     $uploadObjects = $form->get('uploads')->getData();
-                    $objectData = $object->getData();
-
-                    /** @var Template\TemplateObject\MultiUploadObject $uploadObject */
-                    foreach ($uploadObjects as $key => $uploadObject) {
-                        if ($uploadObject->getFile() instanceof UploadedFile) {
-                            $fileData = $this->get('command.participant.upload_file_handler')->handle(
-                                new UploadFile($sheet, $this->getUser(), $uploadObject, [], true)
-                            );
-
-                            $objectData[$key]['path'] = $fileData['path'];
-                        }
-
-                        $objectData[$key]['title'] = $uploadObject->getTitle();
-                    }
-
+                    $objectData = $this->get(MultiUploadCollectionHandler::class)
+                        ->handle(new MultiUploadCollection($uploadObjects));
                     $object->setData($objectData);
                 }
 
