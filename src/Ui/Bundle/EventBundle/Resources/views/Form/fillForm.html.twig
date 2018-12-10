@@ -111,6 +111,7 @@
                                             <b>{{ object.getDefaultLabel }}</b> :
                                             {{ include('@Event/Participant/Object/' ~ object.type ~ '.html.twig', {
                                                 'object': object,
+                                                'forceDisplay': true
                                             }, false) }}
                                         </div>
                                     {% endif %}
@@ -122,8 +123,12 @@
                                 {% set isHidden = object.isVisibilityHidden is defined and object.isVisibilityHidden %}
                                 {% set isReadOnly = object.isVisibilityReadOnly is defined and object.isVisibilityReadOnly %}
 
-                                {% if isHidden or isReadOnly %}
+                                {% if isHidden %}
                                     <div class="alert alert-danger reduce-padding">
+                                {% endif %}
+
+                                {% if isReadOnly %}
+                                    <div class="alert alert-warning reduce-padding">
                                 {% endif %}
 
                                 {{ form_row(child) }}
