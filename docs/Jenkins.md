@@ -8,10 +8,14 @@
 
 ## Overview
 
-1. Vimeet [create a job build in Jenkins](#Create-a-job-build-in-Jenkins)
-2. Jenkins run the job
-3. At the end of the job, Jenkins post the result to Vimeet via the [callback url](#callback)
-    
+Jenkins is used for two different tasks in Vimeet architecture:
+
+1. To run periodic job (similar to Cron jobs)
+2. To run job on demand:
+    1. Vimeet [create a job build in Jenkins](#Create-a-job-build-in-Jenkins)
+    2. Jenkins run the job
+    3. At the end of the job, Jenkins post the result to Vimeet via the [callback url](#callback)
+
 ## Job
 
 Jobs are saved in this Github repository: [proximum/jenkins-config](https://github.com/proximum/jenkins-config/tree/master/jobs).
