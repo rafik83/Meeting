@@ -5693,11 +5693,11 @@ services:
             - '%planner_files_path%'
             - '%planner_command%'
             - '@vimeet_infrastructure.repository.event_repository'
-            - '@repository.file_repository'
             - '@vimeet_infrastructure.repository.planner_job_repository'
             - '@adapter.mailer_adapter'
-            - '@datetime'
             - '%mailer_sender%'
+            - '@adapter.exec_adapter'
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Export }
 
