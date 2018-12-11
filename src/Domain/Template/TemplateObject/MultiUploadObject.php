@@ -26,7 +26,7 @@ class MultiUploadObject
     /** @var null|UploadedFile */
     private $file;
 
-    public function __construct(?string $uniqId, ?string $title, ?string $path)
+    public function __construct(?string $uniqId = null, ?string $title = null, ?string $path = null)
     {
         $this->uniqId = $uniqId;
         $this->title = $title;
