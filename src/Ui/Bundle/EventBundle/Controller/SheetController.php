@@ -240,6 +240,7 @@ class SheetController extends Controller
 
         return $this->render('EventBundle:Sheet:print.html.twig', [
             'event'         => $event,
+            'userSheet'     => $sheet,
             'sheet'         => $sheetToDisplay,
             'taggedData'    => $taggedData,
             'locale'        => $locale,

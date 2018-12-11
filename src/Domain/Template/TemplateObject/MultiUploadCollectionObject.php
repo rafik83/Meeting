@@ -73,9 +73,23 @@ class MultiUploadCollectionObject extends TemplateObject
         return $this->getOption('formats');
     }
 
+    /**
+     * @return MultiUploadObject[]
+     */
     public function getUploads(): array
     {
         return $this->uploads;
+    }
+
+    public function hasUpload(string $path): bool
+    {
+        foreach ($this->getUploads() as $upload) {
+            if ($path === $upload->getPath()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getUploadsIndexedByUniqid(): array
