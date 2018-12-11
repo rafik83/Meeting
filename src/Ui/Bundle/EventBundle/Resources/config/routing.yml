@@ -202,6 +202,15 @@ event_sheet_objects_collection_update:
     methods:  [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ObjectsCollectionUpdateAction
 
+event_sheet_show_uploaded_file:
+    path: /sheet/{sheet}/show-uploaded/{objectKey}/file{path}
+    requirements:
+        sheet: \d+
+        objectKey: \w+
+        path: .*
+    methods:  [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ShowUploadedFileAction
+
 event_sheet_update:
     path: /sheet/{sheet}/{locale}/{key}
     requirements:

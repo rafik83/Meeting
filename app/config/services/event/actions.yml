@@ -13,6 +13,12 @@ services:
             - '@Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\SetArrayContentToBlock'
             - '@adapter.router'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ShowUploadedFileAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@template.template_data_factory'
+            - '%shared_uploaded_files%'
+
     #
     # Package
     #
