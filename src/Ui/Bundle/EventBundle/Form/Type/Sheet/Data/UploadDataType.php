@@ -27,7 +27,9 @@ class UploadDataType extends AbstractType
             ->add('title', TextType::class, [
                 'placeholder' => $options['titlePlaceholder'],
             ])
-            ->add('file', FileType::class)
+            ->add('file', FileType::class, [
+                'required' => false
+            ])
         ;
     }
 
