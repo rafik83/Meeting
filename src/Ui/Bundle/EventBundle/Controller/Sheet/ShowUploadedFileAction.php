@@ -103,8 +103,8 @@ class ShowUploadedFileAction
             throw new AccessDeniedException();
         }
 
-        if ($event !== $sheet->getEvent()) {
-            throw new AccessDeniedException('Sheet not in this event');
+        if ($sheet->getId() === $sheetToDisplay->getId()) {
+            return;
         }
 
         if (!$sheet->isInInternalCatalog()) {
@@ -126,10 +126,6 @@ class ShowUploadedFileAction
 
     private function canSeeSheet(Sheet $fromSheet, Sheet $sheetToDisplay): bool
     {
-        if ($fromSheet->getId() === $sheetToDisplay->getId()) {
-            return true;
-        }
-
         $rules = $this->ruleRepository->getBySeerTypeAndSeeableType($fromSheet->getType(), $sheetToDisplay->getType());
 
         return !empty($rules);
