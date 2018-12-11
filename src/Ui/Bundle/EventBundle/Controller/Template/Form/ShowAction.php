@@ -67,7 +67,7 @@ class ShowAction
                 'sheet' => $sheet->getId(),
                 'participant' => $participant->getId(),
                 'step' => 1,
-            ])
-        );
+            ]
+        ));
     }
 }
