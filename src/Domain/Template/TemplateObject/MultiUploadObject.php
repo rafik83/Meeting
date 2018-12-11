@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class MultiUploadObject
 {
     /** @var null|string */
+    private $uniqId;
+
+    /** @var null|string */
     private $title;
 
     /** @var null|string */
@@ -23,10 +26,16 @@ class MultiUploadObject
     /** @var null|UploadedFile */
     private $file;
 
-    public function __construct(?string $title, ?string $path)
+    public function __construct(?string $uniqId, ?string $title, ?string $path)
     {
+        $this->uniqId = $uniqId;
         $this->title = $title;
         $this->path = $path;
+    }
+
+    public function getUniqId(): ?string
+    {
+        return $this->uniqId;
     }
 
     public function getFile(): ?UploadedFile
@@ -52,5 +61,14 @@ class MultiUploadObject
     public function getPath(): ?string
     {
         return $this->path;
+    }
+
+    public function getDefaultValues(): array
+    {
+        return [
+            'path' => $this->getPath(),
+            'title' => $this->getTitle(),
+            'uniqId' => $this->getUniqId(),
+        ];
     }
 }

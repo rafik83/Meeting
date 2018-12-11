@@ -368,6 +368,11 @@ class SheetController extends Controller
         $object->setBuyableProducts($products);
         $object->setSheet($sheet);
 
+        $savedObject = null;
+        if ($object instanceof Template\TemplateObject\MultiUploadCollectionObject) {
+            $savedObject = clone $object;
+        }
+
         $templateObjectView = $this
             ->get('tactician.commandbus')
             ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
@@ -395,9 +400,9 @@ class SheetController extends Controller
                 }
 
                 if ($object instanceof Template\TemplateObject\MultiUploadCollectionObject) {
-                    $uploadObjects = $form->get('uploads')->getData();
+
                     $objectData = $this->get(MultiUploadCollectionHandler::class)
-                        ->handle(new MultiUploadCollection($uploadObjects));
+                        ->handle(new MultiUploadCollection($savedObject, $object));
                     $object->setData($objectData);
                 }
 
