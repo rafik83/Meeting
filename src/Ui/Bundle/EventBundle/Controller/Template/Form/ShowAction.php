@@ -59,7 +59,9 @@ class ShowAction
             return new RedirectResponse($this->router->generate('event'));
         }
 
-        $participant = $sheet->getUserParticipant($userDomain->getUser());
+        null !== $sheet->getUserParticipant($userDomain->getUser())
+            ? $participant = $sheet->getUserParticipant($userDomain->getUser())
+            : $participant = $sheet->getFirstParticipant();
 
         return new RedirectResponse($this->router->generate('event_participant_fill_form',
             [
