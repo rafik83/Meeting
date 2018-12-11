@@ -36,7 +36,7 @@ class MultiUploadCollectionObject extends TemplateObject
         if (!empty($default)) {
             $pad = $default - \count($this->uploads);
             while ($pad-- > 0) {
-                $this->uploads[] = new MultiUploadObject(null, null, null);
+                $this->uploads[] = new MultiUploadObject();
             }
         }
     }

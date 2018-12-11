@@ -400,7 +400,6 @@ class SheetController extends Controller
                 }
 
                 if ($object instanceof Template\TemplateObject\MultiUploadCollectionObject) {
-
                     $objectData = $this->get(MultiUploadCollectionHandler::class)
                         ->handle(new MultiUploadCollection($savedObject, $object));
                     $object->setData($objectData);
