@@ -92,7 +92,7 @@ class ShowUploadedFileAction
             );
         }
 
-        $fullPath = sprintf('%s/%s', $this->sharedUploadedFiles, $path);
+        $fullPath = sprintf('%s%s', $this->sharedUploadedFiles, $path);
 
         return new BinaryFileResponse($fullPath);
     }
