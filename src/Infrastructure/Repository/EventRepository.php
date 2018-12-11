@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -300,7 +301,12 @@ class EventRepository implements EventRepositoryInterface
      */
     public function findPastEvents(\DateTimeInterface $dateTime): array
     {
-        $queryBuilder = $this
+        return $this->getPastEventQueryBuilder($dateTime)->getQuery()->getResult();
+    }
+
+    private function getPastEventQueryBuilder(\DateTimeInterface $dateTime): QueryBuilder
+    {
+        return $this
             ->entityManager
             ->createQueryBuilder()
             ->select('event')
@@ -310,8 +316,22 @@ class EventRepository implements EventRepositoryInterface
             ->where('NOT (otherDay.endTime > :datetime)')
             ->setParameter('datetime', $dateTime)
         ;
+    }
 
-        return $queryBuilder->getQuery()->getResult();
+    /**
+     * {@inheritdoc}
+     */
+    public function findPastEventIds(\DateTimeInterface $dateTime): array
+    {
+        $eventIdsArray = $this->getPastEventQueryBuilder($dateTime)->select('event.id')->getQuery()->getResult();
+        $eventIds = [];
+
+        foreach ($eventIdsArray as $eventIdArray) {
+            $id = $eventIdArray['id'];
+            $eventIds[$id] = $id;
+        }
+
+        return $eventIds;
     }
 
     /**

@@ -28,4 +28,9 @@ interface VersionRepositoryInterface
      * @return null|Version
      */
     public function getLastVersionByEventAndUser(Event $event, User $user): ?Version;
+
+    /**
+     * @param array $events
+     */
+    public function removeVersionsOfEvents(array $events): void;
 }
