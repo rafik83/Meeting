@@ -892,7 +892,7 @@ event_user_event_phone_validate_code_success:
 #
 event_show_form_template:
     path: /form/{formTemplate}
-    methods: [GET, POST]
+    methods: [GET]
     requirements:
         formTemplate: \d+
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Template\Form\ShowAction
