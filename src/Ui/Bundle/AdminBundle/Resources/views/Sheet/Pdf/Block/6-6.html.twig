@@ -3,6 +3,7 @@
         {% for uid, child in item.column(0) %}
             {{ include('AdminBundle:Sheet/Pdf/' ~ child.component|capitalize ~ ':' ~ child.type ~ '.html.twig', {
                 'sheet': sheet,
+                'userSheet': userSheet,
                 'uid': uid,
                 'item': child,
                 'locale': locale,
@@ -17,6 +18,7 @@
         {% for uid, child in item.column(1) %}
             {{ include('AdminBundle:Sheet/Pdf/' ~ child.component|capitalize ~ ':' ~ child.type ~ '.html.twig', {
                 'sheet': sheet,
+                'userSheet': userSheet,
                 'uid': uid,
                 'item': child,
                 'locale': locale,
