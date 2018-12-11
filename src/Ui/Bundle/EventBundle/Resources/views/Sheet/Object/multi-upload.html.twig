@@ -6,13 +6,7 @@
         </header>
     {% endif %}
     <div class="section__content">
-        <ul class="list list--medias">
-            {% for media in item.data|default([]) %}
-                <li>
-                    <a href="{{ path('event_sheet_show_uploaded_file', { sheet: userSheet ? userSheet.id : sheet.id, sheetToDisplayId: sheet.id, objectKey: item.key, path: media['path'] }) }}" target="_blank">{{ media['title'] }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+        {{ include('@Event/Sheet/Object/multi-upload-list.html.twig') }}
     </div>
     {% if not isCatalog %}
         <footer>
