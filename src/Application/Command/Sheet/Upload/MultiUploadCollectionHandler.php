@@ -33,30 +33,32 @@ class MultiUploadCollectionHandler
     public function handle(MultiUploadCollection $command): array
     {
         $data = [];
+        $savedUploadsIndexedByUniqId = $command->savedMultiUploadCollectionObject->getUploadsIndexedByUniqid();
 
         /** @var MultiUploadObject $uploadObject */
-        foreach ($command->multiUploadObjects as $key => $uploadObject) {
+        foreach ($command->initialMultiUploadCollectionObject->getUploads() as $uploadObject) {
+            if (!array_key_exists($uploadObject->getUniqId(), $savedUploadsIndexedByUniqId)) {
+                $this->fileStorage->remove($this->sharedUploadedFiles.$uploadObject->getPath());
+            }
+        }
+
+        /** @var MultiUploadObject $uploadObject */
+        foreach ($command->savedMultiUploadCollectionObject->getUploads() as $uploadObject) {
             $file = $uploadObject->getFile();
 
             if (!$file instanceof UploadedFile) {
-                $data[$key] = [
-                    'path' => $uploadObject->getPath(),
-                    'title' => $uploadObject->getTitle(),
-                ];
+                $data[] = $uploadObject->getDefaultValues();
 
                 continue;
             }
 
-            if ($uploadObject->getPath()) {
-                // Remove previous file
-                $this->fileStorage->remove($this->sharedUploadedFiles.$uploadObject->getPath());
-            }
-
+            $this->fileStorage->remove($this->sharedUploadedFiles.$uploadObject->getPath());
             $path = $this->fileStorage->upload($file, $this->sharedUploadedFiles);
 
-            $data[$key] = [
+            $data[] = [
                 'path' => $path,
                 'title' => $uploadObject->getTitle(),
+                'uniqId' => $uploadObject->getUniqId() ?? uniqid(),
             ];
         }
 

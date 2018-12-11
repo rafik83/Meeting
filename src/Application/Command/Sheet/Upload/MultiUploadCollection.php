@@ -16,11 +16,15 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadObject;
 
 class MultiUploadCollection implements Command
 {
-    /** @var MultiUploadObject[] */
-    public $multiUploadObjects;
+    /** @var MultiUploadCollectionObject */
+    public $initialMultiUploadCollectionObject;
 
-    public function __construct(array $multiUploadObjects)
+    /** @var MultiUploadCollectionObject */
+    public $savedMultiUploadCollectionObject;
+
+    public function __construct(MultiUploadCollectionObject $initialMultiUploadCollectionObject, MultiUploadCollectionObject $savedMultiUploadCollectionObject)
     {
-        $this->multiUploadObjects = $multiUploadObjects;
+        $this->initialMultiUploadCollectionObject = $initialMultiUploadCollectionObject;
+        $this->savedMultiUploadCollectionObject = $savedMultiUploadCollectionObject;
     }
 }

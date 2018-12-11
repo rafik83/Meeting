@@ -36,7 +36,7 @@ class MultiUploadCollectionObject extends TemplateObject
         if (!empty($default)) {
             $pad = $default - \count($this->uploads);
             while ($pad-- > 0) {
-                $this->uploads[] = new MultiUploadObject(null, null);
+                $this->uploads[] = new MultiUploadObject(null, null, null);
             }
         }
     }
@@ -63,7 +63,7 @@ class MultiUploadCollectionObject extends TemplateObject
     {
         $this->uploads = array_map(
             function (array $upload) {
-                return new MultiUploadObject($upload['title'], $upload['path']);
+                return new MultiUploadObject($upload['uniqId'], $upload['title'], $upload['path']);
             }, array_values($data)
         );
     }
@@ -76,5 +76,20 @@ class MultiUploadCollectionObject extends TemplateObject
     public function getUploads(): array
     {
         return $this->uploads;
+    }
+
+    public function getUploadsIndexedByUniqid(): array
+    {
+        $data = [];
+
+        foreach ($this->uploads as $upload) {
+            if (!$upload->getUniqId()) {
+                continue;
+            }
+
+            $data[$upload->getUniqId()] = $upload;
+        }
+
+        return $data;
     }
 }

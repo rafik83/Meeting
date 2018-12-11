@@ -40,11 +40,11 @@ class MultiUploadDataType extends AbstractType
                     'collection' => $options['data'],
                     'required' => $uploadCollection->getRequired(),
                     'titlePlaceholder' => $uploadCollection->getTitlePlaceholder(),
+                    'help' => $this->getHelp($uploadCollection->getFormats())
                 ],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'label' => false,
-                'help' => $this->getHelp($uploadCollection->getFormats()),
                 'max' => $uploadCollection->getMax(),
             ]);
     }
