@@ -67,6 +67,14 @@ class MultiUploadCollectionObjectValidator extends TemplateObjectValidator
 
         /** @var TemplateObject\MultiUploadObject $upload */
         foreach ($object->getUploads() as $index => $upload) {
+            if (!$upload->getPath()) {
+                $this->context
+                    ->getValidator()
+                    ->inContext($this->context)
+                    ->atPath(sprintf('uploads.%s.file', $index))
+                    ->validate($upload->getFile(), new NotBlank());
+            }
+
             $this->context
                 ->getValidator()
                 ->inContext($this->context)
