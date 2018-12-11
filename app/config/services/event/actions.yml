@@ -16,6 +16,8 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ShowUploadedFileAction:
         arguments:
             - '@adapter.authorization_checker'
+            - '@repository.rule_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
             - '%shared_uploaded_files%'
 

@@ -342,7 +342,7 @@ class CatalogController extends Controller
         Request $request,
         EventDomain $eventDomain,
         Sheet $sheet,
-        $sheetToDisplay,
+        int $sheetToDisplay,
         UserDomain $userDomain
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -350,6 +350,10 @@ class CatalogController extends Controller
         $user = $userDomain->getUser();
         $event = $eventDomain->getEvent();
         $locale = $request->getLocale();
+
+        if ($event !== $sheet->getEvent()) {
+            throw $this->createAccessDeniedException('Sheet not in this event');
+        }
 
         if (!$sheet->isInInternalCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');
