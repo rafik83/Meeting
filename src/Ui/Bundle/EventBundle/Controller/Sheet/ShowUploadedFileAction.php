@@ -132,10 +132,6 @@ class ShowUploadedFileAction
 
         $rules = $this->ruleRepository->getBySeerTypeAndSeeableType($fromSheet->getType(), $sheetToDisplay->getType());
 
-        if (empty($rules)) {
-            return false;
-        }
-
-        return true;
+        return !empty($rules);
     }
 }
