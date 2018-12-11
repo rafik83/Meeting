@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Template\Form;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
@@ -59,9 +60,11 @@ class ShowAction
             return new RedirectResponse($this->router->generate('event'));
         }
 
-        null !== $sheet->getUserParticipant($userDomain->getUser())
-            ? $participant = $sheet->getUserParticipant($userDomain->getUser())
-            : $participant = $sheet->getFirstParticipant();
+        $participant = $sheet->getUserParticipant($userDomain->getUser());
+
+        if (!$participant instanceof Participant) {
+            $participant = $sheet->getFirstParticipant();
+        }
 
         return new RedirectResponse($this->router->generate('event_participant_fill_form',
             [
