@@ -56,7 +56,7 @@ class ShowAction
         try {
             $sheet = $this->sheetGuesser->getUserSheet($userDomain->getUser(), $event, $event->getFallback());
         } catch (SheetNotFoundException $exception) {
-            return new RedirectResponse($this->router->generate('login'));
+            return new RedirectResponse($this->router->generate('event'));
         }
 
         $participant = $sheet->getUserParticipant($userDomain->getUser());
