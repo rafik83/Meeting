@@ -23,7 +23,14 @@ use Proximum\Vimeet\Application\Command\Planner\Import;
 use Proximum\Vimeet\Application\Command\Planner\ImportHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -154,26 +161,77 @@ class ImportHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $spot1 = $this->prophesize(Spot::class);
+        $spot1->getId()->shouldBeCalled()->willReturn(11064);
+
+        $meetingSlot1 = $this->prophesize(MeetingSlot::class);
+        $meetingSlot1->getId()->shouldBeCalled()->willReturn(2563);
+
+        $meetingRequest1 = $this->prophesize(Request::class);
+        $meetingRequest1->getId()->shouldBeCalled()->willReturn(316268);
+
+        $userParticipant1Sheet1 = $this->prophesize(User::class);
+        $userParticipant1Sheet1->getId()->shouldBeCalled()->willReturn(75570);
+
+        $participant1Sheet1 = $this->prophesize(Participant::class);
+        $participant1Sheet1->getUser()->shouldBeCalled()->willReturn($userParticipant1Sheet1->reveal());
+
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->getId()->shouldBeCalled()->willReturn(74246);
+        $sheet1->getParticipantsArray()->shouldBeCalled()->willReturn([$participant1Sheet1->reveal()]);
+
+        $userParticipant2Sheet2 = $this->prophesize(User::class);
+        $userParticipant2Sheet2->getId()->shouldBeCalled()->willReturn(69715);
+
+        $participant2Sheet2 = $this->prophesize(Participant::class);
+        $participant2Sheet2->getUser()->shouldBeCalled()->willReturn($userParticipant2Sheet2->reveal());
+
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet2->getId()->shouldBeCalled()->willReturn(69146);
+        $sheet2->getParticipantsArray()->shouldBeCalled()->willReturn([$participant2Sheet2->reveal()]);
+
         $this->requestRepository
             ->getAllAcceptedByEvent($event->reveal())
             ->shouldBeCalled()
-            ->willReturn([])
+            ->willReturn([$meetingRequest1->reveal()])
         ;
         $this->sheetRepository
             ->getByEvent($event->reveal())
             ->shouldBeCalled()
-            ->willReturn([])
+            ->willReturn([$sheet1->reveal(), $sheet2->reveal()])
         ;
         $this->slotRepository
             ->findByEvent($event->reveal())
             ->shouldBeCalled()
-            ->willReturn([])
+            ->willReturn([$meetingSlot1->reveal()])
         ;
         $this->spotRepository
             ->getActiveByEvent($event->reveal())
             ->shouldBeCalled()
-            ->willReturn([])
+            ->willReturn([$spot1->reveal()])
         ;
+
+        $this->entityManagerAdapter
+            ->persist(
+                new Meeting(
+                    $meetingRequest1->reveal(),
+                    $meetingSlot1->reveal(),
+                    $sheet1->reveal(),
+                    [$participant1Sheet1->reveal()],
+                    $sheet2->reveal(),
+                    [$participant2Sheet2->reveal()],
+                    $this->dateTime,
+                    $spot1->reveal(),
+                    $event->reveal(),
+                    false,
+                    false,
+                    'planner'
+                )
+            )
+            ->shouldBeCalled()
+        ;
+        $this->entityManagerAdapter->flush()->shouldBeCalled();
+        $this->entityManagerAdapter->clear()->shouldBeCalled();
 
         $plannerJobFile = $this->prophesize(File::class);
         $plannerJobFile->getPath()->shouldBeCalled()->willReturn('planner/file.xml');
