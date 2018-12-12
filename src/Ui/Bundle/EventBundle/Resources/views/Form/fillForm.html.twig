@@ -8,75 +8,143 @@
     <div class="main-content">
         <section class="main">
             <header>
-                <h1>
-                    {% if blockStepView.currentStep > 1 %}
-                        <a href="{{ path('event_participant_fill_form', {
-                            'sheet': sheet.id,
-                            'participant': participantList.currentParticipant.id,
-                            'formTemplate': formTemplate.id,
-                            'step': blockStepView.currentStep - 1,
-                        }) }}" class="btn btn-link">
-                            <span class="icon-Precedent_3"></span>
-                        </a>
-                    {% endif %}
-                    {{ formTemplateTitle }}
-                </h1>
-                &nbsp;- {{ 'form_template.fill_step.step_title'|trans({'%currentStep%': blockStepView.currentStep, '%totalStep%': blockStepView.totalStep }) }}
-                {% if participantList.hasMoreThanOneParticipant %}
-                <div class="dropdown pull-right">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                        <i class="icon-Info_1"></i>
-                            {{ 'form_template.fill_step.participant'|trans({'%participant%': participantList.currentParticipant.fullName }) }}
-                        {% if participantList.participants|length > 1 %}<span class="caret"></span>{% endif %}
-                    </button>
-                    {% if participantList.participants|length > 1 %}
-                        <ul class="dropdown-menu">
-                            {% for participantName in participantList.participants %}
-                                <li {% if participantName.id == participantList.currentParticipant.id %}class="active"{% endif %}>
-                                    <a href="{{ path('event_participant_fill_form', {
-                                        'participant': participantName.id,
-                                        'sheet': sheet.id,
-                                        'formTemplate': formTemplate.id,
-                                        'step': blockStepView.currentStep,
-                                    }) }}">
-                                        {{ 'form_template.fill_step.participant'|trans({'%participant%': participantName.fullName}) }}
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
+                <h1>{{ formTemplateTitle }}</h1>
+                <div class="row">
+                    <h2 class="col-md-8">
+                        {% if blockStepView.currentStepIndex > 1 %}
+                            <a href="{{ path('event_participant_fill_form', {
+                                'sheet': sheet.id,
+                                'participant': participantList.currentParticipant.id,
+                                'formTemplate': formTemplate.id,
+                                'step': blockStepView.currentStepIndex - 1,
+                            }) }}" class="btn btn-link">
+                                <span class="icon-Precedent_3"></span>
+                            </a>
+                        {% endif %}
+                        {{ blockStepView.breadCrumb.currentStep.title }}
+                        {% set nextStep = blockStepView.breadCrumb.nextStep %}
+                        {% if nextStep != null and nextStep.accessible %}
+                            <a href="{{ path('event_participant_fill_form', {
+                                'sheet': sheet.id,
+                                'participant': participantList.currentParticipant.id,
+                                'formTemplate': formTemplate.id,
+                                'step': nextStep.index,
+                            }) }}" class="btn btn-link">
+                                <span class="icon-Suivant_3"></span>
+                            </a>
+                        {% endif %}
+                    </h2>
+                    {% if participantList.hasMoreThanOneParticipant %}
+                        <div class="dropdown col-md-4 text-right left-on-mobile">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                <i class="icon-Info_1"></i>
+                                {{ 'form_template.fill_step.participant'|trans({'%participant%': participantList.currentParticipant.fullName }) }}
+                                {% if participantList.participants|length > 1 %}<span class="caret"></span>{% endif %}
+                            </button>
+                            {% if participantList.participants|length > 1 %}
+                                <ul class="dropdown-menu">
+                                    {% for participantName in participantList.participants %}
+                                        <li {% if participantName.id == participantList.currentParticipant.id %}class="active"{% endif %}>
+                                            <a href="{{ path('event_participant_fill_form', {
+                                                'participant': participantName.id,
+                                                'sheet': sheet.id,
+                                                'formTemplate': formTemplate.id,
+                                                'step': blockStepView.currentStepIndex,
+                                            }) }}">
+                                                {{ 'form_template.fill_step.participant'|trans({'%participant%': participantName.fullName}) }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
                     {% endif %}
                 </div>
-                {% endif %}
                 {% if blockStepView.description is not empty %}
                     <p>{{ blockStepView.description|html }}</p>
                 {% endif %}
             </header>
 
-            <div class="main__container">
-                <div class="row">
-                    <div class="col-md-12">
-
+            <div class="row">
+                <div class="col-md-3 hide-on-mobile">
+                    <div class="grey__container">
+                        <ul>
+                        {% for step in blockStepView.breadCrumb.steps %}
+                            <li>
+                                {% if step.accessible %}
+                                    <a href="{{ path('event_participant_fill_form', {
+                                        'participant': participantList.currentParticipant.id,
+                                        'sheet': sheet.id,
+                                        'formTemplate': formTemplate.id,
+                                        'step': step.index,
+                                    }) }}">
+                                {% endif %}
+                                        {% if step.index == blockStepView.currentStepIndex %}
+                                            <b>
+                                        {% endif %}
+                                            {{ step.index }}. {{ step.title }}
+                                        {% if step.index == blockStepView.currentStepIndex %}
+                                            </b>
+                                        {% endif %}
+                                {% if step.accessible %}
+                                    </a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="grey__container">
+                        <h4 class="text-center">
+                            {{ 'form_template.fill_step.step_title'|trans({'%currentStep%': blockStepView.currentStepIndex, '%totalStep%': blockStepView.totalNumberOfStep }) }}
+                        </h4>
                         {{ form_start(form) }}
 
                         {{ form_errors(form) }}
 
                         <div class="inputs">
+                            {% if not is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                {% for object in blockStepView.block.getReadOnlyObjects|default([]) %}
+                                    {% if object.value and object.value|first is not empty %}
+                                        <div>
+                                            <b>{{ object.getDefaultLabel }}</b> :
+                                            {{ include('@Event/Participant/Object/' ~ object.type ~ '.html.twig', {
+                                                'object': object,
+                                                'forceDisplay': true
+                                            }, false) }}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
                             {% for child in form %}
+                                {% set object = child.vars.value %}
+                                {% set isHidden = object.isVisibilityHidden is defined and object.isVisibilityHidden %}
+                                {% set isReadOnly = object.isVisibilityReadOnly is defined and object.isVisibilityReadOnly %}
+
+                                {% if isHidden %}
+                                    <div class="alert alert-danger reduce-padding">
+                                {% endif %}
+
+                                {% if isReadOnly %}
+                                    <div class="alert alert-warning reduce-padding">
+                                {% endif %}
+
                                 {{ form_row(child) }}
 
-                                {% set uploadObject = child.vars.value %}
-                                {% if uploadObject.isUploadAndHasPath is defined and uploadObject.isUploadAndHasPath %}
+                                {% if object.isUploadAndHasPath is defined and object.isUploadAndHasPath %}
                                     {% set parameters = {
                                         'sheet': sheet.id,
                                         'participant': participantList.currentParticipant.id,
                                         'formTemplate': formTemplate.id,
-                                        'objectKey': uploadObject.key
+                                        'objectKey': object.key
                                     } %}
                                     {% set path = path('event_form_template_download_file', parameters) %}
 
                                     <div class="text-center">
                                         <a href="{{ path }}" download>
-                                            {% if uploadObject.isImageFormat %}
+                                            {% if object.isImageFormat %}
                                                 {{ render(controller(
                                                     'Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Form\\DownloadFileAction',
                                                     parameters|merge({'preview': true})
@@ -89,12 +157,15 @@
                                         <hr>
                                     </div>
                                 {% endif %}
+                                {% if isHidden or isReadOnly %}
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         </div>
 
                         <div class="validation text-center">
                             <button type="submit" class="btn btn-primary">
-                                {% if blockStepView.currentStep != blockStepView.totalStep %}
+                                {% if blockStepView.currentStepIndex != blockStepView.totalNumberOfStep %}
                                     <i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}
                                 {% else %}
                                     <i class="icon-Valider_3"></i> {{ 'register.finalize'|trans }}

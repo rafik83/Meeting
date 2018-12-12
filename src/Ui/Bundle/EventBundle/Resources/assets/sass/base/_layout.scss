@@ -74,6 +74,13 @@ body {
     margin-left: -15px;
   }
 
+.grey__container {
+  padding: 25px 25px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  background: $bg-container-color;
+}
+
 .content { padding-right: 40px; }
 
 .content-large { margin-top: 30px; }

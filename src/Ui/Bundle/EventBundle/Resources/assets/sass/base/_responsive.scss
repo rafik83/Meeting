@@ -43,10 +43,14 @@ body {
 }
 
 .show-on-mobile { display: none; }
+.hide-on-mobile { display: block; }
 
 @media screen and (max-width: 767px) {
   .container-fluid {
     padding-bottom: 100px;
+  }
+  .left-on-mobile {
+    float: left;
   }
 
   .container-fluid {
@@ -67,6 +71,10 @@ body {
 
   .show-on-mobile {
     display: block;
+  }
+
+  .hide-on-mobile {
+    display: none !important;
   }
 
   body {

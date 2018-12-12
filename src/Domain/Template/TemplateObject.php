@@ -17,6 +17,10 @@ use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class TemplateObject extends AbstractChild
 {
+    public const VISIBILITY_EDITABLE = 'editable';
+    public const VISIBILITY_READ_ONLY = 'read_only';
+    public const VISIBILITY_HIDDEN = 'hidden';
+
     /**
      * @var array
      */
@@ -261,6 +265,26 @@ class TemplateObject extends AbstractChild
     public function getRequired()
     {
         return null !== $this->getOption('required') ? $this->getOption('required') : false;
+    }
+
+    public function getVisibility(): string
+    {
+        return $this->getOption('visibility') ?? self::VISIBILITY_EDITABLE;
+    }
+
+    public function isVisibilityHidden(): bool
+    {
+        return self::VISIBILITY_HIDDEN === $this->getVisibility();
+    }
+
+    public function isVisibilityEditable(): bool
+    {
+        return self::VISIBILITY_EDITABLE === $this->getVisibility();
+    }
+
+    public function isVisibilityReadOnly(): bool
+    {
+        return self::VISIBILITY_READ_ONLY === $this->getVisibility();
     }
 
     /**

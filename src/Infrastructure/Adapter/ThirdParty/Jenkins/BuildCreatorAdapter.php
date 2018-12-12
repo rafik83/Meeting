@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins;
 
+use Proximum\Vimeet\Application\Adapter\ExecInterface;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\Jenkins\BuildCreatorInterface;
 use Proximum\Vimeet\Application\ThirdParty\Jenkins\Exception\BuildCreationFailedException;
 use Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter;
@@ -25,17 +26,11 @@ class BuildCreatorAdapter implements BuildCreatorInterface
     /** @var string */
     private $jenkinsPassword;
 
-    /** @var ExecAdapter */
+    /** @var ExecInterface */
     private $execAdapter;
 
-    /**
-     * @param ExecAdapter $execAdapter
-     * @param string      $jenkinsCommand
-     * @param string      $jenkinsUser
-     * @param string      $jenkinsPassword
-     */
     public function __construct(
-        ExecAdapter $execAdapter,
+        ExecInterface $execAdapter,
         string $jenkinsCommand,
         string $jenkinsUser,
         string $jenkinsPassword

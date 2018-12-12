@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Update;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
@@ -288,6 +289,7 @@ class SheetTemplateController extends Controller
             'sheet_template_tags' => Tag::getGenericSheetTemplateTags(),
             'template'  => $template,
             'update_form' => $updateForm->createView(),
+            'uploadFormats' => UploadObject::ALLOWED_FORMATS
         ]);
     }
 

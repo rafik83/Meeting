@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Adapter;
 use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 
-interface SendGridApiAdapterInterface
+interface EmailingSenderInterface
 {
     /**
      * Sends an emailing message to a given list of receivers.

@@ -155,7 +155,7 @@ class Block extends AbstractChild
     }
 
     /**
-     * Get first levels blocks
+     * Get all blocks on 1 level
      *
      * @return Block[]
      */
@@ -274,10 +274,42 @@ class Block extends AbstractChild
     /**
      * @return TemplateObject[]
      */
-    public function getEditableObjects()
+    public function getEditableObjects(): array
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
-            return $object->isEditable();
+            return $object->isEditable() && $object->isVisibilityEditable();
+        });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getHiddenAndReadOnlyObjects(): array
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object->isVisibilityHidden() || $object->isVisibilityReadOnly();
+        });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getReadOnlyObjects(): array
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object->isVisibilityReadOnly();
+        });
+    }
+
+    /**
+     * @return TemplateObject[]
+     */
+    public function getObjectsEditableByAdmin(): array
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return ($object->isEditable() && $object->isVisibilityEditable())
+                || $object->isVisibilityHidden()
+                || $object->isVisibilityReadOnly();
         });
     }
 

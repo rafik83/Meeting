@@ -1,0 +1,16 @@
+<section id="object-{{ uid }}" class="object object--media section">
+    {% set label = item.label(locale, fallback) %}
+    {% if label %}
+        <header>
+            <h2>{{ label }}{% if not isCatalog and item.required|default(false) %}*{% endif %}</h2>
+        </header>
+    {% endif %}
+    <div class="section__content">
+        {{ include('@Event/Sheet/Object/multi-upload-list.html.twig') }}
+    </div>
+    {% if not isCatalog %}
+        <footer>
+            <a href="{{ path('event_sheet_form', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" class="edit-link" data-toggle="modal" data-target="#edit-modal"><i class="icon-Note_2"></i> {{ 'sheet.object.action.edit'|trans }} "{{ item.label(locale, fallback) }}"</a>
+        </footer>
+    {% endif %}
+</section>

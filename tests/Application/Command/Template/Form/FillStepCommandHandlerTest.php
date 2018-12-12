@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Template\Form;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Command\Template\Form\FillStepCommand;
 use Proximum\Vimeet\Application\Command\Template\Form\FillStepCommandHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Template\Form\BlockStepView;
+use Proximum\Vimeet\Application\View\Template\Form\BreadCrumbView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\FormData as SheetFormData;
@@ -39,19 +41,21 @@ class FillStepCommandHandlerTest extends TestCase
         $participant->getUser()->shouldBeCalled()->willReturn($user->reveal());
         $sheetFormDataRepository = $this->prophesize(SheetFormDataRepositoryInterface::class);
         $userFormDataRepository = $this->prophesize(UserFormDataRepositoryInterface::class);
+        $authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
+        $authorizationChecker->isGranted('ROLE_PREVIOUS_ADMIN')->shouldBeCalled()->willReturn(false);
 
         $text = $this->prophesize(EditableText::class);
         $nomenclature = $this->prophesize(Nomenclature::class);
         $country = $this->prophesize(Country::class);
 
         $block = $this->prophesize(Block::class);
-        $blockStepView = new BlockStepView($block->reveal(), 'description', 2, 4);
+        $breadCrumb = $this->prophesize(BreadCrumbView::class);
+        $blockStepView = new BlockStepView($block->reveal(), 'description', $breadCrumb->reveal());
         $block->getEditableObjects()->shouldBeCalled()->willReturn([
             '4321' => $text->reveal(),
             '789' => $nomenclature->reveal(),
             '4567' => $country->reveal(),
         ]);
-
 
         $sheetFormDataRepository
             ->getBySheetAndFormTemplate($sheet->reveal(), $formTemplate->reveal())
@@ -106,7 +110,7 @@ class FillStepCommandHandlerTest extends TestCase
         $sheetFormDataRepository->save($sheetFormDataExpected)->shouldBeCalled();
         $userFormDataRepository->save($userFormDataExpected)->shouldBeCalled();
 
-        $handler = new FillStepCommandHandler($userFormDataRepository->reveal(), $sheetFormDataRepository->reveal());
+        $handler = new FillStepCommandHandler($authorizationChecker->reveal(), $userFormDataRepository->reveal(), $sheetFormDataRepository->reveal());
         $handler->handle(new FillStepCommand(
             $formTemplate->reveal(),
             $sheet->reveal(),

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Order;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Exception\Order\OrderMergerException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Order\Row;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -81,5 +82,44 @@ class MergerTest extends TestCase
 
         $orderMerger = new Merger();
         $orderMerger->merge([]);
+    }
+
+    public function test_child_row_with_parent_row_removed()
+    {
+        $datetime = new \DateTime();
+
+        $event = $this->prophesize(Event::class);
+        $event->getCurrency()->willReturn('EUR');
+        $event->getVat()->willReturn(20);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getEvent()->willReturn($event->reveal());
+
+        $option1 = Product::createOption($event->reveal(), 'option', '', 99, 20, 50, 10, 20, true);
+        $option2 = Product::createOption($event->reveal(), 'option', '', 150, 20, 50, 10, 20, true);
+
+        $order1 = new Order($sheet->reveal(), '[]', $datetime);
+        $order1row1 = new Order\Row($order1, 2, 20, $option1, 1337);
+        $order1row1child1 = new Order\Row($order1, 2, 20, null, 1337, 'Custom row 1', 399, $order1row1);
+        $order1row2 = new Order\Row($order1, 2, 20, $option2);
+        $order1->addRow($order1row1);
+        $order1->addRow($order1row1child1);
+        $order1->addRow($order1row2);
+
+        $order2 = new Order($sheet->reveal(), '[]', $datetime);
+        $order2row1 = new Order\Row($order2, -2, 20, $option1, 1337);
+        $order2row2 = new Order\Row($order2, 1, 20, $option2);
+        $order2->addRow($order2row1);
+        $order2->addRow($order2row2);
+
+        $orderMerger = new Merger();
+        $orderMerged = $orderMerger->merge([$order1, $order2]);
+
+        $this->assertEquals(
+            [
+                new Order\Row($orderMerged, 3, 20, $option2),
+                new Order\Row($orderMerged, 2, 20, null, 1337, 'Custom row 1', 399, null),
+            ],
+            array_values($orderMerged->getRows())
+        );
     }
 }

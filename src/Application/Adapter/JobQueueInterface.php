@@ -31,9 +31,8 @@ interface JobQueueInterface
      * @param Event  $event
      * @param int[]  $sheetIds
      * @param string $emailName
-     * @param bool   $sendEmailToTeam
      */
-    public function sendEmailing(Event $event, array $sheetIds, $emailName, $sendEmailToTeam = false);
+    public function sendEmailing(Event $event, array $sheetIds, $emailName);
 
     public function printPlanning(Event\ExtraData $extraData, string $orderBy, string $emailToNotify, string $locale, bool $withBadge = false): void;
 

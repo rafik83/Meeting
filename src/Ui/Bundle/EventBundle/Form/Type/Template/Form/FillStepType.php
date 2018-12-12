@@ -22,7 +22,7 @@ class FillStepType extends AbstractBlockType
         parent::configureOptions($resolver);
 
         $resolver
-            ->setRequired(['blockStepView'])
+            ->setRequired(['blockStepView', 'isAdmin'])
             ->setAllowedTypes('blockStepView', BlockStepView::class)
         ;
 
@@ -36,8 +36,13 @@ class FillStepType extends AbstractBlockType
     {
         /** @var BlockStepView $blockStepView */
         $blockStepView = $options['blockStepView'];
+        $objects = $blockStepView->block->getEditableObjects();
 
-        return $blockStepView->block->getEditableObjects();
+        if (true === $options['isAdmin']) {
+            $objects = array_merge($objects, $blockStepView->block->getHiddenAndReadOnlyObjects());
+        }
+
+        return $objects;
     }
 
     public function getBlockPrefix(): string

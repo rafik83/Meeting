@@ -24,12 +24,17 @@ class FillStepQueryHandler
     /** @var MarkdownAdapterInterface */
     private $markdownAdapter;
 
+    /** @var BreadCrumbViewQueryHandler */
+    private $breadCrumbViewQueryHandler;
+
     public function __construct(
         FormTemplateDataQueryHandler $formTemplateDataQueryHandler,
-        MarkdownAdapterInterface $markdownAdapter
+        MarkdownAdapterInterface $markdownAdapter,
+        BreadCrumbViewQueryHandler $breadCrumbViewQueryHandler
     ) {
         $this->formTemplateDataQueryHandler = $formTemplateDataQueryHandler;
         $this->markdownAdapter = $markdownAdapter;
+        $this->breadCrumbViewQueryHandler = $breadCrumbViewQueryHandler;
     }
 
     /**
@@ -56,27 +61,25 @@ class FillStepQueryHandler
             throw new BlockForGivenStepNotFoundException($query->step);
         }
 
-        if ($query->step !== 1) {
-            foreach ($templateData->getBlocks() as $level => $block) {
-                $formStep = $level+1; // levels start by 0, we add +1 so that the steps start by 1.
+        $breadCrumb = $this->breadCrumbViewQueryHandler->handle(new BreadCrumbViewQuery($templateData, $query->step, $query->locale));
 
-                if ($formStep === $query->step) {
-                    break;
+        $currentStep = $breadCrumb->getCurrentStep();
+
+        if (false === $currentStep->accessible) {
+            $previousStepIndex = 1;
+            foreach ($breadCrumb->steps as $stepIndex => $step) {
+                if (!$step->accessible) {
+                    throw new GivenStepIsRequiredAndNotFilledException($previousStepIndex);
                 }
 
-                foreach ($block->getEditableObjects() as $object) {
-                    if (true === $object->getRequired() && true === $object->isEmpty()) {
-                        throw new GivenStepIsRequiredAndNotFilledException($formStep);
-                    }
-                }
+                $previousStepIndex = $stepIndex;
             }
         }
 
         return new BlockStepView(
             $block,
             $this->markdownAdapter->toHtml($block->getDescription($query->locale)),
-            $query->step,
-            $templateData->getBlocksCount()
+            $breadCrumb
         );
     }
 }

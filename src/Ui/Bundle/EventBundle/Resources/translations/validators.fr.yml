@@ -33,3 +33,4 @@ validators.userPhone.sendCode.phone.min: 'Le numéro de téléphone doit comport
 validators.userPhone.sendCode.phone.mustAccept: 'Vous devez cocher cette case'
 validators.userPhone.validateCode.code.exact: 'Le code doit être composé de 4 chiffres'
 validators.userPhone.validateCode.codeNotValid: 'Le code n''est pas valide'
+validators.multiUpload.file.notValid: 'Format de fichier incorrect'

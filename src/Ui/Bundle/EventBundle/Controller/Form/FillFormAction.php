@@ -122,6 +122,7 @@ class FillFormAction
             'country' => $event->getCountry(),
             'locale' => $locale,
             'locales' => $event->getLocales(),
+            'isAdmin' => $this->authorizationChecker->isGranted('ROLE_PREVIOUS_ADMIN')
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -137,7 +138,7 @@ class FillFormAction
                 $command = new FillStepCommand($formTemplate, $sheet, $participant, $blockStepView);
                 $this->commandBus->handle($command);
 
-                if ($blockStepView->currentStep === $blockStepView->totalStep) {
+                if ($blockStepView->getCurrentStepIndex() === $blockStepView->getTotalNumberOfStep()) {
                     $this->flashBag->add('success', 'flash.form_template.fill_step_finished.success');
 
                     return new RedirectResponse($this->router->generate('event'));
@@ -147,10 +148,12 @@ class FillFormAction
                     'formTemplate' => $formTemplate->getId(),
                     'sheet' => $sheet->getId(),
                     'participant' => $participant->getId(),
-                    'step' => $blockStepView->currentStep + 1,
+                    'step' => $blockStepView->getCurrentStepIndex() + 1,
                 ]));
             }
         }
+
+        $breadCrumb = null;
 
         return new Response(
             $this->engine->render(

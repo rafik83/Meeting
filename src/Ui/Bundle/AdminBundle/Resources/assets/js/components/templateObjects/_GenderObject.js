@@ -30,6 +30,7 @@ GenderObject.prototype.fill = function ()
     this.form.set('label', this.config.label[this.locale]);
     this.form.set('required', this.config.required);
     this.form.set('tags', this.config.tags);
+    this.form.set('visibility', this.config.visibility);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -43,6 +44,7 @@ GenderObject.prototype.save = function ()
     this.config.label[this.locale] = this.form.get('label');
     this.config.required           = this.form.get('required');
     this.config.tags               = this.form.get('tags');
+    this.config.visibility         = this.form.get('visibility');
 
     this.form.bind('label', this.config.label[this.locale]);
 

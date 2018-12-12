@@ -1232,6 +1232,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
 
+    Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler:
+        arguments:
+            - '@adapter.local_file_storage'
+            - '@application.nomenclature.id.uniqu_id_generator'
+            - '%shared_uploaded_files%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection }
     command.sheet.template.save_print_template_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\SavePrintTemplateHandler
         arguments:
@@ -1913,15 +1920,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Process }
 
-    command.messaging.batch.process_handler:
-        class: Proximum\Vimeet\Application\Command\Messaging\Batch\ProcessHandler
-        arguments:
-            - '@adapter.sendgrid_api_adapter'
-            - '@domain.messaging.emailing.substitution_resolver'
-            - '@repository.billing_info_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\Process }
-
     command.messaging.batch.create_handler:
         class: Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessageHandler
         arguments:
@@ -1930,6 +1928,17 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessage }
+
+    Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByTypeHandler:
+        arguments:
+            - '@repository.billing_info_repository'
+            - '@application.components.messaging.message_factory'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
+            - '@adapter.sendgrid_api_adapter'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByType }
 
     command.planner.import_handler:
         class: Proximum\Vimeet\Application\Command\Planner\ImportHandler
@@ -2348,6 +2357,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEventView\Update }
 
+    #
+    # Validator
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\FormTemplateBlockStepDataValidator:
+        arguments:
+            - '@adapter.authorization_checker'
+        tags:
+            - { name: validator.constraint_validator }
 
     #
     # Security
@@ -4655,8 +4672,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@application.components.messaging.message_factory'
-            - '@command.messaging.batch.process_handler'
+            - '@Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByTypeHandler'
         tags:
             - { name: console.command }
 
@@ -5684,11 +5700,11 @@ services:
             - '%planner_files_path%'
             - '%planner_command%'
             - '@vimeet_infrastructure.repository.event_repository'
-            - '@repository.file_repository'
             - '@vimeet_infrastructure.repository.planner_job_repository'
             - '@adapter.mailer_adapter'
-            - '@datetime'
             - '%mailer_sender%'
+            - '@adapter.exec_adapter'
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Export }
 

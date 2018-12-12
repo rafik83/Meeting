@@ -57,6 +57,11 @@ form.multiple_sheet_request_filter_request_type.children.type.filter.request: 'M
 form.multiple_sheet_request_filter_request_type.children.type.label: Type
 form.multiple_sheet_request_filter_request_type.children.user.label: Participant
 form.multiple_sheet_request_filter_request_type.children.user.noPreference.label: 'Pas de préférence'
+form.multi_upload_data.children.uploads.prototype.children.title.label: 'Nom du fichier'
+form.multi_upload_data.children.uploads.prototype.children.file.label: 'Fichier'
+form.multi_upload_data.children.uploads.label_delete: 'Supprimer'
+form.multi_upload_data.children.uploads.label_add: 'Ajouter'
+form.multi_upload_data.children.submit.label: 'Valider'
 form.nomenclature_data.children.items.label: 'Sélectionnez :'
 form.nomenclature_data.children.submit.label: Enregistrer
 form.options.selectParticipants.label: 'Choisir un participant|Choisir un ou des participants'

@@ -60,8 +60,11 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQueryHandler'
             - '@markdown'
+            - '@Proximum\Vimeet\Application\Query\Template\Form\BreadCrumbViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\FillStepQuery }
+
+    Proximum\Vimeet\Application\Query\Template\Form\BreadCrumbViewQueryHandler: ~
 
     #
     # Catalog
