@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Transactional\Mail;
 
 use Proximum\Vimeet\Domain\Model\Messaging\Compose;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Agenda\VersionDiffChangedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
@@ -92,6 +93,11 @@ final class Constant
      * Transactions
      */
     public const TRANSACTIONAL_MAIL_KEY_TRANSACTION_CONFIRMED = 'mail_transaction_confirmed';
+
+    /*
+     * Agenda
+     */
+    public const TRANSACTIONAL_MAIL_KEY_AGENDA_VERSION_DIFF_CHANGED = 'mail_agenda_version_diff_changed';
 
     public const TRANSACTIONAL_MAIL_LIST = [
         self::TRANSACTIONAL_MAIL_KEY_PRE_REGISTERED => [
@@ -281,6 +287,17 @@ final class Constant
             'isCustomizableByType' => true,
             'template' => TransactionConfirmMail::TEMPLATE,
             'template_full_text' => TransactionConfirmMail::TEMPLATE_FULL_TEXT,
+        ],
+        self::TRANSACTIONAL_MAIL_KEY_AGENDA_VERSION_DIFF_CHANGED => [
+            'subject' => VersionDiffChangedMail::SUBJECT,
+            'availableParameters' => [
+                '%agendaModifications%',
+                '%agendaLink%',
+                '%agendaLinkWithCTA%',
+            ],
+            'isCustomizableByType' => true,
+            'template' => VersionDiffChangedMail::TEMPLATE,
+            'template_full_text' => VersionDiffChangedMail::TEMPLATE_FULL_TEXT,
         ],
     ];
 

@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Twig;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
+use Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown;
 use Proximum\Vimeet\Ui\Helper\ChoiceListFormatter;
 use Proximum\Vimeet\Ui\Helper\DataFormatter;
@@ -38,15 +40,19 @@ class AppExtension extends \Twig_Extension
     /** @var Markdown */
     private $markdown;
 
-    /**
-     * @param LocaleHelper $localeHelper
-     */
-    public function __construct(LocaleHelper $localeHelper, Markdown $markdown)
-    {
+    /** @var EventUrlGenerator */
+    private $eventUrlGenerator;
+
+    public function __construct(
+        LocaleHelper $localeHelper,
+        Markdown $markdown,
+        EventUrlGenerator $eventUrlGenerator
+    ) {
         $this->localeHelper = $localeHelper;
         $this->dataFormatter = new DataFormatter($localeHelper);
         $this->choiceListFormatter = new ChoiceListFormatter();
         $this->markdown = $markdown;
+        $this->eventUrlGenerator = $eventUrlGenerator;
     }
 
     /**
@@ -71,6 +77,16 @@ class AppExtension extends \Twig_Extension
     /**
      * {@inheritdoc}
      */
+    public function getFunctions()
+    {
+        return [
+            new \Twig_SimpleFunction('eventUrl', [$this, 'generateEventUrl']),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTests()
     {
         return [
@@ -86,6 +102,15 @@ class AppExtension extends \Twig_Extension
     public function html($value)
     {
         return $value;
+    }
+
+    public function generateEventUrl(Event $event, string $routeName, array $parameters = []): string
+    {
+        return $this->eventUrlGenerator->generateEventAbsoluteUrl(
+            $event,
+            $routeName,
+            $parameters
+        );
     }
 
     /**

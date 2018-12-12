@@ -280,14 +280,14 @@ class EventRepository implements EventRepositoryInterface
      *
      * @return Event[]
      */
-    public function findEventsWithPastSMSActivationDateAndAgendaVersionsNotGenerated(\DateTimeInterface $dateTime): array
+    public function findEventsWithPastSchedulePublishDateAndAgendaVersionsNotGenerated(\DateTimeInterface $dateTime): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('event')
             ->from(Event::class, 'event')
-            ->where('event.configuration.smsActivationDate < :datetime')
+            ->where('event.configuration.schedulePublishDate < :datetime')
             ->andWhere('event.userAgendaVersionsGenerated = false')
             ->setParameter('datetime', $dateTime)
         ;
@@ -356,6 +356,25 @@ class EventRepository implements EventRepositoryInterface
             ->join('event.days', 'day', 'WITH', 'day.endTime <= :end AND day.startTime >= :begin')
             ->setParameter('begin', $begin)
             ->setParameter('end', $end)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param \DateTimeInterface $today
+     *
+     * @return Event[]
+     */
+    public function getNotPastEventsWithAgendaPublished(\DateTimeInterface $today): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->join('event.days', 'day', 'WITH', 'event.configuration.schedulePublishDate < :datetime AND day.endTime > :datetime')
+            ->setParameter('datetime', $today)
         ;
 
         return $queryBuilder->getQuery()->getResult();

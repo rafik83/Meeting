@@ -46,7 +46,8 @@ class DeleteMeetingHandler
                 [
                     $deleteMeeting->meeting->getFromSheet(),
                     $deleteMeeting->meeting->getToSheet(),
-                ]
+                ],
+                $deleteMeeting->meeting->getAllParticipants()
             )
         );
     }

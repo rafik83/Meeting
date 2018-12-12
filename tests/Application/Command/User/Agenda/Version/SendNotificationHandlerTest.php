@@ -13,45 +13,23 @@ namespace Proximum\Vimeet\Tests\Application\Command\User\Agenda\Version;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommand;
+use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler;
+use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommand;
+use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler;
 use Proximum\Vimeet\Application\Command\User\Agenda\Version\SendNotification;
 use Proximum\Vimeet\Application\Command\User\Agenda\Version\SendNotificationHandler;
-use Proximum\Vimeet\Application\Exception\User\Agenda\Version\UserPhoneNotAvailableException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Agenda\Version;
-use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Agenda\Version\DiffVerbalizer;
 
 class SendNotificationHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
-    private $diffVerbalizer;
-
-    /** @var ObjectProphecy */
-    private $SMSSender;
-
-    /** @var ObjectProphecy */
-    private $translator;
-
-    /** @var ObjectProphecy */
-    private $userEventPhoneRepository;
-
-    /** @var ObjectProphecy */
-    private $eventUrlGenerator;
-
-    /** @var ObjectProphecy */
-    private $event;
-
-    /** @var ObjectProphecy */
-    private $sheet;
-
-    /** @var ObjectProphecy */
-    private $user;
+    private $diffVerbalizer, $SMSNotificationCommandHandler, $mailNotificationCommandHandler, $event, $sheet, $user;
 
     public function setUp()
     {
@@ -59,44 +37,8 @@ class SendNotificationHandlerTest extends TestCase
         $this->sheet = $this->prophesize(Sheet::class);
         $this->user = $this->prophesize(User::class);
         $this->diffVerbalizer = $this->prophesize(DiffVerbalizer::class);
-        $this->SMSSender = $this->prophesize(SMSSenderInterface::class);
-        $this->translator = $this->prophesize(TranslatorInterface::class);
-        $this->userEventPhoneRepository = $this->prophesize(UserEventPhoneRepositoryInterface::class);
-        $this->eventUrlGenerator = $this->prophesize(EventUrlGeneratorInterface::class);
-    }
-
-    public function testNoPhone()
-    {
-        // Context
-        $currentVersion = $this->prophesize(Version::class);
-        $diff = [];
-
-        // Expected
-        $this->expectException(UserPhoneNotAvailableException::class);
-        $this->userEventPhoneRepository
-            ->findValidated($this->user->reveal(), $this->event->reveal())
-            ->shouldBeCalled()
-            ->willReturn(null);
-
-        $this->SMSSender->send(Argument::any())->shouldNotBeCalled();
-
-        // Handler
-        $sendNotificationHandler = new SendNotificationHandler(
-            $this->diffVerbalizer->reveal(),
-            $this->SMSSender->reveal(),
-            $this->translator->reveal(),
-            $this->userEventPhoneRepository->reveal(),
-            $this->eventUrlGenerator->reveal()
-        );
-        $sendNotificationHandler->handle(
-            new SendNotification(
-                $this->event->reveal(),
-                $this->sheet->reveal(),
-                $this->user->reveal(),
-                $currentVersion->reveal(),
-                $diff
-            )
-        );
+        $this->SMSNotificationCommandHandler = $this->prophesize(SMSNotificationCommandHandler::class);
+        $this->mailNotificationCommandHandler = $this->prophesize(MailNotificationCommandHandler::class);
     }
 
     public function testHandle()
@@ -104,6 +46,7 @@ class SendNotificationHandlerTest extends TestCase
         // Context
         $currentVersion = $this->prophesize(Version::class);
         $diff = [];
+        $verbalizedDiff = 'Votre rendez-vous avec Tata est déplacé à 10h00 en STAND10.';
         $phone = $this->prophesize(User\UserEventPhone::class);
         $phone->getPhone()->willReturn('+123123123');
         $this->user->getLocale()->willReturn('fr');
@@ -111,43 +54,39 @@ class SendNotificationHandlerTest extends TestCase
         $this->sheet->getId()->willReturn(3);
 
         // Expected
-        $this->userEventPhoneRepository
-            ->findValidated($this->user->reveal(), $this->event->reveal())
-            ->shouldBeCalled()
-            ->willReturn($phone->reveal());
-        $this->translator
-            ->trans(
-                DiffVerbalizer::TRANSLATION_AGENDA_MODIFIED,
+        $this->diffVerbalizer
+            ->verbalizeDiff(
+                $currentVersion,
                 [],
-                DiffVerbalizer::TRANSLATION_DOMAIN,
                 'fr'
             )->shouldBeCalled()
-            ->willReturn('start:');
-        $this->diffVerbalizer
-            ->verbalizeDiff($currentVersion, $diff, 'fr')
-            ->shouldBeCalled()
-            ->willReturn("Verbalized Diff\nNew Line");
-
-        $this->eventUrlGenerator
-            ->generateEventAbsoluteUrl(
+            ->willReturn($verbalizedDiff)
+        ;
+        $this->mailNotificationCommandHandler
+            ->handle(new MailNotificationCommand(
                 $this->event->reveal(),
-                SendNotificationHandler::EVENT_AGENDA_ROUTE,
-                ['sheet' => 3, '_locale' => 'fr']
-            )->shouldBeCalled()
-            ->willReturn('http://toto.tata.events/fr/sheet/3/agenda');
+                $this->user->reveal(),
+                $this->sheet->reveal(),
+                'Votre rendez-vous avec Tata est déplacé à 10h00 en STAND10.'
+            ))
+            ->shouldBeCalled()
+        ;
 
-        $this->SMSSender
-            ->send(
-                new SMS('+123123123', "start:\nVerbalized Diff\nNew Line\nhttp://toto.tata.events/fr/sheet/3/agenda")
-            )->shouldBeCalled();
+        $this->SMSNotificationCommandHandler
+            ->handle(new SMSNotificationCommand(
+                $this->event->reveal(),
+                $this->user->reveal(),
+                $this->sheet->reveal(),
+                'Votre rendez-vous avec Tata est déplacé à 10h00 en STAND10.'
+            ))
+            ->shouldBeCalled()
+        ;
 
         // Handler
         $sendNotificationHandler = new SendNotificationHandler(
             $this->diffVerbalizer->reveal(),
-            $this->SMSSender->reveal(),
-            $this->translator->reveal(),
-            $this->userEventPhoneRepository->reveal(),
-            $this->eventUrlGenerator->reveal()
+            $this->mailNotificationCommandHandler->reveal(),
+            $this->SMSNotificationCommandHandler->reveal()
         );
         $sendNotificationHandler->handle(
             new SendNotification(

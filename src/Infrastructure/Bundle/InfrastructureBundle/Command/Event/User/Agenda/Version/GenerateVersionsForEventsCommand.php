@@ -55,7 +55,7 @@ class GenerateVersionsForEventsCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Generate version of agenda for the upcoming event with a past sms activation date')
+            ->setDescription('Generate version of agenda for the upcoming event with a past schedule published date')
         ;
     }
 
@@ -64,7 +64,7 @@ class GenerateVersionsForEventsCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $events = $this->eventRepository->findEventsWithPastSMSActivationDateAndAgendaVersionsNotGenerated($this->dateTime);
+        $events = $this->eventRepository->findEventsWithPastSchedulePublishDateAndAgendaVersionsNotGenerated($this->dateTime);
 
         foreach ($events as $event) {
             if ($event->isUserAgendaVersionsGenerated()) {

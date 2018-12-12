@@ -1,0 +1,64 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare;
+
+use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareVersionDiffChangedMailView;
+use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
+use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Agenda\VersionDiffChangedCustomizedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Agenda\VersionDiffChangedMail;
+
+class PrepareVersionDiffChangedMail extends AbstractPrepareMailService
+{
+    public function prepare(PrepareVersionDiffChangedMailView $prepareMail): ?AbstractMail
+    {
+        $message = $this->messageRepository->getOneByEventAndTypeAndAssociatedType(
+            $prepareMail->event,
+            $prepareMail->type,
+            $prepareMail->sheet->getType()
+        );
+
+        if ($message instanceof Message) {
+            if (!$message->isEnabled()) {
+                return null;
+            }
+
+            $result = $this->substitutionHandler->handle($prepareMail, $message);
+
+            return new VersionDiffChangedCustomizedMail(
+                $prepareMail->event,
+                $this->eventSenderGuesser->generate($prepareMail->event),
+                $prepareMail->user->getEmail(),
+                $prepareMail->locale,
+                $result->subject,
+                $result->content
+            );
+        }
+
+        $participantMailView = $this->participantMailViewQueryHandler->handle(
+            new ParticipantMailViewQuery($prepareMail->sheet, $prepareMail->user)
+        );
+
+        $mail = new VersionDiffChangedMail(
+            $prepareMail->event,
+            $prepareMail->user,
+            $prepareMail->sheet,
+            $prepareMail->getAgendaModifications(),
+            $this->eventSenderGuesser->generate($prepareMail->event),
+            $prepareMail->user->getEmail(),
+            $prepareMail->locale,
+            $participantMailView
+        );
+
+        return $mail;
+    }
+}

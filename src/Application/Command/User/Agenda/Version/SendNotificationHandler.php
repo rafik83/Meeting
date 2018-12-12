@@ -10,91 +10,56 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Agenda\Version;
 
-use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
-use Proximum\Vimeet\Application\Exception\User\Agenda\Version\UserPhoneNotAvailableException;
-use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
-use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
-use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
+use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommand;
+use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler;
+use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommand;
+use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler;
 use Proximum\Vimeet\Domain\User\Agenda\Version\DiffVerbalizer;
 
 class SendNotificationHandler
 {
-    const EVENT_AGENDA_ROUTE = 'event_agenda';
-
-    /** @var UserEventPhoneRepositoryInterface */
-    private $userEventPhoneRepository;
-
     /** @var DiffVerbalizer */
     private $diffVerbalizer;
 
-    /** @var SMSSenderInterface */
-    private $SMSSender;
+    /** @var MailNotificationCommandHandler */
+    private $mailNotificationCommandHandler;
 
-    /** @var TranslatorInterface */
-    private $translator;
+    /** @var SMSNotificationCommandHandler */
+    private $SMSNotificationCommandHandler;
 
-    /** @var EventUrlGeneratorInterface */
-    private $eventUrlGenerator;
-
-    /**
-     * @param DiffVerbalizer                    $diffVerbalizer
-     * @param SMSSenderInterface                $SMSSender
-     * @param TranslatorInterface               $translator
-     * @param UserEventPhoneRepositoryInterface $userEventPhoneRepository
-     * @param EventUrlGeneratorInterface        $eventUrlGenerator
-     */
     public function __construct(
         DiffVerbalizer $diffVerbalizer,
-        SMSSenderInterface $SMSSender,
-        TranslatorInterface $translator,
-        UserEventPhoneRepositoryInterface $userEventPhoneRepository,
-        EventUrlGeneratorInterface $eventUrlGenerator
+        MailNotificationCommandHandler $mailNotificationCommandHandler,
+        SMSNotificationCommandHandler $SMSNotificationCommandHandler
     ) {
-        $this->userEventPhoneRepository = $userEventPhoneRepository;
         $this->diffVerbalizer = $diffVerbalizer;
-        $this->SMSSender = $SMSSender;
-        $this->translator = $translator;
-        $this->eventUrlGenerator = $eventUrlGenerator;
+        $this->mailNotificationCommandHandler = $mailNotificationCommandHandler;
+        $this->SMSNotificationCommandHandler = $SMSNotificationCommandHandler;
     }
 
     /**
      * @param SendNotification $command
-     *
-     * @throws FailToSendSMSException
-     * @throws UserPhoneNotAvailableException
      */
-    public function handle(SendNotification $command)
+    public function handle(SendNotification $command): void
     {
-        $userEventPhone = $this->userEventPhoneRepository->findValidated($command->user, $command->event);
-
-        if (null === $userEventPhone) {
-            throw new UserPhoneNotAvailableException();
-        }
-
-        $startingSentence = $this->translator->trans(
-            DiffVerbalizer::TRANSLATION_AGENDA_MODIFIED,
-            [],
-            DiffVerbalizer::TRANSLATION_DOMAIN,
-            $command->user->getLocale()
-        );
         $verbalizedDiff = $this->diffVerbalizer->verbalizeDiff(
             $command->currentVersion,
             $command->diff,
             $command->user->getLocale()
         );
 
-        $agendaUrl = $this->eventUrlGenerator->generateEventAbsoluteUrl(
+        $this->mailNotificationCommandHandler->handle(new MailNotificationCommand(
             $command->event,
-            self::EVENT_AGENDA_ROUTE,
-            ['sheet' => $command->sheet->getId(),
-             '_locale' => $command->event->getAvailableLocale($command->user->getLocale()), ]
-        );
+            $command->user,
+            $command->sheet,
+            $verbalizedDiff
+        ));
 
-        $message = $startingSentence . "\n" . $verbalizedDiff . "\n" . $agendaUrl;
-
-        $sms = new SMS($userEventPhone->getPhone(), $message);
-        $this->SMSSender->send($sms);
+        $this->SMSNotificationCommandHandler->handle(new SMSNotificationCommand(
+            $command->event,
+            $command->user,
+            $command->sheet,
+            $verbalizedDiff
+        ));
     }
 }

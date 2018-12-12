@@ -131,6 +131,44 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function getForEventsAndNameWithOlderThanDate(
+        array $events,
+        string $name,
+        \DateTimeInterface $dateTime
+    ): array {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('extraData', 'user', 'event')
+            ->from(ExtraData::class, 'extraData')
+            ->join('extraData.user', 'user', 'WITH', 'extraData.name = :name
+                AND extraData.event IN (:events)
+                AND extraData.updatedAt < :date
+            ')
+            ->join('extraData.event', 'event')
+            ->setParameter('events', $events)
+            ->setParameter('name', $name)
+            ->setParameter('date', $dateTime);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function removeForUserAndEventAndName(User $user, Event $event, string $name): void
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(ExtraData::class, 'extra_data')
+            ->where('extra_data.event = :event')
+            ->andWhere('extra_data.user = :user')
+            ->andWhere('extra_data.name = :name')
+            ->setParameter('event', $event)
+            ->setParameter('user', $user)
+            ->setParameter('name', $name)
+        ;
+
+        $queryBuilder->getQuery()->execute();
+    }
+
     /**
      * {@inheritdoc}
      */

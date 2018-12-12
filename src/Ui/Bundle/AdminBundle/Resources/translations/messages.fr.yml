@@ -1141,6 +1141,7 @@ admin.transactional.mail.list.column.type.options.none: Aucun
 admin.transactional.mail.list.column.type.options.some: 'Tous les autres'
 admin.transactional.mail.list.disabled: Désactivé
 admin.transactional.mail.list.generic.title: 'Email génériques'
+admin.transactional.mail.list.key.mail_agenda_version_diff_changed: 'Notification automatique de la modification du planning'
 admin.transactional.mail.list.key.mail_happening_participation_automatically_updated: 'Recalcule automatique des sous-événements suite à changement de plage de disponbilité'
 admin.transactional.mail.list.key.mail_order_confirmed: 'Commande passée'
 admin.transactional.mail.list.key.mail_participation_added_confirmation: 'Participant ajouté à votre fiche'
@@ -1162,6 +1163,9 @@ admin.transactional.mail.list.key.mail_user_complete_profile: 'Invitation en tan
 admin.transactional.mail.list.key.mail_user_registered: Inscription
 admin.transactional.mail.list.key.mail_user_reset_password: 'Demande de mot de passe oublié'
 admin.transactional.mail.list.title: 'Liste des emails transactionnels'
+admin.transactional.mail.substitution.parameter.description.%agendaModifications%: 'Liste des modifications du planning'
+admin.transactional.mail.substitution.parameter.description.%agendaLink%: 'Lien vers l''agenda'
+admin.transactional.mail.substitution.parameter.description.%agendaLinkWithCTA%: 'CTA avec lien vers l''agenda'
 admin.transactional.mail.substitution.parameter.description.%event%: 'Titre de l''événément'
 admin.transactional.mail.substitution.parameter.description.%firstName%: 'Prénom du participant'
 admin.transactional.mail.substitution.parameter.description.%fromType%: 'Type de participation d''origine'

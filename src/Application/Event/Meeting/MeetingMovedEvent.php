@@ -19,12 +19,14 @@ class MeetingMovedEvent extends Event
     /** @var Meeting */
     private $meeting;
 
-    /**
-     * @param Meeting $meeting
-     */
     public function __construct(Meeting $meeting)
     {
         $this->meeting = $meeting;
+    }
+
+    public function getMeeting(): Meeting
+    {
+        return $this->meeting;
     }
 
     /**
