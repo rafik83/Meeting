@@ -1231,6 +1231,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
 
+    Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler:
+        arguments:
+            - '@adapter.local_file_storage'
+            - '@application.nomenclature.id.uniqu_id_generator'
+            - '%shared_uploaded_files%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection }
     command.sheet.template.save_print_template_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\SavePrintTemplateHandler
         arguments:

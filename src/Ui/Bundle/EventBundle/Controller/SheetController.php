@@ -13,6 +13,9 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
+use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUpload;
+use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection;
+use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
@@ -237,6 +240,7 @@ class SheetController extends Controller
 
         return $this->render('EventBundle:Sheet:print.html.twig', [
             'event'         => $event,
+            'userSheet'     => $sheet,
             'sheet'         => $sheetToDisplay,
             'taggedData'    => $taggedData,
             'locale'        => $locale,
@@ -301,6 +305,7 @@ class SheetController extends Controller
             'nomenclature'  => Data\NomenclatureDataType::class,
             'image'         => Data\ImageDataType::class,
             'tags'          => Data\ItemCollectionDataType::class,
+            'multi-upload'  => Data\MultiUploadDataType::class,
         ];
 
         if (!isset($types[$object->getType()])) {
@@ -363,6 +368,11 @@ class SheetController extends Controller
         $object->setBuyableProducts($products);
         $object->setSheet($sheet);
 
+        $savedObject = null;
+        if ($object instanceof Template\TemplateObject\MultiUploadCollectionObject) {
+            $savedObject = clone $object;
+        }
+
         $templateObjectView = $this
             ->get('tactician.commandbus')
             ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
@@ -387,6 +397,12 @@ class SheetController extends Controller
                         $newImage = $fileStorage->upload($file);
                         $object->setImage($newImage);
                     }
+                }
+
+                if ($object instanceof Template\TemplateObject\MultiUploadCollectionObject) {
+                    $objectData = $this->get(MultiUploadCollectionHandler::class)
+                        ->handle(new MultiUploadCollection($savedObject, $object));
+                    $object->setData($objectData);
                 }
 
                 $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData, $object));

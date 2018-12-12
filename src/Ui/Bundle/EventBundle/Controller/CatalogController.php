@@ -342,13 +342,18 @@ class CatalogController extends Controller
         Request $request,
         EventDomain $eventDomain,
         Sheet $sheet,
-        $sheetToDisplay,
+        int $sheetToDisplay,
         UserDomain $userDomain
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $user = $userDomain->getUser();
         $event = $eventDomain->getEvent();
+        $locale = $request->getLocale();
+
+        if ($event !== $sheet->getEvent()) {
+            throw $this->createAccessDeniedException('Sheet not in this event');
+        }
 
         if (!$sheet->isInInternalCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');
@@ -366,11 +371,6 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet to display not in catalog');
         }
 
-        $markSheetAsViewedByCurrentUser = new Add($user, $sheetToDisplay);
-        $this->get('command.sheet.sheet_viewed.add_handler')->handle($markSheetAsViewedByCurrentUser);
-
-        $locale = $request->getLocale();
-
         $rules = $this
             ->get('repository.rule_repository')
             ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
@@ -378,6 +378,8 @@ class CatalogController extends Controller
         if (empty($rules)) {
             throw $this->createNotFoundException('You do not have the right to see this sheet');
         }
+
+        $this->get('command.sheet.sheet_viewed.add_handler')->handle(new Add($user, $sheetToDisplay));
 
         try {
             list($nomenclatures, $participants, $taggedData) = $this

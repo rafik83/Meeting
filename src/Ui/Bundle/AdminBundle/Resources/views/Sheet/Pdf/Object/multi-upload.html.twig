@@ -1,1 +1,11 @@
-<b>{{ item.getDefaultLabel }}:</b> {{ item.getContentValue }}<br>
+<section id="object-{{ uid }}" class="object object--media section">
+    {% set label = item.label(locale, fallback) %}
+    {% if label %}
+        <header>
+            <h2>{{ label }}</h2>
+        </header>
+    {% endif %}
+    <div class="section__content">
+        {{ include('@Event/Sheet/Object/multi-upload-list.html.twig') }}
+    </div>
+</section>
