@@ -51,6 +51,10 @@ template.object.text: 'Texte non modifiable'
 template.object.upload: 'Upload de fichier'
 template.object.multi-upload: 'Multi upload'
 template.object.url: Lien
+template.object.visibility.label: 'Visibilité du champ'
+template.object.visibility.hidden: 'Caché (éditable et visible uniquement par l’admin)'
+template.object.visibility.editable: 'Editable (éditable et visible par le participant et l’admin)'
+template.object.visibility.read_only: 'Lecture seule (éditable par l’admin et visible par le participant et l’admin)'
 template.participant.display: 'Nombre de participants affichés sur la fiche'
 template.participant.title: 'Les participants'
 template.placeholder.title: Placeholder

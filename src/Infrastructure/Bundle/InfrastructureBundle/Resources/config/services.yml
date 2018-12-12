@@ -2365,6 +2365,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\UserEventView\Update }
 
+    #
+    # Validator
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\FormTemplateBlockStepDataValidator:
+        arguments:
+            - '@adapter.authorization_checker'
+        tags:
+            - { name: validator.constraint_validator }
 
     #
     # Security

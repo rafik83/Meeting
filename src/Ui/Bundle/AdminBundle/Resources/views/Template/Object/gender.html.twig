@@ -3,6 +3,7 @@
 {% set config = {
     label: { (locale): 'template.object.gender'|trans },
     required: false,
+    visibility: 'editable',
     tags: [],
 }|merge(config|default({})) %}
 
@@ -39,6 +40,9 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
+                                {% if enableVisibility is defined and enableVisibility == true %}
+                                    {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
+                                {% endif %}
                                 <div class="form-group">
                                     <label class="form-label">
                                         <input type="checkbox" name="required" />

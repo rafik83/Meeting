@@ -8,7 +8,8 @@
     tags: [],
     datetime_min: '',
     datetime_max: '',
-    format: 'datetime'
+    format: 'datetime',
+    visibility: 'editable'
 }|merge(config|default({})) %}
 
 <div
@@ -61,6 +62,9 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
+                                {% if enableVisibility is defined and enableVisibility == true %}
+                                    {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
+                                {% endif %}
                                 <div class="form-group">
                                     <label class="form-label">
                                         {{ 'template.label.datetime.min'|trans }}

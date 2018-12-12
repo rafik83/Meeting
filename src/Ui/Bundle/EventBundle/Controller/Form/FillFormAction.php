@@ -122,6 +122,7 @@ class FillFormAction
             'country' => $event->getCountry(),
             'locale' => $locale,
             'locales' => $event->getLocales(),
+            'isAdmin' => $this->authorizationChecker->isGranted('ROLE_PREVIOUS_ADMIN')
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

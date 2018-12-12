@@ -73,6 +73,7 @@
                             'nomenclatures': nomenclatures,
                             'templateTagView': templateTagView,
                             'uploadFormats': uploadFormats,
+                            'enableVisibility': true
                         }, false) }}
                     {% endif %}
                 {% endfor %}
@@ -88,45 +89,54 @@
                             'isFormTemplate': true,
                             'locale': locale,
                             'templateTagView': templateTagView,
+                            'enableVisibility': true
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:telephone.html.twig', {
                             'isFormTemplate': true,
                             'locale': locale,
                             'templateTagView': templateTagView,
+                            'enableVisibility': true
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:country.html.twig', {
                             'isFormTemplate': true,
                             'locale': locale,
                             'templateTagView': templateTagView,
+                            'enableVisibility': true
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:url.html.twig', {
                             'isFormTemplate': true,
                             'locale': locale,
                             'templateTagView': templateTagView,
+                            'enableVisibility': true
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:boolean.html.twig', {
                             'locale': locale,
                             'templateTagView': templateTagView,
+                            'enableVisibility': true
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:gender.html.twig', {
                             'locale': locale,
                             'templateTagView': templateTagView,
+                            'enableVisibility': true
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:upload.html.twig', {
                             'locale': locale,
                             'uploadFormats': uploadFormats|default([]),
                             'templateTagView': templateTagView,
+                            'enableVisibility': true
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:nomenclature.html.twig', {
                             'isFormTemplate': true,
                             'locale': locale,
                             'nomenclatures': nomenclatures,
                             'templateTagView': templateTagView,
+                            'enableVisibility': true
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:datetime.html.twig', {
                             'locale': locale,
                             'isFormTemplate': true,
                             'templateTagView': templateTagView,
+                            'enableVisibility': true
                         }, false) }}
                     </div>
                 </div>

@@ -106,6 +106,11 @@ class FillFormActionTest extends TestCase
         ;
         $this
             ->authorizationChecker
+            ->isGranted('ROLE_PREVIOUS_ADMIN')
+            ->willReturn(false)
+        ;
+        $this
+            ->authorizationChecker
             ->isGranted(SheetVoter::EDIT, $this->sheet->reveal())
             ->willReturn(true)
         ;
@@ -278,6 +283,7 @@ class FillFormActionTest extends TestCase
                 'country' => 'FR',
                 'locale' => 'en',
                 'locales' => ['en', 'fr'],
+                'isAdmin' => false,
             ])->shouldBeCalled()
             ->willReturn($form->reveal())
         ;
@@ -362,6 +368,7 @@ class FillFormActionTest extends TestCase
                 'country' => 'FR',
                 'locale' => 'en',
                 'locales' => ['en', 'fr'],
+                'isAdmin' => false,
             ])->shouldBeCalled()
             ->willReturn($form->reveal())
         ;

@@ -40,6 +40,7 @@ NomenclatureObject.prototype.fill = function ()
   this.form.set('nomenclature', this.config.nomenclature);
   this.form.set('required', this.config.required);
   this.form.set('tags', this.config.tags);
+  this.form.set('visibility', this.config.visibility);
 
   this.form.bind('label', this.config.label[this.locale]);
 };
@@ -61,6 +62,7 @@ NomenclatureObject.prototype.save = function ()
   this.config.nomenclature       = this.form.get('nomenclature');
   this.config.required           = this.form.get('required');
   this.config.tags               = this.form.get('tags');
+  this.config.visibility         = this.form.get('visibility');
 
   this.form.bind('label', this.config.label[this.locale]);
 
