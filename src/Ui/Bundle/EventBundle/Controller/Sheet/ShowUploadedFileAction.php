@@ -15,8 +15,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\Exception\NotMultiUploadCollectonObjectException;
-use Proximum\Vimeet\Domain\Template\Exception\PathNotFoundInMultiUploadCollectonObjectException;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadCollectionObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -81,15 +79,11 @@ class ShowUploadedFileAction
         $multiUploadObject = $templateData->getObject($objectKey);
 
         if (!$multiUploadObject instanceof MultiUploadCollectionObject) {
-            throw new NotMultiUploadCollectonObjectException(
-                sprintf('This object %s is not a MultiUploadCollectionObject', $objectKey)
-            );
+            throw new AccessDeniedException(sprintf('This object %s is not a MultiUploadCollectionObject', $objectKey));
         }
 
         if (!$multiUploadObject->hasUpload($path)) {
-            throw new PathNotFoundInMultiUploadCollectonObjectException(
-                sprintf('This object %s do not contains %s path', $objectKey, $path)
-            );
+            throw new AccessDeniedException(sprintf('This object %s do not contains %s path', $objectKey, $path));
         }
 
         $fullPath = sprintf('%s%s', $this->sharedUploadedFiles, $path);
