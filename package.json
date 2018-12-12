@@ -6,14 +6,17 @@
   },
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/polyfill": "^7.0.0",
     "@opentok/client": "^2.14.7",
-    "@symfony/webpack-encore": "^0.20.1",
+    "@symfony/webpack-encore": "^0.21",
     "axios": "^0.15.3",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-react": "^6.24.1",
+    "babel-loader": "^8.0.4",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "3.3.6",
     "chart.js": "^2.6.0",
+    "copy-webpack-plugin": "^4.6",
     "dexie": "^2.0.4",
     "elao-form.js": "0.1.*",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
@@ -30,6 +33,7 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-qr-reader": "^2.1.0",
+    "sass-loader": "^7.1",
     "select2": "4.0.5",
     "tinymce": "^4.5.1",
     "vue": "^2.1.8",
@@ -40,12 +44,8 @@
     "install": "napa"
   },
   "devDependencies": {
-    "babel-loader": "^7.1.2",
-    "copy-webpack-plugin": "^4.2.0",
     "napa": "2.3.*",
-    "node-sass": "^4.6.0",
-    "sass-loader": "^6.0.6",
-    "webpack": "^3.2"
+    "node-sass": "^4.6.0"
   },
   "browser": {
     "bootstrap": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap.js",
@@ -56,5 +56,8 @@
     "bootstrap.popover": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/popover.js",
     "bootstrap.dropdown": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js",
     "vue": "vue/dist/vue.js"
-  }
+  },
+  "browserslist": [
+    "> 1%"
+  ]
 }

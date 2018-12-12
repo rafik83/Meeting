@@ -3,6 +3,7 @@ var webpack = require('webpack');
 var CopyWebPackPlugin = require('copy-webpack-plugin');
 
 Encore
+    .disableSingleRuntimeChunk()
 // directory where all compiled assets will be stored
     .setOutputPath('web/assets')
 

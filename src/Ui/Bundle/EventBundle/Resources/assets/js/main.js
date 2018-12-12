@@ -37,7 +37,7 @@ require('bootstrap');
 require('elao-form.js');
 require('intl-tel-input');
 require('select2');
-require('babel-polyfill');
+require('@babel/polyfill');
 
 function init (target) {
     // always first one in order to avoid collision
