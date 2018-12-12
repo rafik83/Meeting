@@ -11,14 +11,14 @@
 namespace Proximum\Vimeet\Tests\Infrastructure\Adapter\ThirdParty\Jenkins;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter;
+use Proximum\Vimeet\Application\Adapter\ExecInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\BuildCreatorAdapter;
 
 class BuildCreatorAdapterTest extends TestCase
 {
     public function testCreate()
     {
-        $execAdapter = $this->prophesize(ExecAdapter::class);
+        $execAdapter = $this->prophesize(ExecInterface::class);
         $user = 'jenkins';
         $password = 'jenkinsP';
         $jenkinsCommand = 'curl -v -X POST http://optaplanner:8080/job/%buildName%/build --user %jenkinsUser%:%jenkinsPassword% --data-urlencode json=\'\'{"parameter": %jenkinsParameters%}\'\'';

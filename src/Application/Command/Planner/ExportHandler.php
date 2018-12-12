@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
+use Proximum\Vimeet\Application\Adapter\ExecInterface;
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdate;
@@ -21,14 +23,13 @@ use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
 use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\PlannerViewQueryHandler;
+use Proximum\Vimeet\Domain\File\FileFactory;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
-use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\Error\ExportPlannerMailError;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\ExportPlannerMail;
 
@@ -48,7 +49,7 @@ class ExportHandler
     /** @var SerializerAdapterInterface */
     private $serializer;
 
-    /** @var LocalFileStorageAdapter */
+    /** @var FileStorageInterface */
     private $fileStorageAdapter;
 
     /** @var string */
@@ -63,54 +64,36 @@ class ExportHandler
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
-    /** @var FileRepositoryInterface */
-    private $fileRepository;
-
     /** @var PlannerJobRepositoryInterface */
     private $plannerJobRepository;
 
     /** @var MailerInterface */
     private $mailer;
 
-    /** @var \DateTimeInterface */
-    private $dateTime;
-
     /** @var string */
     private $mailSender;
 
-    /**
-     * ExportHandler constructor.
-     *
-     * @param LockMeetingRequestUpdateHandler $lockMeetingRequestHandler
-     * @param DispatcherHandler               $dispatcherHandler
-     * @param PlannerViewQueryHandler         $plannerHandler
-     * @param SerializerAdapterInterface      $serializer
-     * @param LocalFileStorageAdapter         $fileStorageAdapter
-     * @param string                          $exportLocationDirectoryPath
-     * @param string                          $plannerFilesPath
-     * @param string                          $plannerCommand
-     * @param EventRepositoryInterface        $eventRepository
-     * @param FileRepositoryInterface         $fileRepository
-     * @param PlannerJobRepositoryInterface   $plannerJobRepository
-     * @param MailerInterface                 $mailer
-     * @param \DateTimeInterface              $dateTime
-     * @param string                          $mailSender
-     */
+    /** @var ExecInterface */
+    private $execAdapter;
+
+    /** @var FileFactory */
+    private $fileFactory;
+
     public function __construct(
         LockMeetingRequestUpdateHandler $lockMeetingRequestHandler,
         DispatcherHandler $dispatcherHandler,
         PlannerViewQueryHandler $plannerHandler,
         SerializerAdapterInterface $serializer,
-        LocalFileStorageAdapter $fileStorageAdapter,
+        FileStorageInterface $fileStorageAdapter,
         string $exportLocationDirectoryPath,
         string $plannerFilesPath,
         string $plannerCommand,
         EventRepositoryInterface $eventRepository,
-        FileRepositoryInterface $fileRepository,
         PlannerJobRepositoryInterface $plannerJobRepository,
         MailerInterface $mailer,
-        \DateTimeInterface $dateTime,
-        $mailSender
+        string $mailSender,
+        ExecInterface $execAdapter,
+        FileFactory $fileFactory
     ) {
         $this->lockMeetingRequestHandler   = $lockMeetingRequestHandler;
         $this->dispatcherHandler           = $dispatcherHandler;
@@ -121,11 +104,11 @@ class ExportHandler
         $this->plannerFilesPath            = $plannerFilesPath;
         $this->plannerCommand              = $plannerCommand;
         $this->eventRepository             = $eventRepository;
-        $this->fileRepository              = $fileRepository;
         $this->plannerJobRepository        = $plannerJobRepository;
         $this->mailer                      = $mailer;
-        $this->dateTime                    = $dateTime;
         $this->mailSender                  = $mailSender;
+        $this->execAdapter                 = $execAdapter;
+        $this->fileFactory                 = $fileFactory;
     }
 
     /**
@@ -264,10 +247,7 @@ class ExportHandler
             $path
         );
 
-        $file = new File($filePath, $this->dateTime);
-        $this->fileRepository->add($file);
-
-        return $file;
+        return $this->fileFactory->createAndPersistFile($filePath);
     }
 
     /**
@@ -325,9 +305,13 @@ class ExportHandler
         $fileFullPath = $file->getPath();
 
         $output = [];
-        $result = '';
+        $result = 0;
 
-        exec(str_replace('%filename%', $fileFullPath, $this->plannerCommand) . ' 2>&1', $output, $result);
+        $this->execAdapter->exec(
+            str_replace('%filename%', $fileFullPath, $this->plannerCommand) . ' 2>&1',
+            $output,
+            $result
+        );
 
         if ($result > 0) {
             throw new CallPlannerException();
