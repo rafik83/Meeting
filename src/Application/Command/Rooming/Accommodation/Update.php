@@ -17,9 +17,8 @@ class Update extends AbstractAccommodationCommand
     /** @var Accommodation */
     public $accommodation;
 
-    public function __construct(
-        Accommodation $accommodation
-    ) {
+    public function __construct(Accommodation $accommodation)
+    {
         $this->accommodation = $accommodation;
         $this->title = $accommodation->getTitle();
 

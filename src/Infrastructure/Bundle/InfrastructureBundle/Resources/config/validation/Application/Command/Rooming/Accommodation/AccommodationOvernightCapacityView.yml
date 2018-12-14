@@ -7,3 +7,5 @@ Proximum\Vimeet\Application\Command\Rooming\Accommodation\AccommodationOvernight
             - Type:
                 type: integer
             - NotBlank: ~
+            - Range:
+                min: 0

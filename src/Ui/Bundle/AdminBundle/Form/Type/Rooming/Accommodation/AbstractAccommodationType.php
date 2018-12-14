@@ -22,7 +22,7 @@ abstract class AbstractAccommodationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, [])
+            ->add('title', TextType::class)
             ->add('overnightCapacities', CollectionType::class, [
                 'entry_type' => AccommodationOvernightCapacityType::class,
                 'entry_options' => [

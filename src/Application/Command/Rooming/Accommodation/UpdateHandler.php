@@ -26,7 +26,6 @@ class UpdateHandler
     public function handle(Update $update): void
     {
         $accommodation = $update->accommodation;
-
         $overnightCapacities = [];
 
         foreach ($update->overnightCapacities as $overnightCapacity) {

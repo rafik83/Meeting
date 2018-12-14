@@ -55,7 +55,7 @@ class UpdateAction
 
     public function __invoke(Request $request, Event $event, Accommodation $accommodation): Response
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_HOST')
+        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
             || $accommodation->getEvent() !== $event
         ) {

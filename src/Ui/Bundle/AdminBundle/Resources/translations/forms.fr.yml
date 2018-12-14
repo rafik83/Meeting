@@ -8,7 +8,6 @@ form.admin_accommodation_type.children.overnightCapacities.prototype.children.ca
 form.admin_accommodation_type.children.overnightCapacities.label_add: 'Ajouter une nuitée'
 form.admin_accommodation_type.children.submit.label: 'Valider'
 form.activate_account_password.children.password.children.first.label: 'Nouveau mot de passe'
-form.activate_account_password.children.password.children.first.label: 'Nouveau mot de passe'
 form.activate_account_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.activate_account_password.children.submit.label: Envoyer
 form.add_participant.children.data.label: 'Coordonnées du participant'

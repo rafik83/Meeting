@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Rooming\Accommodation;
 
-use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class Add extends AbstractAccommodationCommand
@@ -15,6 +14,7 @@ class Add extends AbstractAccommodationCommand
         $this->event = $event;
         $days = $event->getDays();
 
+        // Add previous day to the default days list of the overnight capacities
         $previousDay = (new \DateTime())
             ->setTimestamp($event->getFirstDay()->getBegin()->getTimestamp())
             ->modify('-1 day')
