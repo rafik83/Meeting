@@ -1,0 +1,24 @@
+<?php
+
+namespace Proximum\Vimeet\Infrastructure\Repository\Rooming;
+
+use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
+use Proximum\Vimeet\Domain\Repository\Rooming\AccommodationRepositoryInterface;
+
+class AccommodationRepository implements AccommodationRepositoryInterface
+{
+    /** @var EntityManager */
+    private $entityManager;
+
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    public function add(Accommodation $accommodation): void
+    {
+        $this->entityManager->persist($accommodation);
+        $this->entityManager->flush($accommodation);
+    }
+}

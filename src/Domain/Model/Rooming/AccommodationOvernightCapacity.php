@@ -19,6 +19,16 @@ class AccommodationOvernightCapacity
     /** @var Accommodation */
     private $accommodation;
 
+    public function __construct(
+        Accommodation $accommodation,
+        \DateTimeInterface $date,
+        int $capacity
+    ) {
+        $this->accommodation = $accommodation;
+        $this->date = $date;
+        $this->capacity = $capacity;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

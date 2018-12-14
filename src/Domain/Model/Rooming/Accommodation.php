@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Model\Rooming;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
 
 /**
@@ -15,11 +16,18 @@ class Accommodation
     /** @var string */
     private $title;
 
-    /** @var AccommodationOvernightCapacity[] */
+    /** @var ArrayCollection of AccommodationOvernightCapacity */
     private $overnightCapacities;
 
     /** @var Event */
     private $event;
+
+    public function __construct(Event $event, string $title)
+    {
+        $this->title = $title;
+        $this->event = $event;
+        $this->overnightCapacities = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -31,13 +39,21 @@ class Accommodation
         return $this->title;
     }
 
+    /**
+     * @return AccommodationOvernightCapacity[]
+     */
     public function getOvernightCapacities(): array
     {
-        return $this->overnightCapacities;
+        return $this->overnightCapacities->toArray();
     }
 
     public function getEvent(): Event
     {
         return $this->event;
+    }
+
+    public function addOvernightCapacity(AccommodationOvernightCapacity $accommodationOvernightCapacity): void
+    {
+        $this->overnightCapacities->add($accommodationOvernightCapacity);
     }
 }

@@ -2008,3 +2008,13 @@ admin_event_static_formulation_update:
         staticFormulation: \d+
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\UpdateAction
+
+#
+# Rooming
+#
+admin_event_rooming_accommodation_add:
+    path: /event/{event}/rooming/accommodation/add
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\AddAction

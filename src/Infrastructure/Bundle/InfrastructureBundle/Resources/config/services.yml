@@ -162,6 +162,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Sheet\CommentRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Repository\Rooming\AccommodationRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
     repository.sheet.completeness_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Sheet\SheetCompletenessRepository
         arguments:

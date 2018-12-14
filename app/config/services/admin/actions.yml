@@ -818,3 +818,15 @@ services:
             - '@form.factory'
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    #
+    # Rooming
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\AddAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating.engine.twig'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@router.default'
+            - '@session.flash_bag'

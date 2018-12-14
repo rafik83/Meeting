@@ -13,6 +13,8 @@ Proximum\Vimeet\Domain\Model\Rooming\Accommodation:
         overnightCapacities:
             targetEntity: Proximum\Vimeet\Domain\Model\Rooming\AccommodationOvernightCapacity
             mappedBy: accommodation
+            cascade: ["persist"]
+            orphanRemoval: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
