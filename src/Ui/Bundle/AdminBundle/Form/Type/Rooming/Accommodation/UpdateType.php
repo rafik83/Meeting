@@ -25,9 +25,4 @@ class UpdateType extends AbstractAccommodationType
             ])
         ;
     }
-
-    public function getBlockPrefix(): string
-    {
-        return 'admin_bundle_update_type';
-    }
 }

@@ -17,9 +17,4 @@ class AddType extends AbstractAccommodationType
             ])
         ;
     }
-
-    public function getBlockPrefix(): string
-    {
-        return 'admin_bundle_add_type';
-    }
 }

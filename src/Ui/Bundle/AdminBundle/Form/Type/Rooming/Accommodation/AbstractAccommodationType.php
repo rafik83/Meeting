@@ -27,6 +27,7 @@ abstract class AbstractAccommodationType extends AbstractType
                 'entry_type' => AccommodationOvernightCapacityType::class,
                 'entry_options' => [
                     'firstDay' => $options['firstDay'],
+                    'label' => false,
                 ],
                 'allow_add' => true,
                 'allow_delete' => false,
@@ -39,5 +40,10 @@ abstract class AbstractAccommodationType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['firstDay']);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return 'admin_accommodation_type';
     }
 }
