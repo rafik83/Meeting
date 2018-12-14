@@ -62,6 +62,14 @@ class UpdateAction
             throw new AccessDeniedException('Access denied');
         }
 
+        if (!$event->hasDay()) {
+            $this->flashBag->add('error', 'flash.event.daysMustBeDefined');
+
+            return new RedirectResponse($this->router->generate('admin_event_read', [
+                'event' => $event->getId(),
+            ]));
+        }
+
         $update = new Update($accommodation);
         $form = $this->formFactory->create(UpdateType::class, $update, [
             'submit' => true,
