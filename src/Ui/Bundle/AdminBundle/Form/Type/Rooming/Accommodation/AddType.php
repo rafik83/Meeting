@@ -7,8 +7,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AddType extends AbstractAccommodationType
 {
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
+        parent::configureOptions($resolver);
+
         $resolver
             ->setDefaults([
                 'data_class' => Add::class
@@ -16,7 +18,7 @@ class AddType extends AbstractAccommodationType
         ;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'admin_bundle_add_type';
     }

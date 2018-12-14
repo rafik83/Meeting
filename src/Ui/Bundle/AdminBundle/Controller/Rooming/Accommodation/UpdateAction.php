@@ -65,6 +65,7 @@ class UpdateAction
         $update = new Update($accommodation);
         $form = $this->formFactory->create(UpdateType::class, $update, [
             'submit' => true,
+            'firstDay' => $event->getFirstDay()->getBegin(),
         ]);
 
         $form->handleRequest($request);

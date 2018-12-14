@@ -21,8 +21,12 @@ class AccommodationOvernightCapacityType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $year = (int) $options['firstDay']->format('Y');
+
         $builder
-            ->add('date', DateType::class)
+            ->add('date', DateType::class, [
+                'years' => range($year -1, $year + 1),
+            ])
             ->add('capacity', IntegerType::class, [
                 'attr' => [
                     'min' => 0,
@@ -34,6 +38,7 @@ class AccommodationOvernightCapacityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
+            ->setRequired(['firstDay'])
             ->setDefaults([
                 'data_class' => AccommodationOvernightCapacityView::class
             ])

@@ -71,6 +71,7 @@ class AddAction
         $add = new Add($event);
         $form = $this->formFactory->create(AddType::class, $add, [
             'submit' => true,
+            'firstDay' => $event->getFirstDay()->getBegin(),
         ]);
 
         $form->handleRequest($request);

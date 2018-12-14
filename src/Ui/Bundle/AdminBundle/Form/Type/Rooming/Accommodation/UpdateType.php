@@ -15,8 +15,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UpdateType extends AbstractAccommodationType
 {
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
+        parent::configureOptions($resolver);
+
         $resolver
             ->setDefaults([
                 'data_class' => Update::class
@@ -24,7 +26,7 @@ class UpdateType extends AbstractAccommodationType
         ;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'admin_bundle_update_type';
     }

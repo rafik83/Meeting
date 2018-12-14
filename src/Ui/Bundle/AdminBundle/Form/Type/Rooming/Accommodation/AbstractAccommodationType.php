@@ -15,6 +15,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractAccommodationType extends AbstractType
 {
@@ -24,13 +25,19 @@ abstract class AbstractAccommodationType extends AbstractType
             ->add('title', TextType::class, [])
             ->add('overnightCapacities', CollectionType::class, [
                 'entry_type' => AccommodationOvernightCapacityType::class,
+                'entry_options' => [
+                    'firstDay' => $options['firstDay'],
+                ],
                 'allow_add' => true,
                 'allow_delete' => false,
                 'prototype' => true,
-                //@todo Change datetime to first day of the event
-                'prototype_data' => new AccommodationOvernightCapacityView(new \DateTime(), 0),
+                'prototype_data' => new AccommodationOvernightCapacityView($options['firstDay'], 0),
             ])
         ;
     }
 
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setRequired(['firstDay']);
+    }
 }
