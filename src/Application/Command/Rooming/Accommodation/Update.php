@@ -10,17 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Rooming\Accommodation;
 
-use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 
-class Update implements Command
+class Update extends AbstractAccommodationCommand
 {
-    /** @var string */
-    public $title;
-
-    /** @var AccommodationOvernightCapacityView[] */
-    public $overnightCapacities;
-
     /** @var Accommodation */
     public $accommodation;
 

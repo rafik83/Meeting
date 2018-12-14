@@ -76,7 +76,7 @@ class AddAction
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($add);
-            $this->flashBag->add('success', 'success');
+            $this->flashBag->add('success', 'flash.event.accommodation.added');
 
             return new RedirectResponse($this->router->generate('admin_event_read', [
                 'event' => $event->getId(),

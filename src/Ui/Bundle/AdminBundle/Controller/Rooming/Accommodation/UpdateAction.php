@@ -70,7 +70,7 @@ class UpdateAction
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($update);
-            $this->flashBag->add('success', 'success');
+            $this->flashBag->add('success', 'flash.event.accommodation.updated');
 
             return new RedirectResponse($this->router->generate('admin_event_rooming_accommodation_update', [
                 'event' => $event->getId(),

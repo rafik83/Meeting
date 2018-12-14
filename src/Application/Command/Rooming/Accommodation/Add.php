@@ -5,14 +5,8 @@ namespace Proximum\Vimeet\Application\Command\Rooming\Accommodation;
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Add implements Command
+class Add extends AbstractAccommodationCommand
 {
-    /** @var string */
-    public $title;
-
-    /** @var AccommodationOvernightCapacityView[] */
-    public $overnightCapacities = [];
-
     /** @var Event */
     public $event;
 

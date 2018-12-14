@@ -1,0 +1,10 @@
+Proximum\Vimeet\Application\Command\Rooming\Accommodation\AbstractAccommodationCommand:
+    constraints:
+        - Expression:
+              expression: "!this.hasDuplicatedDay()"
+              message: "validators.accommodation.noDuplicatedDayAllowed"
+    properties:
+        title:
+            - NotBlank: ~
+        overnightCapacities:
+            - Valid: ~
