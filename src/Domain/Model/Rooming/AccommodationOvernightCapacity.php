@@ -1,0 +1,38 @@
+<?php
+
+namespace Proximum\Vimeet\Domain\Model\Rooming;
+
+class AccommodationOvernightCapacity
+{
+    /** @var int */
+    private $id;
+
+    /** @var \DateTimeInterface */
+    private $date;
+
+    /** @var int */
+    private $capacity;
+
+    /** @var Accommodation */
+    private $accommodation;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getDate(): \DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function getCapacity(): int
+    {
+        return $this->capacity;
+    }
+
+    public function getAccommodation(): Accommodation
+    {
+        return $this->accommodation;
+    }
+}
