@@ -4,6 +4,9 @@ namespace Proximum\Vimeet\Domain\Model\Rooming;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
+/**
+ * "Lieu d'hébergement"
+ */
 class Accommodation
 {
     /** @var int */

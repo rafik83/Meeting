@@ -2,6 +2,9 @@
 
 namespace Proximum\Vimeet\Domain\Model\Rooming;
 
+/**
+ * "Capacité d'un lieu d'hébergement par nuitée"
+ */
 class AccommodationOvernightCapacity
 {
     /** @var int */
