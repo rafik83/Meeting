@@ -16,11 +16,20 @@ class Add implements Command
     /** @var Event */
     public $event;
 
-    public function __construct(
-        Event $event
-    ) {
+    public function __construct(Event $event)
+    {
         $this->event = $event;
         $days = $event->getDays();
+
+        $previousDay = (new \DateTime())
+            ->setTimestamp($event->getFirstDay()->getBegin()->getTimestamp())
+            ->modify('-1 day')
+        ;
+
+        $this->overnightCapacities[] = new AccommodationOvernightCapacityView(
+            $previousDay,
+            0
+        );
 
         foreach ($days as $day) {
             $this->overnightCapacities[] = new AccommodationOvernightCapacityView(
