@@ -235,3 +235,4 @@ flash.spot.export.scheduled: 'La récupération et l''export des lieux des fiche
 flash.template.incomplete_translations.warning: 'Vous avez des traductions manquantes.'
 flash.template.preview.update.success: 'L''aperçu du catalogue a bien été enregistré.'
 flash.type.content.define_terms_of_sale.success: 'La définition des conditions générales de vente a été mise à jour'
+flash.event.daysMustBeDefined: 'Les jours de l''événement doivent être configurés avant.'

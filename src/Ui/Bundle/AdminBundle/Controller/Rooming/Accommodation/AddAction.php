@@ -60,6 +60,14 @@ class AddAction
             throw new AccessDeniedException('Access denied');
         }
 
+        if (!$event->hasDay()) {
+            $this->flashBag->add('error', 'flash.event.daysMustBeDefined');
+
+            return new RedirectResponse($this->router->generate('admin_event_read', [
+                'event' => $event->getId(),
+            ]));
+        }
+
         $add = new Add($event);
         $form = $this->formFactory->create(AddType::class, $add, [
             'submit' => true,
