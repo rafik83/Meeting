@@ -255,10 +255,7 @@ class RegisterController extends Controller
         }
 
         if ($preFillUserDataView->isParticipationDataPreFilled()) {
-            $this->addFlash('success', new TransMessage(
-                'flash.register.participationData.prefilled',
-                ['%event%' => $preFillUserDataView->event->getTitle()]
-            ));
+            $this->addFlash('success', new TransMessage('flash.register.participationData.prefilled', []));
         }
 
         return $this->render('EventBundle:Register:participate.html.twig', [
