@@ -23,7 +23,11 @@ class AccommodationOvernightCapacityType extends AbstractType
     {
         $builder
             ->add('date', DateType::class)
-            ->add('capacity', IntegerType::class)
+            ->add('capacity', IntegerType::class, [
+                'attr' => [
+                    'min' => 0,
+                ],
+            ])
         ;
     }
 

@@ -21,4 +21,9 @@ class AccommodationRepository implements AccommodationRepositoryInterface
         $this->entityManager->persist($accommodation);
         $this->entityManager->flush($accommodation);
     }
+
+    public function update(Accommodation $accommodation): void
+    {
+        $this->entityManager->flush($accommodation);
+    }
 }

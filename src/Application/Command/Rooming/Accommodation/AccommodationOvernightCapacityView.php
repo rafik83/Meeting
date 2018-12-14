@@ -15,12 +15,12 @@ class AccommodationOvernightCapacityView
     /** @var null|\DateTimeInterface */
     public $date;
 
-    /** @var null|int */
+    /** @var int */
     public $capacity;
 
     public function __construct(
         ?\DateTimeInterface $date = null,
-        ?int $capacity = null
+        int $capacity = 0
     ) {
         $this->date = $date;
         $this->capacity = $capacity;

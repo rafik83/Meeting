@@ -11,7 +11,7 @@ class Add implements Command
     public $title;
 
     /** @var AccommodationOvernightCapacityView[] */
-    public $overnightCapacities;
+    public $overnightCapacities = [];
 
     /** @var Event */
     public $event;
@@ -20,8 +20,7 @@ class Add implements Command
         Event $event
     ) {
         $this->event = $event;
-
-        $days = $this->event->getDays();
+        $days = $event->getDays();
 
         foreach ($days as $day) {
             $this->overnightCapacities[] = new AccommodationOvernightCapacityView(

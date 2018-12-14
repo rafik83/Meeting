@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Domain\Model\Rooming;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Application\Command\Rooming\Accommodation\AccommodationOvernightCapacityView;
 use Proximum\Vimeet\Domain\Model\Event;
 
 /**
@@ -55,5 +56,15 @@ class Accommodation
     public function addOvernightCapacity(AccommodationOvernightCapacity $accommodationOvernightCapacity): void
     {
         $this->overnightCapacities->add($accommodationOvernightCapacity);
+    }
+
+    /**
+     * @param string                           $title
+     * @param AccommodationOvernightCapacity[] $overnightCapacities
+     */
+    public function update(string $title, array $overnightCapacities): void
+    {
+        $this->title = $title;
+        $this->overnightCapacities = new ArrayCollection($overnightCapacities);
     }
 }

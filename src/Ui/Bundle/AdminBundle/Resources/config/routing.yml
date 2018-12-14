@@ -2018,3 +2018,11 @@ admin_event_rooming_accommodation_add:
         event: \d+
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\AddAction
+
+admin_event_rooming_accommodation_update:
+    path: /event/{event}/rooming/accommodation/{accommodation}/update
+    requirements:
+        event: \d+
+        accommodation: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\UpdateAction

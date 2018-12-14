@@ -44,6 +44,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Accommodation\Add }
 
+    Proximum\Vimeet\Application\Command\Rooming\Accommodation\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\AccommodationRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Accommodation\Update }
+
     #
     # Extra Parameter
     #
