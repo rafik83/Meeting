@@ -47,14 +47,14 @@
                         - {{ detailView.departureDate|date('d/m/Y H:i') }}
                     {% endif %}
                     <ul>
-                    {% for userOvernightAccommodation in detailView.userOvernightAccommodationViews %}
+                    {% for userStayView in detailView.userStayViews %}
                         <li>
-                            {{ userOvernightAccommodation.accommodationTitle }}
-                            {{ userOvernightAccommodation.roomType }}
-                            {{ userOvernightAccommodation.arrivalDate|date('d/m/Y') }} - {{ userOvernightAccommodation.departureDate|date('d/m/Y') }}
-                            {% if userOvernightAccommodation.roommateView %}
-                                {{ userOvernightAccommodation.roommateView.firstName }}
-                                {{ userOvernightAccommodation.roommateView.lastName }}
+                            {{ userStayView.accommodationTitle }}
+                            {{ userStayView.roomType }}
+                            {{ userStayView.arrivalDate|date('d/m/Y') }} - {{ userStayView.departureDate|date('d/m/Y') }}
+                            {% if userStayView.roommateView %}
+                                {{ userStayView.roommateView.firstName }}
+                                {{ userStayView.roommateView.lastName }}
                             {% endif %}
                         </li>
                     {% endfor %}

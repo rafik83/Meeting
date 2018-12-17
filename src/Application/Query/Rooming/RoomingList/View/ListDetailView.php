@@ -25,8 +25,8 @@ class ListDetailView
     /** @var SheetView[] */
     public $sheetViews;
 
-    /** @var UserOvernightAccommodationView[] */
-    public $userOvernightAccommodationViews;
+    /** @var UserStayView[] */
+    public $userStayViews;
 
     public function __construct(
         int $userId,
@@ -36,7 +36,7 @@ class ListDetailView
         ?\DateTimeInterface $departureDate,
         ?string $comment,
         array $sheetViews,
-        array $userOvernightAccommodationViews
+        array $userStayViews
     ) {
         $this->userId = $userId;
         $this->firstName = $firstName;
@@ -45,11 +45,16 @@ class ListDetailView
         $this->departureDate = $departureDate;
         $this->comment = $comment;
         $this->sheetViews = $sheetViews;
-        $this->userOvernightAccommodationViews = $userOvernightAccommodationViews;
+        $this->userStayViews = $userStayViews;
     }
 
     public function addSheetView(SheetView $sheetView): void
     {
         $this->sheetViews[] = $sheetView;
+    }
+
+    public function addUserStayView(UserStayView $userStayView): void
+    {
+        $this->userStayViews[] = $userStayView;
     }
 }

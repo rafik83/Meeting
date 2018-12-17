@@ -39,8 +39,8 @@ class UserSheetTypeView
         string $sheetTitle,
         ?string $spotReference,
         string $typeTitle,
-        ?\DateTimeInterface $arrival,
-        ?\DateTimeInterface $departure
+        ?\DateTimeInterface $arrival = null,
+        ?\DateTimeInterface $departure = null
     ) {
         $this->userId = $userId;
         $this->sheetId = $sheetId;

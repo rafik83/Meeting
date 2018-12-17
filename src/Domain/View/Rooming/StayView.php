@@ -5,13 +5,10 @@ namespace Proximum\Vimeet\Domain\View\Rooming;
 class StayView
 {
     /** @var int */
+    public $stayId;
+
+    /** @var int */
     public $userId;
-
-    /** @var null|string */
-    public $userFirstName;
-
-    /** @var null|string */
-    public $userLastName;
 
     /** @var \DateTimeInterface */
     public $arrival;
@@ -26,17 +23,15 @@ class StayView
     public $roomType;
 
     public function __construct(
+        int $stayId,
         int $userId,
-        ?string $userFirstName,
-        ?string $userLastName,
         \DateTimeInterface $arrival,
         \DateTimeInterface $departure,
         string $accommodationTitle,
         string $roomType
     ) {
+        $this->stayId = $stayId;
         $this->userId = $userId;
-        $this->userFirstName = $userFirstName;
-        $this->userLastName = $userLastName;
         $this->arrival = $arrival;
         $this->departure = $departure;
         $this->accommodationTitle = $accommodationTitle;

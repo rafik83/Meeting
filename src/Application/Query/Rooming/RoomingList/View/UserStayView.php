@@ -2,8 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Rooming\RoomingList\View;
 
-class UserOvernightAccommodationView
+class UserStayView
 {
+    /** @var int */
+    public $stayId;
+
     /** @var \DateTimeInterface */
     public $arrivalDate;
 
@@ -20,12 +23,14 @@ class UserOvernightAccommodationView
     public $roommateView;
 
     public function __construct(
+        int $stayId,
         \DateTimeInterface $arrivalDate,
         \DateTimeInterface $departureDate,
         string $accommodationTitle,
         string $roomType,
         ?RoommateView $roommateView = null
     ) {
+        $this->stayId = $stayId;
         $this->arrivalDate = $arrivalDate;
         $this->departureDate = $departureDate;
         $this->accommodationTitle = $accommodationTitle;

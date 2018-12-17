@@ -22,7 +22,12 @@ class StayRepository implements StayRepositoryInterface
     {
         return $this->entityManager
             ->createQueryBuilder()
-            ->select(sprintf('new %s(user.id, user.account.firstName, user.account.lastName, stay.arrival, stay.departure, accommodation.title, stay.roomType)', StayView::class))
+            ->select(
+                sprintf(
+                    'new %s(stay.id, user.id, stay.arrival, stay.departure, accommodation.title, stay.roomType)',
+                    StayView::class
+                )
+            )
             ->from(Stay::class, 'stay')
             ->join('stay.accommodation', 'accommodation', 'WITH', 'stay.event = :event')
             ->join('stay.users', 'user')
