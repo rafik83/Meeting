@@ -742,6 +742,7 @@ admin.rule.list.content.category: Catégorie
 admin.rule.list.content.type: Type
 admin.rule.list.title: 'Liste des règles'
 admin.rule.see-what.title: 'Règle de %seer% sur %seeable%'
+admin.rooming.title: 'Rooming list'
 admin.rooming.accommodation.add.title: 'Ajouter un hébergement'
 admin.rooming.accommodation.update.title: 'Modifier un hébergement'
 admin.schedule_day.update.title: 'Définir les jours de l''événement'

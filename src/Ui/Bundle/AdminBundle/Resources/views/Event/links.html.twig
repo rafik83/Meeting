@@ -281,6 +281,23 @@
     </li>
 {% endif %}
 {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+    <li class="dropdown-submenu">
+        <a href="">
+            {{ 'admin.rooming.title'|trans }}
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="">
+                    {{ 'admin.rooming.title'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_event_rooming_accommodation_add', { 'event': event.id }) }}">
+                    {{ 'admin.rooming.accommodation.add.title'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
     <li>
         <a href="{{ path('admin_tip_event_list', { 'event': event.id }) }}">
             {{ 'admin.tip.link'|trans }}
