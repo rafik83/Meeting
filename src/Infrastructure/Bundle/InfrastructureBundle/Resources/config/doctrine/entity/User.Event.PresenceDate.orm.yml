@@ -1,0 +1,24 @@
+Proximum\Vimeet\Domain\Model\User\Event\PresenceDate:
+    type:  entity
+    table: user_event_presence_date
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        arrival:
+            type: datetime
+        departure:
+            type: datetime
+    manyToOne:
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
