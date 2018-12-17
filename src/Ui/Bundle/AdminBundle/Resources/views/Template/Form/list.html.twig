@@ -17,7 +17,6 @@
             <th class="col-md-3">{{ 'admin.template.form.table.column.translatedTitle'|trans }}</th>
             <th class="col-md-2">{{ 'admin.template.form.table.column.types'|trans }}</th>
             <th class="col-md-2">{{ 'admin.template.form.table.column.url'|trans }}</th>
-            <th class="col-md-2">{{ 'admin.template.form.table.column.createdAt'|trans }}</th>
             <th class="col-md-2 text-right">{{ 'admin.template.form.table.column.action'|trans }}</th>
         </tr>
         </thead>
@@ -46,8 +45,7 @@
                         {% endfor %}
                     </ul>
                 </td>
-                <td>{{ formTemplateView.url }}</td>
-                <td>{{ formTemplateView.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
+                <td><a href="{{ formTemplateView.url }}" target="_blank">{{ formTemplateView.url }}</a></td>
                 <td class="text-right">
                     <div class="btn-group">
                         <a href="{{ path('admin_template_form_builder', {'event': event.id, 'template': formTemplateView.id, 'locale': formTemplateView.locale }) }}" class="btn btn-default btn-sm">

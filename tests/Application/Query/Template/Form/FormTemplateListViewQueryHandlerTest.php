@@ -39,7 +39,6 @@ class FormTemplateListViewQueryHandlerTest extends TestCase
                 $formTemplate->reveal(),
             ]);
 
-
         $eventUrlGenerator = $this->prophesize(EventUrlGeneratorInterface::class);
         $eventUrlGenerator->generateEventAbsoluteUrl($event->reveal(), 'event_show_form_template', ['formTemplate' => 1])
             ->shouldBeCalled()
