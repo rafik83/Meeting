@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\ListDetailView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\ListView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\RoommateView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\SheetView;
+use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayView;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -49,20 +50,11 @@ class ListViewQueryHandler
             $userIdsByStayId[$stayView->stayId][] = $stayView->userId;
         }
 
-
         foreach ($userSheetTypeViews as $userSheetTypeView) {
             $userStayViews = $stayViewsByUserId[$userSheetTypeView->userId] ?? [];
+            $sheetView = $this->getSheetView($userSheetTypeView);
 
-            $sheetView = new SheetView(
-                $userSheetTypeView->sheetId,
-                $userSheetTypeView->sheetTitle,
-                $userSheetTypeView->typeTitle,
-                $userSheetTypeView->spotReference
-            );
-
-            if (isset($listDetailViews[$userSheetTypeView->userId])) {
-                $listDetailViews[$userSheetTypeView->userId]->addSheetView($sheetView);
-            } else {
+            if (!isset($listDetailViews[$userSheetTypeView->userId])) {
                 $listDetailViews[$userSheetTypeView->userId] = new ListDetailView(
                     $userSheetTypeView->userId,
                     $userSheetTypeView->firstName,
@@ -70,37 +62,58 @@ class ListViewQueryHandler
                     $userSheetTypeView->arrival,
                     $userSheetTypeView->departure,
                     null,
-                    [
-                        $sheetView
-                    ],
+                    [],
                     $userStayViews
                 );
             }
+
+            $listDetailViews[$userSheetTypeView->userId]->addSheetView($sheetView);
         }
 
-        $roommateViewByUserIdByStayId = [];
-        foreach ($userIdsByStayId as $stayId => $usersId) {
-            if (\count($usersId) > 1) {
-                foreach ($usersId as $userId) {
-                    $roommateIds = array_filter(
-                        $usersId,
-                        function ($otherUserId) use ($userId) {
-                            return $otherUserId !== $userId;
-                        }
-                    );
+        $this->assignRoommateToUserStayView($userIdsByStayId, $listDetailViews);
 
-                    foreach ($roommateIds as $roommateId) {
-                        if (isset($listDetailViews[$roommateId])) {
-                            $roommateViewByUserIdByStayId[$stayId][$userId] = new RoommateView(
-                                $roommateId,
-                                $listDetailViews[$roommateId]->firstName,
-                                $listDetailViews[$roommateId]->lastName
-                            );
-                        }
+        return new ListView($listDetailViews);
+    }
+
+    private function getSheetView(UserSheetTypeView $userSheetTypeView): SheetView
+    {
+        return new SheetView(
+            $userSheetTypeView->sheetId,
+            $userSheetTypeView->sheetTitle,
+            $userSheetTypeView->typeTitle,
+            $userSheetTypeView->spotReference
+        );
+    }
+
+    private function getRoommateViewByUserIdByStayId(array &$userIdsByStayId, array &$listDetailViews): array
+    {
+        $roommateViewByUserIdByStayId = [];
+
+        foreach ($userIdsByStayId as $stayId => $usersId) {
+            if (\count($usersId) === 1) {
+                continue;
+            }
+
+            foreach ($usersId as $userId) {
+                foreach ($usersId as $otherUserId) {
+                    // The roommate is the other user on the same stay
+                    if ($otherUserId !== $userId && isset($listDetailViews[$otherUserId])) {
+                        $roommateViewByUserIdByStayId[$stayId][$userId] = new RoommateView(
+                            $otherUserId,
+                            $listDetailViews[$otherUserId]->firstName,
+                            $listDetailViews[$otherUserId]->lastName
+                        );
                     }
                 }
             }
         }
+
+        return $roommateViewByUserIdByStayId;
+    }
+
+    private function assignRoommateToUserStayView(array &$userIdsByStayId, array &$listDetailViews): void
+    {
+        $roommateViewByUserIdByStayId = $this->getRoommateViewByUserIdByStayId($userIdsByStayId, $listDetailViews);
 
         foreach ($listDetailViews as $userId => $listDetailView) {
             foreach ($listDetailView->userStayViews as $userStayView) {
@@ -109,7 +122,5 @@ class ListViewQueryHandler
                 }
             }
         }
-
-        return new ListView($listDetailViews);
     }
 }
