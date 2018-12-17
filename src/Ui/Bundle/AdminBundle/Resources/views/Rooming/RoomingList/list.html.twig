@@ -39,7 +39,12 @@
                     {{ detailView.lastName }}
                 </td>
                 <td>
-                    {{ detailView.arrivalDate|date('d/m/Y H:i') }} - {{ detailView.departureDate|date('d/m/Y H:i') }}
+                    {% if detailView.arrivalDate is not null %}
+                        {{ detailView.arrivalDate|date('d/m/Y H:i') }}
+                    {% endif %}
+                    {% if detailView.departureDate is not null %}
+                        - {{ detailView.departureDate|date('d/m/Y H:i') }}
+                    {% endif %}
                     <ul>
                     {% for userOvernightAccommodation in detailView.userOvernightAccommodationViews %}
                         <li>

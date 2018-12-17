@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
@@ -232,6 +233,31 @@ class UserRepository implements UserRepositoryInterface
                 'sheet.event = :event' . ($onlyEnabledSheets ? ' AND sheet.enable = true' : '')
             )
             ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function getWithSheetAndTypeByEvent(Event $event, string $locale): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select(sprintf('new %s(user.id, sheet.id, user.account.firstName, user.account.lastName, sheet.title, spot.reference, typeTranslation.title)', UserSheetTypeView::class))
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
+            ->join(
+                'participant.sheet',
+                'sheet',
+                'WITH',
+                'sheet.event = :event AND sheet.enable = true'
+            )
+            ->join('sheet.type', 'type')
+            ->leftJoin('sheet.spot', 'spot')
+            ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale)
+            ->orderBy('sheet.title, user.account.lastName, user.account.firstName', 'ASC')
         ;
 
         return $queryBuilder->getQuery()->getResult();

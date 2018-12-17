@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -91,6 +92,14 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function findWithEnabledSheetByEvent(Event $event): array;
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return UserSheetTypeView[]
+     */
+    public function getWithSheetAndTypeByEvent(Event $event, string $locale): array;
 
     /**
      * @param Event $event

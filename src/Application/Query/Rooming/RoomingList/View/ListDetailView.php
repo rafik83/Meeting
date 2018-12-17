@@ -7,10 +7,10 @@ class ListDetailView
     /** @var int */
     public $userId;
 
-    /** @var string */
+    /** @var null|string */
     public $firstName;
 
-    /** @var string */
+    /** @var null|string */
     public $lastName;
 
     /** @var \DateTimeInterface|null */
@@ -30,8 +30,8 @@ class ListDetailView
 
     public function __construct(
         int $userId,
-        string $firstName,
-        string $lastName,
+        ?string $firstName,
+        ?string $lastName,
         ?\DateTimeInterface $arrivalDate,
         ?\DateTimeInterface $departureDate,
         ?string $comment,
@@ -46,5 +46,10 @@ class ListDetailView
         $this->comment = $comment;
         $this->sheetViews = $sheetViews;
         $this->userOvernightAccommodationViews = $userOvernightAccommodationViews;
+    }
+
+    public function addSheetView(SheetView $sheetView): void
+    {
+        $this->sheetViews[] = $sheetView;
     }
 }

@@ -202,5 +202,7 @@ services:
     # Rooming
     #
     Proximum\Vimeet\Application\Query\Rooming\RoomingList\ListViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\RoomingList\ListViewQuery }
