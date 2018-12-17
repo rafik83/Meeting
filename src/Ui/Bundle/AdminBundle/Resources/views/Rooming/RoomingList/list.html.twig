@@ -9,20 +9,19 @@
         <thead>
         <tr>
             <th>{{ 'admin.rooming.list.sheet'|trans }}</th>
-            <th>{{ 'admin.rooming.list.firstName'|trans }}</th>
-            <th>{{ 'admin.rooming.list.lastName'|trans }}</th>
-            <th>{{ 'admin.rooming.list.arrivalDateAndDepartureDate'|trans }}</th>
-            <th>{{ 'admin.rooming.list.comment'|trans }}</th>
+            <th>{{ 'admin.rooming.list.fullName'|trans }}</th>
+            <th class="col-md-4">{{ 'admin.rooming.list.arrivalDateAndDepartureDate'|trans }}</th>
+            <th class="col-md-2">{{ 'admin.rooming.list.comment'|trans }}</th>
         </tr>
         </thead>
         <tbody>
         {% for detailView in roomingListView.listDetailViews %}
             <tr>
                 <td>
-                    <ul>
-                    {% for sheetView in detailView.sheetViews  %}
+                    <ul class="list-unstyled">
+                    {% for sheetView in detailView.sheetViews %}
                         <li>
-                            {{ sheetView.title }}
+                            <a href="{{ path('admin_sheet_details', { event: event.id, sheet: sheetView.id }) }}" target="_blank">{{ sheetView.title }}</a>
                             <span class="label label-info">{{ sheetView.typeTitle }}</span>
 
                             {% if sheetView.spotReference %}
@@ -33,29 +32,33 @@
                     </ul>
                 </td>
                 <td>
-                    {{ detailView.userId }}
-                    {{ detailView.firstName }}
-                </td>
-                <td>
-                    {{ detailView.lastName }}
+                    <a href="{{ path('admin_users_details', { event: event.id, user: detailView.userId  }) }}" target="_blank">
+                        <b>{{ detailView.lastName }}</b>
+                        {{ detailView.firstName }}
+                    </a>
                 </td>
                 <td>
                     {% if detailView.arrivalDate is not null %}
                         {{ detailView.arrivalDate|date('d/m/Y H:i') }}
                     {% endif %}
                     {% if detailView.departureDate is not null %}
-                        - {{ detailView.departureDate|date('d/m/Y H:i') }}
+                        / {{ detailView.departureDate|date('d/m/Y H:i') }}
                     {% endif %}
-                    <ul>
+
+                    <ul class="nav nav-pills">
                     {% for userStayView in detailView.userStayViews %}
                         <li>
-                            {{ userStayView.accommodationTitle }}
-                            {{ userStayView.roomType }}
-                            {{ userStayView.arrivalDate|date('d/m/Y') }} - {{ userStayView.departureDate|date('d/m/Y') }}
-                            {% if userStayView.roommateView %}
-                                {{ userStayView.roommateView.firstName }}
-                                {{ userStayView.roommateView.lastName }}
-                            {% endif %}
+                            <a href="#">
+                                <small>{{ userStayView.arrivalDate|date('d/m/Y') }} / {{ userStayView.departureDate|date('d/m/Y') }}</small>
+                                <br>
+                                {{ userStayView.accommodationTitle }}
+                                <span class="label label-default">{{ userStayView.roomType }}</span>
+
+                                {% if userStayView.roommateView %}
+                                    <br><b>{{ userStayView.roommateView.lastName }}</b>
+                                    {{ userStayView.roommateView.firstName }}
+                                {% endif %}
+                            </a>
                         </li>
                     {% endfor %}
                     </ul>
