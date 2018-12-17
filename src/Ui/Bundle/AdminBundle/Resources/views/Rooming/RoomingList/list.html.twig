@@ -8,24 +8,29 @@
     <table class="table">
         <thead>
         <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>{{ 'admin.rooming.list.sheet'|trans }}</th>
+            <th>{{ 'admin.rooming.list.firstName'|trans }}</th>
+            <th>{{ 'admin.rooming.list.lastName'|trans }}</th>
+            <th>{{ 'admin.rooming.list.arrivalDateAndDepartureDate'|trans }}</th>
+            <th>{{ 'admin.rooming.list.comment'|trans }}</th>
         </tr>
         </thead>
         <tbody>
         {% for detailView in roomingListView.listDetailViews %}
             <tr>
                 <td>
+                    <ul>
                     {% for sheetView in detailView.sheetViews  %}
-                        {{ sheetView.title }}
-                        {{ sheetView.typeTitle }}
-                        {{ sheetView.spotReference }}
-                        {% if not loop.last %} / {% endif %}
+                        <li>
+                            {{ sheetView.title }}
+                            <span class="label label-info">{{ sheetView.typeTitle }}</span>
+
+                            {% if sheetView.spotReference %}
+                                <span class="label label-default"><i class="glyphicon glyphicon-map-marker"></i> {{ sheetView.spotReference }}</span>
+                            {% endif %}
+                        </li>
                     {% endfor %}
+                    </ul>
                 </td>
                 <td>
                     {{ detailView.firstName }}
@@ -35,18 +40,19 @@
                 </td>
                 <td>
                     {{ detailView.arrivalDate|date('d/m/Y H:i') }} - {{ detailView.departureDate|date('d/m/Y H:i') }}
-                </td>
-                <td>
+                    <ul>
                     {% for userOvernightAccommodation in detailView.userOvernightAccommodationViews %}
-                        {{ userOvernightAccommodation.accommodationTitle }}
-                        {{ userOvernightAccommodation.roomType }}
-                        {{ userOvernightAccommodation.arrivalDate|date('d/m/Y') }} - {{ userOvernightAccommodation.departureDate|date('d/m/Y') }}
-                        {% if userOvernightAccommodation.roommateView %}
-                            {{ userOvernightAccommodation.roommateView.firstName }}
-                            {{ userOvernightAccommodation.roommateView.lastName }}
-                        {% endif %}
-                        {% if not loop.last %} / {% endif %}
+                        <li>
+                            {{ userOvernightAccommodation.accommodationTitle }}
+                            {{ userOvernightAccommodation.roomType }}
+                            {{ userOvernightAccommodation.arrivalDate|date('d/m/Y') }} - {{ userOvernightAccommodation.departureDate|date('d/m/Y') }}
+                            {% if userOvernightAccommodation.roommateView %}
+                                {{ userOvernightAccommodation.roommateView.firstName }}
+                                {{ userOvernightAccommodation.roommateView.lastName }}
+                            {% endif %}
+                        </li>
                     {% endfor %}
+                    </ul>
                 </td>
                 <td>
                     {{ detailView.comment }}
