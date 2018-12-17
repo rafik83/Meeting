@@ -8,9 +8,11 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\RoommateView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\SheetView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayView;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Proximum\Vimeet\Domain\View\Rooming\StayView;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class ListViewQueryHandler
 {
@@ -20,12 +22,17 @@ class ListViewQueryHandler
     /** @var StayRepositoryInterface */
     private $stayRepository;
 
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
+
     public function __construct(
         UserRepositoryInterface $userRepository,
-        StayRepositoryInterface $stayRepository
+        StayRepositoryInterface $stayRepository,
+        ExtraDataRepositoryInterface $extraDataRepository
     ) {
         $this->userRepository = $userRepository;
         $this->stayRepository = $stayRepository;
+        $this->extraDataRepository = $extraDataRepository;
     }
 
     public function handle(ListViewQuery $query): ListView
@@ -34,6 +41,10 @@ class ListViewQueryHandler
         $listDetailViews = [];
         $userSheetTypeViews = $this->userRepository->getWithSheetAndTypeByEvent($query->event, $query->locale);
         $stayViews = $this->stayRepository->getStaysByEvent($query->event);
+        $comments = $this->extraDataRepository->getExtraDataForEventIdAndNameIndexedByUserId(
+            $query->event->getId(),
+            Type::ROOMING_COMMENT
+        );
 
         $stayViewsByUserId = [];
         $userIdsByStayId = [];
@@ -51,23 +62,25 @@ class ListViewQueryHandler
         }
 
         foreach ($userSheetTypeViews as $userSheetTypeView) {
-            $userStayViews = $stayViewsByUserId[$userSheetTypeView->userId] ?? [];
-            $sheetView = $this->getSheetView($userSheetTypeView);
+            $userId = $userSheetTypeView->userId;
+            $userStayViews = $stayViewsByUserId[$userId] ?? [];
 
-            if (!isset($listDetailViews[$userSheetTypeView->userId])) {
-                $listDetailViews[$userSheetTypeView->userId] = new ListDetailView(
+            if (!isset($listDetailViews[$userId])) {
+                $listDetailViews[$userId] = new ListDetailView(
                     $userSheetTypeView->userId,
                     $userSheetTypeView->firstName,
                     $userSheetTypeView->lastName,
                     $userSheetTypeView->arrival,
                     $userSheetTypeView->departure,
-                    null,
+                    isset($comments[$userId]) && $comments[$userId] instanceof ExtraData
+                        ? $comments[$userId]->getValue()
+                        : null,
                     [],
                     $userStayViews
                 );
             }
 
-            $listDetailViews[$userSheetTypeView->userId]->addSheetView($sheetView);
+            $listDetailViews[$userId]->addSheetView($this->getSheetView($userSheetTypeView));
         }
 
         $this->assignRoommateToUserStayView($userIdsByStayId, $listDetailViews);

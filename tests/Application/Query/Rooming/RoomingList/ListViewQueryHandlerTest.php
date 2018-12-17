@@ -12,8 +12,12 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\SheetView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\View\Rooming\StayView;
 
 class ListViewQueryHandlerTest extends TestCase
@@ -29,6 +33,7 @@ class ListViewQueryHandlerTest extends TestCase
         $overnightAccommodation2Departure = new \DateTime('2018-12-16 10:00:00.000');
 
         $event = $this->prophesize(Event::class);
+        $event->getId()->shouldBeCalled()->willReturn(1000);
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository
             ->getWithSheetAndTypeByEvent($event->reveal(), 'fr')
@@ -102,7 +107,26 @@ class ListViewQueryHandlerTest extends TestCase
             ])
         ;
 
-        $handler = new ListViewQueryHandler($userRepository->reveal(), $stayRepository->reveal());
+        $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+        $extraDataRepository
+            ->getExtraDataForEventIdAndNameIndexedByUserId(1000, Type::ROOMING_COMMENT)
+            ->shouldBeCalled()
+            ->willReturn([
+                2 => new ExtraData(
+                    $this->prophesize(User::class)->reveal(),
+                    $event->reveal(),
+                    Type::ROOMING_COMMENT,
+                    "Ceci est un test\nCeci est un autre test",
+                    new \DateTime()
+                )
+            ])
+        ;
+
+        $handler = new ListViewQueryHandler(
+            $userRepository->reveal(),
+            $stayRepository->reveal(),
+            $extraDataRepository->reveal()
+        );
         $result = $handler->handle(new ListViewQuery($event->reveal(), 'fr'));
 
         $expected = new ListView([
