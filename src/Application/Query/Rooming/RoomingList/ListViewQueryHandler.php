@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\ListView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\RoommateView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\SheetView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserOvernightAccommodationView;
+use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class ListViewQueryHandler
@@ -14,15 +15,22 @@ class ListViewQueryHandler
     /** @var UserRepositoryInterface */
     private $userRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
-    {
+    /** @var StayRepositoryInterface */
+    private $stayRepository;
+
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        StayRepositoryInterface $stayRepository
+    ) {
         $this->userRepository = $userRepository;
+        $this->stayRepository = $stayRepository;
     }
 
     public function handle(ListViewQuery $query): ListView
     {
         $results = [];
         $users = $this->userRepository->getWithSheetAndTypeByEvent($query->event, $query->locale);
+        $stays = $this->stayRepository->getStaysByEvent($query->event);
 
         foreach ($users as $user) {
             $sheetView = new SheetView(
@@ -39,8 +47,8 @@ class ListViewQueryHandler
                     $user->userId,
                     $user->firstName,
                     $user->lastName,
-                    null,
-                    null,
+                    $user->arrival,
+                    $user->departure,
                     null,
                     [
                         $sheetView

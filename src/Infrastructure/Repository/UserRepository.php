@@ -243,7 +243,17 @@ class UserRepository implements UserRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select(sprintf('new %s(user.id, sheet.id, user.account.firstName, user.account.lastName, sheet.title, spot.reference, typeTranslation.title)', UserSheetTypeView::class))
+            ->select(sprintf('new %s(
+                user.id, 
+                sheet.id, 
+                user.account.firstName, 
+                user.account.lastName, 
+                sheet.title, 
+                spot.reference, 
+                typeTranslation.title, 
+                presenceDate.arrival,
+                presenceDate.departure
+            )', UserSheetTypeView::class))
             ->from(User::class, 'user')
             ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
             ->join(
@@ -255,6 +265,12 @@ class UserRepository implements UserRepositoryInterface
             ->join('sheet.type', 'type')
             ->leftJoin('sheet.spot', 'spot')
             ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->leftJoin(
+                User\Event\PresenceDate::class,
+                'presenceDate',
+                'WITH',
+                'user.id = presenceDate.user'
+            )
             ->setParameter('event', $event)
             ->setParameter('locale', $locale)
             ->orderBy('sheet.title, user.account.lastName, user.account.firstName', 'ASC')

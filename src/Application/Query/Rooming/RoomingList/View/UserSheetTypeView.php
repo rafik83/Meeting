@@ -25,6 +25,12 @@ class UserSheetTypeView
     /** @var string */
     public $typeTitle;
 
+    /** @var \DateTimeInterface|null */
+    public $arrival;
+
+    /** @var \DateTimeInterface|null */
+    public $departure;
+
     public function __construct(
         int $userId,
         int $sheetId,
@@ -32,7 +38,9 @@ class UserSheetTypeView
         ?string $lastName,
         string $sheetTitle,
         ?string $spotReference,
-        string $typeTitle
+        string $typeTitle,
+        ?\DateTimeInterface $arrival,
+        ?\DateTimeInterface $departure
     ) {
         $this->userId = $userId;
         $this->sheetId = $sheetId;
@@ -41,5 +49,7 @@ class UserSheetTypeView
         $this->sheetTitle = $sheetTitle;
         $this->spotReference = $spotReference;
         $this->typeTitle = $typeTitle;
+        $this->arrival = $arrival;
+        $this->departure = $departure;
     }
 }
