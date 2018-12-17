@@ -1,0 +1,58 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.rooming.title'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.rooming.title'|trans }}</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for detailView in roomingListView.listDetailViews %}
+            <tr>
+                <td>
+                    {% for sheetView in detailView.sheetViews  %}
+                        {{ sheetView.title }}
+                        {{ sheetView.typeTitle }}
+                        {{ sheetView.spotReference }}
+                        {% if not loop.last %} / {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {{ detailView.firstName }}
+                </td>
+                <td>
+                    {{ detailView.lastName }}
+                </td>
+                <td>
+                    {{ detailView.arrivalDate|date('d/m/Y H:i') }} - {{ detailView.departureDate|date('d/m/Y H:i') }}
+                </td>
+                <td>
+                    {% for userOvernightAccommodation in detailView.userOvernightAccommodationViews %}
+                        {{ userOvernightAccommodation.accommodationTitle }}
+                        {{ userOvernightAccommodation.roomType }}
+                        {{ userOvernightAccommodation.arrivalDate|date('d/m/Y') }} - {{ userOvernightAccommodation.departureDate|date('d/m/Y') }}
+                        {% if userOvernightAccommodation.roommateView %}
+                            {{ userOvernightAccommodation.roommateView.firstName }}
+                            {{ userOvernightAccommodation.roommateView.lastName }}
+                        {% endif %}
+                        {% if not loop.last %} / {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {{ detailView.comment }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

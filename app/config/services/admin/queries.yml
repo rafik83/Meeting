@@ -197,3 +197,10 @@ services:
             - '@repository.admin_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Operator\OperatorListViewQuery }
+
+    #
+    # Rooming
+    #
+    Proximum\Vimeet\Application\Query\Rooming\RoomingList\ListViewQueryHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\RoomingList\ListViewQuery }
