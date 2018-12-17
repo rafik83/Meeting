@@ -1163,9 +1163,9 @@ admin.transactional.mail.list.key.mail_user_complete_profile: 'Invitation en tan
 admin.transactional.mail.list.key.mail_user_registered: Inscription
 admin.transactional.mail.list.key.mail_user_reset_password: 'Demande de mot de passe oublié'
 admin.transactional.mail.list.title: 'Liste des emails transactionnels'
-admin.transactional.mail.substitution.parameter.description.%agendaModifications%: 'Liste des modifications du planning'
 admin.transactional.mail.substitution.parameter.description.%agendaLink%: 'Lien vers l''agenda'
 admin.transactional.mail.substitution.parameter.description.%agendaLinkWithCTA%: 'CTA avec lien vers l''agenda'
+admin.transactional.mail.substitution.parameter.description.%agendaModifications%: 'Liste des modifications du planning'
 admin.transactional.mail.substitution.parameter.description.%event%: 'Titre de l''événément'
 admin.transactional.mail.substitution.parameter.description.%firstName%: 'Prénom du participant'
 admin.transactional.mail.substitution.parameter.description.%fromType%: 'Type de participation d''origine'
