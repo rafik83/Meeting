@@ -28,12 +28,20 @@ class ListDetailView
     /** @var UserStayView[] */
     public $userStayViews;
 
+    /** @var bool */
+    public $hasArrivalHours;
+
+    /** @var bool */
+    public $hasDepartureHours;
+
     public function __construct(
         int $userId,
         ?string $firstName,
         ?string $lastName,
         ?\DateTimeInterface $arrivalDate,
         ?\DateTimeInterface $departureDate,
+        bool $hasArrivalHours,
+        bool $hasDepartureHours,
         ?string $comment,
         array $sheetViews,
         array $userStayViews
@@ -46,6 +54,8 @@ class ListDetailView
         $this->comment = $comment;
         $this->sheetViews = $sheetViews;
         $this->userStayViews = $userStayViews;
+        $this->hasArrivalHours = $hasArrivalHours;
+        $this->hasDepartureHours = $hasDepartureHours;
     }
 
     public function addSheetView(SheetView $sheetView): void

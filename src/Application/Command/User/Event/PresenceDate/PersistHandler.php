@@ -44,7 +44,9 @@ class PersistHandler
             $persist->user,
             $persist->event,
             $arrival,
-            $departure
+            $departure,
+            $arrivalObject->displayHours(),
+            $departureObject->displayHours()
         ));
     }
 }

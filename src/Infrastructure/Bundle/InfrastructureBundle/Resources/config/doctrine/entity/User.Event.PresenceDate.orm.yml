@@ -13,6 +13,14 @@ Proximum\Vimeet\Domain\Model\User\Event\PresenceDate:
         departure:
             type: datetime
             nullable: true
+        hasArrivalHours:
+            type: boolean
+            options:
+                default: true
+        hasDepartureHours:
+            type: boolean
+            options:
+                default: true
     manyToOne:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User

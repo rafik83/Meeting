@@ -72,9 +72,12 @@ class ListViewQueryHandler
                     $userSheetTypeView->lastName,
                     $userSheetTypeView->arrival,
                     $userSheetTypeView->departure,
+                    $userSheetTypeView->hasArrivalHours,
+                    $userSheetTypeView->hasDepartureHours,
                     isset($comments[$userId]) && $comments[$userId] instanceof ExtraData
                         ? $comments[$userId]->getValue()
-                        : null,
+                        : null
+                    ,
                     [],
                     $userStayViews
                 );

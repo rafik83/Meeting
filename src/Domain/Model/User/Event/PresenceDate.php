@@ -30,16 +30,26 @@ class PresenceDate
     /** @var null|\DateTimeInterface */
     private $departure;
 
+    /** @var bool */
+    private $hasArrivalHours;
+
+    /** @var bool */
+    private $hasDepartureHours;
+
     public function __construct(
         User $user,
         Event $event,
         ?\DateTimeInterface $arrival,
-        ?\DateTimeInterface $departure
+        ?\DateTimeInterface $departure,
+        bool $hasArrivalHours,
+        bool $hasDepartureHours
     ) {
         $this->user = $user;
         $this->event = $event;
         $this->arrival = $arrival;
         $this->departure = $departure;
+        $this->hasArrivalHours = $hasArrivalHours;
+        $this->hasDepartureHours = $hasDepartureHours;
     }
 
     public function getId(): ?int
@@ -65,5 +75,15 @@ class PresenceDate
     public function getDeparture(): ?\DateTimeInterface
     {
         return $this->departure;
+    }
+
+    public function hasDepartureHours(): bool
+    {
+        return $this->hasDepartureHours;
+    }
+
+    public function hasArrivalHours(): bool
+    {
+        return $this->hasArrivalHours;
     }
 }

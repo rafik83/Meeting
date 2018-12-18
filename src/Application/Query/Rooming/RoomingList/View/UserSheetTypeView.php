@@ -31,6 +31,12 @@ class UserSheetTypeView
     /** @var \DateTimeInterface|null */
     public $departure;
 
+    /** @var bool */
+    public $hasArrivalHours;
+
+    /** @var bool */
+    public $hasDepartureHours;
+
     public function __construct(
         int $userId,
         int $sheetId,
@@ -39,8 +45,10 @@ class UserSheetTypeView
         ?string $sheetTitle,
         ?string $spotReference,
         string $typeTitle,
-        ?\DateTimeInterface $arrival = null,
-        ?\DateTimeInterface $departure = null
+        ?\DateTimeInterface $arrival,
+        ?\DateTimeInterface $departure,
+        bool $hasArrivalHours,
+        bool $hasDepartureHours
     ) {
         $this->userId = $userId;
         $this->sheetId = $sheetId;
@@ -51,5 +59,7 @@ class UserSheetTypeView
         $this->typeTitle = $typeTitle;
         $this->arrival = $arrival;
         $this->departure = $departure;
+        $this->hasArrivalHours = $hasArrivalHours;
+        $this->hasDepartureHours = $hasDepartureHours;
     }
 }

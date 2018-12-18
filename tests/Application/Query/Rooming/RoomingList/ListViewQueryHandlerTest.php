@@ -39,7 +39,7 @@ class ListViewQueryHandlerTest extends TestCase
             ->getWithSheetAndTypeByEvent($event->reveal(), 'fr')
             ->shouldBeCalled()
             ->willReturn([
-                new UserSheetTypeView(1, 11, 'Jean', 'Dupont', 'Aanera', 'Stand A10', 'Fournisseur'),
+                new UserSheetTypeView(1, 11, 'Jean', 'Dupont', 'Aanera', 'Stand A10', 'Fournisseur', null, null, false, false),
                 new UserSheetTypeView(
                     2,
                     11,
@@ -49,7 +49,9 @@ class ListViewQueryHandlerTest extends TestCase
                     'Stand A10',
                     'Fournisseur',
                     $dateArrival,
-                    $dateDeparture
+                    $dateDeparture,
+                    true,
+                    true
                 ),
                 new UserSheetTypeView(
                     2,
@@ -60,7 +62,9 @@ class ListViewQueryHandlerTest extends TestCase
                     null,
                     'Visiteur',
                     $dateArrival,
-                    $dateDeparture
+                    $dateDeparture,
+                    true,
+                    true
                 ),
                 new UserSheetTypeView(
                     3,
@@ -71,7 +75,9 @@ class ListViewQueryHandlerTest extends TestCase
                     null,
                     'Visiteur',
                     $dateArrival,
-                    $dateDeparture
+                    $dateDeparture,
+                    true,
+                    false
                 ),
             ])
         ;
@@ -136,6 +142,8 @@ class ListViewQueryHandlerTest extends TestCase
                 'Dupont',
                 null,
                 null,
+                false,
+                false,
                 null,
                 [
                     new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10'),
@@ -148,6 +156,8 @@ class ListViewQueryHandlerTest extends TestCase
                 'Poulain',
                 $dateArrival,
                 $dateDeparture,
+                true,
+                true,
                 "Ceci est un test\nCeci est un autre test",
                 [
                     new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10'),
@@ -177,6 +187,8 @@ class ListViewQueryHandlerTest extends TestCase
                 'Henry',
                 $dateArrival,
                 $dateDeparture,
+                true,
+                false,
                 null,
                 [
                     new SheetView(12, 'Allianz', 'Visiteur', null),

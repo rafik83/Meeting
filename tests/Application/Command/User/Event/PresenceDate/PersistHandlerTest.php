@@ -24,10 +24,10 @@ class PersistHandlerTest extends TestCase
         $arrival = new \DateTime('2018-12-18');
         $departure = new \DateTime('2018-12-20');
 
-        $departureObject = new DateTime('dateKey1', 'datetime', [], 'fr', 'fr');
+        $departureObject = new DateTime('dateKey1', 'datetime', ['format' => 'datetime'], 'fr', 'fr');
         $departureObject->setDatetime($departure);
 
-        $arrivalObject = new DateTime('dateKey2', 'datetime', [], 'fr', 'fr');
+        $arrivalObject = new DateTime('dateKey2', 'datetime', ['format' => 'datetime'], 'fr', 'fr');
         $arrivalObject->setDatetime($arrival);
 
         $block = $this->prophesize(Block::class);
@@ -50,7 +50,7 @@ class PersistHandlerTest extends TestCase
         ;
 
         $presenceDateRepository
-            ->add(new PresenceDate($user->reveal(), $event->reveal(), $arrival, $departure))
+            ->add(new PresenceDate($user->reveal(), $event->reveal(), $arrival, $departure, true, true))
             ->shouldBeCalled()
         ;
 
@@ -104,13 +104,13 @@ class PersistHandlerTest extends TestCase
         $previousArrival = new \DateTime('2018-12-18');
         $arrival = new \DateTime('2018-12-19');
         $departure = new \DateTime('2018-12-20');
-        $presenceDate = new PresenceDate($user->reveal(), $event->reveal(), $previousArrival, $departure);
+        $presenceDate = new PresenceDate($user->reveal(), $event->reveal(), $previousArrival, $departure, true, true);
 
-        $departureObject = new DateTime('dateKey1', 'datetime', [], 'fr', 'fr');
-        $departureObject->setDatetime($departure);
-
-        $arrivalObject = new DateTime('dateKey2', 'datetime', [], 'fr', 'fr');
+        $arrivalObject = new DateTime('dateKey2', 'datetime', ['format' => 'date'], 'fr', 'fr');
         $arrivalObject->setDatetime($arrival);
+
+        $departureObject = new DateTime('dateKey1', 'datetime', ['format' => 'datetime'], 'fr', 'fr');
+        $departureObject->setDatetime($departure);
 
         $block = $this->prophesize(Block::class);
         $block
@@ -136,7 +136,7 @@ class PersistHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $expected = new PresenceDate($user->reveal(), $event->reveal(), $arrival, $departure);
+        $expected = new PresenceDate($user->reveal(), $event->reveal(), $arrival, $departure, false, true);
         $presenceDateRepository
             ->add($expected)
             ->shouldBeCalled()
@@ -153,12 +153,12 @@ class PersistHandlerTest extends TestCase
 
         $previousArrival = new \DateTime('2018-12-18');
         $previousDeparture = new \DateTime('2018-12-20');
-        $presenceDate = new PresenceDate($user->reveal(), $event->reveal(), $previousArrival, $previousDeparture);
+        $presenceDate = new PresenceDate($user->reveal(), $event->reveal(), $previousArrival, $previousDeparture, true, true);
 
-        $departureObject = new DateTime('dateKey1', 'datetime', [], 'fr', 'fr');
+        $departureObject = new DateTime('dateKey1', 'datetime', ['format' => 'datetime'], 'fr', 'fr');
         $departureObject->setDatetime(null);
 
-        $arrivalObject = new DateTime('dateKey2', 'datetime', [], 'fr', 'fr');
+        $arrivalObject = new DateTime('dateKey2', 'datetime', ['format' => 'datetime'], 'fr', 'fr');
         $arrivalObject->setDatetime(null);
 
         $block = $this->prophesize(Block::class);

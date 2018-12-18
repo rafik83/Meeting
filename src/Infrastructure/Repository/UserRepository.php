@@ -252,7 +252,9 @@ class UserRepository implements UserRepositoryInterface
                 spot.reference, 
                 typeTranslation.title, 
                 presenceDate.arrival,
-                presenceDate.departure
+                presenceDate.departure,
+                COALESCE(presenceDate.hasArrivalHours, false),
+                COALESCE(presenceDate.hasDepartureHours, false)
             )', UserSheetTypeView::class))
             ->from(User::class, 'user')
             ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')

@@ -39,10 +39,10 @@
                 </td>
                 <td>
                     {% if detailView.arrivalDate is not null %}
-                        {{ detailView.arrivalDate|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                        {{ detailView.arrivalDate|localizeddate('short', detailView.hasArrivalHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
                     {% endif %}
                     {% if detailView.departureDate is not null %}
-                        / {{ detailView.departureDate|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                        / {{ detailView.departureDate|localizeddate('short', detailView.hasDepartureHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
                     {% endif %}
 
                     <ul class="nav nav-pills">
