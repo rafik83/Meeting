@@ -11,7 +11,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\PresenceDate;
 use Proximum\Vimeet\Domain\Repository\User\Event\PresenceDateRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateObject\DateTime;
 
 class PersistHandlerTest extends TestCase
@@ -30,13 +30,13 @@ class PersistHandlerTest extends TestCase
         $arrivalObject = new DateTime('dateKey2', 'datetime', [], 'fr', 'fr');
         $arrivalObject->setDatetime($arrival);
 
-        $templateData = $this->prophesize(TemplateData::class);
-        $templateData
+        $block = $this->prophesize(Block::class);
+        $block
             ->getObjectByTag(Tag::PARTICIPANT_DEPARTURE_DATE)
             ->shouldBeCalled()
             ->willReturn($departureObject)
         ;
-        $templateData
+        $block
             ->getObjectByTag(Tag::PARTICIPANT_ARRIVAL_DATE)
             ->shouldBeCalled()
             ->willReturn($arrivalObject)
@@ -60,7 +60,7 @@ class PersistHandlerTest extends TestCase
         ;
 
         $persistHandler = new PersistHandler($presenceDateRepository->reveal());
-        $persistHandler->handle(new Persist($event->reveal(), $user->reveal(), $templateData->reveal()));
+        $persistHandler->handle(new Persist($event->reveal(), $user->reveal(), $block->reveal()));
     }
 
     public function test_previous_presence_date_not_set(): void
@@ -68,13 +68,13 @@ class PersistHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $user = $this->prophesize(User::class);
 
-        $templateData = $this->prophesize(TemplateData::class);
-        $templateData
+        $block = $this->prophesize(Block::class);
+        $block
             ->getObjectByTag(Tag::PARTICIPANT_DEPARTURE_DATE)
             ->shouldBeCalled()
             ->willReturn(null)
         ;
-        $templateData
+        $block
             ->getObjectByTag(Tag::PARTICIPANT_ARRIVAL_DATE)
             ->shouldBeCalled()
             ->willReturn(null)
@@ -93,7 +93,7 @@ class PersistHandlerTest extends TestCase
         ;
 
         $persistHandler = new PersistHandler($presenceDateRepository->reveal());
-        $persistHandler->handle(new Persist($event->reveal(), $user->reveal(), $templateData->reveal()));
+        $persistHandler->handle(new Persist($event->reveal(), $user->reveal(), $block->reveal()));
     }
 
     public function test_previous_presence_exists(): void
@@ -112,13 +112,13 @@ class PersistHandlerTest extends TestCase
         $arrivalObject = new DateTime('dateKey2', 'datetime', [], 'fr', 'fr');
         $arrivalObject->setDatetime($arrival);
 
-        $templateData = $this->prophesize(TemplateData::class);
-        $templateData
+        $block = $this->prophesize(Block::class);
+        $block
             ->getObjectByTag(Tag::PARTICIPANT_DEPARTURE_DATE)
             ->shouldBeCalled()
             ->willReturn($departureObject)
         ;
-        $templateData
+        $block
             ->getObjectByTag(Tag::PARTICIPANT_ARRIVAL_DATE)
             ->shouldBeCalled()
             ->willReturn($arrivalObject)
@@ -143,7 +143,7 @@ class PersistHandlerTest extends TestCase
         ;
 
         $persistHandler = new PersistHandler($presenceDateRepository->reveal());
-        $persistHandler->handle(new Persist($event->reveal(), $user->reveal(), $templateData->reveal()));
+        $persistHandler->handle(new Persist($event->reveal(), $user->reveal(), $block->reveal()));
     }
 
     public function test_previous_presence_exists_un_set(): void
@@ -161,13 +161,13 @@ class PersistHandlerTest extends TestCase
         $arrivalObject = new DateTime('dateKey2', 'datetime', [], 'fr', 'fr');
         $arrivalObject->setDatetime(null);
 
-        $templateData = $this->prophesize(TemplateData::class);
-        $templateData
+        $block = $this->prophesize(Block::class);
+        $block
             ->getObjectByTag(Tag::PARTICIPANT_DEPARTURE_DATE)
             ->shouldBeCalled()
             ->willReturn($departureObject)
         ;
-        $templateData
+        $block
             ->getObjectByTag(Tag::PARTICIPANT_ARRIVAL_DATE)
             ->shouldBeCalled()
             ->willReturn($arrivalObject)
@@ -186,6 +186,6 @@ class PersistHandlerTest extends TestCase
         ;
 
         $persistHandler = new PersistHandler($presenceDateRepository->reveal());
-        $persistHandler->handle(new Persist($event->reveal(), $user->reveal(), $templateData->reveal()));
+        $persistHandler->handle(new Persist($event->reveal(), $user->reveal(), $block->reveal()));
     }
 }

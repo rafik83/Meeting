@@ -11,7 +11,10 @@
 namespace Proximum\Vimeet\Application\Command\Template\Form;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Template\Form\FilledFormStepEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\FormData as SheetFormData;
 use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
@@ -31,14 +34,19 @@ class FillStepCommandHandler
     /** @var SheetFormDataRepositoryInterface */
     private $sheetFormDataRepository;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         UserFormDataRepositoryInterface $userFormDataRepository,
-        SheetFormDataRepositoryInterface $sheetFormDataRepository
+        SheetFormDataRepositoryInterface $sheetFormDataRepository,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->userFormDataRepository = $userFormDataRepository;
         $this->sheetFormDataRepository = $sheetFormDataRepository;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     public function handle(FillStepCommand $command): void
@@ -70,6 +78,17 @@ class FillStepCommandHandler
 
         $this->userFormDataRepository->save($userFormData);
         $this->sheetFormDataRepository->save($sheetFormData);
+
+        $this->delayedEventDispatcher
+            ->dispatch(
+                Events::FILLED_FORM_STEP,
+                new FilledFormStepEvent(
+                    $command->formTemplate,
+                    $command->participant,
+                    $command->blockStepView->block
+                )
+            )
+        ;
     }
 
     private function getSheetFormData(Sheet $sheet, FormTemplate $formTemplate): SheetFormData

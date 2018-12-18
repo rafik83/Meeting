@@ -40,5 +40,6 @@ services:
               - '@adapter.authorization_checker'
               - '@Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository'
               - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\FormDataRepository'
+              - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\FillStepCommand }

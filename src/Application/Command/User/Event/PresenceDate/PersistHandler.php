@@ -21,8 +21,8 @@ class PersistHandler
     {
         $presenceDate = $this->presenceDateRepository->getByUserAndEvent($persist->user, $persist->event);
 
-        $departureObject = $persist->templateData->getObjectByTag(Tag::PARTICIPANT_DEPARTURE_DATE);
-        $arrivalObject = $persist->templateData->getObjectByTag(Tag::PARTICIPANT_ARRIVAL_DATE);
+        $departureObject = $persist->block->getObjectByTag(Tag::PARTICIPANT_DEPARTURE_DATE);
+        $arrivalObject = $persist->block->getObjectByTag(Tag::PARTICIPANT_ARRIVAL_DATE);
 
         $departure = $departureObject instanceof DateTimeObject ? $departureObject->getDatetime() : null;
         $arrival = $arrivalObject instanceof DateTimeObject ? $arrivalObject->getDatetime() : null;
