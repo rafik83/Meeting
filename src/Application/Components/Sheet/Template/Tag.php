@@ -30,6 +30,8 @@ final class Tag
     public const PARTICIPANT_COUNTRY         = 'participant_country';
     public const PARTICIPANT_WEBSITE         = 'participant_website';
     public const PARTICIPANT_GENDER          = 'participant_gender';
+    public const PARTICIPANT_ARRIVAL_DATE    = 'participant_arrival_date';
+    public const PARTICIPANT_DEPARTURE_DATE  = 'participant_departure_date';
     public const BILLING_NAME                = 'billing_name';
     public const BILLING_ADDRESS             = 'billing_address';
     public const BILLING_CITY                = 'billing_city';
@@ -114,6 +116,8 @@ final class Tag
                     self::PARTICIPANT_COUNTRY,
                     self::PARTICIPANT_WEBSITE,
                     self::PARTICIPANT_GENDER,
+                    self::PARTICIPANT_ARRIVAL_DATE,
+                    self::PARTICIPANT_DEPARTURE_DATE,
                 ],
                 self::getGenericParticipantTags()
             )
