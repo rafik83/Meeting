@@ -7,7 +7,7 @@ class SheetView
     /** @var int */
     public $id;
 
-    /** @var string */
+    /** @var null|string */
     public $title;
 
     /** @var string */
@@ -18,7 +18,7 @@ class SheetView
 
     public function __construct(
         int $id,
-        string $title,
+        ?string $title,
         string $typeTitle,
         ?string $spotReference
     ) {
