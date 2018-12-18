@@ -39,17 +39,17 @@
                 </td>
                 <td>
                     {% if detailView.arrivalDate is not null %}
-                        {{ detailView.arrivalDate|date('d/m/Y H:i') }}
+                        {{ detailView.arrivalDate|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                     {% endif %}
                     {% if detailView.departureDate is not null %}
-                        / {{ detailView.departureDate|date('d/m/Y H:i') }}
+                        / {{ detailView.departureDate|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                     {% endif %}
 
                     <ul class="nav nav-pills">
                     {% for userStayView in detailView.userStayViews %}
                         <li>
                             <a href="#">
-                                <small>{{ userStayView.arrivalDate|date('d/m/Y') }} / {{ userStayView.departureDate|date('d/m/Y') }}</small>
+                                <small>{{ userStayView.arrivalDate|localizeddate('medium', 'none', app.request.locale, event.timeZone) }} / {{ userStayView.departureDate|localizeddate('medium', 'none', app.request.locale, event.timeZone) }}</small>
                                 <br>
                                 {{ userStayView.accommodationTitle }}
                                 <span class="label label-default">{{ userStayView.roomType }}</span>

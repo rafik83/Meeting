@@ -26,7 +26,7 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
         return \DateTime::createFromFormat(
             self::DATETIME_FORMAT,
             $this->data['datetime'],
-            new \DateTimeZone($this->getTimezone())
+            new \DateTimeZone(date_default_timezone_get())
         );
     }
 
