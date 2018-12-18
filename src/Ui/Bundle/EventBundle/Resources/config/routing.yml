@@ -202,6 +202,16 @@ event_sheet_objects_collection_update:
     methods:  [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ObjectsCollectionUpdateAction
 
+event_sheet_show_uploaded_file:
+    path: /sheet/{sheet}/display/{sheetToDisplayId}/show-uploaded/{objectKey}/file{path}
+    requirements:
+        sheet: \d+
+        sheetToDisplayId: \d+
+        objectKey: \w+
+        path: .*
+    methods:  [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ShowUploadedFileAction
+
 event_sheet_update:
     path: /sheet/{sheet}/{locale}/{key}
     requirements:
@@ -890,6 +900,13 @@ event_user_event_phone_validate_code_success:
 #
 # Forms
 #
+event_show_form_template:
+    path: /form/{formTemplate}
+    methods: [GET]
+    requirements:
+        formTemplate: \d+
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Template\Form\ShowAction
+
 event_participant_fill_form:
     path: /sheet/{sheet}/participant/{participant}/form/{formTemplate}/step/{step}
     methods: [GET, POST]

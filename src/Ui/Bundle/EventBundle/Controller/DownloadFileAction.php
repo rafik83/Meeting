@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Components\Template\Object\UploadObjectDownloadPathGetter;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Template\Exception\FileNotFoundException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -23,6 +24,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Normalizer\DataUriNormalizer;
 
@@ -89,6 +91,12 @@ class DownloadFileAction
                 ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
         } catch (ObjectNotFoundException $exception) {
             throw new AccessDeniedException('Invalid object');
+        } catch (FileNotFoundException $exception) {
+            if (true === $preview) {
+                return new Response('');
+            }
+
+            throw new NotFoundHttpException('File not found');
         }
     }
 

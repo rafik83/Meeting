@@ -36,6 +36,10 @@ services:
         arguments:
             - '@template.participant_info_guesser'
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\AgendaVersionDiffSubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\User\Agenda\Version\VersionDiffVerbalizedGetter'
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserLastNameSubstitution:
         arguments:
             - '@template.participant_info_guesser'
@@ -138,6 +142,11 @@ services:
             - '@adapter.event_url_generator'
             - '@domain.token.user_event_token_generator'
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\AgendaLinkCTASubstitution:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\AgendaLinkSubstitution'
+            - '@adapter.templating_adapter'
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\TestVisioConfigurationLinkSubstitution:
         arguments:
             - '@adapter.event_url_generator'
@@ -186,6 +195,7 @@ services:
         - ['registerSubstitution', ['%%urlEventActivateAccountWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\ActivateAccountCTASubstitution']]
         - ['registerSubstitution', ['%%sheetSpot%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SpotReferenceSubstitution']]
         - ['registerSubstitution', ['%%sheetLink%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution']]
+        - ['registerSubstitution', ['%%agendaModifications%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\AgendaVersionDiffSubstitution']]
         - ['registerSubstitution', ['%%urlSheet%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution']]
         - ['registerSubstitution', ['%%urlEventSheet%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\SheetLinkSubstitution']]
         - ['registerSubstitution', ['%%urlEventSheetWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\SheetLinkCTASubstitution']]
@@ -209,6 +219,7 @@ services:
         - ['registerSubstitution', ['%%urlEventActivateAccountAlreadyKnownWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventActivateAccountAlreadyKnownCTASubstitution']]
         - ['registerSubstitution', ['%%urlEventProForma%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventProFormaLinkSubstitution']]
         - ['registerSubstitution', ['%%urlEventProFormaWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\EventProFormaCTASubstitution']]
+        - ['registerSubstitution', ['%%agendaLinkWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\AgendaLinkCTASubstitution']]
         - ['registerSubstitution', ['%%invoiceLinks%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\InvoicesLinksSubstitution']]
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler:
@@ -244,6 +255,9 @@ services:
     Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail:
         parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareVersionDiffChangedMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail'
@@ -253,3 +267,4 @@ services:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareVersionDiffChangedMail'

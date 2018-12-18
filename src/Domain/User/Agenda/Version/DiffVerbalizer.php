@@ -350,6 +350,6 @@ class DiffVerbalizer
     {
         $dateFormatted = $dateFormatter->format($date);
 
-        return is_bool($dateFormatted) ? '' : $dateFormatted;
+        return \is_bool($dateFormatted) ? '' : $dateFormatted;
     }
 }

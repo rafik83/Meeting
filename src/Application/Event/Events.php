@@ -49,6 +49,7 @@ final class Events
     public const MEETING_REMOVED = 'meeting.removed';
     public const MEETING_CREATED = 'meeting.created';
     public const MEETING_MOVED = 'meeting.moved';
+    public const MEETING_MOVED_SPOT = 'meeting.moved.spot';
     public const REQUEST_PARTICIPANT_ADDED = 'meeting_request.participant.added';
     public const REQUEST_PARTICIPANT_REMOVED = 'meeting_request.participant.removed';
     public const REQUEST_UPDATE_MESSAGE = 'meeting_request.update.message';

@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingMovedSpotEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -23,14 +26,17 @@ class UpdateSpotHandler
     /** @var SpotRepositoryInterface */
     private $spotRepository;
 
-    /**
-     * @param MeetingRepositoryInterface $meetingRepository
-     * @param SpotRepositoryInterface    $spotRepository
-     */
-    public function __construct(MeetingRepositoryInterface $meetingRepository, SpotRepositoryInterface $spotRepository)
-    {
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
+    public function __construct(
+        MeetingRepositoryInterface $meetingRepository,
+        SpotRepositoryInterface $spotRepository,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
+    ) {
         $this->meetingRepository = $meetingRepository;
-        $this->spotRepository    = $spotRepository;
+        $this->spotRepository = $spotRepository;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     /**
@@ -65,5 +71,10 @@ class UpdateSpotHandler
         $updateSpot->meeting->updateSpot($updateSpot->spot, $updateSpot->blockedSpot, $updateSpot->blockedSlot);
         $updateSpot->meeting->resetStatus();
         $this->meetingRepository->set($updateSpot->meeting);
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::MEETING_MOVED_SPOT,
+            new MeetingMovedSpotEvent($updateSpot->meeting)
+        );
     }
 }

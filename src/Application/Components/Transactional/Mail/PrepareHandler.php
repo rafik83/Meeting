@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePre
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareVersionDiffChangedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 
@@ -44,6 +45,9 @@ class PrepareHandler
     /** @var PrepareOrderConfirmedMail */
     private $prepareOrderConfirmedMail;
 
+    /** @var PrepareVersionDiffChangedMail */
+    private $prepareVersionDiffChangedMail;
+
     public function __construct(
         PrepareRegisterAccountMail $prepareRegisterAccountMail,
         PrepareActivateAccountMail $prepareActivateAccountMail,
@@ -51,7 +55,8 @@ class PrepareHandler
         PreparePreRegisterMail $preparePreRegisterMail,
         PrepareUserCompleteProfileMail $prepareUserCompleteProfileMail,
         PrepareTransactionConfirmMail $prepareTransactionConfirmMail,
-        PrepareOrderConfirmedMail $prepareOrderConfirmedMail
+        PrepareOrderConfirmedMail $prepareOrderConfirmedMail,
+        PrepareVersionDiffChangedMail $prepareVersionDiffChangedMail
     ) {
         $this->prepareRegisterAccountMail = $prepareRegisterAccountMail;
         $this->prepareActivateAccountMail = $prepareActivateAccountMail;
@@ -60,6 +65,7 @@ class PrepareHandler
         $this->prepareUserCompleteProfileMail = $prepareUserCompleteProfileMail;
         $this->prepareTransactionConfirmMail = $prepareTransactionConfirmMail;
         $this->prepareOrderConfirmedMail = $prepareOrderConfirmedMail;
+        $this->prepareVersionDiffChangedMail = $prepareVersionDiffChangedMail;
     }
 
     public function handle(AbstractPrepareMail $prepareMail): ?AbstractMail
@@ -79,6 +85,8 @@ class PrepareHandler
                 return $this->prepareTransactionConfirmMail->prepare($prepareMail);
             case Constant::TRANSACTIONAL_MAIL_KEY_ORDER_CONFIRMED:
                 return $this->prepareOrderConfirmedMail->prepare($prepareMail);
+            case Constant::TRANSACTIONAL_MAIL_KEY_AGENDA_VERSION_DIFF_CHANGED:
+                return $this->prepareVersionDiffChangedMail->prepare($prepareMail);
             default: return null;
         }
     }

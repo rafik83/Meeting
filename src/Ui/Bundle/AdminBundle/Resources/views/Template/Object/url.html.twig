@@ -5,6 +5,7 @@
     placeholder: { (locale): '' },
     required: false,
     tags: [],
+    visibility: 'editable'
 }|merge(config|default({})) %}
 
 <div class="object" data-object="url" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
@@ -40,6 +41,9 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
+                                {% if enableVisibility is defined and enableVisibility == true %}
+                                    {{ include('@Admin/Template/Object/_fieldVisibility.html.twig') }}
+                                {% endif %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.placeholder.title'|trans }}</label>
                                     <textarea class="form-control" name="placeholder"></textarea>

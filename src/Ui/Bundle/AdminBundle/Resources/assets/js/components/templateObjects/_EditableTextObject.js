@@ -36,6 +36,7 @@ EditableTextObject.prototype.fill = function ()
   this.form.set('hideLabel', this.config.hideLabel);
   this.form.set('tag', this.config.tag);
   this.form.set('tags', this.config.tags);
+  this.form.set('visibility', this.config.visibility);
 
   this.form.bind('label', this.config.label[this.locale]);
 };
@@ -57,6 +58,7 @@ EditableTextObject.prototype.save = function ()
   this.config.hideLabel                = this.form.get('hideLabel');
   this.config.tag                      = this.form.get('tag');
   this.config.tags                     = this.form.get('tags');
+  this.config.visibility               = this.form.get('visibility');
 
   this.form.bind('label', this.config.label[this.locale]);
 

@@ -52,4 +52,6 @@ final class Type
     public const VISIO_TESTED = 'visio_tested';
 
     public const IS_PARTICIPANT_VISIO = 'is_participant_visio';
+
+    public const PLANNING_MODIFIED = 'has_planning_modified';
 }

@@ -53,6 +53,7 @@ class TemplateDataFactory
         'boolean'               => TemplateObject\BooleanObject::class,
         'upload'                => TemplateObject\UploadObject::class,
         'datetime'              => TemplateObject\DateTime::class,
+        'multi-upload'          => TemplateObject\MultiUploadCollectionObject::class,
     ];
 
     /**

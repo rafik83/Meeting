@@ -27,7 +27,7 @@ class File
     /** @var \DateTimeInterface */
     private $createdAt;
 
-    public function __construct($path, \DateTimeInterface $createdAt, string $type = self::TYPE_UNKNOWN)
+    public function __construct(string $path, \DateTimeInterface $createdAt, string $type = self::TYPE_UNKNOWN)
     {
         $this->path = $path;
         $this->createdAt = $createdAt;

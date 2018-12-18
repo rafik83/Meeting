@@ -37,6 +37,7 @@ services:
 
     Proximum\Vimeet\Application\Command\Template\Form\FillStepCommandHandler:
         arguments:
+              - '@adapter.authorization_checker'
               - '@Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository'
               - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\FormDataRepository'
         tags:

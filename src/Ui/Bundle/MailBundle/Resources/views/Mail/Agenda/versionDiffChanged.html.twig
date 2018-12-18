@@ -1,0 +1,39 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    {{ 'mail.agenda.version_diff_changed.body'|trans({
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
+        '%event%': mail.event.title,
+        '%participationType%': mail.participantType,
+    }, 'mail', mail.locale)|html|nl2br }}
+    <br>
+    <br>
+    {{ mail.agendaModifications|nl2br }}
+
+    <br>
+    <br>
+    {{ macros.button(
+        'mail.agenda.version_diff_changed.link'|trans({}, 'mail', mail.locale),
+        eventUrl(
+            mail.event,
+            'event_agenda',
+            {
+                'sheet': mail.sheet.id,
+                '_locale': mail.event.getAvailableLocale(mail.locale)
+            }
+        )
+    ) }}
+
+    <br>
+    <br>
+
+    {{ 'mail.agenda.version_diff_changed.end'|trans({
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
+        '%event%': mail.event.title,
+        '%participationType%': mail.participantType,
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

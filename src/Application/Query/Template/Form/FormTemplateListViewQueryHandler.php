@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Template\Form;
 
 use Proximum\Vimeet\Application\View\Template\Form\FormTemplateListView;
 use Proximum\Vimeet\Application\View\Template\Form\FormTemplateView;
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Repository\Template\FormTemplateRepositoryInterface;
 
 class FormTemplateListViewQueryHandler
@@ -19,9 +20,15 @@ class FormTemplateListViewQueryHandler
     /** @var FormTemplateRepositoryInterface */
     private $formTemplateRepository;
 
-    public function __construct(FormTemplateRepositoryInterface $formTemplateRepository)
-    {
+    /** @var EventUrlGeneratorInterface */
+    private $eventUrlGenerator;
+
+    public function __construct(
+        FormTemplateRepositoryInterface $formTemplateRepository,
+        EventUrlGeneratorInterface $eventUrlGenerator
+    ) {
         $this->formTemplateRepository = $formTemplateRepository;
+        $this->eventUrlGenerator = $eventUrlGenerator;
     }
 
     public function handle(FormTemplateListViewQuery $query): FormTemplateListView
@@ -41,6 +48,11 @@ class FormTemplateListViewQueryHandler
                 $formTemplate->isPublished(),
                 $translatedTitles,
                 $formTemplate->getTypes(),
+                $this->eventUrlGenerator->generateEventAbsoluteUrl(
+                    $query->event,
+                    'event_show_form_template',
+                    ['formTemplate' => $formTemplate->getId()]
+                ),
                 $formTemplate->getFallback(),
                 $formTemplate->getCreatedAt()
             );

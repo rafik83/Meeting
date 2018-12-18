@@ -36,6 +36,7 @@ DatetimeObject.prototype.fill = function ()
     this.form.set('format', this.config.format);
     this.form.set('datetime_min', this.config.datetime_min);
     this.form.set('datetime_max', this.config.datetime_max);
+    this.form.set('visibility', this.config.visibility);
 
     this.form.bind('label', this.config.label[this.locale]);
 };
@@ -75,6 +76,7 @@ DatetimeObject.prototype.save = function ()
     this.config.tags               = this.form.get('tags');
     this.config.datetime_min       = this.formatDate(minTime);
     this.config.datetime_max       = this.formatDate(maxTime);
+    this.config.visibility         = this.form.get('visibility');
 
     this.form.bind('label', this.config.label[this.locale]);
 
@@ -97,7 +99,7 @@ DatetimeObject.prototype.getTimestampByInternationalFormat = function (date)
     var hours = splitTime[0];
     var minutes = splitTime[1];
 
-    return new Date(year, month, day, hours, minutes);
+    return new Date(year, month - 1, day, hours, minutes);
 };
 
 DatetimeObject.prototype.formatDate = function (date)
@@ -106,11 +108,12 @@ DatetimeObject.prototype.formatDate = function (date)
         return null;
     }
 
+    var day = this.addPaddingZero(date.getDate());
     var hours = this.addPaddingZero(date.getHours());
     var minutes = this.addPaddingZero(date.getMinutes());
     var months = this.addPaddingZero(date.getMonth() + 1);
 
-    return date.getDate() + "/" + months + "/" +  + date.getFullYear() + " " + hours + ':' + minutes;
+    return day + "/" + months + "/" +  + date.getFullYear() + " " + hours + ':' + minutes + ':00';
 };
 
 DatetimeObject.prototype.addPaddingZero = function (number)

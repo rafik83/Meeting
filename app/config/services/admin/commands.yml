@@ -247,6 +247,47 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Agenda\Version\CleanOldVersionsCommand }
 
     #
+    # User Agenda Version
+    #
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler:
+        arguments:
+            - '@adapter.smssender_alias'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@repository.user.user_event_phone_repository'
+            - '@adapter.event_url_generator'
+
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler'
+            - '@adapter.mailer_adapter'
+
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\SendNotificationHandler:
+        arguments:
+            - '@domain.user.agenda.version.diff_verbalizer'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler'
+
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\NotifyUserOfChangedVersionCommandHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@sheet.sheet_guesser'
+            - '@repository.user.agenda.version_repository'
+            - '@domain.user.agenda.version.generator'
+            - '@domain.user.agenda.version.diff_checker'
+            - '@domain.user.agenda.version.diff_verbalizer'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler'
+            - '@datetime'
+
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\RecurrentNotificationOfChangedInVersionCommandHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '%agenda_version_diff_notification_time_in_minutes%'
+            - '%agenda_version_diff_dday_notification_time_in_minutes%'
+            - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\NotifyUserOfChangedVersionCommandHandler'
+            - '@datetime'
+
+    #
     # Export OMZ
     #
     Proximum\Vimeet\Application\Command\OMZ\ScheduleExportHandler:
@@ -319,6 +360,14 @@ services:
             - '@adapter.mailer_adapter'
             - '%infrastructure.export_participant_path%'
             - '%mailer_sender%'
+            - '@datetime'
+
+    #
+    # User Event
+    #
+    Proximum\Vimeet\Application\Command\User\Event\MeetingPlanningModifiedCommandHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
             - '@datetime'
 
     #

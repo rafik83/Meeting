@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePre
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareVersionDiffChangedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -36,6 +37,7 @@ class PrepareHandlerTest extends TestCase
         $prepareUserCompleteProfileMail,
         $prepareTransactionTotalMail,
         $prepareOrderConfirmedMail,
+        $prepareVersionDiffChangedMail,
         $user,
         $event
     ;
@@ -55,6 +57,7 @@ class PrepareHandlerTest extends TestCase
         $this->prepareUserCompleteProfileMail = $this->prophesize(PrepareUserCompleteProfileMail::class);
         $this->prepareTransactionTotalMail = $this->prophesize(PrepareTransactionConfirmMail::class);
         $this->prepareOrderConfirmedMail = $this->prophesize(PrepareOrderConfirmedMail::class);
+        $this->prepareVersionDiffChangedMail = $this->prophesize(PrepareVersionDiffChangedMail::class);
     }
 
     public function testPrepareRegisterAccountMail()
@@ -73,6 +76,7 @@ class PrepareHandlerTest extends TestCase
         $this->prepareUserCompleteProfileMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareTransactionTotalMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareOrderConfirmedMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareVersionDiffChangedMail->prepare(Argument::any())->shouldNotBeCalled();
 
         $handler = new PrepareHandler(
             $this->prepareRegisterAccountMail->reveal(),
@@ -81,7 +85,8 @@ class PrepareHandlerTest extends TestCase
             $this->preparePreRegisterMail->reveal(),
             $this->prepareUserCompleteProfileMail->reveal(),
             $this->prepareTransactionTotalMail->reveal(),
-            $this->prepareOrderConfirmedMail->reveal()
+            $this->prepareOrderConfirmedMail->reveal(),
+            $this->prepareVersionDiffChangedMail->reveal()
         );
 
         $result = $handler->handle($mail);

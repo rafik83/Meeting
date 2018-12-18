@@ -201,6 +201,11 @@ services:
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: 'form.type' }
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\MultiUploadDataType:
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: 'form.type' }
     form_type_library.telephone_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TelephoneType
         tags:
@@ -528,6 +533,7 @@ services:
         arguments:
             - '@sonata.intl.templating.helper.locale'
             - '@markdown'
+            - '@adapter.event_url_generator'
         tags:
             - { name: 'twig.extension' }
 

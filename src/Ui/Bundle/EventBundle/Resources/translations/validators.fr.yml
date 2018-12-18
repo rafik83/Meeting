@@ -15,6 +15,7 @@ package.product.quantityNotMatch: 'La quantité doit être comprise entre %min% 
 package.product.selectedParticipantsQuantityNotMatch: 'Le nombre de participant doit être compris entre %min% et %max%'
 package.terms-of-sale: 'Merci d''accepter les CGV de l''événement avant de passer à l''étape suivante'
 validators.login.email_not_exists: 'Cette adresse e-mail n''est pas reconnue.'
+validators.multiUpload.file.notValid: 'Format de fichier incorrect'
 validators.participant.alreadyLinkedToASheet: 'Cette personne possède déjà une fiche pour cet événement et ne peut donc être invitée à vous rejoindre'
 validators.participant.alreadyLinkedToThisSheet: 'Cette personne est déjà présente sur votre fiche'
 validators.participant.canNotRemoveAllParticipants: 'Vous ne pouvez pas supprimer tous les participants de la fiche'
