@@ -145,6 +145,8 @@ event.visio.test.testSuccessful: 'Successful test!'
 event.visio.test.title: 'Test your configuration for video meeting'
 event.visio.test.video: Video
 event.visio.welcome: 'Welcome on %event%'
+form_template.fill_step.participant: 'Form for %participant%'
+form_template.fill_step.step_title: 'Step %currentStep% / %totalStep%'
 gender.man: Mr
 gender.woman: Mrs
 group.home.link.create_sheet: 'Create a profile'

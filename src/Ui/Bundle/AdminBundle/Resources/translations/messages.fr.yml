@@ -730,6 +730,8 @@ admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
 admin.role.ROLE_PARTNER: Partenaire
 admin.role.ROLE_SUPER_ADMIN: Admin
+admin.rooming.accommodation.add.title: 'Ajouter un hébergement'
+admin.rooming.accommodation.update.title: 'Modifier un hébergement'
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
 admin.rule.list.action.seeWhat: 'Voit quoi ?'
@@ -742,8 +744,6 @@ admin.rule.list.content.category: Catégorie
 admin.rule.list.content.type: Type
 admin.rule.list.title: 'Liste des règles'
 admin.rule.see-what.title: 'Règle de %seer% sur %seeable%'
-admin.rooming.accommodation.add.title: 'Ajouter un hébergement'
-admin.rooming.accommodation.update.title: 'Modifier un hébergement'
 admin.schedule_day.update.title: 'Définir les jours de l''événement'
 admin.schedule.days.day: Jour
 admin.schedule.days.endTime: 'Heure de fin'

@@ -1,6 +1,7 @@
 flash.authentication_token.invalid_link: 'Invalid link'
 flash.event.user_event_phone.confirmationNeeded: 'To ask for a meeting, please confirm your phone number'
 flash.event.user_event_phone.validate.success: 'Your phone number has been successfully confirmed'
+flash.form_template.fill_step_finished.success: 'Registered form, thank you!'
 flash.group.participant.update_success: '{0}The assignments of the sheets to participants have been successfully updated.|]0,Inf[ The assignements of the sheets to partcipants have been successfully update except for the following participants : %result%'
 flash.group.participant.update.participant_has_meeting_on_sheet: '%participantFullname% can''t be removed from the sheet"%sheetTitle%" because this participant has scheduled meetings..'
 flash.group.participant.update.participant_has_meeting_request_on_sheet: '%participantFullname% can''t be removed from the sheet"%sheetTitle%" because this participant is assigned to meetings requests.'

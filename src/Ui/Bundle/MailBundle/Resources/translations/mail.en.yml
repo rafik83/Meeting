@@ -10,6 +10,10 @@ mail.activateAccount.activate: 'Activate your account'
 mail.activateAccount.body: "Hello,\n\nYou have just been added as a participant for the event %event%\n\nTo join, click on the link below and enter a password to activate your account"
 mail.activateAccount.end: "Regards, The Vimeet Team\n"
 mail.activateAccount.subject: '[%event%] Activate your account'
+mail.agenda.version_diff_changed.body: 'Hello %firstname% %lastname%, Your schedule has been changed:'
+mail.agenda.version_diff_changed.end: 'Regards,'
+mail.agenda.version_diff_changed.link: 'Access your schedule'
+mail.agenda.version_diff_changed.subject: '[%event%]  Your schedule has changed'
 mail.changeMailNew.body: 'Hello, you have chosen a new e-mail addresse as login to ViMeet instead of %currentEmail%. To confirm that you are the owner of this e-mail address, please click on the link below to log in to your member area.'
 mail.changeMailNew.end: Regards
 mail.changeMailNew.subject: 'Your new email ID'
@@ -25,6 +29,7 @@ mail.confirm.test_visio_configuration.link: 'Test my video configuration'
 mail.confirmResetPassword.body: "Dear %firstname% %lastname%, \n\nYour password has been changed"
 mail.confirmResetPassword.subject: 'Your password has been changed'
 mail.download.ebadge.link: 'Download my e-badge'
+mail.event.agenda.link: 'Access your schedule'
 mail.event.export.no_uploaded_objects.subject: 'No files could be exported according to the filter made on the event "%event%"'
 mail.event.export.uploaded_objects_password.subject: 'Password of the zip file of the selected cards of the event "%event%"'
 mail.event.export.uploaded_objects_zip.link.click: 'Download zip file'

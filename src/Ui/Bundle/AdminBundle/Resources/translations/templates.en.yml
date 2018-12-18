@@ -16,6 +16,8 @@ template.error.ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHig
 template.error.objectsCollectionBlockCanNotContainOtherBlock: 'A collection object block can not contain other blocks'
 template.help.title: Support
 template.hideLabel.title: 'hide the label'
+template.label.datetime.max: 'Maximum date and time'
+template.label.datetime.min: 'Minimum date and time'
 template.label.title: label
 template.maxLength.title: 'max length'
 template.media.default: 'number of media by default'
@@ -33,10 +35,14 @@ template.object.boolean: 'Yes / No field'
 template.object.button-link: Link
 template.object.collection: Collection
 template.object.country: Country
+template.object.datetime: 'Date / Time'
+template.object.datetime.format.date: Date
+template.object.datetime.format.datetime: 'Date & time'
 template.object.editable-text: 'Editable text'
 template.object.gender: Gender
 template.object.image: Image
 template.object.media: Media
+template.object.multi-upload: 'Multi upload'
 template.object.nomenclature: Nomenclature
 template.object.participant: Participant
 template.object.tag: 'content displayed by default'
@@ -45,12 +51,17 @@ template.object.telephone: Phone
 template.object.text: 'non modifiable text'
 template.object.upload: 'File upload'
 template.object.url: Link
+template.object.visibility.editable: 'Editable (editable and visible by the participant and the admin)'
+template.object.visibility.hidden: 'Hidden (editable and visible only by admin)'
+template.object.visibility.label: 'Visibility of the field'
+template.object.visibility.read_only: 'Read only (editable by the admin and visible by the participant and the admin)'
 template.participant.display: 'Number of participants showed on profile'
 template.participant.title: 'the participants'
 template.placeholder.title: Placeholder
 template.products.title: 'linked products'
 template.registration.atLeastOneDataFieldMustBeChecked: 'At least one of the "information type " field must be checked'
 template.registration.dataType: 'information type'
+template.registration.dateMinShouldBeLessThanDateMax: 'The minimum date / time must be less than the maximum date / time'
 template.registration.nomenclatureCheckboxesMustBeOfDepthOne: 'Assigned BOMs must be level 1 to be multiple-choice for the following field(s): %objectsLabel%'
 template.registration.optional: optional
 template.registration.participantData: 'participant''s information'

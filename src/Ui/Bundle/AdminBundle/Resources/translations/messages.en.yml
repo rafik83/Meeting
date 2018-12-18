@@ -1030,7 +1030,7 @@ admin.template.form.addBlock: 'Add a step'
 admin.template.form.addLocale: 'Add a language'
 admin.template.form.link: 'Form template'
 admin.template.form.state.draft: Draft
-admin.template.form.state.published: 'On line'
+admin.template.form.state.published: Online
 admin.template.form.table.column.action: Action
 admin.template.form.table.column.createdAt: 'Created on'
 admin.template.form.table.column.title: Title
@@ -1138,6 +1138,7 @@ admin.transactional.mail.list.column.type.options.none: None
 admin.transactional.mail.list.column.type.options.some: 'All the others'
 admin.transactional.mail.list.disabled: Disabled
 admin.transactional.mail.list.generic.title: 'Generic emails'
+admin.transactional.mail.list.key.mail_agenda_version_diff_changed: 'Automatic notification of schedule modification'
 admin.transactional.mail.list.key.mail_happening_participation_automatically_updated: 'Automatic recalculation of sub-events following change of availability range'
 admin.transactional.mail.list.key.mail_order_confirmed: 'Passed orders'
 admin.transactional.mail.list.key.mail_participation_added_confirmation: 'Participant added to your sheet'
@@ -1159,6 +1160,9 @@ admin.transactional.mail.list.key.mail_user_complete_profile: 'Invitation as a p
 admin.transactional.mail.list.key.mail_user_registered: Registration
 admin.transactional.mail.list.key.mail_user_reset_password: 'Forgotten password request'
 admin.transactional.mail.list.title: 'List of transactional emails'
+admin.transactional.mail.substitution.parameter.description.%agendaLink%: 'Link to the agenda'
+admin.transactional.mail.substitution.parameter.description.%agendaLinkWithCTA%: 'CTA with link to the agenda'
+admin.transactional.mail.substitution.parameter.description.%agendaModifications%: 'List of schedule changes'
 admin.transactional.mail.substitution.parameter.description.%event%: 'Event title'
 admin.transactional.mail.substitution.parameter.description.%firstName%: 'Participant first name'
 admin.transactional.mail.substitution.parameter.description.%fromType%: 'Original participation type'
@@ -1211,7 +1215,7 @@ admin.type.create.link: Add
 admin.type.create.title: 'add a type of participation'
 admin.type.form.template: Forms
 admin.type.form.template.status.draft: Draft
-admin.type.form.template.status.published: 'On line'
+admin.type.form.template.status.published: Online
 admin.type.hidden: hidden
 admin.type.id: ID
 admin.type.link: 'Participation types'
