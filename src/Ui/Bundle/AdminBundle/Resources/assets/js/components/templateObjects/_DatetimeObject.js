@@ -99,7 +99,7 @@ DatetimeObject.prototype.getTimestampByInternationalFormat = function (date)
     var hours = splitTime[0];
     var minutes = splitTime[1];
 
-    return new Date(year, month, day, hours, minutes);
+    return new Date(year, month - 1, day, hours, minutes);
 };
 
 DatetimeObject.prototype.formatDate = function (date)
@@ -108,11 +108,12 @@ DatetimeObject.prototype.formatDate = function (date)
         return null;
     }
 
+    var day = this.addPaddingZero(date.getDate());
     var hours = this.addPaddingZero(date.getHours());
     var minutes = this.addPaddingZero(date.getMinutes());
     var months = this.addPaddingZero(date.getMonth() + 1);
 
-    return date.getDate() + "/" + months + "/" +  + date.getFullYear() + " " + hours + ':' + minutes;
+    return day + "/" + months + "/" +  + date.getFullYear() + " " + hours + ':' + minutes + ':00';
 };
 
 DatetimeObject.prototype.addPaddingZero = function (number)
