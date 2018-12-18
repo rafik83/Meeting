@@ -178,6 +178,9 @@ flash.change_mail_activate.success: 'Votre nouveau mail est maintenant associé 
 flash.change_mail.success: 'Votre nouveau mail a bien été enregistré, vous avez reçu un mail pour l''activer'
 flash.change_password.success: 'Votre mot de passe a été changé'
 flash.content.update_terms-of-sale.success: 'Les conditions générales de vente ont été mis à jour'
+flash.event.accommodation.added: 'Hébergement ajouté avec succès'
+flash.event.accommodation.updated: 'Hébergement modifié avec succès'
+flash.event.daysMustBeDefined: 'Les jours de l''événement doivent être configurés avant.'
 flash.event.participation.success: 'Votre fiche de participation a été sauvegardée'
 flash.event.register.already_known.login: 'Vous êtes déjà enregistré à cet événement, connectez-vous'
 flash.event.register.already_known.message: "VOTRE EMAIL EST DÉJÀ ENREGISTRÉ !\nParce-que vous avez participé à un de nos événements, vous pouvez récupérer vos données… et gagner un temps précieux !"
@@ -235,6 +238,3 @@ flash.spot.export.scheduled: 'La récupération et l''export des lieux des fiche
 flash.template.incomplete_translations.warning: 'Vous avez des traductions manquantes.'
 flash.template.preview.update.success: 'L''aperçu du catalogue a bien été enregistré.'
 flash.type.content.define_terms_of_sale.success: 'La définition des conditions générales de vente a été mise à jour'
-flash.event.daysMustBeDefined: 'Les jours de l''événement doivent être configurés avant.'
-flash.event.accommodation.added: 'Hébergement ajouté avec succès'
-flash.event.accommodation.updated: 'Hébergement modifié avec succès'
