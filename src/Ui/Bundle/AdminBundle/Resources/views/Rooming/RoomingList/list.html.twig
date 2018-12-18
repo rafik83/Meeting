@@ -33,8 +33,8 @@
                 </td>
                 <td>
                     <a href="{{ path('admin_users_details', { event: event.id, user: detailView.userId  }) }}" target="_blank">
-                        <b>{{ detailView.lastName }}</b>
-                        {{ detailView.firstName }}
+                        <b>{{ detailView.lastName|upper }}</b>
+                        {{ detailView.firstName|capitalize }}
                     </a>
                 </td>
                 <td>
@@ -55,8 +55,8 @@
                                 <span class="label label-default">{{ userStayView.roomType }}</span>
 
                                 {% if userStayView.roommateView %}
-                                    <br><b>{{ userStayView.roommateView.lastName }}</b>
-                                    {{ userStayView.roommateView.firstName }}
+                                    <br><b>{{ userStayView.roommateView.lastName|upper }}</b>
+                                    {{ userStayView.roommateView.firstName|capitalize }}
                                 {% endif %}
                             </a>
                         </li>
