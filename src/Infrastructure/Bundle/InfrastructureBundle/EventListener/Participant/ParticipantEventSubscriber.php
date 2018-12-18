@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded;
+use Proximum\Vimeet\Application\Command\User\Event\PresenceDate\Persist;
 use Proximum\Vimeet\Application\Command\UserEventView\Update;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
@@ -63,6 +64,14 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
 
     public function onParticipantUpdated(ParticipantUpdatedEvent $participantUpdatedEvent): void
     {
+        $this->commandBus->handle(
+            new Persist(
+                $participantUpdatedEvent->participant->getEvent(),
+                $participantUpdatedEvent->participant->getUser(),
+                $participantUpdatedEvent->templateData
+            )
+        );
+
         $this->sheetIndexer->updateSheets([$participantUpdatedEvent->participant->getSheet()]);
     }
 

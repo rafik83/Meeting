@@ -142,7 +142,7 @@ class ParticipantStepHandler
 
         $this->eventDispatcher->dispatch(
             Events::PARTICIPANT_UPDATED,
-            new ParticipantUpdatedEvent($participantStep->participant)
+            new ParticipantUpdatedEvent($participantStep->participant, $templateData)
         );
     }
 

@@ -373,6 +373,11 @@ services:
         arguments:
             - '@repository.user.event.extra_data_repository'
             - '@datetime'
+    Proximum\Vimeet\Application\Command\User\Event\PresenceDate\PersistHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\User\Event\PresenceDateRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\PresenceDate\Persist }
 
     #
     # RegistrationTemplate

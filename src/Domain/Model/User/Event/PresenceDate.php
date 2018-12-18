@@ -24,17 +24,17 @@ class PresenceDate
     /** @var Event */
     private $event;
 
-    /** @var \DateTimeInterface */
+    /** @var null|\DateTimeInterface */
     private $arrival;
 
-    /** @var \DateTimeInterface */
+    /** @var null|\DateTimeInterface */
     private $departure;
 
     public function __construct(
         User $user,
         Event $event,
-        \DateTimeInterface $arrival,
-        \DateTimeInterface $departure
+        ?\DateTimeInterface $arrival,
+        ?\DateTimeInterface $departure
     ) {
         $this->user = $user;
         $this->event = $event;
@@ -42,42 +42,27 @@ class PresenceDate
         $this->departure = $departure;
     }
 
-    /**
-     * @return null|int
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @return Event
-     */
     public function getEvent(): Event
     {
         return $this->event;
     }
 
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getArrival(): \DateTimeInterface
+    public function getArrival(): ?\DateTimeInterface
     {
         return $this->arrival;
     }
 
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getDeparture(): \DateTimeInterface
+    public function getDeparture(): ?\DateTimeInterface
     {
         return $this->departure;
     }

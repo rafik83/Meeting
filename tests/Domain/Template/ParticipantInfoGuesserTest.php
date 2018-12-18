@@ -250,6 +250,8 @@ class ParticipantInfoGuesserTest extends TestCase
             'participant_generic_tag_97' => 'foobar_participant_generic_tag_97',
             'participant_generic_tag_98' => 'foobar_participant_generic_tag_98',
             'participant_generic_tag_99' => 'foobar_participant_generic_tag_99',
+            'participant_arrival_date'   => 'foobar_participant_arrival_date',
+            'participant_departure_date' => 'foobar_participant_departure_date',
         ];
 
         $this->assertEquals($expected, $guesser->guessParticipantInfos($this->participant, $this->locale));
@@ -384,6 +386,8 @@ class ParticipantInfoGuesserTest extends TestCase
             'participant_generic_tag_97' => 'foobar_participant_generic_tag_97',
             'participant_generic_tag_98' => 'foobar_participant_generic_tag_98',
             'participant_generic_tag_99' => 'foobar_participant_generic_tag_99',
+            'participant_arrival_date'   => 'foobar_participant_arrival_date',
+            'participant_departure_date' => 'foobar_participant_departure_date',
         ];
 
         $this->assertEquals($expected, $guesser->guessParticipantInfosWithTemplateData($this->templateData));

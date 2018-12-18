@@ -9,8 +9,10 @@ Proximum\Vimeet\Domain\Model\User\Event\PresenceDate:
     fields:
         arrival:
             type: datetime
+            nullable: true
         departure:
             type: datetime
+            nullable: true
     manyToOne:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User
