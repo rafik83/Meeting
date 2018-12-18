@@ -116,6 +116,13 @@ interface EventRepositoryInterface
     public function findPastEvents(\DateTimeInterface $dateTime): array;
 
     /**
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return Event[]
+     */
+    public function findPastEventIds(\DateTimeInterface $dateTime): array;
+
+    /**
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      *
