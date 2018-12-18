@@ -16,7 +16,7 @@ class UserSheetTypeView
     /** @var null|string */
     public $lastName;
 
-    /** @var string */
+    /** @var null|string */
     public $sheetTitle
 
     /** @var null|string */;
@@ -36,7 +36,7 @@ class UserSheetTypeView
         int $sheetId,
         ?string $firstName,
         ?string $lastName,
-        string $sheetTitle,
+        ?string $sheetTitle,
         ?string $spotReference,
         string $typeTitle,
         ?\DateTimeInterface $arrival = null,
