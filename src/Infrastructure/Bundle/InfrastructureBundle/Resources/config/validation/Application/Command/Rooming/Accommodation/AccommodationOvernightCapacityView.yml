@@ -1,0 +1,11 @@
+Proximum\Vimeet\Application\Command\Rooming\Accommodation\AccommodationOvernightCapacityView:
+    properties:
+        date:
+            - Date: ~
+            - NotBlank: ~
+        capacity:
+            - Type:
+                type: integer
+            - NotBlank: ~
+            - Range:
+                min: 0

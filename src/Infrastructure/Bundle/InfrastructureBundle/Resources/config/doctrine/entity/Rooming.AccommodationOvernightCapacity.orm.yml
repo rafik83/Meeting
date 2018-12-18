@@ -1,0 +1,20 @@
+Proximum\Vimeet\Domain\Model\Rooming\AccommodationOvernightCapacity:
+    type:  entity
+    table: rooming_accommodation_overnight_capacity
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        date:
+            type: date
+        capacity:
+            type: integer
+    manyToOne:
+        accommodation:
+            targetEntity: Proximum\Vimeet\Domain\Model\Rooming\Accommodation
+            inversedBy: overnightCapacities
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
