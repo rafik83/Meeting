@@ -35,4 +35,10 @@ class StayRepository implements StayRepositoryInterface
             ->getQuery()
             ->getResult();
     }
+
+    public function add(Stay $stay): void
+    {
+        $this->entityManager->persist($stay);
+        $this->entityManager->flush($stay);
+    }
 }

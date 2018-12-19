@@ -8,6 +8,9 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class Stay
 {
+    public const ROOM_TYPE_SINGLE = 'single';
+    public const ROOM_TYPE_DOUBLE = 'double';
+
     /** @var int|null */
     private $id;
 
@@ -31,6 +34,7 @@ class Stay
 
     public function __construct(
         Event $event,
+        User $user,
         \DateTimeInterface $arrival,
         \DateTimeInterface $departure,
         Accommodation $accommodation,
@@ -41,7 +45,7 @@ class Stay
         $this->departure = $departure;
         $this->accommodation = $accommodation;
         $this->roomType = $roomType;
-        $this->users = new ArrayCollection();
+        $this->users = new ArrayCollection([$user]);
     }
 
     public function getId(): ?int
@@ -80,5 +84,10 @@ class Stay
     public function getUsers(): array
     {
         return $this->users->toArray();
+    }
+
+    public function addUser(User $user): void
+    {
+        $this->users->add($user);
     }
 }

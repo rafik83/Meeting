@@ -844,3 +844,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router.default'
             - '@session.flash_bag'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AssignAccommodationAction:
+        arguments:
+            - '@templating.engine.twig'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@router'
