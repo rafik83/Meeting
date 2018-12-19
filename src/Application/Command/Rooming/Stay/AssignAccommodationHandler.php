@@ -5,19 +5,35 @@ namespace Proximum\Vimeet\Application\Command\Rooming\Stay;
 use Proximum\Vimeet\Domain\Model\Rooming\Stay;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
+use Proximum\Vimeet\Domain\Rooming\Accommodation\HasNoRemainingOvernightException;
+use Proximum\Vimeet\Domain\Rooming\Accommodation\HasRemainingOvernight;
 
 class AssignAccommodationHandler
 {
     /** @var StayRepositoryInterface */
     private $stayRepository;
 
-    public function __construct(StayRepositoryInterface $stayRepository)
-    {
+    /** @var HasRemainingOvernight */
+    private $hasRemainingOvernight;
+
+    public function __construct(
+        StayRepositoryInterface $stayRepository,
+        HasRemainingOvernight $hasRemainingOvernight
+    ) {
         $this->stayRepository = $stayRepository;
+        $this->hasRemainingOvernight = $hasRemainingOvernight;
     }
 
     public function handle(AssignAccommodation $assignAccommodation): void
     {
+        if (false === $this->hasRemainingOvernight->isSatisfiedBy(
+            $assignAccommodation->accommodation,
+            $assignAccommodation->arrival,
+            $assignAccommodation->departure)
+        ) {
+            throw new HasNoRemainingOvernightException();
+        }
+
         $stay = new Stay(
             $assignAccommodation->event,
             $assignAccommodation->user,

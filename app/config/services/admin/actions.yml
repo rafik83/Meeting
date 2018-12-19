@@ -851,3 +851,4 @@ services:
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router'
+            - '@vimeet_infrastructure.adapter.translator_adapter'

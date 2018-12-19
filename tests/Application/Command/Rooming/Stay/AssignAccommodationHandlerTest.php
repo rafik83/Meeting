@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Rooming\Stay;
 
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation;
 use Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodationHandler;
 use PHPUnit\Framework\TestCase;
@@ -10,6 +11,7 @@ use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Model\Rooming\Stay;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
+use Proximum\Vimeet\Domain\Rooming\Accommodation\HasRemainingOvernight;
 
 class AssignAccommodationHandlerTest extends TestCase
 {
@@ -43,7 +45,47 @@ class AssignAccommodationHandlerTest extends TestCase
         );
         $assignAccommodation->accommodation = $accommodation->reveal();
 
-        $handler = new AssignAccommodationHandler($stayRepository->reveal());
+        $hasRemainingOvernight = $this->prophesize(HasRemainingOvernight::class);
+        $hasRemainingOvernight
+            ->isSatisfiedBy($accommodation->reveal(), $arrivalDate, $departureDate)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $handler = new AssignAccommodationHandler($stayRepository->reveal(), $hasRemainingOvernight->reveal());
+        $handler->handle($assignAccommodation);
+    }
+
+    /**
+     * @expectedException \Proximum\Vimeet\Domain\Rooming\Accommodation\HasNoRemainingOvernightException
+     */
+    public function test_handle_no_remaining_overnight(): void
+    {
+        $arrivalDate = new \DateTime('2018-12-10');
+        $departureDate = new \DateTime('2018-12-12');
+        $event = $this->prophesize(Event::class);
+        $user = $this->prophesize(User::class);
+        $accommodation = $this->prophesize(Accommodation::class);
+        $stayRepository = $this->prophesize(StayRepositoryInterface::class);
+
+        $assignAccommodation = new AssignAccommodation(
+            $event->reveal(),
+            $user->reveal(),
+            $arrivalDate,
+            $departureDate
+        );
+        $assignAccommodation->accommodation = $accommodation->reveal();
+
+        $hasRemainingOvernight = $this->prophesize(HasRemainingOvernight::class);
+        $hasRemainingOvernight
+            ->isSatisfiedBy($accommodation->reveal(), $arrivalDate, $departureDate)
+            ->shouldBeCalled()
+            ->willReturn(false);
+
+        $stayRepository
+            ->add(Argument::any())
+            ->shouldNotBeCalled();
+
+        $handler = new AssignAccommodationHandler($stayRepository->reveal(), $hasRemainingOvernight->reveal());
         $handler->handle($assignAccommodation);
     }
 
@@ -80,7 +122,13 @@ class AssignAccommodationHandlerTest extends TestCase
         $assignAccommodation->roommate = null;
         $assignAccommodation->roomType = 'double';
 
-        $handler = new AssignAccommodationHandler($stayRepository->reveal());
+        $hasRemainingOvernight = $this->prophesize(HasRemainingOvernight::class);
+        $hasRemainingOvernight
+            ->isSatisfiedBy($accommodation->reveal(), $arrivalDate, $departureDate)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $handler = new AssignAccommodationHandler($stayRepository->reveal(), $hasRemainingOvernight->reveal());
         $handler->handle($assignAccommodation);
     }
 
@@ -119,7 +167,13 @@ class AssignAccommodationHandlerTest extends TestCase
         $assignAccommodation->roommate = $roommate->reveal();
         $assignAccommodation->roomType = 'double';
 
-        $handler = new AssignAccommodationHandler($stayRepository->reveal());
+        $hasRemainingOvernight = $this->prophesize(HasRemainingOvernight::class);
+        $hasRemainingOvernight
+            ->isSatisfiedBy($accommodation->reveal(), $arrivalDate, $departureDate)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $handler = new AssignAccommodationHandler($stayRepository->reveal(), $hasRemainingOvernight->reveal());
         $handler->handle($assignAccommodation);
     }
 }

@@ -77,6 +77,7 @@ validators.promotion_code.promotion.value.percent_off: 'Indiquez un pourcentage 
 validators.promotion_code.promotion.value.value_off: 'Indiquez un montant entre 0 et le prix du produit'
 validators.required.email: 'L''adresse e-mail ne peut pas être vide'
 validators.required.password: 'Le mot de passe ne peut pas être vide'
+validators.rooming.accommodation.hasNoRemainingOvernightException: 'Aucune nuitée disponible pour la période donnée pour cet hébergement'
 validators.sameEmail: 'Vous utilisez déjà cet email'
 validators.schedule_day.shouldBeTheSameDay: 'L''heure de début doit être au même jour que l''heure de fin'
 validators.schedule_day.startTimeMustBeBeforeEndTime: 'L''heure de début doit être avant l''heure de fin'

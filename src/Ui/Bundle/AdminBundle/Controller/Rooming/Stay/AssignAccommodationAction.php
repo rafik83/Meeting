@@ -3,10 +3,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Rooming\Accommodation\HasNoRemainingOvernightException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rooming\Stay\AssignAccommodationType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,16 +31,21 @@ class AssignAccommodationAction
     /** @var RouterInterface */
     private $router;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     public function __construct(
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
-        RouterInterface $router
+        RouterInterface $router,
+        TranslatorInterface $translator
     ) {
         $this->engine = $engine;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->router = $router;
+        $this->translator = $translator;
     }
 
     public function __invoke(Request $request, Event $event, User $user, string $arrivalDate, string $departureDate): Response
@@ -49,7 +57,11 @@ class AssignAccommodationAction
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->commandBus->handle($assignAccommodation);
+            try {
+                $this->commandBus->handle($assignAccommodation);
+            } catch (HasNoRemainingOvernightException $exception) {
+                $form->get('accommodation')->addError(new FormError($this->translator->trans('validators.rooming.accommodation.hasNoRemainingOvernightException', [], 'validators')));
+            }
 
             return new RedirectResponse(
                 $this->router->generate('admin_event_rooming_list', [

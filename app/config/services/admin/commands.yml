@@ -53,6 +53,7 @@ services:
     Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodationHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
+            - '@Proximum\Vimeet\Domain\Rooming\Accommodation\HasRemainingOvernight'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation }
 
