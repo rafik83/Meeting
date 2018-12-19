@@ -4,9 +4,11 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Rooming;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Model\Rooming\Stay;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Rooming\StayView;
+use Proximum\Vimeet\Domain\View\Rooming\TotalStaysPerPeriod;
 
 class StayRepository implements StayRepositoryInterface
 {
@@ -40,5 +42,17 @@ class StayRepository implements StayRepositoryInterface
     {
         $this->entityManager->persist($stay);
         $this->entityManager->flush($stay);
+    }
+
+    public function getTotalStaysByAccommodationPeriod(Accommodation $accommodation): array
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select(sprintf('new %s(stay.arrival, stay.departure, count(stay.id))', TotalStaysPerPeriod::class))
+            ->from(Stay::class, 'stay')
+            ->where('stay.accommodation = :accommodation')
+            ->setParameter('accommodation', $accommodation)
+            ->groupBy('stay.arrival, stay.departure')
+            ->getQuery()
+            ->getResult();
     }
 }
