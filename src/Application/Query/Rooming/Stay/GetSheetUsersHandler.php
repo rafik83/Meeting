@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Rooming\Stay;
 
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class GetSheetUsersHandler
@@ -14,7 +15,12 @@ class GetSheetUsersHandler
         $this->sheetRepository = $sheetRepository;
     }
 
-    public function handle(GetSheetUsers $getSheetUsers)
+    /**
+     * @param GetSheetUsers $getSheetUsers
+     *
+     * @return User[]
+     */
+    public function handle(GetSheetUsers $getSheetUsers): array
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($getSheetUsers->user, $getSheetUsers->event);
         $users = [];
@@ -23,7 +29,7 @@ class GetSheetUsersHandler
             foreach ($sheet->getParticipantsArray() as $participant) {
                 $user = $participant->getUser();
 
-                if (!isset($users[$user->getId()]) && $user !== $getSheetUsers->user) {
+                if (!isset($users[$user->getId()]) && $user->getId() !== $getSheetUsers->user->getId()) {
                     $users[$user->getId()] = $user;
                 }
             }

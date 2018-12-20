@@ -2,11 +2,15 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rooming\Stay;
 
+use function Clue\StreamFilter\fun;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation;
 use Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListByPeriodQuery;
+use Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsers;
 use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Model\Rooming\Stay;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -17,14 +21,20 @@ class AssignAccommodationType extends AbstractType
 {
     /** @var QueryBusInterface */
     private $queryBus;
+    /** @var HasStayForPeriod */
+    private $hasStayForPeriod;
 
-    public function __construct(QueryBusInterface $queryBus)
-    {
+    public function __construct(
+        QueryBusInterface $queryBus,
+        HasStayForPeriod $hasStayForPeriod
+    ) {
         $this->queryBus = $queryBus;
+        $this->hasStayForPeriod = $hasStayForPeriod;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $options['assignAccommodation']->user;
         $event = $options['assignAccommodation']->event;
         $arrival = $options['assignAccommodation']->arrival;
         $departure = $options['assignAccommodation']->departure;
@@ -50,6 +60,22 @@ class AssignAccommodationType extends AbstractType
             ])
             ->add('roommate', ChoiceType::class, [
                 'required' => false,
+                'expanded' => true,
+                'choices' => $this->queryBus->handle(new GetSheetUsers($user, $event)),
+                'choice_label' => function (User $user) {
+                    return $user->getFullname();
+                },
+                'choice_attr' => function(User $user) use ($event, $arrival, $departure) {
+                    if ($this->hasStayForPeriod->isSatisfiedBy($event, $user, $arrival, $departure)) {
+                        return [
+                            'disabled' => 'disabled',
+                            'class' => 'disabled',
+                        ];
+                    }
+
+                    return [];
+                },
+                'placeholder' => 'form.admin_assign_accommodation_type.roommate.none',
             ])
         ;
     }

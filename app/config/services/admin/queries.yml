@@ -215,3 +215,9 @@ services:
             - '@Proximum\Vimeet\Domain\Rooming\Accommodation\HasRemainingOvernight'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListByPeriodQuery }
+
+    Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsersHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsers }
