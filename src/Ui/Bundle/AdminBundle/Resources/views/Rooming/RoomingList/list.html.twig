@@ -1,6 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block title 'admin.rooming.title'|trans %}
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
 
 {% block content %}
     <h1 class="page-header">{{ 'admin.rooming.title'|trans }}</h1>
@@ -64,6 +65,19 @@
                                     {{ userStayView.roommateView.firstName|capitalize }}
                                 {% endif %}
                             </a>
+                            {{ delete_button(
+                                path('admin_event_rooming_remove_stay', {
+                                    'event': event.id,
+                                    'stay': userStayView.stayId,
+                                    'user': detailView.userId
+                                }),
+                                'admin.remove'|trans,
+                                {
+                                    'class': 'btn btn-danger btn-sm',
+                                    'data-confirm': 'admin.rooming.stay.remove.confirm'|trans
+                                },
+                                constant('Proximum\\Vimeet\\Domain\\Intention\\IntentionType::INTENTION_REMOVE_STAY')
+                            ) }}
                         </li>
                     {% endfor %}
                     </ul>

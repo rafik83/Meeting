@@ -857,3 +857,12 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\RemoveAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
+            - '@security.csrf.token_manager'
+            - '@adapter.authorization_checker'
+            - '@session.flash_bag'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
