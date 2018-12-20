@@ -52,9 +52,11 @@ class AssignAccommodationAction
 
     public function __invoke(Request $request, Event $event, User $user, string $arrivalDate, string $departureDate): Response
     {
+        /* @todo check validité des dates */
         $assignAccommodation = new AssignAccommodation($event, $user, new \DateTime($arrivalDate), new \DateTime($departureDate));
         $form = $this->formFactory->create(AssignAccommodationType::class, $assignAccommodation, [
             'submit' => true,
+            'assignAccommodation' => $assignAccommodation,
         ]);
 
         $form->handleRequest($request);
