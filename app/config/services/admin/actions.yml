@@ -852,3 +852,5 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AvailabilityAction: ~

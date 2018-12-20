@@ -2041,3 +2041,11 @@ admin_event_rooming_assign_accommodation_stay:
         user: \d+
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AssignAccommodationAction
+
+admin_event_rooming_assign_accommodation_stay_availability:
+    path: /event/{event}/rooming/assign-accommodation-stay-availability/{user}
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AvailabilityAction

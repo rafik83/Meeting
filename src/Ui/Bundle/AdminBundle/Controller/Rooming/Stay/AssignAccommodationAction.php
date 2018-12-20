@@ -57,6 +57,15 @@ class AssignAccommodationAction
         $form = $this->formFactory->create(AssignAccommodationType::class, $assignAccommodation, [
             'submit' => true,
             'assignAccommodation' => $assignAccommodation,
+            'attr' => [
+                'data-availability-url' => $this->router->generate(
+                    'admin_event_rooming_assign_accommodation_stay_availability',
+                    [
+                        'event' => $event->getId(),
+                        'user' => $user->getId(),
+                    ]
+                )
+            ]
         ]);
 
         $form->handleRequest($request);

@@ -11,9 +11,9 @@ use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Model\Rooming\Stay;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -40,13 +40,20 @@ class AssignAccommodationType extends AbstractType
         $departure = $options['assignAccommodation']->departure;
 
         $builder
-            ->add('arrival', DateType::class)
-            ->add('departure', DateType::class)
+            ->add('arrival', DateTimePickerType::class, [
+                'display_hour' => false,
+            ])
+            ->add('departure', DateTimePickerType::class, [
+                'display_hour' => false,
+            ])
             ->add('accommodation', ChoiceType::class, [
                 'choices' => $this->queryBus->handle(new AccommodationListByPeriodQuery($event, $arrival, $departure)),
                 'choice_label' => function (Accommodation $accommodation) {
                     return $accommodation->getTitle();
                 },
+                'attr' => [
+                    'class' => 'select2',
+                ],
             ])
             ->add('roomType', ChoiceType::class, [
                 'choices' => [
@@ -60,11 +67,13 @@ class AssignAccommodationType extends AbstractType
             ])
             ->add('roommate', ChoiceType::class, [
                 'required' => false,
-                'expanded' => true,
                 'choices' => $this->queryBus->handle(new GetSheetUsers($user, $event)),
                 'choice_label' => function (User $user) {
                     return $user->getFullname();
                 },
+                'attr' => [
+                    'class' => 'select2',
+                ],
                 'choice_attr' => function(User $user) use ($event, $arrival, $departure) {
                     if ($this->hasStayForPeriod->isSatisfiedBy($event, $user, $arrival, $departure)) {
                         return [
