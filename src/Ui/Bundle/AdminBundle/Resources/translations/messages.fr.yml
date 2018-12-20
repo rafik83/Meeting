@@ -742,6 +742,7 @@ admin.rule.list.content.category: Catégorie
 admin.rule.list.content.type: Type
 admin.rule.list.title: 'Liste des règles'
 admin.rule.see-what.title: 'Règle de %seer% sur %seeable%'
+admin.rooming.stay.assignAccommodation.add.title: 'Ajouter une assignation'
 admin.rooming.title: 'Rooming list'
 admin.rooming.list.arrivalDateAndDepartureDate: 'Arrivée / Départ'
 admin.rooming.list.comment: 'Commentaire'

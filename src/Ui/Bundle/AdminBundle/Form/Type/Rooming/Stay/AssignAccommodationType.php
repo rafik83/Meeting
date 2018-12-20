@@ -40,9 +40,12 @@ class AssignAccommodationType extends AbstractType
             ])
             ->add('roomType', ChoiceType::class, [
                 'choices' => [
-                    Stay::ROOM_TYPE_SINGLE => Stay::ROOM_TYPE_SINGLE,
-                    Stay::ROOM_TYPE_DOUBLE => Stay::ROOM_TYPE_DOUBLE,
+                    Stay::ROOM_TYPE_SINGLE,
+                    Stay::ROOM_TYPE_DOUBLE,
                 ],
+                'choice_label' => function ($type) {
+                    return sprintf('form.admin_assign_accommodation_type.roomType.%s', $type);
+                },
                 'expanded' => true,
             ])
             ->add('roommate', ChoiceType::class, [

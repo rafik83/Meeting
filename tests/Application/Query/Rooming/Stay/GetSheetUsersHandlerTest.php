@@ -60,7 +60,6 @@ class GetSheetUsersHandlerTest extends TestCase
                 $participant3->reveal()
             ]);
 
-
         $event = $this->prophesize(Event::class);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
