@@ -6,7 +6,9 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Model\Rooming\Stay;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Domain\View\Rooming\StayView;
 use Proximum\Vimeet\Domain\View\Rooming\TotalStaysPerPeriod;
 
@@ -52,6 +54,34 @@ class StayRepository implements StayRepositoryInterface
             ->where('stay.accommodation = :accommodation')
             ->setParameter('accommodation', $accommodation)
             ->groupBy('stay.arrival, stay.departure')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return TimeRangeView[]
+     */
+    public function getTimeRangeViewsByUserAndEvent(User $user, Event $event): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select(
+                sprintf(
+                    'new %s(stay.arrival, stay.departure)',
+                    TimeRangeView::class
+                )
+            )
+            ->from(Stay::class, 'stay')
+            ->join('stay.users', 'user', 'WITH', 'stay.event = :event AND user = :user')
+            ->setParameters(
+                [
+                    'event' => $event,
+                    'user' => $user,
+                ]
+            )
             ->getQuery()
             ->getResult();
     }

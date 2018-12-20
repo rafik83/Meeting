@@ -5,6 +5,8 @@ namespace Proximum\Vimeet\Domain\Repository\Rooming;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Model\Rooming\Stay;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Domain\View\Rooming\StayView;
 use Proximum\Vimeet\Domain\View\Rooming\TotalStaysPerPeriod;
 
@@ -23,4 +25,12 @@ interface StayRepositoryInterface
      * @return TotalStaysPerPeriod[]
      */
     public function getTotalStaysByAccommodationPeriod(Accommodation $accommodation): array;
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return TimeRangeView[]
+     */
+    public function getTimeRangeViewsByUserAndEvent(User $user, Event $event): array;
 }

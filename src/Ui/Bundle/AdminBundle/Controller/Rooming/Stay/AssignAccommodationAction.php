@@ -8,6 +8,8 @@ use Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Rooming\Accommodation\HasNoRemainingOvernightException;
+use Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriodException;
+use Proximum\Vimeet\Domain\Rooming\Stay\RoommateHasStayForPeriodException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rooming\Stay\AssignAccommodationType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -60,7 +62,17 @@ class AssignAccommodationAction
             try {
                 $this->commandBus->handle($assignAccommodation);
             } catch (HasNoRemainingOvernightException $exception) {
-                $form->get('accommodation')->addError(new FormError($this->translator->trans('validators.rooming.accommodation.hasNoRemainingOvernightException', [], 'validators')));
+                $form->get('accommodation')->addError(
+                    new FormError($this->translator->trans('validators.rooming.accommodation.hasNoRemainingOvernightException', [], 'validators'))
+                );
+            } catch (HasStayForPeriodException $exception) {
+                $form->get('arrival')->addError(
+                    new FormError($this->translator->trans('validators.rooming.accommodation.hasStayForPeriodException', [], 'validators'))
+                );
+            } catch (RoommateHasStayForPeriodException $exception) {
+                $form->get('roommate')->addError(
+                    new FormError($this->translator->trans('validators.rooming.accommodation.roommateHasStayForPeriodException', [], 'validators'))
+                );
             }
 
             return new RedirectResponse(
