@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 
@@ -50,10 +51,19 @@ class AssignAccommodationAction
         $this->translator = $translator;
     }
 
-    public function __invoke(Request $request, Event $event, User $user, string $arrivalDate, string $departureDate): Response
+    public function __invoke(Request $request, Event $event, User $user): Response
     {
-        /* @todo check validité des dates */
-        $assignAccommodation = new AssignAccommodation($event, $user, new \DateTime($arrivalDate), new \DateTime($departureDate));
+        $arrival = $request->get('arrivalDate', null);
+        $departure = $request->get('departureDate', null);
+
+        $arrivalDate = \DateTime::createFromFormat('d/m/Y', $arrival);
+        $departureDate = \DateTime::createFromFormat('d/m/Y', $departure);
+
+        if (!$arrival || !$departure || !$arrivalDate || !$departureDate || $departureDate <= $arrivalDate ) {
+            throw new BadRequestHttpException();
+        }
+
+        $assignAccommodation = new AssignAccommodation($event, $user, $arrivalDate, $departureDate);
         $form = $this->formFactory->create(AssignAccommodationType::class, $assignAccommodation, [
             'submit' => true,
             'assignAccommodation' => $assignAccommodation,
@@ -65,7 +75,7 @@ class AssignAccommodationAction
                         'user' => $user->getId(),
                     ]
                 ),
-                'data-roommate-placeholder' => 'Aucun',
+                'data-roommate-placeholder' => 'Aucune',
             ]
         ]);
 
@@ -96,6 +106,7 @@ class AssignAccommodationAction
         }
 
         return new Response($this->engine->render('@Admin/Rooming/Stay/assignAccommodation.html.twig', [
+            'userName' => $user->getFullname(),
             'event' => $event,
             'form' => $form->createView(),
         ]));

@@ -2035,7 +2035,7 @@ admin_event_rooming_list:
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\RoomingListAction
 
 admin_event_rooming_assign_accommodation_stay:
-    path: /event/{event}/rooming/assign-accommodation-stay/{user}/{arrivalDate}/{departureDate}
+    path: /event/{event}/rooming/assign-accommodation-stay/{user}
     requirements:
         event: \d+
         user: \d+

@@ -1,5 +1,6 @@
 var $ = require('jquery'),
-    axios = require('axios')
+    axios = require('axios'),
+    DateTimeManipulation = require('./_DateTimeManipulation')
 ;
 
 function AssignAccommodationStay(element)
@@ -10,6 +11,8 @@ function AssignAccommodationStay(element)
     this.accommodationInput = element.querySelector('[id="admin_assign_accommodation_type_accommodation"]');
     this.roommateInput = element.querySelector('[id="admin_assign_accommodation_type_roommate"]');
     this.roommateBlock = element.querySelector('[id="admin_assign_accommodation_type_roommate-group"]');
+
+    this.dateTimeManipulation = new DateTimeManipulation();
 
     [].forEach.call(element.querySelectorAll('input[name="admin_assign_accommodation_type[roomType]"]'), function (roomType) {
         roomType.addEventListener('change', this.onSelectRoomType.bind(this));
@@ -42,6 +45,15 @@ AssignAccommodationStay.prototype.onSelectRoomType = function(e) {
 };
 
 AssignAccommodationStay.prototype.onChangePeriod = function(e) {
+
+    const arrivalDate = this.arrivalDateInput.value;
+    const departureDate = this.departureDateInput.value;
+
+    // rewrite form action
+    const action = this.element.action.split('?');
+    this.element.action = action[0] + '?arrivalDate=' + arrivalDate + '&departureDate=' + departureDate;
+
+    // get fresh data
     const accommodationInput = $(this.accommodationInput);
     const roommateInput = $(this.roommateInput);
 
@@ -50,15 +62,15 @@ AssignAccommodationStay.prototype.onChangePeriod = function(e) {
 
     axios.get(this.url, {
         params: {
-            arrivalDate: this.arrivalDateInput.value,
-            departureDate: this.departureDateInput.value,
+            arrivalDate,
+            departureDate,
         }
     }).then(function (response) {
         Object.entries(response.data.accommodations).forEach(
             ([id, label]) => accommodationInput.append(`<option value="${id}">${label}</option>`)
         );
 
-        roommateInput.append(`<option>${this.roommatePlaceholder}</option>`);
+        roommateInput.append(`<option value="">${this.roommatePlaceholder}</option>`);
         Object.entries(response.data.roommates).forEach(
             ([id, object]) => roommateInput.append(`<option value="${id}" ${object.disabled ? 'disabled="disabled"': ''}">${object.label}</option>`)
         );

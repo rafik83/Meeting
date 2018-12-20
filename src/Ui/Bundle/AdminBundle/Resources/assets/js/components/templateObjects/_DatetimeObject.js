@@ -1,5 +1,6 @@
 var Form = require('./../template/_Form'),
-    TemplateTaggableObject = require('./../template/_TemplateTaggableObject')
+    TemplateTaggableObject = require('./../template/_TemplateTaggableObject'),
+    DateTimeManipulation = require('./../_DateTimeManipulation')
 ;
 
 /**
@@ -21,6 +22,8 @@ function DatetimeObject(element, locale, builderType)
     this.dateMinShouldBeLessThanDateMaxMessage = this.element.getAttribute('data-date-min-should-be-less-than-date-max-message');
 
     this.templateTaggableObject = null;
+
+    this.dateTimeManipulation = new DateTimeManipulation();
 
     if (element.querySelector('[data-template-tags-select]')) {
         this.templateTaggableObject = new TemplateTaggableObject(element);
@@ -47,8 +50,8 @@ DatetimeObject.prototype.save = function ()
 
     var dateMin = this.form.get('datetime_min');
     var dateMax = this.form.get('datetime_max');
-    var minTime = this.getTimestampByInternationalFormat(dateMin);
-    var maxTime = this.getTimestampByInternationalFormat(dateMax);
+    var minTime = this.dateTimeManipulation.getTimestampByInternationalFormat(dateMin);
+    var maxTime = this.dateTimeManipulation.getTimestampByInternationalFormat(dateMax);
 
     if ('date' === this.config.format) {
         minTime.setHours(0);
@@ -74,8 +77,8 @@ DatetimeObject.prototype.save = function ()
     this.config.help[this.locale]  = this.form.get('help');
     this.config.required           = this.form.get('required');
     this.config.tags               = this.form.get('tags');
-    this.config.datetime_min       = this.formatDate(minTime);
-    this.config.datetime_max       = this.formatDate(maxTime);
+    this.config.datetime_min       = this.dateTimeManipulation.formatDate(minTime);
+    this.config.datetime_max       = this.dateTimeManipulation.formatDate(maxTime);
     this.config.visibility         = this.form.get('visibility');
 
     this.form.bind('label', this.config.label[this.locale]);
@@ -83,41 +86,6 @@ DatetimeObject.prototype.save = function ()
     return true;
 };
 
-DatetimeObject.prototype.getTimestampByInternationalFormat = function (date)
-{
-    if (!date || -1 === date.indexOf('/')) {
-        return;
-    }
 
-    var splitDate = date.split('/');
-    var splitYear = splitDate[2].split(' ');
-    var splitTime = splitYear[1].split(':');
-
-    var day = splitDate[0];
-    var month = splitDate[1];
-    var year = splitYear[0];
-    var hours = splitTime[0];
-    var minutes = splitTime[1];
-
-    return new Date(year, month, day, hours, minutes);
-};
-
-DatetimeObject.prototype.formatDate = function (date)
-{
-    if (typeof date === 'undefined' || date === null) {
-        return null;
-    }
-
-    var hours = this.addPaddingZero(date.getHours());
-    var minutes = this.addPaddingZero(date.getMinutes());
-    var months = this.addPaddingZero(date.getMonth() + 1);
-
-    return date.getDate() + "/" + months + "/" +  + date.getFullYear() + " " + hours + ':' + minutes;
-};
-
-DatetimeObject.prototype.addPaddingZero = function (number)
-{
-    return number < 10 ? '0' + number : number;
-};
 
 module.exports = DatetimeObject;
