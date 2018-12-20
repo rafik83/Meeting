@@ -43,7 +43,8 @@ class HasRemainingOvernight
             if ($arrivalAtMidnight <= $overnightArrivalDate
                 && $departureAtMidnight > $overnightArrivalDate
             ) {
-                $capacityPerDays[$overnightArrivalDate->format('Y-m-d')] = $overnightCapacity->getCapacity();
+                $indexDay = $overnightArrivalDate->format('Y-m-d');
+                $capacityPerDays[$indexDay] = $overnightCapacity->getCapacity();
             }
         }
 
@@ -65,17 +66,19 @@ class HasRemainingOvernight
                 if ($arrivalAtMidnight <= $midnightDay
                     && $departureAtMidnight > $midnightDay
                 ) {
-                    if (isset($totalAssignByDay[$midnightDay->format('Y-m-d')])) {
-                        $totalAssignByDay[$midnightDay->format('Y-m-d')] += $totalStaysPerPeriod->totalStays;
+                    $indexDay = $midnightDay->format('Y-m-d');
+
+                    if (isset($totalAssignByDay[$indexDay])) {
+                        $totalAssignByDay[$indexDay] += $totalStaysPerPeriod->totalStays;
                     } else {
-                        $totalAssignByDay[$midnightDay->format('Y-m-d')] = $totalStaysPerPeriod->totalStays;
+                        $totalAssignByDay[$indexDay] = $totalStaysPerPeriod->totalStays;
                     }
                 }
             }
         }
 
-        foreach ($capacityPerDays as $key => $capacityPerDay) {
-            if (isset($totalAssignByDay[$key]) && $totalAssignByDay[$key] >= $capacityPerDay) {
+        foreach ($capacityPerDays as $indexDay => $capacityPerDay) {
+            if (isset($totalAssignByDay[$indexDay]) && $totalAssignByDay[$indexDay] >= $capacityPerDay) {
                 return false;
             }
         }
@@ -85,6 +88,9 @@ class HasRemainingOvernight
 
     private function getDateAtMidnight(\DateTimeInterface $dateTime): \DateTimeInterface
     {
-        return (new \DateTime())->setTimestamp($dateTime->getTimestamp())->setTime(0, 0, 0, 0);
+        return (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTime(0, 0, 0, 0)
+        ;
     }
 }
