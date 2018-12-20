@@ -64,7 +64,8 @@ class AssignAccommodationAction
                         'event' => $event->getId(),
                         'user' => $user->getId(),
                     ]
-                )
+                ),
+                'data-roommate-placeholder' => 'Aucun',
             ]
         ]);
 

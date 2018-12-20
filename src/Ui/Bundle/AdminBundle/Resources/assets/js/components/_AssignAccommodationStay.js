@@ -5,6 +5,7 @@ var $ = require('jquery'),
 function AssignAccommodationStay(element)
 {
     this.element = element;
+    this.roommatePlaceholder = element.getAttribute('data-roommate-placeholder');
     this.url = element.getAttribute('data-availability-url');
     this.accommodationInput = element.querySelector('[id="admin_assign_accommodation_type_accommodation"]');
     this.roommateInput = element.querySelector('[id="admin_assign_accommodation_type_roommate"]');
@@ -53,14 +54,15 @@ AssignAccommodationStay.prototype.onChangePeriod = function(e) {
             departureDate: this.departureDateInput.value,
         }
     }).then(function (response) {
-        Object.entries(response.data.accommodation).forEach(
+        Object.entries(response.data.accommodations).forEach(
             ([id, label]) => accommodationInput.append(`<option value="${id}">${label}</option>`)
         );
 
-        Object.entries(response.data.roommate).forEach(
+        roommateInput.append(`<option>${this.roommatePlaceholder}</option>`);
+        Object.entries(response.data.roommates).forEach(
             ([id, object]) => roommateInput.append(`<option value="${id}" ${object.disabled ? 'disabled="disabled"': ''}">${object.label}</option>`)
         );
-    }).catch(alert);
+    }.bind(this)).catch(alert);
 };
 
 module.exports = AssignAccommodationStay;

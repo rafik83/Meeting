@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Rooming\Accommodation;
 
+use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Repository\Rooming\AccommodationRepositoryInterface;
 use Proximum\Vimeet\Domain\Rooming\Accommodation\HasRemainingOvernight;
 
@@ -29,6 +30,11 @@ class AccommodationListByPeriodQueryHandler
         $this->hasRemainingOvernight = $hasRemainingOvernight;
     }
 
+    /**
+     * @param AccommodationListByPeriodQuery $query
+     *
+     * @return Accommodation[]
+     */
     public function handle(AccommodationListByPeriodQuery $query): array
     {
         $accommodationsWithRemainingOvernight = [];

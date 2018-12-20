@@ -853,4 +853,7 @@ services:
             - '@router'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
-    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AvailabilityAction: ~
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AvailabilityAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod'

@@ -42,14 +42,22 @@ class AssignAccommodationType extends AbstractType
         $builder
             ->add('arrival', DateTimePickerType::class, [
                 'display_hour' => false,
+                'format' => 'd/m/Y',
             ])
             ->add('departure', DateTimePickerType::class, [
                 'display_hour' => false,
+                'format' => 'd/m/Y',
             ])
             ->add('accommodation', ChoiceType::class, [
                 'choices' => $this->queryBus->handle(new AccommodationListByPeriodQuery($event, $arrival, $departure)),
                 'choice_label' => function (Accommodation $accommodation) {
                     return $accommodation->getTitle();
+                },
+                'choice_value' => function (?Accommodation $accommodation = null) {
+                    if ($accommodation === null) {
+                        return null;
+                    }
+                    return $accommodation->getId();
                 },
                 'attr' => [
                     'class' => 'select2',
@@ -70,6 +78,12 @@ class AssignAccommodationType extends AbstractType
                 'choices' => $this->queryBus->handle(new GetSheetUsers($user, $event)),
                 'choice_label' => function (User $user) {
                     return $user->getFullname();
+                },
+                'choice_value' => function (?User $user = null) {
+                    if ($user === null) {
+                        return null;
+                    }
+                    return $user->getId();
                 },
                 'attr' => [
                     'class' => 'select2',
