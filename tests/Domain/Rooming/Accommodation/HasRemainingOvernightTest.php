@@ -76,4 +76,30 @@ class HasRemainingOvernightTest extends TestCase
         $hasRemainingOvernight = new HasRemainingOvernight($stayRepository->reveal());
         $this->assertFalse($hasRemainingOvernight->isSatisfiedBy($accommodation->reveal(), $arrival, $departure));
     }
+
+    public function test_accommodation_has_not_overnight_for_a_day(): void
+    {
+        $arrival = new \DateTime('2018-12-15');
+        $departure = new \DateTime('2018-12-18');
+        $accommodation = $this->prophesize(Accommodation::class);
+        $accommodation
+            ->getOvernightCapacities()
+            ->shouldBeCalled()
+            ->willReturn([
+                new AccommodationOvernightCapacity($accommodation->reveal(), new \DateTime('2018-12-16'), 10),
+                new AccommodationOvernightCapacity($accommodation->reveal(), new \DateTime('2018-12-17'), 10),
+                new AccommodationOvernightCapacity($accommodation->reveal(), new \DateTime('2018-12-18'), 10),
+            ])
+        ;
+
+        $stayRepository = $this->prophesize(StayRepositoryInterface::class);
+        $stayRepository
+            ->getTotalStaysByAccommodationPeriod($accommodation->reveal())
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $hasRemainingOvernight = new HasRemainingOvernight($stayRepository->reveal());
+        $this->assertFalse($hasRemainingOvernight->isSatisfiedBy($accommodation->reveal(), $arrival, $departure));
+    }
 }

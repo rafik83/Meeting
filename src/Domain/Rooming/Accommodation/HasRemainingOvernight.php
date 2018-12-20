@@ -52,6 +52,24 @@ class HasRemainingOvernight
             return false;
         }
 
+        $period = new \DatePeriod(
+            $arrivalAtMidnight,
+            new \DateInterval('P1D'),
+            $departureAtMidnight
+        );
+
+        foreach ($period as $day) {
+            if ($departureAtMidnight === $day) {
+                break;
+            }
+
+            $indexDay = $day->format('Y-m-d');
+
+            if (!isset($capacityPerDays[$indexDay])) {
+                return false;
+            }
+        }
+
         $totalAssignByDay = [];
         foreach ($totalStaysByAccommodationPeriod as $totalStaysPerPeriod) {
             $period = new \DatePeriod(

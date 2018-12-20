@@ -35,9 +35,10 @@ class AssignAccommodationHandler
     public function handle(AssignAccommodation $assignAccommodation): void
     {
         if (false === $this->hasRemainingOvernight->isSatisfiedBy(
-            $assignAccommodation->accommodation,
-            $assignAccommodation->arrival,
-            $assignAccommodation->departure)
+                $assignAccommodation->accommodation,
+                $assignAccommodation->arrival,
+                $assignAccommodation->departure
+            )
         ) {
             throw new HasNoRemainingOvernightException();
         }

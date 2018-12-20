@@ -61,6 +61,12 @@ class AssignAccommodationAction
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $this->commandBus->handle($assignAccommodation);
+
+                return new RedirectResponse(
+                    $this->router->generate('admin_event_rooming_list', [
+                        'event' => $event->getId(),
+                    ])
+                );
             } catch (HasNoRemainingOvernightException $exception) {
                 $form->get('accommodation')->addError(
                     new FormError($this->translator->trans('validators.rooming.accommodation.hasNoRemainingOvernightException', [], 'validators'))
@@ -74,12 +80,6 @@ class AssignAccommodationAction
                     new FormError($this->translator->trans('validators.rooming.accommodation.roommateHasStayForPeriodException', [], 'validators'))
                 );
             }
-
-            return new RedirectResponse(
-                $this->router->generate('admin_event_rooming_list', [
-                    'event' => $event->getId(),
-                ])
-            );
         }
 
         return new Response($this->engine->render('@Admin/Rooming/Stay/assignAccommodation.html.twig', [
