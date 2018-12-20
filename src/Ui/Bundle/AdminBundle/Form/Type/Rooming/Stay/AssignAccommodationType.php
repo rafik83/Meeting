@@ -46,7 +46,7 @@ class AssignAccommodationType extends AbstractType
                 'choices' => $this->queryBus->handle(new AccommodationListByPeriodQuery($event, $arrival, $departure)),
                 'choice_label' => function (Accommodation $accommodation) {
                     return $accommodation->getTitle();
-                }
+                },
             ])
             ->add('roomType', ChoiceType::class, [
                 'choices' => [

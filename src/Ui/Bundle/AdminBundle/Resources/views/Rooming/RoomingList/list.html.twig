@@ -16,7 +16,7 @@
         </thead>
         <tbody>
         {% for detailView in roomingListView.listDetailViews %}
-            <tr>
+            <tr id="user_{{ detailView.userId }}">
                 <td>
                     <ul class="list-unstyled">
                     {% for sheetView in detailView.sheetViews %}
@@ -46,6 +46,11 @@
                     {% endif %}
 
                     <ul class="nav nav-pills">
+                        <li>
+                            <a href="{{ path('admin_event_rooming_assign_accommodation_stay', {'event': event.id, 'user': detailView.userId, 'arrivalDate': '2018-12-16', 'departureDate': '2018-12-19'}) }}">
+                                {{ 'admin.rooming.list.assignAccommodation'|trans }}
+                            </a>
+                        </li>
                     {% for userStayView in detailView.userStayViews %}
                         <li>
                             <a href="#">

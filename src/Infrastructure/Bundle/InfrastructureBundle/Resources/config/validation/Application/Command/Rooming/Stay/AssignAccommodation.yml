@@ -1,0 +1,15 @@
+Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation:
+    properties:
+        arrival:
+            - Date: ~
+            - NotBlank: ~
+        departure:
+            - Date: ~
+            - NotBlank: ~
+            - Expression:
+                  expression: "this.arrival < this.departure"
+                  message: "validators.assignAccommodation.arrivalMustBeBeforeDeparture"
+        accommodation:
+            - NotNull: ~
+        roomType:
+            - NotBlank: ~

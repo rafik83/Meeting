@@ -120,5 +120,6 @@ validators.unavailability.mass.children.time_slots.range_error: 'Le début doit 
 validators.unavailability.messageLength: 'Le nombre de caractères ne doit pas être supérieur à 150'
 validators.unavailability.participants.count.min: 'Vous devez choisir au moins {{ limit }} participant'
 validators.unavailability.startTimeMustBeBeforeEndTime: 'Le début doit être avant la fin'
+validators.assignAccommodation.arrivalMustBeBeforeDeparture: 'La date d''arrivée doit être antérieure à la date de départ'
 validators.unavailability.timeSlotsExceedRange: 'Les créneaux de dispatch doivent être entre la date de début et la date de fin de l''indisponibilité de masse.'
 validators.whitespace: 'Ce champ ne doit pas contenir d''espace'
