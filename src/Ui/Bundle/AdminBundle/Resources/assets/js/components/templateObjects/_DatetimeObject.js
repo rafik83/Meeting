@@ -51,13 +51,17 @@ DatetimeObject.prototype.save = function ()
     var maxTime = this.getTimestampByInternationalFormat(dateMax);
 
     if ('date' === this.config.format) {
-        minTime.setHours(0);
-        minTime.setMinutes(0);
-        minTime.setSeconds(0);
+        if (minTime) {
+            minTime.setHours(0);
+            minTime.setMinutes(0);
+            minTime.setSeconds(0);
+        }
 
-        maxTime.setHours(23);
-        maxTime.setMinutes(59);
-        maxTime.setSeconds(59);
+        if (maxTime) {
+            maxTime.setHours(23);
+            maxTime.setMinutes(59);
+            maxTime.setSeconds(59);
+        }
     }
 
     if ((dateMin && dateMax) && minTime.getTime() > maxTime.getTime()) {
