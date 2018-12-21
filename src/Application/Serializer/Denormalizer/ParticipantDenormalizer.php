@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectValidatorNotExistException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -171,6 +172,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $email,
                     $sheetTitle,
                     $sheetRegistrationData,
+                    $sheetData,
                     $participantData,
                     $registrationTemplate
                 );
@@ -256,15 +258,21 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
         foreach ($row as $key => $column) {
             $column = trim($column);
-            $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
+            $objectKey = $mappingGuesser->getMappedOutKey($key);
 
-            if (false === $registrationObjectKey
-                || ParticipantImportTag::REGISTRATION_FIELD_MAIL === $registrationObjectKey
+            if (false === $objectKey
+                || ParticipantImportTag::REGISTRATION_FIELD_MAIL === $objectKey
             ) {
                 continue;
             }
 
-            $templateObject = $registrationTemplate->getObject($registrationObjectKey);
+            $isRegistrationObject = false;
+            try {
+                $templateObject = $registrationTemplate->getObject($objectKey);
+                $isRegistrationObject = true;
+            } catch (ObjectNotFoundException $exception) {
+                $templateObject = $sheetTemplate->getObject($objectKey);
+            }
 
             if (!$templateObject instanceof ContentObjectInterface) {
                 continue;
@@ -285,10 +293,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $this->handleColumn(
                         $templateObject,
                         $column,
-                        $sheetRegistrationData,
-                        $participantData,
-                        $registrationObjectKey,
                         $context['locale']
+                    );
+
+                    $this->dispatchTemplateData(
+                        $isRegistrationObject,
+                        $templateObject,
+                        $sheetRegistrationData,
+                        $sheetData,
+                        $participantData,
+                        $objectKey
                     );
                 } else {
                     throw new InvalidObjectContentException($validatorError);
@@ -298,10 +312,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 $this->handleColumn(
                     $templateObject,
                     $column,
-                    $sheetRegistrationData,
-                    $participantData,
-                    $registrationObjectKey,
                     $context['locale']
+                );
+
+                $this->dispatchTemplateData(
+                    $isRegistrationObject,
+                    $templateObject,
+                    $sheetRegistrationData,
+                    $sheetData,
+                    $participantData,
+                    $objectKey
                 );
             }
 
@@ -323,9 +343,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
     private function handleColumn(
         ContentObjectInterface $templateObject,
         $column,
-        array &$sheetRegistrationData,
-        array &$participantData,
-        $registrationObjectKey,
         $locale
     ): void {
         if ($templateObject instanceof TemplateObject\Nomenclature) {
@@ -340,8 +357,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
         } else {
             $templateObject->setContentValue($column);
         }
-
-        $this->dispatchTemplateData($templateObject, $sheetRegistrationData, $participantData, $registrationObjectKey);
     }
 
     /**
@@ -376,9 +391,10 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $email,
         $sheetTitle,
         $sheetRegistrationData,
+        $sheetData,
         $participantData,
         TemplateData $registrationTemplate
-    ) {
+    ): void {
         $user = $this->getUser($email);
 
         if (!$user instanceof User) {
@@ -389,7 +405,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $this->importLogger->userImported($user);
         }
 
-        $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
+        $sheet = new Sheet($context['event'], $context['type'], $sheetData, $user, $this->dateTime);
         $sheet->setImported(true);
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getFullname();
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getEmail();
@@ -415,26 +431,38 @@ class ParticipantDenormalizer implements DenormalizerInterface
     }
 
     /**
+     * @param bool           $isRegistrationObject
      * @param TemplateObject $templateObject
      * @param array          $sheetRegistrationData
+     * @param array          $sheetData
      * @param array          $participantData
-     * @param                $registrationObjectKey
+     * @param string         $objectKey
      */
     private function dispatchTemplateData(
+        bool $isRegistrationObject,
         TemplateObject $templateObject,
         array &$sheetRegistrationData,
+        array &$sheetData,
         array &$participantData,
-        $registrationObjectKey
+        string $objectKey
     ): void {
+        if (false === $isRegistrationObject) {
+            $sheetData = array_merge($sheetData, [
+                $objectKey => $templateObject->getData(),
+            ]);
+
+            return;
+        }
+
         if ($templateObject->hasTag(Tag::SHEET_DATA)) {
             $sheetRegistrationData = array_merge($sheetRegistrationData, [
-                $registrationObjectKey => $templateObject->getData(),
+                $objectKey => $templateObject->getData(),
             ]);
         }
 
         if ($templateObject->hasTag(Tag::PARTICIPANT_DATA)) {
             $participantData = array_merge($participantData, [
-                $registrationObjectKey => $templateObject->getData(),
+                $objectKey => $templateObject->getData(),
             ]);
         }
     }
