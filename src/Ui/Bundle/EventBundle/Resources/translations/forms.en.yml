@@ -42,6 +42,11 @@ form.email.placeholder: 'Enter your email'
 form.group.participant.submit: Save
 form.login.children.password.placeholder: Password
 form.login.children.rememberMe.label: 'Keep me logged in'
+form.multi_upload_data.children.submit.label: Validate
+form.multi_upload_data.children.uploads.label_add: Add
+form.multi_upload_data.children.uploads.label_delete: Delete
+form.multi_upload_data.children.uploads.prototype.children.file.label: File
+form.multi_upload_data.children.uploads.prototype.children.title.label: 'File name'
 form.multiple_sheet_request_filter_request_type.children.otherSheet.label: 'Other profile'
 form.multiple_sheet_request_filter_request_type.children.sheetConcerned.label: 'Selected profile'
 form.multiple_sheet_request_filter_request_type.children.state.filter.all: All

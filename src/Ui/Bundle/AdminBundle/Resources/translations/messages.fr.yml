@@ -730,6 +730,8 @@ admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
 admin.role.ROLE_PARTNER: Partenaire
 admin.role.ROLE_SUPER_ADMIN: Admin
+admin.rooming.accommodation.add.title: 'Ajouter un hébergement'
+admin.rooming.accommodation.update.title: 'Modifier un hébergement'
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
 admin.rule.list.action.seeWhat: 'Voit quoi ?'
@@ -749,8 +751,6 @@ admin.rooming.list.assignAccommodation: Assigner
 admin.rooming.list.comment: 'Commentaire'
 admin.rooming.list.fullName: 'Nom, prénom'
 admin.rooming.list.sheet: 'Fiche'
-admin.rooming.accommodation.add.title: 'Ajouter un hébergement'
-admin.rooming.accommodation.update.title: 'Modifier un hébergement'
 admin.rooming.stay.remove.success: 'L''assignation a bien été supprimée'
 admin.rooming.stay.remove.confirm: 'Êtes-vous sûr de vouloir supprimer cette assignation ?'
 admin.schedule_day.update.title: 'Définir les jours de l''événement'
@@ -1050,6 +1050,7 @@ admin.template.form.table.column.createdAt: 'Créé le'
 admin.template.form.table.column.title: Titre
 admin.template.form.table.column.translatedTitle: 'Titre front office'
 admin.template.form.table.column.types: Types
+admin.template.form.table.column.url: Url
 admin.template.form.table.content.create: 'Créer un template de formulaire'
 admin.template.form.table.content.edit: Modifier
 admin.template.form.table.content.parameters: Paramètres
@@ -1174,9 +1175,9 @@ admin.transactional.mail.list.key.mail_user_complete_profile: 'Invitation en tan
 admin.transactional.mail.list.key.mail_user_registered: Inscription
 admin.transactional.mail.list.key.mail_user_reset_password: 'Demande de mot de passe oublié'
 admin.transactional.mail.list.title: 'Liste des emails transactionnels'
-admin.transactional.mail.substitution.parameter.description.%agendaModifications%: 'Liste des modifications du planning'
 admin.transactional.mail.substitution.parameter.description.%agendaLink%: 'Lien vers l''agenda'
 admin.transactional.mail.substitution.parameter.description.%agendaLinkWithCTA%: 'CTA avec lien vers l''agenda'
+admin.transactional.mail.substitution.parameter.description.%agendaModifications%: 'Liste des modifications du planning'
 admin.transactional.mail.substitution.parameter.description.%event%: 'Titre de l''événément'
 admin.transactional.mail.substitution.parameter.description.%firstName%: 'Prénom du participant'
 admin.transactional.mail.substitution.parameter.description.%fromType%: 'Type de participation d''origine'

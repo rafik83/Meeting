@@ -258,6 +258,16 @@ services:
             - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
             - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductsAttributedToParticipantRemoveAllBySheet'
 
+
+
+    Proximum\Vimeet\Application\Command\User\Agenda\Version\CleanOldVersionsCommandHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.user.agenda.version_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Agenda\Version\CleanOldVersionsCommand }
+
     #
     # User Agenda Version
     #

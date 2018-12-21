@@ -180,6 +180,7 @@ services:
     Proximum\Vimeet\Application\Query\Template\Form\FormTemplateListViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
+            - '@adapter.event_url_generator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\FormTemplateListViewQuery }
 

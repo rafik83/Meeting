@@ -215,6 +215,12 @@ services:
             - '@form.factory'
             - '@router'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Template\Form\ShowAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@router'
+            - '@sheet.sheet_guesser'
+
     #
     # Content
     #

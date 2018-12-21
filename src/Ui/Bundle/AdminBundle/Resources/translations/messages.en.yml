@@ -213,6 +213,7 @@ admin.event.see.link: See
 admin.event.settings.link: 'Event settings'
 admin.event.sheet.comment.remove.confirm: 'Are you sure you want to delete this comment?'
 admin.event.sheet.index.title: 'Re-index the event sheets'
+admin.event.template.form: 'Form template'
 admin.event.template.link: Templates
 admin.event.template.package: 'Registration package'
 admin.event.template.registration: Registration
@@ -226,6 +227,8 @@ admin.event.unArchive.title: 'Unarchive event %eventTitle%'
 admin.event.update.link: Update
 admin.event.update.origin: 'Event origin'
 admin.event.update.title: 'Update the event'
+admin.event.updateEventDates: 'Change the date of the event'
+admin.event.updateEventDates.begin: 'Event start date'
 admin.event.vatMode.ati: VAT
 admin.event.vatMode.et: 'excluding VAT'
 admin.events.link: 'My events'
@@ -530,6 +533,7 @@ admin.nomenclature.table.title: Title
 admin.nomenclature.title: Nomenclatures
 admin.operator_list.action.create: 'create a new collaborator'
 admin.operator_list.action.create.partner: 'Create a new partner'
+admin.operator_list.column.lastLoginAt.never: Never
 admin.operator_list.filter.empty_filter: 'empty filters'
 admin.operator_list.link: 'Collaborators list'
 admin.operator_list.table.content.admin.events.none: None
@@ -634,6 +638,7 @@ admin.planner.analytics.sheet.table.column.sheet: Sheet
 admin.planner.analytics.sheet.table.column.type: Type
 admin.planner.analytics.sheet.title: Profile
 admin.planner.analytics.slotFillingRate.graph.legend: 'Analytic pooled slots filling rate'
+admin.planner.analytics.spot.table.column.priority: Priority
 admin.planner.analytics.spot.table.column.reference: Reference
 admin.planner.analytics.spot.table.column.satisfaction: Satisfaction
 admin.planner.analytics.spot.table.column.shared: Pooled
@@ -715,6 +720,8 @@ admin.promotion_code.table.column.validUntil: 'valid until'
 admin.promotion_code.table.no_result: 'No promotion code'
 admin.promotion_code.title: 'Promotions code'
 admin.promotion_code.update: 'Update the promotion code'
+admin.remove: Delete
+admin.remove.confirmation: 'Are you sure you want to delete this user?'
 admin.role.ROLE_HOST: Host
 admin.role.ROLE_OPERATOR: collaborator
 admin.role.ROLE_ORGANIZER: Organizer
@@ -1018,6 +1025,22 @@ admin.template.action.update: update
 admin.template.action.updating: 'backup processing'
 admin.template.block.objects_collection: 'Block object collection'
 admin.template.blocks: blocks
+admin.template.form.action.create: 'Create a form template'
+admin.template.form.addBlock: 'Add a step'
+admin.template.form.addLocale: 'Add a language'
+admin.template.form.link: 'Form template'
+admin.template.form.state.draft: Draft
+admin.template.form.state.published: Online
+admin.template.form.table.column.action: Action
+admin.template.form.table.column.createdAt: 'Created on'
+admin.template.form.table.column.title: Title
+admin.template.form.table.column.translatedTitle: 'On line title'
+admin.template.form.table.column.types: Types
+admin.template.form.table.content.create: 'Create a form template'
+admin.template.form.table.content.edit: Modify
+admin.template.form.table.content.parameters: Settings
+admin.template.form.title: 'Form template'
+admin.template.form.update_parameters.title: 'Form template settings'
 admin.template.objects: objects
 admin.template.objectsListEmpty: 'no object available'
 admin.template.preview.title: 'catalog preview'
@@ -1115,6 +1138,7 @@ admin.transactional.mail.list.column.type.options.none: None
 admin.transactional.mail.list.column.type.options.some: 'All the others'
 admin.transactional.mail.list.disabled: Disabled
 admin.transactional.mail.list.generic.title: 'Generic emails'
+admin.transactional.mail.list.key.mail_agenda_version_diff_changed: 'Automatic notification of schedule modification'
 admin.transactional.mail.list.key.mail_happening_participation_automatically_updated: 'Automatic recalculation of sub-events following change of availability range'
 admin.transactional.mail.list.key.mail_order_confirmed: 'Passed orders'
 admin.transactional.mail.list.key.mail_participation_added_confirmation: 'Participant added to your sheet'
@@ -1136,6 +1160,9 @@ admin.transactional.mail.list.key.mail_user_complete_profile: 'Invitation as a p
 admin.transactional.mail.list.key.mail_user_registered: Registration
 admin.transactional.mail.list.key.mail_user_reset_password: 'Forgotten password request'
 admin.transactional.mail.list.title: 'List of transactional emails'
+admin.transactional.mail.substitution.parameter.description.%agendaLink%: 'Link to the agenda'
+admin.transactional.mail.substitution.parameter.description.%agendaLinkWithCTA%: 'CTA with link to the agenda'
+admin.transactional.mail.substitution.parameter.description.%agendaModifications%: 'List of schedule changes'
 admin.transactional.mail.substitution.parameter.description.%event%: 'Event title'
 admin.transactional.mail.substitution.parameter.description.%firstName%: 'Participant first name'
 admin.transactional.mail.substitution.parameter.description.%fromType%: 'Original participation type'
@@ -1186,6 +1213,9 @@ admin.type.badge.example.sheetTitle: 'Company name example'
 admin.type.content.specificTermsOfSale: 'Special terms of sales'
 admin.type.create.link: Add
 admin.type.create.title: 'add a type of participation'
+admin.type.form.template: Forms
+admin.type.form.template.status.draft: Draft
+admin.type.form.template.status.published: Online
 admin.type.hidden: hidden
 admin.type.id: ID
 admin.type.link: 'Participation types'

@@ -73,4 +73,18 @@ class VersionRepository implements VersionRepositoryInterface
             ->getOneOrNullResult()
         ;
     }
+
+    public function removeVersionsOfEvents(array $events): void
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(Version::class, 'version')
+            ->where('version.event IN (:events)')
+            ->setParameter('events', $events)
+        ;
+
+        $queryBuilder->getQuery()->execute();
+    }
 }
