@@ -67,17 +67,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
     /** @var UserEventRepositoryInterface */
     private $userEventRepository;
 
-    /**
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param UserRepositoryInterface        $userRepository
-     * @param SheetRepositoryInterface       $sheetRepository
-     * @param UserEventRepositoryInterface   $userEventRepository
-     * @param TemplateDataFactory            $templateDataFactory
-     * @param EmailValidator                 $emailValidator
-     * @param Synchronizer                   $synchronizer
-     * @param ParticipantImportLogger        $importLogger
-     * @param \DateTimeInterface             $dateTime
-     */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         UserRepositoryInterface $userRepository,
