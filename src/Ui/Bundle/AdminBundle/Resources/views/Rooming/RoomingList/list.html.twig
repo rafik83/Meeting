@@ -43,7 +43,7 @@
                         {{ detailView.arrivalDate|localizeddate('short', detailView.hasArrivalHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
                     {% endif %}
                     {% if detailView.departureDate is not null %}
-                        / {{ detailView.departureDate|localizeddate('short', detailView.hasDepartureHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
+                        ➡ {{ detailView.departureDate|localizeddate('short', detailView.hasDepartureHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
                     {% endif %}
 
                     <ul class="nav nav-pills">
@@ -55,7 +55,10 @@
                     {% for userStayView in detailView.userStayViews %}
                         <li>
                             <a href="#">
-                                <small>{{ userStayView.arrivalDate|localizeddate('medium', 'none', app.request.locale, event.timeZone) }} / {{ userStayView.departureDate|localizeddate('medium', 'none', app.request.locale, event.timeZone) }}</small>
+                                <small>
+                                    {{ userStayView.arrivalDate|localizeddate('short', 'none', app.request.locale, event.timeZone) }}
+                                    ➡
+                                    {{ userStayView.departureDate|localizeddate('short', 'none', app.request.locale, event.timeZone) }}</small>
                                 <br>
                                 {{ userStayView.accommodationTitle }}
                                 <span class="label label-default">{{ userStayView.roomType }}</span>
@@ -65,19 +68,21 @@
                                     {{ userStayView.roommateView.firstName|capitalize }}
                                 {% endif %}
                             </a>
-                            {{ delete_button(
-                                path('admin_event_rooming_remove_stay', {
-                                    'event': event.id,
-                                    'stay': userStayView.stayId,
-                                    'user': detailView.userId
-                                }),
-                                'admin.remove'|trans,
-                                {
-                                    'class': 'btn btn-danger btn-sm',
-                                    'data-confirm': 'admin.rooming.stay.remove.confirm'|trans
-                                },
-                                constant('Proximum\\Vimeet\\Domain\\Intention\\IntentionType::INTENTION_REMOVE_STAY')
-                            ) }}
+                            <div class="text-center">
+                                {{ delete_button(
+                                    path('admin_event_rooming_remove_stay', {
+                                        'event': event.id,
+                                        'stay': userStayView.stayId,
+                                        'user': detailView.userId
+                                    }),
+                                    'admin.remove'|trans,
+                                    {
+                                        'class': 'btn btn-danger btn-xs',
+                                        'data-confirm': 'admin.rooming.stay.remove.confirm'|trans
+                                    },
+                                    constant('Proximum\\Vimeet\\Domain\\Intention\\IntentionType::INTENTION_REMOVE_STAY')
+                                ) }}
+                            </div>
                         </li>
                     {% endfor %}
                     </ul>

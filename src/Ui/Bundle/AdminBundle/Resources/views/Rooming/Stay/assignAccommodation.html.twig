@@ -1,4 +1,6 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
+{% block goback_link path('admin_event_rooming_list', { event: event.id }) %}
+
 {% block form_title 'admin.rooming.stay.assignAccommodation.add.title'|trans ~ ' : ' ~ userName %}
 

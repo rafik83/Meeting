@@ -745,6 +745,7 @@ admin.rule.see-what.title: 'Règle de %seer% sur %seeable%'
 admin.rooming.stay.assignAccommodation.add.title: 'Ajouter une assignation'
 admin.rooming.title: 'Rooming list'
 admin.rooming.list.arrivalDateAndDepartureDate: 'Arrivée / Départ'
+admin.rooming.list.assignAccommodation: Assigner
 admin.rooming.list.comment: 'Commentaire'
 admin.rooming.list.fullName: 'Nom, prénom'
 admin.rooming.list.sheet: 'Fiche'
