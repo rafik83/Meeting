@@ -246,4 +246,81 @@ class ListViewQueryHandlerTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
+
+    public function test_without_stay_handle(): void
+    {
+        $dateArrival = new \DateTime('2018-12-10 16:00:00.000');
+        $dateDeparture = new \DateTime('2018-12-16 18:00:00.000');
+
+        $event = $this->prophesize(Event::class);
+        $event->getId()->shouldBeCalled()->willReturn(1000);
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $userRepository
+            ->getWithSheetAndTypeByEvent($event->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    new UserSheetTypeView(
+                        1,
+                        11,
+                        'Jean',
+                        'Dupont',
+                        'Aanera',
+                        'Stand A10',
+                        'Fournisseur',
+                        $dateArrival,
+                        $dateDeparture,
+                        false,
+                        false
+                    ),
+                ]
+            )
+        ;
+
+        $stayRepository = $this->prophesize(StayRepositoryInterface::class);
+        $stayRepository->getStaysByEvent($event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+        $extraDataRepository
+            ->getExtraDataForEventIdAndNameIndexedByUserId(1000, Type::ROOMING_COMMENT)
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $overlappedTimeRangeTruncater = new OverlappedTimeRangeTruncater();
+
+        $handler = new ListViewQueryHandler(
+            $userRepository->reveal(),
+            $stayRepository->reveal(),
+            $extraDataRepository->reveal(),
+            $overlappedTimeRangeTruncater
+        );
+        $result = $handler->handle(new ListViewQuery($event->reveal(), 'fr'));
+
+        $expected = new ListView(
+            [
+                1 => new ListDetailView(
+                    1,
+                    'Jean',
+                    'Dupont',
+                    $dateArrival,
+                    $dateDeparture,
+                    false,
+                    false,
+                    null,
+                    [
+                        new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10'),
+                    ],
+                    [
+                        new UserStayToAssignView($dateArrival, $dateDeparture),
+                    ]
+                ),
+            ]
+        );
+
+        $this->assertEquals($expected, $result);
+    }
 }

@@ -166,8 +166,16 @@ class ListViewQueryHandler
         foreach ($listDetailViews as $listDetailView) {
             if (null === $listDetailView->arrivalDate
                 || null === $listDetailView->departureDate
-                || empty($listDetailView->userStayViews)
             ) {
+                continue;
+            }
+
+            if (empty($listDetailView->userStayViews)) {
+                $listDetailView->userStayViews[] = new UserStayToAssignView(
+                    $listDetailView->arrivalDate,
+                    $listDetailView->departureDate
+                );
+
                 continue;
             }
 
