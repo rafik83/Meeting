@@ -130,6 +130,10 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $context['type'],
             $context['locale']
         );
+        $sheetTemplate = $this->templateDataFactory->createSheetTemplateFromType(
+            $context['type'],
+            $context['locale']
+        );
 
         foreach ($data as $key => $row) {
             if (!array_key_exists($mappedMailCsvColumn, $row)) {
@@ -154,10 +158,11 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             try {
-                list($sheetData, $participantData, $sheetTitle) = $this->handleRow(
+                list($sheetRegistrationData, $sheetData, $participantData, $sheetTitle) = $this->handleRow(
                     $row,
                     $mappingGuesser,
                     $registrationTemplate,
+                    $sheetTemplate,
                     $context
                 );
 
@@ -165,7 +170,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $context,
                     $email,
                     $sheetTitle,
-                    $sheetData,
+                    $sheetRegistrationData,
                     $participantData,
                     $registrationTemplate
                 );
@@ -226,6 +231,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param array          $row
      * @param MappingGuesser $mappingGuesser
      * @param TemplateData   $registrationTemplate
+     * @param TemplateData   $sheetTemplate
      * @param array          $context
      *
      * @throws InvalidObjectContentException
@@ -237,11 +243,13 @@ class ParticipantDenormalizer implements DenormalizerInterface
         array $row,
         MappingGuesser $mappingGuesser,
         TemplateData $registrationTemplate,
+        TemplateData $sheetTemplate,
         array $context
     ) {
-        $sheetData       = [];
+        $sheetRegistrationData = [];
         $participantData = [];
-        $sheetTitle      = '';
+        $sheetData = [];
+        $sheetTitle = '';
 
         // clear previous data before process current imported participant row
         $registrationTemplate->clear();
@@ -277,7 +285,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $this->handleColumn(
                         $templateObject,
                         $column,
-                        $sheetData,
+                        $sheetRegistrationData,
                         $participantData,
                         $registrationObjectKey,
                         $context['locale']
@@ -290,7 +298,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 $this->handleColumn(
                     $templateObject,
                     $column,
-                    $sheetData,
+                    $sheetRegistrationData,
                     $participantData,
                     $registrationObjectKey,
                     $context['locale']
@@ -309,13 +317,13 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
         }
 
-        return [$sheetData, $participantData, $sheetTitle];
+        return [$sheetRegistrationData, $sheetData, $participantData, $sheetTitle];
     }
 
     private function handleColumn(
         ContentObjectInterface $templateObject,
         $column,
-        array &$sheetData,
+        array &$sheetRegistrationData,
         array &$participantData,
         $registrationObjectKey,
         $locale
@@ -333,7 +341,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $templateObject->setContentValue($column);
         }
 
-        $this->dispatchTemplateData($templateObject, $sheetData, $participantData, $registrationObjectKey);
+        $this->dispatchTemplateData($templateObject, $sheetRegistrationData, $participantData, $registrationObjectKey);
     }
 
     /**
@@ -359,7 +367,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param array        $context
      * @param string       $email
      * @param string       $sheetTitle
-     * @param array        $sheetData
+     * @param array        $sheetRegistrationData
      * @param array        $participantData
      * @param TemplateData $registrationTemplate
      */
@@ -367,7 +375,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         array $context,
         $email,
         $sheetTitle,
-        $sheetData,
+        $sheetRegistrationData,
         $participantData,
         TemplateData $registrationTemplate
     ) {
@@ -386,7 +394,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getFullname();
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getEmail();
         $sheet->setTitle($sheetTitle);
-        $sheet->setRegistrationData($sheetData);
+        $sheet->setRegistrationData($sheetRegistrationData);
         $this->sheetRepository->add($sheet);
 
         $participant = new Participant(
@@ -408,18 +416,18 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
     /**
      * @param TemplateObject $templateObject
-     * @param array          $sheetData
+     * @param array          $sheetRegistrationData
      * @param array          $participantData
      * @param                $registrationObjectKey
      */
     private function dispatchTemplateData(
         TemplateObject $templateObject,
-        &$sheetData,
-        &$participantData,
+        array &$sheetRegistrationData,
+        array &$participantData,
         $registrationObjectKey
     ): void {
         if ($templateObject->hasTag(Tag::SHEET_DATA)) {
-            $sheetData = array_merge($sheetData, [
+            $sheetRegistrationData = array_merge($sheetRegistrationData, [
                 $registrationObjectKey => $templateObject->getData(),
             ]);
         }
