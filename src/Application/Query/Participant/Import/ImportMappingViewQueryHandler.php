@@ -35,11 +35,6 @@ class ImportMappingViewQueryHandler
     /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @param SerializerAdapterInterface $serializerAdapter
-     * @param SessionAdapter             $session
-     * @param TemplateDataFactory        $templateDataFactory
-     */
     public function __construct(
         SerializerAdapterInterface $serializerAdapter,
         SessionAdapter $session,
@@ -59,7 +54,7 @@ class ImportMappingViewQueryHandler
      *
      * @return ImportMappingView
      */
-    public function handle(ImportMappingViewQuery $query)
+    public function handle(ImportMappingViewQuery $query): ImportMappingView
     {
         $data = $this->serializerAdapter->decode(
             file_get_contents($this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE)),
