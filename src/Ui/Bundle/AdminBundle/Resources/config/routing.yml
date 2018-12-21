@@ -2049,3 +2049,12 @@ admin_event_rooming_assign_accommodation_stay_availability:
         user: \d+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AvailabilityAction
+
+admin_event_rooming_remove_stay:
+    path: /event/{event}/rooming/user/{user}/stay/{stay}/remove
+    requirements:
+        event: \d+
+        stay: \d+
+        user: \d+
+    methods: [DELETE]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\RemoveAction

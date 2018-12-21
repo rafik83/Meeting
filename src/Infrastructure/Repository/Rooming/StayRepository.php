@@ -46,6 +46,12 @@ class StayRepository implements StayRepositoryInterface
         $this->entityManager->flush($stay);
     }
 
+    public function remove(Stay $stay): void
+    {
+        $this->entityManager->remove($stay);
+        $this->entityManager->flush($stay);
+    }
+
     public function getTotalStaysByAccommodationPeriod(Accommodation $accommodation): array
     {
         return $this->entityManager->createQueryBuilder()

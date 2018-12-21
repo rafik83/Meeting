@@ -750,6 +750,8 @@ admin.rooming.list.fullName: 'Nom, prénom'
 admin.rooming.list.sheet: 'Fiche'
 admin.rooming.accommodation.add.title: 'Ajouter un hébergement'
 admin.rooming.accommodation.update.title: 'Modifier un hébergement'
+admin.rooming.stay.remove.success: 'L''assignation a bien été supprimée'
+admin.rooming.stay.remove.confirm: 'Êtes-vous sûr de vouloir supprimer cette assignation ?'
 admin.schedule_day.update.title: 'Définir les jours de l''événement'
 admin.schedule.days.day: Jour
 admin.schedule.days.endTime: 'Heure de fin'
