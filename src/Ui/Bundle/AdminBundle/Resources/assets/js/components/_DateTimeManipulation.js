@@ -10,13 +10,18 @@ DateTimeManipulation.prototype.getTimestampByInternationalFormat = function (dat
 
     var splitDate = date.split('/');
     var splitYear = splitDate[2].split(' ');
-    var splitTime = splitYear[1].split(':');
+    var hours = 0;
+    var minutes = 0;
+
+    if (splitYear[1]) {
+        var splitTime = splitYear[1].split(':');
+        hours = splitTime[0];
+        minutes = splitTime[1];
+    }
 
     var day = splitDate[0];
     var month = splitDate[1];
     var year = splitYear[0];
-    var hours = splitTime[0];
-    var minutes = splitTime[1];
 
     return new Date(year, month, day, hours, minutes);
 };

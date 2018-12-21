@@ -45,25 +45,34 @@ AssignAccommodationStay.prototype.onSelectRoomType = function(e) {
 };
 
 AssignAccommodationStay.prototype.onChangePeriod = function(e) {
-
-    const arrivalDate = this.arrivalDateInput.value;
-    const departureDate = this.departureDateInput.value;
+    const arrivalString = this.arrivalDateInput.value;
+    const departureString = this.departureDateInput.value;
 
     // rewrite form action
     const action = this.element.action.split('?');
-    this.element.action = action[0] + '?arrivalDate=' + arrivalDate + '&departureDate=' + departureDate;
+    this.element.action = action[0] + '?arrivalDate=' + arrivalString + '&departureDate=' + departureString;
 
     // get fresh data
     const accommodationInput = $(this.accommodationInput);
     const roommateInput = $(this.roommateInput);
 
     accommodationInput.empty();
+    accommodationInput.attr('disabled','disabled');
+
     roommateInput.empty();
+    roommateInput.attr('disabled','disabled');
+
+    const arrivalDate = this.dateTimeManipulation.getTimestampByInternationalFormat(arrivalString);
+    const departureDate = this.dateTimeManipulation.getTimestampByInternationalFormat(departureString);
+
+    if (arrivalDate >= departureDate) {
+        return;
+    }
 
     axios.get(this.url, {
         params: {
-            arrivalDate,
-            departureDate,
+            arrivalDate: arrivalString,
+            departureDate: departureString,
         }
     }).then(function (response) {
         Object.entries(response.data.accommodations).forEach(
@@ -74,6 +83,9 @@ AssignAccommodationStay.prototype.onChangePeriod = function(e) {
         Object.entries(response.data.roommates).forEach(
             ([id, object]) => roommateInput.append(`<option value="${id}" ${object.disabled ? 'disabled="disabled"': ''}">${object.label}</option>`)
         );
+
+        accommodationInput.removeAttr('disabled');
+        roommateInput.removeAttr('disabled');
     }.bind(this)).catch(alert);
 };
 
