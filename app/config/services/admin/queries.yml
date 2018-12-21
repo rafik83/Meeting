@@ -206,6 +206,7 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
             - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Domain\Time\OverlappedTimeRangeTruncater'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\RoomingList\ListViewQuery }
 

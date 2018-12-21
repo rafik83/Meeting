@@ -2,16 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Rooming\RoomingList\View;
 
-class UserStayView
+class UserStayView extends AbstractUserStayView
 {
     /** @var int */
     public $stayId;
-
-    /** @var \DateTimeInterface */
-    public $arrivalDate;
-
-    /** @var \DateTimeInterface */
-    public $departureDate;
 
     /** @var string */
     public $accommodationTitle;
@@ -24,17 +18,22 @@ class UserStayView
 
     public function __construct(
         int $stayId,
-        \DateTimeInterface $arrivalDate,
-        \DateTimeInterface $departureDate,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
         string $accommodationTitle,
         string $roomType,
         ?RoommateView $roommateView = null
     ) {
+        parent::__construct($begin, $end);
+
         $this->stayId = $stayId;
-        $this->arrivalDate = $arrivalDate;
-        $this->departureDate = $departureDate;
         $this->accommodationTitle = $accommodationTitle;
         $this->roomType = $roomType;
         $this->roommateView = $roommateView;
+    }
+
+    public function isAssigned(): bool
+    {
+        return true;
     }
 }

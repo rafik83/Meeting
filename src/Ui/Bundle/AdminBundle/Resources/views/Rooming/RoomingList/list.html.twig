@@ -6,7 +6,7 @@
 {% block content %}
     <h1 class="page-header">{{ 'admin.rooming.title'|trans }}</h1>
 
-    <table class="table">
+    <table class="table table-striped table-hover table-condensed">
         <thead>
         <tr>
             <th>{{ 'admin.rooming.list.sheet'|trans }}</th>
@@ -39,53 +39,63 @@
                     </a>
                 </td>
                 <td>
-                    {% if detailView.arrivalDate is not null %}
-                        {{ detailView.arrivalDate|localizeddate('short', detailView.hasArrivalHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
-                    {% endif %}
-                    {% if detailView.departureDate is not null %}
-                        ➡ {{ detailView.departureDate|localizeddate('short', detailView.hasDepartureHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
-                    {% endif %}
+                    {% if detailView.userStayViews or detailView.arrivalDate or detailView.departureDate %}
+                        <table class="table table-condensed table-bordered">
+                            <tr>
+                                <th class="text-center" colspan="{{ detailView.userStayViews|length }}">
+                                    {% if detailView.arrivalDate is not null %}
+                                        {{ detailView.arrivalDate|localizeddate('short', detailView.hasArrivalHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
+                                    {% endif %}
+                                    {% if detailView.departureDate is not null %}
+                                        ➡ {{ detailView.departureDate|localizeddate('short', detailView.hasDepartureHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
+                                    {% endif %}
+                                </th>
+                            </tr>
+                            <tr>
+                                {% for userStayView in detailView.userStayViews %}
+                                    <td class="text-center">
+                                        {% if not userStayView.isAssigned %}
+                                            <a class="btn btn-small btn-default" href="{{ path('admin_event_rooming_assign_accommodation_stay', {
+                                                'event': event.id,
+                                                'user': detailView.userId,
+                                                'arrivalDate': userStayView.begin|date('d/m/Y'),
+                                                'departureDate': userStayView.end|date('d/m/Y')
+                                            }) }}">
+                                                {{ 'admin.rooming.list.assignAccommodation'|trans }}
+                                            </a>
+                                        {% else %}
+                                            <small>
+                                                {{ userStayView.begin|localizeddate('short', 'none', app.request.locale, event.timeZone) }}
+                                                ➡
+                                                {{ userStayView.end|localizeddate('short', 'none', app.request.locale, event.timeZone) }}</small>
+                                            <br>
+                                            {{ userStayView.accommodationTitle }}
+                                            <span class="label label-default">{{ userStayView.roomType }}</span>
 
-                    <ul class="nav nav-pills">
-                        <li>
-                            <a href="{{ path('admin_event_rooming_assign_accommodation_stay', {'event': event.id, 'user': detailView.userId, 'arrivalDate': '16/12/2018', 'departureDate': '19/12/2018'}) }}">
-                                {{ 'admin.rooming.list.assignAccommodation'|trans }}
-                            </a>
-                        </li>
-                    {% for userStayView in detailView.userStayViews %}
-                        <li>
-                            <a href="#">
-                                <small>
-                                    {{ userStayView.arrivalDate|localizeddate('short', 'none', app.request.locale, event.timeZone) }}
-                                    ➡
-                                    {{ userStayView.departureDate|localizeddate('short', 'none', app.request.locale, event.timeZone) }}</small>
-                                <br>
-                                {{ userStayView.accommodationTitle }}
-                                <span class="label label-default">{{ userStayView.roomType }}</span>
-
-                                {% if userStayView.roommateView %}
-                                    <br><b>{{ userStayView.roommateView.lastName|upper }}</b>
-                                    {{ userStayView.roommateView.firstName|capitalize }}
-                                {% endif %}
-                            </a>
-                            <div class="text-center">
-                                {{ delete_button(
-                                    path('admin_event_rooming_remove_stay', {
-                                        'event': event.id,
-                                        'stay': userStayView.stayId,
-                                        'user': detailView.userId
-                                    }),
-                                    'admin.remove'|trans,
-                                    {
-                                        'class': 'btn btn-danger btn-xs',
-                                        'data-confirm': 'admin.rooming.stay.remove.confirm'|trans
-                                    },
-                                    constant('Proximum\\Vimeet\\Domain\\Intention\\IntentionType::INTENTION_REMOVE_STAY')
-                                ) }}
-                            </div>
-                        </li>
-                    {% endfor %}
-                    </ul>
+                                            {% if userStayView.roommateView %}
+                                                <br><b>{{ userStayView.roommateView.lastName|upper }}</b>
+                                                {{ userStayView.roommateView.firstName|capitalize }}
+                                            {% endif %}
+                                            
+                                            {{ delete_button(
+                                                path('admin_event_rooming_remove_stay', {
+                                                    'event': event.id,
+                                                    'stay': userStayView.stayId,
+                                                    'user': detailView.userId
+                                                }),
+                                                'admin.remove'|trans,
+                                                {
+                                                    'class': 'btn btn-danger btn-xs',
+                                                    'data-confirm': 'admin.rooming.stay.remove.confirm'|trans
+                                                },
+                                                constant('Proximum\\Vimeet\\Domain\\Intention\\IntentionType::INTENTION_REMOVE_STAY')
+                                            ) }}
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                    {% endif %}
                 </td>
                 <td>
                     {{ detailView.comment }}

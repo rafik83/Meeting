@@ -10,6 +10,7 @@ use Proximum\Vimeet\Domain\Rooming\Accommodation\HasRemainingOvernight;
 use Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod;
 use Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriodException;
 use Proximum\Vimeet\Domain\Rooming\Stay\RoommateHasStayForPeriodException;
+use Proximum\Vimeet\Domain\Time\MidnightTransformer;
 
 class AssignAccommodationHandler
 {
@@ -58,8 +59,8 @@ class AssignAccommodationHandler
         $stay = new Stay(
             $assignAccommodation->event,
             $assignAccommodation->user,
-            $assignAccommodation->arrival,
-            $assignAccommodation->departure,
+            MidnightTransformer::getDateAtMidnight($assignAccommodation->arrival),
+            MidnightTransformer::getDateAtMidnight($assignAccommodation->departure),
             $assignAccommodation->accommodation,
             $assignAccommodation->roomType
         );

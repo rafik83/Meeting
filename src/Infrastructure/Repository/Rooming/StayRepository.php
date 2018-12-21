@@ -35,9 +35,11 @@ class StayRepository implements StayRepositoryInterface
             ->from(Stay::class, 'stay')
             ->join('stay.accommodation', 'accommodation', 'WITH', 'stay.event = :event')
             ->join('stay.users', 'user')
+            ->orderBy('stay.arrival')
             ->setParameter('event', $event)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function add(Stay $stay): void

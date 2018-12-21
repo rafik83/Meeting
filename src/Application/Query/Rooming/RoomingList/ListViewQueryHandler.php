@@ -2,16 +2,21 @@
 
 namespace Proximum\Vimeet\Application\Query\Rooming\RoomingList;
 
+use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\AbstractUserStayView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\ListDetailView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\ListView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\RoommateView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\SheetView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
+use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayToAssignView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayView;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\MidnightTransformer;
+use Proximum\Vimeet\Domain\Time\OverlappedTimeRangeTruncater;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class ListViewQueryHandler
@@ -25,14 +30,19 @@ class ListViewQueryHandler
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
+    /** @var OverlappedTimeRangeTruncater */
+    private $overlappedTimeRangeTruncater;
+
     public function __construct(
         UserRepositoryInterface $userRepository,
         StayRepositoryInterface $stayRepository,
-        ExtraDataRepositoryInterface $extraDataRepository
+        ExtraDataRepositoryInterface $extraDataRepository,
+        OverlappedTimeRangeTruncater $overlappedTimeRangeTruncater
     ) {
         $this->userRepository = $userRepository;
         $this->stayRepository = $stayRepository;
         $this->extraDataRepository = $extraDataRepository;
+        $this->overlappedTimeRangeTruncater = $overlappedTimeRangeTruncater;
     }
 
     public function handle(ListViewQuery $query): ListView
@@ -52,8 +62,8 @@ class ListViewQueryHandler
         foreach ($stayViews as $stayView) {
             $stayViewsByUserId[$stayView->userId][] = new UserStayView(
                 $stayView->stayId,
-                $stayView->arrival,
-                $stayView->departure,
+                MidnightTransformer::getDateAtMidnight($stayView->arrival),
+                MidnightTransformer::getDateAtMidnight($stayView->departure),
                 $stayView->accommodationTitle,
                 $stayView->roomType
             );
@@ -87,6 +97,8 @@ class ListViewQueryHandler
         }
 
         $this->assignRoommateToUserStayView($userIdsByStayId, $listDetailViews);
+
+        $this->getUserStayViewsToAssign($listDetailViews);
 
         return new ListView($listDetailViews);
     }
@@ -133,10 +145,48 @@ class ListViewQueryHandler
 
         foreach ($listDetailViews as $userId => $listDetailView) {
             foreach ($listDetailView->userStayViews as $userStayView) {
+                if ($userStayView instanceof UserStayToAssignView) {
+                    continue;
+                }
+
                 if (isset($roommateViewByUserIdByStayId[$userStayView->stayId][$listDetailView->userId])) {
                     $userStayView->roommateView = $roommateViewByUserIdByStayId[$userStayView->stayId][$listDetailView->userId];
                 }
             }
+        }
+    }
+
+    /**
+     * @param ListDetailView[] $listDetailViews
+     *
+     * @return array
+     */
+    private function getUserStayViewsToAssign(array &$listDetailViews): void
+    {
+        foreach ($listDetailViews as $listDetailView) {
+            if (null === $listDetailView->arrivalDate
+                || null === $listDetailView->departureDate
+                || empty($listDetailView->userStayViews)
+            ) {
+                continue;
+            }
+
+            $period = new TimeRangeView(
+                MidnightTransformer::getDateAtMidnight($listDetailView->arrivalDate),
+                MidnightTransformer::getDateAtMidnight($listDetailView->departureDate)
+            );
+            $timeRangeViews = $this->overlappedTimeRangeTruncater->truncate($period, $listDetailView->userStayViews);
+
+            foreach ($timeRangeViews as $timeRangeView) {
+                $listDetailView->userStayViews[] = new UserStayToAssignView($timeRangeView->begin, $timeRangeView->end);
+            }
+
+            usort(
+                $listDetailView->userStayViews,
+                function (AbstractUserStayView $userStayView, AbstractUserStayView $otherUserStayView) {
+                    return $userStayView->getBegin() <=> $otherUserStayView->getBegin();
+                }
+            );
         }
     }
 }

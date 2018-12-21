@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Rooming\Accommodation;
 
 use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\MidnightTransformer;
 
 class HasRemainingOvernight
 {
@@ -28,8 +29,8 @@ class HasRemainingOvernight
         \DateTimeInterface $arrival,
         \DateTimeInterface $departure
     ): bool {
-        $arrivalAtMidnight = $this->getDateAtMidnight($arrival);
-        $departureAtMidnight = $this->getDateAtMidnight($departure);
+        $arrivalAtMidnight = MidnightTransformer::getDateAtMidnight($arrival);
+        $departureAtMidnight = MidnightTransformer::getDateAtMidnight($departure);
         $overnightCapacities = $accommodation->getOvernightCapacities();
         $totalStaysByAccommodationPeriod = $this->stayRepository
             ->getTotalStaysByAccommodationPeriod($accommodation)
@@ -38,7 +39,7 @@ class HasRemainingOvernight
         $capacityPerDays = [];
 
         foreach ($overnightCapacities as $overnightCapacity) {
-            $overnightArrivalDate = $this->getDateAtMidnight($overnightCapacity->getDate());
+            $overnightArrivalDate = MidnightTransformer::getDateAtMidnight($overnightCapacity->getDate());
 
             if ($arrivalAtMidnight <= $overnightArrivalDate
                 && $departureAtMidnight > $overnightArrivalDate
@@ -79,7 +80,7 @@ class HasRemainingOvernight
             );
 
             foreach ($period as $day) {
-                $midnightDay = $this->getDateAtMidnight($day);
+                $midnightDay = MidnightTransformer::getDateAtMidnight($day);
 
                 if ($arrivalAtMidnight <= $midnightDay
                     && $departureAtMidnight > $midnightDay
@@ -102,13 +103,5 @@ class HasRemainingOvernight
         }
 
         return true;
-    }
-
-    private function getDateAtMidnight(\DateTimeInterface $dateTime): \DateTimeInterface
-    {
-        return (new \DateTime())
-            ->setTimestamp($dateTime->getTimestamp())
-            ->setTime(0, 0, 0, 0)
-        ;
     }
 }
