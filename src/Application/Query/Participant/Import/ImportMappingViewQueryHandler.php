@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Participant\Import;
 
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -19,20 +20,20 @@ use Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter;
 
 class ImportMappingViewQueryHandler
 {
-    /**
-     * @var SessionAdapter
-     */
+    private const HEADER_REGISTRATION = 'admin.participant_import.header.registration';
+    private const HEADER_SHEET = 'admin.participant_import.header.sheet';
+
+    /** @var SessionAdapter */
     private $session;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var SerializerAdapterInterface
-     */
+    /** @var SerializerAdapterInterface */
     private $serializerAdapter;
+
+    /** @var TranslatorInterface */
+    private $translator;
 
     /**
      * @param SerializerAdapterInterface $serializerAdapter
@@ -42,11 +43,13 @@ class ImportMappingViewQueryHandler
     public function __construct(
         SerializerAdapterInterface $serializerAdapter,
         SessionAdapter $session,
-        TemplateDataFactory $templateDataFactory
+        TemplateDataFactory $templateDataFactory,
+        TranslatorInterface $translator
     ) {
-        $this->serializerAdapter   = $serializerAdapter;
-        $this->session             = $session;
+        $this->serializerAdapter = $serializerAdapter;
+        $this->session = $session;
         $this->templateDataFactory = $templateDataFactory;
+        $this->translator = $translator;
     }
 
     /**
@@ -70,13 +73,12 @@ class ImportMappingViewQueryHandler
 
         $csvHeaders = array_keys($data[0]);
 
-        $registrationHeaders = [
+        $headers = [
             ParticipantImportTag::REGISTRATION_FIELD_IGNORE => 'form.participant_import.field.ignore',
-            ParticipantImportTag::REGISTRATION_FIELD_MAIL   => 'form.participant_import.field.mail',
+            ParticipantImportTag::REGISTRATION_FIELD_MAIL => 'form.participant_import.field.mail',
         ];
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($query->type, $query->locale);
-
         $templateObjects = $registrationTemplate->getParticipantAndSheetDataExceptedImageObject();
 
         foreach ($templateObjects as $object) {
@@ -84,11 +86,32 @@ class ImportMappingViewQueryHandler
                 $label = $object->getLabel($query->locale);
 
                 if (null !== $label) {
-                    $registrationHeaders[$object->getKey()] = $label;
+                    $headers[$object->getKey()] = sprintf(
+                        '%s%s',
+                        $this->translator->trans(self::HEADER_REGISTRATION, [], 'messages', $query->locale),
+                        $label
+                    );
                 }
             }
         }
 
-        return new ImportMappingView($csvHeaders, $registrationHeaders);
+        $sheetTemplate = $this->templateDataFactory->createSheetTemplateFromType($query->type, $query->locale);
+        $templateObjects = $sheetTemplate->getEditableTextAndNomenclatureObjects();
+
+        foreach ($templateObjects as $object) {
+            if ($object instanceof ContentObjectInterface) {
+                $label = $object->getLabel($query->locale);
+
+                if (null !== $label) {
+                    $headers[$object->getKey()] = sprintf(
+                        '%s%s',
+                        $this->translator->trans(self::HEADER_SHEET, [], 'messages', $query->locale),
+                        $label
+                    );
+                }
+            }
+        }
+
+        return new ImportMappingView($csvHeaders, $headers);
     }
 }
