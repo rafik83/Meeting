@@ -59,7 +59,7 @@ class AssignAccommodationAction
         $arrivalDate = \DateTime::createFromFormat('d/m/Y', $arrival);
         $departureDate = \DateTime::createFromFormat('d/m/Y', $departure);
 
-        if (!$arrival || !$departure || !$arrivalDate || !$departureDate || $departureDate <= $arrivalDate ) {
+        if (!$arrival || !$departure || !$arrivalDate || !$departureDate) {
             throw new BadRequestHttpException();
         }
 
