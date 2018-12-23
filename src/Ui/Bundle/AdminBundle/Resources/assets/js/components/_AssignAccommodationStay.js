@@ -48,17 +48,11 @@ AssignAccommodationStay.prototype.onChangePeriod = function(e) {
     const arrivalString = this.arrivalDateInput.value;
     const departureString = this.departureDateInput.value;
 
-    // rewrite form action
-    const action = this.element.action.split('?');
-    this.element.action = action[0] + '?arrivalDate=' + arrivalString + '&departureDate=' + departureString;
-
-    // get fresh data
     const accommodationInput = $(this.accommodationInput);
-    const roommateInput = $(this.roommateInput);
-
     accommodationInput.empty();
     accommodationInput.attr('disabled','disabled');
 
+    const roommateInput = $(this.roommateInput);
     roommateInput.empty();
     roommateInput.attr('disabled','disabled');
 
@@ -68,6 +62,10 @@ AssignAccommodationStay.prototype.onChangePeriod = function(e) {
     if (arrivalDate >= departureDate) {
         return;
     }
+
+    // rewrite form action
+    const action = this.element.action.split('?');
+    this.element.action = action[0] + '?arrivalDate=' + arrivalString + '&departureDate=' + departureString;
 
     axios.get(this.url, {
         params: {
