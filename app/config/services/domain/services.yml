@@ -121,3 +121,14 @@ services:
         arguments:
             - '@repository.file_repository'
             - '@datetime'
+
+    #
+    # Rooming
+    #
+    Proximum\Vimeet\Domain\Rooming\Accommodation\HasRemainingOvernight:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
+
+    Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'

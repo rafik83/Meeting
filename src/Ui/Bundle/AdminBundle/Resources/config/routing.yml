@@ -2026,3 +2026,35 @@ admin_event_rooming_accommodation_update:
         accommodation: \d+
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\UpdateAction
+
+admin_event_rooming_list:
+    path: /event/{event}/rooming/list
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\RoomingListAction
+
+admin_event_rooming_assign_accommodation_stay:
+    path: /event/{event}/rooming/assign-accommodation-stay/{user}
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AssignAccommodationAction
+
+admin_event_rooming_assign_accommodation_stay_availability:
+    path: /event/{event}/rooming/assign-accommodation-stay-availability/{user}
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AvailabilityAction
+
+admin_event_rooming_remove_stay:
+    path: /event/{event}/rooming/user/{user}/stay/{stay}/remove
+    requirements:
+        event: \d+
+        stay: \d+
+        user: \d+
+    methods: [DELETE]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\RemoveAction

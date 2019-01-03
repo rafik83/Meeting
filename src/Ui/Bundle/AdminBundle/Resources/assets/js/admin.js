@@ -25,7 +25,8 @@ var $ = require('jquery'),
     FilterBuilder = require('./components/_FilterBuilder'),
     ButtonGroupDefaultStateChanger = require('./components/_ButtonGroupDefaultStateChanger'),
     ParticipantPresence = require('./components/_ParticipantPresence'),
-    ShowModal = require('./components/_ShowModal')
+    ShowModal = require('./components/_ShowModal'),
+    AssignAccommodationStay = require('./components/_AssignAccommodationStay')
 ;
 
 require('bootstrap');
@@ -202,6 +203,10 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-show-modal'), function (element) {
         new ShowModal(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('form[name="admin_assign_accommodation_type"]'), function (element) {
+        new AssignAccommodationStay(element);
     });
 }
 

@@ -50,6 +50,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Accommodation\Update }
 
+    Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodationHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
+            - '@Proximum\Vimeet\Domain\Rooming\Accommodation\HasRemainingOvernight'
+            - '@Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation }
+
     #
     # Extra Parameter
     #
@@ -383,6 +391,11 @@ services:
         arguments:
             - '@repository.user.event.extra_data_repository'
             - '@datetime'
+    Proximum\Vimeet\Application\Command\User\Event\PresenceDate\PersistHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\User\Event\PresenceDateRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\PresenceDate\Persist }
 
     #
     # RegistrationTemplate

@@ -13,6 +13,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Repository\User\Event\PresenceDateRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     Proximum\Vimeet\Infrastructure\Repository\Type\ContentRepository:
         arguments:
@@ -67,5 +70,8 @@ services:
             - '@doctrine.orm.entity_manager'
 
     Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository:
         arguments:
             - '@doctrine.orm.entity_manager'

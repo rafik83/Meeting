@@ -115,4 +115,5 @@ final class Events
     public const PARTICIPANT_PRODUCT_SET = 'participant.product.set';
     public const PARTICIPANT_CART_ROW_ADDED = 'participant.cart.row.added';
     public const REMOVE_DECRYPTED_FILE = 'remove.decrypted.file';
+    public const FILLED_FORM_STEP = 'form.step.filled';
 }

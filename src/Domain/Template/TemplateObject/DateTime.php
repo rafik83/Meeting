@@ -23,11 +23,7 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
             return null;
         }
 
-        return \DateTime::createFromFormat(
-            self::DATETIME_FORMAT,
-            $this->data['datetime'],
-            new \DateTimeZone($this->getTimezone())
-        );
+        return \DateTime::createFromFormat(self::DATETIME_FORMAT, $this->data['datetime']);
     }
 
     public function getContentValue(): ?string
@@ -56,11 +52,7 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
             return null;
         }
 
-        $date = \DateTime::createFromFormat(
-            self::DATETIME_FORMAT,
-            $this->getContentValue(),
-            new \DateTimeZone($this->getTimezone())
-        );
+        $date = \DateTime::createFromFormat(self::DATETIME_FORMAT, $this->getContentValue());
 
         return $date ? $date->format($this->getDatepickerFormat()) : null;
     }
@@ -75,15 +67,16 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
         return 'datetime' === $this->getOption('format');
     }
 
-    public function getOptionDate(string $date): ?\DateTime
+    public function getOptionDate(string $optionDate): ?\DateTime
     {
-        return $this->getOption($date)
-            ? \DateTime::createFromFormat(
-                self::DATETIME_FORMAT,
-                $this->getOption($date),
-                new \DateTimeZone($this->getTimezone())
-            )
-            : null;
+        $option = $this->getOption($optionDate);
+        if (empty($option)) {
+            return null;
+        }
+
+        $date = \DateTime::createFromFormat(self::DATETIME_FORMAT, $option);
+
+        return $date ?? null;
     }
 
     public function getDatepickerFormat(): string

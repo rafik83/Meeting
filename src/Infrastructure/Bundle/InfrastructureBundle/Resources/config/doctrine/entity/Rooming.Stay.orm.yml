@@ -1,0 +1,33 @@
+Proximum\Vimeet\Domain\Model\Rooming\Stay:
+    type:  entity
+    table: rooming_stay
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        arrival:
+            type: datetime
+        departure:
+            type: datetime
+        roomType:
+            type: string
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+        accommodation:
+            targetEntity: Proximum\Vimeet\Domain\Model\Rooming\Accommodation
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+    manyToMany:
+        users:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinTable:
+                name: rooming_stay_user
+                onDelete: CASCADE
+                nullable: false

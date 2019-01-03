@@ -198,3 +198,28 @@ services:
             - '@repository.admin_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Operator\OperatorListViewQuery }
+
+    #
+    # Rooming
+    #
+    Proximum\Vimeet\Application\Query\Rooming\RoomingList\ListViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Domain\Time\OverlappedTimeRangeTruncater'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\RoomingList\ListViewQuery }
+
+    Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListByPeriodQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\AccommodationRepository'
+            - '@Proximum\Vimeet\Domain\Rooming\Accommodation\HasRemainingOvernight'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListByPeriodQuery }
+
+    Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsersHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsers }

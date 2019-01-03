@@ -1,6 +1,21 @@
 admin.sheet.follower.un-assigned: 'Non assigné'
 alphabetical: Alphabétique
 created_at: 'Date d''inscription'
+form.admin_accommodation_type.children.title.label: 'Nom de l''hébergement'
+form.admin_accommodation_type.children.overnightCapacities.label: 'Nuitée(s)'
+form.admin_accommodation_type.children.overnightCapacities.prototype.children.date.label: 'Date'
+form.admin_accommodation_type.children.overnightCapacities.prototype.children.capacity.label: 'Capacité'
+form.admin_accommodation_type.children.overnightCapacities.label_add: 'Ajouter une nuitée'
+form.admin_accommodation_type.children.submit.label: 'Valider'
+form.admin_assign_accommodation_type.children.accommodation.label: 'Hébergement associé'
+form.admin_assign_accommodation_type.children.arrival.label: 'Date d''arrivée'
+form.admin_assign_accommodation_type.children.departure.label: 'Date de départ'
+form.admin_assign_accommodation_type.children.roommate.label: 'Personne associée pour une chambre double'
+form.admin_assign_accommodation_type.children.roomType.label: 'Type de chambre'
+form.admin_assign_accommodation_type.children.submit.label: 'Assigner'
+form.admin_assign_accommodation_type.roomType.single: 'Simple'
+form.admin_assign_accommodation_type.roomType.double: 'Double'
+form.admin_assign_accommodation_type.roommate.none: 'Aucune'
 form.activate_account_password.children.password.children.first.label: 'Nouveau mot de passe'
 form.activate_account_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.activate_account_password.children.submit.label: Envoyer
@@ -12,12 +27,6 @@ form.add_unavailability.children.from.label: De
 form.add_unavailability.children.participants.label: 'Participants concernés'
 form.add_unavailability.children.submit.label: Ajouter
 form.add_unavailability.children.to.label: À
-form.admin_accommodation_type.children.overnightCapacities.label: Nuitée(s)
-form.admin_accommodation_type.children.overnightCapacities.label_add: 'Ajouter une nuitée'
-form.admin_accommodation_type.children.overnightCapacities.prototype.children.capacity.label: Capacité
-form.admin_accommodation_type.children.overnightCapacities.prototype.children.date.label: Date
-form.admin_accommodation_type.children.submit.label: Valider
-form.admin_accommodation_type.children.title.label: 'Nom de l''hébergement'
 form.admin_activate_account_password.children.password.children.first.label: 'Nouveau mot de passe'
 form.admin_activate_account_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.admin_activate_account_password.children.submit.label: Envoyer

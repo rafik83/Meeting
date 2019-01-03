@@ -92,7 +92,7 @@ class UpdateProfileHandler
         // Send event to check and update sheet title depends on sheet title or owner fullname settings
         $sheetTitleCheckEvent = new SheetTitleCheckEvent($participant->getSheet());
 
-        $this->eventDispatcher->dispatch(Events::PARTICIPANT_UPDATED, new ParticipantUpdatedEvent($participant));
+        $this->eventDispatcher->dispatch(Events::PARTICIPANT_UPDATED, new ParticipantUpdatedEvent($participant, $templateData));
         $this->eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, $sheetTitleCheckEvent);
     }
 }

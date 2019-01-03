@@ -126,7 +126,7 @@ class ParticipantStepHandlerTest extends TestCase
         ))->shouldBeCalled();
 
         $eventDispatcher
-            ->dispatch(Events::PARTICIPANT_UPDATED, new ParticipantUpdatedEvent($expectedParticipant))
+            ->dispatch(Events::PARTICIPANT_UPDATED, new ParticipantUpdatedEvent($expectedParticipant, $templateData))
             ->shouldBeCalled()
         ;
 

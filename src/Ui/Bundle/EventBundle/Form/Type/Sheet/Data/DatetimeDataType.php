@@ -31,7 +31,6 @@ class DatetimeDataType extends AbstractType
                 'translation_domain' => false,
                 'display_hour' => $datetime->displayHours(),
                 'format' => $datetime->getDatepickerFormat(),
-                'model_timezone' => $datetime->getTimezone(),
                 'view_timezone' => $datetime->getTimezone(),
                 'min_date' => $datetime->getOptionDateFormattedForDatepicker('datetime_min'),
                 'max_date' => $datetime->getOptionDateFormattedForDatepicker('datetime_max'),

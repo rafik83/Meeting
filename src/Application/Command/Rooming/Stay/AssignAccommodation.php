@@ -1,0 +1,54 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) vimeet
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Rooming\Stay;
+
+use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
+use Proximum\Vimeet\Domain\Model\Rooming\Stay;
+use Proximum\Vimeet\Domain\Model\User;
+
+class AssignAccommodation implements Command
+{
+    /** @var Event */
+    public $event;
+    
+    /** @var User */
+    public $user;
+    
+    /** @var \DateTimeInterface */
+    public $arrival;
+    
+    /** @var \DateTimeInterface */
+    public $departure;
+    
+    /** @var null|Accommodation */
+    public $accommodation;
+    
+    /** @var string */
+    public $roomType;
+    
+    /** @var null|User */
+    public $roommate;
+
+    public function __construct(
+        Event $event,
+        User $user,
+        \DateTimeInterface $arrival,
+        \DateTimeInterface $departure
+    ) {
+        $this->event = $event;
+        $this->user = $user;
+        $this->arrival = $arrival;
+        $this->departure = $departure;
+        $this->roomType = Stay::ROOM_TYPE_SINGLE;
+    }
+}

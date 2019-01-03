@@ -54,4 +54,9 @@ final class Type
     public const IS_PARTICIPANT_VISIO = 'is_participant_visio';
 
     public const PLANNING_MODIFIED = 'has_planning_modified';
+
+    /**
+     * Rooming
+     */
+    public const ROOMING_COMMENT = 'rooming_comment';
 }

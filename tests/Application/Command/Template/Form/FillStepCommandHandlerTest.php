@@ -12,9 +12,12 @@ namespace Proximum\Vimeet\Tests\Application\Command\Template\Form;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Template\Form\FillStepCommand;
 use Proximum\Vimeet\Application\Command\Template\Form\FillStepCommandHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Template\Form\FilledFormStepEvent;
 use Proximum\Vimeet\Application\View\Template\Form\BlockStepView;
 use Proximum\Vimeet\Application\View\Template\Form\BreadCrumbView;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -110,7 +113,18 @@ class FillStepCommandHandlerTest extends TestCase
         $sheetFormDataRepository->save($sheetFormDataExpected)->shouldBeCalled();
         $userFormDataRepository->save($userFormDataExpected)->shouldBeCalled();
 
-        $handler = new FillStepCommandHandler($authorizationChecker->reveal(), $userFormDataRepository->reveal(), $sheetFormDataRepository->reveal());
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $delayedEventDispatcher
+            ->dispatch(Events::FILLED_FORM_STEP, new FilledFormStepEvent($formTemplate->reveal(), $participant->reveal(), $block->reveal()))
+            ->shouldBeCalled()
+        ;
+
+        $handler = new FillStepCommandHandler(
+            $authorizationChecker->reveal(),
+            $userFormDataRepository->reveal(),
+            $sheetFormDataRepository->reveal(),
+            $delayedEventDispatcher->reveal()
+        );
         $handler->handle(new FillStepCommand(
             $formTemplate->reveal(),
             $sheet->reveal(),
