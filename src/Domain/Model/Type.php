@@ -385,4 +385,9 @@ class Type implements WhoInterface, TypeInterface
     {
         $this->formTemplates = new ArrayCollection($templates);
     }
+
+    public function isDisableUnavailabilityManagement(): bool
+    {
+        return $this->disableUnavailabilityManagement;
+    }
 }

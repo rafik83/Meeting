@@ -3,4 +3,10 @@
     {% set timezone = participant.timezone %}
 {% endif %}
 
-{{ include('EventBundle:Unavailability:unavailability.html.twig', { 'timezone': timezone, unavailability: unavailability, 'participantId': participantId, 'sheetId': sheetId}) }}
+{{ include('EventBundle:Unavailability:unavailability.html.twig', {
+    'timezone': timezone,
+    unavailability: unavailability,
+    'participantId': participantId,
+    'sheetId': sheetId,
+    'isUnavailabilityManagementDisabled': isUnavailabilityManagementDisabled,
+}) }}
