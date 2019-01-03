@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\User\Availability\Confirmation;
+use Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled;
 use Proximum\Vimeet\Application\Exception\Unavailability\CanNotDeleteUnavailabilityException;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
@@ -33,6 +34,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UnavailabilityController extends Controller
 {
@@ -56,6 +58,7 @@ class UnavailabilityController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet);
         $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $eventDomain->getEvent());
         $this->checkSheetHasParticipant($sheet, $participant);
+        $this->checkDisableUnavailabilityManagement($sheet);
 
         $event = $eventDomain->getEvent();
         $user  = $userDomain->getUser();
@@ -113,6 +116,7 @@ class UnavailabilityController extends Controller
             'tipTranslationViews' => $tipTranslationViews,
             'timezone' => $timezone,
             'isVisio' => $this->get(IsParticipantVisio::class)->isSatisfiedBy($participant),
+            'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
         ]);
     }
 
@@ -206,6 +210,7 @@ class UnavailabilityController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_REMOVE, $sheet);
         $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $event);
         $this->checkSheetHasParticipant($sheet, $participant);
+        $this->checkDisableUnavailabilityManagement($sheet);
 
         try {
             $this->get('tactician.commandbus')->handle(new Remove($unavailability));
@@ -236,6 +241,13 @@ class UnavailabilityController extends Controller
                     $sheet->getId()
                 )
             );
+        }
+    }
+
+    private function checkDisableUnavailabilityManagement(Sheet $sheet): void
+    {
+        if ($this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet)) {
+            throw new AccessDeniedException();
         }
     }
 }

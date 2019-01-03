@@ -12,3 +12,7 @@ services:
             - '@adapter.file_system_adapter'
             - '%kernel.project_dir%/web'
             - '%infrastructure.encrypted_files_path%'
+
+    Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled:
+        arguments:
+            - '@adapter.authorization_checker'
