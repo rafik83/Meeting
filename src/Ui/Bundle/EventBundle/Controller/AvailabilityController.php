@@ -20,6 +20,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AvailabilityController extends Controller
@@ -40,6 +41,10 @@ class AvailabilityController extends Controller
     ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
+        if ($sheet->getType()->isDisableUnavailabilityManagement()) {
+            throw new AccessDeniedException();
+        }
 
         // The Agenda needs to be open to access this page as it allows the addition of unavailabilities
         $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $eventDomain->getEvent());
