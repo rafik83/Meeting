@@ -74,6 +74,7 @@ class AvailabilityConfirmationCheckerHandler
         if (false === (bool) $this->featureAvailabilityConfirmationActivated
             || true === $this->eventOver->isEventOver($command->event)
             || false === $this->agendaAccessChecker->allowedToAccess($command->event)
+            || true === $command->sheet->getType()->isDisableUnavailabilityManagement()
         ) {
             return new AvailabilityConfirmationCheckerView(AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS, null);
         }

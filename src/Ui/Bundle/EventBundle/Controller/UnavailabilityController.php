@@ -116,6 +116,7 @@ class UnavailabilityController extends Controller
             'tipTranslationViews' => $tipTranslationViews,
             'timezone' => $timezone,
             'isVisio' => $this->get(IsParticipantVisio::class)->isSatisfiedBy($participant),
+            'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
         ]);
     }
 
