@@ -67,6 +67,9 @@ class Type implements WhoInterface, TypeInterface
     /** @var ArrayCollection of FormTemplates */
     private $formTemplates;
 
+    /** @var bool */
+    private $disableUnavailabilityManagement = false;
+
     /**
      * @param Event $event
      */
