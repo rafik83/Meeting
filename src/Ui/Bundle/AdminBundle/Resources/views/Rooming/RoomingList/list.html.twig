@@ -97,7 +97,13 @@
                         </table>
                     {% endif %}
                 </td>
-                <td>
+                <td
+                    class="updatable"
+                    data-type="string"
+                    data-input-type="textarea"
+                    data-url="/fr/toto"
+                    data-update="{{ { 'value': detailView.comment }|json_encode }}"
+                >
                     {{ detailView.comment }}
                 </td>
             </tr>
