@@ -18,6 +18,8 @@ use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger;
 use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
+use Proximum\Vimeet\Domain\Model\NomenclatureItem;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -32,6 +34,7 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Country;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Telephone;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
@@ -132,7 +135,24 @@ class ParticipantDenormalizerTest extends TestCase
         $block->addChild(1, 'country', $country);
         $templateData->addChild(0, 'block', $block);
 
+        $sheetTemplateData = new TemplateData('root', [], 'fr', 'fr');
+        $sheetBlock = new Block('12', [], 'fr', 'fr');
+        $sheetTitle = new EditableText('sheetTitle', 'editable-text', ['tags' => []], 'fr', 'fr');
+        $description = new EditableText('description', 'editable-text', ['tags' => []], 'fr', 'fr');
+        $nomenclature = new Nomenclature('nomenclature', 'nomenclature', ['tags' => []], 'fr', 'fr');
+        $nomenclatureModel = $this->prophesize(NomenclatureModel::class);
+        $nomenclature->setNomenclature($nomenclatureModel->reveal());
+        $item1 = new NomenclatureItem('nomenclatureKey1', ['fr' => 'item1'], [], false);
+        $item2 = new NomenclatureItem('nomenclatureKey2', ['fr' => 'item2'], [], false);
+        $nomenclatureModel->getLastLevel()->shouldBeCalled()->willReturn([$item1, $item2]);
+
+        $sheetBlock->addChild(1, 'sheetTitle', $sheetTitle);
+        $sheetBlock->addChild(1, 'description', $description);
+        $sheetBlock->addChild(1, 'nomenclature', $nomenclature);
+        $sheetTemplateData->addChild(0, 'block', $sheetBlock);
+
         $templateDataFactory->createRegistrationFromType($type, $locale)->willReturn($templateData);
+        $templateDataFactory->createSheetTemplateFromType($type, $locale)->willReturn($sheetTemplateData);
 
         $mapping = [
             'Nom participant' => 'lastname',
@@ -141,6 +161,9 @@ class ParticipantDenormalizerTest extends TestCase
             'E-mail Acheteur' => 'participant_import.field.mail',
             'Mobile' => 'mobile',
             'Pays Acheteur' => 'country',
+            'Titre de la fiche' => 'sheetTitle',
+            'Description' => 'description',
+            'Nomenclature' => 'nomenclature',
         ];
 
         $emailValidator->validate('')->willReturn(false);
@@ -148,6 +171,7 @@ class ParticipantDenormalizerTest extends TestCase
         $emailValidator->validate('nicolas@gmail.com')->willReturn(true);
         $emailValidator->validate('martine@gmail.com')->willReturn(true);
         $emailValidator->validate('julie@gmail.com')->willReturn(true);
+        $emailValidator->validate('zinedine@example.net')->willReturn(true);
 
         // Add sheet for "User already exists in DB" for julie@gmail.com
         $sheet1 = new Sheet($event->reveal(), $type->reveal(), [], $userAlreadyExists->reveal(), $datetime);
@@ -185,7 +209,7 @@ class ParticipantDenormalizerTest extends TestCase
         $user2 = new User(strtolower('jean@gmail.com'), '', '', 'fr');
         $userRepository->add($user2)->shouldBeCalled();
 
-        $sheet2 = new Sheet($event->reveal(), $type->reveal(), [], $user2, $datetime);
+        $sheet2 = new Sheet($event->reveal(), $type->reveal(), ['sheetTitle' => ['text' => 'Ma Petite Tribu']], $user2, $datetime);
         $sheet2->setImported(true);
         $sheet2->setTitle('Ma Petite Tribu');
 
@@ -197,7 +221,21 @@ class ParticipantDenormalizerTest extends TestCase
             ->add(
                 Argument::that(
                     function (Sheet $sheet) use ($sheet2) {
-                        return $sheet->getTitle() === $sheet2->getTitle();
+                        return $sheet->getTitle() === $sheet2->getTitle()
+                            && $sheet->getData() === [
+                                'sheetTitle' => [
+                                    'text' => 'Ma petite Tribu'
+                                ],
+                                'description' => [
+                                    'text' => 'Ceci est une autre description',
+                                ],
+                                'nomenclature' => [
+                                    'items' => [
+                                        0 => 'nomenclatureKey1'
+                                    ]
+                                ]
+                            ]
+                        ;
                     }
                 )
             )
@@ -272,13 +310,14 @@ class ParticipantDenormalizerTest extends TestCase
 
         $expected = [
             'existing_participations' => 1,
-            'file_participations' => 6,
+            'file_participations' => 7,
             'created_sheets' => 2,
             'created_users' => 1,
             'import_errors' => [
                 '2;validators.admin.sheet.import_participant.error.country;France',
                 '5;validators.admin.sheet.participant_import.email.error;',
                 '6;validators.admin.sheet.participant_import.email.exist.error;jean@gmail.com',
+                '8;validators.admin.sheet.participant_import.nomenclature.error;item5',
             ],
         ];
 

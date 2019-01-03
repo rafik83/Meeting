@@ -606,6 +606,8 @@ admin.participant_import_result.errors: 'Liste des erreurs dans le fichier'
 admin.participant_import_result.file_participations: 'Nombre de participations dans le fichier'
 admin.participant_import_result.title.label: 'Resultat de l''importation des participants'
 admin.participant_import.title: 'Importer les participants'
+admin.participant_import.header.registration: 'Inscription : '
+admin.participant_import.header.sheet: 'Fiche : '
 admin.participant.export.fields.day_checkin: 'Venu %date%'
 admin.participant.export.fields.happening_subscriber: 'Inscrit sous-évènement'
 admin.participant.export.fields.happening.participate: Inscrit

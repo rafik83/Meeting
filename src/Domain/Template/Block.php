@@ -358,6 +358,18 @@ class Block extends AbstractChild
     }
 
     /**
+     * @return TemplateObject[]
+     */
+    public function getEditableTextAndNomenclatureObjects(): array
+    {
+        return array_filter($this->getObjects(), function (TemplateObject $object) {
+            return $object->isEditable()
+                && ($object instanceof TemplateObject\EditableText || $object instanceof TemplateObject\Nomenclature)
+            ;
+        });
+    }
+
+    /**
      * @deprecated Use {@link Block::getEditableSheetDataExceptedImageObjects()} instead
      *
      * @return TemplateObject[]

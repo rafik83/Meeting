@@ -3090,6 +3090,7 @@ services:
             - '@adapter.serializer_adapter'
             - '@adapter.session'
             - '@template.template_data_factory'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery }
     query.participant.import.import_result_view_query_handler:

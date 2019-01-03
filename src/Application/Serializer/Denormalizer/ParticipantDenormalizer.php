@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectValidatorNotExistException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -66,17 +67,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
     /** @var UserEventRepositoryInterface */
     private $userEventRepository;
 
-    /**
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param UserRepositoryInterface        $userRepository
-     * @param SheetRepositoryInterface       $sheetRepository
-     * @param UserEventRepositoryInterface   $userEventRepository
-     * @param TemplateDataFactory            $templateDataFactory
-     * @param EmailValidator                 $emailValidator
-     * @param Synchronizer                   $synchronizer
-     * @param ParticipantImportLogger        $importLogger
-     * @param \DateTimeInterface             $dateTime
-     */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         UserRepositoryInterface $userRepository,
@@ -130,6 +120,10 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $context['type'],
             $context['locale']
         );
+        $sheetTemplate = $this->templateDataFactory->createSheetTemplateFromType(
+            $context['type'],
+            $context['locale']
+        );
 
         foreach ($data as $key => $row) {
             if (!array_key_exists($mappedMailCsvColumn, $row)) {
@@ -154,10 +148,11 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             try {
-                list($sheetData, $participantData, $sheetTitle) = $this->handleRow(
+                list($sheetRegistrationData, $sheetData, $participantData, $sheetTitle) = $this->handleRow(
                     $row,
                     $mappingGuesser,
                     $registrationTemplate,
+                    $sheetTemplate,
                     $context
                 );
 
@@ -165,6 +160,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $context,
                     $email,
                     $sheetTitle,
+                    $sheetRegistrationData,
                     $sheetData,
                     $participantData,
                     $registrationTemplate
@@ -226,6 +222,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param array          $row
      * @param MappingGuesser $mappingGuesser
      * @param TemplateData   $registrationTemplate
+     * @param TemplateData   $sheetTemplate
      * @param array          $context
      *
      * @throws InvalidObjectContentException
@@ -237,26 +234,34 @@ class ParticipantDenormalizer implements DenormalizerInterface
         array $row,
         MappingGuesser $mappingGuesser,
         TemplateData $registrationTemplate,
+        TemplateData $sheetTemplate,
         array $context
     ) {
-        $sheetData       = [];
+        $sheetRegistrationData = [];
         $participantData = [];
-        $sheetTitle      = '';
+        $sheetData = [];
+        $sheetTitle = '';
 
         // clear previous data before process current imported participant row
         $registrationTemplate->clear();
 
         foreach ($row as $key => $column) {
             $column = trim($column);
-            $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
+            $objectKey = $mappingGuesser->getMappedOutKey($key);
 
-            if (false === $registrationObjectKey
-                || ParticipantImportTag::REGISTRATION_FIELD_MAIL === $registrationObjectKey
+            if (false === $objectKey
+                || ParticipantImportTag::REGISTRATION_FIELD_MAIL === $objectKey
             ) {
                 continue;
             }
 
-            $templateObject = $registrationTemplate->getObject($registrationObjectKey);
+            $isRegistrationObject = false;
+            try {
+                $templateObject = $registrationTemplate->getObject($objectKey);
+                $isRegistrationObject = true;
+            } catch (ObjectNotFoundException $exception) {
+                $templateObject = $sheetTemplate->getObject($objectKey);
+            }
 
             if (!$templateObject instanceof ContentObjectInterface) {
                 continue;
@@ -277,10 +282,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $this->handleColumn(
                         $templateObject,
                         $column,
+                        $context['locale']
+                    );
+
+                    $this->dispatchTemplateData(
+                        $isRegistrationObject,
+                        $templateObject,
+                        $sheetRegistrationData,
                         $sheetData,
                         $participantData,
-                        $registrationObjectKey,
-                        $context['locale']
+                        $objectKey
                     );
                 } else {
                     throw new InvalidObjectContentException($validatorError);
@@ -290,10 +301,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 $this->handleColumn(
                     $templateObject,
                     $column,
+                    $context['locale']
+                );
+
+                $this->dispatchTemplateData(
+                    $isRegistrationObject,
+                    $templateObject,
+                    $sheetRegistrationData,
                     $sheetData,
                     $participantData,
-                    $registrationObjectKey,
-                    $context['locale']
+                    $objectKey
                 );
             }
 
@@ -309,15 +326,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
         }
 
-        return [$sheetData, $participantData, $sheetTitle];
+        return [$sheetRegistrationData, $sheetData, $participantData, $sheetTitle];
     }
 
     private function handleColumn(
         ContentObjectInterface $templateObject,
         $column,
-        array &$sheetData,
-        array &$participantData,
-        $registrationObjectKey,
         $locale
     ): void {
         if ($templateObject instanceof TemplateObject\Nomenclature) {
@@ -332,8 +346,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
         } else {
             $templateObject->setContentValue($column);
         }
-
-        $this->dispatchTemplateData($templateObject, $sheetData, $participantData, $registrationObjectKey);
     }
 
     /**
@@ -359,7 +371,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param array        $context
      * @param string       $email
      * @param string       $sheetTitle
-     * @param array        $sheetData
+     * @param array        $sheetRegistrationData
      * @param array        $participantData
      * @param TemplateData $registrationTemplate
      */
@@ -367,10 +379,11 @@ class ParticipantDenormalizer implements DenormalizerInterface
         array $context,
         $email,
         $sheetTitle,
+        $sheetRegistrationData,
         $sheetData,
         $participantData,
         TemplateData $registrationTemplate
-    ) {
+    ): void {
         $user = $this->getUser($email);
 
         if (!$user instanceof User) {
@@ -381,12 +394,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $this->importLogger->userImported($user);
         }
 
-        $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
+        $sheet = new Sheet($context['event'], $context['type'], $sheetData, $user, $this->dateTime);
         $sheet->setImported(true);
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getFullname();
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getEmail();
         $sheet->setTitle($sheetTitle);
-        $sheet->setRegistrationData($sheetData);
+        $sheet->setRegistrationData($sheetRegistrationData);
         $this->sheetRepository->add($sheet);
 
         $participant = new Participant(
@@ -407,26 +420,38 @@ class ParticipantDenormalizer implements DenormalizerInterface
     }
 
     /**
+     * @param bool           $isRegistrationObject
      * @param TemplateObject $templateObject
+     * @param array          $sheetRegistrationData
      * @param array          $sheetData
      * @param array          $participantData
-     * @param                $registrationObjectKey
+     * @param string         $objectKey
      */
     private function dispatchTemplateData(
+        bool $isRegistrationObject,
         TemplateObject $templateObject,
-        &$sheetData,
-        &$participantData,
-        $registrationObjectKey
+        array &$sheetRegistrationData,
+        array &$sheetData,
+        array &$participantData,
+        string $objectKey
     ): void {
-        if ($templateObject->hasTag(Tag::SHEET_DATA)) {
+        if (false === $isRegistrationObject) {
             $sheetData = array_merge($sheetData, [
-                $registrationObjectKey => $templateObject->getData(),
+                $objectKey => $templateObject->getData(),
+            ]);
+
+            return;
+        }
+
+        if ($templateObject->hasTag(Tag::SHEET_DATA)) {
+            $sheetRegistrationData = array_merge($sheetRegistrationData, [
+                $objectKey => $templateObject->getData(),
             ]);
         }
 
         if ($templateObject->hasTag(Tag::PARTICIPANT_DATA)) {
             $participantData = array_merge($participantData, [
-                $registrationObjectKey => $templateObject->getData(),
+                $objectKey => $templateObject->getData(),
             ]);
         }
     }
