@@ -125,6 +125,15 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmation }
 
     #
+    # User
+    #
+    Proximum\Vimeet\Application\Command\User\Batch\BatchExportFormTemplateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@adapter.job_queue_adapter'
+            - '@datetime'
+
+    #
     # Type Badge
     #
     Proximum\Vimeet\Application\Command\Type\Badge\ConfigureHandler:

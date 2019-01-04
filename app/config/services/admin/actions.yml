@@ -341,6 +341,7 @@ services:
             - '@router'
             - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface'
             - '@form.factory'
+            - '@session.flash_bag'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanEventEntranceAction:
         arguments:

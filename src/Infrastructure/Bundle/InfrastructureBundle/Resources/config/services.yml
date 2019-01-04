@@ -2128,6 +2128,7 @@ services:
     Proximum\Vimeet\Application\Command\User\Batch\BatchHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Command\User\Batch\BatchCampaignHandler'
+            - '@Proximum\Vimeet\Application\Command\User\Batch\BatchExportFormTemplateHandler'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserIdsByEvent'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Batch\Batch }

@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\User;
@@ -418,5 +419,14 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         ]);
 
         $this->setJob($job);
+    }
+
+    public function exportFormTemplateDataByUsers(
+        Event $event,
+        FormTemplate $formTemplate,
+        Admin $admin,
+        string $locale,
+        Event\ExtraData $extraData
+    ): void {
     }
 }

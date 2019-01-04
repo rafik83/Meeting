@@ -1211,6 +1211,8 @@ form.update_unavailability.children.from.label: De
 form.update_unavailability.children.submit.label: Modifier
 form.update_unavailability.children.to.label: À
 form.user_batch.children.campaignTitle.label: 'Nom de la campagne'
+form.user_batch.children.exportFormTemplate.label: 'Exporter les données'
+form.user_batch.children.formTemplate.label: 'Template de formulaire'
 form.user_batch.children.sendMail.label: 'Créer la campagne'
 form.user_filter.children.participation.label: Participation
 form.user_filter.children.text_search.label: 'Nom, prénom ou email de l''utilisateur'

@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User;
 
 use Proximum\Vimeet\Application\Command\User\Batch\Batch;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\FormTemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -34,18 +36,28 @@ class BatchType extends AbstractType
                 'label' => false,
                 'translation_domain' => false,
             ])
-            ->add('campaignTitle', TextType::class)
+            ->add('campaignTitle', TextType::class, [
+                'required' => false,
+            ])
+            ->add('sendMail', SubmitType::class)
+            ->add('formTemplate', FormTemplateChoiceType::class, [
+                'event' => $options['event'],
+                'required' => false,
+                'placeholder' => false,
+            ])
+            ->add('exportFormTemplate', SubmitType::class)
             ->add('selectionType', HiddenType::class, [
                 'data' => Batch::SELECTION_TYPE_PAGE,
             ])
-            ->add('sendMail', SubmitType::class);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
-            ->setRequired(['ids'])
+            ->setRequired(['ids', 'event'])
             ->setAllowedTypes('ids', ['array'])
+            ->setAllowedTypes('event', Event::class)
             ->setDefaults(['data_class' => Batch::class]);
     }
 
