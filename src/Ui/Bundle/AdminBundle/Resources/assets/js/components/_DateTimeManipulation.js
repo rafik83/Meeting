@@ -23,7 +23,7 @@ DateTimeManipulation.prototype.getTimestampByInternationalFormat = function (dat
     var month = splitDate[1];
     var year = splitYear[0];
 
-    return new Date(year, month, day, hours, minutes);
+    return new Date(year, month - 1, day, hours, minutes);
 };
 
 DateTimeManipulation.prototype.formatDate = function (date)
@@ -32,11 +32,12 @@ DateTimeManipulation.prototype.formatDate = function (date)
         return null;
     }
 
+    var day = this.addPaddingZero(date.getDate());
     var hours = this.addPaddingZero(date.getHours());
     var minutes = this.addPaddingZero(date.getMinutes());
     var months = this.addPaddingZero(date.getMonth() + 1);
 
-    return date.getDate() + "/" + months + "/" +  + date.getFullYear() + " " + hours + ':' + minutes;
+    return day + "/" + months + "/" +  + date.getFullYear() + " " + hours + ':' + minutes + ':00';
 };
 
 DateTimeManipulation.prototype.addPaddingZero = function (number)
