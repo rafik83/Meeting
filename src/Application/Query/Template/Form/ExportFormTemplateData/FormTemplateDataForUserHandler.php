@@ -85,6 +85,7 @@ class FormTemplateDataForUserHandler
 
         return new UserDataView(
             $query->user->getId(),
+            $query->user->getEmail(),
             $participantInfo[Tag::PARTICIPANT_FIRSTNAME] ?? '',
             $participantInfo[Tag::PARTICIPANT_LASTNAME] ?? '',
             $participantInfo[Tag::PARTICIPANT_PHONE] ?? '',

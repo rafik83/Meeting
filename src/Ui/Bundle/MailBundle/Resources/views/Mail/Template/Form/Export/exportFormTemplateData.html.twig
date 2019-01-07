@@ -1,0 +1,17 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    {{ 'admin.mail.export_form_template_data.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+
+    <br>
+    <br>
+    {{ macros.button(
+        'admin.mail.export_form_template_data.file_link'|trans({}, 'mail', mail.locale),
+        url('admin_export_form_template_user_data', {'event': mail.event.id, 'file': mail.file.id, 'hash': mail.file.hash })
+    ) }}
+    <br>
+
+    {{ 'admin.mail.export_form_template_data.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

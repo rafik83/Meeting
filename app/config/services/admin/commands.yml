@@ -58,6 +58,23 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation }
 
+    Proximum\Vimeet\Application\Command\Template\Form\ExportFormTemplateDataByUsersHandler:
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.export_form_template_user_data_path%'
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
+            - '@datetime'
+            - '@Proximum\Vimeet\Application\Command\Template\Form\ExportFormTemplateData\MailToAdminHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\ExportFormTemplateDataByUsers }
+
+    Proximum\Vimeet\Application\Command\Template\Form\ExportFormTemplateData\MailToAdminHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+
     #
     # Extra Parameter
     #

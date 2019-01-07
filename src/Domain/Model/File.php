@@ -14,6 +14,7 @@ class File
 {
     public const TYPE_UNKNOWN = 'unknown';
     public const TYPE_UPLOADED_OBJECTS_ZIP = 'uploaded_objects_zip';
+    public const TYPE_EXPORT_FORM_TEMPLATE_DATA = 'export_form_template_data';
 
     /** @var int */
     private $id;

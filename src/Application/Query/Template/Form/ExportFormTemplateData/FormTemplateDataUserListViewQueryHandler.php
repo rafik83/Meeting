@@ -50,6 +50,7 @@ class FormTemplateDataUserListViewQueryHandler
         }
 
         return new UserListView(
+            $query->locale,
             $userViews,
             $objectLabels
         );

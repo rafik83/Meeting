@@ -221,6 +221,8 @@ services:
             - '@router'
             - '@sheet.sheet_guesser'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction: ~
+
     #
     # Content
     #

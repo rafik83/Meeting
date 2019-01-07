@@ -62,8 +62,12 @@ class UserDataView
      */
     public $formTemplateDataByKey;
 
+    /** @var string */
+    public $userEmail;
+
     public function __construct(
         int $userId,
+        string $userEmail,
         ?string $userFirstName,
         ?string $userLastName,
         ?string $userPhone,
@@ -79,6 +83,7 @@ class UserDataView
         array $formTemplateDataByKey
     ) {
         $this->userId = $userId;
+        $this->userEmail = $userEmail;
         $this->userFirstName = $userFirstName;
         $this->userLastName = $userLastName;
         $this->userPhone = $userPhone;
