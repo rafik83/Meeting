@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Event\Day\EventOver;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type as ParticipationType;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
@@ -55,6 +56,9 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
     /** @var ObjectProphecy */
     public $user;
 
+    /** @var ObjectProphecy */
+    public $type;
+
     public function setUp()
     {
         $this->event = $this->prophesize(Event::class);
@@ -66,6 +70,7 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
         $this->extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->featureAvailabilityConfirmationActivated = '1';
+        $this->type = $this->prophesize(ParticipationType::class);
     }
 
     public function testHandleFeatureFlagDisabled()
@@ -154,8 +159,44 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testHandleUnavailabilityManagementDisabled()
+    {
+        $this->sheet->getType()->willReturn($this->type->reveal());
+        $this->type->isDisableUnavailabilityManagement()->willReturn(true);
+
+        $expected = new AvailabilityConfirmationCheckerView(
+            AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS,
+            null
+        );
+
+        $this->eventOver->isEventOver($this->event->reveal())->shouldBeCalled()->willReturn(false);
+        $this->agendaAccessChecker->allowedToAccess($this->event->reveal())->shouldBeCalled()->willReturn(true);
+
+        $handler = new AvailabilityConfirmationCheckerHandler(
+            $this->agendaAccessChecker->reveal(),
+            $this->eventOver->reveal(),
+            $this->flashBag->reveal(),
+            $this->extraDataRepository->reveal(),
+            $this->router->reveal(),
+            $this->featureAvailabilityConfirmationActivated
+        );
+        $result = $handler->handle(
+            new AvailabilityConfirmationChecker(
+                $this->event->reveal(),
+                $this->sheet->reveal(),
+                $this->user->reveal(),
+                AvailabilityConfirmationChecker::ORIGIN_CATALOG
+            )
+        );
+
+        $this->assertEquals($expected, $result);
+    }
+
     public function testHandleAlreadyConfirmed()
     {
+        $this->sheet->getType()->willReturn($this->type->reveal());
+        $this->type->isDisableUnavailabilityManagement()->willReturn(false);
+
         $expected = new AvailabilityConfirmationCheckerView(
             AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS,
             null
@@ -197,6 +238,9 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
     public function testHandle()
     {
         $this->sheet->getId()->willReturn(12);
+        $this->sheet->getType()->willReturn($this->type->reveal());
+        $this->type->isDisableUnavailabilityManagement()->willReturn(false);
+
         $expected = new AvailabilityConfirmationCheckerView(
             AvailabilityConfirmationCheckerView::REDIRECT,
             'route_to_confirmation'

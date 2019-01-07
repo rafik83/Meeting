@@ -67,6 +67,9 @@ class Type implements WhoInterface, TypeInterface
     /** @var ArrayCollection of FormTemplates */
     private $formTemplates;
 
+    /** @var bool */
+    private $disableUnavailabilityManagement = false;
+
     /**
      * @param Event $event
      */
@@ -381,5 +384,10 @@ class Type implements WhoInterface, TypeInterface
     public function setFormTemplates(array $templates): void
     {
         $this->formTemplates = new ArrayCollection($templates);
+    }
+
+    public function isDisableUnavailabilityManagement(): bool
+    {
+        return $this->disableUnavailabilityManagement;
     }
 }

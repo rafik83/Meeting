@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQuery;
 use Proximum\Vimeet\Application\Query\Agenda\MeetingPropositionFromAvailableSheets\MeetingPropositionFromAvailableSheetsQuery;
@@ -156,7 +157,8 @@ class AgendaController extends Controller
             'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
             'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
             'participant' => $participant,
-            'isVisio' => $this->get(IsParticipantVisio::class)->isSatisfiedBy($participant)
+            'isVisio' => $this->get(IsParticipantVisio::class)->isSatisfiedBy($participant),
+            'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
         ]);
     }
 
