@@ -12,5 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Template\Form;
 
 class ExportFormTemplateDataByUsersHandler
 {
-
+    public function __construct()
+    {
+    }
 }
