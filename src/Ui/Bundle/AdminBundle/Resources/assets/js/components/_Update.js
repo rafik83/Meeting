@@ -146,7 +146,7 @@ Update.prototype.keyupped = function (event)
 
     if (code === 27) {
         this.close();
-    } else if (code === 13) {
+    } else if (code === 13 && !event.shiftKey) {
         event.preventDefault();
         this.save();
         return false;
