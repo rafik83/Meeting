@@ -101,7 +101,7 @@
                     class="updatable"
                     data-type="string"
                     data-input-type="textarea"
-                    data-url="/fr/toto"
+                    data-url="{{ path('admin_event_rooming_add_comment', {'event': event.id, 'user': detailView.userId }) }}"
                     data-update="{{ { 'value': detailView.comment }|json_encode }}"
                 >
                     {{ detailView.comment }}

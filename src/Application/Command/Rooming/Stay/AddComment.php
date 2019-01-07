@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Rooming\Stay;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class AddComment
+class AddComment implements Command
 {
     /** @var Event */
     public $event;
