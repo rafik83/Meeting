@@ -12,9 +12,6 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\
 
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Template\Form\ExportFormTemplateData\UserListView;
-use Symfony\Component\Serializer\Exception\CircularReferenceException;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -103,13 +100,13 @@ class UserListViewNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param string|null $phoneNumber
+     * @param string $phoneNumber
      *
      * @return null|string
      */
     private function formatPhoneNumber($phoneNumber): ?string
     {
-        return null !== $phoneNumber ? sprintf('\'%s\'', $phoneNumber) : null;
+        return !empty($phoneNumber) ? sprintf('\'%s\'', $phoneNumber) : null;
     }
 
     /**

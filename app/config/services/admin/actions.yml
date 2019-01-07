@@ -221,7 +221,11 @@ services:
             - '@router'
             - '@sheet.sheet_guesser'
 
-    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction: ~
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '%infrastructure.export_form_template_user_data_path%'
+            - '@datetime'
 
     #
     # Content
