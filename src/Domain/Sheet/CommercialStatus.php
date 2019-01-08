@@ -72,14 +72,14 @@ class CommercialStatus
         self::STATUS_REGISTERED,
         self::STATUS_INTEREST,
         self::STATUS_INTEREST_NEXT_EDITION,
-        self::STATUS_DO_NOT_CALL,
-        self::STATUS_NO_INTEREST,
-        self::STATUS_REFUSED_BY_ORGANIZER,
-        self::STATUS_FOLLOWED,
+        self::STATUS_LOGISTIC_OK,
         self::STATUS_LOGISTIC_NOT_OK,
         self::STATUS_LOGISTIC_WITHOUT_TICKET,
-        self::STATUS_LOGISTIC_OK,
+        self::STATUS_DO_NOT_CALL,
+        self::STATUS_NO_INTEREST,
         self::STATUS_INCOMPLETE_PRESENTATION,
+        self::STATUS_REFUSED_BY_ORGANIZER,
+        self::STATUS_FOLLOWED,
     ];
 
     public const STATUS_WITH_LABEL = [
@@ -95,9 +95,9 @@ class CommercialStatus
         self::STATUS_NO_INTEREST => 'danger',
         self::STATUS_REFUSED_BY_ORGANIZER => 'danger',
         self::STATUS_FOLLOWED => 'info',
-        self::STATUS_LOGISTIC_NOT_OK => 'default',
-        self::STATUS_LOGISTIC_WITHOUT_TICKET => 'default',
-        self::STATUS_LOGISTIC_OK => 'default',
-        self::STATUS_INCOMPLETE_PRESENTATION => 'default',
+        self::STATUS_LOGISTIC_NOT_OK => 'danger',
+        self::STATUS_LOGISTIC_WITHOUT_TICKET => 'info',
+        self::STATUS_LOGISTIC_OK => 'success',
+        self::STATUS_INCOMPLETE_PRESENTATION => 'danger',
     ];
 }
