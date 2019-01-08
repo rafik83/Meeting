@@ -832,8 +832,12 @@ form.sheet_comment.children.commercialStatus.status.do_not_call: 'Ne pas appeler
 form.sheet_comment.children.commercialStatus.status.followed: Suivi
 form.sheet_comment.children.commercialStatus.status.hot: Chaud
 form.sheet_comment.children.commercialStatus.status.hot_stall: 'Chaud stand'
+form.sheet_comment.children.commercialStatus.status.incomplete_presentation: 'Présentation incomplète'
 form.sheet_comment.children.commercialStatus.status.interest: Intérêt
 form.sheet_comment.children.commercialStatus.status.interest_next_edition: 'Intérêt N+1'
+form.sheet_comment.children.commercialStatus.status.log_not_ok: 'Log pas ok'
+form.sheet_comment.children.commercialStatus.status.log_ok: 'Log ok'
+form.sheet_comment.children.commercialStatus.status.log_without_ticket: 'Log sans ticket'
 form.sheet_comment.children.commercialStatus.status.no_interest: 'Pas intéressé'
 form.sheet_comment.children.commercialStatus.status.none: 'Pas de statut'
 form.sheet_comment.children.commercialStatus.status.refused_by_organizer: 'Refus organisateur'
