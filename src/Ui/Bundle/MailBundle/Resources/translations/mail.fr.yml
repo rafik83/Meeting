@@ -2,6 +2,10 @@ admin.mail.activateAccount.activate: 'Activer votre compte'
 admin.mail.activateAccount.body: "Bonjour,\n\nVous avez été invité en tant que collaborateur sur Vimeet\n\nPour y accéder, cliquer sur le lien suivant et entrer un mot de passe pour activer votre compte:"
 admin.mail.activateAccount.end: ''
 admin.mail.activateAccount.subject: 'Activer votre compte'
+admin.mail.export_form_template_data.body: "Bonjour,\nVoici le fichier comportant l'export des données du formulaire de template\n"
+admin.mail.export_form_template_data.end: "Cordialement\n"
+admin.mail.export_form_template_data.file_link: "Fichier CSV"
+admin.mail.export_form_template_data.subject: "Export des données du formulaire de template"
 admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:"
 admin.mail.resetPassword.end: 'Bien cordialement,'
 admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'

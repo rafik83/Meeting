@@ -75,3 +75,14 @@ services:
             - '@datetime'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Template\Form\ExportFormTemplateDataByUsersCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: console.command }

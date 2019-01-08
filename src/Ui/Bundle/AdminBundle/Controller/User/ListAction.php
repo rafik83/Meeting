@@ -21,10 +21,12 @@ use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\UserEventView\UserEventListView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\BatchType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
@@ -52,6 +54,9 @@ class ListAction
     /** @var FormFactoryInterface */
     private $formFactory;
 
+    /** @var FlashBagInterface */
+    private $flashBag;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
@@ -59,7 +64,8 @@ class ListAction
         CommandBusInterface $commandBus,
         UrlGeneratorInterface $urlGenerator,
         RuleStorageInterface $ruleStorageInterface,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
+        FlashBagInterface $flashBag
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
@@ -68,9 +74,10 @@ class ListAction
         $this->urlGenerator = $urlGenerator;
         $this->ruleStorageInterface = $ruleStorageInterface;
         $this->formFactory = $formFactory;
+        $this->flashBag = $flashBag;
     }
 
-    public function __invoke(Request $request, Event $event): Response
+    public function __invoke(Request $request, Event $event, AdminDomain $adminDomain): Response
     {
         if (!$this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ADMIN')
             || !$this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $event)
@@ -106,26 +113,41 @@ class ListAction
 
         $filters = $this->queryBus->handle(new GetFiltersByTypeAndLocaleQuery($event, 'user', $request->getLocale()));
 
-        $batch = new Batch($event, $locale, $rules);
+        $batch = new Batch($event, $adminDomain->getAdmin(), $locale, $rules);
         $batchForm = $this->formFactory->create(BatchType::class, $batch, [
             'ids' => $userEventListViews->paginatedResult->map(function(UserEventListView $eventListView) {
                 return $eventListView->userId;
-            })
+            }),
+            'event' => $event,
         ]);
 
         $batchForm->handleRequest($request);
         if ($batchForm->isSubmitted() && $batchForm->isValid()) {
             $batch->isCampaignCreation = $batchForm->get('sendMail')->isClicked();
+            $batch->isExportFormTemplate = $batchForm->get('exportFormTemplate')->isClicked();
 
-            /** @var BatchCampaignResult $result */
-            $result = $this->commandBus->handle($batch);
+            if ($batch->isCampaignCreation) {
+                /** @var BatchCampaignResult $result */
+                $result = $this->commandBus->handle($batch);
 
-            return new RedirectResponse(
-                $this->urlGenerator->generate('admin_messaging_campaign_select_message', [
-                    'event' => $event->getId(),
-                    'campaign' => $result->campaign->getId(),
-                ])
-            );
+                return new RedirectResponse(
+                    $this->urlGenerator->generate('admin_messaging_campaign_select_message', [
+                        'event' => $event->getId(),
+                        'campaign' => $result->campaign->getId(),
+                    ])
+                );
+            }
+
+            if ($batch->isExportFormTemplate) {
+                $this->commandBus->handle($batch);
+                $this->flashBag->add('success', 'flash.admin.user.exportFormTemplate.pending');
+
+                return new RedirectResponse(
+                    $this->urlGenerator->generate('admin_users_list', [
+                        'event' => $event->getId(),
+                    ])
+                );
+            }
         }
 
         return new Response(

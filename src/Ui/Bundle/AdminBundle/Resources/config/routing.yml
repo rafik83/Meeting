@@ -1131,6 +1131,15 @@ admin_template_form_parameters:
         event: \d+
         template: \d+
 
+admin_export_form_template_user_data:
+    path: /event/{event}/template/form/export/{file}z{hash}
+    methods: [GET]
+    requirements:
+        event: \d+
+        file: \d+
+        hash: .+
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction
+
 #
 # Package
 #

@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\User;
@@ -29,7 +30,6 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\IndexFromScratchCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\ToggleParticipantVisioCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
@@ -46,6 +46,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Ind
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByTypesCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Template\Form\ExportFormTemplateDataByUsersCommand;
 
 class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterface
 {
@@ -415,6 +416,24 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             $event->getId(),
             $extraData->getId(),
             $admin->getId(),
+        ]);
+
+        $this->setJob($job);
+    }
+
+    public function exportFormTemplateDataByUsers(
+        Event $event,
+        FormTemplate $formTemplate,
+        Admin $admin,
+        string $locale,
+        Event\ExtraData $extraData
+    ): void {
+        $job = new Job(ExportFormTemplateDataByUsersCommand::NAME, [
+            $event->getId(),
+            $formTemplate->getId(),
+            $extraData->getId(),
+            $admin->getId(),
+            $locale
         ]);
 
         $this->setJob($job);
