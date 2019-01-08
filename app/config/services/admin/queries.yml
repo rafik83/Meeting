@@ -227,5 +227,6 @@ services:
     Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\AccommodationRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListViewQuery }

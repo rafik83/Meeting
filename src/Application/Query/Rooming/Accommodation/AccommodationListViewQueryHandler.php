@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\View\Rooming\Accommodation\AccommodationView;
 use Proximum\Vimeet\Application\View\Rooming\Accommodation\OvernightCapacityView;
 use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Repository\Rooming\AccommodationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\MidnightTransformer;
 
 class AccommodationListViewQueryHandler
@@ -22,16 +23,24 @@ class AccommodationListViewQueryHandler
     /** @var AccommodationRepositoryInterface */
     private $accommodationRepository;
 
-    public function __construct(AccommodationRepositoryInterface $accommodationRepository)
-    {
+    /** @var StayRepositoryInterface */
+    private $stayRepository;
+
+    public function __construct(
+        AccommodationRepositoryInterface $accommodationRepository,
+        StayRepositoryInterface $stayRepository
+    ) {
         $this->accommodationRepository = $accommodationRepository;
+        $this->stayRepository = $stayRepository;
     }
 
     public function handle(AccommodationListViewQuery $query): AccommodationListView
     {
         $overnight = [];
+        /** @var AccommodationView[] $accommodationViews */
         $accommodationViews = [];
         $accommodations = $this->accommodationRepository->getByEvent($query->event);
+        $stays = $this->stayRepository->getAccommodationStaysByEvent($query->event);
 
         uasort($accommodations, function (Accommodation $accommodationOne, Accommodation $accommodationTwo) {
             return strcmp($accommodationOne->getTitle(), $accommodationTwo->getTitle());
@@ -62,7 +71,34 @@ class AccommodationListViewQueryHandler
                 );
             }
 
-            $accommodationViews[] = $accommodationView;
+            $accommodationViews[$accommodation->getId()] = $accommodationView;
+        }
+
+        foreach ($stays as $stay) {
+            if (!isset($accommodationViews[$stay->accommodationId])) {
+                continue;
+            }
+
+            $accommodationView = $accommodationViews[$stay->accommodationId];
+            $arrivalAtMidnight = MidnightTransformer::getDateAtMidnight($stay->arrival);
+            $departureAtMidnight = MidnightTransformer::getDateAtMidnight($stay->departure);
+
+            $interval = new \DateInterval('P1D');
+            $period = new \DatePeriod(
+                $arrivalAtMidnight,
+                $interval,
+                $departureAtMidnight
+            );
+
+            foreach ($period as $day) {
+                $formattedDate = $day->format('d/m/Y');
+
+                if (!isset($accommodationView->overnightCapacityViews[$formattedDate])) {
+                    continue;
+                }
+
+                $accommodationView->overnightCapacityViews[$formattedDate]->remaining--;
+            }
         }
 
         uasort($overnight, function (\DateTimeInterface $overnightOne, \DateTimeInterface $overnightTwo) {

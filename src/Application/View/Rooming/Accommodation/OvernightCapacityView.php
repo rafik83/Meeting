@@ -23,11 +23,10 @@ class OvernightCapacityView
 
     public function __construct(
         \DateTimeInterface $date,
-        int $total = 0,
-        int $remaining = 0
+        int $total = 0
     ) {
         $this->date = $date;
         $this->total = $total;
-        $this->remaining = $remaining;
+        $this->remaining = $total;
     }
 }
