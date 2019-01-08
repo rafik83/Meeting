@@ -14,7 +14,7 @@ mail.agenda.version_diff_changed.body: 'Hello %firstname% %lastname%, Your sched
 mail.agenda.version_diff_changed.end: 'Regards,'
 mail.agenda.version_diff_changed.link: 'Access your schedule'
 mail.agenda.version_diff_changed.subject: '[%event%]  Your schedule has changed'
-mail.changeMailNew.body: 'Hello, you have chosen a new e-mail addresse as login to ViMeet instead of %currentEmail%. To confirm that you are the owner of this e-mail address, please click on the link below to log in to your member area.'
+mail.changeMailNew.body: 'Hello, you have chosen a new e-mail addresse as login to ViMeet instead of %currentEmail%. To confirm that you are the owner of this e-mail address, please click on the link below to log in to your participant area.'
 mail.changeMailNew.end: Regards
 mail.changeMailNew.subject: 'Your new email ID'
 mail.changeMailNew.validate: 'Validate Your new email'
@@ -83,8 +83,8 @@ mail.planning.printWidthBadge.link.click: 'Badges and plannings file'
 mail.planning.printWithBadge.intro: 'Here is the requested plannings and badges file'
 mail.planning.printWithBadge.link.intro: 'You can print plannings and badges by clicking here:'
 mail.planning.printWithBadge.subject: 'Badges and plannings file'
-mail.register.body: "%firstname% %lastname%, Congratulations! The access to your member area of %event% has been created.\n\nYou can now connect to your member area on the website of %event%. \n\nBest regards,"
-mail.register.subject: 'The access to your member area of %event% has been created'
+mail.register.body: "%firstname% %lastname%, Congratulations! The access to your participant area of %event% has been created.\n\nYou can now connect to your member area on the website of %event%. \n\nBest regards,"
+mail.register.subject: 'The access to your participant area of %event% has been created'
 mail.resetPassword.body: "Hello, \n\nYou have asked for a password modification. \nPlease click on the following link to create a new password:"
 mail.resetPassword.end: ''
 mail.resetPassword.link: 'Reset password'
@@ -100,7 +100,7 @@ mail.sheet.group.created.body: 'Hello %firstname% %lastname%, your multi-sheets 
 mail.sheet.group.created.subject: 'your multi sheets entity has been created'
 mail.sheet.group.show.link: 'access to the multi-sheets entity'
 mail.sheet.invoiced.body: "Hello %participant%,\n\nAs a follow-up to your participation in the event %event% we inform you that your invoice is available:"
-mail.sheet.invoiced.end: "Your invoice is also available in your member area by this link <a href=\"%ordersLink%\" target=\"_blank\">Invoice and list of orders</a>\n\nWe thank you for your participation."
+mail.sheet.invoiced.end: "Your invoice is also available in your participant area by this link <a href=\"%ordersLink%\" target=\"_blank\">Invoice and list of orders</a>\n\nWe thank you for your participation."
 mail.sheet.invoiced.link: 'Download my invoice %invoiceNumber%'
 mail.sheet.invoiced.subject: 'Download your invoice'
 mail.sheet.print.click: 'download the sheets'

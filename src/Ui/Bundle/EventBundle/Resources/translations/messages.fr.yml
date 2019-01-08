@@ -201,7 +201,7 @@ login.connection: Connexion
 login.error.sheetDisabled: 'Votre participation a été désactivée'
 login.forgot_password: 'Mot de passe oublié ?'
 login.forgotPassword: 'Mot de passe oublié ?'
-login.memberArea: 'Espace membre'
+login.memberArea: 'Espace participant'
 meeting.video.end: 'Arrêter le RDV'
 meeting.video.endingAt: 'Fin du rendez-vous dans'
 meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video ou annulé le lancement du partage d'écran.\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques ou le lancement du partage d'écran."
@@ -241,7 +241,7 @@ navigation.category.catalog: Catalogue
 navigation.category.forms: 'Ma venue'
 navigation.category.happening: 'Gestion RDV'
 navigation.category.meeting: 'Gestion RDV'
-navigation.category.member_space: 'Espace membre'
+navigation.category.member_space: 'Espace participant'
 navigation.category.package: 'Forfait de participation'
 navigation.category.planning: Agenda
 navigation.category.program: Programme
@@ -450,7 +450,7 @@ sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
 sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
-sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication sur la plateforme des participants aux rendez-vous. Votre fiche de présentation sera validée dans les 48h.\n\nVous pourrez toujours la modifier ultérieurement"
+sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication sur la plateforme des participants aux rendez-vous. Votre fiche de présentation sera validée rapidement par l'organisateur.\n\nVous pourrez toujours la modifier ultérieurement"
 sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
 sheet.welcome.packageContent: 'CHOISISSEZ VOTRE FORMULE'
 sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'

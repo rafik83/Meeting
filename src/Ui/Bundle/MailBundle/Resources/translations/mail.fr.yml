@@ -4,21 +4,21 @@ admin.mail.activateAccount.end: ''
 admin.mail.activateAccount.subject: 'Activer votre compte'
 admin.mail.export_form_template_data.body: "Bonjour,\nVoici le fichier comportant l'export des données du formulaire de template\n"
 admin.mail.export_form_template_data.end: "Cordialement\n"
-admin.mail.export_form_template_data.file_link: "Fichier CSV"
-admin.mail.export_form_template_data.subject: "Export des données du formulaire de template"
+admin.mail.export_form_template_data.file_link: 'Fichier CSV'
+admin.mail.export_form_template_data.subject: 'Export des données du formulaire de template'
 admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:"
 admin.mail.resetPassword.end: 'Bien cordialement,'
 admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'
 admin.mail.resetPassword.subject: 'Mot de passe oublié'
 mail.activateAccount.activate: 'Activer votre compte'
-mail.activateAccount.body: "Bonjour,\n\nVous avez reçu une invitation pour participer à l’événement %event%.\n\nPour vous enregistrer en ligne et accéder à votre espace membre, cliquez sur le lien ci-dessous."
+mail.activateAccount.body: "Bonjour,\n\nVous avez reçu une invitation pour participer à l’événement %event%.\n\nPour vous enregistrer en ligne et accéder à votre espace participant, cliquez sur le lien ci-dessous."
 mail.activateAccount.end: 'Bien cordialement,'
 mail.activateAccount.subject: '[%event%] Activer votre compte'
 mail.agenda.version_diff_changed.body: "Bonjour %firstname% %lastname%,\n\nVotre planning a été modifié :"
 mail.agenda.version_diff_changed.end: 'Cordialement,'
 mail.agenda.version_diff_changed.link: 'Accéder à votre planning'
 mail.agenda.version_diff_changed.subject: '[%event%] Votre planning a changé'
-mail.changeMailNew.body: "Bonjour,\n\nVous avez choisi une nouvelle adresse comme nouvel identifiant ViMeet au lieu de %currentEmail%\n\nPour confirmer que vous êtes le propriétaire de cette adresse e-mail, veuillez cliquer sur le lien ci-dessous pour vous connecter à votre espace membre."
+mail.changeMailNew.body: "Bonjour,\n\nVous avez choisi une nouvelle adresse comme nouvel identifiant ViMeet au lieu de %currentEmail%\n\nPour confirmer que vous êtes le propriétaire de cette adresse e-mail, veuillez cliquer sur le lien ci-dessous pour vous connecter à votre espace participant."
 mail.changeMailNew.end: Cordialement
 mail.changeMailNew.subject: 'Votre nouvel identifiant'
 mail.changeMailNew.validate: 'Valider votre nouvel email'
@@ -87,8 +87,8 @@ mail.planning.printWidthBadge.link.click: 'Fichier de plannings et badges'
 mail.planning.printWithBadge.intro: 'Voici le fichier de plannings et badges demandé'
 mail.planning.printWithBadge.link.intro: 'Vous pouvez imprimer les plannings et badges en cliquant ici :'
 mail.planning.printWithBadge.subject: 'Fichier de plannings et badges'
-mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace membre \"%event%\" est créé. \n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site \"%event%\".\n\nBien cordialement,"
-mail.register.subject: 'Votre compte d''accès à l''espace membre de %event% est créé'
+mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace participant \"%event%\" est créé. \n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace participant sur le site \"%event%\".\n\nBien cordialement,"
+mail.register.subject: 'Votre compte d''accès à l''espace participant de %event% est créé'
 mail.resetPassword.body: "Bonjour,\n\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"
 mail.resetPassword.end: 'Cordialement,'
 mail.resetPassword.link: 'Réinitialiser le mot de passe'
@@ -104,7 +104,7 @@ mail.sheet.group.created.body: "Bonjour %firstname% %lastname%,\n\nVotre entité
 mail.sheet.group.created.subject: 'Votre entité multi-fiches a été créée'
 mail.sheet.group.show.link: 'Accéder à l''entité multi-fiches'
 mail.sheet.invoiced.body: "Bonjour %participant%,\n\nPour faire suite à votre participation à l''événement %event% nous vous informons que votre facture est disponible :"
-mail.sheet.invoiced.end: "Votre facture est &eacute;galement disponible dans votre espace membre par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
+mail.sheet.invoiced.end: "Votre facture est &eacute;galement disponible dans votre espace participant par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
 mail.sheet.invoiced.link: 'Télécharger ma facture %invoiceNumber%'
 mail.sheet.invoiced.subject: 'Téléchargez votre facture'
 mail.sheet.print.click: 'Télécharger les fiches'
