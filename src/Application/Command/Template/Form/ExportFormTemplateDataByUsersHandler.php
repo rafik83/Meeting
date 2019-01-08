@@ -83,7 +83,7 @@ class ExportFormTemplateDataByUsersHandler
                 'export_form_template_%d_%d_%s.csv',
                 $command->event->getId(),
                 $command->formTemplate->getId(),
-                $this->dateTime->format('h_i_s_d_m_Y')
+                $this->dateTime->format('H_i_s_d_m_Y')
             ),
             $this->exportFormTemplateDataPath
         );
