@@ -605,9 +605,9 @@ admin.participant_import_result.database_participations: 'Nombre de participatio
 admin.participant_import_result.errors: 'Liste des erreurs dans le fichier'
 admin.participant_import_result.file_participations: 'Nombre de participations dans le fichier'
 admin.participant_import_result.title.label: 'Resultat de l''importation des participants'
-admin.participant_import.title: 'Importer les participants'
 admin.participant_import.header.registration: 'Inscription : '
 admin.participant_import.header.sheet: 'Fiche : '
+admin.participant_import.title: 'Importer les participants'
 admin.participant.export.fields.day_checkin: 'Venu %date%'
 admin.participant.export.fields.happening_subscriber: 'Inscrit sous-évènement'
 admin.participant.export.fields.happening.participate: Inscrit
@@ -734,6 +734,15 @@ admin.role.ROLE_PARTNER: Partenaire
 admin.role.ROLE_SUPER_ADMIN: Admin
 admin.rooming.accommodation.add.title: 'Ajouter un hébergement'
 admin.rooming.accommodation.update.title: 'Modifier un hébergement'
+admin.rooming.list.arrivalDateAndDepartureDate: 'Arrivée / Départ'
+admin.rooming.list.assignAccommodation: Assigner
+admin.rooming.list.comment: Commentaire
+admin.rooming.list.fullName: 'Nom, prénom'
+admin.rooming.list.sheet: Fiche
+admin.rooming.stay.assignAccommodation.add.title: 'Ajouter une assignation'
+admin.rooming.stay.remove.confirm: 'Êtes-vous sûr de vouloir supprimer cette assignation ?'
+admin.rooming.stay.remove.success: 'L''assignation a bien été supprimée'
+admin.rooming.title: 'Rooming list'
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
 admin.rule.list.action.seeWhat: 'Voit quoi ?'
@@ -746,15 +755,6 @@ admin.rule.list.content.category: Catégorie
 admin.rule.list.content.type: Type
 admin.rule.list.title: 'Liste des règles'
 admin.rule.see-what.title: 'Règle de %seer% sur %seeable%'
-admin.rooming.stay.assignAccommodation.add.title: 'Ajouter une assignation'
-admin.rooming.title: 'Rooming list'
-admin.rooming.list.arrivalDateAndDepartureDate: 'Arrivée / Départ'
-admin.rooming.list.assignAccommodation: Assigner
-admin.rooming.list.comment: 'Commentaire'
-admin.rooming.list.fullName: 'Nom, prénom'
-admin.rooming.list.sheet: 'Fiche'
-admin.rooming.stay.remove.success: 'L''assignation a bien été supprimée'
-admin.rooming.stay.remove.confirm: 'Êtes-vous sûr de vouloir supprimer cette assignation ?'
 admin.schedule_day.update.title: 'Définir les jours de l''événement'
 admin.schedule.days.day: Jour
 admin.schedule.days.endTime: 'Heure de fin'
