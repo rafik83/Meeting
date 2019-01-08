@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Rooming\Accommodation;
 use Proximum\Vimeet\Application\View\Rooming\Accommodation\AccommodationListView;
 use Proximum\Vimeet\Application\View\Rooming\Accommodation\AccommodationView;
 use Proximum\Vimeet\Application\View\Rooming\Accommodation\OvernightCapacityView;
+use Proximum\Vimeet\Application\View\Rooming\Accommodation\OvernightTotalView;
 use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Repository\Rooming\AccommodationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
@@ -59,7 +60,10 @@ class AccommodationListViewQueryHandler
                 $formattedDate = $midnightDate->format('d/m/Y');
 
                 if (!isset($overnight[$formattedDate])) {
-                    $overnight[$formattedDate] = $midnightDate;
+                    $overnight[$formattedDate] = new OvernightTotalView(
+                        $formattedDate,
+                        $midnightDate
+                    );
                 }
 
                 $accommodationView->addOvernightCapacityView(
@@ -69,6 +73,8 @@ class AccommodationListViewQueryHandler
                         $overnightCapacity->getCapacity()
                     )
                 );
+
+                $overnight[$formattedDate]->addToTotal($overnightCapacity->getCapacity());
             }
 
             $accommodationViews[$accommodation->getId()] = $accommodationView;
@@ -98,11 +104,12 @@ class AccommodationListViewQueryHandler
                 }
 
                 $accommodationView->overnightCapacityViews[$formattedDate]->remaining--;
+                $overnight[$formattedDate]->decreaseRemaining();
             }
         }
 
-        uasort($overnight, function (\DateTimeInterface $overnightOne, \DateTimeInterface $overnightTwo) {
-            return $overnightOne <=> $overnightTwo;
+        uasort($overnight, function (OvernightTotalView $overnightOne, OvernightTotalView $overnightTwo) {
+            return $overnightOne->date <=> $overnightTwo->date;
         });
 
         return new AccommodationListView(

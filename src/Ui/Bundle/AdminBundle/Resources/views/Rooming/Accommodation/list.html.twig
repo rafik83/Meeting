@@ -16,7 +16,7 @@
             <th>{{ 'admin.rooming.accommodation.list.column.title'|trans }}</th>
             {% for overnight in accommodationListView.overnights %}
                 <th class="text-center">
-                    {{ overnight|date('d/m/Y') }}
+                    {{ overnight.date|date('d/m/Y') }}
                 </th>
             {% endfor %}
             <th></th>
@@ -43,6 +43,15 @@
                 </td>
             </tr>
         {% endfor %}
+        <tr class="info">
+            <td>{{ 'admin.rooming.accommodation.list.column.total'|trans }}</td>
+            {% for overnight in accommodationListView.overnights %}
+                <td class="text-center">
+                    {{ overnight.remaining }} / {{ overnight.total }}
+                </td>
+            {% endfor %}
+            <td></td>
+        </tr>
         </tbody>
     </table>
 {% endblock %}
