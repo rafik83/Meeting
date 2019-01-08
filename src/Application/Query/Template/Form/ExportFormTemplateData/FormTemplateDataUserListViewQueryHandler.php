@@ -46,7 +46,10 @@ class FormTemplateDataUserListViewQueryHandler
         $objectLabels = [];
 
         foreach ($templateData->getExportableObjects() as $object) {
-            $objectLabels[$object->getKey()] = $object->getExportableFieldname($query->locale, $query->locale);
+            $objectLabels[$object->getKey()] = $object->getExportableFieldname(
+                $query->locale,
+                $query->event->getFallback()
+            );
         }
 
         return new UserListView(
