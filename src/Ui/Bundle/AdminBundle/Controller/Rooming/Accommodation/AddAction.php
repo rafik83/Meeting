@@ -79,7 +79,7 @@ class AddAction
             $this->commandBus->handle($add);
             $this->flashBag->add('success', 'flash.event.accommodation.added');
 
-            return new RedirectResponse($this->router->generate('admin_event_read', [
+            return new RedirectResponse($this->router->generate('admin_event_rooming_accommodation_list', [
                 'event' => $event->getId(),
             ]));
         }

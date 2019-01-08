@@ -223,3 +223,9 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsers }
+
+    Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\AccommodationRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListViewQuery }

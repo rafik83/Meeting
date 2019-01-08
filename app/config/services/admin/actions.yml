@@ -837,6 +837,12 @@ services:
             - '@router.default'
             - '@session.flash_bag'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\RoomingListAction:
         arguments:
             - '@templating.engine.twig'
