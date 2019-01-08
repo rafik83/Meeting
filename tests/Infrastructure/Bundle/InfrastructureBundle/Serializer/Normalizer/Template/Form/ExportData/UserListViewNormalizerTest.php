@@ -251,7 +251,7 @@ class UserListViewNormalizerTest extends TestCase
                 ),
                 new UserDataView(
                     2,
-                    'Pimprenelle@exampl.net',
+                    'Pimprenelle@example.net',
                     'Pimprenelle',
                     'Foobar',
                     null,
@@ -296,7 +296,7 @@ class UserListViewNormalizerTest extends TestCase
         $expected = 'sheetId;sheetTitle;typeTitle;categoryTitle;userId;userFirstName;userLastName;userEmail;userPhone;userMobilePhone;sheetAddress;sheetZipCode;sheetCity;sheetCountry;key123;key1234;key12345;key123456
 form_template_data_export.column.sheetId;form_template_data_export.column.sheetTitle;form_template_data_export.column.typeTitle;form_template_data_export.column.categoryTitle;form_template_data_export.column.userId;form_template_data_export.column.userFirstName;form_template_data_export.column.userLastName;form_template_data_export.column.userEmail;form_template_data_export.column.userPhone;form_template_data_export.column.userMobilePhone;form_template_data_export.column.sheetAddress;form_template_data_export.column.sheetZipCode;form_template_data_export.column.sheetCity;form_template_data_export.column.sheetCountry;"Quelque chose";"Autre chose";Nomenclature;"Date de creation"
 11;"Truc Muche";Exposant;Exposants;1;Nicolas;Example;nicolas@example.net;\'+33123456789\';;"2 boulevard des trucs";75000;Paris;FR;Test;Bidule;"Lorem > Ipsum";10/05/2018
-12;"Foo Bar";Visiteur;;2;Pimprenelle;Foobar;Pimprenelle@exampl.net;;\'+33123456789\';"15 avenue des bidules";75000;Paris;FR;ABC;Machin;"Veni > Vidi > Vici";18/05/2018
+12;"Foo Bar";Visiteur;;2;Pimprenelle;Foobar;Pimprenelle@example.net;;\'+33123456789\';"15 avenue des bidules";75000;Paris;FR;ABC;Machin;"Veni > Vidi > Vici";18/05/2018
 ';
 
         $this->assertEquals($expected, $result);
