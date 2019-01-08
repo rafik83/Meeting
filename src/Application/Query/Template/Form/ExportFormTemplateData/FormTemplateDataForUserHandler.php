@@ -56,7 +56,7 @@ class FormTemplateDataForUserHandler
 
             // We need to find the oldest participant of the user (the original Participant)
             if ($userParticipant instanceof Participant
-                && (!$participant instanceof Participant || $participant->getId() < $userParticipant->getId()))
+                && (!$participant instanceof Participant || $participant->getId() > $userParticipant->getId()))
             {
                 $sheet = $userSheet;
                 $participant = $userParticipant;
