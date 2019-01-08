@@ -821,8 +821,12 @@ admin.sheet.details.crm.record.trace.set_commercial_status.do_not_call: 'Ne pas 
 admin.sheet.details.crm.record.trace.set_commercial_status.followed: Suivi
 admin.sheet.details.crm.record.trace.set_commercial_status.hot: Chaud
 admin.sheet.details.crm.record.trace.set_commercial_status.hot_stall: 'Chaud stand'
+admin.sheet.details.crm.record.trace.set_commercial_status.incomplete_presentation: 'Présentation incomplète'
 admin.sheet.details.crm.record.trace.set_commercial_status.interest: Intérêt
 admin.sheet.details.crm.record.trace.set_commercial_status.interest_next_edition: 'Intérêt N+1'
+admin.sheet.details.crm.record.trace.set_commercial_status.log_not_ok: 'Log pas ok'
+admin.sheet.details.crm.record.trace.set_commercial_status.log_ok: 'Log ok'
+admin.sheet.details.crm.record.trace.set_commercial_status.log_without_ticket: 'Log sans billet'
 admin.sheet.details.crm.record.trace.set_commercial_status.no_interest: 'Pas intéressé'
 admin.sheet.details.crm.record.trace.set_commercial_status.none: 'Pas de statut'
 admin.sheet.details.crm.record.trace.set_commercial_status.refused_by_organizer: 'Refus organisateur'
