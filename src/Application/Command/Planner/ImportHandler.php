@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Planner;
 
 use Proximum\Vimeet\Application\Adapter\EntityManagerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
@@ -33,7 +34,6 @@ use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\ParticipantFinder;
-use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\ImportPlannerMail;
 
 class ImportHandler
@@ -65,8 +65,8 @@ class ImportHandler
     /** @var MailerInterface */
     private $mailer;
 
-    /** @var LocalFileStorageAdapter */
-    private $localFileStorage;
+    /** @var FileStorageInterface */
+    private $fileStorage;
 
     /** @var string */
     private $importDirectoryPath;
@@ -109,7 +109,7 @@ class ImportHandler
      * @param PlannerJobRepositoryInterface  $plannerJobRepository
      * @param EntityManagerAdapterInterface  $entityManagerAdapter
      * @param MailerInterface                $mailer
-     * @param LocalFileStorageAdapter        $localFileStorage
+     * @param FileStorageInterface           $fileStorage
      * @param JobQueueInterface              $jobQueue
      * @param \DateTimeInterface             $dateTime
      * @param string                         $importDirectoryPath
@@ -127,7 +127,7 @@ class ImportHandler
         PlannerJobRepositoryInterface $plannerJobRepository,
         EntityManagerAdapterInterface $entityManagerAdapter,
         MailerInterface $mailer,
-        LocalFileStorageAdapter $localFileStorage,
+        FileStorageInterface $fileStorage,
         JobQueueInterface $jobQueue,
         \DateTimeInterface $dateTime,
         string $importDirectoryPath,
@@ -144,7 +144,7 @@ class ImportHandler
         $this->plannerJobRepository = $plannerJobRepository;
         $this->entityManagerAdapter = $entityManagerAdapter;
         $this->mailer               = $mailer;
-        $this->localFileStorage     = $localFileStorage;
+        $this->fileStorage          = $fileStorage;
         $this->jobQueue             = $jobQueue;
         $this->dateTime             = $dateTime;
         $this->importDirectoryPath  = $importDirectoryPath;
@@ -209,10 +209,10 @@ class ImportHandler
 
         $this->generateMeetingSolutionAnalytic($import->event);
 
-        $this->localFileStorage->remove($importDirectory . $import->file->getPath(), true);
+        $this->fileStorage->remove($importDirectory . $import->file->getPath(), true);
 
         if (null !== $plannerJob) {
-            $this->localFileStorage->remove($importDirectory . $plannerJob->getFile()->getPath(), true);
+            $this->fileStorage->remove($importDirectory . $plannerJob->getFile()->getPath(), true);
         }
     }
 
@@ -350,7 +350,7 @@ class ImportHandler
      * @param Event  $event
      * @param Import $command
      */
-    public function notifyAboutImportSuccess(Event $event, Import $command)
+    private function notifyAboutImportSuccess(Event $event, Import $command)
     {
         $this->mailer->send(new ImportPlannerMail(
             $event,
@@ -363,7 +363,7 @@ class ImportHandler
     /**
      * @param Event $event
      */
-    public function generateMeetingSolutionAnalytic(Event $event)
+    private function generateMeetingSolutionAnalytic(Event $event)
     {
         $this->jobQueue->generateMeetingSolutionAnalytic($event);
     }

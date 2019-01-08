@@ -8,13 +8,26 @@
 function Update(element)
 {
     this.element = element;
-    this.data    = JSON.parse(element.getAttribute('data-update'));
-    this.url     = element.getAttribute('data-url');
-    this.type    = element.getAttribute('data-type');
+    this.data = JSON.parse(element.getAttribute('data-update'));
+    this.url = element.getAttribute('data-url');
+    this.type = element.getAttribute('data-type');
+    this.inputSize = element.getAttribute('data-input-size');
+    this.inputType = element.getAttribute('data-input-type');
     this.editing = false;
-    this.old     = null;
-    this.input   = document.createElement('input');
-    this.input.setAttribute('size', '6');
+    this.old = null;
+
+    if ('textarea' === this.inputType) {
+        this.input = document.createElement('textarea');
+    } else {
+        this.input = document.createElement('input');
+    }
+
+    if (null === this.inputSize) {
+        this.input.setAttribute('size', '6');
+    } else {
+        this.input.setAttribute('size', this.inputSize);
+    }
+
     this.element.addEventListener('click', this.clicked.bind(this), false);
     this.input.addEventListener('blur', this.blured.bind(this));
     this.input.addEventListener('keypress', this.keyupped.bind(this));
@@ -133,7 +146,7 @@ Update.prototype.keyupped = function (event)
 
     if (code === 27) {
         this.close();
-    } else if (code === 13) {
+    } else if (code === 13 && !event.shiftKey) {
         event.preventDefault();
         this.save();
         return false;

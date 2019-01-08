@@ -879,3 +879,7 @@ services:
             - '@session.flash_bag'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\CommentAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'

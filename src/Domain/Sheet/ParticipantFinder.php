@@ -57,7 +57,7 @@ final class ParticipantFinder
      */
     public static function getParticipantWithUserId(Sheet $sheet, $userId)
     {
-        $participants = $sheet->getParticipants()->toArray();
+        $participants = $sheet->getParticipantsArray();
 
         /** @var Participant $participant */
         foreach ($participants as $participant) {
