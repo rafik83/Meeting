@@ -37,15 +37,14 @@ class AccommodationListViewQueryHandler
 
     public function handle(AccommodationListViewQuery $query): AccommodationListView
     {
-        $overnight = [];
+        $overnightTotalViews = [];
+
         /** @var AccommodationView[] $accommodationViews */
         $accommodationViews = [];
         $accommodations = $this->accommodationRepository->getByEvent($query->event);
         $stays = $this->stayRepository->getAccommodationStaysByEvent($query->event);
 
-        uasort($accommodations, function (Accommodation $accommodationOne, Accommodation $accommodationTwo) {
-            return strcmp($accommodationOne->getTitle(), $accommodationTwo->getTitle());
-        });
+        $this->sortAccommodationByAlphabeticalOrder($accommodations);
 
         foreach ($accommodations as $accommodation) {
             $accommodationView = new AccommodationView(
@@ -59,8 +58,8 @@ class AccommodationListViewQueryHandler
                 $midnightDate = MidnightTransformer::getDateAtMidnight($overnightCapacity->getDate());
                 $formattedDate = $midnightDate->format('d/m/Y');
 
-                if (!isset($overnight[$formattedDate])) {
-                    $overnight[$formattedDate] = new OvernightTotalView(
+                if (!isset($overnightTotalViews[$formattedDate])) {
+                    $overnightTotalViews[$formattedDate] = new OvernightTotalView(
                         $formattedDate,
                         $midnightDate
                     );
@@ -74,12 +73,38 @@ class AccommodationListViewQueryHandler
                     )
                 );
 
-                $overnight[$formattedDate]->addToTotal($overnightCapacity->getCapacity());
+                $overnightTotalViews[$formattedDate]->addToTotal($overnightCapacity->getCapacity());
             }
 
             $accommodationViews[$accommodation->getId()] = $accommodationView;
         }
 
+        $this->handleRemainingWithStays($stays, $accommodationViews, $overnightTotalViews);
+
+        $this->sortOvernightTotalByDate($overnightTotalViews);
+
+        return new AccommodationListView(
+            $accommodationViews,
+            $overnightTotalViews
+        );
+    }
+
+    private function sortAccommodationByAlphabeticalOrder(array &$accommodations): void
+    {
+        uasort($accommodations, function (Accommodation $accommodationOne, Accommodation $accommodationTwo) {
+            return strcmp($accommodationOne->getTitle(), $accommodationTwo->getTitle());
+        });
+    }
+
+    private function sortOvernightTotalByDate(array &$overnightTotalViews): void
+    {
+        uasort($overnightTotalViews, function (OvernightTotalView $overnightOne, OvernightTotalView $overnightTwo) {
+            return $overnightOne->date <=> $overnightTwo->date;
+        });
+    }
+
+    private function handleRemainingWithStays(array $stays, array &$accommodationViews, array &$overnight): void
+    {
         foreach ($stays as $stay) {
             if (!isset($accommodationViews[$stay->accommodationId])) {
                 continue;
@@ -107,14 +132,5 @@ class AccommodationListViewQueryHandler
                 $overnight[$formattedDate]->decreaseRemaining();
             }
         }
-
-        uasort($overnight, function (OvernightTotalView $overnightOne, OvernightTotalView $overnightTwo) {
-            return $overnightOne->date <=> $overnightTwo->date;
-        });
-
-        return new AccommodationListView(
-            $accommodationViews,
-            $overnight
-        );
     }
 }
