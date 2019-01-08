@@ -104,7 +104,7 @@ mail.sheet.group.created.body: "Bonjour %firstname% %lastname%,\n\nVotre entité
 mail.sheet.group.created.subject: 'Votre entité multi-fiches a été créée'
 mail.sheet.group.show.link: 'Accéder à l''entité multi-fiches'
 mail.sheet.invoiced.body: "Bonjour %participant%,\n\nPour faire suite à votre participation à l''événement %event% nous vous informons que votre facture est disponible :"
-mail.sheet.invoiced.end: "Votre facture est également disponible dans votre espace participant par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
+mail.sheet.invoiced.end: "Votre facture est &eacute;galement disponible dans votre espace participant par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
 mail.sheet.invoiced.link: 'Télécharger ma facture %invoiceNumber%'
 mail.sheet.invoiced.subject: 'Téléchargez votre facture'
 mail.sheet.print.click: 'Télécharger les fiches'
