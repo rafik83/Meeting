@@ -45,8 +45,8 @@ class PersistHandler
             $persist->event,
             $arrival,
             $departure,
-            $arrivalObject->displayHours(),
-            $departureObject->displayHours()
+            $arrival  instanceof \DateTimeInterface ? $arrivalObject->displayHours() : false,
+            $departure  instanceof \DateTimeInterface ? $departureObject->displayHours() : false
         ));
     }
 }

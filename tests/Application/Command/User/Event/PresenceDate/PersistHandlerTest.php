@@ -146,6 +146,55 @@ class PersistHandlerTest extends TestCase
         $persistHandler->handle(new Persist($event->reveal(), $user->reveal(), $block->reveal()));
     }
 
+    public function test_with_one_date(): void
+    {
+        $event = $this->prophesize(Event::class);
+        $user = $this->prophesize(User::class);
+
+        $previousArrival = new \DateTime('2018-12-18');
+        $arrival = new \DateTime('2018-12-19');
+        $presenceDate = new PresenceDate($user->reveal(), $event->reveal(), $previousArrival, null, true, false);
+
+        $arrivalObject = new DateTime('dateKey2', 'datetime', ['format' => 'date'], 'fr', 'fr');
+        $arrivalObject->setDatetime($arrival);
+
+        $departureObject = new DateTime('dateKey1', 'datetime', ['format' => 'datetime'], 'fr', 'fr');
+        $departureObject->setDatetime(null);
+
+        $block = $this->prophesize(Block::class);
+        $block
+            ->getObjectByTag(Tag::PARTICIPANT_DEPARTURE_DATE)
+            ->shouldBeCalled()
+            ->willReturn($departureObject)
+        ;
+        $block
+            ->getObjectByTag(Tag::PARTICIPANT_ARRIVAL_DATE)
+            ->shouldBeCalled()
+            ->willReturn($arrivalObject)
+        ;
+
+        $presenceDateRepository = $this->prophesize(PresenceDateRepositoryInterface::class);
+        $presenceDateRepository
+            ->getByUserAndEvent($user->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn($presenceDate)
+        ;
+
+        $presenceDateRepository
+            ->remove($presenceDate)
+            ->shouldBeCalled()
+        ;
+
+        $expected = new PresenceDate($user->reveal(), $event->reveal(), $arrival, null, false, false);
+        $presenceDateRepository
+            ->add($expected)
+            ->shouldBeCalled()
+        ;
+
+        $persistHandler = new PersistHandler($presenceDateRepository->reveal());
+        $persistHandler->handle(new Persist($event->reveal(), $user->reveal(), $block->reveal()));
+    }
+
     public function test_previous_presence_exists_un_set(): void
     {
         $event = $this->prophesize(Event::class);
