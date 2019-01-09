@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Command\Rooming\Export\PrepareExport;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -37,9 +40,10 @@ class PrepareExportAction
         $this->router = $router;
     }
 
-    public function __invoke(Event $event): RedirectResponse
+    public function __invoke(Request $request, Event $event, AdminDomain $adminDomain): RedirectResponse
     {
-        $command = null;
+        $command = new PrepareExport($event, $adminDomain->getAdmin(), $request->getLocale());
+        $this->commandBus->handle($command);
         $this->flashBag->add('success', 'flash.admin.rooming.list.export.prepare.success');
 
         return new RedirectResponse(

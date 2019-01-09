@@ -65,6 +65,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Stay\AddComment }
 
+    Proximum\Vimeet\Application\Command\Rooming\Export\PrepareExportHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Export\PrepareExport }
+
     #
     # Extra Parameter
     #

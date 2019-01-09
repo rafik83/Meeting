@@ -438,4 +438,8 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
 
         $this->setJob($job);
     }
+
+    public function exportRoomingList(Event $event, Admin $admin, string $locale): void
+    {
+    }
 }
