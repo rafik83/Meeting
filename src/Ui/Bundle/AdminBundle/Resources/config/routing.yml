@@ -2082,3 +2082,12 @@ admin_event_rooming_list_prepare_export:
         event: \d+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\PrepareExportAction
+
+admin_event_rooming_list_download_export:
+    path: /event/{event}/rooming/list/download/export/{file}z{hash}
+    requirements:
+        event: \d+
+        file: \d+
+        hash: .+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\DownloadRoomingListExportAction

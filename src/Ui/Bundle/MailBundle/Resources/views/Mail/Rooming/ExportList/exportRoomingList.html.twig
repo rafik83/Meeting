@@ -9,7 +9,7 @@
     <br>
     {{ macros.button(
         'admin.mail.export_rooming_list.file_link'|trans({}, 'mail', mail.locale),
-        url('', {'event': mail.event.id, 'file': mail.file.id, 'hash': mail.file.hash })
+        url('admin_event_rooming_list_download_export', {'event': mail.event.id, 'file': mail.file.id, 'hash': mail.file.hash })
     ) }}
     <br>
 
