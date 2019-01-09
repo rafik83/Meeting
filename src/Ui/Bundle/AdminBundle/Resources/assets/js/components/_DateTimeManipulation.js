@@ -37,7 +37,7 @@ DateTimeManipulation.prototype.formatDate = function (date)
     var minutes = this.addPaddingZero(date.getMinutes());
     var months = this.addPaddingZero(date.getMonth() + 1);
 
-    return day + "/" + months + "/" +  + date.getFullYear() + " " + hours + ':' + minutes + ':00';
+    return day + "/" + months + "/" +  + date.getFullYear() + " " + hours + ':' + minutes;
 };
 
 DateTimeManipulation.prototype.addPaddingZero = function (number)
