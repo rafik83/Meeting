@@ -62,7 +62,8 @@ class AssignAccommodationHandler
             MidnightTransformer::getDateAtMidnight($assignAccommodation->arrival),
             MidnightTransformer::getDateAtMidnight($assignAccommodation->departure),
             $assignAccommodation->accommodation,
-            $assignAccommodation->roomType
+            $assignAccommodation->roomType,
+            ''
         );
 
         if (Stay::ROOM_TYPE_DOUBLE === $assignAccommodation->roomType

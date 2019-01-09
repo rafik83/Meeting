@@ -100,7 +100,7 @@ class ListViewQueryHandlerTest extends TestCase
         ;
 
         $stayRepository = $this->prophesize(StayRepositoryInterface::class);
-        $stayRepository->getStaysByEvent($event->reveal())
+        $stayRepository->getStayViewsByEvent($event->reveal())
             ->shouldBeCalled()
             ->willReturn(
                 [
@@ -278,7 +278,7 @@ class ListViewQueryHandlerTest extends TestCase
         ;
 
         $stayRepository = $this->prophesize(StayRepositoryInterface::class);
-        $stayRepository->getStaysByEvent($event->reveal())
+        $stayRepository->getStayViewsByEvent($event->reveal())
             ->shouldBeCalled()
             ->willReturn([])
         ;

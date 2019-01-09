@@ -27,10 +27,16 @@ class Stay
     private $accommodation;
 
     /** @var string */
+    private $roomNumber;
+
+    /** @var string */
     private $roomType;
 
     /** @var ArrayCollection of User */
     private $users;
+
+    /** @var User */
+    private $user;
 
     public function __construct(
         Event $event,
@@ -38,7 +44,8 @@ class Stay
         \DateTimeInterface $arrival,
         \DateTimeInterface $departure,
         Accommodation $accommodation,
-        string $roomType
+        string $roomType,
+        string $roomNumber
     ) {
         $this->event = $event;
         $this->arrival = $arrival;
@@ -46,6 +53,7 @@ class Stay
         $this->accommodation = $accommodation;
         $this->roomType = $roomType;
         $this->users = new ArrayCollection([$user]);
+        $this->roomNumber = $roomNumber;
     }
 
     public function getId(): ?int
@@ -76,6 +84,16 @@ class Stay
     public function getRoomType(): string
     {
         return $this->roomType;
+    }
+
+    public function getRoomNumber(): string
+    {
+        return $this->roomNumber;
+    }
+
+    public function setRoomNumber(string $roomNumber): void
+    {
+        $this->roomNumber = $roomNumber;
     }
 
     /**

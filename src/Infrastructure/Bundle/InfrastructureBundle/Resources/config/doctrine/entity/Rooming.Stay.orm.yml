@@ -13,6 +13,10 @@ Proximum\Vimeet\Domain\Model\Rooming\Stay:
             type: datetime
         roomType:
             type: string
+        roomNumber:
+            type: string
+            options:
+                default: ''
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
