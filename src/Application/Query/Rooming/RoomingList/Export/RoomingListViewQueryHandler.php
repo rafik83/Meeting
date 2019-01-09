@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Rooming\RoomingList\Export;
 
 use Proximum\Vimeet\Application\View\Rooming\ExportList\RoomingListView;
+use Proximum\Vimeet\Application\View\Rooming\ExportList\StayView;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
 
 class RoomingListViewQueryHandler
@@ -18,13 +19,46 @@ class RoomingListViewQueryHandler
     /** @var StayRepositoryInterface */
     private $stayRepository;
 
-    public function __construct(StayRepositoryInterface $stayRepository)
+    /** @var UserViewQueryHandler */
+    private $userViewQueryHandler;
+
+    public function __construct(StayRepositoryInterface $stayRepository, UserViewQueryHandler $userViewQueryHandler)
     {
         $this->stayRepository = $stayRepository;
+        $this->userViewQueryHandler = $userViewQueryHandler;
     }
 
     public function handle(RoomingListViewQuery $query): RoomingListView
     {
         $locale = $query->event->getAvailableLocale($query->locale);
+        $userViews = [];
+        $stayViews = [];
+        $stays = $this->stayRepository->getStaysByEvent($query->event);
+
+        foreach ($stays as $stay) {
+            $userStayViews = [];
+
+            foreach ($stay->getUsers() as $user) {
+                $userId = $user->getId();
+
+                if (!isset($userViews[$userId])) {
+                    $userViews[$userId] = $this->userViewQueryHandler->handle(
+                        new UserViewQuery($query->event, $user, $locale)
+                    );
+                }
+
+                $userStayViews[$userId] = $userViews[$userId];
+            }
+
+            $stayViews[] = new StayView(
+                $stay->getAccommodation()->getTitle(),
+                $stay->getArrival(),
+                $stay->getDeparture(),
+                $stay->getRoomType(),
+                $stay->getRoomNumber(),
+                $userStayViews
+            );
+        }
+        return new RoomingListView($stayViews);
     }
 }

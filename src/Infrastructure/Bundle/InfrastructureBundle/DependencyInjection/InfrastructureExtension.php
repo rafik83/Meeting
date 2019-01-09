@@ -46,6 +46,7 @@ class InfrastructureExtension extends Extension
         $container->setParameter('infrastructure.export_omz_path', $config['export_omz_path']);
         $container->setParameter('infrastructure.export_spot_path', $config['export_spot_path']);
         $container->setParameter('infrastructure.export_form_template_user_data_path', $config['export_form_template_user_data_path']);
+        $container->setParameter('infrastructure.export_rooming_list_path', $config['export_rooming_list_path']);
         $container->setParameter('infrastructure.export_planner_path', $config['export_planner_path']);
         $container->setParameter('infrastructure.import_planner_path', $config['import_planner_path']);
         $container->setParameter('infrastructure.import_spot_path', $config['import_spot_path']);

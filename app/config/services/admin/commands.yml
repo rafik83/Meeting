@@ -72,8 +72,21 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Export\PrepareExport }
 
     Proximum\Vimeet\Application\Command\Rooming\Export\ExportRoomingListHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.serializer_adapter'
+            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
+            - '%infrastructure.export_rooming_list_path%'
+            - '@Proximum\Vimeet\Application\Command\Rooming\Export\MailToAdminHandler'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Export\ExportRoomingList }
+
+    Proximum\Vimeet\Application\Command\Rooming\Export\MailToAdminHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
 
     #
     # Extra Parameter

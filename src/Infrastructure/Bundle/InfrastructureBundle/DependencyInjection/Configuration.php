@@ -54,6 +54,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('export_omz_path')->end()
                 ->scalarNode('export_spot_path')->end()
                 ->scalarNode('export_form_template_user_data_path')->end()
+                ->scalarNode('export_rooming_list_path')->end()
                 ->scalarNode('export_participant_path')->end()
                 ->scalarNode('print_sheet_path')->end()
                 ->scalarNode('import_spot_path')->end()
