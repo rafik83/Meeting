@@ -42,6 +42,11 @@
                             {{ 'admin.users.batch.sendMail'|trans }}
                         </a>
                     </li>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#exportFormTemplate">
+                            {{ 'admin.users.batch.exportFormTemplate'|trans }}
+                        </a>
+                    </li>
                 {% endblock %}
             {% endembed %}
         </div>
@@ -217,6 +222,25 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
                     {{ form_widget(batchForm.sendMail) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="exportFormTemplate">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{ 'admin.users.batch.exportFormTemplate'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(batchForm.formTemplate) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
+                    {{ form_widget(batchForm.exportFormTemplate) }}
                 </div>
             </div>
         </div>

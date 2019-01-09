@@ -77,4 +77,19 @@ class FormTemplateRepository implements FormTemplateRepositoryInterface
             ->getResult()
         ;
     }
+
+    public function getById(int $formTemplateId): ?FormTemplate
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('formTemplate')
+            ->from(FormTemplate::class, 'formTemplate')
+            ->where('formTemplate.id = :formTemplateId')
+            ->setParameter('formTemplateId', $formTemplateId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

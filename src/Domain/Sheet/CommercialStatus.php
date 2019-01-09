@@ -16,42 +16,54 @@ namespace Proximum\Vimeet\Domain\Sheet;
 class CommercialStatus
 {
     /** Aucun */
-    const STATUS_NONE = 'none';
+    public const STATUS_NONE = 'none';
 
     /** Accord verbal */
-    const STATUS_VERBAL_AGREEMENT = 'verbal_agreement';
+    public const STATUS_VERBAL_AGREEMENT = 'verbal_agreement';
 
     /** Annulation */
-    const STATUS_CANCELED = 'canceled';
+    public const STATUS_CANCELED = 'canceled';
 
     /** Chaud */
-    const STATUS_HOT = 'hot';
+    public const STATUS_HOT = 'hot';
 
     /** Chaud stand */
-    const STATUS_HOT_STALL = 'hot_stall';
+    public const STATUS_HOT_STALL = 'hot_stall';
 
     /** Inscrit */
-    const STATUS_REGISTERED = 'registered';
+    public const STATUS_REGISTERED = 'registered';
 
     /** Intérêt */
-    const STATUS_INTEREST = 'interest';
+    public const STATUS_INTEREST = 'interest';
 
     /** Intérêt N+1 */
-    const STATUS_INTEREST_NEXT_EDITION = 'interest_next_edition';
+    public const STATUS_INTEREST_NEXT_EDITION = 'interest_next_edition';
 
     /** Ne pas appeler */
-    const STATUS_DO_NOT_CALL = 'do_not_call';
+    public const STATUS_DO_NOT_CALL = 'do_not_call';
 
     /** Pas intéressé */
-    const STATUS_NO_INTEREST = 'no_interest';
+    public const STATUS_NO_INTEREST = 'no_interest';
 
     /** Refus organisateur */
-    const STATUS_REFUSED_BY_ORGANIZER = 'refused_by_organizer';
+    public const STATUS_REFUSED_BY_ORGANIZER = 'refused_by_organizer';
 
     /** Suivi */
-    const STATUS_FOLLOWED = 'followed';
+    public const STATUS_FOLLOWED = 'followed';
 
-    const STATUS = [
+    /** Log Ok */
+    public const STATUS_LOGISTIC_OK = 'log_ok';
+
+    /** Log sans billet */
+    public const STATUS_LOGISTIC_WITHOUT_TICKET = 'log_without_ticket';
+
+    /** Log Pas Ok */
+    public const STATUS_LOGISTIC_NOT_OK = 'log_not_ok';
+
+    /** Présentation incomplète */
+    public const STATUS_INCOMPLETE_PRESENTATION = 'incomplete_presentation';
+
+    public const STATUS = [
         self::STATUS_NONE,
         self::STATUS_VERBAL_AGREEMENT,
         self::STATUS_CANCELED,
@@ -60,13 +72,17 @@ class CommercialStatus
         self::STATUS_REGISTERED,
         self::STATUS_INTEREST,
         self::STATUS_INTEREST_NEXT_EDITION,
+        self::STATUS_LOGISTIC_OK,
+        self::STATUS_LOGISTIC_NOT_OK,
+        self::STATUS_LOGISTIC_WITHOUT_TICKET,
         self::STATUS_DO_NOT_CALL,
         self::STATUS_NO_INTEREST,
+        self::STATUS_INCOMPLETE_PRESENTATION,
         self::STATUS_REFUSED_BY_ORGANIZER,
         self::STATUS_FOLLOWED,
     ];
 
-    const STATUS_WITH_LABEL = [
+    public const STATUS_WITH_LABEL = [
         self::STATUS_NONE => 'default',
         self::STATUS_VERBAL_AGREEMENT => 'success',
         self::STATUS_CANCELED => 'danger',
@@ -79,5 +95,9 @@ class CommercialStatus
         self::STATUS_NO_INTEREST => 'danger',
         self::STATUS_REFUSED_BY_ORGANIZER => 'danger',
         self::STATUS_FOLLOWED => 'info',
+        self::STATUS_LOGISTIC_NOT_OK => 'danger',
+        self::STATUS_LOGISTIC_WITHOUT_TICKET => 'info',
+        self::STATUS_LOGISTIC_OK => 'success',
+        self::STATUS_INCOMPLETE_PRESENTATION => 'danger',
     ];
 }

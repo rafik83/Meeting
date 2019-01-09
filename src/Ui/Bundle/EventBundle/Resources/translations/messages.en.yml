@@ -201,7 +201,7 @@ login.connection: Connexion
 login.error.sheetDisabled: 'Your participation has been disabled.'
 login.forgot_password: 'Forgotten password?'
 login.forgotPassword: 'Forgotten password?'
-login.memberArea: 'Member area'
+login.memberArea: 'Participant area'
 meeting.video.end: 'End call'
 meeting.video.endingAt: 'End of the meeting in'
 meeting.video.error.userDeniedAccess: 'You have denied access to your audio/video devices or canceled the launch of the screen share. For video conferencing to work properly, please allow access to your devices or the launch of screen sharing.'
@@ -240,7 +240,7 @@ navigation.category.catalog: Catalogue
 navigation.category.forms: 'My venue'
 navigation.category.happening: 'Meeting administration'
 navigation.category.meeting: 'My meetings'
-navigation.category.member_space: 'Member area'
+navigation.category.member_space: 'Participant area'
 navigation.category.package: 'Registration package'
 navigation.category.planning: 'Planning & Attendance'
 navigation.category.program: Program
@@ -449,8 +449,8 @@ sheet.submit.validation: 'Submit for validation'
 sheet.submit.validation.moreInfoOnPending: 'Submit your presentation sheet to validation'
 sheet.submit.validation.pending: 'Awaiting validation'
 sheet.title: 'Presentation sheet'
-sheet.validation.complete.message: "You have the possibility to submit your profile for validation if you need the event team to check it.\nYour presentation form will be validated within 48 hours.\nYou will still be able to modify it later on."
-sheet.validation.uncomplete.message: 'Warning, you have not completed the mandatory fields marked with an asterisk.'
+sheet.validation.complete.message: "Once your presentation form has been completed, you must submit it for validation before publication on the participants' platform. Your presentation sheet will be validated quickly by the organizer.\n\nYou can always edit it later"
+sheet.validation.uncomplete.message: 'Warning, you have not completed the mandatory fields marked with an *.'
 sheet.welcome.packageContent: 'Choose the formula of participation.'
 sheet.welcome.programContent: 'Choose your conferences'
 sheet.welcome.sheetContent: "Complete your presentation sheet.\n\nThen\n\nSubmit it for validation"

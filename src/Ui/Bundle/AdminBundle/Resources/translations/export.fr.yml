@@ -24,6 +24,20 @@ export.meeting_request.state.approved: Acceptée
 export.meeting_request.state.planned: Planifiée
 export.meeting_request.state.refused: Refusée
 export.meeting_request.state.sent: Envoyée
+form_template_data_export.column.categoryTitle: 'Catégorie de participation'
+form_template_data_export.column.sheetAddress: Adresse
+form_template_data_export.column.sheetCity: Ville
+form_template_data_export.column.sheetCountry: Pays
+form_template_data_export.column.sheetId: 'Id fiche'
+form_template_data_export.column.sheetTitle: 'Titre fiche'
+form_template_data_export.column.sheetZipCode: 'Code postal'
+form_template_data_export.column.typeTitle: 'Type de participation'
+form_template_data_export.column.userEmail: Email
+form_template_data_export.column.userFirstName: Prénom
+form_template_data_export.column.userId: 'Id user'
+form_template_data_export.column.userLastName: Nom
+form_template_data_export.column.userMobilePhone: Mobile
+form_template_data_export.column.userPhone: Téléphone
 gender.man: Monsieur
 gender.woman: Madame
 order.column.billing_info_city: ville

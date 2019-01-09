@@ -230,3 +230,19 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListViewQuery }
+
+    Proximum\Vimeet\Application\Query\Template\Form\ExportFormTemplateData\FormTemplateDataForUserHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQueryHandler'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\ExportFormTemplateData\FormTemplateDataForUser }
+
+    Proximum\Vimeet\Application\Query\Template\Form\ExportFormTemplateData\FormTemplateDataUserListViewQueryHandler:
+        arguments:
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Application\Query\Template\Form\ExportFormTemplateData\FormTemplateDataForUserHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\ExportFormTemplateData\FormTemplateDataUserListViewQuery }

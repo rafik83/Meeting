@@ -12,6 +12,12 @@ form.add_unavailability.children.from.label: from
 form.add_unavailability.children.participants.label: 'concerned participants'
 form.add_unavailability.children.submit.label: Add
 form.add_unavailability.children.to.label: To
+form.admin_accommodation_type.children.overnightCapacities.label: Night(s)
+form.admin_accommodation_type.children.overnightCapacities.label_add: 'Add a night'
+form.admin_accommodation_type.children.overnightCapacities.prototype.children.capacity.label: Capacity
+form.admin_accommodation_type.children.overnightCapacities.prototype.children.date.label: Date
+form.admin_accommodation_type.children.submit.label: Validate
+form.admin_accommodation_type.children.title.label: 'Hosting name'
 form.admin_activate_account_password.children.password.children.first.label: 'New password'
 form.admin_activate_account_password.children.password.children.second.label: 'Confirm new password'
 form.admin_activate_account_password.children.submit.label: Submit
@@ -813,8 +819,12 @@ form.sheet_comment.children.commercialStatus.status.do_not_call: 'Do not call'
 form.sheet_comment.children.commercialStatus.status.followed: 'follow up'
 form.sheet_comment.children.commercialStatus.status.hot: 'very interested'
 form.sheet_comment.children.commercialStatus.status.hot_stall: 'very interested booth'
+form.sheet_comment.children.commercialStatus.status.incomplete_presentation: 'Incomplete presentation'
 form.sheet_comment.children.commercialStatus.status.interest: interest
 form.sheet_comment.children.commercialStatus.status.interest_next_edition: 'Interest N+1'
+form.sheet_comment.children.commercialStatus.status.log_not_ok: 'Log not ok'
+form.sheet_comment.children.commercialStatus.status.log_ok: 'Log ok'
+form.sheet_comment.children.commercialStatus.status.log_without_ticket: 'Log without ticket'
 form.sheet_comment.children.commercialStatus.status.no_interest: 'not interested'
 form.sheet_comment.children.commercialStatus.status.none: 'no commercial status'
 form.sheet_comment.children.commercialStatus.status.refused_by_organizer: 'status refused by the organizer'

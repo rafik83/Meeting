@@ -58,6 +58,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation }
 
+    Proximum\Vimeet\Application\Command\Rooming\Stay\AddCommentHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Stay\AddComment }
+
     #
     # Extra Parameter
     #
@@ -123,6 +130,15 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmation }
+
+    #
+    # User
+    #
+    Proximum\Vimeet\Application\Command\User\Batch\BatchExportFormTemplateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@adapter.job_queue_adapter'
+            - '@datetime'
 
     #
     # Type Badge
@@ -437,6 +453,23 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Template\FormTemplateRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\UpdateParameters }
+
+    Proximum\Vimeet\Application\Command\Template\Form\ExportFormTemplateDataByUsersHandler:
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.export_form_template_user_data_path%'
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
+            - '@datetime'
+            - '@Proximum\Vimeet\Application\Command\Template\Form\ExportFormTemplateData\MailToAdminHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\ExportFormTemplateDataByUsers }
+
+    Proximum\Vimeet\Application\Command\Template\Form\ExportFormTemplateData\MailToAdminHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
 
     #
     # Order

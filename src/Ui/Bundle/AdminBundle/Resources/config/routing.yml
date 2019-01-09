@@ -1131,6 +1131,15 @@ admin_template_form_parameters:
         event: \d+
         template: \d+
 
+admin_export_form_template_user_data:
+    path: /event/{event}/template/form/export/{file}z{hash}
+    methods: [GET]
+    requirements:
+        event: \d+
+        file: \d+
+        hash: .+
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction
+
 #
 # Package
 #
@@ -2065,3 +2074,11 @@ admin_event_rooming_remove_stay:
         user: \d+
     methods: [DELETE]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\RemoveAction
+
+admin_event_rooming_add_comment:
+    path: /event/{event}/rooming/user/{user}/add/comment
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\CommentAction

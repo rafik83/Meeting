@@ -221,6 +221,12 @@ services:
             - '@router'
             - '@sheet.sheet_guesser'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '%infrastructure.export_form_template_user_data_path%'
+            - '@datetime'
+
     #
     # Content
     #
@@ -341,6 +347,7 @@ services:
             - '@router'
             - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface'
             - '@form.factory'
+            - '@session.flash_bag'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ScanEventEntranceAction:
         arguments:
@@ -878,3 +885,7 @@ services:
             - '@session.flash_bag'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\CommentAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'

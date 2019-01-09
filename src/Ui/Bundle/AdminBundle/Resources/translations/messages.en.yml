@@ -727,6 +727,7 @@ admin.role.ROLE_OPERATOR: collaborator
 admin.role.ROLE_ORGANIZER: Organizer
 admin.role.ROLE_PARTNER: partner
 admin.role.ROLE_SUPER_ADMIN: Admin
+admin.rooming.accommodation.update.title: 'Modify an hosting'
 admin.rule.link: 'Who see who'
 admin.rule.list.action.delete: Delete
 admin.rule.list.action.seeWhat: 'See what'
@@ -805,8 +806,12 @@ admin.sheet.details.crm.record.trace.set_commercial_status.do_not_call: 'Do not 
 admin.sheet.details.crm.record.trace.set_commercial_status.followed: followed
 admin.sheet.details.crm.record.trace.set_commercial_status.hot: 'hot status'
 admin.sheet.details.crm.record.trace.set_commercial_status.hot_stall: 'booth hot status'
+admin.sheet.details.crm.record.trace.set_commercial_status.incomplete_presentation: 'Incomplete presentation'
 admin.sheet.details.crm.record.trace.set_commercial_status.interest: 'interest status'
 admin.sheet.details.crm.record.trace.set_commercial_status.interest_next_edition: 'N+1 Interest status'
+admin.sheet.details.crm.record.trace.set_commercial_status.log_not_ok: 'Log not ok'
+admin.sheet.details.crm.record.trace.set_commercial_status.log_ok: 'Log ok'
+admin.sheet.details.crm.record.trace.set_commercial_status.log_without_ticket: 'Log without ticket'
 admin.sheet.details.crm.record.trace.set_commercial_status.no_interest: 'Not interested status'
 admin.sheet.details.crm.record.trace.set_commercial_status.none: 'No status'
 admin.sheet.details.crm.record.trace.set_commercial_status.refused_by_organizer: 'Refused by the organizer'
@@ -920,7 +925,7 @@ admin.sheet.state: State
 admin.sheet.title: Participations
 admin.sheet.title.count: '{0} no participation |{1} 1 Participation|]1,Inf[ %count% Participations'
 admin.sheet.trace.accept: 'accepted on the %at%'
-admin.sheet.trace.author: by%by%
+admin.sheet.trace.author: 'by %by%'
 admin.sheet.trace.auto: 'automated trace'
 admin.sheet.trace.changed_type: 'The type of participation has been changed'
 admin.sheet.trace.changed_type_comment: 'Changed from %fromType% to %toType%'
@@ -1036,6 +1041,7 @@ admin.template.form.table.column.createdAt: 'Created on'
 admin.template.form.table.column.title: Title
 admin.template.form.table.column.translatedTitle: 'On line title'
 admin.template.form.table.column.types: Types
+admin.template.form.table.column.url: URL
 admin.template.form.table.content.create: 'Create a form template'
 admin.template.form.table.content.edit: Modify
 admin.template.form.table.content.parameters: Settings

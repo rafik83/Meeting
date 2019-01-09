@@ -33,4 +33,6 @@ interface FormTemplateRepositoryInterface
      * @return FormTemplateView[]
      */
     public function getPublishedFormTemplateViewByType(Type $type, string $locale): array;
+
+    public function getById(int $formTemplateId): ?FormTemplate;
 }

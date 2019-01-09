@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Command\User\Batch;
 
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserIdsByEventQuery;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView\GetUserIdsByEvent;
 
 class BatchHandler
@@ -13,12 +14,17 @@ class BatchHandler
     /** @var GetUserIdsByEvent */
     private $getUserIdsByEvent;
 
+    /** @var BatchExportFormTemplateHandler */
+    private $batchExportFormTemplateHandler;
+
     public function __construct(
         BatchCampaignHandler $batchCampaignHandler,
+        BatchExportFormTemplateHandler $batchExportFormTemplateHandler,
         GetUserIdsByEvent $getUserIdsByEvent
     ) {
         $this->batchCampaignHandler = $batchCampaignHandler;
         $this->getUserIdsByEvent = $getUserIdsByEvent;
+        $this->batchExportFormTemplateHandler = $batchExportFormTemplateHandler;
     }
 
     public function handle(Batch $batch): BatchResultInterface
@@ -36,6 +42,18 @@ class BatchHandler
                     $batch->locale,
                     $batch->ids,
                     $batch->campaignTitle
+                )
+            );
+        }
+
+        if ($batch->isExportFormTemplate && $batch->formTemplate instanceof FormTemplate) {
+            return $this->batchExportFormTemplateHandler->handle(
+                new BatchExportFormTemplate(
+                    $batch->event,
+                    $batch->formTemplate,
+                    $batch->admin,
+                    $batch->locale,
+                    $batch->ids
                 )
             );
         }
