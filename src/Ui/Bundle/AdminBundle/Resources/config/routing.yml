@@ -2075,3 +2075,10 @@ admin_event_rooming_add_comment:
         user: \d+
     methods: [POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\CommentAction
+
+admin_event_rooming_list_prepare_export:
+    path: /event/{event}/rooming/list/prepare/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\PrepareExportAction
