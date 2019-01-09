@@ -76,7 +76,7 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
 
         $date = \DateTime::createFromFormat(self::DATETIME_FORMAT, $option);
 
-        return $date ?? null;
+        return false === $date ? null : $date;
     }
 
     public function getDatepickerFormat(): string
