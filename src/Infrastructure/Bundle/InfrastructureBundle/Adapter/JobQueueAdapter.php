@@ -40,6 +40,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Participa
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Rooming\Export\ExportRoomingListCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
@@ -441,5 +442,12 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
 
     public function exportRoomingList(Event $event, Admin $admin, string $locale): void
     {
+        $job = new Job(ExportRoomingListCommand::NAME, [
+            $event->getId(),
+            $admin->getId(),
+            $locale
+        ]);
+
+        $this->setJob($job);
     }
 }

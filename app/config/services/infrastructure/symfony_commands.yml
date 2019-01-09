@@ -86,3 +86,11 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Rooming\Export\ExportRoomingListCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.admin_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: console.command }

@@ -71,6 +71,10 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Export\PrepareExport }
 
+    Proximum\Vimeet\Application\Command\Rooming\Export\ExportRoomingListHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Export\ExportRoomingList }
+
     #
     # Extra Parameter
     #
