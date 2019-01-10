@@ -50,10 +50,19 @@ class RoomingListViewQueryHandler
                 $userStayViews[$userId] = $userViews[$userId];
             }
 
+            $arrival = (new \DateTime())
+                ->setTimestamp($stay->getArrival()->getTimestamp())
+                ->setTimezone(new \DateTimeZone($query->event->getTimeZone()))
+            ;
+            $departure = (new \DateTime())
+                ->setTimestamp($stay->getDeparture()->getTimestamp())
+                ->setTimezone(new \DateTimeZone($query->event->getTimeZone()))
+            ;
+
             $stayViews[] = new StayView(
                 $stay->getAccommodation()->getTitle(),
-                $stay->getArrival(),
-                $stay->getDeparture(),
+                $arrival->format('d/m/Y'),
+                $departure->format('d/m/Y'),
                 $stay->getRoomType(),
                 $stay->getRoomNumber(),
                 $userStayViews

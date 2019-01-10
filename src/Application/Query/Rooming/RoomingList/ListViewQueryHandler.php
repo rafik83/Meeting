@@ -158,8 +158,6 @@ class ListViewQueryHandler
 
     /**
      * @param ListDetailView[] $listDetailViews
-     *
-     * @return array
      */
     private function getUserStayViewsToAssign(array &$listDetailViews): void
     {

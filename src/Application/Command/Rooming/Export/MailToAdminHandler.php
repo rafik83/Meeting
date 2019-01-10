@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Rooming\Export;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Template\Form\Export\ExportFormTemplateDataMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Rooming\ExportList\ExportRoomingListMail;
 
 class MailToAdminHandler
 {
@@ -31,7 +31,7 @@ class MailToAdminHandler
 
     public function handle(MailToAdmin $command): void
     {
-        $mail = new ExportFormTemplateDataMail(
+        $mail = new ExportRoomingListMail(
             $this->sender,
             $command->admin->getEmail(),
             $command->locale,

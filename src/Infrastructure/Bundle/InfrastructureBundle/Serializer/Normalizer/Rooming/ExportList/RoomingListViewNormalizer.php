@@ -101,8 +101,8 @@ class RoomingListViewNormalizer implements NormalizerInterface
 
                 self::KEY_ACCOMMODATION_TITLE => $this->convertCharset($stayView->accommodationTitle),
                 self::KEY_ROOM_TYPE => $this->convertCharset($stayView->roomType),
-                self::KEY_ARRIVAL => $this->convertCharset($stayView->arrivalDate),
-                self::KEY_DEPARTURE => $this->convertCharset($stayView->departureDate),
+                self::KEY_ARRIVAL => $stayView->arrivalDate,
+                self::KEY_DEPARTURE => $stayView->departureDate,
                 self::KEY_ROOM_NUMBER => $this->convertCharset($stayView->roomNumber),
 
                 $this->addRoommateKey(self::KEY_SHEET_ID) => null,
@@ -117,7 +117,7 @@ class RoomingListViewNormalizer implements NormalizerInterface
                 $this->addRoommateKey(self::KEY_USER_TESTING) => null,
             ];
 
-            if ($roommate instanceof UserSheetView) {
+            if ($roommate instanceof UserSheetView && \count($stayView->userSheetViews) > 1) {
                 $stayNormalized[$this->addRoommateKey(self::KEY_SHEET_ID)] = $this->convertCharset($roommate->sheetIds);
                 $stayNormalized[$this->addRoommateKey(self::KEY_SHEET_TITLE)] = $this->convertCharset($roommate->sheetTitles);
                 $stayNormalized[$this->addRoommateKey(self::KEY_TYPE_TITLE)] = $this->convertCharset($roommate->typeTitles);

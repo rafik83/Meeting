@@ -81,7 +81,7 @@ class UserViewQueryHandler
 
         $userSheetView = new UserSheetView(
             $query->user->getId(),
-            $query->user->getAccount()->getGender(),
+            empty($query->user->getAccount()->getGender()) ? null : 'gender.' . $query->user->getAccount()->getGender(),
             $query->user->getAccount()->getFirstName(),
             $query->user->getAccount()->getLastName(),
             implode(',', $sheetIds),
