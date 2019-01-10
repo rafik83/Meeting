@@ -93,6 +93,9 @@ class TypeUpdateType extends AbstractType
                     'class' => 'select2',
                 ],
             ])
+            ->add('enableUnavailabilityManagement', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 

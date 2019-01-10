@@ -53,6 +53,9 @@ class Create implements Command
     /** @var bool */
     public $hidden;
 
+    /** @var bool */
+    public $enableUnavailabilityManagement = true;
+
     /**
      * @param Event  $event
      * @param string $locale

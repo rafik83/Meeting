@@ -60,6 +60,7 @@ class UpdateHandler
         $type = $update->type;
         $type->setPosition($update->rank);
         $type->setHidden($update->hidden);
+        $type->setDisableUnavailabilityManagement(!$update->enableUnavailabilityManagement);
 
         if ($update->sheetTemplate !== $type->getSheetTemplate()) {
             $type->setSheetTemplate($this->getSheetTemplate($update, $type));

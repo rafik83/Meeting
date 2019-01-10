@@ -49,6 +49,9 @@ class Update implements Command
     /** @var bool */
     public $hidden;
 
+    /** @var bool */
+    public $enableUnavailabilityManagement;
+
     /**
      * @param Type   $type
      * @param string $locale
@@ -64,6 +67,7 @@ class Update implements Command
         $this->rank                                = $type->getPosition();
         $this->validationCriteria['sheetAccepted'] = $type->getValidationCriteria()->isSheetAccepted();
         $this->hidden                              = $type->isHidden();
+        $this->enableUnavailabilityManagement      = !$type->isDisableUnavailabilityManagement();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [

@@ -85,6 +85,7 @@ class CreateHandler
         $type->setRegistrationTemplate($this->getRegistrationTemplate($create, $type));
         $type->setPackage($create->package);
         $type->setFormTemplates($create->formTemplates);
+        $type->setDisableUnavailabilityManagement(!$create->enableUnavailabilityManagement);
 
         $this->typeRepository->add($type);
 
