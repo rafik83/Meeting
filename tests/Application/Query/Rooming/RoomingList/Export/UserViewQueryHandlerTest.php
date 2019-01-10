@@ -105,7 +105,7 @@ class UserViewQueryHandlerTest extends TestCase
 
         $expected = new UserSheetView(
             1,
-            'gender.man',
+            'man',
             'Jean',
             'Paul',
             '1,2,3',
