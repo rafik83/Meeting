@@ -22,13 +22,17 @@ class StayView
     /** @var string */
     public $roomType;
 
+    /** @var string|null */
+    public $roomNumber;
+
     public function __construct(
         int $stayId,
         int $userId,
         \DateTimeInterface $arrival,
         \DateTimeInterface $departure,
         string $accommodationTitle,
-        string $roomType
+        string $roomType,
+        ?string $roomNumber
     ) {
         $this->stayId = $stayId;
         $this->userId = $userId;
@@ -36,5 +40,6 @@ class StayView
         $this->departure = $departure;
         $this->accommodationTitle = $accommodationTitle;
         $this->roomType = $roomType;
+        $this->roomNumber = $roomNumber;
     }
 }

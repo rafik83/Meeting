@@ -16,12 +16,16 @@ class UserStayView extends AbstractUserStayView
     /** @var null|RoommateView */
     public $roommateView;
 
+    /** @var string|null */
+    public $roomNumber;
+
     public function __construct(
         int $stayId,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         string $accommodationTitle,
         string $roomType,
+        ?string $roomNumber,
         ?RoommateView $roommateView = null
     ) {
         parent::__construct($begin, $end);
@@ -30,6 +34,7 @@ class UserStayView extends AbstractUserStayView
         $this->accommodationTitle = $accommodationTitle;
         $this->roomType = $roomType;
         $this->roommateView = $roommateView;
+        $this->roomNumber = $roomNumber;
     }
 
     public function isAssigned(): bool

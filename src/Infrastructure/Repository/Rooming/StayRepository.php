@@ -29,7 +29,7 @@ class StayRepository implements StayRepositoryInterface
             ->createQueryBuilder()
             ->select(
                 sprintf(
-                    'new %s(stay.id, user.id, stay.arrival, stay.departure, accommodation.title, stay.roomType)',
+                    'new %s(stay.id, user.id, stay.arrival, stay.departure, accommodation.title, stay.roomType, stay.roomNumber)',
                     StayView::class
                 )
             )
@@ -86,6 +86,11 @@ class StayRepository implements StayRepositoryInterface
     public function add(Stay $stay): void
     {
         $this->entityManager->persist($stay);
+        $this->entityManager->flush($stay);
+    }
+
+    public function update(Stay $stay): void
+    {
         $this->entityManager->flush($stay);
     }
 

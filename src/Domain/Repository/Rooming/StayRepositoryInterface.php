@@ -36,6 +36,8 @@ interface StayRepositoryInterface
 
     public function add(Stay $stay): void;
 
+    public function update(Stay $stay): void;
+
     public function remove(Stay $stay): void;
 
     /**

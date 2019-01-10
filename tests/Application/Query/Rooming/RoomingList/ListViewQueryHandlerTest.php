@@ -110,7 +110,8 @@ class ListViewQueryHandlerTest extends TestCase
                         $overnightAccommodation1Arrival,
                         $overnightAccommodation1Departure,
                         'Novotel',
-                        'single'
+                        'single',
+                        'A123'
                     ),
                     new StayView(
                         200,
@@ -118,7 +119,8 @@ class ListViewQueryHandlerTest extends TestCase
                         $overnightAccommodation2Arrival,
                         $overnightAccommodation2Departure,
                         'Mariott',
-                        'double'
+                        'double',
+                        'A321'
                     ),
                     new StayView(
                         200,
@@ -126,7 +128,8 @@ class ListViewQueryHandlerTest extends TestCase
                         $overnightAccommodation2Arrival,
                         $overnightAccommodation2Departure,
                         'Mariott',
-                        'double'
+                        'double',
+                        'A321'
                     ),
                 ]
             )
@@ -194,7 +197,8 @@ class ListViewQueryHandlerTest extends TestCase
                             $overnightAccommodation1Arrival,
                             $overnightAccommodation1Departure,
                             'Novotel',
-                            'single'
+                            'single',
+                            'A123'
                         ),
                         new UserStayToAssignView(
                             new \DateTime('2018-12-12 00:00:00.000'),
@@ -206,6 +210,7 @@ class ListViewQueryHandlerTest extends TestCase
                             $overnightAccommodation2Departure,
                             'Mariott',
                             'double',
+                            'A321',
                             new RoommateView(3, 'Thierry', 'Henry')
                         ),
                     ]
@@ -233,6 +238,7 @@ class ListViewQueryHandlerTest extends TestCase
                             $overnightAccommodation2Departure,
                             'Mariott',
                             'double',
+                            'A321',
                             new RoommateView(2, 'Amélie', 'Poulain')
                         ),
                         new UserStayToAssignView(

@@ -901,3 +901,7 @@ services:
             - '@adapter.authorization_checker'
             - '%infrastructure.export_rooming_list_path%'
             - '@datetime'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AssignRoomNumberAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'

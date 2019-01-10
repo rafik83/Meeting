@@ -88,6 +88,12 @@ services:
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
 
+    Proximum\Vimeet\Application\Command\Rooming\Stay\AssignRoomNumberHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Stay\AssignRoomNumber }
+
     #
     # Extra Parameter
     #

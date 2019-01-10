@@ -744,6 +744,7 @@ admin.rooming.list.assignAccommodation: Assigner
 admin.rooming.list.export: Exporter
 admin.rooming.list.comment: Commentaire
 admin.rooming.list.fullName: 'Nom, prénom'
+admin.rooming.list.roomNumberAssigned: 'Numéro de chambre associé'
 admin.rooming.list.sheet: Fiche
 admin.rooming.stay.assignAccommodation.add.title: 'Ajouter une assignation'
 admin.rooming.stay.remove.confirm: 'Êtes-vous sûr de vouloir supprimer cette assignation ?'

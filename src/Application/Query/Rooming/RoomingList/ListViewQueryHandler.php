@@ -65,7 +65,8 @@ class ListViewQueryHandler
                 MidnightTransformer::getDateAtMidnight($stayView->arrival),
                 MidnightTransformer::getDateAtMidnight($stayView->departure),
                 $stayView->accommodationTitle,
-                $stayView->roomType
+                $stayView->roomType,
+                $stayView->roomNumber
             );
 
             $userIdsByStayId[$stayView->stayId][] = $stayView->userId;
