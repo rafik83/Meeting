@@ -9,6 +9,7 @@ use Proximum\Vimeet\Domain\Model\Rooming\Stay;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
+use Proximum\Vimeet\Domain\View\Rooming\AccommodationStayView;
 use Proximum\Vimeet\Domain\View\Rooming\StayView;
 use Proximum\Vimeet\Domain\View\Rooming\TotalStaysPerPeriod;
 
@@ -40,6 +41,25 @@ class StayRepository implements StayRepositoryInterface
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function getAccommodationStaysByEvent(Event $event): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select(
+                sprintf(
+                    'new %s(stay.id, stay.arrival, stay.departure, accommodation.id)',
+                    AccommodationStayView::class
+                )
+            )
+            ->from(Stay::class, 'stay')
+            ->join('stay.accommodation', 'accommodation', 'WITH', 'stay.event = :event')
+            ->orderBy('stay.arrival')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
     public function add(Stay $stay): void
