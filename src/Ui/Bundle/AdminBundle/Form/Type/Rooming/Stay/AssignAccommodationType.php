@@ -13,6 +13,7 @@ use Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -63,6 +64,10 @@ class AssignAccommodationType extends AbstractType
                 'attr' => [
                     'class' => 'select2',
                 ],
+            ])
+            ->add('roomNumber', TextType::class, [
+                'required' => false,
+                'empty_data' => '',
             ])
             ->add('roomType', ChoiceType::class, [
                 'choices' => [

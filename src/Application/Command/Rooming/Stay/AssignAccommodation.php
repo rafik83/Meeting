@@ -35,6 +35,9 @@ class AssignAccommodation implements Command
     
     /** @var string */
     public $roomType;
+
+    /** @var string */
+    public $roomNumber = '';
     
     /** @var null|User */
     public $roommate;

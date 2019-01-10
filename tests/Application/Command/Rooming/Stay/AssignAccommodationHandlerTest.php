@@ -90,6 +90,57 @@ class AssignAccommodationHandlerTest extends TestCase
         $handler->handle($assignAccommodation);
     }
 
+    public function test_handle_with_room_number(): void
+    {
+        $arrivalDate = new \DateTime('2018-12-10');
+        $departureDate = new \DateTime('2018-12-12');
+
+        $expected = new Stay(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $arrivalDate,
+            $departureDate,
+            $this->accommodation->reveal(),
+            'single',
+            'A123'
+        );
+
+        $this->stayRepository
+            ->add($expected)
+            ->shouldBeCalled();
+
+        $assignAccommodation = new AssignAccommodation(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $arrivalDate,
+            $departureDate
+        );
+        $assignAccommodation->accommodation = $this->accommodation->reveal();
+        $assignAccommodation->roomNumber = 'A123';
+
+        $this->hasRemainingOvernight
+            ->isSatisfiedBy($this->accommodation->reveal(), $arrivalDate, $departureDate)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $this->hasStayForPeriod
+            ->isSatisfiedBy(
+                $this->event->reveal(),
+                $this->user->reveal(),
+                $arrivalDate,
+                $departureDate
+            )
+            ->shouldBeCalled()
+            ->willReturn(false);
+
+        $handler = new AssignAccommodationHandler(
+            $this->stayRepository->reveal(),
+            $this->hasRemainingOvernight->reveal(),
+            $this->hasStayForPeriod->reveal()
+        );
+        $handler->handle($assignAccommodation);
+    }
+
     public function test_handle_no_remaining_overnight(): void
     {
         $this->expectException(HasNoRemainingOvernightException::class);
