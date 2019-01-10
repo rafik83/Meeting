@@ -1,3 +1,5 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
 {% block form_title 'admin.rooming.accommodation.update.title'|trans %}
+
+{% block goback_link path('admin_event_rooming_accommodation_list', {'event': event.id}) %}

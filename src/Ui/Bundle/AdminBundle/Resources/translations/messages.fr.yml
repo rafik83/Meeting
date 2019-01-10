@@ -734,6 +734,11 @@ admin.role.ROLE_PARTNER: Partenaire
 admin.role.ROLE_SUPER_ADMIN: Admin
 admin.rooming.accommodation.add.title: 'Ajouter un hébergement'
 admin.rooming.accommodation.update.title: 'Modifier un hébergement'
+admin.rooming.accommodation.list.title: 'Liste des hébergenements'
+admin.rooming.accommodation.list.column.title: 'Titre'
+admin.rooming.accommodation.list.column.total: 'Total'
+admin.rooming.accommodation.add.link: 'Créer un hébergement'
+admin.rooming.accommodation.update.link: 'Modifier'
 admin.rooming.list.arrivalDateAndDepartureDate: 'Arrivée / Départ'
 admin.rooming.list.assignAccommodation: Assigner
 admin.rooming.list.export: Exporter
