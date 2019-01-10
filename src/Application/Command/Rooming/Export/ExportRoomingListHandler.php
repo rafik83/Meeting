@@ -64,10 +64,12 @@ class ExportRoomingListHandler
 
         $csvContent = $this->serializerAdapter->serialize($roomingListView, 'csv', ['csv_delimiter' => ';',]);
 
+        $csvWithoutFirstLine = substr($csvContent, strpos($csvContent, "\n") + 1); // Remove first line of the file that contains the keys
+
         $filePath = $this->fileStorage->create(
-            substr($csvContent, strpos($csvContent, "\n") + 1), // Remove first line of the file that contains the keys
+            $csvWithoutFirstLine ?: '',
             sprintf(
-                'export_form_template_%d_%s.csv',
+                'export_rooming_list_%d_%s.csv',
                 $command->event->getId(),
                 $this->dateTime->format('H_i_s_d_m_Y')
             ),
