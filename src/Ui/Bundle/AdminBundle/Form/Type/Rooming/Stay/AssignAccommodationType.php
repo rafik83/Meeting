@@ -42,10 +42,12 @@ class AssignAccommodationType extends AbstractType
         $builder
             ->add('arrival', DateTimePickerType::class, [
                 'display_hour' => false,
+                'view_timezone' => $event->getTimeZone(),
                 'format' => 'd/m/Y',
             ])
             ->add('departure', DateTimePickerType::class, [
                 'display_hour' => false,
+                'view_timezone' => $event->getTimeZone(),
                 'format' => 'd/m/Y',
             ])
             ->add('accommodation', ChoiceType::class, [
