@@ -93,14 +93,14 @@ class RoomingListViewNormalizer implements NormalizerInterface
                 self::KEY_TYPE_TITLE => $this->convertCharset($user->typeTitles),
                 self::KEY_SPOT_REFERENCE => $this->convertCharset($user->spotReferences),
                 self::KEY_USER_ID => $this->convertCharset($user->userId),
-                self::KEY_USER_GENDER => $this->convertCharset($user->gender),
+                self::KEY_USER_GENDER => $this->transGender($user->gender, $locale),
                 self::KEY_USER_FIRST_NAME => $this->convertCharset($user->firstName),
                 self::KEY_USER_LAST_NAME => $this->convertCharset($user->lastName),
                 self::KEY_USER_COMMENT => $this->convertCharset($user->comment),
                 self::KEY_USER_TESTING => $this->convertCharset($user->testing),
 
                 self::KEY_ACCOMMODATION_TITLE => $this->convertCharset($stayView->accommodationTitle),
-                self::KEY_ROOM_TYPE => $this->convertCharset($stayView->roomType),
+                self::KEY_ROOM_TYPE => $this->transRoomType($stayView->roomType, $locale),
                 self::KEY_ARRIVAL => $stayView->arrivalDate,
                 self::KEY_DEPARTURE => $stayView->departureDate,
                 self::KEY_ROOM_NUMBER => $this->convertCharset($stayView->roomNumber),
@@ -123,7 +123,7 @@ class RoomingListViewNormalizer implements NormalizerInterface
                 $stayNormalized[$this->addRoommateKey(self::KEY_TYPE_TITLE)] = $this->convertCharset($roommate->typeTitles);
                 $stayNormalized[$this->addRoommateKey(self::KEY_SPOT_REFERENCE)] = $this->convertCharset($roommate->spotReferences);
                 $stayNormalized[$this->addRoommateKey(self::KEY_USER_ID)] = $this->convertCharset($roommate->userId);
-                $stayNormalized[$this->addRoommateKey(self::KEY_USER_GENDER)] = $this->convertCharset($roommate->gender);
+                $stayNormalized[$this->addRoommateKey(self::KEY_USER_GENDER)] = $this->transGender($roommate->gender, $locale);
                 $stayNormalized[$this->addRoommateKey(self::KEY_USER_FIRST_NAME)] = $this->convertCharset($roommate->firstName);
                 $stayNormalized[$this->addRoommateKey(self::KEY_USER_LAST_NAME)] = $this->convertCharset($roommate->lastName);
                 $stayNormalized[$this->addRoommateKey(self::KEY_USER_COMMENT)] = $this->convertCharset($roommate->comment);
@@ -156,6 +156,32 @@ class RoomingListViewNormalizer implements NormalizerInterface
         return $this->convertCharset(
             $this->translator->trans(
                 sprintf('%s%s', self::TRANSLATION_COLUMN_KEY, $columnKey),
+                [],
+                'export',
+                $locale
+            )
+        );
+    }
+
+    private function transGender(?string $gender, string $locale): ?string
+    {
+        return empty($gender)
+            ? null
+            : $this->convertCharset(
+                $this->translator->trans(
+                    sprintf('%s%s', 'gender.', $gender),
+                    [],
+                    'export',
+                    $locale
+                )
+        );
+    }
+
+    private function transRoomType(string $roomType, string $locale): string
+    {
+        return $this->convertCharset(
+            $this->translator->trans(
+                sprintf('%sroomType.%s', self::TRANSLATION_COLUMN_KEY, $roomType),
                 [],
                 'export',
                 $locale
