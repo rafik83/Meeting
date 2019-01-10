@@ -32,6 +32,7 @@ app_patterns:
     - APP_DATABASE_NAME:           app
     - APP_DATABASE_USER:           "{{ app.user }}"
     - APP_DATABASE_PASSWORD:       null
+    - COMPOSER_MEMORY_LIMIT:       -1
 
   ##########
   # Docker #
