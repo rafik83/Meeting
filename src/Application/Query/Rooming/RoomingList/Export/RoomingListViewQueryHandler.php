@@ -68,6 +68,7 @@ class RoomingListViewQueryHandler
                 $userStayViews
             );
         }
+
         return new RoomingListView($query->locale, $stayViews);
     }
 }

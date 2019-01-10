@@ -71,7 +71,9 @@ class UserViewQueryHandler
             $sheetIds[] = $sheet->getId();
             $sheetTitles[] = $sheet->getTitle();
 
-            $typeTitles[$sheet->getType()->getId()] = $sheet->getTypeTitle($query->locale);
+            if (!isset($typeTitles[$sheet->getType()->getId()])) {
+                $typeTitles[$sheet->getType()->getId()] = $sheet->getTypeTitle($query->locale);
+            }
 
             if ($sheet->getSpot() instanceof Spot) {
                 $spotReferences[] = $sheet->getSpot()->getReference();
