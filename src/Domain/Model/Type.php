@@ -390,4 +390,9 @@ class Type implements WhoInterface, TypeInterface
     {
         return $this->disableUnavailabilityManagement;
     }
+
+    public function setDisableUnavailabilityManagement(bool $disableUnavailabilityManagement): void
+    {
+        $this->disableUnavailabilityManagement = $disableUnavailabilityManagement;
+    }
 }

@@ -37,10 +37,12 @@ class UpdateHandlerTest extends TestCase
         $type = new Type($event);
         $type->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
         $type->getValidationCriteria()->setSheetAccepted(true);
+        $type->setDisableUnavailabilityManagement(false);
 
-        $create                                      = new Update($type, 'fr');
-        $create->translations['fr']['title']         = 'truc';
-        $create->validationCriteria['sheetAccepted'] = false;
+        $update                                      = new Update($type, 'fr');
+        $update->translations['fr']['title']         = 'truc';
+        $update->validationCriteria['sheetAccepted'] = false;
+        $update->enableUnavailabilityManagement = true;
 
         //Mock
         $typeRepository             = $this->prophesize(TypeRepositoryInterface::class);
@@ -56,6 +58,6 @@ class UpdateHandlerTest extends TestCase
             $sheetTemplateCloner->reveal(),
             $registrationTemplateCloner->reveal()
         );
-        $handler->handle($create);
+        $handler->handle($update);
     }
 }

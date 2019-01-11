@@ -76,6 +76,9 @@ class TypeCreateType extends AbstractType
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
             ])
+            ->add('enableUnavailabilityManagement', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 
