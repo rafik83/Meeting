@@ -18,6 +18,13 @@ interface StayRepositoryInterface
      *
      * @return StayView[]
      */
+    public function getStayViewsByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return Stay[]
+     */
     public function getStaysByEvent(Event $event): array;
 
     /**

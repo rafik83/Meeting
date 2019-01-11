@@ -23,7 +23,7 @@ class StayRepository implements StayRepositoryInterface
         $this->entityManager = $entityManager;
     }
 
-    public function getStaysByEvent(Event $event): array
+    public function getStayViewsByEvent(Event $event): array
     {
         return $this->entityManager
             ->createQueryBuilder()
@@ -43,6 +43,27 @@ class StayRepository implements StayRepositoryInterface
         ;
     }
 
+    /**
+     * @param Event $event
+     *
+     * @return Stay[]
+     */
+    public function getStaysByEvent(Event $event): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('stay, user, accommodation')
+            ->from(Stay::class, 'stay')
+            ->join('stay.accommodation', 'accommodation', 'WITH', 'stay.event = :event')
+            ->join('stay.users', 'user')
+            ->orderBy('stay.arrival')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
     public function getAccommodationStaysByEvent(Event $event): array
     {
         return $this->entityManager
@@ -59,7 +80,7 @@ class StayRepository implements StayRepositoryInterface
             ->setParameter('event', $event)
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
 
     public function add(Stay $stay): void

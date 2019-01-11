@@ -51,7 +51,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $arrivalDate,
             $departureDate,
             $this->accommodation->reveal(),
-            'single'
+            'single',
+            ''
         );
 
         $this->stayRepository
@@ -183,7 +184,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $arrivalDate,
             $departureDate,
             $this->accommodation->reveal(),
-            'double'
+            'double',
+            ''
         );
 
         $this->stayRepository
@@ -236,7 +238,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $arrivalDate,
             $departureDate,
             $this->accommodation->reveal(),
-            'double'
+            'double',
+            ''
         );
         $expected->addUser($roommate->reveal());
 
@@ -302,7 +305,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $arrivalDate,
             $departureDate,
             $this->accommodation->reveal(),
-            'double'
+            'double',
+            ''
         );
         $expected->addUser($roommate->reveal());
 

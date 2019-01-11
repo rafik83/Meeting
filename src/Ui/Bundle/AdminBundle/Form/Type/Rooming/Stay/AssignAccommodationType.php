@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rooming\Stay;
 
-use function Clue\StreamFilter\fun;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation;
 use Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListByPeriodQuery;
@@ -42,10 +41,12 @@ class AssignAccommodationType extends AbstractType
         $builder
             ->add('arrival', DateTimePickerType::class, [
                 'display_hour' => false,
+                'view_timezone' => $event->getTimeZone(),
                 'format' => 'd/m/Y',
             ])
             ->add('departure', DateTimePickerType::class, [
                 'display_hour' => false,
+                'view_timezone' => $event->getTimeZone(),
                 'format' => 'd/m/Y',
             ])
             ->add('accommodation', ChoiceType::class, [

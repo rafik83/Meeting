@@ -6,6 +6,10 @@ admin.mail.export_form_template_data.body: "Bonjour,\nVoici le fichier comportan
 admin.mail.export_form_template_data.end: "Cordialement\n"
 admin.mail.export_form_template_data.file_link: 'Fichier CSV'
 admin.mail.export_form_template_data.subject: 'Export des données du formulaire de template'
+admin.mail.export_rooming_list.body: "Bonjour,\nVoici le fichier comportant l'export de la rooming list\n"
+admin.mail.export_rooming_list.end: 'Cordialement\n'
+admin.mail.export_rooming_list.file_link: 'Fichier CSV'
+admin.mail.export_rooming_list.subject: 'Export de la rooming list'
 admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:"
 admin.mail.resetPassword.end: 'Bien cordialement,'
 admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'

@@ -59,4 +59,6 @@ final class Type
      * Rooming
      */
     public const ROOMING_COMMENT = 'rooming_comment';
+
+    public const ROOMING_TESTING = 'rooming_testing';
 }

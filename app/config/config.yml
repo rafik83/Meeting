@@ -142,6 +142,7 @@ infrastructure:
     export_participant_path: '%shared_uploaded_files%/export/participant/'
     export_spot_path: '%kernel.project_dir%/web/uploads/export_spot'
     export_form_template_user_data_path: '%shared_uploaded_files%/export/form-template/'
+    export_rooming_list_path: '%shared_uploaded_files%/export/rooming-list/'
     package:
         default_labels:
             plans:

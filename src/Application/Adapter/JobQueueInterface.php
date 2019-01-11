@@ -202,4 +202,10 @@ interface JobQueueInterface
         string $locale,
         Event\ExtraData $extraData
     ): void;
+
+    public function exportRoomingList(
+        Event $event,
+        Admin $admin,
+        string $locale
+    ): void;
 }

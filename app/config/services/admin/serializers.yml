@@ -80,3 +80,9 @@ services:
             - '@translator'
         tags:
             - { name: serializer.normalizer }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Rooming\ExportList\RoomingListViewNormalizer:
+        arguments:
+           - '@translator'
+        tags:
+            - { name: serializer.normalizer }

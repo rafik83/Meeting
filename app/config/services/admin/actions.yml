@@ -889,3 +889,15 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\CommentAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\PrepareExportAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\DownloadRoomingListExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '%infrastructure.export_rooming_list_path%'
+            - '@datetime'
