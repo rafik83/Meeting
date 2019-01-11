@@ -84,6 +84,19 @@ class SheetContext implements Context
     }
 
     /**
+     * @Given there is a sheet with the title :title registered at :createdAt
+     *
+     * @param string|null $title
+     * @param string|null $createdAt
+     */
+    public function thereIsASheetWithTheTitleAndCreatedAt($title, $createdAt = 'now')
+    {
+        $event = $this->getEvent();
+        $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, null, $title, null, $createdAt);
+        $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
+    }
+
+    /**
      * @Given /^there is a sheet for this type with the title "(?P<title>[^"]+)"$/
      *
      * @param string|null $title
