@@ -25,6 +25,7 @@ form.admin_assign_accommodation_type.children.accommodation.label: 'Hébergement
 form.admin_assign_accommodation_type.children.arrival.label: 'Date d''arrivée'
 form.admin_assign_accommodation_type.children.departure.label: 'Date de départ'
 form.admin_assign_accommodation_type.children.roommate.label: 'Personne associée pour une chambre double'
+form.admin_assign_accommodation_type.children.roomNumber.label: 'Numéro de chambre'
 form.admin_assign_accommodation_type.children.roomType.label: 'Type de chambre'
 form.admin_assign_accommodation_type.children.submit.label: Assigner
 form.admin_assign_accommodation_type.roommate.none: Aucune

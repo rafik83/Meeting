@@ -74,6 +74,19 @@
                                             <br>
                                             {{ userStayView.accommodationTitle }}
                                             <span class="label label-default">{{ userStayView.roomType }}</span>
+                                            <span
+                                                class="label label-info updatable stay_view_room_number_{{ userStayView.stayId }}"
+                                                title="{{ 'admin.rooming.list.roomNumberAssigned'|trans }}"
+                                                data-type="string"
+                                                data-url="{{ path('admin_event_rooming_stay_assign_room_number', {
+                                                    'event': event.id,
+                                                    'stay': userStayView.stayId,
+                                                }) }}"
+                                                data-update-and-reconcile="{{ { 'value': userStayView.roomNumber }|json_encode }}"
+                                                data-to-reconcile=".stay_view_room_number_{{ userStayView.stayId }}"
+                                            >
+                                                {{ userStayView.roomNumber }}
+                                            </span>&nbsp;
 
                                             {% if userStayView.roommateView %}
                                                 <br><b>{{ userStayView.roommateView.lastName|upper }}</b>
