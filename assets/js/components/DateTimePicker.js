@@ -51,11 +51,11 @@ function DateTimePicker(element, customConfig)
     var maxDate = this.element.getAttribute('data-max-date');
 
     if (minDate) {
-        $(element).data("DateTimePicker").minDate(new Date(minDate));
+        $(element).data("DateTimePicker").minDate(new Date(minDate.replace(/ /g,"T")));
     }
 
     if (maxDate) {
-        $(element).data("DateTimePicker").maxDate(new Date(maxDate));
+        $(element).data("DateTimePicker").maxDate(new Date(maxDate.replace(/ /g,"T")));
     }
 
     if ($(this.element).hasClass("datetimepicker-range-element")) {
