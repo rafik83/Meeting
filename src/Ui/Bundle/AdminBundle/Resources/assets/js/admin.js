@@ -10,6 +10,7 @@ var $ = require('jquery'),
     SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
     SortableCollection = require('./components/_SortableCollection'),
     Update = require('./components/_Update'),
+    UpdateAndReconcile = require('./components/_UpdateAndReconcile'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
     AnchorFocuser = require('./components/_AnchorFocuser'),
     DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker'),
@@ -92,6 +93,7 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-update]'), function (element) { new Update(element); });
+    [].forEach.call(target.querySelectorAll('[data-update-and-reconcile]'), function (element) { new UpdateAndReconcile(element); });
     [].forEach.call(target.querySelectorAll('[data-check-all-checkbox]'), function (element) { new CheckAllCheckbox(element, element.getAttribute('data-check-all-checkbox')); });
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element, 'sheet') });
 
