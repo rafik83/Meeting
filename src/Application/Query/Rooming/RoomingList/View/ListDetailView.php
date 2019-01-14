@@ -22,6 +22,9 @@ class ListDetailView
     /** @var null|string */
     public $comment;
 
+    /** @var null|string */
+    public $tasting;
+
     /** @var SheetView[] */
     public $sheetViews;
 
@@ -43,6 +46,7 @@ class ListDetailView
         bool $hasArrivalHours,
         bool $hasDepartureHours,
         ?string $comment,
+        ?string $tasting,
         array $sheetViews,
         array $userStayViews
     ) {
@@ -52,6 +56,7 @@ class ListDetailView
         $this->arrivalDate = $arrivalDate;
         $this->departureDate = $departureDate;
         $this->comment = $comment;
+        $this->tasting = $tasting;
         $this->sheetViews = $sheetViews;
         $this->userStayViews = $userStayViews;
         $this->hasArrivalHours = $hasArrivalHours;
