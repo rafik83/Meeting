@@ -76,7 +76,7 @@ class UploadFileHandler
             ];
 
             if ($object instanceof Image) {
-                $objectData = [
+                $objectData = [
                     'image' => $path,
                 ];
             }
