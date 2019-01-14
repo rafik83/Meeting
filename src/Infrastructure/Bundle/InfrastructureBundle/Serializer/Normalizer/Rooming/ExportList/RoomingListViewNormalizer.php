@@ -32,7 +32,7 @@ class RoomingListViewNormalizer implements NormalizerInterface
     private const KEY_ARRIVAL = 'arrival';
     private const KEY_DEPARTURE = 'departure';
     private const KEY_USER_COMMENT = 'userComment';
-    private const KEY_USER_TESTING = 'userTesting';
+    private const KEY_USER_TASTING = 'userTasting';
 
     private const TRANSLATION_COLUMN_KEY = 'rooming_list_data_export.column.';
 
@@ -61,7 +61,7 @@ class RoomingListViewNormalizer implements NormalizerInterface
             self::KEY_USER_FIRST_NAME => $this->transCol(self::KEY_USER_FIRST_NAME, $locale),
             self::KEY_USER_LAST_NAME => $this->transCol(self::KEY_USER_LAST_NAME, $locale),
             self::KEY_USER_COMMENT => $this->transCol(self::KEY_USER_COMMENT, $locale),
-            self::KEY_USER_TESTING => $this->transCol(self::KEY_USER_TESTING, $locale),
+            self::KEY_USER_TASTING => $this->transCol(self::KEY_USER_TASTING, $locale),
 
             self::KEY_ACCOMMODATION_TITLE => $this->transCol(self::KEY_ACCOMMODATION_TITLE, $locale),
             self::KEY_ROOM_TYPE => $this->transCol(self::KEY_ROOM_TYPE, $locale),
@@ -78,7 +78,7 @@ class RoomingListViewNormalizer implements NormalizerInterface
             $this->addRoommateKey(self::KEY_USER_FIRST_NAME) => $this->transCol($this->addRoommateKey(self::KEY_USER_FIRST_NAME), $locale),
             $this->addRoommateKey(self::KEY_USER_LAST_NAME) => $this->transCol($this->addRoommateKey(self::KEY_USER_LAST_NAME), $locale),
             $this->addRoommateKey(self::KEY_USER_COMMENT) => $this->transCol($this->addRoommateKey(self::KEY_USER_COMMENT), $locale),
-            $this->addRoommateKey(self::KEY_USER_TESTING) => $this->transCol($this->addRoommateKey(self::KEY_USER_TESTING), $locale),
+            $this->addRoommateKey(self::KEY_USER_TASTING) => $this->transCol($this->addRoommateKey(self::KEY_USER_TASTING), $locale),
         ];
 
         foreach ($roomingListView->stayViews as $stayView) {
@@ -97,7 +97,7 @@ class RoomingListViewNormalizer implements NormalizerInterface
                 self::KEY_USER_FIRST_NAME => $this->convertCharset($user->firstName),
                 self::KEY_USER_LAST_NAME => $this->convertCharset($user->lastName),
                 self::KEY_USER_COMMENT => $this->convertCharset($user->comment),
-                self::KEY_USER_TESTING => $this->convertCharset($user->testing),
+                self::KEY_USER_TASTING => $this->convertCharset($user->tasting),
 
                 self::KEY_ACCOMMODATION_TITLE => $this->convertCharset($stayView->accommodationTitle),
                 self::KEY_ROOM_TYPE => $this->transRoomType($stayView->roomType, $locale),
@@ -114,7 +114,7 @@ class RoomingListViewNormalizer implements NormalizerInterface
                 $this->addRoommateKey(self::KEY_USER_FIRST_NAME) => null,
                 $this->addRoommateKey(self::KEY_USER_LAST_NAME) => null,
                 $this->addRoommateKey(self::KEY_USER_COMMENT) => null,
-                $this->addRoommateKey(self::KEY_USER_TESTING) => null,
+                $this->addRoommateKey(self::KEY_USER_TASTING) => null,
             ];
 
             if ($roommate instanceof UserSheetView && \count($stayView->userSheetViews) > 1) {
@@ -127,7 +127,7 @@ class RoomingListViewNormalizer implements NormalizerInterface
                 $stayNormalized[$this->addRoommateKey(self::KEY_USER_FIRST_NAME)] = $this->convertCharset($roommate->firstName);
                 $stayNormalized[$this->addRoommateKey(self::KEY_USER_LAST_NAME)] = $this->convertCharset($roommate->lastName);
                 $stayNormalized[$this->addRoommateKey(self::KEY_USER_COMMENT)] = $this->convertCharset($roommate->comment);
-                $stayNormalized[$this->addRoommateKey(self::KEY_USER_TESTING)] = $this->convertCharset($roommate->testing);
+                $stayNormalized[$this->addRoommateKey(self::KEY_USER_TASTING)] = $this->convertCharset($roommate->tasting);
             }
 
             $data[] = $stayNormalized;

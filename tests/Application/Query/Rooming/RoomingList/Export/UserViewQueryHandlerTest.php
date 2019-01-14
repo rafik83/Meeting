@@ -39,10 +39,10 @@ class UserViewQueryHandlerTest extends TestCase
         $type2 = $this->prophesize(Type::class);
 
         $commentExtraData = $this->prophesize(User\Event\ExtraData::class);
-        $testingExtraData = $this->prophesize(User\Event\ExtraData::class);
+        $tastingExtraData = $this->prophesize(User\Event\ExtraData::class);
 
         $commentExtraData->getValue()->shouldBeCalled()->willReturn('This is a comment');
-        $testingExtraData->getValue()->shouldBeCalled()->willReturn('This is a testing');
+        $tastingExtraData->getValue()->shouldBeCalled()->willReturn('This is a tasting');
 
         $sheet1->getId()->shouldBeCalled()->willReturn(1);
         $sheet2->getId()->shouldBeCalled()->willReturn(2);
@@ -90,9 +90,9 @@ class UserViewQueryHandlerTest extends TestCase
         ;
 
         $extraDataRepository
-            ->getExtraDataForEventNameAndUser($event->reveal(), ExtraDataType::ROOMING_TESTING, $user->reveal())
+            ->getExtraDataForEventNameAndUser($event->reveal(), ExtraDataType::ROOMING_TASTING, $user->reveal())
             ->shouldBeCalled()
-            ->willReturn($testingExtraData->reveal())
+            ->willReturn($tastingExtraData->reveal())
         ;
 
         $query = new UserViewQuery($event->reveal(), $user->reveal(), $locale);
@@ -113,7 +113,7 @@ class UserViewQueryHandlerTest extends TestCase
             'Exposant,Visiteur',
             'A123',
             'This is a comment',
-            'This is a testing'
+            'This is a tasting'
         );
 
         $this->assertEquals($expected, $result);

@@ -60,5 +60,5 @@ final class Type
      */
     public const ROOMING_COMMENT = 'rooming_comment';
 
-    public const ROOMING_TESTING = 'rooming_testing';
+    public const ROOMING_TASTING = 'rooming_tasting';
 }
