@@ -65,6 +65,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Stay\AddComment }
 
+    Proximum\Vimeet\Application\Command\Rooming\Stay\AddTastingHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Rooming\Stay\AddTasting }
+
     Proximum\Vimeet\Application\Command\Rooming\Export\PrepareExportHandler:
         arguments:
             - '@adapter.job_queue_adapter'

@@ -2083,6 +2083,14 @@ admin_event_rooming_add_comment:
     methods: [POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\CommentAction
 
+admin_event_rooming_add_tasting:
+    path: /event/{event}/rooming/user/{user}/add/tasting
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\TastingAction
+
 admin_event_rooming_stay_assign_room_number:
     path: /event/{event}/rooming/stay/{stay}/assign/room-number
     requirements:
