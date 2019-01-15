@@ -152,6 +152,22 @@ class ListViewQueryHandlerTest extends TestCase
             )
         ;
 
+        $extraDataRepository
+            ->getExtraDataForEventIdAndNameIndexedByUserId(1000, Type::ROOMING_TASTING)
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    1 => new ExtraData(
+                        $this->prophesize(User::class)->reveal(),
+                        $event->reveal(),
+                        Type::ROOMING_TASTING,
+                        'Tasting en chambre N123',
+                        new \DateTime()
+                    ),
+                ]
+            )
+        ;
+
         $overlappedTimeRangeTruncater = new OverlappedTimeRangeTruncater();
 
         $handler = new ListViewQueryHandler(
@@ -173,6 +189,7 @@ class ListViewQueryHandlerTest extends TestCase
                     false,
                     false,
                     null,
+                    'Tasting en chambre N123',
                     [
                         new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10'),
                     ],
@@ -187,6 +204,7 @@ class ListViewQueryHandlerTest extends TestCase
                     true,
                     true,
                     "Ceci est un test\nCeci est un autre test",
+                    null,
                     [
                         new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10'),
                         new SheetView(12, 'Allianz', 'Visiteur', null),
@@ -223,6 +241,7 @@ class ListViewQueryHandlerTest extends TestCase
                     new \DateTime('2018-12-17 18:00:00.000'),
                     true,
                     false,
+                    null,
                     null,
                     [
                         new SheetView(12, 'Allianz', 'Visiteur', null),
@@ -295,6 +314,11 @@ class ListViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([])
         ;
+        $extraDataRepository
+            ->getExtraDataForEventIdAndNameIndexedByUserId(1000, Type::ROOMING_TASTING)
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
 
         $overlappedTimeRangeTruncater = new OverlappedTimeRangeTruncater();
 
@@ -316,6 +340,7 @@ class ListViewQueryHandlerTest extends TestCase
                     $dateDeparture,
                     false,
                     false,
+                    null,
                     null,
                     [
                         new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10'),

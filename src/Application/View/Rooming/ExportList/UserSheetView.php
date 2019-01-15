@@ -40,7 +40,7 @@ class UserSheetView
     public $comment;
     
     /** @var string|null */
-    public $testing;
+    public $tasting;
 
     public function __construct(
         int $userId,
@@ -52,7 +52,7 @@ class UserSheetView
         ?string $typeTitles,
         ?string $spotReferences,
         ?string $comment,
-        ?string $testing
+        ?string $tasting
     ) {
         $this->userId = $userId;
         $this->gender = $gender;
@@ -63,6 +63,6 @@ class UserSheetView
         $this->typeTitles = $typeTitles;
         $this->spotReferences = $spotReferences;
         $this->comment = $comment;
-        $this->testing = $testing;
+        $this->tasting = $tasting;
     }
 }

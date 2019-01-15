@@ -34,7 +34,7 @@ class RoomingListViewNormalizerTest extends TestCase
             'Exposant,Visiteur',
             'A123',
             'This is a comment',
-            'This is a testing'
+            'This is a tasting'
         );
         $userView2 = new UserSheetView(
             2,
@@ -70,7 +70,7 @@ class RoomingListViewNormalizerTest extends TestCase
             'Exposant,Visiteur',
             '',
             'A comment',
-            'A testing info'
+            'A tasting info'
         );
 
         return new RoomingListView(
@@ -125,9 +125,9 @@ class RoomingListViewNormalizerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('userComment');
         $translator
-            ->trans('rooming_list_data_export.column.userTesting', [], 'export', 'fr')
+            ->trans('rooming_list_data_export.column.userTasting', [], 'export', 'fr')
             ->shouldBeCalled()
-            ->willReturn('userTesting');
+            ->willReturn('userTasting');
 
         $translator
             ->trans('rooming_list_data_export.column.accommodationTitle', [], 'export', 'fr')
@@ -192,9 +192,9 @@ class RoomingListViewNormalizerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('roommate.userComment');
         $translator
-            ->trans('rooming_list_data_export.column.roommate.userTesting', [], 'export', 'fr')
+            ->trans('rooming_list_data_export.column.roommate.userTasting', [], 'export', 'fr')
             ->shouldBeCalled()
-            ->willReturn('roommate.userTesting');
+            ->willReturn('roommate.userTasting');
 
         $translator
             ->trans('gender.woman', [], 'export', 'fr')
@@ -236,12 +236,12 @@ class RoomingListViewNormalizerTest extends TestCase
 
         $result = $serializer->serialize($this->getInput(), 'csv', ['csv_delimiter' => ';']);
 
-        $expected = 'sheetId;sheetTitle;typeTitle;spotReference;userId;userGender;userFirstName;userLastName;userComment;userTesting;accommodationTitle;roomType;arrival;departure;roomNumber;roommate.sheetId;roommate.sheetTitle;roommate.typeTitle;roommate.spotReference;roommate.userId;roommate.userGender;roommate.userFirstName;roommate.userLastName;roommate.userComment;roommate.userTesting
-rooming_list_data_export.column.sheetId;rooming_list_data_export.column.sheetTitle;rooming_list_data_export.column.typeTitle;rooming_list_data_export.column.spotReference;rooming_list_data_export.column.userId;rooming_list_data_export.column.userGender;rooming_list_data_export.column.userFirstName;rooming_list_data_export.column.userLastName;rooming_list_data_export.column.userComment;rooming_list_data_export.column.userTesting;rooming_list_data_export.column.accommodationTitle;rooming_list_data_export.column.roomType;rooming_list_data_export.column.arrival;rooming_list_data_export.column.departure;rooming_list_data_export.column.roomNumber;rooming_list_data_export.column.roommate.sheetId;rooming_list_data_export.column.roommate.sheetTitle;rooming_list_data_export.column.roommate.typeTitle;rooming_list_data_export.column.roommate.spotReference;rooming_list_data_export.column.roommate.userId;rooming_list_data_export.column.roommate.userGender;rooming_list_data_export.column.roommate.userFirstName;rooming_list_data_export.column.roommate.userLastName;rooming_list_data_export.column.roommate.userComment;rooming_list_data_export.column.roommate.userTesting
-1,2,3;Aanera,Bbnera,Ccnera;Exposant,Visiteur;A123;1;gender.man;Jean;Paul;"This is a comment";"This is a testing";Mariott;rooming_list_data_export.column.roomType.single;08/01/2019;10/01/2019;A123;;;;;;;;;;
+        $expected = 'sheetId;sheetTitle;typeTitle;spotReference;userId;userGender;userFirstName;userLastName;userComment;userTasting;accommodationTitle;roomType;arrival;departure;roomNumber;roommate.sheetId;roommate.sheetTitle;roommate.typeTitle;roommate.spotReference;roommate.userId;roommate.userGender;roommate.userFirstName;roommate.userLastName;roommate.userComment;roommate.userTasting
+rooming_list_data_export.column.sheetId;rooming_list_data_export.column.sheetTitle;rooming_list_data_export.column.typeTitle;rooming_list_data_export.column.spotReference;rooming_list_data_export.column.userId;rooming_list_data_export.column.userGender;rooming_list_data_export.column.userFirstName;rooming_list_data_export.column.userLastName;rooming_list_data_export.column.userComment;rooming_list_data_export.column.userTasting;rooming_list_data_export.column.accommodationTitle;rooming_list_data_export.column.roomType;rooming_list_data_export.column.arrival;rooming_list_data_export.column.departure;rooming_list_data_export.column.roomNumber;rooming_list_data_export.column.roommate.sheetId;rooming_list_data_export.column.roommate.sheetTitle;rooming_list_data_export.column.roommate.typeTitle;rooming_list_data_export.column.roommate.spotReference;rooming_list_data_export.column.roommate.userId;rooming_list_data_export.column.roommate.userGender;rooming_list_data_export.column.roommate.userFirstName;rooming_list_data_export.column.roommate.userLastName;rooming_list_data_export.column.roommate.userComment;rooming_list_data_export.column.roommate.userTasting
+1,2,3;Aanera,Bbnera,Ccnera;Exposant,Visiteur;A123;1;gender.man;Jean;Paul;"This is a comment";"This is a tasting";Mariott;rooming_list_data_export.column.roomType.single;08/01/2019;10/01/2019;A123;;;;;;;;;;
 1;Aanera;Exposant;;2;gender.woman;Marie;Curie;"No comment";;Mariott;rooming_list_data_export.column.roomType.single;08/01/2019;12/01/2019;A124;;;;;;;;;;
-4,5;Lorem,Ipsum;Exposant;A321;3;gender.man;Jean;Paul;;;Mariott;rooming_list_data_export.column.roomType.double;08/01/2019;12/01/2019;A125;5;Aanera,Bbnera,Ccnera;Exposant,Visiteur;;4;;Bidule;Truc;"A comment";"A testing info"
-1,2,3;Aanera,Bbnera,Ccnera;Exposant,Visiteur;A123;1;gender.man;Jean;Paul;"This is a comment";"This is a testing";Novotel;rooming_list_data_export.column.roomType.single;10/01/2019;12/01/2019;A126;;;;;;;;;;
+4,5;Lorem,Ipsum;Exposant;A321;3;gender.man;Jean;Paul;;;Mariott;rooming_list_data_export.column.roomType.double;08/01/2019;12/01/2019;A125;5;Aanera,Bbnera,Ccnera;Exposant,Visiteur;;4;;Bidule;Truc;"A comment";"A tasting info"
+1,2,3;Aanera,Bbnera,Ccnera;Exposant,Visiteur;A123;1;gender.man;Jean;Paul;"This is a comment";"This is a tasting";Novotel;rooming_list_data_export.column.roomType.single;10/01/2019;12/01/2019;A126;;;;;;;;;;
 ';
 
         $this->assertEquals($expected, $result);

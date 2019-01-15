@@ -16,6 +16,7 @@
             <th>{{ 'admin.rooming.list.fullName'|trans }}</th>
             <th class="col-md-4">{{ 'admin.rooming.list.arrivalDateAndDepartureDate'|trans }}</th>
             <th class="col-md-2">{{ 'admin.rooming.list.comment'|trans }}</th>
+            <th class="col-md-1">{{ 'admin.rooming.list.tasting'|trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -121,6 +122,15 @@
                     data-update="{{ { 'value': detailView.comment }|json_encode }}"
                 >
                     {{ detailView.comment }}
+                </td>
+                <td
+                    class="updatable"
+                    data-type="string"
+                    data-input-type="textarea"
+                    data-url="{{ path('admin_event_rooming_add_tasting', {'event': event.id, 'user': detailView.userId }) }}"
+                    data-update="{{ { 'value': detailView.tasting }|json_encode }}"
+                >
+                    {{ detailView.tasting }}
                 </td>
             </tr>
         {% endfor %}

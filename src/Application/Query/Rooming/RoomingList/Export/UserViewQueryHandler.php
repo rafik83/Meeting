@@ -36,7 +36,7 @@ class UserViewQueryHandler
     public function handle(UserViewQuery $query): UserSheetView
     {
         $comment = '';
-        $testing = '';
+        $tasting = '';
         $extraDataComment = $this->extraDataRepository->getExtraDataForEventNameAndUser(
             $query->event,
             Type::ROOMING_COMMENT,
@@ -47,14 +47,14 @@ class UserViewQueryHandler
             $comment = $extraDataComment->getValue();
         }
 
-        $extraDataTesting = $this->extraDataRepository->getExtraDataForEventNameAndUser(
+        $extraDataTasting = $this->extraDataRepository->getExtraDataForEventNameAndUser(
             $query->event,
-            Type::ROOMING_TESTING,
+            Type::ROOMING_TASTING,
             $query->user
         );
 
-        if ($extraDataTesting instanceof ExtraData) {
-            $testing = $extraDataTesting->getValue();
+        if ($extraDataTasting instanceof ExtraData) {
+            $tasting = $extraDataTasting->getValue();
         }
 
         $sheetIds = [];
@@ -80,7 +80,6 @@ class UserViewQueryHandler
             }
         }
 
-
         $userSheetView = new UserSheetView(
             $query->user->getId(),
             $query->user->getAccount()->getGender(),
@@ -91,7 +90,7 @@ class UserViewQueryHandler
             implode(',', $typeTitles),
             implode(',', $spotReferences),
             $comment,
-            $testing
+            $tasting
         );
 
         return $userSheetView;

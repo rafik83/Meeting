@@ -56,6 +56,11 @@ class ListViewQueryHandler
             Type::ROOMING_COMMENT
         );
 
+        $tastings = $this->extraDataRepository->getExtraDataForEventIdAndNameIndexedByUserId(
+            $query->event->getId(),
+            Type::ROOMING_TASTING
+        );
+
         $stayViewsByUserId = [];
         $userIdsByStayId = [];
 
@@ -87,6 +92,10 @@ class ListViewQueryHandler
                     $userSheetTypeView->hasDepartureHours,
                     isset($comments[$userId]) && $comments[$userId] instanceof ExtraData
                         ? $comments[$userId]->getValue()
+                        : null
+                    ,
+                    isset($tastings[$userId]) && $tastings[$userId] instanceof ExtraData
+                        ? $tastings[$userId]->getValue()
                         : null
                     ,
                     [],
