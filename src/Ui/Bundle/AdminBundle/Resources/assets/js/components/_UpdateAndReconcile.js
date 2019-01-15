@@ -5,7 +5,7 @@
  */
 function UpdateAndReconcile(element) {
     this.element = element;
-    this.data = JSON.parse(element.getAttribute('data-update-and-reconcile'));
+    this.data = JSON.parse(this.element.getAttribute('data-update-and-reconcile'));
     this.url = element.getAttribute('data-url');
     this.type = element.getAttribute('data-type');
     this.editing = false;
@@ -13,6 +13,7 @@ function UpdateAndReconcile(element) {
     this.selectorToReconcile = element.getAttribute('data-to-reconcile');
 
     this.input = document.createElement('input');
+    this.input.style.color = 'black';
     this.element.addEventListener('click', this.clicked.bind(this), false);
     this.input.addEventListener('blur', this.blured.bind(this));
     this.input.addEventListener('keypress', this.keyupped.bind(this));
@@ -30,6 +31,7 @@ UpdateAndReconcile.prototype.clicked = function (event)
     event.preventDefault();
 
     this.editing           = true;
+    this.data              = JSON.parse(this.element.getAttribute('data-update-and-reconcile'));
     this.input.value       = this.data.value;
     this.element.innerHTML = null;
     this.element.appendChild(this.input);
@@ -102,6 +104,14 @@ UpdateAndReconcile.prototype.save = function ()
                 if (this.selectorToReconcile !== null) {
                     [].forEach.call(document.querySelectorAll(this.selectorToReconcile), function (element) {
                         element.innerHTML = this.data.value;
+                        var previousJsonData = element.getAttribute('data-update-and-reconcile');
+
+                        if (previousJsonData !== null) {
+                            var previousData = JSON.parse(previousJsonData);
+                            previousData.value = this.data.value;
+
+                            element.setAttribute('data-update-and-reconcile', JSON.stringify(previousData));
+                        }
                     }.bind(this))
                 }
                 var response = JSON.parse(event.target.response);
