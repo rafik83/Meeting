@@ -3640,6 +3640,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery }
 
+    Proximum\Vimeet\Application\Query\Flux\ParticipantFluxQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Flux\ParticipantFluxQuery }
+
     Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQueryHandler:
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'

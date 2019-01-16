@@ -689,6 +689,14 @@ services:
             - '@templating.engine.twig'
 
     #
+    # Flux
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Flux\ParticipantAction:
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    #
     # Visio
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction:
