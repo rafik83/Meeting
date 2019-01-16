@@ -105,6 +105,7 @@ class DuplicateToEventHandlerTest extends TestCase
         $manager = $this->prophesize(User::class);
         $this->group->getManager()->willReturn($manager->reveal());
         $this->group->getTitle()->willReturn('title');
+        $this->group->hasSheetTitleForced()->shouldBeCalled()->willReturn(false);
 
         $this
             ->userToGroupManagerChecker
@@ -120,6 +121,7 @@ class DuplicateToEventHandlerTest extends TestCase
             $this->event->reveal(),
             $manager->reveal(),
             'title',
+            false,
             $this->dateTime,
             $this->group->reveal()
         );

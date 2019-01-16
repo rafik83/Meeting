@@ -32,8 +32,6 @@ class CreateHandler
     private $eventDispatcher;
 
     /**
-     * CreateHandler constructor.
-     *
      * @param GroupRepositoryInterface $groupRepository
      * @param SheetRepositoryInterface $sheetRepository
      * @param \DateTimeInterface       $dateTime
@@ -56,7 +54,13 @@ class CreateHandler
      */
     public function handle(Create $command)
     {
-        $group = new Group($command->event, $command->user, $command->title, $this->dateTime);
+        $group = new Group(
+            $command->event,
+            $command->user,
+            $command->title,
+            $command->forceSheetTitle,
+            $this->dateTime
+        );
 
         foreach ($command->sheetViews as $sheetView) {
             $sheet = $this->sheetRepository->getSheetById($sheetView->id);

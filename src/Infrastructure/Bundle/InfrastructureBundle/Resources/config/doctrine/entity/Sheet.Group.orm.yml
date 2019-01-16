@@ -11,6 +11,10 @@ Proximum\Vimeet\Domain\Model\Sheet\Group:
             type: text
         createdAt:
             type: datetime
+        sheetTitleForced:
+            type: boolean
+            option:
+                default: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

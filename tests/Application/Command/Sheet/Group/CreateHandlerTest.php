@@ -40,8 +40,9 @@ class CreateHandlerTest extends TestCase
 
         $create        = new Create($event, $user);
         $create->sheetViews = $sheetViews;
+        $create->forceSheetTitle = true;
         $create->title = 'Groupe';
-        $group         = new Group($event, $user, 'Groupe', $dateTime);
+        $group         = new Group($event, $user, 'Groupe', true, $dateTime);
 
         $handler = new CreateHandler(
             $groupRepository->reveal(),

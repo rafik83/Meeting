@@ -42,10 +42,14 @@ class Group
     /** @var Group|null */
     private $duplicatedFrom;
 
+    /** @var bool */
+    private $sheetTitleForced;
+
     /**
      * @param Event              $event
      * @param User               $manager
      * @param string             $title
+     * @param bool               $sheetTitleForced
      * @param \DateTimeInterface $createdAt
      * @param Group|null         $duplicatedFrom
      */
@@ -53,6 +57,7 @@ class Group
         Event $event,
         User $manager,
         $title,
+        bool $sheetTitleForced,
         \DateTimeInterface $createdAt,
         Group $duplicatedFrom = null
     ) {
@@ -62,6 +67,7 @@ class Group
         $this->createdAt = $createdAt;
         $this->sheets = new ArrayCollection();
         $this->duplicatedFrom = $duplicatedFrom;
+        $this->sheetTitleForced = $sheetTitleForced;
     }
 
     /**
@@ -124,6 +130,12 @@ class Group
         return $this;
     }
 
+    public function update($title, bool $sheetTitleForced): void
+    {
+        $this->title = $title;
+        $this->sheetTitleForced = $sheetTitleForced;
+    }
+
     /**
      * @param User $manager
      */
@@ -138,5 +150,10 @@ class Group
     public function getDuplicatedFrom(): ?Group
     {
         return $this->duplicatedFrom;
+    }
+
+    public function hasSheetTitleForced(): bool
+    {
+        return $this->sheetTitleForced;
     }
 }

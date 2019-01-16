@@ -22,19 +22,22 @@ class GroupFactory
      * @param User|null     $user
      * @param DateTime|null $dateTime
      * @param string|null   $title
+     * @param bool          $sheetTitleForced
      *
      * @return Group
+     * @throws \Exception
      */
     public static function createGroup(
         Event $event,
         User $user = null,
         DateTime $dateTime = null,
-        $title = null
-    ) {
+        $title = null,
+        bool $sheetTitleForced = false
+    ): Group {
         $user     = (null !== $user) ? $user : UserFactory::create();
         $dateTime = (null !== $dateTime) ? $dateTime : new DateTime();
         $title    = (null !== $title) ? $title : 'GroupTitle';
 
-        return new Group($event, $user, $title, $dateTime);
+        return new Group($event, $user, $title, $sheetTitleForced, $dateTime);
     }
 }

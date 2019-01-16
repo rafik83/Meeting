@@ -23,9 +23,10 @@ class Update
     /** @var string */
     public $title;
 
+    /** @var bool */
+    public $forceSheetTitle;
+
     /**
-     * Update constructor.
-     *
      * @param Group $group
      */
     public function __construct(Group $group)
@@ -33,5 +34,6 @@ class Update
         $this->group = $group;
         $this->email = $group->getManager()->getEmail();
         $this->title = $group->getTitle();
+        $this->forceSheetTitle = $group->hasSheetTitleForced();
     }
 }

@@ -71,6 +71,7 @@ class DuplicateToEventHandler
             $duplicateToEvent->toEvent,
             $originGroup->getManager(),
             $originGroup->getTitle(),
+            $originGroup->hasSheetTitleForced(),
             $this->dateTime,
             $originGroup
         );

@@ -54,10 +54,10 @@ class UpdateHandlerTest extends TestCase
 
     public function setUp()
     {
-        $this->event   = EventFactory::createEvent();
+        $this->event = EventFactory::createEvent();
         $manager = UserFactory::create();
-        $this->now     = new \DateTime();
-        $title   = 'SheetGroup';
+        $this->now = new \DateTime();
+        $title = 'SheetGroup';
 
         $this->group = GroupFactory::createGroup($this->event, $manager, $this->now, $title);
 
@@ -73,9 +73,16 @@ class UpdateHandlerTest extends TestCase
         $update        = new Update($this->group);
         $update->title = 'SheetGroupNewTitle';
         $update->email = $newEmail;
+        $update->forceSheetTitle = true;
 
         $expectedManager = UserFactory::create($newEmail);
-        $expectedGroup   = GroupFactory::createGroup($this->event, $expectedManager, $this->now, 'SheetGroupNewTitle');
+        $expectedGroup   = GroupFactory::createGroup(
+            $this->event,
+            $expectedManager,
+            $this->now,
+            'SheetGroupNewTitle',
+            true
+        );
 
         $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
 

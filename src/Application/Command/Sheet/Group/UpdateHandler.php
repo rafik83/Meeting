@@ -34,8 +34,6 @@ class UpdateHandler
     private $userRepository;
 
     /**
-     * UpdateHandler constructor.
-     *
      * @param EventDispatcherInterface  $eventDispatcher
      * @param GroupRepositoryInterface  $groupRepository
      * @param UserToGroupManagerChecker $userToGroupManagerChecker
@@ -59,7 +57,7 @@ class UpdateHandler
      * @throws UserNotAllowedToManageGroupException
      * @throws UserNotFoundForGivenEmailException
      */
-    public function handle(Update $update)
+    public function handle(Update $update): void
     {
         $isManagerChanged = false;
 
@@ -82,7 +80,7 @@ class UpdateHandler
             }
         }
 
-        $update->group->setTitle($update->title);
+        $update->group->update($update->title, $update->forceSheetTitle);
 
         $this->groupRepository->set($update->group);
 
