@@ -68,8 +68,9 @@ order.column.promotionCode.quantity: '%promotionCodeTitle% : Quantité'
 order.column.promotionCode.total: '%promotionCodeTitle% : Total (HT)'
 order.column.sheet_id: 'Id Fiche'
 order.column.sheet_title: 'titre de la fiche'
-rooming_list_data_export.column.roomType.single: Simple
 rooming_list_data_export.column.roomType.double: Double
+rooming_list_data_export.column.roomType.single: Simple
+rooming_list_data_export.column.roomType.twin: Twin
 rooming_list_data_export.column.sheetId: 'Fiche id'
 rooming_list_data_export.column.sheetTitle: 'Titre de la fiche'
 rooming_list_data_export.column.typeTitle:  'Type de participation'
