@@ -3643,6 +3643,8 @@ services:
     Proximum\Vimeet\Application\Query\Flux\ParticipantFluxQueryHandler:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Flux\ParticipantFluxQuery }
 

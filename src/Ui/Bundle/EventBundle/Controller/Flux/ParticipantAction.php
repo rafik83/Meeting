@@ -32,7 +32,12 @@ class ParticipantAction
             throw new AccessDeniedException();
         }
 
-        $participantFlux = $this->queryBus->handle(new ParticipantFluxQuery($eventDomain->getEvent()));
+        $participantFlux = $this->queryBus->handle(
+            new ParticipantFluxQuery(
+                $eventDomain->getEvent(),
+                $eventDomain->getEvent()->getAvailableLocale($request->getLocale())
+            )
+        );
         $responseContent = $this->serializer->serialize($participantFlux, 'xml');
 
         return new Response($responseContent);

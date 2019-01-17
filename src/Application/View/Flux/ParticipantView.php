@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Application\View\Flux;
 class ParticipantView
 {
     /** @var string */
-    public $initial;
+    public $initials;
 
     /** @var string */
     public $position;
@@ -17,12 +17,12 @@ class ParticipantView
     public $sheetView;
 
     public function __construct(
-        string $initial,
+        string $initials,
         string $position,
         \DateTimeInterface $registrationDate,
         SheetView $sheetView
     ) {
-        $this->initial = $initial;
+        $this->initials = $initials;
         $this->position = $position;
         $this->registrationDate = $registrationDate;
         $this->sheetView = $sheetView;
