@@ -29,6 +29,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         timezone:
             type: string
             nullable: true
+        registrationDate:
+            type: datetime
 
     manyToOne:
         sheet:

@@ -19,7 +19,7 @@ class ParticipantView
     public function __construct(
         string $initials,
         string $position,
-        ?\DateTimeInterface $registrationDate,
+        \DateTimeInterface $registrationDate,
         SheetView $sheetView
     ) {
         $this->initials = $initials;
