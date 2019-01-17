@@ -7,7 +7,7 @@ class ParticipantView
     /** @var string */
     public $initials;
 
-    /** @var string */
+    /** @var null|string */
     public $position;
 
     /** @var \DateTimeInterface */
@@ -18,7 +18,7 @@ class ParticipantView
 
     public function __construct(
         string $initials,
-        string $position,
+        ?string $position,
         \DateTimeInterface $registrationDate,
         SheetView $sheetView
     ) {
