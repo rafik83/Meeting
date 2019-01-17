@@ -408,4 +408,189 @@ class AssignAccommodationHandlerTest extends TestCase
         );
         $handler->handle($assignAccommodation);
     }
+
+    public function test_handle_twin(): void
+    {
+        $arrivalDate = new \DateTime('2018-12-10');
+        $departureDate = new \DateTime('2018-12-12');
+
+        $expected = new Stay(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $arrivalDate,
+            $departureDate,
+            $this->accommodation->reveal(),
+            'twin',
+            ''
+        );
+
+        $this->stayRepository
+            ->add($expected)
+            ->shouldBeCalled()
+        ;
+
+        $this->hasStayForPeriod
+            ->isSatisfiedBy(
+                $this->event->reveal(),
+                $this->user->reveal(),
+                $arrivalDate,
+                $departureDate
+            )
+            ->shouldBeCalled()
+            ->willReturn(false);
+
+        $assignAccommodation = new AssignAccommodation(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $arrivalDate,
+            $departureDate
+        );
+        $assignAccommodation->accommodation = $this->accommodation->reveal();
+        $assignAccommodation->roommate = null;
+        $assignAccommodation->roomType = 'twin';
+
+        $this->hasRemainingOvernight
+            ->isSatisfiedBy($this->accommodation->reveal(), $arrivalDate, $departureDate)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $handler = new AssignAccommodationHandler(
+            $this->stayRepository->reveal(),
+            $this->hasRemainingOvernight->reveal(),
+            $this->hasStayForPeriod->reveal()
+        );
+        $handler->handle($assignAccommodation);
+    }
+
+    public function test_handle_twin_with_roommate(): void
+    {
+        $arrivalDate = new \DateTime('2018-12-10');
+        $departureDate = new \DateTime('2018-12-12');
+        $roommate = $this->prophesize(User::class);
+
+        $expected = new Stay(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $arrivalDate,
+            $departureDate,
+            $this->accommodation->reveal(),
+            'twin',
+            ''
+        );
+        $expected->addUser($roommate->reveal());
+
+        $this->stayRepository
+            ->add($expected)
+            ->shouldBeCalled()
+        ;
+
+        $this->hasStayForPeriod
+            ->isSatisfiedBy(
+                $this->event->reveal(),
+                $this->user->reveal(),
+                $arrivalDate,
+                $departureDate
+            )
+            ->shouldBeCalled()
+            ->willReturn(false);
+
+        $this->hasStayForPeriod
+            ->isSatisfiedBy(
+                $this->event->reveal(),
+                $roommate->reveal(),
+                $arrivalDate,
+                $departureDate
+            )
+            ->shouldBeCalled()
+            ->willReturn(false);
+
+        $assignAccommodation = new AssignAccommodation(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $arrivalDate,
+            $departureDate
+        );
+        $assignAccommodation->accommodation = $this->accommodation->reveal();
+        $assignAccommodation->roommate = $roommate->reveal();
+        $assignAccommodation->roomType = 'twin';
+
+        $this->hasRemainingOvernight
+            ->isSatisfiedBy($this->accommodation->reveal(), $arrivalDate, $departureDate)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $handler = new AssignAccommodationHandler(
+            $this->stayRepository->reveal(),
+            $this->hasRemainingOvernight->reveal(),
+            $this->hasStayForPeriod->reveal()
+        );
+        $handler->handle($assignAccommodation);
+    }
+
+    public function test_handle_twin_with_invalid_roommate(): void
+    {
+        $this->expectException(RoommateHasStayForPeriodException::class);
+
+        $arrivalDate = new \DateTime('2018-12-10');
+        $departureDate = new \DateTime('2018-12-12');
+        $roommate = $this->prophesize(User::class);
+
+        $expected = new Stay(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $arrivalDate,
+            $departureDate,
+            $this->accommodation->reveal(),
+            'twin',
+            ''
+        );
+        $expected->addUser($roommate->reveal());
+
+        $this->stayRepository
+            ->add($expected)
+            ->shouldNotBeCalled()
+        ;
+
+        $this->hasStayForPeriod
+            ->isSatisfiedBy(
+                $this->event->reveal(),
+                $this->user->reveal(),
+                $arrivalDate,
+                $departureDate
+            )
+            ->shouldBeCalled()
+            ->willReturn(false);
+
+        $this->hasStayForPeriod
+            ->isSatisfiedBy(
+                $this->event->reveal(),
+                $roommate->reveal(),
+                $arrivalDate,
+                $departureDate
+            )
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $assignAccommodation = new AssignAccommodation(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $arrivalDate,
+            $departureDate
+        );
+        $assignAccommodation->accommodation = $this->accommodation->reveal();
+        $assignAccommodation->roommate = $roommate->reveal();
+        $assignAccommodation->roomType = 'twin';
+
+        $this->hasRemainingOvernight
+            ->isSatisfiedBy($this->accommodation->reveal(), $arrivalDate, $departureDate)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $handler = new AssignAccommodationHandler(
+            $this->stayRepository->reveal(),
+            $this->hasRemainingOvernight->reveal(),
+            $this->hasStayForPeriod->reveal()
+        );
+        $handler->handle($assignAccommodation);
+    }
 }
