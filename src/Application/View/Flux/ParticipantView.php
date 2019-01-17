@@ -8,7 +8,7 @@ class ParticipantView
     public $initial;
 
     /** @var string */
-    public $function;
+    public $position;
 
     /** @var \DateTimeInterface */
     public $registrationDate;
@@ -18,12 +18,12 @@ class ParticipantView
 
     public function __construct(
         string $initial,
-        string $function,
+        string $position,
         \DateTimeInterface $registrationDate,
         SheetView $sheetView
     ) {
         $this->initial = $initial;
-        $this->function = $function;
+        $this->position = $position;
         $this->registrationDate = $registrationDate;
         $this->sheetView = $sheetView;
     }
