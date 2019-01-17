@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ShowAction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -81,10 +82,16 @@ class ShowActionTest extends TestCase
 
         $authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $authorizationChecker->isGranted(SheetVoter::EDIT, $sheet->reveal())->shouldBeCalled()->willReturn(true);
+        $hasAccessToSheet = $this->prophesize(HasAccessToSheet::class);
+        $hasAccessToSheet->isSatisfiedBy($user->reveal(), $event->reveal(), $sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
 
         $showAction = new ShowAction(
             $badgeAvailableChecker->reveal(),
             $authorizationChecker->reveal(),
+            $hasAccessToSheet->reveal(),
             $engine->reveal(),
             $queryBus->reveal()
         );

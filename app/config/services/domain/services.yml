@@ -132,3 +132,10 @@ services:
     Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
+
+    #
+    # User
+    #
+    Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
