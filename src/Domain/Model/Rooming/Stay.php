@@ -10,6 +10,7 @@ class Stay
 {
     public const ROOM_TYPE_SINGLE = 'single';
     public const ROOM_TYPE_DOUBLE = 'double';
+    public const ROOM_TYPE_TWIN = 'twin';
 
     /** @var int|null */
     private $id;

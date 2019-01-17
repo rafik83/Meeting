@@ -21,6 +21,7 @@ class AssignAccommodationType extends AbstractType
 {
     /** @var QueryBusInterface */
     private $queryBus;
+
     /** @var HasStayForPeriod */
     private $hasStayForPeriod;
 
@@ -73,6 +74,7 @@ class AssignAccommodationType extends AbstractType
                 'choices' => [
                     Stay::ROOM_TYPE_SINGLE,
                     Stay::ROOM_TYPE_DOUBLE,
+                    Stay::ROOM_TYPE_TWIN,
                 ],
                 'choice_label' => function ($type) {
                     return sprintf('form.admin_assign_accommodation_type.roomType.%s', $type);
