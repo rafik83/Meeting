@@ -74,7 +74,7 @@ class ParticipantInfoGuesserTest extends TestCase
             new \DateTime('2017-12-01')
         );
         $this->sheet                = SheetFactory::create($this->event, $this->user, new \DateTime(), $this->type);
-        $this->participant          = new Participant($this->sheet, $this->user, [], true);
+        $this->participant          = new Participant($this->sheet, $this->user, [], true, new \DateTime());
         $this->templateData         = new TemplateData($this->type, [], 'fr', 'fr');
         $this->locale               = 'fr';
     }

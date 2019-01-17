@@ -16,11 +16,20 @@ class SheetView
     /** @var null|string */
     public $country;
 
-    public function __construct(string $type, ?string $title, ?string $description, ?string $country)
-    {
+    /** @var null|string */
+    public $logo;
+
+    public function __construct(
+        string $type,
+        ?string $title,
+        ?string $description,
+        ?string $country,
+        string $logo
+    ) {
         $this->type = $type;
         $this->title = $title;
         $this->description = $description;
         $this->country = $country;
+        $this->logo = $logo;
     }
 }

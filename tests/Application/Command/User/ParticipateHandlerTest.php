@@ -190,7 +190,8 @@ class ParticipateHandlerTest extends TestCase
                 '1efb9cbb' => ['telephone' => 'phone'],
                 '3b759fbb' => ['telephone' => 'mobile'],
             ],
-            $owner = true
+            $owner = true,
+            $now
         );
 
         $previousSheet = $this->prophesize(Sheet::class);

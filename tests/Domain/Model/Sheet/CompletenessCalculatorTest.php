@@ -51,7 +51,7 @@ class CompletenessCalculatorTest extends TestCase
             '3b759fbb' => [
                 'telephone' => 'telephone2',
             ],
-        ], true);
+        ], true, $datetime);
         $sheet->addParticipant($participant);
 
         // Sheet Template Data
@@ -168,7 +168,7 @@ class CompletenessCalculatorTest extends TestCase
             '3b759fbb' => [
                 'telephone' => 'telephone2',
             ],
-        ], true);
+        ], true, $datetime);
         $sheet->addParticipant($participant);
 
         // Sheet Template Data
@@ -307,7 +307,7 @@ class CompletenessCalculatorTest extends TestCase
             '3b759fbb' => [
                 'telephone' => 'telephone2',
             ],
-        ], true);
+        ], true, $datetime);
         $sheet->addParticipant($participant);
 
         // Sheet Template Data

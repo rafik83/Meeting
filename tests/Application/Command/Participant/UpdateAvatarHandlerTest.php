@@ -97,6 +97,7 @@ class UpdateAvatarHandlerTest extends TestCase
         $registrationTemplate = new RegistrationTemplate('Registration template', $template, ['fr'], 'fr', $now);
         $type->setRegistrationTemplate($registrationTemplate);
 
+        $date = new \DateTime();
         $sheet       = new Sheet($event, $type, [], $user, $now);
         $participant = new Participant(
             $sheet,
@@ -105,7 +106,8 @@ class UpdateAvatarHandlerTest extends TestCase
                 '541f84d4' => ['text' => 'truc'],
                 'cb66008e' => ['image' => ''],
             ],
-            $owner = true
+            $owner = true,
+            $date
         );
 
         // Mock
@@ -121,7 +123,8 @@ class UpdateAvatarHandlerTest extends TestCase
                 '541f84d4' => ['text' => 'foo'],
                 'cb66008e' => ['image' => 'path/to/file'],
             ],
-            $owner = true
+            $owner = true,
+            $date
         );
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
@@ -231,6 +234,7 @@ class UpdateAvatarHandlerTest extends TestCase
         $registrationTemplate = new RegistrationTemplate('Registration template', $template, ['fr'], 'fr', $now);
         $type->setRegistrationTemplate($registrationTemplate);
 
+        $date = new \DateTime();
         $sheet = new Sheet($event, $type, [], $user, $now);
         $participant  = new Participant(
             $sheet,
@@ -239,7 +243,8 @@ class UpdateAvatarHandlerTest extends TestCase
                 '541f84d4' => ['text' => 'truc'],
                 'cb66008e' => ['image' => ''],
             ],
-            $owner = true
+            $owner = true,
+            $date
         );
 
         // Mock
@@ -255,7 +260,8 @@ class UpdateAvatarHandlerTest extends TestCase
                 '541f84d4' => ['text' => 'foo'],
                 'cb66008e' => ['image' => 'path/to/file'],
             ],
-            $owner = true
+            $owner = true,
+            $date
         );
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();

@@ -38,7 +38,10 @@ class ParticipantAction
                 $eventDomain->getEvent()->getAvailableLocale($request->getLocale())
             )
         );
-        $responseContent = $this->serializer->serialize($participantFlux, 'xml');
+
+        $responseContent = $this->serializer->serialize($participantFlux, 'xml', [
+            'xml_root_node_name' => 'participants',
+        ]);
 
         return new Response($responseContent);
     }

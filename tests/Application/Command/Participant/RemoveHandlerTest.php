@@ -159,9 +159,9 @@ class RemoveHandlerTest extends TestCase
         $user3 = new User('user3@email.fr', 'password', 'salt', 'fr');
         $date  = new \DateTime();
         $sheet = new Sheet($event, $type, [], $owner, $date);
-        $participant1 = new Participant($sheet, $owner, [], true);
-        $participant2 = new Participant($sheet, $user2, [], true);
-        $participant3 = new Participant($sheet, $user3, [], true);
+        $participant1 = new Participant($sheet, $owner, [], true, $date);
+        $participant2 = new Participant($sheet, $user2, [], true, $date);
+        $participant3 = new Participant($sheet, $user3, [], true, $date);
         $this->setIdToParticipantMock($participant1, 11);
         $this->setIdToParticipantMock($participant2, 12);
         $this->setIdToParticipantMock($participant3, 13);
@@ -233,9 +233,9 @@ class RemoveHandlerTest extends TestCase
         $user3 = new User('user3@email.fr', 'password', 'salt', 'fr');
         $date  = new \DateTime();
         $sheet = new Sheet($event, $type, [], $owner, $date);
-        $participant1 = new Participant($sheet, $owner, [], true);
-        $participant2 = new Participant($sheet, $user2, [], true);
-        $participant3 = new Participant($sheet, $user3, [], true);
+        $participant1 = new Participant($sheet, $owner, [], true, $date);
+        $participant2 = new Participant($sheet, $user2, [], true, $date);
+        $participant3 = new Participant($sheet, $user3, [], true, $date);
         $this->setIdToParticipantMock($participant1, 11);
         $this->setIdToParticipantMock($participant2, 12);
         $this->setIdToParticipantMock($participant3, 13);

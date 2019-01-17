@@ -248,20 +248,17 @@ class ConvertToParticipantHandler
         );
     }
 
-    /**
-     * @param Sheet $sheet
-     * @param User  $user
-     * @param array $participantRegistrationData
-     *
-     * @return Participant
-     */
-    private function createParticipant(Sheet $sheet, User $user, array &$participantRegistrationData): Participant
-    {
+    private function createParticipant(
+        Sheet $sheet,
+        User $user,
+        array &$participantRegistrationData
+    ): Participant {
         $participant = new Participant(
             $sheet,
             $user,
             $participantRegistrationData,
-            false
+            false,
+            $this->dateTime
         );
         $participant->setImported(true);
 

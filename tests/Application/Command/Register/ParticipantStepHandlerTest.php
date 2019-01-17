@@ -39,10 +39,11 @@ class ParticipantStepHandlerTest extends TestCase
 {
     public function testHandle()
     {
+        $date = new \DateTime();
         $event       = EventFactory::createEvent();
         $user        = UserFactory::create();
         $sheet       = SheetFactory::create($event, $user);
-        $participant = ParticipantFactory::create($sheet, $user);
+        $participant = ParticipantFactory::create($sheet, $user, $date);
         $locale      = 'fr';
 
         $sheet->setRegistrationData([]);
@@ -87,7 +88,7 @@ class ParticipantStepHandlerTest extends TestCase
         $userRepository         = $this->prophesize(UserRepositoryInterface::class);
 
         // Expected
-        $expectedParticipant = ParticipantFactory::create($sheet, $user);
+        $expectedParticipant = ParticipantFactory::create($sheet, $user, $date);
         $expectedSheet       = clone $sheet;
         $expectedSheet->setTitle('Proximum');
 

@@ -210,7 +210,8 @@ class UpdateCompanyHandlerTest extends TestCase
             $sheet,
             $user,
             [],
-            true
+            true,
+            $now
         );
 
         // Mock

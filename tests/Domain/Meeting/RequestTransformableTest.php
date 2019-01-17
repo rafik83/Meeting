@@ -42,8 +42,8 @@ class RequestTransformableTest extends TestCase
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
 
-        $toSheet->addParticipant(new Participant($toSheet, $user, [], true));
-        $toSheet->addParticipant(new Participant($toSheet, $user, [], true));
+        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $datetime));
+        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $datetime));
 
         $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
         $this->assertEquals(false, Meeting\TransformableRequest::isTransformable($request));
@@ -58,8 +58,8 @@ class RequestTransformableTest extends TestCase
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
 
-        $participantOne = new Participant($toSheet, $user, [], true);
-        $participantTwo = new Participant($toSheet, $user, [], true);
+        $participantOne = new Participant($toSheet, $user, [], true, $datetime);
+        $participantTwo = new Participant($toSheet, $user, [], true, $datetime);
 
         $toSheet->addParticipant($participantOne);
         $toSheet->addParticipant($participantTwo);
@@ -80,10 +80,10 @@ class RequestTransformableTest extends TestCase
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
 
-        $participantOne = new Participant($toSheet, $user, [], true);
-        $participantTwo = new Participant($toSheet, $user, [], true);
-        $participantThree = new Participant($toSheet, $user, [], true);
-        $participantFour = new Participant($toSheet, $user, [], true);
+        $participantOne = new Participant($toSheet, $user, [], true, $datetime);
+        $participantTwo = new Participant($toSheet, $user, [], true, $datetime);
+        $participantThree = new Participant($toSheet, $user, [], true, $datetime);
+        $participantFour = new Participant($toSheet, $user, [], true, $datetime);
 
         $fromSheet->addParticipant($participantOne);
         $fromSheet->addParticipant($participantTwo);

@@ -83,6 +83,7 @@ class AddHandlerTest extends TestCase
         $type  = new Type($event);
         $user  = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet = new Sheet($event, $type, [], $user, $now);
+        $registrationDate = new \DateTime();
 
         $planProduct        = Product::createPlan($event, 'plan', '', 100, 20, 10, 40);
         $participantProduct = Product::createParticipant($event, 'participant', 50, 20, 10);
@@ -120,7 +121,8 @@ class AddHandlerTest extends TestCase
                     'text' => 'truc',
                 ],
             ],
-            false
+            false,
+            $now
         );
         $expectedSheet->addParticipant($expectedParticipant);
 
@@ -186,7 +188,8 @@ class AddHandlerTest extends TestCase
             $this->eventDispatcher->reveal(),
             $this->updateParticipantProductQuantityHandler->reveal(),
             $this->typeResolver->reveal(),
-            $this->accountSynchronizer->reveal()
+            $this->accountSynchronizer->reveal(),
+            $now
         );
 
         $this->assertEquals(new AddResult($expectedParticipant), $handler->handle($add));
@@ -213,7 +216,8 @@ class AddHandlerTest extends TestCase
                     'text' => 'truc',
                 ],
             ],
-            false
+            false,
+            $now
         );
         $sheet->addParticipant($participant);
 
@@ -255,7 +259,8 @@ class AddHandlerTest extends TestCase
             $this->eventDispatcher->reveal(),
             $this->updateParticipantProductQuantityHandler->reveal(),
             $this->typeResolver->reveal(),
-            $this->accountSynchronizer->reveal()
+            $this->accountSynchronizer->reveal(),
+            $now
         );
 
         $handler->handle($add);

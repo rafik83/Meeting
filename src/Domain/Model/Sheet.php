@@ -1250,7 +1250,7 @@ class Sheet implements TraceableInterface
         $duplicatedSheet->setDuplicatedFrom($sheet);
 
         foreach ($sheet->getParticipants() as $participant) {
-            $duplicatedSheet->addParticipant(Participant::duplicateFrom($participant, $duplicatedSheet));
+            $duplicatedSheet->addParticipant(Participant::duplicateFrom($participant, $duplicatedSheet, $createdAt));
         }
 
         return $duplicatedSheet;

@@ -178,7 +178,7 @@ class ParticipantDenormalizerTest extends TestCase
         $sheet1->setImported(true);
         $sheet1->setTitle('User already exists in DB');
 
-        $participant1 = new Participant($sheet1, $userAlreadyExists->reveal(), [], false);
+        $participant1 = new Participant($sheet1, $userAlreadyExists->reveal(), [], false, $datetime);
         $participant1->setImported(true);
 
         $sheet1->setRegistrationData(
@@ -213,7 +213,7 @@ class ParticipantDenormalizerTest extends TestCase
         $sheet2->setImported(true);
         $sheet2->setTitle('Ma Petite Tribu');
 
-        $participant2 = new Participant($sheet2, $user2, [], false);
+        $participant2 = new Participant($sheet2, $user2, [], false, $datetime);
         $participant2->setImported(true);
 
         $sheet2->setRegistrationData(['company' => ['text' => 'Ma Petite Tribu'], 'country' => ['country' => 'FR']]);

@@ -25,16 +25,17 @@ class UserToParticipant
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param TemplateDataFactory            $templateDataFactory
-     */
+    /** @var \DateTimeInterface */
+    private $date;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
-        TemplateDataFactory $templateDataFactory
+        TemplateDataFactory $templateDataFactory,
+        \DateTimeInterface $date
     ) {
         $this->participantRepository = $participantRepository;
         $this->templateDataFactory = $templateDataFactory;
+        $this->date = $date;
     }
 
     /**
@@ -49,7 +50,8 @@ class UserToParticipant
             $sheet,
             $user,
             $this->getTemplateData($sheet, $user),
-            true
+            true,
+            $this->date
         );
         $this->participantRepository->add($participant);
 

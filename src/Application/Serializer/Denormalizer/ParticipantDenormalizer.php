@@ -406,7 +406,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $sheet,
             $user,
             $participantData,
-            false
+            false,
+            $this->dateTime
         );
         $participant->setImported(true);
         $this->participantRepository->add($participant);

@@ -16,17 +16,11 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class ParticipantFactory
 {
-    /**
-     * @param Sheet     $sheet
-     * @param User|null $user
-     *
-     * @return Participant
-     */
-    public static function create(Sheet $sheet, User $user = null)
+    public static function create(Sheet $sheet, User $user = null, \DateTimeInterface $registrationDate = null)
     {
         $user = (null !== $user) ? $user : new User('user@vimeet.com', 'salt', 'password', 'fr');
 
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, $registrationDate ?? new \DateTime());
         $sheet->addParticipant($participant);
 
         return $participant;

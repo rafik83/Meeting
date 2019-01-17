@@ -24,4 +24,6 @@ interface EventUrlGeneratorInterface
      * @return string
      */
     public function generateEventAbsoluteUrl(Event $event, $routeName, $parameters = []);
+
+    public function generateBaseEventAbsoluteUrl(Event $event): string;
 }
