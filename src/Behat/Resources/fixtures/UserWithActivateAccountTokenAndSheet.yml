@@ -45,12 +45,14 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: "@user_1"
         sheet: "@sheet_1"
         active: true
+        registrationDate: <dateTime()>
         data: []
     participant_2:
         __construct: false
         user: "@user_2"
         sheet: "@sheet_1"
         active: true
+        registrationDate: <dateTime()>
         data: []
 
 Proximum\Vimeet\Domain\Model\User\ActivateAccountToken:

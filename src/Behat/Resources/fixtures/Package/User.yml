@@ -18,6 +18,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: "@user_new_order_1"
         sheet: "@sheet_asddays_1"
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: "Paul" }
             838197c7: { text: "Boiseau" }
@@ -27,6 +28,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: "@user_new_order_2"
         sheet: "@sheet_asddays_1"
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: "Jean" }
             838197c7: { text: "Dupond" }

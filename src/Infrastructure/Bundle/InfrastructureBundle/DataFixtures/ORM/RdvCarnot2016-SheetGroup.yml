@@ -132,6 +132,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@rdv_carnot_group_sheet_1_owner_user'
         sheet: '@rdv_carnot_group_sheet_1'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstNameFemale()> }
             838197c7: { text: <lastName()> }
@@ -145,6 +146,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@rdv_carnot_group_sheet_2_owner_user' # this user participate to rdv_carnot_group_sheet_2 and rdv_carnot_group_sheet_3
         sheet: '@rdv_carnot_group_sheet_2'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstNameMale()> }
             838197c7: { text: <lastName()> }
@@ -157,6 +159,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@rdv_carnot_group_user_manager' # case a participant is a Group manager
         sheet: '@rdv_carnot_group_sheet_3'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstNameMale()> }
             838197c7: { text: <lastName()> }
@@ -169,6 +172,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@rdv_carnot_group_sheet_2_owner_user' # this user participate to rdv_carnot_group_sheet_2 and rdv_carnot_group_sheet_3
         sheet: '@rdv_carnot_group_sheet_3'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstNameMale()> }
             838197c7: { text: <lastName()> }
