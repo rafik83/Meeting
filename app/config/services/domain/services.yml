@@ -139,3 +139,5 @@ services:
     Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+
+    Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter: ~
