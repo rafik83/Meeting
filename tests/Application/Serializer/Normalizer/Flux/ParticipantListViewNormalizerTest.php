@@ -69,6 +69,6 @@ class ParticipantListViewNormalizerTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($result, $expectedResult);
+        $this->assertEquals($result, ['participant' => $expectedResult]);
     }
 }

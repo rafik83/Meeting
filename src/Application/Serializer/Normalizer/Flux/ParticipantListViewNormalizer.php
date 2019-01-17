@@ -26,7 +26,7 @@ class ParticipantListViewNormalizer implements NormalizerInterface
             ];
         }
 
-        return $data;
+        return ['participant' => $data];
     }
 
     public function supportsNormalization($data, $format = null): bool
