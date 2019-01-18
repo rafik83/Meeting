@@ -40,7 +40,7 @@ class ParticipantFluxQueryHandler
 
     public function handle(ParticipantFluxQuery $query): ParticipantListView
     {
-        $participants = $this->participantRepository->getParticipantsByEvent($query->event, $query->locale);
+        $participants = $this->participantRepository->getParticipantsFromEnabledSheetsByEvent($query->event, $query->locale);
         $participantListViews = [];
         $cachedSheetViews = [];
 
