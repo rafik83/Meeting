@@ -29,11 +29,11 @@ function AssignAccommodationStay(element)
 
 AssignAccommodationStay.prototype.init = function() {
     const roomType = this.element.querySelector('input[name="admin_assign_accommodation_type[roomType]"]:checked').value;
-    this.displayRoommate(this.isRoomTypeDouble(roomType));
+    this.displayRoommate(this.isRoomTypeDoubleOrTwin(roomType));
 };
 
-AssignAccommodationStay.prototype.isRoomTypeDouble = function(roomType) {
-    return 'double' === roomType;
+AssignAccommodationStay.prototype.isRoomTypeDoubleOrTwin = function(roomType) {
+    return 'double' === roomType || 'twin' === roomType;
 };
 
 AssignAccommodationStay.prototype.displayRoommate = function(state) {
@@ -41,7 +41,7 @@ AssignAccommodationStay.prototype.displayRoommate = function(state) {
 };
 
 AssignAccommodationStay.prototype.onSelectRoomType = function(e) {
-    this.displayRoommate(this.isRoomTypeDouble(e.target.value));
+    this.displayRoommate(this.isRoomTypeDoubleOrTwin(e.target.value));
 };
 
 AssignAccommodationStay.prototype.onChangePeriod = function(e) {

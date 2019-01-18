@@ -66,7 +66,7 @@ class AssignAccommodationHandler
             $assignAccommodation->roomNumber
         );
 
-        if (Stay::ROOM_TYPE_DOUBLE === $assignAccommodation->roomType
+        if ($this->isRoomTypeDoubleOrTwin($assignAccommodation)
             && $assignAccommodation->roommate instanceof User
         ) {
             if (true === $this->hasStayForPeriod->isSatisfiedBy(
@@ -85,5 +85,11 @@ class AssignAccommodationHandler
         }
 
         $this->stayRepository->add($stay);
+    }
+
+    private function isRoomTypeDoubleOrTwin(AssignAccommodation $assignAccommodation): bool
+    {
+        return $assignAccommodation->roomType === Stay::ROOM_TYPE_DOUBLE
+            || $assignAccommodation->roomType === Stay::ROOM_TYPE_TWIN;
     }
 }
