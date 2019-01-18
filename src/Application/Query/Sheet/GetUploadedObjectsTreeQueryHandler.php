@@ -12,16 +12,22 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\TransliteratorAdapterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\View\Sheet\TemplateDataFromFormTemplateView;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectNodeView;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectsTreeView;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\Template\FormTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
+use Proximum\Vimeet\Domain\Repository\Sheet as SheetRepository;
+use Proximum\Vimeet\Domain\Repository\User as UserRepository;
 
 class GetUploadedObjectsTreeQueryHandler
 {
@@ -31,12 +37,27 @@ class GetUploadedObjectsTreeQueryHandler
     /** @var TransliteratorAdapterInterface */
     private $transliteratorAdapter;
 
+    /** @var FormTemplateRepositoryInterface */
+    private $formTemplateRepository;
+
+    /** @var SheetRepository\FormDataRepositoryInterface */
+    private $sheetFormDataRepository;
+
+    /** @var UserRepository\FormDataRepositoryInterface */
+    private $userFormDataRepository;
+
     public function __construct(
         TemplateDataFactory $templateDataFactory,
-        TransliteratorAdapterInterface $transliteratorAdapter
+        TransliteratorAdapterInterface $transliteratorAdapter,
+        FormTemplateRepositoryInterface $formTemplateRepository,
+        SheetRepository\FormDataRepositoryInterface $sheetFormDataRepository,
+        UserRepository\FormDataRepositoryInterface $userFormDataRepository
     ) {
         $this->templateDataFactory = $templateDataFactory;
         $this->transliteratorAdapter = $transliteratorAdapter;
+        $this->formTemplateRepository = $formTemplateRepository;
+        $this->sheetFormDataRepository = $sheetFormDataRepository;
+        $this->userFormDataRepository = $userFormDataRepository;
     }
 
     public function handle(GetUploadedObjectsTreeQuery $query): UploadedObjectsTreeView
@@ -44,16 +65,86 @@ class GetUploadedObjectsTreeQueryHandler
         $templateDataIndexedByType = [];
         $locale = $query->admin->getLocale();
         $uploadedObjectsTreeView = new UploadedObjectsTreeView();
+        $templateDataFromFormTemplateViews = $this->getTemplatesDataFromFormTemplateByEvent($query->event, $locale);
 
         foreach ($query->sheets as $sheet) {
             $templateData = $this->getTemplateDataByType($sheet->getType(), $templateDataIndexedByType, $locale);
-
             foreach ($templateData->getObjects() as $object) {
                 $this->handleObject($object, $sheet, $uploadedObjectsTreeView, $locale);
+            }
+
+            /** @var TemplateDataFromFormTemplateView $templateDataFromFormTemplateView */
+            foreach ($templateDataFromFormTemplateViews as $templateDataFromFormTemplateView) {
+                foreach ($templateDataFromFormTemplateView->templateData->getObjects() as $object) {
+                    $this->handleFormTemplateObject(
+                        $templateDataFromFormTemplateView->formTemplate,
+                        $object,
+                        $sheet,
+                        $uploadedObjectsTreeView,
+                        $locale
+                    );
+                }
             }
         }
 
         return $uploadedObjectsTreeView;
+    }
+
+    private function handleFormTemplateObject(
+        FormTemplate $formTemplate,
+        TemplateObject $object,
+        Sheet $sheet,
+        UploadedObjectsTreeView $uploadedObjectsTreeView,
+        string $locale
+    ): void {
+        if (!$object instanceof UploadObject) {
+            return;
+        }
+
+        $uploadedObjectNodeView = $this->getUploadedObjectNodeView($object, $uploadedObjectsTreeView, $locale);
+
+        if ($object->hasTag(Tag::SHEET_DATA)) {
+            $sheetFormData = $this->sheetFormDataRepository->getBySheetAndFormTemplate($sheet, $formTemplate);
+
+            if ($sheetFormData && isset($sheetFormData->getData()[$object->getKey()]['path'])) {
+                $data = $sheetFormData->getData()[$object->getKey()];
+
+                $uploadedObjectNodeView->addUploadedObjectView(
+                    new UploadedObjectView(
+                        $data['path'],
+                        $this->sheetFormTemplateUploadObjectFilename($sheet, $data),
+                        $object->isCrypted(),
+                        $sheet,
+                        null,
+                        true
+                    )
+                );
+            }
+            $uploadedObjectsTreeView->addNode($uploadedObjectNodeView, $object->getKey());
+        }
+
+        if ($object->hasTag(Tag::PARTICIPANT_DATA)) {
+            foreach ($sheet->getParticipantsArray() as $participant) {
+                $userFormData = $this->userFormDataRepository->getByUserAndFormTemplate($participant->getUser(), $formTemplate);
+
+                if ($userFormData && isset($userFormData->getData()[$object->getKey()]['path'])) {
+                    $data = $userFormData->getData()[$object->getKey()];
+
+                    $uploadedObjectNodeView->addUploadedObjectView(
+                        new UploadedObjectView(
+                            $data['path'],
+                            $this->participantFormTemplateUploadObjectFilename($sheet, $participant, $data),
+                            $object->isCrypted(),
+                            $sheet,
+                            $participant->getUser(),
+                            false
+                        )
+                    );
+
+                    $uploadedObjectsTreeView->addNode($uploadedObjectNodeView, $object->getKey());
+                }
+            }
+        }
     }
 
     private function handleObject(
@@ -159,6 +250,23 @@ class GetUploadedObjectsTreeQueryHandler
         return $templateData;
     }
 
+    private function getTemplatesDataFromFormTemplateByEvent(Event $event, string $locale): array
+    {
+        $templatesData = [];
+        $formTemplates = $this->formTemplateRepository->findByEvent($event);
+
+        foreach ($formTemplates as $formTemplate) {
+            $templateData = $this->templateDataFactory->createFormTemplateFromTemplate($formTemplate, $locale);
+            foreach ($templateData->getObjects() as $object) {
+                if ($object instanceof UploadObject) {
+                    $templatesData[] = new TemplateDataFromFormTemplateView($templateData, $formTemplate);
+                }
+            }
+        }
+
+        return $templatesData;
+    }
+
     private function sheetUploadObjectFilename(Sheet $sheet, string $key): string
     {
         $path = $this->transliteratorAdapter->urlize([$sheet->getId(), $sheet->getTitle()]);
@@ -175,5 +283,23 @@ class GetUploadedObjectsTreeQueryHandler
         ]);
 
         return $path . '.' . $participant->getData()[$key]['extension'];
+    }
+
+    private function participantFormTemplateUploadObjectFilename(Sheet $sheet, Participant $participant, array $data): string
+    {
+        $path = $this->transliteratorAdapter->urlize([
+            $sheet->getId(),
+            $sheet->getTitle(),
+            $participant->getIdAndFullName(),
+        ]);
+
+        return $path . '.' . $data['extension'];
+    }
+
+    private function sheetFormTemplateUploadObjectFilename(Sheet $sheet, array $data): string
+    {
+        $path = $this->transliteratorAdapter->urlize([$sheet->getId(), $sheet->getTitle()]);
+
+        return $path . '.' . $data['extension'];
     }
 }

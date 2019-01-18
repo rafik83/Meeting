@@ -50,8 +50,14 @@ class ExportUploadedObjectsCommandHandler
     public function handle(ExportUploadedObjectsCommand $command): void
     {
         /** @var UploadedObjectsTreeView $uploadedObjectsTreeView */
-        $uploadedObjectsTreeView = $this->queryBus->handle(new GetUploadedObjectsTreeQuery($command->sheets, $command->admin));
-
+        $uploadedObjectsTreeView = $this->queryBus->handle(
+            new GetUploadedObjectsTreeQuery(
+                $command->event,
+                $command->sheets,
+                $command->admin
+            )
+        );
+        
         if (0 === \count($uploadedObjectsTreeView->tree)) {
             $this->mailer->send(
                 new NoUploadedObjectsZipMail(
