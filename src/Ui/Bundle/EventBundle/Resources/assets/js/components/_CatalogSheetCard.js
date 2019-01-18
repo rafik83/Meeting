@@ -1,6 +1,8 @@
 var $ = require('jquery'),
     CatalogSheetCardButton = require('./_CatalogSheetCardButton'),
-    CatalogSheetCardRequestCheckbox = require('./_CatalogSheetCardRequestCheckbox');
+    CatalogSheetCardRequestCheckbox = require('./_CatalogSheetCardRequestCheckbox'),
+    EditableTextIndicator = require('./_EditableTextIndicator')
+;
 
 function CatalogSheetCard(element, modal) {
     this.element = element;
@@ -56,6 +58,15 @@ CatalogSheetCard.prototype.updateParticipantsHtml = function (participantsHtml) 
 CatalogSheetCard.prototype.putListenerOnRequestForm = function () {
     if (this.modal.querySelector('[data-participants-checkbox]') !== null) {
         new CatalogSheetCardRequestCheckbox(this.modal.querySelector('[data-participants-checkbox]'));
+    }
+
+    var discussionElement = this.modal.querySelector('[data-text-max-length-indicator]');
+    if (discussionElement !== null) {
+        new EditableTextIndicator(
+            discussionElement,
+            discussionElement.getAttribute('data-text-max-length-indicator'),
+            discussionElement.getAttribute('data-text-max-length-translations')
+        );
     }
 
     [].forEach.call(this.modal.querySelectorAll('form'), function (form) {

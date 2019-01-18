@@ -1,0 +1,5 @@
+Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest:
+    properties:
+        description:
+            - Length:
+                  max: 300

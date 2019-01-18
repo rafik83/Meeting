@@ -139,12 +139,14 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCreateType
         arguments:
             - '@template.participant_info_guesser'
+            - '@translator'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.request_update_from_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestUpdateType
         arguments:
             - '@template.participant_info_guesser'
+            - '@translator'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_participant.participant_choice_type:
@@ -169,6 +171,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType
         arguments:
             - '@template.participant_info_guesser'
+            - '@translator'
         tags:
             - { name: 'form.type' }
     vimeet_app.form_type_meeting.refuse_request_type:
