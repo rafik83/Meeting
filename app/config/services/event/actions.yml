@@ -144,6 +144,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\Badge\AvailableChecker'
             - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 

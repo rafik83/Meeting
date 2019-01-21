@@ -199,6 +199,7 @@ form.create_partner.children.password.label: 'Mot de passe'
 form.create_partner.children.submit.label: Créer
 form.create_partner.children.types.label: 'Types disponibles pour ce collaborateur'
 form.create_sheets_group.children.email_manager.label: 'Email du manager'
+form.create_sheets_group.children.forceSheetTitle.label: 'Forcer le nom de la fiche plutôt que le nom de l''entité sur les badges'
 form.create_sheets_group.children.name_manager.label: 'Nom du manager'
 form.create_sheets_group.children.sheetViews.label: 'Fiche(s) de l''entité'
 form.create_sheets_group.children.sheetViews.prototype.label: Fiches
@@ -1198,6 +1199,7 @@ form.update_partner.children.submit.label: Créer
 form.update_partner.children.types.label: 'Types disponibles pour ce partenaire'
 form.update_product.children.submit.label: Valider
 form.update_sheets_group.children.email.label: 'Email du manager'
+form.update_sheets_group.children.forceSheetTitle.label: 'Forcer le nom de la fiche plutôt que le nom de l''entité sur les badges'
 form.update_sheets_group.children.submit.label: Enregistrer
 form.update_sheets_group.children.title.label: 'Titre de l''entité'
 form.update_speaker.children.firstname.label: Prénom

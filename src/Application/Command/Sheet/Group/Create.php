@@ -28,9 +28,10 @@ class Create
     /** @var string */
     public $title;
 
+    /** @var bool */
+    public $forceSheetTitle = false;
+
     /**
-     * Create constructor.
-     *
      * @param Event $event
      * @param User  $user
      */

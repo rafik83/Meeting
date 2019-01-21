@@ -35,7 +35,7 @@ class GroupViewQueryHandlerTest extends TestCase
         $propertyGroupId = $reflectionGroup->getProperty('id');
         $propertyGroupId->setAccessible(true);
 
-        $group = new Group($event, $user, 'My entity', $datetime);
+        $group = new Group($event, $user, 'My entity', false, $datetime);
         $propertyGroupId->setValue($group, 1);
 
         $reflectionSheet = new \ReflectionClass(Sheet::class);

@@ -90,6 +90,7 @@ mail.planning.print.subject: 'Fichier de plannings'
 mail.planning.printWidthBadge.link.click: 'Fichier de plannings et badges'
 mail.planning.printWithBadge.intro: 'Voici le fichier de plannings et badges demandé'
 mail.planning.printWithBadge.link.intro: 'Vous pouvez imprimer les plannings et badges en cliquant ici :'
+mail.planning.printWithBadge.link.click: 'Fichier plannings et badges'
 mail.planning.printWithBadge.subject: 'Fichier de plannings et badges'
 mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace participant \"%event%\" est créé. \n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace participant sur le site \"%event%\".\n\nBien cordialement,"
 mail.register.subject: 'Votre compte d''accès à l''espace participant de %event% est créé'

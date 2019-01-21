@@ -47,6 +47,7 @@ Proximum\Vimeet\Domain\Model\Sheet\Group:
             - '@event_rdv_carnot_2016'
             - '@rdv_carnot_group_user_manager'
             - 'Entité Institut Carnot'
+            - false
             - <dateTime()>
 
 Proximum\Vimeet\Domain\Model\Sheet:

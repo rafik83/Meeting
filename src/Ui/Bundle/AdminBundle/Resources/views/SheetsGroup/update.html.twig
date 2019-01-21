@@ -7,6 +7,7 @@
 {% block form_content %}
     {{ form_row(form.email) }}
     {{ form_row(form.title) }}
+    {{ form_row(form.forceSheetTitle) }}
 {% endblock %}
 
 {% block goback_link path('admin_sheets_group_list', {event: event.id}) %}

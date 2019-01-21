@@ -29,6 +29,7 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
+use Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter;
 
 class FormTemplateDataForUserHandlerTest extends TestCase
 {
@@ -39,7 +40,8 @@ class FormTemplateDataForUserHandlerTest extends TestCase
         $formTemplateDataQueryHandler,
         $sheetRepository,
         $participantInfoGuesser,
-        $sheetInfoGuesser
+        $sheetInfoGuesser,
+        $firstParticipantSheetOfUserGetter
     ;
 
     public function setUp()
@@ -52,21 +54,30 @@ class FormTemplateDataForUserHandlerTest extends TestCase
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $this->sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $this->firstParticipantSheetOfUserGetter = $this->prophesize(FirstParticipantSheetOfUserGetter::class);
     }
     public function testHandleNoSheet(): void
     {
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getUserParticipant($this->user->reveal())->shouldBeCalled()->willReturn(null);
+        $sheets = [$sheet->reveal()];
 
         $this->sheetRepository->getSheetsByUserAndEvent($this->user->reveal(), $this->event->reveal())
             ->shouldBeCalled()
-            ->willReturn([$sheet->reveal()])
+            ->willReturn($sheets)
         ;
+
+        $this->firstParticipantSheetOfUserGetter->getFirstParticipantSheet($this->user->reveal(), $sheets)
+            ->shouldBeCalled()
+            ->willReturn($sheet->reveal())
+        ;
+
         $handler = new FormTemplateDataForUserHandler(
             $this->formTemplateDataQueryHandler->reveal(),
             $this->sheetRepository->reveal(),
             $this->participantInfoGuesser->reveal(),
-            $this->sheetInfoGuesser->reveal()
+            $this->sheetInfoGuesser->reveal(),
+            $this->firstParticipantSheetOfUserGetter->reveal()
         );
         $result = $handler->handle(
             new FormTemplateDataForUser($this->event->reveal(), $this->user->reveal(), $this->formTemplate->reveal(), 'fr')
@@ -80,18 +91,18 @@ class FormTemplateDataForUserHandlerTest extends TestCase
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet2 = $this->prophesize(Sheet::class);
         $sheet3 = $this->prophesize(Sheet::class);
-        $participant1 = $this->prophesize(Participant::class);
+        $sheets = [$sheet1->reveal(), $sheet2->reveal(), $sheet3->reveal()];
         $participant2 = $this->prophesize(Participant::class);
-
-        $participant1->getId()->shouldBeCalled()->willReturn(999);
-        $participant2->getId()->shouldBeCalled()->willReturn(111);
-        $sheet1->getUserParticipant($this->user->reveal())->shouldBeCalled()->willReturn($participant1);
-        $sheet2->getUserParticipant($this->user->reveal())->shouldBeCalled()->willReturn(null);
         $sheet3->getUserParticipant($this->user->reveal())->shouldBeCalled()->willReturn($participant2);
 
         $this->sheetRepository->getSheetsByUserAndEvent($this->user->reveal(), $this->event->reveal())
             ->shouldBeCalled()
-            ->willReturn([$sheet1->reveal(), $sheet2->reveal(), $sheet3->reveal()])
+            ->willReturn($sheets)
+        ;
+
+        $this->firstParticipantSheetOfUserGetter->getFirstParticipantSheet($this->user->reveal(), $sheets)
+            ->shouldBeCalled()
+            ->willReturn($sheet3->reveal())
         ;
 
         $this->user->getId()->shouldBeCalled()->willReturn(1);
@@ -172,7 +183,8 @@ class FormTemplateDataForUserHandlerTest extends TestCase
             $this->formTemplateDataQueryHandler->reveal(),
             $this->sheetRepository->reveal(),
             $this->participantInfoGuesser->reveal(),
-            $this->sheetInfoGuesser->reveal()
+            $this->sheetInfoGuesser->reveal(),
+            $this->firstParticipantSheetOfUserGetter->reveal()
         );
         $result = $handler->handle(
             new FormTemplateDataForUser($this->event->reveal(), $this->user->reveal(), $this->formTemplate->reveal(), 'fr')

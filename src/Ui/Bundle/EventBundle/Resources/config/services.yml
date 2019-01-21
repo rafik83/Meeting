@@ -651,6 +651,7 @@ services:
         class: Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter'
 
     domain.service.sheets_group.type_name_resolver:
         class: Proximum\Vimeet\Domain\Service\Type\TypeNameResolver

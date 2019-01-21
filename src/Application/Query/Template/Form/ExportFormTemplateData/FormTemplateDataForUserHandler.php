@@ -16,8 +16,10 @@ use Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQuery;
 use Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQueryHandler;
 use Proximum\Vimeet\Application\View\Template\Form\ExportFormTemplateData\UserDataView;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter;
 
 class FormTemplateDataForUserHandler
 {
@@ -33,37 +35,35 @@ class FormTemplateDataForUserHandler
     /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
+    /** @var FirstParticipantSheetOfUserGetter */
+    private $firstParticipantSheetOfUserGetter;
+
     public function __construct(
         FormTemplateDataQueryHandler $formTemplateDataQueryHandler,
         SheetRepositoryInterface $sheetRepository,
         ParticipantInfoGuesser $participantInfoGuesser,
-        SheetInfoGuesser $sheetInfoGuesser
+        SheetInfoGuesser $sheetInfoGuesser,
+        FirstParticipantSheetOfUserGetter $firstParticipantSheetOfUserGetter
     ) {
         $this->formTemplateDataQueryHandler = $formTemplateDataQueryHandler;
         $this->sheetRepository = $sheetRepository;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
+        $this->firstParticipantSheetOfUserGetter = $firstParticipantSheetOfUserGetter;
     }
 
     public function handle(FormTemplateDataForUser $query): ?UserDataView
     {
-        $sheet = null;
-        $participant = null;
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($query->user, $query->event);
+        $sheet = $this->firstParticipantSheetOfUserGetter->getFirstParticipantSheet($query->user, $sheets);
 
-        foreach ($sheets as $userSheet) {
-            $userParticipant = $userSheet->getUserParticipant($query->user);
-
-            // We need to find the oldest participant of the user (the original Participant)
-            if ($userParticipant instanceof Participant
-                && (!$participant instanceof Participant || $participant->getId() > $userParticipant->getId()))
-            {
-                $sheet = $userSheet;
-                $participant = $userParticipant;
-            }
+        if (!$sheet instanceof Sheet) {
+            return null;
         }
 
-        if ($sheet === null || $participant === null) {
+        $participant = $sheet->getUserParticipant($query->user);
+
+        if (!$participant instanceof Participant) {
             return null;
         }
 

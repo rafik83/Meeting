@@ -66,6 +66,11 @@ class GetUserBadgeByEventQueryHandler
     public function handle(GetUserBadgeByEventQuery $query): UserBadgeByEventView
     {
         $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($query->user, $query->event);
+
+        if (empty($userSheets)) {
+            throw new AccessToBadgeDeniedException('Badge for this user is not activated');
+        }
+
         $type = $this->typeNameResolver->resolveTypeWithPreloadedSheets($userSheets);
 
         /** @var Badge $badge */

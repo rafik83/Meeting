@@ -237,6 +237,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Template\Form\ExportFormTemplateData\FormTemplateDataForUser }
 
