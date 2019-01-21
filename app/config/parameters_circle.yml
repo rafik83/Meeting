@@ -64,6 +64,9 @@ parameters:
     ovh_consumer_key:       'thisConsumerKeyIsNotSecretYouShouldChangeIt'
     ovh_service_name:       'thisServiceNameIsNotSecretYouShouldChangeIt'
     ovh_sender_name:        'thisSenderNameIsNotSecretYouShouldChangeIt'
+    twilio_sid: 'thisSIDIsNotSecretYouShouldChangeIt'
+    twilio_token: 'thisTokenIsNotSecretYouShouldChangeIt'
+    twilio_number: 'thisNumberIsNotSecretYouShouldChangeIt'
 
     tokbox_api_key: ~
     tokbox_api_secret: ~

@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
+use Proximum\Vimeet\Infrastructure\Adapter\SMS\TwilioClient;
 
 class SMSSenderAdapter implements SMSSenderInterface
 {
@@ -29,16 +30,25 @@ class SMSSenderAdapter implements SMSSenderInterface
     /** @var string */
     private $ovhSenderName;
 
+    /** @var TwilioClient */
+    private $twilioClient;
+
     /**
-     * @param Api    $api
-     * @param string $ovhServiceName
-     * @param string $ovhSenderName
+     * @param Api          $api
+     * @param string       $ovhServiceName
+     * @param string       $ovhSenderName
+     * @param TwilioClient $twilioClient
      */
-    public function __construct(Api $api, $ovhServiceName, $ovhSenderName)
-    {
+    public function __construct(
+        Api $api,
+        $ovhServiceName,
+        $ovhSenderName,
+        TwilioClient $twilioClient
+    ) {
         $this->api = $api;
         $this->ovhServiceName = $ovhServiceName;
         $this->ovhSenderName = $ovhSenderName;
+        $this->twilioClient = $twilioClient;
     }
 
     /**
