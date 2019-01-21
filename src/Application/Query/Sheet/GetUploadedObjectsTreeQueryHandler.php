@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\TransliteratorAdapterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\View\Sheet\TemplateDataFromFormTemplateView;
+use Proximum\Vimeet\Application\View\Sheet\UploadObjectFromFormTemplateView;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectNodeView;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectsTreeView;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectView;
@@ -65,7 +65,7 @@ class GetUploadedObjectsTreeQueryHandler
         $templateDataIndexedByType = [];
         $locale = $query->admin->getLocale();
         $uploadedObjectsTreeView = new UploadedObjectsTreeView();
-        $templateDataFromFormTemplateViews = $this->getTemplatesDataFromFormTemplateByEvent($query->event, $locale);
+        $uploadObjectFromFormTemplateViews = $this->getUploadObjectsFromFormTemplateByEvent($query->event, $locale);
 
         foreach ($query->sheets as $sheet) {
             $templateData = $this->getTemplateDataByType($sheet->getType(), $templateDataIndexedByType, $locale);
@@ -73,17 +73,15 @@ class GetUploadedObjectsTreeQueryHandler
                 $this->handleObject($object, $sheet, $uploadedObjectsTreeView, $locale);
             }
 
-            /** @var TemplateDataFromFormTemplateView $templateDataFromFormTemplateView */
-            foreach ($templateDataFromFormTemplateViews as $templateDataFromFormTemplateView) {
-                foreach ($templateDataFromFormTemplateView->templateData->getObjects() as $object) {
-                    $this->handleFormTemplateObject(
-                        $templateDataFromFormTemplateView->formTemplate,
-                        $object,
-                        $sheet,
-                        $uploadedObjectsTreeView,
-                        $locale
-                    );
-                }
+            /** @var UploadObjectFromFormTemplateView $uploadObjectsFromFormTemplateView */
+            foreach ($uploadObjectFromFormTemplateViews as $uploadObjectsFromFormTemplateView) {
+                $this->handleFormTemplateObject(
+                    $uploadObjectsFromFormTemplateView->formTemplate,
+                    $uploadObjectsFromFormTemplateView->templateObject,
+                    $sheet,
+                    $uploadedObjectsTreeView,
+                    $locale
+                );
             }
         }
 
@@ -112,7 +110,7 @@ class GetUploadedObjectsTreeQueryHandler
                 $uploadedObjectNodeView->addUploadedObjectView(
                     new UploadedObjectView(
                         $data['path'],
-                        $this->sheetFormTemplateUploadObjectFilename($sheet, $data),
+                        $this->sheetFormTemplateUploadObjectFilename($sheet, $data, $object->getKey()),
                         $object->isCrypted(),
                         $sheet,
                         null,
@@ -124,6 +122,7 @@ class GetUploadedObjectsTreeQueryHandler
         }
 
         if ($object->hasTag(Tag::PARTICIPANT_DATA)) {
+
             foreach ($sheet->getParticipantsArray() as $participant) {
                 $userFormData = $this->userFormDataRepository->getByUserAndFormTemplate($participant->getUser(), $formTemplate);
 
@@ -133,7 +132,7 @@ class GetUploadedObjectsTreeQueryHandler
                     $uploadedObjectNodeView->addUploadedObjectView(
                         new UploadedObjectView(
                             $data['path'],
-                            $this->participantFormTemplateUploadObjectFilename($sheet, $participant, $data),
+                            $this->participantFormTemplateUploadObjectFilename($sheet, $participant, $data, $object->getKey()),
                             $object->isCrypted(),
                             $sheet,
                             $participant->getUser(),
@@ -250,21 +249,21 @@ class GetUploadedObjectsTreeQueryHandler
         return $templateData;
     }
 
-    private function getTemplatesDataFromFormTemplateByEvent(Event $event, string $locale): array
+    private function getUploadObjectsFromFormTemplateByEvent(Event $event, string $locale): array
     {
-        $templatesData = [];
+        $uploadObjects = [];
         $formTemplates = $this->formTemplateRepository->findByEvent($event);
 
         foreach ($formTemplates as $formTemplate) {
             $templateData = $this->templateDataFactory->createFormTemplateFromTemplate($formTemplate, $locale);
             foreach ($templateData->getObjects() as $object) {
                 if ($object instanceof UploadObject) {
-                    $templatesData[] = new TemplateDataFromFormTemplateView($templateData, $formTemplate);
+                    $uploadObjects[] = new UploadObjectFromFormTemplateView($formTemplate, $object);
                 }
             }
         }
 
-        return $templatesData;
+        return $uploadObjects;
     }
 
     private function sheetUploadObjectFilename(Sheet $sheet, string $key): string
@@ -285,9 +284,10 @@ class GetUploadedObjectsTreeQueryHandler
         return $path . '.' . $participant->getData()[$key]['extension'];
     }
 
-    private function participantFormTemplateUploadObjectFilename(Sheet $sheet, Participant $participant, array $data): string
+    private function participantFormTemplateUploadObjectFilename(Sheet $sheet, Participant $participant, array $data, string $key): string
     {
         $path = $this->transliteratorAdapter->urlize([
+            $key,
             $sheet->getId(),
             $sheet->getTitle(),
             $participant->getIdAndFullName(),
@@ -296,9 +296,9 @@ class GetUploadedObjectsTreeQueryHandler
         return $path . '.' . $data['extension'];
     }
 
-    private function sheetFormTemplateUploadObjectFilename(Sheet $sheet, array $data): string
+    private function sheetFormTemplateUploadObjectFilename(Sheet $sheet, array $data, string $key): string
     {
-        $path = $this->transliteratorAdapter->urlize([$sheet->getId(), $sheet->getTitle()]);
+        $path = $this->transliteratorAdapter->urlize([$key, $sheet->getId(), $sheet->getTitle()]);
 
         return $path . '.' . $data['extension'];
     }

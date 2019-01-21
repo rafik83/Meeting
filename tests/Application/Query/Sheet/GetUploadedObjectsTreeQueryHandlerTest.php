@@ -19,13 +19,18 @@ use Proximum\Vimeet\Application\View\Sheet\UploadedObjectNodeView;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectsTreeView;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectView;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Template\FormTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
+use Proximum\Vimeet\Domain\Repository\Sheet as SheetRepository;
+use Proximum\Vimeet\Domain\Repository\User as UserRepository;
 
 class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
 {
@@ -36,6 +41,8 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
         $admin = $this->prophesize(Admin::class);
         $admin->getLocale()->shouldBeCalled()->willReturn('fr');
         $type = $this->prophesize(Type::class);
+
+        $event = $this->prophesize(Event::class);
 
         $user = $this->prophesize(User::class);
         $user2 = $this->prophesize(User::class);
@@ -113,8 +120,53 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
         $transliteratorAdapter->urlize([2, 'Title 2', '1-jean-paul-sartre'])->shouldBeCalled()->willReturn('2-title-2-1-jean-paul-sartre');
         $transliteratorAdapter->urlize([2, 'Title 2', '2-simone-de-beauvoir'])->shouldBeCalled()->willReturn('2-title-2-2-simone-de-beauvoir');
 
-        $handler = new GetUploadedObjectsTreeQueryHandler($templateDataFactory->reveal(), $transliteratorAdapter->reveal());
+        $formTemplate = $this->prophesize(FormTemplate::class);
+        $formTemplateRepository = $this->prophesize(FormTemplateRepositoryInterface::class);
+        $sheetFormDataRepository = $this->prophesize(SheetRepository\FormDataRepositoryInterface::class);
+        $userFormDataRepository = $this->prophesize(UserRepository\FormDataRepositoryInterface::class);
+        $formData = new Sheet\FormData($sheet1->reveal(), $formTemplate->reveal(), [
+            'Med79Mea71' => [
+                'path' => '/path/to/file4',
+                'extension' => 'jpg',
+            ]
+        ]);
+        $sheetFormDataRepository->getBySheetAndFormTemplate($sheet1->reveal(), $formTemplate->reveal())
+            ->shouldBeCalled()
+            ->willReturn($formData);
+        $sheetFormDataRepository->getBySheetAndFormTemplate($sheet2->reveal(), $formTemplate->reveal())
+            ->shouldBeCalled()
+            ->willReturn(null);
 
+        $uploadObject = $this->prophesize(UploadObject::class);
+        $uploadObject->hasTag(Tag::SHEET_DATA)->shouldBeCalled()->willReturn(true);
+        $uploadObject->hasTag(Tag::PARTICIPANT_DATA)->shouldBeCalled()->willReturn(false);
+        $uploadObject->isCrypted()->shouldBeCalled()->willReturn(false);
+        $uploadObject->getKey()->shouldBeCalled()->willReturn('Med79Mea71');
+        $uploadObject->getLabel('fr')->shouldBeCalled()->willReturn('Label 4');
+
+        $formTemplateRepository->findByEvent($event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$formTemplate->reveal()]);
+
+        $templateData2 = $this->prophesize(TemplateData::class);
+        $templateData2->getObjects()
+            ->shouldBeCalled()
+            ->willReturn([$uploadObject->reveal()]);
+
+        $templateDataFactory->createFormTemplateFromTemplate($formTemplate->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn($templateData2);
+
+        $handler = new GetUploadedObjectsTreeQueryHandler(
+            $templateDataFactory->reveal(),
+            $transliteratorAdapter->reveal(),
+            $formTemplateRepository->reveal(),
+            $sheetFormDataRepository->reveal(),
+            $userFormDataRepository->reveal()
+        );
+
+        $transliteratorAdapter->urlize(['Med79Mea71', 1, 'Title 1'])->shouldBeCalled()->willReturn('Med79Mea71-1-title-1');
+        $transliteratorAdapter->urlize(['Med79Mea71', 'Label 4'])->shouldBeCalled()->willReturn('Med79Mea71-1-title-1');
         $transliteratorAdapter->urlize(['Mb7d3M765e', 'Label 1'])->shouldBeCalled()->willReturn('Mb7d3M765e-label-1');
 
         $node1 = new UploadedObjectNodeView('Mb7d3M765e-label-1');
@@ -144,12 +196,25 @@ class GetUploadedObjectsTreeQueryHandlerTest extends TestCase
                 false
             )
         );
+        $node3 = new UploadedObjectNodeView('Med79Mea71-1-title-1');
+        $node3->addUploadedObjectView(
+            new UploadedObjectView(
+                '/path/to/file4',
+                'Med79Mea71-1-title-1.jpg',
+                false,
+                $sheet1->reveal(),
+                null,
+                true
+            )
+        );
 
         $expectedResult = new UploadedObjectsTreeView();
         $expectedResult->addNode($node1, 'Mb7d3M765e');
         $expectedResult->addNode($node2, 'Med79Mea70');
+        $expectedResult->addNode($node3, 'Med79Mea71');
         $result = $handler->handle(
             new GetUploadedObjectsTreeQuery(
+                $event->reveal(),
                 [$sheet1->reveal(), $sheet2->reveal()],
                 $admin->reveal()
             )
