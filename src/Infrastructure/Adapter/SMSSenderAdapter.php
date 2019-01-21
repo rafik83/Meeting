@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Infrastructure\Adapter\SMS\TwilioClient;
+use Twilio\Exceptions\RestException;
 
 class SMSSenderAdapter implements SMSSenderInterface
 {
@@ -56,14 +57,17 @@ class SMSSenderAdapter implements SMSSenderInterface
      */
     public function send(SMS $sms)
     {
-        try {
-
-            if (mb_strpos($sms->getReceiver(), '+1') === 0) {
+        if (mb_strpos($sms->getReceiver(), '+1') === 0) {
+            try {
                 $this->twilioClient->sendMessage($sms->getReceiver(), $sms->getMessage());
 
                 return;
+            } catch (RestException $exception) {
+                throw new FailToSendSMSException($exception->getMessage());
             }
+        }
 
+        try {
             $content = [
                 'message'   => $sms->getMessage(),
                 'receivers' => [$sms->getReceiver()],
