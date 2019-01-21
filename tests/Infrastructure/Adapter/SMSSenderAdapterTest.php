@@ -14,6 +14,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Ovh\Api;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
@@ -27,10 +28,11 @@ class SMSSenderAdapterTest extends TestCase
     const SERVICE = 'serviceName';
 
     /** @var ObjectProphecy */
-    private $twilioClient;
+    private $ovh, $twilioClient;
 
     public function setUp()
     {
+        $this->ovh = $this->prophesize(Api::class);
         $this->twilioClient = $this->prophesize(TwilioClient::class);
     }
 
@@ -41,8 +43,7 @@ class SMSSenderAdapterTest extends TestCase
         $sms = new SMS('+33102030405', 'message content');
 
         // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->post(
+        $this->ovh->post(
                 '/sms/serviceName/jobs',
                 [
                     'message'   => 'message content',
@@ -54,7 +55,7 @@ class SMSSenderAdapterTest extends TestCase
             ->willThrow(ClientException::class);
 
         // Adapter
-        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
+        $adapter = new SMSSenderAdapter($this->ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
         $adapter->send($sms);
     }
 
@@ -65,8 +66,7 @@ class SMSSenderAdapterTest extends TestCase
         $sms = new SMS('+33102030405', 'message content');
 
         // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->post(
+        $this->ovh->post(
             '/sms/serviceName/jobs',
             [
                 'message'   => 'message content',
@@ -78,7 +78,7 @@ class SMSSenderAdapterTest extends TestCase
             ->willThrow(ServerException::class);
 
         // Adapter
-        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
+        $adapter = new SMSSenderAdapter($this->ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
         $adapter->send($sms);
     }
 
@@ -89,8 +89,7 @@ class SMSSenderAdapterTest extends TestCase
         $sms = new SMS('+33102030405', 'message content');
 
         // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->post(
+        $this->ovh->post(
                 '/sms/serviceName/jobs',
                 [
                     'message'   => 'message content',
@@ -102,7 +101,7 @@ class SMSSenderAdapterTest extends TestCase
             ->willReturn(['invalidReceivers' => ['+33102030405']]);
 
         // Adapter
-        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
+        $adapter = new SMSSenderAdapter($this->ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
         $adapter->send($sms);
     }
 
@@ -111,8 +110,7 @@ class SMSSenderAdapterTest extends TestCase
         $sms = new SMS('+33102030405', 'message content');
 
         // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->post(
+        $this->ovh->post(
             '/sms/serviceName/jobs',
             [
                 'message'   => 'message content',
@@ -124,7 +122,20 @@ class SMSSenderAdapterTest extends TestCase
             ->willReturn([]);
 
         // Adapter
-        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
+        $adapter = new SMSSenderAdapter($this->ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
+        $adapter->send($sms);
+    }
+
+    public function testSendUsNumber()
+    {
+        $sms = new SMS('+1102030405', 'message content');
+
+        // Mock
+        $this->ovh->post(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->twilioClient->sendMessage('+1102030405', 'message content');
+
+        // Adapter
+        $adapter = new SMSSenderAdapter($this->ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
         $adapter->send($sms);
     }
 
@@ -133,8 +144,7 @@ class SMSSenderAdapterTest extends TestCase
         $sms = new SMS('+33102030405', 'message content', false);
 
         // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->post(
+        $this->ovh->post(
             '/sms/serviceName/jobs',
             [
                 'message'      => 'message content',
@@ -147,7 +157,7 @@ class SMSSenderAdapterTest extends TestCase
             ->willReturn([]);
 
         // Adapter
-        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
+        $adapter = new SMSSenderAdapter($this->ovh->reveal(), self::SERVICE, self::SENDER, $this->twilioClient->reveal());
         $adapter->send($sms);
     }
 }

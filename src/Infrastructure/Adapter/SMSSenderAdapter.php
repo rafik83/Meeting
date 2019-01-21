@@ -57,6 +57,13 @@ class SMSSenderAdapter implements SMSSenderInterface
     public function send(SMS $sms)
     {
         try {
+
+            if (mb_strpos($sms->getReceiver(), '+1') === 0) {
+                $this->twilioClient->sendMessage($sms->getReceiver(), $sms->getMessage());
+
+                return;
+            }
+
             $content = [
                 'message'   => $sms->getMessage(),
                 'receivers' => [$sms->getReceiver()],
