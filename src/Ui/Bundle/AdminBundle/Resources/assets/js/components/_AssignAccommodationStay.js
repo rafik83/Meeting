@@ -11,6 +11,8 @@ function AssignAccommodationStay(element)
     this.accommodationInput = element.querySelector('[id="admin_assign_accommodation_type_accommodation"]');
     this.roommateInput = element.querySelector('[id="admin_assign_accommodation_type_roommate"]');
     this.roommateBlock = element.querySelector('[id="admin_assign_accommodation_type_roommate-group"]');
+    this.displayOtherSheetBlock = element.querySelector('[id="admin_assign_accommodation_type_displayOtherSheet-group"]');
+    this.otherSheetsBlock = element.querySelector('[id="admin_assign_accommodation_type_otherSheet-group"]');
 
     this.dateTimeManipulation = new DateTimeManipulation();
 
@@ -29,19 +31,22 @@ function AssignAccommodationStay(element)
 
 AssignAccommodationStay.prototype.init = function() {
     const roomType = this.element.querySelector('input[name="admin_assign_accommodation_type[roomType]"]:checked').value;
-    this.displayRoommate(this.isRoomTypeDoubleOrTwin(roomType));
+    this.displayRoommateManagement(this.isRoomTypeDoubleOrTwin(roomType));
 };
 
 AssignAccommodationStay.prototype.isRoomTypeDoubleOrTwin = function(roomType) {
     return 'double' === roomType || 'twin' === roomType;
 };
 
-AssignAccommodationStay.prototype.displayRoommate = function(state) {
-    this.roommateBlock.style.display = false === state ? 'none' : 'block';
+AssignAccommodationStay.prototype.displayRoommateManagement = function(state) {
+    let display = false === state ? 'none' : 'block';
+    this.roommateBlock.style.display = display;
+    this.displayOtherSheetBlock.style.display = display;
+    this.otherSheetsBlock.style.display = display;
 };
 
 AssignAccommodationStay.prototype.onSelectRoomType = function(e) {
-    this.displayRoommate(this.isRoomTypeDoubleOrTwin(e.target.value));
+    this.displayRoommateManagement(this.isRoomTypeDoubleOrTwin(e.target.value));
 };
 
 AssignAccommodationStay.prototype.onChangePeriod = function(e) {

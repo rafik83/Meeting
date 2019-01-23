@@ -375,6 +375,13 @@ interface SheetRepositoryInterface
     public function countEnabledSheetsByEvent(Event $event);
 
     /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    public function findEnabledByEvent(Event $event): array;
+
+    /**
      * @param Event  $event
      * @param string $locale
      *

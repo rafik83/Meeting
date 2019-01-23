@@ -832,6 +832,17 @@ class SheetRepository implements SheetRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function findEnabledByEvent(Event $event): array
+    {
+        $queryBuilder = $this->queryEnabledSheetsByEvent($event);
+        $queryBuilder->select('sheet');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @param Event $event
      *
      * @return \Doctrine\ORM\QueryBuilder

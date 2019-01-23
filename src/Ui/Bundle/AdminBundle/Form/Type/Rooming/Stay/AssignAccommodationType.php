@@ -5,13 +5,16 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rooming\Stay;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation;
 use Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListByPeriodQuery;
+use Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetsByEventQuery;
 use Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsers;
 use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Model\Rooming\Stay;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -80,6 +83,13 @@ class AssignAccommodationType extends AbstractType
                     return sprintf('form.admin_assign_accommodation_type.roomType.%s', $type);
                 },
                 'expanded' => true,
+            ])
+            ->add('displayOtherSheet', ButtonType::class)
+            ->add('otherSheet', ChoiceType::class, [
+                'choices' => $this->queryBus->handle(new GetSheetsByEventQuery($event)),
+                'choice_label' => function (Sheet $sheet) {
+                    return $sheet->getTitle();
+                },
             ])
             ->add('roommate', ChoiceType::class, [
                 'required' => false,

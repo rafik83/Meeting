@@ -259,3 +259,9 @@ services:
             - '@Proximum\Vimeet\Application\Query\Rooming\RoomingList\Export\UserViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\RoomingList\Export\RoomingListViewQuery }
+
+    Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetsByEventQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetsByEventQuery }

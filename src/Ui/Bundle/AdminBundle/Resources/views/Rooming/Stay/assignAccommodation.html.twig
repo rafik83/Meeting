@@ -4,3 +4,19 @@
 
 {% block form_title 'admin.rooming.stay.assignAccommodation.add.title'|trans ~ ' : ' ~ userName %}
 
+{% block form_content %}
+    {{ form_row(form.arrival) }}
+    {{ form_row(form.departure) }}
+    {{ form_row(form.accommodation) }}
+    {{ form_row(form.roomNumber) }}
+    {{ form_row(form.roomType) }}
+
+    <div id="{{ form.displayOtherSheet.vars.id }}-group" class="form-group">
+        <label class="col-lg-3 col-md-3 col-sm-3 control-label">
+        </label>
+        <div class="col-lg-9 col-md-9 col-sm-9">
+            {{ form_widget(form.displayOtherSheet) }}
+        </div>
+    </div>
+
+{% endblock form_content %}
