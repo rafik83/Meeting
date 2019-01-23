@@ -11,8 +11,10 @@ function AssignAccommodationStay(element)
     this.accommodationInput = element.querySelector('[id="admin_assign_accommodation_type_accommodation"]');
     this.roommateInput = element.querySelector('[id="admin_assign_accommodation_type_roommate"]');
     this.roommateBlock = element.querySelector('[id="admin_assign_accommodation_type_roommate-group"]');
-    this.displayOtherSheetBlock = element.querySelector('[id="admin_assign_accommodation_type_displayOtherSheet-group"]');
-    this.otherSheetsBlock = element.querySelector('[id="admin_assign_accommodation_type_otherSheet-group"]');
+    this.otherSheetsListInput = element.querySelector('[id="admin_assign_accommodation_type_otherSheet');
+    this.otherSheetsButtonBlock = element.querySelector('[id="admin_assign_accommodation_type_displayOtherSheet-group"]');
+    this.otherSheetsListBlock = element.querySelector('[id="admin_assign_accommodation_type_otherSheet-group"]');
+    this.showOtherSheetsList = false;
 
     this.dateTimeManipulation = new DateTimeManipulation();
 
@@ -25,6 +27,8 @@ function AssignAccommodationStay(element)
 
     $('#admin_assign_accommodation_type_arrival').on('dp.change', this.onChangePeriod.bind(this));
     $('#admin_assign_accommodation_type_departure').on('dp.change', this.onChangePeriod.bind(this));
+    $('#admin_assign_accommodation_type_otherSheet').on('change', this.onChangePeriod.bind(this));
+    $('#admin_assign_accommodation_type_displayOtherSheet').on('click', this.otherSheetsAsked.bind(this));
 
     this.init();
 }
@@ -39,19 +43,28 @@ AssignAccommodationStay.prototype.isRoomTypeDoubleOrTwin = function(roomType) {
 };
 
 AssignAccommodationStay.prototype.displayRoommateManagement = function(state) {
-    let display = false === state ? 'none' : 'block';
-    this.roommateBlock.style.display = display;
-    this.displayOtherSheetBlock.style.display = display;
-    this.otherSheetsBlock.style.display = display;
+    let roommateBlockDisplay = false === state ? 'none' : 'block';
+    let otherSheetsButtonBlockDisplay = state && false === this.showOtherSheetsList ? 'block' : 'none';
+    let otherSheetsListBlockDisplay = state && this.showOtherSheetsList ? 'block' : 'none';
+
+    this.roommateBlock.style.display = roommateBlockDisplay;
+    this.otherSheetsButtonBlock.style.display = otherSheetsButtonBlockDisplay;
+    this.otherSheetsListBlock.style.display = otherSheetsListBlockDisplay;
 };
 
 AssignAccommodationStay.prototype.onSelectRoomType = function(e) {
     this.displayRoommateManagement(this.isRoomTypeDoubleOrTwin(e.target.value));
 };
 
+AssignAccommodationStay.prototype.otherSheetsAsked = function () {
+    this.showOtherSheetsList = true;
+    this.displayRoommateManagement(true);
+};
+
 AssignAccommodationStay.prototype.onChangePeriod = function(e) {
     const arrivalString = this.arrivalDateInput.value;
     const departureString = this.departureDateInput.value;
+    const sheetIdString = this.otherSheetsListInput.value;
 
     const accommodationInput = $(this.accommodationInput);
     accommodationInput.empty();
@@ -76,6 +89,7 @@ AssignAccommodationStay.prototype.onChangePeriod = function(e) {
         params: {
             arrivalDate: arrivalString,
             departureDate: departureString,
+            sheetId: sheetIdString
         }
     }).then(function (response) {
         Object.entries(response.data.accommodations).forEach(
