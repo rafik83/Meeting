@@ -42,6 +42,7 @@ class SearchType extends AbstractType
     {
         $event  = $options['event'];
         $locale = $options['locale'];
+        $hasCategory = \count($options['categoryViews']) >= 1;
 
         $builder
             ->add('orderBy', ChoiceType::class, [
@@ -68,18 +69,18 @@ class SearchType extends AbstractType
         if (\count($options['categoryViews']) > 1) {
             $builder
                 ->add('category', ChoiceType::class, [
-                    'label'        => 'form.search.type.label',
-                    'expanded'     => true,
-                    'multiple'     => true,
-                    'choices'      => $options['categoryViews'],
+                    'label'    => 'form.search.type.label',
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices'  => $options['categoryViews'],
                 ]);
-        } elseif (\count($options['typeViews']) > 1) {
+        } elseif (!$hasCategory && \count($options['typeViews']) > 1) {
             $builder
                 ->add('type', ChoiceType::class, [
-                    'label'        => 'form.search.type.label',
-                    'expanded'     => true,
-                    'multiple'     => true,
-                    'choices'      => $options['typeViews'],
+                    'label'    => 'form.search.type.label',
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices'  => $options['typeViews'],
                 ]);
         }
 
