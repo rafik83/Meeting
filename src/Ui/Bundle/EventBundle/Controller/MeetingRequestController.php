@@ -178,7 +178,7 @@ class MeetingRequestController extends Controller
             $locale,
             $filters,
             $this->getSpecificSlot($filters, $specificSlot, $availableSlots),
-            \count($categoryViews) > 1
+            \count($categoryViews) >= 1
         );
         $statusQuery = new StateListViewQuery(
             $sheet,
