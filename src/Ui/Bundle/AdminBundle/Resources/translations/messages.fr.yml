@@ -732,24 +732,24 @@ admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
 admin.role.ROLE_PARTNER: Partenaire
 admin.role.ROLE_SUPER_ADMIN: Admin
-admin.rooming.accommodation.add.title: 'Ajouter un hébergement'
-admin.rooming.accommodation.update.title: 'Modifier un hébergement'
-admin.rooming.accommodation.list.title: 'Liste des hébergenements'
-admin.rooming.accommodation.list.column.title: 'Titre'
-admin.rooming.accommodation.list.column.total: 'Total'
 admin.rooming.accommodation.add.link: 'Créer un hébergement'
-admin.rooming.accommodation.update.link: 'Modifier'
+admin.rooming.accommodation.add.title: 'Ajouter un hébergement'
+admin.rooming.accommodation.list.column.title: Titre
+admin.rooming.accommodation.list.column.total: Total
+admin.rooming.accommodation.list.title: 'Liste des hébergenements'
+admin.rooming.accommodation.update.link: Modifier
+admin.rooming.accommodation.update.title: 'Modifier un hébergement'
 admin.rooming.list.arrivalDateAndDepartureDate: 'Arrivée / Départ'
 admin.rooming.list.assignAccommodation: Assigner
-admin.rooming.list.export: Exporter
 admin.rooming.list.comment: Commentaire
+admin.rooming.list.export: Exporter
 admin.rooming.list.fullName: 'Nom, prénom'
 admin.rooming.list.roomNumberAssigned: 'Numéro de chambre associé'
 admin.rooming.list.sheet: Fiche
+admin.rooming.list.tasting: Tasting
 admin.rooming.stay.assignAccommodation.add.title: 'Ajouter une assignation'
 admin.rooming.stay.remove.confirm: 'Êtes-vous sûr de vouloir supprimer cette assignation ?'
 admin.rooming.stay.remove.success: 'L''assignation a bien été supprimée'
-admin.rooming.list.tasting: Tasting
 admin.rooming.title: 'Rooming list'
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
