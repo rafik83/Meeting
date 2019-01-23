@@ -355,7 +355,9 @@ services:
             - '%sms_directory%'
 
     # Override the SMS Sender service
-    adapter.smssender_alias: '@adapter.storage_sms_sender_adapter'
+    Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviders:
+        calls:
+            - [registerProvider, ['@adapter.storage_sms_sender_adapter']]
 
     behat.proxy.meeting.request_context_proxy:
         class: Proximum\Vimeet\Behat\Proxy\Meeting\RequestContextProxy

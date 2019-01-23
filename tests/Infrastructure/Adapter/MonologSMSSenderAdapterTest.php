@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Tests\Infrastructure\Adapter;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
-use Proximum\Vimeet\Infrastructure\Adapter\MonologSMSSenderAdapter;
+use Proximum\Vimeet\Infrastructure\Adapter\SMS\MonologSMSSenderAdapter;
 use Psr\Log\LoggerInterface;
 
 class MonologSMSSenderAdapterTest extends TestCase
@@ -30,6 +30,6 @@ class MonologSMSSenderAdapterTest extends TestCase
         ;
 
         $adapter = new MonologSMSSenderAdapter($monolog->reveal());
-        $adapter->send($sms->reveal());
+        $adapter->sendMessage($sms->reveal());
     }
 }

@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter\SMS;
 
+use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Twilio\Rest\Client;
 
-class TwilioClient
+class TwilioClient implements SMSProviderInterface
 {
     /** @var */
     private $twilioSID;
@@ -33,18 +34,23 @@ class TwilioClient
         $this->twilioNumber = $twilioNumber;
     }
 
-    public function getClient(): Client
+    private function getClient(): Client
     {
         return new Client($this->twilioSID, $this->twilioToken);
     }
 
-    public function sendMessage(string $to, string $message): void
+    public function canSend(SMS $sms): bool
+    {
+        return mb_strpos($sms->getReceiver(), '+1') === 0;
+    }
+
+    public function sendMessage(SMS $sms): void
     {
         $client = $this->getClient();
 
-        $client->messages->create($to, [
+        $client->messages->create($sms->getReceiver(), [
             'from' => $this->twilioNumber,
-            'body' => $message,
+            'body' => $sms->getMessage(),
         ]);
     }
 }
