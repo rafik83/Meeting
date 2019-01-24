@@ -36,8 +36,8 @@ class OvhProvider implements SMSProviderInterface
      */
     public function __construct(
         Api $api,
-        $ovhServiceName,
-        $ovhSenderName
+        string $ovhServiceName,
+        string $ovhSenderName
     ) {
         $this->api = $api;
         $this->ovhServiceName = $ovhServiceName;
