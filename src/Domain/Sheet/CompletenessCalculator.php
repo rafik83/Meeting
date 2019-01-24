@@ -222,6 +222,8 @@ class CompletenessCalculator
                             foreach ($object->getUploads() as $upload) {
                                 if ($upload->getPath()) {
                                     ++$completed[$locale];
+
+                                    break;
                                 }
                             }
                         }
