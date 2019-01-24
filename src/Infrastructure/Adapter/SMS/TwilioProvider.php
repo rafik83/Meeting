@@ -11,32 +11,23 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter\SMS;
 
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
-use Twilio\Rest\Client;
+use Proximum\Vimeet\Infrastructure\Adapter\SMS\Client\TwilioClient;
+use Proximum\Vimeet\Infrastructure\Adapter\SMS\Exception\ProviderNotAbleToSendThisTypeOfSMSException;
 
-class TwilioClient implements SMSProviderInterface
+class TwilioProvider implements SMSProviderInterface
 {
-    /** @var */
-    private $twilioSID;
-
-    /** @var */
-    private $twilioToken;
-
     /** @var string */
     private $twilioNumber;
 
+    /** @var TwilioClient */
+    private $twilioClient;
+
     public function __construct(
-        string $twilioSID,
-        string $twilioToken,
+        TwilioClient $twilioClient,
         string $twilioNumber
     ) {
-        $this->twilioSID = $twilioSID;
-        $this->twilioToken = $twilioToken;
         $this->twilioNumber = $twilioNumber;
-    }
-
-    private function getClient(): Client
-    {
-        return new Client($this->twilioSID, $this->twilioToken);
+        $this->twilioClient = $twilioClient;
     }
 
     public function canSend(SMS $sms): bool
@@ -46,9 +37,11 @@ class TwilioClient implements SMSProviderInterface
 
     public function sendMessage(SMS $sms): void
     {
-        $client = $this->getClient();
+        if (!$this->canSend($sms)) {
+            throw new ProviderNotAbleToSendThisTypeOfSMSException(sprintf('%s', $sms->getReceiver()));
+        }
 
-        $client->messages->create($sms->getReceiver(), [
+        $this->twilioClient->getMessageList()->create($sms->getReceiver(), [
             'from' => $this->twilioNumber,
             'body' => $sms->getMessage(),
         ]);

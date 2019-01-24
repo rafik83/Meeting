@@ -16,8 +16,9 @@ use Ovh\Api;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
+use Proximum\Vimeet\Infrastructure\Adapter\SMS\Exception\ProviderNotAbleToSendThisTypeOfSMSException;
 
-class OvhClient implements SMSProviderInterface
+class OvhProvider implements SMSProviderInterface
 {
     /** @var Api */
     private $api;
@@ -53,9 +54,14 @@ class OvhClient implements SMSProviderInterface
      *
      * @throws FailToSendSMSException
      * @throws InvalidReceiverException
+     * @throws ProviderNotAbleToSendThisTypeOfSMSException
      */
     public function sendMessage(SMS $sms): void
     {
+        if (!$this->canSend($sms)) {
+            throw new ProviderNotAbleToSendThisTypeOfSMSException(sprintf('%s', $sms->getReceiver()));
+        }
+
         try {
             $content = [
                 'message' => $sms->getMessage(),

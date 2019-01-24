@@ -10,19 +10,24 @@
 
 namespace Proximum\Vimeet\Tests\Infrastructure\Adapter;
 
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
-use Ovh\Api;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
-use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
-use Proximum\Vimeet\Infrastructure\Adapter\SMS\TwilioClient;
+use Proximum\Vimeet\Infrastructure\Adapter\SMS\MonologSMSSenderAdapter;
+use Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviderGuesser;
 use Proximum\Vimeet\Infrastructure\Adapter\SMSSenderAdapter;
 
 class SMSSenderAdapterTest extends TestCase
 {
-    /* @todo to rewrite */
+    public function testSend(): void
+    {
+        $sms = new SMS('+123456789', 'This is a test message', true);
+
+        $smsProviderGuesser = $this->prophesize(SMSProviderGuesser::class);
+        $provider = $this->prophesize(MonologSMSSenderAdapter::class);
+        $smsProviderGuesser->guessProvider($sms)->shouldBeCalled()->willReturn($provider->reveal());
+        $provider->sendMessage($sms)->shouldBeCalled();
+
+        $smsSender = new SMSSenderAdapter($smsProviderGuesser->reveal());
+        $smsSender->send($sms);
+    }
 }

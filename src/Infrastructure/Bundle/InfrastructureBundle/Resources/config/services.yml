@@ -6391,13 +6391,17 @@ services:
             - '@ovh'
             - '%ovh_service_name%'
 
-    Proximum\Vimeet\Infrastructure\Adapter\SMS\TwilioClient:
+    Proximum\Vimeet\Infrastructure\Adapter\SMS\Client\TwilioClient:
         arguments:
             - '%twilio_sid%'
             - '%twilio_token%'
+
+    Proximum\Vimeet\Infrastructure\Adapter\SMS\TwilioProvider:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SMS\Client\TwilioClient'
             - '%twilio_number%'
 
-    Proximum\Vimeet\Infrastructure\Adapter\SMS\OvhClient:
+    Proximum\Vimeet\Infrastructure\Adapter\SMS\OvhProvider:
         arguments:
             - '@ovh'
             - '%ovh_service_name%'
@@ -6405,8 +6409,8 @@ services:
 
     Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviders:
         calls:
-            - [registerProvider, ['@Proximum\Vimeet\Infrastructure\Adapter\SMS\TwilioClient']]
-            - [registerProvider, ['@Proximum\Vimeet\Infrastructure\Adapter\SMS\OvhClient']]
+            - [registerProvider, ['@Proximum\Vimeet\Infrastructure\Adapter\SMS\TwilioProvider']]
+            - [registerProvider, ['@Proximum\Vimeet\Infrastructure\Adapter\SMS\OvhProvider']]
 
 
     Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviderGuesser:
