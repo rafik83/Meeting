@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\BooleanObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ItemCollection;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadCollectionObject;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class CompletenessCalculator
@@ -187,7 +188,7 @@ class CompletenessCalculator
                         }
                     }
                 } elseif ($object instanceof ItemCollection) {
-                    $count = count($object->getItems());
+                    $count = \count($object->getItems());
 
                     // In case of a required ItemCollection with no item
                     if (0 === $count) {
@@ -203,6 +204,24 @@ class CompletenessCalculator
                                     ++$completed[$locale];
 
                                     break;
+                                }
+                            }
+                        }
+                    }
+                } elseif ($object instanceof MultiUploadCollectionObject) {
+                    $count = \count($object->getUploads());
+
+                    if (0 === $count) {
+                        foreach ($locales as $locale) {
+                            ++$total[$locale];
+                        }
+                    } else {
+                        foreach ($locales as $locale) {
+                            ++$total[$locale];
+
+                            foreach ($object->getUploads() as $upload) {
+                                if ($upload->getPath()) {
+                                    ++$completed[$locale];
                                 }
                             }
                         }
