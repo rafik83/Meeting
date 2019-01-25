@@ -348,8 +348,7 @@ services:
     #
     # Adapter
     #
-    adapter.storage_sms_sender_adapter:
-        class: Proximum\Vimeet\Behat\Service\Adapter\StorageSMSSenderAdapter
+    Proximum\Vimeet\Behat\Service\Adapter\SMS\StorageProvider:
         arguments:
             - '@adapter.file_system_adapter'
             - '%sms_directory%'
@@ -357,7 +356,7 @@ services:
     # Override the SMS Sender service
     Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviders:
         calls:
-            - [registerProvider, ['@adapter.storage_sms_sender_adapter']]
+            - [registerProvider, ['@Proximum\Vimeet\Behat\Service\Adapter\SMS\StorageProvider']]
 
     behat.proxy.meeting.request_context_proxy:
         class: Proximum\Vimeet\Behat\Proxy\Meeting\RequestContextProxy

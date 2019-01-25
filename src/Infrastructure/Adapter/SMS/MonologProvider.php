@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter\SMS;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Psr\Log\LoggerInterface;
 
-class MonologSMSSenderAdapter implements SMSProviderInterface
+class MonologProvider implements SMSProviderInterface
 {
     private const MESSAGE_LOGGED = 'SMS sent to %s with message: %s';
 

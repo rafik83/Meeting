@@ -8,14 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Behat\Service\Adapter;
+namespace Proximum\Vimeet\Behat\Service\Adapter\SMS;
 
 use Behat\Transliterator\Transliterator;
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviderInterface;
 
-class StorageSMSSenderAdapter implements SMSProviderInterface
+class StorageProvider implements SMSProviderInterface
 {
     /** @var FileSystemAdapterInterface */
     private $fileSystem;
