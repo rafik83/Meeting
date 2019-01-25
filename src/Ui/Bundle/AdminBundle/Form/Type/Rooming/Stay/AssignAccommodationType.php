@@ -90,6 +90,12 @@ class AssignAccommodationType extends AbstractType
                 'choice_label' => function (Sheet $sheet) {
                     return $sheet->getTitle();
                 },
+                'choice_value' => function (?Sheet $sheet = null) {
+                    if ($sheet === null) {
+                        return null;
+                    }
+                    return $sheet->getId();
+                },
             ])
             ->add('roommate', ChoiceType::class, [
                 'required' => false,
