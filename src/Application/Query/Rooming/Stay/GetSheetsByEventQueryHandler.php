@@ -16,6 +16,9 @@ class GetSheetsByEventQueryHandler
 
     public function handle(GetSheetsByEventQuery $getSheetsByEventQuery): array
     {
+        if ($getSheetsByEventQuery->event === null) {
+            return [];
+        }
         return $this->sheetRepository->findEnabledByEvent($getSheetsByEventQuery->event);
     }
 }

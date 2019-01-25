@@ -50,12 +50,14 @@ class AssignAccommodation implements Command
         Event $event,
         User $user,
         \DateTimeInterface $arrival,
-        \DateTimeInterface $departure
+        \DateTimeInterface $departure,
+        ?Sheet $otherSheet
     ) {
         $this->event = $event;
         $this->user = $user;
         $this->arrival = $arrival;
         $this->departure = $departure;
         $this->roomType = Stay::ROOM_TYPE_SINGLE;
+        $this->otherSheet = $otherSheet;
     }
 }

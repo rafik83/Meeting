@@ -8,13 +8,14 @@ function AssignAccommodationStay(element)
     this.element = element;
     this.roommatePlaceholder = element.getAttribute('data-roommate-placeholder');
     this.url = element.getAttribute('data-availability-url');
+    this.sheetsUrl = element.getAttribute('data-sheets-url');
     this.accommodationInput = element.querySelector('[id="admin_assign_accommodation_type_accommodation"]');
     this.roommateInput = element.querySelector('[id="admin_assign_accommodation_type_roommate"]');
     this.roommateBlock = element.querySelector('[id="admin_assign_accommodation_type_roommate-group"]');
     this.otherSheetsListInput = element.querySelector('[id="admin_assign_accommodation_type_otherSheet');
     this.otherSheetsButtonBlock = element.querySelector('[id="admin_assign_accommodation_type_displayOtherSheet-group"]');
     this.otherSheetsListBlock = element.querySelector('[id="admin_assign_accommodation_type_otherSheet-group"]');
-    this.showOtherSheetsList = false;
+    this.showOtherSheetsList = this.otherSheetsListInput.value !== '';
 
     this.dateTimeManipulation = new DateTimeManipulation();
 
@@ -59,6 +60,20 @@ AssignAccommodationStay.prototype.onSelectRoomType = function(e) {
 AssignAccommodationStay.prototype.otherSheetsAsked = function () {
     this.showOtherSheetsList = true;
     this.displayRoommateManagement(true);
+
+    this.otherSheetsListInput.setAttribute('disabled','disabled');
+    axios.get(this.sheetsUrl).then(function (response) {
+        Object.entries(response.data.sheets).forEach(
+            ([id, label]) => {
+                const option = document.createElement('option');
+                option.text = label;
+                option.value = id;
+                this.otherSheetsListInput.add(option);
+            }
+        );
+
+        this.otherSheetsListInput.removeAttribute('disabled');
+    }.bind(this)).catch(alert);
 };
 
 AssignAccommodationStay.prototype.onChangePeriod = function(e) {

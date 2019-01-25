@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Rooming\Accommodation\HasNoRemainingOvernightException;
 use Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriodException;
 use Proximum\Vimeet\Domain\Rooming\Stay\RoommateHasStayForPeriodException;
@@ -37,33 +38,47 @@ class AssignAccommodationAction
     /** @var TranslatorInterface */
     private $translator;
 
+    /**
+     * @var SheetRepositoryInterface
+     */
+    private $sheetRepository;
+
     public function __construct(
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         RouterInterface $router,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        SheetRepositoryInterface $sheetRepository
     ) {
         $this->engine = $engine;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->router = $router;
         $this->translator = $translator;
+        $this->sheetRepository = $sheetRepository;
     }
 
     public function __invoke(Request $request, Event $event, User $user): Response
     {
         $arrival = $request->get('arrivalDate', null);
         $departure = $request->get('departureDate', null);
+        $dataForm = $request->request->get('admin_assign_accommodation_type', null);
+        $sheetId = null;
 
         $arrivalDate = \DateTime::createFromFormat('d/m/Y', $arrival);
         $departureDate = \DateTime::createFromFormat('d/m/Y', $departure);
+        if ($dataForm) {
+            $sheetIdString = $dataForm['otherSheet'];
+            $sheetId = is_numeric($sheetIdString) ? (int) $sheetIdString : null;
+        }
+        $sheet = $this->sheetRepository->getSheetById($sheetId);
 
         if (!$arrival || !$departure || !$arrivalDate || !$departureDate) {
             throw new BadRequestHttpException();
         }
 
-        $assignAccommodation = new AssignAccommodation($event, $user, $arrivalDate, $departureDate);
+        $assignAccommodation = new AssignAccommodation($event, $user, $arrivalDate, $departureDate, $sheet);
         $form = $this->formFactory->create(AssignAccommodationType::class, $assignAccommodation, [
             'submit' => true,
             'assignAccommodation' => $assignAccommodation,
@@ -73,6 +88,12 @@ class AssignAccommodationAction
                     [
                         'event' => $event->getId(),
                         'user' => $user->getId(),
+                    ]
+                ),
+                'data-sheets-url' => $this->router->generate(
+                    'admin_event_rooming_assign_accommodation_stay_sheets',
+                    [
+                        'event' => $event->getId(),
                     ]
                 ),
                 'data-roommate-placeholder' => 'Aucune',
