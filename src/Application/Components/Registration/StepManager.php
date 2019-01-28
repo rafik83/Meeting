@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Registration;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
@@ -29,8 +30,6 @@ class StepManager
     private $participantRepository;
 
     /**
-     * StepManager constructor.
-     *
      * @param TemplateDataFactory            $templateDataFactory
      * @param ParticipantRepositoryInterface $participantRepository
      */
@@ -38,7 +37,7 @@ class StepManager
         TemplateDataFactory $templateDataFactory,
         ParticipantRepositoryInterface $participantRepository
     ) {
-        $this->templateDataFactory   = $templateDataFactory;
+        $this->templateDataFactory = $templateDataFactory;
         $this->participantRepository = $participantRepository;
     }
 
@@ -46,11 +45,16 @@ class StepManager
      * @param Participant $participant
      * @param int         $step
      */
-    public function updateCurrentStep(Participant $participant, $step)
+    public function updateCurrentStep(Participant $participant, $step): void
     {
         $participant->setRegistrationStep($step);
 
-        if (true === $this->isRegistrationComplete($participant)) {
+        $registrationTemplate = $this->templateDataFactory->createRegistrationFromParticipant(
+            $participant,
+            $participant->getLocale()
+        );
+
+        if (true === $this->isRegistrationComplete($registrationTemplate)) {
             $participant->setRegistrationComplete(true);
         }
 
@@ -60,26 +64,26 @@ class StepManager
     /**
      * @param Participant $participant
      */
-    public function resetRegistrationStep(Participant $participant)
-    {
-        $participant->setRegistrationComplete($this->isRegistrationComplete($participant));
-        $participant->setRegistrationStep($this->getLastCompleteStep($participant));
-
-        $this->participantRepository->set($participant);
-    }
-
-    /**
-     * @param Participant $participant
-     *
-     * @return bool
-     */
-    private function isRegistrationComplete(Participant $participant): bool
+    public function resetRegistrationStep(Participant $participant): void
     {
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromParticipant(
             $participant,
             $participant->getLocale()
         );
 
+        $participant->setRegistrationComplete($this->isRegistrationComplete($registrationTemplate));
+        $participant->setRegistrationStep($this->getLastCompleteStep($registrationTemplate));
+
+        $this->participantRepository->set($participant);
+    }
+
+    /**
+     * @param TemplateData $registrationTemplate
+     *
+     * @return bool
+     */
+    private function isRegistrationComplete(TemplateData $registrationTemplate): bool
+    {
         return !$this->hasEmptyRequiredObject($registrationTemplate->getEditableObjects());
     }
 
@@ -100,17 +104,12 @@ class StepManager
     }
 
     /**
-     * @param Participant $participant
+     * @param TemplateData $registrationTemplate
      *
      * @return int
      */
-    private function getLastCompleteStep(Participant $participant): int
+    private function getLastCompleteStep(TemplateData $registrationTemplate): int
     {
-        $registrationTemplate = $this->templateDataFactory->createRegistrationFromParticipant(
-            $participant,
-            $participant->getLocale()
-        );
-
         $step = 0;
 
         foreach ($registrationTemplate->getBlocks() as $block) {
@@ -130,16 +129,16 @@ class StepManager
      *
      * @return array
      */
-    public function getRedirectStep(Sheet $sheet, Participant $participant)
+    public function getRedirectStep(Sheet $sheet, Participant $participant): array
     {
-        if (true === $this->isRegistrationComplete($participant)) {
-            return ['redirect' => false];
-        }
-
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromParticipant(
             $participant,
             $participant->getLocale()
         );
+
+        if (true === $this->isRegistrationComplete($registrationTemplate)) {
+            return ['redirect' => false];
+        }
 
         if ($sheet->getOwner() !== $participant->getUser()) {
             return [
@@ -152,16 +151,14 @@ class StepManager
             ];
         }
 
-        $nextStep = $registrationTemplate->getNextBlockPosition($this->getLastCompleteStep($participant));
+        $nextStep = $registrationTemplate->getNextBlockPosition($this->getLastCompleteStep($registrationTemplate));
 
         return [
             'redirect'   => true,
             'route'      => 'event_participant_step',
             'parameters' => [
                 'participant' => $participant->getId(),
-                'step'        => null !== $nextStep ?
-                    $nextStep :
-                    $registrationTemplate->getBlocksCount(),
+                'step'        => $nextStep ?? $registrationTemplate->getBlocksCount(),
             ],
         ];
     }

@@ -19,4 +19,4 @@ Feature: Activate Account
       | form.activate_account_password.children.password.children.first.label  | newpassword |
       | form.activate_account_password.children.password.children.second.label | newpassword |
     And I press "common.validate"
-    Then I should be on this page "/fr/account/sheet/1/participant/2"
+    Then I should be on this page "/fr/account/sheet/1/participant/2/profile"
