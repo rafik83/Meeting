@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListByPeriodQuery;
-use Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsers;
+use Proximum\Vimeet\Application\Query\Rooming\Stay\GetRoommates;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Model\User;
@@ -56,11 +56,7 @@ class AvailabilityAction
         $sheet = $this->sheetRepository->getSheetById($sheetId);
 
         /** @var User[] $users */
-        if ($sheet) {
-            $users = $sheet->getUsers();
-        } else {
-            $users = $this->queryBus->handle(new GetSheetUsers($user, $event));
-        }
+        $users = $this->queryBus->handle(new GetRoommates($user, $event, $sheet));
 
         $roommates = [];
 

@@ -9,7 +9,7 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class GetRoommates implements Query
 {
-    /**  @var User */
+    /** @var User */
     public $user;
 
     /** @var Event */

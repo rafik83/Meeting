@@ -218,11 +218,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListByPeriodQuery }
 
-    Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsersHandler:
+    Proximum\Vimeet\Application\Query\Rooming\Stay\GetRoommatesHandler:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsers }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Stay\GetRoommates }
 
     Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListViewQueryHandler:
         arguments:
@@ -259,12 +259,6 @@ services:
             - '@Proximum\Vimeet\Application\Query\Rooming\RoomingList\Export\UserViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\RoomingList\Export\RoomingListViewQuery }
-
-    Proximum\Vimeet\Application\Query\Rooming\Stay\GetRoommatesHandler:
-        arguments:
-            - '@Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsersHandler'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Stay\GetRoommates }
 
     Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetsByEventQueryHandler:
         arguments:

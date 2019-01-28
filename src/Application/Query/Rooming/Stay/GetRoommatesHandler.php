@@ -3,17 +3,16 @@
 namespace Proximum\Vimeet\Application\Query\Rooming\Stay;
 
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class GetRoommatesHandler
 {
-    /**
-     * @var GetSheetUsersHandler
-     */
-    private $getSheetUsersHandler;
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
 
-    public function __construct(GetSheetUsersHandler $getSheetUsersHandler)
+    public function __construct(SheetRepositoryInterface $sheetRepository)
     {
-        $this->getSheetUsersHandler = $getSheetUsersHandler;
+        $this->sheetRepository = $sheetRepository;
     }
 
     /**
@@ -21,12 +20,25 @@ class GetRoommatesHandler
      *
      * @return User[]
      */
-    public function handle(GetRoommates $getRoommates)
+    public function handle(GetRoommates $getRoommates): array
     {
         if ($getRoommates->sheet) {
-            return $getRoommates->sheet->getUsers();
+            $sheets = [$getRoommates->sheet];
+        } else {
+            $sheets = $this->sheetRepository->getSheetsByUserAndEvent($getRoommates->user, $getRoommates->event);
+        }
+        $users = [];
+
+        foreach ($sheets as $sheet) {
+            foreach ($sheet->getParticipantsArray() as $participant) {
+                $user = $participant->getUser();
+
+                if (!isset($users[$user->getId()]) && $user->getId() !== $getRoommates->user->getId()) {
+                    $users[$user->getId()] = $user;
+                }
+            }
         }
 
-        return $this->getSheetUsersHandler->handle(new GetSheetUsers($getRoommates->user, $getRoommates->event));
+        return $users;
     }
 }
