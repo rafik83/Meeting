@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Rooming\Stay;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Rooming\Stay\GetRoommates;
 use Proximum\Vimeet\Application\Query\Rooming\Stay\GetRoommatesHandler;
-use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -21,62 +21,113 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class GetRoommatesHandlerTest extends TestCase
 {
+    private $sheetRepository;
+
+    private $event;
+
+    private $user1, $user2, $user3;
+
+    private $sheet1, $sheet2;
+
+    private $participant1, $participant2, $participant3;
+
+    protected function setUp()
+    {
+        $this->user1 = $this->prophesize(User::class);
+
+        $this->user2 = $this->prophesize(User::class);
+
+        $this->user3 = $this->prophesize(User::class);
+
+        $this->participant1 = $this->prophesize(Participant::class);
+
+        $this->participant2 = $this->prophesize(Participant::class);
+
+        $this->participant3 = $this->prophesize(Participant::class);
+
+        $this->sheet1 = $this->prophesize(Sheet::class);
+
+        $this->sheet2 = $this->prophesize(Sheet::class);
+
+        $this->event = $this->prophesize(Event::class);
+
+        $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+    }
+
     public function testHandle(): void
     {
-        $user1 = $this->prophesize(User::class);
-        $user1->getId()->shouldBeCalled()->willReturn(1);
+        $this->user1->getId()->shouldBeCalled()->willReturn(1);
+        $this->user2->getId()->shouldBeCalled()->willReturn(2);
+        $this->user3->getId()->shouldBeCalled()->willReturn(3);
 
-        $user2 = $this->prophesize(User::class);
-        $user2->getId()->shouldBeCalled()->willReturn(2);
+        $this->participant1->getUser()->shouldBeCalled()->willReturn($this->user1->reveal());
+        $this->participant2->getUser()->shouldBeCalled()->willReturn($this->user2->reveal());
+        $this->participant3->getUser()->shouldBeCalled()->willReturn($this->user3->reveal());
 
-        $user3 = $this->prophesize(User::class);
-        $user3->getId()->shouldBeCalled()->willReturn(3);
-
-        $participant1 = $this->prophesize(Participant::class);
-        $participant1->getUser()->shouldBeCalled()->willReturn($user1->reveal());
-
-        $participant2 = $this->prophesize(Participant::class);
-        $participant2->getUser()->shouldBeCalled()->willReturn($user2->reveal());
-
-        $participant3 = $this->prophesize(Participant::class);
-        $participant3->getUser()->shouldBeCalled()->willReturn($user3->reveal());
-
-        $sheet1 = $this->prophesize(Sheet::class);
-        $sheet1
+        $this->sheet1
             ->getParticipantsArray()
             ->shouldBeCalled()
-            ->willReturn([
-                $participant1->reveal(),
-                $participant2->reveal(),
-            ]);
-
-        $sheet2 = $this->prophesize(Sheet::class);
-        $sheet2
+            ->willReturn(
+                [
+                    $this->participant1->reveal(),
+                    $this->participant2->reveal(),
+                ]
+            );
+        $this->sheet2
             ->getParticipantsArray()
             ->shouldBeCalled()
-            ->willReturn([
-                $participant1->reveal(),
-                $participant2->reveal(),
-                $participant3->reveal()
-            ]);
+            ->willReturn(
+                [
+                    $this->participant1->reveal(),
+                    $this->participant2->reveal(),
+                    $this->participant3->reveal(),
+                ]
+            );
 
-        $event = $this->prophesize(Event::class);
-
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $sheetRepository->getSheetsByUserAndEvent($user1->reveal(), $event->reveal())
+        $this->sheetRepository->getSheetsByUserAndEvent($this->user1->reveal(), $this->event->reveal())
             ->shouldBeCalled()
-            ->willReturn([
-                $sheet1->reveal(),
-                $sheet2->reveal()
-            ]);
+            ->willReturn(
+                [
+                    $this->sheet1->reveal(),
+                    $this->sheet2->reveal(),
+                ]
+            );
 
         $expectedResult = [
-            2 => $user2->reveal(),
-            3 => $user3->reveal(),
+            2 => $this->user2->reveal(),
+            3 => $this->user3->reveal(),
         ];
 
-        $handler = new GetRoommatesHandler($sheetRepository->reveal());
-        $result = $handler->handle(new GetRoommates($user1->reveal(), $event->reveal(), null));
+        $handler = new GetRoommatesHandler($this->sheetRepository->reveal());
+        $result  = $handler->handle(new GetRoommates($this->user1->reveal(), $this->event->reveal(), null));
+
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testOtherSheetHandle(): void
+    {
+        $this->user1->getId()->shouldBeCalled()->willReturn(1);
+        $this->user2->getId()->shouldBeCalled()->willReturn(2);
+
+        $this->participant1->getUser()->shouldBeCalled()->willReturn($this->user1->reveal());
+        $this->participant2->getUser()->shouldBeCalled()->willReturn($this->user2->reveal());
+
+        $this->sheet1
+            ->getParticipantsArray()
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    $this->participant1->reveal(),
+                    $this->participant2->reveal(),
+                ]
+            );
+
+        $expectedResult = [
+            2 => $this->user2->reveal(),
+        ];
+
+        $handler = new GetRoommatesHandler($this->sheetRepository->reveal());
+        $result  = $handler->handle(new GetRoommates($this->user1->reveal(), $this->event->reveal(), $this->sheet1->reveal()));
 
         $this->assertEquals($expectedResult, $result);
     }
