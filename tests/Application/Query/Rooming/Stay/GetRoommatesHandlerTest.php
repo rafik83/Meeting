@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Rooming\Stay;
 
-use Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsers;
-use Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsersHandler;
+use Proximum\Vimeet\Application\Query\Rooming\Stay\GetRoommates;
+use Proximum\Vimeet\Application\Query\Rooming\Stay\GetRoommatesHandler;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -19,7 +19,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class GetSheetUsersHandlerTest extends TestCase
+class GetRoommatesHandlerTest extends TestCase
 {
     public function testHandle(): void
     {
@@ -75,8 +75,8 @@ class GetSheetUsersHandlerTest extends TestCase
             3 => $user3->reveal(),
         ];
 
-        $handler = new GetSheetUsersHandler($sheetRepository->reveal());
-        $result = $handler->handle(new GetSheetUsers($user1->reveal(), $event->reveal()));
+        $handler = new GetRoommatesHandler($sheetRepository->reveal());
+        $result = $handler->handle(new GetRoommates($user1->reveal(), $event->reveal(), null));
 
         $this->assertEquals($expectedResult, $result);
     }
