@@ -62,9 +62,24 @@ class ActivateAccountController extends Controller
             $this->get('tactician.commandbus')->handle($command);
             $this->get('adapter.authentication_manager')->authenticate($command->user, 'main');
 
+            $participant = $sheet->getUserParticipant($user);
+
+            if (!$participant instanceof Participant) {
+                return $this->redirectToRoute('event_sheet_default', [
+                    'sheet' => $sheet->getId(),
+                ]);
+            }
+
+            $registrationStepManager = $this->get('components.registration.step_manager');
+            $redirectStep = $registrationStepManager->getRedirectStep($sheet, $participant);
+
+            if (true === $redirectStep['redirect']) {
+                return $this->redirectToRoute($redirectStep['route'], $redirectStep['parameters']);
+            }
+
             return $this->redirectToRoute('event_account_participant', [
                 'sheet'       => $sheet->getId(),
-                'participant' => $sheet->getUserParticipant($user)->getId(),
+                'participant' => $participant->getId(),
             ]);
         }
 
