@@ -72,6 +72,10 @@ class TransactionalMailListViewQueryHandler
         $list = [];
 
         foreach (Constant::TRANSACTIONAL_MAIL_LIST as $key => $data) {
+            if (isset($data['isHidden']) && true === $data['isHidden']) {
+                continue;
+            }
+
             $typesUsed = $mails[$key]['typesUsed'] ?? [];
             $remainingTypes = array_filter($types, function (Type $type) use ($typesUsed) {
                 return !isset($typesUsed[$type->getId()]);
