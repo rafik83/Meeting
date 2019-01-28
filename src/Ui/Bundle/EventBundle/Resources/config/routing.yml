@@ -818,17 +818,6 @@ event_sheet_happening_participate:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningParticipateAction }
 
 #
-# Flux
-#
-event_flux_participant:
-    path: /flux_participants
-    requirements:
-    methods:  [GET]
-    defaults:
-        _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Flux\ParticipantAction
-        _format: xml
-
-#
 # Unavailability
 #
 event_unavailability_create:

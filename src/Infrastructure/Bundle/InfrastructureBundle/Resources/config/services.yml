@@ -3641,15 +3641,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery }
 
-    Proximum\Vimeet\Application\Query\Flux\ParticipantFluxQueryHandler:
-        arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@template.participant_info_guesser'
-            - '@adapter.event_url_generator'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Flux\ParticipantFluxQuery }
-
     Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQueryHandler:
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
@@ -5623,10 +5614,6 @@ services:
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
-        tags:
-            - { name: serializer.normalizer }
-
-    Proximum\Vimeet\Application\Serializer\Normalizer\Flux\ParticipantListViewNormalizer:
         tags:
             - { name: serializer.normalizer }
 
