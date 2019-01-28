@@ -75,7 +75,7 @@ class Participant implements MailRecipientInterface
     /** @var string */
     private $timezone;
 
-    /** @var \DateTime */
+    /** @var \DateTimeInterface */
     private $registrationDate;
 
     public function __construct(
@@ -369,7 +369,7 @@ class Participant implements MailRecipientInterface
         $this->timezone = $timezone;
     }
 
-    public function getRegistrationDate(): ?\DateTime
+    public function getRegistrationDate(): \DateTimeInterface
     {
         return $this->registrationDate;
     }
