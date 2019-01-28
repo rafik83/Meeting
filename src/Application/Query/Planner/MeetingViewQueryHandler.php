@@ -93,7 +93,15 @@ class MeetingViewQueryHandler
                     }
                 }
 
-                $participantsMatched += $tempParticipantMatched;
+                foreach ($tempParticipantMatched as $key => $ids) {
+                    if (isset($participantsMatched[$key])) {
+                        foreach($ids as $id) {
+                            $participantsMatched[$key][$id] = $id;
+                        }
+                    } else {
+                        $participantsMatched[$key] = $ids;
+                    }
+                }
 
                 $participantsList = array_merge(
                     $participantsList['fromParticipant'],
