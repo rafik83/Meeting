@@ -104,10 +104,15 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
                 $functionScore->setScoreMode(FunctionScore::SCORE_MODE_SUM);
 
                 foreach ($nomenclatureItems[Nomenclature::OBJECTIVE_NONE] as $key) {
-                    $nested = new \Elastica\Query\Nested();
-                    $nested->setQuery((new Query\Term())->setTerm('nomenclatureItems.key', $key));
-                    $nested->setPath('nomenclatureItems');
-                    $functionScore->addFunction('weight', [], $nested, self::NOMENCLATURE_ITEMS_WEIGHT);
+                    if (is_array($key)) {
+                        foreach ($key as $item) {
+                            $this->setKeyToFunctionScore($functionScore, $item);
+                        }
+
+                        continue;
+                    }
+
+                    $this->setKeyToFunctionScore($functionScore, $key);
                 }
 
                 $builtQuery = $functionScore->setQuery($builtQuery);
@@ -127,6 +132,18 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         }
 
         return $query;
+    }
+
+    private function setKeyToFunctionScore(FunctionScore $functionScore, $key): void
+    {
+        if (!is_string($key)) {
+            return;
+        }
+
+        $nested = new \Elastica\Query\Nested();
+        $nested->setQuery((new Query\Term())->setTerm('nomenclatureItems.key', $key));
+        $nested->setPath('nomenclatureItems');
+        $functionScore->addFunction('weight', [], $nested, self::NOMENCLATURE_ITEMS_WEIGHT);
     }
 
     /**
