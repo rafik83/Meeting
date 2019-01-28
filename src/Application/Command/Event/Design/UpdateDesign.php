@@ -84,13 +84,12 @@ class UpdateDesign implements Command
     {
         return $this->leftColor !== $this->event->getConfiguration()->getLeftColor()
             || $this->rightColor !== $this->event->getConfiguration()->getRightColor()
-            || $this->leftColor !== $this->event->getConfiguration()->getHeaderLeftColor()
-            || $this->rightColor !== $this->event->getConfiguration()->getHeaderRightColor()
+            || $this->headerLeftColor !== $this->event->getConfiguration()->getHeaderLeftColor()
+            || $this->headerRightColor !== $this->event->getConfiguration()->getHeaderRightColor()
             || $this->textColor !== $this->event->getConfiguration()->getTextColor()
             || $this->headerButtonTextColor !== $this->event->getConfiguration()->getHeaderButtonTextColor()
             || $this->headerButtonLeftColor !== $this->event->getConfiguration()->getHeaderButtonLeftColor()
             || $this->headerButtonRightColor !== $this->event->getConfiguration()->getHeaderButtonRightColor()
-            || $this->textColor !== $this->event->getConfiguration()->getTextColor()
             || $this->textColor !== $this->event->getConfiguration()->getTextColor()
             || $this->backgroundColor !== $this->event->getConfiguration()->getBackgroundColor()
         ;

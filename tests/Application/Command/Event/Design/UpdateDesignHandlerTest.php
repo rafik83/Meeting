@@ -273,7 +273,7 @@ class UpdateDesignHandlerTest extends TestCase
         $this->event->getLocalizedMobileLogo('en')->willReturn('mobileLogoEn.jpeg');
         $this->event->getLocalizedMobileLogoExtension('en')->willReturn('jpeg');
 
-        $this->guidelineGenerator->generate($this->event->reveal())->shouldBeCalled()->willReturn('/new/asset/path.css');
+        $this->guidelineGenerator->generate($this->event->reveal())->shouldNotBeCalled();
         $this->removeImageHandler->handle(new RemoveImage($this->event->reveal()))->shouldNotBeCalled();
 
         $this->event->updateLocalizedLogos(
@@ -302,7 +302,7 @@ class UpdateDesignHandlerTest extends TestCase
             '#FFFFFF'
         )->shouldBeCalled();
 
-        $this->event->setAssetPath('/new/asset/path.css')->shouldBeCalled();
+        $this->event->setAssetPath('/new/asset/path.css')->shouldNotBeCalled();
         $this->eventRepository->set($this->event->reveal())->shouldBeCalled();
 
         $updateDesign = new UpdateDesign($this->event->reveal());
