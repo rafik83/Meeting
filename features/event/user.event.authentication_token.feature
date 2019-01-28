@@ -25,7 +25,7 @@
       | form.activate_account_password.children.password.children.first.label | myPassword |
       | form.activate_account_password.children.password.children.second.label | myPassword |
     And I press "common.validate"
-    Then I should be on this page "/fr/account/sheet/1/participant/1"
+    Then I should be on this page "/fr/account/sheet/1/participant/1/profile"
 
   Scenario: I attempt to login with a bad token
     Given the database is purged
