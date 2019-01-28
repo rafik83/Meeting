@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Domain\Participant;
 
 class GetParticipantInitials
 {
-    public function __invoke(string $firstName, string $lastName): string
+    public function __invoke($firstName, $lastName): string
     {
         return sprintf(
             '%s%s',
