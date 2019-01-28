@@ -5,12 +5,12 @@
         {% if message.isLeft %}
             <div class="message col-xs-8">
                 <span class="author">{{ message.sheetName|upper }}</span>
-                <p>{{ message.content }}</p>
+                <p>{{ message.content|nl2br }}</p>
             </div>
         {% else %}
             <div class="message message--right col-xs-offset-4 col-xs-8">
                 <span class="author">{{ message.sheetName|upper }}</span>
-                <p>{{ message.content }}</p>
+                <p>{{ message.content|nl2br }}</p>
             </div>
         {% endif %}
     {% endfor %}

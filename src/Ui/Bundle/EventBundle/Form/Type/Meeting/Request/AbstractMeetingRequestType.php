@@ -14,23 +14,25 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatorInterface;
 
 abstract class AbstractMeetingRequestType extends AbstractType
 {
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
-    /**
-     * @param ParticipantInfoGuesser $participantInfoGuesser
-     */
-    public function __construct(ParticipantInfoGuesser $participantInfoGuesser)
-    {
+    /** @var TranslatorInterface */
+    private $translator;
+
+    public function __construct(
+        ParticipantInfoGuesser $participantInfoGuesser,
+        TranslatorInterface $translator
+    ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->translator = $translator;
     }
 
     /**
@@ -40,17 +42,27 @@ abstract class AbstractMeetingRequestType extends AbstractType
     {
         /** @var Sheet $sheet */
         $sheet = $options['sheet'];
+        $locale = $options['locale'];
 
         if ($options['show_description']) {
             $builder
-                ->add('description', TextType::class, [
+                ->add('description', TextareaType::class, [
                     'placeholder' => $options['placeholder_description'],
                     'required'    => false,
+                    'attr' => [
+                        'data-text-max-length-indicator' => 300,
+                        'data-text-max-length-translations' => sprintf(
+                        '%s|%s|%s',
+                        $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.plural', [], 'forms', $locale),
+                        $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.singular', [], 'forms', $locale),
+                        $this->translator->trans('form.sheet_editable_text_data.data.maxLength.translations.reached', [], 'forms', $locale)
+                    )
+                    ]
                 ])
             ;
         }
 
-        if (1 < $sheet->countParticipant()) {
+        if (1 < $sheet->countParticipants()) {
             $builder
                 ->add('participants', ChoiceType::class, [
                     'choices'      => $sheet->getParticipants()->toArray(),
