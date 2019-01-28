@@ -17,7 +17,7 @@ use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\FeatureContextProxyInterface;
-use Proximum\Vimeet\Behat\Service\Adapter\StorageSMSSenderAdapter;
+use Proximum\Vimeet\Behat\Service\Adapter\SMS\StorageProvider;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
@@ -737,7 +737,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         $fileSystem = $this->kernel->getContainer()->get('adapter.file_system_adapter');
 
         $smsDirectory = $this->kernel->getContainer()->getParameter('sms_directory');
-        $file = $smsDirectory . DIRECTORY_SEPARATOR . StorageSMSSenderAdapter::getFileName($phone);
+        $file = $smsDirectory . DIRECTORY_SEPARATOR . StorageProvider::getFileName($phone);
 
         if (!$fileSystem->exists($file)) {
             throw new \LogicException('Missing SMS');

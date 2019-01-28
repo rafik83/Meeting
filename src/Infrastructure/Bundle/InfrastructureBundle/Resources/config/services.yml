@@ -6384,9 +6384,8 @@ services:
     adapter.smssender_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\SMSSenderAdapter
         arguments:
-            - '@ovh'
-            - '%ovh_service_name%'
-            - '%ovh_sender_name%'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviderGuesser'
+
     adapter.smssender_alias: '@adapter.smssender_adapter'
 
     adapter.smsblack_list_adapter:
@@ -6394,6 +6393,32 @@ services:
         arguments:
             - '@ovh'
             - '%ovh_service_name%'
+
+    Proximum\Vimeet\Infrastructure\Adapter\SMS\Client\TwilioClient:
+        arguments:
+            - '%twilio_sid%'
+            - '%twilio_token%'
+
+    Proximum\Vimeet\Infrastructure\Adapter\SMS\TwilioProvider:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SMS\Client\TwilioClient'
+            - '%twilio_number%'
+
+    Proximum\Vimeet\Infrastructure\Adapter\SMS\OvhProvider:
+        arguments:
+            - '@ovh'
+            - '%ovh_service_name%'
+            - '%ovh_sender_name%'
+
+    Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviders:
+        calls:
+            - [registerProvider, ['@Proximum\Vimeet\Infrastructure\Adapter\SMS\TwilioProvider']]
+            - [registerProvider, ['@Proximum\Vimeet\Infrastructure\Adapter\SMS\OvhProvider']]
+
+
+    Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviderGuesser:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviders'
 
     #
     # User Phone

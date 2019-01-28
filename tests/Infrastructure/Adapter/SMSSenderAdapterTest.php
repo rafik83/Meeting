@@ -10,134 +10,24 @@
 
 namespace Proximum\Vimeet\Tests\Infrastructure\Adapter;
 
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
-use Ovh\Api;
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
-use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
+use Proximum\Vimeet\Infrastructure\Adapter\SMS\MonologProvider;
+use Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviderGuesser;
 use Proximum\Vimeet\Infrastructure\Adapter\SMSSenderAdapter;
 
 class SMSSenderAdapterTest extends TestCase
 {
-    const SENDER  = 'senderName';
-    const SERVICE = 'serviceName';
-
-    public function testSendClientException()
+    public function testSend(): void
     {
-        $this->expectException(FailToSendSMSException::class);
+        $sms = new SMS('+123456789', 'This is a test message', true);
 
-        $sms = new SMS('+33102030405', 'message content');
+        $smsProviderGuesser = $this->prophesize(SMSProviderGuesser::class);
+        $provider = $this->prophesize(MonologProvider::class);
+        $smsProviderGuesser->guessProvider($sms)->shouldBeCalled()->willReturn($provider->reveal());
+        $provider->sendMessage($sms)->shouldBeCalled();
 
-        // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->post(
-                '/sms/serviceName/jobs',
-                [
-                    'message'   => 'message content',
-                    'receivers' => ['+33102030405'],
-                    'sender'    => 'senderName',
-                ]
-            )
-            ->shouldBeCalled()
-            ->willThrow(ClientException::class);
-
-        // Adapter
-        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
-        $adapter->send($sms);
-    }
-
-    public function testSendServerException()
-    {
-        $this->expectException(FailToSendSMSException::class);
-
-        $sms = new SMS('+33102030405', 'message content');
-
-        // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->post(
-            '/sms/serviceName/jobs',
-            [
-                'message'   => 'message content',
-                'receivers' => ['+33102030405'],
-                'sender'    => 'senderName',
-            ]
-        )
-            ->shouldBeCalled()
-            ->willThrow(ServerException::class);
-
-        // Adapter
-        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
-        $adapter->send($sms);
-    }
-
-    public function testSendInvalidReceiver()
-    {
-        $this->expectException(InvalidReceiverException::class);
-
-        $sms = new SMS('+33102030405', 'message content');
-
-        // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->post(
-                '/sms/serviceName/jobs',
-                [
-                    'message'   => 'message content',
-                    'receivers' => ['+33102030405'],
-                    'sender'    => 'senderName',
-                ]
-            )
-            ->shouldBeCalled()
-            ->willReturn(['invalidReceivers' => ['+33102030405']]);
-
-        // Adapter
-        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
-        $adapter->send($sms);
-    }
-
-    public function testSend()
-    {
-        $sms = new SMS('+33102030405', 'message content');
-
-        // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->post(
-            '/sms/serviceName/jobs',
-            [
-                'message'   => 'message content',
-                'receivers' => ['+33102030405'],
-                'sender'    => 'senderName',
-            ]
-        )
-            ->shouldBeCalled()
-            ->willReturn([]);
-
-        // Adapter
-        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
-        $adapter->send($sms);
-    }
-
-    public function testSendNotAdvertising()
-    {
-        $sms = new SMS('+33102030405', 'message content', false);
-
-        // Mock
-        $ovh = $this->prophesize(Api::class);
-        $ovh->post(
-            '/sms/serviceName/jobs',
-            [
-                'message'      => 'message content',
-                'noStopClause' => true,
-                'receivers'    => ['+33102030405'],
-                'sender'       => 'senderName',
-            ]
-        )
-            ->shouldBeCalled()
-            ->willReturn([]);
-
-        // Adapter
-        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
-        $adapter->send($sms);
+        $smsSender = new SMSSenderAdapter($smsProviderGuesser->reveal());
+        $smsSender->send($sms);
     }
 }

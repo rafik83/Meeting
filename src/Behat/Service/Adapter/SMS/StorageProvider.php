@@ -8,14 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Behat\Service\Adapter;
+namespace Proximum\Vimeet\Behat\Service\Adapter\SMS;
 
 use Behat\Transliterator\Transliterator;
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
+use Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviderInterface;
 
-class StorageSMSSenderAdapter implements SMSSenderInterface
+class StorageProvider implements SMSProviderInterface
 {
     /** @var FileSystemAdapterInterface */
     private $fileSystem;
@@ -29,10 +29,15 @@ class StorageSMSSenderAdapter implements SMSSenderInterface
         $this->smsDirectory = $smsDirectory;
     }
 
+    public function canSend(SMS $sms): bool
+    {
+        return true;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function send(SMS $sms)
+    public function sendMessage(SMS $sms): void
     {
         $filePath = $this->smsDirectory . DIRECTORY_SEPARATOR . self::getFileName($sms->getReceiver());
 
