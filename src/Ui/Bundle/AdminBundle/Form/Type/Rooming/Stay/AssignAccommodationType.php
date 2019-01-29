@@ -102,6 +102,9 @@ class AssignAccommodationType extends AbstractType
                     }
                     return $sheet->getId();
                 },
+                'attr' => [
+                    'class' => 'form-control select2',
+                ],
             ])
             ->add('roommate', ChoiceType::class, [
                 'required' => false,
