@@ -56,7 +56,10 @@ class AvailabilityAction
             throw new BadRequestHttpException();
         }
 
-        $sheet = $this->sheetRepository->getSheetById($sheetId);
+        $sheet = null;
+        if (is_numeric($sheetId)) {
+            $sheet = $this->sheetRepository->getSheetById((int) $sheetId);
+        }
 
         /** @var User[] $users */
         $users = $this->queryBus->handle(new GetRoommates($user, $event, $sheet));

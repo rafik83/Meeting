@@ -64,15 +64,18 @@ class AssignAccommodationAction
         $arrival = $request->get('arrivalDate', null);
         $departure = $request->get('departureDate', null);
         $dataForm = $request->request->get('admin_assign_accommodation_type', null);
-        $sheetId = null;
 
+        $sheet = null;
         $arrivalDate = \DateTime::createFromFormat('d/m/Y', $arrival);
         $departureDate = \DateTime::createFromFormat('d/m/Y', $departure);
         if ($dataForm) {
             $sheetIdString = $dataForm['otherSheet'];
-            $sheetId = is_numeric($sheetIdString) ? (int) $sheetIdString : null;
+            if (is_numeric($sheetIdString)) {
+                $sheetId = (int) $sheetIdString;
+
+                $sheet = $this->sheetRepository->getSheetById($sheetId);
+            }
         }
-        $sheet = $this->sheetRepository->getSheetById($sheetId);
 
         if (!$arrival || !$departure || !$arrivalDate || !$departureDate) {
             throw new BadRequestHttpException();
