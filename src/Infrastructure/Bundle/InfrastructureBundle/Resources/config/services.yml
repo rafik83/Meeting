@@ -5075,6 +5075,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@template.template_data_factory'
+            - '@datetime'
 
     #
     # Payment
