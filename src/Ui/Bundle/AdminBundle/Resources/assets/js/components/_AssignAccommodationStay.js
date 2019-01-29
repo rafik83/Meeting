@@ -64,10 +64,10 @@ AssignAccommodationStay.prototype.otherSheetsAsked = function () {
     this.otherSheetsListInput.setAttribute('disabled','disabled');
     axios.get(this.sheetsUrl).then(function (response) {
         Object.entries(response.data.sheets).forEach(
-            ([id, label]) => {
+            ([key, object]) => {
                 const option = document.createElement('option');
-                option.text = label;
-                option.value = id;
+                option.text = object.title;
+                option.value = object.id;
                 this.otherSheetsListInput.add(option);
             }
         );

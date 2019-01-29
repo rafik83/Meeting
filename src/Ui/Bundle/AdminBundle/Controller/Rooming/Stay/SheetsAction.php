@@ -28,11 +28,11 @@ class SheetsAction
 
     public function __invoke(Event $event): JsonResponse
     {
-        $sheets = $this->sheetRepository->getByEvent($event);
+        $sheets = $this->sheetRepository->getByEventAndOrderedByTitle($event);
 
         $sheetsDTO = [];
         foreach ($sheets as $sheet) {
-            $sheetsDTO[$sheet->getId()] = $sheet->getTitle();
+            $sheetsDTO[] = ['id' => $sheet->getId(), 'title' => $sheet->getTitle()];
         }
 
         return new JsonResponse(

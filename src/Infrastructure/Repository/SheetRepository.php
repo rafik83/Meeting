@@ -74,14 +74,18 @@ class SheetRepository implements SheetRepositoryInterface
      */
     public function getByEvent(Event $event): array
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet, participants')
-            ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participants')
-            ->where('sheet.event = :event')
-            ->setParameter('event', $event);
+        $queryBuilder = $this->getByEventQueryBuilder($event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEventAndOrderedByTitle(Event $event): array
+    {
+        $queryBuilder = $this->getByEventQueryBuilder($event);
+        $queryBuilder->orderBy('sheet.title');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -1249,5 +1253,24 @@ class SheetRepository implements SheetRepositoryInterface
         ;
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return QueryBuilder
+     */
+    protected function getByEventQueryBuilder(Event $event): QueryBuilder
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participants')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participants')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder;
     }
 }

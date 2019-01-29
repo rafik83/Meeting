@@ -79,6 +79,13 @@ interface SheetRepositoryInterface
     public function getByEvent(Event $event): array;
 
     /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    public function getByEventAndOrderedByTitle(Event $event): array;
+
+    /**
      * @param Event   $event
      * @param Sheet[] $excludedSheets
      *
