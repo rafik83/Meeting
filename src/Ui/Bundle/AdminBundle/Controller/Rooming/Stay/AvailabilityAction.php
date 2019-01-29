@@ -33,8 +33,11 @@ class AvailabilityAction
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    public function __construct(QueryBusInterface $queryBus, HasStayForPeriod $hasStayForPeriod, SheetRepositoryInterface $sheetRepository)
-    {
+    public function __construct(
+        QueryBusInterface $queryBus,
+        HasStayForPeriod $hasStayForPeriod,
+        SheetRepositoryInterface $sheetRepository
+    ) {
         $this->queryBus = $queryBus;
         $this->hasStayForPeriod = $hasStayForPeriod;
         $this->sheetRepository = $sheetRepository;

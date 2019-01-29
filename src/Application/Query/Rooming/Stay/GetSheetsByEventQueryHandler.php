@@ -19,6 +19,7 @@ class GetSheetsByEventQueryHandler
         if ($getSheetsByEventQuery->event === null) {
             return [];
         }
+
         return $this->sheetRepository->findEnabledByEvent($getSheetsByEventQuery->event);
     }
 }
