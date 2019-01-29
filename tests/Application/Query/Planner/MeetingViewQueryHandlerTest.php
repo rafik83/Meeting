@@ -112,7 +112,7 @@ class MeetingViewQueryHandlerTest extends TestCase
         // Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->getAllAcceptedByEvent($event)->shouldBeCalled()->willReturn(
-            [$request1, $request2, $request3, $request4, $request5]
+            [$request1, $request2, $request3, $request4, $request5, $request6]
         );
 
         // Handler
