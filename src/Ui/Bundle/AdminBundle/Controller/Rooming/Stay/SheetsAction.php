@@ -30,14 +30,9 @@ class SheetsAction
     {
         $sheets = $this->sheetRepository->getByEventAndOrderedByTitle($event);
 
-        $sheetsDTO = [];
-        foreach ($sheets as $sheet) {
-            $sheetsDTO[] = ['id' => $sheet->getId(), 'title' => $sheet->getTitle()];
-        }
-
         return new JsonResponse(
             [
-                'sheets' => $sheetsDTO,
+                'sheets' => $sheets,
             ]
         );
     }

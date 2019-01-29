@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Rooming\SheetView;
 use Proximum\Vimeet\Domain\View\Spot\Import\SheetView as ImportSheetView;
 
 class SheetRepository implements SheetRepositoryInterface
@@ -84,8 +85,19 @@ class SheetRepository implements SheetRepositoryInterface
      */
     public function getByEventAndOrderedByTitle(Event $event): array
     {
-        $queryBuilder = $this->getByEventQueryBuilder($event);
-        $queryBuilder->orderBy('sheet.title');
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select(
+                sprintf(
+                    'new %s(sheet.id, sheet.title)',
+                    SheetView::class
+                )
+            )
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event)
+            ->orderBy('sheet.title');
 
         return $queryBuilder->getQuery()->getResult();
     }

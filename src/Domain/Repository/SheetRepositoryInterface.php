@@ -81,7 +81,7 @@ interface SheetRepositoryInterface
     /**
      * @param Event $event
      *
-     * @return Sheet[]
+     * @return SheetView[]
      */
     public function getByEventAndOrderedByTitle(Event $event): array;
 
