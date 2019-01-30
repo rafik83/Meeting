@@ -86,8 +86,10 @@ class MeetingViewQueryHandler
                 foreach ($participantsList['fromParticipant'] as $fromParticipant) {
                     foreach ($participantsList['toParticipant'] as $toParticipant) {
                         $tempParticipantMatched[$fromParticipant->userId][$toParticipant->userId] = $toParticipant->userId;
+                        $tempParticipantMatched[$toParticipant->userId][$fromParticipant->userId] = $fromParticipant->userId;
 
-                        if (isset($participantsMatched[$fromParticipant->userId][$toParticipant->userId])) {
+                        if (isset($participantsMatched[$fromParticipant->userId][$toParticipant->userId]) ||
+                            isset($participantsMatched[$toParticipant->userId][$fromParticipant->userId])) {
                             continue 3;
                         }
                     }
