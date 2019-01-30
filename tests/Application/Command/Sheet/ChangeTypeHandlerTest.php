@@ -48,7 +48,7 @@ class ChangeTypeHandlerTest extends TestCase
 
         $user        = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet       = new Sheet($event, $type, [], $user, $date);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, $date);
 
         $sheet->addParticipant($participant);
 
@@ -121,7 +121,7 @@ class ChangeTypeHandlerTest extends TestCase
 
         $user        = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet       = new Sheet($event, $type, [], $user, $date);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, $date);
 
         $sheet->addParticipant($participant);
 

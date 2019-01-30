@@ -44,4 +44,13 @@ class EventUrlGenerator implements EventUrlGeneratorInterface
             $this->urlGenerator->generate($routeName, $parameters)
         );
     }
+
+    public function generateBaseEventAbsoluteUrl(Event $event): string
+    {
+        return sprintf(
+            '%s://%s',
+            $this->scheme,
+            $event->getDomain()
+        );
+    }
 }

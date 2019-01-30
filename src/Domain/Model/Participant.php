@@ -75,12 +75,21 @@ class Participant implements MailRecipientInterface
     /** @var string */
     private $timezone;
 
-    public function __construct(Sheet $sheet, User $user, array $data, $active)
-    {
+    /** @var \DateTimeInterface */
+    private $registrationDate;
+
+    public function __construct(
+        Sheet $sheet,
+        User $user,
+        array $data,
+        $active,
+        \DateTimeInterface $registrationDate
+    ) {
         $this->sheet  = $sheet;
         $this->user   = $user;
         $this->data   = $data;
         $this->active = $active;
+        $this->registrationDate = $registrationDate;
     }
 
     /**
@@ -335,13 +344,14 @@ class Participant implements MailRecipientInterface
         $this->participantProduct = $participantProduct;
     }
 
-    public static function duplicateFrom(Participant $participant, Sheet $sheet): Participant
+    public static function duplicateFrom(Participant $participant, Sheet $sheet, \DateTimeInterface $registrationDate): Participant
     {
         $duplicatedParticipant = new self(
             $sheet,
             $participant->getUser(),
             $participant->getData(),
-            $participant->isActive()
+            $participant->isActive(),
+            $registrationDate
         );
 
         $duplicatedParticipant->setImported(true);
@@ -357,5 +367,10 @@ class Participant implements MailRecipientInterface
     public function setTimezone(string $timezone): void
     {
         $this->timezone = $timezone;
+    }
+
+    public function getRegistrationDate(): \DateTimeInterface
+    {
+        return $this->registrationDate;
     }
 }

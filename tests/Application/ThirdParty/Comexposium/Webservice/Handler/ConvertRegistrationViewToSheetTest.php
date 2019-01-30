@@ -83,7 +83,7 @@ class ConvertRegistrationViewToSheetTest extends TestCase
         $expectedSheet->setImported(true);
 
         $expectedParticipant = new Participant(
-            $expectedSheet, $expectedUser, ['whateverRegistrationParticipantData'], false
+            $expectedSheet, $expectedUser, ['whateverRegistrationParticipantData'], false, $dateTime
         );
         $expectedParticipant->setImported(true);
 

@@ -182,7 +182,7 @@ class SheetListViewQueryHandlerTest extends TestCase
      */
     public function createParticipantMock(Sheet $sheet, User $user, $id)
     {
-        $participant = new Participant($sheet, $user, [], false);
+        $participant = new Participant($sheet, $user, [], false, new \DateTime());
         $reflection  = new \ReflectionClass(Participant::class);
 
         $property = $reflection->getProperty('id');

@@ -159,6 +159,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: "@user_asddays_1"
         sheet: "@sheet_asddays_1"
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: "John" }
             838197c7: { text: "DOE" }
@@ -171,6 +172,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: "@user_asddays_2"
         sheet: "@sheet_asddays_empty"
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: "Maryse" }
             838197c7: { text: "Dupond" }
@@ -183,6 +185,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: "@user_asddays_3"
         sheet: "@sheet_asddays_empty_with_tag"
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: "Julie" }
             838197c7: { text: "Martin" }

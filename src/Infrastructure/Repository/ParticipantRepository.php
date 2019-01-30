@@ -562,6 +562,33 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function getParticipantsFromEnabledSheetsByEvent(Event $event, string $locale): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join(
+                'participant.sheet',
+                'sheet',
+                'WITH',
+                'sheet.enable = true AND sheet.event = :event AND sheet.state IN (:states)'
+            )
+            ->join('sheet.type', 'type')
+            ->join('type.translations', 'typeTranslation', 'WITH', 'typeTranslation.locale = :locale')
+            ->setParameters([
+                'event' => $event,
+                'locale' => $locale,
+                'states' => [
+                    Sheet::STATE_ACCEPTED,
+                    Sheet::STATE_VALIDATED,
+                ],
+            ]);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     /**
      * {@inheritdoc}
      */

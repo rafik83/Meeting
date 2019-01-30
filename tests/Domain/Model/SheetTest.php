@@ -39,8 +39,8 @@ class SheetTest extends TestCase
         $property->setValue($user3, 3);
         $property->setAccessible(false);
 
-        $sheet->addParticipant(new Participant($sheet, $user1, [], true));
-        $sheet->addParticipant(new Participant($sheet, $user2, [], false));
+        $sheet->addParticipant(new Participant($sheet, $user1, [], true, new \DateTime()));
+        $sheet->addParticipant(new Participant($sheet, $user2, [], false, new \DateTime()));
 
         $this->assertTrue($sheet->hasUser($user1));
         $this->assertTrue($sheet->hasUser($user2));
@@ -54,9 +54,9 @@ class SheetTest extends TestCase
         $user  = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet = new Sheet($event, $type, [], $user, new \DateTime());
 
-        $participant1 = new Participant($sheet, new User('user1@test.com', '', '', 'fr'), [], true);
-        $participant2 = new Participant($sheet, new User('user2@test.com', '', '', 'fr'), [], true);
-        $participant3 = new Participant($sheet, new User('user3@test.com', '', '', 'fr'), [], true);
+        $participant1 = new Participant($sheet, new User('user1@test.com', '', '', 'fr'), [], true, new \DateTime());
+        $participant2 = new Participant($sheet, new User('user2@test.com', '', '', 'fr'), [], true, new \DateTime());
+        $participant3 = new Participant($sheet, new User('user3@test.com', '', '', 'fr'), [], true, new \DateTime());
 
         $sheet->addParticipant($participant1);
         $sheet->addParticipant($participant2);
@@ -86,9 +86,9 @@ class SheetTest extends TestCase
 
         $user4 = new User('user4@test.com', '', '', 'fr');
 
-        $participant1 = new Participant($sheet, $user1, [], true);
-        $participant2 = new Participant($sheet, $user2, [], true);
-        $participant3 = new Participant($sheet, $user3, [], true);
+        $participant1 = new Participant($sheet, $user1, [], true, new \DateTime());
+        $participant2 = new Participant($sheet, $user2, [], true, new \DateTime());
+        $participant3 = new Participant($sheet, $user3, [], true, new \DateTime());
 
         $sheet->addParticipant($participant1);
         $sheet->addParticipant($participant2);

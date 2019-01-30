@@ -45,17 +45,17 @@ class ApproveRequestHandlerTest extends TestCase
         $dateTime     = new DateTime();
         $sheetTo      = new Sheet($event, $type, [], $user1, $dateTime);
         $sheetFrom    = new Sheet($event, $type, [], $user3, $dateTime);
-        $toParticipant3 = $this->createParticipantMock($sheetTo, $user3, 3);
-        $toParticipant4 = $this->createParticipantMock($sheetTo, $user4, 4);
+        $toParticipant3 = $this->createParticipantMock($sheetTo, $user3, 3, $dateTime);
+        $toParticipant4 = $this->createParticipantMock($sheetTo, $user4, 4, $dateTime);
 
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user1, 1));
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
+        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user1, 1, $dateTime));
+        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2, $dateTime));
         $sheetTo->getParticipants()->add($toParticipant3);
         $sheetTo->getParticipants()->add($toParticipant4);
 
         $participants   = [];
-        $participants[] = $this->createParticipantMock($sheetTo, $user3, 3);
-        $participants[] = $this->createParticipantMock($sheetTo, $user4, 4);
+        $participants[] = $this->createParticipantMock($sheetTo, $user3, 3, $dateTime);
+        $participants[] = $this->createParticipantMock($sheetTo, $user4, 4, $dateTime);
 
         $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user1, $event);
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1, $event, false, true);
@@ -114,17 +114,17 @@ class ApproveRequestHandlerTest extends TestCase
         $dateTime     = new DateTime();
         $sheetTo      = new Sheet($event, $type, [], $user1, $dateTime);
         $sheetFrom    = new Sheet($event, $type, [], $user3, $dateTime);
-        $toParticipant3 = $this->createParticipantMock($sheetTo, $user3, 3);
-        $toParticipant4 = $this->createParticipantMock($sheetTo, $user4, 4);
+        $toParticipant3 = $this->createParticipantMock($sheetTo, $user3, 3, $dateTime);
+        $toParticipant4 = $this->createParticipantMock($sheetTo, $user4, 4, $dateTime);
 
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user1, 1));
-        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2));
+        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user1, 1, $dateTime));
+        $sheetFrom->getParticipants()->add($this->createParticipantMock($sheetFrom, $user2, 2, $dateTime));
         $sheetTo->getParticipants()->add($toParticipant3);
         $sheetTo->getParticipants()->add($toParticipant4);
 
         $participants   = [];
-        $participants[] = $this->createParticipantMock($sheetTo, $user3, 3);
-        $participants[] = $this->createParticipantMock($sheetTo, $user4, 4);
+        $participants[] = $this->createParticipantMock($sheetTo, $user3, 3, $dateTime);
+        $participants[] = $this->createParticipantMock($sheetTo, $user4, 4, $dateTime);
 
         $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user1, $event);
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1, $event);
@@ -170,16 +170,9 @@ class ApproveRequestHandlerTest extends TestCase
         $handler->handle($approveRequest);
     }
 
-    /**
-     * @param Sheet $sheet
-     * @param User  $user
-     * @param $id
-     *
-     * @return Participant
-     */
-    public function createParticipantMock(Sheet $sheet, User $user, $id)
+    public function createParticipantMock(Sheet $sheet, User $user, $id, \DateTime $datetime)
     {
-        $participant = new Participant($sheet, $user, [], false);
+        $participant = new Participant($sheet, $user, [], false, $datetime);
         $reflection  = new \ReflectionClass(Participant::class);
 
         $property = $reflection->getProperty('id');

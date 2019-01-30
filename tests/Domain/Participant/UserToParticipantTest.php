@@ -78,16 +78,18 @@ class UserToParticipantTest extends TestCase
 
         $templateDataMock->getData()->shouldBeCalled()->willReturn(['data' => 'whatever']);
 
-        $participant = new Participant($sheetMock->reveal(), $userMock->reveal(), ['data' => 'whatever'], true);
+        $date = new \DateTime();
+        $participant = new Participant($sheetMock->reveal(), $userMock->reveal(), ['data' => 'whatever'], true, $date);
         $participantRepositoryInterfaceMock->add($participant)->shouldBeCalled();
         $sheetMock->addParticipant($participant)->shouldBeCalled();
 
         $userToParticipant = new UserToParticipant(
             $participantRepositoryInterfaceMock->reveal(),
-            $templateDataFactoryMock->reveal()
+            $templateDataFactoryMock->reveal(),
+            $date
         );
 
-        $expectedParticipant = new Participant($sheetMock->reveal(), $userMock->reveal(), ['data' => 'whatever'], true);
+        $expectedParticipant = new Participant($sheetMock->reveal(), $userMock->reveal(), ['data' => 'whatever'], true, $date);
         $result = $userToParticipant->handle($sheetMock->reveal(), $userMock->reveal());
 
         $this->assertEquals($expectedParticipant, $result);

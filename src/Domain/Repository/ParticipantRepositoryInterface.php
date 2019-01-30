@@ -216,6 +216,8 @@ interface ParticipantRepositoryInterface
      */
     public function getParticipantsByEvent(Event $event, $locale);
 
+    public function getParticipantsFromEnabledSheetsByEvent(Event $event,string  $locale): array;
+
     /**
      * @param Participant[]      $participants
      * @param \DateTimeInterface $begin

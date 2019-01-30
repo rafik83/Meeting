@@ -5,6 +5,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@user_test'
         sheet: '@sheet_test'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: 'Paul' }
             838197c7: { text: 'GASCOIGNE' }
@@ -15,6 +16,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@proximum_user_visiteur'
         sheet: '@proximum_sheet_visiteur'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -23,6 +25,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@proximum_user_exposant'
         sheet: '@proximum_sheet_exposant'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -31,6 +34,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@proximum_user_carnot'
         sheet: '@proximum_sheet_carnot'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -39,6 +43,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@proximum_user_carnot2'
         sheet: '@proximum_sheet_carnot'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -47,6 +52,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@proximum_user_admin'
         sheet: '@proximum_sheet_admin'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -55,6 +61,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@proximum_user_test'
         sheet: '@proximum_sheet_test'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -63,6 +70,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@proximum_user_ui'
         sheet: '@proximum_sheet_ui'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -73,6 +81,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@user_random_1'
         sheet: '@sheet_exposant1'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -81,6 +90,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@user_random_2'
         sheet: '@sheet_exposant2'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -89,6 +99,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@user_random_3'
         sheet: '@sheet_exposant3'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -97,6 +108,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@user_random_4'
         sheet: '@sheet_exposant4'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -105,6 +117,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@user_random_5'
         sheet: '@sheet_exposant5'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }
@@ -113,6 +126,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: '@user_random_6'
         sheet: '@sheet_exposant6'
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: <firstName()> }
             838197c7: { text: <lastName()> }

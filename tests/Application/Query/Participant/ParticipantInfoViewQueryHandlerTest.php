@@ -28,7 +28,7 @@ class ParticipantInfoViewQueryHandlerTest extends TestCase
         $user   = new User('user@user.com', 'salt', 'password', $locale);
 
         $sheet       = SheetFactory::create(null, $user);
-        $participant = new Participant($sheet, $user, [], true);
+        $participant = new Participant($sheet, $user, [], true, new \DateTime());
 
         // Expected
         $participantInfoViewExpected = new ParticipantInfoView(

@@ -126,7 +126,8 @@ class ParticipateHandler
             $sheet,
             $participate->user,
             $participantData,
-            true
+            true,
+            $this->dateTime
         );
         $this->participantRepository->add($participant);
 

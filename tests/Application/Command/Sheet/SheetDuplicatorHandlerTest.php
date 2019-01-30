@@ -93,7 +93,8 @@ class SheetDuplicatorHandlerTest extends TestCase
             $expectedSheet,
             $user->reveal(),
             [],
-            true
+            true,
+            $date
         );
         $expectedParticipant->setImported(true);
 

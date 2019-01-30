@@ -149,4 +149,21 @@ class SheetInfoGuesser
 
         return $infos;
     }
+
+    public function guessSheetLogo(Sheet $sheet, string $locale): ?string
+    {
+        return $this->guessByTag($sheet, Tag::SHEET_LOGO, $locale);
+    }
+
+    public function guessByTag(Sheet $sheet, string $tag, string $locale): ?string
+    {
+        $template = $sheet->getType()->getSheetTemplate();
+
+        return $this->taggedInfoGuesser->guessFirst(
+            $template,
+            $sheet->getData(),
+            $tag,
+            $locale
+        );
+    }
 }

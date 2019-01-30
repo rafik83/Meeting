@@ -65,6 +65,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: "@user_asddays_many_<current()>"
         sheet: "@sheet_asddays_many_<current()>"
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: "<firstName()>" }
             838197c7: { text: "<lastName()>" }
@@ -77,6 +78,7 @@ Proximum\Vimeet\Domain\Model\Participant:
         user: "@user_asddays_many_other_participant_<current()>"
         sheet: "@sheet_asddays_many_<current()>"
         active: true
+        registrationDate: <dateTime()>
         data:
             541f84d4: { text: "<firstName()>" }
             838197c7: { text: "<lastName()>" }

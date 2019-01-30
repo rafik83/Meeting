@@ -190,6 +190,7 @@ class UpdateProfileHandlerTest extends TestCase
 
         $registrationTemplate = new RegistrationTemplate('Registration template', $template, ['fr'], 'fr', $now);
         $type->setRegistrationTemplate($registrationTemplate);
+        $date = new \DateTime();
 
         $sheet       = new Sheet($event, $type, [], $user, $now);
         $participant = new Participant(
@@ -205,7 +206,8 @@ class UpdateProfileHandlerTest extends TestCase
                     'extension' => 'png',
                 ],
             ],
-            $owner = true
+            $owner = true,
+            $date
         );
 
         // Mock
@@ -230,7 +232,8 @@ class UpdateProfileHandlerTest extends TestCase
             $sheetWithParticipant,
             $user,
             $resultParticipant,
-            $owner = true
+            $owner = true,
+            $date
         );
 
         $uploadFileHandler
@@ -473,6 +476,7 @@ class UpdateProfileHandlerTest extends TestCase
         $type->setRegistrationTemplate($registrationTemplate);
 
         $sheet       = new Sheet($event, $type, [], $user, $now);
+        $date = new \DateTime();
         $participant = new Participant(
             $sheet,
             $user,
@@ -482,7 +486,8 @@ class UpdateProfileHandlerTest extends TestCase
                 '1efb9cbb' => ['telephone' => '+11111111'],
                 '3b759fbb' => ['telephone' => '+22222222'],
             ],
-            $owner = true
+            $owner = true,
+            $date
         );
 
         // Mock
@@ -501,7 +506,8 @@ class UpdateProfileHandlerTest extends TestCase
                 '1efb9cbb' => ['telephone' => 'phone'],
                 '3b759fbb' => ['telephone' => 'mobile'],
             ],
-            $owner = true
+            $owner = true,
+            $date
         );
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();

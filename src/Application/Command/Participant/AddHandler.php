@@ -54,16 +54,9 @@ class AddHandler
     /** @var UpdateParticipantProductQuantityHandler */
     private $updateParticipantProductQuantityHandler;
 
-    /**
-     * @param UserRepositoryInterface                 $userRepository
-     * @param ParticipantRepositoryInterface          $participantRepository
-     * @param SheetRepositoryInterface                $sheetRepository
-     * @param TemplateDataFactory                     $templateDataFactory
-     * @param DelayedEventDispatcher                  $eventDispatcher
-     * @param UpdateParticipantProductQuantityHandler $updateParticipantProductQuantityHandler
-     * @param TypeResolver                            $typeResolver
-     * @param Synchronizer                            $accountSynchronizer
-     */
+    /** @var \DateTimeInterface */
+    private $date;
+
     public function __construct(
         UserRepositoryInterface $userRepository,
         ParticipantRepositoryInterface $participantRepository,
@@ -72,7 +65,8 @@ class AddHandler
         DelayedEventDispatcher $eventDispatcher,
         UpdateParticipantProductQuantityHandler $updateParticipantProductQuantityHandler,
         TypeResolver $typeResolver,
-        Synchronizer $accountSynchronizer
+        Synchronizer $accountSynchronizer,
+        \DateTimeInterface $date
     ) {
         $this->userRepository = $userRepository;
         $this->participantRepository = $participantRepository;
@@ -82,6 +76,7 @@ class AddHandler
         $this->typeResolver = $typeResolver;
         $this->accountSynchronizer = $accountSynchronizer;
         $this->updateParticipantProductQuantityHandler = $updateParticipantProductQuantityHandler;
+        $this->date = $date;
     }
 
     /**
@@ -160,7 +155,8 @@ class AddHandler
             $add->sheet,
             $user,
             $templateData->getData(),
-            false
+            false,
+            $this->date
         );
         $this->participantRepository->add($participant);
 
