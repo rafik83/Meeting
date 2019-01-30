@@ -71,9 +71,7 @@ class AssignAccommodationAction
         if ($dataForm) {
             $sheetIdString = $dataForm['otherSheet'];
             if ($sheetIdString && is_numeric($sheetIdString)) {
-                $sheetId = (int) $sheetIdString;
-
-                $sheet = $this->sheetRepository->getSheetById($sheetId);
+                $sheet = $this->sheetRepository->getSheetById((int) $sheetIdString);
             }
         }
 
