@@ -70,7 +70,7 @@ class AssignAccommodationAction
         $departureDate = \DateTime::createFromFormat('d/m/Y', $departure);
         if ($dataForm) {
             $sheetIdString = $dataForm['otherSheet'];
-            if (is_numeric($sheetIdString)) {
+            if ($sheetIdString && is_numeric($sheetIdString)) {
                 $sheetId = (int) $sheetIdString;
 
                 $sheet = $this->sheetRepository->getSheetById($sheetId);

@@ -57,7 +57,7 @@ class AvailabilityAction
         }
 
         $sheet = null;
-        if (is_numeric($sheetId)) {
+        if ($sheetId && is_numeric($sheetId)) {
             $sheet = $this->sheetRepository->getSheetById((int) $sheetId);
         }
 
