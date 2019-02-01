@@ -2214,6 +2214,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@catalog.tagged_nomenclature_filter_getter'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
@@ -2227,14 +2228,24 @@ services:
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer'
 
     Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
         arguments:
             - '@catalog.tagged_nomenclature_filter_getter'
 
+    Proximum\Vimeet\Domain\ConditionRules\GetSheetIdsByParticipationTypeIds:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer:
         arguments:
             - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
+
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Domain\ConditionRules\GetSheetIdsByParticipationTypeIds'
+
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer: ~
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer: ~
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer: ~

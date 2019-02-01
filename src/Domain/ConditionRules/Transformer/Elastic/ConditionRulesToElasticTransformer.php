@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic;
 
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\ConditionRulesTransformerInterface;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer;
@@ -35,16 +36,21 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
     /** @var TextTransformer */
     private $textTransformer;
 
+    /** @var ParticipationTypeTransformer */
+    private $participationTypeTransformer;
+
     public function __construct(
         NullableTransformer $nullableTransformer,
         RadioTransformer $radioTransformer,
         TaggedNomenclatureTransformer $taggedNomenclatureTransformer,
-        TextTransformer $textTransformer
+        TextTransformer $textTransformer,
+        ParticipationTypeTransformer $participationTypeTransformer
     ) {
         $this->nullableTransformer = $nullableTransformer;
         $this->radioTransformer = $radioTransformer;
         $this->taggedNomenclatureTransformer = $taggedNomenclatureTransformer;
         $this->textTransformer = $textTransformer;
+        $this->participationTypeTransformer = $participationTypeTransformer;
     }
 
     public function transform(Condition $condition): array
@@ -87,6 +93,10 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
             );
 
             return $this->taggedNomenclatureTransformer->transform($field);
+        }
+
+        if ($this->participationTypeTransformer->supports($field)) {
+            return $this->participationTypeTransformer->transform($field);
         }
 
         if ($this->nullableTransformer->supports($field)) {
