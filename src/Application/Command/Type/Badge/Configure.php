@@ -73,6 +73,9 @@ class Configure implements Command
     /** @var array */
     public $conditionedByStates;
 
+    /** @var bool */
+    public $showCountry;
+
     public function __construct(Event $event, Type $type, ?Badge $badge = null)
     {
         $this->event = $event;
@@ -92,6 +95,7 @@ class Configure implements Command
         $this->conditioned = false;
         $this->conditionedByPackage = false;
         $this->conditionedByStates = [];
+        $this->showCountry = false;
 
         if ($badge instanceof Badge) {
             $this->showHeader = $badge->isShowHeader();
@@ -107,6 +111,7 @@ class Configure implements Command
             $this->conditioned = $badge->isConditioned();
             $this->conditionedByPackage = $badge->isConditionedByPackage();
             $this->conditionedByStates = $badge->getConditionedByStates();
+            $this->showCountry = $badge->isShowCountry();
         }
     }
 }

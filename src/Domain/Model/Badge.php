@@ -63,6 +63,9 @@ class Badge
     private $showSheetTitle;
 
     /** @var bool */
+    private $showCountry;
+
+    /** @var bool */
     private $showQRCode;
 
     /** @var bool */
@@ -93,6 +96,7 @@ class Badge
         bool $activated = true,
         bool $conditioned = false,
         bool $conditionedByPackage = false,
+        bool $showCountry = false,
         array $conditionedByStates = []
     ) {
         $this->event = $event;
@@ -111,6 +115,7 @@ class Badge
         $this->conditioned = $conditioned;
         $this->conditionedByPackage = $conditionedByPackage;
         $this->conditionedByStates = $conditionedByStates;
+        $this->showCountry = $showCountry;
     }
 
     public static function createDefault(Event $event, Type $type): self
@@ -132,6 +137,7 @@ class Badge
         bool $activated = true,
         bool $conditioned = false,
         bool $conditionedByPackage = false,
+        bool $showCountry = false,
         array $conditionedByStates = []
     ): void {
         $this->header = $header;
@@ -148,6 +154,7 @@ class Badge
         $this->conditioned = $conditioned;
         $this->conditionedByPackage = $conditionedByPackage;
         $this->conditionedByStates = $conditionedByStates;
+        $this->showCountry = $showCountry;
     }
 
     public function getId(): ?int
@@ -173,6 +180,11 @@ class Badge
     public function isShowHeader(): bool
     {
         return $this->showHeader;
+    }
+
+    public function isShowCountry(): bool
+    {
+        return $this->showCountry;
     }
 
     public function getShowFooterTypeOrCategory(): string

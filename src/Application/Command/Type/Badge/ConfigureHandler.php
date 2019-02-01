@@ -68,6 +68,7 @@ class ConfigureHandler
             $configure->activated,
             $configure->conditioned,
             $configure->conditionedByPackage,
+            $configure->showCountry,
             $configure->conditionedByStates
         );
 
