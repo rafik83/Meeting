@@ -1,14 +1,13 @@
 <?php
 
-namespace Proximum\Vimeet\Domain\Participant\Catalog;
+namespace Proximum\Vimeet\Domain\Sheet\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Repository\RuleRepository;
 
-class HasAccessToCatalog
+class CanSeeOtherSheets
 {
-    /** @var RuleRepository */
+    /** @var RuleRepositoryInterface */
     private $ruleRepository;
     
     public function __construct(RuleRepositoryInterface $ruleRepository)

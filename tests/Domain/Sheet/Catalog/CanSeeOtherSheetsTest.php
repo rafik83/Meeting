@@ -1,16 +1,16 @@
 <?php
 
-namespace Proximum\Vimeet\Tests\Domain\Participant\Catalog;
+namespace Proximum\Vimeet\Tests\Domain\Sheet\Catalog;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
-use Proximum\Vimeet\Domain\Participant\Catalog\HasAccessToCatalog;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets;
 
-class HasAccessToCatalogTest extends TestCase
+class CanSeeOtherSheetsTest extends TestCase
 {
     public function testIsSatisfiedBy()
     {
@@ -33,7 +33,7 @@ class HasAccessToCatalogTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($rule->reveal());
         
-        $hasAccessToCatalog = new HasAccessToCatalog($ruleRepository->reveal());
+        $hasAccessToCatalog = new CanSeeOtherSheets($ruleRepository->reveal());
         $this->assertTrue($hasAccessToCatalog->isSatisfiedBy($sheet->reveal()));
     }
     
@@ -56,7 +56,7 @@ class HasAccessToCatalogTest extends TestCase
         $ruleRepository->getByEventAndSeer($event->reveal(), $who->reveal())
             ->shouldBeCalled()
             ->willReturn(null);
-        $hasAccessToCatalog = new HasAccessToCatalog($ruleRepository->reveal());
+        $hasAccessToCatalog = new CanSeeOtherSheets($ruleRepository->reveal());
         $this->assertFalse($hasAccessToCatalog->isSatisfiedBy($sheet->reveal()));
     }
 }

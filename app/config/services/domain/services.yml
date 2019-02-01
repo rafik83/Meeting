@@ -142,6 +142,6 @@ services:
 
     Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter: ~
 
-    Proximum\Vimeet\Domain\Participant\Catalog\HasAccessToCatalog:
+    Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets:
         arguments:
             - '@repository.rule_repository'

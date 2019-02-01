@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Participant\Catalog\HasAccessToCatalog;
+use Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets;
 
 class CatalogSubmenuViewQueryHandler
 {
@@ -29,24 +30,24 @@ class CatalogSubmenuViewQueryHandler
      */
     private $datetime;
     
-    /** @var HasAccessToCatalog */
-    private $accessToCatalog;
+    /** @var CanSeeOtherSheets */
+    private $canSeeOtherSheets;
     
     /**
      * CatalogSubmenuViewQueryHandler constructor.
      *
      * @param NavigationBuilderInterface $navigationBuilder
      * @param DateTimeInterface          $datetime
-     * @param HasAccessToCatalog         $accessToCatalog
+     * @param CanSeeOtherSheets          $canSeeOtherSheets
      */
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
         DateTimeInterface $datetime,
-        HasAccessToCatalog $accessToCatalog
+        CanSeeOtherSheets $canSeeOtherSheets
     ) {
         $this->navigationBuilder = $navigationBuilder;
-        $this->datetime          = $datetime;
-        $this->accessToCatalog   = $accessToCatalog;
+        $this->datetime = $datetime;
+        $this->canSeeOtherSheets = $canSeeOtherSheets;
     }
 
     /**
@@ -61,7 +62,7 @@ class CatalogSubmenuViewQueryHandler
         $catalogOnlineDate = $query->event->getConfiguration()->getCatalogOnlineDate();
 
         if (null !== $catalogOnlineDate && $catalogOnlineDate <= $this->datetime && $query->sheet->isInInternalCatalog()) {
-            if ($this->accessToCatalog->isSatisfiedBy($query->sheet)) {
+            if ($this->canSeeOtherSheets->isSatisfiedBy($query->sheet)) {
                 $catalogTitle = 'navigation.category.catalog';
     
                 if (isset($query->staticFormulationsIndexedByCategory[Category::CATALOG])) {

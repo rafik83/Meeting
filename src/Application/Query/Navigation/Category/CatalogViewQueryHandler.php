@@ -18,7 +18,7 @@ use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Proximum\Vimeet\Domain\Participant\Catalog\HasAccessToCatalog;
+use Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets;
 
 class CatalogViewQueryHandler
 {
@@ -28,22 +28,22 @@ class CatalogViewQueryHandler
     /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
-    /** @var HasAccessToCatalog */
-    private $accessToCatalog;
+    /** @var CanSeeOtherSheets */
+    private $canSeeOtherSheets;
     
     /**
      * @param DateTimeInterface          $dateTime
      * @param NavigationBuilderInterface $navigationBuilder
-     * @param HasAccessToCatalog         $accessToCatalog
+     * @param CanSeeOtherSheets         $canSeeOtherSheets
      */
     public function __construct(
         DateTimeInterface $dateTime,
         NavigationBuilderInterface $navigationBuilder,
-        HasAccessToCatalog $accessToCatalog
+        CanSeeOtherSheets $canSeeOtherSheets
     ) {
-        $this->dateTime          = $dateTime;
+        $this->dateTime = $dateTime;
         $this->navigationBuilder = $navigationBuilder;
-        $this->accessToCatalog   = $accessToCatalog;
+        $this->canSeeOtherSheets = $canSeeOtherSheets;
     }
 
     /**
@@ -53,7 +53,7 @@ class CatalogViewQueryHandler
      */
     public function handle(CatalogViewQuery $catalogViewQuery)
     {
-        if (false === $this->accessToCatalog->isSatisfiedBy($catalogViewQuery->sheet)) {
+        if (false === $this->canSeeOtherSheets->isSatisfiedBy($catalogViewQuery->sheet)) {
             return null;
         }
         
