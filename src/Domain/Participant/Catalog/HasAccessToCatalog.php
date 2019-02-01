@@ -2,7 +2,8 @@
 
 namespace Proximum\Vimeet\Domain\Participant\Catalog;
 
-use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Repository\RuleRepository;
 
 class HasAccessToCatalog
@@ -10,16 +11,16 @@ class HasAccessToCatalog
     /** @var RuleRepository */
     private $ruleRepository;
     
-    public function __construct(RuleRepository $ruleRepository)
+    public function __construct(RuleRepositoryInterface $ruleRepository)
     {
         $this->ruleRepository = $ruleRepository;
     }
     
-    public function isSatisfiedBy(Participant $participant): bool
+    public function isSatisfiedBy(Sheet $sheet): bool
     {
         return null !== $this->ruleRepository->getByEventAndSeer(
-            $participant->getEvent(),
-            $participant->getSheet()->getType()
+            $sheet->getEvent(),
+            $sheet->getType()
         );
     }
 }

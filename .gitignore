@@ -52,3 +52,6 @@ ansible.cfg
 
 # php-git-hooks tool.
 .guard_coverage
+
+# PhpStorm
+/.idea/

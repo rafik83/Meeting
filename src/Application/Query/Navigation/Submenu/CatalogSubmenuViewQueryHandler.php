@@ -28,10 +28,8 @@ class CatalogSubmenuViewQueryHandler
      * @var DateTimeInterface
      */
     private $datetime;
-
-    /**
-     * @var HasAccessToCatalog
-     */
+    
+    /** @var HasAccessToCatalog */
     private $accessToCatalog;
     
     /**
@@ -41,11 +39,14 @@ class CatalogSubmenuViewQueryHandler
      * @param DateTimeInterface          $datetime
      * @param HasAccessToCatalog         $accessToCatalog
      */
-    public function __construct(NavigationBuilderInterface $navigationBuilder, DateTimeInterface $datetime, HasAccessToCatalog $accessToCatalog)
-    {
+    public function __construct(
+        NavigationBuilderInterface $navigationBuilder,
+        DateTimeInterface $datetime,
+        HasAccessToCatalog $accessToCatalog
+    ) {
         $this->navigationBuilder = $navigationBuilder;
         $this->datetime          = $datetime;
-        $this->accessToCatalog = $accessToCatalog;
+        $this->accessToCatalog   = $accessToCatalog;
     }
 
     /**
@@ -60,7 +61,7 @@ class CatalogSubmenuViewQueryHandler
         $catalogOnlineDate = $query->event->getConfiguration()->getCatalogOnlineDate();
 
         if (null !== $catalogOnlineDate && $catalogOnlineDate <= $this->datetime && $query->sheet->isInInternalCatalog()) {
-            if ($this->accessToCatalog->isSatisfiedBy($query->sheet->getUserParticipant($query->user))) {
+            if ($this->accessToCatalog->isSatisfiedBy($query->sheet)) {
                 $catalogTitle = 'navigation.category.catalog';
     
                 if (isset($query->staticFormulationsIndexedByCategory[Category::CATALOG])) {

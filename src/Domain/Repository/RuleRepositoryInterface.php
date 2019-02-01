@@ -39,7 +39,7 @@ interface RuleRepositoryInterface
      *
      * @return Rule|null
      */
-    public function getByEventAndSeer(Event $event, WhoInterface $seer);
+    public function getByEventAndSeer(Event $event, WhoInterface $seer): ?Rule;
 
     /**
      * @param Type $seer

@@ -53,13 +53,10 @@ class CatalogViewQueryHandler
      */
     public function handle(CatalogViewQuery $catalogViewQuery)
     {
-        if (false === $this->accessToCatalog->isSatisfiedBy(
-                $catalogViewQuery->sheet
-                    ->getUserParticipant($catalogViewQuery->user)
-            )
-        ) {
+        if (false === $this->accessToCatalog->isSatisfiedBy($catalogViewQuery->sheet)) {
             return null;
         }
+        
         $catalogOnlineDate = $catalogViewQuery
             ->sheet
             ->getEvent()

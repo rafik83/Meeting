@@ -89,7 +89,7 @@ class RuleRepository implements RuleRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEventAndSeer(Event $event, WhoInterface $seer)
+    public function getByEventAndSeer(Event $event, WhoInterface $seer): ?Rule
     {
         $queryBuilder = $this
             ->entityManager
