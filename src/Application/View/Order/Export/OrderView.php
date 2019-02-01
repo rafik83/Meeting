@@ -42,6 +42,15 @@ class OrderView
     /** @var string */
     public $invoiceDate;
 
+    /** @var float */
+    public $totalWithoutVat;
+
+    /** @var float */
+    public $totalVat;
+
+    /** @var float */
+    public $totalWithVat;
+
     /**
      * @param int                       $orderId
      * @param int                       $sheetId
@@ -49,6 +58,9 @@ class OrderView
      * @param string                    $invoiceNumber
      * @param string                    $invoiceDate
      * @param BillingInfoView           $billingInfo
+     * @param float                     $totalWithoutVat
+     * @param float                     $totalVat
+     * @param float                     $totalWithVat
      * @param ProductBoughtView[]       $productBoughtViews
      * @param PromotionCodeBoughtView[] $promotionCodeBoughtViews
      * @param CustomRowBoughtView[]     $customRowsViews
@@ -60,26 +72,32 @@ class OrderView
         $invoiceNumber,
         $invoiceDate,
         BillingInfoView $billingInfo,
+        float $totalWithoutVat,
+        float $totalVat,
+        float $totalWithVat,
         array $productBoughtViews,
         array $promotionCodeBoughtViews,
         array $customRowsViews
     ) {
-        $this->orderId                  = $orderId;
-        $this->sheetId                  = $sheetId;
-        $this->sheetTitle               = $sheetTitle;
-        $this->invoiceNumber            = $invoiceNumber;
-        $this->invoiceDate              = $invoiceDate;
-        $this->billingInfo              = $billingInfo;
-        $this->productBoughtViews       = $productBoughtViews;
+        $this->orderId = $orderId;
+        $this->sheetId = $sheetId;
+        $this->sheetTitle = $sheetTitle;
+        $this->invoiceNumber = $invoiceNumber;
+        $this->invoiceDate = $invoiceDate;
+        $this->billingInfo = $billingInfo;
+        $this->productBoughtViews = $productBoughtViews;
         $this->promotionCodeBoughtViews = $promotionCodeBoughtViews;
-        $this->customRowsViews          = $customRowsViews;
-        $this->columnArray              = [];
+        $this->customRowsViews = $customRowsViews;
+        $this->columnArray = [];
+        $this->totalWithoutVat = $totalWithoutVat;
+        $this->totalVat = $totalVat;
+        $this->totalWithVat = $totalWithVat;
     }
 
     /**
      * @param array $data
      */
-    public function setColumnArray(array $data)
+    public function setColumnArray(array $data): void
     {
         $this->columnArray = $data;
     }
@@ -87,7 +105,7 @@ class OrderView
     /**
      * @return int
      */
-    public function countCustomRows()
+    public function countCustomRows(): int
     {
         return count($this->customRowsViews);
     }

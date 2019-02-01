@@ -52,7 +52,10 @@ class SharedColumnsTranslationViewQueryHandler
             $this->translator->trans('order.column.billing_info_city', [], 'export', $query->adminLocale),
             $this->translator->trans('order.column.billing_info_country', [], 'export', $query->adminLocale),
             $this->translator->trans('order.column.billing_info_vat_number', [], 'export', $query->adminLocale),
-            $this->translator->trans('order.column.billing_info_reference', [], 'export', $query->adminLocale)
+            $this->translator->trans('order.column.billing_info_reference', [], 'export', $query->adminLocale),
+            $this->translator->trans('order.column.order_total_without_vat', [], 'export', $query->adminLocale),
+            $this->translator->trans('order.column.order_total_vat', [], 'export', $query->adminLocale),
+            $this->translator->trans('order.column.order_total_with_vat', [], 'export', $query->adminLocale)
         );
     }
 }

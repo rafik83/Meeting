@@ -3580,8 +3580,11 @@ services:
         class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQueryHandler
         arguments:
             - '@package.specification.vat_applicable'
+            - '@Proximum\Vimeet\Application\Query\Order\OrderVat\VatListViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQuery }
+
+    Proximum\Vimeet\Application\Query\Order\OrderVat\VatListViewQueryHandler: ~
 
     query.order.order_vat_views_by_event_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler
@@ -4553,6 +4556,8 @@ services:
             - '@query.order.export.product_bought_view_query_handler'
             - '@query.order.export.custom_row_bought_view_query_handler'
             - '@query.order.export.promotion_code_bought_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Order\OrderVat\VatListViewQueryHandler'
+            - '@package.specification.vat_applicable'
 
     query.order.export.custom_row_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Export\CustomRowViewQueryHandler

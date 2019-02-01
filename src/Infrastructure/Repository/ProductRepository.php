@@ -248,6 +248,27 @@ class ProductRepository implements ProductRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function findProductsBoughtByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('product')
+            ->from(Product::class, 'product')
+            ->innerJoin(Row::class,
+                'row',
+                'WITH',
+                'row.product = product.id
+                    AND product.event = :event
+                '
+            )
+            ->innerJoin('row.order', '_order', 'WITH', '_order.cancelled = false')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     /**
      * @param QueryBuilder $queryBuilder
      */

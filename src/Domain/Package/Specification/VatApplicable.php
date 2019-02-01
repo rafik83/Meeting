@@ -70,7 +70,7 @@ class VatApplicable
      *
      * @return bool
      */
-    private function isApplicable($mode, $eventCountry, $billingCountry, $vatNumber)
+    public function isApplicable($mode, $eventCountry, $billingCountry, $vatNumber): bool
     {
         if (Event::VAT_MODE_ATI === $mode) {
             return false;
