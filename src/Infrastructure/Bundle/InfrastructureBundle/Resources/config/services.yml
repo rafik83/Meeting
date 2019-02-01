@@ -6628,6 +6628,8 @@ services:
             - '@domain.service.category.category_name_resolver'
             - '@domain.service.sheets_group.type_name_resolver'
             - '@components.user.user_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery }
 

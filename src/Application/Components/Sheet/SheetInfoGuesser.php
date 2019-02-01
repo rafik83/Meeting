@@ -155,6 +155,11 @@ class SheetInfoGuesser
         return $this->guessByTag($sheet, Tag::SHEET_LOGO, $locale);
     }
 
+    public function guessSheetCountry(Sheet $sheet, string $locale): ?string
+    {
+        return $this->guessByTag($sheet, Tag::SHEET_COUNTRY, $locale);
+    }
+
     public function guessByTag(Sheet $sheet, string $tag, string $locale): ?string
     {
         $template = $sheet->getType()->getSheetTemplate();

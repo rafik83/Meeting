@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Badge;
 
 use Proximum\Vimeet\Application\Adapter\QRCodeGeneratorInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Query\Badge\GetBadgeConfigurationByTypeQuery;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
@@ -29,6 +30,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
+use Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter;
 
 class GetUserBadgeByEventQueryHandlerTest extends TestCase
 {
@@ -54,6 +56,7 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
         $badge->getFooterTextColor()->shouldBeCalled()->willReturn('#ffffff');
         $badge->isShowFooterTypeOrCategory()->shouldBeCalled()->willReturn(true);
         $badge->isShowFooterType()->shouldBeCalled()->willReturn(false);
+        $badge->isShowCountry()->shouldBeCalled()->willReturn(true);
         $badge->getEvent()->shouldBeCalled()->willReturn($event->reveal());
 
         $category = $this->prophesize(Category::class);
@@ -118,6 +121,18 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
             ->willReturn(['firstName' => 'Korben', 'lastName' => 'Dallas', 'position' => 'Taxi driver'])
         ;
 
+        $firstParticipantSheetOfUserGetter = $this->prophesize(FirstParticipantSheetOfUserGetter::class);
+        $firstParticipantSheetOfUserGetter->getFirstParticipantSheet($user->reveal(), $sheets)
+            ->shouldBeCalled()
+            ->willReturn($sheet->reveal());
+
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $sheetInfoGuesser
+            ->guessSheetCountry($sheet->reveal(), 'en')
+            ->shouldBeCalled()
+            ->willReturn('france')
+        ;
+
         $expectedUserBadgeByEventView = new UserBadgeByEventView(
             'Taxi company',
             'Korben',
@@ -128,7 +143,8 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
             'data:qrCodeImageBase64',
             '/path/to/header.png',
             '#ffffff',
-            '#000000'
+            '#000000',
+            'france'
         );
 
         $getUserBadgeByEventQueryHandler = new GetUserBadgeByEventQueryHandler(
@@ -138,7 +154,9 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
             $groupNameResolver->reveal(),
             $categoryNameResolver->reveal(),
             $typeNameResolver->reveal(),
-            $userInfoGuesser->reveal()
+            $userInfoGuesser->reveal(),
+            $sheetInfoGuesser->reveal(),
+            $firstParticipantSheetOfUserGetter->reveal()
         );
         $result = $getUserBadgeByEventQueryHandler->handle(new GetUserBadgeByEventQuery($event->reveal(), $user->reveal()));
 

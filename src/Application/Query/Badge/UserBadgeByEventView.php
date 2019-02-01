@@ -42,6 +42,9 @@ class UserBadgeByEventView
     /** @var string */
     public $footerColor;
 
+    /** @var null|string */
+    public $country;
+
     public function __construct(
         ?string $sheetTitle,
         ?string $firstName,
@@ -52,7 +55,8 @@ class UserBadgeByEventView
         ?string $qrCodeImage,
         ?string $header,
         string $footerTextColor,
-        string $footerColor
+        string $footerColor,
+        ?string $country
     ) {
         $this->sheetTitle = $sheetTitle;
         $this->firstName = $firstName;
@@ -64,5 +68,6 @@ class UserBadgeByEventView
         $this->header = $header;
         $this->footerTextColor = $footerTextColor;
         $this->footerColor = $footerColor;
+        $this->country = $country;
     }
 }
