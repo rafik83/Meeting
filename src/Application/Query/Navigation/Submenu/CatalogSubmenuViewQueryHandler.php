@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Domain\Participant\Catalog\HasAccessToCatalog;
 
 class CatalogSubmenuViewQueryHandler
 {
@@ -29,15 +30,22 @@ class CatalogSubmenuViewQueryHandler
     private $datetime;
 
     /**
+     * @var HasAccessToCatalog
+     */
+    private $accessToCatalog;
+    
+    /**
      * CatalogSubmenuViewQueryHandler constructor.
      *
      * @param NavigationBuilderInterface $navigationBuilder
      * @param DateTimeInterface          $datetime
+     * @param HasAccessToCatalog         $accessToCatalog
      */
-    public function __construct(NavigationBuilderInterface $navigationBuilder, DateTimeInterface $datetime)
+    public function __construct(NavigationBuilderInterface $navigationBuilder, DateTimeInterface $datetime, HasAccessToCatalog $accessToCatalog)
     {
         $this->navigationBuilder = $navigationBuilder;
         $this->datetime          = $datetime;
+        $this->accessToCatalog = $accessToCatalog;
     }
 
     /**
@@ -52,21 +60,22 @@ class CatalogSubmenuViewQueryHandler
         $catalogOnlineDate = $query->event->getConfiguration()->getCatalogOnlineDate();
 
         if (null !== $catalogOnlineDate && $catalogOnlineDate <= $this->datetime && $query->sheet->isInInternalCatalog()) {
-            $catalogTitle = 'navigation.category.catalog';
-
-            if (isset($query->staticFormulationsIndexedByCategory[Category::CATALOG])) {
-                $catalogTitle = $query->staticFormulationsIndexedByCategory[Category::CATALOG]->getTitle($query->locale);
+            if ($this->accessToCatalog->isSatisfiedBy($query->sheet->getUserParticipant($query->user))) {
+                $catalogTitle = 'navigation.category.catalog';
+    
+                if (isset($query->staticFormulationsIndexedByCategory[Category::CATALOG])) {
+                    $catalogTitle = $query->staticFormulationsIndexedByCategory[Category::CATALOG]->getTitle($query->locale);
+                }
+    
+                $buttonViews[] = new SubmenuButtonView(
+                    Category::CATALOG_ICON,
+                    $catalogTitle,
+                    $this->navigationBuilder->getRoute('event_catalog_index', ['sheet' => $query->sheet->getId()]),
+                    Route::isCatalog($query->route),
+                    false,
+                    true
+                );
             }
-
-            $buttonViews[] = new SubmenuButtonView(
-                Category::CATALOG_ICON,
-                $catalogTitle,
-                $this->navigationBuilder->getRoute('event_catalog_index', ['sheet' => $query->sheet->getId()]),
-                Route::isCatalog($query->route),
-                false,
-                true
-            );
-
             $meetingTitle = 'navigation.category.meeting';
 
             if (isset($query->staticFormulationsIndexedByCategory[Category::MEETING])) {

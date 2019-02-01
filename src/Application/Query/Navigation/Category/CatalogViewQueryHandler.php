@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Domain\Participant\Catalog\HasAccessToCatalog;
 
 class CatalogViewQueryHandler
 {
@@ -27,23 +28,38 @@ class CatalogViewQueryHandler
     /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
+    /** @var HasAccessToCatalog */
+    private $accessToCatalog;
+    
     /**
      * @param DateTimeInterface          $dateTime
      * @param NavigationBuilderInterface $navigationBuilder
+     * @param HasAccessToCatalog         $accessToCatalog
      */
-    public function __construct(DateTimeInterface $dateTime, NavigationBuilderInterface $navigationBuilder)
-    {
+    public function __construct(
+        DateTimeInterface $dateTime,
+        NavigationBuilderInterface $navigationBuilder,
+        HasAccessToCatalog $accessToCatalog
+    ) {
         $this->dateTime          = $dateTime;
         $this->navigationBuilder = $navigationBuilder;
+        $this->accessToCatalog   = $accessToCatalog;
     }
 
     /**
      * @param CatalogViewQuery $catalogViewQuery
      *
-     * @return CategoryView
+     * @return CategoryView|null
      */
     public function handle(CatalogViewQuery $catalogViewQuery)
     {
+        if (false === $this->accessToCatalog->isSatisfiedBy(
+                $catalogViewQuery->sheet
+                    ->getUserParticipant($catalogViewQuery->user)
+            )
+        ) {
+            return null;
+        }
         $catalogOnlineDate = $catalogViewQuery
             ->sheet
             ->getEvent()

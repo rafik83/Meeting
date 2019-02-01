@@ -85,6 +85,33 @@ class RuleRepository implements RuleRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEventAndSeer(Event $event, WhoInterface $seer)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('rule')
+            ->from('Entity:Rule', 'rule')
+            ->where('rule.event = :event')
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+        
+        if ($seer instanceof Type) {
+            $queryBuilder
+                ->andWhere('rule.seerType = :seerType')
+                ->setParameter('seerType', $seer);
+        } elseif ($seer instanceof Category) {
+            $queryBuilder
+                ->andWhere('rule.seerCategory = :seerCategory')
+                ->setParameter('seerCategory', $seer);
+        }
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 
     /**
      * {@inheritdoc}
