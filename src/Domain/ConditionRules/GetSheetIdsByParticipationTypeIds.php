@@ -15,10 +15,10 @@ class GetSheetIdsByParticipationTypeIds
         $this->sheetRepository = $sheetRepository;
     }
 
-    public function __invoke(array $sheetIds): array
+    public function __invoke(array $types): array
     {
         return array_map(function(Sheet $sheet) {
             return $sheet->getId();
-        }, $this->sheetRepository->getByTypes($sheetIds));
+        }, $this->sheetRepository->getByTypes($types));
     }
 }
