@@ -78,7 +78,7 @@ class OrdersExportViewQueryHandlerTest extends TestCase
         $productViewQueryHandler->handle(new ProductViewQuery($product->reveal(), 'fr', $adminLocale))->shouldBeCalled()->willReturn($productView->reveal());
 
         $promotionCode = $this->prophesize(PromotionCode::class);
-        $promotionCodeRepository->findByEvent($event)->shouldBeCalled()->willReturn([$promotionCode->reveal()]);
+        $promotionCodeRepository->findBoughtByEvent($event)->shouldBeCalled()->willReturn([$promotionCode->reveal()]);
         $promotionCodeView = $this->prophesize(PromotionCodeView::class);
         $promotionCodeViewQueryHandler->handle(new PromotionCodeViewQuery($promotionCode->reveal(), $adminLocale))->shouldBeCalled()->willReturn($promotionCodeView->reveal());
 

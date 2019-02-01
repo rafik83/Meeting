@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+/**
+ * PromotionCodeRow used in Cart
+ */
 class PromotionCodeRow
 {
     /**

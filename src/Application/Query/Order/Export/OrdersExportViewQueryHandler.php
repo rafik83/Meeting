@@ -80,7 +80,7 @@ class OrdersExportViewQueryHandler
     {
         $locale = $query->event->getFallback();
         $productsBought = $this->productRepository->findProductsBoughtByEvent($query->event);
-        $promotionCodes = $this->promotionCodeRepository->findByEvent($query->event);
+        $promotionCodes = $this->promotionCodeRepository->findBoughtByEvent($query->event);
 
         // Initiate the empty array for the products views, promotion code views, order views and customRow views
         $plans              = [];

@@ -30,7 +30,14 @@ interface PromotionCodeRepositoryInterface
      *
      * @return PromotionCode[]
      */
-    public function findByEvent(Event $event);
+    public function findByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return PromotionCode[]
+     */
+    public function findBoughtByEvent(Event $event): array;
 
     /**
      * @param PromotionCode $promotionCode

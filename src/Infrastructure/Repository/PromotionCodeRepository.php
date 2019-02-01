@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Order\PromotionCode as OrderPromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
@@ -52,7 +53,7 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEvent(Event $event)
+    public function findByEvent(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -60,6 +61,30 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
             ->select('promotion_code')
             ->from(PromotionCode::class, 'promotion_code')
             ->where('promotion_code.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function findBoughtByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('promotion_code')
+            ->from(PromotionCode::class, 'promotion_code')
+            ->innerJoin(
+                OrderPromotionCode::class,
+                'order_promotion_code',
+                'WITH',
+                '
+                    order_promotion_code.promotionCode = promotion_code
+                    AND promotion_code.event = :event
+                '
+            )
+            ->innerJoin('order_promotion_code.order', '_order', 'WITH', '_order.cancelled = false')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
