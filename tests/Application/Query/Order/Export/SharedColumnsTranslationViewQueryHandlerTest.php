@@ -18,7 +18,7 @@ use Proximum\Vimeet\Application\View\Order\Export\SharedColumnsTranslationView;
 
 class SharedColumnsTranslationViewQueryHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $adminLocale = 'fr';
         $translator = $this->prophesize(TranslatorInterface::class);
@@ -41,6 +41,9 @@ class SharedColumnsTranslationViewQueryHandlerTest extends TestCase
         $translator->trans('order.column.billing_info_country', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Country');
         $translator->trans('order.column.billing_info_vat_number', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Vat Number');
         $translator->trans('order.column.billing_info_reference', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Reference');
+        $translator->trans('order.column.order_total_without_vat', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Total without vat');
+        $translator->trans('order.column.order_total_vat', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Total vat');
+        $translator->trans('order.column.order_total_with_vat', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Total with vat');
 
         $handler = new SharedColumnsTranslationViewQueryHandler($translator->reveal());
         $result = $handler->handle(new SharedColumnsTranslationViewQuery($adminLocale));
@@ -64,7 +67,10 @@ class SharedColumnsTranslationViewQueryHandlerTest extends TestCase
             'City',
             'Country',
             'Vat Number',
-            'Reference'
+            'Reference',
+            'Total without vat',
+            'Total vat',
+            'Total with vat'
         );
 
         $this->assertEquals($expected, $result);
