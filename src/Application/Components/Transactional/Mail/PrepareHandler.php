@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrd
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareSheetChangeTypeMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareVersionDiffChangedMail;
@@ -48,6 +49,9 @@ class PrepareHandler
     /** @var PrepareVersionDiffChangedMail */
     private $prepareVersionDiffChangedMail;
 
+    /** @var PrepareSheetChangeTypeMail */
+    private $prepareSheetChangeTypeMail;
+
     public function __construct(
         PrepareRegisterAccountMail $prepareRegisterAccountMail,
         PrepareActivateAccountMail $prepareActivateAccountMail,
@@ -56,7 +60,8 @@ class PrepareHandler
         PrepareUserCompleteProfileMail $prepareUserCompleteProfileMail,
         PrepareTransactionConfirmMail $prepareTransactionConfirmMail,
         PrepareOrderConfirmedMail $prepareOrderConfirmedMail,
-        PrepareVersionDiffChangedMail $prepareVersionDiffChangedMail
+        PrepareVersionDiffChangedMail $prepareVersionDiffChangedMail,
+        PrepareSheetChangeTypeMail $prepareSheetChangeTypeMail
     ) {
         $this->prepareRegisterAccountMail = $prepareRegisterAccountMail;
         $this->prepareActivateAccountMail = $prepareActivateAccountMail;
@@ -66,6 +71,7 @@ class PrepareHandler
         $this->prepareTransactionConfirmMail = $prepareTransactionConfirmMail;
         $this->prepareOrderConfirmedMail = $prepareOrderConfirmedMail;
         $this->prepareVersionDiffChangedMail = $prepareVersionDiffChangedMail;
+        $this->prepareSheetChangeTypeMail = $prepareSheetChangeTypeMail;
     }
 
     public function handle(AbstractPrepareMail $prepareMail): ?AbstractMail
@@ -87,6 +93,8 @@ class PrepareHandler
                 return $this->prepareOrderConfirmedMail->prepare($prepareMail);
             case Constant::TRANSACTIONAL_MAIL_KEY_AGENDA_VERSION_DIFF_CHANGED:
                 return $this->prepareVersionDiffChangedMail->prepare($prepareMail);
+            case Constant::TRANSACTIONAL_MAIL_KEY_SHEET_TYPE_CHANGED:
+                return $this->prepareSheetChangeTypeMail->prepare($prepareMail);
             default: return null;
         }
     }

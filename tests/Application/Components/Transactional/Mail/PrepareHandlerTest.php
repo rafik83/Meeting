@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrd
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareSheetChangeTypeMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareVersionDiffChangedMail;
@@ -38,6 +39,7 @@ class PrepareHandlerTest extends TestCase
         $prepareTransactionTotalMail,
         $prepareOrderConfirmedMail,
         $prepareVersionDiffChangedMail,
+        $prepareSheetChangeTypeMail,
         $user,
         $event
     ;
@@ -58,9 +60,10 @@ class PrepareHandlerTest extends TestCase
         $this->prepareTransactionTotalMail = $this->prophesize(PrepareTransactionConfirmMail::class);
         $this->prepareOrderConfirmedMail = $this->prophesize(PrepareOrderConfirmedMail::class);
         $this->prepareVersionDiffChangedMail = $this->prophesize(PrepareVersionDiffChangedMail::class);
+        $this->prepareSheetChangeTypeMail = $this->prophesize(PrepareSheetChangeTypeMail::class);
     }
 
-    public function testPrepareRegisterAccountMail()
+    public function testPrepareRegisterAccountMail(): void
     {
         $mail = new PrepareUserRegisteredMailView(
             $this->event->reveal(),
@@ -77,6 +80,7 @@ class PrepareHandlerTest extends TestCase
         $this->prepareTransactionTotalMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareOrderConfirmedMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareVersionDiffChangedMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareSheetChangeTypeMail->prepare(Argument::any())->shouldNotBeCalled();
 
         $handler = new PrepareHandler(
             $this->prepareRegisterAccountMail->reveal(),
@@ -86,7 +90,8 @@ class PrepareHandlerTest extends TestCase
             $this->prepareUserCompleteProfileMail->reveal(),
             $this->prepareTransactionTotalMail->reveal(),
             $this->prepareOrderConfirmedMail->reveal(),
-            $this->prepareVersionDiffChangedMail->reveal()
+            $this->prepareVersionDiffChangedMail->reveal(),
+            $this->prepareSheetChangeTypeMail->reveal()
         );
 
         $result = $handler->handle($mail);
