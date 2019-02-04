@@ -1,4 +1,4 @@
-# Availability Time Range (Plage de dipsonibilités)
+# Availability Time Range (Plage de disponibilités)
 
 Les plages de disponibilités sont définies en backoffice par un admin ou un organisateur afin de délimiter des périodes de temps accessibles à certains utilisateurs.
 
