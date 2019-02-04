@@ -3527,14 +3527,14 @@ services:
     query.type.meeting_type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQueryHandler
         arguments:
-            - '@catalog.visible_participation_types'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery }
 
     query.type.meeting_category_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQueryHandler
         arguments:
-            - '@catalog.visible_participation_categories'
+            - '@vimeet_infrastructure.repository.category_repository'
             - '@query.catalog.search_facet_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQuery }

@@ -552,4 +552,70 @@ class TypeRepository implements TypeRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFromSheetMeetingRequests(Sheet $sheet, string $locale): array
+    {
+        // retrieve
+        $query = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type', 'translations')
+            ->from('Entity:Type', 'type')
+            ->where(
+                'type in (
+                        SELECT tmpType.id
+                        FROM Entity:Meeting\Request meetingRequest
+                            INNER JOIN meetingRequest.from sheet WITH sheet = :sheet AND meetingRequest.disabled = false
+                            INNER JOIN meetingRequest.to toSheet
+                            INNER JOIN toSheet.type tmpType
+            )'
+            )
+            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('locale', $locale)
+            ->getQuery();
+
+        $types = $query->getResult();
+
+        $query = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type', 'translations')
+            ->from('Entity:Type', 'type')
+            ->where(
+                'type in (
+                        SELECT tmpType.id
+                        FROM Entity:Meeting\Request meetingRequest
+                            INNER JOIN meetingRequest.to sheet WITH sheet = :sheet AND meetingRequest.disabled = false
+                            INNER JOIN meetingRequest.from fromSheet
+                            INNER JOIN fromSheet.type tmpType
+                )'
+            )
+            ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('locale', $locale)
+            ->getQuery();
+
+        $otherSideTypes = $query->getResult();
+
+        // merge
+        foreach ($otherSideTypes as $category) {
+            if (false === in_array($category, $types, true)) {
+                $types[] = $category;
+            }
+        }
+
+        // sort
+        usort(
+            $types,
+            function (Type $typeA, Type $typeB) use ($locale) {
+                return $typeA->getTitle($locale) <=> $typeB->getTitle($locale);
+            }
+        );
+
+        return $types;
+    }
 }
