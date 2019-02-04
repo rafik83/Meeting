@@ -108,6 +108,6 @@ class MeetingCategoryViewQueryHandlerTest extends TestCase
             ->willReturn([$this->category]);
 
         $categoryViews = $this->handler->handle($this->query);
-        $this->assertEquals($expectedCategoryView, $categoryViews[0]);
+        $this->assertEquals([$expectedCategoryView], $categoryViews);
     }
 }
