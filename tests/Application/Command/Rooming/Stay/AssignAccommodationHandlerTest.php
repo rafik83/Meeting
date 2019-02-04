@@ -29,7 +29,7 @@ class AssignAccommodationHandlerTest extends TestCase
         $user,
         $event
     ;
-    
+
     public function setUp()
     {
         $this->accommodation = $this->prophesize(Accommodation::class);
@@ -39,7 +39,7 @@ class AssignAccommodationHandlerTest extends TestCase
         $this->event = $this->prophesize(Event::class);
         $this->user = $this->prophesize(User::class);
     }
-    
+
     public function test_handle(): void
     {
         $arrivalDate = new \DateTime('2018-12-10');
@@ -63,7 +63,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $arrivalDate,
-            $departureDate
+            $departureDate,
+            null
         );
         $assignAccommodation->accommodation = $this->accommodation->reveal();
 
@@ -113,7 +114,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $arrivalDate,
-            $departureDate
+            $departureDate,
+            null
         );
         $assignAccommodation->accommodation = $this->accommodation->reveal();
         $assignAccommodation->roomNumber = 'A123';
@@ -152,7 +154,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $arrivalDate,
-            $departureDate
+            $departureDate,
+            null
         );
         $assignAccommodation->accommodation = $this->accommodation->reveal();
 
@@ -193,7 +196,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $arrivalDate,
-            $departureDate
+            $departureDate,
+            null
         );
         $assignAccommodation->accommodation = $this->accommodation->reveal();
 
@@ -258,7 +262,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $arrivalDate,
-            $departureDate
+            $departureDate,
+            null
         );
         $assignAccommodation->accommodation = $this->accommodation->reveal();
         $assignAccommodation->roommate = null;
@@ -323,7 +328,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $arrivalDate,
-            $departureDate
+            $departureDate,
+            null
         );
         $assignAccommodation->accommodation = $this->accommodation->reveal();
         $assignAccommodation->roommate = $roommate->reveal();
@@ -390,7 +396,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $arrivalDate,
-            $departureDate
+            $departureDate,
+            null
         );
         $assignAccommodation->accommodation = $this->accommodation->reveal();
         $assignAccommodation->roommate = $roommate->reveal();
@@ -443,7 +450,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $arrivalDate,
-            $departureDate
+            $departureDate,
+            null
         );
         $assignAccommodation->accommodation = $this->accommodation->reveal();
         $assignAccommodation->roommate = null;
@@ -508,7 +516,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $arrivalDate,
-            $departureDate
+            $departureDate,
+            null
         );
         $assignAccommodation->accommodation = $this->accommodation->reveal();
         $assignAccommodation->roommate = $roommate->reveal();
@@ -575,7 +584,8 @@ class AssignAccommodationHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $arrivalDate,
-            $departureDate
+            $departureDate,
+            null
         );
         $assignAccommodation->accommodation = $this->accommodation->reveal();
         $assignAccommodation->roommate = $roommate->reveal();

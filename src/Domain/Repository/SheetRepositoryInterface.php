@@ -79,6 +79,13 @@ interface SheetRepositoryInterface
     public function getByEvent(Event $event): array;
 
     /**
+     * @param Event $event
+     *
+     * @return SheetView[]
+     */
+    public function getByEventAndOrderedByTitle(Event $event): array;
+
+    /**
      * @param Event   $event
      * @param Sheet[] $excludedSheets
      *
@@ -373,6 +380,13 @@ interface SheetRepositoryInterface
      * @return int
      */
     public function countEnabledSheetsByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    public function findEnabledByEvent(Event $event): array;
 
     /**
      * @param Event  $event

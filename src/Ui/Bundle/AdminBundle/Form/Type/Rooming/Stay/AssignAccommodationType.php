@@ -5,13 +5,16 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rooming\Stay;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation;
 use Proximum\Vimeet\Application\Query\Rooming\Accommodation\AccommodationListByPeriodQuery;
-use Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetUsers;
+use Proximum\Vimeet\Application\Query\Rooming\Stay\GetRoommates;
+use Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetsByEventQuery;
 use Proximum\Vimeet\Domain\Model\Rooming\Accommodation;
 use Proximum\Vimeet\Domain\Model\Rooming\Stay;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,10 +38,15 @@ class AssignAccommodationType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $user = $options['assignAccommodation']->user;
-        $event = $options['assignAccommodation']->event;
-        $arrival = $options['assignAccommodation']->arrival;
-        $departure = $options['assignAccommodation']->departure;
+        /** @var AssignAccommodation $assignAccommodation */
+        $assignAccommodation = $options['assignAccommodation'];
+        $event               = $assignAccommodation->event;
+        $arrival             = $assignAccommodation->arrival;
+        $departure           = $assignAccommodation->departure;
+        $otherSheet          = $assignAccommodation->otherSheet;
+        $user                = $assignAccommodation->user;
+
+        $sheets = $otherSheet ? $this->queryBus->handle(new GetSheetsByEventQuery($event)) : [];
 
         $builder
             ->add('arrival', DateTimePickerType::class, [
@@ -81,9 +89,26 @@ class AssignAccommodationType extends AbstractType
                 },
                 'expanded' => true,
             ])
+            ->add('displayOtherSheet', ButtonType::class)
+            ->add('otherSheet', ChoiceType::class, [
+                'required' => false,
+                'choices' => $sheets,
+                'choice_label' => function (Sheet $sheet) {
+                    return $sheet->getTitle();
+                },
+                'choice_value' => function (?Sheet $sheet = null) {
+                    if ($sheet === null) {
+                        return null;
+                    }
+                    return $sheet->getId();
+                },
+                'attr' => [
+                    'class' => 'form-control select2',
+                ],
+            ])
             ->add('roommate', ChoiceType::class, [
                 'required' => false,
-                'choices' => $this->queryBus->handle(new GetSheetUsers($user, $event)),
+                'choices' => $this->queryBus->handle(new GetRoommates($user, $event, $otherSheet)),
                 'choice_label' => function (User $user) {
                     return $user->getFullname();
                 },

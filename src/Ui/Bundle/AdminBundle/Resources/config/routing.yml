@@ -2066,6 +2066,13 @@ admin_event_rooming_assign_accommodation_stay_availability:
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AvailabilityAction
 
+admin_event_rooming_assign_accommodation_stay_sheets:
+    path: /event/{event}/rooming/assign-accommodation-stay-sheets
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\SheetsAction
+
 admin_event_rooming_remove_stay:
     path: /event/{event}/rooming/user/{user}/stay/{stay}/remove
     requirements:

@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Rooming\SheetView;
 use Proximum\Vimeet\Domain\View\Spot\Import\SheetView as ImportSheetView;
 
 class SheetRepository implements SheetRepositoryInterface
@@ -74,14 +75,29 @@ class SheetRepository implements SheetRepositoryInterface
      */
     public function getByEvent(Event $event): array
     {
+        $queryBuilder = $this->getByEventQueryBuilder($event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEventAndOrderedByTitle(Event $event): array
+    {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet, participants')
+            ->select(
+                sprintf(
+                    'new %s(sheet.id, sheet.title)',
+                    SheetView::class
+                )
+            )
             ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participants')
             ->where('sheet.event = :event')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->orderBy('sheet.title');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -832,6 +848,17 @@ class SheetRepository implements SheetRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function findEnabledByEvent(Event $event): array
+    {
+        $queryBuilder = $this->queryEnabledSheetsByEvent($event);
+        $queryBuilder->select('sheet');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @param Event $event
      *
      * @return \Doctrine\ORM\QueryBuilder
@@ -1238,5 +1265,24 @@ class SheetRepository implements SheetRepositoryInterface
         ;
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return QueryBuilder
+     */
+    protected function getByEventQueryBuilder(Event $event): QueryBuilder
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participants')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participants')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder;
     }
 }

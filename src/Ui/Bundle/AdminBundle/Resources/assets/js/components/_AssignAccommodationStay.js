@@ -8,9 +8,14 @@ function AssignAccommodationStay(element)
     this.element = element;
     this.roommatePlaceholder = element.getAttribute('data-roommate-placeholder');
     this.url = element.getAttribute('data-availability-url');
+    this.sheetsUrl = element.getAttribute('data-sheets-url');
     this.accommodationInput = element.querySelector('[id="admin_assign_accommodation_type_accommodation"]');
     this.roommateInput = element.querySelector('[id="admin_assign_accommodation_type_roommate"]');
     this.roommateBlock = element.querySelector('[id="admin_assign_accommodation_type_roommate-group"]');
+    this.otherSheetsListInput = element.querySelector('[id="admin_assign_accommodation_type_otherSheet');
+    this.otherSheetsButtonBlock = element.querySelector('[id="admin_assign_accommodation_type_displayOtherSheet-group"]');
+    this.otherSheetsListBlock = element.querySelector('[id="admin_assign_accommodation_type_otherSheet-group"]');
+    this.showOtherSheetsList = this.otherSheetsListInput.value !== '';
 
     this.dateTimeManipulation = new DateTimeManipulation();
 
@@ -23,30 +28,58 @@ function AssignAccommodationStay(element)
 
     $('#admin_assign_accommodation_type_arrival').on('dp.change', this.onChangePeriod.bind(this));
     $('#admin_assign_accommodation_type_departure').on('dp.change', this.onChangePeriod.bind(this));
+    $('#admin_assign_accommodation_type_otherSheet').on('change', this.onChangePeriod.bind(this));
+    $('#admin_assign_accommodation_type_displayOtherSheet').on('click', this.otherSheetsAsked.bind(this));
 
     this.init();
 }
 
 AssignAccommodationStay.prototype.init = function() {
     const roomType = this.element.querySelector('input[name="admin_assign_accommodation_type[roomType]"]:checked').value;
-    this.displayRoommate(this.isRoomTypeDoubleOrTwin(roomType));
+    this.displayRoommateManagement(this.isRoomTypeDoubleOrTwin(roomType));
 };
 
 AssignAccommodationStay.prototype.isRoomTypeDoubleOrTwin = function(roomType) {
     return 'double' === roomType || 'twin' === roomType;
 };
 
-AssignAccommodationStay.prototype.displayRoommate = function(state) {
-    this.roommateBlock.style.display = false === state ? 'none' : 'block';
+AssignAccommodationStay.prototype.displayRoommateManagement = function(state) {
+    let roommateBlockDisplay = false === state ? 'none' : 'block';
+    let otherSheetsButtonBlockDisplay = state && false === this.showOtherSheetsList ? 'block' : 'none';
+    let otherSheetsListBlockDisplay = state && this.showOtherSheetsList ? 'block' : 'none';
+
+    this.roommateBlock.style.display = roommateBlockDisplay;
+    this.otherSheetsButtonBlock.style.display = otherSheetsButtonBlockDisplay;
+    this.otherSheetsListBlock.style.display = otherSheetsListBlockDisplay;
 };
 
 AssignAccommodationStay.prototype.onSelectRoomType = function(e) {
-    this.displayRoommate(this.isRoomTypeDoubleOrTwin(e.target.value));
+    this.displayRoommateManagement(this.isRoomTypeDoubleOrTwin(e.target.value));
+};
+
+AssignAccommodationStay.prototype.otherSheetsAsked = function () {
+    this.showOtherSheetsList = true;
+    this.displayRoommateManagement(true);
+
+    this.otherSheetsListInput.setAttribute('disabled','disabled');
+    axios.get(this.sheetsUrl).then(function (response) {
+        Object.entries(response.data.sheets).forEach(
+            ([key, object]) => {
+                const option = document.createElement('option');
+                option.text = object.title;
+                option.value = object.id;
+                this.otherSheetsListInput.add(option);
+            }
+        );
+
+        this.otherSheetsListInput.removeAttribute('disabled');
+    }.bind(this)).catch(alert);
 };
 
 AssignAccommodationStay.prototype.onChangePeriod = function(e) {
     const arrivalString = this.arrivalDateInput.value;
     const departureString = this.departureDateInput.value;
+    const sheetIdString = this.otherSheetsListInput.value;
 
     const accommodationInput = $(this.accommodationInput);
     accommodationInput.empty();
@@ -71,6 +104,7 @@ AssignAccommodationStay.prototype.onChangePeriod = function(e) {
         params: {
             arrivalDate: arrivalString,
             departureDate: departureString,
+            sheetId: sheetIdString
         }
     }).then(function (response) {
         Object.entries(response.data.accommodations).forEach(

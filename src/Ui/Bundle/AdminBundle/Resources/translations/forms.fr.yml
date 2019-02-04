@@ -24,6 +24,8 @@ form.admin_activate_account_password.children.submit.label: Envoyer
 form.admin_assign_accommodation_type.children.accommodation.label: 'Hébergement associé'
 form.admin_assign_accommodation_type.children.arrival.label: 'Date d''arrivée'
 form.admin_assign_accommodation_type.children.departure.label: 'Date de départ'
+form.admin_assign_accommodation_type.children.displayOtherSheet.label: 'Voir autre'
+form.admin_assign_accommodation_type.children.otherSheet.label: 'Fiche de la personne associée'
 form.admin_assign_accommodation_type.children.roommate.label: 'Personne associée pour une chambre double'
 form.admin_assign_accommodation_type.children.roomNumber.label: 'Numéro de chambre'
 form.admin_assign_accommodation_type.children.roomType.label: 'Type de chambre'
