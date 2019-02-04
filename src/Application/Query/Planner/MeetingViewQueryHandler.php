@@ -66,6 +66,7 @@ class MeetingViewQueryHandler
     {
         $this->setUp($query);
         $meetingViews = [];
+        $participantsMatched = [];
 
         foreach ($this->requests as $request) {
             try {
@@ -75,6 +76,39 @@ class MeetingViewQueryHandler
                 ];
 
                 $participantsList = $this->getParticipantsList($query, $request, $request->getMeeting());
+
+                if (empty($participantsList)) {
+                    continue;
+                }
+
+                $tempParticipantMatched = [];
+
+                foreach ($participantsList['fromParticipant'] as $fromParticipant) {
+                    foreach ($participantsList['toParticipant'] as $toParticipant) {
+                        $tempParticipantMatched[$fromParticipant->userId][$toParticipant->userId] = $toParticipant->userId;
+                        $tempParticipantMatched[$toParticipant->userId][$fromParticipant->userId] = $fromParticipant->userId;
+
+                        if (isset($participantsMatched[$fromParticipant->userId][$toParticipant->userId]) ||
+                            isset($participantsMatched[$toParticipant->userId][$fromParticipant->userId])) {
+                            continue 3;
+                        }
+                    }
+                }
+
+                foreach ($tempParticipantMatched as $key => $ids) {
+                    if (isset($participantsMatched[$key])) {
+                        foreach($ids as $id) {
+                            $participantsMatched[$key][$id] = $id;
+                        }
+                    } else {
+                        $participantsMatched[$key] = $ids;
+                    }
+                }
+
+                $participantsList = array_merge(
+                    $participantsList['fromParticipant'],
+                    $participantsList['toParticipant']
+                );
 
                 $meetingView = new MeetingView(
                     $request->getId(),
@@ -125,26 +159,22 @@ class MeetingViewQueryHandler
         $this->recursiveDepth = 0;
     }
 
-    /**
-     * @param MeetingViewQuery $query
-     * @param Request          $request
-     * @param Meeting|null     $meeting
-     *
-     * @return ParticipantView[]
-     */
-    private function getParticipantsList(MeetingViewQuery $query, Request $request, Meeting $meeting = null)
+    private function getParticipantsList(MeetingViewQuery $query, Request $request, Meeting $meeting = null): array
     {
         $participantsList = [];
 
         if (!$query->isSolutionFromScratch() && null !== $meeting) {
-            foreach ($meeting->getAllParticipants() as $participant) {
-                $participantsList[] = $this->getParticipantById($participant->getId());
+            foreach ($meeting->getFromParticipants() as $participant) {
+                $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
+            }
+            foreach ($meeting->getToParticipants() as $participant) {
+                $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
             }
         } else {
             if ($request->hasFromParticipants()) {
                 /** @var Participant $participant */
                 foreach ($request->getFromParticipantsArray() as $participant) {
-                    $participantsList[] = $this->getParticipantById($participant->getId());
+                    $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
                 }
             } else {
                 // No preference on from
@@ -152,17 +182,17 @@ class MeetingViewQueryHandler
                 if (1 === $request->getFromSheet()->countParticipant()) {
                     /** @var Participant $participant */
                     foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
-                        $participantsList[] = $this->getParticipantById($participant->getId());
+                        $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
                     }
                 } else {
                     $this->resetRecursiveDepth();
-                    $participantsList[] = $this->getParticipantOfSheet($request->getFromSheet());
+                    $participantsList['fromParticipant'][] = $this->getParticipantOfSheet($request->getFromSheet());
                 }
             }
 
             if ($request->hasToParticipants()) {
                 foreach ($request->getToParticipantsArray() as $participant) {
-                    $participantsList[] = $this->getParticipantById($participant->getId());
+                    $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
                 }
             } else {
                 // not preference on to
@@ -170,11 +200,11 @@ class MeetingViewQueryHandler
                 if (1 === $request->getToSheet()->countParticipant()) {
                     /** @var Participant $participant */
                     foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
-                        $participantsList[] = $this->getParticipantById($participant->getId());
+                        $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
                     }
                 } else {
                     $this->resetRecursiveDepth();
-                    $participantsList[] = $this->getParticipantOfSheet($request->getToSheet());
+                    $participantsList['toParticipant'][] = $this->getParticipantOfSheet($request->getToSheet());
                 }
             }
         }

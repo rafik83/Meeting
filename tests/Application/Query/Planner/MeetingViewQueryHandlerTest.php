@@ -76,6 +76,8 @@ class MeetingViewQueryHandlerTest extends TestCase
         $request2 = new Request($sheet3, [], $sheet1, [$participant1], new \DateTime(), $creator, $event);
         $request3 = new Request($sheet2, [], $sheet3, [], new \DateTime(), $creator, $event);
         $request4 = new Request($sheet4, [], $sheet3, [], new \DateTime(), $creator, $event); // Sheet not in catalog, should be escaped
+        $request5 = new Request($sheet3, [], $sheet1, [$participant1], new \DateTime(), $creator, $event);
+        $request6 = new Request($sheet1, [$participant2], $sheet2, [$participant3], new \DateTime(), $creator, $event);
 
         // Reflection
         $reflectionSheet = new \ReflectionClass(Sheet::class);
@@ -103,12 +105,14 @@ class MeetingViewQueryHandlerTest extends TestCase
         $propertyRequest->setValue($request2, 2);
         $propertyRequest->setValue($request3, 3);
         $propertyRequest->setValue($request4, 4);
+        $propertyRequest->setValue($request5, 5);
+        $propertyRequest->setValue($request6, 6);
         $propertyRequest->setAccessible(false);
 
         // Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->getAllAcceptedByEvent($event)->shouldBeCalled()->willReturn(
-            [$request1, $request2, $request3, $request4]
+            [$request1, $request2, $request3, $request4, $request5, $request6]
         );
 
         // Handler
