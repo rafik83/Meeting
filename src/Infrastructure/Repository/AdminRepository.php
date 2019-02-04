@@ -125,6 +125,7 @@ class AdminRepository implements AdminRepositoryInterface
             ->select('admin, event')
             ->from(Admin::class, 'admin', 'admin.id')
             ->leftJoin('admin.events', 'event')
+            ->andWhere('admin.deletedAt IS NULL')
             ->orderBy('admin.lastname', 'ASC');
 
         if (isset($filters['role']) && null !== $filters['role'] && \in_array($filters['role'], Admin::getAllRoles(), true)) {
