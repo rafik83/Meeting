@@ -60,7 +60,6 @@ class PrepareSheetChangeTypeMail extends AbstractPrepareMailService
             $participantMailView
         );
 
-
         return $mail;
     }
 }
