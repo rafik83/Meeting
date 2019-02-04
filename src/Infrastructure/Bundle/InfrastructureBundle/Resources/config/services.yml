@@ -2234,17 +2234,18 @@ services:
         arguments:
             - '@catalog.tagged_nomenclature_filter_getter'
 
-    Proximum\Vimeet\Domain\ConditionRules\GetSheetIdsByParticipationTypeIds:
+    Proximum\Vimeet\Domain\ConditionRules\GetSheetIdsByFilters:
         arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_search_adapter'
 
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer:
         arguments:
             - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
 
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer:
+        lazy: true
         arguments:
-            - '@Proximum\Vimeet\Domain\ConditionRules\GetSheetIdsByParticipationTypeIds'
+            - '@Proximum\Vimeet\Domain\ConditionRules\GetSheetIdsByFilters'
 
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer: ~
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer: ~

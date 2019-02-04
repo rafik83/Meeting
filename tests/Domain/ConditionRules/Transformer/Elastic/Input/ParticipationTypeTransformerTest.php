@@ -11,24 +11,26 @@
 namespace Proximum\Vimeet\Tests\Domain\ConditionRules\Transformer\Elastic\Input;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Domain\ConditionRules\GetSheetIdsByParticipationTypeIds;
+use Proximum\Vimeet\Domain\ConditionRules\GetSheetIdsByFilters;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorIn;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class ParticipationTypeTransformerTest extends TestCase
 {
     public function testTransform(): void
     {
         $field = new Field('participation_type', new ComparisonOperatorIn(), 'select', [1, 2]);
+        $event = $this->prophesize(Event::class);
 
-        $getSheetIdsByParticipationTypeIds = $this->prophesize(GetSheetIdsByParticipationTypeIds::class);
-        $getSheetIdsByParticipationTypeIds->__invoke([1, 2])
+        $getSheetIdsByFilters = $this->prophesize(GetSheetIdsByFilters::class);
+        $getSheetIdsByFilters->__invoke($event->reveal(), 'fr', ['type' => [1, 2]])
             ->shouldBeCalled()
             ->willReturn([123, 456]);
 
-        $taggedNomenclatureTransformer = new ParticipationTypeTransformer($getSheetIdsByParticipationTypeIds->reveal());
-        $result = $taggedNomenclatureTransformer->transform($field);
+        $participationTypeTransformer = new ParticipationTypeTransformer($getSheetIdsByFilters->reveal());
+        $participationTypeTransformer->setEventAndLocale($event->reveal(), 'fr');
 
         $expectedResult = [
             'nested' => [
@@ -52,6 +54,6 @@ class ParticipationTypeTransformerTest extends TestCase
             ]
         ];
 
-        $this->assertSame($result, $expectedResult);
+        $this->assertSame($participationTypeTransformer->transform($field), $expectedResult);
     }
 }

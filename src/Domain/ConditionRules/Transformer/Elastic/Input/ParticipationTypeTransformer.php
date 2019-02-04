@@ -11,18 +11,31 @@
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
-use Proximum\Vimeet\Domain\ConditionRules\GetSheetIdsByParticipationTypeIds;
+use Proximum\Vimeet\Domain\ConditionRules\GetSheetIdsByFilters;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorNotIn;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class ParticipationTypeTransformer implements InputTransformerInterface
 {
-    /** @var GetSheetIdsByParticipationTypeIds */
-    private $getSheetIdsByParticipationTypeIds;
+    /** @var GetSheetIdsByFilters */
+    private $getSheetIdsByFilters;
 
-    public function __construct(GetSheetIdsByParticipationTypeIds $getSheetIdsByParticipationTypeIds)
+    /** @var Event */
+    private $event;
+
+    /** @var string */
+    private $locale;
+
+    public function __construct(GetSheetIdsByFilters $getSheetIdsByFilters)
     {
-        $this->getSheetIdsByParticipationTypeIds = $getSheetIdsByParticipationTypeIds;
+        $this->getSheetIdsByFilters = $getSheetIdsByFilters;
+    }
+
+    public function setEventAndLocale(Event $event, string $locale): void
+    {
+        $this->event = $event;
+        $this->locale = $locale;
     }
 
     public function transform(Field $field): array
@@ -31,7 +44,11 @@ class ParticipationTypeTransformer implements InputTransformerInterface
             return [];
         }
 
-        $sheetIds = ($this->getSheetIdsByParticipationTypeIds)($field->getValue());
+        $sheetIds = ($this->getSheetIdsByFilters)(
+            $this->event,
+            $this->locale,
+            ['type' => $field->getValue()]
+        );
 
         if (empty($sheetIds)) {
             return [];

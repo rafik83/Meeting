@@ -96,6 +96,11 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
         }
 
         if ($this->participationTypeTransformer->supports($field)) {
+            $this->participationTypeTransformer->setEventAndLocale(
+                $condition->getEvent(),
+                $condition->getLocale()
+            );
+
             return $this->participationTypeTransformer->transform($field);
         }
 
