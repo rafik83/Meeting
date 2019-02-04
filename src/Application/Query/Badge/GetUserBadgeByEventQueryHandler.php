@@ -24,7 +24,7 @@ use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
 use Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter;
-use Symfony\Component\Intl\Intl;
+use Proximum\Vimeet\Infrastructure\Adapter\IntlAdapter;
 
 class GetUserBadgeByEventQueryHandler
 {
@@ -64,7 +64,8 @@ class GetUserBadgeByEventQueryHandler
         TypeNameResolver $typeNameResolver,
         UserInfoGuesser $userInfoGuesser,
         SheetInfoGuesser $sheetInfoGuesser,
-        FirstParticipantSheetOfUserGetter $firstParticipantSheetOfUserGetter
+        FirstParticipantSheetOfUserGetter $firstParticipantSheetOfUserGetter,
+        IntlAdapter $intlAdapter
     ) {
         $this->queryBus = $queryBus;
         $this->qrCodeGenerator = $qrCodeGenerator;
@@ -75,6 +76,7 @@ class GetUserBadgeByEventQueryHandler
         $this->userInfoGuesser = $userInfoGuesser;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->firstParticipantSheetOfUserGetter = $firstParticipantSheetOfUserGetter;
+        $this->intlAdapter = $intlAdapter;
     }
 
     public function handle(GetUserBadgeByEventQuery $query): UserBadgeByEventView
@@ -117,7 +119,7 @@ class GetUserBadgeByEventQueryHandler
                 $sheetInfos = $this->sheetInfoGuesser->guessSheetInfos($sheet);
 
                 if (!empty($sheetInfos[Tag::SHEET_COUNTRY])) {
-                    $country = Intl::getRegionBundle()->getCountryName($sheetInfos[Tag::SHEET_COUNTRY]);
+                    $country = $this->intlAdapter->getCountryName($sheetInfos[Tag::SHEET_COUNTRY]);
                 }
             }
         }

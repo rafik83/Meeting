@@ -31,6 +31,7 @@ use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
 use Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter;
+use Proximum\Vimeet\Infrastructure\Adapter\IntlAdapter;
 
 class GetUserBadgeByEventQueryHandlerTest extends TestCase
 {
@@ -128,10 +129,15 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
 
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $sheetInfoGuesser
-            ->guessSheetCountry($sheet->reveal(), 'en')
+            ->guessSheetInfos($sheet->reveal())
             ->shouldBeCalled()
-            ->willReturn('france')
+            ->willReturn([
+                'sheet_country' => 'FR'
+            ])
         ;
+
+        $intlAdapter = $this->prophesize(IntlAdapter::class);
+        $intlAdapter->getCountryName('FR')->shouldBeCalled()->willReturn('france');
 
         $expectedUserBadgeByEventView = new UserBadgeByEventView(
             'Taxi company',
@@ -156,7 +162,8 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
             $typeNameResolver->reveal(),
             $userInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal(),
-            $firstParticipantSheetOfUserGetter->reveal()
+            $firstParticipantSheetOfUserGetter->reveal(),
+            $intlAdapter->reveal()
         );
         $result = $getUserBadgeByEventQueryHandler->handle(new GetUserBadgeByEventQuery($event->reveal(), $user->reveal()));
 

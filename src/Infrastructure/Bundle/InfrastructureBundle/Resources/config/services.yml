@@ -6630,6 +6630,7 @@ services:
             - '@components.user.user_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter'
+            - '@adapter.intl_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery }
 
