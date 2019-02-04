@@ -102,7 +102,11 @@ class RuleRepository implements RuleRepositoryInterface
         
         if ($seer instanceof Type) {
             $queryBuilder
-                ->andWhere('rule.seerType = :seerType')
+                ->andWhere($queryBuilder->expr()->orX(
+                    'rule.seerType = :seerType',
+                    'rule.seerCategory IN (:seerCategories)'
+                ))
+                ->setParameter('seerCategories', $seer->getCategories())
                 ->setParameter('seerType', $seer);
         } elseif ($seer instanceof Category) {
             $queryBuilder
