@@ -25,6 +25,9 @@
                 <div class="position-participant {% if not userBadgeAndPlanningByEventView.userBadgeByEventView.qrCodeIdentifier %}text-participant-without-qrcode{% endif %}">
                     <div class="text">
                         {{ userBadgeAndPlanningByEventView.userBadgeByEventView.position }}
+                        {% if userBadgeAndPlanningByEventView.userBadgeByEventView.country %}
+                            <br/>{{ userBadgeAndPlanningByEventView.userBadgeByEventView.country|upper }}
+                        {% endif %}
                     </div>
                 </div>
             </div>
