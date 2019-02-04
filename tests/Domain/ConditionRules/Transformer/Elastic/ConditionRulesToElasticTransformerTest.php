@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer;
@@ -128,8 +129,16 @@ class ConditionRulesToElasticTransformerTest extends TestCase
         $taggedNomenclatureTransformer->supports(Argument::any())->shouldBeCalled()->willReturn(false);
         $radioTransformer = new RadioTransformer();
         $textTransformer = new TextTransformer();
+        $participationTypeTransformer = $this->prophesize(ParticipationTypeTransformer::class);
+        $participationTypeTransformer->supports(Argument::any())->shouldBeCalled()->willReturn(false);
 
-        $transformer = new ConditionRulesToElasticTransformer($nullableTransformer, $radioTransformer, $taggedNomenclatureTransformer->reveal(), $textTransformer);
+        $transformer = new ConditionRulesToElasticTransformer(
+            $nullableTransformer,
+            $radioTransformer,
+            $taggedNomenclatureTransformer->reveal(),
+            $textTransformer,
+            $participationTypeTransformer->reveal()
+        );
         $result = $transformer->transform($condition);
 
         $this->assertSame($expectedResult, $result);
