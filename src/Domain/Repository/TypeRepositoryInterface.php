@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -197,4 +198,12 @@ interface TypeRepositoryInterface
      * @return Type[]
      */
     public function getTypesWithPaymentConditionsByEvent(Event $event): array;
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return Type[]
+     */
+    public function getFromSheetMeetingRequests(Sheet $sheet, string $locale): array;
 }

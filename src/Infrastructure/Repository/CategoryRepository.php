@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -214,5 +215,73 @@ class CategoryRepository implements CategoryRepositoryInterface
             },
             $queryBuilder->getQuery()->getResult()
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFromSheetMeetingRequests(Sheet $sheet, string $locale): array
+    {
+        // retrieve
+        $query = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('category', 'translations')
+            ->from('Entity:Category', 'category')
+            ->where(
+                'category in (
+                        SELECT tmpCategory.id
+                        FROM Entity:Meeting\Request meetingRequest
+                            INNER JOIN meetingRequest.from sheet WITH sheet = :sheet AND meetingRequest.disabled = false
+                            INNER JOIN meetingRequest.to toSheet
+                            INNER JOIN toSheet.type type
+                            INNER JOIN type.categories tmpCategory
+            )'
+            )
+            ->join('category.translations', 'translations', 'WITH', 'translations.locale = :locale')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('locale', $locale)
+            ->getQuery();
+
+        $categories = $query->getResult();
+
+        $query = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('category', 'translations')
+            ->from('Entity:Category', 'category')
+            ->where(
+                'category in (
+                        SELECT tmpCategory.id
+                        FROM Entity:Meeting\Request meetingRequest
+                            INNER JOIN meetingRequest.to sheet WITH sheet = :sheet and meetingRequest.disabled = false
+                            INNER JOIN meetingRequest.from fromSheet
+                            INNER JOIN fromSheet.type type
+                            INNER JOIN type.categories tmpCategory
+                )'
+            )
+            ->join('category.translations', 'translations', 'WITH', 'translations.locale = :locale')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('locale', $locale)
+            ->getQuery();
+
+        $otherSideCategories = $query->getResult();
+
+        // merge
+        foreach ($otherSideCategories as $category) {
+            if (false === in_array($category, $categories, true)) {
+                $categories[] = $category;
+            }
+        }
+
+        // sort
+        usort(
+            $categories,
+            function (Category $categoryA, Category $categoryB) use ($locale) {
+                return $categoryA->getTitle($locale) <=> $categoryB->getTitle($locale);
+            }
+        );
+
+        return $categories;
     }
 }
