@@ -74,17 +74,17 @@ class OrdersExportNormalizer implements NormalizerInterface, NormalizerAwareInte
         }
 
         foreach ($object->customRowsColumns as $customRow) {
-            $data[$customRow->getTitleColumnId()]     = $this->convertCharset($customRow->title);
+            $data[$customRow->getTitleColumnId()] = $this->convertCharset($customRow->title);
             $data[$customRow->getUnitPriceColumnId()] = $this->convertCharset($customRow->unitPriceTitle);
-            $data[$customRow->getQuantityColumnId()]  = $this->convertCharset($customRow->quantityTitle);
-            $data[$customRow->getTotalColumnId()]     = $this->convertCharset($customRow->totalTitle);
+            $data[$customRow->getQuantityColumnId()] = $this->convertCharset($customRow->quantityTitle);
+            $data[$customRow->getTotalColumnId()] = $this->convertCharset($customRow->totalTitle);
         }
 
         // product column
         foreach ($object->products as $product) {
             $data[$product->getUnitPriceColumnId()] = $this->convertCharset($product->productTitleWithUnitPriceTranslation);
-            $data[$product->getQuantityColumnId()]  = $this->convertCharset($product->productTitleWithQuantityTranslation);
-            $data[$product->getTotalColumnId()]     = $this->convertCharset($product->productTitleWithTotalTranslation);
+            $data[$product->getQuantityColumnId()] = $this->convertCharset($product->productTitleWithQuantityTranslation);
+            $data[$product->getTotalColumnId()] = $this->convertCharset($product->productTitleWithTotalTranslation);
         }
 
         return $data;

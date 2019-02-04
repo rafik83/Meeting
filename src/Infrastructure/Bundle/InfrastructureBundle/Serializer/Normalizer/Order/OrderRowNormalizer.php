@@ -59,23 +59,23 @@ class OrderRowNormalizer implements NormalizerInterface
 
         foreach ($object->promotionCodeBoughtViews as $promotionCodeBought) {
             $data[$promotionCodeBought->getQuantityColumnId()] = $promotionCodeBought->quantity;
-            $data[$promotionCodeBought->getTotalColumnId()]    = $promotionCodeBought->total;
+            $data[$promotionCodeBought->getTotalColumnId()] = $promotionCodeBought->total;
         }
 
         $index = 1;
         foreach ($object->customRowsViews as $customRowView) {
-            $data[$customRowView->getTitleColumnId($index)]     = $this->convertCharset($customRowView->title);
+            $data[$customRowView->getTitleColumnId($index)] = $this->convertCharset($customRowView->title);
             $data[$customRowView->getUnitPriceColumnId($index)] = $customRowView->unitPrice;
-            $data[$customRowView->getQuantityColumnId($index)]  = $customRowView->quantity;
-            $data[$customRowView->getTotalColumnId($index)]     = $customRowView->total;
+            $data[$customRowView->getQuantityColumnId($index)] = $customRowView->quantity;
+            $data[$customRowView->getTotalColumnId($index)] = $customRowView->total;
 
             ++$index;
         }
 
         foreach ($object->productBoughtViews as $productBought) {
             $data[$productBought->getUnitPriceColumnId()] = $productBought->unitPrice;
-            $data[$productBought->getQuantityColumnId()]  = $productBought->quantity;
-            $data[$productBought->getTotalColumnId()]     = $productBought->total;
+            $data[$productBought->getQuantityColumnId()] = $productBought->quantity;
+            $data[$productBought->getTotalColumnId()] = $productBought->total;
         }
 
         $output = [];
