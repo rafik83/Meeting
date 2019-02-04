@@ -132,6 +132,7 @@ class ExportPlanningHandler
 
     private function handlePlanning(Event $event, array &$participants): string
     {
+        $printedUsers = [];
         $plannings = [];
         $this->participantPlanningDisplayer->preloadForUsersAndEvent(
             array_map(function (Participant $participant) {
@@ -142,7 +143,13 @@ class ExportPlanningHandler
 
         $tipTranslationViews = [];
 
+        /** @var Participant $participant */
         foreach ($participants as $participant) {
+            $user = $participant->getUser();
+            if (array_key_exists($user->getId(), $printedUsers)) {
+                continue;
+            }
+
             if (!isset($tipTranslationViews[$participant->getLocale()])) {
                 $tipTranslationViewQuery = new TipTranslationViewQuery(
                     $participant->getSheet()->getType(),
@@ -171,6 +178,8 @@ class ExportPlanningHandler
                 $event->getOrganiserEmail(), // event organiser email
                 $tipTranslationViews[$participant->getLocale()] // Tip messages
             );
+
+            $printedUsers[$user->getId()] = true;
         }
 
         return $this->templating->render('AdminBundle:Planning/Print:plannings.html.twig', [
@@ -181,14 +190,24 @@ class ExportPlanningHandler
     public function handlePlanningAndBadge(Event $event, array &$participants): string
     {
         $planningsAndBadges = [];
+        $printedUsers = [];
 
+        /** @var Participant $participant */
         foreach ($participants as $participant) {
+            $user = $participant->getUser();
+
+            if (array_key_exists($user->getId(), $printedUsers)) {
+                continue;
+            }
+
             $planningsAndBadges[] = $this->queryBus->handle(
                 new GetUserBadgeAndPlanningByEventQuery(
                     $event,
                     $participant->getUser()
                 )
             );
+
+            $printedUsers[$user->getId()] = true;
         }
 
         return $this->templating->render('AdminBundle:Planning/Print:planningsAndBadges.html.twig', [
