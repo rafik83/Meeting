@@ -18,10 +18,10 @@ use Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
-use Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -29,7 +29,7 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 class MeetingCategoryViewQueryHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
-    private $visibleParticipationCategories;
+    private $categoryRepository;
 
     /** @var MeetingCategoryViewQueryHandler */
     private $handler;
@@ -57,12 +57,12 @@ class MeetingCategoryViewQueryHandlerTest extends TestCase
 
     public function setUp()
     {
-        $this->visibleParticipationCategories = $this->prophesize(VisibleParticipationCategories::class);
+        $this->categoryRepository = $this->prophesize(CategoryRepositoryInterface::class);
         $this->searchFacetViewQueryHandler    = $this->prophesize(SearchFacetViewQueryHandler::class);
         $this->locale                         = 'fr';
 
         $this->handler = new MeetingCategoryViewQueryHandler(
-            $this->visibleParticipationCategories->reveal(),
+            $this->categoryRepository->reveal(),
             $this->searchFacetViewQueryHandler->reveal()
         );
 
@@ -102,8 +102,8 @@ class MeetingCategoryViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($searchFacetsView);
 
-        $this->visibleParticipationCategories
-            ->getAllowedCategoriesList($this->sheet)
+        $this->categoryRepository
+            ->getFromSheetMeetingRequests($this->sheet, $this->locale)
             ->shouldBeCalled()
             ->willReturn([$this->category]);
 
