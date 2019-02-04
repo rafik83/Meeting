@@ -34,7 +34,7 @@ class CatalogViewQueryHandler
     /**
      * @param DateTimeInterface          $dateTime
      * @param NavigationBuilderInterface $navigationBuilder
-     * @param CanSeeOtherSheets         $canSeeOtherSheets
+     * @param CanSeeOtherSheets          $canSeeOtherSheets
      */
     public function __construct(
         DateTimeInterface $dateTime,
