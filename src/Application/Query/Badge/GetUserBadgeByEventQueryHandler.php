@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Badge;
 use Proximum\Vimeet\Application\Adapter\QRCodeGeneratorInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
 use Proximum\Vimeet\Domain\Model\Badge;
@@ -23,6 +24,7 @@ use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
 use Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter;
+use Symfony\Component\Intl\Intl;
 
 class GetUserBadgeByEventQueryHandler
 {
@@ -112,7 +114,11 @@ class GetUserBadgeByEventQueryHandler
             $sheet = $this->firstParticipantSheetOfUserGetter->getFirstParticipantSheet($query->user, $userSheets);
 
             if ($sheet) {
-                $country = $this->sheetInfoGuesser->guessSheetCountry($sheet, $query->event->getFallback());
+                $sheetInfos = $this->sheetInfoGuesser->guessSheetInfos($sheet);
+
+                if (!empty($sheetInfos[Tag::SHEET_COUNTRY])) {
+                    $country = Intl::getRegionBundle()->getCountryName($sheetInfos[Tag::SHEET_COUNTRY]);
+                }
             }
         }
 
