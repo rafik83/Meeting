@@ -59,10 +59,12 @@ class RegisterController extends Controller
      */
     public function registerAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')
-            && false === $this->hasSheets($this->getUser(), $eventDomain->getEvent())
-        ) {
-            return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            if ($this->hasSheets($this->getUser(), $eventDomain->getEvent())) {
+                return $this->redirectToRoute('event');
+            } else {
+                return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
+            }
         }
 
         $response = $this
