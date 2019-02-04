@@ -792,4 +792,16 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         $this->fillField('form.billing_info_update.children.country.label', 'FR');
         $this->fillField('form.billing_info_update.children.vatNumber.label', '123456789');
     }
+
+    /**
+     * @Then /^(?:|I )should not see field "(?P<field>[^"]+)"$/
+     */
+    public function iShouldNotSeeField($field)
+    {
+        $found = $this->getSession()->getPage()->hasField($field);
+
+        if (true === $found) {
+            throw new \InvalidArgumentException(sprintf('Element %s found', $field));
+        }
+    }
 }

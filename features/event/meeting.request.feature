@@ -35,8 +35,8 @@ Feature: Meeting Request / Proposition
     And the "type_0" checkbox should be checked
     And the "type_1" checkbox should be checked
     And the "type_2" checkbox should be checked
-    And the "type_3" checkbox should be checked
-    And the "type_4" checkbox should be checked
+    And I should not see field "type_3"
+    And I should not see field "type_4"
     And I should see "Exposant"
     And I should see "Investisseur"
     And I should see "catalog.meeting_request.proposition.approved"
