@@ -25,8 +25,6 @@ class ProductRepository implements ProductRepositoryInterface
     private $entityManager;
 
     /**
-     * OrderRepository constructor.
-     *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
@@ -255,13 +253,7 @@ class ProductRepository implements ProductRepositoryInterface
             ->createQueryBuilder()
             ->select('product')
             ->from(Product::class, 'product')
-            ->innerJoin(Row::class,
-                'row',
-                'WITH',
-                'row.product = product.id
-                    AND product.event = :event
-                '
-            )
+            ->innerJoin(Row::class, 'row', 'WITH', 'row.product = product.id AND product.event = :event')
             ->innerJoin('row.order', '_order', 'WITH', '_order.cancelled = false')
             ->setParameter('event', $event)
         ;
