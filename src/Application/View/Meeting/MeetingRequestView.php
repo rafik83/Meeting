@@ -44,9 +44,6 @@ class MeetingRequestView
     public $isMeetingRequestUpdateLocked;
 
     /** @var bool */
-    public $isSheetSeeable;
-
-    /** @var bool */
     public $isMeetingRequestClosed;
 
     /** @var bool */
@@ -78,7 +75,6 @@ class MeetingRequestView
      * @param PreviewView[]      $previewViews
      * @param bool               $isMeetingPublished
      * @param bool               $isMeetingRequestUpdateLocked
-     * @param bool               $isSheetSeeable
      * @param bool               $isMeetingRequestClosed
      * @param bool               $isAnsweringMeetingRequestClosed
      * @param bool               $hasMessage
@@ -96,7 +92,6 @@ class MeetingRequestView
         array $previewViews,
         $isMeetingPublished = false,
         $isMeetingRequestUpdateLocked = false,
-        $isSheetSeeable = false,
         $isMeetingRequestClosed = false,
         $isAnsweringMeetingRequestClosed = false,
         $hasMessage = false,
@@ -113,7 +108,6 @@ class MeetingRequestView
         $this->previewViews                    = $previewViews;
         $this->isMeetingPublished              = $isMeetingPublished;
         $this->isMeetingRequestUpdateLocked    = $isMeetingRequestUpdateLocked;
-        $this->isSheetSeeable                  = $isSheetSeeable;
         $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
         $this->hasMessage                      = $hasMessage;
