@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActiva
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareOrderConfirmedMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareParticipantAddedMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PreparePreRegisterMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareSheetChangeTypeMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareTransactionConfirmMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserCompleteProfileMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
@@ -325,23 +326,19 @@ class MailEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetChangedTypeEvent $event
      */
-    public function onSheetChangeType(SheetChangedTypeEvent $event)
+    public function onSheetChangeType(SheetChangedTypeEvent $event): void
     {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $event->getSheet()->getOwner())
-        );
-
-        $mail = new SheetChangeTypeMail(
+        $mail = $this->prepareHandler->handle(new PrepareSheetChangeTypeMailView(
             $event->getSheet()->getEvent(),
             $event->getSheet(),
-            $this->sender->generate($event->getSheet()->getEvent()),
-            $event->getSheet()->getOwner()->getEmail(),
-            $event->getLocale(),
             $event->getSheet()->getOwner(),
-            $event->getFromTypeTitle(),
-            $event->getSheet()->getType()->getTitle($event->getLocale()),
-            $participantMailView
-        );
+            $event->getLocale(),
+            $event->getFromTypeTitle()
+        ));
+
+        if (!$mail instanceof AbstractMail) {
+            return;
+        }
 
         $this->mailer->send($mail);
     }

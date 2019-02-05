@@ -46,6 +46,8 @@ services:
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TypeTitleSubstitution: ~
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\FromTypeTitleSubstitution: ~
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ParticipantAccountLinkSubstitution:
         arguments:
             - '@adapter.event_url_generator'
@@ -189,6 +191,8 @@ services:
         - ['registerSubstitution', ['%%orderDate%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\OrderDateSubstitution']]
         - ['registerSubstitution', ['%%transactionTotal%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TransactionTotalSubstitution']]
         - ['registerSubstitution', ['%%participationType%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TypeTitleSubstitution']]
+        - ['registerSubstitution', ['%%toType%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\TypeTitleSubstitution']]
+        - ['registerSubstitution', ['%%fromType%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\FromTypeTitleSubstitution']]
         - ['registerSubstitution', ['%%urlEventAccountParticipant%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ParticipantAccountLinkSubstitution']]
         - ['registerSubstitution', ['%%urlEventAccountParticipantWithCTA%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA\ParticipantAccountCTASubstitution']]
         - ['registerSubstitution', ['%%urlEventActivateAccount%%', '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\ActivateAccountLinkSubstitution']]
@@ -258,6 +262,9 @@ services:
     Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareVersionDiffChangedMail:
         parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
 
+    Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareSheetChangeTypeMail:
+        parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
+
     Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail'
@@ -268,3 +275,4 @@ services:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTransactionConfirmMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareVersionDiffChangedMail'
+            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareSheetChangeTypeMail'
