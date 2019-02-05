@@ -211,7 +211,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $queryToArray = $query->toArray();
         if ($condition instanceof Condition) {
-            $queryToArray['query']['bool']['must'][] = $this->conditionRulesTransformer->transform($condition);
+            $rules = $this->conditionRulesTransformer->transform($condition);
+
+            if ($rules) {
+                $queryToArray['query']['bool']['must'][] = $rules;
+            }
         }
 
         $query = new Query();
@@ -244,7 +248,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $queryToArray = ['query' => $builder->getQuery()->toArray()];
         if ($condition instanceof Condition) {
-            $queryToArray['query']['bool']['must'][] = $this->conditionRulesTransformer->transform($condition);
+            $rules = $this->conditionRulesTransformer->transform($condition);
+
+            if ($rules) {
+                $queryToArray['query']['bool']['must'][] = $rules;
+            }
         }
 
         $query = new Query();
@@ -479,7 +487,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $queryToArray = ['query' => $builder->getQuery()->toArray()];
 
         if ($condition instanceof Condition) {
-            $queryToArray['query']['bool']['must'][] = $this->conditionRulesTransformer->transform($condition);
+            $rules = $this->conditionRulesTransformer->transform($condition);
+
+            if ($rules) {
+                $queryToArray['query']['bool']['must'][] = $rules;
+            }
         }
 
         $query = new Query();

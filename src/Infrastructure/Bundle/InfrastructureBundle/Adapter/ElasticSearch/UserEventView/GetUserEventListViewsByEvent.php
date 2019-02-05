@@ -53,7 +53,11 @@ class GetUserEventListViewsByEvent implements GetUserEventListViewsByEventInterf
         ];
 
         if ($condition) {
-            $conditions[] = $this->conditionRulesTransformer->transform($condition);
+            $rules = $this->conditionRulesTransformer->transform($condition);
+
+            if ($rules) {
+                $conditions[] = $rules;
+            }
         }
 
         $query = new Query(

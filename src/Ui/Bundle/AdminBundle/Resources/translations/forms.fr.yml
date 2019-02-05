@@ -400,6 +400,7 @@ form.filter.participants.email.label: 'Email du participant'
 form.filter.participants.lastname.label: 'Nom du participant'
 form.filter.sheetName.label: 'Nom de la fiche'
 form.filter.spotReference.label: 'Lieux attribué'
+form.filter.participation_type.label: 'Type de participation'
 form.forgotten_password.children.email.label: 'Entrez votre email'
 form.forgotten_password.children.submit.label: Envoyez
 form.form_template_create.children.close.label: Annuler

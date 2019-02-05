@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\ConditionRules\ComparisonOperatorsByType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class GetFiltersByTypeAndLocaleQueryHandler
 {
@@ -69,12 +70,17 @@ class GetFiltersByTypeAndLocaleQueryHandler
     /** @var TaggedNomenclatureFilterGetter */
     private $taggedNomenclatureFilterGetter;
 
+    /** @var TypeRepositoryInterface */
+    private $typeRepository;
+
     public function __construct(
         TranslatorInterface $translator,
-        TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter
+        TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter,
+        TypeRepositoryInterface $typeRepository
     ) {
         $this->translator = $translator;
         $this->taggedNomenclatureFilterGetter = $taggedNomenclatureFilterGetter;
+        $this->typeRepository = $typeRepository;
     }
 
     public function handle(GetFiltersByTypeAndLocaleQuery $query): array
@@ -87,6 +93,10 @@ class GetFiltersByTypeAndLocaleQueryHandler
 
         if ('sheet' === $query->type) {
             $filters = array_merge($filters, $this->getNomenclatureFilters($query->event, $query->locale));
+        }
+
+        if ('user' === $query->type) {
+            $filters = array_merge($filters, $this->getParticipationTypeFilters($query->event, $query->locale));
         }
 
         return $filters;
@@ -115,6 +125,28 @@ class GetFiltersByTypeAndLocaleQueryHandler
         }
 
         return $filters;
+    }
+
+    private function getParticipationTypeFilters(Event $event, string $locale): array
+    {
+        $types = $this->typeRepository->getTypesTitleByEventAndLocale(
+            $event,
+            $event->getAvailableLocale($locale)
+        );
+
+        return [
+            [
+                'id' => 'participation_type',
+                'label' => $this->translate('participation_type', $locale),
+                'type' => 'string',
+                'input' => 'select',
+                'plugin' => 'select2',
+                'multiple' => true,
+                'optgroup' => $this->translate('optgroup.sheetInfo', $locale),
+                'values' => $types,
+                'operators' => ComparisonOperatorsByType::OPERATORS['participation_type'] ?? [],
+            ]
+        ];
     }
 
     private function getFilters(array $fields, string $locale): array

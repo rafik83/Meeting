@@ -33,6 +33,10 @@ final class ComparisonOperatorsByType
             'not_in',
             'is_null',
             'is_not_null'
-        ]
+        ],
+        'participation_type' => [
+            'in',
+            'not_in',
+        ],
     ];
 }
