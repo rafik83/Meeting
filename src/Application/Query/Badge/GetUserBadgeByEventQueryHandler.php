@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Badge;
 
 use Proximum\Vimeet\Application\Adapter\QRCodeGeneratorInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
 use Proximum\Vimeet\Domain\Model\Badge;
@@ -21,6 +23,8 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
+use Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter;
+use Proximum\Vimeet\Infrastructure\Adapter\IntlAdapter;
 
 class GetUserBadgeByEventQueryHandler
 {
@@ -45,6 +49,12 @@ class GetUserBadgeByEventQueryHandler
     /** @var UserInfoGuesser */
     private $userInfoGuesser;
 
+    /** @var SheetInfoGuesser */
+    private $sheetInfoGuesser;
+
+    /** @var FirstParticipantSheetOfUserGetter */
+    private $firstParticipantSheetOfUserGetter;
+
     public function __construct(
         QueryBusInterface $queryBus,
         QRCodeGeneratorInterface $qrCodeGenerator,
@@ -52,7 +62,10 @@ class GetUserBadgeByEventQueryHandler
         GroupNameResolver $groupNameResolver,
         CategoryNameResolver $categoryNameResolver,
         TypeNameResolver $typeNameResolver,
-        UserInfoGuesser $userInfoGuesser
+        UserInfoGuesser $userInfoGuesser,
+        SheetInfoGuesser $sheetInfoGuesser,
+        FirstParticipantSheetOfUserGetter $firstParticipantSheetOfUserGetter,
+        IntlAdapter $intlAdapter
     ) {
         $this->queryBus = $queryBus;
         $this->qrCodeGenerator = $qrCodeGenerator;
@@ -61,6 +74,9 @@ class GetUserBadgeByEventQueryHandler
         $this->categoryNameResolver = $categoryNameResolver;
         $this->typeNameResolver = $typeNameResolver;
         $this->userInfoGuesser = $userInfoGuesser;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
+        $this->firstParticipantSheetOfUserGetter = $firstParticipantSheetOfUserGetter;
+        $this->intlAdapter = $intlAdapter;
     }
 
     public function handle(GetUserBadgeByEventQuery $query): UserBadgeByEventView
@@ -94,6 +110,20 @@ class GetUserBadgeByEventQueryHandler
             $qrCodeImageBase64 = $this->qrCodeGenerator->generateBase64Image($qrCodeIdentifier);
         }
 
+        $country = null;
+
+        if ($badge->isShowCountry()) {
+            $sheet = $this->firstParticipantSheetOfUserGetter->getFirstParticipantSheet($query->user, $userSheets);
+
+            if ($sheet) {
+                $sheetInfos = $this->sheetInfoGuesser->guessSheetInfos($sheet);
+
+                if (!empty($sheetInfos[Tag::SHEET_COUNTRY])) {
+                    $country = $this->intlAdapter->getCountryName($sheetInfos[Tag::SHEET_COUNTRY]);
+                }
+            }
+        }
+
         return new UserBadgeByEventView(
             $this->getSheetTitle($badge, $query->user, $userSheets),
             $badge->isShowFirstName() ? $userInfo['firstName'] : null,
@@ -104,7 +134,8 @@ class GetUserBadgeByEventQueryHandler
             $qrCodeImageBase64,
             $this->getHeader($query->event, $badge),
             $badge->getFooterTextColor(),
-            $badge->getFooterColor()
+            $badge->getFooterColor(),
+            $country
         );
     }
 

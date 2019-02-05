@@ -1238,6 +1238,7 @@ admin.type.badge.example.explanation: 'Ceci est un exemple de rendu du e-badge m
 admin.type.badge.example.firstName: Prénom
 admin.type.badge.example.lastName: Nom
 admin.type.badge.example.position: 'Directeur des badges '
+admin.type.badge.example.country: 'France'
 admin.type.badge.example.sheetTitle: 'Exemple de titre de Fiche'
 admin.type.content.specificTermsOfSale: 'CGV particulières'
 admin.type.create.link: Ajouter

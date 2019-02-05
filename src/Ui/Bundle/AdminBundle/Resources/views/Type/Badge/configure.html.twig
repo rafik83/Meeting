@@ -99,6 +99,10 @@
                 {% if badge is null or badge.showPosition %}
                     {{ 'admin.type.badge.example.position'|trans }}
                 {% endif %}
+                <br/>
+                {% if badge and badge.showCountry %}
+                    {{ 'admin.type.badge.example.country'|trans|upper }}
+                {% endif %}
             </div>
             <div class="badge-footer"
                  {% if badge is not null %}
@@ -127,6 +131,7 @@
             {{ form_row(form.showFirstName) }}
             {{ form_row(form.showLastName) }}
             {{ form_row(form.showPosition) }}
+            {{ form_row(form.showCountry) }}
         </div>
         <hr>
         <div class="badge-footer-edit">

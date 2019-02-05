@@ -41,7 +41,8 @@ class GetUserBadgeAndPlanningByEventQueryHandlerTest extends TestCase
             'data:qrCodeImageBase64',
             '/path/to/header.png',
             '#ffffff',
-            '#000000'
+            '#000000',
+            'France'
         );
 
         $queryBus = $this->prophesize(QueryBusInterface::class);

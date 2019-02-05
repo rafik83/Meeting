@@ -58,6 +58,9 @@ class ConfigureType extends AbstractType
             ->add('showPosition', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('showCountry', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('showFirstName', CheckboxType::class, [
                 'required' => false,
             ])

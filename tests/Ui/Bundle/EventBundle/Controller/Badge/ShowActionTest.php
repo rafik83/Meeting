@@ -54,7 +54,8 @@ class ShowActionTest extends TestCase
             'qrCodeImageBase64',
             '/path/to/header.png',
             '#ffffff',
-            '#000000'
+            '#000000',
+            null
         );
 
         $queryBus = $this->prophesize(QueryBusInterface::class);

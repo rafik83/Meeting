@@ -80,6 +80,9 @@
 
                 <div class="ft-bold highlight">
                     {{ userBadgeByEventView.position }}
+                    {% if userBadgeByEventView.country is not empty %}
+                        <br/>{{ userBadgeByEventView.country|upper }}
+                    {% endif %}
                 </div>
             </div>
         </div>

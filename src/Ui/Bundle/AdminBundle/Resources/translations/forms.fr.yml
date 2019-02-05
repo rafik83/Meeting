@@ -95,6 +95,7 @@ form.badge_configuration.children.showFooterTypeOrCategory.label: 'Affichage du 
 form.badge_configuration.children.showHeader.label: 'Affichage du logo en header'
 form.badge_configuration.children.showLastName.label: 'Affichage du nom'
 form.badge_configuration.children.showPosition.label: 'Affichage de la fonction'
+form.badge_configuration.children.showCountry.label: 'Affichage du pays'
 form.badge_configuration.children.showQRCode.label: 'Affichage du QRCode'
 form.badge_configuration.children.showSheetTitle.label: 'Affichage du nom de société'
 form.badge_configuration.children.submit.label: Enregistrer
