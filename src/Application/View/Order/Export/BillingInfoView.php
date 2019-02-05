@@ -54,6 +54,9 @@ class BillingInfoView
     /** @var string|null */
     public $reference;
 
+    /** @var string|null */
+    public $countryCode;
+
     /**
      * @param string|null $gender
      * @param string|null $lastName
@@ -67,6 +70,7 @@ class BillingInfoView
      * @param string|null $zipCode
      * @param string|null $city
      * @param string|null $country
+     * @param string|null $countryCode
      * @param string|null $vatNumber
      * @param string|null $reference
      */
@@ -83,6 +87,7 @@ class BillingInfoView
         $zipCode = null,
         $city = null,
         $country = null,
+        $countryCode = null,
         $vatNumber = null,
         $reference = null
     ) {
@@ -100,5 +105,6 @@ class BillingInfoView
         $this->country   = $country;
         $this->vatNumber = $vatNumber;
         $this->reference = $reference;
+        $this->countryCode = $countryCode;
     }
 }

@@ -52,37 +52,36 @@ class OrderRowNormalizer implements NormalizerInterface
             SharedColumnsTranslationView::COLUMN_BILLING_INFO_COUNTRY    => $object->billingInfo->country,
             SharedColumnsTranslationView::COLUMN_BILLING_INFO_VAT_NUMBER => $object->billingInfo->vatNumber,
             SharedColumnsTranslationView::COLUMN_BILLING_INFO_REFERENCE  => $object->billingInfo->reference,
+            SharedColumnsTranslationView::COLUMN_ORDER_TOTAL_WITHOUT_VAT => $object->totalWithoutVat,
+            SharedColumnsTranslationView::COLUMN_ORDER_TOTAL_VAT         => $object->totalVat,
+            SharedColumnsTranslationView::COLUMN_ORDER_TOTAL_WITH_VAT    => $object->totalWithVat,
         ];
-
-        foreach ($object->productBoughtViews as $productBought) {
-            $data[$productBought->getUnitPriceColumnId()] = $productBought->unitPrice;
-            $data[$productBought->getQuantityColumnId()]  = $productBought->quantity;
-            $data[$productBought->getTotalColumnId()]     = $productBought->total;
-        }
 
         foreach ($object->promotionCodeBoughtViews as $promotionCodeBought) {
             $data[$promotionCodeBought->getQuantityColumnId()] = $promotionCodeBought->quantity;
-            $data[$promotionCodeBought->getTotalColumnId()]    = $promotionCodeBought->total;
+            $data[$promotionCodeBought->getTotalColumnId()] = $promotionCodeBought->total;
         }
 
         $index = 1;
         foreach ($object->customRowsViews as $customRowView) {
-            $data[$customRowView->getTitleColumnId($index)]     = $this->convertCharset($customRowView->title);
+            $data[$customRowView->getTitleColumnId($index)] = $this->convertCharset($customRowView->title);
             $data[$customRowView->getUnitPriceColumnId($index)] = $customRowView->unitPrice;
-            $data[$customRowView->getQuantityColumnId($index)]  = $customRowView->quantity;
-            $data[$customRowView->getTotalColumnId($index)]     = $customRowView->total;
+            $data[$customRowView->getQuantityColumnId($index)] = $customRowView->quantity;
+            $data[$customRowView->getTotalColumnId($index)] = $customRowView->total;
 
             ++$index;
+        }
+
+        foreach ($object->productBoughtViews as $productBought) {
+            $data[$productBought->getUnitPriceColumnId()] = $productBought->unitPrice;
+            $data[$productBought->getQuantityColumnId()] = $productBought->quantity;
+            $data[$productBought->getTotalColumnId()] = $productBought->total;
         }
 
         $output = [];
 
         foreach ($object->columnArray as $key => $column) {
-            if (isset($data[$key])) {
-                $output[$key] = $data[$key];
-            } else {
-                $output[$key] = null;
-            }
+            $output[$key] = $data[$key] ?? null;
         }
 
         return $output;

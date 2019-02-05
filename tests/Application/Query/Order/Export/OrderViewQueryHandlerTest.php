@@ -22,15 +22,21 @@ use Proximum\Vimeet\Application\Query\Order\Export\ProductBoughtViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\ProductBoughtViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Export\PromotionCodeBoughtViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\PromotionCodeBoughtViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\VatListViewQuery;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\VatListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\Export\BillingInfoView;
 use Proximum\Vimeet\Application\View\Order\Export\CustomRowBoughtView;
 use Proximum\Vimeet\Application\View\Order\Export\OrderView;
 use Proximum\Vimeet\Application\View\Order\Export\ProductBoughtView;
 use Proximum\Vimeet\Application\View\Order\Export\PromotionCodeBoughtView;
+use Proximum\Vimeet\Application\View\Package\Vat\VatListView;
+use Proximum\Vimeet\Application\View\Package\Vat\VatView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class OrderViewQueryHandlerTest extends TestCase
@@ -62,9 +68,7 @@ class OrderViewQueryHandlerTest extends TestCase
 
         $order->getId()->willReturn(2);
         $order->getSheet()->willReturn($sheet->reveal());
-
         $sheet->getId()->willReturn(3);
-        $sheet->getEvent()->shouldBeCalled()->willReturn($event);
 
         $row1 = $this->prophesize(Order\Row::class);
         $row1->isProduct()->willReturn(true);
@@ -97,6 +101,7 @@ class OrderViewQueryHandlerTest extends TestCase
             'mobile',
             'email@email.fr'
         );
+        $billingInfo->countryCode = 'FR';
 
         $productBought = new ProductBoughtView(1, 2, 3, 6);
         $productBoughtViewQueryHandler->handle(new ProductBoughtViewQuery($row1->reveal()))
@@ -116,14 +121,38 @@ class OrderViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($billingInfo);
 
+        $vatViews = [
+            'vat_20' => new VatView(20, Event::VAT_MODE_ATI, 50000, 10000),
+            'vat_10' => new VatView(10, Event::VAT_MODE_ATI, 25000, 2500),
+        ];
+        $vatListView = new VatListView(75000, 87500.0, true, Event::VAT_MODE_ATI, $vatViews);
+        $vatListViewQueryHandler = $this->prophesize(VatListViewQueryHandler::class);
+        $vatListViewQueryHandler->handle(new VatListViewQuery($order->reveal(), true))
+            ->shouldBeCalled()
+            ->willReturn($vatListView)
+        ;
+
+        $vatApplicable = $this->prophesize(VatApplicable::class);
+        $vatApplicable->isApplicable(
+                Event::VAT_MODE_ET,
+                'FR',
+                'FR',
+                null
+            )
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
         $handler = new OrderViewQueryHandler(
             $sheetInfoGuesserCache->reveal(),
             $billingInfoViewQueryHandler->reveal(),
             $productBoughtViewQueryHandler->reveal(),
             $customRowBoughtViewQueryHandler->reveal(),
-            $promotionCodeBoughtViewQueryHandler->reveal()
+            $promotionCodeBoughtViewQueryHandler->reveal(),
+            $vatListViewQueryHandler->reveal(),
+            $vatApplicable->reveal()
         );
-        $result  = $handler->handle(new OrderViewQuery($order->reveal(), $locale, $adminLocale));
+        $result  = $handler->handle(new OrderViewQuery($event, $order->reveal(), $locale, $adminLocale));
 
         $expected = new OrderView(
             2,
@@ -132,6 +161,9 @@ class OrderViewQueryHandlerTest extends TestCase
             'invoicePrefix2017-0001',
             '10/12/16',
             $billingInfo,
+            750,
+            125,
+            875,
             [$productBought],
             [$promotionCodeBought],
             [$customRowBought]

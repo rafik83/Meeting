@@ -11,8 +11,12 @@
 namespace Proximum\Vimeet\Application\Query\Order\Export;
 
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\VatListViewQuery;
+use Proximum\Vimeet\Application\Query\Order\OrderVat\VatListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\Export\OrderView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
+use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 
 class OrderViewQueryHandler
 {
@@ -31,25 +35,37 @@ class OrderViewQueryHandler
     /** @var PromotionCodeBoughtViewQueryHandler */
     private $promotionCodeBoughtViewQueryHandler;
 
+    /** @var VatListViewQueryHandler */
+    private $vatListViewQueryHandler;
+
+    /** @var VatApplicable */
+    private $vatApplicable;
+
     /**
      * @param SheetInfoGuesserCache               $sheetInfoGuesserCache
      * @param BillingInfoViewQueryHandler         $billingInfoViewQueryHandler
      * @param ProductBoughtViewQueryHandler       $productBoughtViewQueryHandler
      * @param CustomRowBoughtViewQueryHandler     $customRowBoughtViewQueryHandler
      * @param PromotionCodeBoughtViewQueryHandler $promotionCodeBoughtViewQueryHandler
+     * @param VatListViewQueryHandler             $vatListViewQueryHandler
+     * @param VatApplicable                       $vatApplicable
      */
     public function __construct(
         SheetInfoGuesserCache $sheetInfoGuesserCache,
         BillingInfoViewQueryHandler $billingInfoViewQueryHandler,
         ProductBoughtViewQueryHandler $productBoughtViewQueryHandler,
         CustomRowBoughtViewQueryHandler $customRowBoughtViewQueryHandler,
-        PromotionCodeBoughtViewQueryHandler $promotionCodeBoughtViewQueryHandler
+        PromotionCodeBoughtViewQueryHandler $promotionCodeBoughtViewQueryHandler,
+        VatListViewQueryHandler $vatListViewQueryHandler,
+        VatApplicable $vatApplicable
     ) {
         $this->sheetInfoGuesserCache           = $sheetInfoGuesserCache;
         $this->billingInfoViewQueryHandler     = $billingInfoViewQueryHandler;
         $this->productBoughtViewQueryHandler   = $productBoughtViewQueryHandler;
         $this->customRowBoughtViewQueryHandler = $customRowBoughtViewQueryHandler;
         $this->promotionCodeBoughtViewQueryHandler = $promotionCodeBoughtViewQueryHandler;
+        $this->vatListViewQueryHandler = $vatListViewQueryHandler;
+        $this->vatApplicable = $vatApplicable;
     }
 
     /**
@@ -65,7 +81,7 @@ class OrderViewQueryHandler
      *
      * @return OrderView
      */
-    public function handle(OrderViewQuery $query)
+    public function handle(OrderViewQuery $query): OrderView
     {
         $adminLocale     = $query->adminLocale;
         $sheet           = $query->order->getSheet();
@@ -92,20 +108,32 @@ class OrderViewQueryHandler
         $formatter     = [];
 
         if ($query->order->hasInvoice()) {
-            $eventId = $query->order->getSheet()->getEvent()->getId();
+            $eventId = $query->event->getId();
 
             if (!isset($formatter[$eventId])) {
                 $formatter[$eventId] = \IntlDateFormatter::create(
                     $query->locale,
                     \IntlDateFormatter::SHORT,
                     \IntlDateFormatter::NONE,
-                    $query->order->getSheet()->getEvent()->getTimeZone()
+                    $query->event->getTimeZone()
                 );
             }
 
             $invoiceNumber = $query->order->getInvoice()->getNumber();
             $invoiceDate   = $formatter[$eventId]->format($query->order->getInvoice()->getCreatedAt());
         }
+
+        $vatListView = $this->vatListViewQueryHandler->handle(
+            new VatListViewQuery(
+                $query->order,
+                $this->vatApplicable->isApplicable(
+                    $query->event->getMode(),
+                    $query->event->getCountry(),
+                    $billingInfoView->countryCode,
+                    $billingInfoView->vatNumber
+                )
+            )
+        );
 
         return new OrderView(
             $query->order->getId(),
@@ -114,6 +142,9 @@ class OrderViewQueryHandler
             $invoiceNumber,
             $invoiceDate,
             $billingInfoView,
+            AmountFormatter::centsToDecimalAmount($vatListView->total),
+            AmountFormatter::centsToDecimalAmount($vatListView->getVatAmount()),
+            AmountFormatter::centsToDecimalAmount($vatListView->totalWithVat),
             $productBoughtViews,
             $promotionCodeBoughtViews,
             $customRowViews

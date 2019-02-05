@@ -76,11 +76,11 @@ class OrdersExportViewQueryHandler
      *
      * @return OrdersExportView
      */
-    public function handle(OrdersExportViewQuery $query)
+    public function handle(OrdersExportViewQuery $query): OrdersExportView
     {
-        $locale         = $query->event->getFallback();
-        $products       = $this->productRepository->findByEvent($query->event);
-        $promotionCodes = $this->promotionCodeRepository->findByEvent($query->event);
+        $locale = $query->event->getFallback();
+        $boughtProducts = $this->productRepository->findProductsBoughtByEvent($query->event);
+        $promotionCodes = $this->promotionCodeRepository->findBoughtByEvent($query->event);
 
         // Initiate the empty array for the products views, promotion code views, order views and customRow views
         $plans              = [];
@@ -91,7 +91,7 @@ class OrdersExportViewQueryHandler
         $orderViews         = [];
         $customRowViews     = [];
 
-        foreach ($products as $product) {
+        foreach ($boughtProducts as $product) {
             $productView = $this->productViewQueryHandler->handle(
                 new ProductViewQuery($product, $locale, $query->adminLocale)
             );
@@ -119,7 +119,7 @@ class OrdersExportViewQueryHandler
 
         foreach ($orders as $order) {
             $orderView = $this->orderViewQueryHandler->handle(
-                new OrderViewQuery($order, $locale, $query->adminLocale)
+                new OrderViewQuery($query->event, $order, $locale, $query->adminLocale)
             );
 
             if ($orderView->countCustomRows() > $maxIndexOfCustomRow) {

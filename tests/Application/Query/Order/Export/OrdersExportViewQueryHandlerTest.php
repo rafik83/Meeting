@@ -39,7 +39,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class OrdersExportViewQueryHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event       = EventFactory::createEvent();
         $adminLocale = 'en';
@@ -64,21 +64,21 @@ class OrdersExportViewQueryHandlerTest extends TestCase
         $orderView2->countCustomRows()->willReturn(2);
 
         $orderViewQueryHandler->preloadBillingInfo($event)->shouldBeCalled();
-        $orderViewQueryHandler->handle(new OrderViewQuery($order1->reveal(), 'fr', $adminLocale))->shouldBeCalled()->willReturn($orderView1->reveal());
-        $orderViewQueryHandler->handle(new OrderViewQuery($order2->reveal(), 'fr', $adminLocale))->shouldBeCalled()->willReturn($orderView2->reveal());
+        $orderViewQueryHandler->handle(new OrderViewQuery($event, $order1->reveal(), 'fr', $adminLocale))->shouldBeCalled()->willReturn($orderView1->reveal());
+        $orderViewQueryHandler->handle(new OrderViewQuery($event, $order2->reveal(), 'fr', $adminLocale))->shouldBeCalled()->willReturn($orderView2->reveal());
 
         $product = $this->prophesize(Product::class);
         $product->isPlan()->willReturn(false);
         $product->isParticipant()->willReturn(false);
         $product->isPlanning()->willReturn(false);
         $product->isOption()->willReturn(true);
-        $productRepository->findByEvent($event)->shouldBeCalled()->willReturn([$product->reveal()]);
+        $productRepository->findProductsBoughtByEvent($event)->shouldBeCalled()->willReturn([$product->reveal()]);
 
         $productView = $this->prophesize(ProductView::class);
         $productViewQueryHandler->handle(new ProductViewQuery($product->reveal(), 'fr', $adminLocale))->shouldBeCalled()->willReturn($productView->reveal());
 
         $promotionCode = $this->prophesize(PromotionCode::class);
-        $promotionCodeRepository->findByEvent($event)->shouldBeCalled()->willReturn([$promotionCode->reveal()]);
+        $promotionCodeRepository->findBoughtByEvent($event)->shouldBeCalled()->willReturn([$promotionCode->reveal()]);
         $promotionCodeView = $this->prophesize(PromotionCodeView::class);
         $promotionCodeViewQueryHandler->handle(new PromotionCodeViewQuery($promotionCode->reveal(), $adminLocale))->shouldBeCalled()->willReturn($promotionCodeView->reveal());
 

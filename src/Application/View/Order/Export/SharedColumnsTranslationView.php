@@ -12,25 +12,28 @@ namespace Proximum\Vimeet\Application\View\Order\Export;
 
 class SharedColumnsTranslationView
 {
-    const COLUMN_ORDER_ID                = 'order_id';
-    const COLUMN_SHEET_ID                = 'sheet_id';
-    const COLUMN_SHEET_TITLE             = 'sheet_title';
-    const COLUMN_INVOICE_NUMBER          = 'invoice_number';
-    const COLUMN_INVOICE_DATE            = 'invoice_date';
-    const COLUMN_BILLING_INFO_GENDER     = 'billing_info_gender';
-    const COLUMN_BILLING_INFO_LAST_NAME  = 'billing_info_last_name';
-    const COLUMN_BILLING_INFO_FIRST_NAME = 'billing_info_first_name';
-    const COLUMN_BILLING_INFO_POSITION   = 'billing_info_position';
-    const COLUMN_BILLING_INFO_PHONE      = 'billing_info_phone';
-    const COLUMN_BILLING_INFO_MOBILE     = 'billing_info_mobile';
-    const COLUMN_BILLING_INFO_EMAIL      = 'billing_info_email';
-    const COLUMN_BILLING_INFO_COMPANY    = 'billing_info_company';
-    const COLUMN_BILLING_INFO_STREET     = 'billing_info_street';
-    const COLUMN_BILLING_INFO_ZIP_CODE   = 'billing_info_zip_code';
-    const COLUMN_BILLING_INFO_CITY       = 'billing_info_city';
-    const COLUMN_BILLING_INFO_COUNTRY    = 'billing_info_country';
-    const COLUMN_BILLING_INFO_VAT_NUMBER = 'billing_info_vat_number';
-    const COLUMN_BILLING_INFO_REFERENCE  = 'billing_info_reference';
+    public const COLUMN_ORDER_ID                = 'order_id';
+    public const COLUMN_SHEET_ID                = 'sheet_id';
+    public const COLUMN_SHEET_TITLE             = 'sheet_title';
+    public const COLUMN_INVOICE_NUMBER          = 'invoice_number';
+    public const COLUMN_INVOICE_DATE            = 'invoice_date';
+    public const COLUMN_BILLING_INFO_GENDER     = 'billing_info_gender';
+    public const COLUMN_BILLING_INFO_LAST_NAME  = 'billing_info_last_name';
+    public const COLUMN_BILLING_INFO_FIRST_NAME = 'billing_info_first_name';
+    public const COLUMN_BILLING_INFO_POSITION   = 'billing_info_position';
+    public const COLUMN_BILLING_INFO_PHONE      = 'billing_info_phone';
+    public const COLUMN_BILLING_INFO_MOBILE     = 'billing_info_mobile';
+    public const COLUMN_BILLING_INFO_EMAIL      = 'billing_info_email';
+    public const COLUMN_BILLING_INFO_COMPANY    = 'billing_info_company';
+    public const COLUMN_BILLING_INFO_STREET     = 'billing_info_street';
+    public const COLUMN_BILLING_INFO_ZIP_CODE   = 'billing_info_zip_code';
+    public const COLUMN_BILLING_INFO_CITY       = 'billing_info_city';
+    public const COLUMN_BILLING_INFO_COUNTRY    = 'billing_info_country';
+    public const COLUMN_BILLING_INFO_VAT_NUMBER = 'billing_info_vat_number';
+    public const COLUMN_BILLING_INFO_REFERENCE  = 'billing_info_reference';
+    public const COLUMN_ORDER_TOTAL_WITHOUT_VAT = 'order_total_without_vat';
+    public const COLUMN_ORDER_TOTAL_VAT         = 'order_total_vat';
+    public const COLUMN_ORDER_TOTAL_WITH_VAT    = 'order_total_with_vat';
 
     /** @var string */
     public $orderId;
@@ -89,6 +92,15 @@ class SharedColumnsTranslationView
     /** @var string */
     public $invoiceDate;
 
+    /** @var string */
+    public $totalWithoutVat;
+
+    /** @var string */
+    public $totalVat;
+
+    /** @var string */
+    public $totalWithVat;
+
     /**
      * @param string $orderId
      * @param string $sheetId
@@ -109,6 +121,9 @@ class SharedColumnsTranslationView
      * @param string $country
      * @param string $vatNumber
      * @param string $reference
+     * @param string $totalWithoutVat
+     * @param string $totalVat
+     * @param string $totalWithVat
      */
     public function __construct(
         $orderId,
@@ -129,7 +144,10 @@ class SharedColumnsTranslationView
         $city,
         $country,
         $vatNumber,
-        $reference
+        $reference,
+        $totalWithoutVat,
+        $totalVat,
+        $totalWithVat
     ) {
         $this->orderId    = $orderId;
         $this->sheetId    = $sheetId;
@@ -150,12 +168,15 @@ class SharedColumnsTranslationView
         $this->country    = $country;
         $this->vatNumber  = $vatNumber;
         $this->reference  = $reference;
+        $this->totalWithoutVat = $totalWithoutVat;
+        $this->totalVat = $totalVat;
+        $this->totalWithVat = $totalWithVat;
     }
 
     /**
      * @return array
      */
-    public function getAllColumns()
+    public function getAllColumns(): array
     {
         return [
             self::COLUMN_ORDER_ID                => $this->orderId,
@@ -177,6 +198,9 @@ class SharedColumnsTranslationView
             self::COLUMN_BILLING_INFO_COUNTRY    => $this->country,
             self::COLUMN_BILLING_INFO_VAT_NUMBER => $this->vatNumber,
             self::COLUMN_BILLING_INFO_REFERENCE  => $this->reference,
+            self::COLUMN_ORDER_TOTAL_WITHOUT_VAT => $this->totalWithoutVat,
+            self::COLUMN_ORDER_TOTAL_VAT         => $this->totalVat,
+            self::COLUMN_ORDER_TOTAL_WITH_VAT    => $this->totalWithVat,
         ];
     }
 }

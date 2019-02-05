@@ -100,4 +100,11 @@ interface ProductRepositoryInterface
      * @return Product[]
      */
     public function findParticipantAndAttributableByEvent($event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return Product[]
+     */
+    public function findProductsBoughtByEvent(Event $event): array;
 }

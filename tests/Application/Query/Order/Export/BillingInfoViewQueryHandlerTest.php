@@ -94,6 +94,7 @@ class BillingInfoViewQueryHandlerTest extends TestCase
             'zipCode',
             'city',
             'Country',
+            'co',
             'vatNumber',
             'thisIsTheReference'
         );
@@ -103,7 +104,7 @@ class BillingInfoViewQueryHandlerTest extends TestCase
 
     public function testHandleWithoutPreload()
     {
-        $event       = EventFactory::createEvent();
+        $event = EventFactory::createEvent();
         $adminLocale = 'fr';
 
         $sheet  = $this->prophesize(Sheet::class);
@@ -129,7 +130,7 @@ class BillingInfoViewQueryHandlerTest extends TestCase
         $query = new BillingInfoViewQuery($sheet->reveal(), $adminLocale);
 
         $this->billingInfoRepository->getBySheet($sheet->reveal())->shouldBeCalled()->willReturn($billingInfo);
-        $this->billingInfoRepository->findByEvent($sheet->reveal())->shouldNotBeCalled();
+        $this->billingInfoRepository->findByEvent($event)->shouldNotBeCalled();
         $this->translator->trans('gender.man', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Man');
         $this->intlAdapter->getCountryName('co', $adminLocale)->shouldBeCalled()->willReturn('Country');
 
@@ -153,6 +154,7 @@ class BillingInfoViewQueryHandlerTest extends TestCase
             'zipCode',
             'city',
             'Country',
+            'co',
             'vatNumber',
             'thisIsTheReference'
         );
