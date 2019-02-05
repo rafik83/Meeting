@@ -65,6 +65,7 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
     /**
      * {@inheritdoc}
      */

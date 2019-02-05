@@ -108,14 +108,14 @@ class OrderViewQueryHandler
         $formatter     = [];
 
         if ($query->order->hasInvoice()) {
-            $eventId = $query->order->getSheet()->getEvent()->getId();
+            $eventId = $query->event->getId();
 
             if (!isset($formatter[$eventId])) {
                 $formatter[$eventId] = \IntlDateFormatter::create(
                     $query->locale,
                     \IntlDateFormatter::SHORT,
                     \IntlDateFormatter::NONE,
-                    $query->order->getSheet()->getEvent()->getTimeZone()
+                    $query->event->getTimeZone()
                 );
             }
 

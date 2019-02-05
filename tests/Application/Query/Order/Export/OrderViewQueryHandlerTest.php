@@ -68,9 +68,7 @@ class OrderViewQueryHandlerTest extends TestCase
 
         $order->getId()->willReturn(2);
         $order->getSheet()->willReturn($sheet->reveal());
-
         $sheet->getId()->willReturn(3);
-        $sheet->getEvent()->shouldBeCalled()->willReturn($event);
 
         $row1 = $this->prophesize(Order\Row::class);
         $row1->isProduct()->willReturn(true);
