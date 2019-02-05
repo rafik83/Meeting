@@ -94,3 +94,12 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: console.command }
+
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Rooming\CleanUserNotPresentCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
+        tags:
+            - { name: console.command }
