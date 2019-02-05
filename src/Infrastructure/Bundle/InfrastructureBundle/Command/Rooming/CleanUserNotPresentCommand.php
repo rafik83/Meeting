@@ -50,7 +50,7 @@ class CleanUserNotPresentCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Aggregate the slots available for the sheets of the event')
+            ->setDescription('Clean user not present anymore for the rooming')
             ->addArgument('eventId', InputArgument::REQUIRED, 'Event id')
         ;
     }
@@ -66,6 +66,7 @@ class CleanUserNotPresentCommand extends Command
             throw new \Exception('Event not found.');
         }
 
+        $count = 0;
         $stays = $this->stayRepository->getStaysByEvent($event);
 
         foreach ($stays as $stay) {
@@ -78,19 +79,16 @@ class CleanUserNotPresentCommand extends Command
                 if (empty($sheets)) {
                     $usersNotPresent++;
 
-                    if ($countUsers === 1) {
+                    if ($countUsers === 1 || $usersNotPresent === $countUsers) {
                         $this->stayRepository->remove($stay);
-
-                        continue 2;
-                    }
-
-                    if ($usersNotPresent === $countUsers) {
-                        $this->stayRepository->remove($stay);
+                        ++$count;
 
                         continue 2;
                     }
                 }
             }
         }
+
+        $output->writeln(sprintf('%d users are not present anymore and have been deleted from the rooming list', $count));
     }
 }
