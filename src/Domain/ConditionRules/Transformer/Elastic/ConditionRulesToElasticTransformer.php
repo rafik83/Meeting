@@ -59,7 +59,13 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
         $operator = $this->getOperator($condition);
 
         foreach ($condition->getRules() as $rule) {
-            $queries['bool'][$operator][] = $this->buildQueries($condition, $rule);
+            $query = $this->buildQueries($condition, $rule);
+
+            if (!$query) {
+                continue;
+            }
+
+            $queries['bool'][$operator][] = $query;
         }
 
         return $queries;

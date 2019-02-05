@@ -51,7 +51,17 @@ class ParticipationTypeTransformer implements InputTransformerInterface
         );
 
         if (empty($sheetIds)) {
-            return [];
+            $query = $this->emptySheetsQuery();
+
+            if ($this->isContraryComparisonOperator($field)) {
+                return [
+                    'bool' => [
+                        'must_not' => $query,
+                    ],
+                ];
+            }
+
+            return $query;
         }
 
         $query = $this->buildNestedSheetIdsQuery($sheetIds);
@@ -84,6 +94,30 @@ class ParticipationTypeTransformer implements InputTransformerInterface
                 'path' => TypesMapping::USER_EVENT_VIEW_SHEETS,
                 'query' => $query,
             ],
+        ];
+    }
+
+    /**
+     * In the case there is no sheet attached to the type,
+     * we filter on a non-existent sheet id to go 0 result
+     *
+     * @return array
+     */
+    private function emptySheetsQuery(): array
+    {
+        return [
+            'nested' => [
+                'path' => TypesMapping::USER_EVENT_VIEW_SHEETS,
+                'query' => [
+                    'bool' => [
+                        'should' => [
+                            'match' => [
+                                sprintf('%s.id', TypesMapping::USER_EVENT_VIEW_SHEETS) => 0
+                            ]
+                        ]
+                    ]
+                ]
+            ]
         ];
     }
 

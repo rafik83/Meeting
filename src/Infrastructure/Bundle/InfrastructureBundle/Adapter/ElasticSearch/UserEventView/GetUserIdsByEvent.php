@@ -48,7 +48,11 @@ class GetUserIdsByEvent
         ];
 
         if ($getUserIdsQuery->condition) {
-            $conditions[] = $this->conditionRulesTransformer->transform($getUserIdsQuery->condition);
+            $rules = $this->conditionRulesTransformer->transform($getUserIdsQuery->condition);
+
+            if ($rules) {
+                $conditions[] = $rules;
+            }
         }
 
         $query = new Query(
