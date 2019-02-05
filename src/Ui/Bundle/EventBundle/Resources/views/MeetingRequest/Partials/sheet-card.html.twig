@@ -1,4 +1,4 @@
-{% set sheetToDisplayLink = meetingRequestView.isSheetSeeable == true ? path('event_catalog_complete_sheet', { sheet: sheet.id, sheetToDisplay: meetingRequestView.sheet.id }) : null %}
+{% set sheetToDisplayLink = path('event_catalog_complete_sheet', { sheet: sheet.id, sheetToDisplay: meetingRequestView.sheet.id }) %}
 <div class="col-md-4" data-meeting-request="{{ meetingRequestView.meetingRequest.getTypeOfRequest(sheet) }}">
     <div class="catalog__item">
         <div class="content__sheet-card">

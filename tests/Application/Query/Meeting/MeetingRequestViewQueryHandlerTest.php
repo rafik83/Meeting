@@ -115,7 +115,6 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             false,
             false,
             false,
-            false,
             true,
             false,
             true,

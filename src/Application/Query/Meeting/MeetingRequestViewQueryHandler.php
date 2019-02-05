@@ -74,8 +74,6 @@ class MeetingRequestViewQueryHandler
 
         $previews = $this->preview->getPreview($otherSheet, $query->locale, $composedRule);
 
-        $isSheetSeeable = !empty($rules);
-
         $participant = $query->sheet->getUserParticipant($query->user);
 
         if (null !== $participant) {
@@ -99,7 +97,6 @@ class MeetingRequestViewQueryHandler
             $previews,
             $query->isMeetingPublished,
             $query->isMeetingRequestUpdateLocked,
-            $isSheetSeeable,
             $query->isMeetingRequestClosed,
             $query->isAnsweringMeetingRequestClosed,
             $query->meetingRequest->hasMessage(),
