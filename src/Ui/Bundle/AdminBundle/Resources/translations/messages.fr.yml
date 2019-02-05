@@ -1234,11 +1234,11 @@ admin.type.action.confirmDelete: 'Etes-vous sûr de vouloir supprimer ce type ?'
 admin.type.already_exists: 'Un type de participation au titre identique existe déjà'
 admin.type.badge.configuration.link: 'Configuration du e-badge'
 admin.type.badge.configuration.title: 'Configuration du design et des conditions du e-Badge'
+admin.type.badge.example.country: France
 admin.type.badge.example.explanation: 'Ceci est un exemple de rendu du e-badge mais pas le rendu précis'
 admin.type.badge.example.firstName: Prénom
 admin.type.badge.example.lastName: Nom
 admin.type.badge.example.position: 'Directeur des badges '
-admin.type.badge.example.country: 'France'
 admin.type.badge.example.sheetTitle: 'Exemple de titre de Fiche'
 admin.type.content.specificTermsOfSale: 'CGV particulières'
 admin.type.create.link: Ajouter
