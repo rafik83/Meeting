@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
-use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 
 class MeetingViewQueryHandler
 {
@@ -36,26 +35,18 @@ class MeetingViewQueryHandler
     private $videoMeetingAccess;
 
     /**
-     * @var CanSeeSheet
-     */
-    private $canSeeSheet;
-
-    /**
      * @param MeetingParticipantViewQueryHandler $participantHandler
      * @param RuleRepositoryInterface            $ruleRepository
      * @param VideoMeetingAccess                 $videoMeetingAccess
-     * @param CanSeeSheet                        $canSeeSheet
      */
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
         RuleRepositoryInterface $ruleRepository,
-        VideoMeetingAccess $videoMeetingAccess,
-        CanSeeSheet $canSeeSheet
+        VideoMeetingAccess $videoMeetingAccess
     ) {
         $this->participantHandler = $participantHandler;
         $this->ruleRepository = $ruleRepository;
         $this->videoMeetingAccess = $videoMeetingAccess;
-        $this->canSeeSheet = $canSeeSheet;
     }
 
     /**
@@ -78,8 +69,6 @@ class MeetingViewQueryHandler
                 ->handle(new MeetingParticipantViewQuery($participant, $rules, $query->locale));
         }
 
-        $isSheetDetailsSeeAble = $this->canSeeSheet->isSatisfiedBy($query->currentSheet, $sheetMet);
-
         $meeting = new MeetingView(
             $query->meeting->getId(),
             $userSheet->getTitle(),
@@ -92,7 +81,6 @@ class MeetingViewQueryHandler
             $query->event->getConfiguration()->getLeftColor(),
             $query->event->getConfiguration()->getRightColor(),
             $participants,
-            $isSheetDetailsSeeAble,
             $query->isUserParticipantMultipleSheets,
             $query->meeting->getSpot()->isVisio(),
             $this->videoMeetingAccess->allowedToAccess($query->meeting)

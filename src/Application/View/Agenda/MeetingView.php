@@ -42,9 +42,6 @@ class MeetingView extends AbstractTimeEntityView
     public $rightColor;
 
     /** @var bool */
-    public $isSheetDetailsSeeAble;
-
-    /** @var bool */
     public $isUserParticipantMultipleSheets;
 
     /** @var bool */
@@ -65,7 +62,6 @@ class MeetingView extends AbstractTimeEntityView
      * @param string                   $leftColor
      * @param string                   $rightColor
      * @param MeetingParticipantView[] $participants
-     * @param bool                     $isSheetDetailsSeeAble
      * @param bool                     $isUserParticipantMultipleSheets
      * @param bool                     $isVisio
      * @param bool                     $isVisioAvailable
@@ -82,7 +78,6 @@ class MeetingView extends AbstractTimeEntityView
         $leftColor,
         $rightColor,
         array $participants,
-        $isSheetDetailsSeeAble = false,
         $isUserParticipantMultipleSheets = false,
         bool $isVisio = false,
         bool $isVisioAvailable = false
@@ -98,7 +93,6 @@ class MeetingView extends AbstractTimeEntityView
         $this->leftColor                       = $leftColor;
         $this->rightColor                      = $rightColor;
         $this->participants                    = $participants;
-        $this->isSheetDetailsSeeAble           = $isSheetDetailsSeeAble;
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
         $this->isVisio                         = $isVisio;
         $this->isVisioAvailable                = $isVisioAvailable;

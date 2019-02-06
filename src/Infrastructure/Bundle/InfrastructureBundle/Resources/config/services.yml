@@ -3924,7 +3924,6 @@ services:
             - '@query.agenda.meeting.meeting_participant_view_query_handler'
             - '@repository.rule_repository'
             - '@components.security.video_meeting_access'
-            - '@Proximum\Vimeet\Domain\Sheet\CanSeeSheet'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery }
 
