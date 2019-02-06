@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface RequestRepositoryInterface
@@ -190,6 +191,14 @@ interface RequestRepositoryInterface
         $type = null,
         $user = null
     );
+
+    /**
+     * @param Event $event
+     * @param Type  $type
+     *
+     * @return Request[]
+     */
+    public function getRequestOfType(Event $event, Type $type): array;
 
     /**
      * @param Event            $event

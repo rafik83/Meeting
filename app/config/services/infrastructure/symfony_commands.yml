@@ -103,3 +103,13 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Meeting\Request\AssignAllParticipantsToRequestCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@doctrine.orm.entity_manager'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: console.command }
