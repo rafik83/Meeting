@@ -87,7 +87,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
             return true;
         }
 
-        if ($this->isTranslatable()) {
+        if ($this->isTranslatable() || \is_array($this->data[self::TEXT])) {
             foreach ($this->data[self::TEXT] as $translatedText) {
                 if ('' !== trim($translatedText)) {
                     return false;
