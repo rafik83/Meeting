@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadCollectionObject;
@@ -96,12 +97,15 @@ class ShowUploadedFileActionTest extends TestCase
         $this->templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $this->sharedUploadedFiles = 'tests/Ui/Bundle/EventBundle/Controller/Sheet';
 
+        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal());
+
         $this->showUploadedFileAction = new ShowUploadedFileAction(
             $this->authorizationChecker->reveal(),
             $this->ruleRepository->reveal(),
             $this->sheetRepository->reveal(),
             $this->templateDataFactory->reveal(),
-            $this->sharedUploadedFiles
+            $this->sharedUploadedFiles,
+            $canSeeSheet
         );
     }
 

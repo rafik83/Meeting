@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
@@ -108,10 +109,13 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
+        $canSeeSheet = new CanSeeSheet($ruleRepository->reveal());
+
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
-            $videoMeetingAccess->reveal()
+            $videoMeetingAccess->reveal(),
+            $canSeeSheet
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
@@ -210,10 +214,13 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
+        $canSeeSheet = new CanSeeSheet($ruleRepository->reveal());
+
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
-            $videoMeetingAccess->reveal()
+            $videoMeetingAccess->reveal(),
+            $canSeeSheet
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadCollectionObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -42,18 +43,23 @@ class ShowUploadedFileAction
     /** @var string */
     private $sharedUploadedFiles;
 
+    /** @var CanSeeSheet */
+    private $canSeeSheet;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         RuleRepositoryInterface $ruleRepository,
         SheetRepositoryInterface $sheetRepository,
         TemplateDataFactory $templateDataFactory,
-        string $sharedUploadedFiles
+        string $sharedUploadedFiles,
+        CanSeeSheet $canSeeSheet
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->ruleRepository = $ruleRepository;
         $this->sheetRepository = $sheetRepository;
         $this->templateDataFactory = $templateDataFactory;
         $this->sharedUploadedFiles = $sharedUploadedFiles;
+        $this->canSeeSheet = $canSeeSheet;
     }
 
     public function __invoke(
@@ -113,15 +119,8 @@ class ShowUploadedFileAction
             throw new AccessDeniedException('Sheet to display not in catalog');
         }
 
-        if (!$this->canSeeSheet($sheet, $sheetToDisplay)) {
+        if (!$this->canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
             throw new AccessDeniedException('SheetToDisplay not visible by Sheet');
         }
-    }
-
-    private function canSeeSheet(Sheet $fromSheet, Sheet $sheetToDisplay): bool
-    {
-        $rules = $this->ruleRepository->getBySeerTypeAndSeeableType($fromSheet->getType(), $sheetToDisplay->getType());
-
-        return !empty($rules);
     }
 }

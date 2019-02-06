@@ -29,6 +29,7 @@ use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
 use Proximum\Vimeet\Domain\Rule\Composer;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -185,6 +186,8 @@ class SheetViewQueryHandlerTest extends TestCase
             true
         );
 
+        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal());
+
         $handler = new SheetViewQueryHandler(
             $this->templateDataFactory->reveal(),
             $this->participantInfoGuesser->reveal(),
@@ -193,7 +196,8 @@ class SheetViewQueryHandlerTest extends TestCase
             $this->composer->reveal(),
             $this->applyer->reveal(),
             $this->sheetInfoQueryHandler->reveal(),
-            $this->sheetRegistrationInfoQueryHandler->reveal()
+            $this->sheetRegistrationInfoQueryHandler->reveal(),
+            $canSeeSheet
         );
 
         $result = $handler->handle($query);
@@ -244,6 +248,8 @@ class SheetViewQueryHandlerTest extends TestCase
             ->willReturn($registrationFields)
         ;
 
+        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal());
+
         $handler = new SheetViewQueryHandler(
             $this->templateDataFactory->reveal(),
             $this->participantInfoGuesser->reveal(),
@@ -252,7 +258,8 @@ class SheetViewQueryHandlerTest extends TestCase
             $this->composer->reveal(),
             $this->applyer->reveal(),
             $this->sheetInfoQueryHandler->reveal(),
-            $this->sheetRegistrationInfoQueryHandler->reveal()
+            $this->sheetRegistrationInfoQueryHandler->reveal(),
+            $canSeeSheet
         );
 
         $handler->reMapFields($sheetView);

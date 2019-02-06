@@ -36,6 +36,7 @@ services:
             - '@domain.rule.applyer'
             - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetInfoQueryHandler'
             - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetRegistrationInfoQueryHandler'
+            - '@Proximum\Vimeet\Domain\Sheet\CanSeeSheet'
 
     #
     # Participant

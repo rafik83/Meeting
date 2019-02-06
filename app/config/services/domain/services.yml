@@ -86,6 +86,9 @@ services:
             - '@template.template_data_factory'
             - '@order.merger'
             - '@vimeet_infrastructure.repository.sheet_repository'
+    Proximum\Vimeet\Domain\Sheet\CanSeeSheet:
+        arguments:
+            - '@repository.rule_repository'
 
     #
     # Template
