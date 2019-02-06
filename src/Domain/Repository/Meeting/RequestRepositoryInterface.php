@@ -198,7 +198,7 @@ interface RequestRepositoryInterface
      *
      * @return Request[]
      */
-    public function getRequestOfType(Event $event, Type $type): array;
+    public function getApprovedByType(Event $event, Type $type): array;
 
     /**
      * @param Event            $event

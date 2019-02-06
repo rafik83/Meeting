@@ -727,7 +727,7 @@ class RequestRepository implements RequestRepositoryInterface
      *
      * @return Request[]
      */
-    public function getRequestOfType(Event $event, Type $type): array
+    public function getApprovedByType(Event $event, Type $type): array
     {
         return $this->entityManager
             ->createQueryBuilder()

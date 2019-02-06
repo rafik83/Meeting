@@ -84,7 +84,9 @@ class AssignAllParticipantsToRequestCommand extends Command
         }
 
         $participants = [];
-        $requests = $this->requestRepository->getRequestOfType($event, $type);
+        $requests = $this->requestRepository->getApprovedByType($event, $type);
+        $toFlush = [];
+        $index = 1;
 
         foreach ($requests as $request) {
             if (count($request->getFromParticipantsArray()) !== $request->getFromSheet()->countParticipants()) {
@@ -106,11 +108,7 @@ class AssignAllParticipantsToRequestCommand extends Command
                     }
                 }
             }
-        }
 
-        $toFlush = [];
-        $index = 1;
-        foreach ($requests as $request) {
             $toFlush[] = $request;
 
             // Each 1000 request, flush and clear to optimize the insertion
