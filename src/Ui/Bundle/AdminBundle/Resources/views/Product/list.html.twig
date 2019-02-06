@@ -54,7 +54,7 @@
         {% set availabilityCssClass = {'default': 'success', 'warning': 'warning', 'alert': 'danger'} %}
         {% set currentType = null %}
 
-        {% for product in products['unit'] %}
+        {% for product in products %}
             {% if currentType is null or currentType != product.type %}
                 {% set currentType = product.type %}
                 <tr class="info">
@@ -111,19 +111,9 @@
 
                 </td>
                 <td>
-                    {% set boughtIncludedTotal = 0 %}
-                    {% for boughtIncludedProducts in products['other'] %}
-                        {% for boughtIncludedProduct in boughtIncludedProducts %}
-                            {% if boughtIncludedProduct[product.id] is defined %}
-                                {% if boughtIncludedProduct[product.id] > 0 %}
-                                    {% set boughtIncludedTotal = boughtIncludedTotal + boughtIncludedProduct[product.id] %}
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                    {% if boughtIncludedTotal > 0 %}
+                    {% if product.productIncludedBought > 0 %}
                         <span class="label label-{{ availabilityCssClass[product.availabilityStatus] }}">
-                            {{ boughtIncludedTotal }}
+                            {{  product.productIncludedBought }}
                         </span>
                     {% endif %}
                 </td>

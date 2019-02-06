@@ -33,6 +33,9 @@ class ProductView
     /** @var int */
     public $bought;
 
+    /** @var int */
+    public $productIncludedBought;
+
     /** @var string */
     public $availabilityStatus;
 
@@ -77,6 +80,7 @@ class ProductView
         bool $subjectedToValidation,
         array $includedProducts,
         int $bought,
+        int $productIncludedBought,
         bool $removable,
         string $availabilityStatus,
         bool $availabilityManaged,
@@ -97,6 +101,7 @@ class ProductView
         $this->subjectedToValidation = $subjectedToValidation;
         $this->includedProducts = $includedProducts;
         $this->bought = $bought;
+        $this->productIncludedBought = $productIncludedBought;
         $this->removable = $removable;
         $this->availabilityStatus = $availabilityStatus;
         $this->availabilityManaged = $availabilityManaged;

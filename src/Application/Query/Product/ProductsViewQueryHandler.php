@@ -50,22 +50,32 @@ class ProductsViewQueryHandler
     public function handle(ProductsViewQuery $query): array
     {
         $productViews = [];
-        $includedProductViews = [];
+        $bought = [];
+        $productIncludedBought = [];
         $products = $this->productRepository->findByEventOrderedByProductTypeAndProductname($query->event);
         $this->removeAuthorizationChecker->preloadForEvent($query->event);
 
         foreach ($products as $product) {
-            if (count($product->getIncludedProducts()) > 0) {
-                $includedProductViews[] = array_map(function (Product\ProductIncluded $includedProduct) {
-                    return [
-                        $includedProduct->getIncluded()->getId()  =>  $this->rowRepository->boughtByProduct($includedProduct->getProduct()),
-                    ];
-                }, $product->getIncludedProducts());
+
+            $bought[$product->getId()] = $this->rowRepository->boughtByProduct($product);
+
+            if($product->getType() == 'plan') {
+                if (count($product->getIncludedProducts()) > 0) {
+                    $includedProducts = $product->getIncludedProducts();
+
+                    foreach ($includedProducts as $includedProduct) {
+                        if(isset($productIncludedBought[$includedProduct->getIncluded()->getId()])) {
+                            $productIncludedBought[$includedProduct->getIncluded()->getId()] += $includedProduct->getQuantity() * $bought[$product->getId()];
+                        } else {
+                            $productIncludedBought[$includedProduct->getIncluded()->getId()] = $includedProduct->getQuantity() * $bought[$product->getId()];
+                        }
+                    }
+                }
             }
+        }
 
-            $bought = $this->rowRepository->boughtByProduct($product);
-
-            $productViews['unit'][] = new ProductView(
+        foreach ($products as $product) {
+            $productViews[] = new ProductView(
                 $product->getId(),
                 $product->getName(),
                 $product->getType(),
@@ -78,9 +88,10 @@ class ProductsViewQueryHandler
                         'name' => $includedProduct->getIncluded()->getName(),
                     ];
                 }, $product->getIncludedProducts()),
-                $bought,
+                $bought[$product->getId()],
+                isset($productIncludedBought[$product->getId()]) ? $productIncludedBought[$product->getId()] : 0,
                 $this->removeAuthorizationChecker->canBeRemoved($product),
-                $product->getAvailabilityStatus($bought),
+                $product->getAvailabilityStatus($bought[$product->getId()]),
                 $product->isAvailabilityManaged(),
                 $product->isUpdatable(),
                 $product->getQuantityMax(),
@@ -93,8 +104,6 @@ class ProductsViewQueryHandler
                 $product->hasHappenings()
             );
         }
-
-        $productViews['other'] = $includedProductViews;
 
         return $productViews;
     }
