@@ -133,7 +133,6 @@ class MeetingViewQueryHandlerTest extends TestCase
             'leftColor',
             'rightColor',
             $participants,
-            true,
             true
         );
 
@@ -239,7 +238,6 @@ class MeetingViewQueryHandlerTest extends TestCase
             'leftColor',
             'rightColor',
             $participants,
-            true,
             true
         );
 
