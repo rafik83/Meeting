@@ -89,6 +89,7 @@ services:
     Proximum\Vimeet\Domain\Sheet\CanSeeSheet:
         arguments:
             - '@repository.rule_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
 
     #
     # Template

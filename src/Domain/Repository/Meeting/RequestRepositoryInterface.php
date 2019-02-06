@@ -174,6 +174,14 @@ interface RequestRepositoryInterface
     public function getRequestBetweenSheets(Sheet $one, Sheet $another);
 
     /**
+     * @param Sheet $one
+     * @param Sheet $another
+     *
+     * @return bool
+     */
+    public function hasRequestBetweenSheets(Sheet $one, Sheet $another): bool;
+
+    /**
      * @param Event            $event
      * @param Sheet[]          $sheets
      * @param Sheet[]          $sheetsMet

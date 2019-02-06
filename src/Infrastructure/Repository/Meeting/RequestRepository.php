@@ -684,23 +684,20 @@ class RequestRepository implements RequestRepositoryInterface
      */
     public function getRequestBetweenSheets(Sheet $one, Sheet $another)
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('request')
-            ->from(Request::class, 'request')
-            ->setMaxResults(1);
-
-        // Between
-        $queryBuilder
-            ->andWhere($queryBuilder->expr()->orX(
-                $queryBuilder->expr()->andX('request.from = :one', 'request.to = :another'),
-                $queryBuilder->expr()->andX('request.from = :another', 'request.to = :one')
-            ))
-            ->setParameter('one', $one)
-            ->setParameter('another', $another);
+        $queryBuilder = $this->getRequestBetweenSheetsQueryBuilder($one, $another);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasRequestBetweenSheets(Sheet $one, Sheet $another): bool
+    {
+        $queryBuilder = $this->getRequestBetweenSheetsQueryBuilder($one, $another);
+        $queryBuilder->andWhere('request.disabled = false');
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -1029,5 +1026,34 @@ class RequestRepository implements RequestRepositoryInterface
             RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC,
             RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC,
         ];
+    }
+
+    /**
+     * @param Sheet $one
+     * @param Sheet $another
+     *
+     * @return QueryBuilder
+     */
+    private function getRequestBetweenSheetsQueryBuilder(Sheet $one, Sheet $another): QueryBuilder
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->setMaxResults(1);
+
+        // Between
+        $queryBuilder
+            ->andWhere(
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->andX('request.from = :one', 'request.to = :another'),
+                    $queryBuilder->expr()->andX('request.from = :another', 'request.to = :one')
+                )
+            )
+            ->setParameter('one', $one)
+            ->setParameter('another', $another);
+
+        return $queryBuilder;
     }
 }
