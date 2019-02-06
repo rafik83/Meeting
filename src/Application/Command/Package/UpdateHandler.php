@@ -28,7 +28,7 @@ class UpdateHandler
     /**
      * @param Update $update
      */
-    public function handle(Update $update)
+    public function handle(Update $update): void
     {
         $update->package
             ->setTitle($update->title)
@@ -41,6 +41,7 @@ class UpdateHandler
 
         $update->package->setPlanning($update->participantAndPlanning->planning);
         $update->package->setPlanningSelectable($update->participantAndPlanning->planningSelectable);
+        $update->package->setParticipantWithPlanning($update->participantAndPlanning->participantWithPlanning);
 
         foreach ($update->package->getEvent()->getLocales() as $locale) {
             $update->package->translate(

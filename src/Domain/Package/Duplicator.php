@@ -93,6 +93,8 @@ class Duplicator
         }
 
         $toPackage->setGroupsModel($groups);
+        $toPackage->setPlanningSelectable($fromPackage->isPlanningSelectable());
+        $toPackage->setParticipantWithPlanning($fromPackage->isParticipantWithPlanning());
 
         $toPackage->enable(
             $fromPackage->isPlansEnabled(),
@@ -141,6 +143,9 @@ class Duplicator
 
         // handle package participant
         $toPackage->setParticipants($fromPackage->getParticipants());
+
+        $toPackage->setPlanningSelectable($fromPackage->isPlanningSelectable());
+        $toPackage->setParticipantWithPlanning($fromPackage->isParticipantWithPlanning());
 
         // handle package planning
         if (null !== $fromPackage->getPlanning()) {

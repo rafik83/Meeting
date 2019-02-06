@@ -102,6 +102,7 @@ class DuplicatorTest extends TestCase
         $package->translate('fr', 'Forfait', 'Participant et planning', 'Options');
         $package->translate('en', 'Plans', 'Participant and Planning', 'Options');
         $package->enable(true, false, true);
+        $package->setParticipantWithPlanning(true);
 
         $package->setPlans([
             $plan1->reveal(),
@@ -137,6 +138,7 @@ class DuplicatorTest extends TestCase
         $expectedPackage->translate('en', 'Plans', 'Participant and Planning', 'Options');
         $expectedPackage->translate('de', '', '', '');
         $expectedPackage->enable(true, false, true);
+        $expectedPackage->setParticipantWithPlanning(true);
 
         $expectedPackage->setPlans([
             $newPlan1->reveal(),

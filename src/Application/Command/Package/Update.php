@@ -34,9 +34,9 @@ class Update implements Command
 
     public function __construct(Package $package)
     {
-        $plansLabels                  = [];
+        $plansLabels = [];
         $participantAndPlanningLabels = [];
-        $optionsLabels                = [];
+        $optionsLabels = [];
 
         foreach ($package->getEvent()->getLocales() as $locale) {
             $plansLabels[$locale]                  = $package->getPlansLabel($locale);
@@ -44,22 +44,25 @@ class Update implements Command
             $optionsLabels[$locale]                = $package->getOptionsLabel($locale);
         }
 
-        $this->package                = $package;
-        $this->title                  = $package->getTitle();
-        $this->plans                  = new Model\Plans(
+        $this->package = $package;
+        $this->title = $package->getTitle();
+        $this->plans = new Model\Plans(
             $plansLabels,
             $package->isPlansEnabled(),
             $package->getPlans()
         );
+
         $this->participantAndPlanning = new Model\ParticipantAndPlanning(
             $participantAndPlanningLabels,
             $package->isParticipantAndPlanningEnabled(),
             $package->getMaxParticipant(),
             $package->getParticipants(),
             $package->getPlanning(),
-            $package->isPlanningSelectable()
+            $package->isPlanningSelectable(),
+            $package->isParticipantWithPlanning()
         );
-        $this->options                = new Model\Options(
+
+        $this->options = new Model\Options(
             $optionsLabels,
             $package->isOptionsEnabled(),
             array_map(function (PackageGroup $group) {

@@ -33,6 +33,9 @@ class ParticipantAndPlanning
     /** @var bool */
     public $planningSelectable = true;
 
+    /** @var bool */
+    public $participantWithPlanning = false;
+
     /**
      * @param array     $labels
      * @param bool      $enabled
@@ -40,6 +43,7 @@ class ParticipantAndPlanning
      * @param Product[] $participants
      * @param Product   $planning
      * @param bool      $planningSelectable
+     * @param bool      $participantWithPlanning
      *
      * @throws WrongTypeException
      */
@@ -49,7 +53,8 @@ class ParticipantAndPlanning
         $maxParticipant,
         array $participants = [],
         Product $planning = null,
-        bool $planningSelectable
+        bool $planningSelectable,
+        bool $participantWithPlanning
     ) {
         foreach ($participants as $participant) {
             if (null !== $participant && !$participant->isParticipant()) {
@@ -67,6 +72,7 @@ class ParticipantAndPlanning
         $this->participants = $participants;
         $this->planning = $planning;
         $this->planningSelectable = $planningSelectable;
+        $this->participantWithPlanning = $participantWithPlanning;
     }
 
     /**
