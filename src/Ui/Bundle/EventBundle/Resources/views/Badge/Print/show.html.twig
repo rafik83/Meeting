@@ -6,11 +6,12 @@
             margin: 0;
         }
         .ebadge {
-            width: 50%;
-            height: 50%;
+            width: 105mm;
+            height: 148mm;
             margin: 0;
             padding: 0;
             position: relative;
+            overflow: hidden;
         }
 
         .ebadge-logo {
@@ -22,15 +23,15 @@
         }
 
         .ebadge-qrcode {
-            width: 170px;
+            width: 45mm;
             border: 1px solid #e2e3e4;
             margin: 10px auto;
             padding: 10px 10px 4px 10px;
         }
 
         .ebadge-qrcode img {
-            width: 150px;
-            height: 150px;
+            width: 40mm;
+            height: 40mm;
         }
 
         .ebadge-qrcode-token {
@@ -44,14 +45,23 @@
 
         .ebadge-participation-type {
             font-size: 24px;
-            font-weight: 400;
-            height: 90px;
-            line-height: 90px;
+            height: 25mm;
             text-transform: uppercase;
             position: absolute;
-            top: 133mm;
+            bottom: 0px;
             text-align: center;
             width: 100%;
+        }
+
+        .ebadge-participation-type-content {
+            display: table;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ebadge-participation-type-content-text {
+            display: table-cell;
+            vertical-align: middle;
         }
 
         @media print {
@@ -96,7 +106,11 @@
 
         {% if userBadgeByEventView.participationTypeOrCategoryLabel %}
             <div class="ebadge-participation-type ft-bold" style="background: {{ userBadgeByEventView.footerColor }}; color: {{ userBadgeByEventView.footerTextColor }};">
-                {{ userBadgeByEventView.participationTypeOrCategoryLabel }}
+                <div class="ebadge-participation-type-content">
+                    <div class="ebadge-participation-type-content-text">
+                    {{ userBadgeByEventView.participationTypeOrCategoryLabel }}
+                    </div>
+                </div>
             </div>
         {% endif %}
     </div>
