@@ -669,6 +669,11 @@ class Package
         return $this->planningSelectable;
     }
 
+    public function canPlanningBeBought(): bool
+    {
+        return false === $this->participantWithPlanning && $this->planningSelectable;
+    }
+
     public function setPlanningSelectable(bool $planningSelectable): void
     {
         $this->planningSelectable = $planningSelectable;
