@@ -30,7 +30,7 @@ class ParticipantAssignedAggregator
         RequestRepositoryInterface $requestRepository,
         ParticipantRepositoryInterface $participantRepository
     ) {
-        $this->requestRepository     = $requestRepository;
+        $this->requestRepository = $requestRepository;
         $this->participantRepository = $participantRepository;
     }
 

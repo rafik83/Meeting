@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
@@ -718,6 +719,39 @@ class RequestRepository implements RequestRepositoryInterface
         $queryBuilder->select('request, fromSheet, toSheet, meeting');
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Event $event
+     * @param Type  $type
+     *
+     * @return Request[]
+     */
+    public function getApprovedByType(Event $event, Type $type): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('request, fromSheet, toSheet')
+            ->from(Request::class, 'request')
+            ->innerJoin(
+                'request.from',
+                'fromSheet',
+                'WITH',
+                'request.event = :event
+                    AND request.disabled = false
+                    AND request.state = :state
+                '
+            )
+            ->innerJoin('request.to', 'toSheet')
+            ->innerJoin('fromSheet.type', 'fromType')
+            ->innerJoin('toSheet.type', 'toType')
+            ->where('fromType = :type OR toType = :type')
+            ->setParameter('event', $event)
+            ->setParameter('type', $type)
+            ->setParameter('state', Request::STATE_APPROVED)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**
