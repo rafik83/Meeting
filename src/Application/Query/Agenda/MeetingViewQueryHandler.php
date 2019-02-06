@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 
 class MeetingViewQueryHandler
 {
@@ -35,18 +36,26 @@ class MeetingViewQueryHandler
     private $videoMeetingAccess;
 
     /**
+     * @var CanSeeSheet
+     */
+    private $canSeeSheet;
+
+    /**
      * @param MeetingParticipantViewQueryHandler $participantHandler
      * @param RuleRepositoryInterface            $ruleRepository
      * @param VideoMeetingAccess                 $videoMeetingAccess
+     * @param CanSeeSheet                        $canSeeSheet
      */
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
         RuleRepositoryInterface $ruleRepository,
-        VideoMeetingAccess $videoMeetingAccess
+        VideoMeetingAccess $videoMeetingAccess,
+        CanSeeSheet $canSeeSheet
     ) {
         $this->participantHandler = $participantHandler;
         $this->ruleRepository = $ruleRepository;
         $this->videoMeetingAccess = $videoMeetingAccess;
+        $this->canSeeSheet = $canSeeSheet;
     }
 
     /**
@@ -69,7 +78,7 @@ class MeetingViewQueryHandler
                 ->handle(new MeetingParticipantViewQuery($participant, $rules, $query->locale));
         }
 
-        $isSheetDetailsSeeAble = !empty($rules);
+        $isSheetDetailsSeeAble = $this->canSeeSheet->isSatisfiedBy($query->currentSheet, $sheetMet);
 
         $meeting = new MeetingView(
             $query->meeting->getId(),

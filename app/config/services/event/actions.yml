@@ -20,6 +20,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
             - '%shared_uploaded_files%'
+            - '@Proximum\Vimeet\Domain\Sheet\CanSeeSheet'
 
     #
     # Package
