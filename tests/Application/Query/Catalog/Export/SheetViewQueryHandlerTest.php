@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
@@ -110,6 +111,8 @@ class SheetViewQueryHandlerTest extends TestCase
             ->willReturn([$rule1->reveal()])
         ;
 
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+
         $this->templateDataFactory
             ->createRegistrationFromSheet($this->sheet->reveal(), 'fr')
             ->shouldBeCalled()
@@ -186,7 +189,7 @@ class SheetViewQueryHandlerTest extends TestCase
             true
         );
 
-        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal());
+        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal(), $requestRepository->reveal());
 
         $handler = new SheetViewQueryHandler(
             $this->templateDataFactory->reveal(),
@@ -241,6 +244,8 @@ class SheetViewQueryHandlerTest extends TestCase
             'President'
         );
 
+        $requestRepository  = $this->prophesize(RequestRepositoryInterface::class);
+
         $this->sheetInfoQueryHandler->getSheetFields()->shouldBeCalled()->willReturn($sheetFields);
         $this->sheetRegistrationInfoQueryHandler
             ->getSheetRegistrationFields()
@@ -248,7 +253,7 @@ class SheetViewQueryHandlerTest extends TestCase
             ->willReturn($registrationFields)
         ;
 
-        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal());
+        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal(), $requestRepository->reveal());
 
         $handler = new SheetViewQueryHandler(
             $this->templateDataFactory->reveal(),

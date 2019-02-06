@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
@@ -72,6 +73,9 @@ class ShowUploadedFileActionTest extends TestCase
     /** @var UserDomain */
     private $userDomain;
 
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
     public function setUp()
     {
         $this->event = $this->prophesize(Event::class);
@@ -96,8 +100,9 @@ class ShowUploadedFileActionTest extends TestCase
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $this->sharedUploadedFiles = 'tests/Ui/Bundle/EventBundle/Controller/Sheet';
+        $this->requestRepository  = $this->prophesize(RequestRepositoryInterface::class);
 
-        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal());
+        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal(), $this->requestRepository->reveal());
 
         $this->showUploadedFileAction = new ShowUploadedFileAction(
             $this->authorizationChecker->reveal(),
