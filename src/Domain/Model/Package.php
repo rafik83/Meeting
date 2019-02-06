@@ -49,6 +49,9 @@ class Package
     private $participantAndPlanningEnabled = true;
 
     /** @var bool */
+    private $participantWithPlanning = false;
+
+    /** @var bool */
     private $optionsEnabled = true;
 
     /** @var null|int */
@@ -669,5 +672,15 @@ class Package
     public function setPlanningSelectable(bool $planningSelectable): void
     {
         $this->planningSelectable = $planningSelectable;
+    }
+
+    public function setParticipantWithPlanning(bool $participantWithPlanning): void
+    {
+        $this->participantWithPlanning = $participantWithPlanning;
+    }
+
+    public function isParticipantWithPlanning(): bool
+    {
+        return $this->participantWithPlanning;
     }
 }
