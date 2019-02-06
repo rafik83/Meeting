@@ -14,6 +14,9 @@ use Symfony\Component\Process\Process;
 
 class PdfPrinter
 {
+    public const RENDER_TYPE_DEFAULT = 'default';
+    public const RENDER_TYPE_BADGE = 'badge';
+
     /** @var string */
     private $phantomjsPath;
 
@@ -26,25 +29,35 @@ class PdfPrinter
     /** @var string */
     private $phantomjsHttpPassword;
 
+    /** @var string */
+    private $phantomjsRenderScriptPath;
+
+    /** @var string */
+    private $phantomjsRenderBadgeScript;
+
     public function __construct(
         string $phantomjsPath,
         string $phantomjsScript,
+        string $phantomjsRenderScriptPath,
+        string $phantomjsRenderBadgeScript,
         string $phantomjsHttpUser,
         string $phantomjsHttpPassword
     ) {
-        $this->phantomjsPath         = $phantomjsPath;
-        $this->phantomjsScript       = $phantomjsScript;
-        $this->phantomjsHttpUser     = $phantomjsHttpUser;
+        $this->phantomjsPath = $phantomjsPath;
+        $this->phantomjsScript = $phantomjsScript;
+        $this->phantomjsRenderScriptPath = $phantomjsRenderScriptPath;
+        $this->phantomjsRenderBadgeScript = $phantomjsRenderBadgeScript;
+        $this->phantomjsHttpUser = $phantomjsHttpUser;
         $this->phantomjsHttpPassword = $phantomjsHttpPassword;
     }
 
-    public function generate(string $urlToPrint, string $pathToPdf): string
+    public function generate(string $urlToPrint, string $pathToPdf, string $renderType = self::RENDER_TYPE_DEFAULT): string
     {
         $process = new Process(
             sprintf(
                 '%s %s %s %s %s %s',
                 $this->phantomjsPath,
-                $this->phantomjsScript,
+                $this->getRenderScript($renderType),
                 $urlToPrint,
                 $pathToPdf,
                 $this->phantomjsHttpUser,
@@ -59,5 +72,14 @@ class PdfPrinter
         }
 
         return $pathToPdf;
+    }
+
+    private function getRenderScript(string $renderType): string
+    {
+        if ($renderType === self::RENDER_TYPE_BADGE) {
+            return sprintf('%s%s', $this->phantomjsRenderScriptPath, $this->phantomjsRenderBadgeScript);
+        }
+
+        return $this->phantomjsScript;
     }
 }

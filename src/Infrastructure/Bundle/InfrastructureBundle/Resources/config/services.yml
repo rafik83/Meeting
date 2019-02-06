@@ -5464,6 +5464,8 @@ services:
         arguments:
             - '%phantomjs_path%'
             - '%phantomjs_script%'
+            - '%phantomjs_render_script_path%'
+            - '%phantomjs_render_badge_script%'
             - '%phantomjs_http_user%'
             - '%phantomjs_http_password%'
 
