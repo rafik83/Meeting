@@ -85,7 +85,6 @@ class AssignAllParticipantsToRequestCommand extends Command
 
         $participants = [];
         $requests = $this->requestRepository->getApprovedByType($event, $type);
-        $toFlush = [];
         $index = 1;
 
         foreach ($requests as $request) {
@@ -109,17 +108,10 @@ class AssignAllParticipantsToRequestCommand extends Command
                 }
             }
 
-            $toFlush[] = $request;
-
             // Each 1000 request, flush and clear to optimize the insertion
             if (0 === ($index % 1000)) {
-                $this->entityManager->flush($toFlush);
-
-                foreach ($toFlush as $flush) {
-                    $this->entityManager->detach($flush);
-                }
-
-                $toFlush = [];
+                $this->entityManager->flush();
+                $this->entityManager->clear();
             }
 
             ++$index;
