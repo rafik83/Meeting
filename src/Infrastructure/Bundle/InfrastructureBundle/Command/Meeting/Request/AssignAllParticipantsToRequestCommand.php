@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Meeting\Request;
 
-use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -37,9 +36,6 @@ class AssignAllParticipantsToRequestCommand extends Command
     /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /** @var EntityManager */
-    private $entityManager;
-
     /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
@@ -47,7 +43,6 @@ class AssignAllParticipantsToRequestCommand extends Command
         EventRepositoryInterface $eventRepository,
         TypeRepositoryInterface $typeRepository,
         RequestRepositoryInterface $requestRepository,
-        EntityManager $entityManager,
         EventDispatcherInterface $eventDispatcher
     ) {
         parent::__construct(self::NAME);
@@ -55,7 +50,6 @@ class AssignAllParticipantsToRequestCommand extends Command
         $this->eventRepository = $eventRepository;
         $this->typeRepository = $typeRepository;
         $this->requestRepository = $requestRepository;
-        $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -85,7 +79,6 @@ class AssignAllParticipantsToRequestCommand extends Command
 
         $participants = [];
         $requests = $this->requestRepository->getApprovedByType($event, $type);
-        $index = 1;
 
         foreach ($requests as $request) {
             if (count($request->getFromParticipantsArray()) !== $request->getFromSheet()->countParticipants()) {
@@ -108,17 +101,8 @@ class AssignAllParticipantsToRequestCommand extends Command
                 }
             }
 
-            // Each 1000 request, flush and clear to optimize the insertion
-            if (0 === ($index % 1000)) {
-                $this->entityManager->flush();
-                $this->entityManager->clear();
-            }
-
-            ++$index;
+            $this->requestRepository->update($request);
         }
-
-        $this->entityManager->flush();
-        $this->entityManager->clear();
 
         foreach ($participants as $participant) {
             $this->eventDispatcher->dispatch(Events::REQUEST_PARTICIPATE, new ParticipateToRequestEvent($participant));
