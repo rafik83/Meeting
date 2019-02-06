@@ -40,6 +40,7 @@
             <th>{{ 'admin.product.id'|trans }}</th>
             <th>{{ 'admin.product.name'|trans }}</th>
             <th class="text-center col-md-1">{{ 'admin.product.bought'|trans }}</th>
+            <th class="text-center col-md-1">{{ 'admin.product.boughtIncluded'|trans }}</th>
             <th class="text-center col-md-1">{{ 'admin.product.availabilityCurrentMax'|trans }}</th>
             <th class="text-center">{{ 'admin.product.unitPrice'|trans }}</th>
             <th class="text-center">{{ 'admin.product.quantityMax'|trans }}</th>
@@ -53,11 +54,11 @@
         {% set availabilityCssClass = {'default': 'success', 'warning': 'warning', 'alert': 'danger'} %}
         {% set currentType = null %}
 
-        {% for product in products %}
+        {% for product in products['unit'] %}
             {% if currentType is null or currentType != product.type %}
                 {% set currentType = product.type %}
                 <tr class="info">
-                    <th colspan="10">
+                    <th colspan="11">
                         <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
                         {{ ('admin.product.type.' ~ product.type)|trans }}
                     </th>
@@ -106,6 +107,24 @@
                                 {{ product.bought }}
                             </span>
                         </a>
+                    {% endif %}
+
+                </td>
+                <td>
+                    {% set boughtIncludedTotal = 0 %}
+                    {% for boughtIncludedProducts in products['other'] %}
+                        {% for boughtIncludedProduct in boughtIncludedProducts %}
+                            {% if boughtIncludedProduct[product.id] is defined %}
+                                {% if boughtIncludedProduct[product.id] > 0 %}
+                                    {% set boughtIncludedTotal = boughtIncludedTotal + boughtIncludedProduct[product.id] %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    {% if boughtIncludedTotal > 0 %}
+                        <span class="label label-{{ availabilityCssClass[product.availabilityStatus] }}">
+                            {{ boughtIncludedTotal }}
+                        </span>
                     {% endif %}
                 </td>
                 <td>

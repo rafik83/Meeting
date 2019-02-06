@@ -50,13 +50,22 @@ class ProductsViewQueryHandler
     public function handle(ProductsViewQuery $query): array
     {
         $productViews = [];
+        $includedProductViews = [];
         $products = $this->productRepository->findByEventOrderedByProductTypeAndProductname($query->event);
         $this->removeAuthorizationChecker->preloadForEvent($query->event);
 
         foreach ($products as $product) {
+            if (count($product->getIncludedProducts()) > 0) {
+                $includedProductViews[] = array_map(function (Product\ProductIncluded $includedProduct) {
+                    return [
+                        $includedProduct->getIncluded()->getId()  =>  $this->rowRepository->boughtByProduct($includedProduct->getProduct()),
+                    ];
+                }, $product->getIncludedProducts());
+            }
+
             $bought = $this->rowRepository->boughtByProduct($product);
 
-            $productViews[] = new ProductView(
+            $productViews['unit'][] = new ProductView(
                 $product->getId(),
                 $product->getName(),
                 $product->getType(),
@@ -84,6 +93,8 @@ class ProductsViewQueryHandler
                 $product->hasHappenings()
             );
         }
+
+        $productViews['other'] = $includedProductViews;
 
         return $productViews;
     }

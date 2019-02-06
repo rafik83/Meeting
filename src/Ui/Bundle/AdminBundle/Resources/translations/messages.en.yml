@@ -687,6 +687,7 @@ admin.product.action.confirmDelete: 'are you sure you want to delete this produc
 admin.product.actions: Actions
 admin.product.availabilityCurrentMax: 'Current/max availability'
 admin.product.bought: 'number of bought products'
+admin.product.boughtIncluded: 'number of bought products from pack'
 admin.product.buyableUntil: 'Buyable until'
 admin.product.deletableUntil: 'deletable until'
 admin.product.happenings.tooltip: 'Linked to under-events'
