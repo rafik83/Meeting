@@ -59,7 +59,7 @@ class ProductsViewQueryHandler
 
             $bought[$product->getId()] = $this->rowRepository->boughtByProduct($product);
 
-            if ($product->getType() == 'plan') {
+            if ('plan' === $product->getType()) {
                 if (count($product->getIncludedProducts()) > 0) {
                     $includedProducts = $product->getIncludedProducts();
 
