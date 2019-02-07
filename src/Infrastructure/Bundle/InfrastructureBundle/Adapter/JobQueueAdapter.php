@@ -61,11 +61,13 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $this->setJob($job);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function printPlanning(Event\ExtraData $extraData, string $orderBy, string $emailToNotify, string $locale, bool $withBadge = false): void
-    {
+    public function printPlanning(
+        Event\ExtraData $extraData,
+        string $orderBy,
+        string $emailToNotify,
+        string $locale,
+        string $printOption
+    ): void {
         $job = new Job(
             GeneratePlanningCommand::NAME,
             [
@@ -73,7 +75,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 sprintf('--orderBy=%s', $orderBy),
                 sprintf('--emailToNotify=%s', $emailToNotify),
                 sprintf('--locale=%s', $locale),
-                sprintf('--withBadge=%s', (int)$withBadge),
+                sprintf('--printOption=%s', $printOption),
             ]
         );
 

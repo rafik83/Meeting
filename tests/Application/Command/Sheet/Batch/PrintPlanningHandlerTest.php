@@ -23,7 +23,7 @@ use Proximum\Vimeet\Domain\Repository\Event\ExtraDataRepositoryInterface;
 
 class PrintPlanningHandlerTest extends TestCase
 {
-    public function testHandle(): void
+    public function testHandlePlanning(): void
     {
         $event = $this->prophesize(Event::class);
         $sheetIds = [11, 12, 13, 14, 15, 16];
@@ -40,7 +40,7 @@ class PrintPlanningHandlerTest extends TestCase
         $extraDataRepository->add($extraData)->shouldBeCalled();
 
         $jobQueue
-            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr', false)
+            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr', 'printPlanning')
             ->shouldBeCalled()
         ;
 
@@ -50,7 +50,7 @@ class PrintPlanningHandlerTest extends TestCase
             $dateTime
         );
 
-        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr', false);
+        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr', 'printPlanning');
         $result = $handler->handle($command);
 
         $expected = new BatchResult($sheetIds, $command->getMessage() . 'printPlanning.success');
@@ -58,7 +58,7 @@ class PrintPlanningHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleWithBadge(): void
+    public function testHandlePlanningAndBadge(): void
     {
         $event = $this->prophesize(Event::class);
         $sheetIds = [11, 12, 13, 14, 15, 16];
@@ -75,7 +75,7 @@ class PrintPlanningHandlerTest extends TestCase
         $extraDataRepository->add($extraData)->shouldBeCalled();
 
         $jobQueue
-            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr', true)
+            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr', 'printPlanningAndBadge')
             ->shouldBeCalled()
         ;
 
@@ -85,10 +85,45 @@ class PrintPlanningHandlerTest extends TestCase
             $dateTime
         );
 
-        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr', true);
+        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr', 'printPlanningAndBadge');
         $result = $handler->handle($command);
 
         $expected = new BatchResult($sheetIds, $command->getMessage() . 'printPlanningAndBadge.success');
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testHandleBadge(): void
+    {
+        $event = $this->prophesize(Event::class);
+        $sheetIds = [11, 12, 13, 14, 15, 16];
+        $admin = $this->prophesize(Admin::class);
+        $admin->getEmail()->shouldBeCalled()->willReturn('email@example.net');
+        $orderBy = PlanningOrderedBy::ORDER_BY_SHEET_TITLE;
+        $admin->getLocale()->willReturn('fr');
+
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+        $dateTime = new \DateTime();
+
+        $extraData = new Event\ExtraData($event->reveal(), Type::ADMIN_SHEET_BATCH_IDS, '11,12,13,14,15,16', $dateTime);
+        $extraDataRepository->add($extraData)->shouldBeCalled();
+
+        $jobQueue
+            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr', 'printBadge')
+            ->shouldBeCalled()
+        ;
+
+        $handler = new PrintPlanningHandler(
+            $jobQueue->reveal(),
+            $extraDataRepository->reveal(),
+            $dateTime
+        );
+
+        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr', 'printBadge');
+        $result = $handler->handle($command);
+
+        $expected = new BatchResult($sheetIds, $command->getMessage() . 'printBadge.success');
 
         $this->assertEquals($expected, $result);
     }

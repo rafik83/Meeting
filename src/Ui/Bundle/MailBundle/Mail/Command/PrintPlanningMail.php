@@ -39,8 +39,8 @@ class PrintPlanningMail extends AbstractMail
     /** @var int */
     public $fileId;
 
-    /** @var bool */
-    public $withBadge;
+    /** @var string */
+    public $printOption;
 
     public function __construct(
         Event $event,
@@ -50,7 +50,7 @@ class PrintPlanningMail extends AbstractMail
         $fileHash,
         $fileId,
         $orderBy,
-        bool $withBadge = false
+        string $printOption
     ) {
         parent::__construct($sender, $receiver, $locale);
 
@@ -58,6 +58,6 @@ class PrintPlanningMail extends AbstractMail
         $this->fileHash = $fileHash;
         $this->fileId = $fileId;
         $this->orderBy = $orderBy;
-        $this->withBadge = $withBadge;
+        $this->printOption = $printOption;
     }
 }

@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Application\Command\Planning;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Components\Planning\Displayer\ParticipantPlanningDisplayer;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQuery;
+use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -30,7 +32,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
 class ExportPlanningHandler
 {
-    const PLANNING_TEMPLATE = 'AdminBundle:Planning/Print:plannings.html.twig';
+    public const PLANNING_TEMPLATE = 'AdminBundle:Planning/Print:plannings.html.twig';
 
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
@@ -119,10 +121,16 @@ class ExportPlanningHandler
 
         $this->orderParticipant($event, $exportPlanning->orderBy, $participants);
 
-        if ($exportPlanning->withBadge) {
-            $print = $this->handlePlanningAndBadge($event, $participants);
-        } else {
-            $print = $this->handlePlanning($event, $participants);
+        switch ($exportPlanning->printOption) {
+            case Batch::PRINT_OPTION_PLANNING:
+                $print = $this->handlePlanning($event, $participants);
+                break;
+            case Batch::PRINT_OPTION_PLANNING_AND_BADGE:
+                $print = $this->handlePlanningAndBadge($event, $participants);
+                break;
+            case Batch::PRINT_OPTION_BADGE:
+                $print = $this->handleBadge($event, $participants);
+                break;
         }
 
         $file = $this->createFile($print);
@@ -215,6 +223,34 @@ class ExportPlanningHandler
         ]);
     }
 
+    public function handleBadge(Event $event, array &$participants): string
+    {
+        $badges = [];
+        $printedUsers = [];
+
+        /** @var Participant $participant */
+        foreach ($participants as $participant) {
+            $user = $participant->getUser();
+
+            if (array_key_exists($user->getId(), $printedUsers)) {
+                continue;
+            }
+
+            $badges[] = $this->queryBus->handle(
+                new GetUserBadgeByEventQuery(
+                    $event,
+                    $participant->getUser()
+                )
+            );
+
+            $printedUsers[$user->getId()] = true;
+        }
+
+        return $this->templating->render('AdminBundle:Planning/Print:badges.html.twig', [
+            'badges' => $badges,
+        ]);
+    }
+
     /**
      * @param string $print
      *
@@ -248,7 +284,7 @@ class ExportPlanningHandler
                 $file->getHash(),
                 $file->getId(),
                 $exportPlanning->orderBy,
-                $exportPlanning->withBadge
+                $exportPlanning->printOption
             )
         );
     }

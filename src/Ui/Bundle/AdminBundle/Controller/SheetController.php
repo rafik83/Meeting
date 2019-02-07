@@ -232,8 +232,14 @@ class SheetController extends Controller
                 if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
                     $batch->refuse = $batchForm->get('refuse')->isClicked();
                     $batch->printPdf  = $batchForm->get('printPdf')->isClicked();
-                    $batch->printPlanning = $batchForm->get('printPlanning')->isClicked();
-                    $batch->printPlanningAndBadge = $batchForm->get('printPlanningAndBadge')->isClicked();
+
+                    if ($batchForm->get('printPlanning')->isClicked()) {
+                        $batch->printOption = Batch::PRINT_OPTION_PLANNING;
+                    } elseif ($batchForm->get('printPlanningAndBadge')->isClicked()) {
+                        $batch->printOption = Batch::PRINT_OPTION_PLANNING_AND_BADGE;
+                    } elseif ($batchForm->get('printBadge')->isClicked()) {
+                        $batch->printOption = Batch::PRINT_OPTION_BADGE;
+                    }
                 }
 
                 if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
