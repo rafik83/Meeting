@@ -28,8 +28,8 @@ class PrintPlanning extends AbstractBatch
     /** @var Event */
     public $event;
 
-    /** @var bool */
-    public $withBadge;
+    /** @var string */
+    public $printOption;
 
     public function __construct(
         Event $event,
@@ -37,13 +37,13 @@ class PrintPlanning extends AbstractBatch
         Admin $admin,
         string $orderBy,
         string $locale,
-        bool $withBadge = false
+        string $printOption
     ) {
         $this->event = $event;
         $this->ids = $sheetIds;
         $this->admin = $admin;
         $this->orderBy = $orderBy;
         $this->locale = $locale;
-        $this->withBadge = $withBadge;
+        $this->printOption = $printOption;
     }
 }

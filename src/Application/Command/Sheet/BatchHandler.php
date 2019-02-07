@@ -182,19 +182,7 @@ class BatchHandler
             );
         }
 
-        if ($batch->printPlanning && null !== $batch->printPlanningOrderBy) {
-            return $this->printPlanningHandler->handle(
-                new PrintPlanning(
-                    $batch->event,
-                    $batch->ids,
-                    $batch->admin,
-                    $batch->printPlanningOrderBy,
-                    $batch->locale
-                )
-            );
-        }
-
-        if ($batch->printPlanningAndBadge && null !== $batch->printPlanningOrderBy) {
+        if ($batch->printOption && null !== $batch->printPlanningOrderBy) {
             return $this->printPlanningHandler->handle(
                 new PrintPlanning(
                     $batch->event,
@@ -202,7 +190,7 @@ class BatchHandler
                     $batch->admin,
                     $batch->printPlanningOrderBy,
                     $batch->locale,
-                    true
+                    $batch->printOption
                 )
             );
         }

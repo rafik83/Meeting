@@ -52,7 +52,7 @@ class GeneratePlanningCommand extends Command
             ->addOption('orderBy', null, InputOption::VALUE_REQUIRED, 'OrderBy Sheet name or participant last name')
             ->addOption('emailToNotify', null, InputOption::VALUE_REQUIRED, 'email to notify at the end of the command')
             ->addOption('locale', null, InputOption::VALUE_REQUIRED, 'locale for the mail of notification')
-            ->addOption('withBadge', null, InputOption::VALUE_REQUIRED, 'add badge to impression')
+            ->addOption('printOption', null, InputOption::VALUE_REQUIRED, 'Print option (badge, planning, planning + badge)')
         ;
     }
 
@@ -62,18 +62,18 @@ class GeneratePlanningCommand extends Command
             || null === $input->getOption('sheetIdsExtraData')
             || null === $input->getOption('emailToNotify')
             || null === $input->getOption('locale')
-            || null === $input->getOption('withBadge')
+            || null === $input->getOption('printOption')
         ) {
             $output->writeln('<error>The orderBy, sheetIdsExtraData, emailToNotify and locale options are mandatory and can not be null</error>');
 
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The orderBy, sheetIdsExtraData, emailToNotify and locale options are mandatory and can not be null, arguments passed: orderBy=%s types=%s emailToNotify=%s locale=%s withBadge=%s',
+                    'The orderBy, sheetIdsExtraData, emailToNotify and locale options are mandatory and can not be null, arguments passed: orderBy=%s types=%s emailToNotify=%s locale=%s printOption=%s',
                     $input->getOption('orderBy'),
                     $input->getOption('sheetIdsExtraData'),
                     $input->getOption('emailToNotify'),
                     $input->getOption('locale'),
-                    $input->getOption('withBadge')
+                    $input->getOption('printOption')
                 )
             );
         }
@@ -91,7 +91,7 @@ class GeneratePlanningCommand extends Command
                 $input->getOption('orderBy'),
                 $input->getOption('emailToNotify'),
                 $input->getOption('locale'),
-                (bool)$input->getOption('withBadge')
+                $input->getOption('printOption')
             )
         );
     }

@@ -1,7 +1,7 @@
 {% import "MailBundle:Mail:macros.html.twig" as macros %}
 <html>
 <body>
-{% set transKey = mail.withBadge ? 'printWithBadge' : 'print'  %}
+{% set transKey = mail.printOption %}
 
 {{ ('mail.planning.'~ transKey ~'.intro')|trans({}, 'mail', mail.locale)|html|nl2br }}
 <br>
