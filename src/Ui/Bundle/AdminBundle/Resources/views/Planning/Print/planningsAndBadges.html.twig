@@ -149,8 +149,11 @@
     </style>
 </head>
 <body>
-{% for planningAndBadge in planningsAndBadges %}
-    {% include '@Admin/User/Event/Badge/content.html.twig' with {'userBadgeAndPlanningByEventView': planningAndBadge} %}
+{% for result in results %}
+    {% include '@Admin/User/Event/Badge/content.html.twig' with {
+        'userBadgeByEventView' : result.userBadgeByEventView is defined ? result.userBadgeByEventView : result,
+        'planning': result.planning is defined ? result.planning : null
+    } %}
 {% endfor %}
 <script>
     window.print();

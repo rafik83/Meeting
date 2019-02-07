@@ -219,7 +219,7 @@ class ExportPlanningHandler
         }
 
         return $this->templating->render('AdminBundle:Planning/Print:planningsAndBadges.html.twig', [
-            'planningsAndBadges' => $planningsAndBadges,
+            'results' => $planningsAndBadges,
         ]);
     }
 
@@ -246,8 +246,8 @@ class ExportPlanningHandler
             $printedUsers[$user->getId()] = true;
         }
 
-        return $this->templating->render('AdminBundle:Planning/Print:badges.html.twig', [
-            'badges' => $badges,
+        return $this->templating->render('AdminBundle:Planning/Print:planningsAndBadges.html.twig', [
+            'results' => $badges,
         ]);
     }
 
