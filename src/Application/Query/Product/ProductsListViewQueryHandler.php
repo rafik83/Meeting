@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Product;
 
+use Proximum\Vimeet\Application\View\Product\ProductsListView;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
 class ProductsListViewQueryHandler
@@ -26,5 +27,13 @@ class ProductsListViewQueryHandler
     {
         $productListViews = [];
         $products = $this->productRepository->findByEventOrderedByProductTypeAndProductname($query->event);
+
+        foreach ($products as $product) {
+            $productListViews[] = new ProductsListView(
+                
+            );
+        }
+
+        return $productListViews;
     }
 }
