@@ -59,12 +59,12 @@ class ProductsViewQueryHandler
 
             $bought[$product->getId()] = $this->rowRepository->boughtByProduct($product);
 
-            if($product->getType() == 'plan') {
+            if ($product->getType() == 'plan') {
                 if (count($product->getIncludedProducts()) > 0) {
                     $includedProducts = $product->getIncludedProducts();
 
                     foreach ($includedProducts as $includedProduct) {
-                        if(isset($productIncludedBought[$includedProduct->getIncluded()->getId()])) {
+                        if (isset($productIncludedBought[$includedProduct->getIncluded()->getId()])) {
                             $productIncludedBought[$includedProduct->getIncluded()->getId()] += $includedProduct->getQuantity() * $bought[$product->getId()];
                         } else {
                             $productIncludedBought[$includedProduct->getIncluded()->getId()] = $includedProduct->getQuantity() * $bought[$product->getId()];
