@@ -30,7 +30,13 @@ class ProductsListViewQueryHandler
 
         foreach ($products as $product) {
             $productListViews[] = new ProductsListView(
-                
+                $product->getName(),
+                $product->getUnitPrice(),
+                '',
+                '',
+                '',
+                '',
+                ''
             );
         }
 
