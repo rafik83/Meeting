@@ -87,6 +87,7 @@ form.badge_configuration.children.footerColor.label: 'Couleur du footer'
 form.badge_configuration.children.footerTextColor.label: 'Couleur du texte du footer'
 form.badge_configuration.children.header.help: 'Par défaut le header mobile de la langue par défaut'
 form.badge_configuration.children.header.label: 'Logo du header'
+form.badge_configuration.children.showCountry.label: 'Affichage du pays'
 form.badge_configuration.children.showFirstName.label: 'Affichage du prénom'
 form.badge_configuration.children.showFooterTypeOrCategory.choices.category: 'Catégorie de participation'
 form.badge_configuration.children.showFooterTypeOrCategory.choices.none: Aucun
@@ -95,7 +96,6 @@ form.badge_configuration.children.showFooterTypeOrCategory.label: 'Affichage du 
 form.badge_configuration.children.showHeader.label: 'Affichage du logo en header'
 form.badge_configuration.children.showLastName.label: 'Affichage du nom'
 form.badge_configuration.children.showPosition.label: 'Affichage de la fonction'
-form.badge_configuration.children.showCountry.label: 'Affichage du pays'
 form.badge_configuration.children.showQRCode.label: 'Affichage du QRCode'
 form.badge_configuration.children.showSheetTitle.label: 'Affichage du nom de société'
 form.badge_configuration.children.submit.label: Enregistrer
@@ -398,9 +398,9 @@ form.filter.optgroup.participantManagement.label: 'Gestion participant'
 form.filter.optgroup.sheetInfo.label: 'Info fiche'
 form.filter.participants.email.label: 'Email du participant'
 form.filter.participants.lastname.label: 'Nom du participant'
+form.filter.participation_type.label: 'Type de participation'
 form.filter.sheetName.label: 'Nom de la fiche'
 form.filter.spotReference.label: 'Lieux attribué'
-form.filter.participation_type.label: 'Type de participation'
 form.forgotten_password.children.email.label: 'Entrez votre email'
 form.forgotten_password.children.submit.label: Envoyez
 form.form_template_create.children.close.label: Annuler
@@ -826,6 +826,7 @@ form.sheet_batch.children.pending.label: 'En attente'
 form.sheet_batch.children.printPdf.label: 'Imprimer en PDF'
 form.sheet_batch.children.printPlanning.label: Imprimer
 form.sheet_batch.children.printPlanningAndBadge.label: 'Impression badge et planning'
+form.sheet_batch.children.printBadge.label: 'Impression badge'
 form.sheet_batch.children.printPlanningOrderBy.label: 'Ordre de l''export'
 form.sheet_batch.children.refuse.label: Refuser
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'

@@ -34,6 +34,14 @@ interface RuleRepositoryInterface
     public function getByEventSeerAndSeeable(Event $event, WhoInterface $seer, WhoInterface $seeable);
 
     /**
+     * @param Event        $event
+     * @param WhoInterface $seer
+     *
+     * @return Rule|null
+     */
+    public function getByEventAndSeer(Event $event, WhoInterface $seer): ?Rule;
+
+    /**
      * @param Type $seer
      * @param Type $seeable
      *

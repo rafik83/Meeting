@@ -175,7 +175,7 @@
                         <li role="separator" class="divider"></li>
                         <li>{{ form_widget(batch_form.printPdf) }}</li>
                     {% endif %}
-                    {% if batch_form.printPlanning is defined or batch_form.printPlanningAndBadge is defined %}
+                    {% if batch_form.printPlanning is defined or batch_form.printPlanningAndBadge is defined or batch_form.printBadge is defined %}
                         <li role="separator" class="divider"></li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#printPlanningOrderBy">
@@ -468,6 +468,9 @@
                         {% endif %}
                         {% if batch_form.printPlanningAndBadge is defined %}
                             {{ form_widget(batch_form.printPlanningAndBadge) }}
+                        {% endif %}
+                        {% if batch_form.printBadge is defined %}
+                            {{ form_widget(batch_form.printBadge) }}
                         {% endif %}
                     </div>
                 </div>

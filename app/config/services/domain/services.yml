@@ -141,3 +141,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
 
     Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter: ~
+
+    Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets:
+        arguments:
+            - '@repository.rule_repository'

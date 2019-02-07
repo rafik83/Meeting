@@ -39,15 +39,4 @@
             {% endif %}
         </div>
     </div>
-
-    {% if planning is not empty %}
-        <div class="badge-planning">
-            <div class="badge-planning-content">
-                <div class="text-center">
-                    <b>PLANNING</b>
-                </div>
-                {{ planning|markdown_to_html }}
-            </div>
-        </div>
-    {% endif %}
 </div>

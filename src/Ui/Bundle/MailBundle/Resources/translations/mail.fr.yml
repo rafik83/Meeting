@@ -7,7 +7,7 @@ admin.mail.export_form_template_data.end: "Cordialement\n"
 admin.mail.export_form_template_data.file_link: 'Fichier CSV'
 admin.mail.export_form_template_data.subject: 'Export des données du formulaire de template'
 admin.mail.export_rooming_list.body: "Bonjour,\nVoici le fichier comportant l'export de la rooming list\n"
-admin.mail.export_rooming_list.end: "Cordialement\n"
+admin.mail.export_rooming_list.end: Cordialement\n
 admin.mail.export_rooming_list.file_link: 'Fichier CSV'
 admin.mail.export_rooming_list.subject: 'Export de la rooming list'
 admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:"
@@ -80,18 +80,23 @@ mail.planner.import.error: "Bonjour, \n\n Une erreur s'est produite durant le tr
 mail.planner.import.intro: "Bonjour, \n\n L'import du fichier pour les planifications de l'événement %eventTitle% est terminé."
 mail.planner.import.subject: 'Import des planifications'
 mail.planner.import.subject.error: 'Erreur lors de l''import des planifications'
-mail.planning.print.intro: 'Voici le fichier de plannings demandé'
-mail.planning.print.link.click: 'Fichier de planning'
-mail.planning.print.link.intro: 'Vous pouvez imprimer les plannings en cliquant ici :'
+mail.planning.printPlanning.intro: 'Voici le fichier de plannings demandé'
+mail.planning.printPlanning.link.click: 'Fichier de planning'
+mail.planning.printPlanning.link.intro: 'Vous pouvez imprimer les plannings en cliquant ici :'
 mail.planning.print.orderBy.participant_last_name: 'par nom de famille du participant'
 mail.planning.print.orderBy.sheet_title: 'par nom de société'
 mail.planning.print.orderBy.text: 'Le fichier est trié'
 mail.planning.print.subject: 'Fichier de plannings'
-mail.planning.printWidthBadge.link.click: 'Fichier de plannings et badges'
-mail.planning.printWithBadge.intro: 'Voici le fichier de plannings et badges demandé'
-mail.planning.printWithBadge.link.click: 'Fichier plannings et badges'
-mail.planning.printWithBadge.link.intro: 'Vous pouvez imprimer les plannings et badges en cliquant ici :'
-mail.planning.printWithBadge.subject: 'Fichier de plannings et badges'
+mail.planning.printPlanningAndBadge.link.click: 'Fichier de plannings et badges'
+mail.planning.printPlanningAndBadge.intro: 'Voici le fichier de plannings et badges demandé'
+mail.planning.printPlanningAndBadge.link.click: 'Fichier plannings et badges'
+mail.planning.printPlanningAndBadge.link.intro: 'Vous pouvez imprimer les plannings et badges en cliquant ici :'
+mail.planning.printPlanningAndBadge.subject: 'Fichier de plannings et badges'
+mail.planning.printBadge.link.click: 'Fichier de badges'
+mail.planning.printBadge.intro: 'Voici le fichier de badges demandé'
+mail.planning.printBadge.link.click: 'Fichier badges'
+mail.planning.printBadge.link.intro: 'Vous pouvez imprimer les badges en cliquant ici :'
+mail.planning.printBadge.subject: 'Fichier de badges'
 mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace participant \"%event%\" est créé. \n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace participant sur le site \"%event%\".\n\nBien cordialement,"
 mail.register.subject: 'Votre compte d''accès à l''espace participant de %event% est créé'
 mail.resetPassword.body: "Bonjour,\n\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"

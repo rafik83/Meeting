@@ -21,6 +21,10 @@ class Batch extends AbstractBatch
     const SELECTION_TYPE_PAGE = 'selection_type_page';
     const SELECTION_TYPE_ALL  = 'selection_type_all';
 
+    public const PRINT_OPTION_BADGE = 'printBadge';
+    public const PRINT_OPTION_PLANNING_AND_BADGE = 'printPlanningAndBadge';
+    public const PRINT_OPTION_PLANNING = 'printPlanning';
+
     /** @var array */
     public $ids;
 
@@ -109,11 +113,8 @@ class Batch extends AbstractBatch
     /** @var string */
     public $printPlanningOrderBy = PlanningOrderedBy::ORDER_BY_SHEET_TITLE;
 
-    /** @var bool */
-    public $printPlanning;
-
-    /** @var bool */
-    public $printPlanningAndBadge;
+    /** @var string */
+    public $printOption;
 
     /** @var Type */
     public $duplicateToType;

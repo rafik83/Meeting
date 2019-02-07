@@ -52,7 +52,7 @@ class PrintPlanningHandler
             $command->orderBy,
             $command->admin->getEmail(),
             $command->admin->getLocale(),
-            $command->withBadge
+            $command->printOption
         );
 
         return new BatchResult(
@@ -60,7 +60,7 @@ class PrintPlanningHandler
             sprintf(
                 '%s%s.success',
                 $command->getMessage(),
-                $command->withBadge ? 'printPlanningAndBadge' : 'printPlanning'
+                $command->printOption
             )
         );
     }

@@ -4209,6 +4209,7 @@ services:
         arguments:
             - '@datetime'
             - '@navigation.navigation_builder'
+            - '@Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets'
 
     Proximum\Vimeet\Application\Query\Navigation\Category\FormsViewQueryHandler:
         arguments:
@@ -4259,6 +4260,7 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery }
 

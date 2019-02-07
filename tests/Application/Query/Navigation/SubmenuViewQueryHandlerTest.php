@@ -21,12 +21,17 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHa
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\StaticFormulation;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SubmenuViewQueryHandlerTest extends TestCase
@@ -79,6 +84,25 @@ class SubmenuViewQueryHandlerTest extends TestCase
             ),
         ];
 
+        // Rule
+        $rule = $this->prophesize(Rule::class);
+        $event = $this->prophesize(Event::class);
+        $who = $this->prophesize(WhoInterface::class);
+        $sheet->getEvent()
+            ->shouldBeCalled()
+            ->willReturn($event->reveal());
+        ;
+        $sheet->getType()
+            ->shouldBeCalled()
+            ->willReturn($who->reveal());
+        ;
+
+        $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
+        $ruleRepository->getByEventAndSeer($event->reveal(), $who->reveal())
+            ->shouldBeCalled()
+            ->willReturn($rule->reveal());
+        $canSeeOtherSheets = new CanSeeOtherSheets($ruleRepository->reveal());
+
         // Mock
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
 
@@ -88,7 +112,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $navigationBuilder->getRoute('event_meeting_list_request', ['sheet' => 1])->shouldBeCalled()
             ->willReturn('navigation.category.meeting.link');
 
-        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime);
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime, $canSeeOtherSheets);
         $menuButtonViews = $handler->handle($query);
 
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);

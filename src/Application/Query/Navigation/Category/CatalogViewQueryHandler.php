@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets;
 
 class CatalogViewQueryHandler
 {
@@ -27,23 +28,35 @@ class CatalogViewQueryHandler
     /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
+    /** @var CanSeeOtherSheets */
+    private $canSeeOtherSheets;
+    
     /**
      * @param DateTimeInterface          $dateTime
      * @param NavigationBuilderInterface $navigationBuilder
+     * @param CanSeeOtherSheets          $canSeeOtherSheets
      */
-    public function __construct(DateTimeInterface $dateTime, NavigationBuilderInterface $navigationBuilder)
-    {
-        $this->dateTime          = $dateTime;
+    public function __construct(
+        DateTimeInterface $dateTime,
+        NavigationBuilderInterface $navigationBuilder,
+        CanSeeOtherSheets $canSeeOtherSheets
+    ) {
+        $this->dateTime = $dateTime;
         $this->navigationBuilder = $navigationBuilder;
+        $this->canSeeOtherSheets = $canSeeOtherSheets;
     }
 
     /**
      * @param CatalogViewQuery $catalogViewQuery
      *
-     * @return CategoryView
+     * @return CategoryView|null
      */
     public function handle(CatalogViewQuery $catalogViewQuery)
     {
+        if (false === $this->canSeeOtherSheets->isSatisfiedBy($catalogViewQuery->sheet)) {
+            return null;
+        }
+        
         $catalogOnlineDate = $catalogViewQuery
             ->sheet
             ->getEvent()
