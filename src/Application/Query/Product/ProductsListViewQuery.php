@@ -1,0 +1,19 @@
+<?php
+
+namespace Proximum\Vimeet\Application\Query\Product;
+
+use Proximum\Vimeet\Domain\Model\Event;
+
+class ProductsListViewQuery
+{
+    /** @var Event */
+    public $event;
+
+    /**
+     * @param Event $event
+     */
+    public function __construct(Event $event)
+    {
+        $this->event = $event;
+    }
+}
