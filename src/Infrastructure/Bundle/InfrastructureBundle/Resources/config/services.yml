@@ -69,6 +69,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\RuleRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
     Proximum\Vimeet\Infrastructure\Repository\ScanRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
