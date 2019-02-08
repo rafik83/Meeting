@@ -307,7 +307,7 @@ class Meeting implements MessageSubjectInterface
      *
      * @param Sheet $sheet
      *
-     * @return Sheet|null
+     * @return Sheet
      */
     public function getSheetMet(Sheet $sheet)
     {
