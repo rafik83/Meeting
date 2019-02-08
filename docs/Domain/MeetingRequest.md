@@ -52,10 +52,18 @@ La seule condition ici est que le créneau soit disponible (pas d'autre rdv au m
 
 Lors du jour-J, une demande de RDV qui est acceptée peut être placé automatiquement au créneau le plus proche si les personnes concernées ont acceptées de recevoir des notifications SMS et validé leur numéro de téléphone, afin d'être notifié de quand se déroulera le RDV.
 
+### Règle de vérité
+
+La source de vérité sur le positionnement des RDVs est le planner.
+Si un RDV est positionné via la GDR admin, alors que le planner est en train de "tourner", à l'import de la solution de ce dernier, les anciens RDVs positionnés seront supprimés. Aucune réconciliation n'est effectuée, seul les RDVs du planner font foi.
+
 
 # Rendez-vous `Meeting`
 
 Un Rendez-vous (RDV) `Meeting` est lié à une demande de RDV et est composé des mêmes informations qu'une demande, ainsi qu'une liaision à un lieu `Spot` et un créneau de RDV `MeetingSlot`
 
 Un RDV ne peut avoir lieu s'il n'a pas de lieu `Spot` ou de créneau `MeetingSlot`
+
+Une demande de RDV n'est plus modifiable par l'utilisateur lorsque celle-ci a été transformée en Rendez-vous.
+Elle est toujours visible par l'utilisateur, notamment pour la partie message échangé et information de la fiche rencontrée. Mais son statuts ne peut être changé et les participants assignés modifiés.
 
