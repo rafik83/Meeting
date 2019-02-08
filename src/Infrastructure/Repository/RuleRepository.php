@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
@@ -93,7 +92,7 @@ class RuleRepository implements RuleRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -107,7 +106,7 @@ class RuleRepository implements RuleRepositoryInterface
             ->where('rule.event = :event')
             ->setParameter('event', $event)
             ->setMaxResults(1);
-        
+
         if ($seer instanceof Type) {
             $queryBuilder
                 ->andWhere($queryBuilder->expr()->orX(
@@ -169,11 +168,10 @@ class RuleRepository implements RuleRepositoryInterface
         }
 
         // if there's at least one request between sheets, the default rule is used
-        $defaultRule = new Rule(
+        $defaultRule = Rule::createDefault(
             $seeableSheet->getEvent(),
             $seerSheet->getType(),
-            $seeableSheet->getType(),
-            Tag::getSeeableTags()
+            $seeableSheet->getType()
         );
 
         return [$defaultRule];
