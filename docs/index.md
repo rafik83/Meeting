@@ -6,3 +6,4 @@
 - [Symfony update](SymfonyUpdate.md)
 - [System Unavailability (Indisponibilité admin)](SystemUnavailability.md)
 - [Template objects](TemplateObjects.md)
+- [Workflow](workflow.md)
