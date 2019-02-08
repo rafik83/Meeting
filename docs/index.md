@@ -11,3 +11,4 @@
   - [Template objects](Domain/TemplateObjects.md)
   - [System Unavailability (Indisponibilité admin)](Domain/SystemUnavailability.md)
   - [API](Domain/Api.md)
+  - [Forfait de participation `Package`](Domain/Package.md)
