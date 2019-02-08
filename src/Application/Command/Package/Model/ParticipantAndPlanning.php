@@ -33,7 +33,11 @@ class ParticipantAndPlanning
     /** @var bool */
     public $planningSelectable = true;
 
-    /** @var bool */
+    /**
+     * This is used to explicitly set : "a participant = a planning" without buying a planning for each one
+     *
+     * @var bool
+     */
     public $participantWithPlanning = false;
 
     /**

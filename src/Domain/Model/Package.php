@@ -48,7 +48,11 @@ class Package
     /** @var bool */
     private $participantAndPlanningEnabled = true;
 
-    /** @var bool */
+    /**
+     * This is used to explicitly set : "a participant = a planning" without buying a planning for each one
+     *
+     * @var bool
+     */
     private $participantWithPlanning = false;
 
     /** @var bool */
