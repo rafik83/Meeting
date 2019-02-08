@@ -11,12 +11,14 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class RuleRepository implements RuleRepositoryInterface
@@ -26,12 +28,17 @@ class RuleRepository implements RuleRepositoryInterface
      */
     private $entityManager;
 
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
     /**
-     * @param EntityManager $entityManager
+     * @param EntityManager              $entityManager
+     * @param RequestRepositoryInterface $requestRepository
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, RequestRepositoryInterface $requestRepository)
     {
         $this->entityManager = $entityManager;
+        $this->requestRepository = $requestRepository;
     }
 
     /**
@@ -151,7 +158,25 @@ class RuleRepository implements RuleRepositoryInterface
      */
     public function getBySeerSheetAndSeeableSheet(Sheet $seerSheet, Sheet $seeableSheet): array
     {
-        return $this->getBySeerTypeAndSeeableType($seerSheet->getType(), $seeableSheet->getType());
+        $rules = $this->getBySeerTypeAndSeeableType($seerSheet->getType(), $seeableSheet->getType());
+
+        if (!empty($rules)) {
+            return $rules;
+        }
+
+        if (false === $this->requestRepository->hasRequestBetweenSheets($seerSheet, $seeableSheet)) {
+            return [];
+        }
+
+        // if there's at least one request between sheets, the default rule is used
+        $defaultRule = new Rule(
+            $seeableSheet->getEvent(),
+            $seerSheet->getType(),
+            $seeableSheet->getType(),
+            Tag::getSeeableTags()
+        );
+
+        return [$defaultRule];
     }
 
     /**
