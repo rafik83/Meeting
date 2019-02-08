@@ -102,7 +102,7 @@ class SheetViewQueryHandler
             throw new \DomainException('Sheet not visible');
         }
 
-        $rules = $this->ruleRepository->getBySeerTypeAndSeeableType($query->viewer->getType(), $query->sheet->getType());
+        $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->viewer, $query->sheet);
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromSheet($query->sheet, $query->locale);
         $template = $this->templateDataFactory->createFromSheet($query->sheet, $query->locale);

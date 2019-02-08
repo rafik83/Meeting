@@ -62,10 +62,7 @@ class MeetingRequestViewQueryHandler
     {
         $otherSheet = $query->meetingRequest->getSheetMet($query->sheet);
         $userSheet = $query->sheet;
-        $rules = $this->ruleRepository->getBySeerTypeAndSeeableType(
-            $userSheet->getType(),
-            $otherSheet->getType()
-        );
+        $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($userSheet, $otherSheet);
         $composedRule = null;
 
         if (!empty($rules)) {

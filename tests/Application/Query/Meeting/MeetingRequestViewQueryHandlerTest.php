@@ -59,7 +59,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $sheet2->getId()->willReturn(1337);
         $sheet2->getCategoriesTitles('fr')->shouldBeCalled()->willReturn('category');
         $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), $locale)->willReturn('sheet name');
-        $ruleRepository->getBySeerTypeAndSeeableType($type1->reveal(), $type2->reveal())->shouldBeCalled()
+        $ruleRepository->getBySeerSheetAndSeeableSheet($sheet->reveal(), $sheet2->reveal())->shouldBeCalled()
             ->willReturn([]);
         $preview->getPreview($sheet2->reveal(), $locale, null)->shouldBeCalled()->willReturn([]);
 

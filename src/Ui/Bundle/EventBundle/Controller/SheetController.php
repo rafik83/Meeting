@@ -232,7 +232,7 @@ class SheetController extends Controller
 
             $rules = $this
                 ->get('repository.rule_repository')
-                ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
+                ->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
 
             $ruleApplyer = $this->get('domain.rule.applyer');
             $ruleApplyer->applyRuleForTemplate($templateData, $rules);

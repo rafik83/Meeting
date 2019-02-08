@@ -60,7 +60,7 @@ class MeetingViewQueryHandler
     {
         $userSheet    = $query->meeting->getSheetOfUser($query->user);
         $sheetMet     = $query->meeting->getSheetMet($userSheet);
-        $rules        = $this->ruleRepository->getBySeerTypeAndSeeableType($query->currentSheet->getType(), $sheetMet->getType());
+        $rules        = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->currentSheet, $sheetMet);
         $participants = [];
 
         foreach ($query->meeting->getParticipants($sheetMet) as $participant) {

@@ -129,7 +129,7 @@ class DisplaySheetController extends Controller
 
         $rules = $this
             ->get('repository.rule_repository')
-            ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
+            ->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
 
         $templateData = $this->get('template.tagged_data_factory')
             ->buildTaggedDataView($sheetToDisplay, $locale, $rules);

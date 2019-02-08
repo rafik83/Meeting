@@ -106,7 +106,7 @@ class SheetViewQueryHandlerTest extends TestCase
         $rule1 = $this->prophesize(Rule::class);
 
         $this->ruleRepository
-            ->getBySeerTypeAndSeeableType($this->type2->reveal(), $this->type1->reveal())
+            ->getBySeerSheetAndSeeableSheet($this->viewer->reveal(), $this->sheet->reveal())
             ->shouldBeCalled()
             ->willReturn([$rule1->reveal()])
         ;

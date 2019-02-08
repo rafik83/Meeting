@@ -107,7 +107,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($participantView2);
 
-        $ruleRepository->getBySeerTypeAndSeeableType($type, $type)->shouldBeCalled()->willReturn([$rule]);
+        $ruleRepository->getBySeerSheetAndSeeableSheet($sheet, $sheetMet)->shouldBeCalled()->willReturn([$rule]);
 
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
@@ -212,7 +212,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             ->handle($participantViewQuery2)
             ->shouldBeCalled()
             ->willReturn($participantView2);
-        $ruleRepository->getBySeerTypeAndSeeableType($type, $type)->shouldBeCalled()->willReturn([$rule]);
+        $ruleRepository->getBySeerSheetAndSeeableSheet($sheet, $sheetMet)->shouldBeCalled()->willReturn([$rule]);
 
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
