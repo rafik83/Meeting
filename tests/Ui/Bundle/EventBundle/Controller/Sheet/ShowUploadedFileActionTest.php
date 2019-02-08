@@ -138,7 +138,7 @@ class ShowUploadedFileActionTest extends TestCase
         ;
 
         $this->ruleRepository
-            ->getBySeerTypeAndSeeableType($type1->reveal(), $type2->reveal())
+            ->getBySeerSheetAndSeeableSheet($this->sheet->reveal(), $sheetToDisplay->reveal())
             ->shouldBeCalled()
             ->willReturn([new Rule($this->event->reveal(), $type1->reveal(), $type2->reveal(), [])])
         ;

@@ -22,7 +22,7 @@ class CanSeeSheet
 
     public function isSatisfiedBy(Sheet $fromSheet, Sheet $sheetToDisplay): bool
     {
-        $rules = $this->ruleRepository->getBySeerTypeAndSeeableType($fromSheet->getType(), $sheetToDisplay->getType());
+        $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($fromSheet, $sheetToDisplay);
 
         if (!empty($rules)) {
             return true;

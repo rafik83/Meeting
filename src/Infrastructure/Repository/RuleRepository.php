@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
@@ -143,6 +144,14 @@ class RuleRepository implements RuleRepositoryInterface
             ->setParameter('seeableCategories', $seeable->getCategories());
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBySeerSheetAndSeeableSheet(Sheet $seerSheet, Sheet $seeableSheet): array
+    {
+        return $this->getBySeerTypeAndSeeableType($seerSheet->getType(), $seeableSheet->getType());
     }
 
     /**

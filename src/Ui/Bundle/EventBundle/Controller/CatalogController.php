@@ -380,7 +380,7 @@ class CatalogController extends Controller
 
         $rules = $this
             ->get('repository.rule_repository')
-            ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
+            ->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
 
         $this->get('command.sheet.sheet_viewed.add_handler')->handle(new Add($user, $sheetToDisplay));
 
