@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+
 /**
  * "Règle".
  */
@@ -85,6 +87,11 @@ class Rule
         } else {
             throw new \InvalidArgumentException(sprintf('Do not know how to handle %s', get_class($seeable)));
         }
+    }
+
+    public static function createDefault(Event $event, WhoInterface $seer, WhoInterface $seeable, $priority = 0): Rule
+    {
+        return new self($event, $seer, $seeable, Tag::getSeeableTags(), $priority);
     }
 
     /**
