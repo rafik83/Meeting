@@ -39,7 +39,6 @@ class ProductsListViewQueryHandler
         $products = $this->productRepository->findByEventOrderedByProductTypeAndProductName($query->event);
 
         foreach ($products as $product) {
-
             $bought[$product->getId()] = $this->rowRepository->boughtByProduct($product);
 
             if ('plan' === $product->getType()) {
@@ -69,7 +68,7 @@ class ProductsListViewQueryHandler
                 $productIncludedBought[$product->getId()],
                 $total,
                 $promotion,
-                ($unitPrice * $total) - $promotion
+                ($unitPrice * $total) - $promotion,
             );
         }
 

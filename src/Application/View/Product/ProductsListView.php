@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Application\View\Product;
 
-
 class ProductsListView
 {
     /** @var string */
@@ -43,4 +42,8 @@ class ProductsListView
         $this->promotion = $promotion;
         $this->sales = $sales;
     }
+
+
+
+
 }

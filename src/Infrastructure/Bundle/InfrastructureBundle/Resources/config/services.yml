@@ -3902,6 +3902,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Product\ProductsViewQuery }
 
+    query.product.products_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Product\ProductsListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@vimeet_infrastructure.repository.order_row_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Product\ProductsListViewQuery }
+
     query.register.pre_fill_user_data_handler:
         class: Proximum\Vimeet\Application\Query\Register\PreFillUserDataHandler
         arguments:
@@ -4541,7 +4549,6 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\Find\MultipleSheetFoundViewQuery }
-
 
     #
     # Order Export Queries
@@ -5690,6 +5697,16 @@ services:
             - { name: serializer.normalizer }
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    #
+    # Products List Export
+    #
+    catalog.produsts.list.export.normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Catalog\CatalogExportNormalizer
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }
 
     Proximum\Vimeet\Application\Components\User\Event\Denormalizer\AuthenticationTokenDenormalizer:
         tags:
