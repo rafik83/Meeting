@@ -55,6 +55,9 @@ class GetUserBadgeByEventQueryHandler
     /** @var FirstParticipantSheetOfUserGetter */
     private $firstParticipantSheetOfUserGetter;
 
+    /** @var IntlAdapter */
+    private $intlAdapter;
+
     public function __construct(
         QueryBusInterface $queryBus,
         QRCodeGeneratorInterface $qrCodeGenerator,

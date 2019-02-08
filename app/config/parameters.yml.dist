@@ -47,10 +47,11 @@ parameters:
     paypal_signature: "AKarEPU9IGhpxmdZtMXPhpeKKLPRAe-BNJglO3FIWyFQxmJFjwjXo1hC"
     paypal_sandbox:   true
 
-    phantomjs_path:          '%kernel.root_dir%/../node_modules/.bin/phantomjs'
-    phantomjs_script:        '%kernel.root_dir%/../phantomjs/render.js'
-    phantomjs_http_user:     'phantomjs'
-    phantomjs_http_password: '7DSJD2sm8YpzfjmnXeethPuybb'
+    phantomjs_path:                '%kernel.root_dir%/../node_modules/.bin/phantomjs'
+    phantomjs_script:              '%kernel.root_dir%/../phantomjs/render.js'
+    phantomjs_render_script_path:  '%kernel.root_dir%/../phantomjs/'
+    phantomjs_render_badge_script: 'renderBadge.js'
+    phantomjs_http_password:       '7DSJD2sm8YpzfjmnXeethPuybb'
 
     user_activate_account_token_expiration: 'P7D'
 

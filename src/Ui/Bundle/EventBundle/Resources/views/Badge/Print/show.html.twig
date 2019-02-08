@@ -1,56 +1,156 @@
 <html>
 <head>
-    <style type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
         body {
             margin: 0;
-        }
-        .ebadge {
-            width: 50%;
-            height: 50%;
-            margin: 0;
             padding: 0;
-            position: relative;
+            font-family: RobotoRegular, HelveticaNeue, Helvetica, Calibri, sans-serif !important;
         }
 
         .ebadge-logo {
             max-width: 100%;
-            max-height: 48mm;
+            max-height: 44mm;
             margin: 0 auto;
             text-align: center;
             display: block;
         }
 
-        .ebadge-qrcode {
-            width: 170px;
-            border: 1px solid #e2e3e4;
-            margin: 10px auto;
-            padding: 10px 10px 4px 10px;
+        .page {
+            page-break-after: always;
+            clear: both;
+            width: 105mm;
+            height: 148mm;
         }
 
-        .ebadge-qrcode img {
-            width: 150px;
-            height: 150px;
+        .badge {
+            width: 98mm;
+            height: 141mm;
+            margin: 0;
+            position: relative;
         }
 
-        .ebadge-qrcode-token {
-            margin-top: 4px;
+        .badge .badge-content {
+            margin: 0 auto;
         }
 
-        .ebadge-content {
+        .text {
+            margin: 0 5mm;
+        }
+
+        .badge .badge-content .company-participant {
+            height: 17mm;
+            overflow: hidden;
+            color: #2F2F2F;
+            font-size: 24px;
+            margin: 10px 0 0 0;
+            font-weight: 700;
+            position: absolute;
+            top: 32mm;
             text-align: center;
-            padding: 10px;
+            width: 100%;
+        }
+
+        .badge .badge-content .qrcode {
+            font-size: 13px;
+            text-align: center;
+            top: 50mm;
+            position: absolute;
+            width: 100%;
+            color: #555555;
+        }
+
+        .badge .badge-content .qrcode-border {
+            border: solid 1px #ddd;
+            margin: 0 auto;
+            width: 34mm;
+            padding: 2mm;
+        }
+
+        .badge .badge-content .qrcode img {
+            height: 30mm;
+            width: 30mm;
+        }
+
+        .badge .badge-content .info-participant {
+            max-height: 28mm;
+            height: 26mm;
+            margin: 0;
+            position: absolute;
+            top: 94mm;
+            overflow: hidden;
+            text-align: center;
+            width: 100%;
+        }
+
+        .badge .badge-content .info-participant .name-participant {
+            color: #2F2F2F;
+            font-size: 20px;
+            font-weight: 400;
+            margin: 0;
+            max-height: 14mm;
+            overflow: hidden;
+        }
+
+        .badge .badge-content .info-participant .name-participant .last-name-participant {
+            text-transform: uppercase;
+        }
+
+        .badge .badge-content .info-participant .position-participant {
+            color: #1518E7;
+            font-size: 20px;
+            font-weight: 700;
+            max-height: 20mm;
+            overflow: hidden;
+            text-align: center;
+            width: 100%;
         }
 
         .ebadge-participation-type {
-            font-size: 24px;
-            font-weight: 400;
-            height: 90px;
-            line-height: 90px;
+            font-size: 23px;
+            height: 24mm;
             text-transform: uppercase;
             position: absolute;
-            top: 133mm;
+            bottom: 0;
             text-align: center;
             width: 100%;
+        }
+
+        .ebadge-participation-type-content {
+            display: table;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ebadge-participation-type-content-text {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .text-center {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .company-zone-without-qrcode {
+            top: 36mm !important;
+        }
+
+        .participant-zone-without-qrcode {
+            margin-top: -27mm !important;
+            max-height: 42mm !important;
+            height: 42mm !important;
+        }
+
+        .text-participant-without-qrcode {
+            font-size: 24px !important;
+            max-height: 21mm !important;
+        }
+
+        @media print {
+            body {
+                zoom: 0.75;
+            }
         }
     </style>
     <title>
@@ -58,40 +158,54 @@
     </title>
 </head>
 <body>
-    <div class="ebadge">
+<div class="page">
+    <div class="badge">
         {% if userBadgeByEventView.header %}
             <img src="{{ userBadgeByEventView.header }}" class="ebadge-logo" />
         {% endif %}
 
-        <div class="ebadge-content">
-            <div class="ft-bold">
-                {{ userBadgeByEventView.sheetTitle }}
+        <div class="badge-content">
+            <div class="company-participant {% if not userBadgeByEventView.qrCodeIdentifier %}company-zone-without-qrcode{% endif %}">
+                <div class="text">{{ userBadgeByEventView.sheetTitle }}</div>
             </div>
 
             {% if userBadgeByEventView.qrCodeIdentifier %}
-                <div class="ebadge-qrcode">
-                    <img src="{{ userBadgeByEventView.qrCodeImage }}" /><br>
-                    <div class="ebadge-qrcode-token">ID {{ userBadgeByEventView.qrCodeIdentifier }}</div>
+                <div class="qrcode">
+                    <div class="qrcode-border">
+                        <img src="{{ userBadgeByEventView.qrCodeImage }}"/><br>
+                        ID {{ userBadgeByEventView.qrCodeIdentifier }}<br>
+                    </div>
                 </div>
             {% endif %}
 
-            <div>
-                <div>{{ userBadgeByEventView.firstName }} {{ userBadgeByEventView.lastName }}</div>
+            <div class="info-participant {% if not userBadgeByEventView.qrCodeIdentifier %}participant-zone-without-qrcode{% endif %}">
+                <div class="name-participant {% if not userBadgeByEventView.qrCodeIdentifier %}text-participant-without-qrcode{% endif %}">
+                    <div class="text">
+                        {{ userBadgeByEventView.firstName }}
+                        <span class="last-name-participant">{{ userBadgeByEventView.lastName }}</span>
+                    </div>
+                </div>
 
-                <div class="ft-bold highlight">
-                    {{ userBadgeByEventView.position }}
-                    {% if userBadgeByEventView.country is not empty %}
-                        <br/>{{ userBadgeByEventView.country|upper }}
-                    {% endif %}
+                <div class="position-participant {% if not userBadgeByEventView.qrCodeIdentifier %}text-participant-without-qrcode{% endif %}">
+                    <div class="text">
+                        {{ userBadgeByEventView.position }}
+                        {% if userBadgeByEventView.country %}
+                            <br/>{{ userBadgeByEventView.country|upper }}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-
         {% if userBadgeByEventView.participationTypeOrCategoryLabel %}
             <div class="ebadge-participation-type ft-bold" style="background: {{ userBadgeByEventView.footerColor }}; color: {{ userBadgeByEventView.footerTextColor }};">
-                {{ userBadgeByEventView.participationTypeOrCategoryLabel }}
+                <div class="ebadge-participation-type-content">
+                    <div class="ebadge-participation-type-content-text">
+                        {{ userBadgeByEventView.participationTypeOrCategoryLabel }}
+                    </div>
+                </div>
             </div>
         {% endif %}
     </div>
+</div>
 </body>
 </html>

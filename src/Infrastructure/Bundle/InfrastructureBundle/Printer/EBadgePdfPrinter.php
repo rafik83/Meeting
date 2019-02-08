@@ -47,6 +47,6 @@ class EBadgePdfPrinter
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        return $this->pdfPrinter->generate($urlToPrint, $pathToPdf);
+        return $this->pdfPrinter->generate($urlToPrint, $pathToPdf, PdfPrinter::RENDER_TYPE_BADGE);
     }
 }
