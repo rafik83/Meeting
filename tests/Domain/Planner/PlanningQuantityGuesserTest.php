@@ -68,6 +68,27 @@ class PlanningQuantityGuesserTest extends TestCase
         $participant2 = ParticipantFactory::create($sheet);
         $package = new Package($event, 'title', new \DateTime());
         $package->enable(false, false, false);
+        $package->setParticipantWithPlanning(false);
+        $sheet->getType()->setPackage($package);
+
+        $planningQuantityGuesser = new PlanningQuantityGuesser(
+            $this->orderRepository->reveal(),
+            $this->orderMerger->reveal()
+        );
+
+        $this->assertEquals(2, $planningQuantityGuesser->guess($sheet));
+    }
+
+    public function testGuessWithPackageAndOptionParticipantWithPlanningActivated()
+    {
+        $event        = EventFactory::createEvent();
+        $sheet        = SheetFactory::create($event);
+        // Useful as this method add the participant on the sheet
+        $participant  = ParticipantFactory::create($sheet);
+        $participant2 = ParticipantFactory::create($sheet);
+        $package = new Package($event, 'title', new \DateTime());
+        $package->enable(true, true, false);
+        $package->setParticipantWithPlanning(true);
         $sheet->getType()->setPackage($package);
 
         $planningQuantityGuesser = new PlanningQuantityGuesser(

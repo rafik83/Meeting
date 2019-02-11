@@ -34,12 +34,20 @@ class ParticipantAndPlanning
     public $planningSelectable = true;
 
     /**
+     * This is used to explicitly set : "a participant = a planning" without buying a planning for each one
+     *
+     * @var bool
+     */
+    public $participantWithPlanning = false;
+
+    /**
      * @param array     $labels
      * @param bool      $enabled
      * @param int|null  $maxParticipant
      * @param Product[] $participants
      * @param Product   $planning
      * @param bool      $planningSelectable
+     * @param bool      $participantWithPlanning
      *
      * @throws WrongTypeException
      */
@@ -49,7 +57,8 @@ class ParticipantAndPlanning
         $maxParticipant,
         array $participants = [],
         Product $planning = null,
-        bool $planningSelectable
+        bool $planningSelectable,
+        bool $participantWithPlanning
     ) {
         foreach ($participants as $participant) {
             if (null !== $participant && !$participant->isParticipant()) {
@@ -67,6 +76,7 @@ class ParticipantAndPlanning
         $this->participants = $participants;
         $this->planning = $planning;
         $this->planningSelectable = $planningSelectable;
+        $this->participantWithPlanning = $participantWithPlanning;
     }
 
     /**

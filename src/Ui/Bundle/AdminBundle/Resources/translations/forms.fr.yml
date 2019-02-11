@@ -571,6 +571,7 @@ form.package_update.children.participantAndPlanning.children.participants.label_
 form.package_update.children.participantAndPlanning.children.participants.label_delete: '&times;'
 form.package_update.children.participantAndPlanning.children.planning.label: Planning
 form.package_update.children.participantAndPlanning.children.planningSelectable.label: 'Planning visible'
+form.package_update.children.participantAndPlanning.children.participantWithPlanning.label: 'Un participant = un planning'
 form.package_update.children.plans.children.enabled.label: Activé
 form.package_update.children.plans.children.labels.label: 'Libellé de l''étape'
 form.package_update.children.plans.children.plans.label: Formules

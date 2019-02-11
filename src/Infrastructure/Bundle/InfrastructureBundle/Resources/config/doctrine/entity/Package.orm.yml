@@ -24,6 +24,10 @@ Proximum\Vimeet\Domain\Model\Package:
             type: boolean
             options:
                 default: true
+        participantWithPlanning:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

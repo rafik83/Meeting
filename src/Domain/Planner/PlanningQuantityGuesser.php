@@ -43,8 +43,10 @@ class PlanningQuantityGuesser
      */
     public function guess(Sheet $sheet): int
     {
-        // If the sheet has no package, the number of planning is equal to the number of participant
-        if (!$sheet->getPackage()->isPassable()) {
+        // If the sheet has no package,
+        // Or if the option a participant = a planning
+        // the number of planning is equal to the number of participant
+        if (!$sheet->getPackage()->isPassable() || $sheet->getPackage()->isParticipantWithPlanning()) {
             return $sheet->countParticipants();
         }
 

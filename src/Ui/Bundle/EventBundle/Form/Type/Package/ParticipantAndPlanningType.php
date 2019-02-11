@@ -67,7 +67,7 @@ class ParticipantAndPlanningType extends AbstractType
             $maxErrorMessage = 'package.planning.quantityMax.forParticipation';
         }
 
-        if ($package->isPlanningSelectable()) {
+        if ($package->canPlanningBeBought()) {
             $builder->add('planningQuantity', QuantityAndParticipantsType::class, [
                 'label' => false,
                 'max' => $this->quantityMaxGuesser->getMaxPlanning($sheet),

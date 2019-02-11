@@ -48,6 +48,13 @@ class Package
     /** @var bool */
     private $participantAndPlanningEnabled = true;
 
+    /**
+     * This is used to explicitly set : "a participant = a planning" without buying a planning for each one
+     *
+     * @var bool
+     */
+    private $participantWithPlanning = false;
+
     /** @var bool */
     private $optionsEnabled = true;
 
@@ -666,8 +673,23 @@ class Package
         return $this->planningSelectable;
     }
 
+    public function canPlanningBeBought(): bool
+    {
+        return false === $this->participantWithPlanning && $this->planningSelectable;
+    }
+
     public function setPlanningSelectable(bool $planningSelectable): void
     {
         $this->planningSelectable = $planningSelectable;
+    }
+
+    public function setParticipantWithPlanning(bool $participantWithPlanning): void
+    {
+        $this->participantWithPlanning = $participantWithPlanning;
+    }
+
+    public function isParticipantWithPlanning(): bool
+    {
+        return $this->participantWithPlanning;
     }
 }
