@@ -29,7 +29,7 @@ class ExportProductsCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName(self::NAME)

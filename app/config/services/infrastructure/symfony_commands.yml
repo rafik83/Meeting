@@ -112,3 +112,9 @@ services:
             - '@event_dispatcher'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Catalog\ExportProductsCommand:
+        arguments:
+            - '@command.catalog.export.export_products_handler'
+        tags:
+            - { name: console.command }

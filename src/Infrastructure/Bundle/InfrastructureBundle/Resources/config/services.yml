@@ -5698,16 +5698,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
-    #
-    # Products List Export
-    #
-    catalog.produsts.list.export.normalizer:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Catalog\ProductsExportNormalizer
-        arguments:
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-        tags:
-            - { name: serializer.normalizer }
-
     Proximum\Vimeet\Application\Components\User\Event\Denormalizer\AuthenticationTokenDenormalizer:
         tags:
             - { name: serializer.normalizer }
