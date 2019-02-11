@@ -2,7 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Product;
 
-use Proximum\Vimeet\Application\View\Product\ProductsListView;
+use Proximum\Vimeet\Application\View\Product\Export\ProductsListView;
+use Proximum\Vimeet\Application\View\Product\ProductsView;
 use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
@@ -29,12 +30,12 @@ class ProductsListViewQueryHandler
     /**
      * @param ProductsListViewQuery $query
      *
-     * @return array
+     * @return ProductsListView
      */
-    public function handle(ProductsListViewQuery $query): array
+    public function handle(ProductsListViewQuery $query): ProductsListView
     {
         $bought = [];
-        $productListViews = [];
+        $productViews = [];
         $productIncludedBought = [];
         $products = $this->productRepository->findByEventOrderedByProductTypeAndProductName($query->event);
 
@@ -61,17 +62,20 @@ class ProductsListViewQueryHandler
             $total = $bought[$product->getId()] + $productIncludedBought[$product->getId()];
             $promotion = 0;
 
-            $productListViews[] = new ProductsListView(
+            $productViews[] = new ProductsView(
                 $product->getName(),
                 $unitPrice,
                 $bought[$product->getId()],
                 $productIncludedBought[$product->getId()],
                 $total,
                 $promotion,
-                ($unitPrice * $total) - $promotion,
+                ($unitPrice * $total) - $promotion
             );
         }
 
-        return $productListViews;
+        return new ProductsListView(
+            $productViews,
+            $query->adminLocale
+        );
     }
 }

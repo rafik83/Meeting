@@ -4,20 +4,20 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Application\View\Product\Export\ProductsListExportView;
+use Proximum\Vimeet\Application\View\Product\Export\ProductsListView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CatalogExportNormalizer implements NormalizerInterface
+class ProductsExportNormalizer implements NormalizerInterface
 {
-    const TRANSLATION_DOMAIN  = 'export';
+    public const TRANSLATION_DOMAIN  = 'export';
 
-    const COL_PRODUCT_NAME = 'productName';
-    const COL_UNIT_PRICE = 'unitPrice';
-    const COL_QUANTITY_UNIT = 'quantityUnit';
-    const COL_QUANTITY_PLAN = 'quantityPlan';
-    const COL_QUANTITY_TOTAL = 'quantityTotal';
-    const COL_PROMOTION = 'promotion';
-    const COL_SALES = 'sales';
+    public const COL_PRODUCT_NAME = 'productName';
+    public const COL_UNIT_PRICE = 'unitPrice';
+    public const COL_QUANTITY_UNIT = 'quantityUnit';
+    public const COL_QUANTITY_PLAN = 'quantityPlan';
+    public const COL_QUANTITY_TOTAL = 'quantityTotal';
+    public const COL_PROMOTION = 'promotion';
+    public const COL_SALES = 'sales';
 
     private $charset = Charset::UTF_8;
 
@@ -37,8 +37,8 @@ class CatalogExportNormalizer implements NormalizerInterface
      */
     public function normalize($object, $format = null, array $context = []): array
     {
-        if (!$object instanceof ProductsListExportView) {
-            throw new \Exception('Invalid object');
+        if (!$object instanceof ProductsListView) {
+            throw new \LogicException('Invalid object');
         }
 
         if (isset($context['charset']) && $context['charset'] !== $this->charset) {
@@ -68,7 +68,7 @@ class CatalogExportNormalizer implements NormalizerInterface
      *
      * @return string
      */
-    private function convertCharset($input)
+    private function convertCharset($input): string
     {
         if (Charset::UTF_8 !== $this->charset) {
             return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . '//TRANSLIT', $input);
@@ -93,8 +93,8 @@ class CatalogExportNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null): bool
     {
-        return $data instanceof ProductsListExportView && 'csv' === $format;
+        return $data instanceof ProductsListView && 'csv' === $format;
     }
 }

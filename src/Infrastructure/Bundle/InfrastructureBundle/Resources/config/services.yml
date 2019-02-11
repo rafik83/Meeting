@@ -5702,7 +5702,7 @@ services:
     # Products List Export
     #
     catalog.produsts.list.export.normalizer:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Catalog\CatalogExportNormalizer
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Catalog\ProductsExportNormalizer
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:

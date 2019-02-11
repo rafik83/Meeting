@@ -1,49 +1,20 @@
 <?php
 
-namespace Proximum\Vimeet\Application\View\Product;
+namespace Proximum\Vimeet\Application\View\Product\Export;
 
 class ProductsListView
 {
+    /** @var ProductsListView[] */
+    public $products;
+
     /** @var string */
-    public $name;
-
-    /** @var float */
-    public $unitPrice;
-
-    /** @var int */
-    public $quantityUnit;
-
-    /** @var int */
-    public $quantityPlan;
-
-    /** @var int */
-    public $quantityTotal;
-
-    /** @var float */
-    public $promotion;
-
-    /** @var float */
-    public $sales;
+    public $locale;
 
     public function __construct(
-        string $name,
-        float $unitPrice,
-        int $quantityUnit,
-        int $quantityPlan,
-        int $quantityTotal,
-        float $promotion,
-        float $sales
+        array $products,
+        string $locale
     ) {
-        $this->name = $name;
-        $this->unitPrice = $unitPrice;
-        $this->quantityUnit = $quantityUnit;
-        $this->quantityPlan = $quantityPlan;
-        $this->quantityTotal = $quantityTotal;
-        $this->promotion = $promotion;
-        $this->sales = $sales;
+        $this->products = $products;
+        $this->locale = $locale;
     }
-
-
-
-
 }
