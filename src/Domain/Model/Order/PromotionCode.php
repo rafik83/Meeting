@@ -33,18 +33,22 @@ class PromotionCode
     /** @var float */
     private $vatRate;
 
+    /** @var Model\Product */
+    private $product;
+
     /**
      * @param Order               $order
      * @param Model\PromotionCode $promotionCode
      * @param float               $price
      * @param float               $vatRate
      */
-    public function __construct(Order $order, Model\PromotionCode $promotionCode, float $price, float $vatRate)
+    public function __construct(Order $order, Model\PromotionCode $promotionCode, float $price, Model\Product $product, float $vatRate)
     {
         $this->order = $order;
         $this->promotionCode = $promotionCode;
         $this->data = $promotionCode->getSerializedData();
         $this->price = $price;
+        $this->product = $product;
         $this->vatRate = $vatRate;
     }
 
