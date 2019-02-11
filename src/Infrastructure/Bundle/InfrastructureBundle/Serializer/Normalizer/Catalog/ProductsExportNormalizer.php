@@ -2,9 +2,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Catalog;
 
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Product\Export\ProductsListView;
+use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ProductsExportNormalizer implements NormalizerInterface
@@ -21,13 +21,13 @@ class ProductsExportNormalizer implements NormalizerInterface
 
     private $charset = Charset::UTF_8;
 
-    /** @var TranslatorInterface */
+    /** @var TranslatorAdapter */
     private $translator;
 
     /**
-     * @param TranslatorInterface $translator
+     * @param TranslatorAdapter $translator
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(TranslatorAdapter $translator)
     {
         $this->translator = $translator;
     }
