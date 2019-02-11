@@ -114,7 +114,7 @@ class ExportProductsHandler
     {
         $filePath = $this->fileStorageAdapter->create(
             $data,
-            sprintf('orders_%s.csv', $event->getId()),
+            sprintf('products_%s.csv', $event->getId()),
             $this->exportLocationDirectoryPath
         );
 
