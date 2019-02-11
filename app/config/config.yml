@@ -133,6 +133,7 @@ infrastructure:
     print_sheet_path: '%kernel.project_dir%/web/uploads/print_sheet'
     export_transactions_path: '%kernel.project_dir%/web/uploads/export_transactions'
     export_order_path: '%kernel.project_dir%/web/uploads/export_orders'
+    export_products_path: '%kernel.project_dir%/web/uploads/export_products'
     export_planner_path: '%kernel.project_dir%/web/uploads/export_planner'
     import_planner_path: '%kernel.project_dir%/web/uploads/import_planner'
     import_spot_path: '%kernel.project_dir%/web/uploads/import_spots/'

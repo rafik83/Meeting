@@ -6146,6 +6146,22 @@ services:
             - '%infrastructure.export_order_path%'
             - '@datetime'
 
+    #
+    # Catalog export
+    #
+    command.catalog.export.export_products_handler:
+        class: Proximum\Vimeet\Application\Command\Catalog\Export\ExportProductsHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.serializer_adapter'
+            - '@query.product.products_list_view_query_handler'
+            - '@adapter.local_file_storage'
+            - '@repository.file_repository'
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+            - '%infrastructure.export_products_path%'
+            - '@datetime'
+
     # Invoice
     #
     printer.invoice_pdf_printer:

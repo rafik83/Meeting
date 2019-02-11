@@ -13,15 +13,14 @@ use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Catalog\ProductsExportNormalizer;
 
 class ExportProductsHandler
 {
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
-    /** @var ProductsExportNormalizer */
-    private $normalizer;
+    /** @var SerializerAdapterInterface */
+    private $serializer;
 
     /** @var ProductsListViewQueryHandler */
     private $queryHandler;
@@ -46,7 +45,7 @@ class ExportProductsHandler
 
     /**
      * @param EventRepositoryInterface     $eventRepository
-     * @param ProductsExportNormalizer     $normalizer
+     * @param SerializerAdapterInterface   $serializer
      * @param ProductsListViewQueryHandler $queryHandler
      * @param LocalFileStorageAdapter      $fileStorageAdapter
      * @param FileRepositoryInterface      $fileRepository
@@ -57,7 +56,7 @@ class ExportProductsHandler
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
-        ProductsExportNormalizer $normalizer,
+        SerializerAdapterInterface $serializer,
         ProductsListViewQueryHandler $queryHandler,
         LocalFileStorageAdapter $fileStorageAdapter,
         FileRepositoryInterface $fileRepository,
@@ -67,7 +66,7 @@ class ExportProductsHandler
         \DateTimeInterface $dateTime
     ) {
         $this->eventRepository = $eventRepository;
-        $this->normalizer = $normalizer;
+        $this->serializer = $serializer;
         $this->queryHandler = $queryHandler;
         $this->fileStorageAdapter = $fileStorageAdapter;
         $this->fileRepository = $fileRepository;
@@ -91,7 +90,7 @@ class ExportProductsHandler
         }
 
         $view = $this->queryHandler->handle(new ProductsListViewQuery($event, $command->locale));
-        $data = $this->normalizer->normalize($view, 'csv', [
+        $data = $this->serializer->normalize($view, 'csv', [
             'charset' => Charset::WINDOWS_1252,
             'csv_delimiter' => ';',
         ]);
@@ -101,7 +100,7 @@ class ExportProductsHandler
 
         $file = $this->createFile($event, $dataWithoutFirstLine);
 
-        $this->notifyCreationOfFile();
+        //$this->notifyCreationOfFile();
     }
 
 
