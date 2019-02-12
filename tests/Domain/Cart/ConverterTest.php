@@ -116,7 +116,13 @@ class ConverterTest extends TestCase
         $promotionCode->getSerializedData()->shouldBeCalled()->willReturn('Promotion Code Serialized data');
         $promotionCode->getPromotions()->shouldBeCalled()->willReturn([$promotion->reveal()]);
 
-        $promotionCodeOrderRow = new Order\PromotionCode($expectedOrder, $promotionCode->reveal(), -100, 20);
+        $promotionCodeOrderRow = new Order\PromotionCode(
+            $expectedOrder,
+            $promotionCode->reveal(),
+            -100,
+            $chair->reveal(),
+            20
+        );
         $expectedOrder->addPromotionCode($promotionCodeOrderRow);
 
         $expectedOrderCallBack = Argument::that(function (Order $order) use ($expectedOrder) {

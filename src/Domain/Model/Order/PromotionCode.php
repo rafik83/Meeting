@@ -97,6 +97,18 @@ class PromotionCode
     }
 
     /**
+     * @param float $price
+     *
+     * @return PromotionCode
+     */
+    public function setPrice(float $price): PromotionCode
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    /**
      * @return float
      */
     public function getVatRate(): float
@@ -140,6 +152,26 @@ class PromotionCode
     public function getDescription($locale, $fallback = null): string
     {
         return $this->getTranslatedValueOfData('description', $locale, $fallback);
+    }
+
+    /**
+     * @return Model\Product
+     */
+    public function getProduct(): Model\Product
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param Model\Product $product
+     *
+     * @return $this
+     */
+    public function setProduct(Model\Product $product): self
+    {
+        $this->product = $product;
+
+        return $this;
     }
 
     /**

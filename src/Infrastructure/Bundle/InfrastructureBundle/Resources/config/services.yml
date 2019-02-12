@@ -1805,6 +1805,13 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\FindHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+    command.order.fix_promotion_order_products_handler:
+        class: Proximum\Vimeet\Application\Command\Order\FixPromotionOrderProductsHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@adapter.entity_manager_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\FixPromotionOrderProducts }
     command.invoice.find_handler:
         class: Proximum\Vimeet\Application\Command\Invoice\FindHandler
         arguments:
@@ -4758,6 +4765,13 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand
         arguments:
             - '@command.order.export.export_orders_handler'
+        tags:
+            - { name: console.command }
+
+    command.order.fix_order_promotion_code_products:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\FixProductToOrderPromotionCodeCommand
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: console.command }
 
