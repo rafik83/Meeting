@@ -33,14 +33,14 @@ Pour les commits des fonctionnalités et de maintenance, il est important de pr�
 
 Il est parfois intéressant de spliter ses commits par pan fonctionnel afin qu'un•e collègue puisse récupérer une partie du développement et avancer sur une autre partie.
 
-C'est notamment utile dans le cas d'un développement impliquant un nouveau modèle qui sera utiliser par plusieurs personne
+C'est notamment utile dans le cas d'un développement impliquant un nouveau modèle qui sera utiliser par plusieurs personnes.
 
 
 ## Code
 
 ### Code style
 
-Le projet a évolué et il existe encore des parties du code qui ne respecte pas les conventions actuelles. Les conventions sont :
+Le projet a évolué et il existe encore des parties du code qui ne respectent pas les conventions actuelles. Les conventions sont :
 
 - Pas d'alignement des assignations
 
@@ -52,7 +52,7 @@ Le projet a évolué et il existe encore des parties du code qui ne respecte pas
   ```
 
 - Typage des méthodes (paramètre et retour)
-  - Il est possible que d'ancienne méthodes n'aient pas de paramètre typé mais ait une phpdoc, attention, cette phpdoc n'est peut être pas assez strict. Il convient d'être sûr lors du rajout d'un typage strict
+  - Il est possible que d'anciennes méthodes n'aient pas de paramètre typé mais ait une phpdoc, attention, cette phpdoc n'est peut être pas assez strict. Il convient d'être sûr lors du rajout d'un typage strict
   ```
   /**
    * @param string $toto
