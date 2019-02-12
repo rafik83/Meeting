@@ -56,19 +56,18 @@ class ProductsViewQueryHandler
         $this->removeAuthorizationChecker->preloadForEvent($query->event);
 
         foreach ($products as $product) {
-
             $bought[$product->getId()] = $this->rowRepository->boughtByProduct($product);
 
-            if ('plan' === $product->getType()) {
-                if (count($product->getIncludedProducts()) > 0) {
-                    $includedProducts = $product->getIncludedProducts();
+            if ($product->isPlan() && $product->hasIncludedProducts()) {
+                $includedProducts = $product->getIncludedProducts();
 
-                    foreach ($includedProducts as $includedProduct) {
-                        if (isset($productIncludedBought[$includedProduct->getIncluded()->getId()])) {
-                            $productIncludedBought[$includedProduct->getIncluded()->getId()] += $includedProduct->getQuantity() * $bought[$product->getId()];
-                        } else {
-                            $productIncludedBought[$includedProduct->getIncluded()->getId()] = $includedProduct->getQuantity() * $bought[$product->getId()];
-                        }
+                foreach ($includedProducts as $includedProduct) {
+                    $includedProductId = $includedProduct->getIncluded()->getId();
+
+                    if (isset($productIncludedBought[$includedProductId])) {
+                        $productIncludedBought[$includedProductId] += $includedProduct->getQuantity() * $bought[$product->getId()];
+                    } else {
+                        $productIncludedBought[$includedProductId] = $includedProduct->getQuantity() * $bought[$product->getId()];
                     }
                 }
             }
@@ -89,7 +88,7 @@ class ProductsViewQueryHandler
                     ];
                 }, $product->getIncludedProducts()),
                 $bought[$product->getId()],
-                isset($productIncludedBought[$product->getId()]) ? $productIncludedBought[$product->getId()] : 0,
+                $productIncludedBought[$product->getId()] ?? 0,
                 $this->removeAuthorizationChecker->canBeRemoved($product),
                 $product->getAvailabilityStatus($bought[$product->getId()]),
                 $product->isAvailabilityManaged(),

@@ -33,7 +33,7 @@ class RemoveAuthorizationChecker
     /**
      * @param Event $event
      */
-    public function preloadForEvent(Event $event)
+    public function preloadForEvent(Event $event): void
     {
         $this->productsRemovable[$event->getId()] = $this->productRepository->findRemovableProductsForEvent($event);
     }
