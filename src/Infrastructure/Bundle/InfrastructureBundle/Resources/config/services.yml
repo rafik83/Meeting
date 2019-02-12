@@ -6139,6 +6139,13 @@ services:
     #
     # Catalog export
     #
+    command.catalog.export.export_job_creator_handler:
+        class: Proximum\Vimeet\Application\Command\Catalog\Export\ExportProductsJobCreatorHandler
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\Export\ExportProductsJobCreator }
+
     command.catalog.export.export_products_handler:
         class: Proximum\Vimeet\Application\Command\Catalog\Export\ExportProductsHandler
         arguments:

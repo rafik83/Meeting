@@ -1305,6 +1305,13 @@ admin_product_export:
     methods: [GET]
     defaults: { _controller: AdminBundle:Product/Export:export }
 
+admin_product_export_file:
+    path: /event/{event}/product/export/link/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Product/Export:exportFile }
 #
 # Organizer
 #

@@ -13,6 +13,7 @@ use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\ExportProductsMail;
 
 class ExportProductsHandler
 {
@@ -98,9 +99,9 @@ class ExportProductsHandler
         // Remove first line of file which is composed of the key
         $dataWithoutFirstLine = substr($data, strpos($data, "\n") + 1);
 
-        $file = $this->createFile($event, $data);
-
-        $this->notifyCreationOfFile();
+        $file = $this->createFile($event, $dataWithoutFirstLine);
+    
+        $this->notifyCreationOfFile($event, $command, $file);
     }
 
     /**
@@ -122,8 +123,23 @@ class ExportProductsHandler
 
         return $file;
     }
-
-    private function notifyCreationOfFile()
+    
+    /**
+     * Send a mail to the emailToNotify with the link to download the csv file
+     *
+     * @param Event          $event
+     * @param ExportProducts $command
+     * @param File           $file
+     */
+    private function notifyCreationOfFile(Event $event, ExportProducts $command, File $file): void
     {
+        $this->mailer->send(new ExportProductsMail(
+            $event,
+            $this->mailSender,
+            $command->emailToNotify,
+            $command->locale,
+            $file->getHash(),
+            $file->getId()
+        ));
     }
 }

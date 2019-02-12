@@ -130,3 +130,6 @@ mail.thirdParty.comexposium.sso.participantAdded.link: Login
 mail.thirdParty.comexposium.sso.participantAdded.subject: '[%event%] Activate your account'
 mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"
 mail.transaction.confirm.subject: '[%event%] Your payment has been received'
+mail.product.export.link.click: 'download products'
+mail.product.export.intro: "Hello, here is the export of the products for the %eventTitle% event"
+mail.product.export.subject: 'products export file'
