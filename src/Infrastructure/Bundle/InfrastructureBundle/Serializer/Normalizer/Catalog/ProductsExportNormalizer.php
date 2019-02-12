@@ -9,15 +9,15 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ProductsExportNormalizer implements NormalizerInterface
 {
-    public const TRANSLATION_DOMAIN  = 'export';
+    public const TRANSLATION_DOMAIN  = 'product';
 
-    public const COL_PRODUCT_NAME = 'productName';
-    public const COL_UNIT_PRICE = 'unitPrice';
-    public const COL_QUANTITY_UNIT = 'quantityUnit';
-    public const COL_QUANTITY_PLAN = 'quantityPlan';
-    public const COL_QUANTITY_TOTAL = 'quantityTotal';
-    public const COL_PROMOTION = 'promotion';
-    public const COL_SALES = 'sales';
+    public const COL_PRODUCT_NAME = 'export.product.name';
+    public const COL_UNIT_PRICE = 'export.product.unitPrice';
+    public const COL_QUANTITY_UNIT = 'export.product.quantityUnit';
+    public const COL_QUANTITY_PLAN = 'export.product.quantityPlan';
+    public const COL_QUANTITY_TOTAL = 'export.product.quantityTotal';
+    public const COL_PROMOTION = 'export.product.promotion';
+    public const COL_SALES = 'export.product.sales';
 
     private $charset = Charset::UTF_8;
 
