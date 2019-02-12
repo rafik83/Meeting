@@ -692,6 +692,7 @@ admin.product.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer ce pro
 admin.product.actions: Actions
 admin.product.availabilityCurrentMax: 'Disponibilité courante / max'
 admin.product.bought: 'Nombre de produits achetés'
+admin.product.boughtIncluded: 'Nombre de produits achetés issus du pack'
 admin.product.buyableUntil: 'Achetable jusqu''au'
 admin.product.deletableUntil: 'Supprimable jusqu''au'
 admin.product.happenings.tooltip: 'Lié à des sous évènements'

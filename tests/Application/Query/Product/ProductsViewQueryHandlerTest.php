@@ -44,6 +44,9 @@ class ProductsViewQueryHandlerTest extends TestCase
         $product1->getType()->willReturn('plan');
         $product2->getType()->willReturn('participant');
         $product3->getType()->willReturn('planning');
+        $product1->isPlan()->willReturn(true);
+        $product2->isPlan()->willReturn(false);
+        $product3->isPlan()->willReturn(false);
         $product1->getUnitPrice()->willReturn(123.99);
         $product2->getUnitPrice()->willReturn(677213);
         $product3->getUnitPrice()->willReturn(2339.33);
@@ -53,6 +56,9 @@ class ProductsViewQueryHandlerTest extends TestCase
         $product1->getIncludedProducts()->willReturn([$includedProduct->reveal()]);
         $product2->getIncludedProducts()->willReturn([]);
         $product3->getIncludedProducts()->willReturn([]);
+        $product1->hasIncludedProducts()->willReturn(true);
+        $product2->hasIncludedProducts()->willReturn(false);
+        $product3->hasIncludedProducts()->willReturn(false);
         $product1->getAvailabilityStatus(4)->willReturn('default');
         $product2->getAvailabilityStatus(9)->willReturn('warning');
         $product3->getAvailabilityStatus(0)->willReturn('alert');
@@ -139,6 +145,7 @@ class ProductsViewQueryHandlerTest extends TestCase
                     ],
                 ],
                 4,
+                0,
                 true,
                 'default',
                 false,
@@ -160,6 +167,7 @@ class ProductsViewQueryHandlerTest extends TestCase
                 true,
                 [],
                 9,
+                0,
                 false,
                 'warning',
                 false,
@@ -181,6 +189,7 @@ class ProductsViewQueryHandlerTest extends TestCase
                 false,
                 [],
                 0,
+                16,
                 true,
                 'alert',
                 true,

@@ -40,6 +40,7 @@
             <th>{{ 'admin.product.id'|trans }}</th>
             <th>{{ 'admin.product.name'|trans }}</th>
             <th class="text-center col-md-1">{{ 'admin.product.bought'|trans }}</th>
+            <th class="text-center col-md-1">{{ 'admin.product.boughtIncluded'|trans }}</th>
             <th class="text-center col-md-1">{{ 'admin.product.availabilityCurrentMax'|trans }}</th>
             <th class="text-center">{{ 'admin.product.unitPrice'|trans }}</th>
             <th class="text-center">{{ 'admin.product.quantityMax'|trans }}</th>
@@ -57,7 +58,7 @@
             {% if currentType is null or currentType != product.type %}
                 {% set currentType = product.type %}
                 <tr class="info">
-                    <th colspan="10">
+                    <th colspan="11">
                         <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
                         {{ ('admin.product.type.' ~ product.type)|trans }}
                     </th>
@@ -106,6 +107,14 @@
                                 {{ product.bought }}
                             </span>
                         </a>
+                    {% endif %}
+
+                </td>
+                <td>
+                    {% if product.productIncludedBought > 0 %}
+                        <span class="label label-{{ availabilityCssClass[product.availabilityStatus] }}">
+                            {{  product.productIncludedBought }}
+                        </span>
                     {% endif %}
                 </td>
                 <td>

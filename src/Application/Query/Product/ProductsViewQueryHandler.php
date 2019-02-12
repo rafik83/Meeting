@@ -50,12 +50,30 @@ class ProductsViewQueryHandler
     public function handle(ProductsViewQuery $query): array
     {
         $productViews = [];
+        $bought = [];
+        $productIncludedBought = [];
         $products = $this->productRepository->findByEventOrderedByProductTypeAndProductname($query->event);
         $this->removeAuthorizationChecker->preloadForEvent($query->event);
 
         foreach ($products as $product) {
-            $bought = $this->rowRepository->boughtByProduct($product);
+            $bought[$product->getId()] = $this->rowRepository->boughtByProduct($product);
 
+            if ($product->isPlan() && $product->hasIncludedProducts()) {
+                $includedProducts = $product->getIncludedProducts();
+
+                foreach ($includedProducts as $includedProduct) {
+                    $includedProductId = $includedProduct->getIncluded()->getId();
+
+                    if (isset($productIncludedBought[$includedProductId])) {
+                        $productIncludedBought[$includedProductId] += $includedProduct->getQuantity() * $bought[$product->getId()];
+                    } else {
+                        $productIncludedBought[$includedProductId] = $includedProduct->getQuantity() * $bought[$product->getId()];
+                    }
+                }
+            }
+        }
+
+        foreach ($products as $product) {
             $productViews[] = new ProductView(
                 $product->getId(),
                 $product->getName(),
@@ -69,9 +87,10 @@ class ProductsViewQueryHandler
                         'name' => $includedProduct->getIncluded()->getName(),
                     ];
                 }, $product->getIncludedProducts()),
-                $bought,
+                $bought[$product->getId()],
+                $productIncludedBought[$product->getId()] ?? 0,
                 $this->removeAuthorizationChecker->canBeRemoved($product),
-                $product->getAvailabilityStatus($bought),
+                $product->getAvailabilityStatus($bought[$product->getId()]),
                 $product->isAvailabilityManaged(),
                 $product->isUpdatable(),
                 $product->getQuantityMax(),
