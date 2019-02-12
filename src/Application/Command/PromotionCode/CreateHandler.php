@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
+use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 
 class CreateHandler extends AbstractCommandHandler

@@ -18,19 +18,13 @@ use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
 abstract class AbstractCommandHandler
 {
-    /**
-     * @var PromotionCodeRepositoryInterface
-     */
+    /** @var PromotionCodeRepositoryInterface */
     protected $promotionCodeRepository;
 
-    /**
-     * @var UniqueCodeChecker
-     */
+    /** @var UniqueCodeChecker */
     protected $uniqueCodeChecker;
 
     /**
-     * CreateHandler constructor.
-     *
      * @param PromotionCodeRepositoryInterface $promotionCodeRepository
      * @param UniqueCodeChecker                $uniqueCodeChecker
      */
@@ -45,7 +39,7 @@ abstract class AbstractCommandHandler
     /**
      * @param PromotionCode $promotionCode
      */
-    protected function checkUniqueCode(PromotionCode $promotionCode)
+    protected function checkUniqueCode(PromotionCode $promotionCode): void
     {
         if (!$this->uniqueCodeChecker->hasUniqueCode($promotionCode)) {
             throw new NonUniqueCodeException('This code already exists.');
@@ -56,7 +50,7 @@ abstract class AbstractCommandHandler
      * @param PromotionCode   $promotionCode
      * @param AbstractCommand $command
      */
-    protected function translate(PromotionCode $promotionCode, AbstractCommand $command)
+    protected function translate(PromotionCode $promotionCode, AbstractCommand $command): void
     {
         foreach ($command->translations as $locale => $translation) {
             $promotionCode->translate($locale, $translation['label'], $translation['description']);
@@ -67,7 +61,7 @@ abstract class AbstractCommandHandler
      * @param PromotionCode   $promotionCode
      * @param AbstractCommand $command
      */
-    protected function setPromotions(PromotionCode $promotionCode, AbstractCommand $command)
+    protected function setPromotions(PromotionCode $promotionCode, AbstractCommand $command): void
     {
         foreach ($command->promotions as $promotion) {
             $promotionCode->setPromotion(

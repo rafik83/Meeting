@@ -95,6 +95,10 @@ class PromotionCodeController extends Controller
         $form   = $this->createForm(UpdateType::class, $update, [
             'submit' => true,
             'event'  => $event,
+            'can_update_promotions' => !$this
+                ->get('vimeet_infrastructure.repository.order_repository')
+                ->hasOrderWithPromotionCode($promotionCode)
+            ,
             'locale' => $event->getAvailableLocale($request->getLocale()),
         ]);
 

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Numero\OrderNumeroView;
 
@@ -101,4 +102,6 @@ interface OrderRepositoryInterface
      * @return bool
      */
     public function hasInvoice(Sheet $sheet);
+
+    public function hasOrderWithPromotionCode(PromotionCode $promotionCode): bool;
 }
