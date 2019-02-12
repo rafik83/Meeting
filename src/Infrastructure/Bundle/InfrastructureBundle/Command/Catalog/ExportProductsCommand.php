@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ExportProductsCommand extends Command
 {
-    const NAME = 'vimeet:products:export';
+    public const NAME = 'vimeet:products:export';
 
     /** @var ExportProductsHandler */
     private $exportProductsHandler;
@@ -35,15 +35,24 @@ class ExportProductsCommand extends Command
             ->setName(self::NAME)
             ->setDescription('Generate csv for the list of products')
             ->addArgument('event', InputArgument::REQUIRED, 'Event id')
-            ->addArgument('emailToNotify', InputArgument::REQUIRED, 'Email of the admin to notify for completion of the task')
+            ->addArgument(
+                'emailToNotify',
+                InputArgument::REQUIRED,
+                'Email of the admin to notify for completion of the task'
+            )
             ->addArgument('locale', InputArgument::REQUIRED, 'Locale for the email')
         ;
     }
-
+    
     /**
-     * {@inheritdoc}
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return int|void|null
+     *
+     * @throws \Proximum\Vimeet\Application\Exception\Order\Export\InvalidArgumentForExportException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $this->exportProductsHandler->handle(
             new ExportProducts(

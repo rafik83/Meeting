@@ -81,7 +81,7 @@ class ExportProductsHandler
      *
      * @throws InvalidArgumentForExportException
      */
-    public function handle(ExportProducts $command)
+    public function handle(ExportProducts $command): void
     {
         $event = $this->eventRepository->getById($command->eventId);
 
@@ -100,7 +100,7 @@ class ExportProductsHandler
 
         $file = $this->createFile($event, $data);
 
-        //$this->notifyCreationOfFile();
+        $this->notifyCreationOfFile();
     }
 
     /**
@@ -109,7 +109,7 @@ class ExportProductsHandler
      *
      * @return File
      */
-    private function createFile(Event $event, &$data)
+    private function createFile(Event $event, &$data): File
     {
         $filePath = $this->fileStorageAdapter->create(
             $data,
