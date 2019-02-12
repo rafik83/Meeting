@@ -90,19 +90,18 @@ class ExportProductsHandler
         }
 
         $view = $this->queryHandler->handle(new ProductsListViewQuery($event, $command->locale));
-        $data = $this->serializer->normalize($view, 'csv', [
+        $data = $this->serializer->serialize($view, 'csv', [
             'charset' => Charset::WINDOWS_1252,
             'csv_delimiter' => ';',
         ]);
-
+       
         // Remove first line of file which is composed of the key
         $dataWithoutFirstLine = substr($data, strpos($data, "\n") + 1);
 
-        $file = $this->createFile($event, $dataWithoutFirstLine);
+        $file = $this->createFile($event, $data);
 
         //$this->notifyCreationOfFile();
     }
-
 
     /**
      * @param Event  $event
@@ -117,7 +116,7 @@ class ExportProductsHandler
             sprintf('products_%s.csv', $event->getId()),
             $this->exportLocationDirectoryPath
         );
-
+        
         $file = new File($filePath, $this->dateTime);
         $this->fileRepository->add($file);
 

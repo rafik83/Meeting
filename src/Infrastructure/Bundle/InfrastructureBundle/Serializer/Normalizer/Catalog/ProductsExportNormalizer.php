@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Application\View\Product\Export\ProductsListView;
+use Proximum\Vimeet\Application\View\Product\ProductsListView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ProductsExportNormalizer implements NormalizerInterface
@@ -49,7 +49,7 @@ class ProductsExportNormalizer implements NormalizerInterface
         $locale = $object->locale;
 
         foreach ($object->products as $product) {
-            $data = [
+            $data[] = [
                 $this->colTrans(self::COL_PRODUCT_NAME, $locale) => $this->convertCharset($product->name),
                 $this->colTrans(self::COL_UNIT_PRICE, $locale) => $product->unitPrice,
                 $this->colTrans(self::COL_QUANTITY_UNIT, $locale) => $product->quantityUnit,
@@ -59,7 +59,7 @@ class ProductsExportNormalizer implements NormalizerInterface
                 $this->colTrans(self::COL_SALES, $locale) => $product->sales
             ];
         }
-
+        
         return $data;
     }
 
