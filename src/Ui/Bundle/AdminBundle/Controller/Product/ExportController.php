@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product;
 
 use Proximum\Vimeet\Application\Command\Catalog\Export\ExportProductsJobCreator;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -32,7 +32,7 @@ class ExportController extends Controller
         
         $this->get('tactician.commandbus')->handle($exportJobCreator);
         
-        $this->addFlash('success', 'flash.admin.export.products.success');
+        $this->addFlash('success', 'flash.admin.product.export.success');
         
         return $this->redirectToRoute('admin_product', ['event' => $event->getId()]);
     }

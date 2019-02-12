@@ -1298,6 +1298,13 @@ admin_product_remove:
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Product/Remove:remove }
 
+admin_product_export:
+    path: /event/{event}/product/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Product/Export:export }
+
 #
 # Organizer
 #

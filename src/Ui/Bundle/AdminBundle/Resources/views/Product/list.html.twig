@@ -7,7 +7,14 @@
 {% block list_title 'admin.product.title'|trans %}
 
 {% block content %}
-    <h1 class="page-header">{{ block('list_title') }}</h1>
+    <h1 class="page-header">
+        {{ block('list_title') }}
+        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+            <form action="{{ path('admin_product_export', { 'event': event.id }) }}" method="GET" class="pull-right" style="margin-left: 10px;">
+                <input type="submit" value="{{ 'admin.product.export.button.label'|trans }}" class="btn btn-sm btn-default"/>
+            </form>
+        {% endif %}
+    </h1>
 
     <p>
         <a href="{{ path('admin_product_create_option', {'event': event.id}) }}" class="btn btn-primary">
