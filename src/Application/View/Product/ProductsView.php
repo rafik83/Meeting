@@ -22,7 +22,7 @@ class ProductsView
     /** @var float */
     public $promotion;
 
-    /** @var float */
+    /** @var float|null */
     public $sales;
 
     public function __construct(
@@ -32,7 +32,7 @@ class ProductsView
         int $quantityPlan,
         int $quantityTotal,
         float $promotion,
-        float $sales
+        ?float $sales
     ) {
         $this->name = $name;
         $this->unitPrice = $unitPrice;

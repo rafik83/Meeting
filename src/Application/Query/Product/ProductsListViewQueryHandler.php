@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Product;
 
-use Proximum\Vimeet\Application\View\Product\Export\ProductsListView;
+use Proximum\Vimeet\Application\View\Product\ProductsListView;
 use Proximum\Vimeet\Application\View\Product\ProductsView;
 use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
@@ -58,15 +58,18 @@ class ProductsListViewQueryHandler
         }
 
         foreach ($products as $product) {
-            $unitPrice = $product->getUnitPrice();
-            $total = $bought[$product->getId()] + $productIncludedBought[$product->getId()];
+            $unitPrice = (int) $product->getUnitPrice();
+            $bought = $bought[$product->getId()] ?? 0;
+            $productIncludedBought = $productIncludedBought[$product->getId()] ?? 0;
+            
+            $total = $bought + $productIncludedBought;
             $promotion = 0;
 
             $productViews[] = new ProductsView(
                 $product->getName(),
                 $unitPrice,
-                $bought[$product->getId()],
-                $productIncludedBought[$product->getId()],
+                $bought,
+                $productIncludedBought,
                 $total,
                 $promotion,
                 ($unitPrice * $total) - $promotion
