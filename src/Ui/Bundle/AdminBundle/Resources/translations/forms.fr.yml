@@ -569,9 +569,9 @@ form.package_update.children.participantAndPlanning.children.participant.label: 
 form.package_update.children.participantAndPlanning.children.participants.label: 'Produit(s) Participant'
 form.package_update.children.participantAndPlanning.children.participants.label_add: 'Ajouter un produit participant'
 form.package_update.children.participantAndPlanning.children.participants.label_delete: '&times;'
+form.package_update.children.participantAndPlanning.children.participantWithPlanning.label: 'Un participant = un planning'
 form.package_update.children.participantAndPlanning.children.planning.label: Planning
 form.package_update.children.participantAndPlanning.children.planningSelectable.label: 'Planning visible'
-form.package_update.children.participantAndPlanning.children.participantWithPlanning.label: 'Un participant = un planning'
 form.package_update.children.plans.children.enabled.label: Activé
 form.package_update.children.plans.children.labels.label: 'Libellé de l''étape'
 form.package_update.children.plans.children.plans.label: Formules
@@ -824,10 +824,10 @@ form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.generateInvoice.label: 'Générer facture'
 form.sheet_batch.children.group.label: Entité
 form.sheet_batch.children.pending.label: 'En attente'
+form.sheet_batch.children.printBadge.label: 'Impression badge'
 form.sheet_batch.children.printPdf.label: 'Imprimer en PDF'
 form.sheet_batch.children.printPlanning.label: Imprimer
 form.sheet_batch.children.printPlanningAndBadge.label: 'Impression badge et planning'
-form.sheet_batch.children.printBadge.label: 'Impression badge'
 form.sheet_batch.children.printPlanningOrderBy.label: 'Ordre de l''export'
 form.sheet_batch.children.refuse.label: Refuser
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
