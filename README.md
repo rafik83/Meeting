@@ -101,11 +101,6 @@ Remarks :
 - Translations on Openl10n are never deleted or updated with a `push` command. Only new translations will be added.
 - Your locale translations will be updated with a `pull` command (new, update or delete).
 
-### Commits
-
-Please provide the User Story Id in the commit message: `"1337 - Add a killing feature".
-You can ignore pre commit hooks with `-n` option: `$ git commit -n`
-
 ### Deployment
 
 `Incenteev\ParameterHandler\ScriptHandler::buildParameters` is not ran on preprod or prod.
@@ -148,19 +143,6 @@ After a deploy, you will need to do manually some commands at prod or preprod ([
 ### Styleguide
 
 http://(subdomain event).vimeet.proximum/app_dev.php/fr/styleguide
-
-### Definition of Done
-
-- Test d'acceptation respecté : relire la story
-- Clé et libellé de traduction posé en français (Si possible, par ordre alphabétique, pour éviter les diffs et conflicts avec open10ln)
-- Checker l'accès aux controllers
-- Respecter l'UI Admin (si la story concerne l'Admin)
-- Générer une migration de la DB (si la structure change => make migrations)
-- Regénérer npm-shrinkwrap.json si un nouveau package npm est installé : (`$ npm shrinkwrap`)
-- Tests unitaires et fonctionnels qui passent (make test)
-- La branche est en platinum sur Insight 
-- Être reviewé (avoir plusieurs +1)
-- Pas de conflit avec `master` ou les résoudre dès que possible.
 
 ### Code
 
