@@ -13,11 +13,6 @@ class ExportProducts
     /** @var string */
     public $locale;
 
-    /**
-     * @param int    $eventId
-     * @param string $emailToNotify
-     * @param string $locale
-     */
     public function __construct(int $eventId, string $emailToNotify, string $locale)
     {
         $this->eventId = $eventId;

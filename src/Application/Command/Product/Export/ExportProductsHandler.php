@@ -48,18 +48,6 @@ class ExportProductsHandler
     /** @var string */
     private $mailSender;
 
-    /**
-     * @param EventRepositoryInterface     $eventRepository
-     * @param SerializerAdapterInterface   $serializer
-     * @param ProductsListViewQueryHandler $queryHandler
-     * @param FileStorageInterface         $fileStorage
-     * @param FileRepositoryInterface      $fileRepository
-     * @param FileFactory                  $fileFactory
-     * @param MailerInterface              $mailer
-     * @param string                       $mailSender
-     * @param string                       $exportLocationDirectoryPath
-     * @param \DateTimeInterface           $dateTime
-     */
     public function __construct(
         EventRepositoryInterface $eventRepository,
         SerializerAdapterInterface $serializer,
@@ -113,11 +101,11 @@ class ExportProductsHandler
 
     /**
      * @param Event $event
-     * @param $data
+     * @param string $data
      *
      * @return File
      */
-    private function createFile(Event $event, &$data): File
+    private function createFile(Event $event, string &$data): File
     {
         $filePath = $this->fileStorage->create(
             $data,

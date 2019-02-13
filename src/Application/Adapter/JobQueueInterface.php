@@ -72,12 +72,7 @@ interface JobQueueInterface
      */
     public function exportOrdersForEvent(Event $event, Admin $admin, $locale);
     
-    /**
-     * @param Event  $event
-     * @param Admin  $admin
-     * @param string $locale
-     */
-    public function exportProductsForEvent(Event $event, Admin $admin, $locale): void;
+    public function exportProductsForEvent(Event $event, Admin $admin, string $locale): void;
 
     /**
      * @param Event           $event

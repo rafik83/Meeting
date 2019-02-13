@@ -150,7 +150,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function exportProductsForEvent(Event $event, Admin $admin, $locale): void
+    public function exportProductsForEvent(Event $event, Admin $admin, string $locale): void
     {
         $job = new Job(ExportCommand::NAME, [$event->getId(), $admin->getEmail(), $locale]);
         

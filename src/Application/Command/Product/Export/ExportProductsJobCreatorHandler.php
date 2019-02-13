@@ -6,14 +6,9 @@ use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 
 class ExportProductsJobCreatorHandler
 {
-    /**
-     * @var JobQueueInterface
-     */
+    /** @var JobQueueInterface  */
     private $jobQueue;
     
-    /**
-     * @param JobQueueInterface $jobQueue
-     */
     public function __construct(JobQueueInterface $jobQueue)
     {
         $this->jobQueue = $jobQueue;

@@ -16,11 +16,6 @@ class ExportProductsJobCreator
     /** @var string */
     public $locale;
     
-    /**
-     * @param Event  $event
-     * @param Admin  $admin
-     * @param string $locale
-     */
     public function __construct(Event $event, Admin $admin, string $locale)
     {
         $this->event  = $event;

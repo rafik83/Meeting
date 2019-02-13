@@ -28,21 +28,13 @@ class ExportProductsMail extends AbstractMail
     /** @var int */
     public $fileId;
     
-    /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param string $fileHash
-     * @param int    $fileId
-     */
     public function __construct(
         Event $event,
-        $sender,
-        $receiver,
-        $locale,
-        $fileHash,
-        $fileId
+        string $sender,
+        string $receiver,
+        string $locale,
+        string $fileHash,
+        int $fileId
     ) {
         parent::__construct($sender, $receiver, $locale);
         
