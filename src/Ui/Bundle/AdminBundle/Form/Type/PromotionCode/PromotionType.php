@@ -31,12 +31,12 @@ class PromotionType extends AbstractType
         $canUpdatePromotions = $options['can_update_promotions'];
 
         $productOptions = [
-            'select2'      => true,
-            'placeholder'  => '',
+            'select2' => true,
+            'placeholder' => '',
             'disabled' => !$canUpdatePromotions,
-            'event'        => $options['event'],
-            'locale'       => $options['locale'],
-            'group_by'     => function (Product $product) {
+            'event' => $options['event'],
+            'locale' => $options['locale'],
+            'group_by' => function (Product $product) {
                 return sprintf('form.product_choice.group_by.type.%s', $product->getType());
             },
 
@@ -50,10 +50,10 @@ class PromotionType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'placeholder' => '',
                 'disabled' => !$canUpdatePromotions,
-                'choices'     => [
+                'choices' => [
                     'form.promotion_code_promotion.children.type.percentOff' => Promotion::TYPE_PERCENT_OFF,
-                    'form.promotion_code_promotion.children.type.valueOff'   => Promotion::TYPE_VALUE_OFF,
-                    'form.promotion_code_promotion.children.type.free'       => Promotion::TYPE_FREE,
+                    'form.promotion_code_promotion.children.type.valueOff' => Promotion::TYPE_VALUE_OFF,
+                    'form.promotion_code_promotion.children.type.free' => Promotion::TYPE_FREE,
                 ],
             ])
             ->add('value', NumberType::class, [

@@ -23,11 +23,11 @@ class CreateType extends PromotionCodeType
 
         $builder
             ->add('promotions', CollectionType::class, [
-                'entry_type'     => PromotionType::class,
-                'entry_options'  => [
+                'entry_type' => PromotionType::class,
+                'entry_options' => [
+                    'error_bubbling' => false,
                     'event' => $options['event'],
                     'label' => false,
-                    'error_bubbling' => false,
                     'locale' => $options['locale'],
                 ],
                 'allow_add' => true,
