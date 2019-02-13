@@ -1,15 +1,15 @@
 <?php
 
-namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Catalog;
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Product;
 
-use Proximum\Vimeet\Application\Command\Catalog\Export\ExportProducts;
-use Proximum\Vimeet\Application\Command\Catalog\Export\ExportProductsHandler;
+use Proximum\Vimeet\Application\Command\Product\Export\ExportProducts;
+use Proximum\Vimeet\Application\Command\Product\Export\ExportProductsHandler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ExportProductsCommand extends Command
+class ExportCommand extends Command
 {
     public const NAME = 'vimeet:products:export';
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Command\Catalog\Export;
+namespace Proximum\Vimeet\Application\Command\Product\Export;
 
 class ExportProducts
 {
@@ -18,7 +18,7 @@ class ExportProducts
      * @param string $emailToNotify
      * @param string $locale
      */
-    public function __construct($eventId, $emailToNotify, $locale)
+    public function __construct(int $eventId, string $emailToNotify, string $locale)
     {
         $this->eventId = $eventId;
         $this->emailToNotify = $emailToNotify;

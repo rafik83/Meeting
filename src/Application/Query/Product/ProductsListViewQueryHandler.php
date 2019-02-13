@@ -15,10 +15,6 @@ class ProductsListViewQueryHandler
     /** @var RowRepositoryInterface */
     private $rowRepository;
 
-    /**
-     * @param ProductRepositoryInterface $productRepository
-     * @param RowRepositoryInterface $rowRepository
-     */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         RowRepositoryInterface $rowRepository
@@ -41,17 +37,17 @@ class ProductsListViewQueryHandler
 
         foreach ($products as $product) {
             $bought[$product->getId()] = $this->rowRepository->boughtByProduct($product);
-
-            if ('plan' === $product->getType()) {
-                if (count($product->getIncludedProducts()) > 0) {
-                    $includedProducts = $product->getIncludedProducts();
-
-                    foreach ($includedProducts as $includedProduct) {
-                        if (isset($productIncludedBought[$includedProduct->getIncluded()->getId()])) {
-                            $productIncludedBought[$includedProduct->getIncluded()->getId()] += $includedProduct->getQuantity() * $bought[$product->getId()];
-                        } else {
-                            $productIncludedBought[$includedProduct->getIncluded()->getId()] = $includedProduct->getQuantity() * $bought[$product->getId()];
-                        }
+    
+            if ($product->isPlan() && $product->hasIncludedProducts()) {
+                $includedProducts = $product->getIncludedProducts();
+        
+                foreach ($includedProducts as $includedProduct) {
+                    $includedProductId = $includedProduct->getIncluded()->getId();
+            
+                    if (isset($productIncludedBought[$includedProductId])) {
+                        $productIncludedBought[$includedProductId] += $includedProduct->getQuantity() * $bought[$product->getId()];
+                    } else {
+                        $productIncludedBought[$includedProductId] = $includedProduct->getQuantity() * $bought[$product->getId()];
                     }
                 }
             }

@@ -1,18 +1,19 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Command\Catalog\Export;
+namespace Proximum\Vimeet\Application\Command\Product\Export;
 
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Order\Export\InvalidArgumentForExportException;
 use Proximum\Vimeet\Application\Query\Product\ProductsListViewQuery;
 use Proximum\Vimeet\Application\Query\Product\ProductsListViewQueryHandler;
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Domain\File\FileFactory;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\ExportProductsMail;
 
 class ExportProductsHandler
@@ -26,8 +27,11 @@ class ExportProductsHandler
     /** @var ProductsListViewQueryHandler */
     private $queryHandler;
 
-    /** @var LocalFileStorageAdapter */
-    private $fileStorageAdapter;
+    /** @var FileStorageInterface */
+    private $fileStorage;
+    
+    /** @var FileFactory */
+    private $fileFactory;
 
     /** @var string */
     private $exportLocationDirectoryPath;
@@ -48,8 +52,9 @@ class ExportProductsHandler
      * @param EventRepositoryInterface     $eventRepository
      * @param SerializerAdapterInterface   $serializer
      * @param ProductsListViewQueryHandler $queryHandler
-     * @param LocalFileStorageAdapter      $fileStorageAdapter
+     * @param FileStorageInterface         $fileStorage
      * @param FileRepositoryInterface      $fileRepository
+     * @param FileFactory                  $fileFactory
      * @param MailerInterface              $mailer
      * @param string                       $mailSender
      * @param string                       $exportLocationDirectoryPath
@@ -59,17 +64,19 @@ class ExportProductsHandler
         EventRepositoryInterface $eventRepository,
         SerializerAdapterInterface $serializer,
         ProductsListViewQueryHandler $queryHandler,
-        LocalFileStorageAdapter $fileStorageAdapter,
+        FileStorageInterface $fileStorage,
         FileRepositoryInterface $fileRepository,
+        FileFactory $fileFactory,
         MailerInterface $mailer,
-        $mailSender,
-        $exportLocationDirectoryPath,
+        string $mailSender,
+        string $exportLocationDirectoryPath,
         \DateTimeInterface $dateTime
     ) {
         $this->eventRepository = $eventRepository;
         $this->serializer = $serializer;
         $this->queryHandler = $queryHandler;
-        $this->fileStorageAdapter = $fileStorageAdapter;
+        $this->fileStorage = $fileStorage;
+        $this->fileFactory = $fileFactory;
         $this->fileRepository = $fileRepository;
         $this->exportLocationDirectoryPath = $exportLocationDirectoryPath;
         $this->dateTime = $dateTime;
@@ -105,20 +112,20 @@ class ExportProductsHandler
     }
 
     /**
-     * @param Event  $event
-     * @param string $data
+     * @param Event $event
+     * @param $data
      *
      * @return File
      */
     private function createFile(Event $event, &$data): File
     {
-        $filePath = $this->fileStorageAdapter->create(
+        $filePath = $this->fileStorage->create(
             $data,
-            sprintf('products_%s.csv', $event->getId()),
+            sprintf('export_product_list_%d_%s.csv', $event->getId(), $this->dateTime->format('H_i_s_d_m_Y')),
             $this->exportLocationDirectoryPath
         );
-        
-        $file = new File($filePath, $this->dateTime);
+    
+        $file = $this->fileFactory->createAndPersistFile($filePath, File::TYPE_EXPORT_PRODUCT_LIST);
         $this->fileRepository->add($file);
 
         return $file;

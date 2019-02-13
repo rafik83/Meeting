@@ -12,10 +12,6 @@ class ProductsListViewQuery
     /** @var string */
     public $adminLocale;
 
-    /**
-     * @param Event  $event
-     * @param string $adminLocale
-     */
     public function __construct(Event $event, $adminLocale)
     {
         $this->event = $event;

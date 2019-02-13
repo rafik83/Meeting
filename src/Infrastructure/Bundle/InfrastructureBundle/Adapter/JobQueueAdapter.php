@@ -28,7 +28,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\AvailableSlotCalculatorCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\Phone\PhoneValidationStatusCalculatorCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Catalog\ExportProductsCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Product\ExportCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\IndexFromScratchCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
@@ -152,7 +152,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function exportProductsForEvent(Event $event, Admin $admin, $locale): void
     {
-        $job = new Job(ExportProductsCommand::NAME, [$event->getId(), $admin->getEmail(), $locale]);
+        $job = new Job(ExportCommand::NAME, [$event->getId(), $admin->getEmail(), $locale]);
         
         $this->setJob($job);
     }

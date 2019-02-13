@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Command\Catalog\Export;
+namespace Proximum\Vimeet\Application\Command\Product\Export;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 
@@ -24,7 +24,7 @@ class ExportProductsJobCreatorHandler
      */
     public function handle(ExportProductsJobCreator $command): void
     {
-        $this->jobQueue->exportOrdersForEvent(
+        $this->jobQueue->exportProductsForEvent(
             $command->event,
             $command->admin,
             $command->locale

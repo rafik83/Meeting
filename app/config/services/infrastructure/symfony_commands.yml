@@ -113,8 +113,8 @@ services:
         tags:
             - { name: console.command }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Catalog\ExportProductsCommand:
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Product\ExportCommand:
         arguments:
-            - '@command.catalog.export.export_products_handler'
+            - '@command.product.export.export_products_handler'
         tags:
             - { name: console.command }
