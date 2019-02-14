@@ -81,7 +81,7 @@ services:
         tags:
             - { name: serializer.normalizer }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Catalog\ProductsExportNormalizer:
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Product\ProductsExportNormalizer:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:

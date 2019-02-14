@@ -57,6 +57,10 @@ class ProductsListViewQueryHandler
             $unitPrice = (int) $product->getUnitPrice();
             $bought = $bought[$product->getId()] ?? 0;
             $productIncludedBought = $productIncludedBought[$product->getId()] ?? 0;
+    
+            if ($bought === 0 && $productIncludedBought === 0) {
+                continue;
+            }
             
             $total = $bought + $productIncludedBought;
             $promotion = 0;

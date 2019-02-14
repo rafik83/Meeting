@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Catalog;
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Product;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Serializer\Charset;
@@ -24,9 +24,6 @@ class ProductsExportNormalizer implements NormalizerInterface
     /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @param TranslatorInterface $translator
-     */
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
@@ -68,7 +65,7 @@ class ProductsExportNormalizer implements NormalizerInterface
      *
      * @return string
      */
-    private function convertCharset($input): string
+    private function convertCharset(string $input): string
     {
         if (Charset::UTF_8 !== $this->charset) {
             return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . '//TRANSLIT', $input);

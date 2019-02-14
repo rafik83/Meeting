@@ -16,9 +16,6 @@ class ExportCommand extends Command
     /** @var ExportProductsHandler */
     private $exportProductsHandler;
 
-    /**
-     * @param ExportProductsHandler $exportProductsHandler
-     */
     public function __construct(ExportProductsHandler $exportProductsHandler)
     {
         parent::__construct(self::NAME);

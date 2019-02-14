@@ -565,3 +565,25 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\StaticFormulation\Update }
+
+    #
+    # Product export
+    #
+    Proximum\Vimeet\Application\Command\Product\Export\ExportProductsJobCreatorHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Export\ExportProductsJobCreator }
+
+    Proximum\Vimeet\Application\Command\Product\Export\ExportProductsHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.serializer_adapter'
+            - '@query.product.products_list_view_query_handler'
+            - '@adapter.local_file_storage'
+            - '@repository.file_repository'
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+            - '%infrastructure.export_products_path%'
+            - '@datetime'

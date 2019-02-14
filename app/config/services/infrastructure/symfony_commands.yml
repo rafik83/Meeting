@@ -115,6 +115,6 @@ services:
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Product\ExportCommand:
         arguments:
-            - '@command.product.export.export_products_handler'
+            - '@Proximum\Vimeet\Application\Command\Product\Export\ExportProductsHandler'
         tags:
             - { name: console.command }

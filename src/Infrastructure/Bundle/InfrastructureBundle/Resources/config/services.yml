@@ -6136,30 +6136,6 @@ services:
             - '%infrastructure.export_order_path%'
             - '@datetime'
 
-    #
-    # Product export
-    #
-    command.product.export.export_job_creator_handler:
-        class: Proximum\Vimeet\Application\Command\Product\Export\ExportProductsJobCreatorHandler
-        arguments:
-            - '@adapter.job_queue_adapter'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Export\ExportProductsJobCreator }
-
-    command.product.export.export_products_handler:
-        class: Proximum\Vimeet\Application\Command\Product\Export\ExportProductsHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.event_repository'
-            - '@adapter.serializer_adapter'
-            - '@query.product.products_list_view_query_handler'
-            - '@adapter.local_file_storage'
-            - '@repository.file_repository'
-            - '@Proximum\Vimeet\Domain\File\FileFactory'
-            - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
-            - '%infrastructure.export_products_path%'
-            - '@datetime'
-
     # Invoice
     #
     printer.invoice_pdf_printer:
