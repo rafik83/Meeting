@@ -52,24 +52,28 @@ class ProductsListViewQueryHandler
                 }
             }
         }
-
+        
         foreach ($products as $product) {
-            $unitPrice = (int) $product->getUnitPrice();
-            $bought = $bought[$product->getId()] ?? 0;
-            $productIncludedBought = $productIncludedBought[$product->getId()] ?? 0;
-    
-            if ($bought === 0 && $productIncludedBought === 0) {
+            $unitPrice = $product->getUnitPrice();
+            $boughtInt = $bought[$product->getId()];
+            $productIncludedBoughtInt = 0;
+            
+            if (array_key_exists($product->getId(), $productIncludedBought)) {
+                $productIncludedBoughtInt = $productIncludedBought[$product->getId()];
+            }
+            
+            if ($boughtInt === 0 && $productIncludedBoughtInt === 0) {
                 continue;
             }
             
-            $total = $bought + $productIncludedBought;
+            $total = $boughtInt + $productIncludedBoughtInt;
             $promotion = 0;
-
+            
             $productViews[] = new ProductsView(
                 $product->getName(),
                 $unitPrice,
-                $bought,
-                $productIncludedBought,
+                $boughtInt,
+                $productIncludedBoughtInt,
                 $total,
                 $promotion,
                 ($unitPrice * $total) - $promotion

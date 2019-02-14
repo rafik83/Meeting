@@ -14,7 +14,6 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-
 class ExportAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
