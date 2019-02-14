@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Query\Product;
 
 use Proximum\Vimeet\Application\View\Product\ProductsListView;
 use Proximum\Vimeet\Application\View\Product\ProductsView;
+use Proximum\Vimeet\Domain\Repository\Order\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
@@ -14,13 +15,18 @@ class ProductsListViewQueryHandler
 
     /** @var RowRepositoryInterface */
     private $rowRepository;
-
+    
+    /** @var PromotionCodeRepositoryInterface */
+    private $promotionCodeRepository;
+    
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        RowRepositoryInterface $rowRepository
+        RowRepositoryInterface $rowRepository,
+        PromotionCodeRepositoryInterface $promotionCodeRepository
     ) {
         $this->productRepository = $productRepository;
         $this->rowRepository = $rowRepository;
+        $this->promotionCodeRepository = $promotionCodeRepository;
     }
 
     /**
@@ -34,6 +40,8 @@ class ProductsListViewQueryHandler
         $productViews = [];
         $productIncludedBought = [];
         $products = $this->productRepository->findByEventOrderedByProductTypeAndProductName($query->event);
+        $promotions = $this->promotionCodeRepository->findPrices();
+        dump($promotions);die;
 
         foreach ($products as $product) {
             $bought[$product->getId()] = $this->rowRepository->boughtByProduct($product);

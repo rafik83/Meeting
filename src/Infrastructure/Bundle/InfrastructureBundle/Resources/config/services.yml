@@ -115,6 +115,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Order\RowRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.order_promotion_code_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Order\PromotionCodeRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.product_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\ProductRepository
         arguments:
@@ -3907,6 +3911,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
             - '@vimeet_infrastructure.repository.order_row_repository'
+            - '@vimeet_infrastructure.repository.order_promotion_code_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Product\ProductsListViewQuery }
 
