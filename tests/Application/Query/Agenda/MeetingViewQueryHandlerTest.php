@@ -27,7 +27,9 @@ use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
@@ -94,6 +96,7 @@ class MeetingViewQueryHandlerTest extends TestCase
         $participantHandler = $this->prophesize(MeetingParticipantViewQueryHandler::class);
         $ruleRepository     = $this->prophesize(RuleRepositoryInterface::class);
         $videoMeetingAccess = $this->prophesize(VideoMeetingAccess::class);
+        $requestRepository  = $this->prophesize(RequestRepositoryInterface::class);
 
         $participantHandler
             ->handle(new MeetingParticipantViewQuery($participant->reveal(), [$rule], 'fr'))
@@ -104,14 +107,17 @@ class MeetingViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($participantView2);
 
-        $ruleRepository->getBySeerTypeAndSeeableType($type, $type)->shouldBeCalled()->willReturn([$rule]);
+        $ruleRepository->getBySeerSheetAndSeeableSheet($sheet, $sheetMet)->shouldBeCalled()->willReturn([$rule]);
 
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
+
+        $canSeeSheet = new CanSeeSheet($ruleRepository->reveal(), $requestRepository->reveal());
 
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
-            $videoMeetingAccess->reveal()
+            $videoMeetingAccess->reveal(),
+            $canSeeSheet
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
@@ -127,7 +133,6 @@ class MeetingViewQueryHandlerTest extends TestCase
             'leftColor',
             'rightColor',
             $participants,
-            true,
             true
         );
 
@@ -197,6 +202,7 @@ class MeetingViewQueryHandlerTest extends TestCase
         $participantHandler = $this->prophesize(MeetingParticipantViewQueryHandler::class);
         $ruleRepository     = $this->prophesize(RuleRepositoryInterface::class);
         $videoMeetingAccess = $this->prophesize(VideoMeetingAccess::class);
+        $requestRepository  = $this->prophesize(RequestRepositoryInterface::class);
 
         $participantHandler
             ->handle($participantViewQuery1)
@@ -206,14 +212,17 @@ class MeetingViewQueryHandlerTest extends TestCase
             ->handle($participantViewQuery2)
             ->shouldBeCalled()
             ->willReturn($participantView2);
-        $ruleRepository->getBySeerTypeAndSeeableType($type, $type)->shouldBeCalled()->willReturn([$rule]);
+        $ruleRepository->getBySeerSheetAndSeeableSheet($sheet, $sheetMet)->shouldBeCalled()->willReturn([$rule]);
 
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
+
+        $canSeeSheet = new CanSeeSheet($ruleRepository->reveal(), $requestRepository->reveal());
 
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
-            $videoMeetingAccess->reveal()
+            $videoMeetingAccess->reveal(),
+            $canSeeSheet
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
@@ -229,7 +238,6 @@ class MeetingViewQueryHandlerTest extends TestCase
             'leftColor',
             'rightColor',
             $participants,
-            true,
             true
         );
 

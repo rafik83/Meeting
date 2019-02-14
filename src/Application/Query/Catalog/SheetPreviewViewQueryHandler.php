@@ -94,7 +94,7 @@ class SheetPreviewViewQueryHandler
         $viewer = $catalogSheetPreviewViewQuery->viewer;
         $sheet  = $catalogSheetPreviewViewQuery->sheet;
         $locale = $catalogSheetPreviewViewQuery->locale;
-        $rules  = $this->ruleRepository->getBySeerTypeAndSeeableType($viewer->getType(), $sheet->getType());
+        $rules  = $this->ruleRepository->getBySeerSheetAndSeeableSheet($viewer, $sheet);
 
         if (!empty($rules)) {
             $rule = $this->ruleComposer->compose($rules);

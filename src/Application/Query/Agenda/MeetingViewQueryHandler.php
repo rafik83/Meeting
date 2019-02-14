@@ -60,7 +60,7 @@ class MeetingViewQueryHandler
     {
         $userSheet    = $query->meeting->getSheetOfUser($query->user);
         $sheetMet     = $query->meeting->getSheetMet($userSheet);
-        $rules        = $this->ruleRepository->getBySeerTypeAndSeeableType($query->currentSheet->getType(), $sheetMet->getType());
+        $rules        = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->currentSheet, $sheetMet);
         $participants = [];
 
         foreach ($query->meeting->getParticipants($sheetMet) as $participant) {
@@ -68,8 +68,6 @@ class MeetingViewQueryHandler
                 ->participantHandler
                 ->handle(new MeetingParticipantViewQuery($participant, $rules, $query->locale));
         }
-
-        $isSheetDetailsSeeAble = !empty($rules);
 
         $meeting = new MeetingView(
             $query->meeting->getId(),
@@ -83,7 +81,6 @@ class MeetingViewQueryHandler
             $query->event->getConfiguration()->getLeftColor(),
             $query->event->getConfiguration()->getRightColor(),
             $participants,
-            $isSheetDetailsSeeAble,
             $query->isUserParticipantMultipleSheets,
             $query->meeting->getSpot()->isVisio(),
             $this->videoMeetingAccess->allowedToAccess($query->meeting)

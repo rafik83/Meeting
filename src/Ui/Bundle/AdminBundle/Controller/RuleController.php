@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Rule\SeeWhat;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
@@ -154,6 +153,6 @@ class RuleController extends Controller
     private function findOrCreateRule(Event $event, WhoInterface $seer, WhoInterface $seeable, $priority)
     {
         return $this->findRule($event, $seer, $seeable) ?:
-            $this->get('repository.rule_repository')->add(new Rule($event, $seer, $seeable, Tag::getSeeableTags(), $priority));
+            $this->get('repository.rule_repository')->add(Rule::createDefault($event, $seer, $seeable, $priority));
     }
 }

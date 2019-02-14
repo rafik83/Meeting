@@ -24,11 +24,13 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
 use Proximum\Vimeet\Domain\Rule\Composer;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -104,10 +106,12 @@ class SheetViewQueryHandlerTest extends TestCase
         $rule1 = $this->prophesize(Rule::class);
 
         $this->ruleRepository
-            ->getBySeerTypeAndSeeableType($this->type2->reveal(), $this->type1->reveal())
+            ->getBySeerSheetAndSeeableSheet($this->viewer->reveal(), $this->sheet->reveal())
             ->shouldBeCalled()
             ->willReturn([$rule1->reveal()])
         ;
+
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
 
         $this->templateDataFactory
             ->createRegistrationFromSheet($this->sheet->reveal(), 'fr')
@@ -185,6 +189,8 @@ class SheetViewQueryHandlerTest extends TestCase
             true
         );
 
+        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal(), $requestRepository->reveal());
+
         $handler = new SheetViewQueryHandler(
             $this->templateDataFactory->reveal(),
             $this->participantInfoGuesser->reveal(),
@@ -193,7 +199,8 @@ class SheetViewQueryHandlerTest extends TestCase
             $this->composer->reveal(),
             $this->applyer->reveal(),
             $this->sheetInfoQueryHandler->reveal(),
-            $this->sheetRegistrationInfoQueryHandler->reveal()
+            $this->sheetRegistrationInfoQueryHandler->reveal(),
+            $canSeeSheet
         );
 
         $result = $handler->handle($query);
@@ -237,12 +244,16 @@ class SheetViewQueryHandlerTest extends TestCase
             'President'
         );
 
+        $requestRepository  = $this->prophesize(RequestRepositoryInterface::class);
+
         $this->sheetInfoQueryHandler->getSheetFields()->shouldBeCalled()->willReturn($sheetFields);
         $this->sheetRegistrationInfoQueryHandler
             ->getSheetRegistrationFields()
             ->shouldBeCalled()
             ->willReturn($registrationFields)
         ;
+
+        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal(), $requestRepository->reveal());
 
         $handler = new SheetViewQueryHandler(
             $this->templateDataFactory->reveal(),
@@ -252,7 +263,8 @@ class SheetViewQueryHandlerTest extends TestCase
             $this->composer->reveal(),
             $this->applyer->reveal(),
             $this->sheetInfoQueryHandler->reveal(),
-            $this->sheetRegistrationInfoQueryHandler->reveal()
+            $this->sheetRegistrationInfoQueryHandler->reveal(),
+            $canSeeSheet
         );
 
         $handler->reMapFields($sheetView);

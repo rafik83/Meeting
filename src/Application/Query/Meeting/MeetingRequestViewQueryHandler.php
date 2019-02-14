@@ -62,10 +62,7 @@ class MeetingRequestViewQueryHandler
     {
         $otherSheet = $query->meetingRequest->getSheetMet($query->sheet);
         $userSheet = $query->sheet;
-        $rules = $this->ruleRepository->getBySeerTypeAndSeeableType(
-            $userSheet->getType(),
-            $otherSheet->getType()
-        );
+        $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($userSheet, $otherSheet);
         $composedRule = null;
 
         if (!empty($rules)) {
@@ -73,8 +70,6 @@ class MeetingRequestViewQueryHandler
         }
 
         $previews = $this->preview->getPreview($otherSheet, $query->locale, $composedRule);
-
-        $isSheetSeeable = !empty($rules);
 
         $participant = $query->sheet->getUserParticipant($query->user);
 
@@ -99,7 +94,6 @@ class MeetingRequestViewQueryHandler
             $previews,
             $query->isMeetingPublished,
             $query->isMeetingRequestUpdateLocked,
-            $isSheetSeeable,
             $query->isMeetingRequestClosed,
             $query->isAnsweringMeetingRequestClosed,
             $query->meetingRequest->hasMessage(),

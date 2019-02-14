@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Group;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -104,11 +105,9 @@ class DisplaySheetController extends Controller
             throw $this->createAccessDeniedException('Sheet not found');
         }
 
-        $rules = $this
-            ->get('repository.rule_repository')
-            ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
+        $canSeeSheet = $this->get(CanSeeSheet::class);
 
-        if (empty($rules)) {
+        if (false === $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
             throw $this->createNotFoundException('You do not have the right to see this sheet');
         }
 
@@ -127,6 +126,10 @@ class DisplaySheetController extends Controller
         } catch (AccessDeniedException $exception) {
             throw $this->createAccessDeniedException();
         }
+
+        $rules = $this
+            ->get('repository.rule_repository')
+            ->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
 
         $templateData = $this->get('template.tagged_data_factory')
             ->buildTaggedDataView($sheetToDisplay, $locale, $rules);

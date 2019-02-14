@@ -69,6 +69,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\RuleRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
     Proximum\Vimeet\Infrastructure\Repository\ScanRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
@@ -2990,9 +2991,9 @@ services:
     # Getter
     #
     template.sheet.sheet_info_getter:
-        class: Proximum\Vimeet\Domain\Sheet\SheetInfosGetter
+        class: Proximum\Vimeet\Domain\Sheet\SheetInfoGetter
         arguments:
-            - '@catalog.sheet_access_checker'
+            - '@Proximum\Vimeet\Domain\Sheet\CanSeeSheet'
             - '@repository.nomenclature_repository'
             - '@template.template_data_factory'
             - '@query.participant.card_list_view_query_handler'
@@ -3527,14 +3528,14 @@ services:
     query.type.meeting_type_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQueryHandler
         arguments:
-            - '@catalog.visible_participation_types'
+            - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery }
 
     query.type.meeting_category_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQueryHandler
         arguments:
-            - '@catalog.visible_participation_categories'
+            - '@vimeet_infrastructure.repository.category_repository'
             - '@query.catalog.search_facet_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQuery }

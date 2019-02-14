@@ -10,24 +10,24 @@
 
 namespace Proximum\Vimeet\Application\Query\Type;
 
-use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\TypeView;
 
 class MeetingTypeViewQueryHandler
 {
     /**
-     * @var VisibleParticipationTypes
+     * @var TypeRepositoryInterface
      */
-    private $visibleParticipationTypes;
+    private $typeRepository;
 
     /**
      * MeetingTypeViewQueryHandler constructor.
      *
-     * @param VisibleParticipationTypes $visibleParticipationTypes
+     * @param TypeRepositoryInterface $typeRepository
      */
-    public function __construct(VisibleParticipationTypes $visibleParticipationTypes)
+    public function __construct(TypeRepositoryInterface $typeRepository)
     {
-        $this->visibleParticipationTypes = $visibleParticipationTypes;
+        $this->typeRepository = $typeRepository;
     }
 
     /**
@@ -37,7 +37,7 @@ class MeetingTypeViewQueryHandler
      */
     public function handle(MeetingTypeViewQuery $query)
     {
-        $visibleTypes = $this->visibleParticipationTypes->getAllowedTypesList($query->sheet);
+        $visibleTypes = $this->typeRepository->getFromSheetMeetingRequests($query->sheet, $query->locale);
 
         $typeViews = [];
 

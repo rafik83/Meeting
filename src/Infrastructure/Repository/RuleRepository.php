@@ -14,8 +14,10 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class RuleRepository implements RuleRepositoryInterface
@@ -25,12 +27,17 @@ class RuleRepository implements RuleRepositoryInterface
      */
     private $entityManager;
 
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
     /**
-     * @param EntityManager $entityManager
+     * @param EntityManager              $entityManager
+     * @param RequestRepositoryInterface $requestRepository
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, RequestRepositoryInterface $requestRepository)
     {
         $this->entityManager = $entityManager;
+        $this->requestRepository = $requestRepository;
     }
 
     /**
@@ -85,7 +92,7 @@ class RuleRepository implements RuleRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -99,7 +106,7 @@ class RuleRepository implements RuleRepositoryInterface
             ->where('rule.event = :event')
             ->setParameter('event', $event)
             ->setMaxResults(1);
-        
+
         if ($seer instanceof Type) {
             $queryBuilder
                 ->andWhere($queryBuilder->expr()->orX(
@@ -143,6 +150,31 @@ class RuleRepository implements RuleRepositoryInterface
             ->setParameter('seeableCategories', $seeable->getCategories());
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBySeerSheetAndSeeableSheet(Sheet $seerSheet, Sheet $seeableSheet): array
+    {
+        $rules = $this->getBySeerTypeAndSeeableType($seerSheet->getType(), $seeableSheet->getType());
+
+        if (!empty($rules)) {
+            return $rules;
+        }
+
+        if (false === $this->requestRepository->hasRequestBetweenSheets($seerSheet, $seeableSheet)) {
+            return [];
+        }
+
+        // if there's at least one request between sheets, the default rule is used
+        $defaultRule = Rule::createDefault(
+            $seeableSheet->getEvent(),
+            $seerSheet->getType(),
+            $seeableSheet->getType()
+        );
+
+        return [$defaultRule];
     }
 
     /**

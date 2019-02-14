@@ -41,12 +41,10 @@
                 <span>{{ meeting.begin|date('H:i', timezone) }} - {{ meeting.end|date('H:i', timezone) }}</span>
             </p>
 
-            {% if meeting.isSheetDetailsSeeAble %}
-                <a href="{{ path('event_catalog_complete_sheet', { sheet: sheetId, sheetToDisplay: meeting.sheetMetId }) }}" target="_blank">
-                    <i class="icon icon-Document_1"></i>
-                    {{ 'agenda.meeting.details'|trans }}
-                </a>
-            {% endif %}
+            <a href="{{ path('event_catalog_complete_sheet', { sheet: sheetId, sheetToDisplay: meeting.sheetMetId }) }}" target="_blank">
+                <i class="icon icon-Document_1"></i>
+                {{ 'agenda.meeting.details'|trans }}
+            </a>
 
             <div class="actions">
                 {% if meeting.isVisioAndAvailable %}

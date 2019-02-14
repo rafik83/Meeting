@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\CategoryView;
 
@@ -80,4 +81,12 @@ interface CategoryRepositoryInterface
      * @return array
      */
     public function getCategoriesTitleByEventAndLocale(Event $event, string $locale, array $categories): array;
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return Category[]
+     */
+    public function getFromSheetMeetingRequests(Sheet $sheet, string $locale): array;
 }

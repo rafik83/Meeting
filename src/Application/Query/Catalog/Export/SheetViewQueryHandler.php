@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\Composer;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -49,6 +50,9 @@ class SheetViewQueryHandler
     /** @var SheetRegistrationInfoQueryHandler */
     private $sheetRegistrationInfoQueryHandler;
 
+    /** @var CanSeeSheet */
+    private $canSeeSheet;
+
     /**
      * @param TemplateDataFactory               $templateDataFactory
      * @param ParticipantInfoGuesser            $participantInfoGuesser
@@ -67,7 +71,8 @@ class SheetViewQueryHandler
         Composer $composer,
         Applyer $applyer,
         SheetInfoQueryHandler $sheetInfoQueryHandler,
-        SheetRegistrationInfoQueryHandler $sheetRegistrationInfoQueryHandler
+        SheetRegistrationInfoQueryHandler $sheetRegistrationInfoQueryHandler,
+        CanSeeSheet $canSeeSheet
     ) {
         $this->templateDataFactory = $templateDataFactory;
         $this->categoryNameResolver = $categoryNameResolver;
@@ -77,6 +82,7 @@ class SheetViewQueryHandler
         $this->composer = $composer;
         $this->sheetInfoQueryHandler = $sheetInfoQueryHandler;
         $this->sheetRegistrationInfoQueryHandler = $sheetRegistrationInfoQueryHandler;
+        $this->canSeeSheet = $canSeeSheet;
     }
 
     /**
@@ -91,12 +97,12 @@ class SheetViewQueryHandler
         $sheets = [$query->sheet];
         $locale = $query->locale;
 
-        $rules = $this->ruleRepository->getBySeerTypeAndSeeableType($query->viewer->getType(), $query->sheet->getType());
-
         // This should not happen as the sheet return are the only visible by the viewer
-        if (empty($rules)) {
+        if (false === $this->canSeeSheet->isSatisfiedBy($query->viewer, $query->sheet)) {
             throw new \DomainException('Sheet not visible');
         }
+
+        $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->viewer, $query->sheet);
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromSheet($query->sheet, $query->locale);
         $template = $this->templateDataFactory->createFromSheet($query->sheet, $query->locale);

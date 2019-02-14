@@ -29,6 +29,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
@@ -371,13 +372,15 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet to display not in catalog');
         }
 
-        $rules = $this
-            ->get('repository.rule_repository')
-            ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
+        $canSeeSheet = $this->get(CanSeeSheet::class);
 
-        if (empty($rules)) {
+        if (false === $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
             throw $this->createNotFoundException('You do not have the right to see this sheet');
         }
+
+        $rules = $this
+            ->get('repository.rule_repository')
+            ->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
 
         $this->get('command.sheet.sheet_viewed.add_handler')->handle(new Add($user, $sheetToDisplay));
 

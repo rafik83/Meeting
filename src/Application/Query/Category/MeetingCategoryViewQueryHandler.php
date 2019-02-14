@@ -12,26 +12,26 @@ namespace Proximum\Vimeet\Application\Query\Category;
 
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQueryHandler;
-use Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories;
+use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\View\CategoryView;
 
 class MeetingCategoryViewQueryHandler
 {
-    /** @var VisibleParticipationCategories */
-    private $visibleParticipationCategories;
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
 
     /** @var SearchFacetViewQueryHandler */
     private $searchFacetViewQueryHandler;
 
     /**
-     * @param VisibleParticipationCategories $visibleParticipationCategories
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param SearchFacetViewQueryHandler    $searchFacetViewQueryHandler
      */
     public function __construct(
-        VisibleParticipationCategories $visibleParticipationCategories,
+        CategoryRepositoryInterface $categoryRepository,
         SearchFacetViewQueryHandler $searchFacetViewQueryHandler
     ) {
-        $this->visibleParticipationCategories = $visibleParticipationCategories;
+        $this->categoryRepository = $categoryRepository;
         $this->searchFacetViewQueryHandler = $searchFacetViewQueryHandler;
     }
 
@@ -53,7 +53,7 @@ class MeetingCategoryViewQueryHandler
             return [];
         }
 
-        $visibleCategories = $this->visibleParticipationCategories->getAllowedCategoriesList($query->sheet);
+        $visibleCategories = $this->categoryRepository->getFromSheetMeetingRequests($query->sheet, $query->locale);
 
         $categoryViews = [];
 

@@ -12,19 +12,16 @@ namespace Proximum\Vimeet\Domain\Sheet;
 
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler;
-use Proximum\Vimeet\Domain\Catalog\SheetAccessChecker;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
-class SheetInfosGetter
+class SheetInfoGetter
 {
-    /** @var SheetAccessChecker */
-    private $accessChecker;
-
     /** @var NomenclatureRepositoryInterface */
     private $nomenclatureRepository;
 
@@ -34,19 +31,22 @@ class SheetInfosGetter
     /** @var CardListViewQueryHandler */
     private $cardListViewQueryHandler;
 
+    /** @var CanSeeOtherSheets */
+    private $canSeeSheet;
+
     /**
-     * @param SheetAccessChecker              $accessChecker
+     * @param CanSeeSheet                     $canSeeSheet
      * @param NomenclatureRepositoryInterface $nomenclatureRepository
      * @param TemplateDataFactory             $templateDataFactory
      * @param CardListViewQueryHandler        $cardListViewQueryHandler
      */
     public function __construct(
-        SheetAccessChecker $accessChecker,
+        CanSeeSheet $canSeeSheet,
         NomenclatureRepositoryInterface $nomenclatureRepository,
         TemplateDataFactory $templateDataFactory,
         CardListViewQueryHandler $cardListViewQueryHandler
     ) {
-        $this->accessChecker = $accessChecker;
+        $this->canSeeSheet = $canSeeSheet;
         $this->nomenclatureRepository = $nomenclatureRepository;
         $this->templateDataFactory = $templateDataFactory;
         $this->cardListViewQueryHandler = $cardListViewQueryHandler;
@@ -70,13 +70,13 @@ class SheetInfosGetter
         User $user,
         string $locale
     ): array {
-        if (!$this->accessChecker->checkAccess($sheet, $sheetToDisplay)) {
+        if (!$this->canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
             throw new AccessDeniedException('Access Denied');
         }
 
-        $nomenclatures     = $this->nomenclatureRepository->findByEvent($event);
+        $nomenclatures = $this->nomenclatureRepository->findByEvent($event);
         $cardListViewQuery = new CardListViewQuery($sheetToDisplay, $user, $locale);
-        $participants      = $this->cardListViewQueryHandler->handle($cardListViewQuery);
+        $participants = $this->cardListViewQueryHandler->handle($cardListViewQuery);
 
         $registrationTemplateData = $this
             ->templateDataFactory

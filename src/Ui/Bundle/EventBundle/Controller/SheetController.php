@@ -25,6 +25,7 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
@@ -170,11 +171,9 @@ class SheetController extends Controller
                 throw $this->createAccessDeniedException('Sheet not in catalog');
             }
 
-            $rules = $this
-                ->get('repository.rule_repository')
-                ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
+            $canSeeSheet = $this->get(CanSeeSheet::class);
 
-            if (empty($rules)) {
+            if (false === $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
                 throw $this->createNotFoundException('You do not have the right to see this sheet');
             }
         }
@@ -225,13 +224,15 @@ class SheetController extends Controller
                 throw $this->createAccessDeniedException('Sheet not in catalog');
             }
 
-            $rules = $this
-                ->get('repository.rule_repository')
-                ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
+            $canSeeSheet = $this->get(CanSeeSheet::class);
 
-            if (empty($rules)) {
+            if (false === $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
                 throw $this->createNotFoundException('You do not have the right to see this sheet');
             }
+
+            $rules = $this
+                ->get('repository.rule_repository')
+                ->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
 
             $ruleApplyer = $this->get('domain.rule.applyer');
             $ruleApplyer->applyRuleForTemplate($templateData, $rules);

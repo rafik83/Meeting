@@ -15,11 +15,11 @@ use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\CardListView;
 use Proximum\Vimeet\Application\View\Participant\CardView;
-use Proximum\Vimeet\Domain\Catalog\SheetAccessChecker;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
-use Proximum\Vimeet\Domain\Sheet\SheetInfosGetter;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
+use Proximum\Vimeet\Domain\Sheet\SheetInfoGetter;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -28,9 +28,9 @@ use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class SheetInfoGetterTest extends TestCase
 {
-    public function testSheetInfos()
+    public function testSheetInfos(): void
     {
-        $accessChecker = $this->prophesize(SheetAccessChecker::class);
+        $canSeeSheet = $this->prophesize(CanSeeSheet::class);
         $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $cardListViewQueryHandler = $this->prophesize(CardListViewQueryHandler::class);
@@ -56,14 +56,14 @@ class SheetInfoGetterTest extends TestCase
 
         $expectedResult = [$nomenclatures, $cardListView, $templateData->getAllTaggedDatas()];
 
-        $sheetInfosGetter = new SheetInfosGetter(
-            $accessChecker->reveal(),
+        $sheetInfosGetter = new SheetInfoGetter(
+            $canSeeSheet->reveal(),
             $nomenclatureRepository->reveal(),
             $templateDataFactory->reveal(),
             $cardListViewQueryHandler->reveal()
         );
 
-        $accessChecker->checkAccess($sheet, $sheetToDisplay)
+        $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)
             ->shouldBeCalled()
             ->willReturn(true);
 
@@ -84,9 +84,9 @@ class SheetInfoGetterTest extends TestCase
         $this->assertEquals($result, $expectedResult);
     }
 
-    public function testAccessDenied()
+    public function testAccessDenied(): void
     {
-        $accessChecker = $this->prophesize(SheetAccessChecker::class);
+        $canSeeSheet = $this->prophesize(CanSeeSheet::class);
         $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $cardListViewQueryHandler = $this->prophesize(CardListViewQueryHandler::class);
@@ -97,14 +97,14 @@ class SheetInfoGetterTest extends TestCase
         $sheetToDisplay = SheetFactory::create($event);
         $locale = 'fr';
 
-        $sheetInfosGetter = new SheetInfosGetter(
-            $accessChecker->reveal(),
+        $sheetInfosGetter = new SheetInfoGetter(
+            $canSeeSheet->reveal(),
             $nomenclatureRepository->reveal(),
             $templateDataFactory->reveal(),
             $cardListViewQueryHandler->reveal()
         );
 
-        $accessChecker->checkAccess($sheet, $sheetToDisplay)
+        $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)
             ->shouldBeCalled()
             ->willReturn(false);
 
