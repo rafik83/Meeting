@@ -52,8 +52,9 @@ class TemplateBooleanFilterIdentifier
                 && $object->isFilter()
             ) {
                 $filters[] = [
-                    'key'   => $object->getKey(),
+                    'key' => $object->getKey(),
                     'value' => $object->getFilterLabel(),
+                    'tags' => $object->getTags(),
                 ];
             }
         }

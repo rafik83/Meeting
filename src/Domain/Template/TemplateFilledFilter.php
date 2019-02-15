@@ -28,6 +28,7 @@ class TemplateFilledFilter
                     $filters[] = [
                         'key' => $object->getKey(),
                         'status' => null === $object->getPath() ? FilledFilter::NOT_FILLED : FilledFilter::FILLED,
+                        'tags' => $object->getTags(),
                     ];
                 } elseif ($object->hasTag(Tag::PARTICIPANT_DATA)) {
                     $participants = $sheet->getParticipantsArray();
@@ -51,6 +52,7 @@ class TemplateFilledFilter
                     $filters[] = [
                         'key' => $object->getKey(),
                         'status' => $status,
+                        'tags' => $object->getTags(),
                     ];
                 }
             }
@@ -68,6 +70,7 @@ class TemplateFilledFilter
                 $filters[] = [
                     'key' => $object->getKey(),
                     'value' => $object->getFilterLabel(),
+                    'tags' => $object->getTags(),
                 ];
             }
         }

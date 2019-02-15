@@ -14,14 +14,10 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class BooleanTemplateFilter
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
     /**
@@ -32,52 +28,46 @@ class BooleanTemplateFilter
      */
     private $templateKey;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $label;
 
-    /**
-     * @param Event  $event
-     * @param string $templateKey
-     * @param string $label
-     */
-    public function __construct(Event $event, $templateKey, $label)
-    {
-        $this->event       = $event;
+    /** @var null|string */
+    private $informationType;
+
+    public function __construct(
+        Event $event,
+        string $templateKey,
+        string $label,
+        ?string $informationType
+    ) {
+        $this->event = $event;
         $this->templateKey = $templateKey;
-        $this->label       = $label;
+        $this->label = $label;
+        $this->informationType = $informationType;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return Event
-     */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    /**
-     * @return string
-     */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->label;
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplateKey()
+    public function getTemplateKey(): string
     {
         return $this->templateKey;
+    }
+
+    public function getInformationType(): ?string
+    {
+        return $this->informationType;
     }
 }

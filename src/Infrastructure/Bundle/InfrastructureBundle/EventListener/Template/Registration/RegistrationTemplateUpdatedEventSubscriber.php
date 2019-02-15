@@ -93,7 +93,6 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
         $this->booleanTemplateFilterRepository->deleteForEvent($event);
 
         $filters = TemplateBooleanFilterIdentifier::getBooleanFilters($templatesData);
-
         $filtersAdded = [];
 
         foreach ($filters as $filter) {
@@ -102,7 +101,8 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
                 $booleanFilter = new BooleanTemplateFilter(
                     $event,
                     $filter['key'],
-                    $filter['value']
+                    $filter['value'],
+                    $this->getInformationType($filter)
                 );
 
                 $this->booleanTemplateFilterRepository->add($booleanFilter);
@@ -122,13 +122,28 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
                 $filledFilter = new FilledTemplateFilter(
                     $event,
                     $filter['key'],
-                    $filter['value']
+                    $filter['value'],
+                    $this->getInformationType($filter)
                 );
 
                 $this->filledTemplateFilterRepository->add($filledFilter);
                 $filtersAdded[$filledFilter->getTemplateKey()] = true;
             }
         }
+    }
+
+
+    private function getInformationType(array &$filter): ?string
+    {
+        $informationType = null;
+
+        if (\in_array(Tag::SHEET_DATA, $filter['tags'], true)) {
+            $informationType = Tag::SHEET_DATA;
+        } elseif (\in_array(Tag::PARTICIPANT_DATA, $filter['tags'], true)) {
+            $informationType = Tag::PARTICIPANT_DATA;
+        }
+
+        return $informationType;
     }
 
     /**

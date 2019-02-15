@@ -26,11 +26,19 @@ class FilledTemplateFilter
     /** @var string */
     private $label;
 
-    public function __construct(Event $event, string $templateKey, string $label)
-    {
+    /** @var null|string */
+    private $informationType;
+
+    public function __construct(
+        Event $event,
+        string $templateKey,
+        string $label,
+        ?string $informationType
+    ) {
         $this->event = $event;
         $this->templateKey = $templateKey;
         $this->label = $label;
+        $this->informationType = $informationType;
     }
 
     public function getId(): int
@@ -51,5 +59,10 @@ class FilledTemplateFilter
     public function getTemplateKey(): string
     {
         return $this->templateKey;
+    }
+
+    public function getInformationType(): ?string
+    {
+        return $this->informationType;
     }
 }
