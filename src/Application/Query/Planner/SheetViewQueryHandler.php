@@ -71,10 +71,11 @@ class SheetViewQueryHandler
             if ($indicator->possibleMeetingsQuantity > 0) {
                 $possibleMeetingQuantity = $indicator->possibleMeetingsQuantity;
 
-                if (!empty($meetingCount)
-                    && isset($meetingCount[$sheet->getId()])
-                    && isset($meetingCount[$sheet->getId()]['countMeetings'])
-                ) {
+                if (!empty($meetingCount) && isset($meetingCount[$sheet->getId()]['countMeetings'])) {
+                    // In case of solution with existing meeting, we overwrite the number of possible meeting quantity
+                    // with the max between existing meeting and possibileMeetingQuantity
+                    // Therefore, if the admin have added meeting previously, which overcome the number of possible meeting
+                    // The planner is not blocked with the extra meetings
                     $possibleMeetingQuantity = max($meetingCount[$sheet->getId()]['countMeetings'], $possibleMeetingQuantity);
                 }
 

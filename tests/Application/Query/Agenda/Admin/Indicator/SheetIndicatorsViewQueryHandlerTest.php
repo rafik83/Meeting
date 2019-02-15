@@ -37,7 +37,7 @@ class SheetIndicatorsViewQueryHandlerTest extends TestCase
         $request = 1;
         $propositions = 1;
 
-        $indicators = new IndicatorView(1, 1, 0, 1, 1, 1, 0);
+        $indicators = new IndicatorView(1, 1, 0, 1, 1, 1, 0, 8);
 
         $query = new SheetIndicatorsViewQuery($sheet);
         $handler = new SheetIndicatorsViewQueryHandler(
@@ -45,7 +45,7 @@ class SheetIndicatorsViewQueryHandlerTest extends TestCase
             $requestRepository->reveal(),
             $indicatorCalculator->reveal()
         );
-        $expectedView = new SheetIndicatorsView(1, 1, 1, 1, 1, 1, 1, 1);
+        $expectedView = new SheetIndicatorsView(1, 1, 1, 1, 1, 1, 1);
 
         $requestRepository->countRequestSentBySheet($sheet)->shouldBeCalled()->willReturn($request);
         $requestRepository->countPropositionReceivedBySheet($sheet)->shouldBeCalled()->willReturn($propositions);
