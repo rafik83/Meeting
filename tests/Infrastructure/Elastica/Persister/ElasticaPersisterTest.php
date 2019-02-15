@@ -37,7 +37,8 @@ class ElasticaPersisterTest extends TestCase
             'fr',
             false,
             false,
-            [['id' => 1337]]
+            [['id' => 1337]],
+            []
         );
         $normalizedUserEventView = [
             'firstName' => 'Korben',

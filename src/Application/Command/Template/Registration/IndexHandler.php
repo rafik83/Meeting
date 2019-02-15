@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Template\Registration;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Application\Command\UserEventView\Update as UpdateUserEvent;
 
 /**
  * Reindex all sheets by given SheetTemplate
@@ -24,23 +26,33 @@ class IndexHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param SheetIndexerInterface    $sheetIndexer
-     */
-    public function __construct(SheetRepositoryInterface $sheetRepository, SheetIndexerInterface $sheetIndexer)
-    {
+    /** @var CommandBusInterface */
+    private $commandBus;
+
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        SheetIndexerInterface $sheetIndexer,
+        CommandBusInterface $commandBus
+    ) {
         $this->sheetIndexer = $sheetIndexer;
         $this->sheetRepository = $sheetRepository;
+        $this->commandBus = $commandBus;
     }
 
-    /**
-     * @param Index $index
-     */
-    public function handle(Index $index)
+    public function handle(Index $index): void
     {
-        $this->sheetIndexer->updateSheets(
-            $this->sheetRepository->getByRegistrationTemplate($index->registrationTemplate)
-        );
+        $sheets = $this->sheetRepository->getByRegistrationTemplate($index->registrationTemplate);
+        $this->sheetIndexer->updateSheets($sheets);
+
+        foreach ($sheets as $sheet) {
+            foreach ($sheet->getParticipants() as $participant) {
+                $this->commandBus->handle(
+                    new UpdateUserEvent(
+                        $participant->getUser(),
+                        $participant->getEvent()
+                    )
+                );
+            }
+        }
     }
 }

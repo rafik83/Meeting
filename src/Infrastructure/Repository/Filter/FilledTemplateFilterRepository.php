@@ -38,6 +38,23 @@ class FilledTemplateFilterRepository implements FilledTemplateFilterRepositoryIn
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function getByEventIdAndInformationType(int $eventId, string $informationType): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('filledTemplateFilter')
+            ->from(FilledTemplateFilter::class, 'filledTemplateFilter', 'filledTemplateFilter.templateKey')
+            ->where('filledTemplateFilter.event = :event')
+            ->andWhere('filledTemplateFilter.informationType = :informationType')
+            ->setParameters([
+                'event' => $eventId,
+                'informationType' => $informationType,
+            ])
+            ->getQuery()
+            ->getResult();
+    }
+
     public function deleteForEvent(Event $event): void
     {
         $this

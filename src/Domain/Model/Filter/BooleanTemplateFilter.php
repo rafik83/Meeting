@@ -38,7 +38,7 @@ class BooleanTemplateFilter
         Event $event,
         string $templateKey,
         string $label,
-        ?string $informationType
+        ?string $informationType = null
     ) {
         $this->event = $event;
         $this->templateKey = $templateKey;

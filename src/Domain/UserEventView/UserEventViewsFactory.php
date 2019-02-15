@@ -10,11 +10,16 @@
 
 namespace Proximum\Vimeet\Domain\UserEventView;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Query\Event\Filter\GetTemplateFiltersQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEvent\UserEventViewRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User as UserRepository;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class UserEventViewsFactory
@@ -24,6 +29,12 @@ class UserEventViewsFactory
 
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
+
+    /** @var QueryBusInterface */
+    private $queryBus;
+
+    /** @var UserRepository\FormDataRepositoryInterface */
+    private $formDataRepositoryInterface;
 
     /** @var bool */
     private $isEventDataPreloaded = false;
@@ -36,10 +47,14 @@ class UserEventViewsFactory
 
     public function __construct(
         UserEventViewRepositoryInterface $userEventViewRepository,
-        ExtraDataRepositoryInterface $extraDataRepository
+        ExtraDataRepositoryInterface $extraDataRepository,
+        QueryBusInterface $queryBus,
+        UserRepository\FormDataRepositoryInterface $formDataRepositoryInterface
     ) {
         $this->userEventViewRepository = $userEventViewRepository;
         $this->extraDataRepository = $extraDataRepository;
+        $this->queryBus = $queryBus;
+        $this->formDataRepositoryInterface = $formDataRepositoryInterface;
     }
 
     /**
@@ -70,6 +85,9 @@ class UserEventViewsFactory
     private function getUserEventViews(Event $event, array $results, ?User $filteredUser = null): array
     {
         $userEventViews = [];
+        $templateFilters = $this->queryBus->handle(
+            new GetTemplateFiltersQuery($event->getId(), Tag::PARTICIPANT_DATA)
+        );
 
         foreach ($results as $result) {
             if (null === $filteredUser || $filteredUser->getId() === $result['ownerId']) {
@@ -81,7 +99,8 @@ class UserEventViewsFactory
                     $result['ownerLastName'],
                     $result['ownerEmail'],
                     $result['ownerLocale'],
-                    $result['sheetId']
+                    $result['sheetObject'],
+                    $templateFilters
                 );
             }
 
@@ -94,7 +113,8 @@ class UserEventViewsFactory
                     $result['userLastName'],
                     $result['userEmail'],
                     $result['userLocale'],
-                    $result['sheetId']
+                    $result['sheetObject'],
+                    $templateFilters
                 );
             }
         }
@@ -113,15 +133,18 @@ class UserEventViewsFactory
         ?string $lastName,
         string $email,
         string $locale,
-        int $sheetId
+        Sheet $sheet,
+        array $templateFilters
     ): void {
         if (isset($userEventViews[$userId])) {
-            if (!$userEventViews[$userId]->hasSheetId($sheetId)) {
-                $userEventViews[$userId]->addSheet(['id' => $sheetId]);
+            if (!$userEventViews[$userId]->hasSheetId($sheet->getId())) {
+                $userEventViews[$userId]->addSheet(['id' => $sheet->getId()]);
             }
 
             return;
         }
+
+        $dataMappedToTemplateFilters = $this->getDataMappedToTemplateFilters($sheet, $eventId, $userId, $templateFilters);
 
         $userEventViews[$userId] = new UserEventView(
             $eventId,
@@ -133,9 +156,33 @@ class UserEventViewsFactory
             $this->isVisio($eventId, $userId),
             $this->isVisioTested($eventId, $userId),
             [
-                ['id' => $sheetId],
-            ]
+                ['id' => $sheet->getId()],
+            ],
+            $dataMappedToTemplateFilters
         );
+    }
+
+    private function getDataMappedToTemplateFilters(
+        Sheet $sheet,
+        int $eventId,
+        int $userId,
+        array &$templateFilters
+    ): array {
+        $formData = $this->formDataRepositoryInterface->getDataByEventIdAndUserId($eventId, $userId);
+
+        foreach ($sheet->getParticipants() as $participant) {
+            if (empty($participant->getData())) {
+                continue;
+            }
+
+            $formData[] = $participant->getData();
+        }
+
+        if (empty($formData)) {
+            return [];
+        }
+
+        return TemplateObjectFilterTransformer::transform($templateFilters, array_merge(...$formData));
     }
 
     private function isVisio(int $eventId, int $userId): bool

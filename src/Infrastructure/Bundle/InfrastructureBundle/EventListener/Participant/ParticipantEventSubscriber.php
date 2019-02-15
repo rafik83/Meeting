@@ -28,6 +28,7 @@ use Proximum\Vimeet\Application\Event\Participant\ParticipantVisioTestedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantVisioToggledEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Proximum\Vimeet\Application\Command\UserEventView\Update as UpdateUserEvent;
 
 class ParticipantEventSubscriber implements EventSubscriberInterface
 {
@@ -69,6 +70,13 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
                 $participantUpdatedEvent->participant->getEvent(),
                 $participantUpdatedEvent->participant->getUser(),
                 $participantUpdatedEvent->templateData
+            )
+        );
+
+        $this->commandBus->handle(
+            new UpdateUserEvent(
+                $participantUpdatedEvent->participant->getUser(),
+                $participantUpdatedEvent->participant->getEvent()
             )
         );
 

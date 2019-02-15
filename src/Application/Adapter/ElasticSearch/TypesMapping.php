@@ -93,8 +93,6 @@ final class TypesMapping
         ],
     ];
 
-
-
     public const SEARCH_MAPPING = [
         self::SHEET_VIEW_SHEET_NAME => [
             'path' => 'sheetName.raw',

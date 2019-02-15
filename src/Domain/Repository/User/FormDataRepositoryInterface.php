@@ -20,4 +20,5 @@ interface FormDataRepositoryInterface
     public function update(FormData $formData): void;
     public function save(FormData $formData): void;
     public function getByUserAndFormTemplate(User $user, FormTemplate $formTemplate): ?FormData;
+    public function getDataByEventIdAndUserId(int $eventId, int $userId): array;
 }

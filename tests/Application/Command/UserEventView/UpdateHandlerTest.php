@@ -70,7 +70,8 @@ class UpdateHandlerTest extends TestCase
                 'fr',
                 false,
                 false,
-                [['id' => 999]]
+                [['id' => 999]],
+                []
             ),
         ];
 

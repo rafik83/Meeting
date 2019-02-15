@@ -58,4 +58,20 @@ class FormDataRepository implements FormDataRepositoryInterface
             ->getOneOrNullResult()
         ;
     }
+
+    public function getDataByEventIdAndUserId(int $eventId, int $userId): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('formData.data')
+            ->from(FormData::class, 'formData')
+            ->where('formData.user = :user')
+            ->innerJoin('formData.formTemplate', 'formTemplate', 'WITH', 'formTemplate.event = :event')
+            ->setParameters([
+                'user' => $userId,
+                'event' => $eventId,
+            ])
+            ->getQuery()
+            ->getResult();
+    }
 }
