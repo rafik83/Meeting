@@ -29,7 +29,7 @@ class SinglePromoOneMatchingProductStrategy implements FixProductPromotionStrate
         $promotionCode = $order->getPromotionCodes()[0]->getPromotionCode();
 
         foreach ($order->getRows() as $row) {
-            if ($row->getProduct() === null) {
+            if (null === $row->getProduct()) {
                 continue;
             }
             $promotion = $promotionCode->getPromotion($row->getProduct());
@@ -52,11 +52,10 @@ class SinglePromoOneMatchingProductStrategy implements FixProductPromotionStrate
 
         $matchingProduct = null;
 
-        $orderPromotionCode = $order->getPromotionCodes()[0];
-        $promotionCode = $orderPromotionCode->getPromotionCode();
+        $promotionCode = $order->getPromotionCodes()[0]->getPromotionCode();
 
         foreach ($order->getRows() as $row) {
-            if ($row->getProduct() === null) {
+            if (null === $row->getProduct()) {
                 continue;
             }
             $promotion = $promotionCode->getPromotion($row->getProduct());
@@ -64,7 +63,7 @@ class SinglePromoOneMatchingProductStrategy implements FixProductPromotionStrate
                 $matchingProduct = $row->getProduct();
             }
         }
-
-        $orderPromotionCode->setProduct($matchingProduct);
+    
+        $order->getPromotionCodes()[0]->setProduct($matchingProduct);
     }
 }

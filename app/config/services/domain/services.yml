@@ -150,6 +150,10 @@ services:
         arguments:
             - '@repository.rule_repository'
 
+    Proximum\Vimeet\Application\Components\Order\FixProductPromotionCodes\ProductPromotionCodesFixStrategyGuesser:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Order\OrderHelper'
+
     Proximum\Vimeet\Domain\User\Security\CanPasswordBeDefinedWithActivationEmail:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'

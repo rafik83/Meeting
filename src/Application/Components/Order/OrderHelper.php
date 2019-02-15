@@ -9,14 +9,23 @@ use Proximum\Vimeet\Domain\Order\DiscountCalculator;
 
 class OrderHelper
 {
+    /** @var DiscountCalculator */
+    private  $discountCalculator;
+    
+    public function __construct(DiscountCalculator $discountCalculator)
+    {
+       $this->discountCalculator = $discountCalculator;
+    }
+    
     /**
      * @param Order $order
      *
      * @return PromotionCode[]
      */
-    public static function getModelPromotionCodes(Order $order)
+    public function getModelPromotionCodes(Order $order): array
     {
         $identityMap = [];
+        
         foreach ($order->getPromotionCodes() as $orderPromotionCode) {
             $modelPromotionCode = $orderPromotionCode->getPromotionCode();
             $identityMap[$modelPromotionCode->getId()] = $modelPromotionCode;
@@ -31,11 +40,12 @@ class OrderHelper
      *
      * @return Order\PromotionCode[]
      */
-    public static function convertToPromotionCodes(Order $order, PromotionCode $modelPromotionCode): array
+    public function convertToPromotionCodes(Order $order, PromotionCode $modelPromotionCode): array
     {
         $promotionCodeRows = [];
+        
         foreach ($modelPromotionCode->getPromotions() as $promotion) {
-            $discount = self::getDiscountForProduct(
+            $discount = $this->getDiscountForProduct(
                 $order,
                 $modelPromotionCode,
                 $promotion->getProduct()
@@ -55,9 +65,10 @@ class OrderHelper
         return $promotionCodeRows;
     }
 
-    public static function getPromotionCodes(Order $order, PromotionCode $modelPromotionCode)
+    public function getPromotionCodes(Order $order, PromotionCode $modelPromotionCode): array
     {
         $promotionCodeRows = [];
+        
         foreach ($order->getPromotionCodes() as $orderPromotionCode) {
             if ($orderPromotionCode->getPromotionCode() === $modelPromotionCode) {
                 $promotionCodeRows[] = $orderPromotionCode;
@@ -67,20 +78,18 @@ class OrderHelper
         return $promotionCodeRows;
     }
 
-    public static function getDiscountForProduct(Order $order, PromotionCode $promotionCode, Product $product): float
+    public function getDiscountForProduct(Order $order, PromotionCode $promotionCode, Product $product): float
     {
-        $discountCalculator = new DiscountCalculator();
-
         // fake order promotion code
         $orderPromotionCode = new Order\PromotionCode($order, $promotionCode, 0.0, $product, 0.0);
-
-        return $discountCalculator->getDiscountForProduct($order, $orderPromotionCode, $product);
+        dump($this->discountCalculator);die;
+        return $this->discountCalculator->getDiscountForProduct($order, $orderPromotionCode, $product);
     }
 
-    public static function checkPromotionCodes(Order $order)
+    public function checkPromotionCodes(Order $order): bool
     {
         foreach ($order->getPromotionCodes() as $promotionCode) {
-            if ($promotionCode->getProduct() === null) {
+            if (null === $promotionCode->getProduct()) {
                 return false;
             }
         }

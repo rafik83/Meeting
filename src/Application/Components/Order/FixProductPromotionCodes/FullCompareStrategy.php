@@ -15,16 +15,24 @@ use Proximum\Vimeet\Domain\Money\AmountFormatter;
  */
 class FullCompareStrategy implements FixProductPromotionStrategyInterface
 {
+    /** @var OrderHelper */
+    private $orderHelper;
+    
+    public function __construct(OrderHelper $orderHelper)
+    {
+        $this->orderHelper = $orderHelper;
+    }
+    
     /**
      * {@inheritdoc}
      */
     public function canApply(Order $order): bool
     {
-        $modelPromotionCodes = OrderHelper::getModelPromotionCodes($order);
+        $modelPromotionCodes = $this->orderHelper->getModelPromotionCodes($order);
 
         foreach ($modelPromotionCodes as $modelPromotionCode) {
-            $newPromotionCodeRows = OrderHelper::convertToPromotionCodes($order, $modelPromotionCode);
-            $existingPromotionCodeRows = OrderHelper::getPromotionCodes($order, $modelPromotionCode);
+            $newPromotionCodeRows = $this->orderHelper->convertToPromotionCodes($order, $modelPromotionCode);
+            $existingPromotionCodeRows = $this->orderHelper->getPromotionCodes($order, $modelPromotionCode);
             $promoCompareResult = $this->compare($existingPromotionCodeRows, $newPromotionCodeRows);
             if (false === $promoCompareResult) {
                 return false;
@@ -43,11 +51,11 @@ class FullCompareStrategy implements FixProductPromotionStrategyInterface
             throw new \BadMethodCallException('Can\'t apply this strategy to this order');
         }
 
-        $modelPromotionCodes = OrderHelper::getModelPromotionCodes($order);
+        $modelPromotionCodes = $this->orderHelper->getModelPromotionCodes($order);
 
         foreach ($modelPromotionCodes as $modelPromotionCode) {
-            $newPromotionCodeRows = OrderHelper::convertToPromotionCodes($order, $modelPromotionCode);
-            $existingPromotionCodeRows = OrderHelper::getPromotionCodes($order, $modelPromotionCode);
+            $newPromotionCodeRows = $this->orderHelper->convertToPromotionCodes($order, $modelPromotionCode);
+            $existingPromotionCodeRows = $this->orderHelper->getPromotionCodes($order, $modelPromotionCode);
             $this->set($existingPromotionCodeRows, $newPromotionCodeRows);
         }
     }
@@ -58,10 +66,11 @@ class FullCompareStrategy implements FixProductPromotionStrategyInterface
      *
      * @return bool
      */
-    private function compare(array $existingPromotionCodeRows, array $newPromotionCodeRows)
+    private function compare(array $existingPromotionCodeRows, array $newPromotionCodeRows) :bool
     {
         $existingPrice = 0;
         $existingCountElts = 0;
+        
         foreach ($existingPromotionCodeRows as $existingPromotionCodeRow) {
             $existingPrice += $existingPromotionCodeRow->getPrice();
             $existingCountElts++;
@@ -69,12 +78,13 @@ class FullCompareStrategy implements FixProductPromotionStrategyInterface
 
         $newPrice = 0;
         $newCountElts = 0;
+        
         foreach ($newPromotionCodeRows as $existingPromotionCodeRow) {
             $newPrice += $existingPromotionCodeRow->getPrice();
             $newCountElts++;
         }
 
-        $discountDiff = round(
+        $discountDiff = \round(
             $existingPrice - $newPrice,
             2
         );
@@ -88,9 +98,10 @@ class FullCompareStrategy implements FixProductPromotionStrategyInterface
         }
 
         $newPromotionCodeRowsSet = [];
+        
         foreach ($existingPromotionCodeRows as $existingPromotionCodeRow) {
             foreach ($newPromotionCodeRows as $newPromotionCodeRow) {
-                if (in_array($newPromotionCodeRow, $newPromotionCodeRowsSet, true)) {
+                if (\in_array($newPromotionCodeRow, $newPromotionCodeRowsSet, true)) {
                     continue;
                 }
                 if ($this->doesNewPromoAndExistingPromoMatch($existingPromotionCodeRow, $newPromotionCodeRow)) {
@@ -100,19 +111,20 @@ class FullCompareStrategy implements FixProductPromotionStrategyInterface
             }
         }
 
-        return count($newPromotionCodeRowsSet) === count($newPromotionCodeRows);
+        return \count($newPromotionCodeRowsSet) === \count($newPromotionCodeRows);
     }
 
     /**
-     * @param Order\PromotionCode[] $existingPromotionCodeRows
-     * @param Order\PromotionCode[] $newPromotionCodeRows
+     * @param array $existingPromotionCodeRows
+     * @param array $newPromotionCodeRows
      */
-    private function set(array $existingPromotionCodeRows, array $newPromotionCodeRows)
+    private function set(array $existingPromotionCodeRows, array $newPromotionCodeRows): void
     {
         $newPromotionCodeRowsSet = [];
+        
         foreach ($existingPromotionCodeRows as $existingPromotionCodeRow) {
             foreach ($newPromotionCodeRows as $newPromotionCodeRow) {
-                if (in_array($newPromotionCodeRow, $newPromotionCodeRowsSet, true)) {
+                if (\in_array($newPromotionCodeRow, $newPromotionCodeRowsSet, true)) {
                     continue;
                 }
                 if ($this->doesNewPromoAndExistingPromoMatch($existingPromotionCodeRow, $newPromotionCodeRow)) {

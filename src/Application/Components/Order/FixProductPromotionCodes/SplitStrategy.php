@@ -15,16 +15,24 @@ use Proximum\Vimeet\Domain\Money\AmountFormatter;
  */
 class SplitStrategy implements FixProductPromotionStrategyInterface
 {
+    /** @var OrderHelper */
+    private $orderHelper;
+    
+    public function __construct(OrderHelper $orderHelper)
+    {
+        $this->orderHelper = $orderHelper;
+    }
+    
     /**
      * {@inheritdoc}
      */
     public function canApply(Order $order): bool
     {
-        $modelPromotionCodes = OrderHelper::getModelPromotionCodes($order);
+        $modelPromotionCodes = $this->orderHelper->getModelPromotionCodes($order);
 
         foreach ($modelPromotionCodes as $modelPromotionCode) {
-            $newPromotionCodeRows = OrderHelper::convertToPromotionCodes($order, $modelPromotionCode);
-            $existingPromotionCodeRows = OrderHelper::getPromotionCodes($order, $modelPromotionCode);
+            $newPromotionCodeRows = $this->orderHelper->convertToPromotionCodes($order, $modelPromotionCode);
+            $existingPromotionCodeRows = $this->orderHelper->getPromotionCodes($order, $modelPromotionCode);
             $promoCompareResult = $this->compare($existingPromotionCodeRows, $newPromotionCodeRows);
             if (false === $promoCompareResult) {
                 return false;
@@ -43,11 +51,11 @@ class SplitStrategy implements FixProductPromotionStrategyInterface
             throw new \BadMethodCallException('Can\'t apply this strategy to this order');
         }
 
-        $modelPromotionCodes = OrderHelper::getModelPromotionCodes($order);
+        $modelPromotionCodes = $this->orderHelper->getModelPromotionCodes($order);
 
         foreach ($modelPromotionCodes as $modelPromotionCode) {
-            $newPromotionCodeRows = OrderHelper::convertToPromotionCodes($order, $modelPromotionCode);
-            $existingPromotionCodeRows = OrderHelper::getPromotionCodes($order, $modelPromotionCode);
+            $newPromotionCodeRows = $this->orderHelper->convertToPromotionCodes($order, $modelPromotionCode);
+            $existingPromotionCodeRows = $this->orderHelper->getPromotionCodes($order, $modelPromotionCode);
             $this->set($order, $existingPromotionCodeRows, $newPromotionCodeRows);
         }
     }
@@ -58,7 +66,7 @@ class SplitStrategy implements FixProductPromotionStrategyInterface
      *
      * @return bool
      */
-    private function compare(array $existingPromotionCodeRows, array $newPromotionCodeRows)
+    private function compare(array $existingPromotionCodeRows, array $newPromotionCodeRows): bool
     {
         if (count($existingPromotionCodeRows) !== 1) {
             return false;
@@ -111,7 +119,7 @@ class SplitStrategy implements FixProductPromotionStrategyInterface
      *
      * @return void
      */
-    private function set(Order $order, array $existingPromotionCodeRows, array $newPromotionCodeRows)
+    private function set(Order $order, array $existingPromotionCodeRows, array $newPromotionCodeRows): void
     {
         $existingPromotionCodeRow = $existingPromotionCodeRows[0];
 

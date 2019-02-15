@@ -62,7 +62,7 @@ class SingleProductPromotionStrategy implements FixProductPromotionStrategyInter
             $promotionCode = $orderPromotionCode->getPromotionCode();
 
             foreach ($order->getRows() as $row) {
-                if ($row->getProduct() === null) {
+                if (null === $row->getProduct()) {
                     continue;
                 }
                 $promotion = $promotionCode->getPromotion($row->getProduct());

@@ -2,28 +2,31 @@
 
 namespace Proximum\Vimeet\Application\Components\Order\FixProductPromotionCodes;
 
+use Proximum\Vimeet\Application\Components\Order\OrderHelper;
 use Proximum\Vimeet\Domain\Model\Order;
 
 class ProductPromotionCodesFixStrategyGuesser
 {
     /** @var FixProductPromotionStrategyInterface[] */
     private $strategies = [];
-
-    public static function create(): ProductPromotionCodesFixStrategyGuesser
+    
+    /** @var OrderHelper */
+    private $orderHelper;
+    
+    public function __construct(OrderHelper $orderHelper)
     {
-        $fixer = new self;
+        $this->orderHelper = $orderHelper;
+    }
 
-        $fixer->addStrategy(new SinglePromoSingleRowStrategy());
-
-        $fixer->addStrategy(new SinglePromoOneMatchingProductStrategy());
-
-        $fixer->addStrategy(new SingleProductPromotionStrategy());
-
-        $fixer->addStrategy(new FullCompareStrategy());
-
-        $fixer->addStrategy(new SplitStrategy());
-
-        return $fixer;
+    public function create(): ProductPromotionCodesFixStrategyGuesser
+    {
+        $this->addStrategy(new SinglePromoSingleRowStrategy());
+        $this->addStrategy(new SinglePromoOneMatchingProductStrategy());
+        $this->addStrategy(new SingleProductPromotionStrategy());
+        $this->addStrategy(new FullCompareStrategy($this->orderHelper));
+        $this->addStrategy(new SplitStrategy($this->orderHelper));
+        
+        return $this;
     }
 
     /**
@@ -48,9 +51,5 @@ class ProductPromotionCodesFixStrategyGuesser
         }
 
         return null;
-    }
-
-    private function __construct()
-    {
     }
 }

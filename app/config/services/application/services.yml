@@ -276,3 +276,18 @@ services:
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareVersionDiffChangedMail'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareSheetChangeTypeMail'
+
+    #
+    # Order Helper
+    #
+    Proximum\Vimeet\Application\Components\Order\OrderHelper:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Order\DiscountCalculator'
+
+    Proximum\Vimeet\Application\Components\Order\FixProductPromotionCodes\FullCompareStrategy:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Order\OrderHelper'
+
+    Proximum\Vimeet\Application\Components\Order\FixProductPromotionCodes\SplitStrategy:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Order\OrderHelper'

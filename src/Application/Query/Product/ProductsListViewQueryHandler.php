@@ -39,9 +39,17 @@ class ProductsListViewQueryHandler
         $bought = [];
         $productViews = [];
         $productIncludedBought = [];
+        $promotions = [];
         $products = $this->productRepository->findByEventOrderedByProductTypeAndProductName($query->event);
-        $promotions = $this->promotionCodeRepository->findPrices();
-
+        $promotionCodes = $this->promotionCodeRepository->findPrices();
+        
+        if (count($promotionCodes) >0) {
+            foreach ($promotionCodes as $promotion) {
+                $price = $promotion['price'];
+                $promotions[$price] = $promotion['price'];
+            }
+        }
+        
         foreach ($products as $product) {
             $bought[$product->getId()] = $this->rowRepository->boughtByProduct($product);
     
@@ -64,9 +72,14 @@ class ProductsListViewQueryHandler
             $unitPrice = $product->getUnitPrice();
             $boughtInt = $bought[$product->getId()];
             $productIncludedBoughtInt = 0;
+            $promotionInt = 0;
             
-            if (array_key_exists($product->getId(), $productIncludedBought)) {
+            if (\array_key_exists($product->getId(), $productIncludedBought)) {
                 $productIncludedBoughtInt = $productIncludedBought[$product->getId()];
+            }
+    
+            if (\array_key_exists($product->getId(), $promotions)) {
+                $promotionInt = $promotions[$product->getId()];
             }
             
             if ($boughtInt === 0 && $productIncludedBoughtInt === 0) {
@@ -74,7 +87,6 @@ class ProductsListViewQueryHandler
             }
             
             $total = $boughtInt + $productIncludedBoughtInt;
-            $promotion = 0;
             
             $productViews[] = new ProductsView(
                 $product->getName(),
@@ -82,8 +94,8 @@ class ProductsListViewQueryHandler
                 $boughtInt,
                 $productIncludedBoughtInt,
                 $total,
-                $promotion,
-                ($unitPrice * $total) - $promotion
+                $promotionInt,
+                ($unitPrice * $total) - \abs($promotionInt)
             );
         }
 

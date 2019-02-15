@@ -15,31 +15,37 @@ class FixPromotionOrderProductsHandler
 
     /** @var EntityManagerAdapterInterface */
     private $entityManagerAdapter;
-
-    /** @var ProductPromotionCodesFixStrategyGuesser */
-    private $guesser;
+    
+    /**@var OrderHelper */
+    private $orderHelper;
+    
+    /**@var ProductPromotionCodesFixStrategyGuesser */
+    private $fixStrategyGuesser;
 
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        EntityManagerAdapterInterface $entityManagerAdapter
+        EntityManagerAdapterInterface $entityManagerAdapter,
+        OrderHelper $orderHelper,
+        ProductPromotionCodesFixStrategyGuesser $fixStrategyGuesser
     ) {
         $this->orderRepository = $orderRepository;
         $this->entityManagerAdapter = $entityManagerAdapter;
-        $this->guesser = ProductPromotionCodesFixStrategyGuesser::create();
+        $this->orderHelper = $orderHelper;
+        $this->fixStrategyGuesser = $fixStrategyGuesser;
     }
 
-    public function handle(FixPromotionOrderProducts $fixPromotionOrderProducts)
+    public function handle(FixPromotionOrderProducts $fixPromotionOrderProducts): void
     {
         $orders = $this->orderRepository->findWithPromotion();
-
         $ordersCount = 0;
         $modifiedOrdersCount = 0;
+        
         foreach ($orders as $order) {
             $ordersCount++;
             try {
                 $this->fixOrder($order);
                 $modifiedOrdersCount++;
-                $check = OrderHelper::checkPromotionCodes($order);
+                $check = $this->orderHelper->checkPromotionCodes($order);
 
                 if (false === $check) {
                     throw new \UnexpectedValueException($order->getId());
@@ -63,9 +69,10 @@ class FixPromotionOrderProductsHandler
         );
     }
 
-    private function fixOrder(Order $order)
+    private function fixOrder(Order $order): void
     {
-        $strategy = $this->guesser->guess($order);
+        $guesser = $this->fixStrategyGuesser->create();
+        $strategy = $guesser->guess($order);
 
         // if strategy found
         if (!$strategy) {
@@ -76,8 +83,9 @@ class FixPromotionOrderProductsHandler
     }
 
     /**
-     * @param Order\PromotionCode[] $existingPromotionCodeRows
-     * @param Order\PromotionCode[] $newPromotionCodeRows
+     * @param Order $order
+     * @param array $existingPromotionCodeRows
+     * @param array $newPromotionCodeRows
      */
     private function displayPromotionCodeDetail(
         Order $order,
@@ -86,6 +94,7 @@ class FixPromotionOrderProductsHandler
     ): void {
         $existingPrice = 0;
         $existingCountElts = 0;
+        
         foreach ($existingPromotionCodeRows as $existingPromotionCodeRow) {
             $existingPrice += $existingPromotionCodeRow->getPrice();
             $existingCountElts++;
@@ -93,6 +102,7 @@ class FixPromotionOrderProductsHandler
 
         $newPrice = 0;
         $newCountElts = 0;
+        
         foreach ($newPromotionCodeRows as $existingPromotionCodeRow) {
             $newPrice += $existingPromotionCodeRow->getPrice();
             $newCountElts++;
@@ -127,12 +137,12 @@ class FixPromotionOrderProductsHandler
      */
     private function displayOrderDetail(Order $order): void
     {
-        $modelPromotionCodes = OrderHelper::getModelPromotionCodes($order);
+        $modelPromotionCodes = $this->orderHelper->getModelPromotionCodes($order);
 
         // display some data since there's no strategy
         foreach ($modelPromotionCodes as $modelPromotionCode) {
-            $newPromotionCodeRows = OrderHelper::convertToPromotionCodes($order, $modelPromotionCode);
-            $existingPromotionCodeRows = OrderHelper::getPromotionCodes($order, $modelPromotionCode);
+            $newPromotionCodeRows = $this->orderHelper->convertToPromotionCodes($order, $modelPromotionCode);
+            $existingPromotionCodeRows = $this->orderHelper->getPromotionCodes($order, $modelPromotionCode);
             $this->displayPromotionCodeDetail($order, $existingPromotionCodeRows, $newPromotionCodeRows);
         }
     }

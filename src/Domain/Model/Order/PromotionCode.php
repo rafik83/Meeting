@@ -124,9 +124,6 @@ class PromotionCode
         return $this->promotionCode;
     }
     
-    /**
-     * @return Model\Product
-     */
     public function getProduct(): Model\Product
     {
         return $this->product;
@@ -152,14 +149,6 @@ class PromotionCode
     public function getDescription($locale, $fallback = null): string
     {
         return $this->getTranslatedValueOfData('description', $locale, $fallback);
-    }
-
-    /**
-     * @return Model\Product
-     */
-    public function getProduct(): Model\Product
-    {
-        return $this->product;
     }
 
     /**
