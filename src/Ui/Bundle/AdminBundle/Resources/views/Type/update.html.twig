@@ -31,7 +31,8 @@
         </div>
     </div>
 
-    {{ form_row(form.rank, {widget_columns: 1}) }}
+    {{ form_row(form.rank, {widget_columns: 2}) }}
+    {{ form_row(form.numberOfMeetingsPerPlanning, {widget_columns: 2}) }}
     {{ form_row(form.validationCriteria) }}
 
 {% endblock form_content %}

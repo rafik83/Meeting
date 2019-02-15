@@ -32,6 +32,7 @@ class UpdateHandlerTest extends TestCase
         $expectedType = new Type($event);
         $expectedType->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'truc'));
         $expectedType->getValidationCriteria()->setSheetAccepted(false);
+        $expectedType->update(1, true, false, 12);
 
         //Command
         $type = new Type($event);
@@ -39,10 +40,13 @@ class UpdateHandlerTest extends TestCase
         $type->getValidationCriteria()->setSheetAccepted(true);
         $type->setDisableUnavailabilityManagement(false);
 
-        $update                                      = new Update($type, 'fr');
-        $update->translations['fr']['title']         = 'truc';
+        $update = new Update($type, 'fr');
+        $update->translations['fr']['title'] = 'truc';
         $update->validationCriteria['sheetAccepted'] = false;
         $update->enableUnavailabilityManagement = true;
+        $update->rank = 1;
+        $update->hidden = true;
+        $update->numberOfMeetingsPerPlanning = 12;
 
         //Mock
         $typeRepository             = $this->prophesize(TypeRepositoryInterface::class);

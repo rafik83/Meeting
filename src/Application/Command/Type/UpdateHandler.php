@@ -58,7 +58,12 @@ class UpdateHandler
     public function handle(Update $update)
     {
         $type = $update->type;
-        $type->setPosition($update->rank);
+        $type->update(
+            $update->rank,
+            $update->hidden,
+            !$update->enableUnavailabilityManagement,
+            $update->numberOfMeetingsPerPlanning
+        );
         $type->setHidden($update->hidden);
         $type->setDisableUnavailabilityManagement(!$update->enableUnavailabilityManagement);
 

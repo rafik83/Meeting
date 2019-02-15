@@ -56,6 +56,9 @@ class Create implements Command
     /** @var bool */
     public $enableUnavailabilityManagement = true;
 
+    /** @var int|null */
+    public $numberOfMeetingsPerPlanning;
+
     /**
      * @param Event  $event
      * @param string $locale
