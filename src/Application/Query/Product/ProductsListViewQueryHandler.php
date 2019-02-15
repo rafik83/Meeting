@@ -41,7 +41,6 @@ class ProductsListViewQueryHandler
         $productIncludedBought = [];
         $products = $this->productRepository->findByEventOrderedByProductTypeAndProductName($query->event);
         $promotions = $this->promotionCodeRepository->findPrices();
-        dump($promotions);die;
 
         foreach ($products as $product) {
             $bought[$product->getId()] = $this->rowRepository->boughtByProduct($product);

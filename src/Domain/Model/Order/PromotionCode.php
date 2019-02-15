@@ -111,7 +111,15 @@ class PromotionCode
     {
         return $this->promotionCode;
     }
-
+    
+    /**
+     * @return Model\Product
+     */
+    public function getProduct(): Model\Product
+    {
+        return $this->product;
+    }
+    
     /**
      * @param string      $locale
      * @param string|null $fallback

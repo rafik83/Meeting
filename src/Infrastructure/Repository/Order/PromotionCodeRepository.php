@@ -24,9 +24,11 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('orderPromotionCode')
-            ->from(PromotionCode::class, 'orderPromotionCode')
-            ->groupBy('orderPromotionCode.product')
+            ->select('p.id AS product', 'SUM(o.price) AS price')
+            ->from(PromotionCode::class, 'o')
+            ->innerJoin('o.product', 'p')
+            ->groupBy('p.id')
+            ->orderBy('p.type, p.name')
         ;
         
         return $queryBuilder->getQuery()->getResult();
