@@ -1,0 +1,75 @@
+<?php
+
+namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Product\Export;
+
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Command\Product\Export\ExportProductsJobCreator;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export\ExportAction;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+class ExportActionTest extends TestCase
+{
+    /** @var AuthorizationCheckerAdapterInterface */
+    private $authorizationCheckerAdapter;
+    
+    /** @var CommandBusInterface */
+    private $commandBus;
+    
+    /** @var RouterInterface */
+    private $router;
+    
+    /** @var FlashBagInterface */
+    private $flashBag;
+    
+    /** @var Event */
+    private $event;
+    
+    /** @var Request */
+    private $request;
+    
+    /** @var UserInterface */
+    private $admin;
+    
+    /** @var AdminDomain */
+    private $adminDomain;
+    
+    public function setUp()
+    {
+        $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
+        $this->commandBus = $this->prophesize(CommandBusInterface::class);
+        $this->router = $this->prophesize(RouterInterface::class);
+        $this->flashBag = $this->prophesize(FlashBagInterface::class);
+        $this->event = $this->prophesize(Event::class);
+        $this->request = $this->prophesize(Request::class);
+        $this->admin = $this->prophesize(UserInterface::class);
+        $this->adminDomain = $this->prophesize(AdminDomain::class);
+    }
+    
+    public function testAccessDenied(): void
+    {
+        $this->expectException(AccessDeniedException::class);
+        
+        $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+        
+        $action = new ExportAction(
+            $this->authorizationCheckerAdapter->reveal(),
+            $this->commandBus->reveal(),
+            $this->router->reveal(),
+            $this->flashBag->reveal()
+        );
+        
+        $action($this->request->reveal(), $this->admin->reveal(), $this->event->reveal(), $this->adminDomain->reveal());
+    }
+}
