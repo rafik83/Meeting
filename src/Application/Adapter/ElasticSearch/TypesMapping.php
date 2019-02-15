@@ -27,6 +27,10 @@ final class TypesMapping
     public const USER_EVENT_VIEW_SHEETS_ID = 'id';
     public const USER_EVENT_VIEW_IS_VISIO = 'isVisio';
     public const USER_EVENT_VIEW_IS_VISIO_TESTED = 'isVisioTested';
+    public const USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS = 'templateObjectFilters';
+    public const USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_KEY = 'key';
+    public const USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_TYPE = 'type';
+    public const USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_VALUE = 'value';
     public const SHEET_VIEW_SHEET_NAME = 'sheetName';
     public const SHEET_VIEW_SPOT_REFERENCE = 'spotReference';
     public const SHEET_VIEW_PARTICIPANTS_LASTNAME = 'participants.lastname';
@@ -71,9 +75,25 @@ final class TypesMapping
                         self::USER_EVENT_VIEW_SHEETS_ID => ['type' => 'integer'],
                     ],
                 ],
+                self::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS => [
+                    'type' => 'nested',
+                    'properties' => [
+                        self::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_KEY => [
+                            'type' => 'string',
+                        ],
+                        self::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_VALUE => [
+                            'type' => 'string',
+                        ],
+                        self::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_TYPE => [
+                            'type' => 'string'
+                        ],
+                    ],
+                ],
             ],
         ],
     ];
+
+
 
     public const SEARCH_MAPPING = [
         self::SHEET_VIEW_SHEET_NAME => [
