@@ -82,7 +82,7 @@ class OrderHelper
     {
         // fake order promotion code
         $orderPromotionCode = new Order\PromotionCode($order, $promotionCode, 0.0, $product, 0.0);
-        dump($this->discountCalculator);die;
+        
         return $this->discountCalculator->getDiscountForProduct($order, $orderPromotionCode, $product);
     }
 

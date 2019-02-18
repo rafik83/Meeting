@@ -3,12 +3,14 @@
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Product\Export;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\Product\Export\ExportProductsJobCreator;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export\ExportAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -17,29 +19,35 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ExportActionTest extends TestCase
 {
-    /** @var AuthorizationCheckerAdapterInterface */
+    /** @var ObjectProphecy */
     private $authorizationCheckerAdapter;
     
-    /** @var CommandBusInterface */
+    /** @var ObjectProphecy */
     private $commandBus;
     
-    /** @var RouterInterface */
+    /** @var ObjectProphecy */
     private $router;
     
-    /** @var FlashBagInterface */
+    /** @var ObjectProphecy */
     private $flashBag;
     
-    /** @var Event */
+    /** @var ObjectProphecy */
     private $event;
     
-    /** @var Request */
+    /** @var ObjectProphecy */
     private $request;
     
-    /** @var UserInterface */
+    /** @var ObjectProphecy */
     private $admin;
     
-    /** @var AdminDomain */
+    /** @var ObjectProphecy */
     private $adminDomain;
+    
+    /** @var ObjectProphecy */
+    private $redirectResponse;
+    
+    /** @var ObjectProphecy */
+    private $eventRepository;
     
     public function setUp()
     {
@@ -51,6 +59,8 @@ class ExportActionTest extends TestCase
         $this->request = $this->prophesize(Request::class);
         $this->admin = $this->prophesize(UserInterface::class);
         $this->adminDomain = $this->prophesize(AdminDomain::class);
+        $this->redirectResponse = $this->prophesize(RedirectResponse::class);
+        $this->eventRepository = $this->prophesize(EventRepositoryInterface::class);
     }
     
     public function testAccessDenied(): void

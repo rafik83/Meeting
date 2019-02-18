@@ -45,8 +45,7 @@ class ProductsListViewQueryHandler
         
         if (count($promotionCodes) >0) {
             foreach ($promotionCodes as $promotion) {
-                $price = $promotion['price'];
-                $promotions[$price] = $promotion['price'];
+                $promotions[$promotion['product']] = $promotion['price'];
             }
         }
         
