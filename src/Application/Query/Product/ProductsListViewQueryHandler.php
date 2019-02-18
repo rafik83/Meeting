@@ -94,7 +94,7 @@ class ProductsListViewQueryHandler
                 $productIncludedBoughtInt,
                 $total,
                 $promotionInt,
-                ($unitPrice * $total) - \abs($promotionInt)
+                ($unitPrice * $boughtInt) - \abs($promotionInt)
             );
         }
 
