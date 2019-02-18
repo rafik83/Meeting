@@ -62,6 +62,12 @@ class ExportActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(false)
         ;
+    
+        $this->authorizationCheckerAdapter
+            ->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
         
         $action = new ExportAction(
             $this->authorizationCheckerAdapter->reveal(),

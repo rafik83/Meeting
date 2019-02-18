@@ -95,7 +95,7 @@ class ProductsViewQueryHandlerTest extends TestCase
         $rowRepository = $this->prophesize(RowRepositoryInterface::class);
 
         $productRepository
-            ->findByEventOrderedByProductTypeAndProductname($event->reveal())
+            ->findByEventOrderedByProductTypeAndProductName($event->reveal())
             ->shouldBeCalled()
             ->willReturn([
                 $product1->reveal(),
