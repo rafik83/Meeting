@@ -426,6 +426,11 @@ event_login_second_step:
     methods:  [GET]
     defaults: { _controller: EventBundle:Security:loginSecondStep }
 
+event_login_send_activation_mail:
+    path:     /activation-mail
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Security:sendActivationMail }
+
 event_login_check:
     path:     /login_check
     methods:  [GET, POST]

@@ -43,3 +43,10 @@ services:
               - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Form\FillStepCommand }
+
+    Proximum\Vimeet\Application\Command\User\ActivateAccount\SendActivateAccountFromLoginTokenHandler:
+        arguments:
+            - '@components.token.user.activate_account_token_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccount\SendActivateAccountFromLoginToken }

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\User\ActivateAccount\SendActivateAccountFromLoginToken;
 use Proximum\Vimeet\Application\Components\Security\LoginSecondStepAccessChecker;
 use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery;
@@ -17,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\User\Security\CanPasswordBeDefinedWithActivationEmail;
 use Proximum\Vimeet\Infrastructure\Adapter\QueryBus;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
@@ -28,6 +30,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -58,6 +61,10 @@ class SecurityController extends Controller
                 // clear potential previous email before setting new one
                 $this->get('session')->getFlashBag()->get('login_email');
                 $this->addFlash('login_email', $email->email);
+
+                if ($this->get(CanPasswordBeDefinedWithActivationEmail::class)->isSatisfiedBy($event, $email->email)) {
+                    return $this->redirectToRoute('event_login_send_activation_mail');
+                }
 
                 return $this->redirectToRoute('event_login_second_step');
             }
@@ -182,6 +189,44 @@ class SecurityController extends Controller
             'event'  => $eventDomain->getEvent(),
             'locale' => $request->getLocale(),
         ]);
+    }
+
+    /**
+     * @param EventDomain $eventDomain
+     *
+     * @return RedirectResponse|Response
+     */
+    public function sendActivationMailAction(EventDomain $eventDomain)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return $this->redirectToRoute('event');
+        }
+
+        $emails = $this->get('session')->getFlashBag()->get('login_email');
+        $email = array_shift($emails);
+
+        if (false === is_string($email) || false === $this->get(CanPasswordBeDefinedWithActivationEmail::class)
+                ->isSatisfiedBy($eventDomain->getEvent(), $email)) {
+            throw new AccessDeniedHttpException('Invalid access');
+        }
+
+        $this->addFlash('login_email', $email);
+
+        $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
+
+        $sheets = $this->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getAllSheetsByUserAndEvent($user, $eventDomain->getEvent());
+
+        $sheet = current($sheets);
+
+        $this->get('tactician.commandbus')->handle(new SendActivateAccountFromLoginToken($sheet, $user));
+
+        return $this->render(
+            'EventBundle:Security:login_send_activation_mail.html.twig',
+            [
+                'event' => $eventDomain->getEvent(),
+            ]
+        );
     }
 
     /**

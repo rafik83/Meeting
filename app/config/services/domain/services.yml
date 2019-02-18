@@ -149,3 +149,8 @@ services:
     Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets:
         arguments:
             - '@repository.rule_repository'
+
+    Proximum\Vimeet\Domain\User\Security\CanPasswordBeDefinedWithActivationEmail:
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
