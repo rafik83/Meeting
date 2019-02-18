@@ -7,10 +7,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export\ExportAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -43,12 +41,6 @@ class ExportActionTest extends TestCase
     /** @var ObjectProphecy */
     private $adminDomain;
     
-    /** @var ObjectProphecy */
-    private $redirectResponse;
-    
-    /** @var ObjectProphecy */
-    private $eventRepository;
-    
     public function setUp()
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
@@ -59,8 +51,6 @@ class ExportActionTest extends TestCase
         $this->request = $this->prophesize(Request::class);
         $this->admin = $this->prophesize(UserInterface::class);
         $this->adminDomain = $this->prophesize(AdminDomain::class);
-        $this->redirectResponse = $this->prophesize(RedirectResponse::class);
-        $this->eventRepository = $this->prophesize(EventRepositoryInterface::class);
     }
     
     public function testAccessDenied(): void
