@@ -11,11 +11,15 @@
 namespace Proximum\Vimeet\Application\Query\ConditionRules\Filters;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Query\Event\Filter\GetTemplateFiltersQuery;
 use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\ConditionRules\ComparisonOperatorsByType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Filter\BooleanTemplateFilter;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class GetFiltersByTypeAndLocaleQueryHandler
@@ -73,14 +77,19 @@ class GetFiltersByTypeAndLocaleQueryHandler
     /** @var TypeRepositoryInterface */
     private $typeRepository;
 
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     public function __construct(
         TranslatorInterface $translator,
         TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter,
-        TypeRepositoryInterface $typeRepository
+        TypeRepositoryInterface $typeRepository,
+        QueryBusInterface $queryBus
     ) {
         $this->translator = $translator;
         $this->taggedNomenclatureFilterGetter = $taggedNomenclatureFilterGetter;
         $this->typeRepository = $typeRepository;
+        $this->queryBus = $queryBus;
     }
 
     public function handle(GetFiltersByTypeAndLocaleQuery $query): array
@@ -96,7 +105,11 @@ class GetFiltersByTypeAndLocaleQueryHandler
         }
 
         if ('user' === $query->type) {
-            $filters = array_merge($filters, $this->getParticipationTypeFilters($query->event, $query->locale));
+            $filters = array_merge(
+                $filters,
+                $this->getParticipationTypeFilters($query->event, $query->locale),
+                $this->getTemplateObjectFilters($query->event, $query->locale)
+            );
         }
 
         return $filters;
@@ -119,6 +132,44 @@ class GetFiltersByTypeAndLocaleQueryHandler
                 'optgroup' => $this->translate('optgroup.nomenclature', $locale),
                 'values' => $nomenclatureFilterView->items,
                 'operators' => ComparisonOperatorsByType::OPERATORS['nomenclature'] ?? [],
+            ];
+
+            $filters[] = $filter;
+        }
+
+        return $filters;
+    }
+
+    private function getTemplateObjectFilters(Event $event, string $locale): array
+    {
+        $filters = [];
+        $templateFilters = $this->queryBus->handle(new GetTemplateFiltersQuery($event->getId(), Tag::PARTICIPANT_DATA));
+
+        foreach ($templateFilters as $objectKey => $templateFilter) {
+            if ($templateFilter instanceof BooleanTemplateFilter) {
+                $input = 'checkbox';
+                $values = [
+                    'true' => $this->translate('boolean.yes', $locale),
+                    'false' => $this->translate('boolean.no', $locale),
+                    'none' => $this->translate('not_filled', $locale)
+                ];
+            } else {
+                $input = 'radio';
+                $values = [
+                    'true' => $this->translate('filled', $locale),
+                    'false' => $this->translate('not_filled', $locale),
+                ];
+            }
+
+            $filter = [
+                'id' => $objectKey,
+                'label' => $templateFilter->getLabel(),
+                'type' => 'boolean',
+                'optgroup' => $this->translate('optgroup.tag_participant', $locale),
+                'value' => $objectKey,
+                'input' => $input,
+                'values' => $values,
+                'operators' => ComparisonOperatorsByType::OPERATORS['boolean'],
             ];
 
             $filters[] = $filter;

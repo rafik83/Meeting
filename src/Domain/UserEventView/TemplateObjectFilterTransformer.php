@@ -22,7 +22,7 @@ class TemplateObjectFilterTransformer
 
                 if (isset($data['path'])) {
                     $value = $data['path'];
-                    $type = 'path';
+                    $type = 'upload';
                 }
 
                 $dataMappedToTemplateFilters[] = [
