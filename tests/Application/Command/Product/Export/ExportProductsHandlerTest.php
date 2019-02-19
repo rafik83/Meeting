@@ -127,7 +127,7 @@ class ExportProductsHandlerTest extends TestCase
     
         $this->serializer->serialize($list, 'csv', [
             'charset' => Charset::WINDOWS_1252,
-            'csv_delimiter' => ',',
+            'csv_delimiter' => ';',
         ])->shouldBeCalled()->willReturn($data);
         
         $fileName = sprintf('export_product_list_%s.csv', $dateTime->format('H_i_s_d_m_Y'));

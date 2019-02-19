@@ -48,12 +48,12 @@ class ProductsExportNormalizer implements NormalizerInterface
         foreach ($object->products as $product) {
             $data[] = [
                 $this->colTrans(self::COL_PRODUCT_NAME, $locale) => $this->convertCharset($product->name),
-                $this->colTrans(self::COL_UNIT_PRICE, $locale) => $product->unitPrice,
+                $this->colTrans(self::COL_UNIT_PRICE, $locale) => number_format($product->unitPrice, 2, ',', ' '),
                 $this->colTrans(self::COL_QUANTITY_UNIT, $locale) => $product->quantityUnit,
                 $this->colTrans(self::COL_QUANTITY_PLAN, $locale) => $product->quantityPlan,
                 $this->colTrans(self::COL_QUANTITY_TOTAL, $locale) => $product->quantityTotal,
-                $this->colTrans(self::COL_PROMOTION, $locale) => $product->promotion,
-                $this->colTrans(self::COL_SALES, $locale) => $product->sales
+                $this->colTrans(self::COL_PROMOTION, $locale) => number_format($product->promotion, 2, ',', ' '),
+                $this->colTrans(self::COL_SALES, $locale) => number_format($product->sales, 2, ',', ' ')
             ];
         }
         

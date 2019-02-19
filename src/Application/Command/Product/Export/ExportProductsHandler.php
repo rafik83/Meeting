@@ -88,7 +88,7 @@ class ExportProductsHandler
         $view = $this->queryHandler->handle(new ProductsListViewQuery($event, $command->locale));
         $data = $this->serializer->serialize($view, 'csv', [
             'charset' => Charset::WINDOWS_1252,
-            'csv_delimiter' => ',',
+            'csv_delimiter' => ';',
         ]);
 
         $file = $this->createFile($data);
