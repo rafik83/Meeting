@@ -22,6 +22,10 @@ use Proximum\Vimeet\Domain\Type\TypeInterface;
  */
 class Type implements WhoInterface, TypeInterface
 {
+   public const TYPE_UNAVAILABLE = 'unavailable';
+   public const TYPE_AVAILABLE = 'available';
+   public const TYPE_NONE = 'none';
+    
     /** @var int */
     private $id;
 
@@ -66,9 +70,9 @@ class Type implements WhoInterface, TypeInterface
 
     /** @var ArrayCollection of FormTemplates */
     private $formTemplates;
-
-    /** @var bool */
-    private $disableUnavailabilityManagement = false;
+    
+    /** @var string */
+    private $availabilityType;
 
     /** @var int|null */
     private $numberOfMeetingsPerPlanning;
@@ -389,14 +393,14 @@ class Type implements WhoInterface, TypeInterface
         $this->formTemplates = new ArrayCollection($templates);
     }
 
-    public function isDisableUnavailabilityManagement(): bool
+    public function getAvailabilityType(): string
     {
-        return $this->disableUnavailabilityManagement;
+        return $this->availabilityType;
     }
 
-    public function setDisableUnavailabilityManagement(bool $disableUnavailabilityManagement): void
+    public function setAvailabilityType(string $availabilityType): void
     {
-        $this->disableUnavailabilityManagement = $disableUnavailabilityManagement;
+        $this->availabilityType = $availabilityType;
     }
 
     public function update(

@@ -65,7 +65,7 @@ class UpdateHandler
             $update->numberOfMeetingsPerPlanning
         );
         $type->setHidden($update->hidden);
-        $type->setDisableUnavailabilityManagement(!$update->enableUnavailabilityManagement);
+        $type->setAvailabilityType($update->availabilityType);
 
         if ($update->sheetTemplate !== $type->getSheetTemplate()) {
             $type->setSheetTemplate($this->getSheetTemplate($update, $type));

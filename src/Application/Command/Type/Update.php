@@ -48,9 +48,9 @@ class Update implements Command
 
     /** @var bool */
     public $hidden;
-
-    /** @var bool */
-    public $enableUnavailabilityManagement;
+    
+    /** @var string */
+    public $availabilityType;
 
     /** @var int|null */
     public $numberOfMeetingsPerPlanning;
@@ -70,7 +70,8 @@ class Update implements Command
         $this->rank = $type->getPosition();
         $this->validationCriteria['sheetAccepted'] = $type->getValidationCriteria()->isSheetAccepted();
         $this->hidden = $type->isHidden();
-        $this->enableUnavailabilityManagement = !$type->isDisableUnavailabilityManagement();
+        $this->availabilityType = $type->getAvailabilityType();
+        $this->hidden = $type->isHidden();
         $this->numberOfMeetingsPerPlanning = $type->getNumberOfMeetingsPerPlanning();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {

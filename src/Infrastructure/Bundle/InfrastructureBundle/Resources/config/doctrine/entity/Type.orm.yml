@@ -16,13 +16,11 @@ Proximum\Vimeet\Domain\Model\Type:
             type: text
         hidden:
             type: boolean
-        disableUnavailabilityManagement:
-            type: boolean
-            options:
-                default: false
         numberOfMeetingsPerPlanning:
             type: integer
             nullable: true
+        availabilityType:
+            type: string
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria
