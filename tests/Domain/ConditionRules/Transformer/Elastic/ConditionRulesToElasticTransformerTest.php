@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTran
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TemplateObjectFilterTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorBeginsWith;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
@@ -131,13 +132,16 @@ class ConditionRulesToElasticTransformerTest extends TestCase
         $textTransformer = new TextTransformer();
         $participationTypeTransformer = $this->prophesize(ParticipationTypeTransformer::class);
         $participationTypeTransformer->supports(Argument::any())->shouldBeCalled()->willReturn(false);
+        $templateObjectFilterTransformer = $this->prophesize(TemplateObjectFilterTransformer::class);
+        $templateObjectFilterTransformer->supports(Argument::any())->shouldBeCalled()->willReturn(false);
 
         $transformer = new ConditionRulesToElasticTransformer(
             $nullableTransformer,
             $radioTransformer,
             $taggedNomenclatureTransformer->reveal(),
             $textTransformer,
-            $participationTypeTransformer->reveal()
+            $participationTypeTransformer->reveal(),
+            $templateObjectFilterTransformer->reveal()
         );
         $result = $transformer->transform($condition);
 

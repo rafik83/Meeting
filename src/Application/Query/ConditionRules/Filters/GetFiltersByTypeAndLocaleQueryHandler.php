@@ -146,31 +146,34 @@ class GetFiltersByTypeAndLocaleQueryHandler
         $templateFilters = $this->queryBus->handle(new GetTemplateFiltersQuery($event->getId(), Tag::PARTICIPANT_DATA));
 
         foreach ($templateFilters as $objectKey => $templateFilter) {
-            if ($templateFilter instanceof BooleanTemplateFilter) {
-                $input = 'checkbox';
-                $values = [
-                    'true' => $this->translate('boolean.yes', $locale),
-                    'false' => $this->translate('boolean.no', $locale),
-                    'none' => $this->translate('not_filled', $locale)
-                ];
-            } else {
-                $input = 'radio';
-                $values = [
-                    'true' => $this->translate('filled', $locale),
-                    'false' => $this->translate('not_filled', $locale),
-                ];
-            }
-
             $filter = [
-                'id' => $objectKey,
+                'id' => sprintf('templateObjectFilters.%s', $objectKey),
                 'label' => $templateFilter->getLabel(),
-                'type' => 'boolean',
                 'optgroup' => $this->translate('optgroup.tag_participant', $locale),
-                'value' => $objectKey,
-                'input' => $input,
-                'values' => $values,
-                'operators' => ComparisonOperatorsByType::OPERATORS['boolean'],
             ];
+
+            if ($templateFilter instanceof BooleanTemplateFilter) {
+                $filter = array_merge($filter, [
+                    'type' => 'string',
+                    'input' => 'checkbox',
+                    'values' => [
+                        'true' => $this->translate('boolean.yes', $locale),
+                        'false' => $this->translate('boolean.no', $locale),
+                        'none' => $this->translate('not_filled', $locale)
+                    ],
+                    'operators' => ['in'],
+                ]);
+            } else {
+                $filter = array_merge($filter, [
+                    'type' => 'boolean',
+                    'input' => 'radio',
+                    'values' => [
+                        'true' => $this->translate('filled', $locale),
+                        'false' => $this->translate('not_filled', $locale),
+                    ],
+                    'operators' => ComparisonOperatorsByType::OPERATORS['boolean'],
+                ]);
+            }
 
             $filters[] = $filter;
         }
