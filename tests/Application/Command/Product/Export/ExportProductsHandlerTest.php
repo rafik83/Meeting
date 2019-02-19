@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Order\Export;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Command\Product\Export\ExportProducts;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\ExportProductsMail;
 
 class ExportProductsHandlerTest extends TestCase
 {
@@ -41,10 +42,16 @@ class ExportProductsHandlerTest extends TestCase
     private $serializer;
     
     /** @var ObjectProphecy */
-    private $fileStorageAdapter;
+    private $file;
+    
+    /** @var ObjectProphecy */
+    private $fileStorage;
     
     /** @var ObjectProphecy */
     private $fileRepository;
+    
+    /** @var ObjectProphecy */
+    private $fileFactory;
     
     /** @var ObjectProphecy */
     private $mailer;
@@ -57,8 +64,10 @@ class ExportProductsHandlerTest extends TestCase
         $this->eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $this->view = $this->prophesize(ProductsListView::class);
         $this->serializer = $this->prophesize(SerializerAdapterInterface::class);
-        $this->fileStorageAdapter = $this->prophesize(LocalFileStorageAdapter::class);
+        $this->file = $this->prophesize(File::class);
+        $this->fileStorage = $this->prophesize(FileStorageInterface::class);
         $this->fileRepository = $this->prophesize(FileRepositoryInterface::class);
+        $this->fileFactory = $this->prophesize(FileFactory::class);
         $this->mailer = $this->prophesize(MailerInterface::class);
     }
     
@@ -91,36 +100,60 @@ class ExportProductsHandlerTest extends TestCase
             0,
             2
         );
-    
-        $this->event->getId()->willReturn(1);
+        $data ="z;y;x;\na;b;c;\n1;2;3;";
+        $dateTime = new \DateTime();
+        
         $command = new ExportProducts(1, 'test@test.fr', 'fr');
-        $view = $this->queryHandler->handle(new ProductsListViewQuery($this->event->reveal(), $command->locale))
-            ->willReturn(new ProductsListView($productViews, 'fr'))
+        $handler = new ExportProductsHandler(
+            $this->eventRepository->reveal(),
+            $this->serializer->reveal(),
+            $this->queryHandler->reveal(),
+            $this->fileStorage->reveal(),
+            $this->fileRepository->reveal(),
+            $this->fileFactory->reveal(),
+            $this->mailer->reveal(),
+            'test@test.fr',
+            'super/path',
+            $dateTime
+        );
+    
+        $this->eventRepository->getById(1)->shouldBeCalled()->willReturn( $this->event->reveal());
+    
+        $list = new ProductsListView($productViews, 'fr');
+        $this->queryHandler->handle(new ProductsListViewQuery($this->event->reveal(), $command->locale))
+            ->shouldBeCalled()
+            ->willReturn($list)
         ;
-        $data = $this->serializer->serialize($view, 'csv', [
+    
+        $this->serializer->serialize($list, 'csv', [
             'charset' => Charset::WINDOWS_1252,
-            'csv_delimiter' => ';',
-        ]);
-    
-        $this->fileStorageAdapter->create(
+            'csv_delimiter' => ',',
+        ])->shouldBeCalled()->willReturn($data);
+        
+        $fileName = sprintf('export_product_list_%s.csv', $dateTime->format('H_i_s_d_m_Y'));
+        $this->fileStorage->create(
             $data,
-            'products_1.csv',
+            $fileName,
             'super/path'
-        )->willReturn('path/to/file/products_1.csv');
+        )->shouldBeCalled()->willReturn('path/to/file/'.$fileName);
     
-        $expectedFile = new File('path/to/file/orders_1234.csv', new \DateTime());
-        $reflection   = new \ReflectionClass(File::class);
-        $property = $reflection->getProperty('id');
-        $property->setAccessible(true);
-        $property->setAccessible(false);
-        $this->fileRepository->add($expectedFile);
-        
-        $file = $this->prophesize(File::class);
-        $fileFactory = $this->prophesize(FileFactory::class);
-        
-        $fileFactory
-            ->createAndPersistFile('path/to/store/export/export_products_list_1_10_00_00_10_01_2019.csv', File::TYPE_EXPORT_PRODUCT_LIST)
-            ->willReturn($file->reveal())
+        $this->fileFactory
+            ->createAndPersistFile('path/to/file/'.$fileName, File::TYPE_EXPORT_PRODUCT_LIST)
+            ->shouldBeCalled()
+            ->willReturn($this->file->reveal())
         ;
+        $this->file->getHash()->shouldBeCalled()->willReturn('azerty1234.csv');
+        $this->file->getId()->shouldBeCalled()->willReturn(1);
+        
+        $this->mailer->send(new ExportProductsMail(
+            $this->event->reveal(),
+            'test@test.fr',
+            'test@test.fr',
+            'fr',
+            'azerty1234.csv',
+            1
+        ))->shouldBeCalled();
+        
+        $handler->handle($command);
     }
 }
