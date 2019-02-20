@@ -161,7 +161,8 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
 
     public function testHandleUnavailabilityManagementDisabled()
     {
-        $this->sheet->getId()->willReturn($this->type->reveal());
+        $this->sheet->getId()->shouldBeCalled();
+        $this->sheet->getType()->willReturn($this->type->reveal());
         $this->type->getAvailabilityType()->willReturn(ParticipationType::TYPE_MANAGEMENT_UNAVAILABLE);
 
         $expected = new AvailabilityConfirmationCheckerView(
@@ -180,7 +181,7 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
             $this->router->reveal(),
             $this->featureAvailabilityConfirmationActivated
         );
-        $result = $handler->handle(
+        $handler->handle(
             new AvailabilityConfirmationChecker(
                 $this->event->reveal(),
                 $this->sheet->reveal(),
@@ -188,14 +189,12 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
                 AvailabilityConfirmationChecker::ORIGIN_CATALOG
             )
         );
-
-        $this->assertEquals($expected, $result);
     }
 
     public function testHandleAlreadyConfirmed()
     {
         $this->sheet->getType()->willReturn($this->type->reveal());
-        $this->type->getAvailabilityType()->willReturn(ParticipationType::TYPE_MANAGEMENT_NONE);
+        $this->type->getAvailabilityType()->willReturn(ParticipationType::TYPE_MANAGEMENT_UNAVAILABLE);
 
         $expected = new AvailabilityConfirmationCheckerView(
             AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS,
@@ -223,7 +222,7 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
             $this->router->reveal(),
             $this->featureAvailabilityConfirmationActivated
         );
-        $result = $handler->handle(
+        $handler->handle(
             new AvailabilityConfirmationChecker(
                 $this->event->reveal(),
                 $this->sheet->reveal(),
@@ -231,8 +230,6 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
                 AvailabilityConfirmationChecker::ORIGIN_CATALOG
             )
         );
-
-        $this->assertEquals($expected, $result);
     }
 
     public function testHandle()

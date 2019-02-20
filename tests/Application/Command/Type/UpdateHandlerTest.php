@@ -39,12 +39,12 @@ class UpdateHandlerTest extends TestCase
         $type = new Type($event);
         $type->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
         $type->getValidationCriteria()->setSheetAccepted(true);
-        $type->setAvailabilityType(Type::TYPE_MANAGEMENT_NONE);
+        $type->setAvailabilityType(Type::TYPE_MANAGEMENT_UNAVAILABLE);
 
         $update = new Update($type, 'fr');
         $update->translations['fr']['title'] = 'truc';
         $update->validationCriteria['sheetAccepted'] = false;
-        $update->availabilityType = true;Type::TYPE_MANAGEMENT_UNAVAILABLE;
+        $update->availabilityType = true;Type::TYPE_MANAGEMENT_NONE;
         $update->rank = 1;
         $update->hidden = true;
         $update->numberOfMeetingsPerPlanning = 12;
