@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -38,16 +39,21 @@ class LeniUserCustomDataQueryHandler
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
+    /** @var ProductAttributedToParticipantRepositoryInterface */
+    private $productAttributedToParticipantRepository;
+
     public function __construct(
         TypeConverter $typeConverter,
         MappingGetter $mappingGetter,
         CustomDataConverter $customDataConverter,
-        TemplateDataFactory $templateDataFactory
+        TemplateDataFactory $templateDataFactory,
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
     ) {
         $this->typeConverter = $typeConverter;
         $this->mappingGetter = $mappingGetter;
         $this->customDataConverter = $customDataConverter;
         $this->templateDataFactory = $templateDataFactory;
+        $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
     }
 
     /**
@@ -96,34 +102,48 @@ class LeniUserCustomDataQueryHandler
             return [];
         }
 
-        $taggedData = [];
+        $customData = [];
 
-        $this->handleSheetState($sheet, $taggedData);
-        $this->getTaggedRawData($this->templateDataFactory->createFromSheet($sheet, $locale), $taggedData);
-        $this->getTaggedRawData($this->templateDataFactory->createRegistrationFromSheet($sheet, $locale), $taggedData);
+        $this->handleSheetState($sheet, $customData);
+        $this->handleProductsData($event, $user, $customData);
+        $this->getTaggedRawData($this->templateDataFactory->createFromSheet($sheet, $locale), $customData);
+        $this->getTaggedRawData($this->templateDataFactory->createRegistrationFromSheet($sheet, $locale), $customData);
 
         $participant = $sheet->getUserParticipant($user);
 
         if (null !== $participant) {
             $this->getTaggedRawData(
                 $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale),
-                $taggedData
+                $customData
             );
         }
 
-        return $this->customDataConverter->convert($customDataMapping, $taggedData);
+        return $this->customDataConverter->convert($customDataMapping, $customData);
     }
 
-    private function handleSheetState(Sheet $sheet, array &$taggedData): void
+    private function handleSheetState(Sheet $sheet, array &$customData): void
     {
-        $taggedData[LeniConstants::DATA_MAPPING_FORMAT_STATES][Sheet::SHEET_STATE] = LeniConstants::SHEET_STATE_MAPPING[
+        $customData[LeniConstants::DATA_MAPPING_FORMAT_STATES][Sheet::SHEET_STATE] = LeniConstants::SHEET_STATE_MAPPING[
             $sheet->getState()
         ];
     }
 
-    private function getTaggedRawData(TemplateData $templateData, array &$taggedData): void
+    private function handleProductsData(Event $event, User $user, array &$customData): void
+    {
+        $products = $this->productAttributedToParticipantRepository->findProductIdsAttributedByUserAndEvent(
+            $user,
+            $event
+        );
+
+        foreach ($products as $productId) {
+            $customData[LeniConstants::DATA_MAPPING_FORMAT_PRODUCTS][$productId] = true;
+        }
+    }
+
+    private function getTaggedRawData(TemplateData $templateData, array &$customData): void
     {
         $typeTag = LeniConstants::DATA_MAPPING_FORMAT_TAGS;
+
         foreach ($templateData->getEditableObjects() as $object) {
             foreach ($object->getTags() as $tag) {
                 if (!$object instanceof TemplateObject\ContentObjectInterface) {
@@ -132,12 +152,12 @@ class LeniUserCustomDataQueryHandler
 
                 if ($object instanceof TemplateObject\Nomenclature) {
                     if ($object->isMultiple()) {
-                        $taggedData[$typeTag][$tag] = $object->getItems();
+                        $customData[$typeTag][$tag] = $object->getItems();
                     } else {
-                        $taggedData[$typeTag][$tag] = $object->getItem();
+                        $customData[$typeTag][$tag] = $object->getItem();
                     }
                 } else {
-                    $taggedData[$typeTag][$tag] = $object->getContentValueLocalize();
+                    $customData[$typeTag][$tag] = $object->getContentValueLocalize();
                 }
             }
         }

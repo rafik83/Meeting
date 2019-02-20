@@ -146,4 +146,11 @@ class LeniConstants
             // tag_2 => leni_field_name
         ],
     ];
+
+    public const LENI_MAPPING_BOOLEAN_TRUE = 'True';
+    public const LENI_MAPPING_BOOLEAN_FALSE = 'False';
+    public const LENI_MAPPING_BOOLEAN = [
+        true => self::LENI_MAPPING_BOOLEAN_TRUE,
+        false => self::LENI_MAPPING_BOOLEAN_FALSE,
+    ];
 }

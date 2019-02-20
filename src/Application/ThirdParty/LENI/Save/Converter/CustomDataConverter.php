@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter;
 
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
+
 class CustomDataConverter
 {
     /**
@@ -32,9 +34,15 @@ class CustomDataConverter
         $dataIndexedByFieldName = [];
 
         foreach ($customDataMapping as $type => $fields) {
-            foreach ($fields as $tag => $fieldName) {
-                if (isset($taggedData[$type][$tag])) {
-                    $dataIndexedByFieldName[$fieldName] = $taggedData[$type][$tag];
+            foreach ($fields as $identifier => $fieldName) {
+                if ($type === LeniConstants::DATA_MAPPING_FORMAT_PRODUCTS) {
+                    $dataIndexedByFieldName[$fieldName] =
+                        isset($taggedData[$type][$identifier])
+                            ? LeniConstants::LENI_MAPPING_BOOLEAN_TRUE
+                            : LeniConstants::LENI_MAPPING_BOOLEAN_FALSE
+                    ;
+                } elseif (isset($taggedData[$type][$identifier])) {
+                    $dataIndexedByFieldName[$fieldName] = $taggedData[$type][$identifier];
                 }
             }
         }

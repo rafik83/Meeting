@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface ProductAttributedToParticipantRepositoryInterface
 {
@@ -52,4 +54,12 @@ interface ProductAttributedToParticipantRepositoryInterface
      * @return bool
      */
     public function participantHasAtLeastOneProduct(Participant $participant, array $products): bool;
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return Product[]
+     */
+    public function findProductIdsAttributedByUserAndEvent(User $user, Event $event): array;
 }

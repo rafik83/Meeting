@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Common\Query;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQueryHandler;
@@ -23,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Country;
@@ -81,6 +83,10 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
                         'sheet_country' => 'FR',
                         'sheet_website' => 'https://www.site.web',
                     ],
+                    'products' => [
+                        1 => true,
+                        2 => true,
+                    ],
                 ]
             )
             ->shouldBeCalled()
@@ -90,6 +96,7 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
         $sheetTemplateData = $this->prophesize(TemplateData::class);
         $registrationTemplateData = $this->prophesize(TemplateData::class);
         $participantTemplateData = $this->prophesize(TemplateData::class);
+        $productAttributedToParticipantRepository = $this->prophesize(ProductAttributedToParticipantRepositoryInterface::class);
 
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $templateDataFactory
@@ -172,11 +179,18 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
         $urlObject->setUrl('https://www.site.web');
         $registrationTemplateData->getEditableObjects()->shouldBeCalled()->willReturn([$countryObject, $urlObject]);
 
+        $productAttributedToParticipantRepository
+            ->findProductIdsAttributedByUserAndEvent($user->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([1, 2])
+        ;
+
         $leniUserCustomDataQueryHandler = new LeniUserCustomDataQueryHandler(
             $typeConverter->reveal(),
             $mappingGetter->reveal(),
             $customDataConverter->reveal(),
-            $templateDataFactory->reveal()
+            $templateDataFactory->reveal(),
+            $productAttributedToParticipantRepository->reveal()
         );
 
         $this->assertEquals(
@@ -218,12 +232,19 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
 
         $customDataConverter = $this->prophesize(CustomDataConverter::class);
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $productAttributedToParticipantRepository = $this->prophesize(ProductAttributedToParticipantRepositoryInterface::class);
+
+        $productAttributedToParticipantRepository
+            ->findProductIdsAttributedByUserAndEvent($user->reveal(), $event->reveal())
+            ->shouldNotBeCalled()
+        ;
 
         $leniUserCustomDataQueryHandler = new LeniUserCustomDataQueryHandler(
             $typeConverter->reveal(),
             $mappingGetter->reveal(),
             $customDataConverter->reveal(),
-            $templateDataFactory->reveal()
+            $templateDataFactory->reveal(),
+            $productAttributedToParticipantRepository->reveal()
         );
 
         $leniUserCustomDataQueryHandler->handle(
