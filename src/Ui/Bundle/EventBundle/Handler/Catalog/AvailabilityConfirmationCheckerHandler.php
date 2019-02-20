@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Domain\Event\Day\EventOver;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Model\Type as ParticipantType;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -74,7 +75,7 @@ class AvailabilityConfirmationCheckerHandler
         if (false === (bool) $this->featureAvailabilityConfirmationActivated
             || true === $this->eventOver->isEventOver($command->event)
             || false === $this->agendaAccessChecker->allowedToAccess($command->event)
-            || true === $command->sheet->getType()->isDisableUnavailabilityManagement()
+            || ParticipantType::TYPE_MANAGEMENT_NONE === $command->sheet->getType()->getAvailabilityType()
         ) {
             return new AvailabilityConfirmationCheckerView(AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS, null);
         }

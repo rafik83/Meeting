@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Type;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class HasUnavailabilityManagementDisabled
 {
@@ -27,7 +28,7 @@ class HasUnavailabilityManagementDisabled
     {
         $type = $sheet->getType();
 
-        return $type->isDisableUnavailabilityManagement()
+        return Type::TYPE_MANAGEMENT_NONE === $type->getAvailabilityType()
             && false === $this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN')
         ;
     }

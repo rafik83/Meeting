@@ -61,7 +61,7 @@ class UpdateHandler
         $type->update(
             $update->rank,
             $update->hidden,
-            !$update->enableUnavailabilityManagement,
+            $update->availabilityType,
             $update->numberOfMeetingsPerPlanning
         );
         $type->setHidden($update->hidden);

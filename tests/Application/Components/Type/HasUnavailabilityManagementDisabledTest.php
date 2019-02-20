@@ -32,7 +32,7 @@ class HasUnavailabilityManagementDisabledTest extends TestCase
 
     public function testIsDisabledAndImpersonate(): void
     {
-        $this->type->isDisableUnavailabilityManagement()->shouldBeCalled()->willReturn(true);
+        $this->type->getAvailabilityType()->shouldBeCalled()->willReturn(Type::TYPE_MANAGEMENT_NONE);
         $this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN')->shouldBeCalled()->willReturn(true);
 
         $service = new HasUnavailabilityManagementDisabled($this->authorizationCheckerAdapter->reveal());
@@ -41,7 +41,7 @@ class HasUnavailabilityManagementDisabledTest extends TestCase
 
     public function testIsDisabledAndNotImpersonate(): void
     {
-        $this->type->isDisableUnavailabilityManagement()->shouldBeCalled()->willReturn(true);
+        $this->type->getAvailabilityType()->shouldBeCalled()->willReturn(Type::TYPE_MANAGEMENT_NONE);
         $this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN')->shouldBeCalled()->willReturn(false);
 
         $service = new HasUnavailabilityManagementDisabled($this->authorizationCheckerAdapter->reveal());
@@ -50,7 +50,7 @@ class HasUnavailabilityManagementDisabledTest extends TestCase
 
     public function testIsNotDisabled(): void
     {
-        $this->type->isDisableUnavailabilityManagement()->shouldBeCalled()->willReturn(false);
+        $this->type->getAvailabilityType()->shouldBeCalled()->willReturn(Type::TYPE_MANAGEMENT_UNAVAILABLE);
         $this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN')->shouldNotBeCalled();
 
         $service = new HasUnavailabilityManagementDisabled($this->authorizationCheckerAdapter->reveal());

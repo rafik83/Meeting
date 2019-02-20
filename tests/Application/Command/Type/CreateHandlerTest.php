@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Type;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Type\Create;
 use Proximum\Vimeet\Application\Command\Type\CreateHandler;
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
@@ -64,13 +65,15 @@ class CreateHandlerTest extends TestCase
         $create->formTemplates = [$formTemplate1, $formTemplate2];
         $create->hidden = true;
         $create->rank = null;
-        $create->enableUnavailabilityManagement = false;
+        $create->availabilityType = Type::TYPE_MANAGEMENT_NONE;
         $create->numberOfMeetingsPerPlanning = 12;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
-        $typeRepository->add($expectedType)->shouldBeCalled();
-        $typeRepository->typeExists($event, 'fr', 'toto')->willReturn(false);
+        $typeRepository->add(Argument::that(function ($actual) use ($expectedType) {
+            return $expectedType->getId() === $actual->getId();
+        }))->shouldBeCalled();
+        $typeRepository->typeExists($event, 'fr', 'toto')->shouldBeCalled()->willReturn(false);
 
         $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
         $sheetTemplateCloner->duplicate($sheetTemplate, $event, 'toto')->shouldBeCalled()->willReturn($expectedSheetTemplate);

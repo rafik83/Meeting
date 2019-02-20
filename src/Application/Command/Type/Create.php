@@ -54,7 +54,7 @@ class Create implements Command
     public $hidden;
     
     /** @var string */
-    public $availabilityType = Type::TYPE_NONE;
+    public $availabilityType = Type::TYPE_MANAGEMENT_NONE;
 
     /** @var int|null */
     public $numberOfMeetingsPerPlanning;
