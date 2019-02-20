@@ -22,9 +22,9 @@ use Proximum\Vimeet\Domain\Type\TypeInterface;
  */
 class Type implements WhoInterface, TypeInterface
 {
-   public const TYPE_UNAVAILABLE = 'unavailable';
-   public const TYPE_AVAILABLE = 'available';
-   public const TYPE_NONE = 'none';
+   public const TYPE_MANAGEMENT_UNAVAILABLE = 'unavailable';
+   public const TYPE_MANAGEMENT_AVAILABLE = 'available';
+   public const TYPE_MANAGEMENT_NONE = 'none';
     
     /** @var int */
     private $id;

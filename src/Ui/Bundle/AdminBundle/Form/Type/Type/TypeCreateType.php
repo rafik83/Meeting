@@ -84,9 +84,9 @@ class TypeCreateType extends AbstractType
             ->add('availabilityType', ChoiceType::class, [
                 'expanded' => true,
                 'choices' => [
-                    "none" => Model\Type::TYPE_NONE,
-                    "available" => Model\Type::TYPE_AVAILABLE,
-                    "unavailable" => Model\Type::TYPE_UNAVAILABLE,
+                    "admin.type.management.none.label" => Model\Type::TYPE_MANAGEMENT_NONE,
+                    "admin.type.management.available.label" => Model\Type::TYPE_MANAGEMENT_AVAILABLE,
+                    "admin.type.management.unavailable.label" => Model\Type::TYPE_MANAGEMENT_UNAVAILABLE,
                 ],
             ])
         ;
