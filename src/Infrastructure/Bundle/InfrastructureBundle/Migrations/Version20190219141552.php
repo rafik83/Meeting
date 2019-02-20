@@ -6,7 +6,7 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * Add availability_type, Drop disable_unavailability_management and migration data
  */
 class Version20190219141552 extends AbstractMigration
 {
