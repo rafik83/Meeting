@@ -22,7 +22,7 @@ use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as UserEventExtraDataType;
 
 class HasUserSheetStateChangedQueryHandlerTest extends TestCase
 {
-    public function testNoSheetStateTagExistsInMapping()
+    public function testNoSheetStateTagExistsInMapping(): void
     {
         $event = $this->prophesize(Event::class);
         $user = $this->prophesize(User::class);
@@ -51,7 +51,7 @@ class HasUserSheetStateChangedQueryHandlerTest extends TestCase
         );
     }
 
-    public function testUserHasNotPreviousFingerprintAndIsAccepted()
+    public function testUserHasNotPreviousFingerprintAndIsAccepted(): void
     {
         $event = $this->prophesize(Event::class);
         $user = $this->prophesize(User::class);
@@ -74,7 +74,7 @@ class HasUserSheetStateChangedQueryHandlerTest extends TestCase
                 EventExtraParameterType::TYPE_LENI_DATA_MAPPING
             )
             ->shouldBeCalled()
-            ->willReturn(['sheet_state' => 'ZL_MODERATION'])
+            ->willReturn(['states' => ['sheet_state' => 'ZL_MODERATION']])
         ;
 
         $hasUserSheetStateChangedQueryHandler = new HasUserSheetStateChangedQueryHandler(
@@ -89,7 +89,7 @@ class HasUserSheetStateChangedQueryHandlerTest extends TestCase
         );
     }
 
-    public function testUserHasNotPreviousFingerprintAndIsValidated()
+    public function testUserHasNotPreviousFingerprintAndIsValidated(): void
     {
         $event = $this->prophesize(Event::class);
         $user = $this->prophesize(User::class);
@@ -112,7 +112,7 @@ class HasUserSheetStateChangedQueryHandlerTest extends TestCase
                 EventExtraParameterType::TYPE_LENI_DATA_MAPPING
             )
             ->shouldBeCalled()
-            ->willReturn(['sheet_state' => 'ZL_MODERATION'])
+            ->willReturn(['states' => ['sheet_state' => 'ZL_MODERATION']])
         ;
 
         $hasUserSheetStateChangedQueryHandler = new HasUserSheetStateChangedQueryHandler(
@@ -127,7 +127,7 @@ class HasUserSheetStateChangedQueryHandlerTest extends TestCase
         );
     }
 
-    public function testUserHasPreviousFingerprintAndStateHasNotChanged()
+    public function testUserHasPreviousFingerprintAndStateHasNotChanged(): void
     {
         $event = $this->prophesize(Event::class);
         $user = $this->prophesize(User::class);
@@ -152,7 +152,7 @@ class HasUserSheetStateChangedQueryHandlerTest extends TestCase
                 EventExtraParameterType::TYPE_LENI_DATA_MAPPING
             )
             ->shouldBeCalled()
-            ->willReturn(['sheet_state' => 'ZL_MODERATION'])
+            ->willReturn(['states' => ['sheet_state' => 'ZL_MODERATION']])
         ;
 
         $hasUserSheetStateChangedQueryHandler = new HasUserSheetStateChangedQueryHandler(
@@ -171,7 +171,7 @@ class HasUserSheetStateChangedQueryHandlerTest extends TestCase
         );
     }
 
-    public function testUserHasPreviousFingerprintAndStateHasChanged()
+    public function testUserHasPreviousFingerprintAndStateHasChanged(): void
     {
         $event = $this->prophesize(Event::class);
         $user = $this->prophesize(User::class);
@@ -196,7 +196,7 @@ class HasUserSheetStateChangedQueryHandlerTest extends TestCase
                 EventExtraParameterType::TYPE_LENI_DATA_MAPPING
             )
             ->shouldBeCalled()
-            ->willReturn(['sheet_state' => 'ZL_MODERATION'])
+            ->willReturn(['states' => ['sheet_state' => 'ZL_MODERATION']])
         ;
 
         $hasUserSheetStateChangedQueryHandler = new HasUserSheetStateChangedQueryHandler(
@@ -215,7 +215,7 @@ class HasUserSheetStateChangedQueryHandlerTest extends TestCase
         );
     }
 
-    public function testUserHasPreviousValidatedFingerprintAndStateHasChanged()
+    public function testUserHasPreviousValidatedFingerprintAndStateHasChanged(): void
     {
         $event = $this->prophesize(Event::class);
         $user = $this->prophesize(User::class);
@@ -240,7 +240,7 @@ class HasUserSheetStateChangedQueryHandlerTest extends TestCase
                 EventExtraParameterType::TYPE_LENI_DATA_MAPPING
             )
             ->shouldBeCalled()
-            ->willReturn(['sheet_state' => 'ZL_MODERATION'])
+            ->willReturn(['states' => ['sheet_state' => 'ZL_MODERATION']])
         ;
 
         $hasUserSheetStateChangedQueryHandler = new HasUserSheetStateChangedQueryHandler(
