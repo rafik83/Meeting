@@ -44,7 +44,10 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
         $sheet->getState()->willReturn('accepted');
 
         $typeMapping = ['whatever' => 'mapping'];
-        $dataMapping = ['sheet_state' => 'ZL_MODERATION', 'sheet_template_generic_tag_1' => 'leni_field_1'];
+        $dataMapping = [
+            'states' => ['sheet_state' => 'ZL_MODERATION'],
+            'tags' => ['sheet_template_generic_tag_1' => 'leni_field_1'],
+        ];
 
         $typeConverter = $this->prophesize(TypeConverter::class);
         $typeConverter
@@ -70,12 +73,14 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
             ->convert(
                 $dataMapping,
                 [
-                    'sheet_state' => 'A',
-                    'sheet_template_generic_tag_1' => 'A3',
-                    'sheet_template_generic_tag_2' => ['B1', 'B2', 'B5'],
-                    'participant_position' => 'Developper',
-                    'sheet_country' => 'FR',
-                    'sheet_website' => 'https://www.site.web',
+                    'states' => ['sheet_state' => 'A'],
+                    'tags' => [
+                        'sheet_template_generic_tag_1' => 'A3',
+                        'sheet_template_generic_tag_2' => ['B1', 'B2', 'B5'],
+                        'participant_position' => 'Developper',
+                        'sheet_country' => 'FR',
+                        'sheet_website' => 'https://www.site.web',
+                    ],
                 ]
             )
             ->shouldBeCalled()

@@ -129,4 +129,21 @@ class LeniConstants
     public const FILTER_OPERATOR_IN = 'IN';
 
     public const SORT_ASC = 'ASC';
+
+    public const DATA_MAPPING_FORMAT_TAGS = 'tags';
+    public const DATA_MAPPING_FORMAT_PRODUCTS = 'products';
+    public const DATA_MAPPING_FORMAT_STATES = 'states';
+
+    public const DATA_MAPPING_FORMAT = [
+        self::DATA_MAPPING_FORMAT_PRODUCTS => [
+            // product_id => leni_field_name
+        ],
+        self::DATA_MAPPING_FORMAT_STATES => [
+            // sheet_state => leni_field_name
+        ],
+        self::DATA_MAPPING_FORMAT_TAGS => [
+            // tag_1 => leni_field_name
+            // tag_2 => leni_field_name
+        ],
+    ];
 }

@@ -19,15 +19,20 @@ class CustomDataConverter
      *                                 example: ['ZL_MODERATION' => 'W', 'ZL_Effectif' => 'A1', 'ZL_TypePrestation' => ['P12', 'P3', 'P5']]
      *
      * @return array indexed by tag
-     *               exemple: ['sheet_state' => 'W', 'sheet_organization_staff' => 'A1', 'sheet_generic_tag_20' => ['P12', 'P3', 'P5']]]
+     *    exemple: [
+     *         'states' => ['sheet_state' => 'W'],
+     *         'tags' => ['sheet_organization_staff' => 'A1', 'sheet_generic_tag_20' => ['P12', 'P3', 'P5']],
+     *  ]
      */
     public function convert(array $customDataMapping, array $rawUser): array
     {
         $dataIndexedByTag = [];
 
-        foreach ($customDataMapping as $tag => $fieldName) {
-            if (isset($rawUser[$fieldName])) {
-                $dataIndexedByTag[$tag] = $rawUser[$fieldName];
+        foreach ($customDataMapping as $type => $fields) {
+            foreach ($fields as $tag => $fieldName) {
+                if (isset($rawUser[$fieldName])) {
+                    $dataIndexedByTag[$type][$tag] = $rawUser[$fieldName];
+                }
             }
         }
 

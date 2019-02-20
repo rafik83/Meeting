@@ -97,7 +97,7 @@ class RawDataToParticipantConverter
                 $type,
                 $rawUserData[LeniConstants::LENI_COL_EMAIL],
                 $rawUserData[LeniConstants::LENI_COL_LOCALE] ?? $event->getFallback(),
-                $dataIndexedByTag,
+                $dataIndexedByTag[LeniConstants::DATA_MAPPING_FORMAT_TAGS] ?? [],
                 $this->participationTypeTemplateDataGetter->getRegistrationTemplateDataByType($type),
                 $this->participationTypeTemplateDataGetter->getSheetTemplateDataByType($type),
                 UserEventExtraDataType::LENI_USER_ID,
@@ -119,17 +119,17 @@ class RawDataToParticipantConverter
     }
 
     /**
-     * @param array $dataIndexedByTag
+     * @param array $dataIndexed
      *
      * @return string
      */
-    private function convertState(array &$dataIndexedByTag): string
+    private function convertState(array &$dataIndexed): string
     {
-        if (!isset($dataIndexedByTag[Sheet::SHEET_STATE])) {
+        if (!isset($dataIndexed[LeniConstants::DATA_MAPPING_FORMAT_STATES][Sheet::SHEET_STATE])) {
             return Sheet::STATE_PENDING;
         }
 
-        $rawState = $dataIndexedByTag[Sheet::SHEET_STATE];
+        $rawState = $dataIndexed[LeniConstants::DATA_MAPPING_FORMAT_STATES][Sheet::SHEET_STATE];
         $stateIndexedByLeniValue = array_flip(LeniConstants::SHEET_STATE_MAPPING);
 
         return $stateIndexedByLeniValue[$rawState] ?? Sheet::STATE_PENDING;

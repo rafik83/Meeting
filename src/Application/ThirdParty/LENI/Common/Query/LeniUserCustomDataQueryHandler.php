@@ -116,11 +116,14 @@ class LeniUserCustomDataQueryHandler
 
     private function handleSheetState(Sheet $sheet, array &$taggedData): void
     {
-        $taggedData[Sheet::SHEET_STATE] = LeniConstants::SHEET_STATE_MAPPING[$sheet->getState()];
+        $taggedData[LeniConstants::DATA_MAPPING_FORMAT_STATES][Sheet::SHEET_STATE] = LeniConstants::SHEET_STATE_MAPPING[
+            $sheet->getState()
+        ];
     }
 
     private function getTaggedRawData(TemplateData $templateData, array &$taggedData): void
     {
+        $typeTag = LeniConstants::DATA_MAPPING_FORMAT_TAGS;
         foreach ($templateData->getEditableObjects() as $object) {
             foreach ($object->getTags() as $tag) {
                 if (!$object instanceof TemplateObject\ContentObjectInterface) {
@@ -128,13 +131,13 @@ class LeniUserCustomDataQueryHandler
                 }
 
                 if ($object instanceof TemplateObject\Nomenclature) {
-                    if ($object->isCheckboxes()) {
-                        $taggedData[$tag] = $object->getItems();
+                    if ($object->isMultiple()) {
+                        $taggedData[$typeTag][$tag] = $object->getItems();
                     } else {
-                        $taggedData[$tag] = $object->getItem();
+                        $taggedData[$typeTag][$tag] = $object->getItem();
                     }
                 } else {
-                    $taggedData[$tag] = $object->getContentValueLocalize();
+                    $taggedData[$typeTag][$tag] = $object->getContentValueLocalize();
                 }
             }
         }
