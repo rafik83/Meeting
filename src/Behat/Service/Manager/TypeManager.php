@@ -57,7 +57,6 @@ class TypeManager
         $type = new Type($event);
         $type->setSheetTemplate($this->sheetTemplateManager->create($event));
         $type->setRegistrationTemplate($this->registrationTemplateManager->create($event));
-        $type->setAvailabilityType(Type::TYPE_MANAGEMENT_UNAVAILABLE);
         $package = new Package($event, 'Forfait', new \DateTime());
         $package->enable(false, false, false);
         $type->setPackage($package);

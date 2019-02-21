@@ -89,6 +89,7 @@ class Type implements WhoInterface, TypeInterface
         $this->validationCriteria = new ValidationCriteria(false);
         $this->paymentConditions = new ArrayCollection();
         $this->formTemplates = new ArrayCollection();
+        $this->availabilityType = self::TYPE_MANAGEMENT_NONE;
     }
 
     /**

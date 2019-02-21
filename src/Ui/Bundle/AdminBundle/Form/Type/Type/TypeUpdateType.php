@@ -101,9 +101,9 @@ class TypeUpdateType extends AbstractType
             ->add('availabilityType', ChoiceType::class, [
                 'expanded' => true,
                 'choices' => [
-                    "none" => Type::TYPE_NONE,
-                    "available" => Type::TYPE_AVAILABLE,
-                    "unavailable" => Type::TYPE_UNAVAILABLE,
+                    "none" => Type::TYPE_MANAGEMENT_NONE,
+                    "available" => Type::TYPE_MANAGEMENT_AVAILABLE,
+                    "unavailable" => Type::TYPE_MANAGEMENT_UNAVAILABLE,
                 ],
             ])
         ;
