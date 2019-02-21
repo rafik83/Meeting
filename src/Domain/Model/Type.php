@@ -407,12 +407,12 @@ class Type implements WhoInterface, TypeInterface
     public function update(
         ?int $rank,
         bool $hidden,
-        bool $disableUnavailabilityManagement,
+        string $availabilityType,
         ?int $numberOfMeetingsPerPlanning
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
-        $this->disableUnavailabilityManagement = $disableUnavailabilityManagement;
+        $this->availabilityType = $availabilityType;
         $this->numberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning;
     }
 
