@@ -21,7 +21,6 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorAnd;
 use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
-use Proximum\Vimeet\Domain\Model\Event;
 
 class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInterface
 {

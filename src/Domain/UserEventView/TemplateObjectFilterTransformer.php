@@ -3,6 +3,8 @@
 namespace Proximum\Vimeet\Domain\UserEventView;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\TypesMapping;
+use Proximum\Vimeet\Domain\Model\Filter\BooleanTemplateFilter;
+use Proximum\Vimeet\Domain\Model\Filter\FilledTemplateFilter;
 
 class TemplateObjectFilterTransformer
 {
@@ -10,27 +12,31 @@ class TemplateObjectFilterTransformer
     {
         $dataMappedToTemplateFilters = [];
 
-        foreach ($formData as $templateKey => $data) {
-            if (isset($templateFilters[$templateKey])) {
-                $value = null;
-                $type = null;
+        foreach ($templateFilters as $templateKey => $templateFilter) {
+            $value = 'none';
+            $type = 'none';
 
-                if (isset($data['boolean'])) {
-                    $value = $data['boolean'];
-                    $type = 'boolean';
+            if ($templateFilter instanceof BooleanTemplateFilter) {
+                $type = 'boolean';
+
+                if (isset($formData[$templateKey])) {
+                    $value = $formData[$templateKey]['boolean'] ?? 'none';
                 }
-
-                if (isset($data['path'])) {
-                    $value = $data['path'];
-                    $type = 'upload';
-                }
-
-                $dataMappedToTemplateFilters[] = [
-                    TypesMapping::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_TYPE => $type,
-                    TypesMapping::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_VALUE => $value,
-                    TypesMapping::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_KEY => $templateKey
-                ];
             }
+
+            if ($templateFilter instanceof FilledTemplateFilter) {
+                $type = 'upload';
+
+                if (isset($formData[$templateKey])) {
+                    $value = $formData[$templateKey]['path'] ?? 'none';
+                }
+            }
+
+            $dataMappedToTemplateFilters[] = [
+                TypesMapping::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_TYPE => $type,
+                TypesMapping::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_VALUE => $value,
+                TypesMapping::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_KEY => $templateKey
+            ];
         }
 
         return $dataMappedToTemplateFilters;
