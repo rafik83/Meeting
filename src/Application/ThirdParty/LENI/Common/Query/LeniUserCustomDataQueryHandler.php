@@ -135,8 +135,8 @@ class LeniUserCustomDataQueryHandler
             $event
         );
 
-        foreach ($products as $productId) {
-            $customData[LeniConstants::DATA_MAPPING_FORMAT_PRODUCTS][$productId] = true;
+        foreach ($products as $product) {
+            $customData[LeniConstants::DATA_MAPPING_FORMAT_PRODUCTS][$product['id']] = true;
         }
     }
 

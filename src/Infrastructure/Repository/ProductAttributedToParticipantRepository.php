@@ -115,11 +115,11 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
 
     public function findProductIdsAttributedByUserAndEvent(User $user, Event $event): array
     {
-        $queryBuilder =$this->entityManager->createQueryBuilder()
+        $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('product.id')
             ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
-            ->innerJoin(Participant::class, 'participant', 'WITH', 'participant.user = :user')
-            ->innerJoin(Product::class, 'product', 'WITH', 'product.event = :event')
+            ->join('productAttributedToParticipant.participant', 'participant', 'WITH', 'participant.user = :user')
+            ->join('productAttributedToParticipant.product', 'product', 'WITH', 'product.event = :event')
             ->setParameter('user', $user)
             ->setParameter('event', $event)
             ->groupBy('product')

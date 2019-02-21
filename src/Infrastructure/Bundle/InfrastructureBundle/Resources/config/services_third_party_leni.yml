@@ -9,6 +9,12 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@planning.formatter.participant_planning_formatter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareUserDataForApiCallHandler'
+            - '@datetime'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareUserDataForApiCallHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue'
@@ -97,6 +103,15 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Save\PrepareOneUserLeniApiCallCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareUserDataForApiCallHandler'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.user.event.extra_data_repository'
+        tags:
+            - { name: console.command }
+
     #
     # Normalizer
     #
@@ -146,6 +161,7 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter'
             - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler: ~
 
