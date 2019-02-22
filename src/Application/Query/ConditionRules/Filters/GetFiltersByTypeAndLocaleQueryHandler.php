@@ -143,7 +143,7 @@ class GetFiltersByTypeAndLocaleQueryHandler
     private function getTemplateObjectFilters(Event $event, string $locale): array
     {
         $filters = [];
-        $templateFilters = $this->queryBus->handle(new GetTemplateFiltersQuery($event->getId(), Tag::PARTICIPANT_DATA));
+        $templateFilters = $this->queryBus->handle(new GetTemplateFiltersQuery($event, Tag::PARTICIPANT_DATA));
 
         foreach ($templateFilters as $objectKey => $templateFilter) {
             $filter = [

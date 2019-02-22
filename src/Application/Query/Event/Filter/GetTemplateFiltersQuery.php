@@ -3,18 +3,19 @@
 namespace Proximum\Vimeet\Application\Query\Event\Filter;
 
 use Proximum\Vimeet\Application\Query\Query;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class GetTemplateFiltersQuery implements Query
 {
-    /** @var int */
-    public $eventId;
+    /** @var Event */
+    public $event;
 
     /** @var string */
     public $informationType;
 
-    public function __construct(int $eventId, string $informationType)
+    public function __construct(Event $event, string $informationType)
     {
-        $this->eventId = $eventId;
+        $this->event = $event;
         $this->informationType = $informationType;
     }
 }

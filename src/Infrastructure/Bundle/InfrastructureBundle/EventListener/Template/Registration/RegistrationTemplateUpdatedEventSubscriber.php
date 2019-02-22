@@ -132,7 +132,6 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
         }
     }
 
-
     private function getInformationType(array &$filter): ?string
     {
         $informationType = null;

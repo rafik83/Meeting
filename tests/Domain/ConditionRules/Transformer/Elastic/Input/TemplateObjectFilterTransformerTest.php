@@ -10,6 +10,18 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 class TemplateObjectFilterTransformerTest extends TestCase
 {
+    public function testTransformNotSupport(): void
+    {
+        $field = new Field('status', new ComparisonOperatorIn(), 'checkbox', ['none', 'yes']);
+
+        $templateObjectFilterTransformer = new TemplateObjectFilterTransformer();
+        $result = $templateObjectFilterTransformer->transform($field);
+
+        $expectedResult = [];
+
+        $this->assertSame($result, $expectedResult);
+    }
+
     public function testTransformCheckbox(): void
     {
         $field = new Field('templateObjectFilters.57eced1b99305', new ComparisonOperatorIn(), 'checkbox', ['none', 'yes']);
@@ -47,6 +59,23 @@ class TemplateObjectFilterTransformerTest extends TestCase
                         ],
                     ],
                 ],
+            ],
+        ];
+
+        $this->assertSame($result, $expectedResult);
+    }
+
+    public function testTransformEmptyCheckbox(): void
+    {
+        $field = new Field('templateObjectFilters.57eced1b99305', new ComparisonOperatorIn(), 'checkbox', []);
+
+        $templateObjectFilterTransformer = new TemplateObjectFilterTransformer();
+        $result = $templateObjectFilterTransformer->transform($field);
+
+        $expectedResult = [
+            'nested' => [
+                'path' => 'templateObjectFilters',
+                'query' => [],
             ],
         ];
 

@@ -24,8 +24,8 @@ class GetTemplateFiltersQueryHandler
     public function handle(GetTemplateFiltersQuery $query): array
     {
         return array_merge(
-            $this->booleanTemplateFilterRepository->getByEventIdAndInformationType($query->eventId, $query->informationType),
-            $this->filledTemplateFilterRepository->getByEventIdAndInformationType($query->eventId, $query->informationType)
+            $this->booleanTemplateFilterRepository->getByEventIdAndInformationType($query->event->getId(), $query->informationType),
+            $this->filledTemplateFilterRepository->getByEventIdAndInformationType($query->event->getId(), $query->informationType)
         );
     }
 }

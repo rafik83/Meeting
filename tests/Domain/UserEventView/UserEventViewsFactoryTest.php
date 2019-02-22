@@ -169,7 +169,7 @@ class UserEventViewsFactoryTest extends TestCase
 
         $queryBus = $this->prophesize(QueryBusInterface::class);
 
-        $queryBus->handle(new GetTemplateFiltersQuery(777, 'participant_data'))
+        $queryBus->handle(new GetTemplateFiltersQuery($event->reveal(), 'participant_data'))
             ->shouldBeCalled()
             ->willReturn([]);
 

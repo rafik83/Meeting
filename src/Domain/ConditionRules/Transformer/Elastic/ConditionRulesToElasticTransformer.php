@@ -131,7 +131,6 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
             return $this->radioTransformer->transform($field);
         }
 
-
         return [];
     }
 

@@ -86,7 +86,7 @@ class UserEventViewsFactory
     {
         $userEventViews = [];
         $templateFilters = $this->queryBus->handle(
-            new GetTemplateFiltersQuery($event->getId(), Tag::PARTICIPANT_DATA)
+            new GetTemplateFiltersQuery($event, Tag::PARTICIPANT_DATA)
         );
 
         foreach ($results as $result) {
