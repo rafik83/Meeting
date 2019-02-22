@@ -44,7 +44,7 @@ class UpdateHandlerTest extends TestCase
         $update = new Update($type, 'fr');
         $update->translations['fr']['title'] = 'truc';
         $update->validationCriteria['sheetAccepted'] = false;
-        $update->availabilityType = true;Type::TYPE_MANAGEMENT_NONE;
+        $update->availabilityType = Type::TYPE_MANAGEMENT_NONE;
         $update->rank = 1;
         $update->hidden = true;
         $update->numberOfMeetingsPerPlanning = 12;

@@ -43,7 +43,7 @@ class AvailabilityController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (Type::TYPE_MANAGEMENT_NONE === $sheet->getType()->getAvailabilityType()) {
+        if (Type::TYPE_MANAGEMENT_UNAVAILABLE !== $sheet->getType()->getAvailabilityType()) {
             throw new AccessDeniedException();
         }
 

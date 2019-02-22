@@ -4,14 +4,12 @@ Proximum\Vimeet\Domain\Model\Type:
         position: 0
         package: '@package_spanish_event'
         registrationTemplate: '@registration_template_event_spanish'
-        availability_type: 'unavailability'
 
     event_spanish_type_exposant:
         __construct: ["@event_spanish"]
         position: 1
         package: '@package_spanish_event'
         registrationTemplate: '@registration_template_event_spanish'
-        availability_type: 'unavailability'
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     event_spanish_type_fournisseur_es:

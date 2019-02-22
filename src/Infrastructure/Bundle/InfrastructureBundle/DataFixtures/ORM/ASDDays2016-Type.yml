@@ -5,7 +5,7 @@ Proximum\Vimeet\Domain\Model\Type:
         package: '@package_asd_days'
         sheetTemplate: '@sheet_template_fournisseur_asddays'
         registrationTemplate: '@registration_template_asd_days'
-        availability_type: 'unavailability'
+        availabilityType: 'unavailable'
 
     event_asddays_2016_type_investisseur:
         __construct: ["@event_asddays_2016"]
@@ -13,7 +13,7 @@ Proximum\Vimeet\Domain\Model\Type:
         package: '@package_asd_days'
         sheetTemplate: '@sheet_template_investisseur_asddays'
         registrationTemplate: '@registration_template_asd_days'
-        availability_type: 'unavailability'
+        availabilityType: 'unavailable'
 
     event_asddays_2016_type_donneur_ordre:
         __construct: ["@event_asddays_2016"]
@@ -21,7 +21,7 @@ Proximum\Vimeet\Domain\Model\Type:
         package: '@package_asd_days'
         sheetTemplate: '@sheet_template_fournisseur_asddays'
         registrationTemplate: '@registration_template_asd_days'
-        availability_type: 'unavailability'
+        availabilityType: 'unavailable'
 
     event_asddays_2016_type_structure_de_recherche:
         __construct: ["@event_asddays_2016"]
@@ -29,7 +29,7 @@ Proximum\Vimeet\Domain\Model\Type:
         package: '@package_asd_days'
         sheetTemplate: '@sheet_template_fournisseur_asddays'
         registrationTemplate: '@registration_template_asd_days_in_one_step'
-        availability_type: 'unavailability'
+        availabilityType: 'unavailable'
 
     event_asddays_2016_type_delegation:
         __construct: ["@event_asddays_2016"]
@@ -37,7 +37,7 @@ Proximum\Vimeet\Domain\Model\Type:
         package: '@package_asd_days'
         sheetTemplate: '@sheet_template_fournisseur_asddays'
         registrationTemplate: '@registration_template_asd_days'
-        availability_type: 'unavailability'
+        availabilityType: 'unavailable'
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     event_asddays_2016_type_fournisseur_fr:

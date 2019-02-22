@@ -11,7 +11,6 @@ Proximum\Vimeet\Domain\Model\Type:
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
         sheetTemplate: '@template_sheet_carnot'
         registrationTemplate: '@registration_template_carnot'
-        availability_type: 'unavailability'
 
     type_investisseur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -20,7 +19,6 @@ Proximum\Vimeet\Domain\Model\Type:
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
         sheetTemplate: '@template_sheet_carnot'
         registrationTemplate: '@registration_template_carnot'
-        availability_type: 'unavailability'
 
     type_visiteur:
         __construct: ["@event_rdv_carnot_2016"]
@@ -29,7 +27,6 @@ Proximum\Vimeet\Domain\Model\Type:
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
         sheetTemplate: '@template_sheet_carnot'
         registrationTemplate: '@registration_template_carnot'
-        availability_type: 'unavailability'
 
     type_visiteur_visio:
         __construct: ["@event_rdv_carnot_2016"]
@@ -38,7 +35,6 @@ Proximum\Vimeet\Domain\Model\Type:
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
         sheetTemplate: '@template_sheet_carnot'
         registrationTemplate: '@registration_template_carnot'
-        availability_type: 'unavailability'
 
     type_institute_carnot:
         __construct: ["@event_rdv_carnot_2016"]
@@ -47,7 +43,6 @@ Proximum\Vimeet\Domain\Model\Type:
         validationCriteria: '@validation_criteria_event_rdv_carnot_2016'
         sheetTemplate: '@template_sheet_carnot'
         registrationTemplate: '@registration_template_carnot'
-        availability_type: 'unavailability'
 
 Proximum\Vimeet\Domain\Model\TypeTranslation:
     type_exposant_fr:

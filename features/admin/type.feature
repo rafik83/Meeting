@@ -53,7 +53,10 @@ Feature: add type
       | type_update_translations_fr_title | TestEdited |
       | type_update_translations_en_title | TestEdited |
       | type_update_rank                  | 2          |
-    
+    When I press "form.type_update.children.submit.label"
+    Then the response status code should be 200
+    And I should see "flash.admin.type.update.success"
+
   Scenario: edit a type that haven't sheet right now
     Given I am logged with "test@test.com" on admin
     And I am on this page "/fr/event/past"

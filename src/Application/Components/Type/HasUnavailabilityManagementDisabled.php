@@ -28,7 +28,7 @@ class HasUnavailabilityManagementDisabled
     {
         $type = $sheet->getType();
 
-        return Type::TYPE_MANAGEMENT_NONE === $type->getAvailabilityType()
+        return Type::TYPE_MANAGEMENT_UNAVAILABLE !== $type->getAvailabilityType()
             && false === $this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN')
         ;
     }

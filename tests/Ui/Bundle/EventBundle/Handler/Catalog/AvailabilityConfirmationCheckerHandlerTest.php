@@ -159,11 +159,10 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleUnavailabilityManagementDisabled()
+    public function testHandleUnavailabilityManagementDisabled(): void
     {
-        $this->sheet->getId()->shouldBeCalled();
         $this->sheet->getType()->willReturn($this->type->reveal());
-        $this->type->getAvailabilityType()->willReturn(ParticipationType::TYPE_MANAGEMENT_UNAVAILABLE);
+        $this->type->getAvailabilityType()->willReturn(ParticipationType::TYPE_MANAGEMENT_NONE);
 
         $expected = new AvailabilityConfirmationCheckerView(
             AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS,
@@ -181,7 +180,7 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
             $this->router->reveal(),
             $this->featureAvailabilityConfirmationActivated
         );
-        $handler->handle(
+        $result = $handler->handle(
             new AvailabilityConfirmationChecker(
                 $this->event->reveal(),
                 $this->sheet->reveal(),
@@ -189,6 +188,8 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
                 AvailabilityConfirmationChecker::ORIGIN_CATALOG
             )
         );
+
+        $this->assertEquals($expected, $result);
     }
 
     public function testHandleAlreadyConfirmed()
@@ -222,7 +223,7 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
             $this->router->reveal(),
             $this->featureAvailabilityConfirmationActivated
         );
-        $handler->handle(
+        $result = $handler->handle(
             new AvailabilityConfirmationChecker(
                 $this->event->reveal(),
                 $this->sheet->reveal(),
@@ -230,6 +231,8 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
                 AvailabilityConfirmationChecker::ORIGIN_CATALOG
             )
         );
+
+        $this->assertEquals($expected, $result);
     }
 
     public function testHandle()
