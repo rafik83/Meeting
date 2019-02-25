@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\View\Agenda;
 class AgendaSpotView
 {
     /**
-     * @var DayView[]
+     * @var AgendaDayView[]
      */
     public $days;
 
@@ -32,7 +32,7 @@ class AgendaSpotView
      *
      * @param int       $id
      * @param string    $reference
-     * @param DayView[] $days
+     * @param AgendaDayView[] $days
      */
     public function __construct($id, $reference, array $days = [])
     {

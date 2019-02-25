@@ -34,7 +34,7 @@ class DaySpotViewQueryHandler
      *
      * @return AgendaDayView
      */
-    public function handle(DaySpotViewQuery $query)
+    public function handle(DaySpotViewQuery $query): AgendaDayView
     {
         $slotViews = $this->slotViewQueryHandler->handle(
             new SlotViewQuery(

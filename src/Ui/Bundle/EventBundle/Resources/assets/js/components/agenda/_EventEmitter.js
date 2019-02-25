@@ -20,7 +20,7 @@ EventEmitter.prototype.on = function(name, callback) {
 /**
  * Listen for an event
  *
- * @param {String} event Event name
+ * @param {String} name Event name
  */
 EventEmitter.prototype.emit = function(name) {
     var event = document.createEvent('HTMLEvents');
