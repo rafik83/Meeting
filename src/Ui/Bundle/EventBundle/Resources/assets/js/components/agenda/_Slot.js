@@ -88,7 +88,29 @@ Slot.prototype.createElement = function(time, agendaDate) {
  * @return {String}
  */
 Slot.prototype.format = function(time) {
-    return this.prefix(Math.floor(time / 60)) + 'h' + this.prefix(Math.floor(time % 60));
+    return this.prefix(this.getHourFromTime(time)) + 'h' + this.prefix(this.getMinutesFromTime(time));
+};
+
+/**
+ * Get hours from time
+ *
+ * @param {Number} time Time in minutes
+ *
+ * @return {Number}
+ */
+Slot.prototype.getHourFromTime = function(time) {
+    return Math.floor(time / 60);
+};
+
+/**
+ * Get minutes from time
+ *
+ * @param {Number} time Time in minutes
+ *
+ * @return {Number}
+ */
+Slot.prototype.getMinutesFromTime = function(time) {
+    return Math.floor(time % 60);
 };
 
 /**
@@ -155,6 +177,28 @@ Slot.prototype.displayMeets = function() {
  */
 Slot.prototype.displayMeet = function(meet) {
     meet.display();
+};
+
+Slot.prototype.hasParticipantToBePresent = function() {
+    var result = false;
+    [].forEach.call(this.meets, function(meet) {
+        if (meet.type === 'meeting' || meet.type === 'happening') {
+            result = true;
+        }
+    });
+
+    return result;
+};
+
+Slot.prototype.hasUnavailabilities = function() {
+    var result = false;
+    [].forEach.call(this.meets, function(meet) {
+        if (meet.type === 'unavailability') {
+            result = true;
+        }
+    });
+
+    return result;
 };
 
 module.exports = Slot;

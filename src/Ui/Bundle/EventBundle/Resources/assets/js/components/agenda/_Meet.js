@@ -27,6 +27,7 @@ function Meet(agenda, element) {
         this.header.addEventListener('click', this.toggleOpen);
     }
     this.element.agendaMeet = this;
+    this.type = this.guessType();
 }
 
 Meet.prototype = Object.create(EventEmitter.prototype);
@@ -148,7 +149,7 @@ Meet.prototype.getLeft = function() {
  */
 Meet.prototype.getWidth = function() {
     if (!this.group) {
-        return 100;
+        return this.agenda.getMeetMaxWidth();
     }
 
     return this.group.getLayerWidth(this.layer);
@@ -202,6 +203,35 @@ Meet.prototype.overlap = function(meet) {
  */
 Meet.prototype.timeOverlarp = function(from, to) {
     return this.start < to && this.end > from;
+};
+
+Meet.prototype.guessType = function() {
+    var classList = this.element.classList;
+
+    if (classList.contains('program-mass')) {
+        return 'mass'
+    }
+
+    if (classList.contains('happening')) {
+        return 'happening';
+    }
+
+    if (classList.contains('lock')) {
+        return 'unavailability';
+    }
+
+    // currently, "mass" & "happening" types have "has-details" class too so "meeting" need to be tested after them
+    if (classList.contains('has-details')) {
+        return 'meeting';
+    }
+
+    if (classList.contains('available')) {
+        return 'availableForMeeting';
+    }
+
+    window.console && console.error && console.error('unknow meet type for this meet :');
+    window.console && console.error && console.error(this);
+    return 'unknown';
 };
 
 module.exports = Meet;

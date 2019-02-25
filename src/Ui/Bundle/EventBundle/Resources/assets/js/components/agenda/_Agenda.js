@@ -15,6 +15,8 @@ function Agenda(element) {
     this.agendaDate   = moment(this.element.querySelector('.agenda-date').getAttribute('data-date'), 'DD-MM-YY HH:mm:ss').format('MM-DD-YY');
     this.start        = this.parseTime(this.element.getAttribute('data-beginhour'));
     this.end          = this.parseTime(this.element.getAttribute('data-endhour'));
+    this.startTimestamp = parseInt(element.getAttribute('data-beginTimestamp'));
+    this.endTimestamp = parseInt(element.getAttribute('data-endTimestamp'));
     this.duration     = this.end - this.start;
     this.slotDuration = this.getDuration(this.element.getAttribute('data-slotduration'));
     this.layout       = this.element.querySelector('.layout');
@@ -24,6 +26,7 @@ function Agenda(element) {
     this.slots        = [];
     this.scale        = 0;
     this.slotHeight   = 0;
+    this.meetMaxWidth = 100;
 
     this.addMeet     = this.addMeet.bind(this);
     this.onSlotScale = this.onSlotScale.bind(this);
@@ -202,6 +205,10 @@ Agenda.prototype.onSlotScale = function(event) {
  */
 Agenda.prototype.onResize = function(event) {
     this.meets.forEach(this.updateMeet);
+};
+
+Agenda.prototype.getMeetMaxWidth = function() {
+    return this.meetMaxWidth;
 };
 
 module.exports = Agenda;

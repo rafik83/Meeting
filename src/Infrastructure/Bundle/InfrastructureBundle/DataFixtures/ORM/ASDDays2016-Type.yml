@@ -13,7 +13,7 @@ Proximum\Vimeet\Domain\Model\Type:
         package: '@package_asd_days'
         sheetTemplate: '@sheet_template_investisseur_asddays'
         registrationTemplate: '@registration_template_asd_days'
-        availabilityType: 'unavailable'
+        availabilityType: 'available'
 
     event_asddays_2016_type_donneur_ordre:
         __construct: ["@event_asddays_2016"]

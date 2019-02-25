@@ -42,11 +42,11 @@ Group.prototype.add = function(meet) {
  */
 Group.prototype.getLayerWidth = function(index) {
     if (this.expandedLayer === null) {
-        return 100 / this.layers.length;
+        return this.getMeetMaxWidth() / this.layers.length;
     }
 
     if (this.expandedLayer === index) {
-        return 100 - (this.collapsedWidth * (this.layers.length - 1));
+        return this.getMeetMaxWidth() - (this.collapsedWidth * (this.layers.length - 1));
     }
 
     return this.collapsedWidth;
@@ -214,6 +214,10 @@ Group.prototype.displayMeet = function(meet) {
  */
 Group.prototype.closeMeet = function(meet) {
     meet.close();
+};
+
+Group.prototype.getMeetMaxWidth = function() {
+    return this.meets[0].agenda.getMeetMaxWidth();
 };
 
 module.exports = Group;
