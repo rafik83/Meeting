@@ -98,4 +98,24 @@ class DayRepository implements DayRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    public function findByEventStartTimeAndEndTime(Event $event, \DateTimeInterface $start, \DateTimeInterface $end): ?Day
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('day')
+            ->from(Day::class, 'day')
+            ->where('day.startTime = :start')
+            ->andWhere('day.endTime = :end')
+            ->andWhere('day.event = :event')
+            ->setParameters([
+                'start' => $start,
+                'end' => $end,
+                'event' => $event,
+            ])
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

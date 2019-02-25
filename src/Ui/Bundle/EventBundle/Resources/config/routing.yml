@@ -833,6 +833,14 @@ event_unavailability_create:
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Unavailability:create }
 
+event_unavailabilities_create:
+    path: /sheet/{sheet}/agenda/participant/{participant}/unavailabilities/create
+    requirements:
+        sheet: \d+
+        participant: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\AvailabilityType\CreateUnavailabilitiesAction
+
 event_unavailability_create_from_confirmation:
     path: /sheet/{sheet}/confirmation/unavailability/create
     requirements:

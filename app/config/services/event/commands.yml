@@ -50,3 +50,11 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccount\SendActivateAccountFromLoginToken }
+    #
+    # Unavailabilities
+    #
+    Proximum\Vimeet\Application\Command\Unavailability\RemoveUserUnavailabilitiesHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\RemoveUserUnavailabilities }

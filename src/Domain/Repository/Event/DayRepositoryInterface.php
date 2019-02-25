@@ -43,4 +43,6 @@ interface DayRepositoryInterface
      * @param Day $day
      */
     public function set(Day $day);
+
+    public function findByEventStartTimeAndEndTime(Event $event, \DateTimeInterface $start, \DateTimeInterface $end): ?Day;
 }
