@@ -18,7 +18,7 @@ class Version20190219141552 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
     
         $this->addSql('ALTER TABLE type ADD availability_type VARCHAR(255) NOT NULL');
-        $this->addSql('UPDATE type SET availability_type = IF(disable_unavailability_management, \'none\', \'unavailability\')');
+        $this->addSql('UPDATE type SET availability_type = IF(disable_unavailability_management, \'none\', \'unavailable\')');
         $this->addSql('ALTER TABLE type DROP disable_unavailability_management');
     }
 
