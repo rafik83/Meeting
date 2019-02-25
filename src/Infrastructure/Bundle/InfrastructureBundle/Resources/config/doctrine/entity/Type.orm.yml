@@ -19,6 +19,10 @@ Proximum\Vimeet\Domain\Model\Type:
         numberOfMeetingsPerPlanning:
             type: integer
             nullable: true
+        disableUnavailabilityManagement:
+            type: boolean
+            options:
+                default: false
         availabilityType:
             type: string
     embedded:

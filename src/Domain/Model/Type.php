@@ -74,6 +74,11 @@ class Type implements WhoInterface, TypeInterface
     /** @var string */
     private $availabilityType;
 
+    /**
+     * @todo to remove after migration
+     */
+    private $disableUnavailabilityManagement = false;
+
     /** @var int|null */
     private $numberOfMeetingsPerPlanning;
 
@@ -419,5 +424,13 @@ class Type implements WhoInterface, TypeInterface
     public function getNumberOfMeetingsPerPlanning(): ?int
     {
         return $this->numberOfMeetingsPerPlanning;
+    }
+
+    /**
+     * @todo to remove after migration
+     */
+    public function isDisableUnavailabilityManagement(): bool
+    {
+        return $this->disableUnavailabilityManagement;
     }
 }
