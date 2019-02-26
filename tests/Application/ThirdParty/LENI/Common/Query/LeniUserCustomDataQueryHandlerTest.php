@@ -75,18 +75,19 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
             ->convert(
                 $dataMapping,
                 [
-                    'states' => ['sheet_state' => 'A'],
+                    'states' => [
+                        'sheet_state' => 'A'
+                    ],
                     'tags' => [
                         'sheet_template_generic_tag_1' => 'A3',
                         'sheet_template_generic_tag_2' => ['B1', 'B2', 'B5'],
                         'participant_position' => 'Developper',
                         'sheet_country' => 'FR',
-                        'sheet_website' => 'https://www.site.web',
+                        'sheet_website' => 'https://www.site.web'
                     ],
                     'products' => [
-                        1 => true,
-                        2 => true,
-                    ],
+                        '' => true
+                    ]
                 ]
             )
             ->shouldBeCalled()
