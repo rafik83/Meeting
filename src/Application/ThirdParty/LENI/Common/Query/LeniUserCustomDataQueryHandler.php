@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -42,18 +43,23 @@ class LeniUserCustomDataQueryHandler
     /** @var ProductAttributedToParticipantRepositoryInterface */
     private $productAttributedToParticipantRepository;
 
+    /** @var ParticipantRepositoryInterface */
+    private $participantRepository;
+
     public function __construct(
         TypeConverter $typeConverter,
         MappingGetter $mappingGetter,
         CustomDataConverter $customDataConverter,
         TemplateDataFactory $templateDataFactory,
-        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
+        ParticipantRepositoryInterface $participantRepository
     ) {
         $this->typeConverter = $typeConverter;
         $this->mappingGetter = $mappingGetter;
         $this->customDataConverter = $customDataConverter;
         $this->templateDataFactory = $templateDataFactory;
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
+        $this->participantRepository = $participantRepository;
     }
 
     /**
@@ -130,9 +136,15 @@ class LeniUserCustomDataQueryHandler
 
     private function handleProductsData(Event $event, User $user, array &$customData): void
     {
-        $products = $this->productAttributedToParticipantRepository->findProductIdsAttributedByUserAndEvent(
-            $user,
-            $event
+        $products = array_merge(
+            $this->productAttributedToParticipantRepository->findProductIdsAttributedByUserAndEvent(
+                $user,
+                $event
+            ),
+            $this->participantRepository->getProductIdsOfUserForEvent(
+                $user,
+                $event
+            )
         );
 
         foreach ($products as $product) {

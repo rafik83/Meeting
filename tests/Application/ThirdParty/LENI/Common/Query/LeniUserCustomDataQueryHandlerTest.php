@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -183,15 +184,21 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
         $productAttributedToParticipantRepository
             ->findProductIdsAttributedByUserAndEvent($user->reveal(), $event->reveal())
             ->shouldBeCalled()
-            ->willReturn([1, 2])
+            ->willReturn([1])
         ;
+
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository->getProductIdsOfUserForEvent($user->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([2]);
 
         $leniUserCustomDataQueryHandler = new LeniUserCustomDataQueryHandler(
             $typeConverter->reveal(),
             $mappingGetter->reveal(),
             $customDataConverter->reveal(),
             $templateDataFactory->reveal(),
-            $productAttributedToParticipantRepository->reveal()
+            $productAttributedToParticipantRepository->reveal(),
+            $participantRepository->reveal()
         );
 
         $this->assertEquals(
@@ -240,12 +247,17 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
             ->shouldNotBeCalled()
         ;
 
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository->getProductIdsOfUserForEvent($user->reveal(), $event->reveal())
+            ->shouldNotBeCalled();
+
         $leniUserCustomDataQueryHandler = new LeniUserCustomDataQueryHandler(
             $typeConverter->reveal(),
             $mappingGetter->reveal(),
             $customDataConverter->reveal(),
             $templateDataFactory->reveal(),
-            $productAttributedToParticipantRepository->reveal()
+            $productAttributedToParticipantRepository->reveal(),
+            $participantRepository->reveal()
         );
 
         $leniUserCustomDataQueryHandler->handle(

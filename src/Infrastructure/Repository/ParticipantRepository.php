@@ -663,4 +663,19 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function getProductIdsOfUserForEvent(User $user, Event $event): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('participantProduct.id')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->join('participant.participantProduct', 'participantProduct')
+            ->where('participant.user = :user')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult();
+    }
 }

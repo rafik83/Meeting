@@ -162,6 +162,7 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter'
             - '@template.template_data_factory'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@vimeet_infrastructure.repository.participant_repository'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler: ~
 
