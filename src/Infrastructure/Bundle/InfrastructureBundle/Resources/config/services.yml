@@ -1573,6 +1573,7 @@ services:
         arguments:
             - '@repository.promotion_code_repository'
             - '@promotion.unique_code_checker'
+            - '@vimeet_infrastructure.repository.order_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Update }
     command.meeting_slot.generate_handler:

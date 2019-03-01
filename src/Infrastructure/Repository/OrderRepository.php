@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Numero\OrderNumeroView;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -260,10 +261,28 @@ class OrderRepository implements OrderRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('_order.id')
-            ->from(ORder::class, '_order', '_order.id')
+            ->from(Order::class, '_order', '_order.id')
             ->where('_order.sheet = :sheet')
             ->andWhere('_order.invoice IS NOT NULL')
             ->setParameter('sheet', $sheet)
+            ->setMaxResults(1);
+
+        return (null === $queryBuilder->getQuery()->getOneOrNullResult()) ? false : true;
+    }
+
+    public function hasOrderWithPromotionCode(PromotionCode $promotionCode): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order.id')
+            ->from(Order::class, '_order', '_order.id')
+            ->innerJoin('_order.promotionCodes',
+                'orderPromotionCode',
+                'WITH',
+                'orderPromotionCode.promotionCode = :promotionCode AND _order.cancelled = false'
+            )
+            ->setParameter('promotionCode', $promotionCode)
             ->setMaxResults(1);
 
         return (null === $queryBuilder->getQuery()->getOneOrNullResult()) ? false : true;

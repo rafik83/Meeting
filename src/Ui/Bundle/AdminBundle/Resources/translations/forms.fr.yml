@@ -748,6 +748,7 @@ form.promotion_code_create.children.stock.label: Stock
 form.promotion_code_create.children.submit.label: Enregistrer
 form.promotion_code_create.children.title.label: Titre
 form.promotion_code_create.children.validUntil.label: 'Valide jusqu''au'
+form.promotion_code_promotion.children.product.can_not_update_promotions: 'Vous ne pouvez pas modifier ce produit car le code promo a été utilisé dans une commande'
 form.promotion_code_promotion.children.type.free: offert
 form.promotion_code_promotion.children.type.percentOff: '% de réduction'
 form.promotion_code_promotion.children.type.valueOff: réduction
