@@ -1101,6 +1101,8 @@ form.type_create.children.translations.prototype.children.description.label: Des
 form.type_create.children.translations.prototype.children.title.label: Titre
 form.type_create.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'
 form.type_create.children.validationCriteria.label: 'Critère de validation automatique des fiches de présentation'
+form.type_create.children.availabilityType.label: 'Gestion de disponibilité'
+form.type_update.children.availabilityType.label: 'Gestion de disponibilité'
 form.type_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.type_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.type_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
@@ -1244,3 +1246,6 @@ form.who_see_who.children.priority.label: 'Priorité de la règle'
 form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter
+admin.type.management.none.label: 'Aucune'
+admin.type.management.available.label: 'par disponiblité'
+admin.type.management.unavailable.label: 'par indisponibilité'

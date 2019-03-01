@@ -159,10 +159,10 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleUnavailabilityManagementDisabled()
+    public function testHandleUnavailabilityManagementDisabled(): void
     {
         $this->sheet->getType()->willReturn($this->type->reveal());
-        $this->type->isDisableUnavailabilityManagement()->willReturn(true);
+        $this->type->getAvailabilityType()->willReturn(ParticipationType::TYPE_MANAGEMENT_NONE);
 
         $expected = new AvailabilityConfirmationCheckerView(
             AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS,
@@ -195,7 +195,7 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
     public function testHandleAlreadyConfirmed()
     {
         $this->sheet->getType()->willReturn($this->type->reveal());
-        $this->type->isDisableUnavailabilityManagement()->willReturn(false);
+        $this->type->getAvailabilityType()->willReturn(ParticipationType::TYPE_MANAGEMENT_UNAVAILABLE);
 
         $expected = new AvailabilityConfirmationCheckerView(
             AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS,
@@ -239,7 +239,7 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
     {
         $this->sheet->getId()->willReturn(12);
         $this->sheet->getType()->willReturn($this->type->reveal());
-        $this->type->isDisableUnavailabilityManagement()->willReturn(false);
+        $this->type->getAvailabilityType()->willReturn(ParticipationType::TYPE_MANAGEMENT_UNAVAILABLE);
 
         $expected = new AvailabilityConfirmationCheckerView(
             AvailabilityConfirmationCheckerView::REDIRECT,

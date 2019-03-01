@@ -1101,6 +1101,8 @@ form.type_template_field_update.children.submit.label: Save
 form.type_template.registration.base: 'basic registration template'
 form.type_template.registration.event: 'Event templates'
 form.type_template.registration.organizer: 'my registration templates'
+form.type_create.children.availabilityType.label: 'Availability Management'
+form.type_update.children.availabilityType.label: 'Availability Management'
 form.type_template.sheet.base: 'basic participation template'
 form.type_template.sheet.event: 'Event templates'
 form.type_template.sheet.organizer: 'my participation templates'
@@ -1212,3 +1214,5 @@ form.who_see_who.children.priority.label: 'rule priority'
 form.who_see_who.children.seeable.label: see
 form.who_see_who.children.seer.label: who
 form.who_see_who.children.submit.label: Add
+admin.type.management.available.label: 'By available'
+admin.type.management.unavailable.label: 'By unavailable'

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Type;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Type\Update;
 use Proximum\Vimeet\Application\Command\Type\UpdateHandler;
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
@@ -38,12 +39,12 @@ class UpdateHandlerTest extends TestCase
         $type = new Type($event);
         $type->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
         $type->getValidationCriteria()->setSheetAccepted(true);
-        $type->setDisableUnavailabilityManagement(false);
+        $type->setAvailabilityType(Type::TYPE_MANAGEMENT_UNAVAILABLE);
 
         $update = new Update($type, 'fr');
         $update->translations['fr']['title'] = 'truc';
         $update->validationCriteria['sheetAccepted'] = false;
-        $update->enableUnavailabilityManagement = true;
+        $update->availabilityType = Type::TYPE_MANAGEMENT_NONE;
         $update->rank = 1;
         $update->hidden = true;
         $update->numberOfMeetingsPerPlanning = 12;
@@ -53,7 +54,9 @@ class UpdateHandlerTest extends TestCase
         $sheetTemplateCloner        = $this->prophesize(SheetTemplateCloner::class);
         $registrationTemplateCloner = $this->prophesize(RegistrationTemplateCloner::class);
 
-        $typeRepository->set($expectedType)->shouldBeCalled();
+        $typeRepository->set(Argument::that(function ($actual) use ($expectedType) {
+            return $expectedType->getId() === $actual->getId();
+        }))->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'truc', $type)->willReturn(false);
 
         //Handler

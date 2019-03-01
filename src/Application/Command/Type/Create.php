@@ -52,9 +52,9 @@ class Create implements Command
 
     /** @var bool */
     public $hidden;
-
-    /** @var bool */
-    public $enableUnavailabilityManagement = true;
+    
+    /** @var string */
+    public $availabilityType = Type::TYPE_MANAGEMENT_NONE;
 
     /** @var int|null */
     public $numberOfMeetingsPerPlanning;

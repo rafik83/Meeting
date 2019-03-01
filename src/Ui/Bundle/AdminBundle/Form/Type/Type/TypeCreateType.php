@@ -18,6 +18,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\RegistrationTemplat
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\SheetTemplateChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -80,8 +81,13 @@ class TypeCreateType extends AbstractType
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
             ])
-            ->add('enableUnavailabilityManagement', CheckboxType::class, [
-                'required' => false,
+            ->add('availabilityType', ChoiceType::class, [
+                'expanded' => true,
+                'choices' => [
+                    "admin.type.management.none.label" => Model\Type::TYPE_MANAGEMENT_NONE,
+                    "admin.type.management.available.label" => Model\Type::TYPE_MANAGEMENT_AVAILABLE,
+                    "admin.type.management.unavailable.label" => Model\Type::TYPE_MANAGEMENT_UNAVAILABLE,
+                ],
             ])
         ;
     }

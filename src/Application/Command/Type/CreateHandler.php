@@ -63,7 +63,7 @@ class CreateHandler
         $type->update(
             $create->rank,
             $create->hidden,
-            !$create->enableUnavailabilityManagement,
+            $create->availabilityType,
             $create->numberOfMeetingsPerPlanning
         );
 

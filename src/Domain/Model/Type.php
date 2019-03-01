@@ -22,6 +22,10 @@ use Proximum\Vimeet\Domain\Type\TypeInterface;
  */
 class Type implements WhoInterface, TypeInterface
 {
+   public const TYPE_MANAGEMENT_UNAVAILABLE = 'unavailable';
+   public const TYPE_MANAGEMENT_AVAILABLE = 'available';
+   public const TYPE_MANAGEMENT_NONE = 'none';
+    
     /** @var int */
     private $id;
 
@@ -66,8 +70,13 @@ class Type implements WhoInterface, TypeInterface
 
     /** @var ArrayCollection of FormTemplates */
     private $formTemplates;
+    
+    /** @var string */
+    private $availabilityType;
 
-    /** @var bool */
+    /**
+     * @todo to remove after migration
+     */
     private $disableUnavailabilityManagement = false;
 
     /** @var int|null */
@@ -85,6 +94,7 @@ class Type implements WhoInterface, TypeInterface
         $this->validationCriteria = new ValidationCriteria(false);
         $this->paymentConditions = new ArrayCollection();
         $this->formTemplates = new ArrayCollection();
+        $this->availabilityType = self::TYPE_MANAGEMENT_NONE;
     }
 
     /**
@@ -389,30 +399,38 @@ class Type implements WhoInterface, TypeInterface
         $this->formTemplates = new ArrayCollection($templates);
     }
 
-    public function isDisableUnavailabilityManagement(): bool
+    public function getAvailabilityType(): string
     {
-        return $this->disableUnavailabilityManagement;
+        return $this->availabilityType;
     }
 
-    public function setDisableUnavailabilityManagement(bool $disableUnavailabilityManagement): void
+    public function setAvailabilityType(string $availabilityType): void
     {
-        $this->disableUnavailabilityManagement = $disableUnavailabilityManagement;
+        $this->availabilityType = $availabilityType;
     }
 
     public function update(
         ?int $rank,
         bool $hidden,
-        bool $disableUnavailabilityManagement,
+        string $availabilityType,
         ?int $numberOfMeetingsPerPlanning
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
-        $this->disableUnavailabilityManagement = $disableUnavailabilityManagement;
+        $this->availabilityType = $availabilityType;
         $this->numberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int
     {
         return $this->numberOfMeetingsPerPlanning;
+    }
+
+    /**
+     * @todo to remove after migration
+     */
+    public function isDisableUnavailabilityManagement(): bool
+    {
+        return $this->disableUnavailabilityManagement;
     }
 }
