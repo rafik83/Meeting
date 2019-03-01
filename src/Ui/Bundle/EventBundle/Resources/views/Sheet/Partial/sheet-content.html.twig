@@ -31,7 +31,7 @@
             {{ include('EventBundle:Sheet/Partial:validationButton.html.twig', {'sheet': sheet}, false) }}
         {% endif %}
 
-        <a href="{{ path('event_sheet_generate_pdf', { sheet: userSheet is defined ? userSheet.id : sheet.id, sheetToDisplay: sheet.id, locale: locale }) }}" class="btn btn-gray"><span class="glyphicon glyphicon-print"></span>Pdf</a>
+        <a href="{{ path('event_sheet_generate_pdf', { sheet: userSheet is defined ? userSheet.id : sheet.id, sheetToDisplay: sheet.id, locale: locale }) }}" class="btn btn-gray" target="_blank"><span class="glyphicon glyphicon-print"></span>Pdf</a>
 
         {% if isCatalog is not defined or isCatalog == false %}
             <ul class="tabs">

@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
-use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUpload;
 use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection;
 use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
