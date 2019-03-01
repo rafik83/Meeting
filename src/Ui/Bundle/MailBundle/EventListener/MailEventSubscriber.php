@@ -33,6 +33,7 @@ use Proximum\Vimeet\Application\Event\Sheet\SheetGroupCreatedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetGroupUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
+use Proximum\Vimeet\Application\Event\User\ActivateAccountFromLoginEvent as UserActivateAccountFromLoginEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteProfileEvent;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
@@ -221,6 +222,25 @@ class MailEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param UserActivateAccountFromLoginEvent $event
+     */
+    public function onUserActivateAccountFromLogin(UserActivateAccountFromLoginEvent $event): void
+    {
+        $mail = $this->prepareHandler->handle(new PrepareActivateAccountMailView(
+            $event->getEvent(),
+            $event->getUser(),
+            $event->getUser()->getLocale(),
+            $event->getActivateAccountToken()
+        ));
+
+        if (!$mail instanceof AbstractMail) {
+            return;
+        }
+
+        $this->mailer->send($mail);
+    }
+
+    /**
      * @param UserResetPasswordEvent $event
      */
     public function onUserResetPassword(UserResetPasswordEvent $event)
@@ -378,6 +398,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION => 'onSheetAddParticipant',
             Events::USER_MAIL_CHANGED                  => 'onChangeMailAddressEvent',
             Events::USER_ACCOUNT_ACTIVATED             => 'onUserActivateAccount',
+            Events::USER_ACCOUNT_ACTIVATED_FROM_LOGIN  => 'onUserActivateAccountFromLogin',
             Events::USER_PASSWORD_RESET                => 'onUserResetPassword',
             Events::USER_PROFILE_COMPLETED             => 'onUserCompleteProfile',
             Events::USER_REGISTERED                    => 'onUserRegistered',

@@ -654,6 +654,17 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * Page returns 403
+     *
+     * @Then /^this page "(?P<page>[^"]+)" returns 403$/
+     */
+    public function pageReturns403($page)
+    {
+        $this->visit($this->baseUrl . $page);
+        $this->assertResponseStatus(403);
+    }
+
+    /**
      * Event page returns 404 during template rendering
      *
      * @Then /^this event page "(?P<page>[^"]+)" returns 404$/

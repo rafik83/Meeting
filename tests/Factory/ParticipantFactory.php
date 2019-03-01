@@ -25,4 +25,15 @@ class ParticipantFactory
 
         return $participant;
     }
+
+    public static function createImported(
+        Sheet $sheet,
+        User $user = null,
+        \DateTimeInterface $registrationDate = null
+    ): Participant {
+        $participant = self::create($sheet, $user, $registrationDate);
+        $participant->setImported(true);
+
+        return $participant;
+    }
 }

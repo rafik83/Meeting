@@ -66,6 +66,7 @@ final class Events
     public const ADMIN_ACCOUNT_ACTIVATED = 'admin.account_activated';
     public const ADMIN_PASSWORD_RESET = 'admin.password_reset';
     public const USER_ACCOUNT_ACTIVATED = 'user.account_activated';
+    public const USER_ACCOUNT_ACTIVATED_FROM_LOGIN = 'user.account_activated_from_login';
     public const USER_PASSWORD_RESET = 'user.password_reset';
     public const USER_PROFILE_COMPLETED = 'user.profile_completed';
     public const REGISTRATION_STEP = 'user.registration.step';

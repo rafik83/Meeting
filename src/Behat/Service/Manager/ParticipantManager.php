@@ -49,10 +49,11 @@ class ParticipantManager
      * @param Event      $event
      * @param Sheet|null $sheet
      * @param User|null  $user
+     * @param bool       $isImported
      *
      * @return Participant
      */
-    public function create(Event $event, Sheet $sheet = null, User $user = null)
+    public function create(Event $event, Sheet $sheet = null, User $user = null, bool $isImported = false): Participant
     {
         if (null === $sheet) {
             $sheet = $this->sheetManager->create($event);
@@ -62,7 +63,12 @@ class ParticipantManager
             $user = $this->userManager->create();
         }
 
-        $participant = ParticipantFactory::create($sheet, $user);
+        if ($isImported) {
+            $participant = ParticipantFactory::createImported($sheet, $user);
+        } else {
+            $participant = ParticipantFactory::create($sheet, $user);
+        }
+
         $participant->setData([]);
         $this->participantRepository->add($participant);
         $this->commandBus->handle(new Update($participant->getUser(), $participant->getEvent()));
