@@ -134,7 +134,7 @@ class AgendaSheetViewQueryHandlerTest extends TestCase
         );
 
         $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn(
-            new IndicatorView(12, 1, 0, 1, 10, 0, 2)
+            new IndicatorView(12, 1, 0, 1, 10, 0, 2, null)
         );
 
         $handler = new AgendaSheetViewQueryHandler(

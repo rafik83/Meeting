@@ -102,40 +102,52 @@ class IndicatorView
      *
      * @var int
      */
-    public $massUnavaibilitiesCount;
+    public $massUnavailabilitiesCount;
 
     /**
-     * @param int $slotTotal
-     * @param int $participantsCount
-     * @param int $unavailabilitiesCount
-     * @param int $sheetsPlanningQuantity
-     * @param int $meetingRequestsCount
-     * @param int $pendingPropositionCount
-     * @param int $massUnavaibilitiesCount
+     * Number of Meetings per planning defined per Type
+     *
+     * @var int|null
      */
+    public $numberOfMeetingsPerPlanning;
+
     public function __construct(
-        $slotTotal,
-        $participantsCount,
-        $unavailabilitiesCount,
-        $sheetsPlanningQuantity,
-        $meetingRequestsCount,
-        $pendingPropositionCount,
-        $massUnavaibilitiesCount
+        int $slotTotal,
+        int $participantsCount,
+        int $unavailabilitiesCount,
+        int $sheetsPlanningQuantity,
+        int $meetingRequestsCount,
+        int $pendingPropositionCount,
+        int $massUnavailabilitiesCount,
+        ?int $numberOfMeetingsPerPlanning
     ) {
-        $this->slotTotal               = $slotTotal;
-        $this->participantsCount       = $participantsCount;
-        $this->unavailabilitiesCount   = $unavailabilitiesCount;
-        $this->sheetsPlanningQuantity  = $sheetsPlanningQuantity;
-        $this->meetingRequestsCount    = $meetingRequestsCount;
+        $this->slotTotal = $slotTotal;
+        $this->participantsCount = $participantsCount;
+        $this->unavailabilitiesCount = $unavailabilitiesCount;
+        $this->sheetsPlanningQuantity = $sheetsPlanningQuantity;
+        $this->meetingRequestsCount = $meetingRequestsCount;
         $this->pendingPropositionCount = $pendingPropositionCount;
-        $this->massUnavaibilitiesCount = $massUnavaibilitiesCount;
+        $this->massUnavailabilitiesCount = $massUnavailabilitiesCount;
+        $this->numberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning;
 
-        $this->slotCount                = $slotTotal * $sheetsPlanningQuantity;
-        $this->slotsParticipantsCount   = $slotTotal * $participantsCount;
+        $this->slotCount = $slotTotal * $sheetsPlanningQuantity;
+        $this->slotsParticipantsCount = $slotTotal * $participantsCount;
 
-        $this->availableSlotsCount      = $this->slotsParticipantsCount - $unavailabilitiesCount;
-        $this->possibleMeetingsQuantity = max(0, min($meetingRequestsCount, $this->slotCount, $this->availableSlotsCount));
-        $this->usableSlots              = max(0, min($this->slotCount, $this->availableSlotsCount));
-        $this->maxMeetingAvailable      = max(0, $sheetsPlanningQuantity * ($slotTotal - $massUnavaibilitiesCount));
+
+        $minNumberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning !== null ?
+            min($numberOfMeetingsPerPlanning, $slotTotal - $massUnavailabilitiesCount)
+            : $slotTotal - $massUnavailabilitiesCount
+        ;
+        $this->maxMeetingAvailable = max(
+            0,
+            $sheetsPlanningQuantity * $minNumberOfMeetingsPerPlanning
+        );
+
+        $this->availableSlotsCount = $this->slotsParticipantsCount - $unavailabilitiesCount;
+        $this->possibleMeetingsQuantity = max(
+            0,
+            min($meetingRequestsCount, $this->slotCount, $this->availableSlotsCount, $this->maxMeetingAvailable)
+        );
+        $this->usableSlots = max(0, min($this->slotCount, $this->availableSlotsCount));
     }
 }

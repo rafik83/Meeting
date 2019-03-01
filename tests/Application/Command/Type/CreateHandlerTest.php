@@ -49,22 +49,23 @@ class CreateHandlerTest extends TestCase
         $expectedType->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
         $expectedType->getValidationCriteria()->setSheetAccepted(true);
         $expectedType->setSheetTemplate($expectedSheetTemplate);
-        $expectedType->setHidden(true);
+        $expectedType->update(null, true, true, 12);
         $expectedType->setRegistrationTemplate($expectedRegistrationTemplate);
         $expectedType->setPackage($package);
         $expectedType->setFormTemplates([$formTemplate1, $formTemplate2]);
-        $expectedType->setDisableUnavailabilityManagement(true);
 
         //Command
         $create = new Create($event, 'fr');
         $create->translations['fr']['title'] = 'toto';
         $create->validationCriteria['sheetAccepted'] = true;
-        $create->sheetTemplate        = $sheetTemplate;
+        $create->sheetTemplate = $sheetTemplate;
         $create->registrationTemplate = $registrationTemplate;
-        $create->package              = $package;
+        $create->package = $package;
         $create->formTemplates = [$formTemplate1, $formTemplate2];
-        $create->hidden               = true;
+        $create->hidden = true;
+        $create->rank = null;
         $create->enableUnavailabilityManagement = false;
+        $create->numberOfMeetingsPerPlanning = 12;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);

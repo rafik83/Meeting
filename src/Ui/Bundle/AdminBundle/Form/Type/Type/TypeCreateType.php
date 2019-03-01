@@ -70,6 +70,10 @@ class TypeCreateType extends AbstractType
             ->add('hidden', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('numberOfMeetingsPerPlanning', IntegerType::class, [
+                'required' => false,
+                'help' => 'form.type_create.children.numberOfMeetingsPerPlanning.help',
+            ])
             ->add('rank', IntegerType::class, [
                 'required' => false,
             ])

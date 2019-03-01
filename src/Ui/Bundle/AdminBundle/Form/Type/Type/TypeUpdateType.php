@@ -82,6 +82,10 @@ class TypeUpdateType extends AbstractType
             ->add('hidden', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('numberOfMeetingsPerPlanning', IntegerType::class, [
+                'required' => false,
+                'help' => 'form.type_update.children.numberOfMeetingsPerPlanning.help',
+            ])
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
             ])

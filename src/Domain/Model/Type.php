@@ -70,18 +70,21 @@ class Type implements WhoInterface, TypeInterface
     /** @var bool */
     private $disableUnavailabilityManagement = false;
 
+    /** @var int|null */
+    private $numberOfMeetingsPerPlanning;
+
     /**
      * @param Event $event
      */
     public function __construct(Event $event)
     {
-        $this->event              = $event;
-        $this->translations       = new ArrayCollection();
-        $this->categories         = new ArrayCollection();
-        $this->admins             = new ArrayCollection();
+        $this->event = $event;
+        $this->translations = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+        $this->admins = new ArrayCollection();
         $this->validationCriteria = new ValidationCriteria(false);
-        $this->paymentConditions  = new ArrayCollection();
-        $this->formTemplates      = new ArrayCollection();
+        $this->paymentConditions = new ArrayCollection();
+        $this->formTemplates = new ArrayCollection();
     }
 
     /**
@@ -394,5 +397,22 @@ class Type implements WhoInterface, TypeInterface
     public function setDisableUnavailabilityManagement(bool $disableUnavailabilityManagement): void
     {
         $this->disableUnavailabilityManagement = $disableUnavailabilityManagement;
+    }
+
+    public function update(
+        ?int $rank,
+        bool $hidden,
+        bool $disableUnavailabilityManagement,
+        ?int $numberOfMeetingsPerPlanning
+    ) {
+        $this->position = $rank;
+        $this->hidden = $hidden;
+        $this->disableUnavailabilityManagement = $disableUnavailabilityManagement;
+        $this->numberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning;
+    }
+
+    public function getNumberOfMeetingsPerPlanning(): ?int
+    {
+        return $this->numberOfMeetingsPerPlanning;
     }
 }

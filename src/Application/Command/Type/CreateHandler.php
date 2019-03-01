@@ -60,8 +60,12 @@ class CreateHandler
     public function handle(Create $create)
     {
         $type = new Type($create->event);
-        $type->setPosition($create->rank);
-        $type->setHidden($create->hidden);
+        $type->update(
+            $create->rank,
+            $create->hidden,
+            !$create->enableUnavailabilityManagement,
+            $create->numberOfMeetingsPerPlanning
+        );
 
         $localesTitleAlreadyExists = [];
 
@@ -85,7 +89,6 @@ class CreateHandler
         $type->setRegistrationTemplate($this->getRegistrationTemplate($create, $type));
         $type->setPackage($create->package);
         $type->setFormTemplates($create->formTemplates);
-        $type->setDisableUnavailabilityManagement(!$create->enableUnavailabilityManagement);
 
         $this->typeRepository->add($type);
 

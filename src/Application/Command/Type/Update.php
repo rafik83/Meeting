@@ -52,22 +52,26 @@ class Update implements Command
     /** @var bool */
     public $enableUnavailabilityManagement;
 
+    /** @var int|null */
+    public $numberOfMeetingsPerPlanning;
+
     /**
      * @param Type   $type
      * @param string $locale
      */
     public function __construct(Type $type, $locale)
     {
-        $this->sheetTemplate                       = $type->getSheetTemplate();
-        $this->package                             = $type->getPackage();
-        $this->registrationTemplate                = $type->getRegistrationTemplate();
-        $this->formTemplates                       = $type->getFormTemplates();
-        $this->locale                              = $locale;
-        $this->type                                = $type;
-        $this->rank                                = $type->getPosition();
+        $this->sheetTemplate = $type->getSheetTemplate();
+        $this->package = $type->getPackage();
+        $this->registrationTemplate = $type->getRegistrationTemplate();
+        $this->formTemplates = $type->getFormTemplates();
+        $this->locale = $locale;
+        $this->type = $type;
+        $this->rank = $type->getPosition();
         $this->validationCriteria['sheetAccepted'] = $type->getValidationCriteria()->isSheetAccepted();
-        $this->hidden                              = $type->isHidden();
-        $this->enableUnavailabilityManagement      = !$type->isDisableUnavailabilityManagement();
+        $this->hidden = $type->isHidden();
+        $this->enableUnavailabilityManagement = !$type->isDisableUnavailabilityManagement();
+        $this->numberOfMeetingsPerPlanning = $type->getNumberOfMeetingsPerPlanning();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [
