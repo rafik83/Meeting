@@ -46,6 +46,23 @@ class BooleanTemplateFilterRepository implements BooleanTemplateFilterRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function getByEventIdAndInformationType(int $eventId, string $informationType): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('booleanTemplateFilter')
+            ->from(BooleanTemplateFilter::class, 'booleanTemplateFilter', 'booleanTemplateFilter.templateKey')
+            ->where('booleanTemplateFilter.event = :event')
+            ->andWhere('booleanTemplateFilter.informationType = :informationType')
+            ->setParameters([
+                'event' => $eventId,
+                'informationType' => $informationType
+            ])
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\User\Event\PresenceDate\Persist;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Template\Form\FilledFormStepEvent;
 use Proximum\Vimeet\Application\Query\Template\Form\FormTemplateDataQuery;
+use Proximum\Vimeet\Application\Command\UserEventView\Update as UpdateUserEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class FillFormEventSubscriber implements EventSubscriberInterface
@@ -53,6 +54,13 @@ class FillFormEventSubscriber implements EventSubscriberInterface
                 $filledFormStepEvent->participant->getEvent(),
                 $filledFormStepEvent->participant->getUser(),
                 $templateData
+            )
+        );
+
+        $this->commandBus->handle(
+            new UpdateUserEvent(
+                $filledFormStepEvent->participant->getUser(),
+                $filledFormStepEvent->participant->getEvent()
             )
         );
     }

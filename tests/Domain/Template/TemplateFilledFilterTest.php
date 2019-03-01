@@ -29,14 +29,17 @@ class TemplateFilledFilterTest extends TestCase
         $uploadObject1->isFilter()->shouldBeCalled()->willReturn(true);
         $uploadObject1->getKey()->shouldBeCalled()->willReturn('211b2168');
         $uploadObject1->getFilterLabel()->shouldBeCalled()->willReturn('label 1');
+        $uploadObject1->getTags()->shouldBeCalled()->willReturn(['participant_data']);
 
         $uploadObject2->getFilterLabel()->shouldBeCalled()->willReturn('label 2');
         $uploadObject2->isFilter()->shouldBeCalled()->willReturn(true);
         $uploadObject2->getKey()->shouldBeCalled()->willReturn('0aea62b2');
+        $uploadObject2->getTags()->shouldBeCalled()->willReturn(['participant_data']);
 
         $uploadObject3->getFilterLabel()->shouldBeCalled()->willReturn('label 3');
         $uploadObject3->isFilter()->shouldBeCalled()->willReturn(true);
         $uploadObject3->getKey()->shouldBeCalled()->willReturn('ec74be5e');
+        $uploadObject3->getTags()->shouldBeCalled()->willReturn(['sheet_data']);
 
         $objects = [
             $uploadObject1->reveal(),
@@ -51,14 +54,23 @@ class TemplateFilledFilterTest extends TestCase
             0 => [
                 'key' => '211b2168',
                 'value' => 'label 1',
+                'tags' => [
+                    'participant_data'
+                ],
             ],
             1 => [
                 'key' => '0aea62b2',
                 'value' => 'label 2',
+                'tags' => [
+                    'participant_data'
+                ],
             ],
             2 => [
                 'key' => 'ec74be5e',
                 'value' => 'label 3',
+                'tags' => [
+                    'sheet_data'
+                ],
             ],
         ];
 
@@ -89,16 +101,19 @@ class TemplateFilledFilterTest extends TestCase
 
         $uploadObject1->getPath()->shouldBeCalled()->willReturn(null);
         $uploadObject1->hasTag(Tag::SHEET_DATA)->shouldBeCalled()->willReturn(true);
+        $uploadObject1->getTags()->shouldBeCalled()->willReturn([Tag::SHEET_DATA]);
         $uploadObject1->isFilter()->shouldBeCalled()->willReturn(true);
         $uploadObject1->getKey()->shouldBeCalled()->willReturn('211b2168');
 
         $uploadObject2->getPath()->shouldBeCalled()->willReturn('/tmp/path/to/file/2');
         $uploadObject2->hasTag(Tag::SHEET_DATA)->shouldBeCalled()->willReturn(true);
+        $uploadObject2->getTags()->shouldBeCalled()->willReturn([Tag::SHEET_DATA]);
         $uploadObject2->isFilter()->shouldBeCalled()->willReturn(true);
         $uploadObject2->getKey()->shouldBeCalled()->willReturn('0aea62b2');
 
         $uploadObject3->hasTag(Tag::SHEET_DATA)->shouldBeCalled()->willReturn(false);
         $uploadObject3->hasTag(Tag::PARTICIPANT_DATA)->shouldBeCalled()->willReturn(true);
+        $uploadObject3->getTags()->shouldBeCalled()->willReturn([Tag::SHEET_DATA, Tag::PARTICIPANT_DATA]);
         $uploadObject3->isFilter()->shouldBeCalled()->willReturn(true);
         $uploadObject3->getKey()->shouldBeCalled()->willReturn('ec74be5e');
 
@@ -115,14 +130,24 @@ class TemplateFilledFilterTest extends TestCase
             0 => [
                 'key' => '211b2168',
                 'status' => 'not_filled',
+                'tags' => [
+                    'sheet_data'
+                ]
             ],
             1 => [
                 'key' => '0aea62b2',
                 'status' => 'filled',
+                'tags' => [
+                    'sheet_data'
+                ]
             ],
             2 => [
                 'key' => 'ec74be5e',
                 'status' => 'partly_filled',
+                'tags' => [
+                    'sheet_data',
+                    'participant_data',
+                ]
             ],
         ];
 
@@ -140,12 +165,15 @@ class TemplateFilledFilterTest extends TestCase
         $uploadObject1->isFilter()->shouldBeCalled()->willReturn(true);
         $uploadObject1->getKey()->shouldBeCalled()->willReturn('211b2168');
         $uploadObject1->getFilterLabel()->shouldBeCalled()->willReturn('label 1');
+        $uploadObject1->getTags()->shouldBeCalled()->willReturn([Tag::SHEET_DATA]);
 
         $uploadObject2->getFilterLabel()->shouldBeCalled()->willReturn('label 2');
         $uploadObject2->isFilter()->shouldBeCalled()->willReturn(true);
+        $uploadObject2->getTags()->shouldBeCalled()->willReturn([Tag::SHEET_DATA]);
         $uploadObject2->getKey()->shouldBeCalled()->willReturn('0aea62b2');
 
         $uploadObject3->getFilterLabel()->shouldBeCalled()->willReturn('label 3');
+        $uploadObject3->getTags()->shouldBeCalled()->willReturn([Tag::SHEET_DATA]);
         $uploadObject3->isFilter()->shouldBeCalled()->willReturn(true);
         $uploadObject3->getKey()->shouldBeCalled()->willReturn('ec74be5e');
 
@@ -162,14 +190,23 @@ class TemplateFilledFilterTest extends TestCase
             0 => [
                 'key' => '211b2168',
                 'value' => 'label 1',
+                'tags' => [
+                    'sheet_data'
+                ]
             ],
             1 => [
                 'key' => '0aea62b2',
                 'value' => 'label 2',
+                'tags' => [
+                    'sheet_data'
+                ]
             ],
             2 => [
                 'key' => 'ec74be5e',
                 'value' => 'label 3',
+                'tags' => [
+                    'sheet_data'
+                ]
             ],
         ];
 

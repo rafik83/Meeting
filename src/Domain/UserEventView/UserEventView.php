@@ -42,6 +42,9 @@ class UserEventView
     /** @var bool */
     public $isVisioTested;
 
+    /** @var array */
+    public $templateObjectFilters = [];
+
     public function __construct(
         int $eventId,
         int $userId,
@@ -51,7 +54,8 @@ class UserEventView
         string $locale,
         bool $isVisio,
         bool $isVisioTested,
-        array $sheets
+        array $sheets,
+        array $templateObjectFilters
     ) {
         $this->id = self::generateId($eventId, $userId);
         $this->eventId = $eventId;
@@ -62,6 +66,7 @@ class UserEventView
         $this->locale = $locale;
         $this->isVisio = $isVisio;
         $this->isVisioTested = $isVisioTested;
+        $this->templateObjectFilters = $templateObjectFilters;
 
         $this->addSheets($sheets);
     }

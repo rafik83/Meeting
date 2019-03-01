@@ -15,12 +15,12 @@ use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\Participatio
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TemplateObjectFilterTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
 use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 use Proximum\Vimeet\Domain\ConditionRules\View\LogicalOperator\LogicalOperatorAnd;
 use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
-use Proximum\Vimeet\Domain\Model\Event;
 
 class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInterface
 {
@@ -39,18 +39,23 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
     /** @var ParticipationTypeTransformer */
     private $participationTypeTransformer;
 
+    /** @var TemplateObjectFilterTransformer */
+    private $templateObjectFilterTransformer;
+
     public function __construct(
         NullableTransformer $nullableTransformer,
         RadioTransformer $radioTransformer,
         TaggedNomenclatureTransformer $taggedNomenclatureTransformer,
         TextTransformer $textTransformer,
-        ParticipationTypeTransformer $participationTypeTransformer
+        ParticipationTypeTransformer $participationTypeTransformer,
+        TemplateObjectFilterTransformer $templateObjectFilterTransformer
     ) {
         $this->nullableTransformer = $nullableTransformer;
         $this->radioTransformer = $radioTransformer;
         $this->taggedNomenclatureTransformer = $taggedNomenclatureTransformer;
         $this->textTransformer = $textTransformer;
         $this->participationTypeTransformer = $participationTypeTransformer;
+        $this->templateObjectFilterTransformer = $templateObjectFilterTransformer;
     }
 
     public function transform(Condition $condition): array
@@ -108,6 +113,10 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
             );
 
             return $this->participationTypeTransformer->transform($field);
+        }
+
+        if ($this->templateObjectFilterTransformer->supports($field)) {
+            return $this->templateObjectFilterTransformer->transform($field);
         }
 
         if ($this->nullableTransformer->supports($field)) {

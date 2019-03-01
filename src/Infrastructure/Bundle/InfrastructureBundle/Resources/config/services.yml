@@ -1330,6 +1330,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_indexer'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Index }
 
@@ -2217,6 +2218,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@catalog.tagged_nomenclature_filter_getter'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
@@ -2231,6 +2233,7 @@ services:
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TemplateObjectFilterTransformer'
 
     Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
         arguments:
@@ -2252,6 +2255,7 @@ services:
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer: ~
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\RadioTransformer: ~
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TemplateObjectFilterTransformer: ~
 
     command.product.remove.remove_handler:
         class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler
@@ -2694,6 +2698,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\UserEvent\UserEventViewRepository'
             - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\Adapter\QueryBusInterface'
+            - '@Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository'
 
     #
     # Token component
@@ -3657,6 +3663,13 @@ services:
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery }
+
+    Proximum\Vimeet\Application\Query\Event\Filter\GetTemplateFiltersQueryHandler:
+        arguments:
+            - '@repository.filter.boolean_template_filter_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Filter\FilledTemplateFilterRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\Filter\GetTemplateFiltersQuery }
 
     Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQueryHandler:
         arguments:

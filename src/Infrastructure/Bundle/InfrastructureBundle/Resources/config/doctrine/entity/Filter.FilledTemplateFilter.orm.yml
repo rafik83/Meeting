@@ -11,6 +11,9 @@ Proximum\Vimeet\Domain\Model\Filter\FilledTemplateFilter:
             type: string
         label:
             type: string
+        informationType:
+            type: string
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

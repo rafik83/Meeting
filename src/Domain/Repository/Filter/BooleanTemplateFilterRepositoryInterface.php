@@ -22,6 +22,8 @@ interface BooleanTemplateFilterRepositoryInterface
      */
     public function getByEvent(Event $event);
 
+    public function getByEventIdAndInformationType(int $eventId, string $informationType): array;
+
     /**
      * @param Event $event
      */
