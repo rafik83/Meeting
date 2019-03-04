@@ -64,7 +64,8 @@ class CreateHandler
             $create->rank,
             $create->hidden,
             $create->availabilityType,
-            $create->numberOfMeetingsPerPlanning
+            $create->numberOfMeetingsPerPlanning,
+            $create->canMoveMeeting
         );
 
         $localesTitleAlreadyExists = [];
