@@ -17,6 +17,8 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConvert
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -136,7 +138,7 @@ class LeniUserCustomDataQueryHandler
 
     private function handleProductsData(Event $event, User $user, array &$customData): void
     {
-        $products = array_merge(
+        $productIds = array_merge(
             $this->productAttributedToParticipantRepository->findProductIdsAttributedByUserAndEvent(
                 $user,
                 $event
@@ -147,7 +149,7 @@ class LeniUserCustomDataQueryHandler
             )
         );
 
-        foreach ($products as $product) {
+        foreach ($productIds as $product) {
             $customData[LeniConstants::DATA_MAPPING_FORMAT_PRODUCTS][$product['id']] = true;
         }
     }

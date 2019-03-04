@@ -670,11 +670,13 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->createQueryBuilder()
             ->select('participantProduct.id')
             ->from(Participant::class, 'participant')
-            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event and participant.user = :user')
             ->join('participant.participantProduct', 'participantProduct')
-            ->where('participant.user = :user')
-            ->setParameter('user', $user)
-            ->setParameter('event', $event)
+            ->setParameters([
+                'user' => $user,
+                'event' => $event,
+            ])
+            ->groupBy('participantProduct.id')
             ->getQuery()
             ->getResult();
     }

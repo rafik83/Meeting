@@ -48,8 +48,8 @@ class LeniUserViewNormalizer
             $data[LeniConstants::LENI_LEADER_ID] = $userView->leaderView->leniUserId;
             $data[LeniConstants::LENI_LEADER_SHEET_NAME] = self::longTruncate($userView->leaderView->sheetName);
             $data[LeniConstants::LENI_LEADER_EMAIL] = self::longTruncate($userView->leaderView->email);
-            $data[LeniConstants::LENI_LEADER_LAST_NAME] = self::longTruncate($userView->leaderView->lastName);
-            $data[LeniConstants::LENI_LEADER_FIRST_NAME] = self::longTruncate($userView->leaderView->firstName);
+            $data[LeniConstants::LENI_LEADER_LAST_NAME] = self::longTruncate($userView->leaderView->lastName ?? '');
+            $data[LeniConstants::LENI_LEADER_FIRST_NAME] = self::longTruncate($userView->leaderView->firstName ?? '');
         }
 
         // Custom data
