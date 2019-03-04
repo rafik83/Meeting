@@ -19,6 +19,7 @@
     },
     "require": {
         "php": "^7.2",
+        "ext-json": "*",
         "symfony/symfony": "^3.4.21",
         "doctrine/orm": "^2.6.1",
         "doctrine/doctrine-bundle": "~1.6",
