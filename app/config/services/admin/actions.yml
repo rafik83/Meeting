@@ -915,3 +915,17 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AssignRoomNumberAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export\ExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@router.default'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Application\Command\Product\Export\ExportProductsJobCreatorHandler'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export\ExportFileAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.file_system_adapter'
+            - '%infrastructure.export_products_path%'

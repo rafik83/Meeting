@@ -115,6 +115,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Order\RowRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.order_promotion_code_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Order\PromotionCodeRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.product_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\ProductRepository
         arguments:
@@ -1801,6 +1805,15 @@ services:
         class: Proximum\Vimeet\Application\Command\Order\FindHandler
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+    command.order.fix_promotion_order_products_handler:
+        class: Proximum\Vimeet\Application\Command\Order\FixPromotionOrderProductsHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@adapter.entity_manager_adapter'
+            - '@Proximum\Vimeet\Application\Components\Order\OrderHelper'
+            - '@Proximum\Vimeet\Application\Components\Order\FixProductPromotionCodes\ProductPromotionCodesFixStrategyGuesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\FixPromotionOrderProducts }
     command.invoice.find_handler:
         class: Proximum\Vimeet\Application\Command\Invoice\FindHandler
         arguments:
@@ -3902,6 +3915,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Product\ProductsViewQuery }
 
+    query.product.products_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Product\ProductsListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+            - '@vimeet_infrastructure.repository.order_row_repository'
+            - '@vimeet_infrastructure.repository.order_promotion_code_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Product\ProductsListViewQuery }
+
     query.register.pre_fill_user_data_handler:
         class: Proximum\Vimeet\Application\Query\Register\PreFillUserDataHandler
         arguments:
@@ -4542,7 +4564,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\Find\MultipleSheetFoundViewQuery }
 
-
     #
     # Order Export Queries
     #
@@ -4746,6 +4767,13 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand
         arguments:
             - '@command.order.export.export_orders_handler'
+        tags:
+            - { name: console.command }
+
+    command.order.fix_order_promotion_code_products:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\FixProductToOrderPromotionCodeCommand
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: console.command }
 

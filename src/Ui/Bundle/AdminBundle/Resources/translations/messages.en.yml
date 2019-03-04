@@ -708,6 +708,7 @@ admin.product.type.planning: Planning
 admin.product.unitPrice: 'Unit price'
 admin.product.updatable: Deletable
 admin.product.update.action: Modify
+admin.product.export.button.label: Export products
 admin.promotion_code.action.close: Close
 admin.promotion_code.error.non_unique_code: 'This code is already used'
 admin.promotion_code.link: 'Promotion codes'

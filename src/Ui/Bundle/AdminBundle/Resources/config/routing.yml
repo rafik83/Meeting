@@ -1298,6 +1298,21 @@ admin_product_remove:
     methods: [DELETE]
     defaults: { _controller: AdminBundle:Product/Remove:remove }
 
+admin_product_export:
+    path: /event/{event}/product/export
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export\ExportAction
+
+admin_product_export_file:
+    path: /event/{event}/product/export/link/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export\ExportFileAction
+
 #
 # Organizer
 #

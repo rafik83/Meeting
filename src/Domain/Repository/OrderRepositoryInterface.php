@@ -103,5 +103,10 @@ interface OrderRepositoryInterface
      */
     public function hasInvoice(Sheet $sheet);
 
+    /**
+     * @return Order[]
+     */
+    public function findWithPromotion(): array;
+
     public function hasOrderWithPromotionCode(PromotionCode $promotionCode): bool;
 }

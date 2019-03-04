@@ -43,6 +43,7 @@ class InfrastructureExtension extends Extension
         $container->setParameter('infrastructure.print_sheet_path', $config['print_sheet_path']);
         $container->setParameter('infrastructure.export_transactions_path', $config['export_transactions_path']);
         $container->setParameter('infrastructure.export_order_path', $config['export_order_path']);
+        $container->setParameter('infrastructure.export_products_path', $config['export_products_path']);
         $container->setParameter('infrastructure.export_omz_path', $config['export_omz_path']);
         $container->setParameter('infrastructure.export_spot_path', $config['export_spot_path']);
         $container->setParameter('infrastructure.export_form_template_user_data_path', $config['export_form_template_user_data_path']);

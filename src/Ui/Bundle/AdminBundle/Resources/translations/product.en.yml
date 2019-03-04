@@ -1,0 +1,7 @@
+export.product.name : 'Name'
+export.product.unitPrice : 'Unit price'
+export.product.quantityUnit : 'Quantity sold unit'
+export.product.quantityPlan : 'Quantity sold with pack'
+export.product.quantityTotal : 'Total quantity'
+export.product.promotion : 'Promotion code'
+export.product.sales : "Sale generated"

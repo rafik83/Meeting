@@ -39,7 +39,7 @@ class OrderRepository implements OrderRepositoryInterface
     public function __construct(EntityManager $entityManager, Paginator $paginator)
     {
         $this->entityManager = $entityManager;
-        $this->paginator     = $paginator;
+        $this->paginator = $paginator;
     }
 
     /**
@@ -286,5 +286,24 @@ class OrderRepository implements OrderRepositoryInterface
             ->setMaxResults(1);
 
         return (null === $queryBuilder->getQuery()->getOneOrNullResult()) ? false : true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findWithPromotion(): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order', 'promotionCodes')
+            ->from(Order::class, '_order')
+            ->join('_order.promotionCodes', 'promotionCodes')
+            ->where('_order.cancelled = false')
+            ->andWhere('EXISTS(SELECT 1
+                                FROM Entity:Order\PromotionCode promo
+                                WHERE promo.order = _order)');
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

@@ -167,6 +167,7 @@ class Converter
                     $order,
                     $promotionCodeRow->getPromotionCode(),
                     $discount,
+                    $promotion->getProduct(),
                     $promotion->getProduct()->getVat()
                 );
             }

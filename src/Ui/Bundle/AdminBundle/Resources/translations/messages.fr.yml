@@ -713,6 +713,7 @@ admin.product.type.planning: Planning
 admin.product.unitPrice: 'Prix unitaire'
 admin.product.updatable: Supprimable
 admin.product.update.action: Modifier
+admin.product.export.button.label: Exporter les produits
 admin.promotion_code.action.close: Fermer
 admin.promotion_code.error.non_unique_code: 'Ce code est déjà utilisé'
 admin.promotion_code.link: 'Codes promos'

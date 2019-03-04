@@ -69,7 +69,7 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEventOrderedByProductTypeAndProductname(Event $event): array
+    public function findByEventOrderedByProductTypeAndProductName(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager

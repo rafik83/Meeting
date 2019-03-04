@@ -81,6 +81,12 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Product\ProductsExportNormalizer:
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }
+
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Rooming\ExportList\RoomingListViewNormalizer:
         arguments:
            - '@translator'

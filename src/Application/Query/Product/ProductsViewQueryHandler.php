@@ -52,7 +52,7 @@ class ProductsViewQueryHandler
         $productViews = [];
         $bought = [];
         $productIncludedBought = [];
-        $products = $this->productRepository->findByEventOrderedByProductTypeAndProductname($query->event);
+        $products = $this->productRepository->findByEventOrderedByProductTypeAndProductName($query->event);
         $this->removeAuthorizationChecker->preloadForEvent($query->event);
 
         foreach ($products as $product) {

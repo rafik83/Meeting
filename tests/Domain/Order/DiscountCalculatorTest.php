@@ -43,7 +43,7 @@ class DiscountCalculatorTest extends TestCase
         $row2 = new Order\Row($order, 2, 20, $product2, null, null, 200, null);
         $row3 = new Order\Row($order, 1, 20, $product3, null, null, 150, null);
         $row4 = new Order\Row($order, 2, 20, $product4, null, null, 160, null);
-        $promotionCodeRow = new Order\PromotionCode($order, $promotionCode, -100, 20);
+        $promotionCodeRow = new Order\PromotionCode($order, $promotionCode, -100, $product1, 20);
         $order->addRow($row1);
         $order->addRow($row2);
         $order->addRow($row3);

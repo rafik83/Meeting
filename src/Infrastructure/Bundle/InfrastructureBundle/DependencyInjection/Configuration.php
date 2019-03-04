@@ -49,6 +49,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('print_sheet_path')->end()
                 ->scalarNode('export_transactions_path')->end()
                 ->scalarNode('export_order_path')->end()
+                ->scalarNode('export_products_path')->end()
                 ->scalarNode('export_planner_path')->end()
                 ->scalarNode('import_planner_path')->end()
                 ->scalarNode('export_omz_path')->end()

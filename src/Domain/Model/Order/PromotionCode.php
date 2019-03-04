@@ -33,18 +33,22 @@ class PromotionCode
     /** @var float */
     private $vatRate;
 
+    /** @var Model\Product */
+    private $product;
+
     /**
      * @param Order               $order
      * @param Model\PromotionCode $promotionCode
      * @param float               $price
      * @param float               $vatRate
      */
-    public function __construct(Order $order, Model\PromotionCode $promotionCode, float $price, float $vatRate)
+    public function __construct(Order $order, Model\PromotionCode $promotionCode, float $price, Model\Product $product, float $vatRate)
     {
         $this->order = $order;
         $this->promotionCode = $promotionCode;
         $this->data = $promotionCode->getSerializedData();
         $this->price = $price;
+        $this->product = $product;
         $this->vatRate = $vatRate;
     }
 
@@ -93,6 +97,18 @@ class PromotionCode
     }
 
     /**
+     * @param float $price
+     *
+     * @return PromotionCode
+     */
+    public function setPrice(float $price): PromotionCode
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    /**
      * @return float
      */
     public function getVatRate(): float
@@ -107,7 +123,12 @@ class PromotionCode
     {
         return $this->promotionCode;
     }
-
+    
+    public function getProduct(): Model\Product
+    {
+        return $this->product;
+    }
+    
     /**
      * @param string      $locale
      * @param string|null $fallback
@@ -128,6 +149,18 @@ class PromotionCode
     public function getDescription($locale, $fallback = null): string
     {
         return $this->getTranslatedValueOfData('description', $locale, $fallback);
+    }
+
+    /**
+     * @param Model\Product $product
+     *
+     * @return $this
+     */
+    public function setProduct(Model\Product $product): self
+    {
+        $this->product = $product;
+
+        return $this;
     }
 
     /**
