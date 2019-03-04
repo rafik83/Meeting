@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\CreateUnavailabilities;
 use Proximum\Vimeet\Application\Command\Unavailability\RemoveUserUnavailabilities;
+use Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled;
 use Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled;
 use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResultsView;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -28,15 +29,20 @@ class CreateUnavailabilitiesAction
     
     /** @var HasUnavailabilityManagementDisabled */
     private $hasUnavailabilityManagementDisabled;
-    
+
+    /** @var HasAvailabilityManagementEnabled */
+    private $hasAvailabilityManagementEnabled;
+
     public function __construct(
         CommandBusInterface $commandBus,
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        HasUnavailabilityManagementDisabled $hasUnavailabilityManagementDisabled
+        HasUnavailabilityManagementDisabled $hasUnavailabilityManagementDisabled,
+        HasAvailabilityManagementEnabled $hasAvailabilityManagementEnabled
     ) {
         $this->commandBus = $commandBus;
         $this->authorizationChecker = $authorizationChecker;
         $this->hasUnavailabilityManagementDisabled = $hasUnavailabilityManagementDisabled;
+        $this->hasAvailabilityManagementEnabled = $hasAvailabilityManagementEnabled;
     }
     
     public function __invoke(
@@ -52,8 +58,9 @@ class CreateUnavailabilitiesAction
         if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationChecker->isGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet)
             || !$this->authorizationChecker->isGranted(AgendaAccessVoter::PERMISSION, $event)
-            || true === $this->hasUnavailabilityManagementDisabled->isSatisfiedBy($sheet)
             || null === $sheet->getParticipants()
+            || !(!$this->hasUnavailabilityManagementDisabled->isSatisfiedBy($sheet)
+                || $this->hasAvailabilityManagementEnabled->isSatisfiedBy($sheet))
         ) {
             throw new AccessDeniedHttpException();
         }

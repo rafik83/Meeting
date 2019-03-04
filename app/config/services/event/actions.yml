@@ -171,3 +171,4 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled'
+            - '@Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled'
