@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
-class UpdateSlot
+class UpdateSlot implements Command
 {
     /** @var Meeting */
     public $meeting;

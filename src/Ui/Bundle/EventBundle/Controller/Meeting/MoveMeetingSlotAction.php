@@ -5,10 +5,12 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Move;
-use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
-use Proximum\Vimeet\Application\View\Agenda\Admin\MeetingUpdateSlotView;
+use Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsQuery;
+use Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsView;
+use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MeetingSlot\MoveMeetingSlotType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -33,33 +35,40 @@ class MoveMeetingSlotAction
 
     /** @var QueryBusInterface */
     private $queryBus;
+    /** @var GetTimezoneHelper */
+    private $getTimezoneHelper;
 
     public function __construct(
         CanMoveMeeting $canMoveMeeting,
         FormFactoryInterface $formFactory,
         EngineInterface $engine,
         CommandBusInterface $commandBus,
-        QueryBusInterface $queryBus
+        QueryBusInterface $queryBus,
+        GetTimezoneHelper $getTimezoneHelper
     ) {
         $this->canMoveMeeting = $canMoveMeeting;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
         $this->commandBus = $commandBus;
         $this->queryBus = $queryBus;
+        $this->getTimezoneHelper = $getTimezoneHelper;
     }
 
-    public function __invoke(Request $request, Sheet $sheet, Meeting $meeting): Response
+    public function __invoke(Request $request, Participant $participant, Sheet $sheet, Meeting $meeting): Response
     {
         if (false === $this->canMoveMeeting->isSatisfiedBy($sheet)) {
             throw new AccessDeniedException();
         }
 
-        /** @var MeetingUpdateSlotView $meetingUpdateSlotView */
-        $meetingUpdateSlotView = $this->queryBus->handle(new MeetingUpdateSlotViewQuery($meeting));
+        $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
 
-        $move = new Move();
+        /** @var GetAvailableSlotsView $availableSlotsView */
+        $availableSlotsView = $this->queryBus->handle(new GetAvailableSlotsQuery($meeting));
+
+        $move = new Move($sheet, $meeting);
         $form = $this->formFactory->create(MoveMeetingSlotType::class, $move, [
-            'availableSlotIds' => $meetingUpdateSlotView->availableSlotsId,
+            'availableSlots' => $availableSlotsView->availableSlots,
+            'timezone' => $timezone,
         ]);
 
         $form->handleRequest($request);

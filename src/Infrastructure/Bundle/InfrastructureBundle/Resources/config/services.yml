@@ -1602,6 +1602,12 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
+    Proximum\Vimeet\Application\Command\MeetingSlot\MoveHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\MoveHandler }
     command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:

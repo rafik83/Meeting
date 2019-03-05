@@ -779,8 +779,9 @@ event_agenda_participant:
     defaults: { _controller: EventBundle:Agenda:participant }
 
 event_agenda_move_meeting_slot:
-    path: /sheet/{sheet}/agenda/meeting/{meeting}/move-meeting-slot
+    path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/move-meeting-slot
     requirements:
+        participant: \d+
         sheet: \d+
         meeting: \d+
     methods: [GET, POST]

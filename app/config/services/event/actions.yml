@@ -66,6 +66,7 @@ services:
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
 
     #
     # Form Template
