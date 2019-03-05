@@ -59,11 +59,13 @@ services:
     #
     # Meeting
     #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingAction:
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingSlotAction:
         arguments:
             - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
             - '@form.factory'
             - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # Form Template

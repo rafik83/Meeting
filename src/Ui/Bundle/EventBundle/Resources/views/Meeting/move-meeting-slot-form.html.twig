@@ -1,4 +1,4 @@
-{# form_theme form_unavailability with ['@Ui/default.html.twig'] only #}
+{% form_theme form with ['@Ui/default.html.twig'] only %}
 
 <div class="modal-header">
     <h4 class="modal-title">
@@ -7,13 +7,18 @@
     </h4>
 </div>
 
+{{ form_start(form) }}
 <div class="modal-body">
     <div class="row">
-        <div class="row">
-            <div class="col-md-2 text-center">Label</div>
-            <div class="col-md-6">
-                widget
-            </div>
+        <div class="col-md-2 text-center">{{ form_label(form.slotId) }}</div>
+        <div class="col-md-6">
+            {{ form_widget(form.slotId) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-center">{{ form_label(form.comment) }}</div>
+        <div class="col-md-6">
+            {{ form_widget(form.comment) }}
         </div>
     </div>
 </div>
@@ -25,3 +30,4 @@
         </button>
     </button>
 </div>
+{{ form_end(form) }}
