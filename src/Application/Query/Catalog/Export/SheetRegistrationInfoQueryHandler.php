@@ -55,7 +55,7 @@ class SheetRegistrationInfoQueryHandler
                 $this->sheetRegistrationFields[$key] = $fieldName;
             }
 
-            $content = $object->getExportableContent([], $query->locale);
+            $content = $object->getExportableContent([], $query->locale, false);
 
             if ($object instanceof TemplateObject\Gender) {
                 $content = $this->translator->trans(

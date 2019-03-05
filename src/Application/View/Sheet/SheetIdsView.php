@@ -14,10 +14,9 @@ class SheetIdsView
 {
     /** @var int[] Sheet id */
     public $sheetIds;
+    /*** @var bool */
+    public $displayNomenclatureIds;
 
-    /**
-     * @param int[] $sheetIds
-     */
     public function __construct(array $sheetIds)
     {
         $this->sheetIds = $sheetIds;

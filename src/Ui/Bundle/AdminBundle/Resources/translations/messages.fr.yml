@@ -920,6 +920,7 @@ admin.sheet.export.meetings.button.label: 'Exporter RDV'
 admin.sheet.export.no: Non
 admin.sheet.export.participant.button.label: 'Exporter participants'
 admin.sheet.export.sheet.button.label: 'Exporter fiches'
+admin.sheet.export.sheet.id.nomenclature.button.label: 'Exporter fiches avec ids'
 admin.sheet.export.uploaded_objects.button.label: 'Exporter les fichiers uploadés'
 admin.sheet.export.yes: Oui
 admin.sheet.filter.has_cart: 'Fiche avec panier'

@@ -211,6 +211,18 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
+     * Get the keys of all the items
+     *
+     * @param null $locale
+     *
+     * @return array|null
+     */
+    public function getNomenclatureKeys($locale = null)
+    {
+        return $this->nomenclature->getKeys($locale ?: $this->locale);
+    }
+
+    /**
      * @deprecated use getNomenclatureLabelOfItems with implode
      *
      * @return null|string
@@ -355,16 +367,25 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         return $this->getLabel($locale, $fallback);
     }
 
+    public function getExportableContent(array $taggedData = [], ?string $locale = null){
+        return $this->getNomenclatureItems();
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent(array $taggedData = [], ?string $locale = null)
+    public function getNomenclatureItems(bool $displayNomenclatureIds = false)
     {
         if (empty($this->getItems())) {
             return '';
         }
 
-        $nomenclatureLabels = $this->getNomenclatureLabels();
+        if ($displayNomenclatureIds) {
+            $nomenclatureLabels = $this->getNomenclatureKeys();
+        }else {
+            $nomenclatureLabels = $this->getNomenclatureLabels();
+        }
+
         // Leaf elements are the ones with the longest path (max depth):
         $maxDepth = 1;
         $allItemPaths = [];
@@ -375,8 +396,8 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
                     implode(
                         ', ',
                         array_map(
-                            function ($subItem) {
-                                return $this->getLabelForKey($subItem);
+                            function ($subItem) use ($displayNomenclatureIds) {
+                                return $displayNomenclatureIds ? $subItem : $this->getLabelForKey($subItem);
                             },
                             $item
                         )

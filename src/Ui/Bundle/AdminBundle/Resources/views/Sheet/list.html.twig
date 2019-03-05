@@ -16,6 +16,10 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li>
+                        <a href="{{ path('admin_sheet_export_sheet', { 'event': event.id, displayNomenclatureIds: 'true' }) }}">
+                            {{ 'admin.sheet.export.sheet.id.nomenclature.button.label'|trans }}
+                        </a>
+                    </li><li>
                         <a href="{{ path('admin_sheet_export_sheet', { 'event': event.id }) }}">
                             {{ 'admin.sheet.export.sheet.button.label'|trans }}
                         </a>

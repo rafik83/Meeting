@@ -297,6 +297,52 @@ class Nomenclature
     }
 
     /**
+     *
+     */
+    public function getKeys($locale){
+        $keys = [];
+
+        if (3 === $this->depth) {
+            foreach ($this->getValue() as $key => $item) {
+                if (!isset($item['children'])) {
+                    continue;
+                }
+
+                foreach ($item['children'] as $keyChild => $secondDepth) {
+                    $keys[$key][$keyChild] = array_map(
+                        function ($value) use ($keyChild) {
+                            return isset($keyChild) ? $keyChild : '';
+                        },
+                        $secondDepth['children']
+                    );
+                }
+            }
+
+            return $keys;
+        } elseif (2 === $this->depth) {
+            foreach ($this->getValue() as $keyTwo => $item) {
+                if (!isset($item['children'])) {
+                    continue;
+                }
+
+                $keys[$item['label'][$locale]] = array_map(function ($value) use ($locale) {
+                    return isset($item['label'][$locale]) ? $value['label'][$locale] : '';
+                }, $item['children']);
+            }
+
+            return $keys;
+        } elseif (1 === $this->depth) {
+            $keys= array_map(function ($value) use ($locale) {
+                return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
+            }, $this->getValue());
+
+            return $keys;
+        }
+
+        return [];
+    }
+
+    /**
      * @param string $locale
      *
      * @return array

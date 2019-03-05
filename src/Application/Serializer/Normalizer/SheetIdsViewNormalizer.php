@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
@@ -325,8 +326,19 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
                 $this->sheetFields[$key] = $fieldName;
             }
 
-            $rawData[$key] = $presentationObject->getExportableContent($taggedData);
+            $rawData[$key] = $this->getExportableContent($presentationObject, array('taggedData' => $taggedData, 'displayNomenclatureIds' => true ));
         }
+    }
+
+    private function getExportableContent(ExportableObjectInterface $exportableObject, array $context)
+    {
+        $displayNomenclatureIds = $context['displayNomenclatureIds'] ?? false;
+
+        if ($exportableObject instanceof Nomenclature && $displayNomenclatureIds) {
+            return $exportableObject->getNomenclatureItems($displayNomenclatureIds);
+        }
+
+        return $this->getExportableContent($exportableObject, $context);
     }
 
     /**
@@ -350,9 +362,10 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
                     $this->registrationFields[$key] = $fieldName;
                 }
 
-                $rawData[$key] = $registrationObject->getExportableContent();
-            }
+                $rawData[$key] = $this->getExportableContent($registrationObject, []);
         }
+        }
+
     }
 
     /**
