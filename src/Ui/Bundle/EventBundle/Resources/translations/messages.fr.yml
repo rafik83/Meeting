@@ -15,6 +15,8 @@ agenda.availability.available_sheets_with_proposition: '{1} Voir une proposition
 agenda.day.hide: 'Cacher cette journée'
 agenda.day.see: 'Voir la journée'
 agenda.meeting.details: Details
+agenda.meeting.move.button: 'Déplacer le RDV'
+agenda.meeting.move.back: 'Retour'
 agenda.participant.view: 'Agenda de %participant%'
 agenda.title: 'Mon agenda'
 agenda.unavailability.add: 'Ajouter une indisponibilité'

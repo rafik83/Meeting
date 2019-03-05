@@ -5,23 +5,35 @@ var EventEmitter = require('./_EventEmitter');
  *
  * @param {Agenda} agenda
  * @param {Element} element
+ * @param {Element} modal
  */
-function Meet(agenda, element) {
+function Meet(agenda, element, modal) {
     EventEmitter.call(this, element);
 
-    this.agenda   = agenda;
-    this.header   = this.element.querySelector('header');
-    this.details  = this.element.querySelector('.details');
+    this.modal = modal;
+    this.agenda = agenda;
+    this.header = this.element.querySelector('header');
+    this.details = this.element.querySelector('.details');
+    this.moveMeetingAction = this.element.querySelector('.moveMeetingAction');
     this.duration = this.agenda.getDuration(this.element.getAttribute('data-duration'));
-    this.start    = this.agenda.getRelativeTime(this.agenda.parseTime(this.element.getAttribute('data-beginhour')));
-    this.end      = this.start + this.duration;
-    this.slots    = [];
-    this.scale    = 1;
-    this.layer    = 0;
-    this.open     = false;
+    this.start = this.agenda.getRelativeTime(this.agenda.parseTime(this.element.getAttribute('data-beginhour')));
+
+    this.end = this.start + this.duration;
+    this.slots = [];
+    this.scale = 1;
+    this.layer = 0;
+    this.open = false;
+
+    if (null !== this.moveMeetingAction) {
+        this.moveMeetingAction.addEventListener('click', function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            this.onMoveMeeting();
+        }.bind(this), false);
+    }
 
     this.toggleOpen = this.toggleOpen.bind(this);
-    this.setLayer   = this.setLayer.bind(this);
+    this.setLayer = this.setLayer.bind(this);
 
     if (this.element.classList.contains('has-details')) {
         this.header.addEventListener('click', this.toggleOpen);
@@ -39,12 +51,50 @@ Meet.prototype.constructor = Meet;
  */
 Meet.prototype.margin = 3;
 
+Meet.prototype.onMoveMeeting = function () {
+    this.moveMeetingAction.disabled = true;
+    this.moveMeetingAction.classList.add('disabled');
+    this.handleRequestMoveMeetingButton();
+};
+
+Meet.prototype.handleRequestMoveMeetingButton = function () {
+    var href = this.moveMeetingAction.getAttribute('href');
+
+    $.get(href, function (response) {
+        this.enableMoveMeetingAction();
+        this.showModal(response);
+    }.bind(this)).fail(function () {
+        this.enableParticipateAction();
+    }.bind(this));
+};
+
+Meet.prototype.enableMoveMeetingAction = function () {
+    this.moveMeetingAction.disabled = false;
+    this.moveMeetingAction.classList.remove('disabled');
+};
+
+Meet.prototype.showModal = function (html) {
+    var modal = $(this.modal);
+    modal.modal().show();
+
+    var content = modal.find('.modal-content');
+    content.html(html);
+
+    var form = content.find('form');
+
+    $(form).on('submit', function () {
+        this.handleRequestForm(form);
+
+        return false;
+    }.bind(this));
+};
+
 /**
  * Display
  */
-Meet.prototype.display = function() {
-    this.element.style.top   = this.getTop() + 'px';
-    this.element.style.left  = this.getLeft() + '%';
+Meet.prototype.display = function () {
+    this.element.style.top = this.getTop() + 'px';
+    this.element.style.left = this.getLeft() + '%';
     this.element.style.width = this.getWidth() + '%';
     this.header.style.height = (this.getHeight() - this.margin) + 'px';
 
@@ -69,7 +119,7 @@ Meet.prototype.display = function() {
  *
  * @param {Event} event
  */
-Meet.prototype.toggleOpen = function(event) {
+Meet.prototype.toggleOpen = function (event) {
     if (typeof event !== 'undefined') {
         event.preventDefault();
     }
@@ -81,14 +131,14 @@ Meet.prototype.toggleOpen = function(event) {
 /**
  * Close
  */
-Meet.prototype.close = function() {
+Meet.prototype.close = function () {
     this.open = false;
 };
 
 /**
  * Update scale
  */
-Meet.prototype.updateScale = function() {
+Meet.prototype.updateScale = function () {
     var scale = this.resolveScale();
 
     if (scale !== this.scale) {
@@ -102,7 +152,7 @@ Meet.prototype.updateScale = function() {
  *
  * @return {Number}
  */
-Meet.prototype.resolveScale = function() {
+Meet.prototype.resolveScale = function () {
     if (!this.open) {
         return 1;
     }
@@ -115,7 +165,7 @@ Meet.prototype.resolveScale = function() {
  *
  * @return {Boolean}
  */
-Meet.prototype.isOpen = function() {
+Meet.prototype.isOpen = function () {
     return this.open;
 };
 
@@ -124,7 +174,7 @@ Meet.prototype.isOpen = function() {
  *
  * @return {Number}
  */
-Meet.prototype.getTop = function() {
+Meet.prototype.getTop = function () {
     return this.agenda.getY(this.start);
 };
 
@@ -133,7 +183,7 @@ Meet.prototype.getTop = function() {
  *
  * @return {Number}
  */
-Meet.prototype.getLeft = function() {
+Meet.prototype.getLeft = function () {
     if (!this.group) {
         return 0;
     }
@@ -146,7 +196,7 @@ Meet.prototype.getLeft = function() {
  *
  * @return {Number}
  */
-Meet.prototype.getWidth = function() {
+Meet.prototype.getWidth = function () {
     if (!this.group) {
         return 100;
     }
@@ -159,7 +209,7 @@ Meet.prototype.getWidth = function() {
  *
  * @return {Number}
  */
-Meet.prototype.getHeight = function() {
+Meet.prototype.getHeight = function () {
     return this.agenda.getY(this.end) - this.agenda.getY(this.start);
 };
 
@@ -168,7 +218,7 @@ Meet.prototype.getHeight = function() {
  *
  * @param {Group} group
  */
-Meet.prototype.setGroup = function(group) {
+Meet.prototype.setGroup = function (group) {
     this.group = group;
 };
 
@@ -177,7 +227,7 @@ Meet.prototype.setGroup = function(group) {
  *
  * @param {Number} layer
  */
-Meet.prototype.setLayer = function(layer) {
+Meet.prototype.setLayer = function (layer) {
     this.layer = layer;
 };
 
@@ -188,7 +238,7 @@ Meet.prototype.setLayer = function(layer) {
  *
  * @return {Boolean}
  */
-Meet.prototype.overlap = function(meet) {
+Meet.prototype.overlap = function (meet) {
     return this.timeOverlarp(meet.start, meet.end);
 };
 
@@ -200,7 +250,7 @@ Meet.prototype.overlap = function(meet) {
  *
  * @return {Boolean}
  */
-Meet.prototype.timeOverlarp = function(from, to) {
+Meet.prototype.timeOverlarp = function (from, to) {
     return this.start < to && this.end > from;
 };
 

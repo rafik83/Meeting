@@ -47,9 +47,9 @@
             </a>
 
             {% if canMoveMeeting %}
-            <a>
-                <i class="icon icon-Transferer"></i> Déplacer le RDV
-            </a>
+                <a class="moveMeetingAction" href="{{ path('event_agenda_move_meeting', {'sheet': sheetId, 'meeting': meeting.id}) }}">
+                    <i class="icon icon-Transferer"></i> {{ 'agenda.meeting.move.button'|trans }}
+                </a>
             {% endif %}
 
             <div class="actions">

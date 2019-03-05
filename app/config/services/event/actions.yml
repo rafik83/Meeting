@@ -57,6 +57,15 @@ services:
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\ParticipateHandler'
 
     #
+    # Meeting
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingAction:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@form.factory'
+            - '@templating.engine.twig'
+
+    #
     # Form Template
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Form\DownloadFileAction:
