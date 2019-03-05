@@ -1,3 +1,5 @@
+var Toggle = require('./../../_Toggle');
+
 /**
  * SlotToggle constructor
  *
@@ -12,6 +14,7 @@ function SlotToggle(availability, slot) {
     this.element = null;
     this.input = null;
     this.checked = null;
+    this.toggle = null;
 
     this.availability.on('availability.enabled', this.show.bind(this));
     this.availability.on('availability.disabled', this.hide.bind(this));
@@ -67,7 +70,7 @@ SlotToggle.prototype.draw = function () {
 
     this.element = document.createElement('div');
 
-    this.element.className = 'slotToggle';
+    this.element.className = 'slotToggle slotToggle--slot';
 
     this.input = document.createElement('input');
     this.input.setAttribute('type', 'checkbox');
@@ -85,10 +88,13 @@ SlotToggle.prototype.draw = function () {
     layout.appendChild(this.element);
 
     this.drawn = true;
+
+    this.toggle = new Toggle(this.input);
 };
 
-SlotToggle.prototype.onchange = function() {
+SlotToggle.prototype.onchange = function () {
     this.checked = this.input.checked;
+    this.toggle.refresh();
 };
 
 SlotToggle.prototype.guessIfCheckedFromSlot = function () {

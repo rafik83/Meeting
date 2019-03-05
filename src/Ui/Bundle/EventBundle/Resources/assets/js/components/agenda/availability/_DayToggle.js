@@ -1,4 +1,5 @@
-var EventEmitter = require('./../_EventEmitter');
+var EventEmitter = require('./../_EventEmitter'),
+    Toggle = require('./../../_Toggle');
 
 /**
  * DayToggle constructor
@@ -12,6 +13,7 @@ function DayToggle(availability) {
     this.element = document.createElement('div');
     this.input = null;
     this.checked = null;
+    this.toggle = null;
 
     this.availability.on('availability.enabled', this.show.bind(this));
     this.availability.on('availability.disabled', this.hide.bind(this));
@@ -68,6 +70,8 @@ DayToggle.prototype.draw = function () {
     layout.appendChild(this.element);
 
     this.drawn = true;
+
+    this.toggle = new Toggle(this.input);
 };
 
 DayToggle.prototype.onCheckboxChange = function () {

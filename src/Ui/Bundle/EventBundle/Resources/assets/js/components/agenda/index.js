@@ -1,14 +1,27 @@
 var Availability = require('./availability/_Availability'),
     Agenda = require('./_Agenda'),
-    AvailabilityStorage = require('./availability/_Storage');
+    AvailabilityStorage = require('./availability/_Storage'),
+    Toggle = require('./../_Toggle');
 
 var agendaAvailabilities = [];
 var availabilityStorage = null;
+var agendaContainer = null;
 
 function init(target) {
+    agendaContainer = target.querySelectorAll('.agenda-container')[0];
+
     initMain(target);
     initUI(target);
     initStorage(target);
+    initTooltip();
+}
+
+function initTooltip() {
+    var availableMessage = agendaContainer.getAttribute('data-slot-available');
+    var unavailableMessage = agendaContainer.getAttribute('data-slot-unavailable');
+    var imperativePresenceMessage = agendaContainer.getAttribute('data-slot-imperative-presence');
+
+    Toggle.defaultLabels = {disabled: imperativePresenceMessage, yes: availableMessage, no: unavailableMessage};
 }
 
 function initMain(target) {
@@ -119,8 +132,7 @@ function initUI(target) {
     init();
 }
 
-function initStorage(target) {
-    var agendaContainer = target.querySelectorAll('.agenda-container')[0];
+function initStorage() {
     var eventUnavailabilitiesCreateUrl = agendaContainer.getAttribute('data-event-unavailabilities-create-url');
     var koOnSaveMessage = agendaContainer.getAttribute('data-event-availabilities-ko-message');
     var failOnSaveMessage = agendaContainer.getAttribute('data-event-availabilities-fail-message');

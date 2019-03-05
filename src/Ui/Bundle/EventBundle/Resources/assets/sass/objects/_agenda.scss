@@ -33,6 +33,28 @@ $slotHeight: 60px;
 
   .agenda-foot { text-align: right; }
 
+  // this rules try to cancel ones applied by vimeet on bootstrap ones
+  .agenda-slotToggle {
+    .glyphicon {
+      margin-right: 0;
+    }
+
+    .btn {
+      border-radius: 4px;
+      border: 1px solid #CCCCCC;
+      line-height: normal;
+      font-family: RobotoRegular, HelveticaNeue, Helvetica, sans-serif;
+      font-size: 15px;
+
+      &:hover,
+      &:active,
+      &:focus {
+        color: rgb(51, 51, 51);
+        background: rgb(230, 230, 230);
+      }
+    }
+  }
+
   .insert {
     position: relative;
     width: 100%;
@@ -242,7 +264,10 @@ $slotHeight: 60px;
     padding: 2px;
     height: $slotHeight;
     z-index: 1;
-    margin-left: 80%;
+
+    &--slot {
+      margin-left: 80%;
+    }
   }
 }
 
