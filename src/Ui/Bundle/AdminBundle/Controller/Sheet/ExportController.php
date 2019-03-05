@@ -38,11 +38,13 @@ class ExportController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $displayNomenclatureIds = $request->query->getBoolean('displayNomenclatureIds');
         $locale = $event->getAvailableLocale($request->getLocale());
         $exportQuery = new Sheet\Export\ExportQuery(
             $event,
             $this->getFilters($event, $adminDomain->getAdmin(), $locale),
             $locale,
+            $displayNomenclatureIds,
             $this->get(RuleStorageInterface::class)->getRules($event, $locale, 'sheet')
         );
 

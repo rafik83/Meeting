@@ -31,10 +31,14 @@ class ExportQuery
     /** @var string */
     public $charset;
 
+    /** @var bool */
+    public $displayNomenclatureIds;
+
     public function __construct(
         Event $event,
         array $filters,
         string $locale,
+        bool $displayNomenclatureIds,
         ?RuleInterface $condition = null,
         string $charset = Charset::WINDOWS_1252
     ) {
@@ -43,5 +47,6 @@ class ExportQuery
         $this->locale  = $locale;
         $this->condition = $condition;
         $this->charset = $charset;
+        $this->displayNomenclatureIds = $displayNomenclatureIds;
     }
 }
