@@ -6,6 +6,7 @@ var Availability = require('./availability/_Availability'),
 var agendaAvailabilities = [];
 var availabilityStorage = null;
 var agendaContainer = null;
+var agendas = [];
 
 function init(target) {
     agendaContainer = target.querySelectorAll('.agenda-container')[0];
@@ -27,7 +28,8 @@ function initTooltip() {
 function initMain(target) {
     agendaAvailabilities = [];
 
-    [].forEach.call(target.querySelectorAll('.agenda'), function (element) {
+    agendas = target.querySelectorAll('.agenda');
+    [].forEach.call(agendas, function (element) {
         var agenda = new Agenda(element);
         var meetsLayoutNode = element.querySelectorAll('.meets')[0];
         var agendaHeadNode = element.querySelectorAll('.agenda-head')[0];
@@ -60,6 +62,37 @@ function initUI(target) {
 
         hideSaveButton();
         hideDisableButton();
+
+        initScrollListener();
+    }
+
+    function initScrollListener() {
+        // Reference : https://developer.mozilla.org/fr/docs/Web/Events/scroll
+        var latestKnownAgendaYPosition = 0;
+        var ticking = false;
+
+        window.addEventListener('scroll', function(e) {
+            latestKnownAgendaYPosition = agendas[0].getBoundingClientRect().y;
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    fixingSaveButtons(latestKnownAgendaYPosition);
+                    ticking = false;
+                });
+            }
+            ticking = true;
+        });
+    }
+
+    function fixingSaveButtons(agendaYPosition) {
+        if(agendaYPosition > 0) {
+            [].forEach.call(saveButtons, function(element) {
+                element.classList.remove('saveAvailabilityButton--fixed');
+            });
+        } else {
+            [].forEach.call(saveButtons, function(element) {
+                element.classList.add('saveAvailabilityButton--fixed');
+            });
+        }
     }
 
     function saveData() {

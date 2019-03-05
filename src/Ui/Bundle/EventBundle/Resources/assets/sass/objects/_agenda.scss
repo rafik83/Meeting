@@ -271,6 +271,41 @@ $slotHeight: 60px;
   }
 }
 
+.saveAvailabilityButton--fixed {
+  position: fixed;
+  z-index: 2;
+
+  right: 0;
+  top: 1em;
+
+  .btn {
+    border: white 1px solid !important;
+  }
+}
+
+@media (min-width: 767.1px) {
+  .saveAvailabilityButton--fixed {
+    margin: 0 20px !important;
+    padding-right: 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .saveAvailabilityButton--fixed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* center the element */
+    right: 0;
+    left: 0;
+    margin-right: auto;
+    margin-left: auto;
+    /* give it dimensions */
+    width: 90%;
+  }
+}
+
 @media (max-width: 640px) {
   .agenda-container {
     margin: 20px 0 0 0;
