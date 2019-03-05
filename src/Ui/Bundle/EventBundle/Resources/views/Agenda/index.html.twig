@@ -102,7 +102,14 @@
                                     {% endfor %}
 
                                     {% for meeting in day.meetings %}
-                                        {{ include('EventBundle:Agenda:meeting.html.twig', {'isVisio': isVisio, 'sheetId': agenda.sheet.id, 'participant': participant, 'participantId': agenda.participant.id, 'meeting': meeting }) }}
+                                        {{ include('EventBundle:Agenda:meeting.html.twig', {
+                                            'isVisio': isVisio,
+                                            'sheetId': agenda.sheet.id,
+                                            'participant': participant,
+                                            'participantId': agenda.participant.id,
+                                            'meeting': meeting,
+                                            'canMoveMeeting': agenda.canMoveMeeting
+                                        }) }}
                                     {% endfor %}
 
                                     {% for availableSlotView in day.availableSlotViews %}

@@ -46,6 +46,12 @@
                 {{ 'agenda.meeting.details'|trans }}
             </a>
 
+            {% if canMoveMeeting %}
+            <a>
+                <i class="icon icon-Transferer"></i> Déplacer le RDV
+            </a>
+            {% endif %}
+
             <div class="actions">
                 {% if meeting.isVisioAndAvailable %}
                     <a class="btn btn-primary start-visio"

@@ -2779,6 +2779,10 @@ services:
             - '@datetime'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
+    Proximum\Vimeet\Domain\Meeting\CanMoveMeeting:
+        arguments:
+            - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
+
     #
     # Security Component
     #
@@ -4005,6 +4009,7 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
+            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
 
