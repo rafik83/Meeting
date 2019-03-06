@@ -73,7 +73,6 @@ class SheetRegistrationInfoQueryHandlerTest extends TestCase
         ;
 
         $translator = $this->prophesize(TranslatorInterface::class);
-        $intl = $this->prophesize(IntlInterface::class);
 
         $translator->trans('gender.woman', [], 'exports', 'fr')->shouldBeCalled()->willReturn('woman');
         $translator->trans('boolean.yes', [], 'exports', 'fr')->shouldBeCalled()->willReturn('yes');
