@@ -7,6 +7,8 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingSlotException;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MoveHandler
@@ -20,14 +22,24 @@ class MoveHandler
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var MessageRepositoryInterface */
+    private $messageRepository;
+
+    /** @var \DateTimeInterface */
+    private $datetime;
+
     public function __construct(
         CanMoveMeeting $canMoveMeeting,
         CommandBusInterface $commandBus,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        MessageRepositoryInterface $messageRepository,
+        \DateTimeInterface $datetime
     ) {
         $this->canMoveMeeting = $canMoveMeeting;
         $this->commandBus = $commandBus;
         $this->translator = $translator;
+        $this->messageRepository = $messageRepository;
+        $this->datetime = $datetime;
     }
 
     public function handle(Move $move): void
@@ -40,7 +52,14 @@ class MoveHandler
             $this->commandBus->handle(new UpdateSlot($move->meeting, $move->meetingSlot));
 
             if ($move->content) {
-                //$this->commandBus->handle(new UpdateSlot($move->meeting, $move->meetingSlot));
+                $message = new Message(
+                    $move->meeting->getRequest(),
+                    $move->sheet,
+                    $move->content,
+                    $this->datetime
+                );
+
+                $this->messageRepository->add($message);
             }
         } catch (\Exception $exception) {
             throw new MoveMeetingSlotException(
