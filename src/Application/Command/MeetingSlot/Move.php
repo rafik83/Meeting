@@ -19,7 +19,7 @@ class Move implements Command
     public $meetingSlot;
 
     /** @var string */
-    public $comment;
+    public $content;
 
     public function __construct(Sheet $sheet, Meeting $meeting)
     {

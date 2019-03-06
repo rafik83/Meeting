@@ -31,4 +31,14 @@ class DayHelper
             $timeZone
         );
     }
+
+    public static function getHourFormatter($locale, $timeZone): \IntlDateFormatter
+    {
+        return \IntlDateFormatter::create(
+            $locale,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::SHORT,
+            $timeZone
+        );
+    }
 }

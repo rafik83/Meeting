@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Move;
+use Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingSlotException;
 use Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsQuery;
 use Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
@@ -68,13 +69,18 @@ class MoveMeetingSlotAction
         $form = $this->formFactory->create(MoveMeetingSlotType::class, $move, [
             'availableSlots' => $availableSlotsView->availableSlots,
             'timezone' => $timezone,
+            'locale' => $sheet->getEvent()->getAvailableLocale($request->getLocale()),
         ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->commandBus->handle($move);
+            try {
+                $this->commandBus->handle($move);
+            } catch (MoveMeetingSlotException $exception) {
+                return new Response($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+            }
 
-            return new Response('ok');
+            return new Response(null, Response::HTTP_NO_CONTENT);
         }
 
         return new Response(

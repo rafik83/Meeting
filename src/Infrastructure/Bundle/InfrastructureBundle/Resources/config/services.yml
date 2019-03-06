@@ -1606,6 +1606,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\MoveHandler }
     command.meeting_slot.unlock_handler:

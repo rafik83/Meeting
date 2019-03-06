@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MeetingSlot;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Move;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -13,33 +14,41 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MoveMeetingSlotType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    /** @var TranslatorInterface */
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $timezone = $options['timezone'];
+        $locale = $options['locale'];
 
         $builder
             ->add('meetingSlot', ChoiceType::class, [
                 'choices' => $options['availableSlots'],
-                'choice_label' => function(MeetingSlot $meetingSlot) use ($timezone) {
-                    return sprintf(
-                        'De %s à %s',
-                        $this->convertDateToInternationalFormat($meetingSlot->getBegin(), $timezone),
-                        $this->convertDateToInternationalFormat($meetingSlot->getEnd(), $timezone)
-                    );
+                'choice_label' => function(MeetingSlot $meetingSlot) use ($timezone, $locale) {
+                    $day = DayHelper::getFormatter($locale, $timezone)->format($meetingSlot->getBegin());
+                    $begin = DayHelper::getHourFormatter($locale, $timezone)->format($meetingSlot->getBegin());
+                    $end = DayHelper::getHourFormatter($locale, $timezone)->format($meetingSlot->getEnd());
+
+                    return $this->translator->trans('form.move_meeting_slot.children.meetingSlot.label.begin.end', [
+                        '%day%' => $day,
+                        '%begin%' => $begin,
+                        '%end%' => $end,
+                    ], 'forms');
                 }
             ])
-            ->add('comment', TextareaType::class, [
+            ->add('content', TextareaType::class, [
                 'required' => false,
+                'attr' => [
+                    'maxlength' => 300,
+                ]
             ])
         ;
-    }
-
-    private function convertDateToInternationalFormat(\DateTimeInterface $dateTime, string $timezone): string
-    {
-        return (new \DateTime())
-            ->setTimestamp($dateTime->getTimestamp())
-            ->setTimezone(new \DateTimeZone($timezone))
-            ->format('d/m/Y H:i');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -47,6 +56,7 @@ class MoveMeetingSlotType extends AbstractType
         $resolver
             ->setRequired([
                 'availableSlots',
+                'locale',
                 'timezone',
             ])
             ->setDefaults([
