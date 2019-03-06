@@ -381,11 +381,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
             return '';
         }
 
-        if ($displayNomenclatureIds) {
-            return implode(',', $this->getItems());
-        }
-
-        $nomenclatureLabels = $this->getNomenclatureLabels();
+        $displayNomenclatureIds === true ? $nomenclatureLabels = $this->getNomenclatureKeys() : $nomenclatureLabels = $this->getNomenclatureLabels();
 
         // Leaf elements are the ones with the longest path (max depth):
         $maxDepth = 1;
