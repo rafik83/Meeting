@@ -367,7 +367,8 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         return $this->getLabel($locale, $fallback);
     }
 
-    public function getExportableContent(array $taggedData = [], ?string $locale = null){
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
+    {
         return $this->getNomenclatureItems();
     }
 

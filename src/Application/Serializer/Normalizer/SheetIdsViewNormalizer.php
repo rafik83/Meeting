@@ -185,7 +185,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         $rawSheets = [];
 
         foreach ($sheets as $sheet) {
-            $rawSheets[] = $this->getSheetRawData($sheet, $locale);
+            $rawSheets[] = $this->getSheetRawData($sheet, $locale, $context);
         }
 
         $normalizedSheets = [];
@@ -211,10 +211,11 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      *
      * @param Sheet  $sheet
      * @param string $locale
+     * @param array  $context
      *
      * @return array Raw data about sheet
      */
-    private function getSheetRawData(Sheet $sheet, string $locale)
+    private function getSheetRawData(Sheet $sheet, string $locale, array $context)
     {
         $event    = $sheet->getEvent();
         $owner    = $sheet->getOwner();
@@ -268,11 +269,12 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_COMMERCIAL_STATUS => $this->getCommercialStatus($sheet),
         ];
 
+
         // 2. Registration data
-        $this->addRegistrationRawData($rawData, $sheet, $availableLocale, $fallbackLocale);
+        $this->addRegistrationRawData($rawData, $sheet, $availableLocale, $fallbackLocale, $context);
 
         // 3. Sheet presentation data
-        $this->addPresentationRawData($rawData, $sheet, $availableLocale, $fallbackLocale);
+        $this->addPresentationRawData($rawData, $sheet, $availableLocale, $fallbackLocale, $context);
 
         return $rawData;
     }
@@ -310,13 +312,16 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      * @param Sheet  $sheet
      * @param string $availableLocale
      * @param string $fallbackLocale
+     * @param array  $context
      */
-    private function addPresentationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale)
+    private function addPresentationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale, array $context = []): void
     {
         $presentationTemplateData = $this->templateDataFactory->createFromSheet($sheet, $availableLocale);
 
         // the tagged data are used in case of empty field
         $taggedData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale)->getAllTaggedDatas();
+
+        $context = array_merge($context, ['taggedData' => $taggedData]);
 
         foreach ($presentationTemplateData->getExportableObjects() as $presentationObject) {
             $key = $presentationObject->getKey();
@@ -326,19 +331,8 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
                 $this->sheetFields[$key] = $fieldName;
             }
 
-            $rawData[$key] = $this->getExportableContent($presentationObject, array('taggedData' => $taggedData, 'displayNomenclatureIds' => true ));
+            $rawData[$key] = $this->getExportableContent($presentationObject, $context);
         }
-    }
-
-    private function getExportableContent(ExportableObjectInterface $exportableObject, array $context)
-    {
-        $displayNomenclatureIds = $context['displayNomenclatureIds'] ?? false;
-
-        if ($exportableObject instanceof Nomenclature && $displayNomenclatureIds) {
-            return $exportableObject->getNomenclatureItems($displayNomenclatureIds);
-        }
-
-        return $this->getExportableContent($exportableObject, $context);
     }
 
     /**
@@ -348,8 +342,9 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      * @param Sheet  $sheet
      * @param string $availableLocale
      * @param string $fallbackLocale
+     * @param array  $context
      */
-    private function addRegistrationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale)
+    private function addRegistrationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale, array $context = []): void
     {
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale);
 
@@ -362,10 +357,27 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
                     $this->registrationFields[$key] = $fieldName;
                 }
 
-                $rawData[$key] = $this->getExportableContent($registrationObject, []);
-        }
+                $rawData[$key] = $this->getExportableContent($registrationObject, $context);
+            }
         }
 
+    }
+
+    /**
+     * @param ExportableObjectInterface $exportableObject
+     * @param array                     $context
+     *
+     * @return string
+     */
+    private function getExportableContent(ExportableObjectInterface $exportableObject, array $context)
+    {
+        $displayNomenclatureIds = $context['displayNomenclatureIds'] ?? false;
+
+        if ($exportableObject instanceof Nomenclature && $displayNomenclatureIds) {
+            return $exportableObject->getNomenclatureItems($displayNomenclatureIds);
+        }
+
+        return $exportableObject->getExportableContent($context['taggedData'] ?? [], $context['locale'] ?? null);
     }
 
     /**
