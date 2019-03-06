@@ -56,4 +56,13 @@ class HasUnavailabilityManagementDisabledTest extends TestCase
         $service = new HasUnavailabilityManagementDisabled($this->authorizationCheckerAdapter->reveal());
         $this->assertFalse($service->isSatisfiedBy($this->sheet->reveal()));
     }
+
+    public function testAvailabilityManagement(): void
+    {
+        $this->type->getAvailabilityType()->shouldBeCalled()->willReturn(Type::TYPE_MANAGEMENT_AVAILABLE);
+        $this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN')->shouldNotBeCalled();
+
+        $service = new HasUnavailabilityManagementDisabled($this->authorizationCheckerAdapter->reveal());
+        $this->assertTrue($service->isSatisfiedBy($this->sheet->reveal()));
+    }
 }
