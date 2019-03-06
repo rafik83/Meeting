@@ -60,10 +60,9 @@ class MoveMeetingSlotAction
             throw new AccessDeniedException();
         }
 
-        $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
-
         /** @var GetAvailableSlotsView $availableSlotsView */
         $availableSlotsView = $this->queryBus->handle(new GetAvailableSlotsQuery($meeting));
+        $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
 
         $move = new Move($sheet, $meeting);
         $form = $this->formFactory->create(MoveMeetingSlotType::class, $move, [
