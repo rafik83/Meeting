@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingSlotException;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MoveHandler
@@ -25,6 +26,9 @@ class MoveHandler
     /** @var MessageRepositoryInterface */
     private $messageRepository;
 
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
     /** @var \DateTimeInterface */
     private $datetime;
 
@@ -33,12 +37,14 @@ class MoveHandler
         CommandBusInterface $commandBus,
         TranslatorInterface $translator,
         MessageRepositoryInterface $messageRepository,
+        MeetingRepositoryInterface $meetingRepository,
         \DateTimeInterface $datetime
     ) {
         $this->canMoveMeeting = $canMoveMeeting;
         $this->commandBus = $commandBus;
         $this->translator = $translator;
         $this->messageRepository = $messageRepository;
+        $this->meetingRepository = $meetingRepository;
         $this->datetime = $datetime;
     }
 
@@ -49,7 +55,16 @@ class MoveHandler
         }
 
         try {
-            $this->commandBus->handle(new UpdateSlot($move->meeting, $move->meetingSlot));
+            $this->commandBus->handle(
+                new UpdateSlot(
+                    $move->meeting,
+                    $move->meetingSlot,
+                    $move->meeting->getSpot()->isVisio()
+                )
+            );
+
+            $move->meeting->blockSlot();
+            $this->meetingRepository->set($move->meeting);
 
             if ($move->content) {
                 $message = new Message(

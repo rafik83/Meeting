@@ -47,6 +47,9 @@ class TypeListView
     /** @var bool */
     public $canRemoveMeeting;
 
+    /** @var bool */
+    public $canMoveMeeting;
+
     public function __construct(
         int $id,
         ?int $position,
@@ -58,7 +61,9 @@ class TypeListView
         string $package,
         bool $hasSpecificPaymentConditions = false,
         bool $hasSpecificTermsOfSale = false,
-        bool $canRemoveMeeting
+        bool $hasSpecificTermsOfSale = false,
+        bool $canMoveMeeting = false,
+        bool $canRemoveMeeting = false
     ) {
         $this->id = $id;
         $this->position = $position;
@@ -71,5 +76,6 @@ class TypeListView
         $this->hasSpecificPaymentConditions = $hasSpecificPaymentConditions;
         $this->hasSpecificTermsOfSale = $hasSpecificTermsOfSale;
         $this->canRemoveMeeting = $canRemoveMeeting;
+        $this->canMoveMeeting = $canMoveMeeting;
     }
 }

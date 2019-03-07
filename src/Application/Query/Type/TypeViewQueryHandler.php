@@ -73,6 +73,7 @@ class TypeViewQueryHandler
                 (null !== $type->getPackage()) ? $type->getPackage()->getTitle() : '',
                 null !== $type->getPaymentConditions(),
                 isset($contentIndexedByTypeId[$type->getId()]),
+                $type->canMoveMeeting(),
                 $type->canRemoveMeeting()
             );
         }
