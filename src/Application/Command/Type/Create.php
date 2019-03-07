@@ -59,6 +59,9 @@ class Create implements Command
     /** @var int|null */
     public $numberOfMeetingsPerPlanning;
 
+    /** @var bool */
+    public $canRemoveMeeting;
+
     /**
      * @param Event  $event
      * @param string $locale
