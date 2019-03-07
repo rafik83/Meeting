@@ -26,8 +26,7 @@ class GetAvailableSlotsQueryHandler
         $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $query->meeting->getEvent(),
             $query->meeting->getAllParticipants(),
-            false,
-            $query->meeting
+            false
         );
 
         $availableSlots = [];

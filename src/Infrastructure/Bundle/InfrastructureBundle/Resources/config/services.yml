@@ -1610,7 +1610,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\MoveHandler }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Move }
     command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:

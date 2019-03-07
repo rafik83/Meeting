@@ -28,7 +28,7 @@ function Meet(agenda, element, modal) {
         this.moveMeetingAction.addEventListener('click', function (event) {
             event.stopPropagation();
             event.preventDefault();
-            this.onMoveMeeting();
+            this.handleRequestMoveMeetingButton();
         }.bind(this), false);
     }
 
@@ -51,26 +51,12 @@ Meet.prototype.constructor = Meet;
  */
 Meet.prototype.margin = 3;
 
-Meet.prototype.onMoveMeeting = function () {
-    this.moveMeetingAction.disabled = true;
-    this.moveMeetingAction.classList.add('disabled');
-    this.handleRequestMoveMeetingButton();
-};
-
 Meet.prototype.handleRequestMoveMeetingButton = function () {
     var href = this.moveMeetingAction.getAttribute('href');
 
     $.get(href, function (response) {
-        this.enableMoveMeetingAction();
         this.showModal(response);
-    }.bind(this)).fail(function () {
-        this.enableParticipateAction();
     }.bind(this));
-};
-
-Meet.prototype.enableMoveMeetingAction = function () {
-    this.moveMeetingAction.disabled = false;
-    this.moveMeetingAction.classList.remove('disabled');
 };
 
 Meet.prototype.showModal = function (html) {
@@ -87,6 +73,28 @@ Meet.prototype.showModal = function (html) {
 
         return false;
     }.bind(this));
+};
+
+Meet.prototype.handleRequestForm = function (form)
+{
+    var submitButton = form.find("button[type='submit']");
+    submitButton.attr('disabled', 'disabled');
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        data: form.serialize(),
+        success: function(){
+            document.location.reload(true);
+        },
+        error: function(response) {
+            alert(response.responseText);
+
+            submitButton.removeAttr('disabled');
+        }
+    });
+
+    return false;
 };
 
 /**

@@ -33,7 +33,7 @@ class GetAvailableSlotsQueryHandlerTest extends TestCase
 
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
-        $meetingSlotRepository->findAvailableSlotsByParticipants($event->reveal(), [$participant->reveal()], false, $meeting->reveal())
+        $meetingSlotRepository->findAvailableSlotsByParticipants($event->reveal(), [$participant->reveal()], false)
             ->shouldBeCalled()
             ->willReturn([$meetingSlot1->reveal(), $meetingSlot2->reveal()]);
 
