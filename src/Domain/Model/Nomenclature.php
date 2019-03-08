@@ -297,36 +297,21 @@ class Nomenclature
     }
 
     /**
-     * @param string $locale
-     *
      * @return array
      */
-    public function getLabels($locale): array
+    public function getTreeKeys(): array
     {
         $labels = [];
 
         if (3 === $this->depth) {
-            foreach ($this->getValue() as $key =>$item) {
+            foreach ($this->getValue() as $key => $item) {
                 if (!isset($item['children'])) {
                     continue;
                 }
 
-                if(!isset($locale) && !$locale) {
-
-                    foreach ($item['children'] as $keyChild => $secondDepth) {
-                        foreach (array_keys($secondDepth['children']) as $id) {
-                            $labels[$key][$keyChild][$id] = $id;
-                        }
-                    }
-                } else {
-
-                    foreach ($item['children'] as $secondDepth) {
-                        $labels[$item['label'][$locale]][$secondDepth['label'][$locale]] = array_map(
-                            function ($value) use ($locale) {
-                                return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
-                            },
-                            $secondDepth['children']
-                        );
+                foreach ($item['children'] as $keyChild => $secondDepth) {
+                    foreach (array_keys($secondDepth['children']) as $id) {
+                        $labels[$key][$keyChild][$id] = $id;
                     }
                 }
             }
@@ -338,37 +323,34 @@ class Nomenclature
                     continue;
                 }
 
-                if(!isset($locale) && !$locale) {
-                    foreach($item['children'] as $idTwo => $tab) {
-                        $labels[$keyTwo][$idTwo] = $idTwo;
-                    }
-
-                } else {
-                    $labels[$item['label'][$locale]] = array_map(function ($value) use ($locale) {
-                        return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
-                    }, $item['children']);
+                foreach ($item['children'] as $idTwo => $tab) {
+                    $labels[$keyTwo][$idTwo] = $idTwo;
                 }
             }
 
             return $labels;
         } elseif (1 === $this->depth) {
 
-            if(!isset($locale) && !$locale) {
-                foreach ($this->getValue() as $idOne => $val) {
-                    $labels[$idOne] = $idOne;
-                }
-                return $labels;
+            foreach ($this->getValue() as $idOne => $val) {
+                $labels[$idOne] = $idOne;
             }
-
-            $labels = array_map(function ($value) use ($locale) {
-                    return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
-                }, $this->getValue());
-
 
             return $labels;
         }
 
         return [];
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function getLabels($locale): array
+    {
+        $treeKeys = $this->getTreeKeys();
+
+        return $this->transformDataToLabel($treeKeys, $locale);
     }
 
     /**
@@ -570,5 +552,31 @@ class Nomenclature
         }
 
         return $levelsArchitecture;
+    }
+
+    /**
+     * @param array|string $data
+     * @param string       $locale
+     *
+     * @return array|string
+     */
+    private function transformDataToLabel($data, string $locale)
+    {
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $result = $this->transformDataToLabel($value, $locale);
+
+                if (is_array($result)) {
+                    unset($data[$key]);
+                    $key = $this->getLabel($key, $locale);
+                }
+
+                $data[$key] = $result;
+            }
+
+            return $data;
+        }
+
+        return $this->getLabel($data, $locale);
     }
 }
