@@ -28,7 +28,7 @@ Storage.prototype.save = function () {
                 alert(this2.messages.onKo);
                 return;
             }
-            alert(this2.messages.onOk);
+            window.document.location.reload(true);
         })
         .catch(function () {
             alert(this2.messages.onFail);

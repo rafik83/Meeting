@@ -17,34 +17,40 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class CreateUnavailabilitiesAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
-    
+
     /** @var CommandBusInterface */
     private $commandBus;
-    
+
     /** @var HasUnavailabilityManagementDisabled */
     private $hasUnavailabilityManagementDisabled;
 
     /** @var HasAvailabilityManagementEnabled */
     private $hasAvailabilityManagementEnabled;
 
+    /** @var Session */
+    private $session;
+
     public function __construct(
         CommandBusInterface $commandBus,
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         HasUnavailabilityManagementDisabled $hasUnavailabilityManagementDisabled,
-        HasAvailabilityManagementEnabled $hasAvailabilityManagementEnabled
+        HasAvailabilityManagementEnabled $hasAvailabilityManagementEnabled,
+        Session $session
     ) {
         $this->commandBus = $commandBus;
         $this->authorizationChecker = $authorizationChecker;
         $this->hasUnavailabilityManagementDisabled = $hasUnavailabilityManagementDisabled;
         $this->hasAvailabilityManagementEnabled = $hasAvailabilityManagementEnabled;
+        $this->session = $session;
     }
-    
+
     public function __invoke(
         Request $request,
         EventDomain $eventDomain,
@@ -54,7 +60,7 @@ class CreateUnavailabilitiesAction
     ): JsonResponse {
         $event = $eventDomain->getEvent();
         $user = $userDomain->getUser();
-        
+
         if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationChecker->isGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet)
             || !$this->authorizationChecker->isGranted(AgendaAccessVoter::PERMISSION, $event)
@@ -91,6 +97,10 @@ class CreateUnavailabilitiesAction
 
                 break;
             }
+        }
+
+        if (!$hasError) {
+            $this->session->getFlashBag()->add('success', 'flash.agenda.availability.ok_message_on_save');
         }
 
         return new JsonResponse([
