@@ -60,6 +60,9 @@ class Create implements Command
     public $numberOfMeetingsPerPlanning;
 
     /** @var bool */
+    public $canMoveMeeting;
+
+    /** @var bool */
     public $canRemoveMeeting;
 
     /**

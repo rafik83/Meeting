@@ -1,5 +1,4 @@
 admin.sheet.follower.un-assigned: 'Non assigné'
-admin.sheet.follower.un-assigned: 'Non assigné'
 alphabetical: Alphabétique
 created_at: 'Date d''inscription'
 form.activate_account_password.children.password.children.first.label: 'Mot de passe'
@@ -1088,6 +1087,9 @@ form.transactional_mail_update_customized.children.translations.prototype.childr
 form.transactional_mail_update_customized.children.translations.prototype.children.subject.label: Sujet
 form.type_content_define_terms_of_sale.children.enabled.label: 'Activer la personnalisation des conditions générales de vente pour ce type'
 form.type_content_define_terms_of_sale.children.submit.label: Valider
+form.type_create.children.availabilityType.label: 'Gestion de disponibilité'
+form.type_create.children.canMoveMeeting.label: 'Peut déplacer les RDV'
+form.type_create.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_create.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_create.children.formTemplates.label: Formulaires
 form.type_create.children.formTemplates.status.draft: brouillon
@@ -1101,13 +1103,12 @@ form.type_create.children.registrationTemplate.label: 'Template d''Inscription'
 form.type_create.children.sheetTemplate.label: 'Template de présentation'
 form.type_create.children.submit.label: Enregistrer
 form.type_create.children.template.label: Template
-form.type_create.children.canRemoveMeeting.label : 'Peut supprimer les RDV'
 form.type_create.children.translations.prototype.children.description.label: Description
 form.type_create.children.translations.prototype.children.title.label: Titre
 form.type_create.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'
 form.type_create.children.validationCriteria.label: 'Critère de validation automatique des fiches de présentation'
-form.type_create.children.availabilityType.label: 'Gestion de disponibilité'
 form.type_update.children.availabilityType.label: 'Gestion de disponibilité'
+form.type_update.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_update.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.type_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'

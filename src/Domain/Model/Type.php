@@ -83,6 +83,9 @@ class Type implements WhoInterface, TypeInterface
     private $numberOfMeetingsPerPlanning;
 
     /** @var bool */
+    private $canMoveMeeting = false;
+
+    /** @var bool */
     private $canRemoveMeeting = false;
 
     /**
@@ -417,12 +420,14 @@ class Type implements WhoInterface, TypeInterface
         bool $hidden,
         string $availabilityType,
         ?int $numberOfMeetingsPerPlanning,
+        bool $canMoveMeeting = false,
         bool $canRemoveMeeting = false
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
         $this->availabilityType = $availabilityType;
         $this->numberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning;
+        $this->canMoveMeeting = $canMoveMeeting;
         $this->canRemoveMeeting = $canRemoveMeeting;
     }
 
@@ -437,6 +442,11 @@ class Type implements WhoInterface, TypeInterface
     public function isDisableUnavailabilityManagement(): bool
     {
         return $this->disableUnavailabilityManagement;
+    }
+
+    public function canMoveMeeting(): bool
+    {
+        return $this->canMoveMeeting;
     }
 
     public function canRemoveMeeting(): bool

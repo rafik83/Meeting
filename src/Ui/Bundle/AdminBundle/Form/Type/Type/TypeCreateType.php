@@ -92,6 +92,9 @@ class TypeCreateType extends AbstractType
                     "admin.type.management.unavailable.label" => Model\Type::TYPE_MANAGEMENT_UNAVAILABLE,
                 ],
             ])
+            ->add('canMoveMeeting', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 
