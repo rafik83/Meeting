@@ -3,6 +3,7 @@
 var TokboxInstance = require('./TokboxInstance').TokboxInstance;
 var CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL;
 var openTokLayout = require('opentok-layout-js');
+var openTokTextChat = require('opentok-text-chat');
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var $ = require('jquery');
@@ -147,6 +148,16 @@ VideoConference.prototype.init = function() {
 VideoConference.prototype.connect = function() {
   this.session.connect(this.token, function(error) {
     if (!error) {
+      new openTokTextChat({
+        session: this.session,
+        sender: {
+            id: 'myCustomIdentifier',
+            alias: 'David',
+        },
+        textChatContainer: '#chat',
+        alwaysOpen: true
+      });
+
       this.publishStream();
     } else {
       console.log(error);
