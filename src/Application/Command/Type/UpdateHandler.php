@@ -62,7 +62,8 @@ class UpdateHandler
             $update->rank,
             $update->hidden,
             $update->availabilityType,
-            $update->numberOfMeetingsPerPlanning
+            $update->numberOfMeetingsPerPlanning,
+            $update->canMoveMeeting
         );
         $type->setHidden($update->hidden);
 
