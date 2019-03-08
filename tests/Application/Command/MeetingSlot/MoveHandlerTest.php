@@ -84,7 +84,7 @@ class MoveHandlerTest extends TestCase
         $this->spot->isVisio()->shouldBeCalled()->willReturn(false);
         $this->meeting->getSpot()->shouldBeCalled()->willReturn($this->spot->reveal());
 
-        $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), false))
+        $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), false, true))
             ->shouldBeCalled()
             ->willThrow(new \Exception());
         $this->messageRepository->add(Argument::any())->shouldNotBeCalled();
@@ -115,7 +115,7 @@ class MoveHandlerTest extends TestCase
         $this->meeting->getSpot()->shouldBeCalled()->willReturn($this->spot->reveal());
         $this->meeting->blockSlot()->shouldBeCalled();
 
-        $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), false))
+        $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), false, true))
             ->shouldBeCalled();
         $this->messageRepository->add(Argument::any())->shouldNotBeCalled();
         $this->meetingRepository->set($this->meeting->reveal())->shouldBeCalled();
@@ -145,7 +145,7 @@ class MoveHandlerTest extends TestCase
         $this->meeting->getSpot()->shouldBeCalled()->willReturn($this->spot->reveal());
         $this->meeting->blockSlot()->shouldBeCalled();
 
-        $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), true))
+        $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), true, true))
             ->shouldBeCalled();
 
         $request = $this->prophesize(Meeting\Request::class);

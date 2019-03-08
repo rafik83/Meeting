@@ -25,15 +25,18 @@ class UpdateSlot implements Command
     /** @var bool */
     public $visio;
 
-    /**
-     * @param Meeting     $meeting
-     * @param MeetingSlot $slot
-     * @param bool        $visio
-     */
-    public function __construct(Meeting $meeting, MeetingSlot $slot, $visio = false)
-    {
+    /** @var bool */
+    public $isUpdatedByParticipant;
+
+    public function __construct(
+        Meeting $meeting,
+        MeetingSlot $slot,
+        bool $visio = false,
+        bool $isUpdatedByParticipant = false
+    ) {
         $this->meeting = $meeting;
-        $this->slot    = $slot;
-        $this->visio   = $visio;
+        $this->slot = $slot;
+        $this->visio = $visio;
+        $this->isUpdatedByParticipant = $isUpdatedByParticipant;
     }
 }

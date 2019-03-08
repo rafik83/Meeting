@@ -59,7 +59,8 @@ class MoveHandler
                 new UpdateSlot(
                     $move->meeting,
                     $move->meetingSlot,
-                    $move->meeting->getSpot()->isVisio()
+                    $move->meeting->getSpot()->isVisio(),
+                    true
                 )
             );
 
