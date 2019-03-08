@@ -296,91 +296,74 @@ class Nomenclature
         return $nomenclatureItemsIndexedByKey;
     }
 
-    public function getKeys($locale){
-        $keys = [];
+    /**
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function getLabels($locale): array
+    {
+        $labels = [];
 
         if (3 === $this->depth) {
-            foreach ($this->getValue() as $key => $item) {
+            foreach ($this->getValue() as $key =>$item) {
                 if (!isset($item['children'])) {
                     continue;
                 }
 
-                foreach ($item['children'] as $keyChild => $secondDepth) {
-                    foreach (array_keys($secondDepth['children']) as $id) {
-                        $keys[$key][$keyChild][$id] = $id;
+                if(!isset($locale) && !$locale) {
+
+                    foreach ($item['children'] as $keyChild => $secondDepth) {
+                        foreach (array_keys($secondDepth['children']) as $id) {
+                            $labels[$key][$keyChild][$id] = $id;
+                        }
+                    }
+                } else {
+
+                    foreach ($item['children'] as $secondDepth) {
+                        $labels[$item['label'][$locale]][$secondDepth['label'][$locale]] = array_map(
+                            function ($value) use ($locale) {
+                                return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
+                            },
+                            $secondDepth['children']
+                        );
                     }
                 }
             }
 
-            return $keys;
+            return $labels;
         } elseif (2 === $this->depth) {
             foreach ($this->getValue() as $keyTwo => $item) {
                 if (!isset($item['children'])) {
                     continue;
                 }
 
-                foreach($item['children'] as $idTwo => $tab) {
-                    $keys[$keyTwo][$idTwo] = $idTwo;
+                if(!isset($locale) && !$locale) {
+                    foreach($item['children'] as $idTwo => $tab) {
+                        $labels[$keyTwo][$idTwo] = $idTwo;
+                    }
+
+                } else {
+                    $labels[$item['label'][$locale]] = array_map(function ($value) use ($locale) {
+                        return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
+                    }, $item['children']);
                 }
-            }
-
-            return $keys;
-        } elseif (1 === $this->depth) {
-
-            foreach ($this->getValue() as $idOne => $val) {
-                $keys[$idOne] = $idOne;
-            }
-
-            return $keys;
-        }
-
-        return [];
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return array
-     */
-    public function getLabels($locale)
-    {
-        $labels = [];
-
-        if (3 === $this->depth) {
-            foreach ($this->getValue() as $item) {
-                if (!isset($item['children'])) {
-                    continue;
-                }
-
-                foreach ($item['children'] as $secondDepth) {
-                    $labels[$item['label'][$locale]][$secondDepth['label'][$locale]] = array_map(
-                        function ($value) use ($locale) {
-                            return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
-                        },
-                        $secondDepth['children']
-                    );
-                }
-
-                dump($labels);exit;
-            }
-
-            return $labels;
-        } elseif (2 === $this->depth) {
-            foreach ($this->getValue() as $item) {
-                if (!isset($item['children'])) {
-                    continue;
-                }
-
-                $labels[$item['label'][$locale]] = array_map(function ($value) use ($locale) {
-                    return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
-                }, $item['children']);
             }
 
             return $labels;
         } elseif (1 === $this->depth) {
+
+            if(!isset($locale) && !$locale) {
+                foreach ($this->getValue() as $idOne => $val) {
+                    $labels[$idOne] = $idOne;
+                }
+                return $labels;
+            }
+
             $labels = array_map(function ($value) use ($locale) {
-                return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
-            }, $this->getValue());
+                    return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
+                }, $this->getValue());
+
 
             return $labels;
         }

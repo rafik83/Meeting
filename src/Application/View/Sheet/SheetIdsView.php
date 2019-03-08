@@ -14,6 +14,7 @@ class SheetIdsView
 {
     /** @var int[] Sheet id */
     public $sheetIds;
+
     /*** @var bool */
     public $displayNomenclatureIds;
 

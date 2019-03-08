@@ -213,13 +213,11 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     /**
      * Get the keys of all the items
      *
-     * @param null $locale
-     *
      * @return array|null
      */
-    public function getNomenclatureKeys($locale = null)
+    public function getNomenclatureKeys(): ?array
     {
-        return $this->nomenclature->getKeys($locale ?: $this->locale);
+        return $this->nomenclature->getLabels(null);
     }
 
     /**

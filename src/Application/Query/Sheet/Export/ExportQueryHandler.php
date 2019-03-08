@@ -47,8 +47,6 @@ class ExportQueryHandler
             $exportQuery->condition
         );
 
-        $sheetIdsView->displayNomenclatureIds = $exportQuery->displayNomenclatureIds;
-
         return $this->serializerAdapter->serialize($sheetIdsView, 'csv', [
             'locale' => $exportQuery->locale,
             'charset' => $exportQuery->charset,

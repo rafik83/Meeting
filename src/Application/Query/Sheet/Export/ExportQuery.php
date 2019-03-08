@@ -38,7 +38,7 @@ class ExportQuery
         Event $event,
         array $filters,
         string $locale,
-        bool $displayNomenclatureIds,
+        bool $displayNomenclatureIds = false,
         ?RuleInterface $condition = null,
         string $charset = Charset::WINDOWS_1252
     ) {
