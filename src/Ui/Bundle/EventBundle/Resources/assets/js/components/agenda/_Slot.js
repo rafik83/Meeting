@@ -5,16 +5,14 @@ var EventEmitter = require('./_EventEmitter');
  *
  * @param {Agenda} agenda Agenda
  * @param {Number} time Time (in minutes from midnight)
- * @param {Number} UIDuration Duration (in minutes)
- * @param {string} dateAgenda
  */
-function Slot(agenda, time, UIDuration, dateAgenda) {
+function Slot(agenda, time) {
     this.agenda   = agenda;
-    this.dateAgenda = dateAgenda;
-    this.UIDuration = UIDuration;
+    this.dateAgenda = agenda.agendaDate;
+    this.UIDuration = agenda.slotDuration;
     this.time     = time;
     this.start    = this.agenda.getRelativeTime(time);
-    this.end      = this.start + UIDuration;
+    this.end      = this.start + agenda.slotDuration;
     this.meets    = [];
     this.scale    = 1;
 
