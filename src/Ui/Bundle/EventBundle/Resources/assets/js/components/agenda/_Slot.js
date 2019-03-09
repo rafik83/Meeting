@@ -5,16 +5,16 @@ var EventEmitter = require('./_EventEmitter');
  *
  * @param {Agenda} agenda Agenda
  * @param {Number} time Time (in minutes from midnight)
- * @param {Number} duration Duration (in minutes)
+ * @param {Number} UIDuration Duration (in minutes)
  * @param {string} dateAgenda
  */
-function Slot(agenda, time, duration, dateAgenda) {
+function Slot(agenda, time, UIDuration, dateAgenda) {
     this.agenda   = agenda;
     this.dateAgenda = dateAgenda;
-    this.duration = duration;
+    this.UIDuration = UIDuration;
     this.time     = time;
     this.start    = this.agenda.getRelativeTime(time);
-    this.end      = this.start + duration;
+    this.end      = this.start + UIDuration;
     this.meets    = [];
     this.scale    = 1;
 
@@ -42,7 +42,7 @@ Slot.prototype.display = function() {
  * @return {Number}
  */
 Slot.prototype.getHeight = function() {
-    return this.duration * this.scale * this.agenda.scale;
+    return this.UIDuration * this.scale * this.agenda.scale;
 };
 
 /**

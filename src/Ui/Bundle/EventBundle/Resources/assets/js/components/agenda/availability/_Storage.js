@@ -57,8 +57,8 @@ Storage.prototype.getData = function () {
                     minute: slot.getMinutesFromTime(slot.time)
                 },
                 end: {
-                    hour: slot.getHourFromTime(slot.time + slot.duration),
-                    minute: slot.getMinutesFromTime(slot.time + slot.duration)
+                    hour: slot.getHourFromTime(slot.time + slot.UIDuration),
+                    minute: slot.getMinutesFromTime(slot.time + slot.UIDuration)
                 }
             })
         });
