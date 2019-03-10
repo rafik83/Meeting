@@ -43,7 +43,9 @@ Availability.prototype.initToggles = function () {
     }
 
     for (const agendaSlot of this.agenda.slots) {
-        this.slots.push(new SlotToggle(this, agendaSlot));
+        if (agendaSlot.duration > 0) {
+            this.slots.push(new SlotToggle(this, agendaSlot));
+        }
     }
 
     this.dayToggle = new DayToggle(this);

@@ -34,7 +34,8 @@ function Agenda(element) {
     this.updateMeet  = this.updateMeet.bind(this);
 
     for (var time = this.start; time <= this.end; time += this.slotDuration) {
-        this.addSlot(time);
+        var slotDuration = this.end - time;
+        this.addSlot(time, slotDuration);
     }
     Array.prototype.forEach.call(this.element.querySelectorAll('.meet'), this.addMeet);
 
@@ -55,9 +56,10 @@ function Agenda(element) {
  * Add slot
  *
  * @param {Number} time Time in minutes
+ * @param {Number} slotDuration Duration in minutes
  */
-Agenda.prototype.addSlot = function(time) {
-    var slot = new Slot(this, time);
+Agenda.prototype.addSlot = function(time, slotDuration) {
+    var slot = new Slot(this, time, slotDuration);
     this.slots.push(slot);
     this.layout.appendChild(slot.element);
     slot.on('scale', this.onSlotScale);
