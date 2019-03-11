@@ -53,4 +53,15 @@ class NomenclatureLevel1Test extends TestCase
 
         $this->assertEquals($expectedLabels, $nomenclature->getLabels('fr'));
     }
+
+    public function testGetTreeKeys()
+    {
+        $nomenclature = $this->nomenclature;
+
+        $expectedLabels = [
+            'ad987cae' => 'ad987cae',
+        ];
+
+        $this->assertEquals($expectedLabels, $nomenclature->getTreeKeys());
+    }
 }
