@@ -217,7 +217,7 @@ class BatchHandler
             );
         }
 
-        if ($batch->duplicateToType instanceof Type) {
+        if ($batch->duplicate && $batch->duplicateToType instanceof Type) {
             return $this->batchDuplicateSheetsHandler->handle(
                 new BatchDuplicateSheets(
                     $batch->event,

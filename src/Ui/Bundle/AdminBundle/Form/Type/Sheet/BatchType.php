@@ -61,7 +61,6 @@ class BatchType extends AbstractType
             ->add('validate', SubmitType::class)
             ->add('assign', SubmitType::class)
             ->add('accept', SubmitType::class)
-            ->add('refuse', SubmitType::class)
             ->add('pending', SubmitType::class)
             ->add('selectionType', HiddenType::class, [
                 'data' => Batch::SELECTION_TYPE_PAGE,
@@ -70,6 +69,7 @@ class BatchType extends AbstractType
 
         if ($this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
             $builder
+                ->add('refuse', SubmitType::class)
                 ->add('printPdf', SubmitType::class)
                 ->add('printPlanning', SubmitType::class)
                 ->add('printBadge', SubmitType::class)

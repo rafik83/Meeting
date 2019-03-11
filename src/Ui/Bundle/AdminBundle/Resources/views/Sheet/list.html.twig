@@ -103,7 +103,11 @@
                             {{ 'admin.sheet.validate'|trans }}
                         </a>
                     </li>
-                    <li>{{ form_widget(batch_form.refuse, { 'attr': { 'data-confirm': 'admin.batch_actions.confirm'|trans } }) }}</li>
+
+                    {% if batch_form.refuse is defined %}
+                        <li>{{ form_widget(batch_form.refuse, { 'attr': { 'data-confirm': 'admin.batch_actions.confirm'|trans } }) }}</li>
+                    {% endif %}
+
                     <li role="separator" class="divider"></li>
 
                     <li>
