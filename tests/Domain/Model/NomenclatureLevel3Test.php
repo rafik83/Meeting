@@ -13,11 +13,13 @@ namespace Proximum\Vimeet\Tests\Domain\Model;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
-class NomenclatureTest extends TestCase
+class NomenclatureLevel3Test extends TestCase
 {
-    public function testGetLabel()
-    {
-        $nomenclature = new Nomenclature('Compétences', 3, [
+    /** @var Nomenclature */
+    private $nomenclature;
+
+    public function setUp() {
+        $this->nomenclature = new Nomenclature('Compétences', 3, [
             'ad987cae' => [
                 'label' => ['fr' => 'Compétences Aéronautiques', 'en' => 'Aeronautical skills'],
                 'children' => [
@@ -45,6 +47,11 @@ class NomenclatureTest extends TestCase
                 ],
             ],
         ]);
+    }
+
+    public function testGetLabel()
+    {
+        $nomenclature = $this->nomenclature;
 
         // Existing label
         $this->assertEquals('Compétences Aéronautiques', $nomenclature->getLabel('ad987cae', 'fr'));
@@ -60,5 +67,29 @@ class NomenclatureTest extends TestCase
 
         // Test fallback
         $this->assertEquals('Modelling and simulation', $nomenclature->getLabel('cab0332d', 'fr', 'en'));
+    }
+
+    public function testGetLabels()
+    {
+        $nomenclature = $this->nomenclature;
+
+        $expectedLabels = [
+            'Compétences Aéronautiques' => [
+                'Ingénierie & Bureau d\'études'                              => [
+                    'c93def9a' => 'Modélisation et calculs',
+                    '34eab90c' => 'Expérimentation & réalisation de prototypes',
+                ],
+                'Informatique'                                               => [
+                    'cab0332d' => '',
+                ],
+                'Instrumentation Appareils de mesures scientifiques in-situ' => [
+                    'aaa34eb9' => 'Appareils de mesures scientifiques in-situ',
+                    'bdec99a0' => 'Prototypage',
+                    'b35ae9c7' => 'Technologie laser',
+                ],
+            ],
+        ];
+
+        $this->assertEquals($expectedLabels, $nomenclature->getLabels('fr'));
     }
 }
