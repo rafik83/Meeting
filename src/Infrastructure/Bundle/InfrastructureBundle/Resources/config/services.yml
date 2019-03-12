@@ -2918,6 +2918,7 @@ services:
     Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQueryHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@adapter.event_url_generator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQuery }
 

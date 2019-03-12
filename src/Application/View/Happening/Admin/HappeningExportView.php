@@ -19,13 +19,17 @@ class HappeningExportView
     /** @var string */
     private $end;
 
-    public function __construct(string $title, ?string $description, string $category, string $begin, string $end)
+    /** @var SpeakersExportListView */
+    public $speakersListView;
+
+    public function __construct(string $title, ?string $description, string $category, string $begin, string $end, SpeakersExportListView $speakersListView)
     {
         $this->title = $title;
         $this->description = $description;
         $this->category = $category;
         $this->begin = $begin;
         $this->end = $end;
+        $this->speakersListView = $speakersListView;
     }
 
     /**
