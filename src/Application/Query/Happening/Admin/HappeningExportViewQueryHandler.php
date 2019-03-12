@@ -57,8 +57,8 @@ class HappeningExportViewQueryHandler
                 $happening->getTitle($locale),
                 $happening->getDescription($locale),
                 $happening->getCategory()->getTitle($locale),
-                $happening->getBegin()->format('d-m-Yh:i'),
-                $happening->getEnd()->format('d-m-Yh:i'),
+                $happening->getBegin()->format('d-m-Y H:i'),
+                $happening->getEnd()->format('d-m-Y H:i'),
                 new SpeakersExportListView($speakerViews)
             );
         }
