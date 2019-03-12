@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
-use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery;
+use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
@@ -78,7 +78,7 @@ class ExportParticipantAction
 
         try {
             $happeningParticipantViews = $this->queryBus->handle(
-                new HappeningParticipantViewQuery($event, $event->getAvailableLocale($request->getLocale()))
+                new HappeningParticipantExportViewQuery($event, $event->getAvailableLocale($request->getLocale()))
             );
         } catch (EmptyHappeningParticipationException $exception) {
             $this->flashBag->add('error', 'flash.admin.happening.participation.empty');

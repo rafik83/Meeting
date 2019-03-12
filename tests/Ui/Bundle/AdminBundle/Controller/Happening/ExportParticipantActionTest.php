@@ -18,18 +18,18 @@ use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
-use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery;
+use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\PartcipantAction;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class ExportActionTest extends TestCase
+class ExportParticipantActionTest extends TestCase
 {
     /** @var ObjectProphecy */
     private $authorizationCheckerAdapter;
@@ -73,7 +73,7 @@ class ExportActionTest extends TestCase
             ->willReturn(false)
         ;
 
-        $action = new PartcipantAction(
+        $action = new ExportParticipantAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
@@ -97,7 +97,7 @@ class ExportActionTest extends TestCase
         $this->event->getId()->willReturn(12);
 
         $this->queryBus
-            ->handle(new HappeningParticipantViewQuery($this->event->reveal(), 'fr'))
+            ->handle(new HappeningParticipantExportViewQuery($this->event->reveal(), 'fr'))
             ->shouldBeCalled()
             ->willThrow(new EmptyHappeningParticipationException())
         ;
@@ -106,7 +106,7 @@ class ExportActionTest extends TestCase
 
         $this->router->generate('admin_happening_list', ['event' => 12])->shouldBeCalled()->willReturn('/route');
 
-        $action = new PartcipantAction(
+        $action = new ExportParticipantAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
@@ -134,7 +134,7 @@ class ExportActionTest extends TestCase
 
         $view = $this->prophesize(HappeningParticipantListView::class);
         $this->queryBus
-            ->handle(new HappeningParticipantViewQuery($this->event->reveal(), 'fr'))
+            ->handle(new HappeningParticipantExportViewQuery($this->event->reveal(), 'fr'))
             ->shouldBeCalled()
             ->willReturn($view->reveal())
         ;
@@ -153,7 +153,7 @@ class ExportActionTest extends TestCase
         $this->flashBag->add(Argument::any())->shouldNotBeCalled();
         $this->router->generate(Argument::any())->shouldNotBeCalled();
 
-        $action = new PartcipantAction(
+        $action = new ExportParticipantAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
