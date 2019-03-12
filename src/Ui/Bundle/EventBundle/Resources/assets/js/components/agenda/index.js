@@ -8,8 +8,8 @@ var availabilityStorage = null;
 var agendaContainer = null;
 var agendas = [];
 
-function init(target) {
-    agendaContainer = target.querySelectorAll('.agenda-container')[0];
+function init(target, element) {
+    agendaContainer = element;
 
     initMain(target);
     initUI(target);

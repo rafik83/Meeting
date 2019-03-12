@@ -117,7 +117,10 @@ function init (target) {
         new CatalogSelectFromNomenclaturesField(element, document.getElementById('select-from-nomenclatures-modal'));
     });
 
-    Agenda.init(target);
+
+    [].forEach.call(target.querySelectorAll('.agenda-container'), function (element) {
+        Agenda.init(target, element);
+    });
 
     [].forEach.call(target.querySelectorAll('.program-happening, .program-mass'), function(element) {
        new Program(element);
