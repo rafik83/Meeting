@@ -23,6 +23,8 @@ function VideoConference(element) {
   this.meetingEndTime = element.getAttribute('data-meeting-end-time');
   this.meetingStartTime = element.getAttribute('data-meeting-start-time');
   this.currentTime = element.getAttribute('data-current-time');
+  this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
+  this.userCompleteName = element.getAttribute('data-user-complete-name');
 
   this.notCompatibleBrowserMessage = element.getAttribute(
     'data-not-compatible-browser-message'
@@ -73,6 +75,7 @@ function VideoConference(element) {
   this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
   this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
   this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
+  this.chatInstance = null;
 
   document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
@@ -149,7 +152,6 @@ VideoConference.prototype.init = function() {
 VideoConference.prototype.connect = function() {
   this.session.connect(this.token, function(error) {
     this.toggleChatElement.classList.remove('hide');
-    console.log('toggleChat remove hide');
 
     if (!error) {
       this.publishStream();
@@ -162,16 +164,20 @@ VideoConference.prototype.connect = function() {
 /**
  * Open chat
  */
-VideoConference.prototype.openChat = function() {
-    new openTokTextChat({
-        session: this.session,
-        sender: {
-            id: 'vincent',
-            alias: 'Vincent',
-        },
-        textChatContainer: '#chat',
-        alwaysOpen: true
-    });
+VideoConference.prototype.openChat = function () {
+  if (this.chatInstance) {
+    return;
+  }
+
+  this.chatInstance = new openTokTextChat({
+    session: this.session,
+    sender: {
+      alias: this.userCompleteName,
+    },
+    textChatContainer: '.chat-container',
+    waitingMessage: this.chatWaitingMessage,
+    alwaysOpen: true
+  });
 };
 
 /**
@@ -329,29 +335,31 @@ VideoConference.prototype.isNotIE = function() {
  * @param element button
  * @param bool    isOn
  */
-VideoConference.prototype.toggleButton = function(button, isOn) {
-    if (isOn) {
-        button.classList.remove('btn-off');
-        return;
-    }
+VideoConference.prototype.toggleButton = function (button, isOn) {
+  if (isOn) {
+    button.classList.remove('btn-off');
+    return;
+  }
 
-    button.classList.add('btn-off');
+  button.classList.add('btn-off');
 };
 
 /**
  * Toggle Chat
  */
-VideoConference.prototype.toggleChat = function() {
-    if (this.chatContainer.classList.contains('hide')) {
-        this.toggleButton(this.toggleChatElement, true);
-        this.chatContainer.classList.remove('hide');
-        this.openChat();
+VideoConference.prototype.toggleChat = function () {
+  if (this.chatContainer.classList.contains('hide')) {
+    this.toggleButton(this.toggleChatElement, true);
+    this.chatContainer.classList.remove('hide');
+    this.openChat();
+    this.chatInstance.showTextChat();
 
-        return;
-    }
+    return;
+  }
 
-    this.chatContainer.classList.add('hide');
-    this.toggleButton(this.toggleChatElement, false);
+  this.chatInstance.hideTextChat();
+  this.chatContainer.classList.add('hide');
+  this.toggleButton(this.toggleChatElement, false);
 };
 
 /**

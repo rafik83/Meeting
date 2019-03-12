@@ -1,10 +1,17 @@
 .chat-container {
-  position:absolute;
-  bottom:54px;
-  width: 100%;
+  position: absolute;
+  bottom: 54px;
+  width: 40%;
   height: 300px;
   z-index: 9999;
   overflow: hidden;
+  right: 0;
+}
+
+@media screen and (max-width: 767px) {
+  .chat-container {
+    width: 100%;
+  }
 }
 
 .ots-text-chat {

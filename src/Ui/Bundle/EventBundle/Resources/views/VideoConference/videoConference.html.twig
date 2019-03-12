@@ -15,9 +15,11 @@
          data-session-id="{{ videoConferenceView.sessionId }}"
          data-api-key="{{ videoConferenceView.apiKey }}"
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
+         data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-participant-presence-action="{{ participantPresenceAction }}"
+         data-user-complete-name="{{ userCompleteName }}"
          {% if meetingView is defined %}
              data-meeting-start-time="{{ meetingView.begin.timestamp }}"
              data-meeting-end-time="{{ meetingView.end.timestamp }}"
