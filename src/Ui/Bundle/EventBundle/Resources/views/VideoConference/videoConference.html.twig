@@ -26,7 +26,7 @@
     >
         <div class="layout-container"></div>
         <div class="publisher-container"></div>
-        <div id="chat" style="background: pink; position:absolute; top:0; left:0; width:300px; height:300px"></div>
+        <div class="chat-container hide"></div>
         <div class="video-helper">
             <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
 
@@ -57,6 +57,9 @@
             </button>
             <button id="toggle-video" class="btn">
                 <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
+            </button>
+            <button id="toggle-chat" class="btn btn-off hide">
+                <i class="icon-Commentaire icon-center"></i>
             </button>
             <button id="start-screensharing" class="btn screensharing">
                 <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.start'|trans }}
