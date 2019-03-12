@@ -53,9 +53,10 @@ Feature: See, create and update happening
     Then I should see "admin.happening.title"
     And I should see "Starting event"
 
+  @test
   Scenario: I can export happening participant
     Given I am logged with "test@test.com" on admin
     When I go to this page "/fr/event/1/happening"
-    Then I should see "admin.happening.button.export"
-    When I follow "admin.happening.button.export"
+    Then I should see "admin.happening.participations.button.export"
+    When I follow "admin.happening.participations.button.export"
     Then I should be on this page "/fr/event/1/happening"
