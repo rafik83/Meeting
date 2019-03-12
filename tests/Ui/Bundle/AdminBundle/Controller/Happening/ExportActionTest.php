@@ -23,7 +23,7 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportAction;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\PartcipantAction;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -73,7 +73,7 @@ class ExportActionTest extends TestCase
             ->willReturn(false)
         ;
 
-        $action = new ExportAction(
+        $action = new PartcipantAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
@@ -106,7 +106,7 @@ class ExportActionTest extends TestCase
 
         $this->router->generate('admin_happening_list', ['event' => 12])->shouldBeCalled()->willReturn('/route');
 
-        $action = new ExportAction(
+        $action = new PartcipantAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
@@ -153,7 +153,7 @@ class ExportActionTest extends TestCase
         $this->flashBag->add(Argument::any())->shouldNotBeCalled();
         $this->router->generate(Argument::any())->shouldNotBeCalled();
 
-        $action = new ExportAction(
+        $action = new PartcipantAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),

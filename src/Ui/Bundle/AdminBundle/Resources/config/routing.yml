@@ -998,12 +998,12 @@ admin_happening_category_update:
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\UpdateAction }
 
-admin_happening_export:
+admin_happening_participant_export:
     path: /event/{event}/happening/export
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportAction }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction }
 
 #
 # Happening Speaker
