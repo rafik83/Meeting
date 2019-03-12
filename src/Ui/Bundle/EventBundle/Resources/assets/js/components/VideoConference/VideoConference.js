@@ -164,7 +164,7 @@ VideoConference.prototype.connect = function() {
 /**
  * Open chat
  */
-VideoConference.prototype.openChat = function () {
+VideoConference.prototype.initChat = function () {
   if (this.chatInstance) {
     return;
   }
@@ -351,8 +351,9 @@ VideoConference.prototype.toggleChat = function () {
   if (this.chatContainer.classList.contains('hide')) {
     this.toggleButton(this.toggleChatElement, true);
     this.chatContainer.classList.remove('hide');
-    this.openChat();
+    this.initChat();
     this.chatInstance.showTextChat();
+    this.chatInstance.deliverUnsentMessages();
 
     return;
   }
