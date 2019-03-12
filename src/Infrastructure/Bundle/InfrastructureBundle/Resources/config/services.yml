@@ -2915,6 +2915,11 @@ services:
             - '@sheet.sheet_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQuery }
+    Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQuery }
 
     #
     # Template

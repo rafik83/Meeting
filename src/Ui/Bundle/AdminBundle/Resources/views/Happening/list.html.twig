@@ -13,6 +13,9 @@
                 {{ 'admin.happening.button.speaker'|trans }}
             </a>
             <a class="btn btn-info" href="{{ path('admin_happening_participant_export', {event: event.id}) }}">
+                {{ 'admin.happening.participations.button.export'|trans }}
+            </a>
+            <a class="btn btn-info" href="{{ path('admin_happening_export', {event: event.id, locale: 'fr'}) }}">
                 {{ 'admin.happening.button.export'|trans }}
             </a>
         </div>
