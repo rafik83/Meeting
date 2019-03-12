@@ -25,14 +25,14 @@
                         {% for locale in event.locales %}
                         <li>
                             <a href="{{ path('admin_happening_export', {event: event.id, locale: locale}) }}">
-                                {{ locale }}
+                                {{ locale|locale(app.request.locale)|capitalize }}
                             </a>
                         </li>
                         {% endfor %}
                     </ul>
                 </div>
             {% else %}
-                <a class="btn btn-info" href="{{ path('admin_happening_export', {event: event.id, locale: app.request.locale}) }}">
+                <a class="btn btn-info" href="{{ path('admin_happening_export', {event: event.id, locale: event.locales|first}) }}">
                     {{ 'admin.happening.button.export'|trans }}
                 </a>
             {% endif %}
