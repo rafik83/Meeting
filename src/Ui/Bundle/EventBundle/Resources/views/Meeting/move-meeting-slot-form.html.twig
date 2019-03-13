@@ -7,27 +7,37 @@
     </h4>
 </div>
 
-{{ form_start(form) }}
+{% if hasAvailableSlots %}
+    {{ form_start(form) }}
+{% endif %}
 <div class="modal-body">
-    <div class="row">
-        <div class="col-md-4">{{ form_label(form.meetingSlot) }}</div>
-        <div class="col-md-8">
-            {{ form_widget(form.meetingSlot) }}
+    {% if hasAvailableSlots %}
+        <div class="row">
+            <div class="col-md-4">{{ form_label(form.meetingSlot) }}</div>
+            <div class="col-md-8">
+                {{ form_widget(form.meetingSlot) }}
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">{{ form_label(form.content) }}</div>
-        <div class="col-md-8">
-            {{ form_widget(form.content) }}
+        <div class="row">
+            <div class="col-md-4">{{ form_label(form.content) }}</div>
+            <div class="col-md-8">
+                {{ form_widget(form.content) }}
+            </div>
         </div>
-    </div>
+    {% else %}
+        {{ 'agenda.meeting.move.no_available_slots'|trans }}
+    {% endif %}
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
         <i class="icon-Retour"></i>{{ 'agenda.meeting.move.back'|trans }}
-        <button type="submit" class="btn btn-primary pull-right">
-            <i class="icon-Transferer"></i> {{ 'common.validate'|trans }}
-        </button>
+        {% if hasAvailableSlots %}
+            <button type="submit" class="btn btn-primary pull-right">
+                <i class="icon-Transferer"></i> {{ 'common.validate'|trans }}
+            </button>
+        {% endif %}
     </button>
 </div>
-{{ form_end(form) }}
+{% if hasAvailableSlots %}
+    {{ form_end(form) }}
+{% endif %}

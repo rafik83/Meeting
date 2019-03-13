@@ -17,6 +17,8 @@ agenda.day.see: 'Voir la journée'
 agenda.meeting.details: Details
 agenda.meeting.move.button: 'Déplacer le RDV'
 agenda.meeting.move.back: 'Retour'
+agenda.meeting.move.success: 'Le RDV a bien été déplacé'
+agenda.meeting.move.no_available_slots: 'Le rendez-vous ne peut être déplacé car il n''y a pas de d''autres disponibilités conjointes'
 agenda.meeting.updateSlot.error: 'Impossible de déplacer ce RDV'
 agenda.participant.view: 'Agenda de %participant%'
 agenda.title: 'Mon agenda'

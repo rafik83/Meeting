@@ -67,6 +67,8 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+            - '@session.flash_bag'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
 
     #
     # Form Template
