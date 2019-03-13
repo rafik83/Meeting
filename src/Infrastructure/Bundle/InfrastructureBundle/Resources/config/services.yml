@@ -5614,6 +5614,7 @@ services:
             - '@order.merger'
             - '@order.balance'
             - '@Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler'
+            - '@adapter.event_url_generator'
         tags:
             - { name: serializer.normalizer }
 
