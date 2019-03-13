@@ -101,11 +101,16 @@ class MoveMeetingSlotAction
             return new Response(null, Response::HTTP_NO_CONTENT);
         }
 
-        return new Response(
-            $this->engine->render('@Event/Meeting/move-meeting-slot-form.html.twig', [
-                'form' => $form->createView(),
-                'hasAvailableSlots' => \count($availableSlotsView->availableSlots) > 0,
-            ])
-        );
+        if (0 === \count($availableSlotsView->availableSlots)) {
+            return new Response(
+                $this->engine->render('@Event/Meeting/no-available-slot.html.twig')
+            );
+        } else {
+            return new Response(
+                $this->engine->render('@Event/Meeting/move-meeting-slot-form.html.twig', [
+                    'form' => $form->createView(),
+                ])
+            );
+        }
     }
 }
