@@ -18,9 +18,11 @@ class CustomDataConverterTest extends TestCase
     public function testConvert()
     {
         $customDataMapping = [
-            'sheet_organization_staff' => 'ZL_Effectif',
-            'sheet_generic_tag_20' => 'ZL_ACTIVITE',
-            'sheet_generic_tag_10' => 'ZL_TypePrestation',
+            'tags' => [
+                'sheet_organization_staff' => 'ZL_Effectif',
+                'sheet_generic_tag_20' => 'ZL_ACTIVITE',
+                'sheet_generic_tag_10' => 'ZL_TypePrestation',
+            ],
         ];
 
         $data = [
@@ -34,11 +36,13 @@ class CustomDataConverterTest extends TestCase
         ];
 
         $expectedResult = [
-            'sheet_organization_staff' => 'A1',
-            'sheet_generic_tag_10' => [
-                'P12',
-                'P3',
-                'P5',
+            'tags' => [
+                'sheet_organization_staff' => 'A1',
+                'sheet_generic_tag_10' => [
+                    'P12',
+                    'P3',
+                    'P5',
+                ],
             ],
         ];
 

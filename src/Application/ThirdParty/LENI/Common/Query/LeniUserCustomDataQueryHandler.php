@@ -17,9 +17,13 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConvert
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -38,16 +42,26 @@ class LeniUserCustomDataQueryHandler
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
+    /** @var ProductAttributedToParticipantRepositoryInterface */
+    private $productAttributedToParticipantRepository;
+
+    /** @var ParticipantRepositoryInterface */
+    private $participantRepository;
+
     public function __construct(
         TypeConverter $typeConverter,
         MappingGetter $mappingGetter,
         CustomDataConverter $customDataConverter,
-        TemplateDataFactory $templateDataFactory
+        TemplateDataFactory $templateDataFactory,
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
+        ParticipantRepositoryInterface $participantRepository
     ) {
         $this->typeConverter = $typeConverter;
         $this->mappingGetter = $mappingGetter;
         $this->customDataConverter = $customDataConverter;
         $this->templateDataFactory = $templateDataFactory;
+        $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
+        $this->participantRepository = $participantRepository;
     }
 
     /**
@@ -96,31 +110,54 @@ class LeniUserCustomDataQueryHandler
             return [];
         }
 
-        $taggedData = [];
+        $customData = [];
 
-        $this->handleSheetState($sheet, $taggedData);
-        $this->getTaggedRawData($this->templateDataFactory->createFromSheet($sheet, $locale), $taggedData);
-        $this->getTaggedRawData($this->templateDataFactory->createRegistrationFromSheet($sheet, $locale), $taggedData);
+        $this->handleSheetState($sheet, $customData);
+        $this->handleProductsData($event, $user, $customData);
+        $this->getTaggedRawData($this->templateDataFactory->createFromSheet($sheet, $locale), $customData);
+        $this->getTaggedRawData($this->templateDataFactory->createRegistrationFromSheet($sheet, $locale), $customData);
 
         $participant = $sheet->getUserParticipant($user);
 
         if (null !== $participant) {
             $this->getTaggedRawData(
                 $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale),
-                $taggedData
+                $customData
             );
         }
 
-        return $this->customDataConverter->convert($customDataMapping, $taggedData);
+        return $this->customDataConverter->convert($customDataMapping, $customData);
     }
 
-    private function handleSheetState(Sheet $sheet, array &$taggedData): void
+    private function handleSheetState(Sheet $sheet, array &$customData): void
     {
-        $taggedData[Sheet::SHEET_STATE] = LeniConstants::SHEET_STATE_MAPPING[$sheet->getState()];
+        $customData[LeniConstants::DATA_MAPPING_FORMAT_STATES][Sheet::SHEET_STATE] = LeniConstants::SHEET_STATE_MAPPING[
+            $sheet->getState()
+        ];
     }
 
-    private function getTaggedRawData(TemplateData $templateData, array &$taggedData): void
+    private function handleProductsData(Event $event, User $user, array &$customData): void
     {
+        $productIds = array_merge(
+            $this->productAttributedToParticipantRepository->findProductIdsAttributedByUserAndEvent(
+                $user,
+                $event
+            ),
+            $this->participantRepository->getProductIdsOfUserForEvent(
+                $user,
+                $event
+            )
+        );
+
+        foreach ($productIds as $product) {
+            $customData[LeniConstants::DATA_MAPPING_FORMAT_PRODUCTS][$product['id']] = true;
+        }
+    }
+
+    private function getTaggedRawData(TemplateData $templateData, array &$customData): void
+    {
+        $typeTag = LeniConstants::DATA_MAPPING_FORMAT_TAGS;
+
         foreach ($templateData->getEditableObjects() as $object) {
             foreach ($object->getTags() as $tag) {
                 if (!$object instanceof TemplateObject\ContentObjectInterface) {
@@ -128,13 +165,13 @@ class LeniUserCustomDataQueryHandler
                 }
 
                 if ($object instanceof TemplateObject\Nomenclature) {
-                    if ($object->isCheckboxes()) {
-                        $taggedData[$tag] = $object->getItems();
+                    if ($object->isMultiple()) {
+                        $customData[$typeTag][$tag] = $object->getItems();
                     } else {
-                        $taggedData[$tag] = $object->getItem();
+                        $customData[$typeTag][$tag] = $object->getItem();
                     }
                 } else {
-                    $taggedData[$tag] = $object->getContentValueLocalize();
+                    $customData[$typeTag][$tag] = $object->getContentValueLocalize();
                 }
             }
         }

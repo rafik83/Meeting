@@ -44,12 +44,12 @@ class HasUserSheetStateChangedQueryHandler
             EventExtraParameterType::TYPE_LENI_DATA_MAPPING
         );
 
-        if (!isset($customDataMapping[Sheet::SHEET_STATE])) {
+        if (!isset($customDataMapping[LeniConstants::DATA_MAPPING_FORMAT_STATES][Sheet::SHEET_STATE])) {
             return false;
         }
 
         $previousState = null;
-        $stateLeniFieldName = $customDataMapping[Sheet::SHEET_STATE];
+        $stateLeniFieldName = $customDataMapping[LeniConstants::DATA_MAPPING_FORMAT_STATES][Sheet::SHEET_STATE];
         $currentState = $query->data[$stateLeniFieldName] ?? null;
 
         $previousLeniFingerprintExtraData = $this->extraDataRepository->getExtraDataForEventNameAndUser(
