@@ -3,6 +3,7 @@
 var TokboxInstance = require('./TokboxInstance').TokboxInstance;
 var CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL;
 var openTokLayout = require('opentok-layout-js');
+var openTokTextChat = require('opentok-text-chat');
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var $ = require('jquery');
@@ -22,6 +23,8 @@ function VideoConference(element) {
   this.meetingEndTime = element.getAttribute('data-meeting-end-time');
   this.meetingStartTime = element.getAttribute('data-meeting-start-time');
   this.currentTime = element.getAttribute('data-current-time');
+  this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
+  this.userCompleteName = element.getAttribute('data-user-complete-name');
 
   this.notCompatibleBrowserMessage = element.getAttribute(
     'data-not-compatible-browser-message'
@@ -38,6 +41,7 @@ function VideoConference(element) {
   this.publisherContainer = element.querySelector('.publisher-container');
   this.layoutContainer = element.querySelector('.layout-container');
   this.helperContainer = element.querySelector('.video-helper');
+  this.chatContainer = element.querySelector('.chat-container');
   this.timerContainer = element.querySelector('.timer');
   this.countDownContainer = element.querySelector('.timer span.countdown');
 
@@ -46,6 +50,7 @@ function VideoConference(element) {
   this.endScreenSharingButton = element.querySelector('#end-screensharing');
   this.toggleAudioElement = element.querySelector('#toggle-audio');
   this.toggleVideoElement = element.querySelector('#toggle-video');
+  this.toggleChatElement = element.querySelector('#toggle-chat');
 
   if (endMeetingButton) {
       endMeetingButton.addEventListener('click', this.disconnect.bind(this));
@@ -69,6 +74,8 @@ function VideoConference(element) {
 
   this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
   this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
+  this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
+  this.chatInstance = null;
 
   document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
@@ -119,8 +126,6 @@ VideoConference.prototype.init = function() {
 
     subscriber.element.appendChild(fullscreenButton);
 
-    console.log('subscriberSTREAM', subscriber.stream.id);
-
     this.helperContainer.classList.add('hide');
 
     var infoContainer = document.createElement('div');
@@ -146,12 +151,33 @@ VideoConference.prototype.init = function() {
  */
 VideoConference.prototype.connect = function() {
   this.session.connect(this.token, function(error) {
+    this.toggleChatElement.classList.remove('hide');
+
     if (!error) {
       this.publishStream();
     } else {
       console.log(error);
     }
   }.bind(this));
+};
+
+/**
+ * Open chat
+ */
+VideoConference.prototype.initChat = function () {
+  if (this.chatInstance) {
+    return;
+  }
+
+  this.chatInstance = new openTokTextChat({
+    session: this.session,
+    sender: {
+      alias: this.userCompleteName,
+    },
+    textChatContainer: '.chat-container',
+    waitingMessage: this.chatWaitingMessage,
+    alwaysOpen: true
+  });
 };
 
 /**
@@ -304,6 +330,40 @@ VideoConference.prototype.isNotIE = function() {
 };
 
 /**
+ * Toggle button
+ *
+ * @param element button
+ * @param bool    isOn
+ */
+VideoConference.prototype.toggleButton = function (button, isOn) {
+  if (isOn) {
+    button.classList.remove('btn-off');
+    return;
+  }
+
+  button.classList.add('btn-off');
+};
+
+/**
+ * Toggle Chat
+ */
+VideoConference.prototype.toggleChat = function () {
+  if (this.chatContainer.classList.contains('hide')) {
+    this.toggleButton(this.toggleChatElement, true);
+    this.chatContainer.classList.remove('hide');
+    this.initChat();
+    this.chatInstance.showTextChat();
+    this.chatInstance.deliverUnsentMessages();
+
+    return;
+  }
+
+  this.chatInstance.hideTextChat();
+  this.chatContainer.classList.add('hide');
+  this.toggleButton(this.toggleChatElement, false);
+};
+
+/**
  * Toggle audio stream
  */
 VideoConference.prototype.toggleAudio = function() {
@@ -320,10 +380,10 @@ VideoConference.prototype.toggleAudio = function() {
 
   if (publisher.stream.hasAudio) {
     publisher.publishAudio(false);
-    this.toggleAudioElement.classList.add('btn-off');
+    this.toggleButton(this.toggleAudioElement, false);
   } else {
+    this.toggleButton(this.toggleAudioElement, true);
     publisher.publishAudio(true);
-    this.toggleAudioElement.classList.remove('btn-off');
   }
 };
 
@@ -338,10 +398,10 @@ VideoConference.prototype.toggleVideo = function() {
 
   if (publisher.stream.hasVideo) {
     publisher.publishVideo(false);
-    this.toggleVideoElement.classList.add('btn-off');
+    this.toggleButton(this.toggleVideoElement, false);
   } else {
     publisher.publishVideo(true);
-    this.toggleVideoElement.classList.remove('btn-off');
+    this.toggleButton(this.toggleVideoElement, true);
   }
 };
 

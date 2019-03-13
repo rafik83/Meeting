@@ -213,6 +213,7 @@ meeting.video.screenshare.end: 'Arrêter le partage'
 meeting.video.screenshare.start: 'Partager mon écran'
 meeting.video.start: 'Démarrer le RDV'
 meeting.video.waitingForParticipant: 'En attente d''un participant'
+meeting.video.chat.waitingMessage: 'Les messages seront remis une fois votre contact connecté.'
 meetingRequest.mobile.filters.availableSlot.title: 'Qui est disponible ?'
 meetingRequest.mobile.filters.state.title: 'Gestion RDV'
 modal.back: Retour
