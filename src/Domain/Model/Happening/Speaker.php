@@ -193,7 +193,7 @@ class Speaker
      */
     public function getName()
     {
-        return $this->firstname . ' ' . strtoupper($this->lastname);
+        return $this->firstname . ' ' . mb_strtoupper($this->lastname);
     }
 
     /**
