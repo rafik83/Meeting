@@ -46,6 +46,6 @@ class ParticipantSubstitution implements SubstituteInterface
         $firstname = $this->firstnameSubstitution->getValue($sheet, $locale);
         $lastname = $this->lastnameSubstitution->getValue($sheet, $locale);
 
-        return ucfirst(strtolower($firstname)) . ' ' . strtoupper($lastname);
+        return ucfirst(strtolower($firstname)) . ' ' . mb_strtoupper($lastname);
     }
 }
