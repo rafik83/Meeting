@@ -72,7 +72,8 @@ class TypeViewQueryHandler
                 $formTemplateViews,
                 (null !== $type->getPackage()) ? $type->getPackage()->getTitle() : '',
                 null !== $type->getPaymentConditions(),
-                isset($contentIndexedByTypeId[$type->getId()])
+                isset($contentIndexedByTypeId[$type->getId()]),
+                $type->canRemoveMeeting()
             );
         }
 
