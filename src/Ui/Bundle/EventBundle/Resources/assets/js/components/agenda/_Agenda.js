@@ -25,6 +25,7 @@ function Agenda(element) {
     this.slots        = [];
     this.scale        = 0;
     this.slotHeight   = 0;
+    this.moveMeetingModal = document.getElementById('meeting-modal');
 
     this.addMeet     = this.addMeet.bind(this);
     this.onSlotScale = this.onSlotScale.bind(this);
@@ -69,7 +70,7 @@ Agenda.prototype.addSlot = function(time, dateAgenda) {
  * @param {Element} element
  */
 Agenda.prototype.addMeet = function(element) {
-    var meet   = new Meet(this, element);
+    var meet   = new Meet(this, element, this.moveMeetingModal);
     var length = this.slots.length;
 
     this.meets.push(meet);

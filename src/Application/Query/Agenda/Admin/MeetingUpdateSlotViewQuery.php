@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Meeting;
 
-class MeetingUpdateSlotViewQuery
+class MeetingUpdateSlotViewQuery implements Query
 {
     /** @var Meeting */
     public $meeting;

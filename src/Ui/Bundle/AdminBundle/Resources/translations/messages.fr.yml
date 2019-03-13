@@ -1272,6 +1272,7 @@ admin.type.registration.template: 'Template d''inscription'
 admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'
 admin.type.specificPaymentConditions: 'Conditions de paiement particulières'
+admin.type.canMoveMeeting: 'Peut déplacer les RDV'
 admin.type.title: Titre
 admin.type.update.link: Modifier
 admin.type.update.title: 'Modifier le type de participation'

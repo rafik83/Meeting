@@ -34,12 +34,7 @@ class MeetingUpdateSlotViewQueryHandler
         $this->meetingSlotRepository = $meetingSlotRepository;
     }
 
-    /**
-     * @param MeetingUpdateSlotViewQuery $query
-     *
-     * @return MeetingUpdateSlotView
-     */
-    public function handle(MeetingUpdateSlotViewQuery $query)
+    public function handle(MeetingUpdateSlotViewQuery $query): MeetingUpdateSlotView
     {
         $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $query->meeting->getEvent(),

@@ -57,6 +57,20 @@ services:
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\ParticipateHandler'
 
     #
+    # Meeting
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingSlotAction:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@form.factory'
+            - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+            - '@session.flash_bag'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    #
     # Form Template
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Form\DownloadFileAction:

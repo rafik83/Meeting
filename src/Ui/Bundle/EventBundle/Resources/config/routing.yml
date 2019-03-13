@@ -778,6 +778,15 @@ event_agenda_participant:
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:participant }
 
+event_agenda_move_meeting_slot:
+    path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/move-meeting-slot
+    requirements:
+        participant: \d+
+        sheet: \d+
+        meeting: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingSlotAction
+
 event_participant_timezone:
     path: /sheet/{sheet}/participant/{participant}/timezone
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ParticipantTimezoneAction }
