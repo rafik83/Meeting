@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\MimeType\MimeType;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class Image extends EditableObject implements UploadableObjectInterface
+class Image extends EditableObject implements UploadableObjectInterface, ExportableObjectInterface
 {
     /** @var null|UploadedFile */
     public $file;
@@ -128,5 +128,21 @@ class Image extends EditableObject implements UploadableObjectInterface
     public function isExportable()
     {
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
+    {
+        return $this->getContentValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
     }
 }

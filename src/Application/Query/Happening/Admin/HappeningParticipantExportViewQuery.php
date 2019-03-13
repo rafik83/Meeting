@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class HappeningParticipantViewQuery implements Query
+class HappeningParticipantExportViewQuery implements Query
 {
     /** @var Event */
     public $event;

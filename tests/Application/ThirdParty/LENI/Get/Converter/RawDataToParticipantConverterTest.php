@@ -83,12 +83,12 @@ class RawDataToParticipantConverterTest extends TestCase
         $dataConverter
             ->convert($customDataMappingEvent1, $rawDataUser1)
             ->shouldBeCalled()
-            ->willReturn(['user1-data-indexed-by-tag' => 'whatever'])
+            ->willReturn(['tags' => ['user1-data-indexed-by-tag' => 'whatever']])
         ;
         $dataConverter
             ->convert($customDataMappingEvent1, $rawDataUser2)
             ->shouldBeCalled()
-            ->willReturn(['user2-data-indexed-by-tag' => 'whatever'])
+            ->willReturn(['tags' => ['user2-data-indexed-by-tag' => 'whatever']])
         ;
 
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
@@ -219,7 +219,10 @@ class RawDataToParticipantConverterTest extends TestCase
         ];
 
         $typeMappingEvent = ['type-mapping-event-1'];
-        $customDataMappingEvent = ['sheet_state' => 'ZL_MODERATION', 'my_tag' => 'custom-data-mapping-event-1'];
+        $customDataMappingEvent = [
+            'states' => ['sheet_state' => 'ZL_MODERATION'],
+            'tags' => ['my_tag' => 'custom-data-mapping-event-1']
+        ];
 
         $user = $this->prophesize(User::class);
         $participantForUser2 = $this->prophesize(Participant::class);
@@ -249,7 +252,10 @@ class RawDataToParticipantConverterTest extends TestCase
         $dataConverter
             ->convert($customDataMappingEvent, $rawDataUser)
             ->shouldBeCalled()
-            ->willReturn(['user2-data-indexed-by-tag' => 'whatever', 'sheet_state' => 'Y'])
+            ->willReturn([
+                'states' => ['sheet_state' => 'Y'],
+                'tags' => ['user2-data-indexed-by-tag' => 'whatever'],
+            ])
         ;
 
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
@@ -260,7 +266,7 @@ class RawDataToParticipantConverterTest extends TestCase
                     $eventType1->reveal(),
                     'ronald@macdonald.food',
                     'en',
-                    ['user2-data-indexed-by-tag' => 'whatever', 'sheet_state' => 'Y'],
+                    ['user2-data-indexed-by-tag' => 'whatever'],
                     $registrationTemplateDataEvent1type1->reveal(),
                     $sheetTemplateDataEvent1type1->reveal(),
                     'leni_user_id',

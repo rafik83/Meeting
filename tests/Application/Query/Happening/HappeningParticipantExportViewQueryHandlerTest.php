@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Happening;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
-use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery;
-use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQuery;
+use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\User;
@@ -24,7 +24,7 @@ use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class HappeningParticipantViewQueryHandlerTest extends TestCase
+class HappeningParticipantExportViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -60,7 +60,7 @@ class HappeningParticipantViewQueryHandlerTest extends TestCase
         $groupNameResolver->resolve($event, $user)->shouldBeCalled()->willReturn('');
         $sheetGuesser->getUserSheet($user, $event, $locale)->shouldBeCalled()->willReturn($sheet);
 
-        $handler = new HappeningParticipantViewQueryHandler(
+        $handler = new HappeningParticipantExportViewQueryHandler(
             $happeningRepository->reveal(),
             $questionRepository->reveal(),
             $groupNameResolver->reveal(),
@@ -68,7 +68,7 @@ class HappeningParticipantViewQueryHandlerTest extends TestCase
         );
 
         $happeningParticipantListView = $handler->handle(
-            new HappeningParticipantViewQuery($event, $locale)
+            new HappeningParticipantExportViewQuery($event, $locale)
         );
 
         $this->assertCount(1, $happeningParticipantListView->getHappeningParticipantListView());
@@ -95,7 +95,7 @@ class HappeningParticipantViewQueryHandlerTest extends TestCase
 
         $happeningRepository->findHappeningParticipant($event)->shouldBeCalled()->willReturn([]);
 
-        $handler = new HappeningParticipantViewQueryHandler(
+        $handler = new HappeningParticipantExportViewQueryHandler(
             $happeningRepository->reveal(),
             $questionRepository->reveal(),
             $groupNameResolver->reveal(),
@@ -104,6 +104,6 @@ class HappeningParticipantViewQueryHandlerTest extends TestCase
 
         $this->expectException(EmptyHappeningParticipationException::class);
 
-        $handler->handle(new HappeningParticipantViewQuery($event, $locale));
+        $handler->handle(new HappeningParticipantExportViewQuery($event, $locale));
     }
 }

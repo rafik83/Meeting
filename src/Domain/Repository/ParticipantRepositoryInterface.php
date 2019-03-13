@@ -263,4 +263,6 @@ interface ParticipantRepositoryInterface
      *               ]
      */
     public function getParticipantEmailsForEvent(Event $event): array;
+
+    public function getProductIdsOfUserForEvent(User $user, Event $event): array;
 }

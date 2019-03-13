@@ -388,6 +388,14 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.serializer_adapter'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportAction:
         arguments:
             - '@adapter.authorization_checker'

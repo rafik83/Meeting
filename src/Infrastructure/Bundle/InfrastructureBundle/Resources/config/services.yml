@@ -2920,14 +2920,20 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQuery }
     query.happening.admin.happening_participant_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@sheet.sheet_guesser'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQuery }
+    Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@adapter.event_url_generator'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQuery }
 
     #
     # Template
@@ -5614,6 +5620,7 @@ services:
             - '@order.merger'
             - '@order.balance'
             - '@Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler'
+            - '@adapter.event_url_generator'
         tags:
             - { name: serializer.normalizer }
 

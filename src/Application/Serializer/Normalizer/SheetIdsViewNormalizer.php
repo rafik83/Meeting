@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Sheet\Details\CRM\RecordView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Category;
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
@@ -26,6 +27,7 @@ use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -133,14 +135,18 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      */
     private $recordViewsQueryHandler;
 
+    /** @var EventUrlGeneratorInterface */
+    private $eventUrlGenerator;
+
     /**
-     * @param TranslatorInterface      $translator
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param TemplateDataFactory      $templateDataFactory
-     * @param OrderRepositoryInterface $orderRepository
-     * @param Merger                   $merger
-     * @param Balance                  $balance
-     * @param RecordViewsQueryHandler  $recordViewsQueryHandler
+     * @param TranslatorInterface        $translator
+     * @param SheetRepositoryInterface   $sheetRepository
+     * @param TemplateDataFactory        $templateDataFactory
+     * @param OrderRepositoryInterface   $orderRepository
+     * @param Merger                     $merger
+     * @param Balance                    $balance
+     * @param RecordViewsQueryHandler    $recordViewsQueryHandler
+     * @param EventUrlGeneratorInterface $eventUrlGenerator
      */
     public function __construct(
         TranslatorInterface $translator,
@@ -149,7 +155,8 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         OrderRepositoryInterface $orderRepository,
         Merger $merger,
         Balance $balance,
-        RecordViewsQueryHandler $recordViewsQueryHandler
+        RecordViewsQueryHandler $recordViewsQueryHandler,
+        EventUrlGeneratorInterface $eventUrlGenerator
     ) {
         parent::__construct($translator);
 
@@ -161,6 +168,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         $this->balance             = $balance;
         $this->orderRepository     = $orderRepository;
         $this->recordViewsQueryHandler = $recordViewsQueryHandler;
+        $this->eventUrlGenerator = $eventUrlGenerator;
     }
 
     /**
@@ -320,6 +328,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
 
         // the tagged data are used in case of empty field
         $taggedData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale)->getAllTaggedDatas();
+        $eventUrl = $this->eventUrlGenerator->generateBaseEventAbsoluteUrl($sheet->getEvent());
 
         $context = array_merge($context, ['taggedData' => $taggedData]);
 
@@ -331,7 +340,13 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
                 $this->sheetFields[$key] = $fieldName;
             }
 
-            $rawData[$key] = $this->getExportableContent($presentationObject, $context);
+            $data = $this->getExportableContent($presentationObject, $context);
+
+            if($presentationObject instanceof Image && $data !== '') {
+                $data = $eventUrl.$data;
+            }
+
+            $rawData[$key] = $data;
         }
     }
 

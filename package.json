@@ -7,8 +7,8 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.0.0",
-    "@babel/preset-react": "^7.0.0",
     "@babel/polyfill": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "@opentok/client": "^2.14.7",
     "@symfony/webpack-encore": "^0.21",
     "axios": "^0.15.3",
@@ -28,6 +28,7 @@
     "moment-timezone": "^0.4.1",
     "opentok-layout-js": "^0.5.1",
     "opentok-network-test-js": "^2.0.0",
+    "opentok-text-chat": "^1.0.30",
     "phantomjs-prebuilt": "^2.1.13",
     "pubsub-js": "1.5.3",
     "react": "^16.4.1",
