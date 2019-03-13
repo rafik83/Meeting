@@ -1087,6 +1087,9 @@ form.transactional_mail_update_customized.children.translations.prototype.childr
 form.transactional_mail_update_customized.children.translations.prototype.children.subject.label: Sujet
 form.type_content_define_terms_of_sale.children.enabled.label: 'Activer la personnalisation des conditions générales de vente pour ce type'
 form.type_content_define_terms_of_sale.children.submit.label: Valider
+form.type_create.children.availabilityType.label: 'Gestion de disponibilité'
+form.type_create.children.canMoveMeeting.label: 'Peut déplacer les RDV'
+form.type_create.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_create.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_create.children.formTemplates.label: Formulaires
 form.type_create.children.formTemplates.status.draft: brouillon
@@ -1104,10 +1107,9 @@ form.type_create.children.translations.prototype.children.description.label: Des
 form.type_create.children.translations.prototype.children.title.label: Titre
 form.type_create.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'
 form.type_create.children.validationCriteria.label: 'Critère de validation automatique des fiches de présentation'
-form.type_create.children.availabilityType.label: 'Gestion de disponibilité'
-form.type_create.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_update.children.availabilityType.label: 'Gestion de disponibilité'
 form.type_update.children.canMoveMeeting.label: 'Peut déplacer les RDV'
+form.type_update.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.type_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.type_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'

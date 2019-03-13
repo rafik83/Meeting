@@ -1252,6 +1252,7 @@ admin.type.form.template: Formulaires
 admin.type.form.template.status.draft: brouillon
 admin.type.form.template.status.published: publié
 admin.type.hidden: Caché
+admin.type.canRemoveMeeting: Peut supprimer un RDV
 admin.type.id: Id
 admin.type.link: 'Types de participation'
 admin.type.list.title: 'Types de participation'

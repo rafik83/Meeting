@@ -48,6 +48,7 @@ class UpdateHandlerTest extends TestCase
         $update->rank = 1;
         $update->hidden = true;
         $update->numberOfMeetingsPerPlanning = 12;
+        $update->canRemoveMeeting = false;
 
         //Mock
         $typeRepository             = $this->prophesize(TypeRepositoryInterface::class);
