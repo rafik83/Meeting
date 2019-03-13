@@ -30,6 +30,11 @@
                             {{ 'admin.sheet.export.uploaded_objects.button.label'|trans }}
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ path('admin_sheet_export_sheet', { 'event': event.id, displayNomenclatureIds: 'true' }) }}">
+                            {{ 'admin.sheet.export.sheet.id.nomenclature.button.label'|trans }}
+                        </a>
+                    </li>
                 </ul>
             </div>
 

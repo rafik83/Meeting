@@ -211,6 +211,16 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
+     * Get the keys of all the items
+     *
+     * @return array|null
+     */
+    public function getNomenclatureKeys(): ?array
+    {
+        return $this->nomenclature->getTreeKeys();
+    }
+
+    /**
      * @deprecated use getNomenclatureLabelOfItems with implode
      *
      * @return null|string
@@ -355,16 +365,22 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         return $this->getLabel($locale, $fallback);
     }
 
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
+    {
+        return $this->getNomenclatureItems();
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent(array $taggedData = [], ?string $locale = null)
+    public function getNomenclatureItems(bool $displayNomenclatureIds = false)
     {
         if (empty($this->getItems())) {
             return '';
         }
 
-        $nomenclatureLabels = $this->getNomenclatureLabels();
+        $nomenclatureLabels = $displayNomenclatureIds ? $this->getNomenclatureKeys() : $this->getNomenclatureLabels();
+
         // Leaf elements are the ones with the longest path (max depth):
         $maxDepth = 1;
         $allItemPaths = [];
