@@ -61,7 +61,6 @@ class TypeListView
         string $package,
         bool $hasSpecificPaymentConditions = false,
         bool $hasSpecificTermsOfSale = false,
-        bool $hasSpecificTermsOfSale = false,
         bool $canMoveMeeting = false,
         bool $canRemoveMeeting = false
     ) {
