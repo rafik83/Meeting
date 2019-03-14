@@ -72,6 +72,10 @@ function initUI(target) {
         var ticking = false;
 
         window.addEventListener('scroll', function(e) {
+            if (!agendas[0]) {
+                return;
+            }
+
             latestKnownAgendaYPosition = agendas[0].getBoundingClientRect().y;
             if (!ticking) {
                 window.requestAnimationFrame(function() {

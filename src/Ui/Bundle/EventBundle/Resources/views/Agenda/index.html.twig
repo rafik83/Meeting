@@ -144,13 +144,15 @@
             {% endfor %}
         </div>
     </div>
+
     {% if sheet.attend and not isUnavailabilityManagementDisabled %}
         <div class="pull-right mg-tp mg-bt">
             <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
         </div>
-        {{ include('EventBundle:Meeting:meeting-modal.html.twig') }}
         {{ include('EventBundle:Agenda:unavailability-modal.html.twig') }}
-        {{ include('EventBundle:Agenda:send-code-form-modal.html.twig') }}
     {% endif %}
+
+    {{ include('EventBundle:Agenda:send-code-form-modal.html.twig') }}
+    {{ include('EventBundle:Meeting:meeting-modal.html.twig') }}
     {{ include('EventBundle:Program/Partials:modal.html.twig', {}, false) }}
 {% endblock %}

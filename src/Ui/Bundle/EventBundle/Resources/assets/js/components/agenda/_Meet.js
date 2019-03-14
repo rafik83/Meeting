@@ -287,8 +287,6 @@ Meet.prototype.guessType = function() {
         return 'availableForMeeting';
     }
 
-    window.console && console.error && console.error('unknow meet type for this meet :');
-    window.console && console.error && console.error(this);
     return 'unknown';
 };
 
