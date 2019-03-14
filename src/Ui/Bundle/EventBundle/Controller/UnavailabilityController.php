@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\User\Availability\Confirmation;
+use Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled;
 use Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled;
 use Proximum\Vimeet\Application\Exception\Unavailability\CanNotDeleteUnavailabilityException;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
@@ -117,6 +118,7 @@ class UnavailabilityController extends Controller
             'timezone' => $timezone,
             'isVisio' => $this->get(IsParticipantVisio::class)->isSatisfiedBy($participant),
             'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
+            'isAvailabilityManagementEnabled' => $this->get(HasAvailabilityManagementEnabled::class)->isSatisfiedBy($sheet),
         ]);
     }
 

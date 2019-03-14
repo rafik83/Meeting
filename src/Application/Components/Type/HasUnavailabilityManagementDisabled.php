@@ -28,8 +28,13 @@ class HasUnavailabilityManagementDisabled
     {
         $type = $sheet->getType();
 
-        return Type::TYPE_MANAGEMENT_UNAVAILABLE !== $type->getAvailabilityType()
-            && false === $this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN')
-        ;
+        // 1rst rule
+        $isEnabled = Type::TYPE_MANAGEMENT_UNAVAILABLE === $type->getAvailabilityType();
+        // 2nd rule
+        $isEnabled = $isEnabled
+            || (Type::TYPE_MANAGEMENT_NONE === $type->getAvailabilityType()
+                && $this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN'));
+
+        return !$isEnabled;
     }
 }

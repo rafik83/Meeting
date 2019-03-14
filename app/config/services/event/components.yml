@@ -16,3 +16,5 @@ services:
     Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled:
         arguments:
             - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled:

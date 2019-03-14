@@ -64,9 +64,9 @@ class UnavailabilityTest extends TestCase
         $user  = new User('test@test.com', '__SALT__', 'password', 'fr');
 
         $expected      = new Unavailability($user, $event, $e, $f);
-        $unvailability = new Unavailability($user, $event, $a, $b);
-        $unvailability->merge(new Unavailability($user, $event, $c, $d));
+        $unavailability = new Unavailability($user, $event, $a, $b);
+        $unavailability->merge(new Unavailability($user, $event, $c, $d));
 
-        $this->assertEquals($expected, $unvailability);
+        $this->assertEquals($expected, $unavailability);
     }
 }

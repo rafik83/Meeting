@@ -12,7 +12,7 @@ var $ = require('jquery'),
     ProductSelector = require('./components/_ProductSelector'),
     QuantitySelector = require('./components/_QuantitySelector'),
     CatalogSheetCard = require('./components/_CatalogSheetCard'),
-    Agenda = require('./components/agenda/_Agenda'),
+    Agenda = require('./components/agenda'),
     Program = require('./components/agenda/_Program'),
     ShowMore = require('./components/_ShowMore'),
     ShowMoreParticipants = require('./components/_ShowMoreParticipants'),
@@ -117,8 +117,9 @@ function init (target) {
         new CatalogSelectFromNomenclaturesField(element, document.getElementById('select-from-nomenclatures-modal'));
     });
 
-    [].forEach.call(target.querySelectorAll('.agenda'), function (element) {
-        new Agenda(element);
+
+    [].forEach.call(target.querySelectorAll('.agenda-container'), function (element) {
+        Agenda.init(target, element);
     });
 
     [].forEach.call(target.querySelectorAll('.program-happening, .program-mass'), function(element) {

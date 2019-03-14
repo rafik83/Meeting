@@ -72,6 +72,14 @@ interface UnavailabilityRepositoryInterface
     public function removeSystemUnavailabilityForUserAndEvent(User $user, Event $event): void;
 
     /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return Unavailability[]
+     */
+    public function findByUserEventAndSheet(User $user, Event $event): array;
+
+    /**
      * @param Participant[] $participants
      *
      * @return Unavailability[]

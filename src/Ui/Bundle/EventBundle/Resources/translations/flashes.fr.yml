@@ -1,3 +1,4 @@
+flash.agenda.availability.ok_message_on_save: 'L''enregistrement de vos disponibilités a réussi.'
 flash.authentication_token.invalid_link: 'Lien invalide'
 flash.event.user_event_phone.confirmationNeeded: 'Afin de faire une demande de RDV, merci de confirmer votre numéro de téléphone mobile'
 flash.event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'

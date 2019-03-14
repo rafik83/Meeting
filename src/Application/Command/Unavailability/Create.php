@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Create
+class Create implements Command
 {
     /**
      * @var Event

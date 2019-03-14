@@ -176,3 +176,14 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\StyleGuide\ShowAction:
         arguments:
             - '@templating'
+
+    #
+    #  AvailabilityType
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\AvailabilityType\CreateUnavailabilitiesAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled'
+            - '@Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled'
+            - '@session'
