@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
@@ -68,6 +69,9 @@ class AgendaViewQueryHandler
     /** @var GetParticipantTypes */
     private $getParticipantTypes;
 
+    /** @var CanMoveMeeting */
+    private $canMoveMeeting;
+
     public function __construct(
         DayRepositoryInterface $dayRepository,
         SheetRepositoryInterface $sheetRepository,
@@ -81,7 +85,8 @@ class AgendaViewQueryHandler
         ValidationRequiredChecker $validationRequiredChecker,
         ExtraDataRepository $extraDataRepository,
         GetTimezoneHelper $getTimezoneHelper,
-        GetParticipantTypes $getParticipantTypes
+        GetParticipantTypes $getParticipantTypes,
+        CanMoveMeeting $canMoveMeeting
     ) {
         $this->dayRepository = $dayRepository;
         $this->sheetRepository = $sheetRepository;
@@ -96,6 +101,7 @@ class AgendaViewQueryHandler
         $this->extraDataRepository = $extraDataRepository;
         $this->getTimezoneHelper = $getTimezoneHelper;
         $this->getParticipantTypes = $getParticipantTypes;
+        $this->canMoveMeeting = $canMoveMeeting;
     }
 
     /**
@@ -105,9 +111,10 @@ class AgendaViewQueryHandler
      */
     public function handle(AgendaViewQuery $query): AgendaView
     {
-        $eventDays   = $this->dayRepository->findByEvent($query->event);
+        $eventDays = $this->dayRepository->findByEvent($query->event);
         $participant = $query->participant;
-        $sheet       = $query->sheet;
+        $sheet = $query->sheet;
+        $canMoveMeeting = $this->canMoveMeeting->isSatisfiedBy($sheet);
 
         $isUserParticipantMultipleSheet = $this->sheetRepository->isUserParticipantMultipleSheetsInEvent(
             $participant->getUser(),
@@ -126,7 +133,7 @@ class AgendaViewQueryHandler
         );
 
         if (empty($eventDays)) {
-            return new AgendaView([], $timezone, $sheet, $participant, $isUserAloneParticipant, $participants, false);
+            return new AgendaView([], $timezone, $sheet, $participant, $isUserAloneParticipant, $participants, false, $canMoveMeeting);
         }
 
         $unavailabilities        = [];
@@ -194,7 +201,8 @@ class AgendaViewQueryHandler
             $participant,
             $isUserAloneParticipant,
             $participants,
-            $isPhoneConfirmationRequired
+            $isPhoneConfirmationRequired,
+            $canMoveMeeting
         );
     }
 

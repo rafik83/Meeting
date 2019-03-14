@@ -19,7 +19,6 @@ use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAnd
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHandler;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
@@ -66,7 +65,7 @@ class UpdateSlotHandler
     public function handle(UpdateSlot $updateSlot)
     {
         // Check if meeting can be moved
-        if (true === $updateSlot->meeting->isBlockedSlot()) {
+        if (true === $updateSlot->meeting->isBlockedSlot() && false === $updateSlot->isUpdatedByParticipant) {
             throw new MeetingIsBlockedSlotException();
         }
 

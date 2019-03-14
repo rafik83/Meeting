@@ -15,9 +15,11 @@
          data-session-id="{{ videoConferenceView.sessionId }}"
          data-api-key="{{ videoConferenceView.apiKey }}"
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
+         data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-participant-presence-action="{{ participantPresenceAction }}"
+         data-user-complete-name="{{ userCompleteName }}"
          {% if meetingView is defined %}
              data-meeting-start-time="{{ meetingView.begin.timestamp }}"
              data-meeting-end-time="{{ meetingView.end.timestamp }}"
@@ -26,6 +28,7 @@
     >
         <div class="layout-container"></div>
         <div class="publisher-container"></div>
+        <div class="chat-container hide"></div>
         <div class="video-helper">
             <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
 
@@ -56,6 +59,9 @@
             </button>
             <button id="toggle-video" class="btn">
                 <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
+            </button>
+            <button id="toggle-chat" class="btn btn-off hide">
+                <i class="icon-Commentaire icon-center"></i>
             </button>
             <button id="start-screensharing" class="btn screensharing">
                 <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.start'|trans }}

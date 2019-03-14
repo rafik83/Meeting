@@ -56,8 +56,10 @@ class VideoConferenceController extends Controller
             throw $this->createAccessDeniedException('Meeting is not visio');
         }
 
+        $user = $userDomain->getUser();
+
         if (false === $sheet->hasParticipant($participant)
-            || false === $sheet->hasUser($userDomain->getUser())
+            || false === $sheet->hasUser($user)
             || ($meeting->getToSheet() !== $sheet && $sheet !== $meeting->getFromSheet())
             || (false === $meeting->hasFromParticipant($participant) && false === $meeting->hasToParticipant($participant))
         ) {
@@ -82,6 +84,7 @@ class VideoConferenceController extends Controller
                 'event' => $event,
                 'sheet' => $sheet,
                 'participant' => $participant,
+                'userCompleteName' => $user->getAccount()->getCompleteName(),
                 'meeting' => $meeting,
                 'videoConferenceView' => $videoConferenceView,
                 'meetingView' => $meetingView,
@@ -106,14 +109,18 @@ class VideoConferenceController extends Controller
 
     /**
      * Opened page to test the Video Conference feature with a sessionId
-     *
-     * @param EventDomain $eventDomain
-     * @param string      $sessionId
-     *
-     * @return Response
      */
-    public function accessSessionVideoTestAction(EventDomain $eventDomain, string $sessionId): Response
-    {
+    public function accessSessionVideoTestAction(
+        EventDomain $eventDomain,
+        ?UserDomain $userDomain,
+        string $sessionId
+    ): Response {
+        if ('' === $sessionId) {
+            return $this->redirectToRoute('event_video_conference_create_session_test');
+        }
+
+        $userCompleteName = null !== $userDomain ? $userDomain->getUser()->getAccount()->getCompleteName() : 'N/A';
+
         try {
             /** @var VideoConferenceView $videoConferenceView */
             $videoConferenceView = $this->get('tactician.commandbus')->handle(
@@ -125,6 +132,7 @@ class VideoConferenceController extends Controller
 
         return $this->render('EventBundle:VideoConference:videoConference.html.twig', [
             'event' => $eventDomain->getEvent(),
+            'userCompleteName' => $userCompleteName,
             'videoConferenceView' => $videoConferenceView,
         ]);
     }

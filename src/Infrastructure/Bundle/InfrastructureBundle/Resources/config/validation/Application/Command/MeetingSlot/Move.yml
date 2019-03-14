@@ -1,0 +1,7 @@
+Proximum\Vimeet\Application\Command\MeetingSlot\Move:
+    properties:
+        meetingSlot:
+            - NotBlank: ~
+        content:
+            - Length:
+                max: 300

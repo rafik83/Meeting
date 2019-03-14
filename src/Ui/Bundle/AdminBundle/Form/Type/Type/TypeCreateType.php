@@ -75,6 +75,9 @@ class TypeCreateType extends AbstractType
                 'required' => false,
                 'help' => 'form.type_create.children.numberOfMeetingsPerPlanning.help',
             ])
+            ->add('canRemoveMeeting', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('rank', IntegerType::class, [
                 'required' => false,
             ])
@@ -88,6 +91,9 @@ class TypeCreateType extends AbstractType
                     "admin.type.management.available.label" => Model\Type::TYPE_MANAGEMENT_AVAILABLE,
                     "admin.type.management.unavailable.label" => Model\Type::TYPE_MANAGEMENT_UNAVAILABLE,
                 ],
+            ])
+            ->add('canMoveMeeting', CheckboxType::class, [
+                'required' => false,
             ])
         ;
     }

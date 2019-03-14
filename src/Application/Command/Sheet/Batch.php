@@ -116,6 +116,9 @@ class Batch extends AbstractBatch
     /** @var string */
     public $printOption;
 
+    /** @var bool */
+    public $duplicate = false;
+
     /** @var Type */
     public $duplicateToType;
 

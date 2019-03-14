@@ -1602,6 +1602,16 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
+    Proximum\Vimeet\Application\Command\MeetingSlot\MoveHandler:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Move }
     command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:
@@ -2786,6 +2796,10 @@ services:
             - '@datetime'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
+    Proximum\Vimeet\Domain\Meeting\CanMoveMeeting:
+        arguments:
+            - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
+
     #
     # Security Component
     #
@@ -2927,14 +2941,20 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQuery }
     query.happening.admin.happening_participant_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQueryHandler
+        class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@sheet.sheet_guesser'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQuery }
+    Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@adapter.event_url_generator'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQuery }
 
     #
     # Template
@@ -4006,6 +4026,7 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
+            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
 
@@ -4122,6 +4143,9 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery }
+
     query.agenda.admin.request_slot_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler
         arguments:
@@ -5621,6 +5645,7 @@ services:
             - '@order.merger'
             - '@order.balance'
             - '@Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler'
+            - '@adapter.event_url_generator'
         tags:
             - { name: serializer.normalizer }
 

@@ -87,6 +87,9 @@ class TypeUpdateType extends AbstractType
                 'required' => false,
                 'help' => 'form.type_update.children.numberOfMeetingsPerPlanning.help',
             ])
+            ->add('canRemoveMeeting', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('validationCriteria', TypeValidationCriteriaType::class, [
                 'required' => false,
             ])
@@ -105,6 +108,9 @@ class TypeUpdateType extends AbstractType
                     "admin.type.management.available.label" => Type::TYPE_MANAGEMENT_AVAILABLE,
                     "admin.type.management.unavailable.label" => Type::TYPE_MANAGEMENT_UNAVAILABLE,
                 ],
+            ])
+            ->add('canMoveMeeting', CheckboxType::class, [
+                'required' => false,
             ])
         ;
     }

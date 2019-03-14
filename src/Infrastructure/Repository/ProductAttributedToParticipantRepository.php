@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class ProductAttributedToParticipantRepository implements ProductAttributedToParticipantRepositoryInterface
@@ -109,5 +111,20 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function findProductIdsAttributedByUserAndEvent(User $user, Event $event): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('product.id')
+            ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
+            ->join('productAttributedToParticipant.participant', 'participant', 'WITH', 'participant.user = :user')
+            ->join('productAttributedToParticipant.product', 'product', 'WITH', 'product.event = :event')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->groupBy('product')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

@@ -12,9 +12,30 @@
             <a class="btn btn-info" href="{{ path('admin_happening_speaker_list', {event: event.id}) }}">
                 {{ 'admin.happening.button.speaker'|trans }}
             </a>
-            <a class="btn btn-info" href="{{ path('admin_happening_export', {event: event.id}) }}">
-                {{ 'admin.happening.button.export'|trans }}
+            <a class="btn btn-info" href="{{ path('admin_happening_participant_export', {event: event.id}) }}">
+                {{ 'admin.happening.participations.button.export'|trans }}
             </a>
+            {% if event.locales|length > 1 %}
+                <div class="dropdown pull-right" style="margin: 0 10px;">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        {{ 'admin.happening.button.export'|trans }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        {% for locale in event.locales %}
+                        <li>
+                            <a href="{{ path('admin_happening_export', {event: event.id, locale: locale}) }}">
+                                {{ locale|locale(app.request.locale)|capitalize }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                <a class="btn btn-info" href="{{ path('admin_happening_export', {event: event.id, locale: event.locales|first}) }}">
+                    {{ 'admin.happening.button.export'|trans }}
+                </a>
+            {% endif %}
         </div>
     </h1>
 

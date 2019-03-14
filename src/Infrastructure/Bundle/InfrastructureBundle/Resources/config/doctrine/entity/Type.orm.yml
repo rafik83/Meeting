@@ -23,6 +23,14 @@ Proximum\Vimeet\Domain\Model\Type:
             type: boolean
             options:
                 default: false
+        canMoveMeeting:
+            type: boolean
+            options:
+                default: false
+        canRemoveMeeting:
+            type: boolean
+            options:
+                default: false
         availabilityType:
             type: string
     embedded:

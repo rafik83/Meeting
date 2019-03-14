@@ -7,7 +7,13 @@ function SharedChoicesCollection(element, name)
     this.element    = $(element);
     this.name       = name;
 
-    this.element.find('[data-shared-choices-collection-item="' + this.name + '"]').each(function (key, item) {
+    const elements = this.element.find('[data-shared-choices-collection-item="' + this.name + '"]');
+
+    if (elements.length > 10) {
+        return;
+    }
+
+    elements.each(function (key, item) {
         $(item).data('shared-choices-collection-item-object', new SharedChoices(item, '[data-shared-choices-collection-item="' + item.getAttribute('data-shared-choices-collection-item') + '"]'));
     }.bind(this));
 

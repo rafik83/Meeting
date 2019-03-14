@@ -30,6 +30,11 @@
                             {{ 'admin.sheet.export.uploaded_objects.button.label'|trans }}
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ path('admin_sheet_export_sheet', { 'event': event.id, displayNomenclatureIds: 'true' }) }}">
+                            {{ 'admin.sheet.export.sheet.id.nomenclature.button.label'|trans }}
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -103,7 +108,11 @@
                             {{ 'admin.sheet.validate'|trans }}
                         </a>
                     </li>
-                    <li>{{ form_widget(batch_form.refuse, { 'attr': { 'data-confirm': 'admin.batch_actions.confirm'|trans } }) }}</li>
+
+                    {% if batch_form.refuse is defined %}
+                        <li>{{ form_widget(batch_form.refuse, { 'attr': { 'data-confirm': 'admin.batch_actions.confirm'|trans } }) }}</li>
+                    {% endif %}
+
                     <li role="separator" class="divider"></li>
 
                     <li>

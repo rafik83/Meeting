@@ -50,7 +50,7 @@ class CreateHandlerTest extends TestCase
         $expectedType->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
         $expectedType->getValidationCriteria()->setSheetAccepted(true);
         $expectedType->setSheetTemplate($expectedSheetTemplate);
-        $expectedType->update(null, true, true, 12);
+        $expectedType->update(null, true, true, 12, false);
         $expectedType->setRegistrationTemplate($expectedRegistrationTemplate);
         $expectedType->setPackage($package);
         $expectedType->setFormTemplates([$formTemplate1, $formTemplate2]);
@@ -65,8 +65,10 @@ class CreateHandlerTest extends TestCase
         $create->formTemplates = [$formTemplate1, $formTemplate2];
         $create->hidden = true;
         $create->rank = null;
+        $create->canMoveMeeting = false;
         $create->availabilityType = Type::TYPE_MANAGEMENT_UNAVAILABLE;
         $create->numberOfMeetingsPerPlanning = 12;
+        $create->canRemoveMeeting = false;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);

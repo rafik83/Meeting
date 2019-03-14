@@ -324,6 +324,11 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MeetingSlot\MoveMeetingSlotType:
+        arguments:
+             - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
 
     #
     # Form Factory

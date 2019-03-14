@@ -33,7 +33,7 @@ class UpdateHandlerTest extends TestCase
         $expectedType = new Type($event);
         $expectedType->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'truc'));
         $expectedType->getValidationCriteria()->setSheetAccepted(false);
-        $expectedType->update(1, true, false, 12);
+        $expectedType->update(1, true, false, 12, false);
 
         //Command
         $type = new Type($event);
@@ -48,6 +48,7 @@ class UpdateHandlerTest extends TestCase
         $update->rank = 1;
         $update->hidden = true;
         $update->numberOfMeetingsPerPlanning = 12;
+        $update->canRemoveMeeting = false;
 
         //Mock
         $typeRepository             = $this->prophesize(TypeRepositoryInterface::class);

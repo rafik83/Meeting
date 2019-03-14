@@ -22,7 +22,7 @@ use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 
-class HappeningParticipantViewQueryHandler
+class HappeningParticipantExportViewQueryHandler
 {
     /**
      * @var HappeningRepositoryInterface
@@ -64,13 +64,13 @@ class HappeningParticipantViewQueryHandler
     }
 
     /**
-     * @param HappeningParticipantViewQuery $query
+     * @param HappeningParticipantExportViewQuery $query
      *
      * @throws EmptyHappeningParticipationException
      *
      * @return HappeningParticipantListView
      */
-    public function handle(HappeningParticipantViewQuery $query)
+    public function handle(HappeningParticipantExportViewQuery $query)
     {
         // preload happenings with participations and questions
         $happenings = $this->happeningRepository->findHappeningParticipant($query->event);

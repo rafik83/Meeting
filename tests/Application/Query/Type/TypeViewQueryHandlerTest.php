@@ -70,6 +70,8 @@ class TypeViewQueryHandlerTest extends TestCase
         $type1->getFormTemplates()->willReturn([$formTemplate1->reveal()]);
         $type1->getPackage()->willReturn($package2->reveal());
         $type1->getPaymentConditions()->willReturn(null);
+        $type1->canMoveMeeting()->willReturn(false);
+        $type1->canRemoveMeeting()->willReturn(false);
 
         $type2->getId()->willReturn(17);
         $type2->getPosition()->willReturn(1);
@@ -80,6 +82,8 @@ class TypeViewQueryHandlerTest extends TestCase
         $type2->getFormTemplates()->willReturn([$formTemplate1->reveal(), $formTemplate2->reveal()]);
         $type2->getPackage()->willReturn($package1->reveal());
         $type2->getPaymentConditions()->willReturn(null);
+        $type2->canRemoveMeeting()->willReturn(false);
+        $type2->canMoveMeeting()->willReturn(false);
 
         $type3->getId()->willReturn(18);
         $type3->getPosition()->willReturn(2);
@@ -90,6 +94,8 @@ class TypeViewQueryHandlerTest extends TestCase
         $type3->getFormTemplates()->willReturn([]);
         $type3->getPackage()->willReturn($package2->reveal());
         $type3->getPaymentConditions()->willReturn($paymentConditions->reveal());
+        $type3->canRemoveMeeting()->willReturn(false);
+        $type3->canMoveMeeting()->willReturn(false);
 
         $paginatedResult = new PaginatedResult([$type1->reveal(), $type2->reveal(), $type3->reveal()], 1, 20, 50);
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
@@ -110,9 +116,9 @@ class TypeViewQueryHandlerTest extends TestCase
 
         $expected = new TypeListsView();
         $expected->types = [
-            new TypeListView(14, 3, 'Type 1', true, 'registration template 1', 'sheet template 2', [$formTemplateView1], 'package 2', false, false),
-            new TypeListView(17, 1, 'Type 2', false, 'registration template 2', 'sheet template 2', [$formTemplateView1, $formTemplateView2], 'package 1', false, false),
-            new TypeListView(18, 2, 'Type 3', true, 'registration template 1', 'sheet template 1', [], 'package 2', true, true),
+            new TypeListView(14, 3, 'Type 1', true, 'registration template 1', 'sheet template 2', [$formTemplateView1], 'package 2', false, false, false, false),
+            new TypeListView(17, 1, 'Type 2', false, 'registration template 2', 'sheet template 2', [$formTemplateView1, $formTemplateView2], 'package 1', false, false, false, false),
+            new TypeListView(18, 2, 'Type 3', true, 'registration template 1', 'sheet template 1', [], 'package 2', true, true, false, false),
         ];
         $expected->results = $paginatedResult;
 

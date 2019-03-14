@@ -62,6 +62,16 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MeetingRequest\Export\MeetingRequestListViewQuery }
 
     #
+    # Meeting Slot
+    #
+    Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsQuery }
+
+    #
     # Sheet Details
     #
     query.sheet.detail.participant.phone_validation_status_query_handler:

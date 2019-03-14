@@ -1,22 +1,15 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
-use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
-use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery;
+use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningException;
+use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Application\View\Happening\Admin\HappeningExportListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -65,38 +58,39 @@ class ExportAction
     /**
      * @param Request $request
      * @param Event   $event
+     * @param string  $locale
      *
      * @throws AccessDeniedException
      *
      * @return RedirectResponse|CsvFileResponse
      */
-    public function __invoke(Request $request, Event $event)
+    public function __invoke(Request $request, Event $event, string $locale)
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
             throw new AccessDeniedException('Access Denied!');
         }
 
         try {
-            $happeningParticipantViews = $this->queryBus->handle(
-                new HappeningParticipantViewQuery($event, $event->getAvailableLocale($request->getLocale()))
+            /** @var HappeningExportListView $happeningExportListView */
+            $happeningExportListView = $this->queryBus->handle(
+                new HappeningExportViewQuery($event, $event->getAvailableLocale($locale))
             );
-        } catch (EmptyHappeningParticipationException $exception) {
-            $this->flashBag->add('error', 'flash.admin.happening.participation.empty');
+        } catch (EmptyHappeningException $exception) {
+            $this->flashBag->add('error', 'flash.admin.happening.empty');
 
             return new RedirectResponse(
                 $this->router->generate('admin_happening_list', ['event' => $event->getId()])
             );
         }
 
-        $exportedContent = $this->serializer->serialize($happeningParticipantViews, 'csv', [
+        $exportedContent = $this->serializer->serialize(
+            $happeningExportListView->getHappeningExportListView(), 'csv', [
             'locale'        => $event->getAvailableLocale($request->getLocale()),
             'charset'       => Charset::WINDOWS_1252,
             'csv_delimiter' => ';',
-        ]);
-
-        return new CsvFileResponse(
-            $exportedContent,
-            'export_happening_participants_' . date('Y_m_d_His') . '.csv'
+        ]
         );
+
+        return new CsvFileResponse($exportedContent, 'export_happening_'.date('Y_m_d_His').'.csv');
     }
 }

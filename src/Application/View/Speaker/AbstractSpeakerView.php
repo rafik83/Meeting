@@ -123,8 +123,8 @@ abstract class AbstractSpeakerView
     {
         return sprintf(
             '%s%s',
-            strtoupper(mb_substr($this->firstname, 0, 1)),
-            strtoupper(mb_substr($this->lastname, 0, 1))
+            mb_strtoupper(mb_substr($this->firstname, 0, 1)),
+            mb_strtoupper(mb_substr($this->lastname, 0, 1))
         );
     }
 }

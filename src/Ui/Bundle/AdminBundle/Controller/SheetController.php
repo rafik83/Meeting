@@ -229,6 +229,10 @@ class SheetController extends Controller
                 $batch->draft              = $batchForm->get('validationStateDraft')->isClicked();
                 $batch->validationValidate = $batchForm->get('validationStateValidate')->isClicked();
 
+                $batch->duplicate = $batchForm->has('duplicate')
+                    ? $batchForm->get('duplicate')->isClicked()
+                    : false;
+
                 if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
                     $batch->refuse = $batchForm->get('refuse')->isClicked();
                     $batch->printPdf  = $batchForm->get('printPdf')->isClicked();

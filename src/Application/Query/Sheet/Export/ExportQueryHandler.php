@@ -48,9 +48,10 @@ class ExportQueryHandler
         );
 
         return $this->serializerAdapter->serialize($sheetIdsView, 'csv', [
-            'locale'        => $exportQuery->locale,
-            'charset'       => $exportQuery->charset,
-            'event'         => $exportQuery->event,
+            'locale' => $exportQuery->locale,
+            'charset' => $exportQuery->charset,
+            'event' => $exportQuery->event,
+            'displayNomenclatureIds' => $exportQuery->displayNomenclatureIds,
             'csv_delimiter' => ';',
         ]);
     }
