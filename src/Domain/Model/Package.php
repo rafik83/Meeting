@@ -265,6 +265,11 @@ class Package
      */
     public function getParticipant()
     {
+        return $this->getFirstProductParticipant();
+    }
+
+    public function getFirstProductParticipant(): Product
+    {
         $firstPackageParticipantRank = $this->participantRanks->first();
 
         if (!$firstPackageParticipantRank instanceof PackageParticipantRank) {
