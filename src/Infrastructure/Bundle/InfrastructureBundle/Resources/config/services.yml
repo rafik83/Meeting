@@ -3052,6 +3052,10 @@ services:
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.participant_repository'
 
+    Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
+
     #
     # Spot component
     #

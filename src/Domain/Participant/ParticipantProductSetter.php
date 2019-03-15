@@ -10,20 +10,26 @@
 
 namespace Proximum\Vimeet\Domain\Participant;
 
-use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ProductSetOnParticipantEvent;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ParticipantProductSetter
 {
-    /** @var DelayedEventDispatcherInterface */
+    /** @var ParticipantRepositoryInterface */
+    private $participantRepository;
+
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     public function __construct(
-        DelayedEventDispatcherInterface $eventDispatcher
+        ParticipantRepositoryInterface $participantRepository,
+        EventDispatcherInterface $eventDispatcher
     ) {
+        $this->participantRepository = $participantRepository;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -40,6 +46,7 @@ class ParticipantProductSetter
 
         if ($hasNewProduct || $removeProduct || $newProductIsDifferent) {
             $participant->setParticipantProduct($product);
+            $this->participantRepository->set($participant);
 
             $event = new ProductSetOnParticipantEvent($participant);
             $this->eventDispatcher->dispatch(Events::PARTICIPANT_PRODUCT_SET, $event);

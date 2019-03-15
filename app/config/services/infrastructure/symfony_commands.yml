@@ -29,6 +29,14 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Participant\ParticipantProduct\SetProductToParticipantWithPackageParticipantAndPlanningDisabledCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled'
+        tags:
+            - { name: console.command }
+
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsForEventsCommand:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
