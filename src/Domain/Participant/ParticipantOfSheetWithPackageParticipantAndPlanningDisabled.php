@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Participant;
 
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
 class ParticipantOfSheetWithPackageParticipantAndPlanningDisabled
 {
@@ -23,7 +22,7 @@ class ParticipantOfSheetWithPackageParticipantAndPlanningDisabled
         $this->participantProductSetter = $participantProductSetter;
     }
 
-    public function handleParticipant(Participant $participant): void
+    public function handle(Participant $participant): void
     {
         $package = $participant->getSheet()->getPackage();
 
