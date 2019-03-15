@@ -29,7 +29,6 @@ class MoveHandlerTest extends TestCase
         $meetingRepository,
         $datetime,
         $sheet,
-        $spot,
         $meetingSlot,
         $meeting;
 
@@ -43,7 +42,6 @@ class MoveHandlerTest extends TestCase
         $this->datetime = new \DateTime();
         $this->sheet = $this->prophesize(Sheet::class);
         $this->meeting = $this->prophesize(Meeting::class);
-        $this->spot = $this->prophesize(Spot::class);
         $this->meetingSlot = $this->prophesize(MeetingSlot::class);
     }
 
@@ -81,8 +79,7 @@ class MoveHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true);
 
-        $this->spot->isVisio()->shouldBeCalled()->willReturn(false);
-        $this->meeting->getSpot()->shouldBeCalled()->willReturn($this->spot->reveal());
+        $this->meeting->isVisio()->shouldBeCalled()->willReturn(false);
 
         $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), false, true))
             ->shouldBeCalled()
@@ -111,8 +108,7 @@ class MoveHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true);
 
-        $this->spot->isVisio()->shouldBeCalled()->willReturn(false);
-        $this->meeting->getSpot()->shouldBeCalled()->willReturn($this->spot->reveal());
+        $this->meeting->isVisio()->shouldBeCalled()->willReturn(false);
         $this->meeting->blockSlot()->shouldBeCalled();
 
         $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), false, true))
@@ -141,8 +137,7 @@ class MoveHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true);
 
-        $this->spot->isVisio()->shouldBeCalled()->willReturn(true);
-        $this->meeting->getSpot()->shouldBeCalled()->willReturn($this->spot->reveal());
+        $this->meeting->isVisio()->shouldBeCalled()->willReturn(true);
         $this->meeting->blockSlot()->shouldBeCalled();
 
         $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), true, true))

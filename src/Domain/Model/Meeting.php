@@ -504,4 +504,9 @@ class Meeting implements MessageSubjectInterface
     {
         $this->status = self::STATUS_NOT_CONFIRMED;
     }
+
+    public function isVisio(): bool
+    {
+        return $this->getSpot()->isVisio();
+    }
 }
