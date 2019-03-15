@@ -37,12 +37,16 @@ class ListDetailView
     /** @var bool */
     public $hasDepartureHours;
 
+    /** @var bool */
+    public $areDatesFilledByUser;
+
     public function __construct(
         int $userId,
         ?string $firstName,
         ?string $lastName,
         ?\DateTimeInterface $arrivalDate,
         ?\DateTimeInterface $departureDate,
+        bool $areDatesFilledByUser,
         bool $hasArrivalHours,
         bool $hasDepartureHours,
         ?string $comment,
@@ -55,6 +59,7 @@ class ListDetailView
         $this->lastName = $lastName;
         $this->arrivalDate = $arrivalDate;
         $this->departureDate = $departureDate;
+        $this->areDatesFilledByUser = $areDatesFilledByUser;
         $this->comment = $comment;
         $this->tasting = $tasting;
         $this->sheetViews = $sheetViews;

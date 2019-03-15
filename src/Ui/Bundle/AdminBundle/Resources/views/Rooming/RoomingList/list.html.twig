@@ -47,13 +47,13 @@
                         <table class="table table-condensed table-bordered">
                             <tr>
                                 <th class="text-center" colspan="{{ detailView.userStayViews|length }}">
-                                    {% if detailView.arrivalDate is not null %}
+                                    {% if detailView.areDatesFilledByUser and detailView.arrivalDate is not null %}
                                         {{ detailView.arrivalDate|localizeddate('short', detailView.hasArrivalHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
                                     {% endif %}
-                                    {% if detailView.departureDate is not null %}
+                                    {% if detailView.areDatesFilledByUser and detailView.departureDate is not null %}
                                         ➡ {{ detailView.departureDate|localizeddate('short', detailView.hasDepartureHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
                                     {% endif %}
-                                    {% if detailView.arrivalDate is null and detailView.departureDate is null %}
+                                    {% if not detailView.areDatesFilledByUser %}
                                         {{ 'admin.rooming.stay.no-dates'|trans }}
                                     {% endif %}
                                 </th>
