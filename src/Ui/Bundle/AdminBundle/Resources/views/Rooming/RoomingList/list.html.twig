@@ -53,6 +53,9 @@
                                     {% if detailView.departureDate is not null %}
                                         ➡ {{ detailView.departureDate|localizeddate('short', detailView.hasDepartureHours ? 'short' : 'none', app.request.locale, event.timeZone) }}
                                     {% endif %}
+                                    {% if detailView.arrivalDate is null and detailView.departureDate is null %}
+                                        {{ 'admin.rooming.stay.no-dates'|trans }}
+                                    {% endif %}
                                 </th>
                             </tr>
                             <tr>
