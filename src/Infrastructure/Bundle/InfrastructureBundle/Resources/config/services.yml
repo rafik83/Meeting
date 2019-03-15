@@ -2798,6 +2798,9 @@ services:
 
     Proximum\Vimeet\Domain\Meeting\CanMoveMeeting:
         arguments:
+
+    Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting:
+        arguments:
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
 
     #

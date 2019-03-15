@@ -52,6 +52,12 @@
                 </a>
             {% endif %}
 
+            {% if canRemoveMeeting %}
+                <a class="removeMeetingAction" href="{{ path('event_agenda_remove_meeting_slot', {'sheet': sheetId, 'meeting': meeting.id, 'participant': participantId}) }}">
+                    <i class="icon icon-remove"></i> {{ 'agenda.meeting.remove.button'|trans }}
+                </a>
+            {% endif %}
+
             <div class="actions">
                 {% if meeting.isVisioAndAvailable %}
                     <a class="btn btn-primary start-visio"

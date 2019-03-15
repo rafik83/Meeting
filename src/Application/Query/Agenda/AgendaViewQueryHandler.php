@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
+use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
 use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
@@ -72,6 +73,9 @@ class AgendaViewQueryHandler
     /** @var CanMoveMeeting */
     private $canMoveMeeting;
 
+    /** @var CanRemoveMeeting */
+    private $canRemoveMeeting;
+
     public function __construct(
         DayRepositoryInterface $dayRepository,
         SheetRepositoryInterface $sheetRepository,
@@ -86,7 +90,8 @@ class AgendaViewQueryHandler
         ExtraDataRepository $extraDataRepository,
         GetTimezoneHelper $getTimezoneHelper,
         GetParticipantTypes $getParticipantTypes,
-        CanMoveMeeting $canMoveMeeting
+        CanMoveMeeting $canMoveMeeting,
+        CanRemoveMeeting $canRemoveMeeting
     ) {
         $this->dayRepository = $dayRepository;
         $this->sheetRepository = $sheetRepository;
@@ -102,6 +107,7 @@ class AgendaViewQueryHandler
         $this->getTimezoneHelper = $getTimezoneHelper;
         $this->getParticipantTypes = $getParticipantTypes;
         $this->canMoveMeeting = $canMoveMeeting;
+        $this->canRemoveMeeting = $canRemoveMeeting;
     }
 
     /**
@@ -115,6 +121,7 @@ class AgendaViewQueryHandler
         $participant = $query->participant;
         $sheet = $query->sheet;
         $canMoveMeeting = $this->canMoveMeeting->isSatisfiedBy($sheet);
+        $canRemoveMeeting = $this->canRemoveMeeting->isSatisfiedBy($sheet);
 
         $isUserParticipantMultipleSheet = $this->sheetRepository->isUserParticipantMultipleSheetsInEvent(
             $participant->getUser(),
@@ -133,7 +140,7 @@ class AgendaViewQueryHandler
         );
 
         if (empty($eventDays)) {
-            return new AgendaView([], $timezone, $sheet, $participant, $isUserAloneParticipant, $participants, false, $canMoveMeeting);
+            return new AgendaView([], $timezone, $sheet, $participant, $isUserAloneParticipant, $participants, false, $canMoveMeeting, $canRemoveMeeting);
         }
 
         $unavailabilities        = [];
@@ -202,7 +209,8 @@ class AgendaViewQueryHandler
             $isUserAloneParticipant,
             $participants,
             $isPhoneConfirmationRequired,
-            $canMoveMeeting
+            $canMoveMeeting,
+            $canRemoveMeeting
         );
     }
 
