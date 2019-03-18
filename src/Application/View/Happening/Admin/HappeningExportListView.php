@@ -12,6 +12,9 @@ class HappeningExportListView
         $this->happeningExportListView = $happeningExportListView;
     }
 
+    /**
+     * @return HappeningExportView[]
+     */
     public function getHappeningExportListView(): array
     {
         return $this->happeningExportListView;
