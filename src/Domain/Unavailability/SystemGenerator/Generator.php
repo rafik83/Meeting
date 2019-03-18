@@ -232,7 +232,7 @@ class Generator
      *
      * @return AvailabilityTimeRange[]
      */
-    private function getAvailabilityTimeRangeOutOfProducts(array &$products): array
+    private function getAvailabilityTimeRangeOutOfProducts(array $products): array
     {
         $availabilityTimeRangesBought = [];
         foreach ($products as $product) {
