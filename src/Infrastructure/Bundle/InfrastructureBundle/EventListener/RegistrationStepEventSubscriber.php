@@ -13,22 +13,22 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use Proximum\Vimeet\Application\Components\Registration\StepManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
+use Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class RegistrationStepEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var StepManager
-     */
+    /** @var ParticipantOfSheetWithPackageParticipantAndPlanningDisabled */
+    private $participantOfSheetWithPackageParticipantAndPlanningDisabled;
+
+    /** @var StepManager */
     private $registrationStepManager;
 
-    /**
-     * RegistrationStepEventListener constructor.
-     *
-     * @param StepManager $registrationStepManager
-     */
-    public function __construct(StepManager $registrationStepManager)
-    {
+    public function __construct(
+        ParticipantOfSheetWithPackageParticipantAndPlanningDisabled $participantOfSheetWithPackageParticipantAndPlanningDisabled,
+        StepManager $registrationStepManager
+    ) {
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled = $participantOfSheetWithPackageParticipantAndPlanningDisabled;
         $this->registrationStepManager = $registrationStepManager;
     }
 
@@ -37,7 +37,9 @@ class RegistrationStepEventSubscriber implements EventSubscriberInterface
      */
     public function onRegistrationStep(RegistrationStepEvent $event)
     {
-        $this->registrationStepManager->updateCurrentStep($event->getParticipant(), $event->getStep());
+        $participant = $event->getParticipant();
+        $this->registrationStepManager->updateCurrentStep($participant, $event->getStep());
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled->handle($participant);
     }
 
     /**
