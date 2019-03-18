@@ -75,7 +75,7 @@ class MoveMeetingSlotAction
         }
 
         /** @var GetAvailableSlotsView $availableSlotsView */
-        $availableSlotsView = $this->queryBus->handle(new GetAvailableSlotsQuery($meeting));
+        $availableSlotsView = $this->queryBus->handle(new GetAvailableSlotsQuery($meeting, $meeting->isVisio()));
         $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
 
         $move = new Move($sheet, $meeting);
