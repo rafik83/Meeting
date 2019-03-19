@@ -304,6 +304,10 @@ $slotHeight: 60px;
     /* give it dimensions */
     width: 90%;
   }
+
+  .meeting-icon-label{
+    display: none;
+  }
 }
 
 @media (max-width: 640px) {
