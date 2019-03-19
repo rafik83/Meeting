@@ -61,6 +61,7 @@ admin.agenda.mass_assignment.submit.label: Valider
 admin.agenda.mass_assignment.title.label: 'Modifier l''indispo de masse dispatchée'
 admin.agenda.meeting.mass_assignment.update: 'Modifier l''indisponibilité de masse dispatchée'
 admin.agenda.meeting.move: 'Déplacer le RDV'
+admin.agenda.meeting.remove: 'Supprimer le RDV'
 admin.agenda.meeting.selectSlot: 'Sélectionner ce créneau'
 admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists: 'Le créneau sélectionné n''existe pas'
 admin.agenda.meeting.update: 'Modifier le RDV'

@@ -70,6 +70,15 @@ services:
             - '@session.flash_bag'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\RemoveMeetingSlotAction:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
+            - '@form.factory'
+            - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
     #
     # Form Template
     #

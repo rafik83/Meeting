@@ -1619,12 +1619,14 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
-    command.meeting_slot.remove_handler:
-        class: Proximum\Vimeet\Application\Command\MeetingSlot\RemoveHandler
+    Proximum\Vimeet\Application\Command\MeetingSlot\RemoveHandler:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Remove }
     command.event.configure_dates_handler:
@@ -2798,6 +2800,7 @@ services:
 
     Proximum\Vimeet\Domain\Meeting\CanMoveMeeting:
         arguments:
+            - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
 
     Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting:
         arguments:
@@ -4030,6 +4033,7 @@ services:
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
             - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
 
