@@ -1787,6 +1787,16 @@ admin_sheets_group_update:
     defaults: { _controller: AdminBundle:SheetsGroup/Group:update }
 
 #
+# Linked sheets (Entités fiches liées)
+#
+admin_linked_sheets_list:
+    path: /event/{event}/linked-sheets/list
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\ListAction }
+
+#
 # Sheet attendance
 #
 admin_sheet_attend:

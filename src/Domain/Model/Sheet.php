@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Sheet\Availability\ConfirmationStatus;
 use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
@@ -192,6 +193,9 @@ class Sheet implements TraceableInterface
 
     /** @var Sheet|null */
     private $duplicatedFrom;
+
+    /** @var LinkedSheets|null */
+    private $linkedSheets;
 
     /**
      * Sheet constructor.

@@ -281,6 +281,13 @@
     </li>
 {% endif %}
 {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+    <li>
+        <a href="{{ path('admin_linked_sheets_list', { 'event': event.id }) }}">
+            {{ 'admin.linked_sheets.index'|trans }}
+        </a>
+    </li>
+{% endif %}
+{% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
     <li class="dropdown-submenu">
         <a href="{{ path('admin_event_rooming_list', { 'event': event.id }) }}">
             {{ 'admin.rooming.title'|trans }}

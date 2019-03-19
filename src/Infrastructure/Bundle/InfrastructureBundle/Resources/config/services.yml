@@ -179,6 +179,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Sheet\GroupRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository:
+        autowire: true
+
     repository.sheet.sheet_viewed_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Sheet\SheetViewedRepository
         arguments:
@@ -3759,6 +3763,11 @@ services:
             - '@adapter.impersonate_url_generator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery }
+
+    Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin\LinkedSheetsListViewQueryHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, typehints: true }
 
     query.sheet.multiple.multiple_view_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQueryHandler

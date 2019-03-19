@@ -386,6 +386,12 @@ admin.invoice.list.title: 'Nom backoffice'
 admin.invoice.pdf: 'Voir la facture'
 admin.invoice.show: Voir
 admin.invoice.title: 'Liste des préfixes de numéro de facture'
+admin.linked_sheets.column.sheets: Fiches
+admin.linked_sheets.column.created_at: Date de création
+admin.linked_sheets.create: Lier des fiches
+admin.linked_sheets.no_result: Aucun résultat
+admin.linked_sheets.index: Fiches liées
+admin.linked_sheets.title: Fiches liées
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request_sheets_list.link: 'Par fiche de participation'
 admin.meeting_request.action.export: Exporter
