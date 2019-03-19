@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\MeetingSlot;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Slot\DeletedEvent;
-use Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToRemoveSlotException;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -23,32 +22,22 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class RemoveHandler
 {
-    /**
-     * @var MeetingSlotRepositoryInterface
-     */
+    /** @var MeetingSlotRepositoryInterface */
     public $meetingSlotRepository;
 
-    /**
-     * @var MeetingRepositoryInterface
-     */
+    /**@var MeetingRepositoryInterface */
     private $meetingRepository;
 
     /** @var DelayedEventDispatcherInterface */
     private $delayedEventDispatcher;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $datetime;
 
-    /**
-     * @var MessageRepositoryInterface
-     */
+    /** @var MessageRepositoryInterface */
     private $messageRepository;
 
-    /**
-     * @var CanRemoveMeeting
-     */
+    /** @var CanRemoveMeeting */
     private $canRemoveMeeting;
 
     /**
@@ -79,8 +68,6 @@ class RemoveHandler
 
     /**
      * @param Remove $command
-     *
-     * @throws IsNotAllowedToRemoveSlotException
      */
     public function handle(Remove $command)
     {
