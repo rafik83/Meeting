@@ -56,10 +56,10 @@ admin.agenda.indicators-caption: 'Indicators caption'
 admin.agenda.indicators-help: 'Hover the cursor on icons'
 admin.agenda.link: 'My meetings'
 admin.agenda.mass_assignment.enabled.label: Activated
-admin.agenda.mass_assignment.submit.label: Validate
+admin.agenda.mass_assignment.submit.label: Submit
 admin.agenda.mass_assignment.title.label: 'Update mass assignment'
 admin.agenda.meeting.mass_assignment.update: 'Update the mass meeting assignement'
-admin.agenda.meeting.move: 'Move the meeting.'
+admin.agenda.meeting.move: 'Move the meeting'
 admin.agenda.meeting.selectSlot: 'Select this slot'
 admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists: 'The selected slot doesn''t exist'
 admin.agenda.meeting.update: 'Update the meeting'
@@ -320,7 +320,7 @@ admin.happening_speaker.updateTitle: 'Speaker update'
 admin.happening.add: Add
 admin.happening.addTitle: 'Add a conference'
 admin.happening.button.category: 'categories set up'
-admin.happening.participations.button.export: 'participants download'
+admin.happening.button.export: 'participants download'
 admin.happening.button.speaker: 'Speakers management'
 admin.happening.export.fields.happening_begin_hour: 'Beginning hour'
 admin.happening.export.fields.happening_day: Day
@@ -346,6 +346,7 @@ admin.happening.list.question: Question
 admin.happening.list.speaker: speakers
 admin.happening.list.title: Title
 admin.happening.menu.link: Program
+admin.happening.participations.button.export: 'participants download'
 admin.happening.private: Private
 admin.happening.products: 'This under-event is related to the following products'
 admin.happening.products.tooltip: 'Link to products'
@@ -690,6 +691,7 @@ admin.product.bought: 'number of bought products'
 admin.product.boughtIncluded: 'number of bought products from pack'
 admin.product.buyableUntil: 'Buyable until'
 admin.product.deletableUntil: 'deletable until'
+admin.product.export.button.label: 'Export products'
 admin.product.happenings.tooltip: 'Linked to under-events'
 admin.product.hasAvailabilityTimeRanges: 'Subject to availability ranges'
 admin.product.id: Id
@@ -708,7 +710,6 @@ admin.product.type.planning: Planning
 admin.product.unitPrice: 'Unit price'
 admin.product.updatable: Deletable
 admin.product.update.action: Modify
-admin.product.export.button.label: Export products
 admin.promotion_code.action.close: Close
 admin.promotion_code.error.non_unique_code: 'This code is already used'
 admin.promotion_code.link: 'Promotion codes'
@@ -1349,7 +1350,7 @@ event.meeting.listRequest.informations: Information
 event.meeting.listRequest.participants: 'The participants'
 event.meeting.listRequest.show: See
 event.meeting.listRequest.state: States
-event.meeting.listRequest.title: 'List of you meeting requests'
+event.meeting.listRequest.title: 'List of your meeting requests'
 event.meeting.listRequest.to: For
 event.meeting.refusedRequest.label: 'From %fromName% to %toName%'
 event.meeting.refusedRequest.title: 'Refuse the meeting proposal'

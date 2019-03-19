@@ -20,15 +20,15 @@ agenda.availability.save: 'Enregistrer mes disponibilités'
 agenda.day.hide: 'Cacher cette journée'
 agenda.day.see: 'Voir la journée'
 agenda.meeting.details: Details
+agenda.meeting.move.back: Retour
 agenda.meeting.move.button: 'Déplacer le RDV'
-agenda.meeting.move.back: 'Retour'
-agenda.meeting.move.success: 'Le RDV a bien été déplacé'
 agenda.meeting.move.no_available_slots: 'Le rendez-vous ne peut être déplacé car il n''y a pas de d''autres disponibilités conjointes'
+agenda.meeting.move.success: 'Le RDV a bien été déplacé'
 agenda.meeting.updateSlot.error: 'Impossible de déplacer ce RDV'
 agenda.participant.view: 'Agenda de %participant%'
-agenda.slot.available: 'Disponible'
+agenda.slot.available: Disponible
 agenda.slot.imperative-presence: 'Votre présence est impérative.'
-agenda.slot.unavailable: 'Indisponible'
+agenda.slot.unavailable: Indisponible
 agenda.title: 'Mon agenda'
 agenda.unavailability.add: 'Ajouter une indisponibilité'
 agenda.unavailability.back: Retour
@@ -216,6 +216,7 @@ login.error.sheetDisabled: 'Votre participation a été désactivée'
 login.forgot_password: 'Mot de passe oublié ?'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace participant'
+meeting.video.chat.waitingMessage: 'Les messages seront remis une fois votre contact connecté.'
 meeting.video.end: 'Arrêter le RDV'
 meeting.video.endingAt: 'Fin du rendez-vous dans'
 meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video ou annulé le lancement du partage d'écran.\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques ou le lancement du partage d'écran."
@@ -226,7 +227,6 @@ meeting.video.screenshare.end: 'Arrêter le partage'
 meeting.video.screenshare.start: 'Partager mon écran'
 meeting.video.start: 'Démarrer le RDV'
 meeting.video.waitingForParticipant: 'En attente d''un participant'
-meeting.video.chat.waitingMessage: 'Les messages seront remis une fois votre contact connecté.'
 meetingRequest.mobile.filters.availableSlot.title: 'Qui est disponible ?'
 meetingRequest.mobile.filters.state.title: 'Gestion RDV'
 modal.back: Retour
@@ -465,7 +465,7 @@ sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
 sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
-sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication sur la plateforme des participants aux rendez-vous. Votre fiche de présentation sera validée rapidement par l'organisateur.\n\nVous pourrez toujours la modifier ultérieurement"
+sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication sur la plateforme. Votre fiche de présentation sera validée rapidement par l'organisateur.\n\nVous pourrez toujours la modifier ultérieurement"
 sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
 sheet.welcome.packageContent: 'CHOISISSEZ VOTRE FORMULE'
 sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'
