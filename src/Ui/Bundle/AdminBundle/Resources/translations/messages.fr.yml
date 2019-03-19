@@ -986,7 +986,7 @@ admin.sheets_group.column.title: Titre
 admin.sheets_group.create: 'Nouvelle entité multi-fiches'
 admin.sheets_group.create.title: 'Création d''une entité muti-fiches'
 admin.sheets_group.index: Multi-fiches
-admin.sheets_group.no_result: 'Aucun résultats'
+admin.sheets_group.no_result: 'Aucun résultat'
 admin.sheets_group.title: Multi-fiches
 admin.sheets_group.update: 'Modification de l''entité'
 admin.sheets_group.update.link: Modifier
