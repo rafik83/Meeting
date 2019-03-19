@@ -103,6 +103,9 @@ mail.planning.printWithBadge.intro: 'Voici le fichier de plannings et badges dem
 mail.planning.printWithBadge.link.click: 'Fichier plannings et badges'
 mail.planning.printWithBadge.link.intro: 'Vous pouvez imprimer les plannings et badges en cliquant ici :'
 mail.planning.printWithBadge.subject: 'Fichier de plannings et badges'
+mail.product.export.intro: "Bonjour,\n\n Voici l'export des produits pour l'événement %eventTitle% :\n"
+mail.product.export.link.click: 'Télécharger les produits'
+mail.product.export.subject: 'Fichier d''export des produits'
 mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace participant \"%event%\" est créé. \n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace participant sur le site \"%event%\".\n\nBien cordialement,"
 mail.register.subject: 'Votre compte d''accès à l''espace participant de %event% est créé'
 mail.resetPassword.body: "Bonjour,\n\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"
@@ -150,6 +153,3 @@ mail.thirdParty.comexposium.sso.participantAdded.link: Connectez-vous
 mail.thirdParty.comexposium.sso.participantAdded.subject: '[%event%] Activer votre compte'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
-mail.product.export.link.click: 'Télécharger les produits'
-mail.product.export.intro: "Bonjour,\n\n Voici l'export des produits pour l'événement %eventTitle% :\n"
-mail.product.export.subject: 'Fichier d''export des produits'

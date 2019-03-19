@@ -83,6 +83,9 @@ mail.planning.printWidthBadge.link.click: 'Badges and plannings file'
 mail.planning.printWithBadge.intro: 'Here is the requested plannings and badges file'
 mail.planning.printWithBadge.link.intro: 'You can print plannings and badges by clicking here:'
 mail.planning.printWithBadge.subject: 'Badges and plannings file'
+mail.product.export.intro: 'Hello, here is the export of the products for the %eventTitle% event'
+mail.product.export.link.click: 'download products'
+mail.product.export.subject: 'products export file'
 mail.register.body: "%firstname% %lastname%, Congratulations! The access to your participant area of %event% has been created.\n\nYou can now connect to your member area on the website of %event%. \n\nBest regards,"
 mail.register.subject: 'The access to your participant area of %event% has been created'
 mail.resetPassword.body: "Hello, \n\nYou have asked for a password modification. \nPlease click on the following link to create a new password:"
@@ -130,6 +133,3 @@ mail.thirdParty.comexposium.sso.participantAdded.link: Login
 mail.thirdParty.comexposium.sso.participantAdded.subject: '[%event%] Activate your account'
 mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"
 mail.transaction.confirm.subject: '[%event%] Your payment has been received'
-mail.product.export.link.click: 'download products'
-mail.product.export.intro: "Hello, here is the export of the products for the %eventTitle% event"
-mail.product.export.subject: 'products export file'

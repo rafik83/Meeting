@@ -1,7 +1,9 @@
 admin.sheet.follower.un-assigned: unassigned
+admin.type.management.available.label: 'By available'
+admin.type.management.unavailable.label: 'By unavailable'
 alphabetical: Alphabetical
 created_at: 'Created at'
-form.activate_account_password.children.password.children.first.label: 'Password'
+form.activate_account_password.children.password.children.first.label: 'New password'
 form.activate_account_password.children.password.children.second.label: 'Confirm password'
 form.activate_account_password.children.submit.label: Submit
 form.add_participant.children.data.label: 'Participant personnal informations'
@@ -16,7 +18,7 @@ form.admin_accommodation_type.children.overnightCapacities.label: Night(s)
 form.admin_accommodation_type.children.overnightCapacities.label_add: 'Add a night'
 form.admin_accommodation_type.children.overnightCapacities.prototype.children.capacity.label: Capacity
 form.admin_accommodation_type.children.overnightCapacities.prototype.children.date.label: Date
-form.admin_accommodation_type.children.submit.label: Validate
+form.admin_accommodation_type.children.submit.label: Submit
 form.admin_accommodation_type.children.title.label: 'Hosting name'
 form.admin_activate_account_password.children.password.children.first.label: 'New password'
 form.admin_activate_account_password.children.password.children.second.label: 'Confirm new password'
@@ -47,7 +49,7 @@ form.admin_schedule_days.children.days.label_delete: 'delete this day'
 form.admin_schedule_days.children.days.prototype.children.day.label: day
 form.admin_schedule_days.children.days.prototype.children.endTime.label: 'ending time'
 form.admin_schedule_days.children.days.prototype.children.startTime.label: 'starting time'
-form.admin_schedule_days.children.submit.label: validate
+form.admin_schedule_days.children.submit.label: Submit
 form.admin.picto.Cafe_1: 'coffee time'
 form.admin.picto.Cocktail: Cocktail
 form.admin.picto.Conference: microphone
@@ -95,13 +97,13 @@ form.billing_info_update.children.gender.label: Gender
 form.billing_info_update.children.lastname.label: 'Last Name'
 form.billing_info_update.children.mobile.label: 'Mobile phone'
 form.billing_info_update.children.phone.label: Phone
-form.billing_info_update.children.reference.label: 'Account reference'
+form.billing_info_update.children.reference.label: 'Other information you need in your invoice'
 form.billing_info_update.children.reference.placeholder: 'Account reference, order number...'
 form.billing_info_update.children.street.label: Address
 form.billing_info_update.children.submit.label: Save
 form.billing_info_update.children.vatNumber.label: 'VAT Number'
 form.billing_info_update.children.zipcode.label: Postcode
-form.billing_update.children.submit.label: Save
+form.billing_update.children.submit.label: Submit
 form.buy_participant.children.data.label: 'Participant personnal informations'
 form.buy_participant.children.participantData.children.email.label: Email
 form.buy_participant.children.submit.label: Submit
@@ -494,7 +496,7 @@ form.messaging_update_message.children.subject.label: Subject
 form.messaging_update_message.children.submit.label: Save
 form.new_password.children.password.children.first.label: 'New password'
 form.new_password.children.password.children.second.label: 'Confirm new password'
-form.new_password.children.submit.label: Validate
+form.new_password.children.submit.label: Submit
 form.noCategoryFound: 'no available category'
 form.nomenclature_assign_type.children.event.help: 'the nomenclature will be duplicated to be assigned to this event. You will find it back into the nomenclatures of the event.'
 form.nomenclature_assign_type.children.event.label: Event
@@ -809,7 +811,7 @@ form.sheet_batch.children.printPlanningAndBadge.label: 'Badge and planning print
 form.sheet_batch.children.printPlanningOrderBy.label: 'Export order'
 form.sheet_batch.children.refuse.label: refuse
 form.sheet_batch.children.removeCatalog.label: 'remove from the catalog'
-form.sheet_batch.children.validate.label: validate
+form.sheet_batch.children.validate.label: Submit
 form.sheet_batch.children.validateComment.label: 'leave a comment (optional)'
 form.sheet_batch.children.validationStateDraft.label: 'put the sheet back as draft'
 form.sheet_batch.children.validationStateValidate.label: 'sheet content validation'
@@ -919,7 +921,7 @@ form.sheet.filter.children.template_filters.label: 'additional filters'
 form.sheet.messaging_campaign.create.name.label: 'Title of the messaging campaign'
 form.sheet.messaging_campaign.create.submit.label: 'End my selection'
 form.sheet.messaging_campaign.message.submit.label: End
-form.sheet.messaging_campaign.recipients.submit.label: validate
+form.sheet.messaging_campaign.recipients.submit.label: Submit
 form.sheet.reminderDate.children.begin.label: Start
 form.sheet.reminderDate.children.end.label: End
 form.sheet.sheetGroup.unAssignedGroup: unassigned
@@ -960,7 +962,7 @@ form.static_formulation_update.children.submit.label: Update
 form.static_formulation_update.children.translations.prototype.children.title.label: 'Formulation title'
 form.static_formulation_update.children.types.label: 'Types of participation remaining'
 form.template_add_locale.children.locale.label: language
-form.template_add_locale.children.submit.label: validate
+form.template_add_locale.children.submit.label: Submit
 form.template_registration_update.children.submit.label: Save
 form.template_registration_update.children.title.label: 'Template title'
 form.template_registration_update.children.value.label: 'content of the template'
@@ -1060,7 +1062,8 @@ form.transactional_mail_update_customized.children.translations.label: 'Content 
 form.transactional_mail_update_customized.children.translations.prototype.children.content.label: Content
 form.transactional_mail_update_customized.children.translations.prototype.children.subject.label: Subject
 form.type_content_define_terms_of_sale.children.enabled.label: 'Activate the customization of the general terms of sale for this type'
-form.type_content_define_terms_of_sale.children.submit.label: Validate
+form.type_content_define_terms_of_sale.children.submit.label: Submit
+form.type_create.children.availabilityType.label: 'Availability Management'
 form.type_create.children.formTemplates.label: Forms
 form.type_create.children.formTemplates.status.draft: Draft
 form.type_create.children.formTemplates.status.published: Oneline
@@ -1101,11 +1104,10 @@ form.type_template_field_update.children.submit.label: Save
 form.type_template.registration.base: 'basic registration template'
 form.type_template.registration.event: 'Event templates'
 form.type_template.registration.organizer: 'my registration templates'
-form.type_create.children.availabilityType.label: 'Availability Management'
-form.type_update.children.availabilityType.label: 'Availability Management'
 form.type_template.sheet.base: 'basic participation template'
 form.type_template.sheet.event: 'Event templates'
 form.type_template.sheet.organizer: 'my participation templates'
+form.type_update.children.availabilityType.label: 'Availability Management'
 form.type_update.children.formTemplates.label: Forms
 form.type_update.children.hidden.label: hidden
 form.type_update.children.package.label: 'Registration package template'
@@ -1181,7 +1183,7 @@ form.update_partner.children.firstname.label: firstname
 form.update_partner.children.lastname.label: lastname
 form.update_partner.children.submit.label: create
 form.update_partner.children.types.label: 'available types for this operator'
-form.update_product.children.submit.label: validate
+form.update_product.children.submit.label: Submit
 form.update_sheets_group.children.email.label: 'manager''s email'
 form.update_sheets_group.children.submit.label: Save
 form.update_sheets_group.children.title.label: 'Entity title'
@@ -1193,7 +1195,7 @@ form.update_speaker.children.photo.label: 'Speaker picture'
 form.update_speaker.children.submit.label: Save
 form.update_speaker.children.translations.children.position.label: position
 form.update_speaker.children.translations.label: position
-form.update_step.children.submit.label: 'validate and go to the next step'
+form.update_step.children.submit.label: 'Submit and go to the next step'
 form.update_transaction.children.amount.label: amount
 form.update_transaction.children.date.label: date
 form.update_transaction.children.mode.label: 'Mode of payment'
@@ -1214,5 +1216,3 @@ form.who_see_who.children.priority.label: 'rule priority'
 form.who_see_who.children.seeable.label: see
 form.who_see_who.children.seer.label: who
 form.who_see_who.children.submit.label: Add
-admin.type.management.available.label: 'By available'
-admin.type.management.unavailable.label: 'By unavailable'

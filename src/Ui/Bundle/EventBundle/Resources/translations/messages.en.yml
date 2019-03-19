@@ -74,7 +74,7 @@ common.need_help: 'Need help'
 common.next: Next
 common.required_formats: '{1} Required format is : %format%|[1, Inf[Required formats are : %format%'
 common.update: Modify
-common.validate: Validate
+common.validate: Submit
 error.403.content: 'Your are not allowed to reach this content.'
 error.403.title: 'Not allowed'
 error.404.content: 'This content is not available or not available any more.'
@@ -348,7 +348,7 @@ package.payment.bankInfo: 'Bank details'
 package.payment.billingAddress: 'Billing address'
 package.payment.deposit.title: Deposit
 package.payment.deposit.toPay: 'You can pay a deposit of %deposit% by selecting payment with deposit'
-package.payment.pay.label: Validate
+package.payment.pay.label: Checkout
 package.payment.title: Payment
 package.payment.total.title: Total
 package.payment.total.toPay: '%total%'
@@ -360,7 +360,7 @@ package.planning.quantityMin: 'Maximum minimum reached'
 package.planning.total: Total
 package.planning.unitPrice: 'Unit price'
 package.plans.seeMore: 'View more benefits'
-package.plans.validate: Validate
+package.plans.validate: Submit
 package.product.availability: '%availabilityCurrent% out of %availabilityMax%'
 package.product.available: Available
 package.product.buyableUntil: 'purchasable until %date%'
@@ -384,7 +384,7 @@ package.product.totalPrice: '<sup>%currency%</sup> <span class="product-total-pr
 package.product.unavailable: 'Not available'
 package.product.unitPrice: '<sup>%currency%</sup> %price%<br><small>%vatMode%</small>'
 package.product.unitPriceLabel: 'Unit price'
-package.product.validate: Validate
+package.product.validate: Submit
 package.select: Select
 package.summary.billingInfo.update: 'Modify billing information'
 package.summary.columns.quantity: Quantity
@@ -396,9 +396,9 @@ package.summary.empty: 'No product has been added'
 package.summary.option: Options
 package.summary.order-list: 'Order list'
 package.summary.pageTitle: 'Summary of your registration package'
-package.summary.pay: 'Validate registration package'
-package.summary.promotion.button.label: Validate
-package.summary.promotion.label: 'Pack code'
+package.summary.pay: Submit
+package.summary.promotion.button.label: Submit
+package.summary.promotion.label: 'Promotional code'
 package.summary.seeTermsOfSale: 'View general sales conditions'
 package.summary.title: Summary
 package.summary.total.title: 'Registration package'
@@ -417,8 +417,8 @@ pro_forma.title: 'Proforma - %date%'
 pro_forma.vatNumber.title: 'VAT number'
 program.title: Program
 register.already_registered: 'Already registered?'
-register.connect: validate
-register.finalize: Complete
+register.connect: Submit
+register.finalize: Submit
 register.noAvailableRegistrationType: 'No available registration type'
 register.photo: "Why should you publish a photo?\n- Let potential business partners “put a face to a name” \n- Reinforce your professional network\n- Help contacts identify you more easily, and vice-versa\n- Complete digital business cards available to everyone\n- Easily identify each participant’s schedule"
 register.privacy_policies: "The data collected in this form will be registered with Vimeet, and is needed for your participation at this event. \n\nThe data will be stored safely and confidentially and will be kept for two years. \n\nAccording  to the European Union data protection and freedom of information laws, you have the right to access, rectify, modify and delete all data concerning you. You may do so by contacting cnil@vi-meet.com"
@@ -466,7 +466,7 @@ summary.column.unitPrice: 'Unit price'
 summary.group.option.title: Options
 summary.product.included: Included
 summary.promotionCode.free: Free
-summary.promotionCode.title: 'Pack code'
+summary.promotionCode.title: 'Promotional code'
 summary.total: Total
 summary.totalByVat: 'Total subjected to %vatRate%%'
 summary.totalToPay: 'Total to pay'
