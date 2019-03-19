@@ -211,6 +211,14 @@ class Speaker
     }
 
     /**
+     * @param SpeakerTranslation $translation
+     */
+    public function setTranslation(SpeakerTranslation $translation)
+    {
+        $this->translations->set($translation->getLocale(), $translation);
+    }
+
+    /**
      * @param $locale
      *
      * @return string

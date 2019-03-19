@@ -320,7 +320,7 @@ admin.happening_speaker.updateTitle: 'Speaker update'
 admin.happening.add: Add
 admin.happening.addTitle: 'Add a conference'
 admin.happening.button.category: 'categories set up'
-admin.happening.button.export: 'participants download'
+admin.happening.participations.button.export: 'participants download'
 admin.happening.button.speaker: 'Speakers management'
 admin.happening.export.fields.happening_begin_hour: 'Beginning hour'
 admin.happening.export.fields.happening_day: Day

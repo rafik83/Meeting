@@ -2,11 +2,9 @@
 
 namespace Proximum\Vimeet\Application\View\Happening\Admin;
 
-use Proximum\Vimeet\Application\View\Agenda\SpeakerView;
-
 class SpeakersExportListView
 {
-    /** @var SpeakerView[] */
+    /** @var SpeakerExportView[] */
     private $speakersListView;
 
     public function __construct(array $speakersListView)
@@ -15,7 +13,7 @@ class SpeakersExportListView
     }
 
     /**
-     * @return SpeakerView[]
+     * @return SpeakerExportView[]
      */
     public function getSpeakersListView(): array
     {

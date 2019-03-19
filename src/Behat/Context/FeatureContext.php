@@ -815,4 +815,18 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             throw new \InvalidArgumentException(sprintf('Element %s found', $field));
         }
     }
+
+    /**
+     * Clicks link with specified id|title|alt|text in specified element
+     * Example: When I follow "Log In" in the "div#button" element
+     *
+     * @When /^(?:|I )follow "(?P<link>(?:[^"]|\\")*)" in the "(?P<element>[^"]*)" element$/
+     */
+    public function clickInElementLink($element, $link)
+    {
+        $element = $this->assertSession()->elementExists('css', $element);
+
+        $link = $this->fixStepArgument($link);
+        $element->clickLink($link);
+    }
 }

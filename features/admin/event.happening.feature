@@ -53,10 +53,25 @@ Feature: See, create and update happening
     Then I should see "admin.happening.title"
     And I should see "Starting event"
 
-  @test
   Scenario: I can export happening participant
     Given I am logged with "test@test.com" on admin
     When I go to this page "/fr/event/1/happening"
     Then I should see "admin.happening.participations.button.export"
     When I follow "admin.happening.participations.button.export"
     Then I should be on this page "/fr/event/1/happening"
+
+  Scenario: I can export happenings in french
+    Given I am logged with "test@test.com" on admin
+    When I go to this page "/fr/event/1/happening"
+    Then I should see "admin.happening.button.export"
+    Then I should see "Français" in the ".export_localize" element
+    When I follow "Français" in the ".export_localize" element
+    Then I should be on this page "/fr/event/1/happening/export/fr"
+
+  Scenario: I can export happenings in english
+    Given I am logged with "test@test.com" on admin
+    When I go to this page "/fr/event/1/happening"
+    Then I should see "admin.happening.button.export"
+    Then I should see "Anglais" in the ".export_localize" element
+    When I follow "Anglais" in the ".export_localize" element
+    Then I should be on this page "/fr/event/1/happening/export/en"
