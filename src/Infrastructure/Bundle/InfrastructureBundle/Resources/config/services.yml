@@ -413,6 +413,7 @@ services:
             - '@components.token.user.activate_account_token_generator'
             - '@repository.event.extra_parameter_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded }
 

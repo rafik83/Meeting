@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -60,6 +61,12 @@ class OnParticipantAddedHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $commandBus;
 
+    /** @var ObjectProphecy|ParticipantOfSheetWithPackageParticipantAndPlanningDisabled */
+    private $participantOfSheetWithPackageParticipantAndPlanningDisabled;
+
+    /** @var OnParticipantAddedHandler */
+    private $handler;
+
     public function setUp()
     {
         $this->event = $this->prophesize(Event::class);
@@ -78,6 +85,17 @@ class OnParticipantAddedHandlerTest extends TestCase
         $this->activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
         $this->extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled = $this->prophesize(
+            ParticipantOfSheetWithPackageParticipantAndPlanningDisabled::class
+        );
+
+        $this->handler = new OnParticipantAddedHandler(
+            $this->eventDispatcher->reveal(),
+            $this->activateAccountTokenGenerator->reveal(),
+            $this->extraParameterRepository->reveal(),
+            $this->commandBus->reveal(),
+            $this->participantOfSheetWithPackageParticipantAndPlanningDisabled->reveal()
+        );
     }
 
     public function testHandleUserOwner()
@@ -91,14 +109,12 @@ class OnParticipantAddedHandlerTest extends TestCase
 
         $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(true);
 
-        $handler = new OnParticipantAddedHandler(
-            $this->eventDispatcher->reveal(),
-            $this->activateAccountTokenGenerator->reveal(),
-            $this->extraParameterRepository->reveal(),
-            $this->commandBus->reveal()
-        );
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
+            ->handle($this->participant->reveal())
+            ->shouldBeCalled()
+        ;
 
-        $handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
+        $this->handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
     }
 
     public function testHandleUserActive()
@@ -139,14 +155,12 @@ class OnParticipantAddedHandlerTest extends TestCase
 
         $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(false);
 
-        $handler = new OnParticipantAddedHandler(
-            $this->eventDispatcher->reveal(),
-            $this->activateAccountTokenGenerator->reveal(),
-            $this->extraParameterRepository->reveal(),
-            $this->commandBus->reveal()
-        );
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
+            ->handle($this->participant->reveal())
+            ->shouldBeCalled()
+        ;
 
-        $handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
+        $this->handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
     }
 
     public function testHandleUserNotActive()
@@ -189,14 +203,12 @@ class OnParticipantAddedHandlerTest extends TestCase
 
         $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(false);
 
-        $handler = new OnParticipantAddedHandler(
-            $this->eventDispatcher->reveal(),
-            $this->activateAccountTokenGenerator->reveal(),
-            $this->extraParameterRepository->reveal(),
-            $this->commandBus->reveal()
-        );
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
+            ->handle($this->participant->reveal())
+            ->shouldBeCalled()
+        ;
 
-        $handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
+        $this->handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
     }
 
     public function testHandleSSO()
@@ -235,13 +247,11 @@ class OnParticipantAddedHandlerTest extends TestCase
 
         $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(false);
 
-        $handler = new OnParticipantAddedHandler(
-            $this->eventDispatcher->reveal(),
-            $this->activateAccountTokenGenerator->reveal(),
-            $this->extraParameterRepository->reveal(),
-            $this->commandBus->reveal()
-        );
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
+            ->handle($this->participant->reveal())
+            ->shouldBeCalled()
+        ;
 
-        $handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
+        $this->handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
     }
 }
