@@ -160,23 +160,23 @@ build-all-assets@prod: build@prod
 trans-push: trans-openl10n-push
 
 trans-openl10n-push:
-	openl10n-cli push --locale=all
+	openl10n push --locale=all
 
 ## Translations pull
 trans-pull: trans-openl10n-pull
 
 trans-openl10n-pull:
-	openl10n-cli pull --locale=all
+	openl10n pull --locale=all
 
 ## Translations sync
 trans-sync:
-	openl10n-cli push --locale=all
-	openl10n-cli pull --locale=all
+	openl10n push --locale=all
+	openl10n pull --locale=all
 
 trans-pr:
 	read -p "Are you on master branch and you have Hub (github) installed (y/n)?" CONFIRM; \
 	if [ "$$CONFIRM" = "y" ]; then \
-	  vagrant ssh -- "cd /srv/app && make trans-sync"; \
+	  make trans-sync; \
 	  git branch -D update-translations; \
 	  git checkout -b update-translations; \
 	  git add .; \
