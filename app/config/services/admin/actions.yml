@@ -460,6 +460,9 @@ services:
             - '@session.flash_bag'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\AddAction:
+        autowire: true
+
     #
     # Catalog
     #
