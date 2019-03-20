@@ -1029,6 +1029,13 @@ class Sheet implements TraceableInterface
         return $this;
     }
 
+    public function setLinkedSheets(LinkedSheets $linkedSheets): self
+    {
+        $this->linkedSheets = $linkedSheets;
+
+        return $this;
+    }
+
     /**
      * Set Group to null
      */

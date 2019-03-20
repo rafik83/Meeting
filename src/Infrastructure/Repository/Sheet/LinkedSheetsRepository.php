@@ -46,4 +46,13 @@ class LinkedSheetsRepository implements LinkedSheetsRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(LinkedSheets $linkedSheets): void
+    {
+        $this->entityManager->persist($linkedSheets);
+        $this->entityManager->flush($linkedSheets);
+    }
 }

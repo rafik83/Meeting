@@ -446,6 +446,9 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\ListAction:
         autowire: true
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\AddAction:
+        autowire: true
+
     #
     # Catalog
     #

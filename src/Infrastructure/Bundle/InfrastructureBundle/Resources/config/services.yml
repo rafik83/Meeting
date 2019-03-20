@@ -1278,6 +1278,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\Create }
 
+    Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\CreateHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     proximum.vimeet.application.command.sheet.group.update_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Group\UpdateHandler
         arguments:
@@ -6770,3 +6775,8 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetBadgeConfigurationByTypeQuery }
+
+    Proximum\Vimeet\Application\Query\Sheet\SheetsForNewLinkedSheetsQueryHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, typehints: true }

@@ -1,0 +1,15 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.linked_sheets.create.title'|trans %}
+
+{% block form_title 'admin.linked_sheets.create'|trans %}
+
+{% block form_content %}
+
+    {% if form.sheetViews is defined %}
+        {{ form_row(form.sheetViews) }}
+    {% endif %}
+
+{% endblock %}
+
+{% block goback_link path('admin_linked_sheets_list', {event: event.id}) %}

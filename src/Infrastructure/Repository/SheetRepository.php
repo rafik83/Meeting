@@ -1268,6 +1268,26 @@ class SheetRepository implements SheetRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getNotLinkedSheets(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet', 'type')
+            ->from(Sheet::class, 'sheet')
+            ->innerJoin('sheet.type', 'type')
+            ->where('sheet.event = :event')
+            ->andWhere('sheet.linkedSheets IS NULL')
+            ->andWhere('sheet.enable = true')
+            ->orderBy('sheet.title')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @param Event $event
      *
      * @return QueryBuilder

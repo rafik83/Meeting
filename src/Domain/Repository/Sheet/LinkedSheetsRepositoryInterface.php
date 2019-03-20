@@ -21,4 +21,6 @@ interface LinkedSheetsRepositoryInterface
      * @return LinkedSheets[]
      */
     public function getByEvent(Event $event): array;
+
+    public function add(LinkedSheets $linkedSheets): void;
 }

@@ -1796,6 +1796,13 @@ admin_linked_sheets_list:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\ListAction }
 
+admin_linked_sheets_create:
+    path: /event/{event}/linked-sheets/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\AddAction }
+
 #
 # Sheet attendance
 #

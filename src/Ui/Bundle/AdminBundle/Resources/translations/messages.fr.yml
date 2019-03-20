@@ -389,6 +389,7 @@ admin.invoice.title: 'Liste des préfixes de numéro de facture'
 admin.linked_sheets.column.sheets: Fiches
 admin.linked_sheets.column.created_at: Date de création
 admin.linked_sheets.create: Lier des fiches
+admin.linked_sheets.create.title: Liaison de fiches
 admin.linked_sheets.no_result: Aucun résultat
 admin.linked_sheets.index: Fiches liées
 admin.linked_sheets.title: Fiches liées

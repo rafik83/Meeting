@@ -193,6 +193,8 @@ form.create_admin.role.operator: Collaborateur
 form.create_admin.role.organizer: Organisateur
 form.create_admin.role.partner: Partenaire
 form.create_admin.role.super_admin: Administrateur
+form.create_linked_sheets.children.sheetViews.label: Fiches
+form.create_linked_sheets.children.submit.label: Lier les fiches
 form.create_operator.children.email.label: Email
 form.create_operator.children.events.label: 'Événements disponibles pour ce collaborateur'
 form.create_operator.children.firstname.label: Prénom
