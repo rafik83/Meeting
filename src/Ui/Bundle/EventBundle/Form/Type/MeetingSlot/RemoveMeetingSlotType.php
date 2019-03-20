@@ -19,8 +19,6 @@ class RemoveMeetingSlotType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $locale = $options['locale'];
-
         $builder
             ->add('content', TextareaType::class, [
                 'required' => false,
@@ -34,9 +32,6 @@ class RemoveMeetingSlotType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
-            ->setRequired([
-                'locale'
-            ])
             ->setDefaults([
                 'data_class' => Remove::class,
             ])

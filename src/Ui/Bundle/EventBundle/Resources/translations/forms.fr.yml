@@ -42,6 +42,7 @@ form.email.placeholder: 'Saisissez votre adresse e-mail'
 form.group.participant.submit: Enregistrer
 form.login.children.password.placeholder: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté'
+form.remove_meeting_slot.children.content.label: 'Commentaire à destination de votre interlocuteur'
 form.move_meeting_slot.children.content.label: 'Commentaire à destination de votre interlocuteur'
 form.move_meeting_slot.children.meetingSlot.label: 'Choisir un créneau disponible'
 form.move_meeting_slot.children.meetingSlot.label.begin.end: '%day% de %begin% à %end%'

@@ -68,9 +68,7 @@ class RemoveMeetingSlotAction
         }
 
         $remove = new Remove($meeting->getSlot(), $sheet, $meeting);
-        $form = $this->formFactory->create(RemoveMeetingSlotType::class, $remove, [
-            'locale' => $sheet->getEvent()->getAvailableLocale($request->getLocale()),
-        ]);
+        $form = $this->formFactory->create(RemoveMeetingSlotType::class, $remove);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
