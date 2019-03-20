@@ -86,7 +86,16 @@ Meet.prototype.showModal = function (html, confirmation = null) {
 
     var form = content.find('form');
 
-    $(form).on('submit', function () {
+    $(form).on('submit', function (e) {
+        if (confirmation) {
+            e.preventDefault();
+            var confirm = window.confirm('Confirmer la suppression :');
+            if (confirm) {
+                this.handleRequestForm(form);
+            } else {
+                return false;
+            }
+        }
         this.handleRequestForm(form);
 
         return false;
