@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\ExtraDataRepositoryInterface as SheetExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -63,6 +64,9 @@ class ConvertRegistrationViewToSheet
     /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
+    /** @var ParticipantOfSheetWithPackageParticipantAndPlanningDisabled */
+    private $participantOfSheetWithPackageParticipantAndPlanningDisabled;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -76,6 +80,7 @@ class ConvertRegistrationViewToSheet
         UserEventRepositoryInterface $userEventRepository,
         Synchronizer $synchronizer,
         EventDispatcherInterface $eventDispatcher,
+        ParticipantOfSheetWithPackageParticipantAndPlanningDisabled $participantOfSheetWithPackageParticipantAndPlanningDisabled,
         \DateTimeInterface $dateTime
     ) {
         $this->sheetAndParticipantTemplateDataHandler = $sheetAndParticipantTemplateDataHandler;
@@ -87,6 +92,7 @@ class ConvertRegistrationViewToSheet
         $this->userEventRepository = $userEventRepository;
         $this->synchronizer = $synchronizer;
         $this->eventDispatcher = $eventDispatcher;
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled = $participantOfSheetWithPackageParticipantAndPlanningDisabled;
         $this->dateTime = $dateTime;
     }
 
@@ -244,6 +250,7 @@ class ConvertRegistrationViewToSheet
         );
 
         $this->participantRepository->add($participant);
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled->handle($participant);
 
         $this->eventDispatcher->dispatch(
             Events::PARTICIPANT_IMPORTED_FROM_API,

@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\ExtraDataRepositoryInterface as SheetExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -112,7 +113,7 @@ class ConvertRegistrationViewToSheetTest extends TestCase
         $userEventRepository->add(new UserEvent($expectedUser, $event->reveal(), $type->reveal()))->shouldBeCalled();
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository->add($expectedParticipant);
+        $participantRepository->add($expectedParticipant)->shouldBeCalled();
 
         $registrationTemplateData = $this->prophesize(TemplateData::class);
         $sheetTemplateData = $this->prophesize(TemplateData::class);
@@ -147,6 +148,14 @@ class ConvertRegistrationViewToSheetTest extends TestCase
             ->willReturn($expectedSheetAndParticipantTemplateDataView)
         ;
 
+        $participantOfSheetWithPackageParticipantAndPlanningDisabled = $this->prophesize(
+            ParticipantOfSheetWithPackageParticipantAndPlanningDisabled::class
+        );
+        $participantOfSheetWithPackageParticipantAndPlanningDisabled
+            ->handle($expectedParticipant)
+            ->shouldBeCalled()
+        ;
+
         $importSheetHandler = new ConvertRegistrationViewToSheet(
             $sheetAndParticipantTemplateDataHandler->reveal(),
             $userRepository->reveal(),
@@ -157,6 +166,7 @@ class ConvertRegistrationViewToSheetTest extends TestCase
             $userEventRepository->reveal(),
             $synchronizer->reveal(),
             $eventDispatcher->reveal(),
+            $participantOfSheetWithPackageParticipantAndPlanningDisabled->reveal(),
             $dateTime
         );
         $importSheetHandler->handle(

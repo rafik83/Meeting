@@ -62,6 +62,7 @@ services:
             - '@vimeet_infrastructure.repository.user_event_repository'
             - '@account.synchronizer'
             - '@event_dispatcher'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled'
             - '@datetime'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler: ~
