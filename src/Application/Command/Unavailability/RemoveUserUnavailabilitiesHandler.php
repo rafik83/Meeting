@@ -17,7 +17,7 @@ class RemoveUserUnavailabilitiesHandler
     public function handle(RemoveUserUnavailabilities $remove): void
     {
         $unavailabilities = $this->unavailabilityRepository
-            ->findByUserEventAndSheet($remove->user, $remove->event, $remove->sheet);
+            ->findByUserAndEventCreatedByUser($remove->user, $remove->event);
 
         foreach ($unavailabilities as $unavailability) {
             $this->unavailabilityRepository->remove($unavailability);

@@ -55,11 +55,10 @@ class CreateUnavailabilitiesAction
         Request $request,
         EventDomain $eventDomain,
         Participant $participant,
-        Sheet $sheet,
-        UserDomain $userDomain
+        Sheet $sheet
     ): JsonResponse {
         $event = $eventDomain->getEvent();
-        $user = $userDomain->getUser();
+        $user = $participant->getUser();
 
         if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationChecker->isGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet)
