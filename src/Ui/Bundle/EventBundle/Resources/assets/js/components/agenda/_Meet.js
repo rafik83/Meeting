@@ -90,11 +90,11 @@ Meet.prototype.showModal = function (html, confirmation = null) {
         if (confirmation) {
             e.preventDefault();
             var confirm = window.confirm('Confirmer la suppression :');
-            if (confirm) {
-                this.handleRequestForm(form);
-            } else {
+            if (!confirm) {
                 return false;
             }
+                this.handleRequestForm(form);
+                return false;
         }
         this.handleRequestForm(form);
 
