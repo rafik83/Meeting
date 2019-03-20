@@ -5723,6 +5723,7 @@ services:
             - '@validator.email_validator'
             - '@account.synchronizer'
             - '@serializer.denormalizer.participant_import_logger'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled'
             - '@datetime'
         tags:
             - { name: serializer.normalizer }

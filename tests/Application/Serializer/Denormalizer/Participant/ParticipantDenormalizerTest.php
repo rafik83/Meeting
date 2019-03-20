@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
@@ -51,7 +52,7 @@ class ParticipantDenormalizerTest extends TestCase
         $filename = __DIR__ . '/import_participants.csv';
 
         $userAlreadyExists = $this->prophesize(User::class);
-        $userAlreadyExists->getEmail()->willReturn('julie@gmail.com');
+        $userAlreadyExists->getEmail()->shouldBeCalled()->willReturn('julie@gmail.com');
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
@@ -61,6 +62,9 @@ class ParticipantDenormalizerTest extends TestCase
         $emailValidator = $this->prophesize(EmailValidator::class);
         $synchronizer = $this->prophesize(Synchronizer::class);
         $translatorAdapter = $this->prophesize(TranslatorInterface::class);
+        $participantOfSheetWithPackageParticipantAndPlanningDisabled = $this->prophesize(
+            ParticipantOfSheetWithPackageParticipantAndPlanningDisabled::class
+        );
 
         $userRepository->findByEmail('julie@gmail.com')->shouldBeCalled()->willReturn($userAlreadyExists->reveal());
         $userRepository->findByEmail('jean@gmail.com')->shouldBeCalled()->willReturn(null);
@@ -151,8 +155,16 @@ class ParticipantDenormalizerTest extends TestCase
         $sheetBlock->addChild(1, 'nomenclature', $nomenclature);
         $sheetTemplateData->addChild(0, 'block', $sheetBlock);
 
-        $templateDataFactory->createRegistrationFromType($type, $locale)->willReturn($templateData);
-        $templateDataFactory->createSheetTemplateFromType($type, $locale)->willReturn($sheetTemplateData);
+        $templateDataFactory
+            ->createRegistrationFromType($type, $locale)
+            ->shouldBeCalled()
+            ->willReturn($templateData)
+        ;
+        $templateDataFactory
+            ->createSheetTemplateFromType($type, $locale)
+            ->shouldBeCalled()
+            ->willReturn($sheetTemplateData)
+        ;
 
         $mapping = [
             'Nom participant' => 'lastname',
@@ -188,15 +200,20 @@ class ParticipantDenormalizerTest extends TestCase
         $sheetRepository
             ->add(
                 Argument::that(
-                    function (Sheet $sheet) use ($sheet1) {
-                        return $sheet->getTitle() === $sheet1->getTitle();
+                    function (Sheet $sheet) {
+                        return 'User already exists in DB' === $sheet->getTitle()
+                            && $sheet->isImported()
+                        ;
                     }
                 )
             )
             ->shouldBeCalled()
         ;
 
-        $userEventRepository->add(new UserEvent($userAlreadyExists->reveal(), $event->reveal(), $type->reveal()));
+        $userEventRepository
+            ->add(new UserEvent($userAlreadyExists->reveal(), $event->reveal(), $type->reveal()))
+            ->shouldBeCalled()
+        ;
         $taggedData1 = [
             'participant_firstname' => 'Julie',
             'participant_lastname' => 'KL',
@@ -206,7 +223,7 @@ class ParticipantDenormalizerTest extends TestCase
         $synchronizer->set($templateData->setTaggedData($taggedData1), $userAlreadyExists->reveal())->shouldBeCalled();
 
         // Add sheet for "Ma Petite Tribu" for jean@gmail.com
-        $user2 = new User(strtolower('jean@gmail.com'), '', '', 'fr');
+        $user2 = new User('jean@gmail.com', '', '', 'fr');
         $userRepository->add($user2)->shouldBeCalled();
 
         $sheet2 = new Sheet($event->reveal(), $type->reveal(), ['sheetTitle' => ['text' => 'Ma Petite Tribu']], $user2, $datetime);
@@ -220,21 +237,9 @@ class ParticipantDenormalizerTest extends TestCase
         $sheetRepository
             ->add(
                 Argument::that(
-                    function (Sheet $sheet) use ($sheet2) {
-                        return $sheet->getTitle() === $sheet2->getTitle()
-                            && $sheet->getData() === [
-                                'sheetTitle' => [
-                                    'text' => 'Ma petite Tribu'
-                                ],
-                                'description' => [
-                                    'text' => 'Ceci est une autre description',
-                                ],
-                                'nomenclature' => [
-                                    'items' => [
-                                        0 => 'nomenclatureKey1'
-                                    ]
-                                ]
-                            ]
+                    function (Sheet $sheet) {
+                        return 'Ma Petite Tribu' === $sheet->getTitle()
+                            && $sheet->isImported()
                         ;
                     }
                 )
@@ -242,9 +247,39 @@ class ParticipantDenormalizerTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $participantRepository->add($participant2);
+        $callBackParticipant1 = Argument::that(
+            function (Participant $participant) {
+                return 'User already exists in DB' === $participant->getSheet()->getTitle()
+                    && 'julie@gmail.com' === $participant->getUser()->getEmail()
+                    && $participant->isImported();
+            }
+        );
+        $participantOfSheetWithPackageParticipantAndPlanningDisabled
+            ->handle($callBackParticipant1)
+            ->shouldBeCalled()
+        ;
 
-        $userEventRepository->add(new UserEvent($user2, $event->reveal(), $type->reveal()));
+        $callBackParticipant2 = Argument::that(
+            function (Participant $participant) {
+                return 'Ma Petite Tribu' === $participant->getSheet()->getTitle()
+                    && 'jean@gmail.com' === $participant->getUser()->getEmail()
+                    && $participant->isImported();
+            }
+        );
+
+        $participantRepository
+            ->add($callBackParticipant2)
+            ->shouldBeCalled()
+        ;
+        $participantOfSheetWithPackageParticipantAndPlanningDisabled
+            ->handle($callBackParticipant2)
+            ->shouldBeCalled()
+        ;
+
+        $userEventRepository
+            ->add(new UserEvent($user2, $event->reveal(), $type->reveal()))
+            ->shouldBeCalled()
+        ;
         $taggedData2 = [
             'participant_firstname' => 'Jean',
             'participant_lastname' => 'CD',
@@ -284,6 +319,7 @@ class ParticipantDenormalizerTest extends TestCase
                     $emailValidator->reveal(),
                     $synchronizer->reveal(),
                     $participantLogger,
+                    $participantOfSheetWithPackageParticipantAndPlanningDisabled->reveal(),
                     $datetime
                 ),
             ],

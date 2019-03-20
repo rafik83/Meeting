@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
@@ -67,6 +68,9 @@ class ParticipantDenormalizer implements DenormalizerInterface
     /** @var UserEventRepositoryInterface */
     private $userEventRepository;
 
+    /** @var ParticipantOfSheetWithPackageParticipantAndPlanningDisabled */
+    private $participantOfSheetWithPackageParticipantAndPlanningDisabled;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         UserRepositoryInterface $userRepository,
@@ -76,17 +80,19 @@ class ParticipantDenormalizer implements DenormalizerInterface
         EmailValidator $emailValidator,
         Synchronizer $synchronizer,
         ParticipantImportLogger $importLogger,
+        ParticipantOfSheetWithPackageParticipantAndPlanningDisabled $participantOfSheetWithPackageParticipantAndPlanningDisabled,
         \DateTimeInterface $dateTime
     ) {
         $this->participantRepository = $participantRepository;
-        $this->userRepository        = $userRepository;
-        $this->sheetRepository       = $sheetRepository;
-        $this->userEventRepository   = $userEventRepository;
-        $this->templateDataFactory   = $templateDataFactory;
-        $this->emailValidator        = $emailValidator;
-        $this->synchronizer          = $synchronizer;
-        $this->importLogger          = $importLogger;
-        $this->dateTime              = $dateTime;
+        $this->userRepository = $userRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->userEventRepository = $userEventRepository;
+        $this->templateDataFactory = $templateDataFactory;
+        $this->emailValidator = $emailValidator;
+        $this->synchronizer = $synchronizer;
+        $this->importLogger = $importLogger;
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled = $participantOfSheetWithPackageParticipantAndPlanningDisabled;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -414,6 +420,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $sheet->addParticipant($participant); // required to have participant in array sheet array collection
 
         $this->userEventRepository->add(new UserEvent($user, $context['event'], $context['type']));
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled->handle($participant);
 
         $this->importLogger->sheetImported($sheet);
 
