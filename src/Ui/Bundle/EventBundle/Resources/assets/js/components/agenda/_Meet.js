@@ -15,6 +15,7 @@ function Meet(agenda, element, modal) {
     this.header = this.element.querySelector('header');
     this.details = this.element.querySelector('.details');
     this.moveMeetingAction = this.element.querySelector('.moveMeetingAction');
+    this.removeMeetingAction = this.element.querySelector('.removeMeetingAction');
     this.duration = this.agenda.getDuration(this.element.getAttribute('data-duration'));
     this.start = this.agenda.getRelativeTime(this.agenda.parseTime(this.element.getAttribute('data-beginhour')));
 
@@ -29,6 +30,15 @@ function Meet(agenda, element, modal) {
             event.stopPropagation();
             event.preventDefault();
             this.handleRequestMoveMeetingButton();
+        }.bind(this), false);
+    }
+
+    if (null !== this.removeMeetingAction) {
+        this.removeMeetingConfirmMessage = this.removeMeetingAction.getAttribute('data-confirm-remove-meeting-message');
+        this.removeMeetingAction.addEventListener('click', function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            this.handleRequestRemoveMeetingButton();
         }.bind(this), false);
     }
 
@@ -60,7 +70,15 @@ Meet.prototype.handleRequestMoveMeetingButton = function () {
     }.bind(this));
 };
 
-Meet.prototype.showModal = function (html) {
+Meet.prototype.handleRequestRemoveMeetingButton = function () {
+    var href = this.removeMeetingAction.getAttribute('href');
+
+    $.get(href, function (response) {
+        this.showModal(response, true);
+    }.bind(this));
+};
+
+Meet.prototype.showModal = function (html, confirmation = null) {
     var modal = $(this.modal);
     modal.modal().show();
 
@@ -69,7 +87,15 @@ Meet.prototype.showModal = function (html) {
 
     var form = content.find('form');
 
-    $(form).on('submit', function () {
+    $(form).on('submit', function (e) {
+        e.preventDefault();
+
+        if (confirmation) {
+            if (!window.confirm(this.removeMeetingConfirmMessage)) {
+                return false;
+            }
+        }
+
         this.handleRequestForm(form);
 
         return false;

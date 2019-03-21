@@ -14,16 +14,9 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class Remove
 {
-    /**
-     * @var MeetingSlot
-     */
+    /** @var MeetingSlot */
     public $meetingSlot;
 
-    /**
-     * Remove constructor.
-     *
-     * @param MeetingSlot $meetingSlot
-     */
     public function __construct(MeetingSlot $meetingSlot)
     {
         $this->meetingSlot = $meetingSlot;

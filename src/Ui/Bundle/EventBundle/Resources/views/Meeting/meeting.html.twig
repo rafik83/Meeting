@@ -43,12 +43,18 @@
 
             <a href="{{ path('event_catalog_complete_sheet', { sheet: sheetId, sheetToDisplay: meeting.sheetMetId }) }}" target="_blank">
                 <i class="icon icon-Document_1"></i>
-                {{ 'agenda.meeting.details'|trans }}
+                <span class="meeting-icon-label">{{ 'agenda.meeting.details'|trans }}</span>
             </a>
 
             {% if canMoveMeeting %}
                 <a class="moveMeetingAction" href="{{ path('event_agenda_move_meeting_slot', {'sheet': sheetId, 'meeting': meeting.id, 'participant': participantId}) }}">
-                    <i class="icon icon-Transferer"></i> {{ 'agenda.meeting.move.button'|trans }}
+                    <i class="icon icon-Transferer"></i> <span class="meeting-icon-label">{{ 'agenda.meeting.move.button'|trans }}</span>
+                </a>
+            {% endif %}
+
+            {% if canRemoveMeeting %}
+                <a class="removeMeetingAction" href="{{ path('event_agenda_remove_meeting', {'sheet': sheetId, 'meeting': meeting.id, 'participant': participantId}) }}" data-confirm-remove-meeting-message="{{ 'agenda.meeting.remove.confirm'|trans }}">
+                    <i class="icon icon-Fermer_1"></i> <span class="meeting-icon-label">{{ 'agenda.meeting.remove.button'|trans }}</span>
                 </a>
             {% endif %}
 
@@ -61,7 +67,6 @@
                         <i class="icon-Appeler"></i> {{ 'meeting.video.start'|trans }}
                     </a>
                 {% endif %}
-                <i class="icon icon-Localiser"></i> {{ meeting.spotRef }}
             </div>
         </footer>
     </div>

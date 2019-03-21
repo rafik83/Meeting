@@ -19,33 +19,22 @@ use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class RemoveHandler
 {
-    /**
-     * @var MeetingSlotRepositoryInterface
-     */
+    /** @var MeetingSlotRepositoryInterface */
     public $meetingSlotRepository;
 
-    /**
-     * @var MeetingRepositoryInterface
-     */
+    /** @var MeetingRepositoryInterface */
     private $meetingRepository;
 
     /** @var DelayedEventDispatcherInterface */
     private $delayedEventDispatcher;
 
-    /**
-     * RemoveHandler constructor.
-     *
-     * @param MeetingSlotRepositoryInterface  $meetingSlotRepository
-     * @param MeetingRepositoryInterface      $meetingRepository
-     * @param DelayedEventDispatcherInterface $delayedEventDispatcher
-     */
     public function __construct(
         MeetingSlotRepositoryInterface $meetingSlotRepository,
         MeetingRepositoryInterface $meetingRepository,
         DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->meetingSlotRepository = $meetingSlotRepository;
-        $this->meetingRepository     = $meetingRepository;
+        $this->meetingRepository = $meetingRepository;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
@@ -59,6 +48,7 @@ class RemoveHandler
         if ($this->meetingRepository->hasMeetingOnSlot($command->meetingSlot)) {
             throw new IsNotAllowedToRemoveSlotException('Slot already used by scheduled meetings');
         }
+
         $this->meetingSlotRepository->remove($command->meetingSlot);
 
         $this->delayedEventDispatcher->dispatch(

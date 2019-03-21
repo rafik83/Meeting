@@ -420,7 +420,7 @@ admin_agenda_sheet_meeting_remove:
         sheet: \d+
         meeting: \d+
     methods: [DELETE]
-    defaults: { _controller: AdminBundle:Agenda/Meeting:remove}
+    defaults: { _controller: AdminBundle:Agenda/Meeting:remove }
 
 admin_agenda_mass_assignment_detail:
     path: /event/{event}/agenda/mass/{massAssignment}/detail

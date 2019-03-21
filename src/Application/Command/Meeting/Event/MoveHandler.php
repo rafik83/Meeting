@@ -1,11 +1,11 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Command\MeetingSlot;
+namespace Proximum\Vimeet\Application\Command\Meeting\Event;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
-use Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingSlotException;
+use Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingException;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
@@ -50,7 +50,9 @@ class MoveHandler
 
     public function handle(Move $move): void
     {
-        if (false === $this->canMoveMeeting->isSatisfiedBy($move->sheet)) {
+        if (false === $this->canMoveMeeting->isSatisfiedBy($move->sheet)
+            || !$move->meeting->hasSheet($move->sheet)
+        ) {
             throw new AccessDeniedException();
         }
 
@@ -78,7 +80,7 @@ class MoveHandler
                 $this->messageRepository->add($message);
             }
         } catch (\Exception $exception) {
-            throw new MoveMeetingSlotException(
+            throw new MoveMeetingException(
                 $this->translator->trans('agenda.meeting.updateSlot.error')
             );
         }

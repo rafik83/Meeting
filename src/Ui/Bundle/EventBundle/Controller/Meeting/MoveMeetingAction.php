@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting;
 
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Command\MeetingSlot\Move;
-use Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingSlotException;
+use Proximum\Vimeet\Application\Command\Meeting\Event\Move;
+use Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingException;
 use Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsQuery;
 use Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
@@ -14,7 +15,8 @@ use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MeetingSlot\MoveMeetingSlotType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\MoveMeetingType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +24,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 
-class MoveMeetingSlotAction
+class MoveMeetingAction
 {
     /** @var CanMoveMeeting */
     private $canMoveMeeting;
@@ -48,7 +50,11 @@ class MoveMeetingSlotAction
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var AuthorizationCheckerAdapterInterface */
+    private $authorizationCheckerAdapter;
+
     public function __construct(
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanMoveMeeting $canMoveMeeting,
         FormFactoryInterface $formFactory,
         EngineInterface $engine,
@@ -58,6 +64,7 @@ class MoveMeetingSlotAction
         FlashBagInterface $flashBag,
         TranslatorInterface $translator
     ) {
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canMoveMeeting = $canMoveMeeting;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
@@ -70,7 +77,10 @@ class MoveMeetingSlotAction
 
     public function __invoke(Request $request, Participant $participant, Sheet $sheet, Meeting $meeting): Response
     {
-        if (false === $this->canMoveMeeting->isSatisfiedBy($sheet)) {
+        if (!$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
+            || false === $this->canMoveMeeting->isSatisfiedBy($sheet)
+            || !$meeting->hasSheet($sheet)
+        ) {
             throw new AccessDeniedException();
         }
 
@@ -79,7 +89,7 @@ class MoveMeetingSlotAction
         $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
 
         $move = new Move($sheet, $meeting);
-        $form = $this->formFactory->create(MoveMeetingSlotType::class, $move, [
+        $form = $this->formFactory->create(MoveMeetingType::class, $move, [
             'availableSlots' => $availableSlotsView->availableSlots,
             'timezone' => $timezone,
             'locale' => $sheet->getEvent()->getAvailableLocale($request->getLocale()),
@@ -89,7 +99,7 @@ class MoveMeetingSlotAction
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $this->commandBus->handle($move);
-            } catch (MoveMeetingSlotException $exception) {
+            } catch (MoveMeetingException $exception) {
                 return new Response($exception->getMessage(), Response::HTTP_BAD_REQUEST);
             }
 
@@ -105,12 +115,12 @@ class MoveMeetingSlotAction
             return new Response(
                 $this->engine->render('@Event/Meeting/no-available-slot.html.twig')
             );
-        } else {
-            return new Response(
-                $this->engine->render('@Event/Meeting/move-meeting-slot-form.html.twig', [
-                    'form' => $form->createView(),
-                ])
-            );
         }
+
+        return new Response(
+            $this->engine->render('@Event/Meeting/move-meeting-slot-form.html.twig', [
+                'form' => $form->createView(),
+            ])
+        );
     }
 }

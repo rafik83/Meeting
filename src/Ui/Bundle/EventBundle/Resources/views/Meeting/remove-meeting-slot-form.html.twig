@@ -1,0 +1,27 @@
+{% form_theme form with ['@Ui/default.html.twig'] only %}
+
+<div class="modal-header">
+    <h4 class="modal-title">
+        <i class="icon-Fermer_1"></i>
+        {{ 'agenda.meeting.remove.button'|trans }}
+    </h4>
+</div>
+
+{{ form_start(form) }}
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-4">{{ form_label(form.content) }}</div>
+        <div class="col-md-8">
+            {{ form_widget(form.content) }}
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'agenda.meeting.move.back'|trans }}
+        <button type="submit" class="btn btn-primary pull-right">
+            <i class="icon-Fermer_1"></i> {{ 'unavailability.action.remove.title'|trans }}
+        </button>
+    </button>
+</div>
+{{ form_end(form) }}
