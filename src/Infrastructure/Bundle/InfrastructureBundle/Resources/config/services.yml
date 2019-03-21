@@ -1602,7 +1602,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
-    Proximum\Vimeet\Application\Command\MeetingSlot\MoveHandler:
+    Proximum\Vimeet\Application\Command\Meeting\Event\MoveHandler:
         arguments:
             - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
@@ -1611,7 +1611,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Move }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Move }
     command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:
@@ -1619,14 +1619,20 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
-    Proximum\Vimeet\Application\Command\MeetingSlot\RemoveHandler:
+    Proximum\Vimeet\Application\Command\Meeting\Event\RemoveHandler:
         arguments:
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
             - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Remove }
+    Proximum\Vimeet\Application\Command\MeetingSlot\RemoveHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Remove }
     command.event.configure_dates_handler:

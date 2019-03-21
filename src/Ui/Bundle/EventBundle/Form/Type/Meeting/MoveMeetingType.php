@@ -1,9 +1,9 @@
 <?php
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MeetingSlot;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Command\MeetingSlot\Move;
+use Proximum\Vimeet\Application\Command\Meeting\Event\Move;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Symfony\Component\Form\AbstractType;
@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MoveMeetingSlotType extends AbstractType
+class MoveMeetingType extends AbstractType
 {
     /** @var TranslatorInterface */
     private $translator;
@@ -35,7 +35,7 @@ class MoveMeetingSlotType extends AbstractType
                     $begin = DayHelper::getHourFormatter($locale, $timezone)->format($meetingSlot->getBegin());
                     $end = DayHelper::getHourFormatter($locale, $timezone)->format($meetingSlot->getEnd());
 
-                    return $this->translator->trans('form.move_meeting_slot.children.meetingSlot.label.begin.end', [
+                    return $this->translator->trans('form.move_meeting.children.meetingSlot.label.begin.end', [
                         '%day%' => $day,
                         '%begin%' => $begin,
                         '%end%' => $end,

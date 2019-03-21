@@ -439,6 +439,11 @@ class Meeting implements MessageSubjectInterface
         return [$this->fromSheet, $this->toSheet];
     }
 
+    public function hasSheet(Sheet $sheet): bool
+    {
+        return in_array($sheet, $this->getSheets(), true);
+    }
+
     /**
      * @return Participant[]
      */

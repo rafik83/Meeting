@@ -1,22 +1,26 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Command\MeetingSlot;
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Meeting\Event;
 
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class Move implements Command
+class Remove implements Command
 {
     /** @var Sheet */
     public $sheet;
 
     /** @var Meeting */
     public $meeting;
-
-    /** @var MeetingSlot */
-    public $meetingSlot;
 
     /** @var string */
     public $content;

@@ -785,16 +785,16 @@ event_agenda_move_meeting_slot:
         sheet: \d+
         meeting: \d+
     methods: [GET, POST]
-    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingSlotAction
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingAction
 
-event_agenda_remove_meeting_slot:
-    path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/remove-meeting-slot
+event_agenda_remove_meeting:
+    path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/remove
     requirements:
         participant: \d+
         sheet: \d+
         meeting: \d+
     methods: [GET, POST]
-    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\RemoveMeetingSlotAction
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\RemoveMeetingAction
 
 event_participant_timezone:
     path: /sheet/{sheet}/participant/{participant}/timezone

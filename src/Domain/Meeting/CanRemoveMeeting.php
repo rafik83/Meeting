@@ -1,9 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: taner
- * Date: 15/03/19
- * Time: 14:29
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\Meeting;

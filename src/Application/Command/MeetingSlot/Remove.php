@@ -10,36 +10,15 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingSlot;
 
-use Proximum\Vimeet\Application\Command\Command;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
-use Proximum\Vimeet\Domain\Model\Sheet;
 
-class Remove implements Command
+class Remove
 {
     /** @var MeetingSlot */
     public $meetingSlot;
 
-    /** @var Sheet */
-    public $sheet;
-
-    /** @var Meeting */
-    public $meeting;
-
-    /** @var string */
-    public $content;
-
-    /**
-     * Remove constructor.
-     *
-     * @param MeetingSlot $meetingSlot
-     * @param Sheet       $sheet
-     * @param Meeting     $meeting
-     */
-    public function __construct(MeetingSlot $meetingSlot, Sheet $sheet = null, Meeting $meeting = null)
+    public function __construct(MeetingSlot $meetingSlot)
     {
         $this->meetingSlot = $meetingSlot;
-        $this->sheet = $sheet;
-        $this->meeting = $meeting;
     }
 }

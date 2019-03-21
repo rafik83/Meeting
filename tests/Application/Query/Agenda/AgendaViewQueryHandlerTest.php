@@ -23,7 +23,7 @@ use Proximum\Vimeet\Application\View\Agenda\ParticipantView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
-use Proximum\Vimeet\Domain\Model\Event\Day;
+use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Unavailability;
@@ -143,6 +143,9 @@ class AgendaViewQueryHandlerTest extends TestCase
         $canMoveMeeting = $this->prophesize(CanMoveMeeting::class);
         $canMoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
 
+        $canRemoveMeeting = $this->prophesize(CanRemoveMeeting::class);
+        $canRemoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
+
         // Handler
         $handler = new AgendaViewQueryHandler(
             $dayRepository->reveal(),
@@ -158,7 +161,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             $this->extraDataRepository->reveal(),
             $getTimezoneHelper->reveal(),
             $getParticipantTypes->reveal(),
-            $canMoveMeeting->reveal()
+            $canMoveMeeting->reveal(),
+            $canRemoveMeeting->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant, 'fr', $user));
 
@@ -171,7 +175,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             true,
             [new ParticipantView(1, 'fullName')],
             false,
-            false
+            false,
+            true
         );
 
         $this->assertEquals($expected, $result);
@@ -258,8 +263,12 @@ class AgendaViewQueryHandlerTest extends TestCase
 
         $getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
         $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant2)->willReturn('Europe/Paris');
+
         $canMoveMeeting = $this->prophesize(CanMoveMeeting::class);
-        $canMoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
+        $canMoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
+
+        $canRemoveMeeting = $this->prophesize(CanRemoveMeeting::class);
+        $canRemoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
 
         // Handler
         $handler = new AgendaViewQueryHandler(
@@ -276,7 +285,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             $this->extraDataRepository->reveal(),
             $getTimezoneHelper->reveal(),
             $getParticipantTypes->reveal(),
-            $canMoveMeeting->reveal()
+            $canMoveMeeting->reveal(),
+            $canRemoveMeeting->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user));
 
@@ -291,6 +301,7 @@ class AgendaViewQueryHandlerTest extends TestCase
                 new ParticipantView(1, 'fullName'),
                 new ParticipantView(2, 'fullName2'),
             ],
+            true,
             true,
             false
         );

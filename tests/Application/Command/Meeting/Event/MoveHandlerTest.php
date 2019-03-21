@@ -1,20 +1,19 @@
 <?php
 
-namespace Proximum\Vimeet\Tests\Application\Command\MeetingSlot;
+namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Event;
 
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
-use Proximum\Vimeet\Application\Command\MeetingSlot\Move;
-use Proximum\Vimeet\Application\Command\MeetingSlot\MoveHandler;
+use Proximum\Vimeet\Application\Command\Meeting\Event\Move;
+use Proximum\Vimeet\Application\Command\Meeting\Event\MoveHandler;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
@@ -71,10 +70,12 @@ class MoveHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingSlotException
+     * @expectedException \Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingException
      */
-    public function testHandleMoveMeetingSlotException(): void
+    public function testHandleMoveMeetingException(): void
     {
+        $this->meeting->hasSheet($this->sheet->reveal())->shouldBeCalled()->willReturn(true);
+
         $this->canMoveMeeting->isSatisfiedBy($this->sheet->reveal())
             ->shouldBeCalled()
             ->willReturn(true);
@@ -104,6 +105,8 @@ class MoveHandlerTest extends TestCase
 
     public function testHandleWithoutContent(): void
     {
+        $this->meeting->hasSheet($this->sheet->reveal())->shouldBeCalled()->willReturn(true);
+
         $this->canMoveMeeting->isSatisfiedBy($this->sheet->reveal())
             ->shouldBeCalled()
             ->willReturn(true);
@@ -133,6 +136,8 @@ class MoveHandlerTest extends TestCase
 
     public function testHandleWithContent(): void
     {
+        $this->meeting->hasSheet($this->sheet->reveal())->shouldBeCalled()->willReturn(true);
+
         $this->canMoveMeeting->isSatisfiedBy($this->sheet->reveal())
             ->shouldBeCalled()
             ->willReturn(true);

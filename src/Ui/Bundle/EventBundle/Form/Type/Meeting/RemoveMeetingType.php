@@ -1,21 +1,22 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: taner
- * Date: 19/03/19
- * Time: 07:43
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MeetingSlot;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting;
 
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Command\MeetingSlot\Remove;
+use Proximum\Vimeet\Application\Command\Meeting\Event\Remove;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RemoveMeetingSlotType extends AbstractType
+class RemoveMeetingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
