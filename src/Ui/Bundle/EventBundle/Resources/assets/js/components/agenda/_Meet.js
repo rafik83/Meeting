@@ -16,6 +16,7 @@ function Meet(agenda, element, modal) {
     this.details = this.element.querySelector('.details');
     this.moveMeetingAction = this.element.querySelector('.moveMeetingAction');
     this.removeMeetingAction = this.element.querySelector('.removeMeetingAction');
+    this.removeMeetingConfirmMessage = this.removeMeetingAction.getAttribute('data-confirm-remove-meeting-message');
     this.duration = this.agenda.getDuration(this.element.getAttribute('data-duration'));
     this.start = this.agenda.getRelativeTime(this.agenda.parseTime(this.element.getAttribute('data-beginhour')));
 
@@ -87,15 +88,14 @@ Meet.prototype.showModal = function (html, confirmation = null) {
     var form = content.find('form');
 
     $(form).on('submit', function (e) {
+        e.preventDefault();
+
         if (confirmation) {
-            e.preventDefault();
-            var confirm = window.confirm('Confirmer la suppression :');
-            if (!confirm) {
+            if (!window.confirm(this.removeMeetingConfirmMessage)) {
                 return false;
             }
-                this.handleRequestForm(form);
-                return false;
         }
+
         this.handleRequestForm(form);
 
         return false;
