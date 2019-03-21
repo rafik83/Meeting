@@ -87,7 +87,7 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByUserEventAndSheet(User $user, Event $event): array
+    public function findByUserAndEventCreatedByUser(User $user, Event $event): array
     {
         $queryBuilder = $this
             ->entityManager

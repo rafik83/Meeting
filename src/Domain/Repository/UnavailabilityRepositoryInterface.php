@@ -77,7 +77,7 @@ interface UnavailabilityRepositoryInterface
      *
      * @return Unavailability[]
      */
-    public function findByUserEventAndSheet(User $user, Event $event): array;
+    public function findByUserAndEventCreatedByUser(User $user, Event $event): array;
 
     /**
      * @param Participant[] $participants
