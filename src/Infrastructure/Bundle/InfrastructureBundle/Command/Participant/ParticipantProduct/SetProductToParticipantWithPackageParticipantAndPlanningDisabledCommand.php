@@ -69,8 +69,17 @@ class SetProductToParticipantWithPackageParticipantAndPlanningDisabledCommand ex
 
         $participants = $this->participantRepository->findByEvent($event);
 
+        $output->writeln($this->getDescription());
+        $output->writeln(sprintf('Found %d participants for Event id %d', count($participants), $event->getId()));
+
+        $participantsUpdated = 0;
+
         foreach ($participants as $participant) {
-            $this->participantOfSheetWithPackageParticipantAndPlanningDisabled->handle($participant);
+            $isUpdated = $this->participantOfSheetWithPackageParticipantAndPlanningDisabled->handle($participant);
+            $participantsUpdated += $isUpdated ? 1 : 0;
         }
+
+        $output->writeln(sprintf('%d participants updated for Event id %d', $participantsUpdated, $event->getId()));
+        $output->writeln('End of the process !');
     }
 }

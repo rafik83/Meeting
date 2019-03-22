@@ -22,15 +22,17 @@ class ParticipantOfSheetWithPackageParticipantAndPlanningDisabled
         $this->participantProductSetter = $participantProductSetter;
     }
 
-    public function handle(Participant $participant): void
+    public function handle(Participant $participant): bool
     {
         $package = $participant->getSheet()->getPackage();
 
-        if (false !== $package->isParticipantAndPlanningEnabled()) {
-            return;
+        if ($package->isParticipantAndPlanningEnabled()) {
+            return false;
         }
 
         $productParticipant = $package->getFirstProductParticipant();
         $this->participantProductSetter->setProductOnParticipant($participant, $productParticipant);
+
+        return true;
     }
 }
