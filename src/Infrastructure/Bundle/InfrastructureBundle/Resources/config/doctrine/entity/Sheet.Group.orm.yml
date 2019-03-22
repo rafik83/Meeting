@@ -30,7 +30,6 @@ Proximum\Vimeet\Domain\Model\Sheet\Group:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet\Group
             joinColumn:
                 nullable: true
-                unique: true
                 onDelete: SET NULL
     oneToMany:
         sheets:
@@ -41,3 +40,7 @@ Proximum\Vimeet\Domain\Model\Sheet\Group:
             columns:
                 - event_id
                 - manager_id
+        unique_duplicated_group_event:
+            columns:
+                - event_id
+                - duplicated_from_id
