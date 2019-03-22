@@ -261,7 +261,7 @@ class Package
      *
      * @return Product
      *
-     * @deprecated use getParticipants()
+     * @deprecated use self::getFirstProductParticipant()
      */
     public function getParticipant()
     {
