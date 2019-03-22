@@ -40,6 +40,10 @@ class ParticipantOfSheetWithPackageParticipantAndPlanningDisabledTest extends Te
 
         $participantProductSetter = $this->prophesize(ParticipantProductSetter::class);
         $participantProductSetter
+            ->setProductOnParticipant($participant1->reveal(), $productParticipant->reveal())
+            ->shouldNotBeCalled()
+        ;
+        $participantProductSetter
             ->setProductOnParticipant($participant2->reveal(), $productParticipant->reveal())
             ->shouldBeCalled()
         ;
