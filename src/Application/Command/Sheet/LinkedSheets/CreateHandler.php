@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\LinkedSheets;
 
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
 use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -37,6 +38,11 @@ class CreateHandler
 
     /**
      * @param Create $command
+     *
+     * @throws AlreadyLinkedException
+     * @throws LinkedSheetsTypeUniquenessException
+     * @throws NotEnoughSheetsException
+     * @throws SheetNotFoundException
      */
     public function handle(Create $command)
     {
@@ -45,10 +51,34 @@ class CreateHandler
             $this->dateTime
         );
 
+        $type = null;
+
+        $count = 0;
         foreach ($command->sheetViews as $sheetView) {
             $sheet = $this->sheetRepository->getSheetById($sheetView->id);
 
+            if ($sheet === null) {
+                throw new SheetNotFoundException('Not found for id'.$sheetView->id);
+            }
+
+            if (null !== $sheet->getLinkedSheets()) {
+                throw new AlreadyLinkedException();
+            }
+
+            if ($type === null) {
+                $type = $sheet->getType();
+            }
+
+            if ($type !== $sheet->getType()) {
+                throw new LinkedSheetsTypeUniquenessException();
+            }
+
+            $count++;
             $sheet->setLinkedSheets($linkedSheets);
+        }
+
+        if ($count < 2) {
+            throw new NotEnoughSheetsException();
         }
 
         $this->linkedSheetsRepository->add($linkedSheets);
