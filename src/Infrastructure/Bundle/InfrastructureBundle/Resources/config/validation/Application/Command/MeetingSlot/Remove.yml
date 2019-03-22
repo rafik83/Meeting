@@ -2,6 +2,3 @@ Proximum\Vimeet\Application\Command\MeetingSlot\Remove:
   properties:
     meetingSlot:
       - NotBlank: ~
-    content:
-      - Length:
-          max: 300
