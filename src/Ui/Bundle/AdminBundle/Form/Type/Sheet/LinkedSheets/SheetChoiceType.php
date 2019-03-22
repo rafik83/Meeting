@@ -32,6 +32,8 @@ class SheetChoiceType extends AbstractType
             'choices' => function (Options $options) {
                 return $options['sheetViews'];
             },
+            'multiple' => true,
+            'select2'  => true,
         ]);
     }
 

@@ -28,8 +28,6 @@ class CreateType extends AbstractType
             SheetChoiceType::class,
             [
                 'sheetViews' => $options['sheetViews'],
-                'expanded'   => true,
-                'multiple'   => true,
             ]
         );
 
