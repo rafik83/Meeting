@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting\Event;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
+use Proximum\Vimeet\Application\Exception\Meeting\RemoveMeetingException;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
@@ -52,6 +53,8 @@ class RemoveHandler
 
     /**
      * @param Remove $command
+     *
+     * @throws RemoveMeetingException
      */
     public function handle(Remove $command)
     {
@@ -61,17 +64,23 @@ class RemoveHandler
             throw new AccessDeniedException();
         }
 
-        if ($command->content) {
-            $message = new Message(
-                $command->meeting->getRequest(),
-                $command->sheet,
-                $command->content,
-                $this->datetime
-            );
-            $this->messageRepository->add($message);
-        }
+        try {
+            if ($command->content) {
+                $message = new Message(
+                    $command->meeting->getRequest(),
+                    $command->sheet,
+                    $command->content,
+                    $this->datetime
+                );
+                $this->messageRepository->add($message);
+            }
 
-        $this->meetingRepository->remove($command->meeting);
+            $this->meetingRepository->remove($command->meeting);
+        } catch (\Exception $exception){
+            throw new RemoveMeetingException(
+                'Can not remove meeting'
+            );
+        }
 
         $this->eventDispatcher->dispatch(
             Events::MEETING_REMOVED,
