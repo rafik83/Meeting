@@ -88,6 +88,8 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@templating.engine.twig'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # Form Template

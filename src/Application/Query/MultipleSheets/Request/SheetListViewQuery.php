@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Query\MultipleSheets\Request;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class SheetListViewQuery
+class SheetListViewQuery implements Query
 {
     /** @var Sheet[] indexed by sheet id */
     public $sheets;

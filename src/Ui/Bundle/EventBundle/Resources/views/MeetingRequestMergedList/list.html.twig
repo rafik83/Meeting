@@ -2,7 +2,17 @@
 
 {% block title 'event.meeting.listRequest.title'|trans %}
 
-{% block body_attributes 'class="grey"' %}
-
 {% block content %}
+    <section class="main">
+        <header>
+            <h1>{{ 'event.meeting.listRequest.title'|trans }}</h1>
+        </header>
+
+        <div class="main__container">
+            {{ include('EventBundle:MultipleSheets/Request:filterForm.html.twig', {'resetLink': path('event_meeting_request_merged_list', {'sheet': sheet.id})}) }}
+        </div>
+        <div class="main__container">
+            {{ include('EventBundle:MultipleSheets/Request:requests.html.twig', {'isMultipleSheet': true}) }}
+        </div>
+    </section>
 {% endblock %}
