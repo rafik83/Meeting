@@ -26,6 +26,8 @@ class CreateUnavailabilitiesHandlerTest extends TestCase
         $participant = $this->prophesize(Participant::class);
         $day1 = $this->prophesize(Event\Day::class);
         $day2 = $this->prophesize(Event\Day::class);
+        $event->getDays()->willReturn([$day1, $day2]);
+        $event->getFirstDay()->willReturn($day1);
 
         $payload = [
             [
@@ -36,21 +38,21 @@ class CreateUnavailabilitiesHandlerTest extends TestCase
                 'unavailabilities' => [
                     [
                         'begin' => [
-                            'hour' => 9,
+                            'hour' => 10,
                             'minute' => 0,
                         ],
                         'end' => [
-                            'hour' => 9,
+                            'hour' => 10,
                             'minute' => 30,
                         ],
                     ],
                     [
                         'begin' => [
-                            'hour' => 10,
+                            'hour' => 11,
                             'minute' => 0,
                         ],
                         'end' => [
-                            'hour' => 10,
+                            'hour' => 11,
                             'minute' => 30,
                         ],
                     ],
@@ -64,11 +66,11 @@ class CreateUnavailabilitiesHandlerTest extends TestCase
                 'unavailabilities' => [
                     [
                         'begin' => [
-                            'hour' => 9,
+                            'hour' => 10,
                             'minute' => 0,
                         ],
                         'end' => [
-                            'hour' => 17,
+                            'hour' => 18,
                             'minute' => 0,
                         ],
                     ],
@@ -78,17 +80,22 @@ class CreateUnavailabilitiesHandlerTest extends TestCase
 
         $date1Start = (new \DateTime())
             ->setTimestamp('1551171600')
-            ->setTimezone(new \DateTimeZone('UTC'));
+            ->setTimezone(new \DateTimeZone('UTC')); // 26/2/2019 à 9:00:00
         $date1End = (new \DateTime())
             ->setTimestamp('1551200400')
-            ->setTimezone(new \DateTimeZone('UTC'));
+            ->setTimezone(new \DateTimeZone('UTC')); // 26/2/2019 à 17:00:00
 
         $date2Start = (new \DateTime())
             ->setTimestamp('1551258000')
-            ->setTimezone(new \DateTimeZone('UTC'));
+            ->setTimezone(new \DateTimeZone('UTC')); //  27/2/2019 à 9:00:00
         $date2End = (new \DateTime())
             ->setTimestamp('1551286800')
-            ->setTimezone(new \DateTimeZone('UTC'));
+            ->setTimezone(new \DateTimeZone('UTC')); // 27/2/2019 à 17:00:00
+
+        $day1->getStartTime()->willReturn($date1Start);
+        $day1->getEndTime()->willReturn($date1End);
+        $day2->getStartTime()->willReturn($date2Start);
+        $day2->getEndTime()->willReturn($date2End);
 
         $getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
         $getTimezoneHelper->getTimezoneByEventAndParticipant($event->reveal(), $participant->reveal())
@@ -96,13 +103,6 @@ class CreateUnavailabilitiesHandlerTest extends TestCase
             ->willReturn('Europe/Paris');
 
         $dayRepository = $this->prophesize(DayRepositoryInterface::class);
-        $dayRepository->findByEventStartTimeAndEndTime($event->reveal(), $date1Start, $date1End)
-            ->shouldBeCalled()
-            ->willReturn($day1->reveal());
-
-        $dayRepository->findByEventStartTimeAndEndTime($event->reveal(), $date2Start, $date2End)
-            ->shouldBeCalled()
-            ->willReturn($day2->reveal());
 
         $commandBus = $this->prophesize(CommandBusInterface::class);
 
@@ -111,7 +111,7 @@ class CreateUnavailabilitiesHandlerTest extends TestCase
             $sheet->reveal(),
             $user->reveal(),
             'fr',
-            'Europe/Paris'
+            'UTC'
         );
         $create1->day = $day1->reveal();
         $create1->time = [
@@ -130,7 +130,7 @@ class CreateUnavailabilitiesHandlerTest extends TestCase
             $sheet->reveal(),
             $user->reveal(),
             'fr',
-            'Europe/Paris'
+            'UTC'
         );
         $create2->day = $day1->reveal();
         $create2->time = [
@@ -149,7 +149,7 @@ class CreateUnavailabilitiesHandlerTest extends TestCase
             $sheet->reveal(),
             $user->reveal(),
             'fr',
-            'Europe/Paris'
+            'UTC'
         );
         $create3->day = $day2->reveal();
         $create3->time = [

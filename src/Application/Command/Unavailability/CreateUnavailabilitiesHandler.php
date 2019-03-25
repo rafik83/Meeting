@@ -15,26 +15,20 @@ use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResult
 use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResultView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Event\Day;
-use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 
 class CreateUnavailabilitiesHandler
 {
     /** @var GetTimezoneHelper */
     private $getTimezoneHelper;
 
-    /** @var DayRepositoryInterface */
-    private $dayRepository;
-
     /** @var CommandBusInterface */
     private $commandBus;
 
     public function __construct(
         GetTimezoneHelper $getTimezoneHelper,
-        DayRepositoryInterface $dayRepository,
         CommandBusInterface $commandBus
     ) {
         $this->getTimezoneHelper = $getTimezoneHelper;
-        $this->dayRepository = $dayRepository;
         $this->commandBus = $commandBus;
     }
 
@@ -46,30 +40,48 @@ class CreateUnavailabilitiesHandler
             $command->participant
         );
 
+        $days = $command->event->getDays();
+
         foreach ($command->payload as $payload) {
             if (empty($payload['day'] || empty($payload['unavailabilities']))) {
                 continue;
             }
 
-            $day = $this->dayRepository->findByEventStartTimeAndEndTime(
-                $command->event,
-                $this->convertTimestampToDateTime($payload['day']['start']),
-                $this->convertTimestampToDateTime($payload['day']['end'])
-            );
-
-            if (!$day instanceof Day) {
-                continue;
-            }
-
             foreach ($payload['unavailabilities'] as $unavailability) {
+                [
+                    $normalizedBeginDatetime,
+                    $normalizedEndDatetime,
+                ] = $this->getNormalizedBeginEndUnavailabilityDatetimes(
+                    $payload['day'],
+                    $timezone,
+                    $unavailability
+                );
+
+                $day = $this->guessDay($days, $normalizedBeginDatetime);
+
+                if (!$day instanceof Day) {
+                    continue;
+                }
+
+                $normalizedUnavailabilites = [
+                    'begin' => [
+                        'hour'   => $normalizedBeginDatetime->format('H'),
+                        'minute' => $normalizedBeginDatetime->format('i'),
+                    ],
+                    'end'   => [
+                        'hour'   => $normalizedEndDatetime->format('H'),
+                        'minute' => $normalizedEndDatetime->format('i'),
+                    ],
+                ];
+
                 $createCommand = new Create(
                     $command->event,
                     $command->sheet,
                     $command->user,
                     $command->locale,
-                    $timezone
+                    $normalizedBeginDatetime->getTimezone()->getName()
                 );
-                $createCommand->time = $unavailability;
+                $createCommand->time = $normalizedUnavailabilites;
                 $createCommand->day = $day;
 
                 try {
@@ -89,5 +101,50 @@ class CreateUnavailabilitiesHandler
         return (new \DateTime())
             ->setTimestamp($timestamp)
             ->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+    }
+
+    /**
+     * @param array  $dayPayload
+     * @param string $timezone
+     * @param array  $unavailability
+     *
+     * @return \DateTimeInterface[]
+     */
+    private function getNormalizedBeginEndUnavailabilityDatetimes($dayPayload, string $timezone, $unavailability): array
+    {
+        /** @var \DateTime $beginDatetime */
+        $beginDatetime = $this->convertTimestampToDateTime($dayPayload['start']);
+        $beginDatetime->setTimezone(new \DateTimeZone($timezone));
+        $beginDatetime->setTime($unavailability['begin']['hour'], $unavailability['begin']['minute']);
+
+        $endDatetime = clone $beginDatetime;
+        $endDatetime->setTime($unavailability['end']['hour'], $unavailability['end']['minute']);
+
+        $beginDatetime
+            ->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $endDatetime
+            ->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+
+        return [$beginDatetime, $endDatetime];
+    }
+
+    /**
+     * @param array              $days
+     * @param \DateTimeInterface $beginDatetime
+     *
+     * @return Day|null
+     */
+    private function guessDay(array $days, \DateTimeInterface $beginDatetime): ?Day
+    {
+        $chosenDay = null;
+        foreach ($days as $day) {
+            if ($day->getStartTime()->getTimestamp() <= $beginDatetime->getTimestamp()
+                && $day->getEndTime()->getTimestamp() >= $beginDatetime->getTimestamp()
+            ) {
+                $chosenDay = $day;
+            }
+        }
+
+        return $chosenDay;
     }
 }
