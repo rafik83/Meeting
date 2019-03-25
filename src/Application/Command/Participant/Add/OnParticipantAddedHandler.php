@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -47,22 +48,21 @@ class OnParticipantAddedHandler
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /**
-     * @param EventDispatcherInterface          $eventDispatcher
-     * @param ActivateAccountTokenGenerator     $activateAccountTokenGenerator
-     * @param ExtraParameterRepositoryInterface $extraParameterRepository
-     * @param CommandBusInterface               $commandBus
-     */
+    /** @var ParticipantOfSheetWithPackageParticipantAndPlanningDisabled */
+    private $participantOfSheetWithPackageParticipantAndPlanningDisabled;
+
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         ExtraParameterRepositoryInterface $extraParameterRepository,
-        CommandBusInterface $commandBus
+        CommandBusInterface $commandBus,
+        ParticipantOfSheetWithPackageParticipantAndPlanningDisabled $participantOfSheetWithPackageParticipantAndPlanningDisabled
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
         $this->extraParameterRepository = $extraParameterRepository;
         $this->commandBus = $commandBus;
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled = $participantOfSheetWithPackageParticipantAndPlanningDisabled;
     }
 
     public function handle(OnParticipantAdded $command): void
@@ -72,6 +72,8 @@ class OnParticipantAddedHandler
         }
 
         $this->commandBus->handle(new Update($command->participant->getUser(), $command->participant->getEvent()));
+
+        $this->participantOfSheetWithPackageParticipantAndPlanningDisabled->handle($command->participant);
     }
 
     private function handleNotOwnerOfSheet(OnParticipantAdded $command): void

@@ -413,6 +413,7 @@ services:
             - '@components.token.user.activate_account_token_generator'
             - '@repository.event.extra_parameter_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded }
 
@@ -3070,6 +3071,10 @@ services:
         arguments:
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.participant_repository'
+
+    Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
 
     #
     # Spot component
@@ -5738,6 +5743,7 @@ services:
             - '@validator.email_validator'
             - '@account.synchronizer'
             - '@serializer.denormalizer.participant_import_logger'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled'
             - '@datetime'
         tags:
             - { name: serializer.normalizer }

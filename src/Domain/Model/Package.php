@@ -261,9 +261,14 @@ class Package
      *
      * @return Product
      *
-     * @deprecated use getParticipants()
+     * @deprecated use self::getFirstProductParticipant()
      */
     public function getParticipant()
+    {
+        return $this->getFirstProductParticipant();
+    }
+
+    public function getFirstProductParticipant(): Product
     {
         $firstPackageParticipantRank = $this->participantRanks->first();
 

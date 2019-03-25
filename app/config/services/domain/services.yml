@@ -56,7 +56,8 @@ services:
     #
     Proximum\Vimeet\Domain\Participant\ParticipantProductSetter:
         arguments:
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@event_dispatcher'
 
     Proximum\Vimeet\Domain\Participant\IsParticipantVisio:
         arguments:

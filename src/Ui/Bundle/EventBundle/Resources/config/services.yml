@@ -373,6 +373,7 @@ services:
     event_listener.registration_step_event_subscriber:
             class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\RegistrationStepEventSubscriber
             arguments:
+                - '@Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled'
                 - '@components.registration.step_manager'
             tags:
                  - { name: kernel.event_subscriber }

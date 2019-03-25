@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Unavailability\SystemGenerator;
 
-use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Unavailability\System\SystemUnavailabilityForUserGeneratedEvent;
 use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;
@@ -29,6 +28,7 @@ use Proximum\Vimeet\Domain\Time\OverlappedTimeRangeMerger;
 use Proximum\Vimeet\Domain\Time\OverlappedTimeRangeTruncater;
 use Proximum\Vimeet\Domain\Time\TimeRangeNotAccessibleView;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Generator
 {
@@ -47,7 +47,7 @@ class Generator
     /** @var OverlappedTimeRangeTruncater */
     private $overlappedTimeRangeTruncater;
 
-    /** @var DelayedEventDispatcherInterface */
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     /** @var CartRowParticipantRepositoryInterface */
@@ -59,7 +59,7 @@ class Generator
         ParticipantRepositoryInterface $participantRepository,
         OverlappedTimeRangeMerger $overlappedTimeRangeMerger,
         OverlappedTimeRangeTruncater $overlappedTimeRangeTruncater,
-        DelayedEventDispatcherInterface $eventDispatcher,
+        EventDispatcherInterface $eventDispatcher,
         CartRowParticipantRepositoryInterface $cartRowParticipantRepository
     ) {
         $this->unavailabilityRepository = $unavailabilityRepository;
@@ -158,13 +158,6 @@ class Generator
         $products = [];
 
         foreach ($participants as $participant) {
-            // If a participant has a package that is not passable, it will not be
-            // able to buy a product that allows him to access availability time ranges
-            // Therefore, full access
-            if (!$participant->getSheet()->getPackage()->isPassable()) {
-                return [];
-            }
-
             $product = $participant->getParticipantProduct();
 
             if ($product instanceof Product) {
@@ -239,7 +232,7 @@ class Generator
      *
      * @return AvailabilityTimeRange[]
      */
-    private function getAvailabilityTimeRangeOutOfProducts(array &$products): array
+    private function getAvailabilityTimeRangeOutOfProducts(array $products): array
     {
         $availabilityTimeRangesBought = [];
         foreach ($products as $product) {
