@@ -436,6 +436,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Product\ProductUpdatedEventSubscriber:
+        autowire: true
+        tags:
+            - { name: kernel.event_subscriber }
+
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\RemoveDecryptedFileSubscriber:
         arguments:
             - '@adapter.file_system_adapter'

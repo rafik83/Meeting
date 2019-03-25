@@ -51,6 +51,8 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@Proximum\Vimeet\Infrastructure\Repository\CartRowParticipantRepository'
 
+    Proximum\Vimeet\Domain\Unavailability\SystemGenerator\GenerateParticipantProductSystemUnavailabilities:
+        autowire: true
     #
     # Participant
     #

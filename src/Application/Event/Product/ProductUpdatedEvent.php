@@ -1,0 +1,29 @@
+<?php
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Event\Product;
+
+use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;
+use Proximum\Vimeet\Domain\Model\Product;
+use Symfony\Component\EventDispatcher\Event;
+
+class ProductUpdatedEvent extends Event
+{
+    /** @var Product */
+    public $product;
+
+    /** @var AvailabilityTimeRange[] */
+    public $previousAvailabilityTimeRanges;
+
+    public function __construct(Product $product, array $previousAvailabilityTimeRanges)
+    {
+        $this->product = $product;
+        $this->previousAvailabilityTimeRanges = $previousAvailabilityTimeRanges;
+    }
+}
