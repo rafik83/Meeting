@@ -82,6 +82,14 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
     #
+    # Meeting request
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\MeetingRequest\MergedListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating.engine.twig'
+
+    #
     # Form Template
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Form\DownloadFileAction:
