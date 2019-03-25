@@ -71,10 +71,13 @@ class MergedListAction
         $user = $userDomain->getUser();
 
         $sheets = [$sheet];
+        $isMultipleSheet = false;
+
         $linkedSheets = $sheet->getLinkedSheets();
 
         if (null !== $linkedSheets) {
             $sheets = $linkedSheets->getSheets();
+            $isMultipleSheet = true;
         }
 
         $filterRequestView = new FilterRequestView();
@@ -117,6 +120,7 @@ class MergedListAction
                     'sheet' => $sheet,
                     'filterForm'    => $form->createView(),
                     'sheetListView' => $sheetListView,
+                    'isMultipleSheet' => $isMultipleSheet,
                 ]
             )
         );

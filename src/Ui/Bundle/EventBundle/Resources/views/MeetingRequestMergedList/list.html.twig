@@ -5,14 +5,15 @@
 {% block content %}
     <section class="main">
         <header>
-            <h1>{{ 'event.meeting.listRequest.title'|trans }}</h1>
+            {{ include('@Event/MeetingRequest/Partials/switchListMode.html.twig', { 'mode': 'list' }) }}
         </header>
 
         <div class="main__container">
             {{ include('EventBundle:MultipleSheets/Request:filterForm.html.twig', {'resetLink': path('event_meeting_request_merged_list', {'sheet': sheet.id})}) }}
         </div>
+
         <div class="main__container">
-            {{ include('EventBundle:MultipleSheets/Request:requests.html.twig', {'isMultipleSheet': true}) }}
+            {{ include('EventBundle:MultipleSheets/Request:requests.html.twig', {'isMultipleSheet': isMultipleSheet}) }}
         </div>
     </section>
 {% endblock %}
