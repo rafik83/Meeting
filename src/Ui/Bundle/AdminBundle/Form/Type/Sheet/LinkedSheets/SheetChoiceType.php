@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\LinkedSheets;
 
-use Proximum\Vimeet\Application\View\Group\Sheet\SheetView;
+use Proximum\Vimeet\Domain\View\SheetView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
@@ -27,7 +27,7 @@ class SheetChoiceType extends AbstractType
         $resolver->setAllowedTypes('sheetViews', 'array');
         $resolver->setDefaults([
             'choice_label' => function (SheetView $sheetView) {
-                return $sheetView->title;
+                return $sheetView->typeTitle;
             },
             'choices' => function (Options $options) {
                 return $options['sheetViews'];
