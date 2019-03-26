@@ -20,11 +20,13 @@
             {{ form_errors(filterForm.type) }}
         </div>
 
-        <div class="col-md-3">
-            {{ form_label(filterForm.sheetConcerned) }}
-            {{ form_widget(filterForm.sheetConcerned) }}
-            {{ form_errors(filterForm.sheetConcerned) }}
-        </div>
+        {% if filterForm.sheetConcerned is defined %}
+            <div class="col-md-3">
+                {{ form_label(filterForm.sheetConcerned) }}
+                {{ form_widget(filterForm.sheetConcerned) }}
+                {{ form_errors(filterForm.sheetConcerned) }}
+            </div>
+        {% endif %}
 
         <div class="col-md-2">
             {{ form_label(filterForm.user) }}
