@@ -10,10 +10,48 @@
 
 namespace Proximum\Vimeet\Application\Command\Product\Participant;
 
-use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Product\ProductUpdatedEvent;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
+use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
-class UpdateParticipantHandler extends AbstractHandler
+class UpdateParticipantHandler
 {
+    /**
+     * @var DelayedEventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var UpdatePriceResolver
+     */
+    private $updatePriceResolver;
+
+    /**
+     * @var FileStorageInterface
+     */
+    private $fileStorageInterface;
+
+    public function __construct(
+
+        DelayedEventDispatcherInterface $eventDispatcher,
+        ProductRepositoryInterface $productRepository,
+        UpdatePriceResolver $updatePriceResolver,
+        FileStorageInterface $fileStorageInterface = null
+    ) {
+        $this->eventDispatcher = $eventDispatcher;
+        $this->productRepository = $productRepository;
+        $this->updatePriceResolver = $updatePriceResolver;
+        $this->fileStorageInterface = $fileStorageInterface;
+    }
+
     /**
      * @param UpdateParticipant $updateParticipant
      */
@@ -31,8 +69,15 @@ class UpdateParticipantHandler extends AbstractHandler
             $product->translate($locale, $translation['title'], null, $translation['description'], null, null);
         }
 
+        $previousAvailabilityTimeRanges = $product->getAvailabilityTimeRanges();
+
         $product->setAvailabilityTimeRanges($updateParticipant->availabilityTimeRanges);
 
         $this->productRepository->update($product);
+
+        $this->eventDispatcher->dispatch(
+            Events::PRODUCT_UPDATED,
+            new ProductUpdatedEvent($product, $previousAvailabilityTimeRanges)
+        );
     }
 }

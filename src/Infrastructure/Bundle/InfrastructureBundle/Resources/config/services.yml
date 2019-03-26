@@ -1455,6 +1455,7 @@ services:
     command.product.update_participant_handler:
         class: Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipantHandler
         arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@vimeet_infrastructure.repository.product_repository'
             - '@domain.product.update_price_resolver'
         tags:

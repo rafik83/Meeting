@@ -12,8 +12,11 @@ namespace Proximum\Vimeet\Tests\Application\Command\Product\Participant;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant;
 use Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipantHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Product\ProductUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
@@ -24,6 +27,9 @@ class UpdateParticipantHandlerTest extends TestCase
 {
     public function testHandle()
     {
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $product = $this->prophesize(Product::class);
+
         $event = EventFactory::createEvent();
         $event->setLocales(['fr', 'en'], 'fr');
 
@@ -85,14 +91,22 @@ class UpdateParticipantHandlerTest extends TestCase
 
         // Handler
         $handler = new UpdateParticipantHandler(
+            $eventDispatcher->reveal(),
             $productRepository->reveal(),
             $updatePriceResolver->reveal()
         );
         $handler->handle($updateParticipantCommand);
+
+        $eventDispatcher->reveal()->dispatch(
+            Events::PRODUCT_UPDATED,
+            new ProductUpdatedEvent($product->reveal(),[$availabilityTimeRange])
+        );
     }
 
     public function testHandleCanNotUpdatePriceAndVat()
     {
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+
         $event = EventFactory::createEvent();
         $event->setLocales(['fr', 'en'], 'fr');
 
@@ -137,6 +151,7 @@ class UpdateParticipantHandlerTest extends TestCase
 
         // Handler
         $handler = new UpdateParticipantHandler(
+            $eventDispatcher->reveal(),
             $productRepository->reveal(),
             $updatePriceResolver->reveal()
         );
