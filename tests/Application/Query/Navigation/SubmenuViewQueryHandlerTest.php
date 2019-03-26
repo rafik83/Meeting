@@ -52,6 +52,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $sheet = $this->prophesize(Sheet::class);
         $sheet->isInInternalCatalog()->shouldBeCalled()->willReturn(true);
         $sheet->getId()->shouldBeCalled()->willReturn(1);
+        $sheet->hasLinkedSheets()->shouldBeCalled()->willReturn(false);
 
         $locale = 'fr';
         $route = 'event_catalog_index';
@@ -86,11 +87,10 @@ class SubmenuViewQueryHandlerTest extends TestCase
 
         // Rule
         $rule = $this->prophesize(Rule::class);
-        $event = $this->prophesize(Event::class);
         $who = $this->prophesize(WhoInterface::class);
         $sheet->getEvent()
             ->shouldBeCalled()
-            ->willReturn($event->reveal());
+            ->willReturn($event);
         ;
         $sheet->getType()
             ->shouldBeCalled()
@@ -98,7 +98,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         ;
 
         $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
-        $ruleRepository->getByEventAndSeer($event->reveal(), $who->reveal())
+        $ruleRepository->getByEventAndSeer($event, $who->reveal())
             ->shouldBeCalled()
             ->willReturn($rule->reveal());
         $canSeeOtherSheets = new CanSeeOtherSheets($ruleRepository->reveal());
@@ -114,6 +114,89 @@ class SubmenuViewQueryHandlerTest extends TestCase
 
         $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime, $canSeeOtherSheets);
         $menuButtonViews = $handler->handle($query);
+
+        $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
+    }
+
+    public function testSheetHasLinkedSheets()
+    {
+        $datetime = new \DateTime();
+        $event = EventFactory::createEvent();
+        $event->getConfiguration()->setDates(
+            $datetime->modify('-1 month'),
+            $datetime->modify('-1 month'),
+            $datetime->modify('-1 month')
+        );
+
+        $user = new User('email@email.com', 'salt', 'password', 'fr');
+
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->isInInternalCatalog()->shouldBeCalled()->willReturn(true);
+        $sheet->getId()->shouldBeCalled()->willReturn(1);
+        $sheet->hasLinkedSheets()->shouldBeCalled()->willReturn(true);
+
+        // Expected
+        $expectedSubmenuButtonViews = [
+            new SubmenuButtonView(
+                Category::CATALOG_ICON,
+                'navigation.category.catalog',
+                'navigation.category.catalog.link',
+                false,
+                false,
+                true
+            ),
+            new SubmenuButtonView(
+                Category::MEETING_ICON,
+                'navigation.category.meeting',
+                'navigation.category.meeting.link',
+                true,
+                false,
+                true
+            ),
+        ];
+
+        $rule = $this->prophesize(Rule::class);
+        $who = $this->prophesize(WhoInterface::class);
+        $sheet->getEvent()
+            ->shouldBeCalled()
+            ->willReturn($event);
+        ;
+        $sheet->getType()
+            ->shouldBeCalled()
+            ->willReturn($who->reveal());
+        ;
+
+        $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
+        $ruleRepository->getByEventAndSeer($event, $who->reveal())
+            ->shouldBeCalled()
+            ->willReturn($rule->reveal());
+        $canSeeOtherSheets = new CanSeeOtherSheets($ruleRepository->reveal());
+
+        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
+
+        $navigationBuilder
+            ->getRoute('event_catalog_index', ['sheet' => 1])
+            ->shouldBeCalled()
+            ->willReturn('navigation.category.catalog.link')
+        ;
+
+        $navigationBuilder
+            ->getRoute('event_meeting_request_merged_list', ['sheet' => 1])
+            ->shouldBeCalled()
+            ->willReturn('navigation.category.meeting.link')
+        ;
+
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime, $canSeeOtherSheets);
+        $menuButtonViews = $handler->handle(
+            new CatalogSubmenuViewQuery(
+                $user,
+                $event,
+                'fr',
+                $sheet->reveal(),
+                'event_meeting_request_merged_list',
+                []
+            )
+        );
 
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
     }
