@@ -1895,7 +1895,9 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Create }
     Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilitiesHandler:
-        autowire: true
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\CreateUnavailabilities }
 
