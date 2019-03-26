@@ -1390,6 +1390,10 @@ event.meeting.listRequest.show: Voir
 event.meeting.listRequest.state: Statut
 event.meeting.listRequest.title: 'Liste de vos demandes de rendez-vous'
 event.meeting.listRequest.to: 'A destination de'
+event.meeting.listRequest.switchListMode.linkedSheets.thumbnails: 'RDV de ma fiche'
+event.meeting.listRequest.switchListMode.linkedSheets.list: 'RDV de mes fiches liées'
+event.meeting.listRequest.switchListMode.oneSheet.thumbnails: 'Vue mosaïque'
+event.meeting.listRequest.switchListMode.oneSheet.list: 'Vue liste'
 event.meeting.refusedRequest.label: 'De %fromName% pour %toName%'
 event.meeting.refusedRequest.title: 'Refuser la proposition de rendez vous'
 event.meeting.request.details.createdAt: Création

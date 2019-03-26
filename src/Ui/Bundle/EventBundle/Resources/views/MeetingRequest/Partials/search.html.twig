@@ -101,8 +101,6 @@
     {% endif %}
     <div class="catalog__filters">
         <div class="select-all">
-            {{ include('@Event/MeetingRequest/Partials/switchListMode.html.twig', { 'mode': 'thumbnail' }) }}
-
             {% if filterRequestProposition == true %}
                 <div class="btn-group" role="group" data-meeting-request-filter-type-buttons="buttons">
                     <button class="btn btn-primary" data-meeting-request-filter-by="all">
@@ -115,6 +113,8 @@
                         {{ 'event.meeting.listRequest.filter.propositions'|trans }}
                     </button>
                 </div>
+            {% else %}
+                {{ include('@Event/MeetingRequest/Partials/switchListMode.html.twig', { 'mode': 'thumbnail' }) }}
             {% endif %}
         </div>
 

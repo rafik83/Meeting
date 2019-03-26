@@ -1,8 +1,8 @@
 <div class="btn-group" role="group">
     <a class="btn btn-{{ 'thumbnail' == mode ? 'primary' : 'default' }}" href="{{ path('event_meeting_list_request', { 'sheet': sheet.id }) }}">
-        <i class="icon-Mosaique"></i> Les RDV de ma fiche
+        <i class="icon-Mosaique"></i> {{ (sheet.linkedSheets ? 'event.meeting.listRequest.switchListMode.linkedSheets.thumbnails' : 'event.meeting.listRequest.switchListMode.oneSheet.thumbnails')|trans }}
     </a>
     <a class="btn btn-{{ 'list' == mode ? 'primary' : 'default' }}" href="{{ path('event_meeting_request_merged_list', { 'sheet': sheet.id }) }}">
-        <i class="icon-Liste"></i> Les RDV de mes fiches liées
+        <i class="icon-Liste"></i> {{ (sheet.linkedSheets ? 'event.meeting.listRequest.switchListMode.linkedSheets.list' : 'event.meeting.listRequest.switchListMode.oneSheet.list')|trans }}
     </a>
 </div>
