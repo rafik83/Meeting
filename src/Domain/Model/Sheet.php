@@ -1012,6 +1012,11 @@ class Sheet implements TraceableInterface
         return $this->group;
     }
 
+    public function hasLinkedSheets(): bool
+    {
+        return null !== $this->getLinkedSheets();
+    }
+
     public function getLinkedSheets(): ?LinkedSheets
     {
         return $this->linkedSheets;

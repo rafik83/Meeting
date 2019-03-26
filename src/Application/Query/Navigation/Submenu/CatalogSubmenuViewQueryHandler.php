@@ -87,9 +87,14 @@ class CatalogSubmenuViewQueryHandler
             $buttonViews[] = new SubmenuButtonView(
                 Category::MEETING_ICON,
                 $meetingTitle,
-                $this->navigationBuilder->getRoute('event_meeting_list_request', [
-                    'sheet' => $query->sheet->getId(),
-                ]),
+                $this->navigationBuilder->getRoute(
+                    $query->sheet->hasLinkedSheets()
+                        ? 'event_meeting_request_merged_list'
+                        : 'event_meeting_list_request',
+                    [
+                        'sheet' => $query->sheet->getId(),
+                    ]
+                ),
                 Route::isMeetingRequest($query->route),
                 false,
                 true

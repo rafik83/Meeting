@@ -39,6 +39,7 @@ final class Route
     public const CATALOG_VIEW_OTHER_SHEET = 'event_catalog_complete_sheet';
     public const CATALOG_MEETING_REQUEST = 'event_catalog_sheet_meeting_request';
     public const MEETING_REQUEST_LIST = 'event_meeting_list_request';
+    public const MEETING_REQUEST_MERGED_LIST = 'event_meeting_request_merged_list';
 
     public const PACKAGE = [
         'event_package_step',
@@ -104,7 +105,7 @@ final class Route
 
     public static function isMeetingRequest(string $route): bool
     {
-        return self::MEETING_REQUEST_LIST === $route;
+        return \in_array($route, [self::MEETING_REQUEST_LIST, self::MEETING_REQUEST_MERGED_LIST], true);
     }
 
     public static function isNotification(string $route): bool
