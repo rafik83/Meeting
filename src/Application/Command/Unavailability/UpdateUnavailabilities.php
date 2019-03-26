@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class CreateUnavailabilities implements Command
+class UpdateUnavailabilities implements Command
 {
     /** @var Event */
     public $event;

@@ -1894,7 +1894,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Create }
-    Proximum\Vimeet\Application\Command\Unavailability\CreateUnavailabilitiesHandler:
+    Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilitiesHandler:
         autowire: true
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\CreateUnavailabilities }

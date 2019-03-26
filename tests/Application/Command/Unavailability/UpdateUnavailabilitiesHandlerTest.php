@@ -3,8 +3,8 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\Unavailability\CreateUnavailabilities;
-use Proximum\Vimeet\Application\Command\Unavailability\CreateUnavailabilitiesHandler;
+use Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilities;
+use Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilitiesHandler;
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResultsView;
@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 
-class CreateUnavailabilitiesHandlerTest extends TestCase
+class UpdateUnavailabilitiesHandlerTest extends TestCase
 {
     public function testHandle(): void
     {
@@ -167,8 +167,8 @@ class CreateUnavailabilitiesHandlerTest extends TestCase
         $commandBus->handle($create2)->shouldBeCalled();
         $commandBus->handle($create3)->shouldBeCalled();
 
-        $handler = new CreateUnavailabilitiesHandler($getTimezoneHelper->reveal(), $dayRepository->reveal(), $commandBus->reveal());
-        $result = $handler->handle(new CreateUnavailabilities(
+        $handler = new UpdateUnavailabilitiesHandler($getTimezoneHelper->reveal(), $dayRepository->reveal(), $commandBus->reveal());
+        $result = $handler->handle(new UpdateUnavailabilities(
             $event->reveal(),
             $sheet->reveal(),
             $user->reveal(),

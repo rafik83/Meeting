@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResult
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 
-class CreateUnavailabilitiesHandler
+class UpdateUnavailabilitiesHandler
 {
     /** @var GetTimezoneHelper */
     private $getTimezoneHelper;
@@ -32,8 +32,11 @@ class CreateUnavailabilitiesHandler
         $this->commandBus = $commandBus;
     }
 
-    public function handle(CreateUnavailabilities $command): CreateUnavailabilitiesResultsView
+    public function handle(UpdateUnavailabilities $command): CreateUnavailabilitiesResultsView
     {
+        // Remove old unavailabilities
+        $this->commandBus->handle(new RemoveUserUnavailabilities($command->user, $command->event, $command->sheet));
+
         $result = [];
         $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant(
             $command->event,
