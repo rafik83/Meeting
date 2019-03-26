@@ -21,6 +21,12 @@ class ProductUpdatedEvent extends Event
     /** @var AvailabilityTimeRange[] */
     public $previousAvailabilityTimeRanges;
 
+    /**
+     * ProductUpdatedEvent constructor.
+     *
+     * @param Product $product
+     * @param AvailabilityTimeRange[] $previousAvailabilityTimeRanges
+     */
     public function __construct(Product $product, array $previousAvailabilityTimeRanges)
     {
         $this->product = $product;

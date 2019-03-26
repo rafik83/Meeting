@@ -131,5 +131,5 @@ interface UserRepositoryInterface
      *
      * @return User[]
      */
-    public function findByParticipantProduct (Product $product): array;
+    public function findByParticipantProduct(Product $product): array;
 }

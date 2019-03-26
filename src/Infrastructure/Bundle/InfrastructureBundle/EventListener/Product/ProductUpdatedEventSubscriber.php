@@ -58,13 +58,15 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface
      */
     private function setIdTimeRangeArray(array $timeRangeArrayObjects)
     {
-        $IdArray = array_map(
+        $availabilityTimeRangeIds = array_map(
             function (AvailabilityTimeRange $timeRange) {
 
                 return $timeRange->getId();
             }
             , $timeRangeArrayObjects
         );
-        return sort($IdArray);
+        sort($availabilityTimeRangeIds);
+
+        return $availabilityTimeRangeIds;
     }
 }

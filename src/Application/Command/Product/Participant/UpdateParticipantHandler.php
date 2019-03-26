@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Product\Participant;
 
-use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Product\ProductUpdatedEvent;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
@@ -34,22 +33,14 @@ class UpdateParticipantHandler
      */
     private $updatePriceResolver;
 
-    /**
-     * @var FileStorageInterface
-     */
-    private $fileStorageInterface;
-
     public function __construct(
-
         DelayedEventDispatcherInterface $eventDispatcher,
         ProductRepositoryInterface $productRepository,
-        UpdatePriceResolver $updatePriceResolver,
-        FileStorageInterface $fileStorageInterface = null
+        UpdatePriceResolver $updatePriceResolver
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->productRepository = $productRepository;
         $this->updatePriceResolver = $updatePriceResolver;
-        $this->fileStorageInterface = $fileStorageInterface;
     }
 
     /**

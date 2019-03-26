@@ -432,14 +432,16 @@ class UserRepository implements UserRepositoryInterface
             ->getOneOrNullResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findByParticipantProduct(Product $product): array
     {
         return $this->entityManager
             ->createQueryBuilder()
             ->select('user')
             ->from(User::class, 'user')
-            ->join(Participant::class, 'participant', 'WITH', 'user = participant.user')
-            ->join('participant.participantProduct', 'participant_product', 'WITH', 'participant_product = :product')
+            ->join(Participant::class, 'participant', 'WITH', 'user = participant.user AND participant.participantProduct = :product')
             ->setParameter('product', $product)
             ->getQuery()
             ->getResult();

@@ -28,7 +28,6 @@ class UpdateParticipantHandlerTest extends TestCase
     public function testHandle()
     {
         $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
-        $product = $this->prophesize(Product::class);
 
         $event = EventFactory::createEvent();
         $event->setLocales(['fr', 'en'], 'fr');
@@ -48,6 +47,8 @@ class UpdateParticipantHandlerTest extends TestCase
             $vat,
             $quantityMax
         );
+
+        $participant->setAvailabilityTimeRanges([$availabilityTimeRange]);
 
         $expectedParticipant = Product::createParticipant(
             $event,
@@ -95,12 +96,13 @@ class UpdateParticipantHandlerTest extends TestCase
             $productRepository->reveal(),
             $updatePriceResolver->reveal()
         );
-        $handler->handle($updateParticipantCommand);
 
-        $eventDispatcher->reveal()->dispatch(
+        $eventDispatcher->dispatch(
             Events::PRODUCT_UPDATED,
-            new ProductUpdatedEvent($product->reveal(),[$availabilityTimeRange])
-        );
+            new ProductUpdatedEvent($participant,[$availabilityTimeRange])
+        )->shouldBeCalled();
+
+        $handler->handle($updateParticipantCommand);
     }
 
     public function testHandleCanNotUpdatePriceAndVat()
