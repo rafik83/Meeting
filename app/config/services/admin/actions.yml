@@ -444,10 +444,21 @@ services:
     # Linked sheets
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\ListAction:
-        autowire: true
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\AddAction:
-        autowire: true
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@form.factory'
+            - '@router.default'
+            - '@session.flash_bag'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
 
     #
     # Catalog

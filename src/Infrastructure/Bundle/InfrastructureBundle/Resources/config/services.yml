@@ -181,7 +181,8 @@ services:
             - '@doctrine.orm.entity_manager'
 
     Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository:
-        autowire: true
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     repository.sheet.sheet_viewed_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Sheet\SheetViewedRepository
@@ -1279,7 +1280,10 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\Create }
 
     Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\CreateHandler:
-        autowire: true
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, typehints: true }
 
@@ -3770,7 +3774,8 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery }
 
     Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin\LinkedSheetsListViewQueryHandler:
-        autowire: true
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
         tags:
             - { name: tactician.handler, typehints: true }
 
@@ -6777,6 +6782,7 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetBadgeConfigurationByTypeQuery }
 
     Proximum\Vimeet\Application\Query\Sheet\SheetsForNewLinkedSheetsQueryHandler:
-        autowire: true
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, typehints: true }
