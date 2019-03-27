@@ -36,7 +36,7 @@ class SheetListViewQuery implements Query
 
     /**
      * @param User              $user
-     * @param Sheet[]           $sheets            indexed by sheet id
+     * @param Sheet[]           $sheets indexed by sheet id
      * @param string            $locale
      * @param int               $page
      * @param int               $limit
@@ -44,11 +44,17 @@ class SheetListViewQuery implements Query
      */
     public function __construct(User $user, array $sheets, $locale, $page, $limit, FilterRequestView $filterRequestView)
     {
-        $this->sheets            = $sheets;
-        $this->locale            = $locale;
-        $this->page              = $page;
-        $this->limit             = $limit;
+        foreach ($sheets as $sheetId => $sheet) {
+            if ($sheetId !== $sheet->getId()) {
+                throw new \InvalidArgumentException('Sheets array must be indexed by id');
+            }
+        }
+
+        $this->sheets = $sheets;
+        $this->locale = $locale;
+        $this->page = $page;
+        $this->limit = $limit;
         $this->filterRequestView = $filterRequestView;
-        $this->user              = $user;
+        $this->user = $user;
     }
 }

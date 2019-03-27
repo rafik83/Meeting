@@ -70,14 +70,17 @@ class MergedListAction
         $event = $eventDomain->getEvent();
         $user = $userDomain->getUser();
 
-        $sheets = [$sheet];
+        $sheets = [$sheet->getId() => $sheet];
         $isMultipleSheet = false;
 
         $linkedSheets = $sheet->getLinkedSheets();
 
         if (null !== $linkedSheets) {
-            $sheets = $linkedSheets->getSheets();
             $isMultipleSheet = true;
+
+            foreach ($linkedSheets->getSheets() as $linkedSheet) {
+                $sheets[$linkedSheet->getId()] = $linkedSheet;
+            }
         }
 
         $filterRequestView = new FilterRequestView();
