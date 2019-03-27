@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Command\Unavailability\RemoveUserUnavailabilities;
 use Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilities;
 use Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilitiesHandler;
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
@@ -14,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 
 class UpdateUnavailabilitiesHandlerTest extends TestCase
 {
@@ -102,8 +102,6 @@ class UpdateUnavailabilitiesHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('Europe/Paris');
 
-        $dayRepository = $this->prophesize(DayRepositoryInterface::class);
-
         $commandBus = $this->prophesize(CommandBusInterface::class);
 
         $create1 = new Create(
@@ -163,11 +161,14 @@ class UpdateUnavailabilitiesHandlerTest extends TestCase
             ],
         ];
 
+        $removeUserUnavailabilitiesQuery = new RemoveUserUnavailabilities($user->reveal(), $event->reveal(), $sheet->reveal());
+
+        $commandBus->handle($removeUserUnavailabilitiesQuery)->shouldBeCalled();
         $commandBus->handle($create1)->shouldBeCalled();
         $commandBus->handle($create2)->shouldBeCalled();
         $commandBus->handle($create3)->shouldBeCalled();
 
-        $handler = new UpdateUnavailabilitiesHandler($getTimezoneHelper->reveal(), $dayRepository->reveal(), $commandBus->reveal());
+        $handler = new UpdateUnavailabilitiesHandler($getTimezoneHelper->reveal(), $commandBus->reveal());
         $result = $handler->handle(new UpdateUnavailabilities(
             $event->reveal(),
             $sheet->reveal(),
