@@ -40,7 +40,7 @@ class UpdateParticipantHandlerTest extends TestCase
         $end = new \DateTime('2017-10-10 18:00:00.000');
         $availabilityTimeRange = new AvailabilityTimeRange($event, 'name', $begin, $end);
 
-        $participant = Product::createParticipant(
+        $participantProduct = Product::createParticipant(
             $event,
             $name,
             $unitPrice,
@@ -48,9 +48,9 @@ class UpdateParticipantHandlerTest extends TestCase
             $quantityMax
         );
 
-        $participant->setAvailabilityTimeRanges([$availabilityTimeRange]);
+        $participantProduct->setAvailabilityTimeRanges([$availabilityTimeRange]);
 
-        $expectedParticipant = Product::createParticipant(
+        $expectedParticipantProduct = Product::createParticipant(
             $event,
             'my participant updated',
             200,
@@ -60,12 +60,12 @@ class UpdateParticipantHandlerTest extends TestCase
 
         // set translations to empty
         foreach ($event->getLocales() as $locale) {
-            $expectedParticipant->translate($locale, '', '', '', '', '');
+            $expectedParticipantProduct->translate($locale, '', '', '', '', '');
         }
-        $expectedParticipant->setAvailabilityTimeRanges([$availabilityTimeRange]);
+        $expectedParticipantProduct->setAvailabilityTimeRanges([$availabilityTimeRange]);
 
         // Command
-        $updateParticipantCommand = new UpdateParticipant($participant);
+        $updateParticipantCommand = new UpdateParticipant($participantProduct);
         $updateParticipantCommand->name = 'my participant updated';
         $updateParticipantCommand->unitPrice = 200;
         $updateParticipantCommand->vat = 19;
@@ -76,19 +76,19 @@ class UpdateParticipantHandlerTest extends TestCase
         // Mock
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
         $productRepository
-            ->update(Argument::that(function (Product $product) use ($expectedParticipant) {
-                return $product->getEvent() === $expectedParticipant->getEvent()
-                    && $product->getName() === $expectedParticipant->getName()
-                    && $product->getVat() === $expectedParticipant->getVat()
-                    && $product->getTitle('fr') === $expectedParticipant->getTitle('fr')
-                    && \count($product->getAvailabilityTimeRanges()) === \count($expectedParticipant->getAvailabilityTimeRanges())
-                    && $product->getQuantityMax() === $expectedParticipant->getQuantityMax()
+            ->update(Argument::that(function (Product $product) use ($expectedParticipantProduct) {
+                return $product->getEvent() === $expectedParticipantProduct->getEvent()
+                    && $product->getName() === $expectedParticipantProduct->getName()
+                    && $product->getVat() === $expectedParticipantProduct->getVat()
+                    && $product->getTitle('fr') === $expectedParticipantProduct->getTitle('fr')
+                    && \count($product->getAvailabilityTimeRanges()) === \count($expectedParticipantProduct->getAvailabilityTimeRanges())
+                    && $product->getQuantityMax() === $expectedParticipantProduct->getQuantityMax()
                 ;
             }))
             ->shouldBeCalled();
 
         $updatePriceResolver = $this->prophesize(UpdatePriceResolver::class);
-        $updatePriceResolver->resolve($participant)->shouldBeCalled()->willReturn(true);
+        $updatePriceResolver->resolve($participantProduct)->shouldBeCalled()->willReturn(true);
 
         // Handler
         $handler = new UpdateParticipantHandler(
@@ -99,7 +99,7 @@ class UpdateParticipantHandlerTest extends TestCase
 
         $eventDispatcher->dispatch(
             Events::PRODUCT_UPDATED,
-            new ProductUpdatedEvent($participant,[$availabilityTimeRange])
+            new ProductUpdatedEvent($participantProduct,[$availabilityTimeRange])
         )->shouldBeCalled();
 
         $handler->handle($updateParticipantCommand);
@@ -117,7 +117,7 @@ class UpdateParticipantHandlerTest extends TestCase
         $vat = 20;
         $quantityMax = 4;
 
-        $participant = Product::createParticipant(
+        $participantProduct = Product::createParticipant(
             $event,
             $name,
             $unitPrice,
@@ -125,7 +125,7 @@ class UpdateParticipantHandlerTest extends TestCase
             $quantityMax
         );
 
-        $expectedParticipant = Product::createParticipant(
+        $expectedParticipantProduct = Product::createParticipant(
             $event,
             'my participant updated',
             $unitPrice,
@@ -135,21 +135,21 @@ class UpdateParticipantHandlerTest extends TestCase
 
         // set translations to empty
         foreach ($event->getLocales() as $locale) {
-            $expectedParticipant->translate($locale, '', '', '', '', '');
+            $expectedParticipantProduct->translate($locale, '', '', '', '', '');
         }
 
         // Command
-        $updateParticipantCommand = new UpdateParticipant($participant);
+        $updateParticipantCommand = new UpdateParticipant($participantProduct);
         $updateParticipantCommand->name = 'my participant updated';
         $updateParticipantCommand->unitPrice = 200;
         $updateParticipantCommand->vat = 19;
 
         // Mock
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
-        $productRepository->update($expectedParticipant)->shouldBeCalled();
+        $productRepository->update($expectedParticipantProduct)->shouldBeCalled();
 
         $updatePriceResolver = $this->prophesize(UpdatePriceResolver::class);
-        $updatePriceResolver->resolve($participant)->shouldBeCalled()->willReturn(false);
+        $updatePriceResolver->resolve($participantProduct)->shouldBeCalled()->willReturn(false);
 
         // Handler
         $handler = new UpdateParticipantHandler(
