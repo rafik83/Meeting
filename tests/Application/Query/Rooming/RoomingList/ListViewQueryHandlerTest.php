@@ -37,6 +37,18 @@ class ListViewQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(1000);
+        $firstDay = $this->prophesize(Event\Day::class);
+        $lastDay = $this->prophesize(Event\Day::class);
+        $firstEventDay = clone $dateArrival;
+        $lastEventDay = clone $dateDeparture;
+        $defaultFirstRoomingDay = clone $firstEventDay;
+        $defaultFirstRoomingDay->sub(new \DateInterval('P1D'));
+        $defaultLastRoomingDay = clone $lastEventDay;
+        $event->getFirstDay()->shouldBeCalled()->willReturn($firstDay->reveal());
+        $event->getLastDay()->shouldBeCalled()->willReturn($lastDay->reveal());
+        $firstDay->getDay()->shouldBeCalled()->willReturn($firstEventDay);
+        $lastDay->getDay()->shouldBeCalled()->willReturn($lastEventDay);
+
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository
             ->getWithSheetAndTypeByEvent($event->reveal(), 'fr')
@@ -184,8 +196,9 @@ class ListViewQueryHandlerTest extends TestCase
                     1,
                     'Jean',
                     'Dupont',
-                    null,
-                    null,
+                    $defaultFirstRoomingDay,
+                    $defaultLastRoomingDay,
+                    false,
                     false,
                     false,
                     null,
@@ -193,7 +206,12 @@ class ListViewQueryHandlerTest extends TestCase
                     [
                         new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10'),
                     ],
-                    []
+                    [
+                        new UserStayToAssignView(
+                            $defaultFirstRoomingDay,
+                            $defaultLastRoomingDay
+                        ),
+                    ]
                 ),
                 2 => new ListDetailView(
                     2,
@@ -201,6 +219,7 @@ class ListViewQueryHandlerTest extends TestCase
                     'Poulain',
                     $dateArrival,
                     $dateDeparture,
+                    true,
                     true,
                     true,
                     "Ceci est un test\nCeci est un autre test",
@@ -239,6 +258,7 @@ class ListViewQueryHandlerTest extends TestCase
                     'Henry',
                     new \DateTime('2018-12-12 10:00:00.000'),
                     new \DateTime('2018-12-17 18:00:00.000'),
+                    true,
                     true,
                     false,
                     null,
@@ -279,6 +299,14 @@ class ListViewQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(1000);
+        $firstEventDay = $this->prophesize(Event\Day::class);
+        $lastEventDay = $this->prophesize(Event\Day::class);
+        $dummyDate = new \DateTime();
+        $event->getFirstDay()->shouldBeCalled()->willReturn($firstEventDay->reveal());
+        $event->getLastDay()->shouldBeCalled()->willReturn($lastEventDay->reveal());
+        $firstEventDay->getDay()->shouldBeCalled()->willReturn($dummyDate);
+        $lastEventDay->getDay()->shouldBeCalled()->willReturn($dummyDate);
+
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository
             ->getWithSheetAndTypeByEvent($event->reveal(), 'fr')
@@ -338,6 +366,7 @@ class ListViewQueryHandlerTest extends TestCase
                     'Dupont',
                     $dateArrival,
                     $dateDeparture,
+                    true,
                     false,
                     false,
                     null,
