@@ -4,8 +4,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\AvailabilityType;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\Unavailability\CreateUnavailabilities;
-use Proximum\Vimeet\Application\Command\Unavailability\RemoveUserUnavailabilities;
+use Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilities;
 use Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled;
 use Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled;
 use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResultsView;
@@ -14,7 +13,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -70,14 +68,11 @@ class CreateUnavailabilitiesAction
             throw new AccessDeniedHttpException();
         }
 
-        // Remove old unavailabilities
-        $this->commandBus->handle(new RemoveUserUnavailabilities($user, $event, $sheet));
-
         $payload = json_decode($request->getContent(), true);
 
         // Create new unavailabilities by days
-        $createUnavailabilitiesResults = $this->commandBus->handle(
-            new CreateUnavailabilities(
+        $updateUnavailabilitiesResults = $this->commandBus->handle(
+            new UpdateUnavailabilities(
                 $event,
                 $sheet,
                 $user,
@@ -89,8 +84,8 @@ class CreateUnavailabilitiesAction
 
         $hasError = false;
 
-        /** @var CreateUnavailabilitiesResultsView $createUnavailabilitiesResults */
-        foreach ($createUnavailabilitiesResults->results as $createUnavailabilitiesResult) {
+        /** @var CreateUnavailabilitiesResultsView $updateUnavailabilitiesResults */
+        foreach ($updateUnavailabilitiesResults->results as $createUnavailabilitiesResult) {
             if (false === $createUnavailabilitiesResult->success) {
                 $hasError = true;
 
