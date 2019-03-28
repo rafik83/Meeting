@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
@@ -429,5 +430,20 @@ class UserRepository implements UserRepositoryInterface
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByParticipantProduct(Product $product): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'user = participant.user AND participant.participantProduct = :product')
+            ->setParameter('product', $product)
+            ->getQuery()
+            ->getResult();
     }
 }
