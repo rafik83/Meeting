@@ -92,6 +92,11 @@ Proximum\Vimeet\Domain\Model\Sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
             joinColumn:
                 onDelete: SET NULL
+        linkedSheets:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets
+            inversedBy: sheets
+            joinColumn:
+                onDelete: SET NULL
     oneToMany:
         participants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

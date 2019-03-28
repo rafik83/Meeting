@@ -1,0 +1,86 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Sheet\LinkedSheets;
+
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
+use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+
+class CreateHandler
+{
+    /** @var LinkedSheetsRepositoryInterface */
+    private $linkedSheetsRepository;
+
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
+    public function __construct(
+        LinkedSheetsRepositoryInterface $linkedSheetsRepository,
+        SheetRepositoryInterface $sheetRepository,
+        \DateTimeInterface $dateTime
+    ) {
+        $this->linkedSheetsRepository = $linkedSheetsRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->dateTime = $dateTime;
+    }
+
+    /**
+     * @param Create $command
+     *
+     * @throws AlreadyLinkedException
+     * @throws LinkedSheetsTypeUniquenessException
+     * @throws NotEnoughSheetsException
+     * @throws SheetNotFoundException
+     */
+    public function handle(Create $command)
+    {
+        $linkedSheets = new LinkedSheets(
+            $command->event,
+            $this->dateTime
+        );
+
+        $type = null;
+
+        $count = 0;
+        foreach ($command->sheetViews as $sheetView) {
+            $sheet = $this->sheetRepository->getSheetById($sheetView->id);
+
+            if ($sheet === null) {
+                throw new SheetNotFoundException('Not found for id'.$sheetView->id);
+            }
+
+            if (null !== $sheet->getLinkedSheets()) {
+                throw new AlreadyLinkedException();
+            }
+
+            if ($type === null) {
+                $type = $sheet->getType();
+            }
+
+            if ($type !== $sheet->getType()) {
+                throw new LinkedSheetsTypeUniquenessException();
+            }
+
+            $count++;
+            $sheet->setLinkedSheets($linkedSheets);
+        }
+
+        if ($count < 2) {
+            throw new NotEnoughSheetsException();
+        }
+
+        $this->linkedSheetsRepository->add($linkedSheets);
+    }
+}

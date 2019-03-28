@@ -441,6 +441,26 @@ services:
             - '@templating'
 
     #
+    # Linked sheets
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\AddAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@form.factory'
+            - '@router.default'
+            - '@session.flash_bag'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    #
     # Catalog
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\ExportAction:

@@ -482,4 +482,11 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getSheetsEnabledByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    public function getNotLinkedSheets(Event $event): array;
 }

@@ -1,0 +1,44 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.linked_sheets.title'|trans %}
+
+{% block content %}
+    <h1 class="page-header">
+        {{ 'admin.linked_sheets.title'|trans }}
+    </h1>
+
+    <div>
+        <a href="{{ path('admin_linked_sheets_create', {'event': event.id}) }}" class="btn btn-primary new-action">
+            {{ 'admin.linked_sheets.create'|trans }}
+        </a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ 'admin.linked_sheets.column.sheets'|trans }}</th>
+                <th>{{ 'admin.linked_sheets.column.created_at'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for linkedSheetsView in linkedSheetsListView.linkedSheetsView %}
+            <tr>
+                <td>
+                    <ul>
+                        {% for sheetTitle in linkedSheetsView.titles %}
+                            <li>
+                                {{ sheetTitle }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ linkedSheetsView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2" class="text-center">{{ 'admin.linked_sheets.no_result'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
