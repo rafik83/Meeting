@@ -69,6 +69,7 @@ class CreateHandlerTest extends TestCase
         $create->availabilityType = Type::TYPE_MANAGEMENT_UNAVAILABLE;
         $create->numberOfMeetingsPerPlanning = 12;
         $create->canRemoveMeeting = false;
+        $create->allSheetParticipantsAssignedToMeeting = true;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);

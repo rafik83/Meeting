@@ -33,6 +33,10 @@ Proximum\Vimeet\Domain\Model\Type:
                 default: false
         availabilityType:
             type: string
+        allSheetParticipantsAssignedToMeeting:
+            type: string
+            options:
+                default: false
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria
