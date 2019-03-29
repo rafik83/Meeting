@@ -64,7 +64,8 @@ class UpdateHandler
             $update->availabilityType,
             $update->numberOfMeetingsPerPlanning,
             $update->canMoveMeeting,
-            $update->canRemoveMeeting
+            $update->canRemoveMeeting,
+            $update->allSheetParticipantsAssignedToMeeting
         );
         $type->setHidden($update->hidden);
 

@@ -112,6 +112,10 @@ class TypeUpdateType extends AbstractType
             ->add('canMoveMeeting', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add(
+                'allSheetParticipantsAssignedToMeeting', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 

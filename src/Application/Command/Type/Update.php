@@ -61,6 +61,9 @@ class Update implements Command
     /** @var bool */
     public $canRemoveMeeting;
 
+    /** @var bool */
+    public $allSheetParticipantsAssignedToMeeting;
+
     /**
      * @param Type   $type
      * @param string $locale
@@ -81,6 +84,7 @@ class Update implements Command
         $this->numberOfMeetingsPerPlanning = $type->getNumberOfMeetingsPerPlanning();
         $this->canMoveMeeting = $type->canMoveMeeting();
         $this->canRemoveMeeting = $type->canRemoveMeeting();
+        $this->allSheetParticipantsAssignedToMeeting = $type->allSheetParticipantsAssignedToMeeting();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [
