@@ -52,7 +52,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\CartRowParticipantRepository'
 
     Proximum\Vimeet\Domain\Unavailability\SystemGenerator\GenerateParticipantProductSystemUnavailabilities:
-        autowire: true
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\Generator'
+
     #
     # Participant
     #
