@@ -183,4 +183,21 @@ class SheetTest extends TestCase
 
         $this->assertFalse($sheet1->hasUserInLinkedSheets($user2->reveal()));
     }
+
+    public function testHasLinkedSheet()
+    {
+        $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
+        $user = $this->prophesize(User::class);
+        $sheet1 = new Sheet($event->reveal(), $type->reveal(), [], $user->reveal(), new \DateTime());
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet3 = $this->prophesize(Sheet::class);
+
+        $linkedSheets = $this->prophesize(Sheet\LinkedSheets::class);
+        $linkedSheets->getSheets()->shouldBeCalled()->willReturn([$sheet1, $sheet2->reveal()]);
+        $sheet1->setLinkedSheets($linkedSheets->reveal());
+
+        $this->assertTrue($sheet1->hasLinkedSheet($sheet2->reveal()));
+        $this->assertFalse($sheet1->hasLinkedSheet($sheet3->reveal()));
+    }
 }

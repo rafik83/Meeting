@@ -610,6 +610,15 @@ class Sheet implements TraceableInterface
         return false;
     }
 
+    public function hasLinkedSheet(Sheet $sheet): bool
+    {
+        if (!$this->hasLinkedSheets()) {
+            return false;
+        }
+
+        return in_array($sheet, $this->getLinkedSheets()->getSheets(), true);
+    }
+
     /**
      * @param Participant $participant
      *
