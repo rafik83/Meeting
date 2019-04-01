@@ -593,6 +593,23 @@ class Sheet implements TraceableInterface
         });
     }
 
+    public function hasUserInLinkedSheets(User $user): bool
+    {
+        if (!$this->hasLinkedSheets()) {
+            return false;
+        }
+
+        $linkedSheets = $this->getLinkedSheets()->getSheets();
+
+        foreach ($linkedSheets as $linkedSheet) {
+            if ($linkedSheet->hasUser($user)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param Participant $participant
      *
@@ -1010,6 +1027,11 @@ class Sheet implements TraceableInterface
     public function getGroup()
     {
         return $this->group;
+    }
+
+    public function hasLinkedSheets(): bool
+    {
+        return null !== $this->linkedSheets;
     }
 
     public function getLinkedSheets(): ?LinkedSheets

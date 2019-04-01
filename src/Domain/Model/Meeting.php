@@ -335,6 +335,14 @@ class Meeting implements MessageSubjectInterface
             return $this->toSheet;
         }
 
+        if ($this->fromSheet->hasUserInLinkedSheets($user)) {
+            return $this->fromSheet;
+        }
+
+        if ($this->toSheet->hasUserInLinkedSheets($user)) {
+            return $this->toSheet;
+        }
+
         throw new NoSheetForUserException();
     }
 
