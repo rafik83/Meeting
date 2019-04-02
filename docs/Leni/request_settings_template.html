@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demande des paramètres d'API LENI</title>
+</head>
+<body>
+<h1>Objet du mail</h1>
+[Vimeet] Demande de paramétrage de l'instance LENI pour l'évènement %foobar_event%
+
+<h1>Contenu</h1>
+<p>
+    Bonjour,<br/>
+    <br/>
+    Concernant l'évènement %foobar_event%, il nous ait nécessaire d'obtenir certaines informations.
+</p>
+<p>
+    <b>Informations récapitulatives :</b><br/>
+    Id Evénement (idEvt) : 647ac5ab-4fa9-44a3-8739-473778a8ec32<br/><br/>
+    Login / mot de passe : fake@example.org:gandalflegris<br/><br/>
+    Sens de la synchro : Vimeet vers LENI<br/><br/>
+    Endpoint : https://foo.bag/api/save<br/><br/>
+    Lien vers le badge :<br/>
+    https://event.example.org/account/bagdge?accessToken=%id%<br/>
+    <br/>
+    Types de participation concernés par le lien vers le badge ?<br/>
+    Tous sauf les visiteurs
+</p>
+<p>
+    <b>1/ Les prérequis ont ils été mis en oeuvre ?</b><br/>
+    (voir https://vimeet.zendesk.com/hc/fr/articles/360005354213-API-LENI)<br/>
+    <br/>
+    <b>2/ Quelles sont les correspondances pour les types de participations VIMEET / LENI :</b><br/>
+    <br/>
+    Voici les types Vimeet :<br/>
+    1234 Startup<br/>
+    5678 Investisseur<br/>
+    <br/>
+    Quel est le ou les champs et les valeurs de correspondances ?<br/>
+    Exemples de correspondances réalisés pour d'autres évènements :<br/>
+    exemple 1 :<br/>
+    "314": {"CategorieIndividuEvt": "VISITEUR", "ZL_PROFIL":"SALON"}<br/>
+    "042": {"CategorieIndividuEvt": "VISITEUR", "ZL_PROFIL": "PROSPECT"}<br/>
+    <br/>
+    exemple 2 :<br/>
+    "314": {"ZL_TYPE": "314"}<br/>
+    "042": {"ZL_TYPE": "042"}<br/>
+    <br/>
+    <b>3/ ZL_MODERATION est-il utilisé ?</b><br/>
+    (voir https://vimeet.zendesk.com/hc/fr/articles/360005354213-API-LENI)<br/>
+    <br/>
+    Merci d'avance,<br/>
+    Cordialement,
+</p>
+</body>
+</html>
