@@ -62,7 +62,7 @@ abstract class AbstractMeetingRequestType extends AbstractType
             ;
         }
 
-        if (1 < $sheet->countParticipants()) {
+        if (!$sheet->getType()->areAllSheetParticipantsAssignedToMeeting() && 1 < $sheet->countParticipants()) {
             $builder
                 ->add('participants', ChoiceType::class, [
                     'choices'      => $sheet->getParticipants()->toArray(),
@@ -86,8 +86,9 @@ abstract class AbstractMeetingRequestType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['sheet', 'locale']);
+        $resolver->setRequired(['sheet', 'locale', 'are_all_sheet_participants_assigned']);
         $resolver->setDefault('placeholder_description', '');
         $resolver->setDefault('show_description', true);
+        $resolver->setDefault('are_all_sheet_participants_assigned',false);
     }
 }
