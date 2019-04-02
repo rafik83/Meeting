@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>API LENI - Vimeet</title>
+</head>
+<body>
+<pre>
+    <!-- Excepté pour cette balise <pre>, tout le <body> constitue la sauvegarde.
+        C'est une copie du innerHTML de l'élément .article-body.
+        Autrement dit, ce n'est pas une copie directe du code source HTML. -->
+    Cette documentation est une extraction de https://vimeet.zendesk.com/hc/fr/articles/360005354213-API-LENI.
+    C'est une sauvegarde dans le cas où le lien ci-dessus serait mort.
+</pre>
+<h2>Pré requis LENI</h2>
+<ul>
+    <li>Création de la nouvelle instance à partir du dernier événement VIMEET</li>
+    <li>A fournir à VIMEET : L’identifiant de la manifestation IdEvenement. Le compte de connexion à la gateway &gt; Voir Pascal, Franck ou Olivier pour ces deux points</li>
+    <li>Faire créer un compte de connexion à ATLAS et fournir l’URL, login et mot de passe</li>
+</ul>
+<p>Créer les champs suivants&nbsp;:</p>
+<ul>
+    <li>"ZL_RDVNONORGANISES": Type TEXTE, longueur illimité, chaine de caractères contenant les rdv non organisés</li>
+    <li>"ZL_JOURNEE(n)", (n) de 1 à 10: Type TEXTE, longueur illimité contenant l'agenda de l'événement (donc créer autant de jour qu'il y en a sur l'événement)</li>
+    <li>"ZL_ACTIF" : Type CHOIX - ACTI (actif) ou INAC (inactif) selon le statut Vimeet (inactif = pas de badge)</li>
+    <li>"ZL_ETATDEPAIEMENT" : Type CHOIX - PA (payé) ou PP (pas payé)</li>
+    <li>"ZL_IDPRODUITPARTICIPANT" : entier ou null</li>
+    <li>"ZL_LEADER_ID": idUtilisateur LENI</li>
+    <li>"ZL_LEADER_SOCIETE": nom de la fiche Vimeet</li>
+    <li>"ZL_LEADER_EMAIL": email participant</li>
+    <li>"ZL_LEADER_NOM": nom participant</li>
+    <li>"ZL_LEADER_PRENOM": prenom participant</li>
+</ul>
+<h2>Paramétrages</h2>
+<p>Sur Vimeet, dans les paramètres supplémentaires de l'évènement :</p>
+<table width="100%" border="1">
+    <tbody>
+    <tr>
+        <th>Type</th>
+        <th>Nom&nbsp;(libellé n'importe pas)</th>
+        <th>Valeur</th>
+    </tr>
+    <tr>
+        <td>Code Utilisateur LENI</td>
+        <td>user&nbsp;</td>
+        <td>email:password (fourni par LENI, à&nbsp;demander à Pascal, Franck T. ou Olivier)</td>
+    </tr>
+    <tr>
+        <td>LENI Code Event</td>
+        <td>idEvt&nbsp;</td>
+        <td>2ff82e18-xxxxxxx (fourni par LENI, l’identifiant de la manifestation est disponible dans la source de données de la barre bleue)</td>
+    </tr>
+    <tr>
+        <td>LENI Get endpoint</td>
+        <td>get</td>
+        <td>Adresse de l'API GET, exemple : "https://gateway.svc.exhibis.net/XXXXX/Domain/IndividuEvt/get" (uniquement requis pour les modes "get" ou "both", fourni par LENI)</td>
+    </tr>
+    <tr>
+        <td>LENI Save endpoint</td>
+        <td>save&nbsp;</td>
+        <td>Adresse de l'API SAVE, exemple : "https://gateway.svc.exhibis.net/XXXXX/Domain/IndividuEvt/save",&nbsp;(uniquement requis pour les modes "save" ou "both", fourni par LENI)</td>
+    </tr>
+    <tr>
+        <td>LENI mapping des types de participation</td>
+        <td>Types mapping&nbsp;</td>
+        <td>
+            <p>Mapping entre Id type Vimeet et champs LENI&nbsp;au format JSON :</p>
+            <p>{<br>&nbsp; "id type Vimeet (entier)": {<br>&nbsp; &nbsp; "champs_leni": "valeur",<br>&nbsp; &nbsp; "autre_champs_leni": "valeur"<br>&nbsp; },<br>&nbsp; "id autre type Vimeet (entier)": {<br>&nbsp; &nbsp; "champs_leni": "valeur",<br>&nbsp; &nbsp; "autre_champs_leni": "valeur"<br>&nbsp; }<br>}</p>
+            <p>Exemple :</p>
+            <p>{"344": {"CategorieIndividuEvt": "VISITEUR", "ZL_PROFIL":"SALON" }, "328": {"CategorieIndividuEvt": "VISITEUR", "ZL_PROFIL": "PROSPECT"}, "345": {"CategorieIndividuEvt": "PROSPECT", "ZL_PROFIL": null}}</p>
+            <p>Pour le mapping conditionnel, cf chapitre plus bas dans cette doc.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>LENI mapping des champs</td>
+        <td>mapping&nbsp;</td>
+        <td>
+            <p>Il s'agit de champs supplémentaires à récupérer sur le template d'inscription our template de présentation. Le mapping se fait avec les tags Vimeet et les noms des champs LENI, au format JSON :</p>
+            <p>{<br>&nbsp; "tag_vimeet": "champs_leni",<br>&nbsp; "autre_tag_vimeet": "autre_champs_leni"<br>}</p>
+            <p>Exemple :&nbsp;</p>
+            <p>{"sheet_state": "ZL_MODERATION", "sheet_template_generic_tag_1": "ZL_THEMATIQUES", "sheet_template_generic_tag_2": "ZL_TypePrestation", "participant_position": "EvenementFonction", "sheet_organization_staff": "ZL_Effectif", "sheet_generic_tag_1": "ZL_ACTIVITE", "sheet_generic_tag_4": "ZL_Emplacement", "sheet_generic_tag_5": "ZL_Commerce", "sheet_generic_tag_6": "ZL_NombreHabitant"}</p>
+        </td>
+    </tr>
+    <tr>
+        <td>LENI Mode (get, save ou both)</td>
+        <td>mode&nbsp;</td>
+        <td>Important : Le mode est à paramétrer en dernier afin que le CRON ait tous les paramètres à disposition.
+            <ul>
+                <li>"get" pour uniquement récupérer des données depuis LENI</li>
+                <li>"save" pour uniquement envoyer des données vers LENI</li>
+                <li>"both" pour les deux modes</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>LENI filtres de l'API (GET)</td>
+        <td>filtres</td>
+        <td>pour filtrer les résultats de l'API, exemple :
+            <p>[{"selectedFieldId":"CategorieIndividuEvt", "selectedOperator":"IN", "value": ["VISITEUR", "PRESSE"]}]</p>
+            <p>Cf la documentation fournie par LENI pour le fonctionnement des filtres.</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h2>Fonctionnement récupération (GET) :</h2>
+<ul>
+    <li>une nouvelle inscription non connue par Vimeet est récupérée puis sauvegardées, les mises à jour ne sont pas prises en compte.</li>
+    <li>fréquence de récupération : toutes les 10 minutes.</li>
+</ul>
+<h2>Etat de l'inscription&nbsp;</h2>
+<p>Dans le paramètre supplémentaire "LENI mapping des champs", il est possible grâce au tag "sheet_state" de récupérer l'état de l'inscription depuis LENI :</p>
+<p>{ "sheet_state": "ZL_MODERATION" }</p>
+<p>La correspondance entre les valeurs LENI et le statuts Vimeet sont :</p>
+<ul>
+    <li>W (en attente) = En attente</li>
+    <li>A (Accepté) = Accepté</li>
+    <li>Y (validé) = Validé</li>
+    <li>R (refusé) = Refusé</li>
+</ul>
+<h2>Mapping pré-défini quelque soit l'évènement</h2>
+<p>Champs définis quelque soit l'évènement à gérer entre Vimeet / LENI :</p>
+<ul>
+    <li>"Id": id utilisateur LENI | null si nouvel utilisateur pas connu par LENI</li>
+    <li>"Cab2": idUtilisateur Vimeet</li>
+    <li>"CleExterne": idUtilisateur Vimeet</li>
+    <li>"Civilite": civilité participant<br>- MME devient woman pour Vimeet<br>- MLLE devient woman pour Vimeet<br>- M devient man pour Vimeet</li>
+    <li>"Nom": nom participant</li>
+    <li>"Prenom": prenom participant</li>
+    <li>"Email": email participant</li>
+    <li>"EvenementFonction": tag fonction du participant</li>
+    <li>"EvenementOrigine": si nouvel utilisateur Vimeet, envoyer "API" sinon la valeur récupérée depuis l'API (WEB ou IMPORT)</li>
+    <li>"Societe": nom de la fiche Vimeet</li>
+    <li>"CodePostal": tag code postal</li>
+    <li>"Ville": tag ville</li>
+    <li>"Adresse1" : tag adresse Vimeet</li>
+    <li>"Pays": tag pays</li>
+    <li>"TelephoneFixe" : tag téléphone participant</li>
+    <li>"Mobile" : tag mobile participant</li>
+    <li>"Langue": langue utilisateur</li>
+    <li>"Inscrit" : "Inscrit" si créé par Vimeet, sinon prendre la valeur fournie par l'API</li>
+    <li>"ZL_RDVNONORGANISES": chaine de caractères contenant les rdv non organisés</li>
+    <li>"ZL_JOURNEE1": chaine de caractères contenant l'agenda du 1er jour</li>
+    <li>"ZL_JOURNEE( n )": chaine de caractères contenant l'agenda du n-ième jour selon le nombre de jours de l'évènement</li>
+    <li>"ZL_ACTIF" : ACTI ou INAC ; état de la fiche sur Vimeet (Activé ou désactivée)</li>
+    <li>"ZL_ETATDEPAIEMENT" : PA ou PP ; état de paiement de la fiche sur Vimeet. Si pas de forfait pour la fiche, elle est en état payé.</li>
+    <li>"ZL_IDPRODUITPARTICIPANT" : entier ou null ; il s'agit de l'id produit participant de l'utilisateur</li>
+</ul>
+<p>Quelque soit l'évènement, s'il s’agit d’un collègue (à rattacher à un contact existant), les données suivants sont envoyées, contenant les informations du propriétaire de la fiche Vimeet :</p>
+<ul>
+    <li>"ZL_LEADER_ID": idUtilisateur LENI</li>
+    <li>"ZL_LEADER_SOCIETE": nom de la fiche Vimeet</li>
+    <li>"ZL_LEADER_EMAIL": email participant</li>
+    <li>"ZL_LEADER_NOM": nom participant</li>
+    <li>"ZL_LEADER_PRENOM": prénom participant</li>
+</ul>
+<p>Données complémentaires envoyées :</p>
+<ul>
+    <li>les champs définis dans le paramètre "LENI mapping des types de participation"</li>
+    <li>les champs définis dans le paramètre "LENI mapping des champs"</li>
+</ul>
+<p>Si le champ tagué est une nomenclature, la correspondance sera faites sur la clé de chaque élément de la nomenclature. Il est indispensable que d'importer sur Vimeet les nomenclatures avec les clés des nomenclatures de LENI. Par exemple, si on a cette nomenclature :</p>
+<ul>
+    <li>F1 | Manager</li>
+    <li>F2 | Gérant</li>
+    <li>F3 | Salarié</li>
+    <li>...</li>
+    <li>F99 | Autre</li>
+</ul>
+<h2>Mapping conditionnel des types de participation</h2>
+<p>Le paramètre supplémentaire "<strong>LENI mapping des types de participation</strong>" accepte maintenant une entrée "<strong>condition</strong>" pour chaque type de participation, qui est écrit en "ExpressionLanguage", un composant de Symfony : cf la doc sur la syntaxe&nbsp;<a class="external-link" title="Suivre le lien" href="https://symfony.com/doc/current/components/expression_language/syntax.html" rel="nofollow">https://symfony.com/doc/current/components/expression_language/syntax.html</a></p>
+<p>IMPORTANT : le mapping conditionnel ne fonctionne qu'avec le mode "GET" et non "SAVE".</p>
+<p>Exemple :</p>
+<div class="preformatted panel">
+    <div class="preformattedContent panelContent">
+        <pre>{"424": {"condition": "CategorieIndividuEvt === 'VISITEUR' &amp; ZL_EDT_SECTEUR_ACTIVITE in ['A01', 'A02']" }, "423": {"condition": "CategorieIndividuEvt === 'VISITEUR' &amp; ZL_EDT_SECTEUR_ACTIVITE in ['A07']" }}</pre>
+    </div>
+</div>
+<p>NB : tous les champs utilisés dans les conditions hors ceux du "Mapping pré-défini quelque soit l'évènement" doivent être récupérés via le paramètre supplémentaire "LENI mapping des champs". Par exemple ici, on utilise "ZL_EDT_SECTEUR_ACTIVITE". On devrait avoir par exemple dans "LENI mapping des champs" :</p>
+<div class="preformatted panel">
+    <div class="preformattedContent panelContent">
+        <pre>{"sheet_generic_tag_4": "ZL_EDT_SECTEUR_ACTIVITE"}</pre>
+    </div>
+</div>
+<p>Le mode sans condition, c'est à dire mapping simple de champs : clé + valeur et tous en "ET" est toujours valable, exemple :</p>
+<div class="preformatted panel">
+    <div class="preformattedContent panelContent">
+        <pre>{"344": {"CategorieIndividuEvt": "VISITEUR", "ZL_EDT_SECTEUR_ACTIVITE":"A07"}}</pre>
+    </div>
+</div>
+<p>On pourrait ré-écrire ce mapping précédent avec une condition sous cette forme :</p>
+<div class="preformatted panel">
+    <div class="preformattedContent panelContent">
+        <pre>{"344": {"condition" : "CategorieIndividuEvt === 'VISITEUR' &amp; ZL_EDT_SECTEUR_ACTIVITE === 'A07'"}}</pre>
+    </div>
+</div>
+<p>&nbsp;</p>
+<h2>Activer sur Vimeet l'envoi d'email de LENI</h2>
+<p>Il s'agit de la fonctionnalité "SendingRequests" de LENI. Sur Vimeet, dans les paramètres supplémentaires de l'évènement, définir le paramètre "Leni Paramètre SendingRequests".&nbsp;Les CodeCommunication et Id sont fournis par LENI.&nbsp;Les éléments sont disponibles dans la liste des campagnes transactionnelles en affichant les champs ID et CODE.</p>
+<h3>Envoi d'email lorsque l'utilisateur n'est pas encore connu par LENI</h3>
+<table width="100%" border="1">
+    <tbody>
+    <tr>
+        <th>Type</th>
+        <th>Nom</th>
+        <th>Valeur</th>
+    </tr>
+    <tr>
+        <td>Leni Paramètre SendingRequests</td>
+        <td>sendingRequests (libellé n'importe pas)</td>
+        <td>
+            <p>{"<strong>sending_request_new_user</strong>": [{"CodeCommunication":"XXXX", "Id": "XXX-YYYY-ZZZ"}]}</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h3>&nbsp;</h3>
+<h3>Envoi d'email lorsque le statut de la fiche passe à "Valider"</h3>
+<p>Si le tag "sheet_state" est défini dans les paramètres de mapping des champs (Cf plus haut chapitre "Etat de l'inscription") et que le statut de la fiche passe de "non validé" (les autres statuts) à "validé"<br>OU<br>il n'existe pas d'envoi précédent à LENI (nouveau participant sur une fiche par exemple) et la fiche est en validée<br>ALORS :</p>
+<ul class="alternate">
+    <li>le champ "Inscrit" est envoyé avec comme valeur "Inscrit"</li>
+    <li>envoi d'un email, si le paramètre suivant pour l'évènement existe :</li>
+</ul>
+<table width="100%" border="1">
+    <tbody>
+    <tr>
+        <th>Type</th>
+        <th>Nom</th>
+        <th>Valeur</th>
+    </tr>
+    <tr>
+        <td>Leni Paramètre SendingRequests</td>
+        <td>sendingRequests (libellé n'importe pas)</td>
+        <td>{"<strong>sending_request_sheet_is_validated</strong>": [{ "CodeCommunication": "XXXX", "Id": "XXX-YYYY-ZZZ"}]}</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
