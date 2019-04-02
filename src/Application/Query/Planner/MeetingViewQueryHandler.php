@@ -179,9 +179,9 @@ class MeetingViewQueryHandler
             } else {
                 // No preference on from
                 // If sheet has only one participant
-                if (1 === $request->getFromSheet()->countParticipant()) {
+                if (1 === $request->getFromSheet()->countParticipants()) {
                     /** @var Participant $participant */
-                    foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
+                    foreach ($request->getFromSheet()->getParticipantsArray() as $participant) {
                         $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
                     }
                 } else {
@@ -197,9 +197,9 @@ class MeetingViewQueryHandler
             } else {
                 // not preference on to
                 // If sheet has only one participant
-                if (1 === $request->getToSheet()->countParticipant()) {
+                if (1 === $request->getToSheet()->countParticipants()) {
                     /** @var Participant $participant */
-                    foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
+                    foreach ($request->getToSheet()->getParticipantsArray() as $participant) {
                         $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
                     }
                 } else {
@@ -345,18 +345,22 @@ class MeetingViewQueryHandler
     {
         foreach ($this->requests as $request) {
             if (!$request->hasFromParticipants()) {
-                if (!isset($this->dispatch[$request->getFromSheet()->getId()]['request'])) {
-                    $this->dispatch[$request->getFromSheet()->getId()]['request'] = 1;
+                $fromSheetId = $request->getFromSheet()->getId();
+
+                if (!isset($this->dispatch[$fromSheetId]['request'])) {
+                    $this->dispatch[$fromSheetId]['request'] = 1;
                 } else {
-                    ++$this->dispatch[$request->getFromSheet()->getId()]['request'];
+                    ++$this->dispatch[$fromSheetId]['request'];
                 }
             }
 
             if (!$request->hasToParticipants()) {
-                if (!isset($this->dispatch[$request->getToSheet()->getId()]['request'])) {
-                    $this->dispatch[$request->getToSheet()->getId()]['request'] = 1;
+                $toSheetId = $request->getToSheet()->getId();
+
+                if (!isset($this->dispatch[$toSheetId]['request'])) {
+                    $this->dispatch[$toSheetId]['request'] = 1;
                 } else {
-                    ++$this->dispatch[$request->getToSheet()->getId()]['request'];
+                    ++$this->dispatch[$toSheetId]['request'];
                 }
             }
         }
