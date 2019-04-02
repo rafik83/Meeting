@@ -108,6 +108,12 @@ class ApproveRequestHandler
             throw new IsNotAllowedToApproveMeetingRequestException();
         }
 
+        if($approveRequest->sheet->getType()->areAllSheetParticipantsAssignedToMeeting()) {
+            foreach ($approveRequest->sheet->getParticipantsArray() as $participant) {
+                    $approveRequest->request->addToParticipant($participant);
+                }
+        }
+
         foreach ($approveRequest->request->getToParticipants() as $oldToParticipant) {
             if (!in_array($oldToParticipant, $approveRequest->participants)) {
                 $approveRequest->request->removeToParticipant($oldToParticipant);
