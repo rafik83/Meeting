@@ -72,9 +72,9 @@
                                             </a>
                                         {% else %}
                                             <small>
-                                                {{ userStayView.begin|localizeddate('short', 'none', app.request.locale, event.timeZone) }}
+                                                {{ userStayView.begin|localizeddate('short', 'none', app.request.locale) }}
                                                 ➡
-                                                {{ userStayView.end|localizeddate('short', 'none', app.request.locale, event.timeZone) }}</small>
+                                                {{ userStayView.end|localizeddate('short', 'none', app.request.locale) }}</small>
                                             <br>
                                             {{ userStayView.accommodationTitle }}
                                             <span class="label label-default">{{ userStayView.roomType }}</span>
