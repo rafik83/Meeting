@@ -65,9 +65,9 @@
         <td>Types mapping&nbsp;</td>
         <td>
             <p>Mapping entre Id type Vimeet et champs LENI&nbsp;au format JSON :</p>
-            <p>{<br>&nbsp; "id type Vimeet (entier)": {<br>&nbsp; &nbsp; "champs_leni": "valeur",<br>&nbsp; &nbsp; "autre_champs_leni": "valeur"<br>&nbsp; },<br>&nbsp; "id autre type Vimeet (entier)": {<br>&nbsp; &nbsp; "champs_leni": "valeur",<br>&nbsp; &nbsp; "autre_champs_leni": "valeur"<br>&nbsp; }<br>}</p>
+            <p>{<br>"states":{ "sheet_state":"ZL_MODERATION" },<br>"tags":{ ... },<br>"products":{ ... }<br>}</p>
             <p>Exemple :</p>
-            <p>{"344": {"CategorieIndividuEvt": "VISITEUR", "ZL_PROFIL":"SALON" }, "328": {"CategorieIndividuEvt": "VISITEUR", "ZL_PROFIL": "PROSPECT"}, "345": {"CategorieIndividuEvt": "PROSPECT", "ZL_PROFIL": null}}</p>
+            <p>{<br>"states":{ "sheet_state":"ZL_MODERATION" },<br>"tags":{ "participant_generic_tag_1":"ZL_DATENAISSANCE" },<br> "products":{ "2576":"ZL_PRODUCT_2576", "2951":"ZL_PRODUCT_2951" }<br>}</p>
             <p>Pour le mapping conditionnel, cf chapitre plus bas dans cette doc.</p>
         </td>
     </tr>
@@ -98,6 +98,16 @@
         <td>pour filtrer les résultats de l'API, exemple :
             <p>[{"selectedFieldId":"CategorieIndividuEvt", "selectedOperator":"IN", "value": ["VISITEUR", "PRESSE"]}]</p>
             <p>Cf la documentation fournie par LENI pour le fonctionnement des filtres.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>LENI lien pour le badge</td>
+        <td>lien vers le badge</td>
+        <td>
+            <p>Ce paramètre permet de faire le lien entre un utilisateur Vimeet avec son accès sur vers un site LENI.</p>
+            <p>Il faut définir à la fois le lien, incluant une position pour l'id de l'utilisateur LENI, et les types de participations concernées par cette possibilité.</p>
+            <p>Exemple :</p>
+            <p>{ "link": "https://example.org/account/welcome.html?accesToken=%s", "concerned_type_ids": [1234, 4567] }</p>
         </td>
     </tr>
     </tbody>
