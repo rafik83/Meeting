@@ -86,9 +86,8 @@ abstract class AbstractMeetingRequestType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['sheet', 'locale', 'are_all_sheet_participants_assigned']);
+        $resolver->setRequired(['sheet', 'locale']);
         $resolver->setDefault('placeholder_description', '');
         $resolver->setDefault('show_description', true);
-        $resolver->setDefault('are_all_sheet_participants_assigned',false);
     }
 }
