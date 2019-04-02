@@ -200,4 +200,39 @@ class SheetTest extends TestCase
         $this->assertTrue($sheet1->hasLinkedSheet($sheet2->reveal()));
         $this->assertFalse($sheet1->hasLinkedSheet($sheet3->reveal()));
     }
+
+    public function testGetLinkedSheetsParticipants()
+    {
+        $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
+        $user = $this->prophesize(User::class);
+
+        $participant1 = $this->prophesize(Participant::class);
+        $participant1->getId()->shouldBeCalled()->willReturn(1);
+
+        $participant2 = $this->prophesize(Participant::class);
+        $participant2->getId()->shouldBeCalled()->willReturn(2);
+
+        $participant3 = $this->prophesize(Participant::class);
+        $participant3->getId()->shouldBeCalled()->willReturn(3);
+
+        $sheet1 = new Sheet($event->reveal(), $type->reveal(), [], $user->reveal(), new \DateTime());
+        $sheet1->addParticipant($participant1->reveal());
+
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet2
+            ->getParticipantsArray()
+            ->shouldBeCalled()
+            ->willReturn([$participant2->reveal(), $participant3->reveal()])
+        ;
+
+        $linkedSheets = $this->prophesize(Sheet\LinkedSheets::class);
+        $linkedSheets->getSheets()->shouldBeCalled()->willReturn([$sheet1, $sheet2->reveal()]);
+        $sheet1->setLinkedSheets($linkedSheets->reveal());
+
+        $this->assertEquals(
+            [1 => $participant1->reveal(), 2 => $participant2->reveal(), 3 => $participant3->reveal()],
+            $sheet1->getLinkedSheetsParticipants()
+        );
+    }
 }
