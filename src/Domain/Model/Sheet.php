@@ -339,6 +339,28 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return Participant[]
+     */
+    public function getLinkedSheetsParticipants(): array
+    {
+        if (!$this->hasLinkedSheets()) {
+            throw new \LogicException(
+                'This method can not be called when sheet has not LinkedSheets. Check before that Sheet::hasLinkedSheets() returns true.'
+            );
+        }
+
+        $participants = [];
+
+        foreach ($this->getLinkedSheets()->getSheets() as $linkedSheet) {
+            foreach ($linkedSheet->getParticipantsArray() as $participant) {
+                $participants[$participant->getId()] = $participant;
+            }
+        }
+
+        return $participants;
+    }
+
+        /**
      * @throws SheetException
      *
      * @return Participant
