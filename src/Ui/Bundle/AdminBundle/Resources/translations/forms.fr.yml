@@ -1100,6 +1100,7 @@ form.type_create.children.formTemplates.label: Formulaires
 form.type_create.children.formTemplates.status.draft: brouillon
 form.type_create.children.formTemplates.status.published: publié
 form.type_create.children.hidden.label: Caché
+form.type_create.children.allSheetParticipantsAssignedToMeeting.label: 'Tous les participants sont affectés à tous les RDV d’une fiche'
 form.type_create.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_create.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV par planning'
 form.type_create.children.package.label: 'Template de forfait de participation'

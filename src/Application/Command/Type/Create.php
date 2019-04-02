@@ -66,7 +66,7 @@ class Create implements Command
     public $canRemoveMeeting;
 
     /** @var bool */
-    public $allSheetParticipantsAssignedToMeeting;
+    public $areAllSheetParticipantsAssignedToMeeting;
 
     /**
      * @param Event  $event
