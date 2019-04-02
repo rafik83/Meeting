@@ -49,7 +49,7 @@ class UpdateHandlerTest extends TestCase
         $update->hidden = true;
         $update->numberOfMeetingsPerPlanning = 12;
         $update->canRemoveMeeting = false;
-        $update->allSheetParticipantsAssignedToMeeting = true;
+        $update->areAllSheetParticipantsAssignedToMeeting = true;
 
         //Mock
         $typeRepository             = $this->prophesize(TypeRepositoryInterface::class);

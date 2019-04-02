@@ -96,7 +96,7 @@ class TypeCreateType extends AbstractType
                 'required' => false,
             ])
             ->add(
-                'allSheetParticipantsAssignedToMeeting', CheckboxType::class, [
+                'areAllSheetParticipantsAssignedToMeeting', CheckboxType::class, [
                 'required' => false,
             ])
         ;

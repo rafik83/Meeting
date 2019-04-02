@@ -33,7 +33,7 @@ Proximum\Vimeet\Domain\Model\Type:
                 default: false
         availabilityType:
             type: string
-        allSheetParticipantsAssignedToMeeting:
+        areAllSheetParticipantsAssignedToMeeting:
             type: string
             options:
                 default: false
