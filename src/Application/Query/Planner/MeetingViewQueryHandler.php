@@ -163,49 +163,55 @@ class MeetingViewQueryHandler
     {
         $participantsList = [];
 
-        if (!$query->isSolutionFromScratch() && null !== $meeting) {
+        // Not from scratch
+        if (null !== $meeting && !$query->isSolutionFromScratch()) {
             foreach ($meeting->getFromParticipants() as $participant) {
                 $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
             }
+
             foreach ($meeting->getToParticipants() as $participant) {
                 $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
             }
+
+            return $participantsList;
+        }
+
+        // From participants
+        if ($request->hasFromParticipants()) {
+            /** @var Participant $participant */
+            foreach ($request->getFromParticipantsArray() as $participant) {
+                $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
+            }
         } else {
-            if ($request->hasFromParticipants()) {
+            // No preference on from
+            // If sheet has only one participant
+            if (1 === $request->getFromSheet()->countParticipants()) {
                 /** @var Participant $participant */
-                foreach ($request->getFromParticipantsArray() as $participant) {
+                foreach ($request->getFromSheet()->getParticipantsArray() as $participant) {
                     $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
                 }
             } else {
-                // No preference on from
-                // If sheet has only one participant
-                if (1 === $request->getFromSheet()->countParticipants()) {
-                    /** @var Participant $participant */
-                    foreach ($request->getFromSheet()->getParticipantsArray() as $participant) {
-                        $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
-                    }
-                } else {
-                    $this->resetRecursiveDepth();
-                    $participantsList['fromParticipant'][] = $this->getParticipantOfSheet($request->getFromSheet());
-                }
+                $this->resetRecursiveDepth();
+                $participantsList['fromParticipant'][] = $this->getParticipantOfSheet($request->getFromSheet());
             }
+        }
 
-            if ($request->hasToParticipants()) {
-                foreach ($request->getToParticipantsArray() as $participant) {
+        // To participants
+        if ($request->hasToParticipants()) {
+            foreach ($request->getToParticipantsArray() as $participant) {
+                $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
+            }
+        } else {
+            // not preference on to
+            // If sheet has only one participant
+            if (1 === $request->getToSheet()->countParticipants()) {
+                /** @var Participant $participant */
+                foreach ($request->getToSheet()->getParticipantsArray() as $participant) {
                     $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
                 }
             } else {
-                // not preference on to
-                // If sheet has only one participant
-                if (1 === $request->getToSheet()->countParticipants()) {
-                    /** @var Participant $participant */
-                    foreach ($request->getToSheet()->getParticipantsArray() as $participant) {
-                        $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
-                    }
-                } else {
-                    $this->resetRecursiveDepth();
-                    $participantsList['toParticipant'][] = $this->getParticipantOfSheet($request->getToSheet());
-                }
+                $this->resetRecursiveDepth();
+                $participantsList['toParticipant'][] = $this->getParticipantOfSheet($request->getToSheet());
             }
         }
 

@@ -35,7 +35,6 @@ use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class MeetingViewQueryHandlerTest extends TestCase
 {
-    /*
     public function testHandle()
     {
         // Data
@@ -133,7 +132,6 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
-    */
 
     public function testAllSheetParticipantsAssignedToMeeting()
     {
@@ -281,8 +279,6 @@ class MeetingViewQueryHandlerTest extends TestCase
         $meetingView2->spot = $spotView2;
         $meetingView2->slot = $slotView1;
         $meetingView2->lockedSlot = $slotView1;
-
-        //var_dump($result);
 
         $handler = new MeetingViewQueryHandler($requestRepository->reveal());
         $results = $handler->handle(
