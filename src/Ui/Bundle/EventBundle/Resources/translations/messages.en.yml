@@ -12,6 +12,7 @@ account.update.profile.title: Profile
 account.update.title: 'Edit my Account'
 agenda.availability.available_sheets: '{1} See available participant|]1,Inf[ See %availableSheets% available participants'
 agenda.availability.available_sheets_with_proposition: '{1}see a meeting request|]1,Inf[ see the %availableSheets% meeting requests'
+agenda.availability.define: 'Set my availabilities'
 agenda.day.hide: 'Hide this day'
 agenda.day.see: 'Show the day'
 agenda.meeting.details: Details
