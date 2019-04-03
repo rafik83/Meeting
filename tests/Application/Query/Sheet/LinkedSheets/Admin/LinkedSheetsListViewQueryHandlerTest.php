@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Query\Admin;
+namespace Proximum\Vimeet\Tests\Application\Query\Sheet\LinkedSheets\Admin;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin\LinkedSheetsListView;
