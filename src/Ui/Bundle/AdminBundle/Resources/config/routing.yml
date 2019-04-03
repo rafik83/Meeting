@@ -1807,7 +1807,7 @@ admin_linked_sheets_delete:
     path: /event/{event}/linked-sheets/delete/{linkedSheets}
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [DELETE]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\DeleteAction }
 
 #

@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
 {% block title 'admin.linked_sheets.title'|trans %}
 
 {% block content %}
@@ -36,9 +38,13 @@
                 <td>{{ linkedSheetsView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
                 <td>
                     {% if linkedSheetsView.isRemovable %}
-                    <a class="btn btn-default" href="{{ path('admin_linked_sheets_delete', {'event': event.id, 'linkedSheets': linkedSheetsView.id}) }}">{{ 'admin.linked_sheets.delete'|trans }}</a>
+                        {{ delete_button(
+                            path('admin_linked_sheets_delete', {'event': event.id, 'linkedSheets': linkedSheetsView.id}),
+                            'admin.linked_sheets.delete'|trans,
+                            { 'class': 'btn btn-default', 'data-confirm': 'admin.linked_sheets.delete_confirm_message'|trans })
+                        }}
                     {% else %}
-                    <button type="button" class="btn btn-default disabled" data-toggle="tooltip" title="{{ 'admin.linked_sheets.disabled_deletion'|trans }}">{{ 'admin.linked_sheets.delete'|trans }}</button>
+                        <button type="button" class="btn btn-default disabled" data-toggle="tooltip" title="{{ 'admin.linked_sheets.disabled_deletion'|trans }}">{{ 'admin.linked_sheets.delete'|trans }}</button>
                     {% endif %}
                 </td>
             </tr>
