@@ -27,6 +27,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
@@ -141,7 +142,7 @@ class MeetingViewQueryHandlerTest extends TestCase
         $sheet1Participant1->getId()->shouldBeCalled()->willReturn(101);
 
         $sheet1Participant2 = $this->prophesize(Participant::class);
-        //$sheet1Participant2->getId()->shouldBeCalled()->willReturn(102);
+        $sheet1Participant2->getId()->shouldBeCalled()->willReturn(102);
 
         $sheet2participant1 = $this->prophesize(Participant::class);
         $sheet2participant1->getId()->shouldBeCalled()->willReturn(103);
@@ -150,23 +151,31 @@ class MeetingViewQueryHandlerTest extends TestCase
         $sheet3participant1->getId()->shouldBeCalled()->willReturn(104);
 
         $sheet3participant2 = $this->prophesize(Participant::class);
-        //$sheet3participant2->getId()->shouldBeCalled()->willReturn(105);
+        $sheet3participant2->getId()->shouldBeCalled()->willReturn(105);
 
         $sheet4participant1 = $this->prophesize(Participant::class);
         //$sheet4participant1->getId()->shouldBeCalled()->willReturn(106);
 
+        $type1 = $this->prophesize(Type::class);
+        $type1->areAllSheetParticipantsAssignedToMeeting()->shouldBeCalled()->willReturn(true);
+
+        $type2 = $this->prophesize(Type::class);
+        $type2->areAllSheetParticipantsAssignedToMeeting()->shouldBeCalled()->willReturn(false);
+
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet1->getId()->shouldBeCalled()->willReturn(1);
-        //$sheet1->countParticipants()->shouldBeCalled()->willReturn(2);
-//        $sheet1
-//            ->getParticipantsArray()
-//            ->shouldBeCalled()
-//            ->willReturn([$sheet1Participant1->reveal(), $sheet1Participant2->reveal()])
-//        ;
+        $sheet1->getType()->shouldBeCalled()->willReturn($type1->reveal());
+        $sheet1->hasLinkedSheets()->shouldBeCalled()->willReturn(false);
+        $sheet1
+            ->getParticipantsArray()
+            ->shouldBeCalled()
+            ->willReturn([$sheet1Participant1->reveal(), $sheet1Participant2->reveal()])
+        ;
 
         $sheet2 = $this->prophesize(Sheet::class);
         $sheet2->getId()->shouldBeCalled()->willReturn(2);
-        $sheet2->countParticipants()->shouldBeCalled()->willReturn(1);
+        $sheet2->getType()->shouldBeCalled()->willReturn($type1->reveal());
+        $sheet2->hasLinkedSheets()->shouldBeCalled()->willReturn(false);
         $sheet2
             ->getParticipantsArray()
             ->shouldBeCalled()
@@ -175,20 +184,13 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $sheet3 = $this->prophesize(Sheet::class);
         $sheet3->getId()->shouldBeCalled()->willReturn(3);
-//        $sheet3->countParticipants()->shouldBeCalled()->willReturn(2);
-//        $sheet3
-//            ->getParticipantsArray()
-//            ->shouldBeCalled()
-//            ->willReturn([$sheet3participant1->reveal(), $sheet3participant2->reveal()])
-//        ;
-
-        $sheet4 = $this->prophesize(Sheet::class);
-        //$sheet4->getId()->shouldBeCalled()->willReturn(4);
-//        $sheet4
-//            ->getParticipantsArray()
-//            //->shouldBeCalled()
-//            ->willReturn([$sheet4participant1->reveal()])
-//        ;
+        $sheet3->getType()->shouldBeCalled()->willReturn($type2->reveal());
+        $sheet3->countParticipants()->shouldBeCalled()->willReturn(2);
+        $sheet3
+            ->getParticipantsArray()
+            ->shouldBeCalled()
+            ->willReturn([$sheet3participant1->reveal(), $sheet3participant2->reveal()])
+        ;
 
         $request1 = $this->prophesize(Request::class);
         $request1->getId()->shouldBeCalled()->willReturn(1001);
@@ -273,7 +275,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             1002,
             [$sheetView3, $sheetView1],
             [$participantView4, $participantView1],
-            false
+            true
         );
         $meetingView2->isBlockedSlot = true;
         $meetingView2->spot = $spotView2;
