@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin;
 
 class LinkedSheetsView
 {
+    /** @var int */
+    public $id;
+
     /** @var string[] */
     public $titles;
 
@@ -21,8 +24,9 @@ class LinkedSheetsView
     /** @var bool */
     public $isRemovable;
 
-    public function __construct(array $titles, \DateTimeInterface $createdAt, bool $canBeDelete)
+    public function __construct(int $id, array $titles, \DateTimeInterface $createdAt, bool $canBeDelete)
     {
+        $this->id = $id;
         $this->titles = $titles;
         $this->createdAt = $createdAt;
         $this->isRemovable = $canBeDelete;

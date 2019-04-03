@@ -1287,6 +1287,12 @@ services:
         tags:
             - { name: tactician.handler, typehints: true }
 
+    Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\DeleteHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     proximum.vimeet.application.command.sheet.group.update_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Group\UpdateHandler
         arguments:

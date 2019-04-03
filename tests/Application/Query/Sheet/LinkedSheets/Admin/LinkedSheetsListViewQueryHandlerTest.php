@@ -40,9 +40,11 @@ class LinkedSheetsListViewQueryHandlerTest extends TestCase
         $linkedSheets1 = $this->prophesize(LinkedSheets::class);
         $linkedSheets1->getCreatedAt()->shouldBeCalled()->willReturn($linkedSheets1CreatedAt);
         $linkedSheets1->getSheets()->shouldBeCalled()->willReturn([$sheet1]);
+        $linkedSheets1->getId()->shouldBeCalled()->willReturn(1);
         $linkedSheets2 = $this->prophesize(LinkedSheets::class);
         $linkedSheets2->getCreatedAt()->shouldBeCalled()->willReturn($linkedSheets2CreatedAt);
         $linkedSheets2->getSheets()->shouldBeCalled()->willReturn([$sheet2]);
+        $linkedSheets2->getId()->shouldBeCalled()->willReturn(2);
 
         $removableLinkedSheetsFilter = $this->prophesize(RemovableLinkedSheetsFilter::class);
         $handler = new LinkedSheetsListViewQueryHandler(
@@ -64,8 +66,8 @@ class LinkedSheetsListViewQueryHandlerTest extends TestCase
         // run tests
         $result = $handler->handle($linkedSheetsListViewQuery);
 
-        $linkedSheetsView1 = new LinkedSheetsView(['Namco'], $linkedSheets1CreatedAt, false);
-        $linkedSheetsView2 = new LinkedSheetsView(['Bandai'], $linkedSheets2CreatedAt, true);
+        $linkedSheetsView1 = new LinkedSheetsView(1, ['Namco'], $linkedSheets1CreatedAt, false);
+        $linkedSheetsView2 = new LinkedSheetsView(2, ['Bandai'], $linkedSheets2CreatedAt, true);
         $expected = new LinkedSheetsListView([$linkedSheetsView1, $linkedSheetsView2]);
 
         $this->assertEquals($expected, $result);

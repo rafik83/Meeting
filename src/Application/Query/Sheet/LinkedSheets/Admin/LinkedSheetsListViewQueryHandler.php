@@ -44,7 +44,7 @@ class LinkedSheetsListViewQueryHandler
                 $titles[] = $sheet->getTitle();
             }
             $isRemovable = in_array($linkedSheets, $removableLinkedSheets, true);
-            $linkedSheetsViews[] = new LinkedSheetsView($titles, $linkedSheets->getCreatedAt(), $isRemovable);
+            $linkedSheetsViews[] = new LinkedSheetsView($linkedSheets->getId(), $titles, $linkedSheets->getCreatedAt(), $isRemovable);
         }
 
         return new LinkedSheetsListView($linkedSheetsViews);

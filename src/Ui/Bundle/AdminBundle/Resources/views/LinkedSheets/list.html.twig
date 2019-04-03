@@ -18,6 +18,7 @@
             <tr>
                 <th>{{ 'admin.linked_sheets.column.sheets'|trans }}</th>
                 <th>{{ 'admin.linked_sheets.column.created_at'|trans }}</th>
+                <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>
@@ -33,10 +34,17 @@
                     </ul>
                 </td>
                 <td>{{ linkedSheetsView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
+                <td>
+                    {% if linkedSheetsView.isRemovable %}
+                    <a class="btn btn-default" href="{{ path('admin_linked_sheets_delete', {'event': event.id, 'linkedSheets': linkedSheetsView.id}) }}">{{ 'admin.linked_sheets.delete'|trans }}</a>
+                    {% else %}
+                    <button type="button" class="btn btn-default disabled" data-toggle="tooltip" title="{{ 'admin.linked_sheets.disabled_deletion'|trans }}">{{ 'admin.linked_sheets.delete'|trans }}</button>
+                    {% endif %}
+                </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="2" class="text-center">{{ 'admin.linked_sheets.no_result'|trans }}</td>
+                <td colspan="3" class="text-center">{{ 'admin.linked_sheets.no_result'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
