@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -42,6 +43,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $admin = $this->prophesize(Admin::class);
         $admin->getDisplayName()->willReturn('admin name');
         $admin->hasAllowedTypes()->willReturn(false);
+        $linkedSheets = $this->prophesize(LinkedSheets::class);
 
         $datetime1 = new \DateTime();
         $datetime2 = new \DateTime();
@@ -81,6 +83,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet1->isAccepted()->willReturn(true);
         $sheet1->isValidated()->willReturn(false);
         $sheet1->attend()->willReturn(true);
+        $sheet1->getLinkedSheets()->willReturn($linkedSheets->reveal());
 
         $sheet1->getFollower()->willReturn($admin->reveal());
         $sheet2->getFollower()->willReturn(null);
@@ -117,6 +120,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet2->getCommercialStatus()->willReturn(CommercialStatus::STATUS_DO_NOT_CALL);
         $sheet1->getReminderDate()->willReturn($datetime1);
         $sheet2->getReminderDate()->willReturn($datetime1);
+        $sheet2->getLinkedSheets()->willReturn(null);
 
         $paginatedResult = new PaginatedResult([$sheet1->reveal(), $sheet2->reveal()], 1, 20, 2);
         $sheetSearchAdapter = $this->prophesize(SheetSearchAdapterInterface::class);
@@ -139,6 +143,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $trace->getAuthor()->willReturn('Toto');
         $trace->getObjectType()->willReturn('Sheet');
         $trace->getObjectId()->willReturn(1);
+
         $traceRepository->getLastByTraceableObjectsAndAction([$sheet1->reveal(), $sheet2->reveal()], TraceableName::SHEET_TRACEABLE_NAME, Trace::ACCEPT)->shouldBeCalled()->willReturn([$trace]);
         $traceRepository->getLastByTraceableObjectsAndAction([$sheet1->reveal(), $sheet2->reveal()], TraceableName::SHEET_TRACEABLE_NAME, Trace::VALIDATE)->shouldBeCalled()->willReturn([]);
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
@@ -184,7 +189,8 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             true,
             'group title 1',
             'Spot 1',
-            $trace->reveal()
+            $trace->reveal(),
+            $linkedSheets->reveal()
         );
         $expectedSheet2 = new SheetListView(
             2,
@@ -206,6 +212,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             'token2',
             2,
             false,
+            null,
             null,
             null,
             null
