@@ -164,7 +164,7 @@ class MeetingViewQueryHandler
      *
      * @return ParticipantView[]
      */
-    private function getMeetingParticipantsList(array $participants): array
+    private function getParticipantViews(array $participants): array
     {
         $participantViews = [];
 
@@ -177,13 +177,26 @@ class MeetingViewQueryHandler
 
     /**
      * @param Sheet         $sheet
+     * @param Participant[] $meetingParticipants
      * @param Participant[] $requestParticipants
      *
      * @return ParticipantView[]
      */
-    private function getRequestParticipants(Sheet $sheet, array $requestParticipants): array
+    private function getRequestParticipants(Sheet $sheet, array $meetingParticipants, array $requestParticipants): array
     {
         $participantViews = [];
+
+        if ($sheet->getType()->areAllSheetParticipantsAssignedToMeeting()) {
+            if ($sheet->hasLinkedSheets()) {
+                return $this->getParticipantViews($sheet->getLinkedSheetsParticipants());
+            }
+
+            return $this->getParticipantViews($sheet->getParticipantsArray());
+        }
+
+        if (count($meetingParticipants)) {
+            return $this->getParticipantViews($meetingParticipants);
+        }
 
         if (count($requestParticipants)) {
             foreach ($requestParticipants as $participant) {
@@ -218,26 +231,24 @@ class MeetingViewQueryHandler
      */
     private function getParticipantsList(MeetingViewQuery $query, Request $request, Meeting $meeting = null): array
     {
-        $participantsList = [];
+        $hasMeetingAndSolutionNotFromScratch = null !== $meeting && !$query->isSolutionFromScratch();
 
-        if (null !== $meeting && !$query->isSolutionFromScratch()) {
-            $participantsList['fromParticipant'] = $this->getMeetingParticipantsList($meeting->getFromParticipants());
-            $participantsList['toParticipant'] = $this->getMeetingParticipantsList($meeting->getToParticipants());
-
-            return $participantsList;
-        }
-
-        $participantsList['fromParticipant'] = $this->getRequestParticipants(
-            $request->getFromSheet(),
-            $request->hasFromParticipants() ? $request->getFromParticipantsArray() : []
-        );
-
-        $participantsList['toParticipant'] = $this->getRequestParticipants(
-            $request->getToSheet(),
-            $request->hasToParticipants() ? $request->getToParticipantsArray() : []
-        );
-
-        return $participantsList;
+        return [
+            'fromParticipant' => $this->getRequestParticipants(
+                $request->getFromSheet(),
+                $hasMeetingAndSolutionNotFromScratch ? $meeting->getFromParticipants() : [],
+                !$hasMeetingAndSolutionNotFromScratch && $request->hasFromParticipants()
+                    ? $request->getFromParticipantsArray()
+                    : []
+            ),
+            'toParticipant' => $this->getRequestParticipants(
+                $request->getToSheet(),
+                $hasMeetingAndSolutionNotFromScratch ? $meeting->getToParticipants() : [],
+                !$hasMeetingAndSolutionNotFromScratch && $request->hasToParticipants()
+                    ? $request->getToParticipantsArray()
+                    : []
+            ),
+        ];
     }
 
     /**
