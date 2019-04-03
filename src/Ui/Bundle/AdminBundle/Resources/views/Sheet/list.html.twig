@@ -264,6 +264,15 @@
                     <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
                         {{ sheet.title }}
                     </a>
+                    {% if sheet.linkedSheets is not null %}
+                        <span class="icon-LienTag" title="{% spaceless %}
+                        {% for linkedSheet in sheet.linkedSheets.sheets -%}
+                            {% if sheet.id != linkedSheet.id -%}
+                                {% if loop.first == false %}, {% endif %}{{ linkedSheet.title-}}
+                            {% endif -%}
+                        {% endfor -%}
+                        {% endspaceless %}"></span>
+                    {% endif %}
                     {% if not sheet.isEnabled %}
                         <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
                     {% endif %}

@@ -172,7 +172,8 @@ class PaginatedSheetListViewQueryHandler
             null !== $sheet->getGroup(),
             null !== $sheet->getGroup() ? $sheet->getGroup()->getTitle() : null,
             null !== $sheet->getSpot() ? $sheet->getSpot()->getReference() : null,
-            $trace
+            $trace,
+            $sheet->getLinkedSheets()
         );
     }
 }
