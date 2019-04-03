@@ -603,10 +603,11 @@ class SheetRepository implements SheetRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet', 'type', 'type_translations')
+            ->select('sheet', 'type', 'type_translations', 'linked_sheets')
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->join('sheet.type', 'type')
             ->join('type.translations', 'type_translations')
+            ->leftJoin('sheet.linkedSheets', 'linked_sheets')
             ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
             ->andWhere(
                 sprintf(
