@@ -16,7 +16,10 @@ agenda.availability.define: 'Set my availabilities'
 agenda.day.hide: 'Hide this day'
 agenda.day.see: 'Show the day'
 agenda.meeting.details: Details
+agenda.meeting.move.back: Back
+agenda.meeting.move.button: 'Move the meeting'
 agenda.meeting.move.no_available_slots: 'The meeting can''t be moved because there are no other join availabilities'
+agenda.meeting.remove.button: 'Delete the meeting'
 agenda.participant.view: 'Schedule of %participant%'
 agenda.title: 'My schedule'
 agenda.unavailability.add: 'Add an unavailability'

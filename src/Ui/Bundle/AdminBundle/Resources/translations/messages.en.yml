@@ -60,6 +60,7 @@ admin.agenda.mass_assignment.submit.label: Submit
 admin.agenda.mass_assignment.title.label: 'Update mass assignment'
 admin.agenda.meeting.mass_assignment.update: 'Update the mass meeting assignement'
 admin.agenda.meeting.move: 'Move the meeting'
+admin.agenda.meeting.remove: 'Delete the meeting'
 admin.agenda.meeting.selectSlot: 'Select this slot'
 admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists: 'The selected slot doesn''t exist'
 admin.agenda.meeting.update: 'Update the meeting'
