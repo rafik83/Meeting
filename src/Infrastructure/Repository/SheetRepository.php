@@ -1288,6 +1288,25 @@ class SheetRepository implements SheetRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function filterWithMeetings(array $sheets): array
+    {
+      $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet IN (:sheets)')
+            ->andWhere('EXISTS (SELECT 1
+                                 FROM Entity:Meeting meeting
+                                 WHERE meeting.fromSheet = sheet or meeting.toSheet = sheet)')
+            ->setParameter('sheets', $sheets);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @param Event $event
      *
      * @return QueryBuilder

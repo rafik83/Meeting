@@ -19,11 +19,13 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
 use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\LinkedSheets\RemovableLinkedSheetsFilter;
 
 class LinkedSheetsListViewQueryHandlerTest extends TestCase
 {
     public function test()
     {
+        // prepare data
         $linkedSheetsRepository = $this->prophesize(LinkedSheetsRepositoryInterface::class);
         $event = $this->prophesize(Event::class);
 
@@ -42,17 +44,28 @@ class LinkedSheetsListViewQueryHandlerTest extends TestCase
         $linkedSheets2->getCreatedAt()->shouldBeCalled()->willReturn($linkedSheets2CreatedAt);
         $linkedSheets2->getSheets()->shouldBeCalled()->willReturn([$sheet2]);
 
+        $removableLinkedSheetsFilter = $this->prophesize(RemovableLinkedSheetsFilter::class);
+        $handler = new LinkedSheetsListViewQueryHandler(
+            $linkedSheetsRepository->reveal(),
+            $removableLinkedSheetsFilter->reveal()
+        );
+        $linkedSheetsListViewQuery = new LinkedSheetsListViewQuery($event->reveal());
+
+        // dependencies prophecies
+        $removableLinkedSheetsFilter->isSatisfiedBy(
+            [$linkedSheets1->reveal(), $linkedSheets2->reveal()]
+        )->shouldBeCalled()
+            ->willReturn([$linkedSheets2->reveal()]);
+
         $linkedSheetsRepository->getByEvent($event->reveal())->willReturn(
             [$linkedSheets1->reveal(), $linkedSheets2->reveal()]
         );
 
-        $handler = new LinkedSheetsListViewQueryHandler($linkedSheetsRepository->reveal());
-        $linkedSheetsListViewQuery = new LinkedSheetsListViewQuery($event->reveal());
-
+        // run tests
         $result = $handler->handle($linkedSheetsListViewQuery);
 
-        $linkedSheetsView1 = new LinkedSheetsView(['Namco'], $linkedSheets1CreatedAt);
-        $linkedSheetsView2 = new LinkedSheetsView(['Bandai'], $linkedSheets2CreatedAt);
+        $linkedSheetsView1 = new LinkedSheetsView(['Namco'], $linkedSheets1CreatedAt, false);
+        $linkedSheetsView2 = new LinkedSheetsView(['Bandai'], $linkedSheets2CreatedAt, true);
         $expected = new LinkedSheetsListView([$linkedSheetsView1, $linkedSheetsView2]);
 
         $this->assertEquals($expected, $result);

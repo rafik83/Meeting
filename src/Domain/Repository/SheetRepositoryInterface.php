@@ -489,4 +489,11 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getNotLinkedSheets(Event $event): array;
+
+    /**
+     * @param Sheet[] $sheets
+     *
+     * @return Sheet[]
+     */
+    public function filterWithMeetings(array $sheets): array;
 }

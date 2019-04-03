@@ -18,9 +18,13 @@ class LinkedSheetsView
     /** @var \DateTimeInterface */
     public $createdAt;
 
-    public function __construct(array $titles, \DateTimeInterface $createdAt)
+    /** @var bool */
+    public $isRemovable;
+
+    public function __construct(array $titles, \DateTimeInterface $createdAt, bool $canBeDelete)
     {
         $this->titles = $titles;
         $this->createdAt = $createdAt;
+        $this->isRemovable = $canBeDelete;
     }
 }

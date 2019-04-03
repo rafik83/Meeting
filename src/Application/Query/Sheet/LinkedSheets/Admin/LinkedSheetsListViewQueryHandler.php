@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin;
 
 use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\LinkedSheets\RemovableLinkedSheetsFilter;
 
 class LinkedSheetsListViewQueryHandler
 {
@@ -19,21 +20,31 @@ class LinkedSheetsListViewQueryHandler
      */
     private $linkedSheetsRepository;
 
-    public function __construct(LinkedSheetsRepositoryInterface $linkedSheetsRepository)
-    {
+    /** @var RemovableLinkedSheetsFilter */
+    private $removableLinkedSheetsFilter;
+
+    public function __construct(
+        LinkedSheetsRepositoryInterface $linkedSheetsRepository,
+        RemovableLinkedSheetsFilter $removableLinkedSheetsFilter
+    ) {
         $this->linkedSheetsRepository = $linkedSheetsRepository;
+        $this->removableLinkedSheetsFilter = $removableLinkedSheetsFilter;
     }
 
     public function handle(LinkedSheetsListViewQuery $query): LinkedSheetsListView
     {
         $linkedSheetsViews = [];
         $someLinkedSheets = $this->linkedSheetsRepository->getByEvent($query->event);
+
+        $removableLinkedSheets = $this->removableLinkedSheetsFilter->isSatisfiedBy($someLinkedSheets);
+
         foreach ($someLinkedSheets as $linkedSheets) {
             $titles = [];
             foreach ($linkedSheets->getSheets() as $sheet) {
                 $titles[] = $sheet->getTitle();
             }
-            $linkedSheetsViews[] = new LinkedSheetsView($titles, $linkedSheets->getCreatedAt());
+            $isRemovable = in_array($linkedSheets, $removableLinkedSheets, true);
+            $linkedSheetsViews[] = new LinkedSheetsView($titles, $linkedSheets->getCreatedAt(), $isRemovable);
         }
 
         return new LinkedSheetsListView($linkedSheetsViews);
