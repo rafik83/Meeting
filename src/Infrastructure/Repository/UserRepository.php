@@ -272,7 +272,7 @@ class UserRepository implements UserRepositoryInterface
                 User\Event\PresenceDate::class,
                 'presenceDate',
                 'WITH',
-                'user.id = presenceDate.user'
+                'user.id = presenceDate.user AND presenceDate.event = :event'
             )
             ->setParameter('event', $event)
             ->setParameter('locale', $locale)
