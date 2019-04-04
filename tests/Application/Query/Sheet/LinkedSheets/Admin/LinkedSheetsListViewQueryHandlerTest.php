@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet\LinkedSheets\Admin;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria;
 use Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin\LinkedSheetsListView;
 use Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin\LinkedSheetsListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin\LinkedSheetsListViewQueryHandler;
@@ -19,7 +20,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
 use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
-use Proximum\Vimeet\Domain\Sheet\LinkedSheets\RemovableLinkedSheetsFilter;
 
 class LinkedSheetsListViewQueryHandlerTest extends TestCase
 {
@@ -46,7 +46,7 @@ class LinkedSheetsListViewQueryHandlerTest extends TestCase
         $linkedSheets2->getSheets()->shouldBeCalled()->willReturn([$sheet2]);
         $linkedSheets2->getId()->shouldBeCalled()->willReturn(2);
 
-        $removableLinkedSheetsFilter = $this->prophesize(RemovableLinkedSheetsFilter::class);
+        $removableLinkedSheetsFilter = $this->prophesize(AreRemovableLinkedSheetsCriteria::class);
         $handler = new LinkedSheetsListViewQueryHandler(
             $linkedSheetsRepository->reveal(),
             $removableLinkedSheetsFilter->reveal()
@@ -54,7 +54,7 @@ class LinkedSheetsListViewQueryHandlerTest extends TestCase
         $linkedSheetsListViewQuery = new LinkedSheetsListViewQuery($event->reveal());
 
         // dependencies prophecies
-        $removableLinkedSheetsFilter->isSatisfiedBy(
+        $removableLinkedSheetsFilter->meetCriteria(
             [$linkedSheets1->reveal(), $linkedSheets2->reveal()]
         )->shouldBeCalled()
             ->willReturn([$linkedSheets2->reveal()]);

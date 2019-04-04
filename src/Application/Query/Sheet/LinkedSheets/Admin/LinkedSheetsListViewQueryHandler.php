@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin;
 
+use Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria;
 use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
-use Proximum\Vimeet\Domain\Sheet\LinkedSheets\RemovableLinkedSheetsFilter;
 
 class LinkedSheetsListViewQueryHandler
 {
@@ -20,12 +20,12 @@ class LinkedSheetsListViewQueryHandler
      */
     private $linkedSheetsRepository;
 
-    /** @var RemovableLinkedSheetsFilter */
+    /** @var AreRemovableLinkedSheetsCriteria */
     private $removableLinkedSheetsFilter;
 
     public function __construct(
         LinkedSheetsRepositoryInterface $linkedSheetsRepository,
-        RemovableLinkedSheetsFilter $removableLinkedSheetsFilter
+        AreRemovableLinkedSheetsCriteria $removableLinkedSheetsFilter
     ) {
         $this->linkedSheetsRepository = $linkedSheetsRepository;
         $this->removableLinkedSheetsFilter = $removableLinkedSheetsFilter;
@@ -36,7 +36,7 @@ class LinkedSheetsListViewQueryHandler
         $linkedSheetsViews = [];
         $someLinkedSheets = $this->linkedSheetsRepository->getByEvent($query->event);
 
-        $removableLinkedSheets = $this->removableLinkedSheetsFilter->isSatisfiedBy($someLinkedSheets);
+        $removableLinkedSheets = $this->removableLinkedSheetsFilter->meetCriteria($someLinkedSheets);
 
         foreach ($someLinkedSheets as $linkedSheets) {
             $titles = [];

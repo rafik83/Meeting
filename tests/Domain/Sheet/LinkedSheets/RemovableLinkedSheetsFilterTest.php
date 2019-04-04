@@ -3,10 +3,10 @@
 namespace Proximum\Vimeet\Tests\Domain\Sheet\LinkedSheets;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Sheet\LinkedSheets\RemovableLinkedSheetsFilter;
 
 class RemovableLinkedSheetsFilterTest extends TestCase
 {
@@ -28,8 +28,8 @@ class RemovableLinkedSheetsFilterTest extends TestCase
             ->willReturn([$sheet1->reveal()]);
 
         // run tests
-        $removableLinkedSheetsFilter = new RemovableLinkedSheetsFilter($sheetRepository->reveal());
-        $result = $removableLinkedSheetsFilter->isSatisfiedBy([$linkedSheets1->reveal(), $linkedSheets2->reveal()]);
+        $removableLinkedSheetsFilter = new AreRemovableLinkedSheetsCriteria($sheetRepository->reveal());
+        $result = $removableLinkedSheetsFilter->meetCriteria([$linkedSheets1->reveal(), $linkedSheets2->reveal()]);
 
         $expected = [$linkedSheets2->reveal()];
 

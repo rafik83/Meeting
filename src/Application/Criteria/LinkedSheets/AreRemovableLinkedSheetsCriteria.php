@@ -1,12 +1,13 @@
 <?php
 
-namespace Proximum\Vimeet\Domain\Sheet\LinkedSheets;
+namespace Proximum\Vimeet\Application\Criteria\LinkedSheets;
 
+use Proximum\Vimeet\Application\Criteria\Criteria;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class RemovableLinkedSheetsFilter
+class AreRemovableLinkedSheetsCriteria implements Criteria
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
@@ -16,7 +17,12 @@ class RemovableLinkedSheetsFilter
         $this->sheetRepository = $sheetRepository;
     }
 
-    public function isSatisfiedBy(array $someLinkedSheets): array
+    /**
+     * @param LinkedSheets[] $someLinkedSheets
+     *
+     * @return LinkedSheets[]
+     */
+    public function meetCriteria(array $someLinkedSheets): array
     {
         $everySheets = [];
         foreach ($someLinkedSheets as $linkedSheets) {

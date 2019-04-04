@@ -466,7 +466,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router.default'
             - '@session.flash_bag'
-            - '@Proximum\Vimeet\Domain\Sheet\LinkedSheets\RemovableLinkedSheetsFilter'
+            - '@Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria'
 
     #
     # Catalog

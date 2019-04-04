@@ -13,9 +13,9 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\Delete;
+use Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
-use Proximum\Vimeet\Domain\Sheet\LinkedSheets\RemovableLinkedSheetsFilter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -35,7 +35,7 @@ class DeleteAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var RemovableLinkedSheetsFilter */
+    /** @var AreRemovableLinkedSheetsCriteria */
     private $removableLinkedSheetsFilter;
 
     public function __construct(
@@ -43,7 +43,7 @@ class DeleteAction
         CommandBusInterface $commandBus,
         RouterInterface $router,
         FlashBagInterface $flashBag,
-        RemovableLinkedSheetsFilter $removableLinkedSheetsFilter
+        AreRemovableLinkedSheetsCriteria $removableLinkedSheetsFilter
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->router = $router;
@@ -58,7 +58,7 @@ class DeleteAction
             throw new AccessDeniedException('Access denied!');
         }
 
-        if (count($this->removableLinkedSheetsFilter->isSatisfiedBy([$linkedSheets])) === 0) {
+        if (count($this->removableLinkedSheetsFilter->meetCriteria([$linkedSheets])) === 0) {
             throw new AccessDeniedException();
         }
 

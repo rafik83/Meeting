@@ -3782,7 +3782,7 @@ services:
     Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin\LinkedSheetsListViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
-            - '@Proximum\Vimeet\Domain\Sheet\LinkedSheets\RemovableLinkedSheetsFilter'
+            - '@Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria'
         tags:
             - { name: tactician.handler, typehints: true }
 
@@ -6340,7 +6340,7 @@ services:
     # Linked Sheets
     #
 
-    Proximum\Vimeet\Domain\Sheet\LinkedSheets\RemovableLinkedSheetsFilter:
+    Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
 
