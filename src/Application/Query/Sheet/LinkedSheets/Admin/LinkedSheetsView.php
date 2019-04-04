@@ -24,11 +24,11 @@ class LinkedSheetsView
     /** @var bool */
     public $isRemovable;
 
-    public function __construct(int $id, array $titles, \DateTimeInterface $createdAt, bool $canBeDelete)
+    public function __construct(int $id, array $titles, \DateTimeInterface $createdAt, bool $isRemovable)
     {
         $this->id = $id;
         $this->titles = $titles;
         $this->createdAt = $createdAt;
-        $this->isRemovable = $canBeDelete;
+        $this->isRemovable = $isRemovable;
     }
 }
