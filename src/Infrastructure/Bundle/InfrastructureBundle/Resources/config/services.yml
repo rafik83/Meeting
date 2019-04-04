@@ -1290,6 +1290,7 @@ services:
     Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\DeleteHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
+            - '@Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria'
         tags:
             - { name: tactician.handler, typehints: true }
 
