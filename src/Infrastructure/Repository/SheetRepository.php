@@ -603,11 +603,10 @@ class SheetRepository implements SheetRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet', 'type', 'type_translations', 'linked_sheets')
+            ->select('sheet', 'type', 'type_translations')
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->join('sheet.type', 'type')
             ->join('type.translations', 'type_translations')
-            ->leftJoin('sheet.linkedSheets', 'linked_sheets')
             ->where('sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true')
             ->andWhere(
                 sprintf(
@@ -768,7 +767,7 @@ class SheetRepository implements SheetRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet, participant, type, typeTranslation, category, categoryTranslation, user')
+            ->select('sheet, participant, type, typeTranslation, category, categoryTranslation, user, linked_sheets')
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->leftJoin('sheet.participants', 'participant')
             ->leftJoin('participant.user', 'user')
@@ -776,6 +775,8 @@ class SheetRepository implements SheetRepositoryInterface
             ->leftJoin('type.translations', 'typeTranslation')
             ->leftJoin('type.categories', 'category')
             ->leftJoin('category.translations', 'categoryTranslation')
+            ->leftJoin('sheet.linkedSheets', 'linked_sheets')
+            ->leftJoin('linked_sheets.sheets', 'linked_sheets_sheet')
             ->where('sheet.id IN (:sheets)')
             ->setParameter('sheets', $sheets);
 

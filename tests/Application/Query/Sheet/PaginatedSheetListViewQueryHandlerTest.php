@@ -84,6 +84,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet1->isValidated()->willReturn(false);
         $sheet1->attend()->willReturn(true);
         $sheet1->getLinkedSheets()->willReturn($linkedSheets->reveal());
+        $linkedSheets->getSheets()->willReturn([$sheet2->reveal()]);
 
         $sheet1->getFollower()->willReturn($admin->reveal());
         $sheet2->getFollower()->willReturn(null);
@@ -121,6 +122,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet1->getReminderDate()->willReturn($datetime1);
         $sheet2->getReminderDate()->willReturn($datetime1);
         $sheet2->getLinkedSheets()->willReturn(null);
+        $sheet2->getTitle()->willReturn('Title');
 
         $paginatedResult = new PaginatedResult([$sheet1->reveal(), $sheet2->reveal()], 1, 20, 2);
         $sheetSearchAdapter = $this->prophesize(SheetSearchAdapterInterface::class);
@@ -177,6 +179,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             true,
             true,
             ['Category'],
+            ['Title'],
             'type1',
             new SheetParticipantView('participant first name', 'participant last name', 'email1@sheet.fr'),
             'admin name',
@@ -189,8 +192,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             true,
             'group title 1',
             'Spot 1',
-            $trace->reveal(),
-            $linkedSheets->reveal()
+            $trace->reveal()
         );
         $expectedSheet2 = new SheetListView(
             2,
@@ -202,6 +204,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             false,
             false,
             [],
+            [],
             'type2',
             new SheetParticipantView('truc', 'muche', 'email2@sheet.fr'),
             '',
@@ -212,7 +215,6 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             'token2',
             2,
             false,
-            null,
             null,
             null,
             null

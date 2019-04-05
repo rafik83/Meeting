@@ -264,15 +264,11 @@
                     <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
                         {{ sheet.title }}
                     </a>
-                    {% if sheet.linkedSheets is not null %}
-                        {% set firstSheetWritten = false %}
+                    {% if sheet.linkedSheetsTitle is not empty %}
                         <span class="icon-LienTag" title="{% spaceless %}
-                        {% for linkedSheet in sheet.linkedSheets.sheets -%}
-                            {% if linkedSheet.id != sheet.id -%}
-                                {% if firstSheetWritten %}, {% endif %}{{ linkedSheet.title-}}
-                                {% set firstSheetWritten = true -%}
-                            {% endif -%}
-                        {% endfor -%}
+                            {% if sheet.linkedSheetsTitle is not empty %}
+                                {{ sheet.linkedSheetsTitle|join(', ') }}
+                            {% endif %}
                         {% endspaceless %}"></span>
                     {% endif %}
                     {% if not sheet.isEnabled %}

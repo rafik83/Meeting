@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\View\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 
@@ -125,8 +124,8 @@ class SheetListView
     /** @var null|\DateTimeInterface */
     public $reminderDate;
 
-    /** @var LinkedSheets */
-    public $linkedSheets;
+    /** @var string[] $inkedSheetsTitle */
+    public $linkedSheetsTitle;
 
     /**
      * @param int                     $id
@@ -151,7 +150,7 @@ class SheetListView
      * @param string|null             $groupTitle
      * @param string|null             $spotReference
      * @param Trace|null              $trace
-     * @param LinkedSheets|null       $linkedSheets
+     * @param string[]                $linkedSheetsTitle
      */
     public function __construct(
         $id,
@@ -163,6 +162,7 @@ class SheetListView
         $inCatalog,
         $attend,
         array $categories,
+        array $linkedSheetsTitle,
         $type,
         SheetParticipantView $owner,
         $follower,
@@ -175,8 +175,7 @@ class SheetListView
         $hasGroup = false,
         $groupTitle = null,
         $spotReference = null,
-        Trace $trace = null,
-        LinkedSheets $linkedSheets = null
+        Trace $trace = null
     ) {
         $this->id                 = $id;
         $this->title              = $title;
@@ -205,7 +204,7 @@ class SheetListView
             $this->traceAt     = $trace->getDate();
             $this->traceBy     = $trace->getAuthor();
         }
-        $this->linkedSheets = $linkedSheets;
+        $this->linkedSheetsTitle = $linkedSheetsTitle;
     }
 
     /**

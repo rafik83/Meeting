@@ -138,6 +138,16 @@ class PaginatedSheetListViewQueryHandler
      */
     private function createSheetListView(Sheet $sheet, $locale, Admin $admin, Trace $trace = null)
     {
+        $linkedSheetsTitle = [];
+        $onLinkedSheets = $sheet->getLinkedSheets();
+        if($onLinkedSheets !== null) {
+            foreach ($onLinkedSheets->getSheets() as $sheetLink) {
+                if($sheetLink !== $sheet){
+                    $linkedSheetsTitle[] = $sheetLink->getTitle();
+                }
+            }
+        }
+
         if (null === $sheet->getParticipantOwner()) {
             $firstName = $sheet->getOwner()->getAccount()->getFirstName();
             $lastName  = $sheet->getOwner()->getAccount()->getLastName();
@@ -156,6 +166,7 @@ class PaginatedSheetListViewQueryHandler
             $sheet->isInCatalog(),
             $sheet->attend(),
             $sheet->getType()->getCategoriesTitles($locale),
+            $linkedSheetsTitle,
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(
                 $firstName,
@@ -172,8 +183,7 @@ class PaginatedSheetListViewQueryHandler
             null !== $sheet->getGroup(),
             null !== $sheet->getGroup() ? $sheet->getGroup()->getTitle() : null,
             null !== $sheet->getSpot() ? $sheet->getSpot()->getReference() : null,
-            $trace,
-            $sheet->getLinkedSheets()
+            $trace
         );
     }
 }
