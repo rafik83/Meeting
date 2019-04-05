@@ -38,6 +38,15 @@ The shell tasks ran by this job is configured in [OptaPlanner_PROD_run](https://
     $ cd /var/www/proximum-optaplanner.project.local/htdocs/current
     $ sudo -u www-data java -jar -Dlogback.level.org.optaplanner=error planner.jar /var/www/proximum-optaplanner.project.local/htdocs/shared/planner/$INPUT
 
+## Delete old builds
+
+When job is created, enable deleting old builds :
+
+    "Supprimer les anciens builds"
+        - Strategy : "Log rotation"
+        - "Nombre de jours de conservation des builds" : 15
+        - "Nombre maximum de builds à conserver" : 10
+
 ## Create a job build in Jenkins
 
 Vimeet production (front1 and front2) and preproduction environments share the same instance of Jenkins.
