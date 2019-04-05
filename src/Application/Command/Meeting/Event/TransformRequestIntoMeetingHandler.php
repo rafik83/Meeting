@@ -99,10 +99,16 @@ class TransformRequestIntoMeetingHandler
      */
     public function handle(TransformRequestIntoMeeting $query): Meeting
     {
+
         $fromSheet          = $query->request->getFromSheet();
         $toSheet            = $query->request->getToSheet();
-        $fromParticipants   = $query->request->getFromParticipantsArray();
-        $toParticipants     = $query->request->getToParticipantsArray();
+
+        $meetingFromParticipantService = new MeetingParticipants($query->request, $fromSheet);
+        $fromParticipants   = $meetingFromParticipantService->getMeetingParticipants(true);
+
+        $meetingToParticipantService = new MeetingParticipants($query->request, $toSheet);
+        $toParticipants     = $meetingToParticipantService->getMeetingParticipants(false);
+
         $fromIsNoPreference = $query->request->hasNoPreference($fromSheet);
         $toIsNoPreference   = $query->request->hasNoPreference($toSheet);
 
