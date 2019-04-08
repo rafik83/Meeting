@@ -178,6 +178,7 @@ class ImportHandlerTest extends TestCase
 
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet1->getId()->shouldBeCalled()->willReturn(74246);
+        $sheet1->hasLinkedSheets()->shouldBeCalled()->willReturn(false);
         $sheet1->getParticipantsArray()->shouldBeCalled()->willReturn([$participant1Sheet1->reveal()]);
 
         $userParticipant2Sheet2 = $this->prophesize(User::class);
@@ -188,7 +189,9 @@ class ImportHandlerTest extends TestCase
 
         $sheet2 = $this->prophesize(Sheet::class);
         $sheet2->getId()->shouldBeCalled()->willReturn(69146);
-        $sheet2->getParticipantsArray()->shouldBeCalled()->willReturn([$participant2Sheet2->reveal()]);
+        $sheet2->hasLinkedSheets()->shouldBeCalled()->willReturn(true);
+        $sheet2->getParticipantsArray()->shouldNotBeCalled();
+        $sheet2->getLinkedSheetsParticipants()->shouldBeCalled()->willReturn([$participant2Sheet2->reveal()]);
 
         $this->requestRepository
             ->getAllAcceptedByEvent($event->reveal())
