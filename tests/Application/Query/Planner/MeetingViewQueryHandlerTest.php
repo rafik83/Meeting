@@ -150,12 +150,6 @@ class MeetingViewQueryHandlerTest extends TestCase
         $sheet3participant1 = $this->prophesize(Participant::class);
         $sheet3participant1->getId()->shouldBeCalled()->willReturn(104);
 
-        $sheet3participant2 = $this->prophesize(Participant::class);
-        $sheet3participant2->getId()->shouldBeCalled()->willReturn(105);
-
-        $sheet4participant1 = $this->prophesize(Participant::class);
-        //$sheet4participant1->getId()->shouldBeCalled()->willReturn(106);
-
         $type1 = $this->prophesize(Type::class);
         $type1->areAllSheetParticipantsAssignedToMeeting()->shouldBeCalled()->willReturn(true);
 
@@ -185,12 +179,6 @@ class MeetingViewQueryHandlerTest extends TestCase
         $sheet3 = $this->prophesize(Sheet::class);
         $sheet3->getId()->shouldBeCalled()->willReturn(3);
         $sheet3->getType()->shouldBeCalled()->willReturn($type2->reveal());
-        $sheet3->countParticipants()->shouldBeCalled()->willReturn(2);
-        $sheet3
-            ->getParticipantsArray()
-            ->shouldBeCalled()
-            ->willReturn([$sheet3participant1->reveal(), $sheet3participant2->reveal()])
-        ;
 
         $request1 = $this->prophesize(Request::class);
         $request1->getId()->shouldBeCalled()->willReturn(1001);
@@ -267,14 +255,14 @@ class MeetingViewQueryHandlerTest extends TestCase
         $meetingView1 = new MeetingView(
             1001,
             [$sheetView1, $sheetView2],
-            [$participantView1, $participantView3],
+            [$participantView1, $participantView2, $participantView3],
             true
         );
 
         $meetingView2 = new MeetingView(
             1002,
             [$sheetView3, $sheetView1],
-            [$participantView4, $participantView1],
+            [$participantView4, $participantView1, $participantView2],
             true
         );
         $meetingView2->isBlockedSlot = true;
