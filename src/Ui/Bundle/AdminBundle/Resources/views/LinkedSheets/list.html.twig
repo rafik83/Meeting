@@ -41,10 +41,10 @@
                         {{ delete_button(
                             path('admin_linked_sheets_delete', {'event': event.id, 'linkedSheets': linkedSheetsView.id}),
                             'admin.linked_sheets.delete'|trans,
-                            { 'class': 'btn btn-default', 'data-confirm': 'admin.linked_sheets.delete_confirm_message'|trans })
+                            { 'class': 'btn btn-danger btn-sm', 'data-confirm': 'admin.linked_sheets.delete_confirm_message'|trans })
                         }}
                     {% else %}
-                        <button type="button" class="btn btn-default disabled" data-toggle="tooltip" title="{{ 'admin.linked_sheets.disabled_deletion'|trans }}">{{ 'admin.linked_sheets.delete'|trans }}</button>
+                        <button type="button" class="btn btn-danger btn-sm disabled" data-toggle="tooltip" title="{{ 'admin.linked_sheets.disabled_deletion'|trans }}">{{ 'admin.linked_sheets.delete'|trans }}</button>
                     {% endif %}
                 </td>
             </tr>
