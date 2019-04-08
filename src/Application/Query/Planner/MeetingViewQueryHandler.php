@@ -236,14 +236,14 @@ class MeetingViewQueryHandler
         return [
             'fromParticipant' => $this->getRequestParticipants(
                 $request->getFromSheet(),
-                $hasMeetingAndSolutionNotFromScratch ? $meeting->getFromParticipants() : [],
+                $hasMeetingAndSolutionNotFromScratch ? $meeting->getFromParticipantsArray() : [],
                 !$hasMeetingAndSolutionNotFromScratch && $request->hasFromParticipants()
                     ? $request->getFromParticipantsArray()
                     : []
             ),
             'toParticipant' => $this->getRequestParticipants(
                 $request->getToSheet(),
-                $hasMeetingAndSolutionNotFromScratch ? $meeting->getToParticipants() : [],
+                $hasMeetingAndSolutionNotFromScratch ? $meeting->getToParticipantsArray() : [],
                 !$hasMeetingAndSolutionNotFromScratch && $request->hasToParticipants()
                     ? $request->getToParticipantsArray()
                     : []
