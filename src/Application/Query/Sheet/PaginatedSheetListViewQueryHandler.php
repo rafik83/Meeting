@@ -139,11 +139,12 @@ class PaginatedSheetListViewQueryHandler
     private function createSheetListView(Sheet $sheet, $locale, Admin $admin, Trace $trace = null)
     {
         $linkedSheetsTitle = [];
-        $onLinkedSheets = $sheet->getLinkedSheets();
-        if($onLinkedSheets !== null) {
-            foreach ($onLinkedSheets->getSheets() as $sheetLink) {
-                if($sheetLink !== $sheet){
-                    $linkedSheetsTitle[] = $sheetLink->getTitle();
+        $linkedSheets = $sheet->getLinkedSheets();
+
+        if (null !== $linkedSheets) {
+            foreach ($linkedSheets->getSheets() as $linkedSheet) {
+                if ($linkedSheet !== $sheet) {
+                    $linkedSheetsTitle[] = $linkedSheet->getTitle();
                 }
             }
         }
