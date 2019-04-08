@@ -227,7 +227,7 @@ class Meeting implements MessageSubjectInterface
      */
     public function getToParticipantsArray(): array
     {
-        return $this->fromParticipants->toArray();
+        return $this->toParticipants->toArray();
     }
 
     /**
