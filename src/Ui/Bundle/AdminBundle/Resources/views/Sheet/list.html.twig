@@ -264,24 +264,26 @@
                     <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}">
                         {{ sheet.title }}
                     </a>
-                    {% if sheet.linkedSheetsTitle is not empty %}
-                        <span class="icon-LienTag" title="{% spaceless %}
-                            {% if sheet.linkedSheetsTitle is not empty %}
-                                {{ sheet.linkedSheetsTitle|join(', ') }}
-                            {% endif %}
-                        {% endspaceless %}"></span>
-                    {% endif %}
                     {% if not sheet.isEnabled %}
                         <span class="label label-danger">{{ 'admin.sheet.disable'|trans }}</span>
                     {% endif %}
+
                     {% if sheet.countParticipant > 1 %}
                         <span class="label label-info"><i class="icon icon-Profil_1"></i> {{ sheet.countParticipant }}</span>
                     {% endif %}
+
                     {% if sheet.hasGroup %}
                         <span class="label label-success">
                             <i class="glyphicon glyphicon-duplicate" data-toggle="tooltip" data-placement="top" title="{{ sheet.groupTitle }}"></i>
                         </span>
                     {% endif %}
+
+                    {% if sheet.linkedSheetsTitle is not empty %}
+                        <span class="label label-info">
+                            <i class="glyphicon glyphicon-duplicate" data-toggle="tooltip" data-placement="top" title="{{ 'admin.sheet.linkedTo'|trans ~ ' ' ~ sheet.linkedSheetsTitle|join(', ') }}"></i>
+                        </span>
+                    {% endif %}
+
                     {% if not sheet.attend %}
                         <span class="label label-danger">{{ 'event.sheet.attend.cancel'|trans }}</span>
                     {% endif %}
