@@ -507,11 +507,19 @@ class Request implements MessageSubjectInterface
      */
     public function hasNoPreference(Sheet $sheet)
     {
-        if ($this->from === $sheet || $this->from->hasLinkedSheet($sheet)) {
+        if ($this->from === $sheet) {
             return $this->fromParticipants->isEmpty();
         }
 
-        if ($this->to === $sheet || $this->to->hasLinkedSheet($sheet)) {
+        if ($this->to === $sheet) {
+            return $this->toParticipants->isEmpty();
+        }
+
+        if ($this->from->hasLinkedSheet($sheet)) {
+            return $this->fromParticipants->isEmpty();
+        }
+
+        if ($this->to->hasLinkedSheet($sheet)) {
             return $this->toParticipants->isEmpty();
         }
 
