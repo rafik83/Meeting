@@ -200,8 +200,8 @@ class MeetingViewQueryHandlerTest extends TestCase
         $meetingSlot->getId()->shouldBeCalled()->willReturn(71);
 
         $meetingForRequest2 = $this->prophesize(Meeting::class);
-        $meetingForRequest2->getFromParticipants()->shouldBeCalled()->willReturn([$sheet3participant1->reveal()]);
-        $meetingForRequest2->getToParticipants()->shouldBeCalled()->willReturn([$sheet1Participant1->reveal()]);
+        $meetingForRequest2->getFromParticipantsArray()->shouldBeCalled()->willReturn([$sheet3participant1->reveal()]);
+        $meetingForRequest2->getToParticipantsArray()->shouldBeCalled()->willReturn([$sheet1Participant1->reveal()]);
         $meetingForRequest2->getSlot()->shouldBeCalled()->willReturn($meetingSlot->reveal());
         $meetingForRequest2->getSpot()->shouldBeCalled()->willReturn($spot->reveal());
         $meetingForRequest2->isBlockedSlot()->shouldBeCalled()->willReturn(true);
