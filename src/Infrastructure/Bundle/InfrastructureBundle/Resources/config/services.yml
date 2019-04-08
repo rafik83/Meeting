@@ -713,6 +713,7 @@ services:
             - '@domain.meeting.visio_guesser'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
+            - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
 
     command.meeting_request.admin.update_participant_handler:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipantsHandler

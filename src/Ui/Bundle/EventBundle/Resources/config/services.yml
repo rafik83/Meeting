@@ -681,10 +681,7 @@ services:
             - '@adapter.validator_adapter'
             - '%infrastructure.import_authentication_token_path%'
 
-    Proximum\Vimeet\Application\Command\Meeting\Event\MeetingParticipants:
-        arguments:
-            - 'Proximum\Vimeet\Domain\Model\Meeting\Request'
-            - 'Proximum\Vimeet\Domain\Model\Sheet'
+    Proximum\Vimeet\Domain\Meeting\MeetingParticipants:
 
     #
     # Validators
