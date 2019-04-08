@@ -150,6 +150,9 @@ class MeetingViewQueryHandlerTest extends TestCase
         $sheet3participant1 = $this->prophesize(Participant::class);
         $sheet3participant1->getId()->shouldBeCalled()->willReturn(104);
 
+        $sheet4participant1 = $this->prophesize(Participant::class);
+        $sheet4participant1->getId()->shouldBeCalled()->willReturn(106);
+
         $type1 = $this->prophesize(Type::class);
         $type1->areAllSheetParticipantsAssignedToMeeting()->shouldBeCalled()->willReturn(true);
 
@@ -169,11 +172,11 @@ class MeetingViewQueryHandlerTest extends TestCase
         $sheet2 = $this->prophesize(Sheet::class);
         $sheet2->getId()->shouldBeCalled()->willReturn(2);
         $sheet2->getType()->shouldBeCalled()->willReturn($type1->reveal());
-        $sheet2->hasLinkedSheets()->shouldBeCalled()->willReturn(false);
+        $sheet2->hasLinkedSheets()->shouldBeCalled()->willReturn(true);
         $sheet2
-            ->getParticipantsArray()
+            ->getLinkedSheetsParticipants()
             ->shouldBeCalled()
-            ->willReturn([$sheet2participant1->reveal()])
+            ->willReturn([$sheet2participant1->reveal(), $sheet4participant1->reveal()])
         ;
 
         $sheet3 = $this->prophesize(Sheet::class);
@@ -255,7 +258,7 @@ class MeetingViewQueryHandlerTest extends TestCase
         $meetingView1 = new MeetingView(
             1001,
             [$sheetView1, $sheetView2],
-            [$participantView1, $participantView2, $participantView3],
+            [$participantView1, $participantView2, $participantView3, $participantView6],
             true
         );
 
