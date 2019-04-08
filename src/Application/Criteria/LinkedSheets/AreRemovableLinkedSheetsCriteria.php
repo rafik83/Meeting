@@ -31,7 +31,7 @@ class AreRemovableLinkedSheetsCriteria implements Criteria
             }
         }
 
-        $sheetsWithMeetings = $this->sheetRepository->filterWithMeetings($everySheets);
+        $sheetsWithMeetings = $this->sheetRepository->filterWithScheduledMeetings($everySheets);
 
         $removableLinkedSheets = [];
         foreach ($someLinkedSheets as $linkedSheets) {

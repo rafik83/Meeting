@@ -26,7 +26,7 @@ class AreRemovableLinkedSheetsCriteriaTest extends TestCase
 
         // prophecies dependencies
 
-        $sheetRepository->filterWithMeetings([$sheetWithMeeting->reveal(), $sheetWithNoMeeting->reveal()])->shouldBeCalled()
+        $sheetRepository->filterWithScheduledMeetings([$sheetWithMeeting->reveal(), $sheetWithNoMeeting->reveal()])->shouldBeCalled()
             ->willReturn([$sheetWithMeeting->reveal()]);
 
         // run tests

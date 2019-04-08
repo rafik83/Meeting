@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -1290,7 +1291,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function filterWithMeetings(array $sheets): array
+    public function filterWithScheduledMeetings(array $sheets): array
     {
       $queryBuilder = $this
             ->entityManager
@@ -1300,7 +1301,9 @@ class SheetRepository implements SheetRepositoryInterface
             ->where('sheet IN (:sheets)')
             ->andWhere('EXISTS (SELECT 1
                                  FROM Entity:Meeting meeting
-                                 WHERE meeting.fromSheet = sheet or meeting.toSheet = sheet)')
+                                 WHERE (meeting.fromSheet = sheet or meeting.toSheet = sheet)
+                                    AND meeting.state = :state)')
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
             ->setParameter('sheets', $sheets);
 
         return $queryBuilder->getQuery()->getResult();

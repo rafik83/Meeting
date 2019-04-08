@@ -24,7 +24,7 @@ class RemovableLinkedSheetsFilterTest extends TestCase
         $linkedSheets2->getSheets()->shouldBeCalled()->willReturn([$sheet2->reveal()]);
 
         // dependencies prophecies
-        $sheetRepository->filterWithMeetings([$sheet1->reveal(), $sheet2->reveal()])->shouldBeCalled()
+        $sheetRepository->filterWithScheduledMeetings([$sheet1->reveal(), $sheet2->reveal()])->shouldBeCalled()
             ->willReturn([$sheet1->reveal()]);
 
         // run tests

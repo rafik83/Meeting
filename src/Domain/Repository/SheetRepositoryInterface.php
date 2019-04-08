@@ -495,5 +495,5 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function filterWithMeetings(array $sheets): array;
+    public function filterWithScheduledMeetings(array $sheets): array;
 }
