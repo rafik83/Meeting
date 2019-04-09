@@ -82,7 +82,7 @@ class ImportAction
             $this->flashBag->add(
                 'success',
                 $this->translator->trans(
-                    'flash.admin.user.import.success',
+                    'flash.admin.leni_user.import.success',
                     [
                         '%countAddedUsers%' => $importResult->countAddedUsers(),
                         '%countUpdatedUsers%' => $importResult->countUpdatedUsers(),
