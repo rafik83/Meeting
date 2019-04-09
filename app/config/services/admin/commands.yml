@@ -552,6 +552,19 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappening }
 
     #
+    # Import
+    #
+    Proximum\Vimeet\Application\Command\User\Import\ImportHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@adapter.local_file_storage'
+            - '@adapter.serializer_adapter'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Import\Import }
+
+    #
     # Static Formulation
     #
     Proximum\Vimeet\Application\Command\StaticFormulation\CreateHandler:

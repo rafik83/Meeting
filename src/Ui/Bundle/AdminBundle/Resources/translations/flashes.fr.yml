@@ -179,6 +179,7 @@ flash.admin.unavailability.mass.dispatch.fail: 'Le dispatch n''a pas pu être r�
 flash.admin.unavailability.mass.dispatch.success: 'Dispatch réalisé avec succès'
 flash.admin.unavailability.mass.update.success: 'L''indisponibilité de masse a bien été mis à jour'
 flash.admin.user.exportFormTemplate.pending: 'Votre export est planifié pour votre sélection, vous receverez un mail avec le fichier'
+flash.admin.user.import.success: 'Ids utilisateurs ajoutés : %countAddedUsers%; Ids utilisateurs modifiés : %countUpdatedUsers%;'
 flash.billing.update_info.success: 'Vos informations de facturation ont été mis à jour'
 flash.change_mail_activate.success: 'Votre nouveau mail est maintenant associé à votre compte'
 flash.change_mail.success: 'Votre nouveau mail a bien été enregistré, vous avez reçu un mail pour l''activer'
