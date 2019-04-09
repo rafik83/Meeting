@@ -108,8 +108,14 @@ class TransformRequestIntoMeetingHandler
     {
         $fromSheet          = $query->request->getFromSheet();
         $toSheet            = $query->request->getToSheet();
-        $fromIsNoPreference = $query->request->hasNoPreference($fromSheet);
-        $toIsNoPreference   = $query->request->hasNoPreference($toSheet);
+
+        $fromIsNoPreference = $fromSheet->getType()->areAllSheetParticipantsAssignedToMeeting()
+            ? false
+            : $query->request->hasNoPreference($fromSheet);
+
+        $toIsNoPreference = $toSheet->getType()->areAllSheetParticipantsAssignedToMeeting()
+            ? false
+            : $query->request->hasNoPreference($toSheet);
 
         $fromParticipants   = $this->meetingParticipants->getMeetingParticipants($query->request, $fromSheet);
 
