@@ -554,7 +554,7 @@ services:
     #
     # Import
     #
-    Proximum\Vimeet\Application\Command\User\Import\ImportHandler:
+    Proximum\Vimeet\Application\LENI\User\Import\ImportHandler:
         arguments:
             - '@repository.user.event.extra_data_repository'
             - '@adapter.local_file_storage'
@@ -562,7 +562,7 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Import\Import }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\LENI\User\Import\Import }
 
     #
     # Static Formulation

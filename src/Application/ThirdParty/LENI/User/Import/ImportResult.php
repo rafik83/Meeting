@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Command\User\Import;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\User\Import;
 
 use Proximum\Vimeet\Domain\Model\User;
 
