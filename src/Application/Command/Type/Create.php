@@ -65,6 +65,9 @@ class Create implements Command
     /** @var bool */
     public $canRemoveMeeting;
 
+    /** @var bool */
+    public $areAllSheetParticipantsAssignedToMeeting;
+
     /**
      * @param Event  $event
      * @param string $locale
