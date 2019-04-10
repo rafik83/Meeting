@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\LENI\User\Import\Import;
-use Proximum\Vimeet\Application\LENI\User\Import\ImportResult;
+use Proximum\Vimeet\Application\ThirdParty\LENI\User\Import\Import;
+use Proximum\Vimeet\Application\ThirdParty\LENI\User\Import\ImportResult;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event\ImportType;
 use Symfony\Component\Form\FormFactoryInterface;

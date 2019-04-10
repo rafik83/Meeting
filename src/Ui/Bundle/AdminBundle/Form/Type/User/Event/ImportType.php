@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event;
 
-use Proximum\Vimeet\Application\LENI\User\Import\Import;
+use Proximum\Vimeet\Application\ThirdParty\LENI\User\Import\Import;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CharsetChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
