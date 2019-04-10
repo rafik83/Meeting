@@ -55,4 +55,13 @@ class LinkedSheetsRepository implements LinkedSheetsRepositoryInterface
         $this->entityManager->persist($linkedSheets);
         $this->entityManager->flush($linkedSheets);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(LinkedSheets $linkedSheets): void
+    {
+        $this->entityManager->remove($linkedSheets);
+        $this->entityManager->flush($linkedSheets);
+    }
 }
