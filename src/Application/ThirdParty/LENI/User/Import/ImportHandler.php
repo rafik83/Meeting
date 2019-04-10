@@ -87,6 +87,7 @@ class ImportHandler
             if (isset($leniUserIdsIndexedByUserId[$importUserView->userId])) {
                 $userExtraData = $leniUserIdsIndexedByUserId[$importUserView->userId];
                 $userExtraData->update($importUserView->leniUserId, $this->dateTime);
+                $this->extraDataRepository->set($userExtraData);
                 $importResult->updatedUser($user);
 
                 continue;
