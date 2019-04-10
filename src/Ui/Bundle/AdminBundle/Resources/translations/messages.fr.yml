@@ -904,6 +904,7 @@ admin.sheet.details.remainingToPay: 'Solde restant dû'
 admin.sheet.details.title: 'Fiche de présentation'
 admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
+admin.sheet.linkedTo: 'Fiche liée à'
 admin.sheet.duplication: 'Dupliquer les fiches'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
