@@ -1549,6 +1549,13 @@ admin_users_list:
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\ListAction }
 
+admin_users_import:
+    path: /event/{event}/users/import
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ImportAction }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
 admin_user_event_scan:
     path: /event/{event}/access/scan
     requirements:

@@ -279,6 +279,8 @@ admin.extraParameter.type.tech_event_configuration: 'Configuration TechEvent'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés'
 admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
 admin.extraParameter.update.title: 'Modification du paramètre supplémentaire %type%'
+admin.leni_user.import.title: 'Importation des utilisateurs Leni'
+admin.leni_user.import.sample: 'Exemple de données du fichier d''import :'
 admin.filter: Filtrer
 admin.filter_by: 'Filtrer par'
 admin.filters.all: Tous
