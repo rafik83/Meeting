@@ -258,6 +258,7 @@ navigation.category.billing: Facturation
 navigation.category.catalog: Catalogue
 navigation.category.forms: 'Ma venue'
 navigation.category.happening: 'Gestion RDV'
+navigation.category.leni_badge_link: 'Badges / E-invitations'
 navigation.category.meeting: 'Gestion RDV'
 navigation.category.member_space: 'Espace participant'
 navigation.category.package: 'Forfait de participation'

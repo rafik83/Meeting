@@ -244,6 +244,7 @@ navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
 navigation.category.forms: 'My venue'
 navigation.category.happening: 'Meeting administration'
+navigation.category.leni_badge_link: 'Badges / E-invitations'
 navigation.category.meeting: 'My meetings'
 navigation.category.member_space: 'Participant area'
 navigation.category.package: 'Registration package'

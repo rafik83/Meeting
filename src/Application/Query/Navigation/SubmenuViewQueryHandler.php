@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuView;
@@ -64,6 +65,20 @@ class SubmenuViewQueryHandler
             );
 
             $buttonsViews = array_merge($buttonsViews, $sheetButtonViews);
+        }
+
+
+        $leniBadgeLinkButtonView = $this->queryBus->handle(
+            new LeniBadgeLinkSubmenuViewQuery(
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
+                $submenuViewQuery->locale,
+                $submenuViewQuery->sheet
+            )
+        );
+
+        if(null !== $leniBadgeLinkButtonView) {
+            $buttonsViews[] = $leniBadgeLinkButtonView;
         }
 
         $catalogButtonViews = $this->queryBus->handle(

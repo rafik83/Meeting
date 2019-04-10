@@ -4408,6 +4408,16 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery }
 
+
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Leni\BadgeLink\AvailableChecker'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery }
+
     ##
     # Mass Assignment query handler
     ##
@@ -6802,3 +6812,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'

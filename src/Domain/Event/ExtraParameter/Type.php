@@ -26,6 +26,7 @@ class Type
     public const TYPE_LENI_SENDING_REQUEST = 'leni_sending_request';
     public const TYPE_LENI_MODE = 'leni_mode';
     public const TYPE_LENI_PREDEFINED_FILTERS = 'leni_predefined_filters';
+    public const TYPE_LENI_BADGE_LINK = 'leni_badge_link';
 
     public const VALUE_LENI_MODE_SAVE = 'save';
     public const VALUE_LENI_MODE_GET = 'get';
@@ -67,6 +68,7 @@ class Type
         self::TYPE_LENI_DATA_MAPPING,
         self::TYPE_LENI_SENDING_REQUEST,
         self::TYPE_LENI_PREDEFINED_FILTERS,
+        self::TYPE_LENI_BADGE_LINK,
         self::TYPE_VIANEO_ENDPOINT,
         self::TYPE_VIANEO_CONCERNED_TYPES_ID,
         self::TYPE_COMEXPOSIUM_EVENT_REFERENCE,
