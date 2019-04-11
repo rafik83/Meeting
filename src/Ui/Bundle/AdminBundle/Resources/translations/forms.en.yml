@@ -341,6 +341,7 @@ form.extra_parameter_create.children.type.choices.leni_save_endpoint: 'LENI Save
 form.extra_parameter_create.children.type.choices.leni_sending_request: 'LENI Paramètre SendingRequests'
 form.extra_parameter_create.children.type.choices.leni_user: 'User LENI code'
 form.extra_parameter_create.children.type.choices.tech_event_configuration: 'TechEvent configuration'
+form.extra_parameter_create.children.type.choices.tracking_code: 'Tracking code'
 form.extra_parameter_create.children.type.choices.vianeo_concerned_types_id: 'Vianeo : concerned types of participation Ids (separated by a comma)'
 form.extra_parameter_create.children.type.choices.vianeo_endpoint: 'Vianeo endpoint'
 form.extra_parameter_create.children.type.label: Type
