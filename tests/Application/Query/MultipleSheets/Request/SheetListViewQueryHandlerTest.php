@@ -219,9 +219,14 @@ class SheetListViewQueryHandlerTest extends TestCase
         $configuration->isMeetingRequestUpdateLocked()->shouldBeCalled()->willReturn(false);
 
         $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+        $sheet1->getId()->shouldBeCalled()->willReturn(1);
+
         $sheet2 = $this->prophesize(Sheet::class);
+        $sheet2->getId()->shouldBeCalled()->willReturn(2);
 
         $sheetMet1 = $this->prophesize(Sheet::class);
+        $sheetMet1->getId()->shouldBeCalled()->willReturn(3);
 
         $multipleSheets = [
             1 => $sheet1->reveal(),
@@ -231,9 +236,6 @@ class SheetListViewQueryHandlerTest extends TestCase
         $sheetsMet = [
             $sheetMet1->reveal(),
         ];
-
-        $sheet1->getEvent()->shouldBeCalled()->willReturn($event->reveal());
-        $sheetMet1->getId()->shouldBeCalled()->willReturn(3);
 
         $locale = 'fr';
         $page   = 1;

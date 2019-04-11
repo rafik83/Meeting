@@ -1,51 +1,40 @@
 <div class="row">
     {{ form_start(filterForm) }}
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="col-md-3">
-                    {{ form_label(filterForm.otherSheet) }}
-                </th>
-                <th class="col-md-2">
-                    {{ form_label(filterForm.state) }}
-                </th>
-                <th class="col-md-2">
-                    {{ form_label(filterForm.type) }}
 
-                </th>
-                <th class="col-md-3">
-                    {{ form_label(filterForm.sheetConcerned) }}
-                </th>
-                <th class="col-md-2">
-                    {{ form_label(filterForm.user) }}
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="col-md-3">
-                    {{ form_widget(filterForm.otherSheet) }}
-                    {{ form_errors(filterForm.otherSheet) }}
-                </td>
-                <td class="col-md-2">
-                    {{ form_widget(filterForm.state) }}
-                    {{ form_errors(filterForm.state) }}
-                </td>
-                <td class="col-md-2">
-                    {{ form_widget(filterForm.type) }}
-                    {{ form_errors(filterForm.type) }}
-                </td>
-                <td class="col-md-3">
-                    {{ form_widget(filterForm.sheetConcerned) }}
-                    {{ form_errors(filterForm.sheetConcerned) }}
-                </td>
-                <td class="col-md-2">
-                    {{ form_widget(filterForm.user) }}
-                    {{ form_errors(filterForm.user) }}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-md-3">
+            {{ form_label(filterForm.otherSheet) }}
+            {{ form_widget(filterForm.otherSheet) }}
+            {{ form_errors(filterForm.otherSheet) }}
+        </div>
+
+        <div class="col-md-2">
+            {{ form_label(filterForm.state) }}
+            {{ form_widget(filterForm.state) }}
+            {{ form_errors(filterForm.state) }}
+        </div>
+
+        <div class="col-md-2">
+            {{ form_label(filterForm.type) }}
+            {{ form_widget(filterForm.type) }}
+            {{ form_errors(filterForm.type) }}
+        </div>
+
+        {% if filterForm.sheetConcerned is defined %}
+            <div class="col-md-3">
+                {{ form_label(filterForm.sheetConcerned) }}
+                {{ form_widget(filterForm.sheetConcerned) }}
+                {{ form_errors(filterForm.sheetConcerned) }}
+            </div>
+        {% endif %}
+
+        <div class="col-md-2">
+            {{ form_label(filterForm.user) }}
+            {{ form_widget(filterForm.user) }}
+            {{ form_errors(filterForm.user) }}
+        </div>
+    </div>
+
     <div class="text-right">
         <a href="{{ resetLink }}" title="{{ 'multiple_sheets.request.filter.reset'|trans }}" class="btn btn-link">
             {{ 'multiple_sheets.request.filter.reset'|trans }}

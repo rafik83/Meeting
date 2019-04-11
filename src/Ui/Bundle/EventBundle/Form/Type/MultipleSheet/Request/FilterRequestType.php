@@ -89,17 +89,6 @@ class FilterRequestType extends AbstractType
                     'data-placeholder' => $this->translator->trans('form.multiple_sheet_request_filter_request_type.children.type.filter.all', [], 'forms'),
                 ],
             ])
-            ->add('sheetConcerned', ChoiceType::class, [
-                'required'     => false,
-                'choices'      => $options['sheets'],
-                'choice_label' => function (Sheet $sheet) {
-                    return $sheet->getTitle();
-                },
-                'attr'         => [
-                    'class'            => 'form-control select2',
-                    'data-placeholder' => '',
-                ],
-            ])
             ->add('user', ChoiceType::class, [
                 'required' => false,
                 'choices' => array_merge([
@@ -118,6 +107,25 @@ class FilterRequestType extends AbstractType
                 ],
             ])
         ;
+
+        if (count($options['sheets']) > 1) {
+            $builder
+                ->add(
+                    'sheetConcerned',
+                    ChoiceType::class,
+                    [
+                        'required' => false,
+                        'choices' => $options['sheets'],
+                        'choice_label' => function (Sheet $sheet) {
+                            return $sheet->getTitle();
+                        },
+                        'attr' => [
+                            'class' => 'form-control select2',
+                            'data-placeholder' => '',
+                        ],
+                    ]
+                );
+        }
     }
 
     /**

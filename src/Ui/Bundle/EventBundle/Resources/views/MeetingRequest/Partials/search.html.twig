@@ -113,6 +113,8 @@
                         {{ 'event.meeting.listRequest.filter.propositions'|trans }}
                     </button>
                 </div>
+            {% else %}
+                {{ include('@Event/MeetingRequest/Partials/switchListMode.html.twig', { 'mode': 'thumbnail' }) }}
             {% endif %}
         </div>
 
