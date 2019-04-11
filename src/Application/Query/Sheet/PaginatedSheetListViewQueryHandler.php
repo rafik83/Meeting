@@ -138,6 +138,17 @@ class PaginatedSheetListViewQueryHandler
      */
     private function createSheetListView(Sheet $sheet, $locale, Admin $admin, Trace $trace = null)
     {
+        $linkedSheetsTitle = [];
+        $linkedSheets = $sheet->getLinkedSheets();
+
+        if (null !== $linkedSheets) {
+            foreach ($linkedSheets->getSheets() as $linkedSheet) {
+                if ($linkedSheet !== $sheet) {
+                    $linkedSheetsTitle[] = $linkedSheet->getTitle();
+                }
+            }
+        }
+
         if (null === $sheet->getParticipantOwner()) {
             $firstName = $sheet->getOwner()->getAccount()->getFirstName();
             $lastName  = $sheet->getOwner()->getAccount()->getLastName();
@@ -156,6 +167,7 @@ class PaginatedSheetListViewQueryHandler
             $sheet->isInCatalog(),
             $sheet->attend(),
             $sheet->getType()->getCategoriesTitles($locale),
+            $linkedSheetsTitle,
             $sheet->getType()->getTitle($locale),
             new SheetParticipantView(
                 $firstName,

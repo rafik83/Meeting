@@ -1288,6 +1288,13 @@ services:
         tags:
             - { name: tactician.handler, typehints: true }
 
+    Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\DeleteHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
+            - '@Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     proximum.vimeet.application.command.sheet.group.update_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Group\UpdateHandler
         arguments:
@@ -3777,6 +3784,7 @@ services:
     Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin\LinkedSheetsListViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
+            - '@Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria'
         tags:
             - { name: tactician.handler, typehints: true }
 
@@ -4400,6 +4408,16 @@ services:
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery }
+
+
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Leni\BadgeLink\AvailableChecker'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery }
 
     ##
     # Mass Assignment query handler
@@ -6331,6 +6349,14 @@ services:
             - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator.inner'
 
     #
+    # Linked Sheets
+    #
+
+    Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
+    #
     # Command Aggregator
     #
     command.aggregate.participant.full_unavailability_handler:
@@ -6787,3 +6813,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'

@@ -17,6 +17,7 @@
 !bin/symfony_requirements
 /composer.phar
 /*.sql
+/behat.yml
 
 # Tests
 /var/tests/*

@@ -355,6 +355,16 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\ImportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@router'
+            - '@translator'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Badge\ShowAction:
         arguments:
             - '@adapter.authorization_checker'
@@ -459,6 +469,13 @@ services:
             - '@router.default'
             - '@session.flash_bag'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\DeleteAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@router.default'
+            - '@session.flash_bag'
 
     #
     # Catalog

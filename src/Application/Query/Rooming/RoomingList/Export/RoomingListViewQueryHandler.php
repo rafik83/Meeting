@@ -52,11 +52,9 @@ class RoomingListViewQueryHandler
 
             $arrival = (new \DateTime())
                 ->setTimestamp($stay->getArrival()->getTimestamp())
-                ->setTimezone(new \DateTimeZone($query->event->getTimeZone()))
             ;
             $departure = (new \DateTime())
                 ->setTimestamp($stay->getDeparture()->getTimestamp())
-                ->setTimezone(new \DateTimeZone($query->event->getTimeZone()))
             ;
 
             $stayViews[] = new StayView(

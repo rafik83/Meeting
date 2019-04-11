@@ -56,11 +56,19 @@ class SheetManager
      * @param Type|null        $type
      * @param string|null      $title
      * @param Sheet\Group|null $group
+     * @param string           $createdAt
      *
      * @return Sheet
+     * @throws \Exception
      */
-    public function create(Event $event, User $user = null, Type $type = null, $title = null, Sheet\Group $group = null)
-    {
+    public function create(
+        Event $event,
+        User $user = null,
+        Type $type = null,
+        $title = null,
+        Sheet\Group $group = null,
+        string $createdAt = 'now'
+    ) {
         if (null === $user) {
             $user = $this->userManager->create();
         }
@@ -69,7 +77,7 @@ class SheetManager
             $type = $this->typeManager->create($event);
         }
 
-        $sheet = SheetFactory::create($event, $user, new \DateTime(), $type);
+        $sheet = SheetFactory::create($event, $user, new \DateTime($createdAt), $type);
         $sheet->setData([]);
         $sheet->setRegistrationData([]);
         $sheet->setTitle($title);

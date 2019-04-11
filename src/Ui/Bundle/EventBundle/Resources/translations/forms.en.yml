@@ -42,6 +42,10 @@ form.email.placeholder: 'Enter your email'
 form.group.participant.submit: Save
 form.login.children.password.placeholder: Password
 form.login.children.rememberMe.label: 'Keep me logged in'
+form.move_meeting_slot.children.content.label: 'Comment to your contact'
+form.move_meeting_slot.children.meetingSlot.label: 'Choose an available slot'
+form.move_meeting.children.content.label: 'Comment to your contact'
+form.move_meeting.children.meetingSlot.label: 'Choose an available slot'
 form.multi_upload_data.children.submit.label: Submit
 form.multi_upload_data.children.uploads.label_add: Add
 form.multi_upload_data.children.uploads.label_delete: Delete
@@ -89,6 +93,7 @@ form.payment_choice.children.paymentMode.bank_transfer: 'Bank transfer'
 form.payment_choice.children.paymentMode.paypal: 'Credit card or Paypal'
 form.register.newUser.password.placeholder: 'Choose your password'
 form.register.newUser.repeatedPassword.placeholder: 'confirm password'
+form.remove_meeting.children.content.label: 'Comment to your contact'
 form.search.autocomplete.atLeastThreeChars: 'type at least 3 characters'
 form.search.autocomplete.atLeastTwoChars: 'type at least 2 characters'
 form.search.autocomplete.searching: searching...

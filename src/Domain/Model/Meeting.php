@@ -331,7 +331,19 @@ class Meeting implements MessageSubjectInterface
             return $this->toSheet;
         }
 
-        return $this->fromSheet;
+        if ($this->toSheet === $sheet) {
+            return $this->fromSheet;
+        }
+
+        if ($this->fromSheet->hasLinkedSheet($sheet)) {
+            return $this->toSheet;
+        }
+
+        if ($this->toSheet->hasLinkedSheet($sheet)) {
+            return $this->fromSheet;
+        }
+
+        throw new \InvalidArgumentException('Sheet unknown for this meeting');
     }
 
     /**

@@ -265,6 +265,7 @@ admin.extraParameter.type.comexposium_sso_salon: 'Comexposium SSO Salon'
 admin.extraParameter.type.comexposium_sso_session_salon: 'Comexposium SSO SessionSalon'
 admin.extraParameter.type.comexposium_visitor_type_id: 'Comexposium : Id du type de participation Visiteur concerné'
 admin.extraParameter.type.crisp_site_id: 'Crisp site ID'
+admin.extraParameter.type.leni_badge_link: 'LENI lien pour le badge'
 admin.extraParameter.type.leni_event: 'Code Event LENI'
 admin.extraParameter.type.leni_get_endpoint: 'LENI Get endpoint'
 admin.extraParameter.type.leni_mode: 'LENI Mode'
@@ -278,6 +279,8 @@ admin.extraParameter.type.tech_event_configuration: 'Configuration TechEvent'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés'
 admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
 admin.extraParameter.update.title: 'Modification du paramètre supplémentaire %type%'
+admin.leni_user.import.title: 'Importation des utilisateurs Leni'
+admin.leni_user.import.sample: 'Exemple de données du fichier d''import :'
 admin.filter: Filtrer
 admin.filter_by: 'Filtrer par'
 admin.filters.all: Tous
@@ -386,13 +389,16 @@ admin.invoice.list.title: 'Nom backoffice'
 admin.invoice.pdf: 'Voir la facture'
 admin.invoice.show: Voir
 admin.invoice.title: 'Liste des préfixes de numéro de facture'
+admin.linked_sheets.column.created_at: 'Date de création'
 admin.linked_sheets.column.sheets: Fiches
-admin.linked_sheets.column.created_at: Date de création
-admin.linked_sheets.create: Lier des fiches
-admin.linked_sheets.create.title: Liaison de fiches
-admin.linked_sheets.no_result: Aucun résultat
-admin.linked_sheets.index: Fiches liées
-admin.linked_sheets.title: Fiches liées
+admin.linked_sheets.create: 'Lier des fiches'
+admin.linked_sheets.create.title: 'Liaison de fiches'
+admin.linked_sheets.delete: 'Supprimer'
+admin.linked_sheets.delete_confirm_message: 'Êtes vous certain de délier ces fiches ?'
+admin.linked_sheets.disabled_deletion: 'La suppression est impossible car il existe au moins un RDV.'
+admin.linked_sheets.index: 'Fiches liées'
+admin.linked_sheets.no_result: 'Aucun résultat'
+admin.linked_sheets.title: 'Fiches liées'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request_sheets_list.link: 'Par fiche de participation'
 admin.meeting_request.action.export: Exporter
@@ -898,6 +904,7 @@ admin.sheet.details.remainingToPay: 'Solde restant dû'
 admin.sheet.details.title: 'Fiche de présentation'
 admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
+admin.sheet.linkedTo: 'Fiche liée à'
 admin.sheet.duplication: 'Dupliquer les fiches'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
@@ -994,7 +1001,7 @@ admin.sheets_group.column.title: Titre
 admin.sheets_group.create: 'Nouvelle entité multi-fiches'
 admin.sheets_group.create.title: 'Création d''une entité muti-fiches'
 admin.sheets_group.index: Multi-fiches
-admin.sheets_group.no_result: 'Aucun résultat'
+admin.sheets_group.no_result: 'Aucun résultats'
 admin.sheets_group.title: Multi-fiches
 admin.sheets_group.update: 'Modification de l''entité'
 admin.sheets_group.update.link: Modifier

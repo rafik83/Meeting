@@ -125,6 +125,14 @@ services:
             - '@Proximum\Vimeet\Domain\Sheet\HasRemainingToPay'
 
     #
+    # Leni badge link
+    #
+
+    Proximum\Vimeet\Application\Leni\BadgeLink\AvailableChecker:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler'
+
+    #
     # File
     #
     Proximum\Vimeet\Domain\File\FileFactory:
