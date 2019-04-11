@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Participant\CardView;
+use Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -54,6 +55,15 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $sheet = $this->prophesize(Sheet::class);
         $sheetMet = $this->prophesize(Sheet::class);
+        $linkedSheets = $this->prophesize(Sheet\LinkedSheets::class);
+
+        $sheetMetLinkedSheet = $this->prophesize(Sheet::class);
+        $sheetMetLinkedSheet->getTitle()->willReturn('sheetMetLinkedSheet');
+
+        $linkedSheets->getSheets()->willReturn([$sheetMet->reveal(), $sheetMetLinkedSheet->reveal()]);
+
+        $sheetMet->hasLinkedSheets()->willReturn(true);
+        $sheetMet->getLinkedSheets()->willReturn($linkedSheets->reveal());
 
         $sheet->getType()->willReturn($type);
         $sheetMet->getType()->willReturn($type);
@@ -125,7 +135,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             1,
             'userSheetTitle',
             2,
-            'sheetMetTitle',
+            'sheetMetTitle - sheetMetLinkedSheet',
             $begin,
             $end,
             'ref',
@@ -157,6 +167,9 @@ class MeetingViewQueryHandlerTest extends TestCase
         $type = new Type($event);
         $sheet = $this->prophesize(Sheet::class);
         $sheetMet = $this->prophesize(Sheet::class);
+
+        $sheetMet->hasLinkedSheets()->willReturn(false);
+
         $sheet->getType()->willReturn($type);
         $sheetMet->getType()->willReturn($type);
 
