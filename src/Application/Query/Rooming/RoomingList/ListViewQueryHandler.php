@@ -10,10 +10,12 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\SheetView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayToAssignView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\DaysHelper;
 use Proximum\Vimeet\Domain\Time\MidnightTransformer;
 use Proximum\Vimeet\Domain\Time\OverlappedTimeRangeTruncater;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
@@ -77,17 +79,22 @@ class ListViewQueryHandler
             $userIdsByStayId[$stayView->stayId][] = $stayView->userId;
         }
 
+        $defaultFirstRoomingDay = $this->getDefaultFirstRoomingDay($query->event);
+        $defaultLastRoomingDay = $this->getDefaultLastRoomingDay($query->event);
+
         foreach ($userSheetTypeViews as $userSheetTypeView) {
             $userId = $userSheetTypeView->userId;
             $userStayViews = $stayViewsByUserId[$userId] ?? [];
 
             if (!isset($listDetailViews[$userId])) {
+                $areDatesFilledByUser = $userSheetTypeView->arrival !== null && $userSheetTypeView->departure !== null;
                 $listDetailViews[$userId] = new ListDetailView(
                     $userSheetTypeView->userId,
                     $userSheetTypeView->firstName,
                     $userSheetTypeView->lastName,
-                    $userSheetTypeView->arrival,
-                    $userSheetTypeView->departure,
+                    $userSheetTypeView->arrival ?? $defaultFirstRoomingDay,
+                    $userSheetTypeView->departure ?? $defaultLastRoomingDay,
+                    $areDatesFilledByUser,
                     $userSheetTypeView->hasArrivalHours,
                     $userSheetTypeView->hasDepartureHours,
                     isset($comments[$userId]) && $comments[$userId] instanceof ExtraData
@@ -204,5 +211,19 @@ class ListViewQueryHandler
                 }
             );
         }
+    }
+
+    private function getDefaultFirstRoomingDay(Event $event): \DateTimeInterface
+    {
+        $defaultRoomingFirstDay = DaysHelper::cloneDateTime($event->getFirstDay()->getDay());
+
+        return $defaultRoomingFirstDay->sub(new \DateInterval('P1D'));
+    }
+
+    private function getDefaultLastRoomingDay(Event $event): \DateTimeInterface
+    {
+        $defaultRoomingLastDay = DaysHelper::cloneDateTime($event->getLastDay()->getDay());
+
+        return $defaultRoomingLastDay;
     }
 }

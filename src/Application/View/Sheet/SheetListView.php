@@ -124,6 +124,9 @@ class SheetListView
     /** @var null|\DateTimeInterface */
     public $reminderDate;
 
+    /** @var string[] $inkedSheetsTitle */
+    public $linkedSheetsTitle;
+
     /**
      * @param int                     $id
      * @param string                  $title
@@ -147,6 +150,7 @@ class SheetListView
      * @param string|null             $groupTitle
      * @param string|null             $spotReference
      * @param Trace|null              $trace
+     * @param string[]                $linkedSheetsTitle
      */
     public function __construct(
         $id,
@@ -158,6 +162,7 @@ class SheetListView
         $inCatalog,
         $attend,
         array $categories,
+        array $linkedSheetsTitle,
         $type,
         SheetParticipantView $owner,
         $follower,
@@ -199,6 +204,7 @@ class SheetListView
             $this->traceAt     = $trace->getDate();
             $this->traceBy     = $trace->getAuthor();
         }
+        $this->linkedSheetsTitle = $linkedSheetsTitle;
     }
 
     /**

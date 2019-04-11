@@ -165,6 +165,14 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
+     * @return Participant[]
+     */
+    public function getFromParticipantsArray(): array
+    {
+        return $this->fromParticipants->toArray();
+    }
+
+    /**
      * @param Participant $participant
      *
      * @return Meeting
@@ -212,6 +220,14 @@ class Meeting implements MessageSubjectInterface
     public function getToParticipants()
     {
         return $this->toParticipants;
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getToParticipantsArray(): array
+    {
+        return $this->toParticipants->toArray();
     }
 
     /**
@@ -315,7 +331,19 @@ class Meeting implements MessageSubjectInterface
             return $this->toSheet;
         }
 
-        return $this->fromSheet;
+        if ($this->toSheet === $sheet) {
+            return $this->fromSheet;
+        }
+
+        if ($this->fromSheet->hasLinkedSheet($sheet)) {
+            return $this->toSheet;
+        }
+
+        if ($this->toSheet->hasLinkedSheet($sheet)) {
+            return $this->fromSheet;
+        }
+
+        throw new \InvalidArgumentException('Sheet unknown for this meeting');
     }
 
     /**
@@ -332,6 +360,14 @@ class Meeting implements MessageSubjectInterface
         }
 
         if ($this->toSheet->hasUser($user)) {
+            return $this->toSheet;
+        }
+
+        if ($this->fromSheet->hasUserInLinkedSheets($user)) {
+            return $this->fromSheet;
+        }
+
+        if ($this->toSheet->hasUserInLinkedSheets($user)) {
             return $this->toSheet;
         }
 
@@ -408,9 +444,9 @@ class Meeting implements MessageSubjectInterface
     public function getParticipants(Sheet $sheet)
     {
         if ($sheet === $this->fromSheet) {
-            return $this->getFromParticipants()->toArray();
+            return $this->getFromParticipantsArray();
         } elseif ($sheet === $this->toSheet) {
-            return $this->getToParticipants()->toArray();
+            return $this->getToParticipantsArray();
         }
 
         return [];
@@ -449,7 +485,7 @@ class Meeting implements MessageSubjectInterface
      */
     public function getAllParticipants()
     {
-        return array_merge($this->getFromParticipants()->toArray(), $this->getToParticipants()->toArray());
+        return array_merge($this->getFromParticipantsArray(), $this->getToParticipantsArray());
     }
 
     /**

@@ -95,6 +95,10 @@ class TypeCreateType extends AbstractType
             ->add('canMoveMeeting', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add(
+                'areAllSheetParticipantsAssignedToMeeting', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 

@@ -1,0 +1,21 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.leni_user.import.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.file) }}
+    {{ form_row(form.charset) }}
+
+    <div class="form-group">
+        <div class="col-lg-9 col-md-9 col-sm-9 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+            {{ 'admin.leni_user.import.sample'|trans }}
+                <pre>
+                    userId;leniUserId<br>
+                    92125;x-y-z<br>
+                    34891;z-a-b
+                </pre>
+        </div>
+    </div>
+{% endblock form_content %}
+
+{% block goback_link path('admin_users_list', {'event': event.id}) %}

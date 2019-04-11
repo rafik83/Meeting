@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -767,7 +768,7 @@ class SheetRepository implements SheetRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet, participant, type, typeTranslation, category, categoryTranslation, user')
+            ->select('sheet, participant, type, typeTranslation, category, categoryTranslation, user, linked_sheets')
             ->from(Sheet::class, 'sheet', 'sheet.id')
             ->leftJoin('sheet.participants', 'participant')
             ->leftJoin('participant.user', 'user')
@@ -775,6 +776,8 @@ class SheetRepository implements SheetRepositoryInterface
             ->leftJoin('type.translations', 'typeTranslation')
             ->leftJoin('type.categories', 'category')
             ->leftJoin('category.translations', 'categoryTranslation')
+            ->leftJoin('sheet.linkedSheets', 'linked_sheets')
+            ->leftJoin('linked_sheets.sheets', 'linked_sheets_sheet')
             ->where('sheet.id IN (:sheets)')
             ->setParameter('sheets', $sheets);
 
@@ -1283,6 +1286,27 @@ class SheetRepository implements SheetRepositoryInterface
             ->andWhere('sheet.enable = true')
             ->orderBy('sheet.title')
             ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function filterWithScheduledMeetings(array $sheets): array
+    {
+      $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet IN (:sheets)')
+            ->andWhere('EXISTS (SELECT 1
+                                 FROM Entity:Meeting meeting
+                                 WHERE (meeting.fromSheet = sheet or meeting.toSheet = sheet)
+                                    AND meeting.state = :state)')
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setParameter('sheets', $sheets);
 
         return $queryBuilder->getQuery()->getResult();
     }

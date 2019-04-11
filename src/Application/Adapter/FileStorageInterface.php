@@ -66,4 +66,9 @@ interface FileStorageInterface
      * @param bool   $overwrite Whether to overwrite the target if it already exists
      */
     public function rename(string $origin, string $target, bool $overwrite = false): void;
+
+    /**
+     * Get file string content
+     */
+    public function getContents(string $filename): string;
 }

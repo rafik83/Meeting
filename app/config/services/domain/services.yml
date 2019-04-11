@@ -51,6 +51,11 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@Proximum\Vimeet\Infrastructure\Repository\CartRowParticipantRepository'
 
+    Proximum\Vimeet\Domain\Unavailability\SystemGenerator\GenerateParticipantProductSystemUnavailabilities:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\Generator'
+
     #
     # Participant
     #
@@ -118,6 +123,14 @@ services:
             - '@Proximum\Vimeet\Domain\KeyDates\Checker\EnableBadgeForParticipantDateAccessChecker'
             - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
             - '@Proximum\Vimeet\Domain\Sheet\HasRemainingToPay'
+
+    #
+    # Leni badge link
+    #
+
+    Proximum\Vimeet\Application\Leni\BadgeLink\AvailableChecker:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler'
 
     #
     # File

@@ -515,6 +515,14 @@ class Request implements MessageSubjectInterface
             return $this->toParticipants->isEmpty();
         }
 
+        if ($this->from->hasLinkedSheet($sheet)) {
+            return $this->fromParticipants->isEmpty();
+        }
+
+        if ($this->to->hasLinkedSheet($sheet)) {
+            return $this->toParticipants->isEmpty();
+        }
+
         throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
     }
 

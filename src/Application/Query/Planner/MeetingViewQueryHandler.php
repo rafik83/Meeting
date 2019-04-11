@@ -159,57 +159,96 @@ class MeetingViewQueryHandler
         $this->recursiveDepth = 0;
     }
 
-    private function getParticipantsList(MeetingViewQuery $query, Request $request, Meeting $meeting = null): array
+    /**
+     * @param Participant[] $participants
+     *
+     * @return ParticipantView[]
+     */
+    private function getParticipantViews(array $participants): array
     {
-        $participantsList = [];
+        $participantViews = [];
 
-        if (!$query->isSolutionFromScratch() && null !== $meeting) {
-            foreach ($meeting->getFromParticipants() as $participant) {
-                $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
-            }
-            foreach ($meeting->getToParticipants() as $participant) {
-                $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
-            }
-        } else {
-            if ($request->hasFromParticipants()) {
-                /** @var Participant $participant */
-                foreach ($request->getFromParticipantsArray() as $participant) {
-                    $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
-                }
-            } else {
-                // No preference on from
-                // If sheet has only one participant
-                if (1 === $request->getFromSheet()->countParticipant()) {
-                    /** @var Participant $participant */
-                    foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
-                        $participantsList['fromParticipant'][] = $this->getParticipantById($participant->getId());
-                    }
-                } else {
-                    $this->resetRecursiveDepth();
-                    $participantsList['fromParticipant'][] = $this->getParticipantOfSheet($request->getFromSheet());
-                }
-            }
-
-            if ($request->hasToParticipants()) {
-                foreach ($request->getToParticipantsArray() as $participant) {
-                    $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
-                }
-            } else {
-                // not preference on to
-                // If sheet has only one participant
-                if (1 === $request->getToSheet()->countParticipant()) {
-                    /** @var Participant $participant */
-                    foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
-                        $participantsList['toParticipant'][] = $this->getParticipantById($participant->getId());
-                    }
-                } else {
-                    $this->resetRecursiveDepth();
-                    $participantsList['toParticipant'][] = $this->getParticipantOfSheet($request->getToSheet());
-                }
-            }
+        foreach ($participants as $participant) {
+            $participantViews[] = $this->getParticipantById($participant->getId());
         }
 
-        return $participantsList;
+        return $participantViews;
+    }
+
+    /**
+     * @param Sheet         $sheet
+     * @param Participant[] $meetingParticipants
+     * @param Participant[] $requestParticipants
+     *
+     * @return ParticipantView[]
+     */
+    private function getRequestParticipants(Sheet $sheet, array $meetingParticipants, array $requestParticipants): array
+    {
+        $participantViews = [];
+
+        if ($sheet->getType()->areAllSheetParticipantsAssignedToMeeting()) {
+            if ($sheet->hasLinkedSheets()) {
+                return $this->getParticipantViews($sheet->getLinkedSheetsParticipants());
+            }
+
+            return $this->getParticipantViews($sheet->getParticipantsArray());
+        }
+
+        if (count($meetingParticipants)) {
+            return $this->getParticipantViews($meetingParticipants);
+        }
+
+        if (count($requestParticipants)) {
+            foreach ($requestParticipants as $participant) {
+                $participantViews[] = $this->getParticipantById($participant->getId());
+            }
+
+            return $participantViews;
+        }
+
+        // No preference and if sheet has only one participant
+        if (1 === $sheet->countParticipants()) {
+            foreach ($sheet->getParticipantsArray() as $participant) {
+                $participantViews[] = $this->getParticipantById($participant->getId());
+            }
+
+            return $participantViews;
+        }
+
+        // Assign a random participant
+        $this->resetRecursiveDepth();
+        $participantViews[] = $this->getParticipantOfSheet($sheet);
+
+        return $participantViews;
+    }
+
+    /**
+     * @param MeetingViewQuery $query
+     * @param Request          $request
+     * @param Meeting|null     $meeting
+     *
+     * @return ParticipantView[]
+     */
+    private function getParticipantsList(MeetingViewQuery $query, Request $request, Meeting $meeting = null): array
+    {
+        $hasMeetingAndSolutionNotFromScratch = null !== $meeting && !$query->isSolutionFromScratch();
+
+        return [
+            'fromParticipant' => $this->getRequestParticipants(
+                $request->getFromSheet(),
+                $hasMeetingAndSolutionNotFromScratch ? $meeting->getFromParticipantsArray() : [],
+                !$hasMeetingAndSolutionNotFromScratch && $request->hasFromParticipants()
+                    ? $request->getFromParticipantsArray()
+                    : []
+            ),
+            'toParticipant' => $this->getRequestParticipants(
+                $request->getToSheet(),
+                $hasMeetingAndSolutionNotFromScratch ? $meeting->getToParticipantsArray() : [],
+                !$hasMeetingAndSolutionNotFromScratch && $request->hasToParticipants()
+                    ? $request->getToParticipantsArray()
+                    : []
+            ),
+        ];
     }
 
     /**
@@ -345,18 +384,22 @@ class MeetingViewQueryHandler
     {
         foreach ($this->requests as $request) {
             if (!$request->hasFromParticipants()) {
-                if (!isset($this->dispatch[$request->getFromSheet()->getId()]['request'])) {
-                    $this->dispatch[$request->getFromSheet()->getId()]['request'] = 1;
+                $fromSheetId = $request->getFromSheet()->getId();
+
+                if (!isset($this->dispatch[$fromSheetId]['request'])) {
+                    $this->dispatch[$fromSheetId]['request'] = 1;
                 } else {
-                    ++$this->dispatch[$request->getFromSheet()->getId()]['request'];
+                    ++$this->dispatch[$fromSheetId]['request'];
                 }
             }
 
             if (!$request->hasToParticipants()) {
-                if (!isset($this->dispatch[$request->getToSheet()->getId()]['request'])) {
-                    $this->dispatch[$request->getToSheet()->getId()]['request'] = 1;
+                $toSheetId = $request->getToSheet()->getId();
+
+                if (!isset($this->dispatch[$toSheetId]['request'])) {
+                    $this->dispatch[$toSheetId]['request'] = 1;
                 } else {
-                    ++$this->dispatch[$request->getToSheet()->getId()]['request'];
+                    ++$this->dispatch[$toSheetId]['request'];
                 }
             }
         }

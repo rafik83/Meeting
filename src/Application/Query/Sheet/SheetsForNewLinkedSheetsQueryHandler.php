@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
-use Proximum\Vimeet\Application\View\Group\Sheet\SheetView;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\View\SheetView;
 
 class SheetsForNewLinkedSheetsQueryHandler
 {
@@ -25,6 +25,11 @@ class SheetsForNewLinkedSheetsQueryHandler
         $this->sheetRepository = $sheetRepository;
     }
 
+    /**
+     * @param SheetsForNewLinkedSheetsQuery $query
+     *
+     * @return SheetView[]
+     */
     public function handle(SheetsForNewLinkedSheetsQuery $query)
     {
         $sheets = $this->sheetRepository->getNotLinkedSheets($query->event);

@@ -173,4 +173,9 @@ class LocalFileStorageAdapter implements FileStorageInterface
     {
         $this->fileSystemAdapter->rename($origin, $target, $overwrite);
     }
+
+    public function getContents(string $filename): string
+    {
+        return file_get_contents($filename);
+    }
 }

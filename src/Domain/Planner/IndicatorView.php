@@ -121,6 +121,10 @@ class IndicatorView
         int $massUnavailabilitiesCount,
         ?int $numberOfMeetingsPerPlanning
     ) {
+        if (0 === $participantsCount) {
+            throw new \InvalidArgumentException('ParticipantsCount must be > 0');
+        }
+
         $this->slotTotal = $slotTotal;
         $this->participantsCount = $participantsCount;
         $this->unavailabilitiesCount = $unavailabilitiesCount;
@@ -133,10 +137,11 @@ class IndicatorView
         $this->slotCount = $slotTotal * $sheetsPlanningQuantity;
         $this->slotsParticipantsCount = $slotTotal * $participantsCount;
 
+        $availableSlotsPerParticipant = $slotTotal - (int) floor($massUnavailabilitiesCount / $participantsCount);
 
-        $minNumberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning !== null ?
-            min($numberOfMeetingsPerPlanning, $slotTotal - $massUnavailabilitiesCount)
-            : $slotTotal - $massUnavailabilitiesCount
+        $minNumberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning !== null
+            ? min($numberOfMeetingsPerPlanning, $availableSlotsPerParticipant)
+            : $availableSlotsPerParticipant
         ;
         $this->maxMeetingAvailable = max(
             0,

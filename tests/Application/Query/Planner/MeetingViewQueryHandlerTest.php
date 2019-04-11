@@ -20,9 +20,14 @@ use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
@@ -127,5 +132,158 @@ class MeetingViewQueryHandlerTest extends TestCase
         ];
 
         $this->assertEquals($expected, $result);
+    }
+
+    public function testAllSheetParticipantsAssignedToMeeting()
+    {
+        $event = $this->prophesize(Event::class);
+
+        $sheet1Participant1 = $this->prophesize(Participant::class);
+        $sheet1Participant1->getId()->shouldBeCalled()->willReturn(101);
+
+        $sheet1Participant2 = $this->prophesize(Participant::class);
+        $sheet1Participant2->getId()->shouldBeCalled()->willReturn(102);
+
+        $sheet2participant1 = $this->prophesize(Participant::class);
+        $sheet2participant1->getId()->shouldBeCalled()->willReturn(103);
+
+        $sheet3participant1 = $this->prophesize(Participant::class);
+        $sheet3participant1->getId()->shouldBeCalled()->willReturn(104);
+
+        $sheet4participant1 = $this->prophesize(Participant::class);
+        $sheet4participant1->getId()->shouldBeCalled()->willReturn(106);
+
+        $type1 = $this->prophesize(Type::class);
+        $type1->areAllSheetParticipantsAssignedToMeeting()->shouldBeCalled()->willReturn(true);
+
+        $type2 = $this->prophesize(Type::class);
+        $type2->areAllSheetParticipantsAssignedToMeeting()->shouldBeCalled()->willReturn(false);
+
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->getId()->shouldBeCalled()->willReturn(1);
+        $sheet1->getType()->shouldBeCalled()->willReturn($type1->reveal());
+        $sheet1->hasLinkedSheets()->shouldBeCalled()->willReturn(false);
+        $sheet1
+            ->getParticipantsArray()
+            ->shouldBeCalled()
+            ->willReturn([$sheet1Participant1->reveal(), $sheet1Participant2->reveal()])
+        ;
+
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet2->getId()->shouldBeCalled()->willReturn(2);
+        $sheet2->getType()->shouldBeCalled()->willReturn($type1->reveal());
+        $sheet2->hasLinkedSheets()->shouldBeCalled()->willReturn(true);
+        $sheet2
+            ->getLinkedSheetsParticipants()
+            ->shouldBeCalled()
+            ->willReturn([$sheet2participant1->reveal(), $sheet4participant1->reveal()])
+        ;
+
+        $sheet3 = $this->prophesize(Sheet::class);
+        $sheet3->getId()->shouldBeCalled()->willReturn(3);
+        $sheet3->getType()->shouldBeCalled()->willReturn($type2->reveal());
+
+        $request1 = $this->prophesize(Request::class);
+        $request1->getId()->shouldBeCalled()->willReturn(1001);
+        $request1->getFromSheet()->shouldBeCalled()->willReturn($sheet1->reveal());
+        $request1->getToSheet()->shouldBeCalled()->willReturn($sheet2->reveal());
+        $request1->hasFromParticipants()->shouldBeCalled()->willReturn(true);
+        $request1->getFromParticipantsArray()->shouldBeCalled()->willReturn([$sheet1Participant1->reveal()]);
+        $request1->hasToParticipants()->shouldBeCalled()->willReturn(false);
+        $request1->hasMeeting()->shouldBeCalled()->willReturn(false);
+        $request1->getMeeting()->shouldBeCalled()->willReturn(null);
+
+        $spot = $this->prophesize(Spot::class);
+        $spot->getId()->shouldBeCalled()->willReturn(82);
+
+        $meetingSlot = $this->prophesize(MeetingSlot::class);
+        $meetingSlot->getId()->shouldBeCalled()->willReturn(71);
+
+        $meetingForRequest2 = $this->prophesize(Meeting::class);
+        $meetingForRequest2->getFromParticipantsArray()->shouldBeCalled()->willReturn([$sheet3participant1->reveal()]);
+        $meetingForRequest2->getToParticipantsArray()->shouldBeCalled()->willReturn([$sheet1Participant1->reveal()]);
+        $meetingForRequest2->getSlot()->shouldBeCalled()->willReturn($meetingSlot->reveal());
+        $meetingForRequest2->getSpot()->shouldBeCalled()->willReturn($spot->reveal());
+        $meetingForRequest2->isBlockedSlot()->shouldBeCalled()->willReturn(true);
+        $meetingForRequest2->isBlockedSpot()->shouldBeCalled()->willReturn(false);
+
+        $request2 = $this->prophesize(Request::class);
+        $request2->getId()->shouldBeCalled()->willReturn(1002);
+        $request2->hasFromParticipants()->shouldBeCalled()->willReturn(false);
+        $request2->hasToParticipants()->shouldBeCalled()->willReturn(true);
+        $request2->getFromSheet()->shouldBeCalled()->willReturn($sheet3->reveal());
+        $request2->getToSheet()->shouldBeCalled()->willReturn($sheet1->reveal());
+        $request2->hasMeeting()->shouldBeCalled()->willReturn(true);
+        $request2->getMeeting()->shouldBeCalled()->willReturn($meetingForRequest2->reveal());
+
+        $day = new Day(1, 12, 10, 2016);
+        $slotView1 = new SlotView(71, 1, 10, 30, $day);
+        $slotView2 = new SlotView(72, 2, 11, 0, $day);
+        $slotView3 = new SlotView(73, 3, 11, 30, $day);
+        $slotViews = [$slotView1, $slotView2, $slotView3];
+
+        $typeView = new TypeView(1, 'Exhibitor');
+        $sheetView1 = new SheetView(1, $typeView, 2, 2);
+        $sheetView2 = new SheetView(2, $typeView, 2, 2);
+        $sheetView3 = new SheetView(3, $typeView, 2, 2);
+        $sheetView4 = new SheetView(4, $typeView, 2, 2);
+        $sheetViews = [$sheetView1, $sheetView2, $sheetView3, $sheetView4];
+
+        $spotView1 = new SpotView(81, false, 'Box A', 10, 2, [$sheetView1], 8, []);
+        $spotView2 = new SpotView(82, false, 'Box B', 10, 2, [], 8, []);
+        $spotViews = [$spotView1, $spotView2];
+
+        $participantView1 = new ParticipantView(101, 11, 'Participant 1', $sheetView1, [], false);
+        $participantView2 = new ParticipantView(102, 12, 'Participant 2', $sheetView1, [], true);
+        $participantView3 = new ParticipantView(103, 13, 'Participant 3', $sheetView2, [], true);
+        $participantView4 = new ParticipantView(104, 14, 'Participant 4', $sheetView3, [], false);
+        $participantView5 = new ParticipantView(105, 15, 'Participant 5', $sheetView3, [], true);
+        $participantView6 = new ParticipantView(106, 16, 'Participant 6', $sheetView4, [], true);
+        $participantViews = [
+            $participantView1,
+            $participantView2,
+            $participantView3,
+            $participantView4,
+            $participantView5,
+            $participantView6,
+        ];
+
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository
+            ->getAllAcceptedByEvent($event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$request1->reveal(), $request2->reveal()])
+        ;
+
+        $meetingView1 = new MeetingView(
+            1001,
+            [$sheetView1, $sheetView2],
+            [$participantView1, $participantView2, $participantView3, $participantView6],
+            true
+        );
+
+        $meetingView2 = new MeetingView(
+            1002,
+            [$sheetView3, $sheetView1],
+            [$participantView4, $participantView1, $participantView2],
+            true
+        );
+        $meetingView2->isBlockedSlot = true;
+        $meetingView2->spot = $spotView2;
+        $meetingView2->slot = $slotView1;
+        $meetingView2->lockedSlot = $slotView1;
+
+        $handler = new MeetingViewQueryHandler($requestRepository->reveal());
+        $results = $handler->handle(
+            new MeetingViewQuery(
+                $event->reveal(),
+                $sheetViews,
+                $participantViews,
+                $slotViews,
+                $spotViews,
+                'moving_allowed'
+            )
+        );
+        $this->assertEquals([$meetingView1, $meetingView2], $results);
     }
 }

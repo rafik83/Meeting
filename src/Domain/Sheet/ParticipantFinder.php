@@ -55,9 +55,12 @@ final class ParticipantFinder
      *
      * @return null|Participant
      */
-    public static function getParticipantWithUserId(Sheet $sheet, $userId)
+    public static function getParticipantWithUserId(Sheet $sheet, int $userId): ?Participant
     {
-        $participants = $sheet->getParticipantsArray();
+        $participants = $sheet->hasLinkedSheets()
+            ? $sheet->getLinkedSheetsParticipants()
+            : $sheet->getParticipantsArray()
+        ;
 
         /** @var Participant $participant */
         foreach ($participants as $participant) {

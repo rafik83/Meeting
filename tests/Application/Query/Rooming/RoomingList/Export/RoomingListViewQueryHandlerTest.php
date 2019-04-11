@@ -59,7 +59,6 @@ class RoomingListViewQueryHandlerTest extends TestCase
         $accommodation2 = $this->prophesize(Accommodation::class);
 
         $event->getAvailableLocale('fr')->shouldBeCalled()->willReturn('en');
-        $event->getTimeZone()->shouldBeCalled()->willReturn('Europe/Paris');
 
         $stays = [$stay1->reveal(), $stay2->reveal(), $stay3->reveal(), $stay4->reveal()];
 

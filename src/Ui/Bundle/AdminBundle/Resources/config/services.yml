@@ -436,6 +436,12 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Product\ProductUpdatedEventSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\GenerateParticipantProductSystemUnavailabilities'
+        tags:
+            - { name: kernel.event_subscriber }
+
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\RemoveDecryptedFileSubscriber:
         arguments:
             - '@adapter.file_system_adapter'

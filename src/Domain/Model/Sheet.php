@@ -339,6 +339,28 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return Participant[]
+     */
+    public function getLinkedSheetsParticipants(): array
+    {
+        if (!$this->hasLinkedSheets()) {
+            throw new \LogicException(
+                'This method can not be called when sheet has not LinkedSheets. Check before that Sheet::hasLinkedSheets() returns true.'
+            );
+        }
+
+        $participants = [];
+
+        foreach ($this->getLinkedSheets()->getSheets() as $linkedSheet) {
+            foreach ($linkedSheet->getParticipantsArray() as $participant) {
+                $participants[$participant->getId()] = $participant;
+            }
+        }
+
+        return $participants;
+    }
+
+        /**
      * @throws SheetException
      *
      * @return Participant
@@ -591,6 +613,32 @@ class Sheet implements TraceableInterface
             // To avoid __isInitialized__: false
             return $participant->getUser()->getId() === $user->getId();
         });
+    }
+
+    public function hasUserInLinkedSheets(User $user): bool
+    {
+        if (!$this->hasLinkedSheets()) {
+            return false;
+        }
+
+        $linkedSheets = $this->getLinkedSheets()->getSheets();
+
+        foreach ($linkedSheets as $linkedSheet) {
+            if ($linkedSheet->hasUser($user)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function hasLinkedSheet(Sheet $sheet): bool
+    {
+        if (!$this->hasLinkedSheets()) {
+            return false;
+        }
+
+        return in_array($sheet, $this->getLinkedSheets()->getSheets(), true);
     }
 
     /**
@@ -1014,7 +1062,7 @@ class Sheet implements TraceableInterface
 
     public function hasLinkedSheets(): bool
     {
-        return null !== $this->getLinkedSheets();
+        return null !== $this->linkedSheets;
     }
 
     public function getLinkedSheets(): ?LinkedSheets

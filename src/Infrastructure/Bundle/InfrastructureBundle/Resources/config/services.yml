@@ -1287,6 +1287,13 @@ services:
         tags:
             - { name: tactician.handler, typehints: true }
 
+    Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\DeleteHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
+            - '@Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     proximum.vimeet.application.command.sheet.group.update_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Group\UpdateHandler
         arguments:
@@ -1468,6 +1475,7 @@ services:
     command.product.update_participant_handler:
         class: Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipantHandler
         arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@vimeet_infrastructure.repository.product_repository'
             - '@domain.product.update_price_resolver'
         tags:
@@ -1907,13 +1915,12 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Create }
-    Proximum\Vimeet\Application\Command\Unavailability\CreateUnavailabilitiesHandler:
+    Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilitiesHandler:
         arguments:
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
-            - '@repository.event.day_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\CreateUnavailabilities }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilities }
 
     command.unavailability.mass_assignment.update_handler:
         class: Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler
@@ -3776,6 +3783,7 @@ services:
     Proximum\Vimeet\Application\Query\Sheet\LinkedSheets\Admin\LinkedSheetsListViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
+            - '@Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria'
         tags:
             - { name: tactician.handler, typehints: true }
 
@@ -4399,6 +4407,16 @@ services:
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery }
+
+
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Leni\BadgeLink\AvailableChecker'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery }
 
     ##
     # Mass Assignment query handler
@@ -6330,6 +6348,14 @@ services:
             - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator.inner'
 
     #
+    # Linked Sheets
+    #
+
+    Proximum\Vimeet\Application\Criteria\LinkedSheets\AreRemovableLinkedSheetsCriteria:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
+    #
     # Command Aggregator
     #
     command.aggregate.participant.full_unavailability_handler:
@@ -6786,3 +6812,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'

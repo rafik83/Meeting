@@ -308,8 +308,8 @@ class ImportHandler
 
         // Check if participant are present also
         foreach ($meetingResult->userResults as $userResult) {
-            $participantFrom = ParticipantFinder::getParticipantWithUserId($sheetFrom, $userResult->id);
-            $participantTo   = ParticipantFinder::getParticipantWithUserId($sheetTo, $userResult->id);
+            $participantFrom = ParticipantFinder::getParticipantWithUserId($sheetFrom, (int) $userResult->id);
+            $participantTo   = ParticipantFinder::getParticipantWithUserId($sheetTo, (int) $userResult->id);
 
             if ((null === $participantFrom && null === $participantTo)) {
                 return null; // Participant of the meeting not found
