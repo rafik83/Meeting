@@ -61,8 +61,7 @@ class MeetingViewQueryHandler
     {
         $userSheet = $query->meeting->getSheetOfUser($query->user);
         $sheetMet = $query->meeting->getSheetMet($userSheet);
-        $linkedSheetsTitle = new LinkedSheetsTitle();
-        $sheetMetTitles = $linkedSheetsTitle::getSheetTitleView($sheetMet);
+        $sheetMetTitles = LinkedSheetsTitle::getSheetTitleView($sheetMet);
         $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->currentSheet, $sheetMet);
         $participants = [];
 

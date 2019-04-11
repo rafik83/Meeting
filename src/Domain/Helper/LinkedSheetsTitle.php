@@ -13,7 +13,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class LinkedSheetsTitle
 {
-    static function getSheetTitleView(Sheet $sheet) :string
+    public static function getSheetTitleView(Sheet $sheet) :string
     {
         $linkedSheetTitles = [];
         if($sheet->hasLinkedSheets()){
