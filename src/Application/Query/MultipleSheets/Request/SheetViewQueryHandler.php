@@ -55,12 +55,24 @@ class SheetViewQueryHandler
         $participant = $query->sheet->getUserParticipant($query->user);
 
         if (null !== $participant) {
+            $redirectTo = $query->sheet->hasGroup()
+                ? $this->router->generate(
+                    'event_sheet_group_requests_list',
+                    [
+                        'sheetGroup' => $query->sheet->getGroup()->getId(),
+                    ]
+                )
+                : $this->router->generate(
+                    'event_meeting_request_merged_list',
+                    [
+                        'sheet' => $query->sheet->getId(),
+                    ]
+                );
+
             $validatePhoneLink = $this->router->generate('event_user_phone_redirect_to_validation', [
                 'sheet'       => $query->sheet->getId(),
                 'participant' => $participant->getId(),
-                'redirectTo'  => $this->router->generate('event_sheet_group_requests_list', [
-                    'sheetGroup' => $query->sheet->getGroup()->getId(),
-                ]),
+                'redirectTo'  => $redirectTo,
             ]);
         }
 
