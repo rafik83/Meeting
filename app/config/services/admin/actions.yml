@@ -734,6 +734,13 @@ services:
             - '@templating.engine.twig'
 
     #
+    # Event
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Event\ExtraHeaderAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    #
     # Visio
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction:

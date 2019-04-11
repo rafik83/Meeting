@@ -18,6 +18,10 @@
         {% block head_link %}
         {% endblock %}
         <meta name="theme-color" content="#ffffff">
+
+        {% if event is defined %}
+            {{ render(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Event\\ExtraHeaderAction', {'event': event})) }}
+        {% endif %}
     </head>
     <body {% block body_attributes '' %}>
         {% block body %}
