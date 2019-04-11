@@ -71,7 +71,10 @@ class LeniBadgeLinkSubmenuViewQueryHandler
             Category::LENI_BADGE_LINK_ICON,
             $this->translator->trans(Category::LENI_BADGE_LINK),
             $leniBadgeLink,
-            false
+            false,
+            false,
+            false,
+            $query->attributes
         );
     }
 }

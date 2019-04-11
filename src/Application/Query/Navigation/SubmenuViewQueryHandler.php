@@ -73,7 +73,8 @@ class SubmenuViewQueryHandler
                 $submenuViewQuery->user,
                 $submenuViewQuery->event,
                 $submenuViewQuery->locale,
-                $submenuViewQuery->sheet
+                $submenuViewQuery->sheet,
+                ['target' => '_blank']
             )
         );
 
