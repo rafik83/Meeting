@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMe
 use Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting\AvailableMeetingView;
 use Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting\AvailableSlotsBySheetView;
 use Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting\AvailableSlotsParticipantView;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -58,6 +59,9 @@ class TransformRequestIntoMeetingHandler
     /** @var UserEventPhoneChecker */
     private $userEventPhoneChecker;
 
+    /** @var MeetingParticipants */
+    private $meetingParticipants;
+
     /**
      * TransformRequestIntoMeetingHandler constructor.
      *
@@ -69,6 +73,7 @@ class TransformRequestIntoMeetingHandler
      * @param VisioGuesser                    $visioGuesser
      * @param DelayedEventDispatcherInterface $eventDispatcher
      * @param \DateTimeInterface              $dateTime
+     * @param MeetingParticipants             $meetingParticipants
      */
     public function __construct(
         MeetingSlotRepositoryInterface $meetingSlotRepository,
@@ -78,7 +83,8 @@ class TransformRequestIntoMeetingHandler
         SlotFilter $slotFilter,
         VisioGuesser $visioGuesser,
         DelayedEventDispatcherInterface $eventDispatcher,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        MeetingParticipants $meetingParticipants
     ) {
         $this->meetingSlotRepository = $meetingSlotRepository;
         $this->userEventPhoneChecker = $userEventPhoneChecker;
@@ -88,6 +94,7 @@ class TransformRequestIntoMeetingHandler
         $this->eventDispatcher       = $eventDispatcher;
         $this->slotFilter            = $slotFilter;
         $this->visioGuesser          = $visioGuesser;
+        $this->meetingParticipants = $meetingParticipants;
     }
 
     /**
@@ -101,10 +108,18 @@ class TransformRequestIntoMeetingHandler
     {
         $fromSheet          = $query->request->getFromSheet();
         $toSheet            = $query->request->getToSheet();
-        $fromParticipants   = $query->request->getFromParticipantsArray();
-        $toParticipants     = $query->request->getToParticipantsArray();
-        $fromIsNoPreference = $query->request->hasNoPreference($fromSheet);
-        $toIsNoPreference   = $query->request->hasNoPreference($toSheet);
+
+        $fromIsNoPreference = $fromSheet->getType()->areAllSheetParticipantsAssignedToMeeting()
+            ? false
+            : $query->request->hasNoPreference($fromSheet);
+
+        $toIsNoPreference = $toSheet->getType()->areAllSheetParticipantsAssignedToMeeting()
+            ? false
+            : $query->request->hasNoPreference($toSheet);
+
+        $fromParticipants   = $this->meetingParticipants->getMeetingParticipants($query->request, $fromSheet);
+
+        $toParticipants     = $this->meetingParticipants->getMeetingParticipants($query->request, $toSheet);
 
         if ($fromIsNoPreference && 1 === $fromSheet->countParticipants()) {
             $fromIsNoPreference = false;

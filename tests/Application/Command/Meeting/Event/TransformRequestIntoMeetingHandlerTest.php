@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingParticipateEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -27,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -42,13 +44,18 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $event    = EventFactory::createEvent();
         $datetime = new \DateTime();
 
+        $type = $this->prophesize(Type::class);
+        $type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
+
         $fromSheet       = $this->prophesize(Sheet::class);
         $fromParticipant = $this->prophesize(Participant::class);
         $fromSheet->getParticipantsArray()->willReturn([$fromParticipant->reveal()]);
+        $fromSheet->getType()->willReturn($type->reveal());
 
         $toSheet       = $this->prophesize(Sheet::class);
         $toParticipant = $this->prophesize(Participant::class);
         $toSheet->getParticipantsArray()->willReturn([$toParticipant->reveal()]);
+        $toSheet->getType()->willReturn($type->reveal());
 
         $request = $this->prophesize(Request::class);
         $slot    = $this->prophesize(MeetingSlot::class);
@@ -73,6 +80,12 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $eventDispatcher       = $this->prophesize(DelayedEventDispatcherInterface::class);
         $slotFilter            = $this->prophesize(SlotFilter::class);
         $visioGuesser          = $this->prophesize(VisioGuesser::class);
+
+        $meetingParticipants = $this->prophesize(MeetingParticipants::class);
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $fromSheet->reveal())
+            ->willReturn([$fromParticipant->reveal()]);
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $toSheet->reveal())
+            ->willReturn([$toParticipant->reveal()]);
 
         // Expected
 
@@ -140,7 +153,8 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime
+            $datetime,
+            $meetingParticipants->reveal()
         );
 
         $query = new TransformRequestIntoMeeting($request->reveal());
@@ -155,15 +169,20 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $event    = EventFactory::createEvent();
         $datetime = new \DateTime();
 
+        $type = $this->prophesize(Type::class);
+        $type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
+
         $fromSheet       = $this->prophesize(Sheet::class);
         $fromUser        = $this->prophesize(User::class);
         $fromParticipant = $this->prophesize(Participant::class);
         $fromSheet->getParticipantsArray()->willReturn([$fromParticipant->reveal()]);
+        $fromSheet->getType()->willReturn($type->reveal());
 
         $toSheet       = $this->prophesize(Sheet::class);
         $toUser        = $this->prophesize(User::class);
         $toParticipant = $this->prophesize(Participant::class);
         $toSheet->getParticipantsArray()->willReturn([$toParticipant->reveal()]);
+        $toSheet->getType()->willReturn($type->reveal());
 
         $request = $this->prophesize(Request::class);
         $slot    = $this->prophesize(MeetingSlot::class);
@@ -204,6 +223,12 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $eventDispatcher       = $this->prophesize(DelayedEventDispatcherInterface::class);
         $slotFilter            = $this->prophesize(SlotFilter::class);
         $visioGuesser          = $this->prophesize(VisioGuesser::class);
+
+        $meetingParticipants = $this->prophesize(MeetingParticipants::class);
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $fromSheet->reveal())
+            ->willReturn([$fromParticipant->reveal()]);
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $toSheet->reveal())
+            ->willReturn([$toParticipant->reveal()]);
 
         // Mock
 
@@ -279,7 +304,8 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime
+            $datetime,
+            $meetingParticipants->reveal()
         );
 
         $query = new TransformRequestIntoMeeting($request->reveal());
@@ -293,6 +319,9 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
     {
         $event    = EventFactory::createEvent();
         $datetime = new \DateTime();
+
+        $type = $this->prophesize(Type::class);
+        $type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
 
         $slot1 = $this->prophesize(MeetingSlot::class);
         $slot1->getId()->willReturn(111);
@@ -332,12 +361,14 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$fromParticipant1->reveal(), $fromParticipant2->reveal(), $fromParticipant3->reveal()]
         );
         $fromSheet->countParticipants()->willReturn(3);
+        $fromSheet->getType()->willReturn($type->reveal());
 
         $toSheet = $this->prophesize(Sheet::class);
         $toSheet->getParticipantsArray()->willReturn(
             [$toParticipant1->reveal(), $toParticipant2->reveal()]
         );
         $toSheet->countParticipants()->willReturn(2);
+        $toSheet->getType()->willReturn($type->reveal());
 
         $request = $this->prophesize(Request::class);
         $request->getFromSheet()->willreturn($fromSheet->reveal());
@@ -424,6 +455,12 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $eventDispatcher   = $this->prophesize(DelayedEventDispatcherInterface::class);
 
+        $meetingParticipants = $this->prophesize(MeetingParticipants::class);
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $fromSheet->reveal())
+            ->willReturn([]);
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $toSheet->reveal())
+            ->willReturn([]);
+
         $slotFilter = $this->prophesize(SlotFilter::class);
         $slotFilter->getFilteredSlots([])->willReturn([]);
         $slotFilter->getFilteredSlots([$slot1->reveal()])->willReturn([$slot1->reveal()]);
@@ -457,7 +494,8 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime
+            $datetime,
+            $meetingParticipants->reveal()
         );
 
         $query = new TransformRequestIntoMeeting($request->reveal());
@@ -488,6 +526,9 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $event    = EventFactory::createEvent();
         $datetime = new \DateTime();
+
+        $type = $this->prophesize(Type::class);
+        $type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
 
         $slot1 = $this->prophesize(MeetingSlot::class);
         $slot1->getId()->willReturn(111);
@@ -525,12 +566,14 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$fromParticipant1->reveal(), $fromParticipant2->reveal(), $fromParticipant3->reveal()]
         );
         $fromSheet->countParticipants()->willReturn(3);
+        $fromSheet->getType()->willReturn($type->reveal());
 
         $toSheet = $this->prophesize(Sheet::class);
         $toSheet->getParticipantsArray()->willReturn(
             [$toParticipant1->reveal(), $toParticipant2->reveal()]
         );
         $toSheet->countParticipants()->willReturn(2);
+        $toSheet->getType()->willReturn($type->reveal());
 
         $request = $this->prophesize(Request::class);
         $request->getFromSheet()->willreturn($fromSheet->reveal());
@@ -617,6 +660,12 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $eventDispatcher   = $this->prophesize(DelayedEventDispatcherInterface::class);
 
+        $meetingParticipants = $this->prophesize(MeetingParticipants::class);
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $fromSheet->reveal())
+            ->willReturn([]);
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $toSheet->reveal())
+            ->willReturn([]);
+
         $slotFilter = $this->prophesize(SlotFilter::class);
         $slotFilter->getFilteredSlots([])->willReturn([]);
         $slotFilter->getFilteredSlots([$slot1->reveal()])->willReturn([$slot1->reveal()]);
@@ -650,7 +699,8 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime
+            $datetime,
+            $meetingParticipants->reveal()
         );
 
         $transformRequestIntoMeetingHandler->handle(new TransformRequestIntoMeeting($request->reveal()));
@@ -662,6 +712,9 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $event    = EventFactory::createEvent();
         $datetime = new \DateTime();
+
+        $type = $this->prophesize(Type::class);
+        $type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
 
         $slot1 = $this->prophesize(MeetingSlot::class);
         $slot1->getId()->willReturn(111);
@@ -699,12 +752,14 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$fromParticipant1->reveal(), $fromParticipant2->reveal(), $fromParticipant3->reveal()]
         );
         $fromSheet->countParticipants()->willReturn(3);
+        $fromSheet->getType()->willReturn($type->reveal());
 
         $toSheet = $this->prophesize(Sheet::class);
         $toSheet->getParticipantsArray()->willReturn(
             [$toParticipant1->reveal(), $toParticipant2->reveal()]
         );
         $toSheet->countParticipants()->willReturn(2);
+        $toSheet->getType()->willReturn($type->reveal());
 
         $request = $this->prophesize(Request::class);
         $request->getFromSheet()->willreturn($fromSheet->reveal());
@@ -767,6 +822,12 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $visioGuesser = $this->prophesize(VisioGuesser::class);
 
+        $meetingParticipants = $this->prophesize(MeetingParticipants::class);
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $fromSheet->reveal())
+            ->willReturn([]);
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $toSheet->reveal())
+            ->willReturn([]);
+
         $transformRequestIntoMeetingHandler = new TransformRequestIntoMeetingHandler(
             $meetingSlotRepository->reveal(),
             $userEventPhoneChecker->reveal(),
@@ -775,7 +836,8 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime
+            $datetime,
+            $meetingParticipants->reveal()
         );
 
         $transformRequestIntoMeetingHandler->handle(new TransformRequestIntoMeeting($request->reveal()));

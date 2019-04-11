@@ -681,6 +681,8 @@ services:
             - '@adapter.validator_adapter'
             - '%infrastructure.import_authentication_token_path%'
 
+    Proximum\Vimeet\Domain\Meeting\MeetingParticipants:
+
     #
     # Validators
     #
