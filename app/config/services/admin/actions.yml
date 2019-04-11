@@ -740,6 +740,11 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Event\PrivacyPolicyAction:
+        arguments:
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
     #
     # Visio
     #
