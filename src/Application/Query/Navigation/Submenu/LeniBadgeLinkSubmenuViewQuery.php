@@ -29,15 +29,11 @@ class LeniBadgeLinkSubmenuViewQuery implements Query
     /** @var User */
     public $user;
 
-    /** @var array */
-    public $attributes;
-
-    public function __construct(User $user, Event $event, string $locale, Sheet $sheet, ?array $attributes = [])
+    public function __construct(User $user, Event $event, string $locale, Sheet $sheet)
     {
         $this->event = $event;
         $this->locale = $locale;
         $this->sheet = $sheet;
         $this->user = $user;
-        $this->attributes = $attributes;
     }
 }

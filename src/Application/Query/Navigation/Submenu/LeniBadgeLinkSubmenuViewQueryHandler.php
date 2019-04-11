@@ -74,7 +74,7 @@ class LeniBadgeLinkSubmenuViewQueryHandler
             false,
             false,
             false,
-            $query->attributes
+            ['target' => '_blank']
         );
     }
 }

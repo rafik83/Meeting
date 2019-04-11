@@ -51,7 +51,7 @@ class SubmenuButtonView
         bool $state = true,
         bool $alert = false,
         bool $isShowOnMobile = false,
-        ?array $attributes = []
+        array $attributes = []
     ) {
         $this->icon = $icon;
         $this->state = $state;
