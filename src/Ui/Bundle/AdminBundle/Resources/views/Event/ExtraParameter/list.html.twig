@@ -31,7 +31,7 @@
                 <tr>
                     <td>{{ ('admin.extraParameter.type.' ~ extraParameter.type)|trans }}</td>
                     <td>{{ extraParameter.name }}</td>
-                    <td>{{ extraParameter.value }}</td>
+                    <td>{{ extraParameter.value|nl2br }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <a class="btn btn-default btn-sm" href="{{ path('admin_event_extra_parameter_update', { 'event': event.id, 'extraParameter': extraParameter.id }) }}">
