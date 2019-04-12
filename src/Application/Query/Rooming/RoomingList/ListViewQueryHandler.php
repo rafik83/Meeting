@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Rooming\RoomingList;
 
+use function count;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\AbstractUserStayView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\ListDetailView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\ListView;
@@ -117,7 +118,7 @@ class ListViewQueryHandler
 
         $this->getUserStayViewsToAssign($listDetailViews);
 
-        return new ListView($listDetailViews);
+        return new ListView($listDetailViews, count($listDetailViews));
     }
 
     private function getSheetView(UserSheetTypeView $userSheetTypeView): SheetView
@@ -135,7 +136,7 @@ class ListViewQueryHandler
         $roommateViewByUserIdByStayId = [];
 
         foreach ($userIdsByStayId as $stayId => $usersId) {
-            if (\count($usersId) === 1) {
+            if (count($usersId) === 1) {
                 continue;
             }
 

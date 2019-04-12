@@ -286,7 +286,8 @@ class ListViewQueryHandlerTest extends TestCase
                         ),
                     ]
                 ),
-            ]
+            ],
+            3
         );
 
         $this->assertEquals($expected, $result);
@@ -378,7 +379,8 @@ class ListViewQueryHandlerTest extends TestCase
                         new UserStayToAssignView($dateArrival, $dateDeparture),
                     ]
                 ),
-            ]
+            ],
+            1
         );
 
         $this->assertEquals($expected, $result);

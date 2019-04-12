@@ -6,7 +6,7 @@
 {% block content %}
     <h1 class="page-header">
         <a href="{{ path('admin_event_rooming_list_prepare_export', {'event': event.id}) }}" class="btn btn-default pull-right">{{ 'admin.rooming.list.export'|trans }}</a>
-        {{ 'admin.rooming.title'|trans }}
+        {{ 'admin.rooming.title'|trans({'%count%': roomingListView.listCount}) }}
     </h1>
 
     <table class="table table-striped table-hover table-condensed">

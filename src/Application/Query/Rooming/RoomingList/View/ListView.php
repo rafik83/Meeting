@@ -7,8 +7,12 @@ class ListView
     /** @var ListDetailView[] */
     public $listDetailViews;
 
-    public function __construct(array $listDetailViews)
+    /** @var int */
+    public $listCount;
+
+    public function __construct(array $listDetailViews, int $listCount)
     {
         $this->listDetailViews = $listDetailViews;
+        $this->listCount = $listCount;
     }
 }
