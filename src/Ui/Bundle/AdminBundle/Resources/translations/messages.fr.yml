@@ -744,6 +744,7 @@ admin.promotion_code.title: 'Codes promos'
 admin.promotion_code.update: 'Modifier code promo'
 admin.remove: Supprimer
 admin.remove.confirmation: 'Etes vous sûr de vouloir supprimer cet utilisateur ?'
+admin.reset.filter: 'Réinitialiser le filtre'
 admin.role.ROLE_HOST: Hôte
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
