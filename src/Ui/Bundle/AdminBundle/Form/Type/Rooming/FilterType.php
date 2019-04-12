@@ -29,6 +29,7 @@ class FilterType extends AbstractType
                     'locale'      => $options['locale'],
                     'user'        => $options['admin'],
                     'event'       => $options['event'],
+                    'orderByTitle' => true,
                 ]
             );
     }
