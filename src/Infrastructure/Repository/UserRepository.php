@@ -239,7 +239,7 @@ class UserRepository implements UserRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function getWithSheetAndTypeByEvent(Event $event, string $locale): array
+    public function getWithSheetAndTypeByEvent(Event $event, string $locale, array $types): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -278,6 +278,12 @@ class UserRepository implements UserRepositoryInterface
             ->setParameter('locale', $locale)
             ->orderBy('sheet.title, user.account.lastName, user.account.firstName', 'ASC')
         ;
+
+        if(count($types)){
+            $queryBuilder
+                ->andWhere('sheet.type IN (:types)')
+                ->setParameter('types', $types);
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }

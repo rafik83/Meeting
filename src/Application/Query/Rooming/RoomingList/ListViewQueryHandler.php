@@ -52,7 +52,7 @@ class ListViewQueryHandler
     {
         /** @var ListDetailView[] $listDetailViews */
         $listDetailViews = [];
-        $userSheetTypeViews = $this->userRepository->getWithSheetAndTypeByEvent($query->event, $query->locale);
+        $userSheetTypeViews = $this->userRepository->getWithSheetAndTypeByEvent($query->event, $query->locale, $query->types);
         $stayViews = $this->stayRepository->getStayViewsByEvent($query->event);
         $comments = $this->extraDataRepository->getExtraDataForEventIdAndNameIndexedByUserId(
             $query->event->getId(),

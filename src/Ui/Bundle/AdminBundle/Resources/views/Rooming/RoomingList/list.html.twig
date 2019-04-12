@@ -8,6 +8,13 @@
         <a href="{{ path('admin_event_rooming_list_prepare_export', {'event': event.id}) }}" class="btn btn-default pull-right">{{ 'admin.rooming.list.export'|trans }}</a>
         {{ 'admin.rooming.title'|trans({'%count%': roomingListView.listCount}) }}
     </h1>
+    {{ form_start(form) }}
+    {{ form_row(form.types, { 'group_attr': { 'class': 'col-md-10' } }) }}
+
+    <div class="col-md-2">
+        <button type="submit" id="submit" name="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+    </div>
+    {{ form_end(form) }}
 
     <table class="table table-striped table-hover table-condensed">
         <thead>
