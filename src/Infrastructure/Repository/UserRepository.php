@@ -294,7 +294,7 @@ class UserRepository implements UserRepositoryInterface
             ->orderBy('sheet.title, user.account.lastName, user.account.firstName', 'ASC')
         ;
 
-        if(count($types)){
+        if (count($types)) {
             $queryBuilder
                 ->andWhere('sheet.type IN (:types)')
                 ->setParameter('types', $types);
