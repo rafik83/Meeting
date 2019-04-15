@@ -765,6 +765,7 @@ admin.rooming.list.fullName: 'Nom, prénom'
 admin.rooming.list.roomNumberAssigned: 'Numéro de chambre associé'
 admin.rooming.list.sheet: Fiche
 admin.rooming.list.tasting: Tasting
+admin.rooming.menu.title: 'Rooming list'
 admin.rooming.stay.assignAccommodation.add.title: 'Ajouter une assignation'
 admin.rooming.stay.no-dates: 'dates non déclarées'
 admin.rooming.stay.remove.confirm: 'Êtes-vous sûr de vouloir supprimer cette assignation ?'
