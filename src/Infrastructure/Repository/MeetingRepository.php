@@ -836,4 +836,24 @@ class MeetingRepository implements MeetingRepositoryInterface
 
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
+
+    public function hasAtLeastOneMeeting(array $sheets, array $otherSheets): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting', 'fromSheet', 'toSheet')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet IN (:sheets) OR fromSheet IN (:otherSheets)')
+            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet IN (:sheets) OR toSheet IN (:otherSheets)')
+            ->setParameter('sheets', $sheets)
+            ->setParameter('otherSheets', $otherSheets)
+            ->where('meeting.state = :state')
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setMaxResults(1)
+        ;
+
+        return null === $queryBuilder->getQuery()->getOneOrNullResult();
+
+    }
 }
