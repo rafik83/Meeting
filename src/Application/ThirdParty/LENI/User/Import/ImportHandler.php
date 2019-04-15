@@ -111,7 +111,10 @@ class ImportHandler
     private function getUsersIndexedById(Event $event)
     {
         $usersIndexedById = [];
-        $users = $this->userRepository->findWithEnabledSheetByEvent($event);
+        $participants = $this->userRepository->findWithEnabledSheetByEvent($event);
+        $owners = $this->userRepository->findOwnersWithEnabledSheetByEvent($event);
+
+        $users = array_merge($participants, $owners);
 
         foreach ($users as $user) {
             $usersIndexedById[$user->getId()] = $user;

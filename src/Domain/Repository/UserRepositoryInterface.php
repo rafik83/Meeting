@@ -96,6 +96,13 @@ interface UserRepositoryInterface
     public function findWithEnabledSheetByEvent(Event $event): array;
 
     /**
+     * @param Event $event
+     *
+     * @return User[]
+     */
+    public function findOwnersWithEnabledSheetByEvent(Event $event): array;
+
+    /**
      * @param Event  $event
      * @param string $locale
      * @param Type[] $types
