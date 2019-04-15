@@ -96,6 +96,8 @@ event.happening.productsNeededByHappening.label: 'Please select an option in you
 event.happening.productsNeededByHappening.order: 'Modify my package'
 event.info.close: Close
 event.info.contact: 'Useful information'
+event.info.privacyPolicy.content: "The data collected are registered by Vimeet and is needed for your participation at this event. \n\nThe data will be stored safely and confidentially and will be kept for two years. \n\nAccording  to the European Union data protection and freedom of information laws, you have the right to access, rectify, modify and delete all data concerning you. You may do so by contacting cnil@vi-meet.com"
+event.info.privacyPolicy.title: 'Privacy policy'
 event.invisible.label: Invisible
 event.meeting.listRequest.contact.export: 'Download my contacts'
 event.meeting.listRequest.filter.all: All
