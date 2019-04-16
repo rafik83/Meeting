@@ -36,25 +36,23 @@ class ExportJobCreatorHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    /**
-     * @param JobQueueInterface              $jobQueue
-     * @param PlannerJobRepositoryInterface  $plannerJobRepository
-     * @param SpotRepositoryInterface        $spotRepository
-     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
-     * @param \DateTimeInterface             $dateTime
-     */
+    /** @var PrePlanningProcessHandler */
+    private $prePlanningProcessHandler;
+
     public function __construct(
         JobQueueInterface $jobQueue,
         PlannerJobRepositoryInterface $plannerJobRepository,
         SpotRepositoryInterface $spotRepository,
         MeetingSlotRepositoryInterface $meetingSlotRepository,
+        PrePlanningProcessHandler $prePlanningProcessHandler,
         \DateTimeInterface $dateTime
     ) {
-        $this->jobQueue              = $jobQueue;
-        $this->plannerJobRepository  = $plannerJobRepository;
-        $this->spotRepository        = $spotRepository;
+        $this->jobQueue = $jobQueue;
+        $this->plannerJobRepository = $plannerJobRepository;
+        $this->spotRepository = $spotRepository;
         $this->meetingSlotRepository = $meetingSlotRepository;
-        $this->dateTime              = $dateTime;
+        $this->prePlanningProcessHandler = $prePlanningProcessHandler;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -79,6 +77,10 @@ class ExportJobCreatorHandler
         }
 
         $plannerJob = null;
+
+        $this->prePlanningProcessHandler->handle(
+            new PrePlanningProcess($exportJobCreator->event, $exportJobCreator->solutionType)
+        );
 
         if ($exportJobCreator->isModeAuto()) {
             $plannerJob = new PlannerJob(
