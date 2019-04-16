@@ -122,4 +122,24 @@ class MergerTest extends TestCase
             array_values($orderMerged->getRows())
         );
     }
+
+    public function test_groups_merge(): void
+    {
+        $datetime = new \DateTime();
+
+        $event = $this->prophesize(Event::class);
+        $event->getCurrency()->willReturn('EUR');
+        $event->getVat()->willReturn(20);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getEvent()->willReturn($event->reveal());
+
+        $order1 = new Order($sheet->reveal(), '{"1": "foo", "2": "bar"}', $datetime);
+        $order2 = new Order($sheet->reveal(), '{"2": "bar", "3": "foobar"}', $datetime);
+
+        $orderMerger = new Merger();
+        $orderMerger = $orderMerger->merge([$order1, $order2]);
+
+        $expected = '{"1":"foo","2":"bar","3":"foobar"}';
+        $this->assertEquals($expected, $orderMerger->getGroupsData());
+    }
 }
