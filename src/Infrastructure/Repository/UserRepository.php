@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
@@ -233,6 +234,20 @@ class UserRepository implements UserRepositoryInterface
                 'WITH',
                 'sheet.event = :event' . ($onlyEnabledSheets ? ' AND sheet.enable = true' : '')
             )
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findOwnersWithEnabledSheetByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join(Sheet::class, 'sheet', 'WITH', 'sheet.owner = user AND sheet.enable = true AND sheet.event = :event')
             ->setParameter('event', $event)
         ;
 

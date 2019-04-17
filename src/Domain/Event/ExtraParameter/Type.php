@@ -58,6 +58,9 @@ class Type
     // Crisp
     public const TYPE_CRISP_SITE_ID = 'crisp_site_id';
 
+    // Tracking code
+    public const TYPE_TRACKING_CODE = 'tracking_code';
+
     public const TYPES = [
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
@@ -80,5 +83,6 @@ class Type
         self::TYPE_COMEXPOSIUM_SSO_APPLICATION,
         self::TYPE_TECH_EVENT_CONFIGURATION,
         self::TYPE_CRISP_SITE_ID,
+        self::TYPE_TRACKING_CODE,
     ];
 }

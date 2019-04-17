@@ -12,33 +12,26 @@ namespace Proximum\Vimeet\Application\View\Navigation;
 
 class SubmenuButtonView
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $icon;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $alert;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $state;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $label;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $link;
 
     /** @var bool */
     public $isShowOnMobile;
+
+    /** @var array */
+    public $attributes;
 
     /**
      * SubmenuButtonView constructor.
@@ -49,6 +42,7 @@ class SubmenuButtonView
      * @param bool        $state
      * @param bool        $alert
      * @param bool        $isShowOnMobile
+     * @param array|null  $attributes
      */
     public function __construct(
         ?string $icon,
@@ -56,7 +50,8 @@ class SubmenuButtonView
         ?string $link,
         bool $state = true,
         bool $alert = false,
-        bool $isShowOnMobile = false
+        bool $isShowOnMobile = false,
+        array $attributes = []
     ) {
         $this->icon = $icon;
         $this->state = $state;
@@ -64,6 +59,7 @@ class SubmenuButtonView
         $this->link = $link;
         $this->alert = $alert;
         $this->isShowOnMobile = $isShowOnMobile;
+        $this->attributes = $attributes;
     }
 
     /**

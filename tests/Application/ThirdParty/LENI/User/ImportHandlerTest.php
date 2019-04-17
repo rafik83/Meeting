@@ -43,6 +43,7 @@ class ImportHandlerTest extends TestCase
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository->findWithEnabledSheetByEvent($event->reveal())->willReturn([$user1->reveal(), $user2->reveal()]);
+        $userRepository->findOwnersWithEnabledSheetByEvent($event->reveal())->willReturn([$user1->reveal()]);
 
         $data = "userId;leniUserId;\n92125;x-y-z;\n34891;z-a-b;\n85201;d-b-a;";
         $fileStorage->getContents(Argument::any())->willReturn($data);

@@ -126,3 +126,13 @@ services:
             - '@Proximum\Vimeet\Application\Command\Product\Export\ExportProductsHandler'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\FixInvoiceDataCommand:
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@query.invoice.invoice_data_query_handler'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.invoice.invoice_repository'
+        tags:
+            - { name: console.command }
