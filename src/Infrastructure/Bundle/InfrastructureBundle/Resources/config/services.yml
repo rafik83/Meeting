@@ -2040,9 +2040,19 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ImportJobCreator }
 
-    Proximum\Vimeet\Application\Command\Planner\PrePlanningProcessHandler:
+    Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcessHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcess }
+
+    Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\ApprovedRequestsByLinkedSheetsHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\ApprovedRequestsByLinkedSheets }
 
     command.meeting.admin.delete_all_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler
@@ -5882,7 +5892,7 @@ services:
             - '@vimeet_infrastructure.repository.planner_job_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@Proximum\Vimeet\Application\Command\Planner\PrePlanningProcessHandler'
+            - '@Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcessHandler'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ExportJobCreator }

@@ -1,0 +1,39 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Meeting;
+
+use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+
+class TransformRequestIntoMeeting implements Command
+{
+    /** @var Request */
+    public $request;
+
+    /** @var Event */
+    public $event;
+
+    /** @var string */
+    public $createdBy;
+
+    public function __construct(Request $request, string $createdBy)
+    {
+        if (!in_array($createdBy, Meeting::CREATED_BY, true)) {
+            throw new \InvalidArgumentException('$createdBy is not valid');
+        }
+
+        $this->request = $request;
+        $this->event = $request->getEvent();
+        $this->createdBy = $createdBy;
+    }
+}
