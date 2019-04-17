@@ -62,7 +62,7 @@ abstract class AbstractMeetingRequestType extends AbstractType
             ;
         }
 
-        if (1 < $sheet->countParticipants()) {
+        if (!$sheet->getType()->areAllSheetParticipantsAssignedToMeeting() && 1 < $sheet->countParticipants()) {
             $builder
                 ->add('participants', ChoiceType::class, [
                     'choices'      => $sheet->getParticipants()->toArray(),
