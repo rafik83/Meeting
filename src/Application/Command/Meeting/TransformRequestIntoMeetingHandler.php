@@ -80,6 +80,10 @@ class TransformRequestIntoMeetingHandler
             $this->meetingSlotRepository->findAvailableSlotsByParticipants($query->event, $participants)
         );
 
+        if (empty($slots)) {
+            return null;
+        }
+
         [$slot, $spot] = $this->getAvailableSlotAndSpot($slots, $fromSheet, $toSheet, $participants);
 
         if (!$slot instanceof MeetingSlot || !$spot instanceof Spot) {
