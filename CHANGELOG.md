@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1] - 2019-04-23
+### Changed
+- VIMEET-1914 - Bold on sheet titles
+
 ## [2.0.9] - 2019-04-17
 ### Changed
 - VIMEET-1913 - No participants selection on meeting request when meetings are assigned to all participants
