@@ -25,14 +25,14 @@ class HasMeetingWithLinkedSheets
     public function isSatisfiedBy(Request $request): bool
     {
         $toSheet = $request->getToSheet();
-        $toSheetLinkedSheets = $toSheet->getLinkedSheets() !== null ? $toSheet->getLinkedSheets()->getSheets() : [$toSheet];
         $fromSheet = $request->getFromSheet();
-        $fromSheetLinkedSheets = $fromSheet->getLinkedSheets() !== null ? $fromSheet->getLinkedSheets()->getSheets() : [$fromSheet];
 
         if ($toSheet->hasLinkedSheets() || $fromSheet->hasLinkedSheets()) {
+            $toSheetLinkedSheets = $toSheet->getLinkedSheets() !== null ? $toSheet->getLinkedSheets()->getSheets() : [$toSheet];
+            $fromSheetLinkedSheets = $fromSheet->getLinkedSheets() !== null ? $fromSheet->getLinkedSheets()->getSheets() : [$fromSheet];
             return $this->meetingRepository->hasAtLeastOneMeeting($toSheetLinkedSheets, $fromSheetLinkedSheets);
         }
 
-        return true;
+        return false;
     }
 }

@@ -85,7 +85,7 @@ class RequestViewQueryHandler
         }
 
         if ($this->hasMeetingWithLinkedSheets->isSatisfiedBy($request)) {
-            return true;
+            return false;
         }
 
         try {
