@@ -9,11 +9,11 @@
         {{ 'admin.rooming.title'|trans({'%count%': roomingListView.listCount}) }}
     </h1>
     {{ form_start(form) }}
-    {{ form_row(form.types, { 'group_attr': { 'class': 'col-md-10' } }) }}
+    {{ form_row(form.types, { 'group_attr': { 'class': 'col-md-9' } }) }}
 
-    <div class="col-md-2">
+    <div class="col-md-3">
         <button type="submit" id="submit" name="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
-        <a href="{{ path('admin_event_rooming_list', {'event': event.id }) }}" class="btn btn-default">{{ 'admin.reset.filter'|trans }}</a>
+        <a href="{{ path('admin_event_rooming_list', {'event': event.id }) }}" class="btn btn-link">{{ 'admin.reset.filter'|trans }}</a>
     </div>
     {{ form_end(form) }}
 
