@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Ui\Helper\HasMeetingWithLinkedSheets;
 
 class RequestViewQueryHandlerTest extends TestCase
 {
@@ -52,6 +53,9 @@ class RequestViewQueryHandlerTest extends TestCase
 
     /** @var RequestViewQueryHandler */
     private $requestViewQueryHandler;
+
+    /** @var HasMeetingWithLinkedSheets */
+    private $hasMeetingWithLinkedSheets;
 
     public function setUp()
     {
@@ -102,17 +106,28 @@ class RequestViewQueryHandlerTest extends TestCase
         $this->requestSlotViewQueryHandler = $this->prophesize(RequestSlotViewQueryHandler::class);
         $this->visioGuesser = $this->prophesize(VisioGuesser::class);
 
+        $this->hasMeetingWithLinkedSheets = $this->prophesize(HasMeetingWithLinkedSheets::class);
+
         $this->requestViewQueryHandler = new RequestViewQueryHandler(
             $this->sheetInfoGuesser->reveal(),
             $this->participantInfoGuesser->reveal(),
             $this->requestSlotViewQueryHandler->reveal(),
-            $this->visioGuesser->reveal()
+            $this->visioGuesser->reveal(),
+            $this->hasMeetingWithLinkedSheets->reveal()
         );
     }
 
     public function test_meeting_request_is_transformable_into_meeting()
     {
         $this->sheet->hasOnlyOneParticipant()->willReturn(true);
+        $this->sheet->hasLinkedSheets()->willReturn(false);
+        $this->sheetMet->hasLinkedSheets()->willReturn(false);
+
+        $this->hasMeetingWithLinkedSheets
+            ->isSatisfiedBy($this->meetingRequest->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false);
+
 
         $this->meetingRequest
             ->hasNoPreference($this->sheet->reveal())
@@ -167,6 +182,13 @@ class RequestViewQueryHandlerTest extends TestCase
     public function test_meeting_request_is_not_transformable_into_meeting_because_no_slot_available()
     {
         $this->sheet->hasOnlyOneParticipant()->willReturn(true);
+        $this->sheet->hasLinkedSheets()->willReturn(false);
+        $this->sheetMet->hasLinkedSheets()->willReturn(false);
+
+        $this->hasMeetingWithLinkedSheets
+            ->isSatisfiedBy($this->meetingRequest->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false);
 
         $this->meetingRequest
             ->hasNoPreference($this->sheet->reveal())
@@ -222,6 +244,9 @@ class RequestViewQueryHandlerTest extends TestCase
     {
         $this->sheet->hasOnlyOneParticipant()->willReturn(false);
 
+        $this->hasMeetingWithLinkedSheets->isSatisfiedBy($this->meetingRequest->reveal())
+            ->shouldNotBeCalled();
+
         $this->meetingRequest
             ->hasNoPreference($this->sheet->reveal())
             ->shouldBeCalled()
@@ -263,6 +288,68 @@ class RequestViewQueryHandlerTest extends TestCase
                 false,
                 true,
                 true,
+                false
+            ),
+            $this->requestViewQueryHandler->handle(
+                new RequestViewQuery($this->meetingRequest->reveal(), $this->sheet->reveal(), 'fr')
+            )
+        );
+    }
+
+    public function test_meeting_request_is_not_transformable_into_meeting_because_sheet_is_linked_sheet()
+    {
+        $this->sheet->hasOnlyOneParticipant()->willReturn(true);
+        $this->sheet->hasLinkedSheets()->willReturn(true);
+        $this->sheetMet->hasLinkedSheets()->willReturn(false);
+
+        $this->hasMeetingWithLinkedSheets
+            ->isSatisfiedBy($this->meetingRequest->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this->meetingRequest
+            ->hasNoPreference($this->sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->meetingRequest
+            ->hasNoPreference($this->sheetMet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this->visioGuesser
+            ->hasMeetingRequestParticipantVisio($this->meetingRequest->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+        $this->meetingRequest
+            ->isTransformableIntoMeeting()
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->meetingRequest
+            ->isOneOfSheetsNotAttend()
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this->requestSlotViewQueryHandler
+            ->handle(new RequestSlotViewQuery($this->meetingRequest->reveal(), false))
+            ->shouldBeCalled()
+            ->willReturn([new RequestSlotView([333, 444])])
+        ;
+
+        $this->assertEquals(
+            new RequestView(
+                1337,
+                'Fifth Element Corp.',
+                42,
+                [new ParticipantView(11, 'Korben DALLAS'), new ParticipantView(22, 'Leeloo')],
+                true,
+                false,
+                false,
                 false
             ),
             $this->requestViewQueryHandler->handle(
