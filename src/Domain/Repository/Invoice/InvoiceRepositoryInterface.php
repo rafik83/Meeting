@@ -23,6 +23,8 @@ interface InvoiceRepositoryInterface
      */
     public function add(Invoice $invoice);
 
+    public function set(Invoice $invoice): void;
+
     /**
      * @param Sheet $sheet
      *
