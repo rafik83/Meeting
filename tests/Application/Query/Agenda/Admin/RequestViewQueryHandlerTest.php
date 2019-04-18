@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class RequestViewQueryHandlerTest extends TestCase
@@ -53,19 +54,31 @@ class RequestViewQueryHandlerTest extends TestCase
     /** @var RequestViewQueryHandler */
     private $requestViewQueryHandler;
 
+    /** @var Type */
+    private $type;
+
+    /**@var Participant */
+    private $participant1;
+
+    /**@var Participant */
+    private $participant2;
+
     public function setUp()
     {
         $this->sheet = $this->prophesize(Sheet::class);
+        $this->type = $this->prophesize(Type::class);
+        $this->type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
+        $this->sheet->getType()->willReturn($this->type->reveal());
 
         $this->sheetMet = $this->prophesize(Sheet::class);
         $this->sheetMet->getId()->willReturn(42);
         $this->sheetMet->hasOnlyOneParticipant()->willReturn(false);
 
-        $participant1 = $this->prophesize(Participant::class);
-        $participant1->getId()->shouldBeCalled()->willReturn(11);
+        $this->participant1 = $this->prophesize(Participant::class);
+        $this->participant1->getId()->shouldBeCalled()->willReturn(11);
 
-        $participant2 = $this->prophesize(Participant::class);
-        $participant2->getId()->shouldBeCalled()->willReturn(22);
+        $this->participant2 = $this->prophesize(Participant::class);
+        $this->participant2->getId()->shouldBeCalled()->willReturn(22);
 
         $this->meetingRequest = $this->prophesize(Request::class);
         $this->meetingRequest->getSheetMet($this->sheet->reveal())->willReturn($this->sheetMet->reveal());
@@ -79,16 +92,16 @@ class RequestViewQueryHandlerTest extends TestCase
 
         $this->participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $this->participantInfoGuesser
-            ->guessParticipantCompleteName($participant1->reveal(), 'fr')
+            ->guessParticipantCompleteName($this->participant1->reveal(), 'fr')
             ->willReturn('Korben DALLAS')
         ;
         $this->participantInfoGuesser
-            ->guessParticipantCompleteName($participant2->reveal(), 'fr')
+            ->guessParticipantCompleteName($this->participant2->reveal(), 'fr')
             ->willReturn('Leeloo')
         ;
         $this->meetingRequest
             ->getParticipants($this->sheet->reveal())
-            ->willReturn([$participant1->reveal(), $participant2->reveal()])
+            ->willReturn([$this->participant1->reveal(), $this->participant2->reveal()])
         ;
 
         $this->requestSlotViewQueryHandler = $this->prophesize(RequestSlotViewQueryHandler::class);
@@ -255,6 +268,66 @@ class RequestViewQueryHandlerTest extends TestCase
                 false,
                 true,
                 true,
+                false
+            ),
+            $this->requestViewQueryHandler->handle(
+                new RequestViewQuery($this->meetingRequest->reveal(), $this->sheet->reveal(), 'fr')
+            )
+        );
+    }
+
+    public function test_not_no_preference_while_all_sheet_participants_are_assigned_to_meeting(): void
+    {
+        // override setup prophecies
+        $this->sheet->hasOnlyOneParticipant()->willReturn(false);
+
+        $this->meetingRequest
+            ->getParticipants($this->sheet->reveal())
+            ->willReturn([])
+        ;
+
+        $this->participant1->getId()->shouldNotBeCalled();
+        $this->participant2->getId()->shouldNotBeCalled();
+
+        // next
+        $this->type->areAllSheetParticipantsAssignedToMeeting()->willReturn(true);
+
+        $this->meetingRequest
+            ->hasNoPreference($this->sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->meetingRequest
+            ->hasNoPreference($this->sheetMet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this->visioGuesser
+            ->hasMeetingRequestParticipantVisio($this->meetingRequest->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+        $this->meetingRequest
+            ->isTransformableIntoMeeting()
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->meetingRequest
+            ->isOneOfSheetsNotAttend()
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this->assertEquals(
+            new RequestView(
+                1337,
+                'Fifth Element Corp.',
+                42,
+                [],
+                true,
+                false,
+                false,
                 false
             ),
             $this->requestViewQueryHandler->handle(
