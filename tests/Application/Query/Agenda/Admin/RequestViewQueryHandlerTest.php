@@ -305,7 +305,7 @@ class RequestViewQueryHandlerTest extends TestCase
         $this->hasMeetingWithLinkedSheets
             ->isSatisfiedBy($this->meetingRequest->reveal())
             ->shouldBeCalled()
-            ->willReturn(false)
+            ->willReturn(true)
         ;
 
         $this->meetingRequest
@@ -337,8 +337,7 @@ class RequestViewQueryHandlerTest extends TestCase
 
         $this->requestSlotViewQueryHandler
             ->handle(new RequestSlotViewQuery($this->meetingRequest->reveal(), false))
-            ->shouldBeCalled()
-            ->willReturn([new RequestSlotView([333, 444])])
+            ->shouldNotBeCalled()
         ;
 
         $this->assertEquals(
@@ -347,7 +346,7 @@ class RequestViewQueryHandlerTest extends TestCase
                 'Fifth Element Corp.',
                 42,
                 [new ParticipantView(11, 'Korben DALLAS'), new ParticipantView(22, 'Leeloo')],
-                true,
+                false,
                 false,
                 false,
                 false
