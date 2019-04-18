@@ -28,8 +28,9 @@ class HasMeetingWithLinkedSheets
         $fromSheet = $request->getFromSheet();
 
         if ($toSheet->hasLinkedSheets() || $fromSheet->hasLinkedSheets()) {
-            $toSheetLinkedSheets = $toSheet->getLinkedSheets() !== null ? $toSheet->getLinkedSheets()->getSheets() : [$toSheet];
-            $fromSheetLinkedSheets = $fromSheet->getLinkedSheets() !== null ? $fromSheet->getLinkedSheets()->getSheets() : [$fromSheet];
+            $toSheetLinkedSheets = $toSheet->hasLinkedSheets() ? $toSheet->getLinkedSheets()->getSheets() : [$toSheet];
+            $fromSheetLinkedSheets = $fromSheet->hasLinkedSheets() ? $fromSheet->getLinkedSheets()->getSheets() : [$fromSheet];
+
             return $this->meetingRepository->hasAtLeastOneMeeting($toSheetLinkedSheets, $fromSheetLinkedSheets);
         }
 

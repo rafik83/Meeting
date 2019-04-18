@@ -847,9 +847,9 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->join('meeting.fromSheet',
                 'fromSheet',
                 'WITH',
-                '(fromSheet IN (:sheets) AND meeting.toSheet IN (:othersSheets)
-                            OR
-                            fromSheet IN (:othersSheets) AND meeting.toSheet IN (:sheets))')
+                'fromSheet IN (:sheets) AND meeting.toSheet IN (:othersSheets)
+                 OR
+                 fromSheet IN (:othersSheets) AND meeting.toSheet IN (:sheets)')
             ->setParameter('sheets', $sheets)
             ->setParameter('othersSheets', $othersSheets)
             ->where('meeting.state = :state')
@@ -858,6 +858,5 @@ class MeetingRepository implements MeetingRepositoryInterface
         ;
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
-
     }
 }
