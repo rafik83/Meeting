@@ -133,7 +133,7 @@
                                 <td>{{ 'admin.agenda.requestsList.zeroResult'|trans }}</td>
                             </tr>
                             <tr v-for="request in focusedSheet.requests">
-                                <td v-bind:class="{ 'request-to-be-placed': meetingRequestToTransformIntoMeeting === request, 'sheet-cancelled-attendance': request.isOneOfSheetsNotAttend || !request.isTransformableIntoMeeting }">
+                                <td v-bind:class="{ 'request-to-be-placed': meetingRequestToTransformIntoMeeting === request, 'sheet-cancelled-attendance': request.isOneOfSheetsNotAttend, 'sheet-blocked-attendance': !request.isTransformableIntoMeeting }">
                                     <a href="#" title="{{ 'admin.agenda.request.updateParticipant.label'|trans }}" class="pull-right" v-on:click="showParticipants(request)">
                                         <span class="glyphicon glyphicon-cog"></span>
                                     </a>
