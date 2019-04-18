@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Event\Meeting\MeetingParticipateEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingRequestCanNotBeMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSpotAvailableException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -40,13 +42,6 @@ class TransformRequestIntoMeetingHandler
     /** @var AvailableSpots */
     private $availableSpots;
 
-    /**
-     * @param MeetingRepositoryInterface  $meetingRepository
-     * @param RequestSlotViewQueryHandler $requestSlotViewQueryHandler
-     * @param AvailableSpots              $availableSpots
-     * @param \DateTimeInterface          $dateTime
-     * @param DelayedEventDispatcher      $eventDispatcher
-     */
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
@@ -54,11 +49,11 @@ class TransformRequestIntoMeetingHandler
         \DateTimeInterface $dateTime,
         DelayedEventDispatcher $eventDispatcher
     ) {
-        $this->meetingRepository           = $meetingRepository;
+        $this->meetingRepository = $meetingRepository;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
-        $this->dateTime                    = $dateTime;
-        $this->eventDispatcher             = $eventDispatcher;
-        $this->availableSpots              = $availableSpots;
+        $this->dateTime = $dateTime;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->availableSpots = $availableSpots;
     }
 
     /**
@@ -67,8 +62,10 @@ class TransformRequestIntoMeetingHandler
      * @throws MeetingRequestCanNotBeMeetingException
      * @throws NoSpotsAvailableForThisSlotAndMeetingException
      * @throws SlotNotAvailableForThisMeetingException
+     * @throws NoSlotAvailableException
+     * @throws NoSpotAvailableException
      */
-    public function handle(TransformRequestIntoMeeting $transformRequestIntoMeeting)
+    public function handle(TransformRequestIntoMeeting $transformRequestIntoMeeting): void
     {
         if (false === $transformRequestIntoMeeting->meetingRequest->isTransformableIntoMeeting()) {
             throw new MeetingRequestCanNotBeMeetingException();
@@ -83,7 +80,12 @@ class TransformRequestIntoMeetingHandler
         );
 
         // Check if selected slot is in available slots
-        if (false === \in_array($transformRequestIntoMeeting->slot->getId(), $meetingUpdateSlotView->availableSlotsId, true)) {
+        if (false === \in_array(
+                $transformRequestIntoMeeting->slot->getId(),
+                $meetingUpdateSlotView->availableSlotsId,
+                true
+            )
+        ) {
             throw new SlotNotAvailableForThisMeetingException();
         }
 
@@ -96,7 +98,7 @@ class TransformRequestIntoMeetingHandler
         );
 
         $fromSheet = $transformRequestIntoMeeting->meetingRequest->getFromSheet();
-        $toSheet   = $transformRequestIntoMeeting->meetingRequest->getToSheet();
+        $toSheet = $transformRequestIntoMeeting->meetingRequest->getToSheet();
 
         $meeting = new Meeting(
             $transformRequestIntoMeeting->meetingRequest,
@@ -121,7 +123,8 @@ class TransformRequestIntoMeetingHandler
         );
 
         foreach ($meeting->getAllParticipants() as $participant) {
-            $this->eventDispatcher->dispatch(Events::MEETING_PARTICIPATE,
+            $this->eventDispatcher->dispatch(
+                Events::MEETING_PARTICIPATE,
                 new MeetingParticipateEvent($participant)
             );
         }
