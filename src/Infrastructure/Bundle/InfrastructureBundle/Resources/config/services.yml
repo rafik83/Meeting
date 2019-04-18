@@ -699,6 +699,7 @@ services:
             - '@domain.spot.available_spots'
             - '@datetime'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting }
 

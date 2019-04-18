@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Admin\MeetingUpdateSlotView;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -46,13 +47,16 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $availableSpots              = $this->prophesize(AvailableSpots::class);
         $datetime                    = new \DateTime();
         $eventDispatcher             = $this->prophesize(DelayedEventDispatcher::class);
+        $meetParticipants = $this->prophesize(MeetingParticipants::class);
+
+        $meetParticipants->getMeetingParticipants($meetingRequest->reveal(), $fromSheet)->willReturn([]);
+        $meetParticipants->getMeetingParticipants($meetingRequest->reveal(), $toSheet)->willReturn([]);
+        $meetParticipants->countAllMeetingParticipants($meetingRequest->reveal())->willReturn(10);
 
         $meetingRequest->isTransformableIntoMeeting()->willReturn(true);
         $meetingRequest->countParticipants()->willReturn(10);
         $meetingRequest->getFromSheet()->willReturn($fromSheet);
         $meetingRequest->getToSheet()->willReturn($toSheet);
-        $meetingRequest->getParticipants($fromSheet)->willReturn([]);
-        $meetingRequest->getParticipants($toSheet)->willReturn([]);
 
         $slot->getId()->willReturn(1);
         $slot->getEvent()->willReturn($event);
@@ -107,7 +111,8 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $requestSlotViewQueryHandler->reveal(),
             $availableSpots->reveal(),
             $datetime,
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $meetParticipants->reveal()
         );
 
         $handler->handle($query);

@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableExceptio
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSpotAvailableException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Spot\AvailableSpots;
@@ -42,18 +43,23 @@ class TransformRequestIntoMeetingHandler
     /** @var AvailableSpots */
     private $availableSpots;
 
+    /** @var MeetingParticipants */
+    private $meetingParticipants;
+
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
         AvailableSpots $availableSpots,
         \DateTimeInterface $dateTime,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher,
+        MeetingParticipants $meetingParticipants
     ) {
         $this->meetingRepository = $meetingRepository;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
         $this->dateTime = $dateTime;
         $this->eventDispatcher = $eventDispatcher;
         $this->availableSpots = $availableSpots;
+        $this->meetingParticipants = $meetingParticipants;
     }
 
     /**
@@ -104,9 +110,9 @@ class TransformRequestIntoMeetingHandler
             $transformRequestIntoMeeting->meetingRequest,
             $transformRequestIntoMeeting->slot,
             $fromSheet,
-            $transformRequestIntoMeeting->meetingRequest->getParticipants($fromSheet),
+            $this->meetingParticipants->getMeetingParticipants($transformRequestIntoMeeting->meetingRequest, $fromSheet),
             $toSheet,
-            $transformRequestIntoMeeting->meetingRequest->getParticipants($toSheet),
+            $this->meetingParticipants->getMeetingParticipants($transformRequestIntoMeeting->meetingRequest, $toSheet),
             $this->dateTime,
             $spot,
             $transformRequestIntoMeeting->event,
