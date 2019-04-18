@@ -90,14 +90,6 @@ class RequestViewQueryHandlerTest extends TestCase
             ->getParticipants($this->sheet->reveal())
             ->willReturn([$participant1->reveal(), $participant2->reveal()])
         ;
-        $this->meetingRequest
-            ->getParticipants($this->sheet->reveal())
-            ->willReturn([$participant1->reveal(), $participant2->reveal()])
-        ;
-        $this->meetingRequest
-            ->getParticipants($this->sheet->reveal())
-            ->willReturn([$participant1->reveal(), $participant2->reveal()])
-        ;
 
         $this->requestSlotViewQueryHandler = $this->prophesize(RequestSlotViewQueryHandler::class);
         $this->visioGuesser = $this->prophesize(VisioGuesser::class);
