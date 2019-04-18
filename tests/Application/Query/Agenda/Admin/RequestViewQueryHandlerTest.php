@@ -146,12 +146,6 @@ class RequestViewQueryHandlerTest extends TestCase
             ->willReturn(false)
         ;
 
-        $this->requestSlotViewQueryHandler
-            ->handle(new RequestSlotViewQuery($this->meetingRequest->reveal(), false))
-            ->shouldBeCalled()
-            ->willReturn([new RequestSlotView([333, 444])])
-        ;
-
         $this->assertEquals(
             new RequestView(
                 1337,
