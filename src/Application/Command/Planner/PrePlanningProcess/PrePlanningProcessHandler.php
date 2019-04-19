@@ -17,7 +17,10 @@ class PrePlanningProcessHandler
     public function handle(PrePlanningProcess $prePlanningProcess): void
     {
         $this->commandBus->handle(
-            new ApprovedRequestsByLinkedSheets($prePlanningProcess->event, $prePlanningProcess->solutionType)
+            new TransformIntoMeetingApprovedRequestsByLinkedSheets(
+                $prePlanningProcess->event,
+                $prePlanningProcess->solutionType
+            )
         );
     }
 }

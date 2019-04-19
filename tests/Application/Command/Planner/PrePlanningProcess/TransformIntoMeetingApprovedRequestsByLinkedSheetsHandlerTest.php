@@ -6,8 +6,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Meeting\TransformRequestIntoMeeting;
-use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\ApprovedRequestsByLinkedSheets;
-use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\ApprovedRequestsByLinkedSheetsHandler;
+use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformIntoMeetingApprovedRequestsByLinkedSheets;
+use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformIntoMeetingApprovedRequestsByLinkedSheetsHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -17,13 +17,13 @@ use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
 
-class ApprovedRequestsByLinkedSheetsHandlerTest extends TestCase
+class TransformIntoMeetingApprovedRequestsByLinkedSheetsHandlerTest extends TestCase
 {
     /** @var ObjectProphecy|Event */
     private $event;
 
-    /** @var ApprovedRequestsByLinkedSheetsHandler */
-    private $approvedRequestsByLinkedSheetsHandler;
+    /** @var TransformIntoMeetingApprovedRequestsByLinkedSheetsHandler */
+    private $transformIntoMeetingApprovedRequestsByLinkedSheetsHandler;
 
     /** @var ObjectProphecy|CommandBusInterface */
     private $commandBus;
@@ -41,7 +41,7 @@ class ApprovedRequestsByLinkedSheetsHandlerTest extends TestCase
         $this->linkedSheetsRepository = $this->prophesize(LinkedSheetsRepositoryInterface::class);
         $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
 
-        $this->approvedRequestsByLinkedSheetsHandler = new ApprovedRequestsByLinkedSheetsHandler(
+        $this->transformIntoMeetingApprovedRequestsByLinkedSheetsHandler = new TransformIntoMeetingApprovedRequestsByLinkedSheetsHandler(
             $this->commandBus->reveal(),
             $this->linkedSheetsRepository->reveal(),
             $this->requestRepository->reveal()
@@ -64,8 +64,8 @@ class ApprovedRequestsByLinkedSheetsHandlerTest extends TestCase
 
         $this->commandBus->handle()->shouldNotBeCalled();
 
-        $this->approvedRequestsByLinkedSheetsHandler->handle(
-            new ApprovedRequestsByLinkedSheets($this->event->reveal(), ExportSolutionType::SOLUTION_FROM_SCRATCH)
+        $this->transformIntoMeetingApprovedRequestsByLinkedSheetsHandler->handle(
+            new TransformIntoMeetingApprovedRequestsByLinkedSheets($this->event->reveal(), ExportSolutionType::SOLUTION_FROM_SCRATCH)
         );
     }
 
@@ -85,8 +85,8 @@ class ApprovedRequestsByLinkedSheetsHandlerTest extends TestCase
 
         $this->commandBus->handle()->shouldNotBeCalled();
 
-        $this->approvedRequestsByLinkedSheetsHandler->handle(
-            new ApprovedRequestsByLinkedSheets($this->event->reveal(), ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED)
+        $this->transformIntoMeetingApprovedRequestsByLinkedSheetsHandler->handle(
+            new TransformIntoMeetingApprovedRequestsByLinkedSheets($this->event->reveal(), ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED)
         );
     }
 
@@ -107,8 +107,8 @@ class ApprovedRequestsByLinkedSheetsHandlerTest extends TestCase
 
         $this->commandBus->handle()->shouldNotBeCalled();
 
-        $this->approvedRequestsByLinkedSheetsHandler->handle(
-            new ApprovedRequestsByLinkedSheets(
+        $this->transformIntoMeetingApprovedRequestsByLinkedSheetsHandler->handle(
+            new TransformIntoMeetingApprovedRequestsByLinkedSheets(
                 $this->event->reveal(),
                 ExportSolutionType::SOLUTION_OPTIMIZE_MOVING_ALLOWED
             )
@@ -226,8 +226,8 @@ class ApprovedRequestsByLinkedSheetsHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $this->approvedRequestsByLinkedSheetsHandler->handle(
-            new ApprovedRequestsByLinkedSheets(
+        $this->transformIntoMeetingApprovedRequestsByLinkedSheetsHandler->handle(
+            new TransformIntoMeetingApprovedRequestsByLinkedSheets(
                 $this->event->reveal(),
                 ExportSolutionType::SOLUTION_OPTIMIZE_MOVING_ALLOWED
             )

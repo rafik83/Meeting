@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess;
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ApprovedRequestsByLinkedSheets implements Command
+class TransformIntoMeetingApprovedRequestsByLinkedSheets implements Command
 {
     /** @var Event */
     public $event;
