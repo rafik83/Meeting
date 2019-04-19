@@ -16,13 +16,15 @@ class LinkedSheetsTitle
     public static function getSheetTitleView(Sheet $sheet) :string
     {
         $linkedSheetTitles = [];
-        if($sheet->hasLinkedSheets()){
+        if ($sheet->hasLinkedSheets()) {
             $linkedSheets = $sheet->getLinkedSheets();
             foreach ($linkedSheets->getSheets() as $linkedSheet) {
                 $linkedSheetTitles[] = $linkedSheet->getTitle();
             }
+
             return implode(' - ', $linkedSheetTitles);
         }
+
         return $sheet->getTitle();
     }
 }
