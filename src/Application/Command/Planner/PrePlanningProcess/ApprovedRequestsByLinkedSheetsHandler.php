@@ -50,11 +50,11 @@ class ApprovedRequestsByLinkedSheetsHandler
         }
 
         // 2. get all accepted requests not transformed into meeting of all linked sheets
-        $approvedRequests = $this->requestRepository->getRequestsOfSheetsWithSheets(
+        $approvedRequests = $this->requestRepository->findBySheets(
             $approvedRequestsByLinkedSheets->event,
             $sheets,
-            $sheets,
-            Meeting\Request::STATE_APPROVED
+            [Meeting\Request::STATE_APPROVED],
+            true
         );
 
         // 3. for each request, if there is a accepted request of its linked sheets
