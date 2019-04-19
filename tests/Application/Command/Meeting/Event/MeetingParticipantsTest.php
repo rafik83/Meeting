@@ -33,63 +33,57 @@ class MeetingParticipantsTest extends TestCase
      */
     private $fromParticipant;
 
-    /** @var MeetingParticipants */
-    private $meetingParticipants;
-
     public function setUp()
     {
         $this->request = $this->prophesize(Request::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->type = $this->prophesize(Type::class);
+
         $this->fromParticipant = $this->prophesize(Participant::class);
+
         $this->sheet->getType()->willReturn($this->type->reveal());
-        $this->meetingParticipants = new MeetingParticipants();
+
+        $this->request->isSender($this->sheet->reveal())
+            ->willReturn(true);
+
+        $this->request->isReceiver($this->sheet->reveal())
+            ->willReturn(false);
     }
 
     public function testInvalidSheet(): void
     {
+        // prepare data
         $request = $this->prophesize(Request::class);
         $invalidSheet = $this->prophesize(Sheet::class);
 
         $request->isSender($invalidSheet)
             ->shouldBeCalled()
-            ->willReturn(false)
-        ;
+            ->willReturn(false);
 
         $request->isReceiver($invalidSheet)
             ->shouldBeCalled()
-            ->willReturn(false)
-        ;
+            ->willReturn(false);
 
+        // run tests
         $this->expectException(InvalidArgumentException::class);
-        $this->meetingParticipants->getMeetingParticipants($request->reveal(), $invalidSheet->reveal());
+
+        $meetingParticipants = new MeetingParticipants();
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $invalidSheet->reveal());
     }
 
     public function testSimple(): void
     {
-        $this
-            ->request
-            ->isSender($this->sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn(true)
-        ;
-
         $this->sheet->hasLinkedSheets()->willReturn(false);
 
         $this->type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
 
-        $this->request
-            ->hasNoPreference($this->sheet->reveal())
+        $this->request->getParticipants($this->sheet->reveal())
             ->shouldBeCalled()
-            ->willReturn(false)
-        ;
-        $this->request
-            ->getParticipants($this->sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn([$this->fromParticipant->reveal()])
-        ;
+            ->willReturn([$this->fromParticipant->reveal()]);
 
-        $result = $this->meetingParticipants->getMeetingParticipants($this->request->reveal(), $this->sheet->reveal());
+        // run tests
+        $meetingParticipants = new MeetingParticipants();
+        $result = $meetingParticipants->getMeetingParticipants($this->request->reveal(), $this->sheet->reveal());
 
         $expected = [$this->fromParticipant->reveal()];
 
@@ -98,49 +92,34 @@ class MeetingParticipantsTest extends TestCase
 
     public function testNotEverybodyAssignedButLinkedSheets(): void
     {
-        $this
-            ->request
-            ->isSender($this->sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn(true)
-        ;
-
         $this->sheet->hasLinkedSheets()->willReturn(true);
 
         $this->type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
 
-        $this->request
-            ->hasNoPreference($this->sheet->reveal())
+        $this->request->getParticipants($this->sheet->reveal())
             ->shouldBeCalled()
-            ->willReturn(false)
-        ;
-        $this->request
-            ->getParticipants($this->sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn([$this->fromParticipant->reveal()])
-        ;
+            ->willReturn([$this->fromParticipant->reveal()]);
 
-        $result = $this->meetingParticipants->getMeetingParticipants($this->request->reveal(), $this->sheet->reveal());
+        // run tests
+        $meetingParticipants = new MeetingParticipants();
+        $result = $meetingParticipants->getMeetingParticipants($this->request->reveal(), $this->sheet->reveal());
+
         $expected = [$this->fromParticipant->reveal()];
+
         $this->assertEquals($expected, $result);
     }
 
     public function testEverybodyAssignedInNotLinkedSheets(): void
     {
-        $this
-            ->request
-            ->isSender($this->sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn(true)
-        ;
-
         $this->sheet->hasLinkedSheets()->willReturn(false);
 
         $this->type->areAllSheetParticipantsAssignedToMeeting()->willReturn(true);
 
         $this->sheet->getParticipantsArray()->shouldBeCalled()->willReturn([$this->fromParticipant->reveal()]);
 
-        $result = $this->meetingParticipants->getMeetingParticipants($this->request->reveal(), $this->sheet->reveal());
+        // run tests
+        $meetingParticipants = new MeetingParticipants();
+        $result = $meetingParticipants->getMeetingParticipants($this->request->reveal(), $this->sheet->reveal());
 
         $expected = [$this->fromParticipant->reveal()];
 
@@ -149,47 +128,18 @@ class MeetingParticipantsTest extends TestCase
 
     public function testEverybodyAssignedInLinkedSheets(): void
     {
-        $this
-            ->request
-            ->isSender($this->sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn(true)
-        ;
-
         $this->sheet->hasLinkedSheets()->willReturn(true);
 
         $this->type->areAllSheetParticipantsAssignedToMeeting()->willReturn(true);
 
         $this->sheet->getLinkedSheetsParticipants()->shouldBeCalled()->willReturn([$this->fromParticipant->reveal()]);
 
-        $result = $this->meetingParticipants->getMeetingParticipants($this->request->reveal(), $this->sheet->reveal());
+        // run tests
+        $meetingParticipants = new MeetingParticipants();
+        $result = $meetingParticipants->getMeetingParticipants($this->request->reveal(), $this->sheet->reveal());
 
         $expected = [$this->fromParticipant->reveal()];
 
         $this->assertEquals($expected, $result);
-    }
-
-    public function testOneParticipantOnSheet(): void
-    {
-        $this
-            ->request
-            ->isSender($this->sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn(true)
-        ;
-
-        $this->type->areAllSheetParticipantsAssignedToMeeting()->shouldBeCalled()->willReturn(false);
-
-        $this->request->hasNoPreference($this->sheet->reveal())->shouldBeCalled()->willReturn(true);
-        $this->sheet->countParticipants()->shouldBeCalled()->willReturn(1);
-        $this->sheet->getParticipantsArray()->shouldBeCalled()->willReturn([$this->fromParticipant->reveal()]);
-
-        $this->assertEquals(
-            [$this->fromParticipant->reveal()],
-            $this->meetingParticipants->getMeetingParticipants(
-                $this->request->reveal(),
-                $this->sheet->reveal()
-            )
-        );
     }
 }

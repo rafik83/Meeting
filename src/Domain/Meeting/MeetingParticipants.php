@@ -35,10 +35,6 @@ class MeetingParticipants
             return $sheet->getParticipantsArray();
         }
 
-        if ($request->hasNoPreference($sheet) && 1 === $sheet->countParticipants()) {
-            return $sheet->getParticipantsArray();
-        }
-
         return $request->getParticipants($sheet);
     }
 }
