@@ -99,7 +99,7 @@ class TransformRequestIntoMeetingHandler
             $transformRequestIntoMeeting->slot,
             $transformRequestIntoMeeting->meetingRequest->getFromSheet(),
             $transformRequestIntoMeeting->meetingRequest->getToSheet(),
-            $transformRequestIntoMeeting->meetingRequest->countParticipants(),
+            $this->meetingParticipants->countAllMeetingParticipants($transformRequestIntoMeeting->meetingRequest),
             $transformRequestIntoMeeting->visio
         );
 

@@ -50,4 +50,9 @@ class MeetingParticipants
             $this->getMeetingParticipants($request, $request->getToSheet())
         );
     }
+
+    public function countAllMeetingParticipants(Request $request): int
+    {
+        return \count($this->getAllMeetingParticipants($request));
+    }
 }

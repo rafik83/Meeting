@@ -54,7 +54,6 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $meetParticipants->countAllMeetingParticipants($meetingRequest->reveal())->willReturn(10);
 
         $meetingRequest->isTransformableIntoMeeting()->willReturn(true);
-        $meetingRequest->countParticipants()->willReturn(10);
         $meetingRequest->getFromSheet()->willReturn($fromSheet);
         $meetingRequest->getToSheet()->willReturn($toSheet);
 
