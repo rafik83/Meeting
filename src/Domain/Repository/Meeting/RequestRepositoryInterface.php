@@ -393,7 +393,7 @@ interface RequestRepositoryInterface
      * @param string[] $states
      * @param bool     $withoutMeeting
      *
-     * @return array
+     * @return Request[]
      */
     public function findBySheets(Event $event, array $sheets, array $states, bool $withoutMeeting): array;
 }

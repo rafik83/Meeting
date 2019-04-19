@@ -4,7 +4,10 @@ namespace Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Meeting\TransformRequestIntoMeeting;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
 use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
@@ -36,7 +39,59 @@ class ApprovedRequestsByLinkedSheetsHandler
             return;
         }
 
-        $someLinkedSheets = $this->linkedSheetsRepository->getByEvent($approvedRequestsByLinkedSheets->event);
+        $event = $approvedRequestsByLinkedSheets->event;
+        $sheets = $this->getAllSheetsOfLinkedSheetsByEvent($event);
+
+        if (empty($sheets)) {
+            return;
+        }
+
+        $approvedRequests = $this->requestRepository->findBySheets(
+            $event,
+            $sheets,
+            [Meeting\Request::STATE_APPROVED],
+            true
+        );
+
+        $countSheetsMetByLinkedSheet = $this->getCountSheetRequestsByLinkedSheet($approvedRequests);
+
+        foreach ($approvedRequests as $request) {
+            $fromSheet = $request->getFromSheet();
+            $fromLinkedSheets = $fromSheet->getLinkedSheets();
+
+            $toSheet = $request->getToSheet();
+            $toLinkedSheets = $toSheet->getLinkedSheets();
+
+            // From sheet
+            $isTransformedIntoMeetingRequest = $this->transformRequestIntoMeetingWhenAllLinkedSheetsHasApprovedRequests(
+                $request,
+                $countSheetsMetByLinkedSheet,
+                $fromLinkedSheets,
+                $toSheet
+            );
+
+            if ($isTransformedIntoMeetingRequest) {
+                continue;
+            }
+
+            // To sheet
+            $this->transformRequestIntoMeetingWhenAllLinkedSheetsHasApprovedRequests(
+                $request,
+                $countSheetsMetByLinkedSheet,
+                $toLinkedSheets,
+                $fromSheet
+            );
+        }
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    private function getAllSheetsOfLinkedSheetsByEvent(Event $event): array
+    {
+        $someLinkedSheets = $this->linkedSheetsRepository->getByEvent($event);
         $sheets = [];
 
         foreach ($someLinkedSheets as $linkedSheets) {
@@ -45,23 +100,92 @@ class ApprovedRequestsByLinkedSheetsHandler
             }
         }
 
-        if (empty($sheets)) {
+        return $sheets;
+    }
+
+    /**
+     * @param Meeting\Request[] $requests
+     *
+     * @return array
+     */
+    private function getCountSheetRequestsByLinkedSheet(array $requests): array
+    {
+        $countSheetsMetByLinkedSheet = [];
+
+        foreach ($requests as $request) {
+            $fromSheet = $request->getFromSheet();
+            $fromLinkedSheets = $fromSheet->getLinkedSheets();
+
+            $toSheet = $request->getToSheet();
+            $toLinkedSheets = $toSheet->getLinkedSheets();
+
+            $this->incrementSheetsMetByLinkedSheet($countSheetsMetByLinkedSheet, $fromLinkedSheets, $toSheet);
+            $this->incrementSheetsMetByLinkedSheet($countSheetsMetByLinkedSheet, $toLinkedSheets, $fromSheet);
+        }
+
+        return $countSheetsMetByLinkedSheet;
+    }
+
+    private function incrementSheetsMetByLinkedSheet(
+        array &$countSheetsMetByLinkedSheet,
+        ?LinkedSheets $linkedSheets,
+        Sheet $sheetMet
+    ): void {
+        if (null === $linkedSheets) {
             return;
         }
 
-        // 2. get all accepted requests not transformed into meeting of all linked sheets
-        $approvedRequests = $this->requestRepository->findBySheets(
-            $approvedRequestsByLinkedSheets->event,
-            $sheets,
-            [Meeting\Request::STATE_APPROVED],
-            true
-        );
+        $sheetMetId = $sheetMet->getId();
+        $linkedSheetsId = $linkedSheets->getId();
 
-        // 3. for each request, if there is a accepted request of its linked sheets
-        // 3.1. transform a request into meeting
-        //$this->commandBus->handle(new TransformRequestIntoMeeting($request, Meeting::CREATED_BY_PLANNER));
+        if (!isset($countSheetsMetByLinkedSheet[$linkedSheetsId])) {
+            $countSheetsMetByLinkedSheet[$linkedSheetsId] = [];
+        }
 
-        // 3.2. ignore not transformed requests
-        // 4. dispatch events ?
+        if (!isset($countSheetsMetByLinkedSheet[$linkedSheetsId][$sheetMetId])) {
+            $countSheetsMetByLinkedSheet[$linkedSheetsId][$sheetMetId] = 0;
+        }
+
+        $countSheetsMetByLinkedSheet[$linkedSheetsId][$sheetMetId]++;
+    }
+
+    /**
+     * Returns true if request is transformed into meeting
+     *
+     * @param Meeting\Request   $request
+     * @param array             $countSheetsMetByLinkedSheet
+     * @param LinkedSheets|null $linkedSheets
+     * @param Sheet             $sheetMet
+     *
+     * @return bool
+     */
+    private function transformRequestIntoMeetingWhenAllLinkedSheetsHasApprovedRequests(
+        Meeting\Request $request,
+        array &$countSheetsMetByLinkedSheet,
+        ?LinkedSheets $linkedSheets,
+        Sheet $sheetMet
+    ): bool {
+        if (null === $linkedSheets) {
+            return false;
+        }
+
+        $sheetMetId = $sheetMet->getId();
+        $linkedSheetsId = $linkedSheets->getId();
+
+        if (!isset($countSheetsMetByLinkedSheet[$linkedSheetsId][$sheetMetId])) {
+            return false;
+        }
+
+        $countApprovedRequestWithThisSheet = $countSheetsMetByLinkedSheet[$linkedSheetsId][$sheetMetId];
+        $allLinkedSheetsHasApprovedRequestsWithThisSheet = $countApprovedRequestWithThisSheet === $linkedSheets->countSheets();
+
+        if (!$allLinkedSheetsHasApprovedRequestsWithThisSheet) {
+            return false;
+        }
+
+        $this->commandBus->handle(new TransformRequestIntoMeeting($request, Meeting::CREATED_BY_PLANNER));
+        unset($countSheetsMetByLinkedSheet[$linkedSheetsId][$sheetMetId]);
+
+        return true;
     }
 }
