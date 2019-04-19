@@ -11,7 +11,7 @@
                 {% if meeting.isUserParticipantMultipleSheets %}
                     <b>{{ meeting.userSheetTitle }}</b> -
                 {% endif %}
-                {{ meeting.sheetMetTitle }}
+                {{ meeting.sheetMetTitle | raw }}
             </p>
         </a>
     </header>

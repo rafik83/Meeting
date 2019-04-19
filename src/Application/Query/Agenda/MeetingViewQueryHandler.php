@@ -16,38 +16,39 @@ use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class MeetingViewQueryHandler
 {
-    /**
-     * @var MeetingParticipantViewQueryHandler
-     */
+    /** @var MeetingParticipantViewQueryHandler */
     private $participantHandler;
 
-    /**
-     * @var RuleRepositoryInterface
-     */
+    /** @var RuleRepositoryInterface */
     private $ruleRepository;
 
-    /**
-     * @var VideoMeetingAccess
-     */
+    /** @var VideoMeetingAccess */
     private $videoMeetingAccess;
+
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
 
     /**
      * @param MeetingParticipantViewQueryHandler $participantHandler
      * @param RuleRepositoryInterface            $ruleRepository
      * @param VideoMeetingAccess                 $videoMeetingAccess
+     * @param RequestRepositoryInterface         $requestRepository
      */
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
         RuleRepositoryInterface $ruleRepository,
-        VideoMeetingAccess $videoMeetingAccess
+        VideoMeetingAccess $videoMeetingAccess,
+        RequestRepositoryInterface $requestRepository
     ) {
         $this->participantHandler = $participantHandler;
         $this->ruleRepository = $ruleRepository;
         $this->videoMeetingAccess = $videoMeetingAccess;
+        $this->requestRepository = $requestRepository;
     }
 
     /**
@@ -61,7 +62,7 @@ class MeetingViewQueryHandler
     {
         $userSheet = $query->meeting->getSheetOfUser($query->user);
         $sheetMet = $query->meeting->getSheetMet($userSheet);
-        $sheetMetTitles = LinkedSheetsTitle::getSheetTitleView($sheetMet);
+        $sheetMetTitles = LinkedSheetsTitle::getSheetTitleView($this->requestRepository, $userSheet, $sheetMet);
         $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->currentSheet, $sheetMet);
         $participants = [];
 

@@ -19,7 +19,6 @@ use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Participant\CardView;
-use Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -127,7 +126,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
             $videoMeetingAccess->reveal(),
-            $canSeeSheet
+            $requestRepository->reveal()
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
@@ -235,7 +234,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
             $videoMeetingAccess->reveal(),
-            $canSeeSheet
+            $requestRepository->reveal()
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
