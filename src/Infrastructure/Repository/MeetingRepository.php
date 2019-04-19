@@ -849,7 +849,8 @@ class MeetingRepository implements MeetingRepositoryInterface
                 'WITH',
                 'fromSheet IN (:sheets) AND meeting.toSheet IN (:othersSheets)
                  OR
-                 fromSheet IN (:othersSheets) AND meeting.toSheet IN (:sheets)')
+                 fromSheet IN (:othersSheets) AND meeting.toSheet IN (:sheets)'
+            )
             ->setParameter('sheets', $sheets)
             ->setParameter('othersSheets', $othersSheets)
             ->where('meeting.state = :state')
