@@ -1023,7 +1023,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->select('request')
             ->from(Request::class, 'request')
             ->andWhere('request.event = :event')
-            ->andWhere('request.to IN (:sheets) OR request.from = (:sheets)')
+            ->andWhere('request.to IN (:sheets) OR request.from IN (:sheets)')
             ->andWhere('request.state IN (:states)')
             ->andWhere('request.disabled = false')
             ->setParameter('event', $event)
