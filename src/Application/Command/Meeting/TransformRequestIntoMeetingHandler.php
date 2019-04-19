@@ -25,17 +25,17 @@ use Proximum\Vimeet\Domain\Spot\AvailableSpots;
 
 class TransformRequestIntoMeetingHandler
 {
+    /** @var AvailableSpots */
+    private $availableSpots;
+
+    /** @var MeetingParticipants */
+    private $meetingParticipants;
+
     /** @var MeetingRepositoryInterface */
     public $meetingRepository;
 
     /** @var MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
-
-    /** @var AvailableSpots */
-    private $availableSpots;
-
-    /** @var \DateTimeInterface */
-    private $dateTime;
 
     /** @var SlotFilter */
     private $slotFilter;
@@ -43,8 +43,8 @@ class TransformRequestIntoMeetingHandler
     /** @var VisioGuesser */
     private $visioGuesser;
 
-    /** @var MeetingParticipants */
-    private $meetingParticipants;
+    /** @var \DateTimeInterface */
+    private $dateTime;
 
     public function __construct(
         AvailableSpots $availableSpots,

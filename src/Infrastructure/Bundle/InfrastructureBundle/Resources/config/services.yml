@@ -772,6 +772,19 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest }
+
+    Proximum\Vimeet\Application\Command\Meeting\TransformRequestIntoMeetingHandler:
+        arguments:
+            - '@domain.spot.available_spots'
+            - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@domain.slot.slot_filter'
+            - '@domain.meeting.visio_guesser'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\TransformRequestIntoMeeting }
+
     command.tip.create_handler:
         class: Proximum\Vimeet\Application\Command\Tip\CreateHandler
         arguments:

@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Planner;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcess;
+use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcessHandler;
 use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
 use Proximum\Vimeet\Application\Exception\Planner\NoSpotActiveException;
 use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
