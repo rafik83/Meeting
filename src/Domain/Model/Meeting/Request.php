@@ -624,14 +624,6 @@ class Request implements MessageSubjectInterface
     }
 
     /**
-     * @return Participant[]
-     */
-    public function getAllParticipants()
-    {
-        return array_merge($this->getParticipants($this->from), $this->getParticipants($this->to));
-    }
-
-    /**
      * @return Event
      */
     public function getEvent()

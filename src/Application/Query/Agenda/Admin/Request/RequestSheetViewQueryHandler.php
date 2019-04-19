@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Request;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Admin\Request\RequestParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\Request\RequestSheetView;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
@@ -28,18 +29,24 @@ class RequestSheetViewQueryHandler
      */
     private $participantInfoGuesser;
 
+    /** @var MeetingParticipants */
+    private $meetingParticipants;
+
     /**
      * RequestSheetViewQueryHandler constructor.
      *
      * @param SheetInfoGuesser       $sheetInfoGuesser
      * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @param MeetingParticipants    $meetingParticipants
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
-        ParticipantInfoGuesser $participantInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        MeetingParticipants $meetingParticipants
     ) {
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->meetingParticipants = $meetingParticipants;
     }
 
     /**
@@ -55,7 +62,7 @@ class RequestSheetViewQueryHandler
         foreach ($query->sheet->getParticipants() as $participant) {
             $participate = false;
 
-            if (in_array($participant, $query->request->getAllParticipants())) {
+            if (in_array($participant, $this->meetingParticipants->getAllMeetingParticipants($query->request()))) {
                 $participate = true;
             }
 

@@ -4198,6 +4198,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
     query.agenda.admin.request.request_sheets_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetsViewQueryHandler
         arguments:
@@ -4210,6 +4211,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
+            - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetViewQuery }
     query.agenda.admin.request.meeting_request_list_view_query_handler:
@@ -6057,6 +6059,7 @@ services:
           class: Proximum\Vimeet\Domain\Meeting\VisioGuesser
           arguments:
               - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
+              - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
 
     #
     # Form extension

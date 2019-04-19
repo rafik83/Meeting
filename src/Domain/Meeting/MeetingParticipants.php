@@ -37,4 +37,17 @@ class MeetingParticipants
 
         return $request->getParticipants($sheet);
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return Participant[]
+     */
+    public function getAllMeetingParticipants(Request $request): array
+    {
+        return array_merge(
+            $this->getMeetingParticipants($request, $request->getFromSheet()),
+            $this->getMeetingParticipants($request, $request->getToSheet())
+        );
+    }
 }
