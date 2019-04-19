@@ -632,19 +632,6 @@ class Request implements MessageSubjectInterface
     }
 
     /**
-     * @return int[] array of all participants id
-     */
-    public function getParticipantsId()
-    {
-        return array_map(
-            function (Participant $participant) {
-                return $participant->getId();
-            },
-            $this->getAllParticipants()
-        );
-    }
-
-    /**
      * @return Event
      */
     public function getEvent()
