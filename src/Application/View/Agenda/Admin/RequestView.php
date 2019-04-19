@@ -31,12 +31,6 @@ class RequestView
     public $isOneOfSheetsNotAttend;
 
     /** @var bool */
-    public $sheetHasNoPreference;
-
-    /** @var bool */
-    public $sheetMetHasNoPreference;
-
-    /** @var bool */
     public $isOneOfSheetsHasNoPreference;
 
     /**
@@ -67,8 +61,6 @@ class RequestView
         $this->participants = $participants;
         $this->isTransformableIntoMeeting = $isTransformableIntoMeeting;
         $this->isOneOfSheetsNotAttend = $isOneOfSheetsNotAttend;
-        $this->sheetHasNoPreference = $sheetHasNoPreference;
-        $this->sheetMetHasNoPreference = $sheetMetHasNoPreference;
-        $this->isOneOfSheetsHasNoPreference = $this->sheetHasNoPreference || $this->sheetMetHasNoPreference;
+        $this->isOneOfSheetsHasNoPreference = $sheetHasNoPreference || $sheetMetHasNoPreference;
     }
 }
