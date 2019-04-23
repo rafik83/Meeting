@@ -20,5 +20,5 @@ Résolution (constatation client):
   Ainsi de suite...
   On peut donc très bien avoir 3 participants qui se partagent 2 plannings. Au maximum, les 3 participants auront 40 RDV.
 
-- Lorsque qu'un forfait comprenant un planning en sous-produit est acheté l'agenda du participant est visible. Un forfait sans planning ne permet pas au participant d'avoir un agenda sauf si lors de l'enregistrement du formulaire
+- Lorsque qu'un forfait comprenant un planning en sous-produit est acheté, l'agenda du participant est visible. Un forfait sans planning ne permet pas au participant d'avoir un agenda sauf si lors de l'enregistrement du formulaire
 la case "un participant = un planning" est cochée, donnant à chaque participant d'une fiche un planning.
