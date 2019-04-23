@@ -28,7 +28,7 @@ use Proximum\Vimeet\Domain\View\SheetView;
 
 class CreateHandlerTest extends TestCase
 {
-    public function testNoSheetFoundException()
+    public function testNoSheetFoundException(): void
     {
         $this->expectException(SheetNotFoundException::class);
 
@@ -56,7 +56,7 @@ class CreateHandlerTest extends TestCase
         $createHandler->handle($create);
     }
 
-    public function testNotUniqueType()
+    public function testNotUniqueType(): void
     {
         $this->expectException(LinkedSheetsTypeUniquenessException::class);
 
@@ -103,7 +103,7 @@ class CreateHandlerTest extends TestCase
         $createHandler->handle($create);
     }
 
-    public function testAlreadyLinkedSheet()
+    public function testAlreadyLinkedSheet(): void
     {
         $this->expectException(AlreadyLinkedException::class);
 
@@ -140,7 +140,7 @@ class CreateHandlerTest extends TestCase
         $createHandler->handle($create);
     }
 
-    public function testMoreThan1Sheet()
+    public function testMoreThan1Sheet(): void
     {
         $this->expectException(NotEnoughSheetsException::class);
 
@@ -227,7 +227,7 @@ class CreateHandlerTest extends TestCase
         $createHandler->handle($create);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $linkedSheetsRepository = $this->prophesize(LinkedSheetsRepositoryInterface::class);
         $sheetsRepository = $this->prophesize(SheetRepositoryInterface::class);
