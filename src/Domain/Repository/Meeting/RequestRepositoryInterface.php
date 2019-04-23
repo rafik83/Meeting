@@ -387,11 +387,6 @@ interface RequestRepositoryInterface
      */
     public function hasAssignedRequestByParticipant(Participant $participant);
 
-    /**
-     * @param Sheet $sheet
-     * @param Sheet $sheetMet
-     *
-     * @return bool
-     */
+
     public function hasApprovedMeetingRequest(Sheet $sheet, Sheet $sheetMet): bool;
 }

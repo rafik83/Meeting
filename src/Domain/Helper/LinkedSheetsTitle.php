@@ -25,7 +25,13 @@ class LinkedSheetsTitle
         $this->requestRepository = $requestRepository;
     }
 
-    public function getSheetTitleView(Sheet $userSheet, Sheet $sheetMet): array
+    /**
+     * @param Sheet $userSheet
+     * @param Sheet $sheetMet
+     *
+     * @return SheetMetView[]
+     */
+    public function getSheetMetViews(Sheet $userSheet, Sheet $sheetMet): array
     {
         if (!$sheetMet->hasLinkedSheets()) {
             return [new SheetMetView($sheetMet->getTitle(), false)];
@@ -34,11 +40,8 @@ class LinkedSheetsTitle
         $linkedSheetTitles = [];
         $linkedSheets = $sheetMet->getLinkedSheets();
         foreach ($linkedSheets->getSheets() as $otherSheet) {
-            if ($this->requestRepository->hasApprovedMeetingRequest($userSheet, $otherSheet)) {
-                $linkedSheetTitles[] = new SheetMetView($otherSheet->getTitle(), true);
-            } else {
-                $linkedSheetTitles[] = new SheetMetView($otherSheet->getTitle(), false);
-            }
+            $isHighLighted = $this->requestRepository->hasApprovedMeetingRequest($userSheet, $otherSheet);
+            $linkedSheetTitles[] = new SheetMetView($otherSheet->getTitle(), $isHighLighted);
         }
 
         return $linkedSheetTitles;

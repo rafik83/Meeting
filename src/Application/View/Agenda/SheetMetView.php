@@ -17,12 +17,6 @@ class SheetMetView
     /** @var bool */
     private $isHighlighted;
 
-    /**
-     * SheetMetView constructor.
-     *
-     * @param string $title
-     * @param bool   $isHighlighted
-     */
     public function __construct(string $title, bool $isHighlighted)
     {
         $this->title = $title;
@@ -34,7 +28,7 @@ class SheetMetView
         return $this->title;
     }
 
-    public function isHighlighted(): string
+    public function isHighlighted(): bool
     {
         return $this->isHighlighted;
     }

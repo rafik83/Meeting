@@ -33,22 +33,28 @@ class MeetingViewQueryHandler
     /** @var RequestRepositoryInterface */
     private $requestRepository;
 
+    /** @var LinkedSheetsTitle */
+    private $linkedSheetsTitle;
+
     /**
      * @param MeetingParticipantViewQueryHandler $participantHandler
      * @param RuleRepositoryInterface            $ruleRepository
      * @param VideoMeetingAccess                 $videoMeetingAccess
      * @param RequestRepositoryInterface         $requestRepository
+     * @param LinkedSheetsTitle                  $linkedSheetsTitle
      */
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
         RuleRepositoryInterface $ruleRepository,
         VideoMeetingAccess $videoMeetingAccess,
-        RequestRepositoryInterface $requestRepository
+        RequestRepositoryInterface $requestRepository,
+        LinkedSheetsTitle $linkedSheetsTitle
     ) {
         $this->participantHandler = $participantHandler;
         $this->ruleRepository = $ruleRepository;
         $this->videoMeetingAccess = $videoMeetingAccess;
         $this->requestRepository = $requestRepository;
+        $this->linkedSheetsTitle = $linkedSheetsTitle;
     }
 
     /**
@@ -63,8 +69,7 @@ class MeetingViewQueryHandler
         $userSheet = $query->meeting->getSheetOfUser($query->user);
         $sheetMet = $query->meeting->getSheetMet($userSheet);
 
-        $linkedSheetsTitle = new LinkedSheetsTitle($this->requestRepository);
-        $sheetMetTitles = $linkedSheetsTitle->getSheetTitleView($userSheet, $sheetMet);
+        $sheetMetTitles = $this->linkedSheetsTitle->getSheetMetViews($userSheet, $sheetMet);
         $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->currentSheet, $sheetMet);
         $participants = [];
 

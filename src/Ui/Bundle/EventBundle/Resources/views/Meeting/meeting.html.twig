@@ -14,13 +14,11 @@
                 {% endif %}
                 {% for sheetMetView in meeting.sheetMetTitle %}
                     &nbsp;-&nbsp;
-                        <span>
                             {% if sheetMetView.isHighlighted %}
                                 <b>{{ sheetMetView.title }}</b>
                             {% else %}
                                 {{ sheetMetView.title }}
                             {% endif %}
-                        </span>
                 {% endfor %}
             </p>
         </a>

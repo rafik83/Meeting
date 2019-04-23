@@ -4034,6 +4034,7 @@ services:
             - '@repository.rule_repository'
             - '@components.security.video_meeting_access'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery }
 

@@ -49,7 +49,7 @@ class LinkedSheetsTitleTest extends TestCase
             ->willReturn(false);
 
         $linkedSheetTitle = new LinkedSheetsTitle($requestRepository->reveal());
-        $result = $linkedSheetTitle->getSheetTitleView($userSheet->reveal(), $sheetMet->reveal());
+        $result = $linkedSheetTitle->getSheetMetViews($userSheet->reveal(), $sheetMet->reveal());
 
         $expected = [$sheetMetView, $sheetMetView2];
 
@@ -76,7 +76,7 @@ class LinkedSheetsTitleTest extends TestCase
             ->shouldNotBeCalled();
 
         $linkedSheetTitle = new LinkedSheetsTitle($requestRepository->reveal());
-        $result = $linkedSheetTitle->getSheetTitleView($userSheet->reveal(), $sheetMet->reveal());
+        $result = $linkedSheetTitle->getSheetMetViews($userSheet->reveal(), $sheetMet->reveal());
 
         $expected = [$sheetMetView];
 
