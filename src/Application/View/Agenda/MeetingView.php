@@ -50,9 +50,6 @@ class MeetingView extends AbstractTimeEntityView
     /** @var bool */
     private $isVisioAvailable;
 
-    /** @var SheetMetView[] */
-    public $sheetMetViews;
-
     /**
      * @param int                      $id
      * @param string                   $userSheetTitle
@@ -68,7 +65,6 @@ class MeetingView extends AbstractTimeEntityView
      * @param bool                     $isUserParticipantMultipleSheets
      * @param bool                     $isVisio
      * @param bool                     $isVisioAvailable
-     * @param array|null               $sheetMetViews
      */
     public function __construct(
         int $id,
@@ -84,8 +80,7 @@ class MeetingView extends AbstractTimeEntityView
         array $participants,
         $isUserParticipantMultipleSheets = false,
         bool $isVisio = false,
-        bool $isVisioAvailable = false,
-        array $sheetMetViews = null
+        bool $isVisioAvailable = false
     ) {
         $this->id = $id;
         $this->userSheetTitle = $userSheetTitle;
@@ -101,7 +96,6 @@ class MeetingView extends AbstractTimeEntityView
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
         $this->isVisio = $isVisio;
         $this->isVisioAvailable = $isVisioAvailable;
-        $this->sheetMetViews = $sheetMetViews;
     }
 
     /**
