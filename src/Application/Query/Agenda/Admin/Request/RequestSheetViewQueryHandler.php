@@ -62,7 +62,7 @@ class RequestSheetViewQueryHandler
         foreach ($query->sheet->getParticipants() as $participant) {
             $participate = false;
 
-            if (in_array($participant, $this->meetingParticipants->getAllMeetingParticipants($query->request()))) {
+            if (in_array($participant, $this->meetingParticipants->getAllMeetingParticipants($query->request))) {
                 $participate = true;
             }
 
