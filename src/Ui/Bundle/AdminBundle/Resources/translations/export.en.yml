@@ -35,7 +35,7 @@ order.column.billing_info_gender: gender
 order.column.billing_info_last_name: name
 order.column.billing_info_mobile: 'mobile phone'
 order.column.billing_info_phone: 'phone number'
-order.column.billing_info_position: position
+order.column.billing_info_position: Position
 order.column.billing_info_reference: 'accounting reference'
 order.column.billing_info_street: adress
 order.column.billing_info_vat_number: 'VAT number'
@@ -54,3 +54,5 @@ order.column.promotionCode.quantity: '%promotionCodeTitle% : quantity'
 order.column.promotionCode.total: '%promotionCodeTitle% : Total (excl. tax)'
 order.column.sheet_id: 'sheet Id'
 order.column.sheet_title: 'Sheet title'
+rooming_list_data_export.column.roommate.sheetTitle: 'Sheet title'
+rooming_list_data_export.column.sheetTitle: 'Sheet title'
