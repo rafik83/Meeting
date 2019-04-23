@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet\LinkedSheets;
 
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -26,20 +27,26 @@ class CreateHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
     public function __construct(
         LinkedSheetsRepositoryInterface $linkedSheetsRepository,
         SheetRepositoryInterface $sheetRepository,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        MeetingRepositoryInterface $meetingRepository
     ) {
         $this->linkedSheetsRepository = $linkedSheetsRepository;
         $this->sheetRepository = $sheetRepository;
         $this->dateTime = $dateTime;
+        $this->meetingRepository = $meetingRepository;
     }
 
     /**
      * @param Create $command
      *
      * @throws AlreadyLinkedException
+     * @throws HasScheduledMeetingException
      * @throws LinkedSheetsTypeUniquenessException
      * @throws NotEnoughSheetsException
      * @throws SheetNotFoundException
@@ -71,6 +78,10 @@ class CreateHandler
 
             if ($type !== $sheet->getType()) {
                 throw new LinkedSheetsTypeUniquenessException();
+            }
+
+            if ($this->meetingRepository->hasScheduledMeeting($sheet)) {
+                throw new HasScheduledMeetingException();
             }
 
             $count++;
