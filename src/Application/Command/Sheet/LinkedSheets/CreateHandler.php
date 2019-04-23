@@ -61,7 +61,7 @@ class CreateHandler
                 throw new SheetNotFoundException('Not found for id'.$sheetView->id);
             }
 
-            if (null !== $sheet->getLinkedSheets()) {
+            if ($sheet->hasLinkedSheets()) {
                 throw new AlreadyLinkedException();
             }
 
