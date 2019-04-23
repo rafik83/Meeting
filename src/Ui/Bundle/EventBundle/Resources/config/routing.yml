@@ -1029,6 +1029,13 @@ event_sheet_user_badge_download:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\DownloadAction, format: 'pdf' }
 
+event_sheet_user_badge_scan:
+    path: /sheet/{sheet}/badge/scan
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ScanAction }
+
 #
 # Custom
 #

@@ -191,6 +191,12 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\EBadgePdfPrinter'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ScanAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet'
+
     #
     # Custom
     #

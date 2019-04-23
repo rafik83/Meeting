@@ -1,0 +1,14 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'badge.scan'|trans %}
+
+{% block container_classes 'full-mobile-container' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/badge-scan.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="scan"></div>
+{% endblock %}
