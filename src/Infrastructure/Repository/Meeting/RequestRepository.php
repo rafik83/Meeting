@@ -1060,7 +1060,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function hasRequestApprovedMeeting(Sheet $sheet, Sheet $sheetMet)
+    public function hasApprovedMeetingRequest(Sheet $sheet, Sheet $sheetMet): bool
     {
         $queryBuilder = $this
             ->entityManager

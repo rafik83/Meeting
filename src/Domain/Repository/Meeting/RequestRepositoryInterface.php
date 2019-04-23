@@ -393,5 +393,5 @@ interface RequestRepositoryInterface
      *
      * @return bool
      */
-    public function hasRequestApprovedMeeting(Sheet $sheet, Sheet $sheetMet);
+    public function hasApprovedMeetingRequest(Sheet $sheet, Sheet $sheetMet): bool;
 }
