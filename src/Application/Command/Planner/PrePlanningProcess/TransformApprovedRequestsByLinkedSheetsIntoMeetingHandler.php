@@ -12,7 +12,7 @@ use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
 
-class TransformIntoMeetingApprovedRequestsByLinkedSheetsHandler
+class TransformApprovedRequestsByLinkedSheetsIntoMeetingHandler
 {
     /** @var CommandBusInterface */
     private $commandBus;
@@ -33,7 +33,7 @@ class TransformIntoMeetingApprovedRequestsByLinkedSheetsHandler
         $this->requestRepository = $requestRepository;
     }
 
-    public function handle(TransformIntoMeetingApprovedRequestsByLinkedSheets $command): void
+    public function handle(TransformApprovedRequestsByLinkedSheetsIntoMeeting $command): void
     {
         if (ExportSolutionType::SOLUTION_OPTIMIZE_MOVING_ALLOWED !== $command->solutionType) {
             return;

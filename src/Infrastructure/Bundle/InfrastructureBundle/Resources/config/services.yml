@@ -2059,13 +2059,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcess }
 
-    Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformIntoMeetingApprovedRequestsByLinkedSheetsHandler:
+    Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformApprovedRequestsByLinkedSheetsIntoMeetingHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformIntoMeetingApprovedRequestsByLinkedSheets }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformApprovedRequestsByLinkedSheetsIntoMeeting }
 
     command.meeting.admin.delete_all_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler
