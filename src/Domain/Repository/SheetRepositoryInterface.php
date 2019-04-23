@@ -127,13 +127,6 @@ interface SheetRepositoryInterface
     public function getOwnerEmails(Event $event): array;
 
     /**
-     * @param Event $event
-     *
-     * @return Sheet[]
-     */
-    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
-
-    /**
      * @param Sheet $sheet
      *
      * @return Sheet[]
