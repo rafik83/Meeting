@@ -239,12 +239,7 @@ interface MeetingRepositoryInterface
      */
     public function findBySpotWithSheets(Spot $spot);
 
-    /**
-     * @param Sheet $sheet
-     *
-     * @return bool
-     */
-    public function hasScheduledMeeting(Sheet $sheet);
+    public function hasScheduledMeeting(Sheet $sheet): bool;
 
     /**
      * @param MeetingSlot $slot

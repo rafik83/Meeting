@@ -759,7 +759,7 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function hasScheduledMeeting(Sheet $sheet)
+    public function hasScheduledMeeting(Sheet $sheet): bool
     {
         $queryBuilder = $this
             ->entityManager
