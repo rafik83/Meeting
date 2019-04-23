@@ -9,6 +9,7 @@
 
 namespace Proximum\Vimeet\Domain\Helper;
 
+use Proximum\Vimeet\Application\View\Agenda\SheetMetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
@@ -24,22 +25,22 @@ class LinkedSheetsTitle
         $this->requestRepository = $requestRepository;
     }
 
-    public function getSheetTitleView(Sheet $userSheet, Sheet $sheetMet): string
+    public function getSheetTitleView(Sheet $userSheet, Sheet $sheetMet): array
     {
         if (!$sheetMet->hasLinkedSheets()) {
-            return $sheetMet->getTitle();
+            return [new SheetMetView($sheetMet->getTitle(), false)];
         }
 
         $linkedSheetTitles = [];
         $linkedSheets = $sheetMet->getLinkedSheets();
         foreach ($linkedSheets->getSheets() as $otherSheet) {
             if ($this->requestRepository->hasApprovedMeetingRequest($userSheet, $otherSheet)) {
-                $linkedSheetTitles[] = '<b>'.$otherSheet->getTitle().'</b>';
+                $linkedSheetTitles[] = new SheetMetView($otherSheet->getTitle(), true);
             } else {
-                $linkedSheetTitles[] = $otherSheet->getTitle();
+                $linkedSheetTitles[] = new SheetMetView($otherSheet->getTitle(), false);
             }
         }
 
-        return implode(' - ', $linkedSheetTitles);
+        return $linkedSheetTitles;
     }
 }

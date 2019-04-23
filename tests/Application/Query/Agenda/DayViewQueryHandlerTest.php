@@ -337,7 +337,7 @@ class DayViewQueryHandlerTest extends TestCase
             1,
             'userSheetTitle',
             2,
-            'title',
+            ['title'],
             $this->beginHappening1,
             $this->endHappening2,
             'ref',

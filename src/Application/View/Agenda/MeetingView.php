@@ -50,11 +50,14 @@ class MeetingView extends AbstractTimeEntityView
     /** @var bool */
     private $isVisioAvailable;
 
+    /** @var SheetMetView[] */
+    public $sheetMets;
+
     /**
      * @param int                      $id
      * @param string                   $userSheetTitle
      * @param int                      $sheetMetId
-     * @param string                   $sheetMetTitle
+     * @param array                   $sheetMetTitle
      * @param \DateTimeInterface       $begin
      * @param \DateTimeInterface       $end
      * @param string                   $spotRef
@@ -65,12 +68,13 @@ class MeetingView extends AbstractTimeEntityView
      * @param bool                     $isUserParticipantMultipleSheets
      * @param bool                     $isVisio
      * @param bool                     $isVisioAvailable
+     * @param array|null               $sheetMets
      */
     public function __construct(
         int $id,
         $userSheetTitle,
         $sheetMetId,
-        $sheetMetTitle,
+        array $sheetMetTitle,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         $spotRef,
@@ -80,22 +84,24 @@ class MeetingView extends AbstractTimeEntityView
         array $participants,
         $isUserParticipantMultipleSheets = false,
         bool $isVisio = false,
-        bool $isVisioAvailable = false
+        bool $isVisioAvailable = false,
+        array $sheetMets = null
     ) {
-        $this->id                              = $id;
-        $this->userSheetTitle                  = $userSheetTitle;
-        $this->sheetMetId                      = $sheetMetId;
-        $this->sheetMetTitle                   = $sheetMetTitle;
-        $this->spotRef                         = $spotRef;
-        $this->begin                           = $begin;
-        $this->end                             = $end;
-        $this->timeZone                        = $timeZone;
-        $this->leftColor                       = $leftColor;
-        $this->rightColor                      = $rightColor;
-        $this->participants                    = $participants;
+        $this->id = $id;
+        $this->userSheetTitle = $userSheetTitle;
+        $this->sheetMetId = $sheetMetId;
+        $this->sheetMetTitle = $sheetMetTitle;
+        $this->spotRef = $spotRef;
+        $this->begin = $begin;
+        $this->end = $end;
+        $this->timeZone = $timeZone;
+        $this->leftColor = $leftColor;
+        $this->rightColor = $rightColor;
+        $this->participants = $participants;
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
-        $this->isVisio                         = $isVisio;
-        $this->isVisioAvailable                = $isVisioAvailable;
+        $this->isVisio = $isVisio;
+        $this->isVisioAvailable = $isVisioAvailable;
+        $this->sheetMets = $sheetMets;
     }
 
     /**
