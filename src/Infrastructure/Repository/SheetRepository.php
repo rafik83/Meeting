@@ -192,24 +192,6 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('sheet, participants')
-            ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participants', 'WITH', 'sheet.event = :event AND sheet.inCatalog = true AND sheet.attend = true')
-            ->where('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE r.event = :event AND (r.from = sheet OR r.to = sheet) AND r.state = :approved)')
-            ->setParameter('approved', Request::STATE_APPROVED)
-            ->setParameter('event', $event);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSheetsMetBySheet(Sheet $sheet): array
     {
         $queryBuilder = $this

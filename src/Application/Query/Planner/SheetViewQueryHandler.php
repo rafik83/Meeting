@@ -54,7 +54,7 @@ class SheetViewQueryHandler
     public function handle(SheetViewQuery $query)
     {
         $this->orderTypeById($query);
-        $sheets = $this->sheetRepository->getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent($query->event);
+        $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($query->event);
 
         $meetingCount = [];
 
@@ -67,25 +67,25 @@ class SheetViewQueryHandler
         /** @var Sheet $sheet */
         foreach ($sheets as $sheet) {
             $indicator = $this->indicatorCalculator->getIndicator($sheet);
+            $possibleMeetingQuantity = $indicator->possibleMeetingsQuantity;
 
-            if ($indicator->possibleMeetingsQuantity > 0) {
-                $possibleMeetingQuantity = $indicator->possibleMeetingsQuantity;
-
-                if (!empty($meetingCount) && isset($meetingCount[$sheet->getId()]['countMeetings'])) {
-                    // In case of solution with existing meeting, we overwrite the number of possible meeting quantity
-                    // with the max between existing meeting and possibileMeetingQuantity
-                    // Therefore, if the admin have added meeting previously, which overcome the number of possible meeting
-                    // The planner is not blocked with the extra meetings
-                    $possibleMeetingQuantity = max($meetingCount[$sheet->getId()]['countMeetings'], $possibleMeetingQuantity);
-                }
-
-                $sheetViews[] = new SheetView(
-                    $sheet->getId(),
-                    $this->types[$sheet->getType()->getId()],
-                    $indicator->sheetsPlanningQuantity,
+            if (!empty($meetingCount) && isset($meetingCount[$sheet->getId()]['countMeetings'])) {
+                // In case of solution with existing meeting, we overwrite the number of possible meeting quantity
+                // with the max between existing meeting and possibileMeetingQuantity
+                // Therefore, if the admin have added meeting previously, which overcome the number of possible meeting
+                // The planner is not blocked with the extra meetings
+                $possibleMeetingQuantity = max(
+                    $meetingCount[$sheet->getId()]['countMeetings'],
                     $possibleMeetingQuantity
                 );
             }
+
+            $sheetViews[] = new SheetView(
+                $sheet->getId(),
+                $this->types[$sheet->getType()->getId()],
+                $indicator->sheetsPlanningQuantity,
+                $possibleMeetingQuantity
+            );
         }
 
         return $sheetViews;
