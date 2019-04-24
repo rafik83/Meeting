@@ -45,7 +45,7 @@ class SheetSatisfactionListQueryHandlerTest extends TestCase
         $sheetSatisfactionViewQueryHandler = $this->prophesize(SheetSatisfactionViewQueryHandler::class);
 
         $sheetRepository
-            ->getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent($event->reveal())
+            ->getSheetsInCatalogByEvent($event->reveal())
             ->shouldBeCalled()
             ->willReturn($sheets)
         ;

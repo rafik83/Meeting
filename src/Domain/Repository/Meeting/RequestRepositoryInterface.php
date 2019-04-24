@@ -387,5 +387,15 @@ interface RequestRepositoryInterface
      */
     public function hasAssignedRequestByParticipant(Participant $participant);
 
+    /**
+     * @param Event    $event
+     * @param Sheet[]  $sheets
+     * @param string[] $states
+     * @param bool     $withoutMeeting
+     *
+     * @return Request[]
+     */
+    public function findBySheets(Event $event, array $sheets, array $states, bool $withoutMeeting): array;
+  
     public function hasApprovedMeetingRequest(Sheet $sheet, Sheet $sheetMet): bool;
 }

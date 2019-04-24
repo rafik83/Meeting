@@ -79,6 +79,11 @@ class InvoiceRepository implements InvoiceRepositoryInterface
         $this->entityManager->flush();
     }
 
+    public function set(Invoice $invoice): void
+    {
+        $this->entityManager->flush($invoice);
+    }
+
     /**
      * {@inheritdoc}
      */

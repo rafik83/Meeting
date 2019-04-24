@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - VIMEET-1914 - Bold on sheet titles
 
+## [2.1.0] - 2019-04-24
+### Fixed
+- Process all Sheets in catalog instead of all sheets with approved requests (fix https://sentry.io/organizations/elao/issues/996055540/)
+### Added
+- VIMEET-1955 - Scheduling meetings from requests unanimously accepted by linked sheets
+- VIMEET-1938 - Can filter rooming list by type
+- VIMEET-1944 - Unallow request meeting placement when linked sheets meeting already placed.
+
 ## [2.0.9] - 2019-04-17
 ### Changed
 - VIMEET-1913 - No participants selection on meeting request when meetings are assigned to all participants

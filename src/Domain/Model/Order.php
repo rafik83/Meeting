@@ -261,6 +261,16 @@ class Order
         return '';
     }
 
+    public function getGroups(): array
+    {
+        return json_decode($this->groupsData, true);
+    }
+
+    public function setGroups(array $groups): void
+    {
+        $this->groupsData = json_encode($groups);
+    }
+
     /**
      * @param int $groupId
      *

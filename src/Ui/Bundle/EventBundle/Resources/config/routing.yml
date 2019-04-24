@@ -629,6 +629,11 @@ event_content_terms_of_sale:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction }
     methods: [GET]
 
+event_privacy_policy:
+    path: /privacy-policy
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Event\PrivacyPolicyAction }
+    methods: [GET]
+
 #
 # Package
 #

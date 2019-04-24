@@ -274,6 +274,7 @@ admin.extraParameter.type.leni_save_endpoint: 'LENI Save endpoint'
 admin.extraParameter.type.leni_sending_request: 'LENI SendingRequests Parameter'
 admin.extraParameter.type.leni_user: 'LENI user code'
 admin.extraParameter.type.tech_event_configuration: 'TechEvent configuration'
+admin.extraParameter.type.tracking_code: 'Tracking code'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo concerned types id'
 admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
 admin.extraParameter.update.title: 'Extra %type% setting update'
@@ -321,7 +322,7 @@ admin.happening_speaker.updateTitle: 'Speaker update'
 admin.happening.add: Add
 admin.happening.addTitle: 'Add a conference'
 admin.happening.button.category: 'categories set up'
-admin.happening.button.export: 'participants download'
+admin.happening.button.export: 'Export conferences'
 admin.happening.button.speaker: 'Speakers management'
 admin.happening.export.fields.happening_begin_hour: 'Beginning hour'
 admin.happening.export.fields.happening_day: Day
@@ -342,12 +343,12 @@ admin.happening.list.category: Category
 admin.happening.list.end: End
 admin.happening.list.limit: Max
 admin.happening.list.no-limit: 'No limit.'
-admin.happening.list.participation: Participants.
+admin.happening.list.participation: Participants
 admin.happening.list.question: Question
-admin.happening.list.speaker: speakers
+admin.happening.list.speaker: Speakers
 admin.happening.list.title: Title
 admin.happening.menu.link: Program
-admin.happening.participations.button.export: 'participants download'
+admin.happening.participations.button.export: 'Export participants'
 admin.happening.private: Private
 admin.happening.products: 'This under-event is related to the following products'
 admin.happening.products.tooltip: 'Link to products'
@@ -385,6 +386,13 @@ admin.invoice.list.title: 'backoffice name'
 admin.invoice.pdf: 'View final invoice'
 admin.invoice.show: show
 admin.invoice.title: 'prefix of invoices numbers list'
+admin.linked_sheets.column.created_at: 'Creation date'
+admin.linked_sheets.column.sheets: Sheets
+admin.linked_sheets.create: 'Link the sheets'
+admin.linked_sheets.create.title: 'Linking sheets'
+admin.linked_sheets.index: 'Linked sheets'
+admin.linked_sheets.no_result: 'No result'
+admin.linked_sheets.title: 'Linked sheets'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request_sheets_list.link: 'participation sheet request'
 admin.meeting_request.action.export: Download
@@ -732,6 +740,7 @@ admin.role.ROLE_ORGANIZER: Organizer
 admin.role.ROLE_PARTNER: partner
 admin.role.ROLE_SUPER_ADMIN: Admin
 admin.rooming.accommodation.update.title: 'Modify an hosting'
+admin.rooming.stay.remove.confirm: 'Are you sure you want to delete this assignment?'
 admin.rule.link: 'Who see who'
 admin.rule.list.action.delete: Delete
 admin.rule.list.action.seeWhat: 'See what'
@@ -897,6 +906,7 @@ admin.sheet.export.meetings.button.label: 'Export meetings'
 admin.sheet.export.no: 'No'
 admin.sheet.export.participant.button.label: 'Export participants'
 admin.sheet.export.sheet.button.label: 'Export sheets'
+admin.sheet.export.sheet.id.nomenclature.button.label: 'Export sheets with nomenclature ids'
 admin.sheet.export.uploaded_objects.button.label: 'Export uploaded files'
 admin.sheet.export.yes: 'yes'
 admin.sheet.filter.has_cart: 'sheet has cart'
@@ -959,7 +969,7 @@ admin.sheets_group.column.sheet_list: 'sheets list'
 admin.sheets_group.column.title: Title
 admin.sheets_group.create: 'new multi-sheets group'
 admin.sheets_group.create.title: 'creation of a new multi-sheets group'
-admin.sheets_group.index: multi-sheets
+admin.sheets_group.index: Multi-sheets
 admin.sheets_group.no_result: 'no result'
 admin.sheets_group.title: Multi-sheets
 admin.sheets_group.update: 'group update'
@@ -1107,8 +1117,8 @@ admin.tip.event.types: 'Type of participations affected'
 admin.tip.event.update.button: Modify
 admin.tip.event.update.title: 'Modify a help message for %eventTitle%'
 admin.tip.events: events
-admin.tip.link: 'assistance messages'
-admin.tip.list.title: 'assistance messages'
+admin.tip.link: 'Assistance messages'
+admin.tip.list.title: 'Assistance messages'
 admin.tip.remove.action.confirm: 'Are you sure you want to delete this help message ?'
 admin.tip.remove.link: Delete
 admin.tip.update.link: update
@@ -1220,6 +1230,7 @@ admin.type.badge.example.firstName: 'First name'
 admin.type.badge.example.lastName: 'Last name'
 admin.type.badge.example.position: 'General Manager example'
 admin.type.badge.example.sheetTitle: 'Company name example'
+admin.type.canRemoveMeeting: 'Can delete a meeting'
 admin.type.content.specificTermsOfSale: 'Special terms of sales'
 admin.type.create.link: Add
 admin.type.create.title: 'add a type of participation'
@@ -1240,7 +1251,7 @@ admin.type.paymentConditions.event.info.paymentModes.none: none
 admin.type.paymentConditions.event.info.title: 'payment conditions of the event'
 admin.type.paymentConditions.link: 'payment conditions'
 admin.type.paymentConditions.update.title: 'define payment conditions as "%typeTitle%"'
-admin.type.position: position
+admin.type.position: Position
 admin.type.register.link: 'registration link'
 admin.type.registration.template: 'registration template'
 admin.type.remove.link: remove
@@ -1351,6 +1362,8 @@ event.meeting.listRequest.informations: Information
 event.meeting.listRequest.participants: 'The participants'
 event.meeting.listRequest.show: See
 event.meeting.listRequest.state: States
+event.meeting.listRequest.switchListMode.oneSheet.list: 'List vue'
+event.meeting.listRequest.switchListMode.oneSheet.thumbnails: 'Mosaic view'
 event.meeting.listRequest.title: 'List of your meeting requests'
 event.meeting.listRequest.to: For
 event.meeting.refusedRequest.label: 'From %fromName% to %toName%'

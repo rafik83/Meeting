@@ -734,6 +734,18 @@ services:
             - '@templating.engine.twig'
 
     #
+    # Event
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Event\ExtraHeaderAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Event\PrivacyPolicyAction:
+        arguments:
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    #
     # Visio
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction:
@@ -899,6 +911,8 @@ services:
         arguments:
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@form.factory'
+            - '@security.token_storage'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\UpdateAction:
         arguments:

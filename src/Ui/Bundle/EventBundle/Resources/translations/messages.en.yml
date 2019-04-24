@@ -13,6 +13,7 @@ account.update.title: 'Edit my Account'
 agenda.availability.available_sheets: '{1} See available participant|]1,Inf[ See %availableSheets% available participants'
 agenda.availability.available_sheets_with_proposition: '{1}see a meeting request|]1,Inf[ see the %availableSheets% meeting requests'
 agenda.availability.define: 'Set my availabilities'
+agenda.availability.save: 'Save my availabilities'
 agenda.day.hide: 'Hide this day'
 agenda.day.see: 'Show the day'
 agenda.meeting.details: Details
@@ -21,6 +22,8 @@ agenda.meeting.move.button: 'Move the meeting'
 agenda.meeting.move.no_available_slots: 'The meeting can''t be moved because there are no other join availabilities'
 agenda.meeting.remove.button: 'Delete the meeting'
 agenda.participant.view: 'Schedule of %participant%'
+agenda.slot.available: Available
+agenda.slot.unavailable: Unavailable
 agenda.title: 'My schedule'
 agenda.unavailability.add: 'Add an unavailability'
 agenda.unavailability.back: Back
@@ -61,7 +64,7 @@ catalog.mobile.filters.title: 'Participants'' catalogue'
 catalog.noResult: 'No result'
 catalog.noVisibleCategories: 'You can''t access to any participant''s category'
 catalog.noVisibleTypes: 'You can''t access to any participant''s type'
-catalog.preview.participant_positions_see_more: 'see more'
+catalog.preview.participant_positions_see_more: 'See more'
 catalog.search.no-filter-to-refine: 'No result'
 catalog.seeMore: 'See more'
 catalog.selectItemsFromNomenclatures.more: '... and %count% more'
@@ -96,6 +99,8 @@ event.happening.productsNeededByHappening.label: 'Please select an option in you
 event.happening.productsNeededByHappening.order: 'Modify my package'
 event.info.close: Close
 event.info.contact: 'Useful information'
+event.info.privacyPolicy.content: "The data collected are registered by Vimeet and is needed for your participation at this event. \n\nThe data will be stored safely and confidentially and will be kept for two years. \n\nAccording  to the European Union data protection and freedom of information laws, you have the right to access, rectify, modify and delete all data concerning you. You may do so by contacting cnil@vi-meet.com"
+event.info.privacyPolicy.title: 'Privacy policy'
 event.invisible.label: Invisible
 event.meeting.listRequest.contact.export: 'Download my contacts'
 event.meeting.listRequest.filter.all: All

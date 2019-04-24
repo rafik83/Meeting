@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -95,12 +96,20 @@ interface UserRepositoryInterface
     public function findWithEnabledSheetByEvent(Event $event): array;
 
     /**
+     * @param Event $event
+     *
+     * @return User[]
+     */
+    public function findOwnersWithEnabledSheetByEvent(Event $event): array;
+
+    /**
      * @param Event  $event
      * @param string $locale
+     * @param Type[] $types
      *
      * @return UserSheetTypeView[]
      */
-    public function getWithSheetAndTypeByEvent(Event $event, string $locale): array;
+    public function getWithSheetAndTypeByEvent(Event $event, string $locale, array $types): array;
 
     /**
      * @param Event $event

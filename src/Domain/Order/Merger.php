@@ -43,9 +43,11 @@ class Merger
 
         $orderMerged = new Order(
             $firstOrder->getSheet(),
-            $firstOrder->getGroupsData(),
+            '[]',
             $firstOrder->getCreatedAt()
         );
+
+        $orderMerged->setGroups($this->mergeGroupsData($orders));
 
         // Merge products and promotion code
         foreach ($orders as $order) {
@@ -138,5 +140,23 @@ class Merger
                 $orderMerged->addPromotionCode($promotionCodeClone->setOrder($orderMerged));
             }
         }
+    }
+
+    /**
+     * @param Order[] $orders
+     *
+     * @return array
+     */
+    private function mergeGroupsData(array $orders): array
+    {
+        $groups = [];
+
+        foreach ($orders as $order) {
+            foreach ($order->getGroups() as $id => $group) {
+                $groups[$id] = $group;
+            }
+        }
+
+        return $groups;
     }
 }

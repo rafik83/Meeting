@@ -89,7 +89,8 @@
                         <li>
                             <a href="{{ menuHeaderView.event.configuration.organiserWebsite }}" target="_blank" rel="external">
                                 {{ menuHeaderView.event.configuration.organiserWebsite }}
-                            </a></li>
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
@@ -97,6 +98,9 @@
                 <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
                     <i class="icon-Retour"></i>{{ 'event.info.close'|trans }}
                 </button>
+                <a href="{{ path('event_privacy_policy') }}" class="btn btn-link pull-right ">
+                    {{ 'event.info.privacyPolicy.title'|trans }}
+                </a>
             </div>
         </div>
     </div>

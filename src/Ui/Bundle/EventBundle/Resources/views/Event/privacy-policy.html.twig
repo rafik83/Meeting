@@ -1,0 +1,20 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'event.info.privacyPolicy.title'|trans %}
+
+{% block content %}
+    <h1>
+        {{ 'event.info.privacyPolicy.title'|trans }}
+    </h1>
+
+    <div class="main__container">
+        <p>{{ 'event.info.privacyPolicy.content'|trans|nl2br }}</p>
+
+        {% if hasTracking %}
+            <iframe
+                style="border: 0; height: 400px; width: 100%;"
+                src="https://stats.vimeet.events/index.php?module=CoreAdminHome&action=optOut&language={{ app.request.locale }}&fontFamily=helvetica"
+            ></iframe>
+        {% endif %}
+    </div>
+{% endblock %}

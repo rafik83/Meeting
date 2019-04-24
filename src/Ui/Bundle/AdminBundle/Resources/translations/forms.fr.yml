@@ -43,9 +43,6 @@ form.admin_export_planning.children.orderBy.choice.spot_reference: 'Par lieux, n
 form.admin_export_planning.children.orderBy.label: 'Ordre de l''export des plannings'
 form.admin_export_planning.children.submit.label: Exporter
 form.admin_export_planning.children.types.label: Types
-form.import.children.file.label: 'Fichier d''import (.csv)'
-form.import.children.charset.label: 'Choix de l''encodage'
-form.import.children.submit.label: 'Importer les utilisateurs LENI'
 form.admin_lib_add.children.submit.label: Ajouter
 form.admin_lib_choice.children.choices.label: Choix
 form.admin_lib_choice.children.choices.label_add: 'Ajouter un item'
@@ -365,6 +362,7 @@ form.extra_parameter_create.children.type.choices.leni_save_endpoint: 'LENI Save
 form.extra_parameter_create.children.type.choices.leni_sending_request: 'LENI Paramètre SendingRequests'
 form.extra_parameter_create.children.type.choices.leni_user: 'Code Utilisateur LENI'
 form.extra_parameter_create.children.type.choices.tech_event_configuration: 'Configuration TechEvent'
+form.extra_parameter_create.children.type.choices.tracking_code: 'Code de suivi'
 form.extra_parameter_create.children.type.choices.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés (séparés par une virgule)'
 form.extra_parameter_create.children.type.choices.vianeo_endpoint: 'Vianeo endpoint'
 form.extra_parameter_create.children.type.label: Type
@@ -383,6 +381,7 @@ form.filter_admin.role.partner: Partenaire
 form.filter_admin.role.super_admin: Admin
 form.filter_operator.children.submit.label: Filtrer
 form.filter_operator.event.all: 'Tous les événements'
+form.filter_operator.rooming.types: 'Filtrer par type de participation'
 form.filter_sheet_template_organizer.children.event.label: Événement/Type(s)
 form.filter_spot_type.children.active.label: Actif
 form.filter_spot_type.children.filters.all.label: Tous
@@ -467,6 +466,9 @@ form.happening_update.children.types.label: 'Types ayant accès'
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
+form.import.children.charset.label: 'Choix de l''encodage'
+form.import.children.file.label: 'Fichier d''import (.csv)'
+form.import.children.submit.label: 'Importer les utilisateurs LENI'
 form.index.children.submit.label: Ré-indexer
 form.invoice_export.children.beginDate.label: 'Date de début'
 form.invoice_export.children.endDate.label: 'Date de fin'
@@ -1096,6 +1098,7 @@ form.transactional_mail_update_customized.children.translations.prototype.childr
 form.transactional_mail_update_customized.children.translations.prototype.children.subject.label: Sujet
 form.type_content_define_terms_of_sale.children.enabled.label: 'Activer la personnalisation des conditions générales de vente pour ce type'
 form.type_content_define_terms_of_sale.children.submit.label: Valider
+form.type_create.children.areAllSheetParticipantsAssignedToMeeting.label: 'Tous les participants sont affectés à tous les RDV d’une fiche'
 form.type_create.children.availabilityType.label: 'Gestion de disponibilité'
 form.type_create.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_create.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
@@ -1104,9 +1107,8 @@ form.type_create.children.formTemplates.label: Formulaires
 form.type_create.children.formTemplates.status.draft: brouillon
 form.type_create.children.formTemplates.status.published: publié
 form.type_create.children.hidden.label: Caché
-form.type_create.children.areAllSheetParticipantsAssignedToMeeting.label: 'Tous les participants sont affectés à tous les RDV d’une fiche'
 form.type_create.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
-form.type_create.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV par planning'
+form.type_create.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV max par planning'
 form.type_create.children.package.label: 'Template de forfait de participation'
 form.type_create.children.rank.label: Position
 form.type_create.children.registrationTemplate.label: 'Template d''Inscription'
@@ -1146,13 +1148,13 @@ form.type_template.registration.organizer: 'Mes templates d''Inscription'
 form.type_template.sheet.base: 'Template de Participation de base'
 form.type_template.sheet.event: 'Templates de l''événément'
 form.type_template.sheet.organizer: 'Mes templates de Participation'
+form.type_update.children.areAllSheetParticipantsAssignedToMeeting.label: 'Tous les participants sont affectés à tous les RDV d’une fiche'
 form.type_update.children.availabilityType.label: 'Gestion de disponibilité'
 form.type_update.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_update.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_update.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_update.children.formTemplates.label: Formulaires
 form.type_update.children.hidden.label: Caché
-form.type_update.children.areAllSheetParticipantsAssignedToMeeting.label: 'Tous les participants sont affectés à tous les RDV d’une fiche'
 form.type_update.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_update.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV par planning'
 form.type_update.children.package.label: 'Template de forfait de participation'

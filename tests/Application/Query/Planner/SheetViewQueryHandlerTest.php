@@ -33,15 +33,15 @@ class SheetViewQueryHandlerTest extends TestCase
         $event = EventFactory::createEvent();
         $type = new Type($event);
         $type2 = new Type($event);
-        $typeView = new TypeView(1, 'title');
+        $typeView1 = new TypeView(1, 'title');
         $typeView2 = new TypeView(2, 'secondTitle');
 
-        $sheet  = SheetFactory::create($event, null, null, $type);
+        $sheet1  = SheetFactory::create($event, null, null, $type);
         $sheet2 = SheetFactory::create($event, null, null, $type);
         $sheet3 = SheetFactory::create($event, null, null, $type2);
         $sheet4 = SheetFactory::create($event, null, null, $type2);
 
-        $indicator  = new IndicatorView(1, 1, 1, 1, 1, 1, 1, null);
+        $indicator1 = new IndicatorView(1, 1, 1, 1, 1, 1, 1, null);
         $indicator2 = new IndicatorView(2, 2, 2, 2, 2, 2, 1, null);
         $indicator3 = new IndicatorView(3, 3, 3, 3, 3, 3, 1, null);
         $indicator4 = new IndicatorView(10, 3, 3, 3, 35, 3, 1, 8);
@@ -52,7 +52,7 @@ class SheetViewQueryHandlerTest extends TestCase
         $property = $reflection->getProperty('id');
         $propertyType = $reflectionType->getProperty('id');
         $property->setAccessible(true);
-        $property->setValue($sheet, 1);
+        $property->setValue($sheet1, 1);
         $property->setValue($sheet2, 2);
         $property->setValue($sheet3, 3);
         $property->setValue($sheet4, 4);
@@ -67,10 +67,10 @@ class SheetViewQueryHandlerTest extends TestCase
         $indicatorCalculator = $this->prophesize(IndicatorCalculator::class);
 
         $sheetRepository
-            ->getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent($event)
+            ->getSheetsInCatalogByEvent($event)
             ->shouldBeCalled()
-            ->willReturn([$sheet, $sheet2, $sheet3, $sheet4]);
-        $indicatorCalculator->getIndicator($sheet)->shouldBeCalled()->willReturn($indicator);
+            ->willReturn([$sheet1, $sheet2, $sheet3, $sheet4]);
+        $indicatorCalculator->getIndicator($sheet1)->shouldBeCalled()->willReturn($indicator1);
         $indicatorCalculator->getIndicator($sheet2)->shouldBeCalled()->willReturn($indicator2);
         $indicatorCalculator->getIndicator($sheet3)->shouldBeCalled()->willReturn($indicator3);
         $indicatorCalculator->getIndicator($sheet4)->shouldBeCalled()->willReturn($indicator4);
@@ -92,13 +92,12 @@ class SheetViewQueryHandlerTest extends TestCase
             $meetingRepository->reveal()
         );
         $result = $handler->handle(
-            new SheetViewQuery($event, [$typeView, $typeView2], ExportSolutionType::SOLUTION_OPTIMIZE_MOVING_ALLOWED)
+            new SheetViewQuery($event, [$typeView1, $typeView2], ExportSolutionType::SOLUTION_OPTIMIZE_MOVING_ALLOWED)
         );
 
-        // Expected
-        // The first sheet should be excluded as the possible meeting quantity is 0
         $expected = [
-            new SheetView(2, $typeView, 2, 2),
+            new SheetView(1, $typeView1, 1, 2),
+            new SheetView(2, $typeView1, 2, 2),
             new SheetView(3, $typeView2, 3, 12),
             new SheetView(4, $typeView2, 3, 24),
         ];

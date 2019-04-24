@@ -1015,6 +1015,29 @@ class RequestRepository implements RequestRepositoryInterface
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
+    public function findBySheets(Event $event, array $sheets, array $states, bool $withoutMeeting): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->andWhere('request.event = :event')
+            ->andWhere('request.to IN (:sheets) OR request.from IN (:sheets)')
+            ->andWhere('request.state IN (:states)')
+            ->andWhere('request.disabled = false')
+            ->setParameter('event', $event)
+            ->setParameter('sheets', $sheets)
+            ->setParameter('states', $states)
+        ;
+
+        if ($withoutMeeting) {
+            $this->requestsWithoutMeeting($queryBuilder);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     /**
      * @return array
      */

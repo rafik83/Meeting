@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
@@ -239,7 +240,21 @@ class UserRepository implements UserRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function getWithSheetAndTypeByEvent(Event $event, string $locale): array
+    public function findOwnersWithEnabledSheetByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join(Sheet::class, 'sheet', 'WITH', 'sheet.owner = user AND sheet.enable = true AND sheet.event = :event')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function getWithSheetAndTypeByEvent(Event $event, string $locale, array $types): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -278,6 +293,12 @@ class UserRepository implements UserRepositoryInterface
             ->setParameter('locale', $locale)
             ->orderBy('sheet.title, user.account.lastName, user.account.firstName', 'ASC')
         ;
+
+        if (count($types)) {
+            $queryBuilder
+                ->andWhere('sheet.type IN (:types)')
+                ->setParameter('types', $types);
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
