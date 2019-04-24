@@ -19,8 +19,8 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Admin\ParticipantView;
-use Proximum\Vimeet\Application\View\Agenda\Admin\RequestSlotView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\RequestView;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -63,6 +63,9 @@ class RequestViewQueryHandlerTest extends TestCase
     /**@var Participant */
     private $participant2;
 
+    /** @var ObjectProphecy|MeetingParticipants */
+    private $meetingParticipants;
+
     public function setUp()
     {
         $this->sheet = $this->prophesize(Sheet::class);
@@ -99,8 +102,10 @@ class RequestViewQueryHandlerTest extends TestCase
             ->guessParticipantCompleteName($this->participant2->reveal(), 'fr')
             ->willReturn('Leeloo')
         ;
-        $this->meetingRequest
-            ->getParticipants($this->sheet->reveal())
+
+        $this->meetingParticipants = $this->prophesize(MeetingParticipants::class);
+        $this->meetingParticipants
+            ->getMeetingParticipants($this->meetingRequest->reveal(), $this->sheet->reveal())
             ->willReturn([$this->participant1->reveal(), $this->participant2->reveal()])
         ;
 
@@ -111,7 +116,8 @@ class RequestViewQueryHandlerTest extends TestCase
             $this->sheetInfoGuesser->reveal(),
             $this->participantInfoGuesser->reveal(),
             $this->requestSlotViewQueryHandler->reveal(),
-            $this->visioGuesser->reveal()
+            $this->visioGuesser->reveal(),
+            $this->meetingParticipants->reveal()
         );
     }
 
@@ -275,8 +281,8 @@ class RequestViewQueryHandlerTest extends TestCase
         // override setup prophecies
         $this->sheet->hasOnlyOneParticipant()->willReturn(false);
 
-        $this->meetingRequest
-            ->getParticipants($this->sheet->reveal())
+        $this->meetingParticipants
+            ->getMeetingParticipants($this->meetingRequest->reveal(), $this->sheet->reveal())
             ->willReturn([])
         ;
 

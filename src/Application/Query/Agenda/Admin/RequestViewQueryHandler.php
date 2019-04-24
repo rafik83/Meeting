@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableExceptio
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSpotAvailableException;
 use Proximum\Vimeet\Application\View\Agenda\Admin\ParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\RequestView;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -36,16 +37,21 @@ class RequestViewQueryHandler
     /** @var VisioGuesser */
     private $visioGuesser;
 
+    /** @var MeetingParticipants */
+    private $meetingParticipants;
+
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
-        VisioGuesser $visioGuesser
+        VisioGuesser $visioGuesser,
+        MeetingParticipants $meetingParticipants
     ) {
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
         $this->visioGuesser = $visioGuesser;
+        $this->meetingParticipants = $meetingParticipants;
     }
 
     public function handle(RequestViewQuery $query): RequestView
@@ -103,7 +109,7 @@ class RequestViewQueryHandler
         $participantViews = [];
 
         try {
-            $participants = $request->getParticipants($sheet);
+            $participants = $this->meetingParticipants->getMeetingParticipants($request, $sheet);
 
             foreach ($participants as $participant) {
                 $participantViews[] = new ParticipantView(
