@@ -28,6 +28,12 @@ class Meeting implements MessageSubjectInterface
     public const CREATED_BY_ADMIN = 'admin';
     public const CREATED_BY_PARTICIPANT = 'participant';
 
+    public const CREATED_BY = [
+        self::CREATED_BY_PLANNER,
+        self::CREATED_BY_ADMIN,
+        self::CREATED_BY_PARTICIPANT,
+    ];
+
     public const STATUS_LIST = [
         self::STATUS_CANCELED,
         self::STATUS_NOT_CONFIRMED,
@@ -123,6 +129,10 @@ class Meeting implements MessageSubjectInterface
         bool $blockedSlot = false,
         string $createdType =  self::CREATED_BY_ADMIN
     ) {
+        if (!in_array($createdType, self::CREATED_BY, true)) {
+            throw new \InvalidArgumentException('$createdType is not valid');
+        }
+
         $this->request = $request;
         $this->slot = $slot;
         $this->fromSheet = $fromSheet;

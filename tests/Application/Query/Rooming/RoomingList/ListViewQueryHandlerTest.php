@@ -13,6 +13,7 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayToAssignV
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type as DomainType;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\Rooming\StayRepositoryInterface;
@@ -36,6 +37,7 @@ class ListViewQueryHandlerTest extends TestCase
         $overnightAccommodation2Departure = new \DateTime('2018-12-16 00:00:00.000');
 
         $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(DomainType::class);
         $event->getId()->shouldBeCalled()->willReturn(1000);
         $firstDay = $this->prophesize(Event\Day::class);
         $lastDay = $this->prophesize(Event\Day::class);
@@ -51,7 +53,7 @@ class ListViewQueryHandlerTest extends TestCase
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository
-            ->getWithSheetAndTypeByEvent($event->reveal(), 'fr')
+            ->getWithSheetAndTypeByEvent($event->reveal(), 'fr', [$type->reveal()])
             ->shouldBeCalled()
             ->willReturn(
                 [
@@ -188,7 +190,7 @@ class ListViewQueryHandlerTest extends TestCase
             $extraDataRepository->reveal(),
             $overlappedTimeRangeTruncater
         );
-        $result = $handler->handle(new ListViewQuery($event->reveal(), 'fr'));
+        $result = $handler->handle(new ListViewQuery($event->reveal(), 'fr', [$type->reveal()]));
 
         $expected = new ListView(
             [
@@ -286,7 +288,8 @@ class ListViewQueryHandlerTest extends TestCase
                         ),
                     ]
                 ),
-            ]
+            ],
+            3
         );
 
         $this->assertEquals($expected, $result);
@@ -309,7 +312,7 @@ class ListViewQueryHandlerTest extends TestCase
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository
-            ->getWithSheetAndTypeByEvent($event->reveal(), 'fr')
+            ->getWithSheetAndTypeByEvent($event->reveal(), 'fr', [])
             ->shouldBeCalled()
             ->willReturn(
                 [
@@ -356,7 +359,7 @@ class ListViewQueryHandlerTest extends TestCase
             $extraDataRepository->reveal(),
             $overlappedTimeRangeTruncater
         );
-        $result = $handler->handle(new ListViewQuery($event->reveal(), 'fr'));
+        $result = $handler->handle(new ListViewQuery($event->reveal(), 'fr', []));
 
         $expected = new ListView(
             [
@@ -378,7 +381,8 @@ class ListViewQueryHandlerTest extends TestCase
                         new UserStayToAssignView($dateArrival, $dateDeparture),
                     ]
                 ),
-            ]
+            ],
+            1
         );
 
         $this->assertEquals($expected, $result);

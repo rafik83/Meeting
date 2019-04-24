@@ -368,6 +368,10 @@ services:
         arguments:
             - '@translator'
 
+    Proximum\Vimeet\Ui\Helper\HasMeetingWithLinkedSheets:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+
     #
     # Subscriber
     #

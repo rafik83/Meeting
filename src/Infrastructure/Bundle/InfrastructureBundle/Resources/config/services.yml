@@ -773,6 +773,19 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest }
+
+    Proximum\Vimeet\Application\Command\Meeting\TransformRequestIntoMeetingHandler:
+        arguments:
+            - '@domain.spot.available_spots'
+            - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@domain.slot.slot_filter'
+            - '@domain.meeting.visio_guesser'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\TransformRequestIntoMeeting }
+
     command.tip.create_handler:
         class: Proximum\Vimeet\Application\Command\Tip\CreateHandler
         arguments:
@@ -2040,6 +2053,20 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ImportJobCreator }
+
+    Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcessHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcess }
+
+    Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformApprovedRequestsByLinkedSheetsIntoMeetingHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformApprovedRequestsByLinkedSheetsIntoMeeting }
 
     command.meeting.admin.delete_all_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler
@@ -4155,6 +4182,7 @@ services:
             - '@query.agenda.admin.request_slot_view_query_handler'
             - '@domain.meeting.visio_guesser'
             - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
+            - '@Proximum\Vimeet\Ui\Helper\HasMeetingWithLinkedSheets'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQuery }
     query.agenda.agenda_participant_view_query_handler:
@@ -5882,6 +5910,7 @@ services:
             - '@vimeet_infrastructure.repository.planner_job_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcessHandler'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ExportJobCreator }

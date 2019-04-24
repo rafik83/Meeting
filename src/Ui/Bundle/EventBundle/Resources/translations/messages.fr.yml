@@ -16,7 +16,7 @@ agenda.availability.define: 'Définir mes disponibilités'
 agenda.availability.fail_message_on_save: 'L''enregistrement de vos disponibilités a échoué. Une erreur inattendue du serveur s''est produite.'
 agenda.availability.hide: 'Cacher mes disponibilités'
 agenda.availability.ko_message_on_save: 'L''enregistrement de vos disponibilités a échoué. Elles sont peut-être incompatibles votre agenda. Veuillez rafraichir votre page.'
-agenda.availability.save: 'Enregistrer mes disponibilités'
+agenda.availability.save: 'Enregistrez mes disponibilités'
 agenda.day.hide: 'Cacher cette journée'
 agenda.day.see: 'Voir la journée'
 agenda.meeting.details: Details

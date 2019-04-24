@@ -53,7 +53,7 @@ class SheetSatisfactionListQueryHandler
      */
     public function handle(SheetSatisfactionListQuery $query): array
     {
-        $sheets = $this->sheetRepository->getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent($query->event);
+        $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($query->event);
         $meetingCount = $this->meetingRepository->countMeetingBySheets($query->event, $sheets);
         $requestCount = $this->requestRepository->countApprovedRequestBySheets($query->event, $sheets);
 

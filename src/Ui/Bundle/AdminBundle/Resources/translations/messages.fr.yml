@@ -280,8 +280,6 @@ admin.extraParameter.type.tracking_code: 'Code de suivi'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés'
 admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
 admin.extraParameter.update.title: 'Modification du paramètre supplémentaire %type%'
-admin.leni_user.import.title: 'Importation des utilisateurs Leni'
-admin.leni_user.import.sample: 'Exemple de données du fichier d''import :'
 admin.filter: Filtrer
 admin.filter_by: 'Filtrer par'
 admin.filters.all: Tous
@@ -326,7 +324,7 @@ admin.happening_speaker.updateTitle: 'Modifier un intervenant'
 admin.happening.add: Ajouter
 admin.happening.addTitle: 'Ajouter une conférence'
 admin.happening.button.category: 'Gérer les catégories'
-admin.happening.button.export: 'Exporter les participants'
+admin.happening.button.export: 'Exporter les conférences'
 admin.happening.button.speaker: 'Gérer les intervenants'
 admin.happening.export.fields.happening_begin_hour: 'Heure de début'
 admin.happening.export.fields.happening_day: Jour
@@ -390,11 +388,13 @@ admin.invoice.list.title: 'Nom backoffice'
 admin.invoice.pdf: 'Voir la facture'
 admin.invoice.show: Voir
 admin.invoice.title: 'Liste des préfixes de numéro de facture'
+admin.leni_user.import.sample: 'Exemple de données du fichier d''import :'
+admin.leni_user.import.title: 'Importation des utilisateurs Leni'
 admin.linked_sheets.column.created_at: 'Date de création'
 admin.linked_sheets.column.sheets: Fiches
 admin.linked_sheets.create: 'Lier des fiches'
 admin.linked_sheets.create.title: 'Liaison de fiches'
-admin.linked_sheets.delete: 'Supprimer'
+admin.linked_sheets.delete: Supprimer
 admin.linked_sheets.delete_confirm_message: 'Êtes vous certain de délier ces fiches ?'
 admin.linked_sheets.disabled_deletion: 'La suppression est impossible car il existe au moins un RDV.'
 admin.linked_sheets.index: 'Fiches liées'
@@ -745,6 +745,7 @@ admin.promotion_code.title: 'Codes promos'
 admin.promotion_code.update: 'Modifier code promo'
 admin.remove: Supprimer
 admin.remove.confirmation: 'Etes vous sûr de vouloir supprimer cet utilisateur ?'
+admin.reset.filter: 'Réinitialiser le filtre'
 admin.role.ROLE_HOST: Hôte
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
@@ -765,11 +766,12 @@ admin.rooming.list.fullName: 'Nom, prénom'
 admin.rooming.list.roomNumberAssigned: 'Numéro de chambre associé'
 admin.rooming.list.sheet: Fiche
 admin.rooming.list.tasting: Tasting
+admin.rooming.menu.title: 'Rooming list'
 admin.rooming.stay.assignAccommodation.add.title: 'Ajouter une assignation'
 admin.rooming.stay.no-dates: 'dates non déclarées'
 admin.rooming.stay.remove.confirm: 'Êtes-vous sûr de vouloir supprimer cette assignation ?'
 admin.rooming.stay.remove.success: 'L''assignation a bien été supprimée'
-admin.rooming.title: 'Rooming list'
+admin.rooming.title: 'Rooming list : %count% utilisateurs'
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
 admin.rule.list.action.seeWhat: 'Voit quoi ?'
@@ -905,7 +907,6 @@ admin.sheet.details.remainingToPay: 'Solde restant dû'
 admin.sheet.details.title: 'Fiche de présentation'
 admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
-admin.sheet.linkedTo: 'Fiche liée à'
 admin.sheet.duplication: 'Dupliquer les fiches'
 admin.sheet.enable: Active
 admin.sheet.exit_impersonation: 'Quitter l''impersonnation'
@@ -956,6 +957,7 @@ admin.sheet.inCatalog: 'Au catalogue'
 admin.sheet.isOwner: Propriétaire
 admin.sheet.lastLoginAt: 'Dernière connexion'
 admin.sheet.link: Participations
+admin.sheet.linkedTo: 'Fiche liée à'
 admin.sheet.list.filters.label: 'Filtres avancés'
 admin.sheet.orders.cancel: 'Annuler tout'
 admin.sheet.orders.cancel.confirm: 'Êtes vous sûr de vouloir annuler toutes les commandes ? Cette action est irréversible'
@@ -1397,12 +1399,12 @@ event.meeting.listRequest.informations: Informations
 event.meeting.listRequest.participants: 'Les participants'
 event.meeting.listRequest.show: Voir
 event.meeting.listRequest.state: Statut
+event.meeting.listRequest.switchListMode.linkedSheets.list: 'RDV de mes fiches liées'
+event.meeting.listRequest.switchListMode.linkedSheets.thumbnails: 'RDV de ma fiche'
+event.meeting.listRequest.switchListMode.oneSheet.list: 'Vue liste'
+event.meeting.listRequest.switchListMode.oneSheet.thumbnails: 'Vue mosaïque'
 event.meeting.listRequest.title: 'Liste de vos demandes de rendez-vous'
 event.meeting.listRequest.to: 'A destination de'
-event.meeting.listRequest.switchListMode.linkedSheets.thumbnails: 'RDV de ma fiche'
-event.meeting.listRequest.switchListMode.linkedSheets.list: 'RDV de mes fiches liées'
-event.meeting.listRequest.switchListMode.oneSheet.thumbnails: 'Vue mosaïque'
-event.meeting.listRequest.switchListMode.oneSheet.list: 'Vue liste'
 event.meeting.refusedRequest.label: 'De %fromName% pour %toName%'
 event.meeting.refusedRequest.title: 'Refuser la proposition de rendez vous'
 event.meeting.request.details.createdAt: Création
