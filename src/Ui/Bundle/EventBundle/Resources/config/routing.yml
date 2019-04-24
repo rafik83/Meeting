@@ -1036,6 +1036,13 @@ event_sheet_user_badge_scan:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ScanAction }
 
+event_sheet_user_badge_scan_handle:
+    path: /sheet/{sheet}/badge/scan/handle
+    requirements:
+        sheet: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ScanHandleAction }
+
 #
 # Custom
 #

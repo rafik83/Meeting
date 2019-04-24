@@ -10,5 +10,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="scan"></div>
+    <div id="scan"
+         data-handle-scan-endpoint="{{ path('event_sheet_user_badge_scan_handle', { sheet: sheet.id }) }}"
+    ></div>
 {% endblock %}

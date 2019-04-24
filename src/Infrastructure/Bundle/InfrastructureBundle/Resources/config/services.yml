@@ -6843,6 +6843,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetBadgeConfigurationByTypeQuery }
 
+    Proximum\Vimeet\Application\Query\Badge\ScannedUserEventProfile\GetScannedUserEventProfileQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\ScannedUserEventProfile\GetScannedUserEventProfileQuery }
+
     Proximum\Vimeet\Application\Query\Sheet\SheetsForNewLinkedSheetsQueryHandler:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'

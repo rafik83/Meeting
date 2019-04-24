@@ -11,35 +11,38 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Query\Badge\ScannedUserEventProfile\GetScannedUserEventProfileQuery;
+use Proximum\Vimeet\Application\Query\Badge\ScannedUserEventProfile\UserNotFoundException;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
 
-class ScanAction
+class ScanHandleAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
-
     /** @var HasAccessToSheet */
     private $hasAccessToSheet;
 
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
-        HasAccessToSheet $hasAccessToSheet
+        HasAccessToSheet $hasAccessToSheet,
+        QueryBusInterface $queryBus
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->hasAccessToSheet = $hasAccessToSheet;
-        $this->engine = $engine;
+        $this->queryBus = $queryBus;
     }
 
     public function __invoke(
@@ -57,14 +60,20 @@ class ScanAction
             throw new AccessDeniedException();
         }
 
-        return new Response(
-            $this->engine->render(
-                'EventBundle:Badge:scan.html.twig',
-                [
-                    'event' => $event,
-                    'sheet' => $sheet,
-                ]
-            )
-        );
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['identifier'])) {
+            return new JsonResponse('Bad parameters', 400);
+        }
+
+        try {
+            $scannedUserEventProfileView = $this->queryBus->handle(
+                new GetScannedUserEventProfileQuery($event, $data['identifier'])
+            );
+        } catch (UserNotFoundException $userNotFoundException) {
+            return new JsonResponse('User not found', 404);
+        }
+
+        return new JsonResponse($scannedUserEventProfileView);
     }
 }

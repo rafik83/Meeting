@@ -26,7 +26,7 @@ class QRCodeIdentifierToUserQueryHandler
     public function handle(QRCodeIdentifierToUserQuery $query): ?User
     {
         return $this->userRepository->findOneById(
-            substr($query->identifier, 0, QRCodeIdentifierQueryHandler::USER_PAD_LEFT)
+            (int) substr($query->identifier, 0, QRCodeIdentifierQueryHandler::USER_PAD_LEFT)
         );
     }
 }
