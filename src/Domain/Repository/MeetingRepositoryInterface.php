@@ -292,4 +292,12 @@ interface MeetingRepositoryInterface
      * @return int
      */
     public function countCreatedByEventAndType(Event $event, string $type): int;
+
+    /**
+     * @param Sheet[] $sheets
+     * @param Sheet[] $otherSheets
+     *
+     * @return bool
+     */
+    public function hasAtLeastOneMeeting(array $sheets, array $otherSheets): bool;
 }
