@@ -40,7 +40,10 @@ class TypeChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event', 'locale', 'user']);
+        $resolver->setDefined(['orderByTitle']);
+        $resolver->addAllowedTypes('orderByTitle', 'bool');
         $resolver->setDefaults([
+            'orderByTitle' => false,
             'choice_label' => function (Options $options) {
                 return function ($type) use ($options) {
                     if ($type instanceof Type) {
@@ -59,16 +62,29 @@ class TypeChoiceType extends AbstractType
             },
             'choices' => function (Options $options) {
                 if ($options['user']->hasAllowedTypes()) {
-                    return $this->typeRepository->getAllowedTypesByEvent(
+                    $types = $this->typeRepository->getAllowedTypesByEvent(
                         $options['user'],
                         $options['event']
                     );
+                } else {
+                    $types = $this->typeRepository->getLocalizedTypesByEvent(
+                        $options['event'],
+                        $options['locale']
+                    );
                 }
 
-                return $this->typeRepository->getLocalizedTypesByEvent(
-                    $options['event'],
-                    $options['locale']
-                );
+                if ($options['orderByTitle']) {
+                    $locale = $options['locale'];
+                    usort(
+                        $types,
+                        static function (Type $typeA, Type $typeB) use ($locale) {
+                            return mb_strtolower($typeA->getTitle($locale)) <=>
+                                mb_strtolower($typeB->getTitle($locale));
+                        }
+                    );
+                }
+
+                return $types;
             },
             'choice_translation_domain' => false,
         ]);

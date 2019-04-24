@@ -57,4 +57,9 @@ class LinkedSheets
     {
         return $this->sheets->toArray();
     }
+
+    public function countSheets(): int
+    {
+        return $this->sheets->count();
+    }
 }
