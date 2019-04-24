@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Query\Contact;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -16,16 +17,21 @@ class GetContactViewQueryHandler
 
     /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
+
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
+    /** @var RouterInterface */
+    private $router;
 
     public function __construct(
         QueryBusInterface $queryBus,
         ParticipantInfoGuesser $participantInfoGuesser,
+        RouterInterface $router,
         SheetRepositoryInterface $sheetRepository
     ) {
         $this->queryBus = $queryBus;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->router = $router;
         $this->sheetRepository = $sheetRepository;
     }
 
@@ -44,13 +50,28 @@ class GetContactViewQueryHandler
             throw new ContactParticipantNotFoundException();
         }
 
+        $contactSheetViews = [];
+
+        foreach ($sheetsOfContact as $sheetOfContact) {
+            $contactSheetViews[] = new ContactSheetView(
+                $sheetOfContact->getTitle(),
+                $this->router->generate(
+                    'event_catalog_complete_sheet',
+                    [
+                        'sheet' => $query->userSheet->getId(), 'sheetToDisplay' => $sheetOfContact->getId(),
+                    ]
+                )
+            );
+        }
+
         $infos = $this->participantInfoGuesser->guessParticipantInfos($participantOfContact, $query->locale);
 
         return new ContactView(
             $infos[Tag::PARTICIPANT_FIRSTNAME],
             $infos[Tag::PARTICIPANT_LASTNAME],
             $infos[Tag::PARTICIPANT_POSITION],
-            $infos[Tag::PARTICIPANT_AVATAR]
+            $infos[Tag::PARTICIPANT_AVATAR],
+            $contactSheetViews
         );
     }
 

@@ -9,7 +9,6 @@
                 <div class="list list--users">
                     <div class="user clearfix">
                         <div class="user__avatar">
-                            <span class="bullet"></span>
                             <div class="avatar">
                                 {% if contactView.avatar %}
                                     <img src="{{ contactView.avatar|imagine_filter('user_avatar') }}"
@@ -22,6 +21,11 @@
                         <div class="user__infos">
                             <p class="name">{{ contactView.firstName|capitalize }} {{ contactView.lastName|upper }}</p>
                             <p class="job">{{ contactView.position }}</p>
+                            <p>
+                                {% for contactSheetView in contactView.contactSheetViews %}
+                                    <a href="{{ contactSheetView.url }}">{{ contactSheetView.title }}</a>{{ not loop.last ? ', ' : '' }}
+                                {% endfor %}
+                            </p>
                         </div>
                     </div>
                 </div>

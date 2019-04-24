@@ -66,7 +66,9 @@ class ShowAction
             throw new AccessDeniedException();
         }
 
-        $contactView = $this->queryBus->handle(new GetContactViewQuery($event, $contact, $request->getLocale()));
+        $contactView = $this->queryBus->handle(
+            new GetContactViewQuery($event, $sheet, $contact, $request->getLocale())
+        );
 
         return new Response(
             $this->engine->render(
