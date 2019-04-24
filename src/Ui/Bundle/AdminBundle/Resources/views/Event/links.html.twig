@@ -290,12 +290,12 @@
 {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
     <li class="dropdown-submenu">
         <a href="{{ path('admin_event_rooming_list', { 'event': event.id }) }}">
-            {{ 'admin.rooming.title'|trans }}
+            {{ 'admin.rooming.menu.title'|trans }}
         </a>
         <ul class="dropdown-menu">
             <li>
                 <a href="{{ path('admin_event_rooming_list', { 'event': event.id }) }}">
-                    {{ 'admin.rooming.title'|trans }}
+                    {{ 'admin.rooming.menu.title'|trans }}
                 </a>
             </li>
             <li>

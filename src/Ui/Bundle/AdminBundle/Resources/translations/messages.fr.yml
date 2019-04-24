@@ -745,6 +745,7 @@ admin.promotion_code.title: 'Codes promos'
 admin.promotion_code.update: 'Modifier code promo'
 admin.remove: Supprimer
 admin.remove.confirmation: 'Etes vous sûr de vouloir supprimer cet utilisateur ?'
+admin.reset.filter: 'Réinitialiser le filtre'
 admin.role.ROLE_HOST: Hôte
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
@@ -765,11 +766,12 @@ admin.rooming.list.fullName: 'Nom, prénom'
 admin.rooming.list.roomNumberAssigned: 'Numéro de chambre associé'
 admin.rooming.list.sheet: Fiche
 admin.rooming.list.tasting: Tasting
+admin.rooming.menu.title: 'Rooming list'
 admin.rooming.stay.assignAccommodation.add.title: 'Ajouter une assignation'
 admin.rooming.stay.no-dates: 'dates non déclarées'
 admin.rooming.stay.remove.confirm: 'Êtes-vous sûr de vouloir supprimer cette assignation ?'
 admin.rooming.stay.remove.success: 'L''assignation a bien été supprimée'
-admin.rooming.title: 'Rooming list'
+admin.rooming.title: 'Rooming list : %count% utilisateurs'
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
 admin.rule.list.action.seeWhat: 'Voit quoi ?'
