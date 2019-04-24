@@ -200,6 +200,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ScanHandleAction:
         arguments:
             - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.router'

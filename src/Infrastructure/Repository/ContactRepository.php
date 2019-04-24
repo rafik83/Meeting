@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Contact;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 
 class ContactRepository implements ContactRepositoryInterface
@@ -31,5 +32,27 @@ class ContactRepository implements ContactRepositoryInterface
     {
         $this->entityManager->persist($contact);
         $this->entityManager->flush($contact);
+    }
+
+    public function find(Contact $contact): ?Contact
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('contact')
+            ->from(Contact::class, 'contact')
+            ->andWhere('contact.event = :event')
+            ->andWhere('contact.user = :user')
+            ->andWhere('contact.contact = :contact')
+            ->setParameters(
+                [
+                    'event' => $contact->getEvent(),
+                    'user' => $contact->getUser(),
+                    'contact' => $contact->getContact(),
+                ]
+            )
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 }

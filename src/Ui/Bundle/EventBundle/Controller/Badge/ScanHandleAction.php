@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Command\Contact\Add;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierToUserQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -30,6 +32,9 @@ class ScanHandleAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
+    /** @var CommandBusInterface */
+    private $commandBus;
+
     /** @var HasAccessToSheet */
     private $hasAccessToSheet;
 
@@ -41,11 +46,13 @@ class ScanHandleAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
+        CommandBusInterface $commandBus,
         HasAccessToSheet $hasAccessToSheet,
         QueryBusInterface $queryBus,
         RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
+        $this->commandBus = $commandBus;
         $this->hasAccessToSheet = $hasAccessToSheet;
         $this->queryBus = $queryBus;
         $this->router = $router;
@@ -79,6 +86,8 @@ class ScanHandleAction
         if (!$contact instanceof User) {
             return new JsonResponse('User not found', 404);
         }
+
+        $this->commandBus->handle(new Add($event, $user, $contact));
 
         return new JsonResponse(
             [

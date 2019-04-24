@@ -15,4 +15,6 @@ use Proximum\Vimeet\Domain\Model\Contact;
 interface ContactRepositoryInterface
 {
     public function add(Contact $contact);
+
+    public function find(Contact $contact): ?Contact;
 }
