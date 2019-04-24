@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Contact;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Command\Contact\Add;
 use Proximum\Vimeet\Application\Command\Contact\AddHandler;
@@ -45,6 +46,9 @@ class AddHandlerTest extends TestCase
 
     public function testContactAlreadyExists()
     {
+        $this->user->getId()->shouldBeCalled()->willReturn(1);
+        $this->contact->getId()->shouldBeCalled()->willReturn(2);
+
         $expectedContact = new Contact(
             $this->event->reveal(),
             $this->user->reveal(),
@@ -57,8 +61,22 @@ class AddHandlerTest extends TestCase
         $this->addHandler->handle(new Add($this->event->reveal(), $this->user->reveal(), $this->contact->reveal()));
     }
 
+    public function testDoNotAddMyself()
+    {
+        $this->user->getId()->shouldBeCalled()->willReturn(1);
+        $this->contact->getId()->shouldBeCalled()->willReturn(1);
+
+        $this->contactRepository->find(Argument::any())->shouldNotBeCalled();
+        $this->contactRepository->add(Argument::any())->shouldNotBeCalled();
+
+        $this->addHandler->handle(new Add($this->event->reveal(), $this->user->reveal(), $this->contact->reveal()));
+    }
+
     public function testAdd()
     {
+        $this->user->getId()->shouldBeCalled()->willReturn(1);
+        $this->contact->getId()->shouldBeCalled()->willReturn(2);
+
         $expectedContact = new Contact(
             $this->event->reveal(),
             $this->user->reveal(),

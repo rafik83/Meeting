@@ -21,6 +21,10 @@ class AddHandler
 
     public function handle(Add $add): void
     {
+        if ($add->user->getId() === $add->contact->getId()) {
+            return;
+        }
+
         $contact = new Contact($add->event, $add->user, $add->contact, $this->dateTime);
 
         if (null !== $this->contactRepository->find($contact)) {
