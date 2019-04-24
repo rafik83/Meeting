@@ -6843,12 +6843,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetBadgeConfigurationByTypeQuery }
 
-    Proximum\Vimeet\Application\Query\Badge\ScannedUserEventProfile\GetScannedUserEventProfileQueryHandler:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\ScannedUserEventProfile\GetScannedUserEventProfileQuery }
-
     Proximum\Vimeet\Application\Query\Sheet\SheetsForNewLinkedSheetsQueryHandler:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
@@ -6858,3 +6852,14 @@ services:
     Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler:
         arguments:
             - '@repository.event.extra_parameter_repository'
+
+    #
+    # Contact
+    #
+    Proximum\Vimeet\Application\Query\Contact\GetContactViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, typehints: true }

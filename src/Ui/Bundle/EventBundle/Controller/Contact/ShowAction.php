@@ -8,27 +8,29 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Adapter\RouterInterface;
-use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierToUserQuery;
+use Proximum\Vimeet\Application\Query\Contact\GetContactViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Templating\EngineInterface;
 
-class ScanHandleAction
+class ShowAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
+
+    /** @var EngineInterface */
+    private $engine;
 
     /** @var HasAccessToSheet */
     private $hasAccessToSheet;
@@ -36,26 +38,24 @@ class ScanHandleAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var RouterInterface */
-    private $router;
-
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
+        EngineInterface $engine,
         HasAccessToSheet $hasAccessToSheet,
-        QueryBusInterface $queryBus,
-        RouterInterface $router
+        QueryBusInterface $queryBus
     ) {
         $this->authorizationChecker = $authorizationChecker;
+        $this->engine = $engine;
         $this->hasAccessToSheet = $hasAccessToSheet;
         $this->queryBus = $queryBus;
-        $this->router = $router;
     }
 
     public function __invoke(
         Request $request,
         EventDomain $eventDomain,
         UserDomain $userDomain,
-        Sheet $sheet
+        Sheet $sheet,
+        User $contact
     ): Response {
         $event = $eventDomain->getEvent();
         $user = $userDomain->getUser();
@@ -66,27 +66,17 @@ class ScanHandleAction
             throw new AccessDeniedException();
         }
 
-        $data = json_decode($request->getContent(), true);
+        $contactView = $this->queryBus->handle(new GetContactViewQuery($event, $contact, $request->getLocale()));
 
-        if (!isset($data['identifier'])) {
-            return new JsonResponse('Bad parameters', 400);
-        }
-
-        $contact = $this->queryBus->handle(
-            new QRCodeIdentifierToUserQuery((string) $data['identifier'])
-        );
-
-        if (!$contact instanceof User) {
-            return new JsonResponse('User not found', 404);
-        }
-
-        return new JsonResponse(
-            [
-                'url' => $this->router->generate(
-                    'event_contact_show',
-                    ['sheet' => $sheet->getId(), 'contact' => $contact->getId()]
-                ),
-            ]
+        return new Response(
+            $this->engine->render(
+                '@Event/Contact/show.html.twig',
+                [
+                    'event' => $event,
+                    'sheet' => $sheet,
+                    'contactView' => $contactView,
+                ]
+            )
         );
     }
 }

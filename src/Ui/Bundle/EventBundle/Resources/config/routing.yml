@@ -558,6 +558,17 @@ event_catalog_external_select_items_from_nomenclatures:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\CatalogExternal\SelectItemsFromNomenclaturesAction }
 
 #
+# Contact
+#
+event_contact_show:
+    path: /sheet/{sheet}/contact/{contact}
+    requirements:
+        sheet: \d+
+        contact: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\ShowAction }
+
+#
 # Meeting Request
 #
 event_meeting_list_request:

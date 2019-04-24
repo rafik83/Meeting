@@ -12,7 +12,6 @@ class Scan extends Component {
     this.state = {
       displayScan: true,
       isLoading: false,
-      result: null
     };
 
     this.handleScan = this.handleScan.bind(this);
@@ -25,8 +24,7 @@ class Scan extends Component {
     axios
       .post(this.handleScanEndpoint, { identifier })
       .then((result) => {
-        console.log(result);
-        this.setState({ ...this.state, isLoading: false, result: result.data });
+        document.location.href = result.data.url;
       })
       .catch((error) => console.error(error))
     ;
@@ -46,7 +44,7 @@ class Scan extends Component {
   }
 
   render() {
-    const { displayScan, isLoading, result } = this.state;
+    const { displayScan, isLoading } = this.state;
 
     return (
       <Fragment>
@@ -58,22 +56,6 @@ class Scan extends Component {
         />}
 
         {isLoading && <div>Loading...</div>}
-
-        {result && <div className="user clearfix">
-          <div className="user__avatar">
-            <span className="bullet"></span>
-            <div className="avatar">
-              {/*<img id="{{ participantAvatarId }}"*/}
-              {/*     src="{{ participant.avatar|imagine_filter('user_avatar') }}"*/}
-              {/*     alt="{{ participant.initials }} avatar">*/}
-              {/*  <p id="{{ participantAvatarId }}">{{ participant.initials }}</p>*/}
-            </div>
-          </div>
-          <div className="user__infos">
-            <p className="name">{result.firstName} {result.lastName}</p>
-            <p className="job">{''}</p>
-          </div>
-        </div>}
       </Fragment>
     );
   }
