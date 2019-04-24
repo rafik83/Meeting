@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1955 - Scheduling meetings from requests unanimously accepted by linked sheets
+- VIMEET-1938 - Can filter rooming list by type
+- VIMEET-1944 - Unallow request meeting placement when linked sheets meeting already placed. 
+
+## [2.0.9] - 2019-04-17
+### Changed
+- VIMEET-1913 - No participants selection on meeting request when meetings are assigned to all participants
+
+## [2.0.8] - 2019-04-17
+### Fixed
+- MV-167 - Fix invoice generator
 
 ## [2.0.7] - 2019-04-15
 ### Added

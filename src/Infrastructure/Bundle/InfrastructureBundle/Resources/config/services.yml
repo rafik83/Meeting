@@ -4180,6 +4180,7 @@ services:
             - '@template.participant_info_guesser'
             - '@query.agenda.admin.request_slot_view_query_handler'
             - '@domain.meeting.visio_guesser'
+            - '@Proximum\Vimeet\Ui\Helper\HasMeetingWithLinkedSheets'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\RequestViewQuery }
     query.agenda.agenda_participant_view_query_handler:

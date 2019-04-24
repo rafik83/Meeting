@@ -283,4 +283,9 @@ class Invoice
             hash('sha256', $this->getId() . $this->getNumber() . $this->getCreatedAt()->format('YmdHis'))
         );
     }
+
+    public function updateData(string $data): void
+    {
+        $this->data = $data;
+    }
 }

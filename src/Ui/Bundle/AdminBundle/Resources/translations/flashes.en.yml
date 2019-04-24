@@ -40,6 +40,7 @@ flash.admin.happening.participation.empty: 'There is no participant to export fo
 flash.admin.happening.update.success: 'The sub event has been successfully updated'
 flash.admin.invoice.create.success: 'The invoicing prefix has been created'
 flash.admin.invoice.export.failed: 'An error occured in the export form'
+flash.admin.linked_sheets.create.success: 'Sheets are linked'
 flash.admin.meeting_request.lock.update.success: 'The change of locking status of meetings requests has been successfully taken into account.'
 flash.admin.meeting_request.position.success: 'The meeting has been successfully scheduled'
 flash.admin.meeting.notAllowedToDeleteAllMeetingsException: 'You cannot delete the meeting, the issue date of publication has passed.'

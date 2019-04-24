@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Ui\Helper\HasMeetingWithLinkedSheets;
 
 class RequestViewQueryHandler
 {
@@ -36,16 +37,21 @@ class RequestViewQueryHandler
     /** @var VisioGuesser */
     private $visioGuesser;
 
+    /** @var HasMeetingWithLinkedSheets */
+    private $hasMeetingWithLinkedSheets;
+
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
-        VisioGuesser $visioGuesser
+        VisioGuesser $visioGuesser,
+        HasMeetingWithLinkedSheets $hasMeetingWithLinkedSheets
     ) {
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
         $this->visioGuesser = $visioGuesser;
+        $this->hasMeetingWithLinkedSheets = $hasMeetingWithLinkedSheets;
     }
 
     public function handle(RequestViewQuery $query): RequestView
@@ -75,6 +81,10 @@ class RequestViewQueryHandler
     private function isTransformableIntoMeeting(Request $request, bool $isVisio): bool
     {
         if (!$request->isTransformableIntoMeeting()) {
+            return false;
+        }
+
+        if ($this->hasMeetingWithLinkedSheets->isSatisfiedBy($request)) {
             return false;
         }
 
