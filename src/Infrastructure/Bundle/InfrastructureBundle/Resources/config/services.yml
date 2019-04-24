@@ -6858,7 +6858,6 @@ services:
     #
     Proximum\Vimeet\Application\Query\Contact\GetContactViewQueryHandler:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@template.participant_info_guesser'
             - '@adapter.router'
             - '@vimeet_infrastructure.repository.sheet_repository'

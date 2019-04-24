@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Contact;
 
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -12,24 +11,20 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class GetContactViewQueryHandler
 {
-    /** @var QueryBusInterface */
-    private $queryBus;
-
     /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
+
     /** @var RouterInterface */
     private $router;
 
     public function __construct(
-        QueryBusInterface $queryBus,
         ParticipantInfoGuesser $participantInfoGuesser,
         RouterInterface $router,
         SheetRepositoryInterface $sheetRepository
     ) {
-        $this->queryBus = $queryBus;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->router = $router;
         $this->sheetRepository = $sheetRepository;
