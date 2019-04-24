@@ -75,3 +75,7 @@ services:
     Proximum\Vimeet\Infrastructure\Repository\Rooming\StayRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\ContactRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
