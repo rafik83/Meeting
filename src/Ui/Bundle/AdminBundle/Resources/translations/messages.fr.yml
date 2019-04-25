@@ -771,7 +771,7 @@ admin.rooming.stay.assignAccommodation.add.title: 'Ajouter une assignation'
 admin.rooming.stay.no-dates: 'dates non déclarées'
 admin.rooming.stay.remove.confirm: 'Êtes-vous sûr de vouloir supprimer cette assignation ?'
 admin.rooming.stay.remove.success: 'L''assignation a bien été supprimée'
-admin.rooming.title: 'Rooming list : %count% utilisateurs'
+admin.rooming.title: 'Rooming list'
 admin.rule.link: 'Qui voit qui'
 admin.rule.list.action.delete: Supprimer
 admin.rule.list.action.seeWhat: 'Voit quoi ?'

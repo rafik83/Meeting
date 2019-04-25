@@ -162,7 +162,7 @@ form.sheet_template_objects_collection_type.children.objectsCollection.label_add
 form.sheet_template_objects_collection_type.children.objectsCollection.label_delete: Delete
 form.sheet_template_objects_collection_type.children.submit.label: Save
 form.user_availability_confirmation.children.confirm.label: 'Confirm your avaibilities'
-form.user_event_phone_validate_code.children.code.label: 'validation code received'
+form.user_event_phone_validate_code.children.code.label: 'Validation code received'
 form.user_event_phone_validate_code.children.confirm.label: Confirmed
 gender.man: Mr
 gender.none: None
