@@ -329,19 +329,16 @@ class ParticipantPlanningFormatter
      */
     private function formatMeeting(MeetingView $meetingView, $userLocale, $isUserMultipleSheets)
     {
-        $sheetsMet = '';
-        $sheetsMetTitle = $this->linkedSheetsTitle->getSheetMetViews($meetingView->userSheet, $meetingView->sheetMet);
+        $sheetsMetTitles = [];
+        $sheetsMetViews = $this->linkedSheetsTitle->getSheetMetViews($meetingView->userSheet, $meetingView->sheetMet);
 
-        $i = 0;
-        foreach ($sheetsMetTitle as $sheetTitle) {
-            $separator = $i === 0 ? '' : ' - ';
-            if ($sheetTitle->isHighlighted()){
-                $sheetsMet .= $separator.MarkdownFormatter::bold($sheetTitle->getTitle());
-            } else {
-                $sheetsMet .= $separator.$sheetTitle->getTitle();
-            }
-            $i++;
+        foreach ($sheetsMetViews as $sheetMetView) {
+            $sheetsMetTitles[] = $sheetMetView->isHighlighted()
+                ? MarkdownFormatter::bold($sheetMetView->getTitle())
+                : $sheetMetView->getTitle();
         }
+
+        $sheetsMetTitle = implode(' - ', $sheetsMetTitles);
 
         if (true === $isUserMultipleSheets) {
             $meetingTranslation = $this->translator->trans(
@@ -358,7 +355,7 @@ class ParticipantPlanningFormatter
             $meetingTranslation = $this->translator->trans(
                 self::TRANSLATE_MEETING,
                 [
-                    '%sheetMet%' => $sheetsMet,
+                    '%sheetMet%' => $sheetsMetTitle,
                     '%spotRef%' => $meetingView->spotRef,
                 ],
                 self::TRANSLATION_DOMAIN,
