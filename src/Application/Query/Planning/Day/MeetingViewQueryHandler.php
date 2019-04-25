@@ -62,7 +62,9 @@ class MeetingViewQueryHandler
                         ? $this->participantInfoGuesser->guessParticipantPosition($participant, $locale)
                         : null
                 );
-            }, $participantsMet)
+            }, $participantsMet),
+            $userSheet,
+            $sheetMet
         );
     }
 }

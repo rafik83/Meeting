@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlannin
 use Proximum\Vimeet\Application\Components\Planning\Formatter\UnallocatedFormatter;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\SheetMetView;
 use Proximum\Vimeet\Application\View\Planning\Day\AssignmentView;
 use Proximum\Vimeet\Application\View\Planning\Day\HappeningParticipationView;
 use Proximum\Vimeet\Application\View\Planning\Day\MassView;
@@ -24,8 +25,11 @@ use Proximum\Vimeet\Application\View\Planning\Day\MeetingView;
 use Proximum\Vimeet\Application\View\Planning\Day\UnavailabilityView;
 use Proximum\Vimeet\Application\View\Planning\DayView;
 use Proximum\Vimeet\Application\View\Planning\PlanningView;
+use Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class ParticipantPlanningFormatterTest extends TestCase
 {
@@ -38,11 +42,19 @@ class ParticipantPlanningFormatterTest extends TestCase
     /** @var ObjectProphecy */
     private $planningViewQueryHandler;
 
+    /** @var ObjectProphecy */
+    private $linkedSheetsTitle;
+
+    /** @var ObjectProphecy */
+    private $requestRepository;
+
     public function setUp()
     {
         $this->translator = $this->prophesize(TranslatorInterface::class);
         $this->unallocatedFormatter = $this->prophesize(UnallocatedFormatter::class);
         $this->planningViewQueryHandler = $this->prophesize(PlanningViewQueryHandler::class);
+        $this->linkedSheetsTitle = $this->prophesize(LinkedSheetsTitle::class);
+        $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
     }
 
     public function testPreloadPlanningHandlerForUsersAndEvent()
@@ -59,7 +71,8 @@ class ParticipantPlanningFormatterTest extends TestCase
         $formatter = new ParticipantPlanningFormatter(
             $this->translator->reveal(),
             $this->unallocatedFormatter->reveal(),
-            $this->planningViewQueryHandler->reveal()
+            $this->planningViewQueryHandler->reveal(),
+            $this->linkedSheetsTitle->reveal()
         );
 
         $formatter->preloadPlanningHandlerForUsersAndEvent([$user1->reveal(), $user2->reveal()], $event->reveal());
@@ -77,7 +90,8 @@ class ParticipantPlanningFormatterTest extends TestCase
         $formatter = new ParticipantPlanningFormatter(
             $this->translator->reveal(),
             $this->unallocatedFormatter->reveal(),
-            $this->planningViewQueryHandler->reveal()
+            $this->planningViewQueryHandler->reveal(),
+            $this->linkedSheetsTitle->reveal()
         );
 
         $formatter->preloadPlanningHandlerForEvent($event->reveal());
@@ -87,6 +101,22 @@ class ParticipantPlanningFormatterTest extends TestCase
     {
         $event = $this->prophesize(Event::class);
         $user  = $this->prophesize(User::class);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheetMet = $this->prophesize(Sheet::class);
+
+        $sheetMetLinkedSheet = $this->prophesize(Sheet::class);
+
+        $sheetMetView = new SheetMetView('sheet met title', true);
+        $sheetMetView2 = new SheetMetView('sheetMetLinkedSheet', false);
+
+        $sheet->getTitle()->willReturn('user sheet title');
+        $sheetMet->getTitle()->willReturn('sheet met title');
+        $sheetMetLinkedSheet->getTitle()->willReturn('sheetMetLinkedSheet');
+
+        $this->linkedSheetsTitle
+            ->getSheetMetViews($sheet->reveal(), $sheetMet->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$sheetMetView, $sheetMetView2]);
 
         $dayBegin = new \DateTime('2017-01-01 08:00:00.000');
         $beginMass = new \DateTime('2017-01-01 10:10:00.000');
@@ -112,7 +142,11 @@ class ParticipantPlanningFormatterTest extends TestCase
             $meetingEnd,
             'spot reference',
             'user sheet title',
-            'sheet met title'
+            'sheet met title',
+            false,
+            [],
+            $sheet->reveal(),
+            $sheetMet->reveal()
         );
         $assignment = new AssignmentView(
             $assignmentBegin,
@@ -176,7 +210,8 @@ class ParticipantPlanningFormatterTest extends TestCase
         $formatter = new ParticipantPlanningFormatter(
             $this->translator->reveal(),
             $this->unallocatedFormatter->reveal(),
-            $this->planningViewQueryHandler->reveal()
+            $this->planningViewQueryHandler->reveal(),
+            $this->linkedSheetsTitle->reveal()
         );
 
         $result = $formatter->formatPlanningFromUserAndEvent($user->reveal(), $event->reveal(), 'fr');
@@ -189,6 +224,18 @@ class ParticipantPlanningFormatterTest extends TestCase
     {
         $event = $this->prophesize(Event::class);
         $user  = $this->prophesize(User::class);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheetMet = $this->prophesize(Sheet::class);
+
+        $sheetMetView = new SheetMetView('sheet met title', false);
+
+        $sheet->getTitle()->willReturn('user sheet title');
+        $sheetMet->getTitle()->willReturn('sheet met title');
+
+        $this->linkedSheetsTitle
+            ->getSheetMetViews($sheet->reveal(), $sheetMet->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$sheetMetView]);
 
         $dayBegin = new \DateTime('2017-01-01 08:00:00.000');
         $meetingBegin = new \DateTime('2017-01-01 17:30:00.000');
@@ -199,7 +246,11 @@ class ParticipantPlanningFormatterTest extends TestCase
             $meetingEnd,
             'spot reference',
             'user sheet title',
-            'sheet met title'
+            'sheet met title',
+            false,
+            [],
+            $sheet->reveal(),
+            $sheetMet->reveal()
         );
 
         $day = $this->prophesize(DayView::class);
@@ -228,7 +279,8 @@ class ParticipantPlanningFormatterTest extends TestCase
         $formatter = new ParticipantPlanningFormatter(
             $this->translator->reveal(),
             $this->unallocatedFormatter->reveal(),
-            $this->planningViewQueryHandler->reveal()
+            $this->planningViewQueryHandler->reveal(),
+            $this->linkedSheetsTitle->reveal()
         );
 
         $result = $formatter->formatPlanningFromUserAndEvent($user->reveal(), $event->reveal(), 'fr');
@@ -241,6 +293,22 @@ class ParticipantPlanningFormatterTest extends TestCase
     {
         $event = $this->prophesize(Event::class);
         $user  = $this->prophesize(User::class);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheetMet = $this->prophesize(Sheet::class);
+
+        $sheetMetLinkedSheet = $this->prophesize(Sheet::class);
+
+        $sheetMetView = new SheetMetView('sheet met title', true);
+        $sheetMetView2 = new SheetMetView('sheetMetLinkedSheet', true);
+
+        $sheet->getTitle()->willReturn('user sheet title');
+        $sheetMet->getTitle()->willReturn('sheet met title');
+        $sheetMetLinkedSheet->getTitle()->willReturn('sheetMetLinkedSheet');
+
+        $this->linkedSheetsTitle
+            ->getSheetMetViews($sheet->reveal(), $sheetMet->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$sheetMetView, $sheetMetView2]);
 
         $dayBegin = new \DateTime('2017-01-01 08:00:00.000');
         $beginMass = new \DateTime('2017-01-01 10:10:00.000');
@@ -266,7 +334,11 @@ class ParticipantPlanningFormatterTest extends TestCase
             $meetingEnd,
             'spot reference',
             'user sheet title',
-            'sheet met title'
+            'sheet met title',
+            false,
+            [],
+            $sheet->reveal(),
+            $sheetMet->reveal()
         );
         $assignment = new AssignmentView(
             $assignmentBegin,
@@ -335,7 +407,8 @@ class ParticipantPlanningFormatterTest extends TestCase
         $formatter = new ParticipantPlanningFormatter(
             $this->translator->reveal(),
             $this->unallocatedFormatter->reveal(),
-            $this->planningViewQueryHandler->reveal()
+            $this->planningViewQueryHandler->reveal(),
+            $this->linkedSheetsTitle->reveal()
         );
 
         $result = $formatter->formatPlanningFromUserAndEventWithUnallocated($user->reveal(), $event->reveal(), 'fr');

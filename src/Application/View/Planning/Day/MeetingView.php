@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\View\Planning\Day;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
+
 class MeetingView extends AbstractTimeEntityView
 {
     /** @var string */
@@ -27,6 +30,12 @@ class MeetingView extends AbstractTimeEntityView
     /** @var bool */
     public $hasParticipantsInfo;
 
+    /** @var Sheet */
+    public $userSheet;
+
+    /** @var LinkedSheets|null */
+    public $sheetMet;
+
     /**
      * @param \DateTimeInterface   $begin
      * @param \DateTimeInterface   $end
@@ -35,6 +44,8 @@ class MeetingView extends AbstractTimeEntityView
      * @param string               $sheetMetTitle
      * @param bool                 $hasParticipantsInfo
      * @param ParticipantMetView[] $participantMetViews
+     * @param Sheet|null           $userSheet
+     * @param Sheet|null           $sheetMet
      */
     public function __construct(
         \DateTimeInterface $begin,
@@ -43,7 +54,9 @@ class MeetingView extends AbstractTimeEntityView
         $userSheetTitle,
         $sheetMetTitle,
         bool $hasParticipantsInfo = false,
-        array $participantMetViews = []
+        array $participantMetViews = [],
+        Sheet $userSheet = null,
+        Sheet $sheetMet = null
     ) {
         parent::__construct($begin, $end);
 
@@ -54,5 +67,7 @@ class MeetingView extends AbstractTimeEntityView
         $this->end = $end;
         $this->participantsMetViews = $participantMetViews;
         $this->hasParticipantsInfo = $hasParticipantsInfo;
+        $this->userSheet = $userSheet;
+        $this->sheetMet = $sheetMet;
     }
 }
