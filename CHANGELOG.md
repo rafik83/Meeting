@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- VIMMET-1942 - Planning print bolded sheets titles
 - VIMEET-1914 - Bold on sheet titles
 
 ## [2.1.0] - 2019-04-24
