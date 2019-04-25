@@ -6865,3 +6865,11 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Contact\GetContactListViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.participant_info_guesser'
+        tags:
+            - { name: tactician.handler, typehints: true }

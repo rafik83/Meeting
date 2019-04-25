@@ -15,6 +15,7 @@ use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -466,5 +467,59 @@ class UserRepository implements UserRepositoryInterface
             ->setParameter('product', $product)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMet(Event $event, User $user): array
+    {
+        /**
+         * The following SQL query was written to test DQL query builder.
+         *
+
+        select distinct u2.*
+        from user u
+        join participant p on u.id = p.user_id and  u.id = 128242
+        join sheet s on p.sheet_id = s.id  and s.event_id = 112
+        join meeting_from_participants mfp on p.id = mfp.participant_id
+        join meeting_to_participants mtp on p.id = mtp.participant_id
+        join meeting m on mfp.meeting_id = m.id or mtp.meeting_id = m.id
+        join meeting_from_participants mfp2 on m.id = mfp2.meeting_id
+        join meeting_to_participants mtp2 on m.id = mtp2.meeting_id
+        join participant p2 on (p2.id = mfp2.participant_id or p2.id = mtp2.participant_id) and  p2.sheet_id != p.sheet_id
+        join user u2 on p2.user_id = u2.id;
+
+         *
+         */
+
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('metUser')
+            ->from(User::class, 'metUser')
+            ->join(Participant::class, 'metParticipant', 'WITH', 'metUser = metParticipant.user')
+            ->join('metParticipant.sheet', 'metSheet', 'WITH', 'metSheet.event = :event')
+            ->join(
+                Meeting::class,
+                'meeting'
+            )
+            ->join('meeting.toParticipants', 'metToParticipants')
+            ->join('meeting.fromParticipants', 'metFromParticipants')
+            ->join('meeting.toParticipants', 'userToParticipants')
+            ->join('meeting.fromParticipants', 'userFromParticipants')
+            ->join(
+                Participant::class,
+                'userParticipant',
+                'WITH',
+                'userParticipant.user = :user'
+            )
+            ->where('metToParticipants = metParticipant OR metFromParticipants = metParticipant')
+            ->andWhere('userToParticipants = userParticipant OR userFromParticipants = userParticipant')
+            ->andWhere('userParticipant.sheet != metSheet')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

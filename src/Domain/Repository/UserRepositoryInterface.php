@@ -141,4 +141,12 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function findByParticipantProduct(Product $product): array;
+
+    /**
+     * @param Event $event
+     * @param User  $user
+     *
+     * @return User[]
+     */
+    public function getMet(Event $event, User $user): array;
 }

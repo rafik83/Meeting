@@ -215,6 +215,11 @@ services:
             - '@Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\IndexAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating.engine.twig'
+
     #
     # Custom
     #

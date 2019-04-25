@@ -1,0 +1,32 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block content %}
+        <div class="profile__content">
+            <div class="main__content">
+                <div class="preview">
+                    <div class="list list--users">
+                    {% for contactPreview in contactListView %}
+                        <div class="user clearfix">
+                            <div class="user__avatar">
+                                <div class="avatar">
+                                    {% if contactPreview.avatar %}
+                                        <img src="{{ contactPreview.avatar|imagine_filter('user_avatar') }}"
+                                             alt="{{ contactPreview.initials }} avatar">
+                                    {% else %}
+                                        <p>{{ contactPreview.initials }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="user__infos">
+                                <p class="sheets">
+                                    {{ contactPreview.sheetTitles | join(', ') }}
+                                </p>
+                                <p class="name">{{ contactPreview.firstName|capitalize }} {{ contactPreview.lastName|upper }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
