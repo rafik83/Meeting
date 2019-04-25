@@ -344,8 +344,8 @@ class ParticipantPlanningFormatter
             $meetingTranslation = $this->translator->trans(
                 self::TRANSLATE_MEETING_MULTIPLE_SHEET,
                 [
-                    '%userSheet%' => $meetingView->userSheetTitle,
-                    '%sheetMet%' => $meetingView->sheetMetTitle,
+                    '%userSheet%' => $meetingView->userSheet->getTitle(),
+                    '%sheetMet%' => $meetingView->sheetMet->getTitle(),
                     '%spotRef%' => $meetingView->spotRef,
                 ],
                 self::TRANSLATION_DOMAIN,

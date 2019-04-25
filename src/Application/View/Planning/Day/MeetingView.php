@@ -18,12 +18,6 @@ class MeetingView extends AbstractTimeEntityView
     /** @var string */
     public $spotRef;
 
-    /** @var string */
-    public $sheetMetTitle;
-
-    /** @var string */
-    public $userSheetTitle;
-
     /** @var ParticipantMetView[] */
     public $participantsMetViews;
 
@@ -40,8 +34,6 @@ class MeetingView extends AbstractTimeEntityView
      * @param \DateTimeInterface   $begin
      * @param \DateTimeInterface   $end
      * @param string               $spotRef
-     * @param string               $userSheetTitle
-     * @param string               $sheetMetTitle
      * @param bool                 $hasParticipantsInfo
      * @param ParticipantMetView[] $participantMetViews
      * @param Sheet|null           $userSheet
@@ -51,8 +43,6 @@ class MeetingView extends AbstractTimeEntityView
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         $spotRef,
-        $userSheetTitle,
-        $sheetMetTitle,
         bool $hasParticipantsInfo = false,
         array $participantMetViews = [],
         Sheet $userSheet = null,
@@ -61,8 +51,6 @@ class MeetingView extends AbstractTimeEntityView
         parent::__construct($begin, $end);
 
         $this->spotRef = $spotRef;
-        $this->userSheetTitle = $userSheetTitle;
-        $this->sheetMetTitle = $sheetMetTitle;
         $this->begin = $begin;
         $this->end = $end;
         $this->participantsMetViews = $participantMetViews;
