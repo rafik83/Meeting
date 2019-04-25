@@ -1,4 +1,4 @@
-admin.sheet.follower.un-assigned: unassigned
+admin.sheet.follower.un-assigned: Unassigned
 admin.type.management.available.label: 'By available'
 admin.type.management.none.label: None
 admin.type.management.unavailable.label: 'By unavailable'
@@ -24,10 +24,11 @@ form.admin_accommodation_type.children.title.label: 'Hosting name'
 form.admin_activate_account_password.children.password.children.first.label: 'New password'
 form.admin_activate_account_password.children.password.children.second.label: 'Confirm new password'
 form.admin_activate_account_password.children.submit.label: Submit
-form.admin_export_planning.children.orderBy.choice.participant_last_name: 'choose with the particpant last name'
-form.admin_export_planning.children.orderBy.choice.sheet_title: 'choose with the company name'
-form.admin_export_planning.children.orderBy.choice.spot_reference: 'by spot, company name'
-form.admin_export_planning.children.orderBy.label: 'plannings export order'
+form.admin_assign_accommodation_type.children.accommodation.label: 'Associated hosting'
+form.admin_export_planning.children.orderBy.choice.participant_last_name: 'Choose with the particpant last name'
+form.admin_export_planning.children.orderBy.choice.sheet_title: 'Choose with the company name'
+form.admin_export_planning.children.orderBy.choice.spot_reference: 'By spot, company name'
+form.admin_export_planning.children.orderBy.label: 'Plannings export order'
 form.admin_export_planning.children.submit.label: Export
 form.admin_export_planning.children.types.label: Types
 form.admin_lib_add.children.submit.label: Add
@@ -58,7 +59,7 @@ form.admin.picto.Dejeuner: lunch
 form.admin.picto.PresFlash_2: flash
 form.admin.picto.RDV: Meeting
 form.admin.sheet.filter.children.submit.label: Filter
-form.admin.sheet.follower.un-assigned: unassigned
+form.admin.sheet.follower.un-assigned: Unassigned
 form.archive_un_archive.children.archive.label: Archive
 form.archive_un_archive.children.unArchive.label: Unarchive
 form.archive_un_archive.confirm.submit.label: 'Do you confirm the action ?'
@@ -144,12 +145,12 @@ form.configure.children.catalogTagFilters.label_add: 'Add a tag filter'
 form.configure.children.catalogTagFilters.label_delete: 'remove a tag filter'
 form.configure.children.catalogTagFilters.prototype.children.tag.label: Tag
 form.configure.children.categories.label: 'visible categories'
-form.configure.children.externalCatalogEnabled.label: 'public catalog  enabled'
+form.configure.children.externalCatalogEnabled.label: 'Public catalog  enabled'
 form.configure.children.hasMessage.label: 'Message activated'
 form.configure.children.messageTranslations.label: Message
 form.configure.children.messageTranslations.prototype.children.content.label: Content
 form.configure.children.messageTranslations.prototype.children.title.label: Title
-form.configure.children.registrationUrl.label: 'registration Url'
+form.configure.children.registrationUrl.label: 'Registration Url'
 form.configure.children.registrationUrl.placeholder: 'Example: https://name-events.vimeet.events'
 form.configure.children.searchFacets.category.label: Category
 form.configure.children.searchFacets.keywords.help: 'Name of the sheet, wording, objects, collection and nomenclatures on the participation sheet'
@@ -228,9 +229,9 @@ form.event_configure_date.children.agendaOnlineDate.label: 'On line publishing o
 form.event_configure_date.children.catalogOnlineDate.label: 'Catalogue opening'
 form.event_configure_date.children.closeAnsweringMeetingRequestDate.label: 'Block answering meeting requests'
 form.event_configure_date.children.closeMeetingRequestDate.label: 'Block the meeting request'
-form.event_configure_date.children.enableBadgeForParticipantDate.help: 'activate the automatic sending of the badge by email'
+form.event_configure_date.children.enableBadgeForParticipantDate.help: 'Activate the automatic sending of the badge by email'
 form.event_configure_date.children.enableBadgeForParticipantDate.label: 'Activate badge display for the participant'
-form.event_configure_date.children.happeningsOpenDate.label: 'opening of the registrations to the sub-events'
+form.event_configure_date.children.happeningsOpenDate.label: 'Opening of the registrations to the sub-events'
 form.event_configure_date.children.registrationCloseDate.label: 'Date of closing registrations'
 form.event_configure_date.children.registrationOpenDate.label: 'Date of opening of the registrations'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication of the final meeting schedules'
@@ -262,7 +263,7 @@ form.event_create.children.title.label: Title
 form.event_create.children.vat.label: 'VAT (%)'
 form.event_create.children.visible.label: Visible
 form.event_create.children.visio.label: 'Dematerialized event'
-form.event_create.children.welcomeEnabled.label: 'welcome popup'
+form.event_create.children.welcomeEnabled.label: 'Welcome popup'
 form.event_duplicate.children.event.label: event
 form.event_duplicate.children.submit.label: create
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activate payment in deposit'
@@ -322,7 +323,7 @@ form.event_update.children.translations.prototype.children.description.label: 'p
 form.event_update.children.vat.label: 'VAT (%)'
 form.event_update.children.visible.label: Visible
 form.event_update.children.visio.label: 'Dematerialized event'
-form.event_update.children.welcomeEnabled.label: 'welcoming popup'
+form.event_update.children.welcomeEnabled.label: 'Welcoming popup'
 form.event.children.invoicePrefix.help.label: 'To change prefix please contact us'
 form.extra_parameter_create.children.name.label: name
 form.extra_parameter_create.children.submit.label: register
@@ -367,11 +368,11 @@ form.filter_sheet_template_organizer.children.event.label: Event/type
 form.filter_spot_type.children.active.label: Active
 form.filter_spot_type.children.filters.all.label: All
 form.filter_spot_type.children.filters.no.label: 'No'
-form.filter_spot_type.children.filters.yes.label: 'yes'
+form.filter_spot_type.children.filters.yes.label: 'Yes'
 form.filter_spot_type.children.meetingCapacity.label: 'Meeting number'
 form.filter_spot_type.children.reference.label: Id
 form.filter_spot_type.children.seatCapacity.label: 'Seat capacity'
-form.filter_spot_type.children.size.label: 'size in square meters'
+form.filter_spot_type.children.size.label: 'Size in square meters'
 form.filter_spot_type.children.submit.label: Filter
 form.filter.boolean.no.label: 'No'
 form.filter.boolean.yes.label: 'Yes'
@@ -458,14 +459,14 @@ form.meeting_cancel.children.message.label: Message
 form.meeting_cancel.children.submit.label: Confirm
 form.meeting_request_approve.children.submit.label: Send
 form.meeting_request_approve.children.toParticipants.label: 'choose participants for this meeting'
-form.meeting_request_cancel.children.message.label: 'explain why'
+form.meeting_request_cancel.children.message.label: 'Explain why'
 form.meeting_request_cancel.children.submit.label: Send
 form.meeting_request_create.children.description.label: 'Detail your meeting request'
 form.meeting_request_create.children.participants.label: 'select the participants you want to assign to this meeting'
 form.meeting_request_create.children.submit.label: Send
 form.meeting_request_filter.children.order_by.label: 'Sort by'
-form.meeting_request_filter.children.order_by.options.created_at_asc: 'increasing sorting of creation date'
-form.meeting_request_filter.children.order_by.options.created_at_desc: 'decreasing sorting of creation date'
+form.meeting_request_filter.children.order_by.options.created_at_asc: 'Increasing sorting of creation date'
+form.meeting_request_filter.children.order_by.options.created_at_desc: 'Decreasing sorting of creation date'
 form.meeting_request_filter.children.order_by.options.state_updated_at_asc: 'Modification of the ascending order of status'
 form.meeting_request_filter.children.order_by.options.state_updated_at_desc: 'Modification of the descending order of status'
 form.meeting_request_filter.children.state.label: States
@@ -512,12 +513,12 @@ form.nomenclature_import_type.children.charset.label: Encoding
 form.nomenclature_import_type.children.file.help: 'An import will reset the nomenclature except if the imported file comes from an export.'
 form.nomenclature_import_type.children.file.label: file
 form.nomenclature_update_type.children.sort.choice.sort_alpha: 'Sort out the nomenclature with alphabetical order'
-form.nomenclature_update_type.children.sort.choice.sort_file: 'keep the file order'
+form.nomenclature_update_type.children.sort.choice.sort_file: 'Keep the file order'
 form.nomenclature_update_type.children.sort.label: sorting
 form.nomenclature_update_type.children.submit.label: Save
 form.nomenclature_update_type.children.title.label: Title
-form.order_filter.children.sheet.enabled.label: sheet
-form.order_find.children.numero.label: 'neter the number of order'
+form.order_filter.children.sheet.enabled.label: Sheet
+form.order_find.children.numero.label: 'Enter the number of order'
 form.order_find.children.submit.label: search
 form.order_invoice_find.children.numero.label: 'number of the order/invoice'
 form.order_invoice_find.children.submit.label: Search
@@ -540,7 +541,7 @@ form.organizer_sheet_template_duplicate.children.title.label: Title
 form.package_create.children.event.label: 'choose an event'
 form.package_create.children.submit.label: Save
 form.package_create.children.title.label: 'Template title'
-form.package_update.children.options.children.enabled.label: activated
+form.package_update.children.options.children.enabled.label: Activated
 form.package_update.children.options.children.groups.label: groups
 form.package_update.children.options.children.groups.label_add: 'Add a group'
 form.package_update.children.options.children.groups.label_delete: '&times;'
@@ -565,7 +566,7 @@ form.package_update.children.plans.children.plans.label: Formulas
 form.package_update.children.plans.children.plans.label_add: 'Add formula'
 form.package_update.children.plans.children.plans.label_delete: '&times;'
 form.package_update.children.submit.label: Save
-form.package_update.children.templateData.children.blocks.prototype.children.enabled.label: 'step activated'
+form.package_update.children.templateData.children.blocks.prototype.children.enabled.label: 'Step activated'
 form.package_update.children.templateData.children.blocks.prototype.label: 'Step title'
 form.package_update.children.title.label: 'Template title'
 form.participant_create.children.data.label: Participation
@@ -791,7 +792,7 @@ form.search_user_sheets_group.children.email.label: 'user''s email'
 form.search_user_sheets_group.children.submit.label: next
 form.select_recipients.children.recipients.label: recipients
 form.sheet_attendance_choice.children.attend.choice.attend: attend
-form.sheet_attendance_choice.children.attend.choice.cancel: cancel
+form.sheet_attendance_choice.children.attend.choice.cancel: Cancel
 form.sheet_attendance_choice.children.attend.label: 'sheet attendance'
 form.sheet_attendance_choice.children.submit.confirm: 'do you confirm the modification ?'
 form.sheet_attendance_choice.children.submit.label: 'confirm the modification'
@@ -799,28 +800,29 @@ form.sheet_batch.children.accept.label: Accept
 form.sheet_batch.children.addCatalog.label: 'Add to catalogue'
 form.sheet_batch.children.assign.label: assign
 form.sheet_batch.children.assignToGroup.label: assign
-form.sheet_batch.children.disable.label: disable
+form.sheet_batch.children.disable.label: Disable
 form.sheet_batch.children.duplicate.confirm.label: 'You are going to duplicate this / these sheet/s, are you sure?'
 form.sheet_batch.children.duplicate.label: Duplicate
 form.sheet_batch.children.duplicateToType.label: Types
 form.sheet_batch.children.enable.label: enable
 form.sheet_batch.children.events.label: 'Destination event'
 form.sheet_batch.children.follower.label: collaborator
-form.sheet_batch.children.generateInvoice.label: 'generate invoice'
+form.sheet_batch.children.generateInvoice.label: 'Generate invoice'
 form.sheet_batch.children.group.label: group
 form.sheet_batch.children.pending.label: Pending
+form.sheet_batch.children.printBadge.label: 'Printing badge'
 form.sheet_batch.children.printPdf.label: 'Print to PDF'
 form.sheet_batch.children.printPlanning.label: Print
 form.sheet_batch.children.printPlanningAndBadge.label: 'Badge and planning printing'
 form.sheet_batch.children.printPlanningOrderBy.label: 'Export order'
-form.sheet_batch.children.refuse.label: refuse
+form.sheet_batch.children.refuse.label: Refuse
 form.sheet_batch.children.removeCatalog.label: 'remove from the catalog'
 form.sheet_batch.children.validate.label: Submit
-form.sheet_batch.children.validateComment.label: 'leave a comment (optional)'
-form.sheet_batch.children.validationStateDraft.label: 'put the sheet back as draft'
-form.sheet_batch.children.validationStateValidate.label: 'sheet content validation'
+form.sheet_batch.children.validateComment.label: 'Leave a comment (optional)'
+form.sheet_batch.children.validationStateDraft.label: 'Put the sheet back as draft'
+form.sheet_batch.children.validationStateValidate.label: 'Sheet content validation'
 form.sheet_comment.children.commercialStatus.label: 'commercial status'
-form.sheet_comment.children.commercialStatus.status.canceled: annulation
+form.sheet_comment.children.commercialStatus.status.canceled: Cancellation
 form.sheet_comment.children.commercialStatus.status.do_not_call: 'Do not call'
 form.sheet_comment.children.commercialStatus.status.followed: 'follow up'
 form.sheet_comment.children.commercialStatus.status.hot: 'very interested'
@@ -837,68 +839,68 @@ form.sheet_comment.children.commercialStatus.status.refused_by_organizer: 'statu
 form.sheet_comment.children.commercialStatus.status.registered: registered
 form.sheet_comment.children.commercialStatus.status.verbal_agreement: 'verbal agreement'
 form.sheet_comment.children.filter.label: Filter
-form.sheet_comment.children.reminderDate.label: 'date reminder'
+form.sheet_comment.children.reminderDate.label: 'Date reminder'
 form.sheet_comment.children.submit.label: Save
 form.sheet_comment.children.text.placeholder: 'Add comment'
-form.sheet_filter.children.agendaConfirmedStatus.choice.all: 'no matter'
-form.sheet_filter.children.agendaConfirmedStatus.choice.all_confirmed: confirmed
-form.sheet_filter.children.agendaConfirmedStatus.choice.none_confirmed: 'not confirmed'
-form.sheet_filter.children.agendaConfirmedStatus.choice.partly_confirmed: 'partly confirmed (one participant at least has not confirmed)'
+form.sheet_filter.children.agendaConfirmedStatus.choice.all: 'No matter'
+form.sheet_filter.children.agendaConfirmedStatus.choice.all_confirmed: Confirmed
+form.sheet_filter.children.agendaConfirmedStatus.choice.none_confirmed: 'Not confirmed'
+form.sheet_filter.children.agendaConfirmedStatus.choice.partly_confirmed: 'Partly confirmed (one participant at least has not confirmed)'
 form.sheet_filter.children.agendaConfirmedStatus.label: 'Agenda confirmed'
-form.sheet_filter.children.availabilityConfirmationStatus.choice.all: 'no matter'
+form.sheet_filter.children.availabilityConfirmationStatus.choice.all: 'No matter'
 form.sheet_filter.children.availabilityConfirmationStatus.choice.all_confirmed: Confirmed
 form.sheet_filter.children.availabilityConfirmationStatus.choice.none_confirmed: 'Not confirmed'
-form.sheet_filter.children.availabilityConfirmationStatus.choice.partly_confirmed: 'partly confirmed'
-form.sheet_filter.children.availabilityConfirmationStatus.label: 'availibilities confirmation'
-form.sheet_filter.children.booleanFilters.noPreference.label: 'no matter'
-form.sheet_filter.children.cancelAttendance.label: 'cancel the attendance'
+form.sheet_filter.children.availabilityConfirmationStatus.choice.partly_confirmed: 'Partly confirmed'
+form.sheet_filter.children.availabilityConfirmationStatus.label: 'Availibilities confirmation'
+form.sheet_filter.children.booleanFilters.noPreference.label: 'No matter'
+form.sheet_filter.children.cancelAttendance.label: 'Cancel the attendance'
 form.sheet_filter.children.cart.no.label: without
-form.sheet_filter.children.cart.noPreference.label: 'no matter'
+form.sheet_filter.children.cart.noPreference.label: 'No matter'
 form.sheet_filter.children.cart.yes.label: with
 form.sheet_filter.children.category.label: category
 form.sheet_filter.children.commercialStatus.label: 'commercial status'
-form.sheet_filter.children.completed.label: completeness
+form.sheet_filter.children.completed.label: Completeness
 form.sheet_filter.children.country.label: Country
 form.sheet_filter.children.creation_interval.label: Inscription
 form.sheet_filter.children.enabled.label: Participation
-form.sheet_filter.children.enabledState.all.label: all
-form.sheet_filter.children.enabledState.disabled.label: disabled
-form.sheet_filter.children.enabledState.enabled.label: enabled
+form.sheet_filter.children.enabledState.all.label: All
+form.sheet_filter.children.enabledState.disabled.label: Disabled
+form.sheet_filter.children.enabledState.enabled.label: Enabled
 form.sheet_filter.children.enabledState.label: 'Profile status'
 form.sheet_filter.children.filledFilter.choice.filled: Filled
 form.sheet_filter.children.filledFilter.choice.not_filled: 'Not filled'
 form.sheet_filter.children.filledFilter.choice.partly_filled: 'Partly filled'
-form.sheet_filter.children.follower.children.un-assigned: unassigned
-form.sheet_filter.children.follower.label: 'commercial follow up'
-form.sheet_filter.children.hasCart.label: basket
-form.sheet_filter.children.hasGroup.label: 'belong to a group'
-form.sheet_filter.children.hasHappeningParticipation.label: 'registration to a conference'
-form.sheet_filter.children.hasInvoice.label: 'has at least one invoice'
-form.sheet_filter.children.hasNoMeetingRequest.label: 'has done no meeting request'
+form.sheet_filter.children.follower.children.un-assigned: Unassigned
+form.sheet_filter.children.follower.label: 'Commercial follow up'
+form.sheet_filter.children.hasCart.label: Basket
+form.sheet_filter.children.hasGroup.label: 'Belong to a group'
+form.sheet_filter.children.hasHappeningParticipation.label: 'Registration to a conference'
+form.sheet_filter.children.hasInvoice.label: 'Has at least one invoice'
+form.sheet_filter.children.hasNoMeetingRequest.label: 'Has done no meeting request'
 form.sheet_filter.children.hasOrder.label: Order
 form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Meeting proposals pending validation'
-form.sheet_filter.children.hasRemainingToPay.label: 'remaining to pay > 0'
+form.sheet_filter.children.hasRemainingToPay.label: 'Remaining to pay > 0'
 form.sheet_filter.children.hasRemainingToPay.no.label: 'No'
-form.sheet_filter.children.hasRemainingToPay.noPreference.label: 'no matter'
+form.sheet_filter.children.hasRemainingToPay.noPreference.label: 'No matter'
 form.sheet_filter.children.hasRemainingToPay.yes.label: 'yes'
 form.sheet_filter.children.hasScheduledMeeting.label: 'Has at least 1 shceduled meeting'
-form.sheet_filter.children.hasSpot.label: 'has a dedicated spot'
+form.sheet_filter.children.hasSpot.label: 'Has a dedicated spot'
 form.sheet_filter.children.imported.all.label: All
 form.sheet_filter.children.imported.label: Imported
-form.sheet_filter.children.inCatalog.label: 'in catalog'
-form.sheet_filter.children.order.no.label: without
-form.sheet_filter.children.order.noPreference.label: 'no preference'
-form.sheet_filter.children.order.totalEqualZero.label: 'total equal to zero'
+form.sheet_filter.children.inCatalog.label: 'In catalog'
+form.sheet_filter.children.order.no.label: Without
+form.sheet_filter.children.order.noPreference.label: 'No preference'
+form.sheet_filter.children.order.totalEqualZero.label: 'Total equal to zero'
 form.sheet_filter.children.order.totalSuperiorZero.label: 'Total Superior to zero'
-form.sheet_filter.children.order.yes.label: with
+form.sheet_filter.children.order.yes.label: With
 form.sheet_filter.children.orderBy.label: 'Sort by'
-form.sheet_filter.children.orderStatus.label: order
+form.sheet_filter.children.orderStatus.label: Order
 form.sheet_filter.children.phoneValidationStatus.choice.all: 'no preference'
 form.sheet_filter.children.phoneValidationStatus.choice.all_confirmed: Confirmed
 form.sheet_filter.children.phoneValidationStatus.choice.none_confirmed: 'Not confirmed'
-form.sheet_filter.children.phoneValidationStatus.choice.partly_confirmed: 'partly confirmed'
-form.sheet_filter.children.phoneValidationStatus.label: 'has confirmed the mobile phone number'
-form.sheet_filter.children.reminderDate.label: 'date reminder'
+form.sheet_filter.children.phoneValidationStatus.choice.partly_confirmed: 'Partly confirmed'
+form.sheet_filter.children.phoneValidationStatus.label: 'Has confirmed the mobile phone number'
+form.sheet_filter.children.reminderDate.label: 'Date reminder'
 form.sheet_filter.children.state.label: State
 form.sheet_filter.children.text_search.label: 'Title of the presentation sheet, name or participant''s email'
 form.sheet_filter.children.type.label: Type
@@ -928,36 +930,36 @@ form.sheet.messaging_campaign.message.submit.label: End
 form.sheet.messaging_campaign.recipients.submit.label: Submit
 form.sheet.reminderDate.children.begin.label: Start
 form.sheet.reminderDate.children.end.label: End
-form.sheet.sheetGroup.unAssignedGroup: unassigned
-form.spot_batch_create.children.active.label: active
+form.sheet.sheetGroup.unAssignedGroup: Unassigned
+form.spot_batch_create.children.active.label: Active
 form.spot_batch_create.children.meetingCapacity.label: 'Capacity of the number of meetings'
-form.spot_batch_create.children.priority.label: priority
+form.spot_batch_create.children.priority.label: Priority
 form.spot_batch_create.children.recipes.label: 'Lot Ids'
 form.spot_batch_create.children.recipes.label_add: Add
 form.spot_batch_create.children.recipes.label_delete: Delete
 form.spot_batch_create.children.recipes.prototype.children.end.label: End
-form.spot_batch_create.children.recipes.prototype.children.prefix.label: prefix
-form.spot_batch_create.children.recipes.prototype.children.start.label: beginning
-form.spot_batch_create.children.seatCapacity.label: 'seat capacity'
-form.spot_batch_create.children.size.label: 'size in square meters'
+form.spot_batch_create.children.recipes.prototype.children.prefix.label: Prefix
+form.spot_batch_create.children.recipes.prototype.children.start.label: Beginning
+form.spot_batch_create.children.seatCapacity.label: 'Seat capacity'
+form.spot_batch_create.children.size.label: 'Size in square meters'
 form.spot_batch_create.children.submit.label: Save
 form.spot_batch_create.children.visio.label: Visio
 form.spot_batch_unavailability.children.submit.label: 'Create unavailibilities'
-form.spot_confirm.children.submit.label: 'confirm spots import'
+form.spot_confirm.children.submit.label: 'Confirm spots import'
 form.spot_create.children.active.label: Active
 form.spot_create.children.filters.all.label: All
 form.spot_create.children.filters.no.label: 'No'
 form.spot_create.children.filters.yes.label: 'Yes'
-form.spot_create.children.meetingCapacity.label: 'number of simultaneous meetings'
-form.spot_create.children.priority.label: priority
+form.spot_create.children.meetingCapacity.label: 'Number of simultaneous meetings'
+form.spot_create.children.priority.label: Priority
 form.spot_create.children.reference.label: ID
-form.spot_create.children.seatCapacity.label: 'seat capacity'
-form.spot_create.children.size.label: 'size in square meters'
+form.spot_create.children.seatCapacity.label: 'Seat capacity'
+form.spot_create.children.size.label: 'Size in square meters'
 form.spot_create.children.submit.label: Save
 form.spot_create.children.visio.label: Visio
-form.spot_import.children.charset.label: 'file encoding'
-form.spot_import.children.file.label: 'spots file'
-form.spot_import.children.submit.label: 'import spots'
+form.spot_import.children.charset.label: 'File encoding'
+form.spot_import.children.file.label: 'Spots file'
+form.spot_import.children.submit.label: 'Import spots'
 form.spot.import.confirm: 'The import of new spots will delete the previous spots on this event. do you want to import the spots ?'
 form.static_formulation_create.children.submit.label: Customize
 form.static_formulation_create.children.translations.prototype.children.title.label: 'Formulation title'
@@ -1069,14 +1071,18 @@ form.type_content_define_terms_of_sale.children.enabled.label: 'Activate the cus
 form.type_content_define_terms_of_sale.children.submit.label: Submit
 form.type_create.children.areAllSheetParticipantsAssignedToMeeting.label: 'All participants are assigned to all the meetings of a sheet'
 form.type_create.children.availabilityType.label: 'Availability Management'
+form.type_create.children.canMoveMeeting.label: 'Can move meetings'
 form.type_create.children.canRemoveMeeting.label: 'Can delete meetings'
+form.type_create.children.enableUnavailabilityManagement.label: 'Can manage unavailabilities'
 form.type_create.children.formTemplates.label: Forms
 form.type_create.children.formTemplates.status.draft: Draft
 form.type_create.children.formTemplates.status.published: Oneline
 form.type_create.children.hidden.label: hidden
+form.type_create.children.numberOfMeetingsPerPlanning.help: 'If empty, equivalent to the number of time slots during the event'
+form.type_create.children.numberOfMeetingsPerPlanning.label: 'Max. number of meetings per schedule'
 form.type_create.children.package.label: 'Registration package template'
 form.type_create.children.rank.label: rank
-form.type_create.children.registrationTemplate.label: 'registration template'
+form.type_create.children.registrationTemplate.label: 'Registration template'
 form.type_create.children.sheetTemplate.label: 'presentation template'
 form.type_create.children.submit.label: Save
 form.type_create.children.template.label: template
@@ -1107,21 +1113,24 @@ form.type_template_field_update.children.label.label: label
 form.type_template_field_update.children.private.label: private
 form.type_template_field_update.children.required.label: Mandatory
 form.type_template_field_update.children.submit.label: Save
-form.type_template.registration.base: 'basic registration template'
+form.type_template.registration.base: 'Basic registration template'
 form.type_template.registration.event: 'Event templates'
-form.type_template.registration.organizer: 'my registration templates'
+form.type_template.registration.organizer: 'My registration templates'
 form.type_template.sheet.base: 'basic participation template'
 form.type_template.sheet.event: 'Event templates'
 form.type_template.sheet.organizer: 'my participation templates'
 form.type_update.children.areAllSheetParticipantsAssignedToMeeting.label: 'All participants are assigned to all the meetings of a sheet'
 form.type_update.children.availabilityType.label: 'Availability Management'
+form.type_update.children.canMoveMeeting.label: 'Can move meetings'
 form.type_update.children.canRemoveMeeting.label: 'Can delete meetings'
+form.type_update.children.enableUnavailabilityManagement.label: 'Can manage unavailabilities'
 form.type_update.children.formTemplates.label: Forms
 form.type_update.children.hidden.label: hidden
+form.type_update.children.numberOfMeetingsPerPlanning.help: 'If empty, equivalent to the number of time slots during the event'
 form.type_update.children.numberOfMeetingsPerPlanning.label: 'Maximum number of appointments per schedule'
 form.type_update.children.package.label: 'Registration package template'
 form.type_update.children.rank.label: rank
-form.type_update.children.registrationTemplate.label: 'registration template'
+form.type_update.children.registrationTemplate.label: 'Registration template'
 form.type_update.children.sheetTemplate.label: 'sheet template'
 form.type_update.children.submit.label: Save
 form.type_update.children.translations.prototype.children.description.label: Description
@@ -1194,6 +1203,7 @@ form.update_partner.children.submit.label: create
 form.update_partner.children.types.label: 'available types for this operator'
 form.update_product.children.submit.label: Submit
 form.update_sheets_group.children.email.label: 'manager''s email'
+form.update_sheets_group.children.forceSheetTitle.label: 'Force the sheet name rather than the name of the entity on the badges'
 form.update_sheets_group.children.submit.label: Save
 form.update_sheets_group.children.title.label: 'Entity title'
 form.update_speaker.children.firstname.label: firstname
@@ -1215,6 +1225,8 @@ form.update_unavailability.children.from.label: from
 form.update_unavailability.children.submit.label: Modify
 form.update_unavailability.children.to.label: To
 form.user_batch.children.campaignTitle.label: 'Campaign name'
+form.user_batch.children.exportFormTemplate.label: 'Exporting data'
+form.user_batch.children.formTemplate.label: 'Form template'
 form.user_batch.children.sendMail.label: 'Create the campaign'
 form.user_filter.children.participation.label: Participation
 form.user_filter.children.text_search.label: 'Last name, first name or email of user'

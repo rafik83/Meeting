@@ -26,26 +26,26 @@ export.meeting_request.state.refused: Refused
 export.meeting_request.state.sent: Sent
 gender.man: Mr
 gender.woman: Mrs
-order.column.billing_info_city: city
-order.column.billing_info_company: company
-order.column.billing_info_country: country
-order.column.billing_info_email: email
-order.column.billing_info_first_name: firstname
-order.column.billing_info_gender: gender
-order.column.billing_info_last_name: name
-order.column.billing_info_mobile: 'mobile phone'
-order.column.billing_info_phone: 'phone number'
+order.column.billing_info_city: City
+order.column.billing_info_company: Company
+order.column.billing_info_country: Country
+order.column.billing_info_email: Email
+order.column.billing_info_first_name: Firstname
+order.column.billing_info_gender: Gender
+order.column.billing_info_last_name: Name
+order.column.billing_info_mobile: 'Mobile phone'
+order.column.billing_info_phone: 'Phone number'
 order.column.billing_info_position: Position
-order.column.billing_info_reference: 'accounting reference'
-order.column.billing_info_street: adress
+order.column.billing_info_reference: 'Accounting reference'
+order.column.billing_info_street: Address
 order.column.billing_info_vat_number: 'VAT number'
-order.column.billing_info_zip_code: 'zip code'
-order.column.customRow.quantity: 'additional line %customRowIndex% quantity'
-order.column.customRow.title: 'additional line %customRowIndex% title'
-order.column.customRow.total: 'additional line %customRowIndex% total amount (tax free)'
-order.column.customRow.unitPrice: 'additional line %customRowIndex% unit price (tax free)'
-order.column.invoice_date: 'invoice date'
-order.column.invoice_number: 'invoice number'
+order.column.billing_info_zip_code: 'Zip code'
+order.column.customRow.quantity: 'Additional line %customRowIndex% quantity'
+order.column.customRow.title: 'Additional line %customRowIndex% title'
+order.column.customRow.total: 'Additional line %customRowIndex% total amount (tax free)'
+order.column.customRow.unitPrice: 'Additional line %customRowIndex% unit price (tax free)'
+order.column.invoice_date: 'Invoice date'
+order.column.invoice_number: 'Invoice number'
 order.column.order_id: 'order ID'
 order.column.product.quantity: '%productTitle% : quantity (excl. tax)'
 order.column.product.total: '%productTitle% : calculated price (excl. tax)'
@@ -54,5 +54,31 @@ order.column.promotionCode.quantity: '%promotionCodeTitle% : quantity'
 order.column.promotionCode.total: '%promotionCodeTitle% : Total (excl. tax)'
 order.column.sheet_id: 'sheet Id'
 order.column.sheet_title: 'Sheet title'
+rooming_list_data_export.column.accommodationTitle: 'Hosting name'
+rooming_list_data_export.column.arrival: 'Date of arrival'
+rooming_list_data_export.column.departure: 'Date of departure'
+rooming_list_data_export.column.roommate.sheetId: 'ID sheet'
 rooming_list_data_export.column.roommate.sheetTitle: 'Sheet title'
+rooming_list_data_export.column.roommate.spotReference: 'Meeting point'
+rooming_list_data_export.column.roommate.typeTitle: 'Type of participation'
+rooming_list_data_export.column.roommate.userComment: Commentary
+rooming_list_data_export.column.roommate.userFirstName: 'First name'
+rooming_list_data_export.column.roommate.userGender: Gender
+rooming_list_data_export.column.roommate.userId: 'ID user'
+rooming_list_data_export.column.roommate.userLastName: 'Last name'
+rooming_list_data_export.column.roommate.userTasting: Tasting
+rooming_list_data_export.column.roomNumber: 'Room number'
+rooming_list_data_export.column.roomType: 'Room type'
+rooming_list_data_export.column.roomType.double: Double
+rooming_list_data_export.column.roomType.single: Single
+rooming_list_data_export.column.roomType.twin: Twin
+rooming_list_data_export.column.sheetId: 'ID sheet'
 rooming_list_data_export.column.sheetTitle: 'Sheet title'
+rooming_list_data_export.column.spotReference: 'Meeting point'
+rooming_list_data_export.column.typeTitle: 'Type of participation'
+rooming_list_data_export.column.userComment: Commentary
+rooming_list_data_export.column.userFirstName: 'First name'
+rooming_list_data_export.column.userGender: Gender
+rooming_list_data_export.column.userId: 'User id'
+rooming_list_data_export.column.userLastName: 'Last name'
+rooming_list_data_export.column.userTasting: Tasting

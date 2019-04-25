@@ -8,7 +8,7 @@ template.block.configure.title: Title
 template.block.remove_confirm: 'Do you confirm the remove of this element ?'
 template.boolean.filter.active: 'Activate the filter'
 template.boolean.filter.label: 'Filter label'
-template.collection.title: 'collection fields enabled'
+template.collection.title: 'Collection fields enabled'
 template.content.title: content
 template.defaultElement.title: 'element by default'
 template.error.objectsCollectionBlockCanNotContainForbiddenObjects: 'A collection block of objects can only contain editable text objects and nomenclature'
@@ -63,11 +63,11 @@ template.registration.atLeastOneDataFieldMustBeChecked: 'At least one of the "in
 template.registration.dataType: 'information type'
 template.registration.dateMinShouldBeLessThanDateMax: 'The minimum date / time must be less than the maximum date / time'
 template.registration.nomenclatureCheckboxesMustBeOfDepthOne: 'Assigned BOMs must be level 1 to be multiple-choice for the following field(s): %objectsLabel%'
-template.registration.optional: optional
-template.registration.participantData: 'participant''s information'
-template.registration.participantTags: 'participant tags'
-template.registration.sheetData: 'sheet data'
-template.registration.sheetTags: 'sheet tags'
+template.registration.optional: Optional
+template.registration.participantData: 'Participant''s information'
+template.registration.participantTags: 'Participant tags'
+template.registration.sheetData: 'Sheet data'
+template.registration.sheetTags: 'Sheet tags'
 template.registration.tag: Tags
 template.registration.templateObjectMustHaveAtLeastOneSetterTag: 'At least one type of information (tag "sheet_data" ou "participant_data") must be assigned for the following fields : %objectsLabel%'
 template.registration.uploadFormatRequired: 'At least one upload format must be selected'
@@ -77,9 +77,11 @@ template.sheet_template.tags: 'presentation tags'
 template.style.default: 'by default'
 template.style.title: Style
 template.tag.participant_address: 'participant''s adress'
+template.tag.participant_arrival_date: 'Date of arrival'
 template.tag.participant_avatar: 'participant''s avatar'
 template.tag.participant_city: 'participant''s city'
 template.tag.participant_country: 'participant''s country'
+template.tag.participant_departure_date: 'Date of departure'
 template.tag.participant_firstname: 'participant''s firstname'
 template.tag.participant_gender: 'Participant gender'
 template.tag.participant_lastname: 'participant''s lastname'
