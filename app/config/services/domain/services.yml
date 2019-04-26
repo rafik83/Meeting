@@ -97,6 +97,10 @@ services:
             - '@repository.rule_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
 
+    Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
     #
     # Template
     #

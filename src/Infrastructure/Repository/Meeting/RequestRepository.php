@@ -1079,4 +1079,28 @@ class RequestRepository implements RequestRepositoryInterface
 
         return $queryBuilder;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasApprovedMeetingRequest(Sheet $sheet, Sheet $sheetMet): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->join('request.to', 'toSheet')
+            ->join('request.from', 'fromSheet')
+            ->where('fromSheet = :sheet OR toSheet = :sheet')
+            ->andWhere('fromSheet = :sheetMet OR toSheet = :sheetMet')
+            ->andWhere('request.state = :state')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('sheetMet', $sheetMet)
+            ->setParameter('state', Request::STATE_APPROVED)
+            ->setMaxResults(1)
+        ;
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

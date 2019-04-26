@@ -7,11 +7,19 @@
         <a class="content col-xs-12" href="#">
             <span class="prefix"><i class="icon icon-RDV"></i></span>
             <p class="title">
-                <b>{{ meeting.spotRef }}</b> -
+                <b>{{ meeting.spotRef }}</b>
                 {% if meeting.isUserParticipantMultipleSheets %}
-                    <b>{{ meeting.userSheetTitle }}</b> -
+                    &nbsp;-&nbsp;
+                    <b>{{ meeting.userSheetTitle }}</b>
                 {% endif %}
-                {{ meeting.sheetMetTitle }}
+                {% for sheetMetView in meeting.sheetMetTitle %}
+                    &nbsp;-&nbsp;
+                            {% if sheetMetView.isHighlighted %}
+                                <b>{{ sheetMetView.title }}</b>
+                            {% else %}
+                                {{ sheetMetView.title }}
+                            {% endif %}
+                {% endfor %}
             </p>
         </a>
     </header>

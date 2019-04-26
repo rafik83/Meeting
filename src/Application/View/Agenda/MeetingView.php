@@ -54,7 +54,7 @@ class MeetingView extends AbstractTimeEntityView
      * @param int                      $id
      * @param string                   $userSheetTitle
      * @param int                      $sheetMetId
-     * @param string                   $sheetMetTitle
+     * @param array                    $sheetMetTitle
      * @param \DateTimeInterface       $begin
      * @param \DateTimeInterface       $end
      * @param string                   $spotRef
@@ -70,7 +70,7 @@ class MeetingView extends AbstractTimeEntityView
         int $id,
         $userSheetTitle,
         $sheetMetId,
-        $sheetMetTitle,
+        array $sheetMetTitle,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         $spotRef,
@@ -82,20 +82,20 @@ class MeetingView extends AbstractTimeEntityView
         bool $isVisio = false,
         bool $isVisioAvailable = false
     ) {
-        $this->id                              = $id;
-        $this->userSheetTitle                  = $userSheetTitle;
-        $this->sheetMetId                      = $sheetMetId;
-        $this->sheetMetTitle                   = $sheetMetTitle;
-        $this->spotRef                         = $spotRef;
-        $this->begin                           = $begin;
-        $this->end                             = $end;
-        $this->timeZone                        = $timeZone;
-        $this->leftColor                       = $leftColor;
-        $this->rightColor                      = $rightColor;
-        $this->participants                    = $participants;
+        $this->id = $id;
+        $this->userSheetTitle = $userSheetTitle;
+        $this->sheetMetId = $sheetMetId;
+        $this->sheetMetTitle = $sheetMetTitle;
+        $this->spotRef = $spotRef;
+        $this->begin = $begin;
+        $this->end = $end;
+        $this->timeZone = $timeZone;
+        $this->leftColor = $leftColor;
+        $this->rightColor = $rightColor;
+        $this->participants = $participants;
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
-        $this->isVisio                         = $isVisio;
-        $this->isVisioAvailable                = $isVisioAvailable;
+        $this->isVisio = $isVisio;
+        $this->isVisioAvailable = $isVisioAvailable;
     }
 
     /**

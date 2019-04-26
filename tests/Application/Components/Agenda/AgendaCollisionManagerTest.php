@@ -37,7 +37,7 @@ class AgendaCollisionManagerTest extends TestCase
             1,
             'userSheetTitle',
             2,
-            'title',
+            ['title'],
             $beginHappening1,
             $endHappening1,
             'ref',
