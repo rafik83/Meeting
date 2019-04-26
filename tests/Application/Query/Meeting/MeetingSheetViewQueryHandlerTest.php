@@ -72,11 +72,13 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
         $type = $this->prophesize(Type::class);
         $type->getTitle('fr')->shouldBeCalled()->willReturn('Exposant');
 
-        $sheetMet1Participant = $this->prophesize(Participant::class);
         $sheetMet1 = $this->prophesize(Sheet::class);
         $sheetMet1->getId()->shouldBeCalled()->willReturn(42);
         $sheetMet1->getType()->shouldBeCalled()->willReturn($type->reveal());
+
+        $sheetMet1Participant = $this->prophesize(Participant::class);
         $sheetMet1->getParticipantsArray()->shouldBeCalled()->willReturn([$sheetMet1Participant->reveal()]);
+
         $this->sheetInfoGuesser
             ->guessSheetInfos($sheetMet1->reveal(), 'fr')
             ->shouldBeCalled()
@@ -113,11 +115,13 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
         $meetingRequest1 = $this->prophesize(Request::class);
         $meetingRequest1->getSheetMet($sheet->reveal())->shouldBeCalled()->willReturn($sheetMet1->reveal());
 
-        $sheetMet2Participant1 = $this->prophesize(Participant::class);
-        $sheetMet2Participant2 = $this->prophesize(Participant::class);
         $sheetMet2 = $this->prophesize(Sheet::class);
         $sheetMet2->getId()->shouldBeCalled()->willReturn(1337);
         $sheetMet2->getType()->shouldBeCalled()->willReturn($type->reveal());
+
+        $sheetMet2Participant1 = $this->prophesize(Participant::class);
+        $sheetMet2Participant1->getSheet()->shouldBeCalled()->willReturn($sheetMet2->reveal());
+        $sheetMet2Participant2 = $this->prophesize(Participant::class);
         $sheetMet2->getParticipantsArray()
             ->shouldBeCalled()
             ->willReturn(
@@ -127,6 +131,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                 ]
             )
         ;
+
         $sheetMet2ParticipantView1 = new MeetingParticipantView(
             'Robin',
             'Hood',
@@ -184,10 +189,73 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
             ->willReturn([$meetingRequest1->reveal(), $meetingRequest2->reveal()])
         ;
 
+        $contact1 = $this->prophesize(User::class);
+        $contact2 = $this->prophesize(User::class);
+
         $this->contactRepository
             ->findByEventAndUser($event->reveal(), $user->reveal())
             ->shouldBeCalled()
-            ->willReturn([])
+            ->willReturn([$contact1->reveal(), $contact2->reveal()])
+        ;
+
+        $this->sheetRepository
+            ->getSheetsByUserAndEvent($contact1->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$sheetMet2->reveal()])
+        ;
+        $sheetMet2->getUserParticipant($contact1->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheetMet2Participant1->reveal())
+        ;
+
+        $sheetOfContact = $this->prophesize(Sheet::class);
+        $sheetOfContact->getId()->shouldBeCalled()->willReturn(1984);
+        $participantOfContact = $this->prophesize(Participant::class);
+        $participantOfContact->getSheet()->shouldBeCalled()->willReturn($sheetOfContact->reveal());
+
+        $this->sheetRepository
+            ->getSheetsByUserAndEvent($contact2->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$sheetOfContact->reveal()])
+        ;
+        $sheetOfContact->getUserParticipant($contact2->reveal())
+            ->shouldBeCalled()
+            ->willReturn($participantOfContact->reveal())
+        ;
+        $sheetOfContact->getType()->shouldBeCalled()->willReturn($type->reveal());
+
+        $this->sheetInfoGuesser
+            ->guessSheetInfos($sheetOfContact->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    Tag::SHEET_TITLE => 'Sheet 3',
+                    Tag::SHEET_ORGANIZATION_CATEGORY => 'PME',
+                    Tag::SHEET_ORGANIZATION_STAFF => '9',
+                    Tag::SHEET_ORGANIZATION_TURNOVER => '10k',
+                    Tag::SHEET_WEBSITE => '',
+                    Tag::SHEET_ADDRESS => '1 rue des Tulipes',
+                    Tag::SHEET_ZIPCODE => '77560',
+                    Tag::SHEET_CITY => 'Sous-les-Bois',
+                    Tag::SHEET_COUNTRY => 'FR',
+                ]
+            )
+        ;
+
+        $participantOfContactView = new MeetingParticipantView(
+            'Pablo',
+            'Picasso',
+            'painter',
+            '+33999',
+            'man',
+            'pablo@picas.so'
+        );
+        $this->participantsViewQueryHandler
+            ->handle(
+                new ParticipantsViewQuery([$participantOfContact->reveal()], 'fr')
+            )
+            ->shouldBeCalled()
+            ->willReturn([$participantOfContactView])
         ;
 
         $this->assertEquals(
@@ -222,6 +290,21 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                         [
                             $sheetMet2ParticipantView1,
                             $sheetMet2ParticipantView2,
+                        ]
+                    ),
+                    1984 => new MeetingSheetView(
+                        'Sheet 3',
+                        'PME',
+                        '10k',
+                        '9',
+                        '',
+                        '1 rue des Tulipes',
+                        '77560',
+                        'Sous-les-Bois',
+                        'FR',
+                        'Exposant',
+                        [
+                            $participantOfContactView,
                         ]
                     ),
                 ],
