@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
+use Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class MeetingViewQueryHandler
@@ -58,9 +59,10 @@ class MeetingViewQueryHandler
      */
     public function handle(MeetingViewQuery $query)
     {
-        $userSheet    = $query->meeting->getSheetOfUser($query->user);
-        $sheetMet     = $query->meeting->getSheetMet($userSheet);
-        $rules        = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->currentSheet, $sheetMet);
+        $userSheet = $query->meeting->getSheetOfUser($query->user);
+        $sheetMet = $query->meeting->getSheetMet($userSheet);
+        $sheetMetTitles = LinkedSheetsTitle::getSheetTitleView($sheetMet);
+        $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->currentSheet, $sheetMet);
         $participants = [];
 
         foreach ($query->meeting->getParticipants($sheetMet) as $participant) {
@@ -73,7 +75,7 @@ class MeetingViewQueryHandler
             $query->meeting->getId(),
             $userSheet->getTitle(),
             $sheetMet->getId(),
-            $sheetMet->getTitle(),
+            $sheetMetTitles,
             $query->meeting->getSlot()->getBegin(),
             $query->meeting->getSlot()->getEnd(),
             $query->meeting->getSpot()->getReference(),
