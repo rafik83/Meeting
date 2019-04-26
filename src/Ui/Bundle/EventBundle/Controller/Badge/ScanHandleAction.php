@@ -75,7 +75,7 @@ class ScanHandleAction
 
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['identifier'])) {
+        if (!is_array($data) || !isset($data['identifier'])) {
             return new JsonResponse('Bad parameters', 400);
         }
 
