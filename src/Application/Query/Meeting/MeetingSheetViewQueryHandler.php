@@ -60,13 +60,12 @@ class MeetingSheetViewQueryHandler
      */
     public function handle(MeetingSheetViewQuery $query)
     {
-        $meetingsRequest = $this->requestRepository->findAccepted($query->sheet);
-
+        $approvedMeetingRequests = $this->requestRepository->findApproved($query->sheet);
         $meetingSheetViews = [];
 
-        foreach ($meetingsRequest as $meeting) {
-            $metSheet     = $meeting->getSheetMet($query->sheet);
-            $participants = $metSheet->getParticipants()->toArray();
+        foreach ($approvedMeetingRequests as $meetingRequest) {
+            $metSheet = $meetingRequest->getSheetMet($query->sheet);
+            $participants = $metSheet->getParticipantsArray();
 
             $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($metSheet, $query->locale);
 

@@ -371,7 +371,7 @@ interface RequestRepositoryInterface
      *
      * @return Request[]
      */
-    public function findAccepted(Sheet $sheet);
+    public function findApproved(Sheet $sheet);
 
     /**
      * @param Participant $participant
