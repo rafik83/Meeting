@@ -42,6 +42,8 @@ availability.confirmation.explanation.title: 'Afin d''accéder à la prise de re
 availability.confirmation.title: 'Confirmer vos disponibilités'
 'Bad credentials.': 'Identifiants incorrects'
 badge.title: 'Mon badge'
+badge.scan.title: 'Scanner le badge d''un participant'
+badge.scan.loading: 'Recherche du profil du participant...'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
 catalog.action.meeting.proposition.show.refuse: 'Proposition refusée'

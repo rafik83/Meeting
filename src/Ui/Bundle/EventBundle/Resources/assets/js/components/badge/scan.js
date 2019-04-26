@@ -8,6 +8,7 @@ class Scan extends Component {
     super();
     this.element = document.querySelector('#scan');
     this.handleScanEndpoint = this.element.getAttribute('data-handle-scan-endpoint');
+    this.loadingMessage = this.element.getAttribute('data-loading-message');
 
     this.state = {
       displayScan: true,
@@ -26,7 +27,10 @@ class Scan extends Component {
       .then((result) => {
         document.location.href = result.data.url;
       })
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        alert(error);
+        this.setState({ ...this.state, displayScan: true });
+      })
     ;
   }
 
@@ -39,8 +43,8 @@ class Scan extends Component {
     this.getScannedUserEventProfile(identifier);
   }
 
-  handleError(err) {
-    console.error(err)
+  handleError(error) {
+    alert(error);
   }
 
   render() {
@@ -50,12 +54,12 @@ class Scan extends Component {
       <Fragment>
         {displayScan && <QrReader
           delay={300}
-          style={{width: '100%'}}
+          style={{width: '100%', height: '600px'}}
           onScan={this.handleScan}
           onError={this.handleError}
         />}
 
-        {isLoading && <div>Loading...</div>}
+        {isLoading && <p>{this.loadingMessage}</p>}
       </Fragment>
     );
   }
