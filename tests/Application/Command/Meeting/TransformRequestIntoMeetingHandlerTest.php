@@ -194,7 +194,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $spot->reveal(),
             $this->event->reveal(),
             false,
-            false,
+            true,
             Meeting::CREATED_BY_PLANNER
         );
 
@@ -206,7 +206,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $this->assertEquals(
             $expectedMeeting,
             $this->transformRequestIntoMeetingHandler->handle(
-                new TransformRequestIntoMeeting($request, Meeting::CREATED_BY_PLANNER)
+                new TransformRequestIntoMeeting($request, Meeting::CREATED_BY_PLANNER, false, true)
             )
         );
     }

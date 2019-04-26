@@ -65,28 +65,10 @@ class TransformApprovedRequestsByLinkedSheetsIntoMeetingHandlerTest extends Test
         $this->commandBus->handle()->shouldNotBeCalled();
 
         $this->transformIntoMeetingApprovedRequestsByLinkedSheetsHandler->handle(
-            new TransformApprovedRequestsByLinkedSheetsIntoMeeting($this->event->reveal(), ExportSolutionType::SOLUTION_FROM_SCRATCH)
-        );
-    }
-
-    public function testSolutionOptimizeLocked()
-    {
-        $this
-            ->linkedSheetsRepository
-            ->getByEvent($this->event->reveal())
-            ->shouldNotBeCalled()
-        ;
-
-        $this
-            ->requestRepository
-            ->getRequestsOfSheetsWithSheets()
-            ->shouldNotBeCalled()
-        ;
-
-        $this->commandBus->handle()->shouldNotBeCalled();
-
-        $this->transformIntoMeetingApprovedRequestsByLinkedSheetsHandler->handle(
-            new TransformApprovedRequestsByLinkedSheetsIntoMeeting($this->event->reveal(), ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED)
+            new TransformApprovedRequestsByLinkedSheetsIntoMeeting(
+                $this->event->reveal(),
+                ExportSolutionType::SOLUTION_FROM_SCRATCH
+            )
         );
     }
 
@@ -217,12 +199,12 @@ class TransformApprovedRequestsByLinkedSheetsIntoMeetingHandlerTest extends Test
 
         $this
             ->commandBus
-            ->handle(new TransformRequestIntoMeeting($request1->reveal(), Meeting::CREATED_BY_PLANNER))
+            ->handle(new TransformRequestIntoMeeting($request1->reveal(), Meeting::CREATED_BY_PLANNER, true, true))
             ->shouldBeCalled()
         ;
         $this
             ->commandBus
-            ->handle(new TransformRequestIntoMeeting($request3->reveal(), Meeting::CREATED_BY_PLANNER))
+            ->handle(new TransformRequestIntoMeeting($request3->reveal(), Meeting::CREATED_BY_PLANNER, true, true))
             ->shouldBeCalled()
         ;
 

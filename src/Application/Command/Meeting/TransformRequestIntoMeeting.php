@@ -26,8 +26,18 @@ class TransformRequestIntoMeeting implements Command
     /** @var string */
     public $createdBy;
 
-    public function __construct(Request $request, string $createdBy)
-    {
+    /** @var bool */
+    public $blockedSpot;
+
+    /** @var bool */
+    public $blockedSlot;
+
+    public function __construct(
+        Request $request,
+        string $createdBy,
+        bool $blockedSpot = false,
+        bool $blockedSlot = false
+    ) {
         if (!in_array($createdBy, Meeting::CREATED_BY, true)) {
             throw new \InvalidArgumentException('$createdBy is not valid');
         }
@@ -35,5 +45,7 @@ class TransformRequestIntoMeeting implements Command
         $this->request = $request;
         $this->event = $request->getEvent();
         $this->createdBy = $createdBy;
+        $this->blockedSpot = $blockedSpot;
+        $this->blockedSlot = $blockedSlot;
     }
 }

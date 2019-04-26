@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
-use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
@@ -100,8 +99,8 @@ class TransformRequestIntoMeetingHandler
             $this->dateTime,
             $spot,
             $query->event,
-            false,
-            false,
+            $query->blockedSpot,
+            $query->blockedSlot,
             $query->createdBy
         );
 
