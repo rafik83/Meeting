@@ -6213,6 +6213,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@planning.formatter.unallocated_formatter'
             - '@query.planning.planning_view_query_handler'
+            - '@Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle'
     planning.formatter.sheet_planning_formatter:
         class: Proximum\Vimeet\Application\Components\Planning\Formatter\SheetPlanningFormatter
         arguments:

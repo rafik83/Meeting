@@ -22,6 +22,7 @@ use Proximum\Vimeet\Application\View\Planning\Day\ParticipantMetView;
 use Proximum\Vimeet\Application\View\Planning\Day\UnavailabilityView;
 use Proximum\Vimeet\Application\View\Planning\DayView;
 use Proximum\Vimeet\Application\View\Planning\PlanningView;
+use Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Service\MarkdownFormatter;
@@ -43,19 +44,25 @@ class ParticipantPlanningFormatter
     /** @var PlanningViewQueryHandler */
     private $planningViewQueryHandler;
 
+    /** @var LinkedSheetsTitle */
+    private $linkedSheetsTitle;
+
     /**
      * @param TranslatorInterface      $translator
      * @param UnallocatedFormatter     $unallocatedFormatter
      * @param PlanningViewQueryHandler $planningViewQueryHandler
+     * @param LinkedSheetsTitle        $linkedSheetsTitle
      */
     public function __construct(
         TranslatorInterface $translator,
         UnallocatedFormatter $unallocatedFormatter,
-        PlanningViewQueryHandler $planningViewQueryHandler
+        PlanningViewQueryHandler $planningViewQueryHandler,
+        LinkedSheetsTitle $linkedSheetsTitle
     ) {
         $this->translator               = $translator;
         $this->unallocatedFormatter     = $unallocatedFormatter;
         $this->planningViewQueryHandler = $planningViewQueryHandler;
+        $this->linkedSheetsTitle = $linkedSheetsTitle;
     }
 
     /**
@@ -322,12 +329,23 @@ class ParticipantPlanningFormatter
      */
     private function formatMeeting(MeetingView $meetingView, $userLocale, $isUserMultipleSheets)
     {
+        $sheetsMetTitles = [];
+        $sheetsMetViews = $this->linkedSheetsTitle->getSheetMetViews($meetingView->userSheet, $meetingView->sheetMet);
+
+        foreach ($sheetsMetViews as $sheetMetView) {
+            $sheetsMetTitles[] = $sheetMetView->isHighlighted()
+                ? MarkdownFormatter::bold($sheetMetView->getTitle())
+                : $sheetMetView->getTitle();
+        }
+
+        $sheetsMetTitle = implode(' - ', $sheetsMetTitles);
+
         if (true === $isUserMultipleSheets) {
             $meetingTranslation = $this->translator->trans(
                 self::TRANSLATE_MEETING_MULTIPLE_SHEET,
                 [
-                    '%userSheet%' => $meetingView->userSheetTitle,
-                    '%sheetMet%' => $meetingView->sheetMetTitle,
+                    '%userSheet%' => $meetingView->userSheet->getTitle(),
+                    '%sheetMet%' => $sheetsMetTitle,
                     '%spotRef%' => $meetingView->spotRef,
                 ],
                 self::TRANSLATION_DOMAIN,
@@ -337,7 +355,7 @@ class ParticipantPlanningFormatter
             $meetingTranslation = $this->translator->trans(
                 self::TRANSLATE_MEETING,
                 [
-                    '%sheetMet%' => $meetingView->sheetMetTitle,
+                    '%sheetMet%' => $sheetsMetTitle,
                     '%spotRef%' => $meetingView->spotRef,
                 ],
                 self::TRANSLATION_DOMAIN,

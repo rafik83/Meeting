@@ -101,10 +101,10 @@ class MeetingViewQueryHandlerTest extends TestCase
             $begin,
             $end,
             'A1',
-            'sheetA',
-            'sheetB',
             true,
-            [new ParticipantMetView('prenom Nom 1', null), new ParticipantMetView('prenom Nom 2', null)]
+            [new ParticipantMetView('prenom Nom 1', null), new ParticipantMetView('prenom Nom 2', null)],
+            $sheetA->reveal(),
+            $sheetB->reveal()
         );
 
         $this->assertEquals($expected, $result);

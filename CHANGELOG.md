@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- VIMMET-1942 - Planning print bolded sheets titles
 - VIMEET-1914 - Bold on sheet titles
 ### Added
 - VIMEET-1950 - In back-office, all participants are assigned to meeting if option is activated.

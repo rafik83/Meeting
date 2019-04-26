@@ -50,8 +50,6 @@ class MeetingViewQueryHandler
             $query->meeting->getSlot()->getBegin(),
             $query->meeting->getSlot()->getEnd(),
             $query->meeting->getSpot()->getReference(),
-            $userSheet->getTitle(),
-            $sheetMet->getTitle(),
             true === $displayParticipantName || true === $displayParticipantPosition,
             array_map(function (Participant $participant) use ($locale, $displayParticipantName, $displayParticipantPosition) {
                 return new ParticipantMetView(
@@ -62,7 +60,9 @@ class MeetingViewQueryHandler
                         ? $this->participantInfoGuesser->guessParticipantPosition($participant, $locale)
                         : null
                 );
-            }, $participantsMet)
+            }, $participantsMet),
+            $userSheet,
+            $sheetMet
         );
     }
 }
