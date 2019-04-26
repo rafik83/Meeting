@@ -20,9 +20,13 @@ class VisioGuesser
     /** @var IsParticipantVisio */
     private $isParticipantVisio;
 
-    public function __construct(IsParticipantVisio $isParticipantVisio)
+    /** @var MeetingParticipants */
+    private $meetingParticipants;
+
+    public function __construct(IsParticipantVisio $isParticipantVisio, MeetingParticipants $meetingParticipants)
     {
         $this->isParticipantVisio = $isParticipantVisio;
+        $this->meetingParticipants = $meetingParticipants;
     }
 
     public function hasMeetingParticipantVisio(Meeting $meeting): bool
@@ -34,7 +38,7 @@ class VisioGuesser
 
     public function hasMeetingRequestParticipantVisio(Request $request): bool
     {
-        $participants = $request->getAllParticipants();
+        $participants = $this->meetingParticipants->getAllMeetingParticipants($request);
 
         return $this->isParticipantVisio($participants);
     }

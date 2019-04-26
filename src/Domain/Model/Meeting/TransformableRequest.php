@@ -36,6 +36,7 @@ class TransformableRequest
         // oneToMany with no preference
         if ($from->getParticipants()->count() > 1
             && $request->hasNoPreference($from)
+            && !$from->getType()->areAllSheetParticipantsAssignedToMeeting()
         ) {
             return false;
         }
@@ -43,12 +44,16 @@ class TransformableRequest
         // oneToMany with no preference other side
         if ($to->getParticipants()->count() > 1
             && $request->hasNoPreference($to)
+            && !$to->getType()->areAllSheetParticipantsAssignedToMeeting()
         ) {
             return false;
         }
 
         // Other request with no preference
-        if ($request->hasNoPreference($from) && $request->hasNoPreference($to)) {
+        if ($request->hasNoPreference($from) && $request->hasNoPreference($to)
+            && !$to->getType()->areAllSheetParticipantsAssignedToMeeting()
+            && !$from->getType()->areAllSheetParticipantsAssignedToMeeting()
+        ) {
             return false;
         }
 

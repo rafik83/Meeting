@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableExceptio
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSpotAvailableException;
 use Proximum\Vimeet\Application\View\Agenda\Admin\ParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\Admin\RequestView;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -37,6 +38,9 @@ class RequestViewQueryHandler
     /** @var VisioGuesser */
     private $visioGuesser;
 
+    /** @var MeetingParticipants */
+    private $meetingParticipants;
+
     /** @var HasMeetingWithLinkedSheets */
     private $hasMeetingWithLinkedSheets;
 
@@ -45,12 +49,14 @@ class RequestViewQueryHandler
         ParticipantInfoGuesser $participantInfoGuesser,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
         VisioGuesser $visioGuesser,
+        MeetingParticipants $meetingParticipants,
         HasMeetingWithLinkedSheets $hasMeetingWithLinkedSheets
     ) {
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
         $this->visioGuesser = $visioGuesser;
+        $this->meetingParticipants = $meetingParticipants;
         $this->hasMeetingWithLinkedSheets = $hasMeetingWithLinkedSheets;
     }
 
@@ -75,7 +81,8 @@ class RequestViewQueryHandler
 
     private function hasNoPreferenceAndNotAlone(Request $request, Sheet $sheet): bool
     {
-        return $request->hasNoPreference($sheet) && !$sheet->hasOnlyOneParticipant();
+        return $request->hasNoPreference($sheet) && !$sheet->hasOnlyOneParticipant()
+            && !$sheet->getType()->areAllSheetParticipantsAssignedToMeeting();
     }
 
     private function isTransformableIntoMeeting(Request $request, bool $isVisio): bool
@@ -112,7 +119,7 @@ class RequestViewQueryHandler
         $participantViews = [];
 
         try {
-            $participants = $request->getParticipants($sheet);
+            $participants = $this->meetingParticipants->getMeetingParticipants($request, $sheet);
 
             foreach ($participants as $participant) {
                 $participantViews[] = new ParticipantView(
