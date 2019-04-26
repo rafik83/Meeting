@@ -13,6 +13,9 @@ account.update.title: 'Edit my Account'
 agenda.availability.available_sheets: '{1} See available participant|]1,Inf[ See %availableSheets% available participants'
 agenda.availability.available_sheets_with_proposition: '{1}see a meeting request|]1,Inf[ see the %availableSheets% meeting requests'
 agenda.availability.define: 'Set my availabilities'
+agenda.availability.fail_message_on_save: 'Your availability registration has failed. An unexpected server error occurred.'
+agenda.availability.hide: 'Hide my availabilities'
+agenda.availability.ko_message_on_save: 'Your availabilities have failed to be registered. They may be incompatible with your agenda. Please refresh your page.'
 agenda.availability.save: 'Save my availabilities'
 agenda.day.hide: 'Hide this day'
 agenda.day.see: 'Show the day'
@@ -20,7 +23,10 @@ agenda.meeting.details: Details
 agenda.meeting.move.back: Back
 agenda.meeting.move.button: 'Move the meeting'
 agenda.meeting.move.no_available_slots: 'The meeting can''t be moved because there are no other join availabilities'
+agenda.meeting.move.success: 'The appointment has been moved'
 agenda.meeting.remove.button: 'Delete the meeting'
+agenda.meeting.remove.confirm: 'Confirm deletion?'
+agenda.meeting.remove.success: 'The appointment has been deleted'
 agenda.participant.view: 'Schedule of %participant%'
 agenda.slot.available: Available
 agenda.slot.unavailable: Unavailable
@@ -139,7 +145,7 @@ event.user_event_phone.validate.explanation: 'You will receive a four number cod
 event.user_event_phone.validate.ignore: Ignore
 event.user_event_phone.validate.returnToPhone: 'Update my phone number'
 event.user_event_phone.validate.success: 'Your phone number is successfully confirmed'
-event.user_event_phone.validate.title: 'phone number validation'
+event.user_event_phone.validate.title: 'Phone number validation'
 event.visio.agenda_access: 'Click here to access your calendar'
 event.visio.test.audio: Audio
 event.visio.test.description: 'When prompted, allow us to use your camera and audio hardware. This test will last for 30 seconds.'

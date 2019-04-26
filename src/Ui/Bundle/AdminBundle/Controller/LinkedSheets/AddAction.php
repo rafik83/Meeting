@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\AlreadyLinkedException;
 use Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\Create;
+use Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\HasScheduledMeetingException;
 use Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\LinkedSheetsTypeUniquenessException;
 use Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\NotEnoughSheetsException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
@@ -129,6 +130,12 @@ class AddAction
                 $form->addError(
                     new FormError(
                         $this->translator->trans('validators.linkedSheets.add.notEnoughSheets', [], 'validators')
+                    )
+                );
+            } catch (HasScheduledMeetingException $exception) {
+                $form->addError(
+                    new FormError(
+                        $this->translator->trans('validators.linkedSheets.add.hasScheduledMeeting', [], 'validators')
                     )
                 );
             }

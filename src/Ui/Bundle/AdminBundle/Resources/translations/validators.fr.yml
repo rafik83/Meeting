@@ -47,6 +47,7 @@ validators.invitationCode.length.min: 'Le code doit être composé de 4 caractè
 validators.invoice.invoiceNotFound: 'Aucune facture avec ce numéro'
 validators.invoice.numeroNotValid: 'Le numéro de la facture que vous avez entré n''est pas valide'
 validators.json.invalid: 'Le JSON n''est pas valide'
+validators.linkedSheets.add.hasScheduledMeeting: 'Les fiches avec RDV ne peuvent pas être liées'
 validators.linkedSheets.add.notEnoughSheets: 'Il faut sélectionner au moins 2 fiches'
 validators.linkedSheets.add.notUniqueType: 'Les fiches doivent être du même type'
 validators.linkedSheets.add.sheetAlreadyLinked: 'Une fiche est déjà liée à d''autres fiches'

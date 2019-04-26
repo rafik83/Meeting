@@ -1299,6 +1299,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\LinkedSheetsRepository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@datetime'
+            - '@vimeet_infrastructure.repository.meeting_repository'
         tags:
             - { name: tactician.handler, typehints: true }
 
