@@ -28,7 +28,7 @@ class ContactRepository implements ContactRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function add(Contact $contact)
+    public function add(Contact $contact): void
     {
         $this->entityManager->persist($contact);
         $this->entityManager->flush($contact);
