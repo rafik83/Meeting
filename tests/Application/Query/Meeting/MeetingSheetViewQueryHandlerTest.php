@@ -18,7 +18,10 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class MeetingSheetViewQueryHandlerTest extends TestCase
 {
@@ -31,17 +34,27 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy|SheetInfoGuesser */
     private $sheetInfoGuesser;
 
+    /** @var ObjectProphecy|ContactRepositoryInterface */
+    private $contactRepository;
+
+    /** @var ObjectProphecy|SheetRepositoryInterface */
+    private $sheetRepository;
+
     /** @var MeetingSheetViewQueryHandler */
     private $meetingSheetViewQueryHandler;
 
     public function setUp()
     {
+        $this->contactRepository = $this->prophesize(ContactRepositoryInterface::class);
         $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->participantsViewQueryHandler = $this->prophesize(ParticipantsViewQueryHandler::class);
         $this->sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
 
         $this->meetingSheetViewQueryHandler = new MeetingSheetViewQueryHandler(
+            $this->contactRepository->reveal(),
             $this->requestRepository->reveal(),
+            $this->sheetRepository->reveal(),
             $this->participantsViewQueryHandler->reveal(),
             $this->sheetInfoGuesser->reveal()
         );
@@ -49,6 +62,8 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
 
     public function testHandle()
     {
+        $user = $this->prophesize(User::class);
+
         $event = $this->prophesize(Event::class);
         $event->getTitle()->shouldBeCalled()->willReturn('B2B Event');
 
@@ -59,6 +74,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
 
         $sheetMet1Participant = $this->prophesize(Participant::class);
         $sheetMet1 = $this->prophesize(Sheet::class);
+        $sheetMet1->getId()->shouldBeCalled()->willReturn(42);
         $sheetMet1->getType()->shouldBeCalled()->willReturn($type->reveal());
         $sheetMet1->getParticipantsArray()->shouldBeCalled()->willReturn([$sheetMet1Participant->reveal()]);
         $this->sheetInfoGuesser
@@ -100,6 +116,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
         $sheetMet2Participant1 = $this->prophesize(Participant::class);
         $sheetMet2Participant2 = $this->prophesize(Participant::class);
         $sheetMet2 = $this->prophesize(Sheet::class);
+        $sheetMet2->getId()->shouldBeCalled()->willReturn(1337);
         $sheetMet2->getType()->shouldBeCalled()->willReturn($type->reveal());
         $sheetMet2->getParticipantsArray()
             ->shouldBeCalled()
@@ -167,10 +184,16 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
             ->willReturn([$meetingRequest1->reveal(), $meetingRequest2->reveal()])
         ;
 
+        $this->contactRepository
+            ->findByEventAndUser($event->reveal(), $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
         $this->assertEquals(
             new MeetingSheetListView(
                 [
-                    new MeetingSheetView(
+                    42 => new MeetingSheetView(
                         'Sheet 1',
                         'Group',
                         '10M',
@@ -185,7 +208,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                             $sheetMet1ParticipantView,
                         ]
                     ),
-                    new MeetingSheetView(
+                    1337 => new MeetingSheetView(
                         'Sheet 2',
                         'Group',
                         '1M',
@@ -205,7 +228,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                 'B2B Event'
             ),
             $this->meetingSheetViewQueryHandler->handle(
-                new MeetingSheetViewQuery($event->reveal(), $sheet->reveal(), 'fr')
+                new MeetingSheetViewQuery($event->reveal(), $user->reveal(), $sheet->reveal(), 'fr')
             )
         );
     }

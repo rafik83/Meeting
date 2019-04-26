@@ -4560,7 +4560,9 @@ services:
     query.meeting.meeting_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQueryHandler
         arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@query.meeting.participants_view_query_handler'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
