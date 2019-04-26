@@ -573,6 +573,8 @@ class Request implements MessageSubjectInterface
     }
 
     /**
+     *  In many cases, prefer \Proximum\Vimeet\Domain\Meeting\MeetingParticipants::getMeetingParticipants
+     *
      * "Quand la demande de RDV n'a pas de participant de préférence et que la liste
      *  des participants disponible est vide on utilise le seul participant de la fiche"
      *
@@ -624,40 +626,11 @@ class Request implements MessageSubjectInterface
     }
 
     /**
-     * @return Participant[]
-     */
-    public function getAllParticipants()
-    {
-        return array_merge($this->getParticipants($this->from), $this->getParticipants($this->to));
-    }
-
-    /**
-     * @return int[] array of all participants id
-     */
-    public function getParticipantsId()
-    {
-        return array_map(
-            function (Participant $participant) {
-                return $participant->getId();
-            },
-            $this->getAllParticipants()
-        );
-    }
-
-    /**
      * @return Event
      */
     public function getEvent()
     {
         return $this->event;
-    }
-
-    /**
-     * @return int
-     */
-    public function countParticipants()
-    {
-        return count($this->fromParticipants) + count($this->toParticipants);
     }
 
     /**

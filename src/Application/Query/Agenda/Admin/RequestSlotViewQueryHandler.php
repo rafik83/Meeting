@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Exception\Meeting\MeetingRequestCanNotBeMeetingE
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSpotAvailableException;
 use Proximum\Vimeet\Application\View\Agenda\Admin\RequestSlotView;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
@@ -25,16 +26,22 @@ class RequestSlotViewQueryHandler
     /** @var MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
 
+    /** @var MeetingParticipants */
+    private $meetingParticipants;
+
     /**
      * @param SpotRepositoryInterface        $spotRepository
      * @param MeetingSlotRepositoryInterface $meetingSlotRepository
+     * @param MeetingParticipants            $meetingParticipants
      */
     public function __construct(
         SpotRepositoryInterface $spotRepository,
-        MeetingSlotRepositoryInterface $meetingSlotRepository
+        MeetingSlotRepositoryInterface $meetingSlotRepository,
+        MeetingParticipants $meetingParticipants
     ) {
         $this->spotRepository        = $spotRepository;
         $this->meetingSlotRepository = $meetingSlotRepository;
+        $this->meetingParticipants = $meetingParticipants;
     }
 
     /**
@@ -54,7 +61,7 @@ class RequestSlotViewQueryHandler
 
         $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $query->meetingRequest->getEvent(),
-            $query->meetingRequest->getAllParticipants(),
+            $this->meetingParticipants->getAllMeetingParticipants($query->meetingRequest),
             false
         );
 
@@ -67,7 +74,7 @@ class RequestSlotViewQueryHandler
         foreach ($slots as $slot) {
             if (true === $this->spotRepository->hasSpotsForSlotAndParticipantsQuantity(
                 $slot,
-                $query->meetingRequest->countParticipants(),
+                $this->meetingParticipants->countAllMeetingParticipants($query->meetingRequest),
                 null,
                 $query->meetingRequest->getFromSheet(),
                 $query->meetingRequest->getToSheet(),
