@@ -34,6 +34,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot as Slot;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
@@ -49,6 +50,11 @@ class DayViewQueryHandlerTest extends TestCase
         $end   = new \DateTime('2016-10-12 18:00');
         $day   = new Day($event, $begin, $end);
         $user  = $this->prophesize(User::class);
+
+        $userSheet = $this->prophesize(Sheet::class);
+        $sheetMet = $this->prophesize(Sheet::class);
+        $userSheet->getTitle()->willReturn('userSheetTitle');
+        $sheetMet->getTitle()->willReturn('sheetMetTitle');
 
         $participation = $this->prophesize(HappeningParticipation::class);
         $happening = $this->prophesize(Happening::class);
@@ -124,7 +130,7 @@ class DayViewQueryHandlerTest extends TestCase
         $meetingHandler
             ->handle(new MeetingViewQuery($event, $meeting2->reveal(), $user->reveal(), 'fr'))
             ->shouldBeCalled()
-            ->willReturn(new MeetingView($begin, $end, 'spotRef', 'userSheetTitle', 'sheetMetTitle'));
+            ->willReturn(new MeetingView($begin, $end, 'spotRef', false, [], $userSheet->reveal(), $sheetMet->reveal()));
         $meetingHandler
             ->handle(new MeetingViewQuery($event, $meeting1->reveal(), $user->reveal(), 'fr'))
             ->shouldNotBeCalled();
@@ -155,7 +161,7 @@ class DayViewQueryHandlerTest extends TestCase
             [new UnavailabilityView($begin, $end)],
             [new MassView($begin, $end, 'title')],
             [new AssignmentView($begin, $end, 'title')],
-            [new MeetingView($begin, $end, 'spotRef', 'userSheetTitle', 'sheetMetTitle')]
+            [new MeetingView($begin, $end, 'spotRef', false, [], $userSheet->reveal(), $sheetMet->reveal())]
         );
 
         $this->assertEquals($expected, $result);

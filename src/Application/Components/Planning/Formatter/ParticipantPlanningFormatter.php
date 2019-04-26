@@ -345,7 +345,7 @@ class ParticipantPlanningFormatter
                 self::TRANSLATE_MEETING_MULTIPLE_SHEET,
                 [
                     '%userSheet%' => $meetingView->userSheet->getTitle(),
-                    '%sheetMet%' => $meetingView->sheetMet->getTitle(),
+                    '%sheetMet%' => $sheetsMetTitle,
                     '%spotRef%' => $meetingView->spotRef,
                 ],
                 self::TRANSLATION_DOMAIN,

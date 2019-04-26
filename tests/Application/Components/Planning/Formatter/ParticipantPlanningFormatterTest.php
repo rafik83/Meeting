@@ -200,10 +200,10 @@ class ParticipantPlanningFormatterTest extends TestCase
         )->shouldBeCalled()->willReturn('14:15 - 14:45 : ');
         $this->translator->trans(
             'planning.participant.meeting_multiple_sheet',
-            ['%userSheet%' => 'user sheet title', '%sheetMet%' => 'sheet met title', '%spotRef%' => 'spot reference'],
+            ['%userSheet%' => 'user sheet title', '%sheetMet%' => '**sheet met title** - sheetMetLinkedSheet', '%spotRef%' => 'spot reference'],
             'messages',
             'fr'
-        )->shouldBeCalled()->willReturn('spot reference - user sheet title - sheet met title');
+        )->shouldBeCalled()->willReturn('spot reference - user sheet title - **sheet met title** - sheetMetLinkedSheet');
 
         $formatter = new ParticipantPlanningFormatter(
             $this->translator->reveal(),
@@ -213,7 +213,7 @@ class ParticipantPlanningFormatterTest extends TestCase
         );
 
         $result = $formatter->formatPlanningFromUserAndEvent($user->reveal(), $event->reveal(), 'fr');
-        $expected = "**Dimanche 1 janvier 2017**\n\n- 11:10 - 11:30 : mass title\n- 13:00 - 14:00 : unavailability title\n- 14:15 - 14:45 : assignment mass title\n- 17:00 - 18:00 : happening title\n- 18:30 - 18:45 : spot reference - user sheet title - sheet met title\n";
+        $expected = "**Dimanche 1 janvier 2017**\n\n- 11:10 - 11:30 : mass title\n- 13:00 - 14:00 : unavailability title\n- 14:15 - 14:45 : assignment mass title\n- 17:00 - 18:00 : happening title\n- 18:30 - 18:45 : spot reference - user sheet title - **sheet met title** - sheetMetLinkedSheet\n";
 
         $this->assertEquals($expected, $result);
     }
@@ -388,10 +388,10 @@ class ParticipantPlanningFormatterTest extends TestCase
         )->shouldBeCalled()->willReturn('14:15 - 14:45 : ');
         $this->translator->trans(
             'planning.participant.meeting_multiple_sheet',
-            ['%userSheet%' => 'user sheet title', '%sheetMet%' => 'sheet met title', '%spotRef%' => 'spot reference'],
+            ['%userSheet%' => 'user sheet title', '%sheetMet%' => '**sheet met title** - **sheetMetLinkedSheet**', '%spotRef%' => 'spot reference'],
             'messages',
             'fr'
-        )->shouldBeCalled()->willReturn('spot reference - user sheet title - sheet met title');
+        )->shouldBeCalled()->willReturn('spot reference - user sheet title - **sheet met title** - **sheetMetLinkedSheet**');
 
         $this->unallocatedFormatter
             ->formatForUser($event->reveal(), $user->reveal(), 'fr', true)
@@ -406,7 +406,7 @@ class ParticipantPlanningFormatterTest extends TestCase
         );
 
         $result = $formatter->formatPlanningFromUserAndEventWithUnallocated($user->reveal(), $event->reveal(), 'fr');
-        $expected = "**Dimanche 1 janvier 2017**\n\n- 11:10 - 11:30 : mass title\n- 13:00 - 14:00 : unavailability title\n- 14:15 - 14:45 : assignment mass title\n- 17:00 - 18:00 : happening title\n- 18:30 - 18:45 : spot reference - user sheet title - sheet met title\n\n\nunallocated: sheet met 1";
+        $expected = "**Dimanche 1 janvier 2017**\n\n- 11:10 - 11:30 : mass title\n- 13:00 - 14:00 : unavailability title\n- 14:15 - 14:45 : assignment mass title\n- 17:00 - 18:00 : happening title\n- 18:30 - 18:45 : spot reference - user sheet title - **sheet met title** - **sheetMetLinkedSheet**\n\n\nunallocated: sheet met 1";
 
         $this->assertEquals($expected, $result);
     }
