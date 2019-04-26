@@ -3,18 +3,16 @@
 namespace Proximum\Vimeet\Application\Query\Contact;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class GetContactListViewQueryHandler
 {
-    /** @var UserRepositoryInterface */
-    private $userRepository;
-
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
@@ -23,14 +21,22 @@ class GetContactListViewQueryHandler
      */
     private $participantInfoGuesser;
 
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
+    /** @var MeetingParticipants */
+    private $meetingParticipants;
+
     public function __construct(
-        UserRepositoryInterface $userRepository,
         SheetRepositoryInterface $sheetRepository,
-        ParticipantInfoGuesser $participantInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        RequestRepositoryInterface $requestRepository,
+        MeetingParticipants $meetingParticipants
     ) {
-        $this->userRepository = $userRepository;
         $this->sheetRepository = $sheetRepository;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->requestRepository = $requestRepository;
+        $this->meetingParticipants = $meetingParticipants;
     }
 
     /**
@@ -40,7 +46,39 @@ class GetContactListViewQueryHandler
      */
     public function handle(GetContactListViewQuery $query): array
     {
-        $users = $this->userRepository->getMet($query->event, $query->user);
+        $sheet = $query->participant->getSheet();
+        $requests = $this->requestRepository->findApproved($sheet);
+
+        $metParticipants = [[]];
+        foreach ($requests as $request) {
+            $requestParticipants = $this->meetingParticipants->getMeetingParticipants($request, $sheet);
+
+            if (\in_array($query->participant, $requestParticipants, true)) {
+                $metParticipants[] = $request->getSheetMet($sheet)->getParticipantsArray();
+            }
+        }
+
+        $metParticipants = array_merge(...$metParticipants);
+        $users = array_map(
+            static function (Participant $participant) {
+                return $participant->getUser();
+            },
+            $metParticipants
+        );
+
+        $parsedUserIds = [];
+        $users = array_filter(
+            $users,
+            static function (User $user) use (&$parsedUserIds) {
+                if (isset($parsedUserIds[$user->getId()])) {
+                    return false;
+                }
+
+                $parsedUserIds[$user->getId()] = 1;
+
+                return true;
+            }
+        );
 
         $contactListView = [];
 

@@ -6868,8 +6868,9 @@ services:
 
     Proximum\Vimeet\Application\Query\Contact\GetContactListViewQueryHandler:
         arguments:
-            - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
         tags:
             - { name: tactician.handler, typehints: true }

@@ -6,12 +6,14 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Contact\ContactPreviewView;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQuery;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQueryHandler;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ContactListQueryHandlerTest extends TestCase
@@ -20,9 +22,18 @@ class ContactListQueryHandlerTest extends TestCase
     {
         // prepare data
         $event = $this->prophesize(Event::class);
+
         $user = $this->prophesize(User::class);
         $user->getFullname()->willReturn('Carrie Fisher');
+        $user->getId()->willReturn(42);
+
+        $participantSheet = $this->prophesize(Sheet::class);
+
         $participant = $this->prophesize(Participant::class);
+        $participant->getSheet()->willReturn($participantSheet->reveal());
+
+        $metParticipant = $this->prophesize(Participant::class);
+        $metParticipant->getUser()->willReturn($user->reveal());
 
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet1->getUserParticipant($user->reveal())
@@ -35,15 +46,21 @@ class ContactListQueryHandlerTest extends TestCase
             ->willReturn($participant->reveal())
         ;
         $sheet2->getTitle()->willReturn('Rebels');
+        $sheet2->getParticipantsArray()->willReturn([$metParticipant->reveal()]);
+
+        $request = $this->prophesize(Request::class);
+        $request->getSheetMet($participantSheet->reveal())->willReturn()
+            ->willReturn($sheet2->reveal())
+        ;
 
         // prophecies dependencies
-        $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $meetingParticipants = $this->prophesize(MeetingParticipants::class);
 
-        $userRepository->getMet($event->reveal(), $user->reveal())
-            ->shouldBeCalled()
-            ->willReturn([$user->reveal()])
+        $requestRepository->findApproved($participantSheet->reveal())
+            ->willReturn([$request->reveal()])
         ;
 
         $sheetRepository->getSheetsByUserAndEvent($user->reveal(), $event->reveal())
@@ -62,12 +79,17 @@ class ContactListQueryHandlerTest extends TestCase
             )
         ;
 
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $participantSheet->reveal())
+            ->willReturn([$participant->reveal()])
+        ;
+
         // run tests
-        $query = new GetContactListViewQuery($event->reveal(), $user->reveal(), 'fr');
+        $query = new GetContactListViewQuery($event->reveal(), $participant->reveal(), 'fr');
         $handler = new GetContactListViewQueryHandler(
-            $userRepository->reveal(),
             $sheetRepository->reveal(),
-            $participantInfoGuesser->reveal()
+            $participantInfoGuesser->reveal(),
+            $requestRepository->reveal(),
+            $meetingParticipants->reveal()
         );
         $result = $handler->handle($query);
 

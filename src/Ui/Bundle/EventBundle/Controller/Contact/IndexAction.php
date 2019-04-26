@@ -36,9 +36,11 @@ class IndexAction
         UserDomain $userDomain,
         Sheet $sheet
     ) {
+        $participant = $sheet->getUserParticipant($userDomain->getUser());
+
         /** @var ContactPreviewView[] $contactListView */
         $contactListView = $this->queryBus->handle(
-            new GetContactListViewQuery($eventDomain->getEvent(), $userDomain->getUser(), $request->getLocale())
+            new GetContactListViewQuery($eventDomain->getEvent(), $participant, $request->getLocale())
         );
 
         return new Response(
