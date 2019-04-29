@@ -8,7 +8,7 @@
     <div class="profile__content">
         <header>
             <h1>
-                {% if true %}
+                {% if isEventOpen %}
                     <a href="{{ path('event_meeting_request_export_contact', {sheet: sheet.id}) }}" class="btn btn-primary pull-right mg-tp--5px mg-bt">
                         <i class="glyphicon glyphicon-download-alt"></i>
                         {{ 'event.meeting.listRequest.contact.export'|trans }}
