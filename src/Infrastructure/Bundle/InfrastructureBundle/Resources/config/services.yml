@@ -6872,5 +6872,6 @@ services:
             - '@template.participant_info_guesser'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
         tags:
             - { name: tactician.handler, typehints: true }
