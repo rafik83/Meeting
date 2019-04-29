@@ -79,10 +79,11 @@ class MeetingSheetViewQueryHandler
 
         foreach ($this->requestRepository->findApproved($sheet) as $meetingRequest) {
             $sheetMet = $meetingRequest->getSheetMet($sheet);
-            $meetingSheetViews[$sheetMet->getId()] = $this->getMeetingSheetView(
+            $meetingSheetViews[$sheetMet->getId()] = $this->createMeetingSheetView(
                 $sheetMet,
                 $sheetMet->getParticipantsArray(),
-                $locale
+                $locale,
+                true
             );
         }
 
@@ -129,10 +130,11 @@ class MeetingSheetViewQueryHandler
         }
 
         foreach ($sheets as $sheetId => $sheet) {
-            $meetingSheetViews[$sheet->getId()] = $this->getMeetingSheetView(
+            $meetingSheetViews[$sheet->getId()] = $this->createMeetingSheetView(
                 $sheet,
                 $participantsBySheet[$sheetId],
-                $locale
+                $locale,
+                false
             );
         }
 
@@ -143,11 +145,16 @@ class MeetingSheetViewQueryHandler
      * @param Sheet         $sheet
      * @param Participant[] $participants
      * @param string        $locale
+     * @param bool          $hasMeetingWith
      *
      * @return MeetingSheetView
      */
-    private function getMeetingSheetView(Sheet $sheet, array $participants, string $locale): MeetingSheetView
-    {
+    private function createMeetingSheetView(
+        Sheet $sheet,
+        array $participants,
+        string $locale,
+        bool $hasMeetingWith
+    ): MeetingSheetView {
         $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($sheet, $locale);
 
         return new MeetingSheetView(
@@ -161,6 +168,7 @@ class MeetingSheetViewQueryHandler
             $sheetTags[Tag::SHEET_CITY],
             $sheetTags[Tag::SHEET_COUNTRY],
             $sheet->getType()->getTitle($locale),
+            $hasMeetingWith,
             $this->participantsViewQueryHandler->handle(
                 new ParticipantsViewQuery($participants, $locale)
             )

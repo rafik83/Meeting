@@ -35,6 +35,7 @@ class MeetingSheetNormalizer extends AbstractNormalizer implements NormalizerInt
     const COL_SHEET_ZIPCODE         = 'sheet_zipcode';
     const COL_SHEET_CITY            = 'sheet_city';
     const COL_SHEET_COUNTRY         = 'sheet_country';
+    const COL_HAS_MEETING_WITH      = 'has_meeting_with';
 
     /**
      * {@inheritdoc}
@@ -120,6 +121,7 @@ class MeetingSheetNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_SHEET_ZIPCODE,
             self::COL_SHEET_CITY,
             self::COL_SHEET_COUNTRY,
+            self::COL_HAS_MEETING_WITH,
         ];
     }
 
@@ -153,6 +155,9 @@ class MeetingSheetNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_SHEET_ZIPCODE         => $meetingSheetView->zipcode,
             self::COL_SHEET_CITY            => $meetingSheetView->city,
             self::COL_SHEET_COUNTRY         => $meetingSheetView->country,
+            self::COL_HAS_MEETING_WITH      => $this->translator->trans(
+                'event.sheet.export.value.' . ($meetingSheetView->hasMeetingWith ? 'true' : 'false')
+            ),
         ];
 
         return $input;

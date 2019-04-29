@@ -293,6 +293,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                         'Paris',
                         'FR',
                         'Exposant',
+                        true,
                         [
                             $sheetMet1ParticipantView,
                         ]
@@ -308,6 +309,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                         'Paris',
                         'FR',
                         'Exposant',
+                        true,
                         [
                             $sheetMet2ParticipantView1,
                             $sheetMet2ParticipantView2,
@@ -324,6 +326,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                         'Sous-les-Bois',
                         'FR',
                         'Exposant',
+                        false,
                         [
                             $participantOfContactView1,
                             $participantOfContactView2,

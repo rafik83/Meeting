@@ -126,6 +126,7 @@ event.participant.define_timezone: 'Définir mon fuseau horaire'
 event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez-vous'
 event.registration_not_open: 'Les inscriptions ne sont pas encore ouvertes'
 event.sheet.export.fields.event_name: 'Nom de l''événement'
+event.sheet.export.fields.has_meeting_with: 'RDV'
 event.sheet.export.fields.participant_email: 'Email participant'
 event.sheet.export.fields.participant_firstname: Prénom
 event.sheet.export.fields.participant_genre: Genre
@@ -142,6 +143,8 @@ event.sheet.export.fields.sheet_turnover: 'Chiffre d''affaires'
 event.sheet.export.fields.sheet_type: Type
 event.sheet.export.fields.sheet_website: 'Site internet'
 event.sheet.export.fields.sheet_zipcode: 'Code postal'
+event.sheet.export.value.true: 'Oui'
+event.sheet.export.value.false: 'Non'
 event.sms.meeting_request.receive: '%event%: Vous avez reçu une proposition de rendez-vous, voir %link%'
 event.sms.receive_meeting_request.approved: '%event%: Votre demande de RDV avec %sheet% a été acceptée. RDV le %date% à %time% : Lieu %spot%, Voir %link%'
 event.sms.reminder.pending_meeting_request: '%eventTitle% : Vous avez reçu %countPendingMeetingRequest% propositions de RDVs, voir %meetingRequestManagementUrl%'
