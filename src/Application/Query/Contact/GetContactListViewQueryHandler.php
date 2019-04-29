@@ -103,7 +103,8 @@ class GetContactListViewQueryHandler
                 $infos[Tag::PARTICIPANT_FIRSTNAME],
                 $infos[Tag::PARTICIPANT_LASTNAME],
                 $infos[Tag::PARTICIPANT_AVATAR],
-                $contactSheetViews
+                $contactSheetViews,
+                true
             );
         }
 

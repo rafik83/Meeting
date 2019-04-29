@@ -95,7 +95,7 @@ class ContactListQueryHandlerTest extends TestCase
 
         $expected = [
             new ContactPreviewView(
-                'Carrie', 'Fisher', 'http://far.away/leia.png', ['New Republic', 'Rebels']
+                'Carrie', 'Fisher', 'http://far.away/leia.png', ['New Republic', 'Rebels'], true
             ),
         ];
 
