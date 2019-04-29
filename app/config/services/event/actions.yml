@@ -219,6 +219,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating.engine.twig'
+            - '@adapter.authorization_checker'
 
     #
     # Custom
