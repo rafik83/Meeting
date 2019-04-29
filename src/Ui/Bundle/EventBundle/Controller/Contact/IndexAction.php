@@ -54,7 +54,9 @@ class IndexAction
             throw new AccessDeniedException();
         }
 
-        $participant = $sheet->getUserParticipant($userDomain->getUser());
+        // if owner is logged and is not a participant, it fallback to one of the participant
+        $participant = $sheet->getUserParticipant($userDomain->getUser()) ?? $sheet->getFirstParticipant();
+
         $event = $eventDomain->getEvent();
 
         /** @var ContactPreviewView[] $contactListView */
@@ -67,9 +69,9 @@ class IndexAction
                 '@Event/Contact/index.html.twig',
                 [
                     'contactListView' => $contactListView,
-                    'sheet' => $sheet,
-                    'event' => $event,
-                    'isEventOpen' => $this->eventOpenAccessChecker->allowedToAccess($event),
+                    'sheet'           => $sheet,
+                    'event'           => $event,
+                    'isEventOpen'     => $this->eventOpenAccessChecker->allowedToAccess($event),
                 ]
             )
         );
