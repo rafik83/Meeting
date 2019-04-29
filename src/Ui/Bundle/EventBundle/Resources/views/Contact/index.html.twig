@@ -35,6 +35,10 @@
                                     </div>
                                 </div>
                                 <div class="user__infos">
+                                    {% if contactPreview.hasMeetingWith %}
+                                        <i class="icon icon-RDV pull-right"></i>
+                                    {% endif %}
+
                                     <p class="sheets">
                                         {{ contactPreview.sheetTitles | join(', ') }}
                                     </p>
