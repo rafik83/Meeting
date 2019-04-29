@@ -55,13 +55,12 @@ class IndexAction
         }
 
         $participant = $sheet->getUserParticipant($userDomain->getUser());
+        $event = $eventDomain->getEvent();
 
         /** @var ContactPreviewView[] $contactListView */
         $contactListView = $this->queryBus->handle(
-            new GetContactListViewQuery($eventDomain->getEvent(), $participant, $request->getLocale())
+            new GetContactListViewQuery($event, $participant, $request->getLocale())
         );
-
-        $event = $eventDomain->getEvent();
 
         return new Response(
             $this->engine->render(
