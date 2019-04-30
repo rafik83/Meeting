@@ -954,7 +954,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findApproved(Sheet $sheet)
+    public function findApproved(Sheet $sheet): array
     {
         $queryBuilder = $this
             ->entityManager

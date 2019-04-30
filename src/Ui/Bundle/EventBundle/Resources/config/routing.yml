@@ -560,6 +560,13 @@ event_catalog_external_select_items_from_nomenclatures:
 #
 # Contact
 #
+event_contact_index:
+    path: /sheet/{sheet}/contacts
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\IndexAction }
+
 event_contact_show:
     path: /sheet/{sheet}/contact/{contact}
     requirements:
