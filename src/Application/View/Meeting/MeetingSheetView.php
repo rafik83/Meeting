@@ -68,7 +68,7 @@ class MeetingSheetView
     public $type;
 
     /** @var bool */
-    public $hasMeetingWith;
+    public $hasApprovedMeetingRequestWith;
 
     /**
      * MeetingSheetView constructor.
@@ -83,7 +83,7 @@ class MeetingSheetView
      * @param string                   $city
      * @param string                   $country
      * @param string                   $type
-     * @param bool                     $hasMeetingWith
+     * @param bool                     $hasApprovedMeetingRequestWith
      * @param MeetingParticipantView[] $participants
      */
     public function __construct(
@@ -97,7 +97,7 @@ class MeetingSheetView
         $city,
         $country,
         $type,
-        bool $hasMeetingWith,
+        bool $hasApprovedMeetingRequestWith,
         array $participants
     ) {
         $this->sheetName = $sheetName;
@@ -110,7 +110,7 @@ class MeetingSheetView
         $this->zipcode = $zipcode;
         $this->city = $city;
         $this->country = $country;
-        $this->hasMeetingWith = $hasMeetingWith;
+        $this->hasApprovedMeetingRequestWith = $hasApprovedMeetingRequestWith;
         $this->type = $type;
     }
 }

@@ -145,7 +145,7 @@ class MeetingSheetViewQueryHandler
      * @param Sheet         $sheet
      * @param Participant[] $participants
      * @param string        $locale
-     * @param bool          $hasMeetingWith
+     * @param bool          $hasApprovedMeetingRequestWith
      *
      * @return MeetingSheetView
      */
@@ -153,7 +153,7 @@ class MeetingSheetViewQueryHandler
         Sheet $sheet,
         array $participants,
         string $locale,
-        bool $hasMeetingWith
+        bool $hasApprovedMeetingRequestWith
     ): MeetingSheetView {
         $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($sheet, $locale);
 
@@ -168,7 +168,7 @@ class MeetingSheetViewQueryHandler
             $sheetTags[Tag::SHEET_CITY],
             $sheetTags[Tag::SHEET_COUNTRY],
             $sheet->getType()->getTitle($locale),
-            $hasMeetingWith,
+            $hasApprovedMeetingRequestWith,
             $this->participantsViewQueryHandler->handle(
                 new ParticipantsViewQuery($participants, $locale)
             )

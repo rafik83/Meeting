@@ -42,7 +42,7 @@ class RequestViewQueryHandler
     private $meetingParticipants;
 
     /** @var HasMeetingWithLinkedSheets */
-    private $hasMeetingWithLinkedSheets;
+    private $hasApprovedMeetingRequestWithLinkedSheets;
 
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
