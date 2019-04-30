@@ -371,9 +371,9 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $toSheet->getType()->willReturn($type->reveal());
 
         $request = $this->prophesize(Request::class);
-        $request->getFromSheet()->willreturn($fromSheet->reveal());
-        $request->getToSheet()->willreturn($toSheet->reveal());
-        $request->getEvent()->willreturn($event);
+        $request->getFromSheet()->willReturn($fromSheet->reveal());
+        $request->getToSheet()->willReturn($toSheet->reveal());
+        $request->getEvent()->willReturn($event);
         $request->getFromParticipantsArray()->willReturn([]);
         $request->getToParticipantsArray()->willReturn([]);
         $request->hasNoPreference($fromSheet->reveal())->willReturn(true);
@@ -576,9 +576,9 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $toSheet->getType()->willReturn($type->reveal());
 
         $request = $this->prophesize(Request::class);
-        $request->getFromSheet()->willreturn($fromSheet->reveal());
-        $request->getToSheet()->willreturn($toSheet->reveal());
-        $request->getEvent()->willreturn($event);
+        $request->getFromSheet()->willReturn($fromSheet->reveal());
+        $request->getToSheet()->willReturn($toSheet->reveal());
+        $request->getEvent()->willReturn($event);
         $request->getFromParticipantsArray()->willReturn([]);
         $request->getToParticipantsArray()->willReturn([]);
         $request->hasNoPreference($fromSheet->reveal())->willReturn(true);
@@ -762,9 +762,9 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $toSheet->getType()->willReturn($type->reveal());
 
         $request = $this->prophesize(Request::class);
-        $request->getFromSheet()->willreturn($fromSheet->reveal());
-        $request->getToSheet()->willreturn($toSheet->reveal());
-        $request->getEvent()->willreturn($event);
+        $request->getFromSheet()->willReturn($fromSheet->reveal());
+        $request->getToSheet()->willReturn($toSheet->reveal());
+        $request->getEvent()->willReturn($event);
         $request->getFromParticipantsArray()->willReturn([]);
         $request->getToParticipantsArray()->willReturn([]);
         $request->hasNoPreference($fromSheet->reveal())->willReturn(true);
@@ -827,6 +827,150 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             ->willReturn([]);
         $meetingParticipants->getMeetingParticipants($request->reveal(), $toSheet->reveal())
             ->willReturn([]);
+
+        $transformRequestIntoMeetingHandler = new TransformRequestIntoMeetingHandler(
+            $meetingSlotRepository->reveal(),
+            $userEventPhoneChecker->reveal(),
+            $availableSpots->reveal(),
+            $meetingRepository->reveal(),
+            $slotFilter->reveal(),
+            $visioGuesser->reveal(),
+            $eventDispatcher->reveal(),
+            $datetime,
+            $meetingParticipants->reveal()
+        );
+
+        $transformRequestIntoMeetingHandler->handle(new TransformRequestIntoMeeting($request->reveal()));
+    }
+
+    public function testAddMeetingForParticipantsNotOnSameSheet()
+    {
+        $event = EventFactory::createEvent();
+        $datetime = new \DateTime();
+
+        $type = $this->prophesize(Type::class);
+        $type->areAllSheetParticipantsAssignedToMeeting()->shouldBeCalled()->willReturn(true);
+
+        $fromParticipant = $this->prophesize(Participant::class);
+        $fromOtherParticipant = $this->prophesize(Participant::class);
+        $toParticipant = $this->prophesize(Participant::class);
+
+        $fromSheet = $this->prophesize(Sheet::class);
+        $fromSheet->getType()->shouldBeCalled()->willReturn($type->reveal());
+
+        $toSheet = $this->prophesize(Sheet::class);
+        $toSheet->getType()->shouldBeCalled()->willReturn($type->reveal());
+
+        $request = $this->prophesize(Request::class);
+        $request->getFromSheet()->shouldBeCalled()->willReturn($fromSheet->reveal());
+        $request->getToSheet()->shouldBeCalled()->willReturn($toSheet->reveal());
+        $request->getEvent()->shouldBeCalled()->willReturn($event);
+
+        $slot = $this->prophesize(MeetingSlot::class);
+        $slot->getId()->shouldBeCalled()->willReturn(111);
+
+        $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+        $meetingSlotRepository
+            ->findAvailableSlotsByParticipants($event, [$fromParticipant->reveal(), $fromOtherParticipant->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$slot->reveal()])
+        ;
+        $meetingSlotRepository
+            ->findAvailableSlotsByParticipants($event, [$toParticipant->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$slot->reveal()])
+        ;
+        $slotFilter = $this->prophesize(SlotFilter::class);
+        $slotFilter->getFilteredSlots([$slot->reveal()])->shouldBeCalled()->willReturn([$slot->reveal()]);
+
+        $visioGuesser = $this->prophesize(VisioGuesser::class);
+        $visioGuesser
+            ->isParticipantVisio(
+                [$fromParticipant->reveal(), $fromOtherParticipant->reveal(), $toParticipant->reveal()]
+            )
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $spot = $this->prophesize(Spot::class);
+        $availableSpots = $this->prophesize(AvailableSpots::class);
+        $availableSpots
+            ->getBySlot(
+                $slot->reveal(),
+                $fromSheet->reveal(),
+                $toSheet->reveal(),
+                3,
+                false
+            )
+            ->shouldBeCalled()
+            ->willReturn($spot->reveal())
+        ;
+
+        $meetingParticipants = $this->prophesize(MeetingParticipants::class);
+        $meetingParticipants
+            ->getMeetingParticipants($request->reveal(), $fromSheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$fromParticipant->reveal(), $fromOtherParticipant->reveal()])
+        ;
+        $meetingParticipants
+            ->getMeetingParticipants($request->reveal(), $toSheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$toParticipant->reveal()])
+        ;
+
+        $userEventPhoneChecker = $this->prophesize(UserEventPhoneChecker::class);
+        $userEventPhoneChecker->isValidated(Argument::any())->shouldNotBeCalled();
+
+        $expectedMeeting = new Meeting(
+            $request->reveal(),
+            $slot->reveal(),
+            $fromSheet->reveal(),
+            [$fromParticipant->reveal(), $fromOtherParticipant->reveal()],
+            $toSheet->reveal(),
+            [$toParticipant->reveal()],
+            $datetime,
+            $spot->reveal(),
+            $event,
+            false,
+            false,
+            Meeting::CREATED_BY_PARTICIPANT
+        );
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $meetingRepository
+            ->add($expectedMeeting)
+            ->shouldBeCalled()
+        ;
+
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $eventDispatcher
+            ->dispatch(
+                Events::MEETING_CREATED,
+                new MeetingCreatedEvent($expectedMeeting)
+            )
+            ->shouldBeCalled()
+        ;
+
+        $eventDispatcher
+            ->dispatch(
+                Events::MEETING_PARTICIPATE,
+                new MeetingParticipateEvent($fromParticipant->reveal())
+            )
+            ->shouldBeCalled()
+        ;
+        $eventDispatcher
+            ->dispatch(
+                Events::MEETING_PARTICIPATE,
+                new MeetingParticipateEvent($fromOtherParticipant->reveal())
+            )
+            ->shouldBeCalled()
+        ;
+        $eventDispatcher
+            ->dispatch(
+                Events::MEETING_PARTICIPATE,
+                new MeetingParticipateEvent($toParticipant->reveal())
+            )
+            ->shouldBeCalled()
+        ;
 
         $transformRequestIntoMeetingHandler = new TransformRequestIntoMeetingHandler(
             $meetingSlotRepository->reveal(),

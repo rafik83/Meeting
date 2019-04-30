@@ -4,10 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- MV-173 - Check participants of linked sheets instead of only participants of the sheet
 
 ## [2.2.0] - 2019-04-26
 ### Changed
-- VIMMET-1942 - Planning print bolded sheets titles
+- VIMEET-1942 - Planning print bolded sheets titles
 - VIMEET-1914 - Bold on sheet titles
 ### Added
 - VIMEET-1950 - In back-office, all participants are assigned to meeting if option is activated.
