@@ -191,6 +191,30 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\EBadgePdfPrinter'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ScanAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ScanHandleAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.router'
+
+    #
+    # Contact
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\ShowAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
     #
     # Custom
     #

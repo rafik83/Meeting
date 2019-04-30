@@ -15,78 +15,176 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Meeting\MeetingSheetListView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingSheetView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class MeetingSheetViewQueryHandler
 {
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /**
-     * @var ParticipantsViewQueryHandler
-     */
+    /** @var ParticipantsViewQueryHandler */
     private $participantsViewQueryHandler;
 
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
-    /**
-     * MeetingSheetViewQueryHandler constructor.
-     *
-     * @param RequestRepositoryInterface   $requestRepository
-     * @param ParticipantsViewQueryHandler $participantsViewQueryHandler
-     * @param SheetInfoGuesser             $sheetInfoGuesser
-     */
+    /** @var ContactRepositoryInterface */
+    private $contactRepository;
+
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
     public function __construct(
+        ContactRepositoryInterface $contactRepository,
         RequestRepositoryInterface $requestRepository,
+        SheetRepositoryInterface $sheetRepository,
         ParticipantsViewQueryHandler $participantsViewQueryHandler,
         SheetInfoGuesser $sheetInfoGuesser
     ) {
-        $this->requestRepository            = $requestRepository;
+        $this->contactRepository = $contactRepository;
+        $this->requestRepository = $requestRepository;
+        $this->sheetRepository = $sheetRepository;
         $this->participantsViewQueryHandler = $participantsViewQueryHandler;
-        $this->sheetInfoGuesser             = $sheetInfoGuesser;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
     }
 
     /**
      * @param MeetingSheetViewQuery $query
      *
-     * @throws SheetNotFoundException
-     *
      * @return MeetingSheetListView
      */
     public function handle(MeetingSheetViewQuery $query)
     {
-        $meetingsRequest = $this->requestRepository->findAccepted($query->sheet);
+        $meetingSheetViews = $this->getFromApprovedRequests($query->sheet, $query->locale);
+        $meetingSheetViews = $this->addFromContacts($meetingSheetViews, $query->event, $query->user, $query->locale);
 
+        return new MeetingSheetListView($meetingSheetViews, $query->event->getTitle());
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return MeetingSheetView[]
+     */
+    private function getFromApprovedRequests(Sheet $sheet, string $locale): array
+    {
         $meetingSheetViews = [];
 
-        foreach ($meetingsRequest as $meeting) {
-            $metSheet     = $meeting->getSheetMet($query->sheet);
-            $participants = $metSheet->getParticipants()->toArray();
-
-            $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($metSheet, $query->locale);
-
-            $meetingSheetViews[] = new MeetingSheetView(
-                $sheetTags[Tag::SHEET_TITLE],
-                $sheetTags[Tag::SHEET_ORGANIZATION_CATEGORY],
-                $sheetTags[Tag::SHEET_ORGANIZATION_TURNOVER],
-                $sheetTags[Tag::SHEET_ORGANIZATION_STAFF],
-                $sheetTags[Tag::SHEET_WEBSITE],
-                $sheetTags[Tag::SHEET_ADDRESS],
-                $sheetTags[Tag::SHEET_ZIPCODE],
-                $sheetTags[Tag::SHEET_CITY],
-                $sheetTags[Tag::SHEET_COUNTRY],
-                $metSheet->getType()->getTitle($query->locale),
-                $this->participantsViewQueryHandler->handle(
-                    new ParticipantsViewQuery($participants, $query->locale)
-                )
+        foreach ($this->requestRepository->findApproved($sheet) as $meetingRequest) {
+            $sheetMet = $meetingRequest->getSheetMet($sheet);
+            $meetingSheetViews[$sheetMet->getId()] = $this->createMeetingSheetView(
+                $sheetMet,
+                $sheetMet->getParticipantsArray(),
+                $locale,
+                true
             );
         }
 
-        return new MeetingSheetListView($meetingSheetViews, $query->event->getTitle());
+        return $meetingSheetViews;
+    }
+
+    /**
+     * @param MeetingSheetView[] $meetingSheetViews
+     * @param Event              $event
+     * @param User               $user
+     * @param string             $locale
+     *
+     * @return MeetingSheetView[]
+     */
+    private function addFromContacts(array $meetingSheetViews, Event $event, User $user, string $locale): array
+    {
+        $participantsBySheet = [];
+        $sheets = [];
+
+        foreach ($this->contactRepository->findByEventAndUser($event, $user) as $contact) {
+            $sheetsOfContact = $this->sheetRepository->getSheetsByUserAndEvent($contact, $event);
+            $participantOfContact = $this->getParticipantFromSheets($sheetsOfContact, $contact);
+
+            if (!$participantOfContact instanceof Participant) {
+                continue;
+            }
+
+            $sheet = $participantOfContact->getSheet();
+            $sheetId = $sheet->getId();
+
+            if (isset($meetingSheetViews[$sheetId])) {
+                continue;
+            }
+
+            $sheets[$sheetId] = $sheet;
+
+            if (isset($participantsBySheet[$sheetId])) {
+                $participantsBySheet[$sheetId][] = $participantOfContact;
+
+                continue;
+            }
+
+            $participantsBySheet[$sheetId] = [$participantOfContact];
+        }
+
+        foreach ($sheets as $sheetId => $sheet) {
+            $meetingSheetViews[$sheet->getId()] = $this->createMeetingSheetView(
+                $sheet,
+                $participantsBySheet[$sheetId],
+                $locale,
+                false
+            );
+        }
+
+        return $meetingSheetViews;
+    }
+
+    /**
+     * @param Sheet         $sheet
+     * @param Participant[] $participants
+     * @param string        $locale
+     * @param bool          $hasApprovedMeetingRequestWith
+     *
+     * @return MeetingSheetView
+     */
+    private function createMeetingSheetView(
+        Sheet $sheet,
+        array $participants,
+        string $locale,
+        bool $hasApprovedMeetingRequestWith
+    ): MeetingSheetView {
+        $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($sheet, $locale);
+
+        return new MeetingSheetView(
+            $sheetTags[Tag::SHEET_TITLE],
+            $sheetTags[Tag::SHEET_ORGANIZATION_CATEGORY],
+            $sheetTags[Tag::SHEET_ORGANIZATION_TURNOVER],
+            $sheetTags[Tag::SHEET_ORGANIZATION_STAFF],
+            $sheetTags[Tag::SHEET_WEBSITE],
+            $sheetTags[Tag::SHEET_ADDRESS],
+            $sheetTags[Tag::SHEET_ZIPCODE],
+            $sheetTags[Tag::SHEET_CITY],
+            $sheetTags[Tag::SHEET_COUNTRY],
+            $sheet->getType()->getTitle($locale),
+            $hasApprovedMeetingRequestWith,
+            $this->participantsViewQueryHandler->handle(
+                new ParticipantsViewQuery($participants, $locale)
+            )
+        );
+    }
+
+    private function getParticipantFromSheets(array $sheets, User $user): ?Participant
+    {
+        foreach ($sheets as $sheet) {
+            $participant = $sheet->getUserParticipant($user);
+
+            if (null !== $participant) {
+                return $participant;
+            }
+        }
+
+        return null;
     }
 }

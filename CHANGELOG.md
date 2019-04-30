@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-1950 - In back-office, all participants are assigned to meeting if option is activated.
 - VIMEET-1931 - Unallow link if sheet has a scheduled meeting
+- VIMEET-1945 - Scan the badge of another participant and export contacts list
 
 ## [2.1.0] - 2019-04-24
 ### Fixed
