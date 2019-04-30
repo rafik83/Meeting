@@ -35,7 +35,7 @@ class TransformApprovedRequestsByLinkedSheetsIntoMeetingHandler
 
     public function handle(TransformApprovedRequestsByLinkedSheetsIntoMeeting $command): void
     {
-        if (ExportSolutionType::SOLUTION_OPTIMIZE_MOVING_ALLOWED !== $command->solutionType) {
+        if (ExportSolutionType::SOLUTION_FROM_SCRATCH === $command->solutionType) {
             return;
         }
 
@@ -183,7 +183,7 @@ class TransformApprovedRequestsByLinkedSheetsIntoMeetingHandler
             return false;
         }
 
-        $this->commandBus->handle(new TransformRequestIntoMeeting($request, Meeting::CREATED_BY_PLANNER));
+        $this->commandBus->handle(new TransformRequestIntoMeeting($request, Meeting::CREATED_BY_PLANNER, true, true));
         unset($countSheetsMetByLinkedSheet[$linkedSheetsId][$sheetMetId]);
 
         return true;
