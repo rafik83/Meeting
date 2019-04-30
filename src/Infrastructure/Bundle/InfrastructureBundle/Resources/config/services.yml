@@ -4562,7 +4562,9 @@ services:
     query.meeting.meeting_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQueryHandler
         arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@query.meeting.participants_view_query_handler'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
@@ -6855,3 +6857,24 @@ services:
     Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler:
         arguments:
             - '@repository.event.extra_parameter_repository'
+
+    #
+    # Contact
+    #
+    Proximum\Vimeet\Application\Query\Contact\GetContactViewQueryHandler:
+        arguments:
+            - '@template.participant_info_guesser'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Contact\GetContactListViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+        tags:
+            - { name: tactician.handler, typehints: true }

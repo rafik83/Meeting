@@ -58,3 +58,13 @@ services:
             - '@vimeet_infrastructure.repository.unavailability_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\RemoveUserUnavailabilities }
+
+    #
+    # Contact
+    #
+    Proximum\Vimeet\Application\Command\Contact\AddHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Contact\Add }

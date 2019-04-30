@@ -17,20 +17,18 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Re
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\EventOpenAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class ContactController extends Controller
 {
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     *
-     * @return CSVFileResponse
-     */
-    public function exportContactAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
-    {
+    public function exportContactAction(
+        Request $request,
+        EventDomain $eventDomain,
+        UserDomain $userDomain,
+        Sheet $sheet
+    ): CsvFileResponse {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted(EventOpenAccessVoter::PERMISSION_EVENT_OPEN_ACCESS, $eventDomain->getEvent());
@@ -38,6 +36,7 @@ class ContactController extends Controller
         $meetingSheetListView = $this->get('tactician.commandbus.query')->handle(
             new MeetingSheetViewQuery(
                 $eventDomain->getEvent(),
+                $userDomain->getUser(),
                 $sheet,
                 $request->getLocale()
             )

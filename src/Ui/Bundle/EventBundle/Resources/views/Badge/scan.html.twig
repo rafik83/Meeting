@@ -1,0 +1,20 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'badge.scan.title'|trans %}
+
+{% block container_classes 'full-mobile-container' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/badge-scan.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <header class="mg-tp">
+        <h1><i class="icon-Badge_1"></i> {{ 'badge.scan.title'|trans }}</h1>
+    </header>
+    <div id="scan"
+         data-handle-scan-endpoint="{{ path('event_sheet_user_badge_scan_handle', { sheet: sheet.id }) }}"
+         data-loading-message="{{ 'badge.scan.loading'|trans }}"
+    ></div>
+{% endblock %}

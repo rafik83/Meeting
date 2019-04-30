@@ -1,0 +1,27 @@
+Proximum\Vimeet\Domain\Model\Contact:
+    type:  entity
+    table: contact
+    id:
+        event:
+            associationKey: true
+        user:
+            associationKey: true
+        contact:
+            associationKey: true
+    fields:
+        createdAt:
+            type: datetime
+            nullable: false
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                nullable: false
+        contact:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                nullable: false

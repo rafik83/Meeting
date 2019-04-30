@@ -558,6 +558,24 @@ event_catalog_external_select_items_from_nomenclatures:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\CatalogExternal\SelectItemsFromNomenclaturesAction }
 
 #
+# Contact
+#
+event_contact_index:
+    path: /sheet/{sheet}/contacts
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\IndexAction }
+
+event_contact_show:
+    path: /sheet/{sheet}/contact/{contact}
+    requirements:
+        sheet: \d+
+        contact: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\ShowAction }
+
+#
 # Meeting Request
 #
 event_meeting_list_request:
@@ -1028,6 +1046,20 @@ event_sheet_user_badge_download:
         format: (html|pdf)
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\DownloadAction, format: 'pdf' }
+
+event_sheet_user_badge_scan:
+    path: /sheet/{sheet}/badge/scan
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ScanAction }
+
+event_sheet_user_badge_scan_handle:
+    path: /sheet/{sheet}/badge/scan/handle
+    requirements:
+        sheet: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ScanHandleAction }
 
 #
 # Custom

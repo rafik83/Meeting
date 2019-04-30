@@ -1,0 +1,148 @@
+<?php
+
+namespace Proximum\Vimeet\Tests\Application\Query\Contact;
+
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Query\Contact\ContactPreviewView;
+use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQuery;
+use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQueryHandler;
+use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+
+class ContactListQueryHandlerTest extends TestCase
+{
+    public function testHandle(): void
+    {
+        // prepare data
+        $event = $this->prophesize(Event::class);
+
+        //    contact list participant
+        $participantSheet = $this->prophesize(Sheet::class);
+        $participantUser = $this->prophesize(User::class);
+
+        $participant = $this->prophesize(Participant::class);
+        $participant->getSheet()->willReturn($participantSheet->reveal());
+        $participant->getUser()->willReturn($participantUser->reveal());
+
+        //    requested users
+        $requestedUser = $this->prophesize(User::class);
+        $requestedUser->getFullname()->willReturn('Carrie Fisher');
+        $requestedUser->getId()->willReturn(42);
+
+        $requestedParticipant = $this->prophesize(Participant::class);
+        $requestedParticipant->getUser()->willReturn($requestedUser->reveal());
+
+        $requestedUserSheet1 = $this->prophesize(Sheet::class);
+        $requestedUserSheet1->getUserParticipant($requestedUser->reveal())
+            ->willReturn($participant->reveal())
+        ;
+        $requestedUserSheet1->getTitle()->willReturn('New Republic');
+
+        $requestedUserSheet2 = $this->prophesize(Sheet::class);
+        $requestedUserSheet2->getUserParticipant($requestedUser->reveal())
+            ->willReturn($participant->reveal())
+        ;
+        $requestedUserSheet2->getTitle()->willReturn('Rebels');
+        $requestedUserSheet2->getParticipantsArray()->willReturn([$requestedParticipant->reveal()]);
+
+        $request = $this->prophesize(Request::class);
+        $request->getSheetMet($participantSheet->reveal())->willReturn()
+            ->willReturn($requestedUserSheet2->reveal())
+        ;
+
+        //    scanned user
+        $scannedUser = $this->prophesize(User::class);
+        $scannedUser->getFullname()->willReturn('Sam Fisher');
+        $scannedUser->getId()->willReturn(314);
+
+        $scannedParticipant = $this->prophesize(Participant::class);
+
+        $scannedSheet = $this->prophesize(Sheet::class);
+        $scannedSheet->getTitle()->willReturn('NSA');
+
+        $scannedSheet->getUserParticipant($scannedUser->reveal())
+            ->willReturn($scannedParticipant->reveal())
+        ;
+
+        // prophesy dependencies
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $meetingParticipants = $this->prophesize(MeetingParticipants::class);
+        $contactRepository = $this->prophesize(ContactRepositoryInterface::class);
+
+        $requestRepository->findApproved($participantSheet->reveal())
+            ->willReturn([$request->reveal()])
+        ;
+
+        $sheetRepository->getSheetsByUserAndEvent($requestedUser->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$requestedUserSheet2->reveal(), $requestedUserSheet1->reveal()])
+        ;
+
+        $sheetRepository->getSheetsByUserAndEvent($scannedUser->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$scannedSheet->reveal()])
+        ;
+
+        $participantInfoGuesser->guessParticipantInfos($participant->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    'participant_firstname' => 'Carrie',
+                    'participant_lastname'  => 'Fisher',
+                    'participant_avatar'    => 'http://far.away/leia.png',
+                ]
+            )
+        ;
+
+        $participantInfoGuesser->guessParticipantInfos($scannedParticipant->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    'participant_firstname' => 'Sam',
+                    'participant_lastname'  => 'Fisher',
+                    'participant_avatar'    => 'http://nsa.org/sam.png',
+                ]
+            )
+        ;
+
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $participantSheet->reveal())
+            ->willReturn([$participant->reveal()])
+        ;
+
+        $contactRepository->findByEventAndUser($event->reveal(), $participantUser->reveal())
+            ->willReturn([$requestedUser, $scannedUser->reveal()])
+        ;
+
+        // run tests
+        $query = new GetContactListViewQuery($event->reveal(), $participant->reveal(), 'fr');
+        $handler = new GetContactListViewQueryHandler(
+            $sheetRepository->reveal(),
+            $participantInfoGuesser->reveal(),
+            $requestRepository->reveal(),
+            $meetingParticipants->reveal(),
+            $contactRepository->reveal()
+        );
+        $result = $handler->handle($query);
+
+        $expected = [
+            new ContactPreviewView(
+                'Carrie', 'Fisher', 'http://far.away/leia.png', ['New Republic', 'Rebels'], true
+            ),
+            new ContactPreviewView(
+                'Sam', 'Fisher', 'http://nsa.org/sam.png', ['NSA'], false
+            ),
+        ];
+
+        $this->assertEquals($expected, $result);
+    }
+}
