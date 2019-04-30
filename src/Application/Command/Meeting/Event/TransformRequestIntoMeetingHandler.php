@@ -106,8 +106,8 @@ class TransformRequestIntoMeetingHandler
      */
     public function handle(TransformRequestIntoMeeting $query): Meeting
     {
-        $fromSheet          = $query->request->getFromSheet();
-        $toSheet            = $query->request->getToSheet();
+        $fromSheet = $query->request->getFromSheet();
+        $toSheet = $query->request->getToSheet();
 
         $fromIsNoPreference = $fromSheet->getType()->areAllSheetParticipantsAssignedToMeeting()
             ? false
@@ -117,18 +117,17 @@ class TransformRequestIntoMeetingHandler
             ? false
             : $query->request->hasNoPreference($toSheet);
 
-        $fromParticipants   = $this->meetingParticipants->getMeetingParticipants($query->request, $fromSheet);
-
-        $toParticipants     = $this->meetingParticipants->getMeetingParticipants($query->request, $toSheet);
+        $fromParticipants = $this->meetingParticipants->getMeetingParticipants($query->request, $fromSheet);
+        $toParticipants = $this->meetingParticipants->getMeetingParticipants($query->request, $toSheet);
 
         if ($fromIsNoPreference && 1 === $fromSheet->countParticipants()) {
             $fromIsNoPreference = false;
-            $fromParticipants   = $fromSheet->getParticipantsArray();
+            $fromParticipants = $fromSheet->getParticipantsArray();
         }
 
         if ($toIsNoPreference && 1 === $toSheet->countParticipants()) {
             $toIsNoPreference = false;
-            $toParticipants   = $toSheet->getParticipantsArray();
+            $toParticipants = $toSheet->getParticipantsArray();
         }
 
         $fromSheet = new AvailableSlotsBySheetView($fromSheet, $fromIsNoPreference);
@@ -174,13 +173,13 @@ class TransformRequestIntoMeetingHandler
         $transformableMeeting = $this->getTransformableMeeting($query->event, $availableMeetings);
 
         foreach ($transformableMeeting->fromParticipants as $fromParticipant) {
-            if (!in_array($fromParticipant, $transformableMeeting->fromSheet->getParticipantsArray(), true)) {
+            if (!in_array($fromParticipant, $fromParticipants, true)) {
                 throw new \LogicException('Chosen From participant is invalid for this meeting');
             }
         }
 
         foreach ($transformableMeeting->toParticipants as $toParticipant) {
-            if (!in_array($toParticipant, $transformableMeeting->toSheet->getParticipantsArray(), true)) {
+            if (!in_array($toParticipant, $toParticipants, true)) {
                 throw new \LogicException('Chosen To participant is invalid for this meeting');
             }
         }
