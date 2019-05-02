@@ -91,6 +91,9 @@ class Type implements WhoInterface, TypeInterface
     /** @var bool */
     private $areAllSheetParticipantsAssignedToMeeting = false;
 
+    /** @var bool */
+    public $canScanParticipant = false;
+
     /**
      * @param Event $event
      */
@@ -425,7 +428,8 @@ class Type implements WhoInterface, TypeInterface
         ?int $numberOfMeetingsPerPlanning,
         bool $canMoveMeeting = false,
         bool $canRemoveMeeting = false,
-        bool $areAllSheetParticipantsAssignedToMeeting = false
+        bool $areAllSheetParticipantsAssignedToMeeting = false,
+        bool $canScanParticipant = false
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
@@ -434,6 +438,7 @@ class Type implements WhoInterface, TypeInterface
         $this->canMoveMeeting = $canMoveMeeting;
         $this->canRemoveMeeting = $canRemoveMeeting;
         $this->areAllSheetParticipantsAssignedToMeeting = $areAllSheetParticipantsAssignedToMeeting;
+        $this->canScanParticipant = $canScanParticipant;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int
@@ -462,5 +467,10 @@ class Type implements WhoInterface, TypeInterface
     public function areAllSheetParticipantsAssignedToMeeting(): bool
     {
         return $this->areAllSheetParticipantsAssignedToMeeting;
+    }
+
+    public function canScanParticipant(): bool
+    {
+        return $this->canScanParticipant;
     }
 }
