@@ -42,6 +42,9 @@ final class Category
     const BADGE      = 'navigation.category.badge';
     const BADGE_ICON = 'icon-Badge_1';
 
+    const BADGE_SCAN      = 'navigation.category.badge_scan';
+    const BADGE_SCAN_ICON = 'icon-Photo';
+
     const LENI_BADGE_LINK = 'navigation.category.leni_badge_link';
     const LENI_BADGE_LINK_ICON = 'icon-Badge_1';
 
