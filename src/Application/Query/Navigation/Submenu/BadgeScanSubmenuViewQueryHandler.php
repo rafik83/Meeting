@@ -48,7 +48,7 @@ class BadgeScanSubmenuViewQueryHandler
                     'sheet' => $query->sheet->getId(),
                 ]
             ),
-            Route::isBadge($query->route),
+            Route::isBadgeScan($query->route),
             false,
             true
         );

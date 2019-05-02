@@ -35,6 +35,8 @@ final class Route
 
     public const PARTICIPANT_ACCOUNT = 'event_account_participant';
 
+    public const CONTACT = 'event_contact_index';
+
     public const CATALOG_INDEX = 'event_catalog_index';
     public const CATALOG_VIEW_OTHER_SHEET = 'event_catalog_complete_sheet';
     public const CATALOG_MEETING_REQUEST = 'event_catalog_sheet_meeting_request';
@@ -75,6 +77,7 @@ final class Route
     public const AGENDA_CONFIRMATION = 'event_user_event_token_confirm_agenda';
 
     public const PROGRAM = 'happening_program';
+    public const BADGE_SCAN = 'event_sheet_user_badge_scan';
     public const BADGE = 'event_sheet_user_badge';
     public const BADGE_DOWNLOAD =' event_sheet_user_badge_download';
     public const NOTIFICATION = 'event_notification_list';
@@ -126,6 +129,16 @@ final class Route
     public static function isBadge(string $route): bool
     {
         return self::BADGE === $route;
+    }
+
+    public static function isBadgeScan(string $route): bool
+    {
+        return self::BADGE_SCAN === $route;
+    }
+
+    public static function isContact(string $route): bool
+    {
+        return self::CONTACT === $route;
     }
 
     public static function isHeaderDisplayedOnMobile(string $route): bool

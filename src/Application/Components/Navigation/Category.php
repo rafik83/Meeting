@@ -30,6 +30,9 @@ final class Category
     const MEETING      = 'navigation.category.meeting';
     const MEETING_ICON = 'icon-RDV';
 
+    const CONTACT      = 'navigation.category.contact';
+    const CONTACT_ICON = 'icon-RDV';
+
     const PLANNING      = 'navigation.category.planning';
     const PLANNING_ICON = 'icon-Calendrier';
 

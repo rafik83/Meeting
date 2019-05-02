@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
@@ -68,7 +69,6 @@ class SubmenuViewQueryHandler
             $buttonsViews = array_merge($buttonsViews, $sheetButtonViews);
         }
 
-
         $badgeScanButtonView = $this->queryBus->handle(
             new BadgeScanSubmenuViewQuery(
                 $submenuViewQuery->user,
@@ -81,6 +81,19 @@ class SubmenuViewQueryHandler
         );
 
         $buttonsViews = array_merge($buttonsViews, $badgeScanButtonView);
+
+        $contactButtonView = $this->queryBus->handle(
+            new ContactSubmenuViewQuery(
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
+                $submenuViewQuery->locale,
+                $submenuViewQuery->sheet,
+                $submenuViewQuery->route,
+                $submenuViewQuery->staticFormulationsIndexByCategories[Category::CONTACT] ?? null
+            )
+        );
+
+        $buttonsViews = array_merge($buttonsViews, $contactButtonView);
 
         $leniBadgeLinkButtonView = $this->queryBus->handle(
             new LeniBadgeLinkSubmenuViewQuery(
