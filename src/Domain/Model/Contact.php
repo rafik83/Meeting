@@ -16,6 +16,12 @@ class Contact
     /** @var \DateTimeInterface */
     private $createdAt;
 
+    /** @var int|null */
+    private $evaluation;
+
+    /** @var string */
+    private $comment = '';
+
     public function __construct(Event $event, User $user, User $contact, \DateTimeInterface $createdAt)
     {
         $this->event = $event;
@@ -42,5 +48,15 @@ class Contact
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function getEvaluation(): ?int
+    {
+        return $this->evaluation;
+    }
+
+    public function getComment(): string
+    {
+        return $this->comment;
     }
 }
