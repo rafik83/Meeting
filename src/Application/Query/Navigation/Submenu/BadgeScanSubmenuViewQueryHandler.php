@@ -33,6 +33,7 @@ class BadgeScanSubmenuViewQueryHandler
     {
         $buttonViews = [];
 
+        $canScan = $query->sheet->getType()->canScanParticipant();
         $badgeScanTitle = Category::BADGE_SCAN;
 
         if (null !== $query->staticFormulation) {
@@ -50,7 +51,7 @@ class BadgeScanSubmenuViewQueryHandler
             ),
             Route::isBadgeScan($query->route),
             false,
-            true
+            $canScan
         );
 
         return $buttonViews;
