@@ -4413,11 +4413,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery }
 
-    Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactSubmenuViewQueryHandler:
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQueryHandler:
         arguments:
             - '@navigation.navigation_builder'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactSubmenuViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery }
 
     query.navigation.sheet_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler

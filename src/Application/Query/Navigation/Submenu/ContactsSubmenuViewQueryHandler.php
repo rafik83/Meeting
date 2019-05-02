@@ -14,16 +14,12 @@ use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
-class ContactSubmenuViewQueryHandler
+class ContactsSubmenuViewQueryHandler
 {
-    /**
-     * @var NavigationBuilderInterface
-     */
+    /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
     /**
-     * ContactSubmenuViewQueryHandler constructor.
-     *
      * @param NavigationBuilderInterface $navigationBuilder
      */
     public function __construct(
@@ -33,22 +29,22 @@ class ContactSubmenuViewQueryHandler
     }
 
     /**
-     * @param ContactSubmenuViewQuery $query
+     * @param ContactsSubmenuViewQuery $query
      *
      * @return SubmenuButtonView[]
      */
-    public function handle(ContactSubmenuViewQuery $query)
+    public function handle(ContactsSubmenuViewQuery $query): array
     {
         $buttonViews = [];
 
         $contactTitle = 'navigation.category.contact';
 
-        if (isset($query->staticFormulationsIndexedByCategory[Category::CONTACT])) {
-            $contactTitle = $query->staticFormulationsIndexedByCategory[Category::CONTACT]->getTitle($query->locale);
+        if (isset($query->staticFormulationsIndexedByCategory[Category::CONTACT_LIST])) {
+            $contactTitle = $query->staticFormulationsIndexedByCategory[Category::CONTACT_LIST]->getTitle($query->locale);
         }
 
         $buttonViews[] = new SubmenuButtonView(
-            Category::CONTACT_ICON,
+            Category::CONTACT_LIST_ICON,
             $contactTitle,
             $this->navigationBuilder->getRoute(
                 'event_contact_index',
@@ -56,7 +52,7 @@ class ContactSubmenuViewQueryHandler
                     'sheet' => $query->sheet->getId(),
                 ]
             ),
-            Route::isContact($query->route),
+            Route::isContactList($query->route),
             false,
             true
         );

@@ -24,23 +24,19 @@ class BadgeScanSubmenuViewQueryHandler
         $this->router = $router;
     }
 
-    /**
-     * @param BadgeScanSubmenuViewQuery $query
-     *
-     * @return SubmenuButtonView[]
-     */
-    public function handle(BadgeScanSubmenuViewQuery $query): array
+    public function handle(BadgeScanSubmenuViewQuery $query): ?SubmenuButtonView
     {
-        $buttonViews = [];
+        if (!$query->sheet->getType()->canScanParticipant() && false) {
+            return null;
+        }
 
-        $canScan = $query->sheet->getType()->canScanParticipant();
         $badgeScanTitle = Category::BADGE_SCAN;
 
         if (null !== $query->staticFormulation) {
             $badgeScanTitle = $query->staticFormulation->getTitle($query->locale);
         }
 
-        $buttonViews[] = new SubmenuButtonView(
+        return new SubmenuButtonView(
             Category::BADGE_SCAN_ICON,
             $badgeScanTitle,
             $this->router->generate(
@@ -51,9 +47,7 @@ class BadgeScanSubmenuViewQueryHandler
             ),
             Route::isBadgeScan($query->route),
             false,
-            $canScan
+            true
         );
-
-        return $buttonViews;
     }
 }

@@ -35,7 +35,7 @@ final class Route
 
     public const PARTICIPANT_ACCOUNT = 'event_account_participant';
 
-    public const CONTACT = 'event_contact_index';
+    public const CONTACT_LIST = 'event_contact_index';
 
     public const CATALOG_INDEX = 'event_catalog_index';
     public const CATALOG_VIEW_OTHER_SHEET = 'event_catalog_complete_sheet';
@@ -136,9 +136,9 @@ final class Route
         return self::BADGE_SCAN === $route;
     }
 
-    public static function isContact(string $route): bool
+    public static function isContactList(string $route): bool
     {
-        return self::CONTACT === $route;
+        return self::CONTACT_LIST === $route;
     }
 
     public static function isHeaderDisplayedOnMobile(string $route): bool

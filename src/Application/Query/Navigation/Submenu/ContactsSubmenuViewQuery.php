@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\StaticFormulation;
 use Proximum\Vimeet\Domain\Model\User;
 
-class ContactSubmenuViewQuery implements Query
+class ContactsSubmenuViewQuery implements Query
 {
     /** @var User */
     public $user;
