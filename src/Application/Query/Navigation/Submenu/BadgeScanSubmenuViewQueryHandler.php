@@ -40,7 +40,7 @@ class BadgeScanSubmenuViewQueryHandler
             $badgeScanTitle = $query->staticFormulation->getTitle($query->locale);
         }
 
-        $buttonViews[] =  new SubmenuButtonView(
+        $buttonViews[] = new SubmenuButtonView(
             Category::BADGE_SCAN_ICON,
             $badgeScanTitle,
             $this->router->generate(

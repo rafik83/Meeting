@@ -104,7 +104,7 @@ class SubmenuViewQueryHandler
             )
         );
 
-        if(null !== $leniBadgeLinkButtonView) {
+        if (null !== $leniBadgeLinkButtonView) {
             $buttonsViews[] = $leniBadgeLinkButtonView;
         }
 

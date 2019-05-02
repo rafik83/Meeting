@@ -53,7 +53,7 @@ class ContactSubmenuViewQueryHandler
             $this->navigationBuilder->getRoute(
                 'event_contact_index',
                 [
-                    'sheet' => $query->sheet->getId()
+                    'sheet' => $query->sheet->getId(),
                 ]
             ),
             Route::isContact($query->route),

@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class BadgeScanSubmenuViewQuery implements Query
 {
-
     /** @var User */
     public $user;
 
