@@ -44,15 +44,15 @@ class GetContactViewQueryHandler
      */
     public function handle(GetContactViewQuery $query): ContactView
     {
-        $contact = $query->contact;
-        $sheetsOfContact = $this->sheetRepository->getSheetsByUserAndEvent($contact, $query->event);
-        $participantOfContact = $this->getParticipant($sheetsOfContact, $contact);
+        $seenUser = $query->contact;
+        $sheetsOfContact = $this->sheetRepository->getSheetsByUserAndEvent($seenUser, $query->event);
+        $participantOfContact = $this->getParticipant($sheetsOfContact, $seenUser);
 
         if (null === $participantOfContact) {
             throw new ContactParticipantNotFoundException();
         }
 
-        if (!$this->canParticipantSeeContact->isSatisfiedBy($query->seerParticipant, $contact)) {
+        if (!$this->canParticipantSeeContact->isSatisfiedBy($query->seerParticipant, $seenUser)) {
             throw new AccessDeniedException();
         }
 
