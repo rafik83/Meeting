@@ -18,9 +18,7 @@ class GetContactListViewQueryHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
     /** @var RequestRepositoryInterface */
