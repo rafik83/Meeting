@@ -66,8 +66,11 @@ class ShowAction
             throw new AccessDeniedException();
         }
 
+        // if owner is logged and is not a participant, it fallback to one of the participant
+        $participant = $sheet->getUserParticipant($userDomain->getUser()) ?? $sheet->getFirstParticipant();
+
         $contactView = $this->queryBus->handle(
-            new GetContactViewQuery($event, $sheet, $contact, $request->getLocale())
+            new GetContactViewQuery($event, $sheet, $participant, $contact, $request->getLocale())
         );
 
         return new Response(

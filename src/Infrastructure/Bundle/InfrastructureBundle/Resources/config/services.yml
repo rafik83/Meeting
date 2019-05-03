@@ -6866,6 +6866,7 @@ services:
             - '@template.participant_info_guesser'
             - '@adapter.router'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Application\Components\Contact\CanParticipantSeeContact'
         tags:
             - { name: tactician.handler, typehints: true }
 

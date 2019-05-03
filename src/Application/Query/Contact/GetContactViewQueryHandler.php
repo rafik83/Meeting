@@ -3,7 +3,9 @@
 namespace Proximum\Vimeet\Application\Query\Contact;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Components\Contact\CanParticipantSeeContact;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -20,14 +22,19 @@ class GetContactViewQueryHandler
     /** @var RouterInterface */
     private $router;
 
+    /** @var CanParticipantSeeContact */
+    private $canParticipantSeeContact;
+
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         RouterInterface $router,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        CanParticipantSeeContact $canParticipantSeeContact
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->router = $router;
         $this->sheetRepository = $sheetRepository;
+        $this->canParticipantSeeContact = $canParticipantSeeContact;
     }
 
     /**
@@ -43,6 +50,10 @@ class GetContactViewQueryHandler
 
         if (null === $participantOfContact) {
             throw new ContactParticipantNotFoundException();
+        }
+
+        if (!$this->canParticipantSeeContact->isSatisfiedBy($query->seerParticipant, $contact)) {
+            throw new AccessDeniedException();
         }
 
         $contactSheetViews = [];
