@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-1945 - Scan the badge of another participant and export contacts list
 - VIMEET-1951 - Add contacts list
 - VIMEET-1957 - Evaluate and comment a contact
+- VIMEET-1958 - Evaluate and comment in contact export 
 
 ## [2.2.0] - 2019-04-26
 ### Changed
