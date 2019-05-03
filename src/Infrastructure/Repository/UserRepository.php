@@ -271,7 +271,8 @@ class UserRepository implements UserRepositoryInterface
                 presenceDate.arrival,
                 presenceDate.departure,
                 COALESCE(presenceDate.hasArrivalHours, false),
-                COALESCE(presenceDate.hasDepartureHours, false)
+                COALESCE(presenceDate.hasDepartureHours, false),
+                sheet.state
             )', UserSheetTypeView::class))
             ->from(User::class, 'user')
             ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')

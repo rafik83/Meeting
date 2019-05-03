@@ -16,15 +16,20 @@ class SheetView
     /** @var string|null */
     public $spotReference;
 
+    /** @var string */
+    public $state;
+
     public function __construct(
         int $id,
         ?string $title,
         string $typeTitle,
-        ?string $spotReference
+        ?string $spotReference,
+        string $state
     ) {
         $this->id = $id;
         $this->title = $title;
         $this->typeTitle = $typeTitle;
         $this->spotReference = $spotReference;
+        $this->state = $state;
     }
 }
