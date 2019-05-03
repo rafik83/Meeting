@@ -27,6 +27,8 @@ class MeetingSheetNormalizer extends AbstractNormalizer implements NormalizerInt
     const COL_PARTICIPANT_LASTNAME = 'participant_lastname';
     const COL_PARTICIPANT_POSITION = 'participant_position';
     const COL_PARTICIPANT_PHONE = 'participant_phone';
+    const COL_CONTACT_COMMENT = 'contact_comment';
+    const COL_CONTACT_EVALUATION = 'contact_evaluation';
     const COL_SHEET_CATEGORY = 'sheet_category';
     const COL_SHEET_TURNOVER = 'sheet_turnover';
     const COL_SHEET_EMPLOYEES = 'sheet_employees';
@@ -113,6 +115,8 @@ class MeetingSheetNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_PARTICIPANT_LASTNAME,
             self::COL_PARTICIPANT_POSITION,
             self::COL_PARTICIPANT_PHONE,
+            self::COL_CONTACT_COMMENT,
+            self::COL_CONTACT_EVALUATION,
             self::COL_SHEET_CATEGORY,
             self::COL_SHEET_TURNOVER,
             self::COL_SHEET_EMPLOYEES,
@@ -140,6 +144,8 @@ class MeetingSheetNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_PARTICIPANT_LASTNAME => $participantView->lastname,
             self::COL_PARTICIPANT_POSITION => $participantView->position,
             self::COL_PARTICIPANT_PHONE => $participantView->phone,
+            self::COL_CONTACT_COMMENT => $participantView->comment,
+            self::COL_CONTACT_EVALUATION => $participantView->evaluation,
             self::COL_SHEET_CATEGORY => $meetingSheetView->category,
             self::COL_SHEET_TURNOVER => $meetingSheetView->turnover,
             self::COL_SHEET_EMPLOYEES => $meetingSheetView->employees,

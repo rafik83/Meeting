@@ -102,11 +102,13 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
             'Taxi driver',
             '+33404',
             'man',
-            'korben@taxi.space'
+            'korben@taxi.space',
+            null,
+            null
         );
         $this->participantsViewQueryHandler
             ->handle(
-                new ParticipantsViewQuery([$sheetMet1Participant->reveal()], 'fr')
+                new ParticipantsViewQuery([$sheetMet1Participant->reveal()], 'fr', [])
             )
             ->shouldBeCalled()
             ->willReturn([$sheetMet1ParticipantView])
@@ -138,7 +140,9 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
             'Archer',
             '+3377',
             'man',
-            'robin@hood.example'
+            'robin@hood.example',
+            null,
+            null
         );
         $sheetMet2ParticipantView2 = new MeetingParticipantView(
             'Jeanne',
@@ -146,7 +150,9 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
             'Ingeneer',
             '+331104',
             'woman',
-            'jeanne@orleans.example'
+            'jeanne@orleans.example',
+            null,
+            null
         );
         $this->participantsViewQueryHandler
             ->handle(
@@ -155,7 +161,8 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                         $sheetMet2Participant1->reveal(),
                         $sheetMet2Participant2->reveal(),
                     ],
-                    'fr'
+                    'fr',
+                    []
                 )
             )
             ->shouldBeCalled()
@@ -261,7 +268,9 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
             'painter',
             '+33999',
             'man',
-            'pablo@picas.so'
+            'pablo@picas.so',
+            3,
+            'Le cubisme'
         );
         $participantOfContactView2 = new MeetingParticipantView(
             'Paloma',
@@ -269,11 +278,13 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
             'painter',
             '+33997',
             'woman',
-            'paloma@picas.so'
+            'paloma@picas.so',
+            4,
+            null
         );
         $this->participantsViewQueryHandler
             ->handle(
-                new ParticipantsViewQuery([$participantOfContact1->reveal(), $participantOfContact2->reveal()], 'fr')
+                new ParticipantsViewQuery([$participantOfContact1->reveal(), $participantOfContact2->reveal()], 'fr', [$contact1->reveal(), $contact2->reveal(), $contact3->reveal()])
             )
             ->shouldBeCalled()
             ->willReturn([$participantOfContactView1, $participantOfContactView2])

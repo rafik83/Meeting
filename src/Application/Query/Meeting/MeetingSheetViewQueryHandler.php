@@ -83,7 +83,8 @@ class MeetingSheetViewQueryHandler
                 $sheetMet,
                 $sheetMet->getParticipantsArray(),
                 $locale,
-                true
+                true,
+                []
             );
         }
 
@@ -103,7 +104,8 @@ class MeetingSheetViewQueryHandler
         $participantsBySheet = [];
         $sheets = [];
 
-        foreach ($this->contactRepository->findByEventAndUser($event, $user) as $contact) {
+        $contacts = $this->contactRepository->findByEventAndUser($event, $user);
+        foreach ($contacts as $contact) {
             $sheetsOfContact = $this->sheetRepository->getSheetsByUserAndEvent($contact, $event);
             $participantOfContact = $this->getParticipantFromSheets($sheetsOfContact, $contact);
 
@@ -134,7 +136,8 @@ class MeetingSheetViewQueryHandler
                 $sheet,
                 $participantsBySheet[$sheetId],
                 $locale,
-                false
+                false,
+                $contacts
             );
         }
 
@@ -146,6 +149,7 @@ class MeetingSheetViewQueryHandler
      * @param Participant[] $participants
      * @param string        $locale
      * @param bool          $hasApprovedMeetingRequestWith
+     * @param User[]         $contacts
      *
      * @return MeetingSheetView
      */
@@ -153,7 +157,8 @@ class MeetingSheetViewQueryHandler
         Sheet $sheet,
         array $participants,
         string $locale,
-        bool $hasApprovedMeetingRequestWith
+        bool $hasApprovedMeetingRequestWith,
+        array $contacts
     ): MeetingSheetView {
         $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($sheet, $locale);
 
@@ -170,7 +175,7 @@ class MeetingSheetViewQueryHandler
             $sheet->getType()->getTitle($locale),
             $hasApprovedMeetingRequestWith,
             $this->participantsViewQueryHandler->handle(
-                new ParticipantsViewQuery($participants, $locale)
+                new ParticipantsViewQuery($participants, $locale, $contacts)
             )
         );
     }
