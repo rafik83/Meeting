@@ -24,11 +24,19 @@ class ContactView
     /** @var ContactSheetView[] */
     public $contactSheetViews;
 
+    /** @var int|null */
+    public $evaluation;
+
+    /** @var string */
+    public $comment;
+
     /**
      * @param string             $firstName
      * @param string             $lastName
      * @param string             $position
      * @param string             $avatar
+     * @param int|null           $evaluation
+     * @param string             $comment
      * @param ContactSheetView[] $contactSheetViews
      */
     public function __construct(
@@ -36,6 +44,8 @@ class ContactView
         string $lastName,
         string $position,
         string $avatar,
+        ?int $evaluation,
+        string $comment,
         array $contactSheetViews
     ) {
         $this->firstName = $firstName;
@@ -44,5 +54,7 @@ class ContactView
         $this->position = $position;
         $this->avatar = $avatar;
         $this->contactSheetViews = $contactSheetViews;
+        $this->evaluation = $evaluation;
+        $this->comment = $comment;
     }
 }

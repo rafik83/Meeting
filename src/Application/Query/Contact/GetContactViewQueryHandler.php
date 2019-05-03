@@ -6,8 +6,10 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Contact\CanParticipantSeeContact;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
+use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
@@ -25,16 +27,26 @@ class GetContactViewQueryHandler
     /** @var CanParticipantSeeContact */
     private $canParticipantSeeContact;
 
+    /** @var ContactRepositoryInterface */
+    private $contactRepository;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         RouterInterface $router,
         SheetRepositoryInterface $sheetRepository,
-        CanParticipantSeeContact $canParticipantSeeContact
+        CanParticipantSeeContact $canParticipantSeeContact,
+        ContactRepositoryInterface $contactRepository,
+        \DateTimeInterface $dateTime
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->router = $router;
         $this->sheetRepository = $sheetRepository;
         $this->canParticipantSeeContact = $canParticipantSeeContact;
+        $this->contactRepository = $contactRepository;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -54,6 +66,14 @@ class GetContactViewQueryHandler
 
         if (!$this->canParticipantSeeContact->isSatisfiedBy($query->seerParticipant, $seenUser)) {
             throw new AccessDeniedException();
+        }
+
+        $contactQuery = new Contact($query->event, $query->seerParticipant->getUser(), $seenUser, $this->dateTime);
+        $contact = $this->contactRepository->find($contactQuery);
+
+        if (null === $contact) {
+            $this->contactRepository->add($contactQuery);
+            $contact = $contactQuery;
         }
 
         $contactSheetViews = [];
@@ -77,6 +97,8 @@ class GetContactViewQueryHandler
             $infos[Tag::PARTICIPANT_LASTNAME],
             $infos[Tag::PARTICIPANT_POSITION],
             $infos[Tag::PARTICIPANT_AVATAR],
+            $contact->getEvaluation(),
+            $contact->getComment(),
             $contactSheetViews
         );
     }

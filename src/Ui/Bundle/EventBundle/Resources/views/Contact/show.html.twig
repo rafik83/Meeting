@@ -26,6 +26,14 @@
                                     <a href="{{ contactSheetView.url }}">{{ contactSheetView.title }}</a>{{ not loop.last ? ', ' : '' }}
                                 {% endfor %}
                             </p>
+                            <p>
+                                {{ 'contact.show.evaluation'|trans }} :<br/>
+                                {{ contactView.evaluation }}
+                            </p>
+                            <p>
+                                {{ 'contact.show.comment'|trans }} :<br/>
+                                {{ contactView.comment }}
+                            </p>
                         </div>
                     </div>
                 </div>

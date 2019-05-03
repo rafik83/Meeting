@@ -6867,6 +6867,8 @@ services:
             - '@adapter.router'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@Proximum\Vimeet\Application\Components\Contact\CanParticipantSeeContact'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, typehints: true }
 
