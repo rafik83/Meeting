@@ -23,7 +23,7 @@
                 {% for contactPreview in contactListView %}
                     <tr>
                         <td>
-                            <div class="user clearfix">
+                            <a class="user clearfix" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contact': contactPreview.contactId}) }}">
                                 <div class="user__avatar">
                                     <div class="avatar">
                                         {% if contactPreview.avatar %}
@@ -44,7 +44,7 @@
                                     </p>
                                     <p class="name">{{ contactPreview.firstName|capitalize }} {{ contactPreview.lastName|upper }}</p>
                                 </div>
-                            </div>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}
