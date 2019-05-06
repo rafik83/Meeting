@@ -77,8 +77,8 @@ class ShowAction
             $this->engine->render(
                 '@Event/Contact/show.html.twig',
                 [
-                    'event' => $event,
-                    'sheet' => $sheet,
+                    'event'       => $event,
+                    'sheet'       => $sheet,
                     'contactView' => $contactView,
                 ]
             )
