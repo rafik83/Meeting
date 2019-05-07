@@ -68,9 +68,10 @@ class GetContactViewQueryHandler
             throw new AccessDeniedException();
         }
 
-        $contactQuery = new Contact($query->event, $query->seerParticipant->getUser(), $seenUser, $this->dateTime);
+        $contactQuery = new Contact($query->event, $query->seerParticipant->getUser(), $seenUser, $this->dateTime, false);
         $contact = $this->contactRepository->find($contactQuery);
 
+        // if contact is not found, it's because it was met during a meeting
         if (null === $contact) {
             $this->contactRepository->add($contactQuery);
             $contact = $contactQuery;

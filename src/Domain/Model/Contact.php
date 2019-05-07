@@ -22,12 +22,16 @@ class Contact
     /** @var string */
     private $comment = '';
 
-    public function __construct(Event $event, User $user, User $contact, \DateTimeInterface $createdAt)
+    /** @var bool */
+    private $scanned;
+
+    public function __construct(Event $event, User $user, User $contact, \DateTimeInterface $createdAt, bool $scanned = false)
     {
         $this->event = $event;
         $this->user = $user;
         $this->contact = $contact;
         $this->createdAt = $createdAt;
+        $this->scanned = $scanned;
     }
 
     public function getEvent(): Event
@@ -58,5 +62,10 @@ class Contact
     public function getComment(): string
     {
         return $this->comment;
+    }
+
+    public function isScanned(): bool
+    {
+        return $this->scanned;
     }
 }

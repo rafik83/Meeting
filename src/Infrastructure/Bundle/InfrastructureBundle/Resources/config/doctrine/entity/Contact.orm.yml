@@ -19,6 +19,9 @@ Proximum\Vimeet\Domain\Model\Contact:
             type: text
             options:
                 default: ''
+        scanned:
+            type: boolean
+            nullable: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
