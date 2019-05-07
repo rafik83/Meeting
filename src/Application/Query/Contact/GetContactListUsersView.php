@@ -7,14 +7,14 @@ use Proximum\Vimeet\Domain\Model\User;
 class GetContactListUsersView
 {
     /** @var User[] */
-    public $scannedUsers;
+    public $inContactsUsers;
 
     /** @var User[] */
     public $requestsUsers;
 
     public function __construct(array $scannedUsers, array $requestsUsers)
     {
-        $this->scannedUsers = $scannedUsers;
+        $this->inContactsUsers = $scannedUsers;
         $this->requestsUsers = $requestsUsers;
     }
 }

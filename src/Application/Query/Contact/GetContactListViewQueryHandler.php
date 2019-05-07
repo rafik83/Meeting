@@ -42,7 +42,7 @@ class GetContactListViewQueryHandler
         );
 
         /** @var User[] $metUsers */
-        $metUsers = array_merge($usersView->requestsUsers, $usersView->scannedUsers);
+        $metUsers = array_merge($usersView->requestsUsers, $usersView->inContactsUsers);
 
         // convert users to view
         $contactListView = [];

@@ -23,7 +23,7 @@ class CanParticipantSeeContact
             new GetContactListUsersViewQuery($seerParticipant->getEvent(), $seerParticipant)
         );
 
-        $metUsers = array_merge($usersView->scannedUsers, $usersView->requestsUsers);
+        $metUsers = array_merge($usersView->inContactsUsers, $usersView->requestsUsers);
 
         return \in_array($seenUser, $metUsers, true);
     }
