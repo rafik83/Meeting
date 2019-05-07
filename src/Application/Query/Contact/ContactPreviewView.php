@@ -27,6 +27,9 @@ class ContactPreviewView
     /** @var bool */
     public $hasApprovedMeetingRequestWith;
 
+    /** @var bool */
+    public $needEvaluation;
+
     /**
      * @param int      $contactId
      * @param string   $firstName
@@ -34,6 +37,7 @@ class ContactPreviewView
      * @param string   $avatar
      * @param string[] $sheetTitles
      * @param bool     $hasApprovedMeetingRequestWith
+     * @param bool     $needEvaluation
      */
     public function __construct(
         int $contactId,
@@ -41,7 +45,8 @@ class ContactPreviewView
         string $lastName,
         string $avatar,
         array $sheetTitles,
-        bool $hasApprovedMeetingRequestWith
+        bool $hasApprovedMeetingRequestWith,
+        bool $needEvaluation
     ) {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -50,5 +55,6 @@ class ContactPreviewView
         $this->sheetTitles = $sheetTitles;
         $this->hasApprovedMeetingRequestWith = $hasApprovedMeetingRequestWith;
         $this->contactId = $contactId;
+        $this->needEvaluation = $needEvaluation;
     }
 }

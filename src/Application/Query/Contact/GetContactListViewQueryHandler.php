@@ -76,7 +76,8 @@ class GetContactListViewQueryHandler
                 $infos[Tag::PARTICIPANT_LASTNAME],
                 $infos[Tag::PARTICIPANT_AVATAR],
                 $contactSheetViews,
-                \in_array($contact, $usersView->requestsUsers, true)
+                \in_array($contact, $usersView->requestsUsers, true),
+                !\in_array($contact, $usersView->inContactsUsers, true)
             );
         }
 

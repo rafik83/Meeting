@@ -35,6 +35,11 @@ class ContactRepository implements ContactRepositoryInterface
         $this->entityManager->flush($contact);
     }
 
+    public function set(Contact $contact): void
+    {
+        $this->entityManager->flush($contact);
+    }
+
     public function find(Contact $contact): ?Contact
     {
         return $this

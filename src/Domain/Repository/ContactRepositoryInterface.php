@@ -18,6 +18,8 @@ interface ContactRepositoryInterface
 {
     public function add(Contact $contact): void;
 
+    public function set(Contact $contact): void;
+
     public function find(Contact $contact): ?Contact;
 
     /**

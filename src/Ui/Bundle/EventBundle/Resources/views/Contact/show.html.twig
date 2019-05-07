@@ -26,6 +26,11 @@
                                     <a href="{{ contactSheetView.url }}">{{ contactSheetView.title }}</a>{{ not loop.last ? ', ' : '' }}
                                 {% endfor %}
                             </p>
+                            {% if form is not null %}
+                                {{ form_start(form) }}
+                                {{ form_widget(form.evaluation) }}
+                                {{ form_end(form) }}
+                            {% else %}
                             <p>
                                 {{ 'contact.show.evaluation'|trans }} :<br/>
                                 {{ contactView.evaluation }}
@@ -34,6 +39,7 @@
                                 {{ 'contact.show.comment'|trans }} :<br/>
                                 {{ contactView.comment }}
                             </p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

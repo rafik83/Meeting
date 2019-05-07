@@ -68,4 +68,9 @@ class Contact
     {
         return $this->scanned;
     }
+
+    public function setEvaluation(int $evaluation): void
+    {
+        $this->evaluation = $evaluation;
+    }
 }
