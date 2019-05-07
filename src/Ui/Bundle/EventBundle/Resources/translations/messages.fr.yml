@@ -92,6 +92,7 @@ common.next: Suivant
 common.required_formats: '{1} Le format requis est : %format%|[1, Inf[Les formats requis sont : %format%'
 common.update: Modifier
 common.validate: Valider
+contact.edit.later: Plus tard
 contact.show.comment: Mon commentaire
 contact.show.evaluation: Qualité du contact
 contacts.list.title: Contacts

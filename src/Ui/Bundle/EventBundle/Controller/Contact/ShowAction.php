@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Contact\EditEvaluation;
+use Proximum\Vimeet\Application\Query\Contact\ContactView;
 use Proximum\Vimeet\Application\Query\Contact\GetContactViewQuery;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -105,6 +106,7 @@ class ShowAction
         // if owner is logged and is not a participant, it fallback to one of the participant
         $participant = $sheet->getUserParticipant($userDomain->getUser()) ?? $sheet->getFirstParticipant();
 
+        /** @var ContactView $contactView */
         $contactView = $this->queryBus->handle(
             new GetContactViewQuery($event, $sheet, $participant, $contactUser, $request->getLocale())
         );

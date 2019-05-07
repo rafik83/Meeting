@@ -94,6 +94,7 @@ class GetContactViewQueryHandler
         $infos = $this->participantInfoGuesser->guessParticipantInfos($participantOfContact, $query->locale);
 
         return new ContactView(
+            $seenUser->getId(),
             $infos[Tag::PARTICIPANT_FIRSTNAME],
             $infos[Tag::PARTICIPANT_LASTNAME],
             $infos[Tag::PARTICIPANT_POSITION],

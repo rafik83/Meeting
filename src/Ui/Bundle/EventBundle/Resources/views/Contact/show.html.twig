@@ -30,6 +30,7 @@
                                 {{ form_start(form) }}
                                 {{ form_widget(form.evaluation) }}
                                 {{ form_end(form) }}
+                                <a class="btn btn-default" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId}) }}">{{ 'contact.edit.later'|trans }}</a>
                             {% else %}
                             <p>
                                 {{ 'contact.show.evaluation'|trans }} :<br/>

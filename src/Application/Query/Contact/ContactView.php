@@ -6,6 +6,9 @@ use Proximum\Vimeet\Domain\Participant\GetParticipantInitials;
 
 class ContactView
 {
+    /** @var int */
+    public $seenUserId;
+
     /** @var string */
     public $firstName;
 
@@ -31,6 +34,7 @@ class ContactView
     public $comment;
 
     /**
+     * @param int                $seenUserId
      * @param string             $firstName
      * @param string             $lastName
      * @param string             $position
@@ -40,6 +44,7 @@ class ContactView
      * @param ContactSheetView[] $contactSheetViews
      */
     public function __construct(
+        int $seenUserId,
         string $firstName,
         string $lastName,
         string $position,
@@ -48,6 +53,7 @@ class ContactView
         string $comment,
         array $contactSheetViews
     ) {
+        $this->seenUserId = $seenUserId;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->initials = (new GetParticipantInitials())($firstName, $lastName);

@@ -73,6 +73,8 @@ class GetContactViewQueryHandlerTest extends TestCase
         $this->contact->getEvaluation()->willReturn(null);
         $this->contact->getComment()->willReturn('hello');
 
+        $this->contactUser->getId()->willReturn(314);
+
         $this->participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -156,6 +158,7 @@ class GetContactViewQueryHandlerTest extends TestCase
 
         $this->assertEquals(
             new ContactView(
+                314,
                 'Korben',
                 'Dallas',
                 'Taxi driver',
