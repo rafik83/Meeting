@@ -284,6 +284,6 @@ class MeetingViewQueryHandlerTest extends TestCase
                 'moving_allowed'
             )
         );
-        $this->assertEquals([$meetingView1, $meetingView2], $results);
+        $this->assertEquals([$meetingView2, $meetingView1], $results);
     }
 }
