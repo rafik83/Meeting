@@ -26,7 +26,7 @@ class BadgeScanSubmenuViewQueryHandler
 
     public function handle(BadgeScanSubmenuViewQuery $query): ?SubmenuButtonView
     {
-        if (!$query->sheet->getType()->canScanParticipant() && false) {
+        if (!$query->sheet->getType()->canScanParticipant()) {
             return null;
         }
 

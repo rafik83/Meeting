@@ -28,22 +28,15 @@ class ContactsSubmenuViewQueryHandler
         $this->navigationBuilder = $navigationBuilder;
     }
 
-    /**
-     * @param ContactsSubmenuViewQuery $query
-     *
-     * @return SubmenuButtonView[]
-     */
-    public function handle(ContactsSubmenuViewQuery $query): array
+    public function handle(ContactsSubmenuViewQuery $query): ?SubmenuButtonView
     {
-        $buttonViews = [];
-
         $contactTitle = 'navigation.category.contact';
 
         if (isset($query->staticFormulationsIndexedByCategory[Category::CONTACT_LIST])) {
             $contactTitle = $query->staticFormulationsIndexedByCategory[Category::CONTACT_LIST]->getTitle($query->locale);
         }
 
-        $buttonViews[] = new SubmenuButtonView(
+        return new SubmenuButtonView(
             Category::CONTACT_LIST_ICON,
             $contactTitle,
             $this->navigationBuilder->getRoute(
@@ -56,7 +49,5 @@ class ContactsSubmenuViewQueryHandler
             false,
             true
         );
-
-        return $buttonViews;
     }
 }

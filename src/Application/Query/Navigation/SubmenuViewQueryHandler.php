@@ -95,7 +95,9 @@ class SubmenuViewQueryHandler
             )
         );
 
-        $buttonsViews = array_merge($buttonsViews, $contactButtonView);
+        if (null !== $contactButtonView) {
+            $buttonsViews[] = $contactButtonView;
+        }
 
         $leniBadgeLinkButtonView = $this->queryBus->handle(
             new LeniBadgeLinkSubmenuViewQuery(
