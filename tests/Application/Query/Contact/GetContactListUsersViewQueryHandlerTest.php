@@ -68,7 +68,7 @@ class GetContactListUsersViewQueryHandlerTest extends TestCase
             ->willReturn([$participant->reveal()])
         ;
 
-        $contactRepository->findByEventAndUser($event->reveal(), $participantUser->reveal())
+        $contactRepository->findSeenUserByEventAndUser($event->reveal(), $participantUser->reveal())
             ->willReturn([$requestedUser->reveal(), $scannedUser->reveal()])
         ;
 

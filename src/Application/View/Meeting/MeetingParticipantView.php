@@ -45,8 +45,8 @@ class MeetingParticipantView
      * @param string       $phone
      * @param string       $gender
      * @param              $email
-     * @param integer|null $evaluation
-     * @param string|null  $comment
+     * @param int|null $evaluation
+     * @param string $comment
      */
     public function __construct($firstname, $lastname, $position, $phone, $gender, $email, $evaluation, $comment)
     {

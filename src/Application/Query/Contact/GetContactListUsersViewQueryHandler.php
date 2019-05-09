@@ -73,6 +73,6 @@ class GetContactListUsersViewQueryHandler
      */
     private function getFromContacts(Event $event, User $user): array
     {
-        return $this->contactRepository->findByEventAndUser($event, $user);
+        return $this->contactRepository->findSeenUserByEventAndUser($event, $user);
     }
 }

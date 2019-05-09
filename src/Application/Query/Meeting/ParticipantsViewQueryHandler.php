@@ -59,7 +59,7 @@ class ParticipantsViewQueryHandler
             $participantContactEvaluation = null;
             $participantContactComment = null;
             foreach ($query->contacts as $contact) {
-                if ($participant->getUser()->getId() === $contact->getId()) {
+                if ($participant->getUser()->getId() === $contact->getContact()->getId()) {
                     $participantContactEvaluation = $contact->getEvaluation();
                     $participantContactComment = $contact->getComment();
                     break;
@@ -73,7 +73,7 @@ class ParticipantsViewQueryHandler
                 $participantInfo[Tag::PARTICIPANT_LASTNAME],
                 $participantInfo[Tag::PARTICIPANT_POSITION],
                 $participantInfo[Tag::PARTICIPANT_PHONE],
-                $this->translator->trans('gender.'.$gender, [], 'messages'),
+                $gender ? $this->translator->trans('gender.'.$gender, [], 'messages') : '',
                 $participant->getEmail(),
                 $participantContactEvaluation,
                 $participantContactComment
