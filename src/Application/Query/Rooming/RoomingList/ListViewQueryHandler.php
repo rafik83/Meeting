@@ -128,7 +128,7 @@ class ListViewQueryHandler
             $userSheetTypeView->sheetTitle,
             $userSheetTypeView->typeTitle,
             $userSheetTypeView->spotReference,
-            $userSheetTypeView->state
+            $userSheetTypeView->sheetState
         );
     }
 

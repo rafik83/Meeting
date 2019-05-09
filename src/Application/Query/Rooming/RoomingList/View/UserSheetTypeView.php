@@ -38,7 +38,7 @@ class UserSheetTypeView
     public $hasDepartureHours;
 
     /** @var string */
-    public $state;
+    public $sheetState;
 
     public function __construct(
         int $userId,
@@ -52,7 +52,7 @@ class UserSheetTypeView
         ?\DateTimeInterface $departure,
         bool $hasArrivalHours,
         bool $hasDepartureHours,
-        string $state
+        string $sheetState
     ) {
         $this->userId = $userId;
         $this->sheetId = $sheetId;
@@ -65,6 +65,6 @@ class UserSheetTypeView
         $this->departure = $departure;
         $this->hasArrivalHours = $hasArrivalHours;
         $this->hasDepartureHours = $hasDepartureHours;
-        $this->state = $state;
+        $this->sheetState = $sheetState;
     }
 }
