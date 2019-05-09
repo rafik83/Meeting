@@ -6861,6 +6861,12 @@ services:
     #
     # Contact
     #
+    Proximum\Vimeet\Application\Command\Contact\EditCommentHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     Proximum\Vimeet\Application\Command\Contact\EditEvaluationHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'

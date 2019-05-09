@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Contact\EditComment;
 use Proximum\Vimeet\Application\Command\Contact\EditEvaluation;
 use Proximum\Vimeet\Application\Query\Contact\ContactView;
 use Proximum\Vimeet\Application\Query\Contact\GetContactViewQuery;
@@ -24,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet;
 use Proximum\Vimeet\Infrastructure\Adapter\CommandBus;
 use Proximum\Vimeet\Infrastructure\Adapter\RouterAdapter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Contact\CommentType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Contact\EvaluationType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -40,6 +42,8 @@ class ShowAction
 {
     public const MODE_QUERY_KEY = 'mode';
     public const MODE_EDIT_EVALUATION = 'evaluation';
+    public const MODE_EDIT_COMMENT = 'comment';
+    public const MODE_VIEW = 'view';
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
@@ -106,30 +110,62 @@ class ShowAction
             throw new AccessDeniedException();
         }
 
+        $mode = $request->query->get(self::MODE_QUERY_KEY, self::MODE_VIEW);
+        if (!\in_array($mode, [self::MODE_EDIT_COMMENT, self::MODE_EDIT_EVALUATION, self::MODE_VIEW], true)) {
+            throw new AccessDeniedException();
+        }
+
         // if owner is logged and is not a participant, it fallback to one of the participant
         $participant = $sheet->getUserParticipant($userDomain->getUser()) ?? $sheet->getFirstParticipant();
 
+        $contact = $this->getContact($contactUser, $event, $participant);
+
+        if (null === $contact) {
+            throw new AccessDeniedException();
+        }
+
         /** @var FormInterface $ratingForm */
         /** @var EditEvaluation $editEvaluationCommand */
-        [$editEvaluationCommand, $ratingForm] = $this->prepareRatingForm($request, $contactUser, $event, $participant);
+        [$editEvaluationCommand, $ratingForm] = $this->prepareRatingForm($request, $sheet, $contact, $mode);
 
         if ($ratingForm->isSubmitted() && $ratingForm->isValid()) {
             $this->commandBus->handle($editEvaluationCommand);
 
-            return new RedirectResponse(
-                $this->router->generate(
-                    'event_contact_show',
-                    ['sheet' => $sheet->getId(), 'contactUser' => $contactUser->getId()]
-                )
-            );
+            $routeParameters = ['sheet' => $sheet->getId(), 'contactUser' => $contactUser->getId()];
+
+            if ($mode !== self::MODE_EDIT_COMMENT) {
+                return new RedirectResponse(
+                    $this->router->generate(
+                        'event_contact_show',
+                        $routeParameters
+                    )
+                );
+            }
+        }
+
+        $commentFormView = null;
+        if ($mode === self::MODE_EDIT_COMMENT) {
+            /** @var FormInterface $commentForm */
+            /** @var EditComment $editCommentCommand */
+            [$editCommentCommand, $commentForm] = $this->prepareCommentForm($request, $contact);
+
+            if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+                $this->commandBus->handle($editCommentCommand);
+
+                return new RedirectResponse(
+                    $this->router->generate(
+                        'event_contact_show',
+                        ['sheet' => $sheet->getId(), 'contactUser' => $contactUser->getId()]
+                    )
+                );
+            }
+            $commentFormView = $commentForm->createView();
         }
 
         /** @var ContactView $contactView */
         $contactView = $this->queryBus->handle(
             new GetContactViewQuery($event, $sheet, $participant, $contactUser, $request->getLocale())
         );
-
-        $mode = $request->query->get(self::MODE_QUERY_KEY);
 
         return new Response(
             $this->engine->render(
@@ -139,35 +175,49 @@ class ShowAction
                     'sheet'       => $sheet,
                     'contactView' => $contactView,
                     'ratingForm'  => $ratingForm->createView(),
+                    'commentForm' => $commentFormView,
                     'mode'        => $mode,
                 ]
             )
         );
     }
 
-    /**
-     * @param Request     $request
-     * @param User        $contactUser
-     * @param Event       $event
-     * @param Participant $participant
-     *
-     * @return array
-     */
-    protected function prepareRatingForm(
-        Request $request,
-        User $contactUser,
-        Event $event,
-        Participant $participant
-    ): array {
+    protected function getContact(User $contactUser, Event $event, Participant $participant): ?Contact
+    {
         $contactQuery = new Contact($event, $participant->getUser(), $contactUser, $this->dateTime);
-        $contact = $this->contactRepository->find($contactQuery);
 
-        if (null === $contact) {
-            throw new AccessDeniedException();
+        return $this->contactRepository->find($contactQuery);
+    }
+
+    protected function prepareRatingForm(Request $request, Sheet $sheet, Contact $contact, string $mode): array
+    {
+        $options = [];
+
+        if ($mode === self::MODE_EDIT_EVALUATION) {
+            $options = [
+                'action' => $this->router->generate(
+                    'event_contact_show',
+                    [
+                        'sheet'              => $sheet->getId(),
+                        'contactUser'        => $contact->getContact()->getId(),
+                        self::MODE_QUERY_KEY => self::MODE_EDIT_COMMENT,
+                    ]
+                ),
+            ];
         }
 
         $editEvaluationCommand = new EditEvaluation($contact, $contact->getEvaluation());
-        $ratingForm = $this->formFactory->create(EvaluationType::class, $editEvaluationCommand);
+        $ratingForm = $this->formFactory->create(EvaluationType::class, $editEvaluationCommand, $options);
+
+        $ratingForm->handleRequest($request);
+
+        return array($editEvaluationCommand, $ratingForm);
+    }
+
+    protected function prepareCommentForm(Request $request, Contact $contact): array
+    {
+        $editEvaluationCommand = new EditComment($contact, $contact->getComment());
+        $ratingForm = $this->formFactory->create(CommentType::class, $editEvaluationCommand);
 
         $ratingForm->handleRequest($request);
 

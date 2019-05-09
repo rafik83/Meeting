@@ -32,18 +32,25 @@
                                 {{ form_widget(ratingForm.evaluation) }}
                                 {{ form_end(ratingForm) }}
                                 {% if mode == constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_EVALUATION') %}
-                                    <a class="btn btn-default" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId}) }}">{{ 'contact.edit.later'|trans }}</a>
+                                    <a class="btn btn-default" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId, (constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_QUERY_KEY')): constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_COMMENT')}) }}">{{ 'contact.edit.later'|trans }}</a>
                                 {% else %}
                                     {% if contactView.evaluation is not null %}
                                     <i>{{ ('contact.show.evaluation.'~contactView.evaluation~'.label')|trans }}</i>
                                     {% endif %}
                                 {% endif %}
                             </p>
-                            {% if mode != constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_EVALUATION') %}
+                            {% if mode == constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_VIEW') %}
                             <p>
                                 {{ 'contact.show.comment'|trans }} :<br/>
-                                {{ contactView.comment }}
+                                <comment>{{ contactView.comment }}</comment><br/>
                             </p>
+                            {% endif %}
+                            {% if commentForm is not null%}
+                                {{ 'contact.show.comment'|trans }} :<br/>
+                                {{ form_start(commentForm) }}
+                                {{ form_widget(commentForm.comment) }}
+                                {{ form_end(commentForm) }}
+                                <a class="btn btn-default" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId}) }}">{{ 'contact.edit.later'|trans }}</a>
                             {% endif %}
                         </div>
                     </div>
