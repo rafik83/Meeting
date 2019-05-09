@@ -118,11 +118,12 @@ class ShowAction
         // if owner is logged and is not a participant, it fallback to one of the participant
         $participant = $sheet->getUserParticipant($userDomain->getUser()) ?? $sheet->getFirstParticipant();
 
-        $contact = $this->getContact($contactUser, $event, $participant);
+        /** @var ContactView $contactView */
+        $contactView = $this->queryBus->handle(
+            new GetContactViewQuery($event, $sheet, $participant, $contactUser, $request->getLocale())
+        );
 
-        if (null === $contact) {
-            throw new AccessDeniedException();
-        }
+        $contact = $this->getContact($contactUser, $event, $participant);
 
         /** @var FormInterface $ratingForm */
         /** @var EditEvaluation $editEvaluationCommand */
@@ -162,11 +163,6 @@ class ShowAction
             $commentFormView = $commentForm->createView();
         }
 
-        /** @var ContactView $contactView */
-        $contactView = $this->queryBus->handle(
-            new GetContactViewQuery($event, $sheet, $participant, $contactUser, $request->getLocale())
-        );
-
         return new Response(
             $this->engine->render(
                 '@Event/Contact/show.html.twig',
@@ -182,7 +178,7 @@ class ShowAction
         );
     }
 
-    protected function getContact(User $contactUser, Event $event, Participant $participant): ?Contact
+    protected function getContact(User $contactUser, Event $event, Participant $participant): Contact
     {
         $contactQuery = new Contact($event, $participant->getUser(), $contactUser, $this->dateTime);
 
