@@ -17,7 +17,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
-class ContactListQueryHandlerTest extends TestCase
+class GetContactListViewQueryHandlerTest extends TestCase
 {
     public function testHandle(): void
     {
