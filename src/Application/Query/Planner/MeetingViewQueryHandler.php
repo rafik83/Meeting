@@ -49,6 +49,9 @@ class MeetingViewQueryHandler
     /** @var SlotView[] */
     private $slots;
 
+    /** @var array */
+    private $participantsMatched = [];
+
     /**
      * @param RequestRepositoryInterface $requestRepository
      */
@@ -65,10 +68,31 @@ class MeetingViewQueryHandler
     public function handle(MeetingViewQuery $query)
     {
         $this->setUp($query);
-        $meetingViews = [];
-        $participantsMatched = [];
+
+        $requestsWithMeeting = [];
+        $requestsWithoutMeeting = [];
 
         foreach ($this->requests as $request) {
+            if ($request->hasMeeting()) {
+                $requestsWithMeeting[$request->getId()] = $request;
+
+                continue;
+            }
+
+            $requestsWithoutMeeting[$request->getId()] = $request;
+        }
+
+        return array_merge(
+            $this->handleRequests($query, $requestsWithMeeting),
+            $this->handleRequests($query, $requestsWithoutMeeting)
+        );
+    }
+
+    private function handleRequests(MeetingViewQuery $query, array $requests): array
+    {
+        $meetingViews = [];
+
+        foreach ($requests as $request) {
             try {
                 $sheetsList = [
                     $this->getSheetById($request->getFromSheet()->getId()),
@@ -88,20 +112,11 @@ class MeetingViewQueryHandler
                         $tempParticipantMatched[$fromParticipant->userId][$toParticipant->userId] = $toParticipant->userId;
                         $tempParticipantMatched[$toParticipant->userId][$fromParticipant->userId] = $fromParticipant->userId;
 
-                        if (isset($participantsMatched[$fromParticipant->userId][$toParticipant->userId]) ||
-                            isset($participantsMatched[$toParticipant->userId][$fromParticipant->userId])) {
+                        if (isset($this->participantsMatched[$fromParticipant->userId][$toParticipant->userId]) ||
+                            isset($this->participantsMatched[$toParticipant->userId][$fromParticipant->userId])
+                        ) {
                             continue 3;
                         }
-                    }
-                }
-
-                foreach ($tempParticipantMatched as $key => $ids) {
-                    if (isset($participantsMatched[$key])) {
-                        foreach($ids as $id) {
-                            $participantsMatched[$key][$id] = $id;
-                        }
-                    } else {
-                        $participantsMatched[$key] = $ids;
                     }
                 }
 
@@ -141,10 +156,19 @@ class MeetingViewQueryHandler
                     }
                 }
 
+                foreach ($tempParticipantMatched as $key => $ids) {
+                    if (!isset($this->participantsMatched[$key])) {
+                        $this->participantsMatched[$key] = [];
+                    }
+
+                    foreach($ids as $id) {
+                        $this->participantsMatched[$key][$id] = $meetingView;
+                    }
+                }
+
                 $meetingViews[] = $meetingView;
             } catch (SheetNotFoundException $exception) {
                 // In case of a sheet not in catalog but with meeting request
-                continue;
             }
         }
 

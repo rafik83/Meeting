@@ -285,7 +285,7 @@ class ImportHandler
      *
      * @return null|Meeting
      */
-    private function handleMeeting(Event $event, MeetingResult $meetingResult)
+    private function handleMeeting(Event $event, MeetingResult $meetingResult): ?Meeting
     {
         if (!isset($this->sheets[$meetingResult->sheetFrom->id])
             || !isset($this->sheets[$meetingResult->sheetTo->id])
@@ -311,10 +311,6 @@ class ImportHandler
             $participantFrom = ParticipantFinder::getParticipantWithUserId($sheetFrom, (int) $userResult->id);
             $participantTo   = ParticipantFinder::getParticipantWithUserId($sheetTo, (int) $userResult->id);
 
-            if ((null === $participantFrom && null === $participantTo)) {
-                return null; // Participant of the meeting not found
-            }
-
             if (null !== $participantFrom) {
                 $participantsFrom[] = $participantFrom;
             }
@@ -322,6 +318,10 @@ class ImportHandler
             if (null !== $participantTo) {
                 $participantsTo[] = $participantTo;
             }
+        }
+
+        if (empty($participantsTo) || empty($participantsFrom)) {
+            return null;
         }
 
         $meeting = new Meeting(
