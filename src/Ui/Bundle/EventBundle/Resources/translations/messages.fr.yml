@@ -95,6 +95,11 @@ common.validate: Valider
 contact.edit.later: Plus tard
 contact.show.comment: Mon commentaire
 contact.show.evaluation: Qualité du contact
+contact.show.evaluation.1.label: Rdv manqué
+contact.show.evaluation.2.label: Non pertinent
+contact.show.evaluation.3.label: Pertinent à long terme
+contact.show.evaluation.4.label: A relancer à moyen terme
+contact.show.evaluation.5.label: A revoir très vite
 contacts.list.title: Contacts
 error.403.content: 'Vous n''êtes pas autorisé à accéder à ce contenu.'
 error.403.title: 'Non autorisé'

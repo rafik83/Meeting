@@ -33,6 +33,10 @@
                                 {{ form_end(ratingForm) }}
                                 {% if mode == constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_EVALUATION') %}
                                     <a class="btn btn-default" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId}) }}">{{ 'contact.edit.later'|trans }}</a>
+                                {% else %}
+                                    {% if contactView.evaluation is not null %}
+                                    <i>{{ ('contact.show.evaluation.'~contactView.evaluation~'.label')|trans }}</i>
+                                    {% endif %}
                                 {% endif %}
                             </p>
                             {% if mode != constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_EVALUATION') %}
