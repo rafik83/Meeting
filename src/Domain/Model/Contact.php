@@ -19,8 +19,8 @@ class Contact
     /** @var int|null */
     private $evaluation;
 
-    /** @var string */
-    private $comment = '';
+    /** @var string|null */
+    private $comment;
 
     /** @var bool */
     private $scanned;
@@ -59,7 +59,7 @@ class Contact
         return $this->evaluation;
     }
 
-    public function getComment(): string
+    public function getComment(): ?string
     {
         return $this->comment;
     }

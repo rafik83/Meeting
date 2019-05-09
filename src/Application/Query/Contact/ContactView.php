@@ -30,7 +30,7 @@ class ContactView
     /** @var int|null */
     public $evaluation;
 
-    /** @var string */
+    /** @var string|null */
     public $comment;
 
     /**
@@ -40,7 +40,7 @@ class ContactView
      * @param string             $position
      * @param string             $avatar
      * @param int|null           $evaluation
-     * @param string             $comment
+     * @param string|null        $comment
      * @param ContactSheetView[] $contactSheetViews
      */
     public function __construct(
@@ -50,7 +50,7 @@ class ContactView
         string $position,
         string $avatar,
         ?int $evaluation,
-        string $comment,
+        ?string $comment,
         array $contactSheetViews
     ) {
         $this->seenUserId = $seenUserId;

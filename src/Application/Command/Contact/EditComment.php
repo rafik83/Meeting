@@ -10,10 +10,10 @@ class EditComment implements Command
     /** @var Contact */
     public $contact;
 
-    /** @var string */
+    /** @var string|null */
     public $comment;
 
-    public function __construct(Contact $contact, string $comment)
+    public function __construct(Contact $contact, ?string $comment)
     {
         $this->contact = $contact;
         $this->comment = $comment;
