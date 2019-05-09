@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Block meeting slot and spot for VIMEET-1955: Scheduling meetings from requests unanimously accepted by linked sheets
 - MV-173 - Check participants of linked sheets instead of only participants of the sheet
+- MV-175 - Fix batch print sheets pdf
 ### Added
 - VIMEET-1945 - Scan the badge of another participant and export contacts list
 - VIMEET-1951 - Add contacts list
