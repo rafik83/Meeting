@@ -26,16 +26,16 @@
                                     <a href="{{ contactSheetView.url }}">{{ contactSheetView.title }}</a>{{ not loop.last ? ', ' : '' }}
                                 {% endfor %}
                             </p>
-                            {% if form is not null %}
-                                {{ form_start(form) }}
-                                {{ form_widget(form.evaluation) }}
-                                {{ form_end(form) }}
-                                <a class="btn btn-default" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId}) }}">{{ 'contact.edit.later'|trans }}</a>
-                            {% else %}
                             <p>
                                 {{ 'contact.show.evaluation'|trans }} :<br/>
-                                {{ contactView.evaluation }}
+                                {{ form_start(ratingForm) }}
+                                {{ form_widget(ratingForm.evaluation) }}
+                                {{ form_end(ratingForm) }}
+                                {% if mode == constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_EVALUATION') %}
+                                    <a class="btn btn-default" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId}) }}">{{ 'contact.edit.later'|trans }}</a>
+                                {% endif %}
                             </p>
+                            {% if mode != constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_EVALUATION') %}
                             <p>
                                 {{ 'contact.show.comment'|trans }} :<br/>
                                 {{ contactView.comment }}

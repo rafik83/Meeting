@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Command\Contact\EditEvaluation;
 use Proximum\Vimeet\Application\Query\Contact\ContactView;
 use Proximum\Vimeet\Application\Query\Contact\GetContactViewQuery;
 use Proximum\Vimeet\Domain\Model\Contact;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
@@ -27,6 +29,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,42 +109,27 @@ class ShowAction
         // if owner is logged and is not a participant, it fallback to one of the participant
         $participant = $sheet->getUserParticipant($userDomain->getUser()) ?? $sheet->getFirstParticipant();
 
+        /** @var FormInterface $ratingForm */
+        /** @var EditEvaluation $editEvaluationCommand */
+        [$editEvaluationCommand, $ratingForm] = $this->prepareRatingForm($request, $contactUser, $event, $participant);
+
+        if ($ratingForm->isSubmitted() && $ratingForm->isValid()) {
+            $this->commandBus->handle($editEvaluationCommand);
+
+            return new RedirectResponse(
+                $this->router->generate(
+                    'event_contact_show',
+                    ['sheet' => $sheet->getId(), 'contactUser' => $contactUser->getId()]
+                )
+            );
+        }
+
         /** @var ContactView $contactView */
         $contactView = $this->queryBus->handle(
             new GetContactViewQuery($event, $sheet, $participant, $contactUser, $request->getLocale())
         );
 
-        $formView = null;
-        switch ($request->query->get(self::MODE_QUERY_KEY)) {
-            case self::MODE_EDIT_EVALUATION:
-
-                $contactQuery = new Contact($event, $participant->getUser(), $contactUser, $this->dateTime);
-                $contact = $this->contactRepository->find($contactQuery);
-
-                if (null === $contact) {
-                    throw new AccessDeniedException();
-                }
-
-                $editEvaluationCommand = new EditEvaluation($contact, $contact->getEvaluation());
-                $form = $this->formFactory->create(EvaluationType::class, $editEvaluationCommand);
-
-                $form->handleRequest($request);
-
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $this->commandBus->handle($editEvaluationCommand);
-
-                    return new RedirectResponse(
-                        $this->router->generate(
-                            'event_contact_show',
-                            ['sheet' => $sheet->getId(), 'contactUser' => $contactUser->getId()]
-                        )
-                    );
-                }
-
-                $formView = $form->createView();
-
-                break;
-        }
+        $mode = $request->query->get(self::MODE_QUERY_KEY);
 
         return new Response(
             $this->engine->render(
@@ -150,9 +138,39 @@ class ShowAction
                     'event'       => $event,
                     'sheet'       => $sheet,
                     'contactView' => $contactView,
-                    'form'        => $formView,
+                    'ratingForm'  => $ratingForm->createView(),
+                    'mode'        => $mode,
                 ]
             )
         );
+    }
+
+    /**
+     * @param Request     $request
+     * @param User        $contactUser
+     * @param Event       $event
+     * @param Participant $participant
+     *
+     * @return array
+     */
+    protected function prepareRatingForm(
+        Request $request,
+        User $contactUser,
+        Event $event,
+        Participant $participant
+    ): array {
+        $contactQuery = new Contact($event, $participant->getUser(), $contactUser, $this->dateTime);
+        $contact = $this->contactRepository->find($contactQuery);
+
+        if (null === $contact) {
+            throw new AccessDeniedException();
+        }
+
+        $editEvaluationCommand = new EditEvaluation($contact, $contact->getEvaluation());
+        $ratingForm = $this->formFactory->create(EvaluationType::class, $editEvaluationCommand);
+
+        $ratingForm->handleRequest($request);
+
+        return array($editEvaluationCommand, $ratingForm);
     }
 }
