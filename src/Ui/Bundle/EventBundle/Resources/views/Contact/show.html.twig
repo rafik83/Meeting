@@ -46,7 +46,7 @@
                                 <a class="btn btn-default" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId, (constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_QUERY_KEY')): constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_COMMENT')}) }}">{{ 'contact.edit.comment'|trans }}</a>
                             </p>
                             {% endif %}
-                            {% if commentForm is not null%}
+                            {% if commentForm is not null %}
                                 {{ 'contact.show.comment'|trans }} :<br/>
                                 {{ form_start(commentForm) }}
                                 {{ form_widget(commentForm.comment) }}

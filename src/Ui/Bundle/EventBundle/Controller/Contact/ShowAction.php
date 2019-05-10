@@ -207,7 +207,7 @@ class ShowAction
 
         $ratingForm->handleRequest($request);
 
-        return array($editEvaluationCommand, $ratingForm);
+        return [$editEvaluationCommand, $ratingForm];
     }
 
     protected function prepareCommentForm(Request $request, Contact $contact): array
@@ -217,6 +217,6 @@ class ShowAction
 
         $ratingForm->handleRequest($request);
 
-        return array($editEvaluationCommand, $ratingForm);
+        return [$editEvaluationCommand, $ratingForm];
     }
 }
