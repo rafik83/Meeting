@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\Export\UserViewQueryHa
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\View\Rooming\ExportList\UserSheetView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -37,6 +38,9 @@ class UserViewQueryHandlerTest extends TestCase
         $spot = $this->prophesize(Spot::class);
         $type1 = $this->prophesize(Type::class);
         $type2 = $this->prophesize(Type::class);
+        $package1 = $this->prophesize(Package::class);
+        $package2 = $this->prophesize(Package::class);
+        $package3 = $this->prophesize(Package::class);
 
         $commentExtraData = $this->prophesize(User\Event\ExtraData::class);
         $tastingExtraData = $this->prophesize(User\Event\ExtraData::class);
@@ -66,14 +70,32 @@ class UserViewQueryHandlerTest extends TestCase
         $sheet2->getSpot()->shouldBeCalled()->willReturn(null);
         $sheet3->getSpot()->shouldBeCalled()->willReturn($spot->reveal());
 
+        $sheet1->getFollowerName()->shouldBeCalled()->willReturn('Al Pacino');
+        $sheet2->getFollowerName()->shouldBeCalled()->willReturn('Robert DeNiro');
+        $sheet3->getFollowerName()->shouldBeCalled()->willReturn('Joe Pesci');
+
+        $package1->getId()->shouldBeCalled()->willReturn(78);
+        $package2->getId()->shouldBeCalled()->willReturn(65);
+        $package3->getId()->shouldBeCalled()->willReturn(19);
+
+        $package1->getTitle()->shouldBeCalled()->willReturn('Package Cosa Nostra');
+        $package2->getTitle()->shouldBeCalled()->willReturn('Package Camorra');
+        $package3->getTitle()->shouldBeCalled()->willReturn('Package Stidda');
+
+        $sheet1->getPackage()->shouldBeCalled()->willReturn($package1->reveal());
+        $sheet2->getPackage()->shouldBeCalled()->willReturn($package2->reveal());
+        $sheet3->getPackage()->shouldBeCalled()->willReturn($package3->reveal());
+
         $spot->getReference()->shouldBeCalled()->willReturn('A123');
 
         $user->getId()->shouldBeCalled()->willReturn(1);
+        $user->getEmail()->shouldBeCalled()->willReturn('test@test.com');
         $user->getAccount()->shouldBeCalled()->willReturn($account->reveal());
 
         $account->getGender()->shouldBeCalled()->willReturn('man');
         $account->getFirstName()->shouldBeCalled()->willReturn('Jean');
         $account->getLastName()->shouldBeCalled()->willReturn('Paul');
+        $account->getMobile()->shouldBeCalled()->willReturn('0000000001');
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
@@ -108,8 +130,12 @@ class UserViewQueryHandlerTest extends TestCase
             'man',
             'Jean',
             'Paul',
+            'test@test.com',
+            '0000000001',
             '1,2,3',
             'Aanera,Bbnera,Ccnera',
+            'Al Pacino,Robert DeNiro,Joe Pesci',
+            'Package Cosa Nostra,Package Camorra,Package Stidda',
             'Exposant,Visiteur',
             'A123',
             'This is a comment',

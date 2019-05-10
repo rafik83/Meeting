@@ -23,12 +23,24 @@ class UserSheetView
     
     /** @var string|null */
     public $lastName;
+
+    /** @var string|null */
+    public $email;
+
+    /** @var string|null */
+    public $mobile;
     
     /** @var string */
     public $sheetIds;
     
     /** @var string|null */
     public $sheetTitles;
+
+    /** @var string|null */
+    public $sheetFollowers;
+
+    /** @var string|null */
+    public $sheetPackages;
     
     /** @var string|null */
     public $typeTitles;
@@ -47,8 +59,12 @@ class UserSheetView
         ?string $gender,
         ?string $firstName,
         ?string $lastName,
+        string $email,
+        string $mobile,
         string $sheetIds,
         ?string $sheetTitles,
+        ?string $sheetFollowers,
+        ?string $sheetPackages,
         ?string $typeTitles,
         ?string $spotReferences,
         ?string $comment,
@@ -58,8 +74,12 @@ class UserSheetView
         $this->gender = $gender;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->email = $email;
+        $this->mobile = $mobile;
         $this->sheetIds = $sheetIds;
         $this->sheetTitles = $sheetTitles;
+        $this->sheetFollowers = $sheetFollowers;
+        $this->sheetPackages = $sheetPackages;
         $this->typeTitles = $typeTitles;
         $this->spotReferences = $spotReferences;
         $this->comment = $comment;

@@ -59,6 +59,8 @@ class UserViewQueryHandler
 
         $sheetIds = [];
         $sheetTitles = [];
+        $sheetFollowers = [];
+        $sheetPackages = [];
         $typeTitles = [];
         $spotReferences = [];
 
@@ -70,6 +72,11 @@ class UserViewQueryHandler
         foreach ($sheets as $sheet) {
             $sheetIds[] = $sheet->getId();
             $sheetTitles[] = $sheet->getTitle();
+            $sheetFollowers[] = $sheet->getFollowerName();
+
+            if (!isset($sheetPackages[$sheet->getPackage()->getId()])) {
+                $sheetPackages[$sheet->getPackage()->getId()] = $sheet->getPackage()->getTitle();
+            }
 
             if (!isset($typeTitles[$sheet->getType()->getId()])) {
                 $typeTitles[$sheet->getType()->getId()] = $sheet->getTypeTitle($query->locale);
@@ -85,8 +92,12 @@ class UserViewQueryHandler
             $query->user->getAccount()->getGender(),
             $query->user->getAccount()->getFirstName(),
             $query->user->getAccount()->getLastName(),
+            $query->user->getEmail(),
+            $query->user->getAccount()->getMobile(),
             implode(',', $sheetIds),
             implode(',', $sheetTitles),
+            implode(',', $sheetFollowers),
+            implode(',', $sheetPackages),
             implode(',', $typeTitles),
             implode(',', $spotReferences),
             $comment,
