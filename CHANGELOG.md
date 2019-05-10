@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-1892 - Rooming export new colums
 
 ## [2.3.0] - 2019-05-09
 ### Fixed
@@ -12,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-174 - Prioritize requests with meeting to avoid deduplication before generating data for planner
 ### Added
 - VIMEET-1945 - Scan the badge of another participant and export contacts list
+- VIMEET-1951 - Add contacts list
 - VIMEET-1951 - Add contacts list
 
 ## [2.2.0] - 2019-04-26
