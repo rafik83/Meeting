@@ -18,8 +18,6 @@ Proximum\Vimeet\Domain\Model\Contact:
         comment:
             type: text
             nullable: true
-            options:
-                default: ''
         scanned:
             type: boolean
             nullable: false
