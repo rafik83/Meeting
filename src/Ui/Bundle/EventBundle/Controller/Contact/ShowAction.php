@@ -132,16 +132,12 @@ class ShowAction
         if ($ratingForm->isSubmitted() && $ratingForm->isValid()) {
             $this->commandBus->handle($editEvaluationCommand);
 
-            $routeParameters = ['sheet' => $sheet->getId(), 'contactUser' => $contactUser->getId()];
-
-            if ($mode !== self::MODE_EDIT_COMMENT) {
-                return new RedirectResponse(
-                    $this->router->generate(
-                        'event_contact_show',
-                        $routeParameters
-                    )
-                );
-            }
+            return new RedirectResponse(
+                $this->router->generate(
+                    'event_contact_show',
+                    ['sheet' => $sheet->getId(), 'contactUser' => $contactUser->getId(), self::MODE_QUERY_KEY => $mode]
+                )
+            );
         }
 
         $commentFormView = null;
