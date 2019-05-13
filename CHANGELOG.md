@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-155 - Cancel sheet orders when the sheet is disabled
 - MV-175 - Fix batch print sheets pdf
 - MV-176 - Update events date with different timezone
+- MV-179 - Fix sheet title in planner sheet satisfaction view
 
 ## [2.3.0] - 2019-05-09
 ### Fixed
