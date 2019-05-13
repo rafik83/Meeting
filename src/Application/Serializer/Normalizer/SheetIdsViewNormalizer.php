@@ -43,29 +43,29 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  */
 class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
-    public const TRANSLATION_COL       = 'admin.sheet.export.fields';
-    public const COL_EVENT_ID          = 'event_id';
-    public const COL_EVENT_NAME        = 'event_name';
-    public const COL_SHEET_ID          = 'sheet_id';
-    public const COL_SHEET_ENABLE      = 'sheet_enable';
-    public const COL_OWNER_ID          = 'owner_id';
-    public const COL_OWNER_FIRSTNAME   = 'owner_first_name';
-    public const COL_OWNER_LASTNAME    = 'owner_last_name';
-    public const COL_OWNER_EMAIL       = 'owner_email';
-    public const COL_OWNER_PHONE       = 'owner_phone';
-    public const COL_OWNER_MOBILE      = 'owner_mobile';
-    public const COL_TYPE              = 'type';
-    public const COL_CATEGORY          = 'category';
+    public const TRANSLATION_COL = 'admin.sheet.export.fields';
+    public const COL_EVENT_ID = 'event_id';
+    public const COL_EVENT_NAME = 'event_name';
+    public const COL_SHEET_ID = 'sheet_id';
+    public const COL_SHEET_ENABLE = 'sheet_enable';
+    public const COL_OWNER_ID = 'owner_id';
+    public const COL_OWNER_FIRSTNAME = 'owner_first_name';
+    public const COL_OWNER_LASTNAME = 'owner_last_name';
+    public const COL_OWNER_EMAIL = 'owner_email';
+    public const COL_OWNER_PHONE = 'owner_phone';
+    public const COL_OWNER_MOBILE = 'owner_mobile';
+    public const COL_TYPE = 'type';
+    public const COL_CATEGORY = 'category';
     public const COL_REGISTRATION_DATE = 'registration_date';
-    public const COL_PARTICIPANTS      = 'participants';
-    public const COL_STATUS            = 'status'; // Validation State
-    public const COL_FOLLOWING         = 'following';  // Admin that follow up the sheet
-    public const COL_IN_CATALOG        = 'in_catalog';
-    public const COL_ORDER_PROMO_CODE  = 'order_promo_code';
-    public const COL_SHEET_STATE       = 'sheet_state'; // State
-    public const COL_TOTAL_ORDER       = 'total_excluded_vat'; // Total hors taxes
-    public const COL_BALANCE           = 'balance';
-    public const COL_COMMENTS          = 'comments';
+    public const COL_PARTICIPANTS = 'participants';
+    public const COL_STATUS = 'status'; // Validation State
+    public const COL_FOLLOWING = 'following';  // Admin that follow up the sheet
+    public const COL_IN_CATALOG = 'in_catalog';
+    public const COL_ORDER_PROMO_CODE = 'order_promo_code';
+    public const COL_SHEET_STATE = 'sheet_state'; // State
+    public const COL_TOTAL_ORDER = 'total_excluded_vat'; // Total hors taxes
+    public const COL_BALANCE = 'balance';
+    public const COL_COMMENTS = 'comments';
     public const COL_COMMERCIAL_STATUS = 'commercial_status';
     public const COL_SPOT = 'sheet_spot';
 
@@ -168,13 +168,13 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     ) {
         parent::__construct($translator);
 
-        $this->sheetRepository     = $sheetRepository;
+        $this->sheetRepository = $sheetRepository;
         $this->templateDataFactory = $templateDataFactory;
-        $this->sheetFields         = [];
-        $this->registrationFields  = [];
-        $this->merger              = $merger;
-        $this->balance             = $balance;
-        $this->orderRepository     = $orderRepository;
+        $this->sheetFields = [];
+        $this->registrationFields = [];
+        $this->merger = $merger;
+        $this->balance = $balance;
+        $this->orderRepository = $orderRepository;
         $this->recordViewsQueryHandler = $recordViewsQueryHandler;
         $this->eventUrlGenerator = $eventUrlGenerator;
     }
@@ -189,9 +189,9 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     public function normalize($object, $format = null, array $context = [])
     {
         $sheetIds = $object->sheetIds;
-        $event    = $context['event'];
-        $locale   = $context['locale'];
-        $charset  = $context['charset'];
+        $event = $context['event'];
+        $locale = $context['locale'];
+        $charset = $context['charset'];
 
         // Preload transaction and order to avoid a query by sheet
         $this->balance->loadAllForSheetIds($event, $sheetIds);
@@ -233,12 +233,12 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      */
     private function getSheetRawData(Sheet $sheet, string $locale, array $context)
     {
-        $event    = $sheet->getEvent();
-        $owner    = $sheet->getOwner();
+        $event = $sheet->getEvent();
+        $owner = $sheet->getOwner();
         $follower = $sheet->getFollower();
 
         $availableLocale = $event->getAvailableLocale($locale);
-        $fallbackLocale  = $event->getFallback();
+        $fallbackLocale = $event->getFallback();
 
         $categories = implode(';', array_map(
             function (Category $category) use ($availableLocale) {
@@ -247,8 +247,8 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             $sheet->getType()->getCategories()->toArray()
         ));
 
-        $promotionCodes      = [];
-        $notCancelledOrders  = $this->orderRepository->findNotCancelledBySheet($sheet);
+        $promotionCodes = [];
+        $notCancelledOrders = $this->orderRepository->findNotCancelledBySheet($sheet);
 
         if (!empty($notCancelledOrders)) {
             $order = $this->merger->merge($notCancelledOrders);
@@ -423,7 +423,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         // Common fields (event ID, event name, etc.)
         foreach (self::COMMON_COL as $fieldKey) {
             $translationKey = sprintf('%s.%s', self::TRANSLATION_COL, $fieldKey);
-            $input          = $rawData[$fieldKey];
+            $input = $rawData[$fieldKey];
 
             $translatedFieldname = $this->convertCharset(
                 $this->translator->trans($translationKey),
@@ -447,7 +447,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
                 continue;
             }
 
-            $fieldName                  = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
+            $fieldName = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
 
@@ -460,7 +460,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
                 continue;
             }
 
-            $fieldName                  = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
+            $fieldName = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
 
