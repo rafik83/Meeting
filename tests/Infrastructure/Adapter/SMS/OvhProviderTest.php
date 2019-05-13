@@ -42,9 +42,10 @@ class OvhProviderTest extends TestCase
         $this->ovh->post(
             '/sms/serviceName/jobs',
             [
-                'message'   => 'message content',
+                'message' => 'message content',
                 'receivers' => ['+33102030405'],
-                'sender'    => 'senderName',
+                'sender' => 'senderName',
+                'noStopClause' => true,
             ]
         )
             ->shouldBeCalled()
@@ -64,9 +65,10 @@ class OvhProviderTest extends TestCase
         $this->ovh->post(
             '/sms/serviceName/jobs',
             [
-                'message'   => 'message content',
+                'message' => 'message content',
                 'receivers' => ['+33102030405'],
-                'sender'    => 'senderName',
+                'sender' => 'senderName',
+                'noStopClause' => true,
             ]
         )
             ->shouldBeCalled()
@@ -87,9 +89,10 @@ class OvhProviderTest extends TestCase
         $this->ovh->post(
             '/sms/serviceName/jobs',
             [
-                'message'   => 'message content',
+                'message' => 'message content',
                 'receivers' => ['+33102030405'],
-                'sender'    => 'senderName',
+                'sender' => 'senderName',
+                'noStopClause' => true,
             ]
         )
             ->shouldBeCalled()
@@ -108,9 +111,10 @@ class OvhProviderTest extends TestCase
         $this->ovh->post(
             '/sms/serviceName/jobs',
             [
-                'message'   => 'message content',
+                'message' => 'message content',
                 'receivers' => ['+33102030405'],
-                'sender'    => 'senderName',
+                'sender' => 'senderName',
+                'noStopClause' => true,
             ]
         )
             ->shouldBeCalled()
@@ -133,18 +137,17 @@ class OvhProviderTest extends TestCase
         $this->assertTrue($adapter->canSend($smsFr));
     }
 
-    public function testSendNotAdvertising(): void
+    public function testSendWithStopClause(): void
     {
-        $sms = new SMS('+33102030405', 'message content', false);
+        $sms = new SMS('+33102030405', 'message content', true);
 
         // Mock
         $this->ovh->post(
             '/sms/serviceName/jobs',
             [
-                'message'      => 'message content',
-                'noStopClause' => true,
-                'receivers'    => ['+33102030405'],
-                'sender'       => 'senderName',
+                'message' => 'message content',
+                'receivers' => ['+33102030405'],
+                'sender' => 'senderName',
             ]
         )
             ->shouldBeCalled()

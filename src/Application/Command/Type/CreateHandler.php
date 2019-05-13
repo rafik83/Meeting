@@ -67,7 +67,8 @@ class CreateHandler
             $create->numberOfMeetingsPerPlanning,
             $create->canMoveMeeting,
             $create->canRemoveMeeting,
-            $create->areAllSheetParticipantsAssignedToMeeting
+            $create->areAllSheetParticipantsAssignedToMeeting,
+            $create->canScanParticipant
         );
 
         $localesTitleAlreadyExists = [];
