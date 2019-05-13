@@ -49,7 +49,11 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     public const COL_SHEET_ID          = 'sheet_id';
     public const COL_SHEET_ENABLE      = 'sheet_enable';
     public const COL_OWNER_ID          = 'owner_id';
+    public const COL_OWNER_FIRSTNAME   = 'owner_first_name';
+    public const COL_OWNER_LASTNAME    = 'owner_last_name';
     public const COL_OWNER_EMAIL       = 'owner_email';
+    public const COL_OWNER_PHONE       = 'owner_phone';
+    public const COL_OWNER_MOBILE      = 'owner_mobile';
     public const COL_TYPE              = 'type';
     public const COL_CATEGORY          = 'category';
     public const COL_REGISTRATION_DATE = 'registration_date';
@@ -76,7 +80,11 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         self::COL_SHEET_STATE,
         self::COL_SPOT,
         self::COL_OWNER_ID,
+        self::COL_OWNER_FIRSTNAME,
+        self::COL_OWNER_LASTNAME,
         self::COL_OWNER_EMAIL,
+        self::COL_OWNER_PHONE,
+        self::COL_OWNER_MOBILE,
         self::COL_TYPE,
         self::COL_CATEGORY,
         self::COL_REGISTRATION_DATE,
@@ -262,7 +270,11 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_SHEET_STATE       => $sheet->getState(),
             self::COL_SPOT              => $sheet->getSpot() instanceof Spot ? $sheet->getSpot()->getReference() : null,
             self::COL_OWNER_ID          => $owner->getId(),
+            self::COL_OWNER_FIRSTNAME   => $owner->getFirstName(),
+            self::COL_OWNER_LASTNAME    => $owner->getLastName(),
             self::COL_OWNER_EMAIL       => $owner->getEmail(),
+            self::COL_OWNER_PHONE       => $owner->getPhone(),
+            self::COL_OWNER_MOBILE      => $owner->getMobile(),
             self::COL_TYPE              => $sheet->getType()->getTitle($availableLocale),
             self::COL_CATEGORY          => $categories,
             self::COL_REGISTRATION_DATE => $sheet->getCreatedAt()->format('d/m/Y'),
