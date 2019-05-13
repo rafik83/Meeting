@@ -17,9 +17,6 @@ class InvoiceQuery
     /** @var Invoice */
     public $invoice;
 
-    /**
-     * @param Invoice $invoice
-     */
     public function __construct(Invoice $invoice)
     {
         $this->invoice = $invoice;

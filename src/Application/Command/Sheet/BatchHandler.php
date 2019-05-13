@@ -99,11 +99,6 @@ class BatchHandler
         $this->batchDuplicateSheetsHandler = $batchDuplicateSheetsHandler;
     }
 
-    /**
-     * @param Batch $batch
-     *
-     * @return BatchResult
-     */
     public function handle(Batch $batch): BatchResult
     {
         if (Batch::SELECTION_TYPE_ALL === $batch->selectionType) {
@@ -111,19 +106,23 @@ class BatchHandler
         }
 
         if ($batch->validate) {
-            return $this->batchValidateHandler->handle(new BatchValidate(
-                $batch->event,
-                $batch->ids,
-                $batch->admin,
-                $batch->validateComment
-            ));
+            return $this->batchValidateHandler->handle(
+                new BatchValidate(
+                    $batch->event,
+                    $batch->ids,
+                    $batch->admin,
+                    $batch->validateComment
+                )
+            );
         }
 
         if ($batch->assign && null !== $batch->follower) {
-            return $this->batchAssignHandler->handle(new BatchAssign(
-                $batch->ids,
-                FollowerConstant::UNASSIGNED_FOLLOWER !== $batch->follower ? $batch->follower : null
-            ));
+            return $this->batchAssignHandler->handle(
+                new BatchAssign(
+                    $batch->ids,
+                    FollowerConstant::UNASSIGNED_FOLLOWER !== $batch->follower ? $batch->follower : null
+                )
+            );
         }
 
         if ($batch->accept) {
@@ -228,6 +227,6 @@ class BatchHandler
             );
         }
 
-        return new BatchResult([], $batch->getMessage() . 'no_action');
+        return new BatchResult([], $batch->getMessage().'no_action');
     }
 }
