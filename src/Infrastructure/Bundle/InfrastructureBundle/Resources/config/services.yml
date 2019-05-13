@@ -983,6 +983,7 @@ services:
     command.sheet.batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Command\Order\CancelAllHandler'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'

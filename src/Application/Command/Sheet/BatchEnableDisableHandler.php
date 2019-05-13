@@ -11,7 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
+use Proximum\Vimeet\Application\Command\Order\CancelAll;
+use Proximum\Vimeet\Application\Command\Order\CancelAllHandler;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Domain\Exception\Order\OrderCanNotBeCancelledException;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -41,31 +45,23 @@ class BatchEnableDisableHandler
      */
     private $batchJobQueue;
 
-    /**
-     * BatchEnableDisableHandler constructor.
-     *
-     * @param SheetRepositoryInterface   $sheetRepository
-     * @param MeetingRepositoryInterface $meetingRepository
-     * @param SheetInfoGuesser           $sheetInfoGuesser
-     * @param BatchJobQueueInterface     $batchJobQueue
-     */
+    /** @var CancelAllHandler */
+    private $cancelAllHandler;
+
     public function __construct(
+        CancelAllHandler $cancelAllHandler,
         SheetRepositoryInterface $sheetRepository,
         MeetingRepositoryInterface $meetingRepository,
         SheetInfoGuesser $sheetInfoGuesser,
         BatchJobQueueInterface $batchJobQueue
     ) {
-        $this->sheetRepository   = $sheetRepository;
+        $this->cancelAllHandler = $cancelAllHandler;
+        $this->sheetRepository = $sheetRepository;
         $this->meetingRepository = $meetingRepository;
-        $this->sheetInfoGuesser  = $sheetInfoGuesser;
-        $this->batchJobQueue     = $batchJobQueue;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
+        $this->batchJobQueue = $batchJobQueue;
     }
 
-    /**
-     * @param BatchEnableDisable $batchEnableDisable
-     *
-     * @return BatchResult
-     */
     public function handle(BatchEnableDisable $batchEnableDisable): BatchResult
     {
         $sheets = $this->sheetRepository->getSheetsById($batchEnableDisable->ids);
@@ -80,21 +76,38 @@ class BatchEnableDisableHandler
         }
 
         foreach ($batchEnableDisable->ids as $index => $id) {
-            if (isset($sheets[$id])) {
-                $sheet = $sheets[$id];
-
-                $disableSheetWithMeeting = false === $batchEnableDisable->state
-                    && isset($meetings[$id]) && $meetings[$id] > 0;
-
-                $enableRefusedSheet = true === $batchEnableDisable->state && $sheet->isRefused();
-
-                if ($disableSheetWithMeeting || $enableRefusedSheet) {
-                    $ignoredSheets[] = $sheet;
-                    $this->excludeSheetFromBatch($batchEnableDisable, $index);
-                } else {
-                    $processedSheets[] = $sheet;
-                }
+            if (!isset($sheets[$id])) {
+                continue;
             }
+
+            $sheet = $sheets[$id];
+
+            $disableSheetWithMeeting = false === $batchEnableDisable->state
+                && isset($meetings[$id]) && $meetings[$id] > 0;
+
+            $enableRefusedSheet = true === $batchEnableDisable->state && $sheet->isRefused();
+
+            if ($disableSheetWithMeeting || $enableRefusedSheet) {
+                $ignoredSheets[] = $sheet;
+                $this->excludeSheetFromBatch($batchEnableDisable, $index);
+
+                continue;
+            }
+
+            $canCancelOrdersWhenSheetIsDisabled = $this->cancelOrdersWhenSheetIsDisabled(
+                $sheet,
+                $batchEnableDisable->admin,
+                $batchEnableDisable->state
+            );
+
+            if (!$canCancelOrdersWhenSheetIsDisabled) {
+                $ignoredSheets[] = $sheet;
+                $this->excludeSheetFromBatch($batchEnableDisable, $index);
+
+                continue;
+            }
+
+            $processedSheets[] = $sheet;
         }
 
         $processedSheetsIds = array_map(
@@ -139,5 +152,23 @@ class BatchEnableDisableHandler
     private function excludeSheetFromBatch(BatchEnableDisable $command, $index)
     {
         unset($command->ids[$index]);
+    }
+
+    /**
+     * return false when sheet should be disabled but orders can not be cancelled
+     */
+    private function cancelOrdersWhenSheetIsDisabled(Sheet $sheet, Admin $admin, bool $state): bool
+    {
+        if (true === $state) {
+            return true;
+        }
+
+        try {
+            $this->cancelAllHandler->handle(new CancelAll($sheet, $admin));
+        } catch (OrderCanNotBeCancelledException $orderCanNotBeCancelledException) {
+            return false;
+        }
+
+        return true;
     }
 }
