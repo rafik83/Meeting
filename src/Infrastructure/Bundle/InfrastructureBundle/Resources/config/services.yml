@@ -4932,7 +4932,7 @@ services:
             - { name: console.command }
 
     command.generate_invoice_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\GenerateInvoiceCommand
         arguments:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.event_repository'

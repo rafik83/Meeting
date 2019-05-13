@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command;
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice;
 
 use Proximum\Vimeet\Application\Command\Invoice\BatchGenerateInvoice;
 use Proximum\Vimeet\Application\Command\Invoice\BatchGenerateInvoiceHandler;

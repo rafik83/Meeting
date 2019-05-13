@@ -33,7 +33,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Ind
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\OMZ\ExportUserCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand;
