@@ -789,7 +789,7 @@ event_invoice_show:
         invoice: \d+
         format: (html|pdf)
     methods: [GET]
-    defaults: { _controller: EventBundle:Invoice:show }
+    defaults: { _controller: EventBundle:Invoice\Show:show }
 
 #
 # Agenda
