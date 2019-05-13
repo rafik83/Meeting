@@ -3,7 +3,7 @@
         {% for uid, child in templateData.column(0) %}
             {{ include('AdminBundle:Sheet/Pdf/' ~ child.component|capitalize ~ ':' ~ child.type ~ '.html.twig', {
                 'sheet': sheet,
-                'userSheet': userSheet,
+                'userSheet': userSheet is defined ? userSheet : sheet,
                 'uid': uid,
                 'item': child,
                 'locale': templateData.locale,
