@@ -1102,6 +1102,7 @@ form.type_create.children.areAllSheetParticipantsAssignedToMeeting.label: 'Tous 
 form.type_create.children.availabilityType.label: 'Gestion de disponibilité'
 form.type_create.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_create.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
+form.type_create.children.canScanParticipant.label: 'Peut scanner un autre participant'
 form.type_create.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_create.children.formTemplates.label: Formulaires
 form.type_create.children.formTemplates.status.draft: brouillon
@@ -1152,6 +1153,7 @@ form.type_update.children.areAllSheetParticipantsAssignedToMeeting.label: 'Tous 
 form.type_update.children.availabilityType.label: 'Gestion de disponibilité'
 form.type_update.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_update.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
+form.type_update.children.canScanParticipant.label: 'Peut scanner un autre participant'
 form.type_update.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_update.children.formTemplates.label: Formulaires
 form.type_update.children.hidden.label: Caché
