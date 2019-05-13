@@ -85,6 +85,8 @@ class UpdateEventDatesToCurrentDateHandler
             throw new AccessDeniedHttpException('This feature is disabled');
         }
 
+        $timeZone = $command->event->getTimeZone();
+
         $slots            = $this->meetingSlotRepository->findByEvent($command->event);
         $masses           = $this->massRepository->findByEvent($command->event);
         $massAssignments  = $this->massAssignmentRepository->findByEvent($command->event);
@@ -94,8 +96,8 @@ class UpdateEventDatesToCurrentDateHandler
 
         foreach ($this->formatPerDay($happenings) as $dayNumber => $happenings) {
             foreach ($happenings as $happening) {
-                $happening->setBegin($this->update($command->beginDate, $happening->getBegin(), $dayNumber));
-                $happening->setEnd($this->update($command->beginDate, $happening->getEnd(), $dayNumber));
+                $happening->setBegin($this->update($timeZone, $command->beginDate, $happening->getBegin(), $dayNumber));
+                $happening->setEnd($this->update($timeZone, $command->beginDate, $happening->getEnd(), $dayNumber));
                 $this->happeningRepository->set($happening);
             }
         }
@@ -103,8 +105,8 @@ class UpdateEventDatesToCurrentDateHandler
         foreach ($this->formatPerDay($unavailabilities) as $dayNumber => $unavailabilities) {
             foreach ($unavailabilities as $unavailability) {
                 $unavailability->update(
-                    $this->update($command->beginDate, $unavailability->getBegin(), $dayNumber),
-                    $this->update($command->beginDate, $unavailability->getEnd(), $dayNumber)
+                    $this->update($timeZone, $command->beginDate, $unavailability->getBegin(), $dayNumber),
+                    $this->update($timeZone, $command->beginDate, $unavailability->getEnd(), $dayNumber)
                 );
                 $this->unavailabilityRepository->set($unavailability);
             }
@@ -113,8 +115,8 @@ class UpdateEventDatesToCurrentDateHandler
         foreach ($this->formatPerDay($massAssignments) as $dayNumber => $massAssignments) {
             foreach ($massAssignments as $massAssignment) {
                 $massAssignment->update(
-                    $this->update($command->beginDate, $massAssignment->getBegin(), $dayNumber),
-                    $this->update($command->beginDate, $massAssignment->getEnd(), $dayNumber),
+                    $this->update($timeZone, $command->beginDate, $massAssignment->getBegin(), $dayNumber),
+                    $this->update($timeZone, $command->beginDate, $massAssignment->getEnd(), $dayNumber),
                     $massAssignment->isEnabled()
                 );
                 $this->massAssignmentRepository->set($massAssignment);
@@ -123,15 +125,15 @@ class UpdateEventDatesToCurrentDateHandler
 
         foreach ($this->formatPerDay($slots) as $dayNumber => $slots) {
             foreach ($slots as $slot) {
-                $slot->setBegin($this->update($command->beginDate, $slot->getBegin(), $dayNumber));
-                $slot->setEnd($this->update($command->beginDate, $slot->getEnd(), $dayNumber));
+                $slot->setBegin($this->update($timeZone, $command->beginDate, $slot->getBegin(), $dayNumber));
+                $slot->setEnd($this->update($timeZone, $command->beginDate, $slot->getEnd(), $dayNumber));
                 $this->meetingSlotRepository->set($slot);
             }
         }
 
         foreach ($days as $dayNumber => $day) {
-            $day->setStartTime($this->update($command->beginDate, $day->getStartTime(), $dayNumber));
-            $day->setEndTime($this->update($command->beginDate, $day->getEndTime(), $dayNumber));
+            $day->setStartTime($this->update($timeZone, $command->beginDate, $day->getStartTime(), $dayNumber));
+            $day->setEndTime($this->update($timeZone, $command->beginDate, $day->getEndTime(), $dayNumber));
             $this->dayRepository->set($day);
         }
 
@@ -139,8 +141,8 @@ class UpdateEventDatesToCurrentDateHandler
             /** @var Mass $mass */
             foreach ($massesPerDay as $mass) {
                 $mass->setDates(
-                    $this->update($command->beginDate, $mass->getBegin(), $dayNumber),
-                    $this->update($command->beginDate, $mass->getEnd(), $dayNumber)
+                    $this->update($timeZone, $command->beginDate, $mass->getBegin(), $dayNumber),
+                    $this->update($timeZone, $command->beginDate, $mass->getEnd(), $dayNumber)
                 );
                 $this->massRepository->update($mass);
             }
@@ -159,26 +161,32 @@ class UpdateEventDatesToCurrentDateHandler
         $this->eventRepository->set($command->event);
     }
 
-    /**
-     * @param \DateTime          $beginDate
-     * @param \DateTimeInterface $dayDateTime
-     * @param int                $dayNumber
-     *
-     * @return \DateTimeInterface
-     */
-    private function update(\DateTime $beginDate, \DateTimeInterface $dayDateTime, int $dayNumber = 0): \DateTimeInterface
-    {
+    private function update(
+        string $timeZone,
+        \DateTime $beginDate,
+        \DateTimeInterface $dayDateTime,
+        int $dayNumber = 0
+    ): \DateTimeInterface {
+        $dayDateTime = (new \DateTime())
+            ->setTimestamp($dayDateTime->getTimestamp())
+            ->setTimezone(new \DateTimeZone($timeZone))
+        ;
+
         $newDate = clone $beginDate;
+        $newDate->setTimezone(new \DateTimeZone($timeZone));
 
         if ($dayNumber > 0) {
             $newDate = $newDate->modify('+' . $dayNumber . ' day');
         }
 
-        return $newDate->setTime(
-            $dayDateTime->format('H'),
-            $dayDateTime->format('i'),
-            $dayDateTime->format('s')
-        );
+        return $newDate
+            ->setTime(
+                $dayDateTime->format('H'),
+                $dayDateTime->format('i'),
+                $dayDateTime->format('s')
+            )
+            ->setTimezone(new \DateTimeZone(date_default_timezone_get()))
+        ;
     }
 
     /**

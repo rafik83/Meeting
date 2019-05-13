@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV-155 - Cancel sheet orders when the sheet is disabled
 - MV-175 - Fix batch print sheets pdf
+- MV-176 - Update events date with different timezone
 
 ## [2.3.0] - 2019-05-09
 ### Fixed
