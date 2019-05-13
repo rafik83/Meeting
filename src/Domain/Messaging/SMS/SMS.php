@@ -30,7 +30,7 @@ class SMS
      * @param string $message
      * @param bool   $stopClause
      */
-    public function __construct($receiver, $message, bool $stopClause = true)
+    public function __construct($receiver, $message, bool $stopClause = false)
     {
         $this->receiver = $receiver;
         $this->message = $message;
