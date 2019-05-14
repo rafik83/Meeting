@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>{{ sheetIds|join(', ') }}</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/mainStyle.css') }}">
+</head>
+<body>
+{% for invoiceView in invoiceViews %}
+    <div class="invoice">
+    {{ include('EventBundle:Invoice/Partial:header.html.twig', {invoiceView: invoiceView}) }}
+
+    {{ include('EventBundle:Invoice/Partial:body.html.twig', {invoiceView: invoiceView}) }}
+
+    {{ include('EventBundle:Invoice/Partial:footer.html.twig', {invoiceView: invoiceView}) }}
+    </div>
+{% endfor %}
+</body>
+</html>

@@ -6306,6 +6306,12 @@ services:
             - '@router'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\PdfPrinter'
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicesPdfBulkPrinter:
+        arguments:
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\PdfPrinter'
+            - '%infrastructure.print_invoices_path%'
+
     query.invoice_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceQueryHandler
         arguments:

@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Invoice;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 
-class InvoiceQuery
+class InvoiceQuery implements Query
 {
     /** @var Invoice */
     public $invoice;
