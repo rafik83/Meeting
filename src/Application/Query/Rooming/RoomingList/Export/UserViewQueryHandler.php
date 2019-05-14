@@ -93,7 +93,7 @@ class UserViewQueryHandler
             $query->user->getAccount()->getFirstName(),
             $query->user->getAccount()->getLastName(),
             $query->user->getEmail(),
-            $query->user->getAccount()->getMobile(),
+            $query->user->getMobile(),
             implode(',', $sheetIds),
             implode(',', $sheetTitles),
             implode(',', $sheetFollowers),
