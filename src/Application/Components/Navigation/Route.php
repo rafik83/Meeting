@@ -79,7 +79,7 @@ final class Route
     public const PROGRAM = 'happening_program';
     public const BADGE_SCAN = 'event_sheet_user_badge_scan';
     public const BADGE = 'event_sheet_user_badge';
-    public const BADGE_DOWNLOAD =' event_sheet_user_badge_download';
+    public const BADGE_DOWNLOAD = 'event_sheet_user_badge_download';
     public const NOTIFICATION = 'event_notification_list';
 
     public const VISIO_TEST_CONFIGURATION = 'event_video_conference_create_network_test';
