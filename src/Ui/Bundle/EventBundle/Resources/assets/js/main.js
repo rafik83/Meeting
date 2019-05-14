@@ -263,15 +263,16 @@ function init (target) {
     });
 
     (function () {
-        let evaluationForm = null;
-        [].forEach.call(target.querySelectorAll('form[name="evaluation"]'), function (element) {
-            evaluationForm = element;
-        });
-        [].forEach.call(target.querySelectorAll('[name="evaluation[evaluation]"]'), function (element) {
-            element.addEventListener('change', function () {
-                evaluationForm.submit();
-            });
-        });
+        const evaluationForm = target.querySelector('form[name="evaluation"]');
+
+        if (null !== evaluationForm) {
+            evaluationForm.querySelectorAll('[name="evaluation[evaluation]"]')
+                .forEach(function (evaluationInput) {
+                    evaluationInput.addEventListener('change', function () {
+                        evaluationForm.submit();
+                    });
+                });
+        }
     })();
 }
 

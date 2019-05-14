@@ -29,7 +29,7 @@ form.change_password_user.children.currentPassword.label: 'Mot de passe actuel'
 form.change_password_user.children.plainPassword.children.first.label: 'Nouveau mot de passe'
 form.change_password_user.children.plainPassword.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.change_password_user.children.submit.label: Envoyer
-form.comment.children.submit.label: Enregistrer
+form.comment.children.submit.label: Valider
 form.create_unavailability.children.day.label: Le
 form.create_unavailability.children.message.label: Commentaire
 form.create_unavailability.children.participants.label: 'Indisponible:'

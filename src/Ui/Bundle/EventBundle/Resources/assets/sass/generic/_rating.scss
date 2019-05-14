@@ -3,6 +3,10 @@
 /* use display:inline-flex to prevent whitespace issues. alternatively, you can put all the children of .rating-group on a single line */
 .rating-group {
   display: inline-flex;
+  background: #fff;
+  border-radius: 5px;
+  padding: 8px 8px 0;
+  margin-bottom: 8px;
 }
 
 /* make hover effect work properly in IE */
