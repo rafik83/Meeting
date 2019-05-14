@@ -262,8 +262,10 @@ multiple_sheets.request.title: 'Gestion des rendez-vous'
 multiple_sheets.select_sheet: 'Sélectionner une fiche'
 multiple_sheets.title: 'Mes fiches'
 navigation.category.badge: Badge
+navigation.category.badge_scan: Scanner
 navigation.category.billing: Facturation
 navigation.category.catalog: Catalogue
+navigation.category.contact: Contacts
 navigation.category.forms: 'Ma venue'
 navigation.category.happening: 'Gestion RDV'
 navigation.category.leni_badge_link: 'Badges / E-invitations'

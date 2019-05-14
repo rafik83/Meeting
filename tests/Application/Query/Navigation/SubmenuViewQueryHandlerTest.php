@@ -81,7 +81,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'navigation.category.meeting.link',
                 false,
                 false,
-                true
+                false
             ),
         ];
 
@@ -151,7 +151,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'navigation.category.meeting.link',
                 true,
                 false,
-                true
+                false
             ),
         ];
 
@@ -321,7 +321,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'program.title.link',
                 false,
                 false,
-                true
+                false
             ),
         ];
 

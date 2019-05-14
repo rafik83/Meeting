@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-1945 - Scan the badge of another participant and export contacts list
 - VIMEET-1951 - Add contacts list
 - VIMEET-1952 - Participants can scan according type parameter
+- VIMEET-1946 - Sheet submenu buttons
 
 ## [2.2.0] - 2019-04-26
 ### Changed
