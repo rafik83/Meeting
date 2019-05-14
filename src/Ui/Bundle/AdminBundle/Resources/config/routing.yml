@@ -1737,6 +1737,13 @@ admin_invoice_show_bulk:
         format: (html|pdf)
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\ShowBulkAction }
+admin_invoice_print_download:
+    path: /event/{event}/invoices/print/download/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\DownloadPrintAction }
 
 #
 # Planning

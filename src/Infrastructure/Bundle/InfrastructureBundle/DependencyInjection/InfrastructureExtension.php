@@ -55,6 +55,7 @@ class InfrastructureExtension extends Extension
         $container->setParameter('infrastructure.export_participant_path', $config['export_participant_path']);
         $container->setParameter('infrastructure.encrypted_files_path', $config['encrypted_files_path']);
         $container->setParameter('infrastructure.package.default_labels', $config['package']['default_labels']);
+        $container->setParameter('infrastructure.print_invoices_path', $config['print_invoices_path']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');

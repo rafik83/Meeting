@@ -995,3 +995,7 @@ services:
             - '@repository.invoice.invoice_repository'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicesPdfBulkPrinter'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\DownloadPrintAction:
+        arguments:
+            - '@adapter.file_system_adapter'

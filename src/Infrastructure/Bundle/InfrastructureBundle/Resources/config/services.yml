@@ -972,6 +972,14 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter_batch_job_queue.batch_pending_job_queue'
 
+    Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoicesHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicesPdfBulkPrinter'
+            - '%mailer_sender%'
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
+            - '@vimeet_infrastructure.repository.event_repository'
+
     command.sheet.batch_refuse_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchRefuseHandler
         arguments:
@@ -4937,6 +4945,12 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@command.invoice.batch_generate_invoice_handler'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\PrintInvoicesCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoicesHandler'
         tags:
             - { name: console.command }
 
