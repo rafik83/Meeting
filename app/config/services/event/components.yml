@@ -18,3 +18,7 @@ services:
             - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled:
+
+    Proximum\Vimeet\Application\Components\Contact\CanParticipantSeeContact:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler'

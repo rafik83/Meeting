@@ -4,20 +4,20 @@ namespace Proximum\Vimeet\Tests\Application\Query\Contact;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Contact\ContactPreviewView;
+use Proximum\Vimeet\Application\Query\Contact\GetContactListUsersView;
+use Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQuery;
+use Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQuery;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQueryHandler;
-use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
-class ContactListQueryHandlerTest extends TestCase
+class GetContactListViewQueryHandlerTest extends TestCase
 {
     public function testHandle(): void
     {
@@ -53,11 +53,6 @@ class ContactListQueryHandlerTest extends TestCase
         $requestedUserSheet2->getTitle()->willReturn('Rebels');
         $requestedUserSheet2->getParticipantsArray()->willReturn([$requestedParticipant->reveal()]);
 
-        $request = $this->prophesize(Request::class);
-        $request->getSheetMet($participantSheet->reveal())->willReturn()
-            ->willReturn($requestedUserSheet2->reveal())
-        ;
-
         //    scanned user
         $scannedUser = $this->prophesize(User::class);
         $scannedUser->getFullname()->willReturn('Sam Fisher');
@@ -75,13 +70,7 @@ class ContactListQueryHandlerTest extends TestCase
         // prophesy dependencies
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $meetingParticipants = $this->prophesize(MeetingParticipants::class);
-        $contactRepository = $this->prophesize(ContactRepositoryInterface::class);
-
-        $requestRepository->findApproved($participantSheet->reveal())
-            ->willReturn([$request->reveal()])
-        ;
+        $getContactListUsersViewQueryHandler = $this->prophesize(GetContactListUsersViewQueryHandler::class);
 
         $sheetRepository->getSheetsByUserAndEvent($requestedUser->reveal(), $event->reveal())
             ->shouldBeCalled()
@@ -115,12 +104,10 @@ class ContactListQueryHandlerTest extends TestCase
             )
         ;
 
-        $meetingParticipants->getMeetingParticipants($request->reveal(), $participantSheet->reveal())
-            ->willReturn([$participant->reveal()])
-        ;
-
-        $contactRepository->findByEventAndUser($event->reveal(), $participantUser->reveal())
-            ->willReturn([$requestedUser, $scannedUser->reveal()])
+        $getContactListUsersViewQueryHandler->handle(
+            new GetContactListUsersViewQuery($event->reveal(), $participant->reveal())
+        )
+            ->willReturn(new GetContactListUsersView([$scannedUser->reveal()], [$requestedUser->reveal()]))
         ;
 
         // run tests
@@ -128,18 +115,16 @@ class ContactListQueryHandlerTest extends TestCase
         $handler = new GetContactListViewQueryHandler(
             $sheetRepository->reveal(),
             $participantInfoGuesser->reveal(),
-            $requestRepository->reveal(),
-            $meetingParticipants->reveal(),
-            $contactRepository->reveal()
+            $getContactListUsersViewQueryHandler->reveal()
         );
         $result = $handler->handle($query);
 
         $expected = [
             new ContactPreviewView(
-                'Carrie', 'Fisher', 'http://far.away/leia.png', ['New Republic', 'Rebels'], true
+                42, 'Carrie', 'Fisher', 'http://far.away/leia.png', ['New Republic', 'Rebels'], true, true
             ),
             new ContactPreviewView(
-                'Sam', 'Fisher', 'http://nsa.org/sam.png', ['NSA'], false
+                314, 'Sam', 'Fisher', 'http://nsa.org/sam.png', ['NSA'], false, false
             ),
         ];
 

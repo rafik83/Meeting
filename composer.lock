@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef93e06213ee117ad37feab24c587930",
+    "content-hash": "e06f1c51844fcae70c5ed183b4b99aa9",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -6277,16 +6277,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.21",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "c7a57e0bcc3c57ae697f072b3e862487b6fd0030"
+                "reference": "1b89e7baec9891c323bbf1ec81af77d901fc60c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/c7a57e0bcc3c57ae697f072b3e862487b6fd0030",
-                "reference": "c7a57e0bcc3c57ae697f072b3e862487b6fd0030",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/1b89e7baec9891c323bbf1ec81af77d901fc60c9",
+                "reference": "1b89e7baec9891c323bbf1ec81af77d901fc60c9",
                 "shasum": ""
             },
             "require": {
@@ -6428,7 +6428,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2019-01-06T15:54:26+00:00"
+            "time": "2019-04-17T15:57:27+00:00"
         },
         {
             "name": "tilleuls/ovh-bundle",
@@ -7535,6 +7535,7 @@
                 }
             ],
             "description": "Allows to declare and use contexts services in scenario scoped container.",
+            "abandoned": "friends-of-behat/symfony-extension",
             "time": "2017-07-10T21:52:32+00:00"
         },
         {
@@ -9335,6 +9336,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2017-08-03T14:08:16+00:00"
         },
         {
@@ -10113,7 +10115,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.2"
+        "php": "^7.2",
+        "ext-json": "*"
     },
     "platform-dev": []
 }

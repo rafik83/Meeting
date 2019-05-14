@@ -53,7 +53,8 @@ class AddHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $this->contact->reveal(),
-            $this->dateTime
+            $this->dateTime,
+            true
         );
         $this->contactRepository->find($expectedContact)->shouldBeCalled()->willReturn($expectedContact);
         $this->contactRepository->add($expectedContact)->shouldNotBeCalled();
@@ -81,7 +82,8 @@ class AddHandlerTest extends TestCase
             $this->event->reveal(),
             $this->user->reveal(),
             $this->contact->reveal(),
-            $this->dateTime
+            $this->dateTime,
+            true
         );
         $this->contactRepository->find($expectedContact)->shouldBeCalled()->willReturn(null);
         $this->contactRepository->add($expectedContact)->shouldBeCalled();

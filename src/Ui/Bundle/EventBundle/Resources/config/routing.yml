@@ -568,11 +568,11 @@ event_contact_index:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\IndexAction }
 
 event_contact_show:
-    path: /sheet/{sheet}/contact/{contact}
+    path: /sheet/{sheet}/contact/{contactUser}
     requirements:
         sheet: \d+
         contact: \d+
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\ShowAction }
 
 #

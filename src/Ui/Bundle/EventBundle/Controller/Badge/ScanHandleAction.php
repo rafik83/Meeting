@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierToUserQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\ShowAction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
@@ -93,7 +94,11 @@ class ScanHandleAction
             [
                 'url' => $this->router->generate(
                     'event_contact_show',
-                    ['sheet' => $sheet->getId(), 'contact' => $contact->getId()]
+                    [
+                        'sheet'                    => $sheet->getId(),
+                        'contactUser'              => $contact->getId(),
+                        ShowAction::MODE_QUERY_KEY => ShowAction::MODE_EDIT_EVALUATION,
+                    ]
                 ),
             ]
         );

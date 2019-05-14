@@ -6873,11 +6873,26 @@ services:
     #
     # Contact
     #
+    Proximum\Vimeet\Application\Command\Contact\EditCommentHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Command\Contact\EditEvaluationHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     Proximum\Vimeet\Application\Query\Contact\GetContactViewQueryHandler:
         arguments:
             - '@template.participant_info_guesser'
             - '@adapter.router'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Application\Components\Contact\CanParticipantSeeContact'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, typehints: true }
 
@@ -6885,6 +6900,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.participant_info_guesser'
+            - '@Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler:
+        arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
