@@ -176,8 +176,3 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.user_repository'
-
-    #
-    # Order
-    #
-    Proximum\Vimeet\Domain\Order\Merger:

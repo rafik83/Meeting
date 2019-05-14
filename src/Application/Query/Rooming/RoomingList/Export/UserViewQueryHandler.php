@@ -83,13 +83,12 @@ class UserViewQueryHandler
             $mergedOrder = null;
             $plan = null;
 
-            if(null !== $this->merger->getMergedOrders($sheet)) {
+            if (null !== $this->merger->getMergedOrders($sheet)) {
                 $mergedOrder = $this->merger->getMergedOrders($sheet);
                 $plan = $mergedOrder->getPlan();
-            }
-
-            if (null !== $plan->getName()) {
-                $sheetPlans[] = $plan->getName();
+                if (null !== $plan) {
+                    $sheetPlans[] = $plan->getName();
+                }
             }
 
             if (!isset($typeTitles[$sheet->getType()->getId()])) {

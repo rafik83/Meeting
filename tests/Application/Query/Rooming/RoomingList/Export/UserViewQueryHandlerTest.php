@@ -42,9 +42,11 @@ class UserViewQueryHandlerTest extends TestCase
         $type2 = $this->prophesize(Type::class);
 
         $merger = $this->prophesize(Merger::class);
+
         $order1 = $this->prophesize(Order::class);
         $order2 = $this->prophesize(Order::class);
         $order3 = $this->prophesize(Order::class);
+
         $plan1 = $this->prophesize(Product::class);
         $plan2 = $this->prophesize(Product::class);
         $plan3 = $this->prophesize(Product::class);
