@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Rooming\RoomingList\Export;
 use Proximum\Vimeet\Application\View\Rooming\ExportList\UserSheetView;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
@@ -25,12 +26,17 @@ class UserViewQueryHandler
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
+    /** @var Merger */
+    private $merger;
+
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        ExtraDataRepositoryInterface $extraDataRepository
+        ExtraDataRepositoryInterface $extraDataRepository,
+        Merger $merger
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->extraDataRepository = $extraDataRepository;
+        $this->merger = $merger;
     }
 
     public function handle(UserViewQuery $query): UserSheetView
@@ -60,7 +66,7 @@ class UserViewQueryHandler
         $sheetIds = [];
         $sheetTitles = [];
         $sheetFollowers = [];
-        $sheetPackages = [];
+        $sheetPlans = [];
         $typeTitles = [];
         $spotReferences = [];
 
@@ -74,8 +80,16 @@ class UserViewQueryHandler
             $sheetTitles[] = $sheet->getTitle();
             $sheetFollowers[] = $sheet->getFollowerName();
 
-            if (!isset($sheetPackages[$sheet->getPackage()->getId()])) {
-                $sheetPackages[$sheet->getPackage()->getId()] = $sheet->getPackage()->getTitle();
+            $mergedOrder = null;
+            $plan = null;
+
+            if(null !== $this->merger->getMergedOrders($sheet)) {
+                $mergedOrder = $this->merger->getMergedOrders($sheet);
+                $plan = $mergedOrder->getPlan();
+            }
+
+            if (null !== $plan->getName()) {
+                $sheetPlans[] = $plan->getName();
             }
 
             if (!isset($typeTitles[$sheet->getType()->getId()])) {
@@ -97,7 +111,7 @@ class UserViewQueryHandler
             implode(',', $sheetIds),
             implode(',', $sheetTitles),
             implode(',', $sheetFollowers),
-            implode(',', $sheetPackages),
+            implode(',', $sheetPlans),
             implode(',', $typeTitles),
             implode(',', $spotReferences),
             $comment,

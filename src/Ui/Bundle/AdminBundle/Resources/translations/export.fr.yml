@@ -78,7 +78,7 @@ rooming_list_data_export.column.email: Email
 rooming_list_data_export.column.mobile: Mobile
 rooming_list_data_export.column.roommate.email: Email
 rooming_list_data_export.column.roommate.mobile: Portable
-rooming_list_data_export.column.roommate.roomPackage: 'Formule de la fiche'
+rooming_list_data_export.column.roommate.roomPlan: 'Formule de la fiche'
 rooming_list_data_export.column.roommate.sheetFollower: 'Collaborateur'
 rooming_list_data_export.column.roommate.sheetId: 'Fiche id'
 rooming_list_data_export.column.roommate.sheetTitle: 'Titre de la fiche'
@@ -91,7 +91,7 @@ rooming_list_data_export.column.roommate.userId: 'User id'
 rooming_list_data_export.column.roommate.userLastName: Nom
 rooming_list_data_export.column.roommate.userTasting: Tasting
 rooming_list_data_export.column.roomNumber: 'Numéro de chambre'
-rooming_list_data_export.column.roomPackage: 'Formule de la fiche'
+rooming_list_data_export.column.roomPlan: 'Formule de la fiche'
 rooming_list_data_export.column.roomType: 'Type de chambre'
 rooming_list_data_export.column.roomType.double: Double
 rooming_list_data_export.column.roomType.single: Simple

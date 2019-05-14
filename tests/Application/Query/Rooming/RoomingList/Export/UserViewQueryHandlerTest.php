@@ -15,11 +15,13 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\Export\UserViewQueryHa
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\View\Rooming\ExportList\UserSheetView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
@@ -38,9 +40,22 @@ class UserViewQueryHandlerTest extends TestCase
         $spot = $this->prophesize(Spot::class);
         $type1 = $this->prophesize(Type::class);
         $type2 = $this->prophesize(Type::class);
-        $package1 = $this->prophesize(Package::class);
-        $package2 = $this->prophesize(Package::class);
-        $package3 = $this->prophesize(Package::class);
+
+        $merger = $this->prophesize(Merger::class);
+        $order1 = $this->prophesize(Order::class);
+        $order2 = $this->prophesize(Order::class);
+        $order3 = $this->prophesize(Order::class);
+        $plan1 = $this->prophesize(Product::class);
+        $plan2 = $this->prophesize(Product::class);
+        $plan3 = $this->prophesize(Product::class);
+
+        $merger->getMergedOrders($sheet1->reveal())->shouldBeCalled()->willReturn($order1->reveal());
+        $merger->getMergedOrders($sheet2->reveal())->shouldBeCalled()->willReturn($order2->reveal());
+        $merger->getMergedOrders($sheet3->reveal())->shouldBeCalled()->willReturn($order3->reveal());
+
+        $order1->getPlan()->shouldBeCalled()->willReturn($plan1->reveal());
+        $order2->getPlan()->shouldBeCalled()->willReturn($plan2->reveal());
+        $order3->getPlan()->shouldBeCalled()->willReturn($plan3->reveal());
 
         $commentExtraData = $this->prophesize(User\Event\ExtraData::class);
         $tastingExtraData = $this->prophesize(User\Event\ExtraData::class);
@@ -74,17 +89,9 @@ class UserViewQueryHandlerTest extends TestCase
         $sheet2->getFollowerName()->shouldBeCalled()->willReturn('Robert DeNiro');
         $sheet3->getFollowerName()->shouldBeCalled()->willReturn('Joe Pesci');
 
-        $package1->getId()->shouldBeCalled()->willReturn(78);
-        $package2->getId()->shouldBeCalled()->willReturn(65);
-        $package3->getId()->shouldBeCalled()->willReturn(19);
-
-        $package1->getTitle()->shouldBeCalled()->willReturn('Package Cosa Nostra');
-        $package2->getTitle()->shouldBeCalled()->willReturn('Package Camorra');
-        $package3->getTitle()->shouldBeCalled()->willReturn('Package Stidda');
-
-        $sheet1->getPackage()->shouldBeCalled()->willReturn($package1->reveal());
-        $sheet2->getPackage()->shouldBeCalled()->willReturn($package2->reveal());
-        $sheet3->getPackage()->shouldBeCalled()->willReturn($package3->reveal());
+        $plan1->getName()->shouldBeCalled()->willReturn('Plan 1');
+        $plan2->getName()->shouldBeCalled()->willReturn('Plan 2');
+        $plan3->getName()->shouldBeCalled()->willReturn('Plan 3');
 
         $spot->getReference()->shouldBeCalled()->willReturn('A123');
 
@@ -120,7 +127,8 @@ class UserViewQueryHandlerTest extends TestCase
         $query = new UserViewQuery($event->reveal(), $user->reveal(), $locale);
         $handler = new UserViewQueryHandler(
             $sheetRepository->reveal(),
-            $extraDataRepository->reveal()
+            $extraDataRepository->reveal(),
+            $merger->reveal()
         );
 
         $result = $handler->handle($query);
@@ -135,7 +143,7 @@ class UserViewQueryHandlerTest extends TestCase
             '1,2,3',
             'Aanera,Bbnera,Ccnera',
             'Al Pacino,Robert DeNiro,Joe Pesci',
-            'Package Cosa Nostra,Package Camorra,Package Stidda',
+            'Plan 1,Plan 2,Plan 3',
             'Exposant,Visiteur',
             'A123',
             'This is a comment',

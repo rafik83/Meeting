@@ -262,6 +262,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Domain\Order\Merger'
 
     Proximum\Vimeet\Application\Query\Rooming\RoomingList\Export\RoomingListViewQueryHandler:
         arguments:

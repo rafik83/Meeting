@@ -40,7 +40,7 @@ class UserSheetView
     public $sheetFollowers;
 
     /** @var string|null */
-    public $sheetPackages;
+    public $sheetPlans;
     
     /** @var string|null */
     public $typeTitles;
@@ -64,7 +64,7 @@ class UserSheetView
         string $sheetIds,
         ?string $sheetTitles,
         ?string $sheetFollowers,
-        ?string $sheetPackages,
+        ?string $sheetPlans,
         ?string $typeTitles,
         ?string $spotReferences,
         ?string $comment,
@@ -79,7 +79,7 @@ class UserSheetView
         $this->sheetIds = $sheetIds;
         $this->sheetTitles = $sheetTitles;
         $this->sheetFollowers = $sheetFollowers;
-        $this->sheetPackages = $sheetPackages;
+        $this->sheetPlans = $sheetPlans;
         $this->typeTitles = $typeTitles;
         $this->spotReferences = $spotReferences;
         $this->comment = $comment;
