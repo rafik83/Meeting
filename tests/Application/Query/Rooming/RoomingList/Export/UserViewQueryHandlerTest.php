@@ -90,12 +90,12 @@ class UserViewQueryHandlerTest extends TestCase
 
         $user->getId()->shouldBeCalled()->willReturn(1);
         $user->getEmail()->shouldBeCalled()->willReturn('test@test.com');
+        $user->getMobile()->shouldBeCalled()->willReturn('0000000001');
         $user->getAccount()->shouldBeCalled()->willReturn($account->reveal());
 
         $account->getGender()->shouldBeCalled()->willReturn('man');
         $account->getFirstName()->shouldBeCalled()->willReturn('Jean');
         $account->getLastName()->shouldBeCalled()->willReturn('Paul');
-        $account->getMobile()->shouldBeCalled()->willReturn('0000000001');
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
