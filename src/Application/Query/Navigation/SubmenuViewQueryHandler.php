@@ -13,8 +13,10 @@ namespace Proximum\Vimeet\Application\Query\Navigation;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
@@ -67,6 +69,35 @@ class SubmenuViewQueryHandler
             $buttonsViews = array_merge($buttonsViews, $sheetButtonViews);
         }
 
+        $badgeScanButtonView = $this->queryBus->handle(
+            new BadgeScanSubmenuViewQuery(
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
+                $submenuViewQuery->locale,
+                $submenuViewQuery->sheet,
+                $submenuViewQuery->route,
+                $submenuViewQuery->staticFormulationsIndexByCategories[Category::BADGE_SCAN] ?? null
+            )
+        );
+
+        if (null !== $badgeScanButtonView) {
+            $buttonsViews[] = $badgeScanButtonView;
+        }
+
+        $contactButtonView = $this->queryBus->handle(
+            new ContactsSubmenuViewQuery(
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
+                $submenuViewQuery->locale,
+                $submenuViewQuery->sheet,
+                $submenuViewQuery->route,
+                $submenuViewQuery->staticFormulationsIndexByCategories[Category::CONTACT_LIST] ?? null
+            )
+        );
+
+        if (null !== $contactButtonView) {
+            $buttonsViews[] = $contactButtonView;
+        }
 
         $leniBadgeLinkButtonView = $this->queryBus->handle(
             new LeniBadgeLinkSubmenuViewQuery(
@@ -77,7 +108,7 @@ class SubmenuViewQueryHandler
             )
         );
 
-        if(null !== $leniBadgeLinkButtonView) {
+        if (null !== $leniBadgeLinkButtonView) {
             $buttonsViews[] = $leniBadgeLinkButtonView;
         }
 

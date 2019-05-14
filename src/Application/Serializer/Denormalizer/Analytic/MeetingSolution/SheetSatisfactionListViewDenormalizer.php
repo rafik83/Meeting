@@ -28,6 +28,10 @@ class SheetSatisfactionListViewDenormalizer implements DenormalizerAwareInterfac
         $sheetSatisfactionlist = new SheetSatisfactionListView();
 
         foreach ($data as $sheetSatisfaction) {
+            if (null === $sheetSatisfaction['sheetTitle']) {
+                $sheetSatisfaction['sheetTitle'] = 'N/C';
+            }
+
             $sheetSatisfactionlist->addSheetSatisfaction(
                 $this->denormalizer->denormalize($sheetSatisfaction, SheetSatisfactionView::class, $format)
             );

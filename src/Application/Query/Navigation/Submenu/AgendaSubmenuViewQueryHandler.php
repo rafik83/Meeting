@@ -90,7 +90,7 @@ class AgendaSubmenuViewQueryHandler
                 $this->navigationBuilder->getRoute('happening_program', ['sheet' => $query->sheet->getId()]),
                 Route::isProgram($query->route),
                 false,
-                true
+                false
             );
         }
 

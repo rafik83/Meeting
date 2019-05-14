@@ -983,6 +983,7 @@ services:
     command.sheet.batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Command\Order\CancelAllHandler'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
@@ -4413,6 +4414,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery }
 
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQueryHandler:
+        arguments:
+            - '@navigation.navigation_builder'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery }
+
     query.navigation.sheet_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
         arguments:
@@ -4444,6 +4451,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery }
 
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQueryHandler:
+        arguments:
+            - '@adapter.router'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQuery }
 
     Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQueryHandler:
         arguments:

@@ -97,7 +97,7 @@ class CatalogSubmenuViewQueryHandler
                 ),
                 Route::isMeetingRequest($query->route),
                 false,
-                true
+                false
             );
         }
 

@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins;
 use Proximum\Vimeet\Application\Adapter\ExecInterface;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\Jenkins\BuildCreatorInterface;
 use Proximum\Vimeet\Application\ThirdParty\Jenkins\Exception\BuildCreationFailedException;
-use Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter;
 
 class BuildCreatorAdapter implements BuildCreatorInterface
 {
