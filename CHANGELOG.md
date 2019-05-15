@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1892 - Rooming export new colums
+- VIMEET-1964 - Sheet export owner new columns
+
+## [2.4.0] - 2019-05-14
+### Fixed
+- MV-155 - Cancel sheet orders when the sheet is disabled
+- MV-175 - Fix batch print sheets pdf
+- MV-176 - Update events date with different timezone
+- MV-179 - Fix sheet title in planner sheet satisfaction view
+### Added
+- VIMEET-1957 - Evaluate and comment a contact
+- VIMEET-1958 - Evaluate and comment in contact export
+- VIMEET-1952 - Participants can scan according type parameter
+- VIMEET-1946 - Sheet submenu buttons
 
 ## [2.3.0] - 2019-05-09
 ### Fixed
@@ -15,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-1945 - Scan the badge of another participant and export contacts list
 - VIMEET-1951 - Add contacts list
+- VIMEET-1939 - Sheet state in rooming list
 
 ## [2.2.0] - 2019-04-26
 ### Changed

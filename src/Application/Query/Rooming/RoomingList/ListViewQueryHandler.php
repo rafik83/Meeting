@@ -127,7 +127,8 @@ class ListViewQueryHandler
             $userSheetTypeView->sheetId,
             $userSheetTypeView->sheetTitle,
             $userSheetTypeView->typeTitle,
-            $userSheetTypeView->spotReference
+            $userSheetTypeView->spotReference,
+            $userSheetTypeView->sheetState
         );
     }
 

@@ -16,12 +16,22 @@ class Contact
     /** @var \DateTimeInterface */
     private $createdAt;
 
-    public function __construct(Event $event, User $user, User $contact, \DateTimeInterface $createdAt)
+    /** @var int|null */
+    private $evaluation;
+
+    /** @var string|null */
+    private $comment;
+
+    /** @var bool */
+    private $scanned;
+
+    public function __construct(Event $event, User $user, User $contact, \DateTimeInterface $createdAt, bool $scanned = false)
     {
         $this->event = $event;
         $this->user = $user;
         $this->contact = $contact;
         $this->createdAt = $createdAt;
+        $this->scanned = $scanned;
     }
 
     public function getEvent(): Event
@@ -42,5 +52,30 @@ class Contact
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function getEvaluation(): ?int
+    {
+        return $this->evaluation;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function isScanned(): bool
+    {
+        return $this->scanned;
+    }
+
+    public function setEvaluation(int $evaluation): void
+    {
+        $this->evaluation = $evaluation;
+    }
+
+    public function setComment(?string $comment): void
+    {
+        $this->comment = $comment;
     }
 }

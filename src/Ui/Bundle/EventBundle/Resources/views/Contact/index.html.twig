@@ -23,7 +23,11 @@
                 {% for contactPreview in contactListView %}
                     <tr>
                         <td>
-                            <div class="user clearfix">
+                            {% set showPathParameters = {'sheet': sheet.id, 'contactUser': contactPreview.contactId} %}
+                            {% if contactPreview.needEvaluation %}
+                                {% set showPathParameters = showPathParameters|merge({(constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_QUERY_KEY')): constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_EVALUATION')}) %}
+                            {% endif %}
+                            <a class="user clearfix" href="{{ path('event_contact_show', showPathParameters) }}">
                                 <div class="user__avatar">
                                     <div class="avatar">
                                         {% if contactPreview.avatar %}
@@ -44,7 +48,7 @@
                                     </p>
                                     <p class="name">{{ contactPreview.firstName|capitalize }} {{ contactPreview.lastName|upper }}</p>
                                 </div>
-                            </div>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Meeting\MeetingSheetListView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingSheetView;
+use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -61,8 +62,11 @@ class MeetingSheetViewQueryHandler
      */
     public function handle(MeetingSheetViewQuery $query)
     {
-        $meetingSheetViews = $this->getFromApprovedRequests($query->sheet, $query->locale);
-        $meetingSheetViews = $this->addFromContacts($meetingSheetViews, $query->event, $query->user, $query->locale);
+
+        $contacts = $this->contactRepository->findByEventAndUser($query->event, $query->user);
+
+        $meetingSheetViews = $this->getFromApprovedRequests($query->sheet, $query->locale, $contacts);
+        $meetingSheetViews = $this->addFromContacts($meetingSheetViews, $query->event, $contacts, $query->locale);
 
         return new MeetingSheetListView($meetingSheetViews, $query->event->getTitle());
     }
@@ -70,10 +74,11 @@ class MeetingSheetViewQueryHandler
     /**
      * @param Sheet  $sheet
      * @param string $locale
+     * @param array  $contacts
      *
      * @return MeetingSheetView[]
      */
-    private function getFromApprovedRequests(Sheet $sheet, string $locale): array
+    private function getFromApprovedRequests(Sheet $sheet, string $locale, array $contacts): array
     {
         $meetingSheetViews = [];
 
@@ -83,7 +88,8 @@ class MeetingSheetViewQueryHandler
                 $sheetMet,
                 $sheetMet->getParticipantsArray(),
                 $locale,
-                true
+                true,
+                $contacts
             );
         }
 
@@ -93,19 +99,19 @@ class MeetingSheetViewQueryHandler
     /**
      * @param MeetingSheetView[] $meetingSheetViews
      * @param Event              $event
-     * @param User               $user
+     * @param array              $contacts
      * @param string             $locale
      *
      * @return MeetingSheetView[]
      */
-    private function addFromContacts(array $meetingSheetViews, Event $event, User $user, string $locale): array
+    private function addFromContacts(array $meetingSheetViews, Event $event, array $contacts, string $locale): array
     {
         $participantsBySheet = [];
         $sheets = [];
 
-        foreach ($this->contactRepository->findByEventAndUser($event, $user) as $contact) {
-            $sheetsOfContact = $this->sheetRepository->getSheetsByUserAndEvent($contact, $event);
-            $participantOfContact = $this->getParticipantFromSheets($sheetsOfContact, $contact);
+        foreach ($contacts as $contact) {
+            $sheetsOfContact = $this->sheetRepository->getSheetsByUserAndEvent($contact->getContact(), $event);
+            $participantOfContact = $this->getParticipantFromSheets($sheetsOfContact, $contact->getContact());
 
             if (!$participantOfContact instanceof Participant) {
                 continue;
@@ -134,7 +140,8 @@ class MeetingSheetViewQueryHandler
                 $sheet,
                 $participantsBySheet[$sheetId],
                 $locale,
-                false
+                false,
+                $contacts
             );
         }
 
@@ -146,6 +153,7 @@ class MeetingSheetViewQueryHandler
      * @param Participant[] $participants
      * @param string        $locale
      * @param bool          $hasApprovedMeetingRequestWith
+     * @param Contact[]         $contacts
      *
      * @return MeetingSheetView
      */
@@ -153,7 +161,8 @@ class MeetingSheetViewQueryHandler
         Sheet $sheet,
         array $participants,
         string $locale,
-        bool $hasApprovedMeetingRequestWith
+        bool $hasApprovedMeetingRequestWith,
+        array $contacts
     ): MeetingSheetView {
         $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($sheet, $locale);
 
@@ -170,7 +179,7 @@ class MeetingSheetViewQueryHandler
             $sheet->getType()->getTitle($locale),
             $hasApprovedMeetingRequestWith,
             $this->participantsViewQueryHandler->handle(
-                new ParticipantsViewQuery($participants, $locale)
+                new ParticipantsViewQuery($participants, $locale, $contacts)
             )
         );
     }

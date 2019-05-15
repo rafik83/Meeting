@@ -983,6 +983,7 @@ services:
     command.sheet.batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Command\Order\CancelAllHandler'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
@@ -4413,6 +4414,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery }
 
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQueryHandler:
+        arguments:
+            - '@navigation.navigation_builder'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery }
+
     query.navigation.sheet_submenu_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHandler
         arguments:
@@ -4444,6 +4451,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery }
 
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQueryHandler:
+        arguments:
+            - '@adapter.router'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQuery }
 
     Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQueryHandler:
         arguments:
@@ -6861,11 +6873,26 @@ services:
     #
     # Contact
     #
+    Proximum\Vimeet\Application\Command\Contact\EditCommentHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Command\Contact\EditEvaluationHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     Proximum\Vimeet\Application\Query\Contact\GetContactViewQueryHandler:
         arguments:
             - '@template.participant_info_guesser'
             - '@adapter.router'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Application\Components\Contact\CanParticipantSeeContact'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, typehints: true }
 
@@ -6873,6 +6900,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.participant_info_guesser'
+            - '@Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler:
+        arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'

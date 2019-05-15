@@ -12,6 +12,15 @@ Proximum\Vimeet\Domain\Model\Contact:
         createdAt:
             type: datetime
             nullable: false
+        evaluation:
+            type: smallint
+            nullable: true
+        comment:
+            type: text
+            nullable: true
+        scanned:
+            type: boolean
+            nullable: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

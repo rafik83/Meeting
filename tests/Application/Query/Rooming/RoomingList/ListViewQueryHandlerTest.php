@@ -68,7 +68,8 @@ class ListViewQueryHandlerTest extends TestCase
                         null,
                         null,
                         false,
-                        false
+                        false,
+                        'pending'
                     ),
                     new UserSheetTypeView(
                         2,
@@ -81,7 +82,8 @@ class ListViewQueryHandlerTest extends TestCase
                         $dateArrival,
                         $dateDeparture,
                         true,
-                        true
+                        true,
+                        'validated'
                     ),
                     new UserSheetTypeView(
                         2,
@@ -94,7 +96,8 @@ class ListViewQueryHandlerTest extends TestCase
                         $dateArrival,
                         $dateDeparture,
                         true,
-                        true
+                        true,
+                        'accepted'
                     ),
                     new UserSheetTypeView(
                         3,
@@ -107,7 +110,8 @@ class ListViewQueryHandlerTest extends TestCase
                         new \DateTime('2018-12-12 10:00:00.000'),
                         new \DateTime('2018-12-17 18:00:00.000'),
                         true,
-                        false
+                        false,
+                        'validated'
                     ),
                 ]
             )
@@ -206,7 +210,7 @@ class ListViewQueryHandlerTest extends TestCase
                     null,
                     'Tasting en chambre N123',
                     [
-                        new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10'),
+                        new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10', 'pending'),
                     ],
                     [
                         new UserStayToAssignView(
@@ -227,8 +231,8 @@ class ListViewQueryHandlerTest extends TestCase
                     "Ceci est un test\nCeci est un autre test",
                     null,
                     [
-                        new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10'),
-                        new SheetView(12, 'Allianz', 'Visiteur', null),
+                        new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10', 'validated'),
+                        new SheetView(12, 'Allianz', 'Visiteur', null, 'accepted'),
                     ],
                     [
                         new UserStayView(
@@ -266,7 +270,7 @@ class ListViewQueryHandlerTest extends TestCase
                     null,
                     null,
                     [
-                        new SheetView(12, 'Allianz', 'Visiteur', null),
+                        new SheetView(12, 'Allianz', 'Visiteur', null, 'validated'),
                     ],
                     [
                         new UserStayToAssignView(
@@ -327,7 +331,8 @@ class ListViewQueryHandlerTest extends TestCase
                         $dateArrival,
                         $dateDeparture,
                         false,
-                        false
+                        false,
+                        'validated'
                     ),
                 ]
             )
@@ -375,7 +380,7 @@ class ListViewQueryHandlerTest extends TestCase
                     null,
                     null,
                     [
-                        new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10'),
+                        new SheetView(11, 'Aanera', 'Fournisseur', 'Stand A10', 'validated'),
                     ],
                     [
                         new UserStayToAssignView($dateArrival, $dateDeparture),

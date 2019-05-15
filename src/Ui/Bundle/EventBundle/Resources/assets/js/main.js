@@ -261,6 +261,19 @@ function init (target) {
     [].forEach.call(target.querySelectorAll('[data-toggle-visibility]'), function (element) {
         new ToggleVisibility(element);
     });
+
+    (function () {
+        const evaluationForm = target.querySelector('form[name="evaluation"]');
+
+        if (null !== evaluationForm) {
+            evaluationForm.querySelectorAll('[name="evaluation[evaluation]"]')
+                .forEach(function (evaluationInput) {
+                    evaluationInput.addEventListener('change', function () {
+                        evaluationForm.submit();
+                    });
+                });
+        }
+    })();
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

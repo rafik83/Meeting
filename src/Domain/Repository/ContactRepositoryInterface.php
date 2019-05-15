@@ -18,6 +18,8 @@ interface ContactRepositoryInterface
 {
     public function add(Contact $contact): void;
 
+    public function set(Contact $contact): void;
+
     public function find(Contact $contact): ?Contact;
 
     /**
@@ -25,6 +27,14 @@ interface ContactRepositoryInterface
      * @param User  $user
      *
      * @return User[]
+     */
+    public function findSeenUserByEventAndUser(Event $event, User $user): array;
+
+    /**
+     * @param Event $event
+     * @param User  $user
+     *
+     * @return Contact[]
      */
     public function findByEventAndUser(Event $event, User $user): array;
 }

@@ -115,3 +115,16 @@
     {%- set type = type|default('text') -%}
     {{ block('form_widget_simple') }}
 {%- endblock url_widget -%}
+
+{% block rating_widget %}
+    <div {{ block('widget_container_attributes') }}>
+        {% for child in form %}
+            {% if loop.first %}
+                <input disabled checked class="rating__input rating__input--none" name="{{ form.vars.full_name }}" id="{{ child.vars.id }}" value="0" type="radio"/>
+            {% else %}
+                <label class="rating__label" for="{{ child.vars.id }}"><i class="rating__icon rating__icon--star icon-EtoilePleine"></i></label>
+                {{- form_widget(child) -}}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}

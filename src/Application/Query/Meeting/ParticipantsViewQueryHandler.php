@@ -38,7 +38,7 @@ class ParticipantsViewQueryHandler
         TranslatorInterface $translator
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->translator             = $translator;
+        $this->translator = $translator;
     }
 
     /**
@@ -56,6 +56,16 @@ class ParticipantsViewQueryHandler
                 $query->locale
             );
 
+            $participantContactEvaluation = null;
+            $participantContactComment = null;
+            foreach ($query->contacts as $contact) {
+                if ($participant->getUser()->getId() === $contact->getContact()->getId()) {
+                    $participantContactEvaluation = $contact->getEvaluation();
+                    $participantContactComment = $contact->getComment();
+                    break;
+                }
+            }
+
             $gender = $participantInfo[Tag::PARTICIPANT_GENDER];
 
             $participantView[] = new MeetingParticipantView(
@@ -63,8 +73,10 @@ class ParticipantsViewQueryHandler
                 $participantInfo[Tag::PARTICIPANT_LASTNAME],
                 $participantInfo[Tag::PARTICIPANT_POSITION],
                 $participantInfo[Tag::PARTICIPANT_PHONE],
-                $this->translator->trans('gender.' . $gender, [], 'messages'),
-                $participant->getEmail()
+                $gender ? $this->translator->trans('gender.'.$gender, [], 'messages') : '',
+                $participant->getEmail(),
+                $participantContactEvaluation,
+                $participantContactComment
             );
         }
 

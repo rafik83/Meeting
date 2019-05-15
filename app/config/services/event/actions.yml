@@ -214,6 +214,11 @@ services:
             - '@templating'
             - '@Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@datetime'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@adapter.router'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\IndexAction:
         arguments:

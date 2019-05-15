@@ -27,6 +27,12 @@
             {{ form_widget(form.canRemoveMeeting) }}
         </div>
     </div>
+    <div class="form-group">
+        {{ form_label(form.canScanParticipant, null, { label_attr: { class: 'control-label col-md-3' }}) }}
+        <div class="col-md-9 checkbox">
+            {{ form_widget(form.canScanParticipant) }}
+        </div>
+    </div>
 
     {{ form_row(form.availabilityType) }}
     {{ form_row(form.rank, {widget_columns: 2}) }}

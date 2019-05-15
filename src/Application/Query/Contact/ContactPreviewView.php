@@ -6,6 +6,9 @@ use Proximum\Vimeet\Domain\Participant\GetParticipantInitials;
 
 class ContactPreviewView
 {
+    /** @var int */
+    public $contactId;
+
     /** @var string */
     public $firstName;
 
@@ -24,19 +27,26 @@ class ContactPreviewView
     /** @var bool */
     public $hasApprovedMeetingRequestWith;
 
+    /** @var bool */
+    public $needEvaluation;
+
     /**
+     * @param int      $contactId
      * @param string   $firstName
      * @param string   $lastName
      * @param string   $avatar
      * @param string[] $sheetTitles
      * @param bool     $hasApprovedMeetingRequestWith
+     * @param bool     $needEvaluation
      */
     public function __construct(
+        int $contactId,
         string $firstName,
         string $lastName,
         string $avatar,
         array $sheetTitles,
-        bool $hasApprovedMeetingRequestWith
+        bool $hasApprovedMeetingRequestWith,
+        bool $needEvaluation
     ) {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -44,5 +54,7 @@ class ContactPreviewView
         $this->avatar = $avatar;
         $this->sheetTitles = $sheetTitles;
         $this->hasApprovedMeetingRequestWith = $hasApprovedMeetingRequestWith;
+        $this->contactId = $contactId;
+        $this->needEvaluation = $needEvaluation;
     }
 }
