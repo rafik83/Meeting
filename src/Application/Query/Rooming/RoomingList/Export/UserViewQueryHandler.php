@@ -102,11 +102,11 @@ class UserViewQueryHandler
 
         $userSheetView = new UserSheetView(
             $query->user->getId(),
-            $query->user->getAccount()->getGender(),
-            $query->user->getAccount()->getFirstName(),
-            $query->user->getAccount()->getLastName(),
+            $query->user->getAccount()->getGender() ?? '',
+            $query->user->getAccount()->getFirstName() ?? '',
+            $query->user->getAccount()->getLastName() ?? '',
             $query->user->getEmail(),
-            $query->user->getMobile(),
+            $query->user->getMobile() ?? '',
             implode(',', $sheetIds),
             implode(',', $sheetTitles),
             implode(',', $sheetFollowers),
