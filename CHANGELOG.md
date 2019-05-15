@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-1892 - Rooming export new colums
 - VIMEET-1964 - Sheet export owner new columns
 
 ## [2.4.0] - 2019-05-14

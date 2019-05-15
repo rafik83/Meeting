@@ -13,102 +13,102 @@ namespace Proximum\Vimeet\Domain\Model\User;
 class Account
 {
     /**
-     * @var string
+     * @var null|string
      */
     private $firstName;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $lastName;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $phone;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $mobile;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $avatar;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $position;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $company;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $website;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $address;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $zipCode;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $city;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $country;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $gender;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $companyAddress;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $companyPhone;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $companyZipCode;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $companyCity;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $companyCountry;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $companyWebsite;
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getFirstName()
     {
@@ -124,7 +124,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getLastName()
     {
@@ -140,7 +140,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getPhone()
     {
@@ -156,7 +156,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getMobile()
     {
@@ -172,7 +172,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getAvatar()
     {
@@ -188,7 +188,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getPosition()
     {
@@ -204,7 +204,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCompany()
     {
@@ -220,7 +220,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getWebsite()
     {
@@ -236,7 +236,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getAddress()
     {
@@ -252,7 +252,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getZipCode()
     {
@@ -268,7 +268,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCity()
     {
@@ -284,7 +284,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCountry()
     {
@@ -300,7 +300,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getGender()
     {
@@ -316,7 +316,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCompanyAddress()
     {
@@ -332,7 +332,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCompanyPhone()
     {
@@ -348,7 +348,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCompanyZipCode()
     {
@@ -364,7 +364,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCompanyCity()
     {
@@ -380,7 +380,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCompanyCountry()
     {
@@ -396,7 +396,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCompanyWebsite()
     {
@@ -412,7 +412,7 @@ class Account
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCompleteName()
     {

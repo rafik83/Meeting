@@ -91,7 +91,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getFirstName()
     {
@@ -103,7 +103,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getLastName()
     {
@@ -115,7 +115,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getAvatar()
     {
@@ -127,7 +127,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getPosition()
     {
@@ -139,7 +139,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getPhone()
     {
@@ -151,7 +151,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getMobile()
     {
@@ -163,7 +163,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getAddress()
     {
@@ -175,7 +175,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getZipCode()
     {
@@ -187,7 +187,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCity()
     {
@@ -199,7 +199,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getCountry()
     {
@@ -211,7 +211,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getWebsite()
     {
@@ -223,7 +223,7 @@ class User extends AbstractUser implements MailRecipientInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getGender()
     {
