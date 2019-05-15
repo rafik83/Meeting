@@ -74,7 +74,7 @@ class Contact
         $this->evaluation = $evaluation;
     }
 
-    public function setComment(string $comment): void
+    public function setComment(?string $comment): void
     {
         $this->comment = $comment;
     }
