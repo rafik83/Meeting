@@ -54,15 +54,14 @@ class PdfPrinter
     public function generate(string $urlToPrint, string $pathToPdf, string $renderType = self::RENDER_TYPE_DEFAULT): string
     {
         $process = new Process(
-            sprintf(
-                '%s %s %s %s %s %s',
+            [
                 $this->phantomjsPath,
                 $this->getRenderScript($renderType),
                 $urlToPrint,
                 $pathToPdf,
                 $this->phantomjsHttpUser,
-                $this->phantomjsHttpPassword
-            )
+                $this->phantomjsHttpPassword,
+            ]
         );
 
         $process->run();
