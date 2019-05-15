@@ -13,20 +13,25 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 
 class BadgeScanSubmenuViewQueryHandler
 {
     /** @var RouterInterface */
     private $router;
 
-    public function __construct(RouterInterface $router)
+    /** @var EventOpenAccessChecker */
+    private $eventOpenAccessChecker;
+
+    public function __construct(RouterInterface $router, EventOpenAccessChecker $eventOpenAccessChecker)
     {
         $this->router = $router;
+        $this->eventOpenAccessChecker = $eventOpenAccessChecker;
     }
 
     public function handle(BadgeScanSubmenuViewQuery $query): ?SubmenuButtonView
     {
-        if (!$query->sheet->getType()->canScanParticipant()) {
+        if (!$this->eventOpenAccessChecker->allowedToAccess($query->event) || !$query->sheet->getType()->canScanParticipant()) {
             return null;
         }
 
