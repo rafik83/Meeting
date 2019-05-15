@@ -106,9 +106,8 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     public function findBySheetIds(array $sheetIds): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('invoice, orders')
+            ->select('invoice')
             ->from(Invoice::class, 'invoice')
-            ->join('invoice.orders', 'orders')
             ->where('invoice.sheet in (:sheetIds)')
             ->setParameter('sheetIds', $sheetIds)
             ->orderBy('invoice.id', 'ASC')
