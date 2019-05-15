@@ -1006,6 +1006,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable }
 
+    Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoicesJobCreatorHandler:
+        arguments:
+          - '@vimeet_infrastructure.repository.sheet_repository'
+          - '@adapter.job_queue_adapter'
+
     command.sheet.batch_catalog_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler
         arguments:
@@ -1166,6 +1171,7 @@ services:
             - '@command.sheet.batch_draft_handler'
             - '@command.sheet.batch_validation_validate_handler'
             - '@command.sheet.batch_generate_invoice_handler'
+            - '@Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoicesJobCreatorHandler'
             - '@command.sheet.batch_assign_to_group_handler'
             - '@command.sheet.batch_pending_handler'
             - '@command.sheet.batch_pdf_job_creator_handler'

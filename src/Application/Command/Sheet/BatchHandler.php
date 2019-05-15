@@ -50,6 +50,9 @@ class BatchHandler
     /** @var BatchGenerateInvoiceHandler */
     private $batchGenerateInvoiceHandler;
 
+    /** @var BatchPrintInvoicesJobCreatorHandler */
+    private $batchPrintInvoicesJobCreatorHandler;
+
     /** @var BatchAssignToGroupHandler */
     private $batchAssignToGroupHandler;
 
@@ -76,6 +79,7 @@ class BatchHandler
         BatchDraftHandler $batchDraftHandler,
         BatchValidationValidateHandler $batchValidationValidateHandler,
         BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler,
+        BatchPrintInvoicesJobCreatorHandler $batchPrintInvoicesJobCreatorHandler,
         BatchAssignToGroupHandler $batchAssignToGroupHandler,
         BatchPendingHandler $batchPendingHandler,
         BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler,
@@ -92,6 +96,7 @@ class BatchHandler
         $this->batchDraftHandler = $batchDraftHandler;
         $this->batchValidationValidateHandler = $batchValidationValidateHandler;
         $this->batchGenerateInvoiceHandler = $batchGenerateInvoiceHandler;
+        $this->batchPrintInvoicesJobCreatorHandler = $batchPrintInvoicesJobCreatorHandler;
         $this->batchAssignToGroupHandler = $batchAssignToGroupHandler;
         $this->batchPendingHandler = $batchPendingHandler;
         $this->batchPdfJobCreatorHandler = $batchPdfJobCreatorHandler;
@@ -178,6 +183,15 @@ class BatchHandler
         if ($batch->generateInvoice) {
             return $this->batchGenerateInvoiceHandler->handle(
                 new BatchGenerateInvoice($batch->event, $batch->ids, $batch->admin)
+            );
+        }
+
+        if ($batch->printInvoices) {
+            return $this->batchPrintInvoicesJobCreatorHandler->handle(
+                new BatchPrintInvoicesJobCreator($batch->event,
+                    $batch->ids,
+                    $batch->admin,
+                    $batch->locale)
             );
         }
 
