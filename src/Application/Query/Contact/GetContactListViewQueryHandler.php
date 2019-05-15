@@ -57,6 +57,10 @@ class GetContactListViewQueryHandler
             $sheetsOfContact = $this->sheetRepository->getSheetsByUserAndEvent($contact, $query->event);
             $participantOfContact = $this->getParticipant($sheetsOfContact, $contact);
 
+            if (null === $participantOfContact) {
+                continue;
+            }
+
             $contactSheetViews = [];
             foreach ($sheetsOfContact as $sheetOfContact) {
                 $contactSheetViews[] = $sheetOfContact->getTitle();

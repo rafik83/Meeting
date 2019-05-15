@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class ContactsSubmenuViewQueryHandler
@@ -19,17 +20,27 @@ class ContactsSubmenuViewQueryHandler
     /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
+    /** @var EventOpenAccessChecker */
+    private $eventOpenAccessChecker;
+
     /**
      * @param NavigationBuilderInterface $navigationBuilder
+     * @param EventOpenAccessChecker     $eventOpenAccessChecker
      */
     public function __construct(
-        NavigationBuilderInterface $navigationBuilder
+        NavigationBuilderInterface $navigationBuilder,
+        EventOpenAccessChecker $eventOpenAccessChecker
     ) {
         $this->navigationBuilder = $navigationBuilder;
+        $this->eventOpenAccessChecker = $eventOpenAccessChecker;
     }
 
     public function handle(ContactsSubmenuViewQuery $query): ?SubmenuButtonView
     {
+        if (!$this->eventOpenAccessChecker->allowedToAccess($query->event) || !$query->sheet->getType()->canScanParticipant()) {
+            return null;
+        }
+
         $contactTitle = 'navigation.category.contact';
 
         if (isset($query->staticFormulationsIndexedByCategory[Category::CONTACT_LIST])) {
