@@ -18,7 +18,7 @@ class Version20190516075329 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE product ADD can_participant_scan TINYINT(1) DEFAULT \'0\' NOT NULL;');
+        $this->addSql('ALTER TABLE product ADD can_scan_participant TINYINT(1) DEFAULT \'0\' NOT NULL;');
 
     }
 
@@ -30,7 +30,7 @@ class Version20190516075329 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE product DROP can_participant_scan');
+        $this->addSql('ALTER TABLE product DROP can_scan_participant');
 
     }
 }

@@ -33,7 +33,7 @@ class UpdateOptionHandler extends AbstractHandler
             $updateOption->subjectedToValidation,
             $updateOption->buyableUntil,
             $updateOption->attributable,
-            $updateOption->canParticipantScan
+            $updateOption->canScanParticipant
         );
 
         $product->setHappenings($updateOption->happenings);

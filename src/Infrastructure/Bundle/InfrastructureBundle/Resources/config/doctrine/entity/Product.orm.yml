@@ -41,7 +41,7 @@ Proximum\Vimeet\Domain\Model\Product:
             type: boolean
             options:
                 default: false
-        canParticipantScan:
+        canScanParticipant:
             type: boolean
             options:
                 default: false
