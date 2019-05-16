@@ -153,5 +153,12 @@
             {% endif %}
         </tbody>
     </table>
+
+    {{ form_start(promotion_code_choice_form) }}
+    <div class="row">
+        <div class="col-md-6">{{ form_row(promotion_code_choice_form.promotionCode) }}</div>
+        <div class="col-md-6">{{ form_row(promotion_code_choice_form.submit) }}</div>
+    </div>
+    {{ form_end(promotion_code_choice_form) }}
 {% endblock %}
 
