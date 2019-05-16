@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1874 - Can participant scan in Product option
+- VIMEET-1972 - Display scan and contacts buttons by Product option 
 
 ## [2.5.0] - 2019-05-15
 ### Added
