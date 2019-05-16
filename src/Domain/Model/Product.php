@@ -1255,7 +1255,7 @@ class Product
     /**
      * @return bool
      */
-    public function isCanScanParticipant(): bool
+    public function canScanParticipant(): bool
     {
         return $this->canScanParticipant;
     }

@@ -4809,10 +4809,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
 
-    Proximum\Vimeet\Domain\Sheet\Product\CanScanParticipant:
-        arguments:
-            - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
-
     #
     # Elastic Adapter
     #
