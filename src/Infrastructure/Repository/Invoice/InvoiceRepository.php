@@ -111,7 +111,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->join('invoice.orders', 'orders')
             ->where('invoice.sheet in (:sheetIds)')
             ->setParameter('sheetIds', $sheetIds)
-            ->orderBy('invoice.id', 'DESC')
+            ->orderBy('invoice.id', 'ASC')
         ;
 
         return $queryBuilder->getQuery()->getResult();
