@@ -1849,6 +1849,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
 
+    Proximum\Vimeet\Application\Command\Order\ApplyPromotionCodeHandler:
+        arguments:
+            - '@order.merger'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\ApplyPromotionCode }
+
     command.rule.see_what_handler:
         class: Proximum\Vimeet\Application\Command\Rule\SeeWhatHandler
         arguments:

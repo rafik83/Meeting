@@ -19,12 +19,14 @@ use Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\AddRowType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\UpdateRowType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\ApplyPromotionCodeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -126,12 +128,18 @@ class OrderController extends Controller
         $promotionCodeChoiceForm->handleRequest($request);
 
         if ($promotionCodeChoiceForm->isSubmitted() && $promotionCodeChoiceForm->isValid()) {
-            // @todo : something to do here
+            try {
+                $this->get('tactician.commandbus')->handle($applyPromotionCode);
 
-            return $this->redirectToRoute(
-                'admin_sheet_order_edit',
-                ['event' => $event->getId(), 'order' => $order->getId()]
-            );
+                return $this->redirectToRoute(
+                    'admin_sheet_order_edit',
+                    ['event' => $event->getId(), 'order' => $order->getId()]
+                );
+            } catch (PromotionCodeException $exception) {
+                $promotionCodeChoiceForm->addError(
+                    new FormError($this->get('translator')->trans($exception->getFlash()))
+                );
+            }
         }
 
         return $this->render('AdminBundle:Order:edit.html.twig', [
