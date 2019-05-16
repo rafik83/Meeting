@@ -169,6 +169,9 @@ class Product
     /** @var bool */
     private $attributable;
 
+    /** @var bool */
+    private $canParticipantScan;
+
     /**
      * @param Event                   $event
      * @param string                  $type
@@ -184,6 +187,7 @@ class Product
      * @param bool                    $subjectedToValidation
      * @param null|\DateTimeInterface $buyableUntil
      * @param bool                    $attributable
+     * @param bool                    $canParticipantScan
      */
     public function __construct(
         Event $event,
@@ -199,7 +203,8 @@ class Product
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null,
-        bool $attributable = false
+        bool $attributable = false,
+        bool $canParticipantScan = false
     ) {
         $this->translations          = new ArrayCollection();
         $this->features              = new ArrayCollection();
@@ -218,6 +223,7 @@ class Product
         $this->subjectedToValidation = $subjectedToValidation;
         $this->buyableUntil          = $buyableUntil;
         $this->attributable          = $attributable;
+        $this->canParticipantScan    = $canParticipantScan;
 
         $this->availabilityTimeRanges = new ArrayCollection();
         $this->happenings = new ArrayCollection();
@@ -1237,5 +1243,21 @@ class Product
     public function isAttributable(): bool
     {
         return $this->attributable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCanParticipantScan(): bool
+    {
+        return $this->canParticipantScan;
+    }
+
+    /**
+     * @param bool $canParticipantScan
+     */
+    public function setCanParticipantScan(bool $canParticipantScan): void
+    {
+        $this->canParticipantScan = $canParticipantScan;
     }
 }
