@@ -893,6 +893,7 @@ class Product
      * @param bool                    $subjectedToValidation
      * @param null|\DateTimeInterface $buyableUntil
      * @param bool                    $attributable
+     * @param bool                    $canParticipantScan
      *
      * @return Product
      */
@@ -909,7 +910,8 @@ class Product
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null,
-        bool $attributable = false
+        bool $attributable = false,
+        bool $canParticipantScan = false
     ) {
         return new self(
             $event,
@@ -925,7 +927,8 @@ class Product
             $deletableUntil,
             $subjectedToValidation,
             $buyableUntil,
-            $attributable
+            $attributable,
+            $canParticipantScan
         );
     }
 
@@ -942,6 +945,7 @@ class Product
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil
      * @param bool                    $attributable
+     * @param bool                    $canParticipantScan
      *
      * @return Product
      */
@@ -957,19 +961,21 @@ class Product
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null,
-        bool $attributable = false
+        bool $attributable = false,
+        bool $canParticipantScan = false
     ): Product {
-        $this->name                  = $name;
-        $this->quantityMax           = $quantityMax;
-        $this->availabilityCurrent   = $availabilityCurrent;
-        $this->availabilityMax       = $availabilityMax;
-        $this->updatable             = $updatable;
-        $this->deletableUntil        = $deletableUntil;
+        $this->name = $name;
+        $this->quantityMax = $quantityMax;
+        $this->availabilityCurrent = $availabilityCurrent;
+        $this->availabilityMax = $availabilityMax;
+        $this->updatable = $updatable;
+        $this->deletableUntil = $deletableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
-        $this->buyableUntil          = $buyableUntil;
-        $this->unitPrice             = $unitPrice;
-        $this->vat                   = $vat;
-        $this->attributable          = $attributable;
+        $this->buyableUntil = $buyableUntil;
+        $this->unitPrice = $unitPrice;
+        $this->vat = $vat;
+        $this->attributable = $attributable;
+        $this->canParticipantScan = $canParticipantScan;
 
         if (null !== $image) {
             $this->image = $image;
@@ -1106,8 +1112,7 @@ class Product
      * @param \DateTimeInterface|null $deletableUntil
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface|null $buyableUntil
-     *
-     * @throws \InvalidArgumentException
+     * @param bool                    $canParticipantScan
      *
      * @return Product
      */
@@ -1124,7 +1129,8 @@ class Product
         bool $updatable,
         \DateTimeInterface $deletableUntil = null,
         bool $subjectedToValidation = false,
-        \DateTimeInterface $buyableUntil = null
+        \DateTimeInterface $buyableUntil = null,
+        bool $canParticipantScan = false
     ): Product {
         if (self::TYPE_OPTION === $type) {
             return self::createOption(
@@ -1139,7 +1145,8 @@ class Product
                 $updatable,
                 $deletableUntil,
                 $subjectedToValidation,
-                $buyableUntil
+                $buyableUntil,
+                $canParticipantScan
             );
         } elseif (self::TYPE_PARTICIPANT === $type) {
             return self::createParticipant($event, $name, $unitPrice, $vat, $quantityMax);
