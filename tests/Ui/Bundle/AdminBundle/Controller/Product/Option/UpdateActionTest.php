@@ -106,7 +106,7 @@ class UpdateActionTest extends TestCase
         $this->product->getDeletableUntil()->willReturn(null);
         $this->product->getBuyableUntil()->willReturn(null);
         $this->product->isSubjectedToValidation()->willReturn(false);
-        $this->product->isCanParticipantScan()->willReturn(false);
+        $this->product->isCanScanParticipant()->willReturn(false);
         $this->product->getHappenings()->willReturn([]);
     }
 

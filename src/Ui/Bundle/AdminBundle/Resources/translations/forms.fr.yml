@@ -638,7 +638,7 @@ form.product_create_option.children.attributable.label: 'Attribuable à un/des p
 form.product_create_option.children.availabilityCurrent.label: 'Stock actuel'
 form.product_create_option.children.availabilityMax.label: 'Stock max'
 form.product_create_option.children.buyableUntil.label: 'Achetable jusqu''aù'
-form.product_create_option.children.canParticipantScan.label: 'Active le scan des participants'
+form.product_create_option.children.canScanParticipant.label: 'Active le scan des participants'
 form.product_create_option.children.deletableUntil.label: 'Supprimable jusqu''aù'
 form.product_create_option.children.file.label: Image
 form.product_create_option.children.happenings.label: 'Sous-évènements liés'
@@ -697,7 +697,7 @@ form.product_update_option.children.attributable.label: 'Attribuable à un/des p
 form.product_update_option.children.availabilityCurrent.label: 'Stock actuel'
 form.product_update_option.children.availabilityMax.label: 'Stock max'
 form.product_update_option.children.buyableUntil.label: 'Achetable jusqu''aù'
-form.product_update_option.children.canParticipantScan.label: 'Active le scan des participants'
+form.product_update_option.children.canScanParticipant.label: 'Active le scan des participants'
 form.product_update_option.children.deletableUntil.label: 'Supprimable jusqu''aù'
 form.product_update_option.children.file.label: Image
 form.product_update_option.children.happenings.label: 'Sous-évènements liés'

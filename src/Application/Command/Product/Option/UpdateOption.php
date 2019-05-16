@@ -37,6 +37,6 @@ class UpdateOption extends AbstractUpdate
         $this->subjectedToValidation = $product->isSubjectedToValidation();
         $this->attributable = $product->isAttributable();
         $this->happenings = $product->getHappenings();
-        $this->canParticipantScan = $product->isCanParticipantScan();
+        $this->canScanParticipant = $product->isCanScanParticipant();
     }
 }
