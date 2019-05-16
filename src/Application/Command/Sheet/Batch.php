@@ -98,6 +98,9 @@ class Batch extends AbstractBatch
     public $generateInvoice;
 
     /** @var bool */
+    public $printInvoices;
+
+    /** @var bool */
     public $printPdf;
 
     /**

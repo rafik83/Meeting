@@ -178,6 +178,7 @@
                     {% if batch_form.generateInvoice is defined %}
                         <li role="separator" class="divider"></li>
                         <li>{{ form_widget(batch_form.generateInvoice, { 'attr': { 'data-confirm': 'admin.batch_actions.generateInvoice.confirm'|trans({'%prefix%': event.invoicePrefix.prefixExample}) } }) }}</li>
+                        <li>{{ form_widget(batch_form.printInvoices) }}</li>
                     {% endif %}
 
                     {% if batch_form.printPdf is defined %}

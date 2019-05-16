@@ -105,22 +105,22 @@ class Invoice
         $data,
         \DateTimeInterface $createdAt
     ) {
-        $this->event            = $event;
-        $this->sheet            = $sheet;
-        $this->prefix           = $prefix;
-        $this->invoicePrefix    = $invoicePrefix;
-        $this->invoiceYear      = $invoiceYear;
+        $this->event = $event;
+        $this->sheet = $sheet;
+        $this->prefix = $prefix;
+        $this->invoicePrefix = $invoicePrefix;
+        $this->invoiceYear = $invoiceYear;
         $this->invoiceIncrement = $invoiceIncrement;
-        $this->vatApplicable    = $vatApplicable;
-        $this->total            = $total;
-        $this->totalWithVat     = $totalWithVat;
-        $this->vatAmount        = $vatAmount;
-        $this->currency         = $currency;
-        $this->data             = $data;
-        $this->createdAt        = $createdAt;
-        $this->orders           = new ArrayCollection();
-        $this->vatMode          = $vatMode;
-        $this->vatRate          = $vatRate;
+        $this->vatApplicable = $vatApplicable;
+        $this->total = $total;
+        $this->totalWithVat = $totalWithVat;
+        $this->vatAmount = $vatAmount;
+        $this->currency = $currency;
+        $this->data = $data;
+        $this->createdAt = $createdAt;
+        $this->orders = new ArrayCollection();
+        $this->vatMode = $vatMode;
+        $this->vatRate = $vatRate;
     }
 
     /**
@@ -280,7 +280,7 @@ class Invoice
         return sprintf(
             '%s-%s',
             $this->getNumber(),
-            hash('sha256', $this->getId() . $this->getNumber() . $this->getCreatedAt()->format('YmdHis'))
+            hash('sha256', $this->getId().$this->getNumber().$this->getCreatedAt()->format('YmdHis'))
         );
     }
 

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hotfix VIMEET-1946 - Contacts and Scan buttons conditions
 - VIMEET-1892 - Rooming export new colums
 - VIMEET-1964 - Sheet export owner new columns
+- VIMEET-1956 - Batch action to send many invoices in one pdf
 
 ## [2.4.0] - 2019-05-14
 ### Fixed

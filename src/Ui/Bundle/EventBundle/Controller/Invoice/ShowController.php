@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Invoice;
 
 use Proximum\Vimeet\Application\Query\Invoice\InvoiceQuery;
 use Proximum\Vimeet\Application\View\Invoice\InvoiceView;
@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class InvoiceController extends Controller
+class ShowController extends Controller
 {
     /**
      * This controller is public

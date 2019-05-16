@@ -88,6 +88,7 @@ class BatchType extends AbstractType
                 ->add('addCatalog', SubmitType::class)
                 ->add('removeCatalog', SubmitType::class)
                 ->add('generateInvoice', SubmitType::class)
+                ->add('printInvoices', SubmitType::class)
                 ->add('group', GroupChoiceType::class, [
                     'event'    => $options['event'],
                     'required' => false,

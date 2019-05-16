@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer;
 
-use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Proximum\Vimeet\Application\Adapter\InvoicesPdfBulkPrinterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class InvoicePdfPrinter
+class InvoicesPdfBulkPrinter implements InvoicesPdfBulkPrinterInterface
 {
     /** @var RouterInterface */
     private $router;
@@ -22,27 +22,30 @@ class InvoicePdfPrinter
     /** @var PdfPrinter */
     private $pdfPrinter;
 
-    public function __construct(RouterInterface $router, PdfPrinter $pdfPrinter)
+    /** @var string */
+    private $printInvoicesPath;
+
+    public function __construct(RouterInterface $router, PdfPrinter $pdfPrinter, string $printInvoicesPath)
     {
         $this->router = $router;
         $this->pdfPrinter = $pdfPrinter;
+        $this->printInvoicesPath = $printInvoicesPath;
     }
 
-    public function generate(Invoice $invoice): string
+    /**
+     * @param int[] $sheetIds
+     *
+     * @return string
+     */
+    public function generate(array $sheetIds): string
     {
-        $pathToPdf = sprintf(
-            '%s/invoice-%s.pdf',
-            sys_get_temp_dir(),
-            $invoice->getId()
-        );
+        $pathToPdf = sprintf('%s/invoices-%s.pdf', $this->printInvoicesPath, sha1(implode('-', $sheetIds)));
 
         $urlToPrint = $this->router->generate(
-            'event_invoice_show',
+            'admin_invoice_show_bulk',
             [
-                'sheet'   => $invoice->getSheet()->getId(),
-                'invoice' => $invoice->getId(),
-                'hash'    => $invoice->getHash(),
-                'format'  => 'html',
+                'sheetIds' => $sheetIds,
+                'format'   => 'html',
             ],
             UrlGeneratorInterface::ABSOLUTE_URL
         );

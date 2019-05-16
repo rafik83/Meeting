@@ -1,51 +1,39 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice;
 
-namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet;
-
-use Proximum\Vimeet\Application\Command\Sheet\BatchPdf;
-use Proximum\Vimeet\Application\Command\Sheet\BatchPdfHandler;
+use Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoices;
+use Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoicesHandler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PrintPdfCommand extends Command
+class PrintInvoicesCommand extends Command
 {
-    const NAME = 'vimeet:sheet:print-pdf';
+    public const NAME = 'vimeet:invoice:print';
 
-    /** @var BatchPdfHandler */
-    private $batchPdfHandler;
+    /** @var BatchPrintInvoicesHandler */
+    private $batchPrintInvoicesHandler;
 
-    /**
-     * @param BatchPdfHandler $batchPdfHandler
-     */
-    public function __construct(BatchPdfHandler $batchPdfHandler)
+    public function __construct(BatchPrintInvoicesHandler $batchPrintInvoicesHandler)
     {
         parent::__construct(self::NAME);
-        $this->batchPdfHandler = $batchPdfHandler;
+        $this->batchPrintInvoicesHandler = $batchPrintInvoicesHandler;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Generate html for the participants sheet')
+            ->setDescription('Print invoices with given sheet ids')
             ->addOption('sheetIds', null, InputOption::VALUE_REQUIRED, 'Sheets')
             ->addOption('eventId', null, InputOption::VALUE_REQUIRED, 'Event id')
             ->addOption('emailToNotify', null, InputOption::VALUE_REQUIRED, 'email to notify at the end of the command')
             ->addOption('locale', null, InputOption::VALUE_REQUIRED, 'locale for the mail of notification')
-            ->addOption('orderBy', null, InputOption::VALUE_REQUIRED, 'the order of the sheets')
         ;
     }
 
@@ -58,29 +46,28 @@ class PrintPdfCommand extends Command
             || null === $input->getOption('emailToNotify')
             || null === $input->getOption('locale')
             || null === $input->getOption('eventId')
-            || null === $input->getOption('orderBy')
         ) {
-            $output->writeln('<error>The sheets ids, emailToNotify, locale and orderBy options are mandatory and can not be null</error>');
+            $output->writeln(
+                '<error>The sheets ids, emailToNotify and locale options are mandatory and can not be null</error>'
+            );
 
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The sheets ids, emailToNotify and locale options are mandatory and can not be null, arguments passed: eventId=%s sheetsIds=%s emailToNotify=%s locale=%s orderBy=%s',
+                    'The sheets ids, emailToNotify and locale options are mandatory and can not be null, arguments passed: eventId=%s sheetsIds=%s emailToNotify=%s locale=%s',
                     $input->getOption('eventId'),
                     $input->getOption('sheetIds'),
                     $input->getOption('emailToNotify'),
-                    $input->getOption('locale'),
-                    $input->getOption('orderBy')
+                    $input->getOption('locale')
                 )
             );
         }
 
-        $this->batchPdfHandler->handle(
-            new BatchPdf(
+        $this->batchPrintInvoicesHandler->handle(
+            new BatchPrintInvoices(
                 $input->getOption('eventId'),
                 explode(',', $input->getOption('sheetIds')),
                 $input->getOption('emailToNotify'),
-                $input->getOption('locale'),
-                $input->getOption('orderBy')
+                $input->getOption('locale')
             )
         );
     }

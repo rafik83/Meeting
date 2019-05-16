@@ -168,4 +168,8 @@
     max-width: 210px !important;
     max-height: 160px !important;
   }
+
+  .invoice {
+    page-break-after: always;
+  }
 }
