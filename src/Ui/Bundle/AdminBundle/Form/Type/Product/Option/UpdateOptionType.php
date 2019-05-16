@@ -71,6 +71,9 @@ class UpdateOptionType extends AbstractUpdateType
             ->add('subjectedToValidation', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('canParticipantScan', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationsType::class,
                 'label'      => false,

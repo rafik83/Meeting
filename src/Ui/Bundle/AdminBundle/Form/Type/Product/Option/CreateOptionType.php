@@ -69,6 +69,9 @@ class CreateOptionType extends AbstractCreateType
                     'data-element-id-to-hide' => 'happenings-block',
                 ],
             ])
+            ->add('canParticipantScan', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('deletableUntil', DateTimePickerType::class, [
                 'required' => false,
             ])
