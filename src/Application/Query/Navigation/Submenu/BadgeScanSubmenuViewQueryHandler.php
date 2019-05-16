@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
+use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Sheet\Product\CanScanParticipant;
 
 class BadgeScanSubmenuViewQueryHandler
 {
@@ -23,15 +25,40 @@ class BadgeScanSubmenuViewQueryHandler
     /** @var EventOpenAccessChecker */
     private $eventOpenAccessChecker;
 
-    public function __construct(RouterInterface $router, EventOpenAccessChecker $eventOpenAccessChecker)
-    {
+    /** @var Merger */
+    private $merger;
+
+    /** @var CanScanParticipant */
+    private $canScanParticipant;
+
+    public function __construct(
+        RouterInterface $router,
+        EventOpenAccessChecker $eventOpenAccessChecker,
+        Merger $merger,
+        CanScanParticipant $canScanParticipant
+    ) {
         $this->router = $router;
         $this->eventOpenAccessChecker = $eventOpenAccessChecker;
+        $this->merger = $merger;
+        $this->canScanParticipant = $canScanParticipant;
     }
 
     public function handle(BadgeScanSubmenuViewQuery $query): ?SubmenuButtonView
     {
-        if (!$this->eventOpenAccessChecker->allowedToAccess($query->event) || !$query->sheet->getType()->canScanParticipant()) {
+        $options = [];
+        $order = $this->merger->getMergedOrders($query->sheet);
+        if(null !== $order) {
+            $options = $order->getOptions();
+        }
+
+        $hasScanOption = false;
+        foreach ($options as $option) {
+            if($this->canScanParticipant->isSatisfiedBy($option)) {
+                $hasScanOption = true;
+            }
+        }
+
+        if (!$query->sheet->getType()->canScanParticipant() || !$hasScanOption || !$this->eventOpenAccessChecker->allowedToAccess($query->event)) {
             return null;
         }
 
