@@ -107,8 +107,7 @@ class ConverterTest extends TestCase
 
         $promotion = $this->prophesize(Promotion::class);
         $promotion->getProduct()->shouldBeCalled()->willReturn($chair->reveal());
-        $promotion->getType()->shouldBeCalled()->willReturn(Promotion::TYPE_VALUE_OFF);
-        $promotion->getDiscount()->shouldBeCalled()->willReturn(50);
+        $promotion->getDiscountAmountForProduct($chair->reveal(), 2)->shouldBeCalled()->willReturn(-50);
 
         $promotionCode = $this->prophesize(PromotionCode::class);
         $promotionCode->getStock()->shouldBeCalled()->willReturn(2);
