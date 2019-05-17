@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
+use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStock;
+use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Order\Merger;
@@ -12,18 +14,31 @@ use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
 class ApplyPromotionCodeHandler
 {
     /** @var Merger */
     private $orderMerger;
 
+    /** @var OrderRepositoryInterface */
+    private $orderRepository;
+
+    /** @var DecrementStockHandler */
+    private $decrementStockHandler;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    public function __construct(Merger $orderMerger, \DateTimeInterface $dateTime)
-    {
+    public function __construct(
+        Merger $orderMerger,
+        OrderRepositoryInterface $orderRepository,
+        DecrementStockHandler $decrementStockHandler,
+        \DateTimeInterface $dateTime
+    ) {
         $this->orderMerger = $orderMerger;
+        $this->orderRepository = $orderRepository;
+        $this->decrementStockHandler = $decrementStockHandler;
         $this->dateTime = $dateTime;
     }
 
@@ -62,7 +77,40 @@ class ApplyPromotionCodeHandler
             throw new PromotionCodeAlreadyExistException('This promotion code is already used');
         }
 
-        // @todo: Add promotion code to order
+        $promotionCodeRows = [];
+
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            $product = $promotion->getProduct();
+            $orderRow = $order->getRowForProduct($product);
+
+            if (null === $orderRow) {
+                continue;
+            }
+
+            $discount = $promotion->getDiscountAmountForProduct($product, $orderRow->getQuantity());
+
+            if ($discount < 0) {
+                $promotionCodeRows[] =  new Order\PromotionCode(
+                    $order,
+                    $promotionCode,
+                    $discount,
+                    $product,
+                    $product->getVat()
+                );
+
+            }
+        }
+
+        if (empty($promotionCodeRows)) {
+            return;
+        }
+
+        foreach ($promotionCodeRows as $promotionCodeRow) {
+            $order->addPromotionCode($promotionCodeRow);
+        }
+
+        $this->decrementStockHandler->handle(new DecrementStock($promotionCode));
+        $this->orderRepository->set($order);
     }
 
     private function hasAtLeastOneProductConcernedByPromotionCode(Order $order, PromotionCode $promotionCode): bool

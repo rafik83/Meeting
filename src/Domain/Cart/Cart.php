@@ -469,10 +469,7 @@ class Cart
 
         foreach ($promotionCode->getPromotions() as $promotion) {
             $product = $promotion->getProduct();
-
-            if (null !== ($cartRow = $this->getCartRowForProduct($product))) {
-                $total += $promotion->getDiscountAmountForProduct($product, $cartRow->getQuantity());
-            }
+            $total += $this->getDiscountForProduct($promotionCode, $product);
         }
 
         return $total;
