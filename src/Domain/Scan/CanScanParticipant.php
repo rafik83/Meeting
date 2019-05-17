@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Order\Merger;
 
 class CanScanParticipant
 {
-
     /** @var Merger */
     private $merger;
 
@@ -26,24 +25,23 @@ class CanScanParticipant
     public function isSatisfiedBy(Sheet $sheet): bool
     {
         $type = $sheet->getType();
-        $options = [];
 
-        if (!$type->canScanParticipant()) {
-            $order = $this->merger->getMergedOrders($sheet);
-            if (null !== $order) {
-                $options = $order->getOptions();
-            }
-
-            $hasScanOption = false;
-            foreach ($options as $option) {
-                if($option->canScanParticipant()) {
-                    $hasScanOption = true;
-                }
-            }
-
-            return $hasScanOption;
+        if ($type->canScanParticipant()) {
+            return true;
         }
 
-        return $type->canScanParticipant();
+        $order = $this->merger->getMergedOrders($sheet);
+        if (null === $order) {
+            return false;
+        }
+
+        $options = $order->getOptions();
+        foreach ($options as $option) {
+            if ($option->canScanParticipant()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
