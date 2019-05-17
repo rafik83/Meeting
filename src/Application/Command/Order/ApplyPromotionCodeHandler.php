@@ -8,6 +8,7 @@ use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeAlreadyExistException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeConflictException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNegativeRowException;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
@@ -26,13 +27,13 @@ class ApplyPromotionCodeHandler
         $this->dateTime = $dateTime;
     }
 
-    public function handle(ApplyPromotionCode $applyPromotionCode)
+    public function handle(ApplyPromotionCode $applyPromotionCode): void
     {
         $promotionCode = $applyPromotionCode->promotionCode;
-        $mergedOrder = $this->orderMerger->getMergedOrders($applyPromotionCode->order->getSheet());
+        $order = $applyPromotionCode->order;
 
-        if (null !== $mergedOrder && $mergedOrder->hasPromotionCode($promotionCode)) {
-            throw new PromotionCodeAlreadyExistException('This promotion code is already used');
+        if (null === $promotionCode) {
+            throw new PromotionCodeNotFoundException();
         }
 
         if ($promotionCode->isOutDated($this->dateTime)) {
@@ -43,16 +44,22 @@ class ApplyPromotionCodeHandler
             throw new PromotionCodeSoldOutException();
         }
 
-        if (!$this->hasAtLeastOneProductConcernedByPromotionCode($mergedOrder, $promotionCode)) {
+        if (!$this->hasAtLeastOneProductConcernedByPromotionCode($order, $promotionCode)) {
             throw new PromotionCodeNotUsedException();
         }
 
-        if ($this->isPromotionHaveConflict($mergedOrder, $promotionCode)) {
+        if ($this->isPromotionHaveConflict($order, $promotionCode)) {
             throw new PromotionCodeConflictException();
         }
 
-        if (!$this->isOrderRowPositive($mergedOrder, $promotionCode)) {
+        if (!$this->isOrderRowPositive($order, $promotionCode)) {
             throw new PromotionCodeNegativeRowException();
+        }
+
+        $mergedOrder = $this->orderMerger->getMergedOrders($applyPromotionCode->order->getSheet());
+
+        if (null !== $mergedOrder && $mergedOrder->hasPromotionCode($promotionCode)) {
+            throw new PromotionCodeAlreadyExistException('This promotion code is already used');
         }
 
         // @todo: Add promotion code to order
