@@ -1,10 +1,8 @@
+{% if form.vars.value|length == 0 and form.vars.choices|length <= 1 %}
+    {{ form_widget(form, { attr: { class: 'hide' } }) }}
+{% else %}
 <div class="filter">
     <h3>{{ form.vars.label }}</h3>
-
-    {% if form.vars.value|length == 0 and form.vars.choices|length <= 1 %}
-        <p><small>{{ 'catalog.search.no-filter-to-refine'|trans }}</small></p>
-        {{ form_widget(form, { attr: { class: 'hide' } }) }}
-    {% else %}
         {{ form_widget(form) }}
-    {% endif %}
 </div>
+{% endif %}
