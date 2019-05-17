@@ -136,8 +136,8 @@ class OrderController extends Controller
                     ['event' => $event->getId(), 'order' => $order->getId()]
                 );
             } catch (PromotionCodeException $exception) {
-                $promotionCodeChoiceForm->addError(
-                    new FormError($this->get('translator')->trans($exception->getFlash()))
+                $promotionCodeChoiceForm->get('promotionCode')->addError(
+                    new FormError($this->get('translator')->trans($exception->getFlash(), [], 'flashes'))
                 );
             }
         }
