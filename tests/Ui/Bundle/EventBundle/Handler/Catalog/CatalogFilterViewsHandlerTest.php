@@ -86,6 +86,9 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->locale
         );
 
+        $this->canDisplayNeedObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(false);
+        $this->canDisplaySupplyObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(false);
+
         $searchFacetView = new SearchFacetView('type', 'label', 'placeholder', true);
         $searchFacetsView = new SearchFacetsView([$searchFacetView]);
         $query = new SearchFacetViewQuery($this->event->reveal(), 'fr');
@@ -136,6 +139,9 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->sheet->reveal(),
             $this->locale
         );
+
+        $this->canDisplayNeedObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(true);
+        $this->canDisplaySupplyObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(true);
 
         $searchFacetView1 = new SearchFacetView('type', 'label', 'placeholder', true);
         $searchFacetView2 = new SearchFacetView('position', 'label', 'placeholder', true);
@@ -203,7 +209,9 @@ class CatalogFilterViewsHandlerTest extends TestCase
             [
                 'sheet_organization_category' => [],
             ],
-            null
+            null,
+            true,
+            true
         );
 
         $this->assertEquals($expected, $result);

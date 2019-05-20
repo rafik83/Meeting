@@ -17,12 +17,14 @@ class CanDisplaySupplyObjectiveFilter
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    public function __construct (TemplateDataFactory $templateDataFactory) {
+    public function __construct(TemplateDataFactory $templateDataFactory)
+    {
 
         $this->templateDataFactory = $templateDataFactory;
     }
 
-    public function isSatisfiedBy(Sheet $sheet, $locale = null) {
+    public function isSatisfiedBy(Sheet $sheet, $locale = null)
+    {
 
         $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
         $nomenclatures = $templateData->getNomenclatureObjects();
