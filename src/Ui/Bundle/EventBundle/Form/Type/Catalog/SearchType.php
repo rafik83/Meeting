@@ -43,27 +43,27 @@ class SearchType extends AbstractSearchType
                 ],
             ]);
 
-            $objectiveFilters = [];
+        $objectiveFilters = [];
 
-            if ($options['hasSupplyObjectiveFilter']) {
-                $objectiveFilters['form.search.objective.supply'] = Nomenclature::OBJECTIVE_SUPPLY;
-            }
+        if ($options['hasSupplyObjectiveFilter']) {
+            $objectiveFilters['form.search.objective.supply'] = Nomenclature::OBJECTIVE_SUPPLY;
+        }
 
-            if ($options['hasNeedObjectiveFilter']) {
-                $objectiveFilters['form.search.objective.need'] = Nomenclature::OBJECTIVE_NEED;
-            }
+        if ($options['hasNeedObjectiveFilter']) {
+            $objectiveFilters['form.search.objective.need'] = Nomenclature::OBJECTIVE_NEED;
+        }
 
-            if ($options['hasNeedObjectiveFilter'] || $options['hasSupplyObjectiveFilter']) {
-                $builder->
-                add(
-                    SearchFields::FILTER_OBJECTIVE, ChoiceType::class, [
+        if ($options['hasNeedObjectiveFilter'] || $options['hasSupplyObjectiveFilter']) {
+            $builder->
+            add(
+                SearchFields::FILTER_OBJECTIVE, ChoiceType::class, [
                     'label'    => 'form.search.objective.label',
                     'expanded' => true,
                     'multiple' => true,
                     'choices'  => $objectiveFilters,
                 ]
-                );
-            }
+            );
+        }
 
         if (true === $options['filterByAvailableSlotIds']) {
             $everyone = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE;
