@@ -5224,9 +5224,9 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
-            - '@repository.promotion_code_repository'
             - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
             - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter'
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler'
             - '@datetime'
 
     cart_cleaner:

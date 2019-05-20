@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Tests\Domain\Cart;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStock;
+use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\Converter;
 use Proximum\Vimeet\Domain\Model\CartRow;
@@ -110,8 +112,6 @@ class ConverterTest extends TestCase
         $promotion->getDiscountAmountForProduct($chair->reveal(), 2)->shouldBeCalled()->willReturn(-50);
 
         $promotionCode = $this->prophesize(PromotionCode::class);
-        $promotionCode->getStock()->shouldBeCalled()->willReturn(2);
-        $promotionCode->setStock(1)->shouldBeCalled();
         $promotionCode->getSerializedData()->shouldBeCalled()->willReturn('Promotion Code Serialized data');
         $promotionCode->getPromotions()->shouldBeCalled()->willReturn([$promotion->reveal()]);
 
@@ -146,14 +146,14 @@ class ConverterTest extends TestCase
         $promotionCodeRowRepository = $this->prophesize(PromotionCodeRowRepositoryInterface::class);
         $promotionCodeRowRepository->deleteForSheet($sheet->reveal())->shouldBeCalled();
 
-        $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
-        $promotionCodeRepository->set($promotionCode->reveal())->shouldBeCalled();
-
         $participantProductSetter = $this->prophesize(ParticipantProductSetter::class);
         $participantProductSetter
             ->setProductOnParticipant($participant1->reveal(), $participantProduct->reveal())
             ->shouldBeCalled()
         ;
+
+        $decrementStockHandler = $this->prophesize(DecrementStockHandler::class);
+        $decrementStockHandler->handle(new DecrementStock($promotionCode->reveal()))->shouldBeCalled();
 
         $productAttributedToParticipantSetter = $this->prophesize(ProductAttributedToParticipantSetter::class);
         $productAttributedToParticipantSetter
@@ -170,9 +170,9 @@ class ConverterTest extends TestCase
             $cartRowRepository->reveal(),
             $cartStepRepository->reveal(),
             $promotionCodeRowRepository->reveal(),
-            $promotionCodeRepository->reveal(),
             $participantProductSetter->reveal(),
             $productAttributedToParticipantSetter->reveal(),
+            $decrementStockHandler->reveal(),
             $datetime
         );
 
