@@ -761,6 +761,8 @@ services:
             - '@catalog.visible_participation_categories'
             - '@catalog.visible_participation_types'
             - '@templating'
+            - '@Proximum\Vimeet\Domain\Catalog\CanDisplayNeedObjectiveFilter'
+            - '@Proximum\Vimeet\Domain\Catalog\CanDisplaySupplyObjectiveFilter'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler:
         arguments:

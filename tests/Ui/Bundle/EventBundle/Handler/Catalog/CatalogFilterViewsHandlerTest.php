@@ -22,6 +22,8 @@ use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
+use Proximum\Vimeet\Domain\Catalog\CanDisplayNeedObjectiveFilter;
+use Proximum\Vimeet\Domain\Catalog\CanDisplaySupplyObjectiveFilter;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -57,6 +59,12 @@ class CatalogFilterViewsHandlerTest extends TestCase
     /** @var string */
     public $locale;
 
+    /** @var ObjectProphecy */
+    public $canDisplayNeedObjectiveFilter;
+
+    /** @var ObjectProphecy */
+    public $canDisplaySupplyObjectiveFilter;
+
     public function setUp()
     {
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
@@ -66,6 +74,8 @@ class CatalogFilterViewsHandlerTest extends TestCase
         $this->event = $this->prophesize(Event::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->locale = 'fr';
+        $this->canDisplayNeedObjectiveFilter = $this->prophesize(CanDisplayNeedObjectiveFilter::class);
+        $this->canDisplaySupplyObjectiveFilter = $this->prophesize(CanDisplaySupplyObjectiveFilter::class);
     }
 
     public function testHandleNoType()
@@ -98,7 +108,10 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->queryBus->reveal(),
             $this->visibleParticipationCategories->reveal(),
             $this->visibleParticipationTypes->reveal(),
-            $this->engine->reveal()
+            $this->engine->reveal(),
+            $this->canDisplayNeedObjectiveFilter->reveal(),
+            $this->canDisplaySupplyObjectiveFilter->reveal()
+
         );
 
         $result = $handler->handle($view);
@@ -174,7 +187,9 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->queryBus->reveal(),
             $this->visibleParticipationCategories->reveal(),
             $this->visibleParticipationTypes->reveal(),
-            $this->engine->reveal()
+            $this->engine->reveal(),
+            $this->canDisplayNeedObjectiveFilter->reveal(),
+            $this->canDisplaySupplyObjectiveFilter->reveal()
         );
 
         $result = $handler->handle($view);
