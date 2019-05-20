@@ -77,6 +77,33 @@ class ApplyPromotionCodeHandler
             throw new PromotionCodeAlreadyExistException('This promotion code is already used');
         }
 
+        $this->applyPromotionCodeToOrder($promotionCode, $order);
+    }
+
+    private function applyPromotionCodeToOrder(PromotionCode $promotionCode, Order $order): void
+    {
+        $promotionCodeRows = $this->getOrderPromotionCodeRows($promotionCode, $order);
+
+        if (empty($promotionCodeRows)) {
+            return;
+        }
+
+        foreach ($promotionCodeRows as $promotionCodeRow) {
+            $order->addPromotionCode($promotionCodeRow);
+        }
+
+        $this->decrementStockHandler->handle(new DecrementStock($promotionCode));
+        $this->orderRepository->set($order);
+    }
+
+    /**
+     * @param PromotionCode $promotionCode
+     * @param Order         $order
+     *
+     * @return Order\PromotionCode[]
+     */
+    private function getOrderPromotionCodeRows(PromotionCode $promotionCode, Order $order): array
+    {
         $promotionCodeRows = [];
 
         foreach ($promotionCode->getPromotions() as $promotion) {
@@ -101,16 +128,7 @@ class ApplyPromotionCodeHandler
             }
         }
 
-        if (empty($promotionCodeRows)) {
-            return;
-        }
-
-        foreach ($promotionCodeRows as $promotionCodeRow) {
-            $order->addPromotionCode($promotionCodeRow);
-        }
-
-        $this->decrementStockHandler->handle(new DecrementStock($promotionCode));
-        $this->orderRepository->set($order);
+        return $promotionCodeRows;
     }
 
     private function hasAtLeastOneProductConcernedByPromotionCode(Order $order, PromotionCode $promotionCode): bool

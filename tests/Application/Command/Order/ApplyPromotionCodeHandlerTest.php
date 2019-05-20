@@ -6,6 +6,8 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Command\Order\ApplyPromotionCode;
 use Proximum\Vimeet\Application\Command\Order\ApplyPromotionCodeHandler;
+use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStock;
+use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -20,6 +22,7 @@ use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotFoundException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
 class ApplyPromotionCodeHandlerTest extends TestCase
 {
@@ -41,6 +44,12 @@ class ApplyPromotionCodeHandlerTest extends TestCase
     /** @var ObjectProphecy|Event */
     private $event;
 
+    /** @var ObjectProphecy|OrderRepositoryInterface */
+    private $orderRepository;
+
+    /** @var ObjectProphecy|DecrementStockHandler */
+    private $decrementStockHandler;
+
     public function setUp()
     {
         $this->orderMerger = $this->prophesize(Merger::class);
@@ -55,7 +64,15 @@ class ApplyPromotionCodeHandlerTest extends TestCase
 
         $this->order = new Order($this->sheet->reveal(), '', new \DateTime('2019-05-15'));
 
-        $this->applyPromotionCodeHandler = new ApplyPromotionCodeHandler($this->orderMerger->reveal(), $this->dateTime);
+        $this->orderRepository = $this->prophesize(OrderRepositoryInterface::class);
+        $this->decrementStockHandler = $this->prophesize(DecrementStockHandler::class);
+
+        $this->applyPromotionCodeHandler = new ApplyPromotionCodeHandler(
+            $this->orderMerger->reveal(),
+            $this->orderRepository->reveal(),
+            $this->decrementStockHandler->reveal(),
+            $this->dateTime
+        );
     }
 
     public function testPromotionCodeNotFoundException()
@@ -108,14 +125,14 @@ class ApplyPromotionCodeHandlerTest extends TestCase
         $product = $this->prophesize(Product::class);
 
         $promotionCode1 = new PromotionCode($this->event->reveal(), 'Promotion code -10%', 'ABCDEF');
-        $promotionCode1->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 20);
+        $promotionCode1->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 10);
         $this->order->addPromotionCode(
             new Order\PromotionCode($this->order, $promotionCode1, 100, $product->reveal(), 20)
         );
         $this->order->addRow(new Order\Row($this->order, 1, 20, $product->reveal()));
 
         $promotionCode2 = new PromotionCode($this->event->reveal(), 'Promotion code -30%', 'GHIJKL');
-        $promotionCode2->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 20);
+        $promotionCode2->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 10);
 
         $applyPromotionCode = new ApplyPromotionCode($this->order);
         $applyPromotionCode->promotionCode = $promotionCode2;
@@ -133,7 +150,7 @@ class ApplyPromotionCodeHandlerTest extends TestCase
         $this->order->addRow(new Order\Row($this->order, -1, 20, $product2->reveal()));
 
         $promotionCode1 = new PromotionCode($this->event->reveal(), 'Promotion code -10%', 'ABCDEF');
-        $promotionCode1->setPromotion($product1->reveal(), Promotion::TYPE_VALUE_OFF, 20);
+        $promotionCode1->setPromotion($product1->reveal(), Promotion::TYPE_VALUE_OFF, 10);
         $this->order->addPromotionCode(
             new Order\PromotionCode($this->order, $promotionCode1, 100, $product1->reveal(), 20)
         );
@@ -154,7 +171,7 @@ class ApplyPromotionCodeHandlerTest extends TestCase
         $this->order->addRow(new Order\Row($this->order, 1, 20, $product->reveal()));
 
         $promotionCode = new PromotionCode($this->event->reveal(), 'Promotion code -10%', 'ABCDEF');
-        $promotionCode->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 20);
+        $promotionCode->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 10);
 
         $mergedOrder = new Order($this->sheet->reveal(), '', new \DateTime('2019-05-15'));
         $mergedOrder->addPromotionCode(
@@ -175,10 +192,14 @@ class ApplyPromotionCodeHandlerTest extends TestCase
     public function testHandle()
     {
         $product = $this->prophesize(Product::class);
+        $product->getVat()->shouldBeCalled()->willReturn(20);
+        $product->getSerializedData()->shouldBeCalled()->willReturn('serializedData');
+        $product->getUnitPrice()->shouldBeCalled()->willReturn(99);
+
         $this->order->addRow(new Order\Row($this->order, 1, 20, $product->reveal()));
 
         $promotionCode = new PromotionCode($this->event->reveal(), 'Promotion code -10%', 'ABCDEF');
-        $promotionCode->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 20);
+        $promotionCode->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 10);
 
         $this->orderMerger
             ->getMergedOrders($this->sheet->reveal())
@@ -186,8 +207,16 @@ class ApplyPromotionCodeHandlerTest extends TestCase
             ->willReturn(null)
         ;
 
+        $this->orderRepository->set($this->order)->shouldBeCalled();
+        $this->decrementStockHandler->handle(new DecrementStock($promotionCode))->shouldBeCalled();
+
         $applyPromotionCode = new ApplyPromotionCode($this->order);
         $applyPromotionCode->promotionCode = $promotionCode;
         $this->applyPromotionCodeHandler->handle($applyPromotionCode);
+
+        $addedPromotionCode = $this->order->getPromotionCodes()[0];
+        $this->assertEquals($product->reveal(), $addedPromotionCode->getProduct());
+        $this->assertEquals($promotionCode, $addedPromotionCode->getPromotionCode());
+        $this->assertEquals(-10.0, $addedPromotionCode->getPrice());
     }
 }
