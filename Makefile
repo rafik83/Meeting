@@ -27,6 +27,7 @@ help:
 
 ## Setup environment & Install & Build application
 setup:
+	cp -n app/config/parameters.yml.dist app/config/parameters.yml
 	vagrant up --no-provision
 	vagrant provision
 	vagrant ssh -- "cd /srv/app && make install build"
