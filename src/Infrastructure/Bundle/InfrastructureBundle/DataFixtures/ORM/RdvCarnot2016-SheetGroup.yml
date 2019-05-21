@@ -140,7 +140,6 @@ Proximum\Vimeet\Domain\Model\Participant:
             4b674gba: { gender: "woman" }
             3b759fbb: { telephone: <e164PhoneNumber()> }
             6c4a3a4f: { items: ["position1"] }
-        visio: true
     rdv_carnot_group_sheet_2_participant_1:
         __construct: false
         user: '@rdv_carnot_group_sheet_2_owner_user' # this user participate to rdv_carnot_group_sheet_2 and rdv_carnot_group_sheet_3
