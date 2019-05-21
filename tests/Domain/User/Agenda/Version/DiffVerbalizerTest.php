@@ -81,18 +81,21 @@ class DiffVerbalizerTest extends TestCase
         $user = $this->prophesize(User::class);
         $locale = 'fr';
         $currentVersion = [];
-        $lastVersion->getVersion()->willReturn([
-            1 => [
-                'request' => 1,
-                'fromSheet' => 2,
-                'toSheet' => 3,
-            ],
-            2 => [
-                'request' => 2,
-                'fromSheet' => 2,
-                'toSheet' => 4,
-            ],
-        ]);
+        $lastVersion->getVersion()->willReturn(
+            [
+                1 => [
+                    'request' => 1,
+                    'fromSheet' => 2,
+                    'toSheet' => 3,
+                ],
+                2 => [
+                    'request' => 2,
+                    'fromSheet' => 2,
+                    'toSheet' => 4,
+                ],
+            ]
+        )
+        ;
         $lastVersion->getEvent()->willReturn($event->reveal());
         $lastVersion->getUser()->willReturn($user->reveal());
         $event->getTimeZone()->willReturn('Europe/Paris');
@@ -102,11 +105,13 @@ class DiffVerbalizerTest extends TestCase
         $this->sheetRepository
             ->getSheetsByUserAndEvent($user->reveal(), $event->reveal())
             ->shouldBeCalled()
-            ->willReturn([2 => $userSheet->reveal()]);
+            ->willReturn([2 => $userSheet->reveal()])
+        ;
         $this->sheetRepository
             ->findByIds([3 => 3, 4 => 4])
             ->shouldBeCalled()
-            ->willReturn([3 => $sheetMet1->reveal(), 4 => $sheetMet2->reveal()]);
+            ->willReturn([3 => $sheetMet1->reveal(), 4 => $sheetMet2->reveal()])
+        ;
         $this->translator
             ->trans(
                 DiffVerbalizer::TRANSLATION_MEETING_DELETED,
@@ -115,7 +120,8 @@ class DiffVerbalizerTest extends TestCase
                 $locale
             )
             ->shouldBeCalled()
-            ->willReturn('Meeting deleted with sheet title given 1');
+            ->willReturn('Meeting deleted with sheet title given 1')
+        ;
         $this->translator
             ->trans(
                 DiffVerbalizer::TRANSLATION_MEETING_DELETED,
@@ -124,7 +130,8 @@ class DiffVerbalizerTest extends TestCase
                 $locale
             )
             ->shouldBeCalled()
-            ->willReturn('Meeting deleted with sheet title given 2');
+            ->willReturn('Meeting deleted with sheet title given 2')
+        ;
 
         $this->meetingSlotRepository->findByIds([])->shouldNotBeCalled();
         $this->spotRepository->getSpotsByIds([])->shouldNotBeCalled();
@@ -171,15 +178,18 @@ class DiffVerbalizerTest extends TestCase
                 'spot' => 14,
             ],
         ];
-        $lastVersion->getVersion()->willReturn([
-            1 => [
-                'request' => 1,
-                'fromSheet' => 2,
-                'toSheet' => 3,
-                'slot' => 9,
-                'spot' => 8,
-            ],
-        ]);
+        $lastVersion->getVersion()->willReturn(
+            [
+                1 => [
+                    'request' => 1,
+                    'fromSheet' => 2,
+                    'toSheet' => 3,
+                    'slot' => 9,
+                    'spot' => 8,
+                ],
+            ]
+        )
+        ;
         $lastVersion->getEvent()->willReturn($event->reveal());
         $lastVersion->getUser()->willReturn($user->reveal());
         $event->getTimeZone()->willReturn('Europe/Paris');
@@ -191,11 +201,13 @@ class DiffVerbalizerTest extends TestCase
         $this->sheetRepository
             ->getSheetsByUserAndEvent($user->reveal(), $event->reveal())
             ->shouldBeCalled()
-            ->willReturn([2 => $userSheet->reveal()]);
+            ->willReturn([2 => $userSheet->reveal()])
+        ;
         $this->sheetRepository
             ->findByIds([4 => 4])
             ->shouldBeCalled()
-            ->willReturn([4 => $sheetMet1->reveal()]);
+            ->willReturn([4 => $sheetMet1->reveal()])
+        ;
         $this->translator
             ->trans(
                 DiffVerbalizer::TRANSLATION_MEETING_ADDED,
@@ -209,7 +221,8 @@ class DiffVerbalizerTest extends TestCase
                 $locale
             )
             ->shouldBeCalled()
-            ->willReturn('Meeting added with sheet title given 1 the 10/10/2017 at 12:00 in Spot Ref');
+            ->willReturn('Meeting added with sheet title given 1 the 10/10/2017 at 12:00 in Spot Ref')
+        ;
 
         $this->meetingSlotRepository->findByIds([12 => 12])->shouldBeCalled()->willReturn([12 => $slot->reveal()]);
         $this->spotRepository->getSpotsByIds([14 => 14])->shouldBeCalled()->willReturn([14 => $spot->reveal()]);
@@ -266,22 +279,25 @@ class DiffVerbalizerTest extends TestCase
                 'spot' => 14,
             ],
         ];
-        $lastVersion->getVersion()->willReturn([
-            1 => [
-                'request' => 1,
-                'fromSheet' => 2,
-                'toSheet' => 3,
-                'slot' => 10,
-                'spot' => 8,
-            ],
-            2 => [
-                'request' => 2,
-                'fromSheet' => 2,
-                'toSheet' => 4,
-                'slot' => 12,
-                'spot' => 16,
-            ],
-        ]);
+        $lastVersion->getVersion()->willReturn(
+            [
+                1 => [
+                    'request' => 1,
+                    'fromSheet' => 2,
+                    'toSheet' => 3,
+                    'slot' => 10,
+                    'spot' => 8,
+                ],
+                2 => [
+                    'request' => 2,
+                    'fromSheet' => 2,
+                    'toSheet' => 4,
+                    'slot' => 12,
+                    'spot' => 16,
+                ],
+            ]
+        )
+        ;
         $lastVersion->getEvent()->willReturn($event->reveal());
         $lastVersion->getUser()->willReturn($user->reveal());
         $event->getTimeZone()->willReturn('Europe/Paris');
@@ -295,11 +311,13 @@ class DiffVerbalizerTest extends TestCase
         $this->sheetRepository
             ->getSheetsByUserAndEvent($user->reveal(), $event->reveal())
             ->shouldBeCalled()
-            ->willReturn([2 => $userSheet->reveal()]);
+            ->willReturn([2 => $userSheet->reveal()])
+        ;
         $this->sheetRepository
             ->findByIds([3 => 3, 4 => 4])
             ->shouldBeCalled()
-            ->willReturn([3 => $sheetMet1->reveal(), 4 => $sheetMet2->reveal()]);
+            ->willReturn([3 => $sheetMet1->reveal(), 4 => $sheetMet2->reveal()])
+        ;
         $this->translator
             ->trans(
                 DiffVerbalizer::TRANSLATION_MEETING_MOVED,
@@ -313,7 +331,8 @@ class DiffVerbalizerTest extends TestCase
                 $locale
             )
             ->shouldBeCalled()
-            ->willReturn('Meeting moved with sheet title given 1 the 10/10/2017 at 12:00 in Spot Ref 1');
+            ->willReturn('Meeting moved with sheet title given 1 the 10/10/2017 at 12:00 in Spot Ref 1')
+        ;
         $this->translator
             ->trans(
                 DiffVerbalizer::TRANSLATION_MEETING_MOVED,
@@ -327,7 +346,8 @@ class DiffVerbalizerTest extends TestCase
                 $locale
             )
             ->shouldBeCalled()
-            ->willReturn('Meeting moved with sheet title given 2 the 10/10/2017 at 16:30 in Spot Ref 2');
+            ->willReturn('Meeting moved with sheet title given 2 the 10/10/2017 at 16:30 in Spot Ref 2')
+        ;
 
         $this->meetingSlotRepository
             ->findByIds([9 => 9, 12 => 12])
@@ -403,22 +423,25 @@ class DiffVerbalizerTest extends TestCase
                 'spot' => 14,
             ],
         ];
-        $lastVersion->getVersion()->willReturn([
-            1 => [
-                'request' => 1,
-                'fromSheet' => 2,
-                'toSheet' => 3,
-                'slot' => 10,
-                'spot' => 8,
-            ],
-            2 => [
-                'request' => 2,
-                'fromSheet' => 2,
-                'toSheet' => 5,
-                'slot' => 12,
-                'spot' => 16,
-            ],
-        ]);
+        $lastVersion->getVersion()->willReturn(
+            [
+                1 => [
+                    'request' => 1,
+                    'fromSheet' => 2,
+                    'toSheet' => 3,
+                    'slot' => 10,
+                    'spot' => 8,
+                ],
+                2 => [
+                    'request' => 2,
+                    'fromSheet' => 2,
+                    'toSheet' => 5,
+                    'slot' => 12,
+                    'spot' => 16,
+                ],
+            ]
+        )
+        ;
         $lastVersion->getEvent()->willReturn($event->reveal());
         $lastVersion->getUser()->willReturn($user->reveal());
         $event->getTimeZone()->willReturn('Europe/Paris');
@@ -433,11 +456,13 @@ class DiffVerbalizerTest extends TestCase
         $this->sheetRepository
             ->getSheetsByUserAndEvent($user->reveal(), $event->reveal())
             ->shouldBeCalled()
-            ->willReturn([2 => $userSheet->reveal()]);
+            ->willReturn([2 => $userSheet->reveal()])
+        ;
         $this->sheetRepository
             ->findByIds([3 => 3, 4 => 4, 5 => 5])
             ->shouldBeCalled()
-            ->willReturn([3 => $sheetMet1->reveal(), 4 => $sheetMet2->reveal(), 5 => $oldSheetMet->reveal()]);
+            ->willReturn([3 => $sheetMet1->reveal(), 4 => $sheetMet2->reveal(), 5 => $oldSheetMet->reveal()])
+        ;
         $this->translator
             ->trans(
                 DiffVerbalizer::TRANSLATION_MEETING_MOVED,
@@ -451,7 +476,8 @@ class DiffVerbalizerTest extends TestCase
                 $locale
             )
             ->shouldBeCalled()
-            ->willReturn('Meeting moved with sheet title given 1 the 10/10/2017 at 12:00 in Spot Ref 1');
+            ->willReturn('Meeting moved with sheet title given 1 the 10/10/2017 at 12:00 in Spot Ref 1')
+        ;
         $this->translator
             ->trans(
                 DiffVerbalizer::TRANSLATION_MEETING_ADDED,
@@ -465,7 +491,8 @@ class DiffVerbalizerTest extends TestCase
                 $locale
             )
             ->shouldBeCalled()
-            ->willReturn('Meeting added with sheet title given 2 the 10/10/2017 at 16:30 in Spot Ref 2');
+            ->willReturn('Meeting added with sheet title given 2 the 10/10/2017 at 16:30 in Spot Ref 2')
+        ;
         $this->translator
             ->trans(
                 DiffVerbalizer::TRANSLATION_MEETING_DELETED,
@@ -474,7 +501,8 @@ class DiffVerbalizerTest extends TestCase
                 $locale
             )
             ->shouldBeCalled()
-            ->willReturn('Meeting removed with old sheet title');
+            ->willReturn('Meeting removed with old sheet title')
+        ;
 
         $this->meetingSlotRepository
             ->findByIds([9 => 9, 12 => 12])
