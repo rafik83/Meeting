@@ -106,10 +106,11 @@ interface UserRepositoryInterface
      * @param Event  $event
      * @param string $locale
      * @param Type[] $types
+     * @param array $states
      *
      * @return UserSheetTypeView[]
      */
-    public function getWithSheetAndTypeByEvent(Event $event, string $locale, array $types): array;
+    public function getWithSheetAndTypeByEvent(Event $event, string $locale, array $types, array $states): array;
 
     /**
      * @param Event $event

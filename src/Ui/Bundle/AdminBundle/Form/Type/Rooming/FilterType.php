@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rooming;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\StateChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,6 +31,13 @@ class FilterType extends AbstractType
                     'user'        => $options['admin'],
                     'event'       => $options['event'],
                     'orderByTitle' => true,
+                ]
+            )
+            ->add(
+                'states', StateChoiceType::class, [
+                    'label'    => 'form.rooming_filter.children.state.label',
+                    'multiple' => true,
+                    'expanded' => true,
                 ]
             );
     }

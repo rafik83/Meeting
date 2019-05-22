@@ -17,10 +17,14 @@ class ListViewQuery implements Query
     /** @var Type[] */
     public $types;
 
-    public function __construct(Event $event, string $locale, array $types)
+    /** @var array */
+    public $states;
+
+    public function __construct(Event $event, string $locale, array $types, array $states)
     {
         $this->event = $event;
         $this->locale = $locale;
         $this->types = $types;
+        $this->states = $states;
     }
 }

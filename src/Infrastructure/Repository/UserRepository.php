@@ -255,7 +255,7 @@ class UserRepository implements UserRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function getWithSheetAndTypeByEvent(Event $event, string $locale, array $types): array
+    public function getWithSheetAndTypeByEvent(Event $event, string $locale, array $types, array $states): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -300,6 +300,12 @@ class UserRepository implements UserRepositoryInterface
             $queryBuilder
                 ->andWhere('sheet.type IN (:types)')
                 ->setParameter('types', $types);
+        }
+
+        if (count($states)) {
+            $queryBuilder
+                ->andWhere('sheet.state IN (:states)')
+                ->setParameter('states', $states);
         }
 
         return $queryBuilder->getQuery()->getResult();

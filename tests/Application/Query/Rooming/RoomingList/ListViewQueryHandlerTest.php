@@ -13,6 +13,7 @@ use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayToAssignV
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserStayView;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type as DomainType;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
@@ -53,7 +54,10 @@ class ListViewQueryHandlerTest extends TestCase
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository
-            ->getWithSheetAndTypeByEvent($event->reveal(), 'fr', [$type->reveal()])
+            ->getWithSheetAndTypeByEvent($event->reveal(),
+                'fr',
+                [$type->reveal()],
+                [Sheet::STATE_PENDING, Sheet::STATE_VALIDATED, Sheet::STATE_ACCEPTED, Sheet::STATE_REFUSED])
             ->shouldBeCalled()
             ->willReturn(
                 [
@@ -194,7 +198,10 @@ class ListViewQueryHandlerTest extends TestCase
             $extraDataRepository->reveal(),
             $overlappedTimeRangeTruncater
         );
-        $result = $handler->handle(new ListViewQuery($event->reveal(), 'fr', [$type->reveal()]));
+        $result = $handler->handle(new ListViewQuery($event->reveal(),
+            'fr',
+            [$type->reveal()],
+            [Sheet::STATE_PENDING, Sheet::STATE_VALIDATED, Sheet::STATE_ACCEPTED, Sheet::STATE_REFUSED]));
 
         $expected = new ListView(
             [
@@ -316,7 +323,7 @@ class ListViewQueryHandlerTest extends TestCase
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $userRepository
-            ->getWithSheetAndTypeByEvent($event->reveal(), 'fr', [])
+            ->getWithSheetAndTypeByEvent($event->reveal(), 'fr', [], [])
             ->shouldBeCalled()
             ->willReturn(
                 [
@@ -364,7 +371,7 @@ class ListViewQueryHandlerTest extends TestCase
             $extraDataRepository->reveal(),
             $overlappedTimeRangeTruncater
         );
-        $result = $handler->handle(new ListViewQuery($event->reveal(), 'fr', []));
+        $result = $handler->handle(new ListViewQuery($event->reveal(), 'fr', [], []));
 
         $expected = new ListView(
             [
