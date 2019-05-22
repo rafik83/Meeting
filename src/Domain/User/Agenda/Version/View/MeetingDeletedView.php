@@ -15,11 +15,16 @@ class MeetingDeletedView
     /** @var int */
     public $sheetId;
 
+    /** @var int */
+    public $requestId;
+
     /**
      * @param int $sheetId
+     * @param int $requestId
      */
-    public function __construct(int $sheetId)
+    public function __construct(int $sheetId, int $requestId)
     {
         $this->sheetId = $sheetId;
+        $this->requestId = $requestId;
     }
 }

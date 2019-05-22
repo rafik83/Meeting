@@ -1554,6 +1554,7 @@ register.email_already_exists: 'Un compte associé à cette adresse mail existe 
 reset_password.title: 'Demande de nouveau mot de passe'
 user.agenda.version.agendaModified: 'Votre planning a été modifié:'
 user.agenda.version.meetingAdded: 'Vous avez un nouveau rendez-vous avec %sheetTitle% le %day% à %hour% en %spotRef%.'
+user.agenda.version.meetingChangedWithMessage: 'Message de votre interlocuteur : %message%'
 user.agenda.version.meetingDeleted: 'Le rendez-vous avec %sheetTitle% a été supprimé.'
 user.agenda.version.meetingMoved: 'Le rendez-vous avec %sheetTitle% a été déplacé au %day% à %hour% en %spotRef%.'
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'

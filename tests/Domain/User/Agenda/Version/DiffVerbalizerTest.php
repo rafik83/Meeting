@@ -15,11 +15,14 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Agenda\Version;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
@@ -43,6 +46,9 @@ class DiffVerbalizerTest extends TestCase
     /** @var ObjectProphecy */
     private $spotRepository;
 
+    /** @var ObjectProphecy|MessageRepositoryInterface */
+    private $messageRepository;
+
     public function setUp()
     {
         $this->diffChecker = $this->prophesize(DiffChecker::class);
@@ -50,6 +56,8 @@ class DiffVerbalizerTest extends TestCase
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $this->spotRepository = $this->prophesize(SpotRepositoryInterface::class);
+        $this->messageRepository = $this->prophesize(MessageRepositoryInterface::class);
+        $this->messageRepository->getLatestMessagesByMeetingRequestIds(Argument::any())->willReturn([]);
     }
 
     public function testVerbalizeDiffNoDiff()
@@ -64,7 +72,8 @@ class DiffVerbalizerTest extends TestCase
             $this->translator->reveal(),
             $this->sheetRepository->reveal(),
             $this->meetingSlotRepository->reveal(),
-            $this->spotRepository->reveal()
+            $this->spotRepository->reveal(),
+            $this->messageRepository->reveal()
         );
         $result = $diffVerbalizer->verbalizeDiff($lastVersion->reveal(), $currentVersion, $locale);
 
@@ -142,7 +151,8 @@ class DiffVerbalizerTest extends TestCase
             $this->translator->reveal(),
             $this->sheetRepository->reveal(),
             $this->meetingSlotRepository->reveal(),
-            $this->spotRepository->reveal()
+            $this->spotRepository->reveal(),
+            $this->messageRepository->reveal()
         );
         $result = $diffVerbalizer->verbalizeDiff($lastVersion->reveal(), $currentVersion, $locale);
 
@@ -240,7 +250,8 @@ class DiffVerbalizerTest extends TestCase
             $this->translator->reveal(),
             $this->sheetRepository->reveal(),
             $this->meetingSlotRepository->reveal(),
-            $this->spotRepository->reveal()
+            $this->spotRepository->reveal(),
+            $this->messageRepository->reveal()
         );
         $result = $diffVerbalizer->verbalizeDiff($lastVersion->reveal(), $currentVersion, $locale);
 
@@ -383,7 +394,8 @@ class DiffVerbalizerTest extends TestCase
             $this->translator->reveal(),
             $this->sheetRepository->reveal(),
             $this->meetingSlotRepository->reveal(),
-            $this->spotRepository->reveal()
+            $this->spotRepository->reveal(),
+            $this->messageRepository->reveal()
         );
         $result = $diffVerbalizer->verbalizeDiff($lastVersion->reveal(), $currentVersion, $locale);
 
@@ -503,6 +515,26 @@ class DiffVerbalizerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('Meeting removed with old sheet title')
         ;
+        $this->translator
+            ->trans(
+                DiffVerbalizer::TRANSLATION_MEETING_CHANGED_WITH_MESSAGE,
+                ['%message%' => 'message de request 2'],
+                DiffVerbalizer::TRANSLATION_DOMAIN,
+                $locale
+            )
+            ->shouldBeCalled()
+            ->willReturn('Message: I had to delete')
+        ;
+        $this->translator
+            ->trans(
+                DiffVerbalizer::TRANSLATION_MEETING_CHANGED_WITH_MESSAGE,
+                ['%message%' => 'message de request 1'],
+                DiffVerbalizer::TRANSLATION_DOMAIN,
+                $locale
+            )
+            ->shouldBeCalled()
+            ->willReturn('Message: I like to move it move it')
+        ;
 
         $this->meetingSlotRepository
             ->findByIds([9 => 9, 12 => 12])
@@ -524,17 +556,43 @@ class DiffVerbalizerTest extends TestCase
             ->willReturn(true)
         ;
 
+        $request1 = $this->prophesize(Request::class);
+        $request1->getId()->willReturn(1);
+
+        $request2 = $this->prophesize(Request::class);
+        $request2->getId()->willReturn(2);
+
+        $request1message = $this->prophesize(Message::class);
+        $request1message->getContent()
+            ->willReturn('message de request 1')
+        ;
+        $request1message->getRequest()->willReturn($request1->reveal());
+        $request1message->getFrom()->willReturn($sheetMet2->reveal());
+
+        $request2message = $this->prophesize(Message::class);
+        $request2message->getContent()
+            ->willReturn('message de request 2')
+        ;
+        $request2message->getRequest()->willReturn($request2->reveal());
+        $request2message->getFrom()->willReturn($sheetMet2->reveal());
+
+        $this->messageRepository->getLatestMessagesByMeetingRequestIds([2, 1])
+            ->shouldBeCalled()
+            ->willReturn([$request1message->reveal(), $request2message->reveal()])
+        ;
+
         $diffVerbalizer = new DiffVerbalizer(
             $this->diffChecker->reveal(),
             $this->translator->reveal(),
             $this->sheetRepository->reveal(),
             $this->meetingSlotRepository->reveal(),
-            $this->spotRepository->reveal()
+            $this->spotRepository->reveal(),
+            $this->messageRepository->reveal()
         );
         $result = $diffVerbalizer->verbalizeDiff($lastVersion->reveal(), $currentVersion, $locale);
 
         $this->assertEquals(
-            "Meeting removed with old sheet title\nMeeting added with sheet title given 2 the 10/10/2017 at 16:30 in Spot Ref 2\nMeeting moved with sheet title given 1 the 10/10/2017 at 12:00 in Spot Ref 1",
+            "Meeting removed with old sheet title Message: I had to delete\nMeeting added with sheet title given 2 the 10/10/2017 at 16:30 in Spot Ref 2\nMeeting moved with sheet title given 1 the 10/10/2017 at 12:00 in Spot Ref 1 Message: I like to move it move it",
             $result
         );
     }

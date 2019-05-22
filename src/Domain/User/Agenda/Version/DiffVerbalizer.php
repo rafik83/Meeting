@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\User\Agenda\Version;
+use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
@@ -31,6 +32,7 @@ class DiffVerbalizer
     const TRANSLATION_MEETING_ADDED = 'user.agenda.version.meetingAdded';
     const TRANSLATION_MEETING_DELETED = 'user.agenda.version.meetingDeleted';
     const TRANSLATION_MEETING_MOVED = 'user.agenda.version.meetingMoved';
+    const TRANSLATION_MEETING_CHANGED_WITH_MESSAGE = 'user.agenda.version.meetingChangedWithMessage';
     const TRANSLATION_DOMAIN = 'messages';
 
     /** @var Sheet[] */
@@ -63,18 +65,26 @@ class DiffVerbalizer
     /** @var DiffChecker */
     private $diffChecker;
 
+    /** @var MessageRepositoryInterface */
+    private $messageRepository;
+
+    /** @var string[] */
+    private $messages;
+
     public function __construct(
         DiffChecker $diffChecker,
         TranslatorInterface $translator,
         SheetRepositoryInterface $sheetRepository,
         MeetingSlotRepositoryInterface $meetingSlotRepository,
-        SpotRepositoryInterface $spotRepository
+        SpotRepositoryInterface $spotRepository,
+        MessageRepositoryInterface $messageRepository
     ) {
         $this->diffChecker = $diffChecker;
         $this->translator = $translator;
         $this->sheetRepository = $sheetRepository;
         $this->meetingSlotRepository = $meetingSlotRepository;
         $this->spotRepository = $spotRepository;
+        $this->messageRepository = $messageRepository;
     }
 
     public function verbalizeDiff(Version $lastVersion, array $currentVersion, string $locale): string
@@ -95,7 +105,7 @@ class DiffVerbalizer
         $deletedRequestViews = $this->getDeletedMeeting($userSheets, $deletedRequests);
         $addedRequestViews = $this->getAddedMeeting($userSheets, $addedRequests);
         $changedViews = $this->getChangedMeeting($userSheets, $toCheckChanges, $currentVersion);
-        $this->getInfo($deletedRequestViews, $addedRequestViews, $changedViews);
+        $this->getInfo($deletedRequestViews, $addedRequestViews, $changedViews, $userSheets);
 
         $this->dayFormatter = new \IntlDateFormatter(
             $locale,
@@ -126,12 +136,24 @@ class DiffVerbalizer
     {
         foreach ($deletedRequestViews as $deletedRequestView) {
             if (isset($this->sheets[$deletedRequestView->sheetId])) {
-                $diffs[] = $this->translator->trans(
+                $sentence = $this->translator->trans(
                     self::TRANSLATION_MEETING_DELETED,
                     ['%sheetTitle%' => $this->sheets[$deletedRequestView->sheetId]->getTitle()],
                     self::TRANSLATION_DOMAIN,
                     $locale
                 );
+
+                $latestMessage = $this->messages[$deletedRequestView->requestId] ?? null;
+                if ($latestMessage !== null) {
+                    $sentence .= ' ' . $this->translator->trans(
+                            self::TRANSLATION_MEETING_CHANGED_WITH_MESSAGE,
+                            ['%message%' => $latestMessage],
+                            self::TRANSLATION_DOMAIN,
+                            $locale
+                        );
+                }
+
+                $diffs[] = $sentence;
             }
         }
     }
@@ -175,7 +197,7 @@ class DiffVerbalizer
                 && isset($this->slots[$changedMeeting->slotId])
                 && isset($this->spots[$changedMeeting->spotId])
             ) {
-                $diffs[] = $this->translator->trans(
+                $sentence = $this->translator->trans(
                     self::TRANSLATION_MEETING_MOVED,
                     [
                         '%sheetTitle%' => $this->sheets[$changedMeeting->sheetId]->getTitle(),
@@ -186,6 +208,18 @@ class DiffVerbalizer
                     self::TRANSLATION_DOMAIN,
                     $locale
                 );
+
+                $latestMessage = $this->messages[$changedMeeting->requestId] ?? null;
+                if ($latestMessage !== null) {
+                    $sentence .= ' ' . $this->translator->trans(
+                            self::TRANSLATION_MEETING_CHANGED_WITH_MESSAGE,
+                            ['%message%' => $latestMessage],
+                            self::TRANSLATION_DOMAIN,
+                            $locale
+                        );
+                }
+
+                $diffs[] = $sentence;
             }
         }
     }
@@ -196,9 +230,14 @@ class DiffVerbalizer
      * @param MeetingDeletedView[] $deletedRequestViews
      * @param MeetingAddedView[]   $addedRequestViews
      * @param MeetingMovedView[]   $changedViews
+     * @param Sheet[]              $userSheets
      */
-    private function getInfo(array $deletedRequestViews, array $addedRequestViews, array $changedViews): void
-    {
+    private function getInfo(
+        array $deletedRequestViews,
+        array $addedRequestViews,
+        array $changedViews,
+        array $userSheets
+    ): void {
         $sheets = [];
         $slots = [];
         $spots = [];
@@ -222,6 +261,15 @@ class DiffVerbalizer
         $this->sheets = !empty($sheets) ? $this->sheetRepository->findByIds($sheets) : [];
         $this->slots = !empty($slots) ? $this->meetingSlotRepository->findByIds($slots) : [];
         $this->spots = !empty($spots) ? $this->spotRepository->getSpotsByIds($spots) : [];
+
+        $concernedByMessagesRequestViews = array_merge($deletedRequestViews, $changedViews);
+        $concernedByMessagesRequestIds = array_map(
+            static function ($item) {
+                return $item->requestId;
+            },
+            $concernedByMessagesRequestViews
+        );
+        $this->messages = $this->getLatestMessagesByRequest($concernedByMessagesRequestIds, $userSheets);
     }
 
     /**
@@ -236,7 +284,9 @@ class DiffVerbalizer
 
         if (!empty($deletedRequests)) {
             foreach ($deletedRequests as $key => $request) {
-                $deletedViews[] = new MeetingDeletedView($this->getSheetMet($userSheets, $request));
+                $deletedViews[] = new MeetingDeletedView(
+                    $this->getSheetMet($userSheets, $request), $request['request']
+                );
             }
         }
 
@@ -276,7 +326,8 @@ class DiffVerbalizer
                     $changedViews[] = new MeetingMovedView(
                         $this->getSheetMet($userSheets, $request),
                         $currentVersion[$key]['slot'],
-                        $currentVersion[$key]['spot']
+                        $currentVersion[$key]['spot'],
+                        $request['request']
                     );
                 }
             } catch (\InvalidArgumentException $exception) {
@@ -313,5 +364,28 @@ class DiffVerbalizer
         $dateFormatted = $dateFormatter->format($date);
 
         return \is_bool($dateFormatted) ? '' : $dateFormatted;
+    }
+
+    /**
+     * @param int[]   $requestIds
+     * @param Sheet[] $userSheets
+     *
+     * @return string[]
+     */
+    private function getLatestMessagesByRequest(array $requestIds, array $userSheets): array
+    {
+        // get latest message by request
+        $messages = $this->messageRepository->getLatestMessagesByMeetingRequestIds($requestIds);
+
+        $indexedMessages = [];
+        foreach ($messages as $message) {
+            // ignore message if it's mine
+            if (\in_array($message->getFrom(), $userSheets, true)) {
+                continue;
+            }
+            $indexedMessages[$message->getRequest()->getId()] = $message->getContent();
+        }
+
+        return $indexedMessages;
     }
 }

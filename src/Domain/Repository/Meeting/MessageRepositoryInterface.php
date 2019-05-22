@@ -35,4 +35,11 @@ interface MessageRepositoryInterface
      * @return mixed
      */
     public function getMessagesByMeetingRequest(Request $request);
+
+    /**
+     * @param int[] $requestIds
+     *
+     * @return Message[]
+     */
+    public function getLatestMessagesByMeetingRequestIds(array $requestIds): array;
 }
