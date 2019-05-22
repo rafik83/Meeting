@@ -71,6 +71,9 @@ class Create implements Command
     /** @var bool */
     public $canScanParticipant;
 
+    /** @var bool */
+    public $isPackageRequired = false;
+
     /**
      * @param Event  $event
      * @param string $locale
