@@ -22,8 +22,7 @@ use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
-use Proximum\Vimeet\Domain\Catalog\CanDisplayNeedObjectiveFilter;
-use Proximum\Vimeet\Domain\Catalog\CanDisplaySupplyObjectiveFilter;
+use Proximum\Vimeet\Domain\Catalog\CanDisplayObjectiveFilter;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -60,10 +59,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
     public $locale;
 
     /** @var ObjectProphecy */
-    public $canDisplayNeedObjectiveFilter;
-
-    /** @var ObjectProphecy */
-    public $canDisplaySupplyObjectiveFilter;
+    public $canDisplayObjectiveFilter;
 
     public function setUp()
     {
@@ -74,8 +70,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
         $this->event = $this->prophesize(Event::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->locale = 'fr';
-        $this->canDisplayNeedObjectiveFilter = $this->prophesize(CanDisplayNeedObjectiveFilter::class);
-        $this->canDisplaySupplyObjectiveFilter = $this->prophesize(CanDisplaySupplyObjectiveFilter::class);
+        $this->canDisplayObjectiveFilter = $this->prophesize(CanDisplayObjectiveFilter::class);
     }
 
     public function testHandleNoType()
@@ -86,8 +81,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->locale
         );
 
-        $this->canDisplayNeedObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(false);
-        $this->canDisplaySupplyObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(false);
+        $this->canDisplayObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn([]);
 
         $searchFacetView = new SearchFacetView('type', 'label', 'placeholder', true);
         $searchFacetsView = new SearchFacetsView([$searchFacetView]);
@@ -112,9 +106,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->visibleParticipationCategories->reveal(),
             $this->visibleParticipationTypes->reveal(),
             $this->engine->reveal(),
-            $this->canDisplayNeedObjectiveFilter->reveal(),
-            $this->canDisplaySupplyObjectiveFilter->reveal()
-
+            $this->canDisplayObjectiveFilter->reveal()
         );
 
         $result = $handler->handle($view);
@@ -140,8 +132,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->locale
         );
 
-        $this->canDisplayNeedObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(true);
-        $this->canDisplaySupplyObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(true);
+        $this->canDisplayObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(['need']);
 
         $searchFacetView1 = new SearchFacetView('type', 'label', 'placeholder', true);
         $searchFacetView2 = new SearchFacetView('position', 'label', 'placeholder', true);
@@ -194,8 +185,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->visibleParticipationCategories->reveal(),
             $this->visibleParticipationTypes->reveal(),
             $this->engine->reveal(),
-            $this->canDisplayNeedObjectiveFilter->reveal(),
-            $this->canDisplaySupplyObjectiveFilter->reveal()
+            $this->canDisplayObjectiveFilter->reveal()
         );
 
         $result = $handler->handle($view);
@@ -210,8 +200,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
                 'sheet_organization_category' => [],
             ],
             null,
-            true,
-            true
+            ['need']
         );
 
         $this->assertEquals($expected, $result);

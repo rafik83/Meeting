@@ -43,11 +43,8 @@ class CatalogFilterViewsResult
     /** @var NomenclatureTagViews[] indexed by Tag */
     public $taggedNomenclatureTagViews;
 
-    /** @var bool */
-    public $hasNeedObjectiveFilter;
-
-    /** @var bool */
-    public $hasSupplyObjectiveFilter;
+    /** @var array */
+    public $hasObjectiveFilter;
 
     /**
      * @param string                     $type
@@ -57,8 +54,7 @@ class CatalogFilterViewsResult
      * @param PositionView[]             $positionViews
      * @param NomenclatureTagViews[]     $taggedNomenclatureTagViews
      * @param Response|null              $response
-     * @param bool                       $hasNeedObjectiveFilter
-     * @param bool                       $hasSupplyObjectiveFilter
+     * @param array                     $hasObjectiveFilter
      */
     public function __construct(
         string $type,
@@ -68,8 +64,7 @@ class CatalogFilterViewsResult
         array $positionViews = [],
         array $taggedNomenclatureTagViews = [],
         Response $response = null,
-        bool $hasNeedObjectiveFilter = false,
-        bool $hasSupplyObjectiveFilter = false
+        array $hasObjectiveFilter = []
     ) {
         $this->type = $type;
         $this->categoryViews = $categoryViews;
@@ -78,8 +73,7 @@ class CatalogFilterViewsResult
         $this->organizationCategoryViews = $organizationCategoryViews;
         $this->positionViews = $positionViews;
         $this->taggedNomenclatureTagViews = $taggedNomenclatureTagViews;
-        $this->hasNeedObjectiveFilter = $hasNeedObjectiveFilter;
-        $this->hasSupplyObjectiveFilter = $hasSupplyObjectiveFilter;
+        $this->hasObjectiveFilter = $hasObjectiveFilter;
     }
 
     /**

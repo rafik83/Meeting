@@ -12,30 +12,35 @@ namespace Proximum\Vimeet\Domain\Catalog;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
-class CanDisplaySupplyObjectiveFilter
+class CanDisplayObjectiveFilter
 {
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
     public function __construct(TemplateDataFactory $templateDataFactory)
     {
-
         $this->templateDataFactory = $templateDataFactory;
     }
 
     public function isSatisfiedBy(Sheet $sheet, $locale = null)
     {
-
         $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
         $nomenclatures = $templateData->getNomenclatureObjects();
 
+        $objectives = [];
         foreach ($nomenclatures as $nomenclature) {
+
+            if ($nomenclature->isNeed() && !empty($nomenclature->getItems())) {
+
+                $objectives[] = 'need';
+            }
+
             if ($nomenclature->isSupply() && !empty($nomenclature->getItems())) {
 
-                return true;
+                $objectives[] = 'supply';
             }
         }
 
-        return false;
+        return $objectives;
     }
 }
