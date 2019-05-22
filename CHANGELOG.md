@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1871 - As an admin, add promotion code to order
+- VIMEET-1899 - Romming list sheet state filter
 
 ## [2.6.0] - 2019-05-16
 ### Added
