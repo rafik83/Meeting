@@ -35,7 +35,7 @@ class FilterType extends AbstractType
             )
             ->add(
                 'states', StateChoiceType::class, [
-                    'label'    => 'form.rooming_filter.children.state.label',
+                    'label'    => 'form.filter_operator.rooming.states',
                     'multiple' => true,
                     'expanded' => true,
                 ]
