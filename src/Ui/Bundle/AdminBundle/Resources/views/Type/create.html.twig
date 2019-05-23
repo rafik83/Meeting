@@ -54,6 +54,7 @@
         {{ form_label(form.isPaymentRequired, null, { label_attr: { class: 'control-label col-md-3' }}) }}
         <div class="col-md-9 checkbox">
             {{ form_widget(form.isPaymentRequired) }}
+            {{ form_errors(form.isPaymentRequired) }}
         </div>
     </div>
 
