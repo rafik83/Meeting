@@ -106,7 +106,7 @@ interface UserRepositoryInterface
      * @param Event  $event
      * @param string $locale
      * @param Type[] $types
-     * @param array $states
+     * @param string[] $states
      *
      * @return UserSheetTypeView[]
      */

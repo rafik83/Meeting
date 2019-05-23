@@ -17,7 +17,7 @@ class ListViewQuery implements Query
     /** @var Type[] */
     public $types;
 
-    /** @var array */
+    /** @var string[] */
     public $states;
 
     public function __construct(Event $event, string $locale, array $types, array $states)
