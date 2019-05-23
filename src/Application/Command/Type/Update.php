@@ -70,6 +70,9 @@ class Update implements Command
     /** @var bool */
     public $isPackageRequired = false;
 
+    /** @var bool */
+    public $isPaymentRequired = false;
+
     /**
      * @param Type   $type
      * @param string $locale
@@ -93,6 +96,7 @@ class Update implements Command
         $this->areAllSheetParticipantsAssignedToMeeting = $type->areAllSheetParticipantsAssignedToMeeting();
         $this->canScanParticipant = $type->canScanParticipant();
         $this->isPackageRequired = $type->isPackageRequired();
+        $this->isPaymentRequired = $type->isPaymentRequired();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [
