@@ -523,7 +523,7 @@ class CatalogController extends Controller
             'filterByAvailableSlotIds' => $filterAvailableSlotIds,
             'filterBySpecificSlot' => null !== $specificSlot,
             'specificSlot' => $specificSlot,
-            'hasObjectiveFilter' => $catalogFilterViewsResult->hasObjectiveFilter
+            'objectiveFilters' => $catalogFilterViewsResult->objectiveFilters
         ]);
     }
 

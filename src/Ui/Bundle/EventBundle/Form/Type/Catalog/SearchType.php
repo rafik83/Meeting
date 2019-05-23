@@ -44,15 +44,15 @@ class SearchType extends AbstractSearchType
             ]);
 
         $objectiveFilters = [];
-        if (in_array('supply', $options['hasObjectiveFilter'])) {
+        if (in_array(Nomenclature::OBJECTIVE_SUPPLY, $options['objectiveFilters'])) {
             $objectiveFilters['form.search.objective.supply'] = Nomenclature::OBJECTIVE_SUPPLY;
         }
 
-        if (in_array('need', $options['hasObjectiveFilter'])) {
+        if (in_array(Nomenclature::OBJECTIVE_NEED, $options['objectiveFilters'])) {
             $objectiveFilters['form.search.objective.need'] = Nomenclature::OBJECTIVE_NEED;
         }
 
-        if (in_array('supply', $options['hasObjectiveFilter']) || in_array('need', $options['hasObjectiveFilter'])) {
+        if (!empty($options['objectiveFilters'])) {
             $builder->
             add(
                 SearchFields::FILTER_OBJECTIVE, ChoiceType::class, [
@@ -142,7 +142,7 @@ class SearchType extends AbstractSearchType
             'filterByAvailableSlotIds' => false,
             'filterBySpecificSlot'     => false,
             'specificSlot'             => null,
-            'hasObjectiveFilter'       => [],
+            'objectiveFilters'         => [],
         ]);
     }
 

@@ -18,7 +18,7 @@ use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
-use Proximum\Vimeet\Domain\Catalog\CanDisplayObjectiveFilter;
+use Proximum\Vimeet\Domain\Catalog\GetDisplayObjectiveFilter;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -37,28 +37,28 @@ class CatalogFilterViewsHandler
     /** @var EngineInterface */
     private $engine;
 
-    /** @var CanDisplayObjectiveFilter */
-    private $canDisplayObjectiveFilter;
+    /** @var GetDisplayObjectiveFilter */
+    private $getDisplayObjectiveFilter;
 
     /**
      * @param QueryBusInterface              $queryBus
      * @param VisibleParticipationCategories $visibleParticipationCategories
      * @param VisibleParticipationTypes      $visibleParticipationTypes
      * @param EngineInterface                $engine
-     * @param CanDisplayObjectiveFilter      $canDisplayObjectiveFilter
+     * @param GetDisplayObjectiveFilter      $getDisplayObjectiveFilter
      */
     public function __construct(
         QueryBusInterface $queryBus,
         VisibleParticipationCategories $visibleParticipationCategories,
         VisibleParticipationTypes $visibleParticipationTypes,
         EngineInterface $engine,
-        CanDisplayObjectiveFilter $canDisplayObjectiveFilter
+        GetDisplayObjectiveFilter $getDisplayObjectiveFilter
     ) {
         $this->queryBus = $queryBus;
         $this->visibleParticipationCategories = $visibleParticipationCategories;
         $this->visibleParticipationTypes = $visibleParticipationTypes;
         $this->engine = $engine;
-        $this->canDisplayObjectiveFilter     = $canDisplayObjectiveFilter;
+        $this->getDisplayObjectiveFilter = $getDisplayObjectiveFilter;
     }
 
     /**
@@ -101,7 +101,7 @@ class CatalogFilterViewsHandler
                         'EventBundle:Catalog:no-visible-category.html.twig',
                         ['event' => $event, 'sheet' => $sheet]
                     ),
-                    $this->canDisplayObjectiveFilter->isSatisfiedBy($sheet, $locale)
+                    ($this->getDisplayObjectiveFilter)($sheet, $locale)
                 );
             }
 
@@ -121,7 +121,7 @@ class CatalogFilterViewsHandler
                         'EventBundle:Catalog:no-visible-type.html.twig',
                         ['event' => $event, 'sheet' => $sheet]
                     ),
-                    $this->canDisplayObjectiveFilter->isSatisfiedBy($sheet, $locale)
+                    ($this->getDisplayObjectiveFilter)($sheet, $locale)
                 );
             }
 
@@ -152,7 +152,7 @@ class CatalogFilterViewsHandler
             $positionViews,
             $taggedNomenclatureTagViews,
             null,
-            $this->canDisplayObjectiveFilter->isSatisfiedBy($sheet, $locale)
+            ($this->getDisplayObjectiveFilter)($sheet, $locale)
         );
     }
 }

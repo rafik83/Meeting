@@ -5266,7 +5266,7 @@ services:
             - '@repository.nomenclature_repository'
             - '@repository.filter.tagged_nomenclature_filter_repository'
 
-    Proximum\Vimeet\Domain\Catalog\CanDisplayObjectiveFilter:
+    Proximum\Vimeet\Domain\Catalog\GetDisplayObjectiveFilter:
         arguments:
             - '@template.template_data_factory'
 

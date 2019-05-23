@@ -10,13 +10,13 @@
 namespace Proximum\Vimeet\Tests\Domain\Catalog;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Domain\Catalog\CanDisplayObjectiveFilter;
+use Proximum\Vimeet\Domain\Catalog\GetDisplayObjectiveFilter;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 
-class CanDisplayObjectiveFilterTest extends TestCase
+class GetDisplayObjectiveFilterTest extends TestCase
 {
     public function testWithNeedObjective(): void
     {
@@ -44,8 +44,8 @@ class CanDisplayObjectiveFilterTest extends TestCase
             ->willReturn($templateData->reveal());
 
         // run tests
-        $canDisplayObjectiveFilter = new CanDisplayObjectiveFilter($templateDataFactory->reveal());
-        $result = $canDisplayObjectiveFilter->isSatisfiedBy($sheet->reveal());
+        $getDisplayObjectiveFilter = new GetDisplayObjectiveFilter($templateDataFactory->reveal());
+        $result = $getDisplayObjectiveFilter($sheet->reveal());
 
         $expected = ['need'];
 
@@ -73,8 +73,8 @@ class CanDisplayObjectiveFilterTest extends TestCase
             ->willReturn($templateData->reveal());
 
         // run tests
-        $canDisplayNeedObjectiveFilter = new CanDisplayObjectiveFilter($templateDataFactory->reveal());
-        $result = $canDisplayNeedObjectiveFilter->isSatisfiedBy($sheet->reveal());
+        $getDisplayObjectiveFilter = new GetDisplayObjectiveFilter($templateDataFactory->reveal());
+        $result = $getDisplayObjectiveFilter($sheet->reveal());
 
         $expected = [];
 
@@ -108,8 +108,8 @@ class CanDisplayObjectiveFilterTest extends TestCase
             ->willReturn($templateData->reveal());
 
         // run tests
-        $canDisplaySupplyObjectiveFilter = new CanDisplayObjectiveFilter($templateDataFactory->reveal());
-        $result = $canDisplaySupplyObjectiveFilter->isSatisfiedBy($sheet->reveal());
+        $getDisplayObjectiveFilter = new GetDisplayObjectiveFilter($templateDataFactory->reveal());
+        $result = $getDisplayObjectiveFilter($sheet->reveal());
 
         $expected = ['supply'];
 
@@ -137,8 +137,8 @@ class CanDisplayObjectiveFilterTest extends TestCase
             ->willReturn($templateData->reveal());
 
         // run tests
-        $canDisplaySupplyObjectiveFilter = new CanDisplayObjectiveFilter($templateDataFactory->reveal());
-        $result = $canDisplaySupplyObjectiveFilter->isSatisfiedBy($sheet->reveal());
+        $getDisplayObjectiveFilter = new GetDisplayObjectiveFilter($templateDataFactory->reveal());
+        $result = $getDisplayObjectiveFilter($sheet->reveal());
 
         $expected = [];
 

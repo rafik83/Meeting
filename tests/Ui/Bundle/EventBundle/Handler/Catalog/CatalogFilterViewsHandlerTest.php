@@ -22,7 +22,7 @@ use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
-use Proximum\Vimeet\Domain\Catalog\CanDisplayObjectiveFilter;
+use Proximum\Vimeet\Domain\Catalog\GetDisplayObjectiveFilter;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -70,7 +70,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
         $this->event = $this->prophesize(Event::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->locale = 'fr';
-        $this->canDisplayObjectiveFilter = $this->prophesize(CanDisplayObjectiveFilter::class);
+        $this->canDisplayObjectiveFilter = $this->prophesize(GetDisplayObjectiveFilter::class);
     }
 
     public function testHandleNoType()
@@ -81,7 +81,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->locale
         );
 
-        $this->canDisplayObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn([]);
+        $this->canDisplayObjectiveFilter->__invoke($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn([]);
 
         $searchFacetView = new SearchFacetView('type', 'label', 'placeholder', true);
         $searchFacetsView = new SearchFacetsView([$searchFacetView]);
@@ -132,7 +132,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->locale
         );
 
-        $this->canDisplayObjectiveFilter->isSatisfiedBy($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(['need']);
+        $this->canDisplayObjectiveFilter->__invoke($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn(['need']);
 
         $searchFacetView1 = new SearchFacetView('type', 'label', 'placeholder', true);
         $searchFacetView2 = new SearchFacetView('position', 'label', 'placeholder', true);

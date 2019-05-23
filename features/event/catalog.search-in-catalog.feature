@@ -1,4 +1,4 @@
-@event @sheet @catalog @testcat
+@event @sheet @catalog
 Feature: Search sheet in catalog
   As a participant, I can filter the sheet list in catalog by position
 
