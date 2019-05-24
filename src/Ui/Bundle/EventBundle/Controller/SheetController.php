@@ -24,6 +24,7 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
 use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
@@ -92,6 +93,10 @@ class SheetController extends Controller
             if (true === $redirectStep['redirect']) {
                 return $this->redirectToRoute($redirectStep['route'], $redirectStep['parameters']);
             }
+        }
+
+        if ($this->get(IsValidatedRequiredPackageMissing::class)->isSatisfiedBy($sheet)) {
+            return $this->redirectToRoute('event_package_redirect_depending_on_context', ['sheet' => $sheet->getId()]);
         }
 
         if ($sheet->isValidationDraft()) {

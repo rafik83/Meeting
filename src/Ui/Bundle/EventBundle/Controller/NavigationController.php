@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
 use Proximum\Vimeet\Domain\StaticFormulation\Constant;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
@@ -53,6 +54,7 @@ class NavigationController extends Controller
             throw new AccessDeniedException('This controller must be used as embedded');
         }
 
+        $isValidatedRequiredPackageMissing = $this->get(IsValidatedRequiredPackageMissing::class);
         $route = $masterRequest->get('_route', Route::EVENT);
         $routeParameters = $masterRequest->get('_route_params');
 
@@ -71,7 +73,10 @@ class NavigationController extends Controller
         $menuView    = null;
         $submenuView = null;
 
-        if (null !== $user && false === $registration) {
+        $canDisplayMenus = null !== $user && false === $registration &&
+            (null === $sheet || !$isValidatedRequiredPackageMissing->isSatisfiedBy($sheet));
+
+        if ($canDisplayMenus) {
             $staticFormulationsIndexedByCategories = [];
 
             if (null !== $sheet) {
