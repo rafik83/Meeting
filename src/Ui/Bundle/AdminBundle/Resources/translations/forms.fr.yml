@@ -837,10 +837,10 @@ form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.events.label: 'Evènement de destination'
 form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.generateInvoice.label: 'Générer facture'
-form.sheet_batch.children.printInvoices.label: 'Imprimer factures PDF'
 form.sheet_batch.children.group.label: Entité
 form.sheet_batch.children.pending.label: 'En attente'
 form.sheet_batch.children.printBadge.label: 'Impression badge'
+form.sheet_batch.children.printInvoices.label: 'Imprimer factures PDF'
 form.sheet_batch.children.printPdf.label: 'Imprimer en PDF'
 form.sheet_batch.children.printPlanning.label: Imprimer
 form.sheet_batch.children.printPlanningAndBadge.label: 'Impression badge et planning'

@@ -741,6 +741,7 @@ admin.promotion_code.title: 'Promotions code'
 admin.promotion_code.update: 'Update the promotion code'
 admin.remove: Delete
 admin.remove.confirmation: 'Are you sure you want to delete this user?'
+admin.reset.filter: 'Reset filter'
 admin.role.ROLE_HOST: Host
 admin.role.ROLE_OPERATOR: collaborator
 admin.role.ROLE_ORGANIZER: Organizer
@@ -761,6 +762,7 @@ admin.rooming.list.fullName: 'Last name, first name'
 admin.rooming.list.roomNumberAssigned: 'Associated room number'
 admin.rooming.list.sheet: Sheet
 admin.rooming.list.tasting: Tasting
+admin.rooming.menu.title: 'Rooming list'
 admin.rooming.stay.assignAccommodation.add.title: 'Add an assignment'
 admin.rooming.stay.no-dates: 'Undeclared dates'
 admin.rooming.stay.remove.confirm: 'Are you sure you want to delete this assignment?'
