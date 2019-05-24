@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 - VIMEET-1967 - Package can be required by type
 - VIMEET-1968 - Payment can be required by type
+- VIMEET-1965 - Must validate package
 
 ## [2.6.0] - 2019-05-16
 ### Added
