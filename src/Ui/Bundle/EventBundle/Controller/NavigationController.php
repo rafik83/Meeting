@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
 use Proximum\Vimeet\Domain\StaticFormulation\Constant;
+use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -55,6 +56,7 @@ class NavigationController extends Controller
         }
 
         $isValidatedRequiredPackageMissing = $this->get(IsValidatedRequiredPackageMissing::class);
+        $isValidatedTransactionMissing = $this->get(IsValidatedTransactionMissing::class);
         $route = $masterRequest->get('_route', Route::EVENT);
         $routeParameters = $masterRequest->get('_route_params');
 
@@ -74,7 +76,8 @@ class NavigationController extends Controller
         $submenuView = null;
 
         $canDisplayMenus = null !== $user && false === $registration &&
-            (null === $sheet || !$isValidatedRequiredPackageMissing->isSatisfiedBy($sheet));
+            (null === $sheet || !$isValidatedRequiredPackageMissing->isSatisfiedBy($sheet)) &&
+            (null === $sheet || !$isValidatedTransactionMissing->isSatisfiedBy($sheet));
 
         if ($canDisplayMenus) {
             $staticFormulationsIndexedByCategories = [];
