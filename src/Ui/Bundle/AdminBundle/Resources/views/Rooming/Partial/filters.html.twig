@@ -8,7 +8,7 @@
             </h4>
         </div>
         <div id="advancedFilters"
-             class="panel-collapse collapse {% if not form.vars.valid %}in{% endif %}"
+             class="panel-collapse {% if not form.vars.valid %}in{% endif %}"
              role="tabpanel"
              {% if not form.vars.valid %}aria-expanded="true"{% endif %}
              aria-labelledby="headingOne"

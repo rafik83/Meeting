@@ -302,7 +302,7 @@ class UserRepository implements UserRepositoryInterface
                 ->setParameter('types', $types);
         }
 
-        if (count($states)) {
+        if (!empty($states)) {
             $queryBuilder
                 ->andWhere('sheet.state IN (:states)')
                 ->setParameter('states', $states);
