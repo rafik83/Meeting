@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\RemoveMeetingException;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
@@ -37,18 +38,23 @@ class RemoveHandler
     /** @var CanRemoveMeeting */
     private $canRemoveMeeting;
 
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
     public function __construct(
         MessageRepositoryInterface $messageRepository,
         MeetingRepositoryInterface $meetingRepository,
         DelayedEventDispatcherInterface $eventDispatcher,
         CanRemoveMeeting $canRemoveMeeting,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $datetime,
+        RequestRepositoryInterface $requestRepository
     ) {
         $this->meetingRepository  = $meetingRepository;
         $this->eventDispatcher = $eventDispatcher;
         $this->datetime = $datetime;
         $this->messageRepository = $messageRepository;
         $this->canRemoveMeeting = $canRemoveMeeting;
+        $this->requestRepository = $requestRepository;
     }
 
     /**
@@ -73,9 +79,13 @@ class RemoveHandler
                     $this->datetime
                 );
                 $this->messageRepository->add($message);
+                $command->meeting->getRequest()->setUpdateOrDeleteReasonMessage($message);
+            } else {
+                $command->meeting->getRequest()->setUpdateOrDeleteReasonMessage(null);
             }
 
             $this->meetingRepository->remove($command->meeting);
+            $this->requestRepository->set($command->meeting->getRequest());
         } catch (\Exception $exception){
             throw new RemoveMeetingException(
                 'Can not remove meeting'

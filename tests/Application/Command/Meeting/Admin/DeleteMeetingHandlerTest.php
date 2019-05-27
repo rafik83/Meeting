@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeetingHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -38,10 +39,13 @@ class DeleteMeetingHandlerTest extends TestCase
         $spot      = SpotFactory::create($event);
         $request   = new Meeting\Request($fromSheet, [], $toSheet, [], new \DateTime(), $user, $event);
         $meeting   = new Meeting($request, $slot, $fromSheet, [], $toSheet, [], new \DateTime(), $spot, $event);
+        $message = $this->prophesize(Meeting\Message::class);
+        $request->setUpdateOrDeleteReasonMessage($message->reveal());
 
         // Mock
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
 
         $meetingRepository->remove($meeting)->shouldBeCalled();
         $eventDispatcher
@@ -57,8 +61,17 @@ class DeleteMeetingHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $requestRepository->set($request)
+            ->shouldBeCalled();
+
         // Handler
-        $handler = new DeleteMeetingHandler($meetingRepository->reveal(), $eventDispatcher->reveal());
+        $handler = new DeleteMeetingHandler(
+            $meetingRepository->reveal(),
+            $eventDispatcher->reveal(),
+            $requestRepository->reveal()
+        );
         $handler->handle(new DeleteMeeting($meeting));
+
+        $this->assertNull($request->getUpdateOrDeleteReasonMessage());
     }
 }

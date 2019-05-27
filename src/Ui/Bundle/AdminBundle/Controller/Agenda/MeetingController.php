@@ -38,6 +38,7 @@ use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\MassAssignment\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -166,6 +167,10 @@ class MeetingController extends Controller
 
         try {
             $this->get('tactician.commandbus')->handle($updateSlot);
+
+            $meeting->getRequest()->setUpdateOrDeleteReasonMessage(null);
+            $this->get('vimeet_infrastructure.repository.meeting.request_repository')
+                ->set($meeting->getRequest());
         } catch (BlockedSpotNotAvailableForThisMeetingAndSlotException $exception) {
             return $this->createErrorJsonResponse(
                 'admin.agenda.meeting.updateSlot.blockedSpotNotAvailableForThisMeetingAndSlot'

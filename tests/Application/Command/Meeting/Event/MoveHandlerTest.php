@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
 class MoveHandlerTest extends TestCase
@@ -31,6 +32,11 @@ class MoveHandlerTest extends TestCase
         $meetingSlot,
         $meeting;
 
+    /** @var ObjectProphecy|RequestRepositoryInterface */
+    private $requestRepository;
+    /** @var ObjectProphecy|Meeting\Request */
+    private $request;
+
     public function setUp()
     {
         $this->canMoveMeeting = $this->prophesize(CanMoveMeeting::class);
@@ -42,6 +48,9 @@ class MoveHandlerTest extends TestCase
         $this->sheet = $this->prophesize(Sheet::class);
         $this->meeting = $this->prophesize(Meeting::class);
         $this->meetingSlot = $this->prophesize(MeetingSlot::class);
+        $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $this->request = $this->prophesize(Meeting\Request::class);
+        $this->meeting->getRequest()->willReturn($this->request->reveal());
     }
 
     /**
@@ -56,6 +65,7 @@ class MoveHandlerTest extends TestCase
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
         $this->messageRepository->add(Argument::any())->shouldNotBeCalled();
         $this->meetingRepository->set(Argument::any())->shouldNotBeCalled();
+        $this->requestRepository->set(Argument::any())->shouldNotBeCalled();
         $this->translator->trans(Argument::any())->shouldNotBeCalled();
 
         $handler = new MoveHandler(
@@ -64,7 +74,8 @@ class MoveHandlerTest extends TestCase
             $this->translator->reveal(),
             $this->messageRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->datetime
+            $this->datetime,
+            $this->requestRepository->reveal()
         );
         $handler->handle(new Move($this->sheet->reveal(), $this->meeting->reveal()));
     }
@@ -87,6 +98,7 @@ class MoveHandlerTest extends TestCase
             ->willThrow(new \Exception());
         $this->messageRepository->add(Argument::any())->shouldNotBeCalled();
         $this->meetingRepository->set(Argument::any())->shouldNotBeCalled();
+        $this->requestRepository->set(Argument::any())->shouldNotBeCalled();
 
         $handler = new MoveHandler(
             $this->canMoveMeeting->reveal(),
@@ -94,7 +106,8 @@ class MoveHandlerTest extends TestCase
             $this->translator->reveal(),
             $this->messageRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->datetime
+            $this->datetime,
+            $this->requestRepository->reveal()
         );
 
         $move = new Move($this->sheet->reveal(), $this->meeting->reveal());
@@ -114,10 +127,13 @@ class MoveHandlerTest extends TestCase
         $this->meeting->isVisio()->shouldBeCalled()->willReturn(false);
         $this->meeting->blockSlot()->shouldBeCalled();
 
+        $this->request->setUpdateOrDeleteReasonMessage(null)->shouldBeCalled();
+
         $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), false, true))
             ->shouldBeCalled();
         $this->messageRepository->add(Argument::any())->shouldNotBeCalled();
         $this->meetingRepository->set($this->meeting->reveal())->shouldBeCalled();
+        $this->requestRepository->set($this->request->reveal())->shouldBeCalled();
 
         $handler = new MoveHandler(
             $this->canMoveMeeting->reveal(),
@@ -125,7 +141,8 @@ class MoveHandlerTest extends TestCase
             $this->translator->reveal(),
             $this->messageRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->datetime
+            $this->datetime,
+            $this->requestRepository->reveal()
         );
 
         $move = new Move($this->sheet->reveal(), $this->meeting->reveal());
@@ -145,15 +162,15 @@ class MoveHandlerTest extends TestCase
         $this->meeting->isVisio()->shouldBeCalled()->willReturn(true);
         $this->meeting->blockSlot()->shouldBeCalled();
 
+        $this->request->setUpdateOrDeleteReasonMessage(Argument::type(Meeting\Message::class))->shouldBeCalled();
+
         $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), true, true))
             ->shouldBeCalled();
 
-        $request = $this->prophesize(Meeting\Request::class);
-        $this->meeting->getRequest()->shouldBeCalled()->willReturn($request->reveal());
-
-        $message = new Meeting\Message($request->reveal(), $this->sheet->reveal(), 'content', $this->datetime);
+        $message = new Meeting\Message($this->request->reveal(), $this->sheet->reveal(), 'content', $this->datetime);
         $this->messageRepository->add($message)->shouldBeCalled();
         $this->meetingRepository->set($this->meeting->reveal())->shouldBeCalled();
+        $this->requestRepository->set($this->request->reveal())->shouldBeCalled();
 
         $handler = new MoveHandler(
             $this->canMoveMeeting->reveal(),
@@ -161,7 +178,8 @@ class MoveHandlerTest extends TestCase
             $this->translator->reveal(),
             $this->messageRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->datetime
+            $this->datetime,
+            $this->requestRepository->reveal()
         );
 
         $move = new Move($this->sheet->reveal(), $this->meeting->reveal());

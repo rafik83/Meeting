@@ -46,6 +46,10 @@ Proximum\Vimeet\Domain\Model\Meeting\Request:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: CASCADE
+        updateOrDeleteReasonMessage:
+            targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Message
+            joinColumn:
+                onDelete: SET NULL
     manyToMany:
         fromParticipants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant

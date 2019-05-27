@@ -102,6 +102,9 @@ class Request implements MessageSubjectInterface
      */
     private $hasMessage;
 
+    /** @var Message|null */
+    private $updateOrDeleteReasonMessage;
+
     /**
      * Request constructor.
      *
@@ -691,5 +694,15 @@ class Request implements MessageSubjectInterface
         return !$this->getFromSheet()->attend() || !$this->getFromSheet()->isEnabled()
             || !$this->getToSheet()->attend() || !$this->getToSheet()->isEnabled()
         ;
+    }
+
+    public function setUpdateOrDeleteReasonMessage(?Message $updateOrDeleteReasonMessage): void
+    {
+        $this->updateOrDeleteReasonMessage = $updateOrDeleteReasonMessage;
+    }
+
+    public function getUpdateOrDeleteReasonMessage(): ?Message
+    {
+        return $this->updateOrDeleteReasonMessage;
     }
 }

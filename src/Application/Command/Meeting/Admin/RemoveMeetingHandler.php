@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingUnParticipateEvent;
 use Proximum\Vimeet\Application\Exception\Slot\LockedException;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
@@ -35,19 +36,25 @@ class RemoveMeetingHandler
      */
     private $eventDispatcher;
 
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
     /**
      * @param MeetingRepositoryInterface $meetingRepository
      * @param TranslatorInterface        $translator
      * @param DelayedEventDispatcher     $eventDispatcher
+     * @param RequestRepositoryInterface $requestRepository
      */
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         TranslatorInterface $translator,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher,
+        RequestRepositoryInterface $requestRepository
     ) {
         $this->meetingRepository = $meetingRepository;
         $this->translator        = $translator;
         $this->eventDispatcher   = $eventDispatcher;
+        $this->requestRepository = $requestRepository;
     }
 
     /**
@@ -67,6 +74,10 @@ class RemoveMeetingHandler
         }
 
         $this->meetingRepository->remove($query->meeting);
+
+        $query->meeting->getRequest()->setUpdateOrDeleteReasonMessage(null);
+
+        $this->requestRepository->set($query->meeting->getRequest());
 
         $participants = $query->meeting->getAllParticipants();
         $this->eventDispatcher->dispatch(
