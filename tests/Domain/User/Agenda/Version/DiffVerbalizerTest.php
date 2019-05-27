@@ -518,7 +518,7 @@ class DiffVerbalizerTest extends TestCase
         $this->translator
             ->trans(
                 DiffVerbalizer::TRANSLATION_MEETING_CHANGED_WITH_MESSAGE,
-                ['%message%' => 'message de request 2'],
+                ['%message%' => 'I had to delete'],
                 DiffVerbalizer::TRANSLATION_DOMAIN,
                 $locale
             )
@@ -528,7 +528,7 @@ class DiffVerbalizerTest extends TestCase
         $this->translator
             ->trans(
                 DiffVerbalizer::TRANSLATION_MEETING_CHANGED_WITH_MESSAGE,
-                ['%message%' => 'message de request 1'],
+                ['%message%' => 'I like to move it move it'],
                 DiffVerbalizer::TRANSLATION_DOMAIN,
                 $locale
             )
@@ -564,14 +564,14 @@ class DiffVerbalizerTest extends TestCase
 
         $request1message = $this->prophesize(Message::class);
         $request1message->getContent()
-            ->willReturn('message de request 1')
+            ->willReturn('I like to move it move it')
         ;
         $request1message->getRequest()->willReturn($request1->reveal());
         $request1message->getFrom()->willReturn($sheetMet2->reveal());
 
         $request2message = $this->prophesize(Message::class);
         $request2message->getContent()
-            ->willReturn('message de request 2')
+            ->willReturn('I had to delete')
         ;
         $request2message->getRequest()->willReturn($request2->reveal());
         $request2message->getFrom()->willReturn($sheetMet2->reveal());
