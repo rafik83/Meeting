@@ -71,21 +71,23 @@ class RemoveHandler
         }
 
         try {
+            $request = $command->meeting->getRequest();
+
             if ($command->content) {
                 $message = new Message(
-                    $command->meeting->getRequest(),
+                    $request,
                     $command->sheet,
                     $command->content,
                     $this->datetime
                 );
                 $this->messageRepository->add($message);
-                $command->meeting->getRequest()->setUpdateOrDeleteReasonMessage($message);
+                $request->setUpdateOrDeleteReasonMessage($message);
             } else {
-                $command->meeting->getRequest()->setUpdateOrDeleteReasonMessage(null);
+                $request->setUpdateOrDeleteReasonMessage(null);
             }
 
             $this->meetingRepository->remove($command->meeting);
-            $this->requestRepository->set($command->meeting->getRequest());
+            $this->requestRepository->set($request);
         } catch (\Exception $exception){
             throw new RemoveMeetingException(
                 'Can not remove meeting'

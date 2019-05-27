@@ -50,9 +50,11 @@ class DeleteMeetingHandler
     {
         $this->meetingRepository->remove($deleteMeeting->meeting);
 
-        $deleteMeeting->meeting->getRequest()->setUpdateOrDeleteReasonMessage(null);
+        $request = $deleteMeeting->meeting->getRequest();
 
-        $this->requestRepository->set($deleteMeeting->meeting->getRequest());
+        $request->setUpdateOrDeleteReasonMessage(null);
+
+        $this->requestRepository->set($request);
 
         $this->eventDispatcher->dispatch(
             Events::MEETING_REMOVED,

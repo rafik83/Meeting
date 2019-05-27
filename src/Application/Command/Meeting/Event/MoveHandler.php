@@ -74,22 +74,24 @@ class MoveHandler
 
             $move->meeting->blockSlot();
 
+            $request = $move->meeting->getRequest();
+
             if ($move->content) {
                 $message = new Message(
-                    $move->meeting->getRequest(),
+                    $request,
                     $move->sheet,
                     $move->content,
                     $this->datetime
                 );
 
-                $move->meeting->getRequest()->setUpdateOrDeleteReasonMessage($message);
+                $request->setUpdateOrDeleteReasonMessage($message);
                 $this->messageRepository->add($message);
             } else {
-                $move->meeting->getRequest()->setUpdateOrDeleteReasonMessage(null);
+                $request->setUpdateOrDeleteReasonMessage(null);
             }
 
             $this->meetingRepository->set($move->meeting);
-            $this->requestRepository->set($move->meeting->getRequest());
+            $this->requestRepository->set($request);
         } catch (\Exception $exception) {
             throw new MoveMeetingException(
                 $this->translator->trans('agenda.meeting.updateSlot.error')

@@ -75,9 +75,11 @@ class RemoveMeetingHandler
 
         $this->meetingRepository->remove($query->meeting);
 
-        $query->meeting->getRequest()->setUpdateOrDeleteReasonMessage(null);
+        $request = $query->meeting->getRequest();
 
-        $this->requestRepository->set($query->meeting->getRequest());
+        $request->setUpdateOrDeleteReasonMessage(null);
+
+        $this->requestRepository->set($request);
 
         $participants = $query->meeting->getAllParticipants();
         $this->eventDispatcher->dispatch(
