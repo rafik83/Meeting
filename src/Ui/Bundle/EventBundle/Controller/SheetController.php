@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
 use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -95,7 +96,8 @@ class SheetController extends Controller
             }
         }
 
-        if ($this->get(IsValidatedRequiredPackageMissing::class)->isSatisfiedBy($sheet)) {
+        if ($this->get(IsValidatedRequiredPackageMissing::class)->isSatisfiedBy($sheet) ||
+            $this->get(IsValidatedTransactionMissing::class)->isSatisfiedBy($sheet)) {
             return $this->redirectToRoute('event_package_redirect_depending_on_context', ['sheet' => $sheet->getId()]);
         }
 
