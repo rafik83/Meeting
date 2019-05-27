@@ -41,5 +41,5 @@ interface MessageRepositoryInterface
      *
      * @return Message[]
      */
-    public function getLatestMessagesByMeetingRequestIds(array $requestIds): array;
+    public function getUpdateOrDeleteReasonMessageFromRequestIds(array $requestIds): array;
 }

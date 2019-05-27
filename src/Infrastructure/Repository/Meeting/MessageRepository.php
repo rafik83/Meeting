@@ -81,24 +81,20 @@ class MessageRepository implements MessageRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getLatestMessagesByMeetingRequestIds(array $requestIds): array
+    public function getUpdateOrDeleteReasonMessageFromRequestIds(array $requestIds): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('message')
             ->from(Message::class, 'message')
-            ->where(
-                '
-                message in (
-                    SELECT max(latestMessage.id)
-                    FROM ' . Message::class . ' latestMessage
-                    WHERE latestMessage.request in (:requestIds)
-                    GROUP BY latestMessage.request
-                )'
+            ->join(
+                Request::class,
+                'request',
+                Query\Expr\Join::WITH,
+                'request.id in (:requestIds) AND request.updateOrDeleteReasonMessage = message'
             )
             ->setParameter('requestIds', $requestIds)
-            ->orderBy('message.createdAt', 'ASC')
         ;
 
         return $queryBuilder->getQuery()->getResult();

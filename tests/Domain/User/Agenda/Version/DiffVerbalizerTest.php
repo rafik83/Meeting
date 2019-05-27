@@ -57,7 +57,7 @@ class DiffVerbalizerTest extends TestCase
         $this->meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $this->spotRepository = $this->prophesize(SpotRepositoryInterface::class);
         $this->messageRepository = $this->prophesize(MessageRepositoryInterface::class);
-        $this->messageRepository->getLatestMessagesByMeetingRequestIds(Argument::any())->willReturn([]);
+        $this->messageRepository->getUpdateOrDeleteReasonMessageFromRequestIds(Argument::any())->willReturn([]);
     }
 
     public function testVerbalizeDiffNoDiff()
@@ -576,7 +576,7 @@ class DiffVerbalizerTest extends TestCase
         $request2message->getRequest()->willReturn($request2->reveal());
         $request2message->getFrom()->willReturn($sheetMet2->reveal());
 
-        $this->messageRepository->getLatestMessagesByMeetingRequestIds([2, 1])
+        $this->messageRepository->getUpdateOrDeleteReasonMessageFromRequestIds([2, 1])
             ->shouldBeCalled()
             ->willReturn([$request1message->reveal(), $request2message->reveal()])
         ;

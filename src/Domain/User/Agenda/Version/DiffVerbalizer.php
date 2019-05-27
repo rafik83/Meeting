@@ -375,7 +375,7 @@ class DiffVerbalizer
     private function getLatestMessagesByRequest(array $requestIds, array $userSheets): array
     {
         // get latest message by request
-        $messages = $this->messageRepository->getLatestMessagesByMeetingRequestIds($requestIds);
+        $messages = $this->messageRepository->getUpdateOrDeleteReasonMessageFromRequestIds($requestIds);
 
         $indexedMessages = [];
         foreach ($messages as $message) {
