@@ -72,6 +72,8 @@ form.admin.picto.PresFlash_2: Flash
 form.admin.picto.RDV: Rendez-vous
 form.admin.sheet.filter.children.submit.label: Filtrer
 form.admin.sheet.follower.un-assigned: 'Non assigné'
+form.apply_promotion_code.children.promotionCode.label: Code promo
+form.apply_promotion_code.children.submit.label: Appliquer
 form.archive_un_archive.children.archive.label: Archiver
 form.archive_un_archive.children.unArchive.label: Désarchiver
 form.archive_un_archive.confirm.submit.label: 'Êtes-vous sûr de vouloir réaliser cette action ?'
