@@ -6994,6 +6994,16 @@ services:
             - '@repository.event.extra_parameter_repository'
 
     #
+    # Translations
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\UpdateTranslationsCommand:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '%kernel.cache_dir%'
+        tags:
+            - { name: console.command }
+
+    #
     # Contact
     #
     Proximum\Vimeet\Application\Command\Contact\EditCommentHandler:

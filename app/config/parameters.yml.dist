@@ -54,6 +54,8 @@ parameters:
     phantomjs_http_user:           'phantomjs'
     phantomjs_http_password:       '7DSJD2sm8YpzfjmnXeethPuybb'
 
+    openl10n_config_file: '%kernel.root_dir%/../.openl10n.yml'
+
     user_activate_account_token_expiration: 'P7D'
 
     sentry_dsn: ~

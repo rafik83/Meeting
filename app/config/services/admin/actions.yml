@@ -613,6 +613,17 @@ services:
             - '%infrastructure.export_omz_path%'
 
     #
+    # Openl10n
+    #
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Translation\DownloadAction:
+        arguments:
+            - '@adapter.job_queue_adapter'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@adapter.authorization_checker'
+
+    #
     # Product
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Participant\CreateAction:

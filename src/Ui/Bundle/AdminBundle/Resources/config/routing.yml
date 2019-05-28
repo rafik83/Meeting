@@ -2198,3 +2198,10 @@ admin_event_rooming_list_download_export:
         hash: .+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\DownloadRoomingListExportAction
+
+#
+# translations
+#
+admin_translations_download_link:
+    path: /openl10n/sync
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Translation\DownloadAction

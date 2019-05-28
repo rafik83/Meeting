@@ -1,0 +1,7 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+  {{ 'admin.mail.translations.downloaded.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}
