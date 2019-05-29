@@ -72,6 +72,8 @@ form.admin.picto.PresFlash_2: Flash
 form.admin.picto.RDV: Rendez-vous
 form.admin.sheet.filter.children.submit.label: Filtrer
 form.admin.sheet.follower.un-assigned: 'Non assigné'
+form.apply_promotion_code.children.promotionCode.label: Code promo
+form.apply_promotion_code.children.submit.label: Appliquer
 form.archive_un_archive.children.archive.label: Archiver
 form.archive_un_archive.children.unArchive.label: Désarchiver
 form.archive_un_archive.confirm.submit.label: 'Êtes-vous sûr de vouloir réaliser cette action ?'
@@ -381,6 +383,7 @@ form.filter_admin.role.partner: Partenaire
 form.filter_admin.role.super_admin: Admin
 form.filter_operator.children.submit.label: Filtrer
 form.filter_operator.event.all: 'Tous les événements'
+form.filter_operator.rooming.states: Etat
 form.filter_operator.rooming.types: 'Filtrer par type de participation'
 form.filter_sheet_template_organizer.children.event.label: Événement/Type(s)
 form.filter_spot_type.children.active.label: Actif
@@ -638,6 +641,7 @@ form.product_create_option.children.attributable.label: 'Attribuable à un/des p
 form.product_create_option.children.availabilityCurrent.label: 'Stock actuel'
 form.product_create_option.children.availabilityMax.label: 'Stock max'
 form.product_create_option.children.buyableUntil.label: 'Achetable jusqu''aù'
+form.product_create_option.children.canScanParticipant.label: 'Active le scan des participants'
 form.product_create_option.children.deletableUntil.label: 'Supprimable jusqu''aù'
 form.product_create_option.children.file.label: Image
 form.product_create_option.children.happenings.label: 'Sous-évènements liés'
@@ -696,6 +700,7 @@ form.product_update_option.children.attributable.label: 'Attribuable à un/des p
 form.product_update_option.children.availabilityCurrent.label: 'Stock actuel'
 form.product_update_option.children.availabilityMax.label: 'Stock max'
 form.product_update_option.children.buyableUntil.label: 'Achetable jusqu''aù'
+form.product_update_option.children.canScanParticipant.label: 'Active le scan des participants'
 form.product_update_option.children.deletableUntil.label: 'Supprimable jusqu''aù'
 form.product_update_option.children.file.label: Image
 form.product_update_option.children.happenings.label: 'Sous-évènements liés'
@@ -837,10 +842,10 @@ form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.events.label: 'Evènement de destination'
 form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.generateInvoice.label: 'Générer facture'
-form.sheet_batch.children.printInvoices.label: 'Imprimer factures PDF'
 form.sheet_batch.children.group.label: Entité
 form.sheet_batch.children.pending.label: 'En attente'
 form.sheet_batch.children.printBadge.label: 'Impression badge'
+form.sheet_batch.children.printInvoices.label: 'Imprimer factures PDF'
 form.sheet_batch.children.printPdf.label: 'Imprimer en PDF'
 form.sheet_batch.children.printPlanning.label: Imprimer
 form.sheet_batch.children.printPlanningAndBadge.label: 'Impression badge et planning'
@@ -1109,6 +1114,8 @@ form.type_create.children.formTemplates.label: Formulaires
 form.type_create.children.formTemplates.status.draft: brouillon
 form.type_create.children.formTemplates.status.published: publié
 form.type_create.children.hidden.label: Caché
+form.type_create.children.isPackageRequired.label: Forfait requis
+form.type_update.children.isPaymentRequired.label: Règlement requis
 form.type_create.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_create.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV max par planning'
 form.type_create.children.package.label: 'Template de forfait de participation'
@@ -1158,6 +1165,7 @@ form.type_update.children.canScanParticipant.label: 'Peut scanner un autre parti
 form.type_update.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_update.children.formTemplates.label: Formulaires
 form.type_update.children.hidden.label: Caché
+form.type_update.children.isPackageRequired.label: Forfait requis
 form.type_update.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_update.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV par planning'
 form.type_update.children.package.label: 'Template de forfait de participation'

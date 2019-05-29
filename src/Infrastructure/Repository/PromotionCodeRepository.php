@@ -61,7 +61,9 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
             ->select('promotion_code')
             ->from(PromotionCode::class, 'promotion_code')
             ->where('promotion_code.event = :event')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->orderBy('promotion_code.title')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }

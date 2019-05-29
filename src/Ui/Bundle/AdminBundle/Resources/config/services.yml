@@ -346,6 +346,12 @@ services:
         tags:
             - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rooming\Stay\AssignAccommodationType }
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\PromotionCodeChoiceType:
+        arguments:
+            - '@repository.promotion_code_repository'
+        tags:
+            - { name: form.type }
+
     #
     # Value Resolver
     #

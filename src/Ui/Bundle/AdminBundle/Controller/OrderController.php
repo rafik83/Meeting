@@ -12,17 +12,21 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Order\AddRowToGroup;
 use Proximum\Vimeet\Application\Command\Order\AddRowToProduct;
+use Proximum\Vimeet\Application\Command\Order\ApplyPromotionCode;
 use Proximum\Vimeet\Application\Command\Order\RemoveRow;
 use Proximum\Vimeet\Application\Command\Order\UpdateRow;
 use Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\AddRowType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\UpdateRowType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\ApplyPromotionCodeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -113,11 +117,37 @@ class OrderController extends Controller
             )
         );
 
+        $applyPromotionCode = new ApplyPromotionCode($order);
+
+        $promotionCodeChoiceForm = $this->createForm(
+            ApplyPromotionCodeType::class,
+            $applyPromotionCode,
+            ['event' => $event, 'submit' => true]
+        );
+
+        $promotionCodeChoiceForm->handleRequest($request);
+
+        if ($promotionCodeChoiceForm->isSubmitted() && $promotionCodeChoiceForm->isValid()) {
+            try {
+                $this->get('tactician.commandbus')->handle($applyPromotionCode);
+
+                return $this->redirectToRoute(
+                    'admin_sheet_order_edit',
+                    ['event' => $event->getId(), 'order' => $order->getId()]
+                );
+            } catch (PromotionCodeException $exception) {
+                $promotionCodeChoiceForm->get('promotionCode')->addError(
+                    new FormError($this->get('translator')->trans($exception->getFlash(), [], 'flashes'))
+                );
+            }
+        }
+
         return $this->render('AdminBundle:Order:edit.html.twig', [
-            'event'      => $event,
+            'event' => $event,
             'sheet_info' => $sheetInfo,
-            'order'      => $order,
+            'order' => $order,
             'order_view' => $summaryView,
+            'promotion_code_choice_form' => $promotionCodeChoiceForm->createView(),
         ]);
     }
 

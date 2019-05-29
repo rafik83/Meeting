@@ -31,6 +31,16 @@ services:
         arguments:
             - '@datetime'
 
+    Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing:
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+
+    Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing:
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@query.order.order_vat_view_query_handler'
+            - '@order.balance'
+
     Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker: ~
 
     Proximum\Vimeet\Domain\Order\DiscountCalculator: ~

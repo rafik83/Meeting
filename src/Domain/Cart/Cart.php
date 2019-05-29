@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\CartRowParticipant;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -451,25 +450,7 @@ class Cart
         $total = 0;
 
         foreach ($promotionCode->getPromotions() as $promotion) {
-            if ($promotion->getProduct() !== $product) {
-                continue;
-            }
-
-            // don't apply promo code on cart row negative quantity
-            if ($cartRow->getQuantity() < 0) {
-                continue;
-            }
-
-            // don't use promotion quantity max if promotion type value off
-            if (Promotion::TYPE_VALUE_OFF === $promotion->getType()) {
-                $total -= $promotion->getDiscount();
-            } elseif ($cartRow->getQuantity() < $promotion->getQuantityMax()
-                || null === $promotion->getQuantityMax()
-            ) {
-                $total -= $cartRow->getQuantity() * $promotion->getDiscount();
-            } else {
-                $total -= $promotion->getQuantityMax() * $promotion->getDiscount();
-            }
+            $total += $promotion->getDiscountAmountForProduct($product, $cartRow->getQuantity());
         }
 
         return $total;
@@ -485,24 +466,10 @@ class Cart
     public function getDiscount(PromotionCode $promotionCode)
     {
         $total = 0;
-        foreach ($promotionCode->getPromotions() as $promotion) {
-            if (null !== ($cartRow = $this->getCartRowForProduct($promotion->getProduct()))) {
-                // don't apply promo code on cart row negative quantity
-                if ($cartRow->getQuantity() < 0) {
-                    continue;
-                }
 
-                // don't use promotion quantity max if promotion type value off
-                if (Promotion::TYPE_VALUE_OFF === $promotion->getType()) {
-                    $total -= $promotion->getDiscount();
-                } elseif ($cartRow->getQuantity() < $promotion->getQuantityMax()
-                    || null === $promotion->getQuantityMax()
-                ) {
-                    $total -= $cartRow->getQuantity() * $promotion->getDiscount();
-                } else {
-                    $total -= $promotion->getQuantityMax() * $promotion->getDiscount();
-                }
-            }
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            $product = $promotion->getProduct();
+            $total += $this->getDiscountForProduct($promotionCode, $product);
         }
 
         return $total;
