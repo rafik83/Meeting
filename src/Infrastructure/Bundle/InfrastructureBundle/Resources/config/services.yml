@@ -5746,6 +5746,10 @@ services:
         arguments:
             - '@adapter.session'
 
+    Proximum\Vimeet\Domain\Filter\RoomingListFilter:
+        arguments:
+            - '@adapter.session'
+
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter:
         arguments:
             - '@Proximum\Vimeet\Domain\Filter\SheetFilter'

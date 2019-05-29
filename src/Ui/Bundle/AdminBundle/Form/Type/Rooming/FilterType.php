@@ -61,6 +61,7 @@ class FilterType extends AbstractType
             [
                 'required' => false,
                 'method'   => 'GET',
+                'csrf_protection' => false,
             ]
         );
     }
