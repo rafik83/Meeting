@@ -1634,6 +1634,13 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Update }
+
+    Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler:
+        arguments:
+            - '@repository.promotion_code_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\DecrementStock }
+
     command.meeting_slot.generate_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\GenerateHandler
         arguments:
@@ -1848,6 +1855,15 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
+
+    Proximum\Vimeet\Application\Command\Order\ApplyPromotionCodeHandler:
+        arguments:
+            - '@order.merger'
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\ApplyPromotionCode }
 
     command.rule.see_what_handler:
         class: Proximum\Vimeet\Application\Command\Rule\SeeWhatHandler
@@ -4432,6 +4448,7 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.event_open_access_checker'
+            - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery }
 
@@ -4470,6 +4487,7 @@ services:
         arguments:
             - '@adapter.router'
             - '@domain.key_dates.checker.event_open_access_checker'
+            - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQuery }
 
@@ -4809,7 +4827,11 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
 
-    #
+    Proximum\Vimeet\Domain\Scan\CanScanParticipant:
+        arguments:
+            - '@order.merger'
+
+  #
     # Elastic Adapter
     #
     adapter.sheet_search_adapter:
@@ -5208,9 +5230,9 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
-            - '@repository.promotion_code_repository'
             - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
             - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter'
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler'
             - '@datetime'
 
     cart_cleaner:

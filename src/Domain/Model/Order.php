@@ -521,6 +521,23 @@ class Order
     }
 
     /**
+     * Get product option in order
+     *
+     * @return Product[]
+     */
+    public function getOptions(): array
+    {
+        $options = [];
+        foreach ($this->rows as $row) {
+            if (Product::TYPE_OPTION === $row->getType()) {
+                $options[] = $row->getProduct();
+            }
+        }
+
+        return $options;
+    }
+
+    /**
      * @return Product\ProductIncluded[]
      */
     public function getIncludedParticipantProducts(): array
