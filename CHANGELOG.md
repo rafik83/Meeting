@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1871 - As an admin, add promotion code to order
-- VIMEET-1899 - Romming list sheet state filter
 - VIMEET-1899 - Add rooming list sheet state filter
+- VIMEET-791 - Display conditional objective filter
+- VIMEET-1874 - Can participant scan in Product option
+- VIMEET-1972 - Display scan and contacts buttons by Product option 
 
 ## [2.6.0] - 2019-05-16
 ### Added
