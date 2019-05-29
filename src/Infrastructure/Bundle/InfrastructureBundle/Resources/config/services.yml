@@ -5744,7 +5744,7 @@ services:
     #
     Proximum\Vimeet\Domain\Filter\SheetFilter:
         arguments:
-            - '@session'
+            - '@adapter.session'
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter:
         arguments:
