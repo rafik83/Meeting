@@ -169,6 +169,9 @@ class Product
     /** @var bool */
     private $attributable;
 
+    /** @var bool */
+    private $canScanParticipant;
+
     /**
      * @param Event                   $event
      * @param string                  $type
@@ -184,6 +187,7 @@ class Product
      * @param bool                    $subjectedToValidation
      * @param null|\DateTimeInterface $buyableUntil
      * @param bool                    $attributable
+     * @param bool                    $canScanParticipant
      */
     public function __construct(
         Event $event,
@@ -199,7 +203,8 @@ class Product
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null,
-        bool $attributable = false
+        bool $attributable = false,
+        bool $canScanParticipant = false
     ) {
         $this->translations          = new ArrayCollection();
         $this->features              = new ArrayCollection();
@@ -218,6 +223,7 @@ class Product
         $this->subjectedToValidation = $subjectedToValidation;
         $this->buyableUntil          = $buyableUntil;
         $this->attributable          = $attributable;
+        $this->canScanParticipant    = $canScanParticipant;
 
         $this->availabilityTimeRanges = new ArrayCollection();
         $this->happenings = new ArrayCollection();
@@ -887,6 +893,7 @@ class Product
      * @param bool                    $subjectedToValidation
      * @param null|\DateTimeInterface $buyableUntil
      * @param bool                    $attributable
+     * @param bool                    $canScanParticipant
      *
      * @return Product
      */
@@ -903,7 +910,8 @@ class Product
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null,
-        bool $attributable = false
+        bool $attributable = false,
+        bool $canScanParticipant = false
     ) {
         return new self(
             $event,
@@ -919,7 +927,8 @@ class Product
             $deletableUntil,
             $subjectedToValidation,
             $buyableUntil,
-            $attributable
+            $attributable,
+            $canScanParticipant
         );
     }
 
@@ -936,6 +945,7 @@ class Product
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil
      * @param bool                    $attributable
+     * @param bool                    $canScanParticipant
      *
      * @return Product
      */
@@ -951,19 +961,21 @@ class Product
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null,
-        bool $attributable = false
+        bool $attributable = false,
+        bool $canScanParticipant = false
     ): Product {
-        $this->name                  = $name;
-        $this->quantityMax           = $quantityMax;
-        $this->availabilityCurrent   = $availabilityCurrent;
-        $this->availabilityMax       = $availabilityMax;
-        $this->updatable             = $updatable;
-        $this->deletableUntil        = $deletableUntil;
+        $this->name = $name;
+        $this->quantityMax = $quantityMax;
+        $this->availabilityCurrent = $availabilityCurrent;
+        $this->availabilityMax = $availabilityMax;
+        $this->updatable = $updatable;
+        $this->deletableUntil = $deletableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
-        $this->buyableUntil          = $buyableUntil;
-        $this->unitPrice             = $unitPrice;
-        $this->vat                   = $vat;
-        $this->attributable          = $attributable;
+        $this->buyableUntil = $buyableUntil;
+        $this->unitPrice = $unitPrice;
+        $this->vat = $vat;
+        $this->attributable = $attributable;
+        $this->canScanParticipant = $canScanParticipant;
 
         if (null !== $image) {
             $this->image = $image;
@@ -1100,8 +1112,7 @@ class Product
      * @param \DateTimeInterface|null $deletableUntil
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface|null $buyableUntil
-     *
-     * @throws \InvalidArgumentException
+     * @param bool                    $canScanParticipant
      *
      * @return Product
      */
@@ -1118,7 +1129,8 @@ class Product
         bool $updatable,
         \DateTimeInterface $deletableUntil = null,
         bool $subjectedToValidation = false,
-        \DateTimeInterface $buyableUntil = null
+        \DateTimeInterface $buyableUntil = null,
+        bool $canScanParticipant = false
     ): Product {
         if (self::TYPE_OPTION === $type) {
             return self::createOption(
@@ -1133,7 +1145,8 @@ class Product
                 $updatable,
                 $deletableUntil,
                 $subjectedToValidation,
-                $buyableUntil
+                $buyableUntil,
+                $canScanParticipant
             );
         } elseif (self::TYPE_PARTICIPANT === $type) {
             return self::createParticipant($event, $name, $unitPrice, $vat, $quantityMax);
@@ -1237,5 +1250,15 @@ class Product
     public function isAttributable(): bool
     {
         return $this->attributable;
+    }
+
+    public function canScanParticipant(): bool
+    {
+        return $this->canScanParticipant;
+    }
+
+    public function setCanScanParticipant(bool $canScanParticipant): void
+    {
+        $this->canScanParticipant = $canScanParticipant;
     }
 }

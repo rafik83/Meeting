@@ -17,8 +17,8 @@ use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Scan\CanScanParticipant;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class ContactsSubmenuViewQueryHandlerTest extends TestCase
@@ -26,17 +26,16 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
     public function testContactsAvailable()
     {
         $sheet = $this->prophesize(Sheet::class);
-        $type = $this->prophesize(Type::class);
-        $type->canScanParticipant()->shouldBeCalled()->willReturn(true);
-
         $sheet->getId()->willReturn(1337);
-        $sheet->getType()->willReturn($type->reveal());
 
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
 
         $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
         $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+
+        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
+        $canScanParticipant->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
 
         $navigationBuilder = $this->prophesize(NavigationBuilder::class);
         $navigationBuilder->getRoute(
@@ -49,7 +48,8 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
 
         $badgeSubmenuViewQueryHandler = new ContactsSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $accessChecker->reveal()
+            $accessChecker->reveal(),
+            $canScanParticipant->reveal()
         );
         $result = $badgeSubmenuViewQueryHandler->handle(
             new ContactsSubmenuViewQuery(
@@ -76,17 +76,21 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
     public function testEventNotOpen()
     {
         $sheet = $this->prophesize(Sheet::class);
+
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
 
         $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
-        $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(false);
+        $accessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+
+        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
 
         $navigationBuilder = $this->prophesize(NavigationBuilder::class);
 
         $badgeSubmenuViewQueryHandler = new ContactsSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $accessChecker->reveal()
+            $accessChecker->reveal(),
+            $canScanParticipant->reveal()
         );
 
         $this->assertNull(
@@ -102,25 +106,24 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
         );
     }
 
-    public function testParticipantCantScan()
+    public function testCantScanParticipant()
     {
         $sheet = $this->prophesize(Sheet::class);
-        $type = $this->prophesize(Type::class);
-        $type->canScanParticipant()->shouldBeCalled()->willReturn(false);
-
-        $sheet->getType()->willReturn($type->reveal());
-
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
 
         $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
-        $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+        $accessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+
+        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
+        $canScanParticipant->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
 
         $navigationBuilder = $this->prophesize(NavigationBuilder::class);
 
         $badgeSubmenuViewQueryHandler = new ContactsSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $accessChecker->reveal()
+            $accessChecker->reveal(),
+            $canScanParticipant->reveal()
         );
 
         $this->assertNull(

@@ -33,7 +33,7 @@ class RoomingListAction
     public function __invoke(Request $request, Event $event, AdminDomain $adminDomain): Response
     {
         $locale = $event->getAvailableLocale($request->getLocale());
-        $listViewQuery = new ListViewQuery($event, $locale, []);
+        $listViewQuery = new ListViewQuery($event, $locale, [], []);
 
         $form = $this->formFactory->create(FilterType::class, $listViewQuery, [
             'event' => $event, 'locale' => $locale, 'admin' => $adminDomain->getAdmin(),

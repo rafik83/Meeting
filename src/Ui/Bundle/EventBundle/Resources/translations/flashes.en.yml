@@ -1,3 +1,4 @@
+flash.agenda.availability.ok_message_on_save: 'Your availabilities have been saved'
 flash.authentication_token.invalid_link: 'Invalid link'
 flash.event.user_event_phone.confirmationNeeded: 'To ask for a meeting, please confirm your phone number'
 flash.event.user_event_phone.validate.success: 'Your phone number has been successfully confirmed'

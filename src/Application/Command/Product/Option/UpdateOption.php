@@ -29,13 +29,14 @@ class UpdateOption extends AbstractUpdate
     {
         parent::__construct($product);
 
-        $this->availabilityCurrent   = $product->getAvailabilityCurrent();
-        $this->availabilityMax       = $product->getAvailabilityMax();
-        $this->updatable             = $product->isUpdatable();
-        $this->deletableUntil        = $product->getDeletableUntil();
-        $this->buyableUntil          = $product->getBuyableUntil();
+        $this->availabilityCurrent = $product->getAvailabilityCurrent();
+        $this->availabilityMax = $product->getAvailabilityMax();
+        $this->updatable = $product->isUpdatable();
+        $this->deletableUntil = $product->getDeletableUntil();
+        $this->buyableUntil = $product->getBuyableUntil();
         $this->subjectedToValidation = $product->isSubjectedToValidation();
-        $this->attributable          = $product->isAttributable();
-        $this->happenings            = $product->getHappenings();
+        $this->attributable = $product->isAttributable();
+        $this->happenings = $product->getHappenings();
+        $this->canScanParticipant = $product->canScanParticipant();
     }
 }
