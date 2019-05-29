@@ -67,6 +67,9 @@ class Update implements Command
     /** @var bool */
     public $canScanParticipant;
 
+    /** @var bool */
+    public $isPackageRequired = false;
+
     /**
      * @param Type   $type
      * @param string $locale
@@ -89,6 +92,7 @@ class Update implements Command
         $this->canRemoveMeeting = $type->canRemoveMeeting();
         $this->areAllSheetParticipantsAssignedToMeeting = $type->areAllSheetParticipantsAssignedToMeeting();
         $this->canScanParticipant = $type->canScanParticipant();
+        $this->isPackageRequired = $type->isPackageRequired();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [

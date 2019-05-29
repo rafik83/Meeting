@@ -44,6 +44,12 @@
             {{ form_widget(form.areAllSheetParticipantsAssignedToMeeting) }}
         </div>
     </div>
+    <div class="form-group">
+        {{ form_label(form.isPackageRequired, null, { label_attr: { class: 'control-label col-md-3' }}) }}
+        <div class="col-md-9 checkbox">
+            {{ form_widget(form.isPackageRequired) }}
+        </div>
+    </div>
 
     {{ form_row(form.validationCriteria) }}
 

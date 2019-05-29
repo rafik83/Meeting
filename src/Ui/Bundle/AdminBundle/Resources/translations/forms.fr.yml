@@ -1114,6 +1114,7 @@ form.type_create.children.formTemplates.label: Formulaires
 form.type_create.children.formTemplates.status.draft: brouillon
 form.type_create.children.formTemplates.status.published: publié
 form.type_create.children.hidden.label: Caché
+form.type_create.children.isPackageRequired.label: Forfait requis
 form.type_create.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_create.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV max par planning'
 form.type_create.children.package.label: 'Template de forfait de participation'
@@ -1163,6 +1164,7 @@ form.type_update.children.canScanParticipant.label: 'Peut scanner un autre parti
 form.type_update.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_update.children.formTemplates.label: Formulaires
 form.type_update.children.hidden.label: Caché
+form.type_update.children.isPackageRequired.label: Forfait requis
 form.type_update.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_update.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV par planning'
 form.type_update.children.package.label: 'Template de forfait de participation'

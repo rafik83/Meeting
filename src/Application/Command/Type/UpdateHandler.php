@@ -66,7 +66,8 @@ class UpdateHandler
             $update->canMoveMeeting,
             $update->canRemoveMeeting,
             $update->areAllSheetParticipantsAssignedToMeeting,
-            $update->canScanParticipant
+            $update->canScanParticipant,
+            $update->isPackageRequired
         );
         $type->setHidden($update->hidden);
 

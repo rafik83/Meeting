@@ -22,10 +22,10 @@ use Proximum\Vimeet\Domain\Type\TypeInterface;
  */
 class Type implements WhoInterface, TypeInterface
 {
-   public const TYPE_MANAGEMENT_UNAVAILABLE = 'unavailable';
-   public const TYPE_MANAGEMENT_AVAILABLE = 'available';
-   public const TYPE_MANAGEMENT_NONE = 'none';
-    
+    public const TYPE_MANAGEMENT_UNAVAILABLE = 'unavailable';
+    public const TYPE_MANAGEMENT_AVAILABLE = 'available';
+    public const TYPE_MANAGEMENT_NONE = 'none';
+
     /** @var int */
     private $id;
 
@@ -70,7 +70,7 @@ class Type implements WhoInterface, TypeInterface
 
     /** @var ArrayCollection of FormTemplates */
     private $formTemplates;
-    
+
     /** @var string */
     private $availabilityType;
 
@@ -94,9 +94,9 @@ class Type implements WhoInterface, TypeInterface
     /** @var bool */
     public $canScanParticipant = false;
 
-    /**
-     * @param Event $event
-     */
+    /** @var bool */
+    public $isPackageRequired = false;
+
     public function __construct(Event $event)
     {
         $this->event = $event;
@@ -158,7 +158,8 @@ class Type implements WhoInterface, TypeInterface
      */
     public function getDescription($locale)
     {
-        return $this->getTranslations()->containsKey($locale) ? $this->getTranslations()->get($locale)->getDescription() : '';
+        return $this->getTranslations()->containsKey($locale) ?
+            $this->getTranslations()->get($locale)->getDescription() : '';
     }
 
     /**
@@ -333,9 +334,12 @@ class Type implements WhoInterface, TypeInterface
      */
     public function getCategoriesTitles($locale)
     {
-        return $this->categories->map(function (Category $category) use ($locale) {
-            return $category->getTitle($locale);
-        })->toArray();
+        return $this->categories->map(
+            static function (Category $category) use ($locale) {
+                return $category->getTitle($locale);
+            }
+        )->toArray()
+            ;
     }
 
     /**
@@ -429,7 +433,8 @@ class Type implements WhoInterface, TypeInterface
         bool $canMoveMeeting = false,
         bool $canRemoveMeeting = false,
         bool $areAllSheetParticipantsAssignedToMeeting = false,
-        bool $canScanParticipant = false
+        bool $canScanParticipant = false,
+        bool $isPackageRequired = false
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
@@ -439,6 +444,7 @@ class Type implements WhoInterface, TypeInterface
         $this->canRemoveMeeting = $canRemoveMeeting;
         $this->areAllSheetParticipantsAssignedToMeeting = $areAllSheetParticipantsAssignedToMeeting;
         $this->canScanParticipant = $canScanParticipant;
+        $this->isPackageRequired = $isPackageRequired;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int
@@ -472,5 +478,10 @@ class Type implements WhoInterface, TypeInterface
     public function canScanParticipant(): bool
     {
         return $this->canScanParticipant;
+    }
+
+    public function isPackageRequired(): bool
+    {
+        return $this->isPackageRequired;
     }
 }
