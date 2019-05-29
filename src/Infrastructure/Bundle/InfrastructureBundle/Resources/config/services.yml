@@ -5742,15 +5742,13 @@ services:
     #
     # Filter
     #
-    filter.sheet_filter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter
+    Proximum\Vimeet\Domain\Filter\SheetFilter:
         arguments:
             - '@session'
 
-
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter:
         arguments:
-            - '@filter.sheet_filter'
+            - '@Proximum\Vimeet\Domain\Filter\SheetFilter'
             - '@form.factory'
 
     #

@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\tests\Infrastructure\Bundle\InfrastructureBundle\EventListener\Filter;
+namespace Proximum\Vimeet\Tests\Domain\Filter;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Filter\SheetFilter;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class SheetFilterTest extends TestCase
