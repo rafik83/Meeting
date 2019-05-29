@@ -41,17 +41,28 @@ class SearchType extends AbstractSearchType
                     'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
                     'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],
-            ])
-            ->add(SearchFields::FILTER_OBJECTIVE, ChoiceType::class, [
-                'label'    => 'form.search.objective.label',
-                'expanded' => true,
-                'multiple' => true,
-                'choices'  => [
-                    'form.search.objective.supply' => Nomenclature::OBJECTIVE_SUPPLY,
-                    'form.search.objective.need'   => Nomenclature::OBJECTIVE_NEED,
-                ],
-            ])
-        ;
+            ]);
+
+        $objectiveFilters = [];
+        if (in_array(Nomenclature::OBJECTIVE_SUPPLY, $options['objectiveFilters'])) {
+            $objectiveFilters['form.search.objective.supply'] = Nomenclature::OBJECTIVE_SUPPLY;
+        }
+
+        if (in_array(Nomenclature::OBJECTIVE_NEED, $options['objectiveFilters'])) {
+            $objectiveFilters['form.search.objective.need'] = Nomenclature::OBJECTIVE_NEED;
+        }
+
+        if (!empty($options['objectiveFilters'])) {
+            $builder->
+            add(
+                SearchFields::FILTER_OBJECTIVE, ChoiceType::class, [
+                    'label'    => 'form.search.objective.label',
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices'  => $objectiveFilters,
+                ]
+            );
+        }
 
         if (true === $options['filterByAvailableSlotIds']) {
             $everyone = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE;
@@ -131,6 +142,7 @@ class SearchType extends AbstractSearchType
             'filterByAvailableSlotIds' => false,
             'filterBySpecificSlot'     => false,
             'specificSlot'             => null,
+            'objectiveFilters'         => [],
         ]);
     }
 

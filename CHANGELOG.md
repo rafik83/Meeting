@@ -4,8 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
 - VIMEET-1967 - Package can be required by type
 - VIMEET-1968 - Payment can be required by type
+- VIMEET-1871 - As an admin, add promotion code to order
+- VIMEET-1899 - Add rooming list sheet state filter
+- VIMEET-791 - Display conditional objective filter
+- VIMEET-1874 - Can participant scan in Product option
+- VIMEET-1972 - Display scan and contacts buttons by Product option
 
 ## [2.6.0] - 2019-05-16
 ### Added

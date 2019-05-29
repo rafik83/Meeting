@@ -24,6 +24,18 @@ export.meeting_request.state.approved: Accepted
 export.meeting_request.state.planned: Planned
 export.meeting_request.state.refused: Refused
 export.meeting_request.state.sent: Sent
+form_template_data_export.column.categoryTitle: 'Category of participation'
+form_template_data_export.column.sheetAddress: Address
+form_template_data_export.column.sheetCity: City
+form_template_data_export.column.sheetCountry: Country
+form_template_data_export.column.sheetId: 'ID sheet'
+form_template_data_export.column.sheetTitle: 'Sheet title'
+form_template_data_export.column.sheetZipCode: 'Zip code'
+form_template_data_export.column.typeTitle: 'Type of participation'
+form_template_data_export.column.userEmail: Email
+form_template_data_export.column.userFirstName: 'First name'
+form_template_data_export.column.userId: 'Id user'
+form_template_data_export.column.userLastName: 'Last name'
 gender.man: Mr
 gender.woman: Mrs
 order.column.billing_info_city: City
