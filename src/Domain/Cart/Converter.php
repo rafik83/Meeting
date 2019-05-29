@@ -10,16 +10,16 @@
 
 namespace Proximum\Vimeet\Domain\Cart;
 
+use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStock;
+use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
 use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 /**
@@ -43,32 +43,32 @@ class Converter
     /** @var PromotionCodeRowRepositoryInterface */
     private $promotionCodeRowRepository;
 
-    /** @var PromotionCodeRepositoryInterface */
-    private $promotionCodeRepository;
-
     /** @var ParticipantProductSetter */
     private $participantProductSetter;
 
     /** @var ProductAttributedToParticipantSetter */
     private $productAttributedToParticipantSetter;
 
+    /** @var DecrementStockHandler */
+    private $decrementStockHandler;
+
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
-        PromotionCodeRepositoryInterface $promotionCodeRepository,
         ParticipantProductSetter $participantProductSetter,
         ProductAttributedToParticipantSetter $productAttributedToParticipantSetter,
+        DecrementStockHandler $decrementStockHandler,
         \DateTimeInterface $datetime
     ) {
         $this->orderRepository = $orderRepository;
         $this->cartRowRepository = $cartRowRepository;
         $this->cartStepRepository = $cartStepRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
-        $this->promotionCodeRepository = $promotionCodeRepository;
         $this->participantProductSetter = $participantProductSetter;
         $this->productAttributedToParticipantSetter = $productAttributedToParticipantSetter;
+        $this->decrementStockHandler = $decrementStockHandler;
         $this->datetime = $datetime;
     }
 
@@ -99,7 +99,7 @@ class Converter
                 $order->addPromotionCode($promotionCodeOrderRow);
             }
 
-            $this->decrementStockPromotionCode($promotionCodeRow->getPromotionCode());
+            $this->decrementStockHandler->handle(new DecrementStock($promotionCodeRow->getPromotionCode()));
         }
 
         $sheet->addOrder($order);
@@ -184,18 +184,5 @@ class Converter
         $this->cartRowRepository->deleteForSheet($cart->getSheet());
         $this->cartStepRepository->deleteForSheet($cart->getSheet());
         $this->promotionCodeRowRepository->deleteForSheet($cart->getSheet());
-    }
-
-    /**
-     * @param PromotionCode $promotionCode
-     */
-    private function decrementStockPromotionCode(PromotionCode $promotionCode): void
-    {
-        $stock = $promotionCode->getStock();
-
-        if (null !== $stock && $stock > 0) {
-            $promotionCode->setStock($stock - 1);
-            $this->promotionCodeRepository->set($promotionCode);
-        }
     }
 }

@@ -72,6 +72,8 @@ form.admin.picto.PresFlash_2: Flash
 form.admin.picto.RDV: Rendez-vous
 form.admin.sheet.filter.children.submit.label: Filtrer
 form.admin.sheet.follower.un-assigned: 'Non assigné'
+form.apply_promotion_code.children.promotionCode.label: Code promo
+form.apply_promotion_code.children.submit.label: Appliquer
 form.archive_un_archive.children.archive.label: Archiver
 form.archive_un_archive.children.unArchive.label: Désarchiver
 form.archive_un_archive.confirm.submit.label: 'Êtes-vous sûr de vouloir réaliser cette action ?'
@@ -839,10 +841,10 @@ form.sheet_batch.children.enable.label: Activer
 form.sheet_batch.children.events.label: 'Evènement de destination'
 form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.generateInvoice.label: 'Générer facture'
-form.sheet_batch.children.printInvoices.label: 'Imprimer factures PDF'
 form.sheet_batch.children.group.label: Entité
 form.sheet_batch.children.pending.label: 'En attente'
 form.sheet_batch.children.printBadge.label: 'Impression badge'
+form.sheet_batch.children.printInvoices.label: 'Imprimer factures PDF'
 form.sheet_batch.children.printPdf.label: 'Imprimer en PDF'
 form.sheet_batch.children.printPlanning.label: Imprimer
 form.sheet_batch.children.printPlanningAndBadge.label: 'Impression badge et planning'
