@@ -70,12 +70,12 @@ Feature: Search sheet in catalog
     But I should not see "World Company Inc"
     And I should not see "Hello World Company"
     When I go to this page "/fr/sheet/2/catalog?objective=need"
-    Then I should see "2" in the title of the ".total-result" element
-    And I should see "Hello World Company"
-    And I should see "Aanera"
+    Then I should see "0" in the title of the ".total-result" element
+    And I should not see "Hello World Company"
+    And I should not see "Aanera"
     But I should not see "World Company Inc"
     When I go to this page "/fr/sheet/2/catalog?objective=supply&objective=need"
-    Then I should see "2" in the title of the ".total-result" element
-    And I should see "Hello World Company"
-    And I should see "Aanera"
+    Then I should see "0" in the title of the ".total-result" element
+    And I should not see "Hello World Company"
+    And I should not see "Aanera"
     But I should not see "World Company Inc"

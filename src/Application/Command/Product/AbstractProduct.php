@@ -44,6 +44,9 @@ abstract class AbstractProduct
      */
     public $updatable;
 
+    /** @var bool */
+    public $canScanParticipant;
+
     /**
      * @var \DateTimeInterface
      */

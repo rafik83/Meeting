@@ -33,7 +33,8 @@ class CreateOptionHandler extends AbstractHandler
             $createOption->deletableUntil,
             $createOption->subjectedToValidation,
             $createOption->buyableUntil,
-            $createOption->attributable
+            $createOption->attributable,
+            $createOption->canScanParticipant
         );
 
         $product->setHappenings($createOption->happenings);

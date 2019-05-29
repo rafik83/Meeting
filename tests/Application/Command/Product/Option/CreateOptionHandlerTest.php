@@ -34,6 +34,7 @@ class CreateOptionHandlerTest extends TestCase
         $availabilityCurrent = 10;
         $availabilityMax     = 50;
         $updatable           = true;
+        $canScanParticipant  = true;
         $deletableUntil      = new \DateTime();
         $translations = [
             'fr' => [
@@ -61,6 +62,7 @@ class CreateOptionHandlerTest extends TestCase
         $create->deletableUntil      = $deletableUntil;
         $create->translations        = $translations;
         $create->attributable        = true;
+        $create->canScanParticipant  = true;
         $create->file                = null;
 
         // Expected
@@ -77,7 +79,8 @@ class CreateOptionHandlerTest extends TestCase
             $deletableUntil,
             false,
             null,
-            true
+            true,
+            $canScanParticipant
         );
         $expectedProduct->translate('fr', 'foo', null, 'bar', 'optional', '');
         $expectedProduct->translate('en', 'enfoo', null, 'enbar', 'enoptional', '');

@@ -41,6 +41,10 @@ Proximum\Vimeet\Domain\Model\Product:
             type: boolean
             options:
                 default: false
+        canScanParticipant:
+            type: boolean
+            options:
+                default: false
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\ProductTranslation
