@@ -256,6 +256,10 @@ class SheetController extends Controller
                     if ($batchForm->has('generateInvoice')) {
                         $batch->generateInvoice = $batchForm->get('generateInvoice')->isClicked();
                     }
+
+                    if ($batchForm->has('printInvoices')) {
+                        $batch->printInvoices = $batchForm->get('printInvoices')->isClicked();
+                    }
                 }
 
                 /** @var BatchResult $result */

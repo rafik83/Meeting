@@ -17,6 +17,7 @@ class File
     public const TYPE_EXPORT_FORM_TEMPLATE_DATA = 'export_form_template_data';
     public const TYPE_EXPORT_ROOMING_LIST = 'export_rooming_list';
     public const TYPE_EXPORT_PRODUCT_LIST = 'export_product_list';
+    public const TYPE_PRINT_INVOICES = 'print_invoices';
     
     /** @var int */
     private $id;

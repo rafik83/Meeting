@@ -214,4 +214,25 @@ class Promotion
     {
         return self::TYPE_FREE === $this->type;
     }
+
+    public function getDiscountAmountForProduct(Product $product, int $quantity)
+    {
+        if ($this->getProduct() !== $product) {
+            return 0;
+        }
+
+        if ($quantity <= 0) {
+            return 0;
+        }
+
+        if (self::TYPE_VALUE_OFF === $this->getType()) {
+            return -1 * $this->getDiscount();
+        }
+
+        if ($quantity < $this->getQuantityMax() || null === $this->getQuantityMax()) {
+            return -1 * $quantity * $this->getDiscount();
+        }
+
+        return -1 * $this->getQuantityMax() * $this->getDiscount();
+    }
 }

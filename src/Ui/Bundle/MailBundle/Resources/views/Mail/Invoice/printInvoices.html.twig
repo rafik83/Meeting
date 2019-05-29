@@ -1,0 +1,17 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    {{ 'admin.mail.invoices.print.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+
+    <br>
+    <br>
+    {{ macros.button(
+        'admin.mail.invoices.print.link_label'|trans({}, 'mail', mail.locale),
+        url('admin_invoice_print_download', {'event': mail.event.id, 'file': mail.fileId, 'hash': mail.fileHash })
+    ) }}
+    <br>
+
+    {{ 'admin.mail.invoices.print.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

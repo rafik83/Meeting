@@ -103,6 +103,14 @@ class TypeCreateType extends AbstractType
                 'canScanParticipant', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add(
+                'isPackageRequired', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add(
+                'isPaymentRequired', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 

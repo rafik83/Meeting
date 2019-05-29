@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Domain\Order;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Order\PromotionCode;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\Promotion;
 
 class DiscountCalculator
 {
@@ -35,25 +34,7 @@ class DiscountCalculator
         $total = 0;
 
         foreach ($promotionCode->getPromotionCode()->getPromotions() as $promotion) {
-            if ($promotion->getProduct() !== $product) {
-                continue;
-            }
-
-            // don't apply promo code on order row negative quantity
-            if ($row->getQuantity() < 0) {
-                continue;
-            }
-
-            // don't use promotion quantity max if promotion type value off
-            if (Promotion::TYPE_VALUE_OFF === $promotion->getType()) {
-                $total -= $promotion->getDiscount();
-            } elseif ($row->getQuantity() < $promotion->getQuantityMax()
-                || null === $promotion->getQuantityMax()
-            ) {
-                $total -= $row->getQuantity() * $promotion->getDiscount();
-            } else {
-                $total -= $promotion->getQuantityMax() * $promotion->getDiscount();
-            }
+            $total += $promotion->getDiscountAmountForProduct($product, $row->getQuantity());
         }
 
         return $total;

@@ -22,60 +22,6 @@
     #}
     <img src="{{ asset(invoiceView.invoiceLogo) }}" style="display: none" />
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-offset-6 col-md-6">
-                <strong>{{ invoiceView.billingInfosView.company }}</strong><br>
-                {{ ('invoice.gender.' ~ invoiceView.billingInfosView.gender)|trans({}, "invoices", invoiceView.eventDefaultLocale) }} {{ invoiceView.billingInfosView.firstname }} {{ invoiceView.billingInfosView.lastname }}<br>
-                {{ invoiceView.billingInfosView.street }}<br>
-                {{ invoiceView.billingInfosView.zipcode }} {{ invoiceView.billingInfosView.city }}<br>
-                {{ invoiceView.billingInfosView.country|country(invoiceView.eventDefaultLocale)|upper }}
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <strong>{{ invoiceView.eventTitle }}</strong>
-                    <br><strong>{{ 'invoice.number.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong>
-                    {{ invoiceView.invoiceNumber }}
-
-                    {% if invoiceView.billingInfosView.reference is not null %}
-                        <br><strong>{{ 'invoice.reference.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong>
-                        {{ invoiceView.billingInfosView.reference }}
-                    {% endif %}
-
-                    <br><strong>{{ 'invoice.date.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong>
-                    {{ invoiceView.createdAt|localizeddate('medium', 'none', invoiceView.eventDefaultLocale, invoiceView.eventTimeZone) }}
-                </p>
-            </div>
-        </div>
-
-        {{ include('EventBundle:Invoice/Partial:summary.html.twig', { invoiceView: invoiceView }) }}
-
-        {% if invoiceView.billingInfosView.vatNumber %}
-            <p>
-                <strong>{{ 'invoice.vatNumber.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong>
-                {{ invoiceView.billingInfosView.vatNumber }}
-            </p>
-        {% endif %}
-
-        <div class="row">
-            <div class="col-md-6">
-                <p>
-                    {{ invoiceView.eventBillingAddress|nl2br }}
-                </p>
-                <p>
-                    <strong>{{ 'invoice.bankInfo.title'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong><br>
-                    {{ invoiceView.eventBankInfo|nl2br }}
-                </p>
-            </div>
-            <div class="col-md-6">
-                <p>
-                    {{ invoiceView.eventPaymentCondition|nl2br }}
-                </p>
-            </div>
-        </div>
-    </div>
+    {{ include('EventBundle:Invoice/Partial:body.html.twig', { invoiceView: invoiceView }) }}
 </body>
 </html>

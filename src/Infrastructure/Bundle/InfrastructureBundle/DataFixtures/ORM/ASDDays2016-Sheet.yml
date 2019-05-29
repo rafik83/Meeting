@@ -98,7 +98,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 # Offre
                 03b394ac: { items: ["ab93de06","ab93de05"] }
                 # Besoins
-                63ccc105: { items: [] }
+                63ccc105: { items: ["ab93de07"] }
             - '@user_asddays_2'
             - <dateTime()>
         registrationData:

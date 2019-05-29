@@ -43,6 +43,9 @@ class CatalogFilterViewsResult
     /** @var NomenclatureTagViews[] indexed by Tag */
     public $taggedNomenclatureTagViews;
 
+    /** @var array */
+    public $objectiveFilters;
+
     /**
      * @param string                     $type
      * @param CategoryView[]             $categoryViews
@@ -51,6 +54,7 @@ class CatalogFilterViewsResult
      * @param PositionView[]             $positionViews
      * @param NomenclatureTagViews[]     $taggedNomenclatureTagViews
      * @param Response|null              $response
+     * @param string[]                      $objectiveFilters
      */
     public function __construct(
         string $type,
@@ -59,7 +63,8 @@ class CatalogFilterViewsResult
         array $organizationCategoryViews = [],
         array $positionViews = [],
         array $taggedNomenclatureTagViews = [],
-        Response $response = null
+        Response $response = null,
+        array $objectiveFilters = []
     ) {
         $this->type = $type;
         $this->categoryViews = $categoryViews;
@@ -68,6 +73,7 @@ class CatalogFilterViewsResult
         $this->organizationCategoryViews = $organizationCategoryViews;
         $this->positionViews = $positionViews;
         $this->taggedNomenclatureTagViews = $taggedNomenclatureTagViews;
+        $this->objectiveFilters = $objectiveFilters;
     }
 
     /**

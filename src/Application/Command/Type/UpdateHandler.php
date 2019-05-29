@@ -53,10 +53,15 @@ class UpdateHandler
     /**
      * @param Update $update
      *
+     * @throws PackageNotRequiredException
      * @throws TypeAlreadyExistsException
      */
     public function handle(Update $update)
     {
+        if(!$update->isPackageRequired && $update->isPaymentRequired) {
+            throw new PackageNotRequiredException();
+        }
+        
         $type = $update->type;
         $type->update(
             $update->rank,
@@ -66,7 +71,9 @@ class UpdateHandler
             $update->canMoveMeeting,
             $update->canRemoveMeeting,
             $update->areAllSheetParticipantsAssignedToMeeting,
-            $update->canScanParticipant
+            $update->canScanParticipant,
+            $update->isPackageRequired,
+            $update->isPaymentRequired
         );
         $type->setHidden($update->hidden);
 

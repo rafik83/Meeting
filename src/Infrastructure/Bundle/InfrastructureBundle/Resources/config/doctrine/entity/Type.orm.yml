@@ -41,6 +41,14 @@ Proximum\Vimeet\Domain\Model\Type:
             type: boolean
             options:
                 default: false
+        isPackageRequired:
+            type: boolean
+            options:
+                default: false
+        isPaymentRequired:
+            type: boolean
+            options:
+                default: false
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria

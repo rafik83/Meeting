@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Command\Type\PackageNotRequiredException;
 use Proximum\Vimeet\Application\Command\Type\Update;
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -105,6 +106,10 @@ class UpdateAction
                 foreach ($typeAlreadyExistsException->getLocales() as $locale) {
                     $form->get('translations')->get($locale)->get('title')->addError($error);
                 }
+            } catch (PackageNotRequiredException $packageNotRequiredException) {
+                $errorPayment = new FormError($this->translator->trans('admin.type.no_required_package'));
+
+                $form->get('isPaymentRequired')->addError($errorPayment);
             }
         }
 

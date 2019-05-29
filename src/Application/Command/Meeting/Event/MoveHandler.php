@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingException;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -32,13 +33,17 @@ class MoveHandler
     /** @var \DateTimeInterface */
     private $datetime;
 
+    /**@var RequestRepositoryInterface */
+    private $requestRepository;
+
     public function __construct(
         CanMoveMeeting $canMoveMeeting,
         CommandBusInterface $commandBus,
         TranslatorInterface $translator,
         MessageRepositoryInterface $messageRepository,
         MeetingRepositoryInterface $meetingRepository,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $datetime,
+        RequestRepositoryInterface $requestRepository
     ) {
         $this->canMoveMeeting = $canMoveMeeting;
         $this->commandBus = $commandBus;
@@ -46,6 +51,7 @@ class MoveHandler
         $this->messageRepository = $messageRepository;
         $this->meetingRepository = $meetingRepository;
         $this->datetime = $datetime;
+        $this->requestRepository = $requestRepository;
     }
 
     public function handle(Move $move): void
@@ -67,18 +73,25 @@ class MoveHandler
             );
 
             $move->meeting->blockSlot();
-            $this->meetingRepository->set($move->meeting);
+
+            $request = $move->meeting->getRequest();
 
             if ($move->content) {
                 $message = new Message(
-                    $move->meeting->getRequest(),
+                    $request,
                     $move->sheet,
                     $move->content,
                     $this->datetime
                 );
 
+                $request->setUpdateOrDeleteReasonMessage($message);
                 $this->messageRepository->add($message);
+            } else {
+                $request->setUpdateOrDeleteReasonMessage(null);
             }
+
+            $this->meetingRepository->set($move->meeting);
+            $this->requestRepository->set($request);
         } catch (\Exception $exception) {
             throw new MoveMeetingException(
                 $this->translator->trans('agenda.meeting.updateSlot.error')

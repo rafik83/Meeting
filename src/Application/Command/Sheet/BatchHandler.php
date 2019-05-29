@@ -50,6 +50,9 @@ class BatchHandler
     /** @var BatchGenerateInvoiceHandler */
     private $batchGenerateInvoiceHandler;
 
+    /** @var BatchPrintInvoicesJobCreatorHandler */
+    private $batchPrintInvoicesJobCreatorHandler;
+
     /** @var BatchAssignToGroupHandler */
     private $batchAssignToGroupHandler;
 
@@ -76,6 +79,7 @@ class BatchHandler
         BatchDraftHandler $batchDraftHandler,
         BatchValidationValidateHandler $batchValidationValidateHandler,
         BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler,
+        BatchPrintInvoicesJobCreatorHandler $batchPrintInvoicesJobCreatorHandler,
         BatchAssignToGroupHandler $batchAssignToGroupHandler,
         BatchPendingHandler $batchPendingHandler,
         BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler,
@@ -92,6 +96,7 @@ class BatchHandler
         $this->batchDraftHandler = $batchDraftHandler;
         $this->batchValidationValidateHandler = $batchValidationValidateHandler;
         $this->batchGenerateInvoiceHandler = $batchGenerateInvoiceHandler;
+        $this->batchPrintInvoicesJobCreatorHandler = $batchPrintInvoicesJobCreatorHandler;
         $this->batchAssignToGroupHandler = $batchAssignToGroupHandler;
         $this->batchPendingHandler = $batchPendingHandler;
         $this->batchPdfJobCreatorHandler = $batchPdfJobCreatorHandler;
@@ -99,11 +104,6 @@ class BatchHandler
         $this->batchDuplicateSheetsHandler = $batchDuplicateSheetsHandler;
     }
 
-    /**
-     * @param Batch $batch
-     *
-     * @return BatchResult
-     */
     public function handle(Batch $batch): BatchResult
     {
         if (Batch::SELECTION_TYPE_ALL === $batch->selectionType) {
@@ -111,19 +111,23 @@ class BatchHandler
         }
 
         if ($batch->validate) {
-            return $this->batchValidateHandler->handle(new BatchValidate(
-                $batch->event,
-                $batch->ids,
-                $batch->admin,
-                $batch->validateComment
-            ));
+            return $this->batchValidateHandler->handle(
+                new BatchValidate(
+                    $batch->event,
+                    $batch->ids,
+                    $batch->admin,
+                    $batch->validateComment
+                )
+            );
         }
 
         if ($batch->assign && null !== $batch->follower) {
-            return $this->batchAssignHandler->handle(new BatchAssign(
-                $batch->ids,
-                FollowerConstant::UNASSIGNED_FOLLOWER !== $batch->follower ? $batch->follower : null
-            ));
+            return $this->batchAssignHandler->handle(
+                new BatchAssign(
+                    $batch->ids,
+                    FollowerConstant::UNASSIGNED_FOLLOWER !== $batch->follower ? $batch->follower : null
+                )
+            );
         }
 
         if ($batch->accept) {
@@ -182,6 +186,15 @@ class BatchHandler
             );
         }
 
+        if ($batch->printInvoices) {
+            return $this->batchPrintInvoicesJobCreatorHandler->handle(
+                new BatchPrintInvoicesJobCreator($batch->event,
+                    $batch->ids,
+                    $batch->admin,
+                    $batch->locale)
+            );
+        }
+
         if ($batch->printOption && null !== $batch->printPlanningOrderBy) {
             return $this->printPlanningHandler->handle(
                 new PrintPlanning(
@@ -228,6 +241,6 @@ class BatchHandler
             );
         }
 
-        return new BatchResult([], $batch->getMessage() . 'no_action');
+        return new BatchResult([], $batch->getMessage().'no_action');
     }
 }

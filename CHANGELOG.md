@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1929 - Remove filter without result
+- VIMEET-1904 - Add message to meeting diff
+- VIMEET-1967 - Package can be required by type
+- VIMEET-1968 - Payment can be required by type
+- VIMEET-1965 - Must validate package
+- VIMEET-1980 - Must validate transaction
+- VIMEET-1871 - As an admin, add promotion code to order
+- VIMEET-1899 - Add rooming list sheet state filter
+- VIMEET-791 - Display conditional objective filter
+- VIMEET-1874 - Can participant scan in Product option
+- VIMEET-1972 - Display scan and contacts buttons by Product option
+
+## [2.6.0] - 2019-05-16
+### Added
+- VIMEET-1956 - Batch action to send many invoices in one pdf
 
 ## [2.5.0] - 2019-05-15
 ### Added

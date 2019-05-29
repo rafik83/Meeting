@@ -67,6 +67,14 @@ interface JobQueueInterface
 
     /**
      * @param Event  $event
+     * @param int[]  $sheetIds
+     * @param string $emailToNotify
+     * @param string $locale
+     */
+    public function printInvoicesPdf(Event $event, array $sheetIds, string $emailToNotify, string $locale): void;
+
+    /**
+     * @param Event  $event
      * @param Admin  $admin
      * @param string $locale
      */
