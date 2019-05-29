@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1967 - Package can be required by type
+- VIMEET-1968 - Payment can be required by type
 - VIMEET-1871 - As an admin, add promotion code to order
 - VIMEET-1899 - Add rooming list sheet state filter
 - VIMEET-791 - Display conditional objective filter

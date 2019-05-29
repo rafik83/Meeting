@@ -55,10 +55,15 @@ class CreateHandler
     /**
      * @param Create $create
      *
+     * @throws PackageNotRequiredException
      * @throws TypeAlreadyExistsException
      */
     public function handle(Create $create)
     {
+        if(!$create->isPackageRequired && $create->isPaymentRequired) {
+            throw new PackageNotRequiredException();
+        }
+
         $type = new Type($create->event);
         $type->update(
             $create->rank,
@@ -69,7 +74,8 @@ class CreateHandler
             $create->canRemoveMeeting,
             $create->areAllSheetParticipantsAssignedToMeeting,
             $create->canScanParticipant,
-            $create->isPackageRequired
+            $create->isPackageRequired,
+            $create->isPaymentRequired
         );
 
         $localesTitleAlreadyExists = [];

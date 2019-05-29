@@ -1281,6 +1281,7 @@ admin.type.hidden: Caché
 admin.type.id: Id
 admin.type.link: 'Types de participation'
 admin.type.list.title: 'Types de participation'
+admin.type.no_required_package: 'Le forfait doit être requis'
 admin.type.package: Forfait
 admin.type.paymentConditions.event.info.allowDeposit: 'Activer le paiement en acompte:'
 admin.type.paymentConditions.event.info.deposit: 'Pourcentage de l''acompte:'
