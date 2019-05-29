@@ -103,6 +103,22 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findBySheetIds(array $sheetIds): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('invoice')
+            ->from(Invoice::class, 'invoice')
+            ->where('invoice.sheet in (:sheetIds)')
+            ->setParameter('sheetIds', $sheetIds)
+            ->orderBy('invoice.id', 'ASC')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getLastInvoiceForEventPrefix(Prefix $prefix, $year)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()

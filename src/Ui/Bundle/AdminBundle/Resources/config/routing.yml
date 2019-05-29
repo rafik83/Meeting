@@ -886,7 +886,7 @@ admin_sheet_order_edit:
     requirements:
         event: \d+
         order: \d+
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: AdminBundle:Order:edit }
 admin_sheet_order_add_row_to_group:
     path: /event/{event}/order/{order}/row/add/to-group/{group}
@@ -1729,7 +1729,21 @@ admin_invoice_export:
     path: /event/invoice/export
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Invoice/Export:export }
-
+admin_invoice_show_bulk:
+    path: /_internal/invoices.{format}
+    requirements:
+        sheet: \d+
+        invoice: \d+
+        format: (html|pdf)
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\ShowBulkAction }
+admin_invoice_print_download:
+    path: /event/{event}/invoices/print/download/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\DownloadPrintAction }
 
 #
 # Planning

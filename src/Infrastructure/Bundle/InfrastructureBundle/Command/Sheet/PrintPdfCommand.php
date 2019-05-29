@@ -60,7 +60,7 @@ class PrintPdfCommand extends Command
             || null === $input->getOption('eventId')
             || null === $input->getOption('orderBy')
         ) {
-            $output->writeln('<error>The sheets ids, emailToNotify and locale options are mandatory and can not be null</error>');
+            $output->writeln('<error>The sheets ids, emailToNotify, locale and orderBy options are mandatory and can not be null</error>');
 
             throw new \InvalidArgumentException(
                 sprintf(

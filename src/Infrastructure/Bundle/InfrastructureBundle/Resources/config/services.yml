@@ -972,6 +972,14 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter_batch_job_queue.batch_pending_job_queue'
 
+    Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoicesHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicesPdfBulkPrinter'
+            - '%mailer_sender%'
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
+            - '@vimeet_infrastructure.repository.event_repository'
+
     command.sheet.batch_refuse_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchRefuseHandler
         arguments:
@@ -997,6 +1005,11 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable }
+
+    Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoicesJobCreatorHandler:
+        arguments:
+          - '@vimeet_infrastructure.repository.sheet_repository'
+          - '@adapter.job_queue_adapter'
 
     command.sheet.batch_catalog_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler
@@ -1158,6 +1171,7 @@ services:
             - '@command.sheet.batch_draft_handler'
             - '@command.sheet.batch_validation_validate_handler'
             - '@command.sheet.batch_generate_invoice_handler'
+            - '@Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoicesJobCreatorHandler'
             - '@command.sheet.batch_assign_to_group_handler'
             - '@command.sheet.batch_pending_handler'
             - '@command.sheet.batch_pdf_job_creator_handler'
@@ -1620,6 +1634,13 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Update }
+
+    Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler:
+        arguments:
+            - '@repository.promotion_code_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\DecrementStock }
+
     command.meeting_slot.generate_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\GenerateHandler
         arguments:
@@ -1834,6 +1855,15 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemoveRow }
+
+    Proximum\Vimeet\Application\Command\Order\ApplyPromotionCodeHandler:
+        arguments:
+            - '@order.merger'
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\ApplyPromotionCode }
 
     command.rule.see_what_handler:
         class: Proximum\Vimeet\Application\Command\Rule\SeeWhatHandler
@@ -4940,11 +4970,17 @@ services:
             - { name: console.command }
 
     command.generate_invoice_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\GenerateInvoiceCommand
         arguments:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@command.invoice.batch_generate_invoice_handler'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\PrintInvoicesCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoicesHandler'
         tags:
             - { name: console.command }
 
@@ -5194,9 +5230,9 @@ services:
             - '@repository.cart_row_repository'
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
-            - '@repository.promotion_code_repository'
             - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
             - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter'
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler'
             - '@datetime'
 
     cart_cleaner:
@@ -6313,6 +6349,12 @@ services:
         arguments:
             - '@router'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\PdfPrinter'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicesPdfBulkPrinter:
+        arguments:
+            - '@router'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\PdfPrinter'
+            - '%infrastructure.print_invoices_path%'
 
     query.invoice_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceQueryHandler

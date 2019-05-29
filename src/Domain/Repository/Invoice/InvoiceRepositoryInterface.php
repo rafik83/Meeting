@@ -33,6 +33,13 @@ interface InvoiceRepositoryInterface
     public function findBySheet(Sheet $sheet);
 
     /**
+     * @param int[] $sheetIds
+     *
+     * @return Invoice[]
+     */
+    public function findBySheetIds(array $sheetIds): array;
+
+    /**
      * Get last generated invoice for given event invoice prefix
      *
      * @param Prefix $prefix

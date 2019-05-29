@@ -988,3 +988,14 @@ services:
             - '@adapter.authorization_checker'
             - '@adapter.file_system_adapter'
             - '%infrastructure.export_products_path%'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\ShowBulkAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@repository.invoice.invoice_repository'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicesPdfBulkPrinter'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\DownloadPrintAction:
+        arguments:
+            - '@adapter.file_system_adapter'

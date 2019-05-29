@@ -22,10 +22,8 @@ class InvoicePdfPrinter
     /** @var PdfPrinter */
     private $pdfPrinter;
 
-    public function __construct(
-        RouterInterface $router,
-        PdfPrinter $pdfPrinter
-    ) {
+    public function __construct(RouterInterface $router, PdfPrinter $pdfPrinter)
+    {
         $this->router = $router;
         $this->pdfPrinter = $pdfPrinter;
     }
@@ -41,10 +39,10 @@ class InvoicePdfPrinter
         $urlToPrint = $this->router->generate(
             'event_invoice_show',
             [
-                'sheet'  => $invoice->getSheet()->getId(),
+                'sheet'   => $invoice->getSheet()->getId(),
                 'invoice' => $invoice->getId(),
-                'hash'   => $invoice->getHash(),
-                'format' => 'html',
+                'hash'    => $invoice->getHash(),
+                'format'  => 'html',
             ],
             UrlGeneratorInterface::ABSOLUTE_URL
         );

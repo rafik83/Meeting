@@ -10,6 +10,10 @@ admin.mail.export_rooming_list.body: "Bonjour,\nVoici le fichier comportant l'ex
 admin.mail.export_rooming_list.end: Cordialement\n
 admin.mail.export_rooming_list.file_link: 'Fichier CSV'
 admin.mail.export_rooming_list.subject: 'Export de la rooming list'
+admin.mail.invoices.print.body: "Bonjour,\nVoici le lien pour télécharger les factures souhaitées\n"
+admin.mail.invoices.print.end: 'Cordialement,'
+admin.mail.invoices.print.link_label: 'Télécharger le document'
+admin.mail.invoices.print.subject: 'Génération du PDF des factures'
 admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:"
 admin.mail.resetPassword.end: 'Bien cordialement,'
 admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'

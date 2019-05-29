@@ -1252,17 +1252,11 @@ class Product
         return $this->attributable;
     }
 
-    /**
-     * @return bool
-     */
     public function canScanParticipant(): bool
     {
         return $this->canScanParticipant;
     }
 
-    /**
-     * @param bool $canScanParticipant
-     */
     public function setCanScanParticipant(bool $canScanParticipant): void
     {
         $this->canScanParticipant = $canScanParticipant;
