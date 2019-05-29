@@ -77,4 +77,26 @@ class MessageRepository implements MessageRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdateOrDeleteReasonMessageFromRequestIds(array $requestIds): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('message')
+            ->from(Message::class, 'message')
+            ->join(
+                Request::class,
+                'request',
+                Query\Expr\Join::WITH,
+                'request.id in (:requestIds) AND request.updateOrDeleteReasonMessage = message'
+            )
+            ->setParameter('requestIds', $requestIds)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

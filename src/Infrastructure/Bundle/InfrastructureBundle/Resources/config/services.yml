@@ -1670,6 +1670,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@datetime'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Move }
     command.meeting_slot.unlock_handler:
@@ -1686,6 +1687,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
             - '@datetime'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Remove }
     Proximum\Vimeet\Application\Command\MeetingSlot\RemoveHandler:
@@ -4206,6 +4208,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeeting }
     query.agenda.request_view_query_handler:
@@ -6759,6 +6762,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.meeting.message_repository'
 
     #
     # User Agenda Phone
