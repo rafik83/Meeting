@@ -58,15 +58,28 @@ class RoomingListAction
             );
         }
 
-        $admin = $adminDomain->getAdmin();
+        $rawSavedFilters = $this->roomingListFilter->get($event);
 
-        if (isset($request->query->all()['filter'])) {
-            $this->roomingListFilter->add($event, $request->query->all()['filter']);
+        if (null !== $rawSavedFilters && !empty($rawSavedFilters) && empty($request->query->all())) {
+            return new RedirectResponse(
+                $this->router->generate('admin_event_rooming_list', ['event' => $event->getId()] + $rawSavedFilters)
+            );
         }
 
-        $savedFilters = $this->getFilters($event, $request->getLocale(), $admin);
+        $admin = $adminDomain->getAdmin();
+
+        if (!empty($request->query->all())) {
+            $this->roomingListFilter->add($event, $request->query->all());
+        }
+
         $locale = $event->getAvailableLocale($request->getLocale());
-        $listViewQuery = new ListViewQuery($event, $locale, $savedFilters['types'] ?? [], []);
+        $savedFilters = $this->getFilters($rawSavedFilters, $event, $request->getLocale(), $admin);
+        $listViewQuery = new ListViewQuery(
+            $event,
+            $locale,
+            $savedFilters['filter']['types'] ?? [],
+            $savedFilters['filter']['states'] ?? []
+        );
 
         $form = $this->formFactory->create(FilterType::class, $listViewQuery, [
             'event' => $event, 'locale' => $locale, 'admin' => $adminDomain->getAdmin(),
@@ -83,29 +96,24 @@ class RoomingListAction
         ]));
     }
 
-    private function getFilters(Event $event, string $locale, Admin $admin)
+    private function getFilters(?array $rawSavedFilters, Event $event, string $locale, Admin $admin)
     {
-        $savedFilters = $this->roomingListFilter->get($event);
-
-        if (null === $savedFilters) {
+        if (null === $rawSavedFilters) {
             return [];
         }
 
         $filterForm = $this->formFactory->createNamed(
             '',
             FilterType::class,
-            $savedFilters,
+            $rawSavedFilters,
             [
                 'event' => $event,
                 'locale' => $locale,
                 'admin' => $admin,
-                'method' => 'GET',
-                'required' => false,
-                'allow_extra_fields' => true,
             ]
         );
 
-        $filterForm->submit($savedFilters);
+        $filterForm->submit($rawSavedFilters);
 
         return $filterForm->getData();
     }
