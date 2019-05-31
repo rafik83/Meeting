@@ -909,6 +909,7 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\RoomingListAction:
         arguments:
+            - '@adapter.authorization_checker'
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@form.factory'
