@@ -50,7 +50,7 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
         conditionIsPhoneConfirmed:
             type: boolean
             nullable: true
-        conditionIsIncompleteSheet:
+        conditionIsCompleteSheet:
             type: boolean
             nullable: true
         conditionHasPendingMeetingProposition:

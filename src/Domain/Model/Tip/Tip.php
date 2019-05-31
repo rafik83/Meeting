@@ -30,10 +30,16 @@ class Tip
     const DISPLAY_DEFAULT = 'default';
     const DISPLAY_FIRST_TIME_OPENED = 'first_time_opened';
     const DISPLAY_ALWAYS_OPENED = 'always_opened';
+    const DISPLAY_CHOICES = [self::DISPLAY_DEFAULT, self::DISPLAY_FIRST_TIME_OPENED, self::DISPLAY_ALWAYS_OPENED];
 
     const CONDITION_ON_ORDERS_WITHOUT = 'without';
     const CONDITION_ON_ORDERS_TOTAL_EQUAL_ZERO = 'total_equal_zero';
     const CONDITION_ON_ORDERS_TOTAL_SUPERIOR_ZERO = 'total_superior_zero';
+    const CONDITION_ON_ORDERS_CHOICES = [
+        self::CONDITION_ON_ORDERS_WITHOUT,
+        self::CONDITION_ON_ORDERS_TOTAL_EQUAL_ZERO,
+        self::CONDITION_ON_ORDERS_TOTAL_SUPERIOR_ZERO
+    ];
 
     /** @var int */
     private $id;
@@ -84,7 +90,7 @@ class Tip
     private $conditionIsPhoneConfirmed;
 
     /** @var null|bool */
-    private $conditionIsIncompleteSheet;
+    private $conditionIsCompleteSheet;
 
     /** @var null|bool */
     private $conditionHasPendingMeetingProposition;
@@ -491,7 +497,7 @@ class Tip
      */
     public function hasConditionIncompleteSheet(): ?bool
     {
-        return $this->conditionIsIncompleteSheet;
+        return $this->conditionIsCompleteSheet;
     }
 
     /**

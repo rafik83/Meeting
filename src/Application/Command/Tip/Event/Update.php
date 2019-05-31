@@ -22,16 +22,23 @@ class Update extends AbstractEventTip
      */
     public function __construct(Tip $tip)
     {
-        $this->tip                 = $tip;
-        $this->title               = $tip->getTitle();
+        $this->tip = $tip;
+        $this->title = $tip->getTitle();
         $this->onMeetingManagement = $tip->isOnMeetingManagement();
-        $this->onCatalog           = $tip->isOnCatalog();
-        $this->onPrintPlanning     = $tip->isOnPrintPlanning();
-        $this->onSheet             = $tip->isOnSheet();
-        $this->onProgram           = $tip->isOnProgram();
-        $this->onAgenda            = $tip->isOnAgenda();
+        $this->onCatalog = $tip->isOnCatalog();
+        $this->onPrintPlanning = $tip->isOnPrintPlanning();
+        $this->onSheet = $tip->isOnSheet();
+        $this->onProgram = $tip->isOnProgram();
+        $this->onAgenda = $tip->isOnAgenda();
         $this->onConfirmationPhone = $tip->isOnConfirmationPhone();
-        $this->types               = $tip->getTypes();
+        $this->types = $tip->getTypes();
+        $this->display = $tip->getDisplay();
+        $this->conditionOnOrders = $tip->getConditionOnOrders();
+        $this->conditionHasCart = $tip->hasConditionCart();
+        $this->conditionHasPendingMeetingProposition = $tip->hasConditionPendingMeetingProposition();
+        $this->conditionHasRemainingToPay = $tip->hasConditionRemainingToPay();
+        $this->conditionIsCompleteSheet = $tip->hasConditionIncompleteSheet();
+        $this->conditionIsPhoneConfirmed = $tip->hasConditionPhoneConfirmed();
 
         foreach ($tip->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

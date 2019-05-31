@@ -1009,6 +1009,21 @@ form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
 form.template.field.type.lib_choice: Choix
 form.template.field.type.lib_text: Texte
+form.tip.conditions.title: Conditions
+form.tip.pages.title: Pages
+form.tip.children.conditionIsCompleteSheet.label: 'A complété sa fiche'
+form.tip.children.conditionIsPhoneConfirmed.label: 'A confirmé son portable'
+form.tip.children.conditionHasCart.label: 'A un panier'
+form.tip.children.conditionHasPendingMeetingProposition.label: 'A des propositions de RDV à valider'
+form.tip.children.conditionHasRemainingToPay.label: 'Solde restant dû > 0'
+form.tip.children.conditionOnOrders.label: Commande
+form.tip.children.conditionOnOrders.total_equal_zero: 'Total égal à zéro'
+form.tip.children.conditionOnOrders.total_superior_zero: 'Total supérieur à zéro'
+form.tip.children.conditionOnOrders.without: Sans
+form.tip.children.display.always_opened: Toujours forcer l’affichage
+form.tip.children.display.default: Normal
+form.tip.children.display.first_time_opened: Forcer l’affichage la première fois
+form.tip.children.display.label: Affichage
 form.tip_create.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_create.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_create.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
