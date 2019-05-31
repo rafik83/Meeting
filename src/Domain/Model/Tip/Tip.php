@@ -27,6 +27,14 @@ class Tip
     const TRANS_VISIBLE_PROGRAM = 'admin.tip.column.visible.onProgram';
     const TRANS_VISIBLE_CONFIRMATION_PHONE = 'admin.tip.column.visible.onConfirmationPhone';
 
+    const DISPLAY_DEFAULT = 'default';
+    const DISPLAY_FIRST_TIME_OPENED = 'first_time_opened';
+    const DISPLAY_ALWAYS_OPENED = 'always_opened';
+
+    const CONDITION_ON_ORDERS_WITHOUT = 'without';
+    const CONDITION_ON_ORDERS_TOTAL_EQUAL_ZERO = 'total_equal_zero';
+    const CONDITION_ON_ORDERS_TOTAL_SUPERIOR_ZERO = 'total_superior_zero';
+
     /** @var int */
     private $id;
 
@@ -63,6 +71,27 @@ class Tip
     /** @var bool */
     private $onConfirmationPhone;
 
+    /** @var string */
+    private $display;
+
+    /** @var null|bool */
+    private $conditionHasCart;
+
+    /** @var null|bool */
+    private $conditionHasRemainingToPay;
+
+    /** @var null|bool */
+    private $conditionIsPhoneConfirmed;
+
+    /** @var null|bool */
+    private $conditionIsIncompleteSheet;
+
+    /** @var null|bool */
+    private $conditionHasPendingMeetingProposition;
+
+    /** @var null|array */
+    private $conditionOnOrders;
+
     /** @var \DateTimeInterface */
     private $createdAt;
 
@@ -80,7 +109,7 @@ class Tip
      */
     public function __construct(
         $title,
-        Event $event = null,
+        ?Event $event,
         $onMeetingManagement,
         $onCatalog,
         $onPrintPlanning,
@@ -102,6 +131,7 @@ class Tip
         $this->translations        = new ArrayCollection();
         $this->types               = new ArrayCollection();
         $this->createdAt           = $createdAt;
+        $this->display             = self::DISPLAY_DEFAULT;
     }
 
     /**
@@ -399,5 +429,76 @@ class Tip
     public function hasEvent(): bool
     {
         return null !== $this->event;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplay(): string
+    {
+        return $this->display;
+    }
+
+    public function isDisplayDefault(): bool
+    {
+        return self::DISPLAY_DEFAULT === $this->display;
+    }
+
+    public function isDisplayAlwaysOpened(): bool
+    {
+        return self::DISPLAY_ALWAYS_OPENED === $this->display;
+    }
+
+    public function isDisplayFirstTimeOpened(): bool
+    {
+        return self::DISPLAY_FIRST_TIME_OPENED === $this->display;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasConditionCart(): ?bool
+    {
+        return $this->conditionHasCart;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasConditionRemainingToPay(): ?bool
+    {
+        return $this->conditionHasRemainingToPay;
+    }
+
+    /**
+     * @return null|array
+     */
+    public function getConditionOnOrders(): ?array
+    {
+        return $this->conditionOnOrders;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasConditionPhoneConfirmed(): ?bool
+    {
+        return $this->conditionIsPhoneConfirmed;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasConditionIncompleteSheet(): ?bool
+    {
+        return $this->conditionIsIncompleteSheet;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function hasConditionPendingMeetingProposition(): ?bool
+    {
+        return $this->conditionHasPendingMeetingProposition;
     }
 }
