@@ -176,6 +176,24 @@ class Tip
         return $this;
     }
 
+    public function updateConditions(
+        string $display,
+        ?array $conditionOnOrders,
+        ?bool $conditionIsCompleteSheet,
+        ?bool $conditionIsPhoneConfirmed,
+        ?bool $conditionHasRemainingToPay,
+        ?bool $conditionHasPendingMeetingProposition,
+        ?bool $conditionHasCart
+    ) {
+        $this->display = $display;
+        $this->conditionOnOrders = $conditionOnOrders;
+        $this->conditionIsCompleteSheet = $conditionIsCompleteSheet;
+        $this->conditionIsPhoneConfirmed = $conditionIsPhoneConfirmed;
+        $this->conditionHasRemainingToPay = $conditionHasRemainingToPay;
+        $this->conditionHasPendingMeetingProposition = $conditionHasPendingMeetingProposition;
+        $this->conditionHasCart = $conditionHasCart;
+    }
+
     /**
      * @param string             $locale
      * @param string             $title
