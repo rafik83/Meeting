@@ -68,7 +68,7 @@ class BadgeSubmenuViewQueryHandlerTest extends TestCase
             Category::BADGE,
             '/url/to/badge',
             true,
-            false,
+            null,
             true
         );
 

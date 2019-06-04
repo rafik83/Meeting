@@ -72,7 +72,7 @@ class LeniBadgeLinkSubmenuViewQueryHandler
             $this->translator->trans(Category::LENI_BADGE_LINK),
             $leniBadgeLink,
             false,
-            false,
+            null,
             false,
             ['target' => '_blank']
         );

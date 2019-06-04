@@ -15,8 +15,8 @@ class SubmenuButtonView
     /** @var string */
     public $icon;
 
-    /** @var bool */
-    private $alert;
+    /** @var int|null */
+    private $counter;
 
     /** @var bool */
     public $state;
@@ -40,7 +40,7 @@ class SubmenuButtonView
      * @param string|null $label
      * @param string|null $link
      * @param bool        $state
-     * @param bool        $alert
+     * @param int|null    $counter
      * @param bool        $isShowOnMobile
      * @param array|null  $attributes
      */
@@ -49,7 +49,7 @@ class SubmenuButtonView
         ?string $label,
         ?string $link,
         bool $state = true,
-        bool $alert = false,
+        ?int $counter = null,
         bool $isShowOnMobile = false,
         array $attributes = []
     ) {
@@ -57,16 +57,13 @@ class SubmenuButtonView
         $this->state = $state;
         $this->label = $label;
         $this->link = $link;
-        $this->alert = $alert;
+        $this->counter = $counter;
         $this->isShowOnMobile = $isShowOnMobile;
         $this->attributes = $attributes;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasAlert()
+    public function getCounter(): ?int
     {
-        return true === $this->alert;
+        return $this->counter;
     }
 }

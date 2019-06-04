@@ -53,7 +53,7 @@ class BadgeSubmenuViewQueryHandler
                 ]
             ),
             Route::isBadge($query->route),
-            false,
+            null,
             true
         );
     }

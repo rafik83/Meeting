@@ -4475,7 +4475,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
-            - '@repository.cart_row_repository'
+            - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery }
 
