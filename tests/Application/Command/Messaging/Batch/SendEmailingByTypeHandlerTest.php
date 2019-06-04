@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Batch;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\EmailingSenderInterface;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByType;
 use Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByTypeHandler;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
@@ -61,6 +62,9 @@ class SendEmailingByTypeHandlerTest extends TestCase
 
     /** @var \DateTimeInterface */
     private $dateTime;
+
+    /** @var ObjectProphecy */
+    private $sheetIndexer;
 
     /** @var SendEmailingByTypeHandler */
     private $sendEmailingByTypeHandler;
@@ -116,6 +120,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $this->mailSender = $this->prophesize(EmailingSenderInterface::class);
         $this->substitutionHandler = $this->prophesize(SubstitutionHandler::class);
         $this->dateTime = new \DateTime();
+        $this->sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
 
         $this->sendEmailingByTypeHandler = new SendEmailingByTypeHandler(
             $this->billingInfoRepository->reveal(),
@@ -123,7 +128,8 @@ class SendEmailingByTypeHandlerTest extends TestCase
             $this->messageRepository->reveal(),
             $this->mailSender->reveal(),
             $this->substitutionHandler->reveal(),
-            $this->dateTime
+            $this->dateTime,
+            $this->sheetIndexer->reveal()
         );
     }
 
