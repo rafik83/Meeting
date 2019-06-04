@@ -4816,6 +4816,7 @@ services:
             - '@order.balance'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@repository.invoice.invoice_repository'
+            - '@repository.messaging.campaign_repository'
 
     #
     # Product Transformer

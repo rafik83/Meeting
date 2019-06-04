@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model\Messaging;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface CampaignRepositoryInterface
 {
@@ -43,4 +44,9 @@ interface CampaignRepositoryInterface
      * @return Campaign
      */
     public function getById($id);
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function getBySheet(Sheet $sheet): array;
 }
