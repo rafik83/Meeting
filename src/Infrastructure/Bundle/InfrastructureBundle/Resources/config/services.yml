@@ -2341,6 +2341,7 @@ services:
             - '@catalog.tagged_nomenclature_filter_getter'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@repository.messaging.message_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 

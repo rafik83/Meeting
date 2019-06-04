@@ -34,6 +34,10 @@ final class ComparisonOperatorsByType
             'is_null',
             'is_not_null'
         ],
+        'message' => [
+            'in',
+            'not_in'
+        ],
         'participation_type' => [
             'in',
             'not_in',

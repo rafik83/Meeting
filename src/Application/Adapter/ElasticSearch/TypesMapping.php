@@ -36,6 +36,7 @@ final class TypesMapping
     public const SHEET_VIEW_PARTICIPANTS_LASTNAME = 'participants.lastname';
     public const SHEET_VIEW_PARTICIPANTS_EMAIL = 'participants.email';
     public const SHEET_VIEW_TAGGED_NOMENCLATURE = 'nestedTaggedData';
+    public const SHEET_MESSAGES_RECEIVED = 'messaging.received';
 
     public const AVAILABLE_TYPES = [
         UserEventView::class => [
@@ -113,6 +114,9 @@ final class TypesMapping
         ],
         self::SHEET_VIEW_PARTICIPANTS_EMAIL => [
             'path' => self::SHEET_VIEW_PARTICIPANTS_EMAIL,
+        ],
+        self::SHEET_MESSAGES_RECEIVED => [
+            'path' => self::SHEET_MESSAGES_RECEIVED,
         ],
         self::SHEET_VIEW_TAGGED_NOMENCLATURE => [
             'path' => self::SHEET_VIEW_TAGGED_NOMENCLATURE,
