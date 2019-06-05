@@ -18,7 +18,7 @@ abstract class AbstractFilter
     /** @var SessionInterface */
     private $session;
 
-    abstract function getName(): string;
+    abstract public function getName(): string;
 
     public function __construct(SessionInterface $session)
     {

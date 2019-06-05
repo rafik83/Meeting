@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Filter;
 
 class RoomingListFilter extends AbstractFilter
 {
-    function getName(): string
+    public function getName(): string
     {
         return 'rooming_list_filters';
     }

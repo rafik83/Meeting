@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Filter;
 
 class SheetFilter extends AbstractFilter
 {
-    function getName(): string
+    public function getName(): string
     {
         return 'sheet_filters';
     }
