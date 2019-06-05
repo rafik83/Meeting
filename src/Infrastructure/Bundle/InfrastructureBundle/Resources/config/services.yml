@@ -3619,12 +3619,18 @@ services:
             - '@repository.tip.repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipViewQuery }
+
     query.tip.tip_translation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler
         arguments:
             - '@repository.tip.repository'
+            - ['@Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmation']
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery }
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmation:
+        arguments:
+            - '@domain.user_event.user_event_phone_checker'
 
     query.tip.tip_translation_view_by_user_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQueryHandler

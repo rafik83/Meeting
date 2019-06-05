@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
+use Proximum\Vimeet\Application\Query\Tip\Condition\ConditionInterface;
 use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
+use Proximum\Vimeet\Domain\ConditionRules\View\Condition;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipTranslationViewQueryHandler
@@ -41,14 +43,17 @@ class TipTranslationViewQueryHandler
     /** @var TipRepositoryInterface */
     private $tipRepository;
 
+    /** @var ConditionInterface[] */
+    private $conditions;
+
     /**
-     * TipTranslationViewQueryHandler constructor.
-     *
      * @param TipRepositoryInterface $tipRepository
+     * @param ConditionInterface[]   $conditions
      */
-    public function __construct(TipRepositoryInterface $tipRepository)
+    public function __construct(TipRepositoryInterface $tipRepository, array $conditions)
     {
         $this->tipRepository = $tipRepository;
+        $this->conditions = $conditions;
     }
 
     /**
@@ -72,6 +77,12 @@ class TipTranslationViewQueryHandler
         $tipTranslationListView = [];
 
         foreach ($tipTranslationViews as $tipTranslationView) {
+            foreach ($this->conditions as $condition) {
+                if (!$condition->isSatisfiedBy($query, $tipTranslationView)) {
+                    continue 2;
+                }
+            }
+
             $tipTranslationListView[] = $tipTranslationView;
         }
 
