@@ -478,49 +478,31 @@ class Tip
         return self::DISPLAY_FIRST_TIME_OPENED === $this->display;
     }
 
-    /**
-     * @return bool
-     */
     public function hasConditionCart(): ?bool
     {
         return $this->conditionHasCart;
     }
 
-    /**
-     * @return bool|null
-     */
     public function hasConditionRemainingToPay(): ?bool
     {
         return $this->conditionHasRemainingToPay;
     }
 
-    /**
-     * @return null|array
-     */
     public function getConditionOnOrders(): ?array
     {
         return $this->conditionOnOrders;
     }
 
-    /**
-     * @return bool|null
-     */
     public function hasConditionPhoneConfirmed(): ?bool
     {
         return $this->conditionIsPhoneConfirmed;
     }
 
-    /**
-     * @return bool|null
-     */
-    public function hasConditionIncompleteSheet(): ?bool
+    public function hasConditionCompleteSheet(): ?bool
     {
         return $this->conditionIsCompleteSheet;
     }
 
-    /**
-     * @return bool|null
-     */
     public function hasConditionPendingMeetingProposition(): ?bool
     {
         return $this->conditionHasPendingMeetingProposition;
