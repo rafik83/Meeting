@@ -33,13 +33,14 @@ class ConfigureHandler
 
     public function handle(Configure $configure): void
     {
-        $previousHeader = null;
+        $badge = $configure->badge;
 
-        if ($configure->badge instanceof Badge) {
-            $previousHeader = $configure->badge->getHeader();
+        if (!$badge instanceof Badge) {
+            $badge = new Badge($configure->event, $configure->type);
         }
 
-        $header = $previousHeader;
+        // save header, remove previous
+        $header = $previousHeader = $badge->getHeader();
 
         if ($configure->header instanceof UploadedFile) {
             $header = $this->fileStorage->upload($configure->header);
@@ -47,11 +48,6 @@ class ConfigureHandler
             if (null !== $previousHeader) {
                 $this->fileStorage->remove($previousHeader);
             }
-        }
-
-        $badge = $configure->badge;
-        if (!$badge instanceof Badge) {
-            $badge = new Badge($configure->event, $configure->type);
         }
 
         $badge->update(
