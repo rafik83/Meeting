@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1990 - Administrate tip message conditions
+- VIMEET-1991 - Conditionnal tip message
 
 ## [2.7.0] - 2019-05-29
 ### Added
