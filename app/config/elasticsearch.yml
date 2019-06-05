@@ -173,11 +173,11 @@ fos_elastica:
                             properties:
                                 key:
                                     type: string
-                        messagesReceived:
+                        messaging.received:
                             type: nested
                             properties:
                                 key:
-                                    type: string
+                                    type: integer
                         nomenclatureItemsSupply:
                             type: nested
                             properties:

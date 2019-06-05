@@ -88,10 +88,11 @@ class CampaignRepository implements CampaignRepositoryInterface
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
+            ->select('message.id')
             ->from(Campaign::class, 'campaign')
-            ->join(Sheet::class, 'sheet', 'WITH', ':sheetParam IN (campaign.sheets)')
-            ->select('DISTINCT campaign.message.id')
-            ->setParameter('sheetParam', $sheet);
+            ->join('campaign.message', 'message')
+            ->join('campaign.sheets', 'sheet', 'WITH', 'sheet = :sheet')
+            ->setParameter('sheet', $sheet);
 
         return $queryBuilder->getQuery()->getResult();
     }

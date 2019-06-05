@@ -172,7 +172,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'availableSlotIds' => $this->buildAvailableSlots($sheet),
                     'reminderDate' => $this->getReminderDate($sheet),
                     'nestedTaggedData' => $this->getNestedTaggedData($registrationTemplateData, $sheetTemplateData),
-                    'messagesReceived' => $this->campaignRepository->getBySheet($sheet)
+                    'messaging.received' => $this->campaignRepository->getBySheet($sheet)
                 ],
                 $sheetContentView->contentByLocale
             )

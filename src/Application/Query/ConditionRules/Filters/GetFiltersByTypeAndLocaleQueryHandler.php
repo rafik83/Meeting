@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\ConditionRules\ComparisonOperatorsByType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Filter\BooleanTemplateFilter;
+use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Repository\Messaging\MessageRepository;
 
@@ -65,10 +66,6 @@ class GetFiltersByTypeAndLocaleQueryHandler
             TypesMapping::SHEET_VIEW_PARTICIPANTS_EMAIL => [
                 'type' => 'string',
                 'optgroup' => 'optgroup.participantInfo'
-            ],
-            TypesMapping::SHEET_MESSAGES_RECEIVED => [
-                'type' => 'string',
-                'optgroup' => 'optgroup.messagingInfo'
             ],
         ],
     ];
@@ -158,28 +155,26 @@ class GetFiltersByTypeAndLocaleQueryHandler
     {
         $filters = [];
         $items = [];
-        $messages = $this->messageRepository->findByEvent($event);
+        $messages = $this->messageRepository->findByEventOrderByName($event);
 
+        /** @var Message $message */
         foreach ($messages as $message) {
             $items[$message->getId()] = $message->getName();
         }
 
-        /** @var NomenclatureFilterView $nomenclatureFilterView */
-        foreach ($messages as $message) {
             $filter = [
-                'id' => sprintf('%s.%s', TypesMapping::SHEET_MESSAGES_RECEIVED, $message->getId()),
-                'label' => $message->getName(),
+                'id' => TypesMapping::SHEET_MESSAGES_RECEIVED,
+                'label' => $this->translate('messaging.received', $locale),
                 'type' => 'string',
                 'input' => 'select',
                 'plugin' => 'select2',
                 'multiple' => true,
-                'optgroup' => $this->translate('optgroup.messagingInfo', $locale),
+                'optgroup' => $this->translate('optgroup.sheetInfo', $locale),
                 'values' => $items,
                 'operators' => ComparisonOperatorsByType::OPERATORS['message'] ?? [],
             ];
 
             $filters[] = $filter;
-        }
 
         return $filters;
     }
