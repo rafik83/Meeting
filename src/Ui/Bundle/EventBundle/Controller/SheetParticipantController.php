@@ -124,6 +124,8 @@ class SheetParticipantController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
+        $user = $userDomain->getUser();
+
         $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
         if (!$canAddParticipant) {
             throw $this->createNotFoundException(
@@ -138,7 +140,7 @@ class SheetParticipantController extends Controller
         $addParticipant = new Add(
             $sheet,
             $locale,
-            $userDomain->getUser(),
+            $user,
             $participantProductViews
         );
         $form  = $this->createForm(AddType::class, $addParticipant, [
@@ -167,7 +169,7 @@ class SheetParticipantController extends Controller
         // If the form is not valid, render the sheet and force the popin with the participant form
         list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
-            $userDomain->getUser(),
+            $user,
             $locale,
             false
         );
@@ -176,7 +178,8 @@ class SheetParticipantController extends Controller
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $sheet->getType(),
+            $sheet,
+            $user,
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );
@@ -248,6 +251,7 @@ class SheetParticipantController extends Controller
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param UserDomain  $userDomain
      * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
@@ -256,10 +260,12 @@ class SheetParticipantController extends Controller
      *
      * @return Response
      */
-    public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key): Response
+    public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, UserDomain $userDomain, Sheet $sheet, $locale, $key): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
+        $user = $userDomain->getUser();
 
         list($form, $remove) = $this->removeParticipantData($sheet, $locale, $key);
 
@@ -316,7 +322,8 @@ class SheetParticipantController extends Controller
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $sheet->getType(),
+            $sheet,
+            $user,
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );

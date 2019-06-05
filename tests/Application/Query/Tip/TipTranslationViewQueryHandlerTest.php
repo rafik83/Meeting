@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class TipTranslationViewQueryHandlerTest extends TestCase
 {
@@ -26,6 +27,7 @@ class TipTranslationViewQueryHandlerTest extends TestCase
         $dateTime = new \DateTime();
         $event    = EventFactory::createEvent();
         $sheet    = SheetFactory::create($event);
+        $user     = UserFactory::create();
 
         $tip = new Tip('tip', null, true, true, true, false, false, false, false, $dateTime);
         $tip->setTranslation('fr', 'title', 'content', $dateTime);
@@ -38,7 +40,7 @@ class TipTranslationViewQueryHandlerTest extends TestCase
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $query = new TipTranslationViewQuery($sheet->getType(), 'event_catalog_index', 'fr');
+        $query = new TipTranslationViewQuery($sheet, $user, 'event_catalog_index', 'fr');
         $expectedViews = [$tipView1, $tipView2];
 
         $handler = new TipTranslationViewQueryHandler($tipRepository->reveal());

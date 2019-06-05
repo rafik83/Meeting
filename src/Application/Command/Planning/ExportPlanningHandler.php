@@ -149,22 +149,11 @@ class ExportPlanningHandler
             $event
         );
 
-        $tipTranslationViews = [];
-
         /** @var Participant $participant */
         foreach ($participants as $participant) {
             $user = $participant->getUser();
             if (array_key_exists($user->getId(), $printedUsers)) {
                 continue;
-            }
-
-            if (!isset($tipTranslationViews[$participant->getLocale()])) {
-                $tipTranslationViewQuery = new TipTranslationViewQuery(
-                    $participant->getSheet()->getType(),
-                    TipTranslationViewQueryHandler::CONTEXT_PRINT_PLANNING,
-                    $event->getAvailableLocale($participant->getLocale())
-                );
-                $tipTranslationViews[$participant->getLocale()] = $this->tipTranslationViewQueryHandler->handle($tipTranslationViewQuery);
             }
 
             $plannings[] = new PlanningPrint(
@@ -184,7 +173,12 @@ class ExportPlanningHandler
                 $event->getConfiguration()->getContactLastName(), // event contact last name
                 $event->getConfiguration()->getOrganiserPhone(), // event organiser phone
                 $event->getOrganiserEmail(), // event organiser email
-                $tipTranslationViews[$participant->getLocale()] // Tip messages
+                $this->tipTranslationViewQueryHandler->handle(new TipTranslationViewQuery(
+                    $participant->getSheet(),
+                    $participant->getUser(),
+                    TipTranslationViewQueryHandler::CONTEXT_PRINT_PLANNING,
+                    $event->getAvailableLocale($participant->getLocale())
+                )) // Tip messages
             );
 
             $printedUsers[$user->getId()] = true;

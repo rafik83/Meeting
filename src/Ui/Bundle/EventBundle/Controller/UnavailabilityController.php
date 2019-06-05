@@ -97,7 +97,8 @@ class UnavailabilityController extends Controller
             );
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $sheet->getType(),
+            $sheet,
+            $user,
             TipTranslationViewQueryHandler::CONTEXT_AGENDA,
             $request->getLocale()
         );

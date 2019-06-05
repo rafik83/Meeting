@@ -56,7 +56,8 @@ class TipTranslationViewByUserQueryHandler
 
         return $this->tipTranslationViewQueryHandler->handle(
             new TipTranslationViewQuery(
-                $sheet->getType(),
+                $sheet,
+                $tipTranslationViewByUserQuery->user,
                 $tipTranslationViewByUserQuery->context,
                 $tipTranslationViewByUserQuery->locale
             )

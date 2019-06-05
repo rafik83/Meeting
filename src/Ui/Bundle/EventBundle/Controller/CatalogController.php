@@ -238,7 +238,8 @@ class CatalogController extends Controller
         }
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $sheet->getType(),
+            $sheet,
+            $user,
             TipTranslationViewQueryHandler::CONTEXT_CATALOG,
             $request->getLocale()
         );
