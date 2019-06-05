@@ -179,12 +179,18 @@ class UpdateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->tip->getEvent()->willReturn($this->event->reveal());
+        $this->tip->getDisplay()->shouldBeCalled()->willReturn(Tip::DISPLAY_DEFAULT);
+        $this->tip->getConditionOnOrders()->shouldBeCalled()->willReturn([]);
+        $this->tip->hasConditionCart()->shouldBeCalled()->willReturn(true);
+        $this->tip->hasConditionPendingMeetingProposition()->shouldBeCalled()->willReturn(null);
+        $this->tip->hasConditionRemainingToPay()->shouldBeCalled()->willReturn(false);
+        $this->tip->hasConditionIncompleteSheet()->shouldBeCalled()->willReturn(true);
+        $this->tip->hasConditionPhoneConfirmed()->shouldBeCalled()->willReturn(null);
 
         $this->event->getLocales()->willReturn(['fr', 'en']);
         $this->request->getLocale()->willReturn('fr');
         $this->event->getAvailableLocale('fr')->willReturn('fr');
         $update = new Update($this->tip->reveal());
-
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
 
@@ -244,6 +250,13 @@ class UpdateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->tip->getEvent()->willReturn($this->event->reveal());
+        $this->tip->getDisplay()->shouldBeCalled()->willReturn(Tip::DISPLAY_ALWAYS_OPENED);
+        $this->tip->getConditionOnOrders()->shouldBeCalled()->willReturn([]);
+        $this->tip->hasConditionCart()->shouldBeCalled()->willReturn(true);
+        $this->tip->hasConditionPendingMeetingProposition()->shouldBeCalled()->willReturn(null);
+        $this->tip->hasConditionRemainingToPay()->shouldBeCalled()->willReturn(false);
+        $this->tip->hasConditionIncompleteSheet()->shouldBeCalled()->willReturn(true);
+        $this->tip->hasConditionPhoneConfirmed()->shouldBeCalled()->willReturn(null);
 
         $this->event->getLocales()->willReturn(['fr', 'en']);
         $this->event->getAvailableLocale('fr')->willReturn('fr');
