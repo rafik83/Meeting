@@ -37,7 +37,7 @@ class Update extends AbstractEventTip
         $this->conditionHasCart = $tip->hasConditionCart();
         $this->conditionHasPendingMeetingProposition = $tip->hasConditionPendingMeetingProposition();
         $this->conditionHasRemainingToPay = $tip->hasConditionRemainingToPay();
-        $this->conditionIsCompleteSheet = $tip->hasConditionIncompleteSheet();
+        $this->conditionIsCompleteSheet = $tip->hasConditionCompleteSheet();
         $this->conditionIsPhoneConfirmed = $tip->hasConditionPhoneConfirmed();
 
         foreach ($tip->getTranslations() as $translation) {

@@ -184,7 +184,7 @@ class UpdateActionTest extends TestCase
         $this->tip->hasConditionCart()->shouldBeCalled()->willReturn(true);
         $this->tip->hasConditionPendingMeetingProposition()->shouldBeCalled()->willReturn(null);
         $this->tip->hasConditionRemainingToPay()->shouldBeCalled()->willReturn(false);
-        $this->tip->hasConditionIncompleteSheet()->shouldBeCalled()->willReturn(true);
+        $this->tip->hasConditionCompleteSheet()->shouldBeCalled()->willReturn(true);
         $this->tip->hasConditionPhoneConfirmed()->shouldBeCalled()->willReturn(null);
 
         $this->event->getLocales()->willReturn(['fr', 'en']);
@@ -255,7 +255,7 @@ class UpdateActionTest extends TestCase
         $this->tip->hasConditionCart()->shouldBeCalled()->willReturn(true);
         $this->tip->hasConditionPendingMeetingProposition()->shouldBeCalled()->willReturn(null);
         $this->tip->hasConditionRemainingToPay()->shouldBeCalled()->willReturn(false);
-        $this->tip->hasConditionIncompleteSheet()->shouldBeCalled()->willReturn(true);
+        $this->tip->hasConditionCompleteSheet()->shouldBeCalled()->willReturn(true);
         $this->tip->hasConditionPhoneConfirmed()->shouldBeCalled()->willReturn(null);
 
         $this->event->getLocales()->willReturn(['fr', 'en']);
