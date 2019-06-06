@@ -3624,11 +3624,11 @@ services:
         class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler
         arguments:
             - '@repository.tip.repository'
-            - ['@Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmation']
+            - ['@Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmationCondition']
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery }
 
-    Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmation:
+    Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmationCondition:
         arguments:
             - '@domain.user_event.user_event_phone_checker'
 

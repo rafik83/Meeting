@@ -6,7 +6,7 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Proximum\Vimeet\Domain\UserEvent\UserEventPhoneChecker;
 
-class PhoneConfirmation implements ConditionInterface
+class PhoneConfirmationCondition implements ConditionInterface
 {
     /** @var UserEventPhoneChecker */
     private $userEventPhoneChecker;
@@ -22,10 +22,12 @@ class PhoneConfirmation implements ConditionInterface
             return true;
         }
 
+        $phoneConfirmed = $this->userEventPhoneChecker->isValidated($query->user, $query->event);
+
         if (true === $tipTranslationView->conditionIsPhoneConfirmed) {
-            return $this->userEventPhoneChecker->isValidated($query->user, $query->event);
+            return $phoneConfirmed;
         }
 
-        return !$this->userEventPhoneChecker->isValidated($query->user, $query->event);
+        return !$phoneConfirmed;
     }
 }

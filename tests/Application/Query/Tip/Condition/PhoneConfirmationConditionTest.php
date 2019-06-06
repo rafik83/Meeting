@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Tip\Condition;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmation;
+use Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmationCondition;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
@@ -15,9 +15,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\UserEvent\UserEventPhoneChecker;
 
-class PhoneConfirmationTest extends TestCase
+class PhoneConfirmationConditionTest extends TestCase
 {
-    /** @var PhoneConfirmation */
+    /** @var PhoneConfirmationCondition */
     private $phoneConfirmation;
 
     /** @var ObjectProphecy|UserEventPhoneChecker */
@@ -45,7 +45,7 @@ class PhoneConfirmationTest extends TestCase
         $this->user = $this->prophesize(User::class);
 
         $this->userEventPhoneChecker = $this->prophesize(UserEventPhoneChecker::class);
-        $this->phoneConfirmation = new PhoneConfirmation($this->userEventPhoneChecker->reveal());
+        $this->phoneConfirmation = new PhoneConfirmationCondition($this->userEventPhoneChecker->reveal());
     }
 
     public function testNoConditionOnPhone()
