@@ -96,6 +96,7 @@ services:
             - '@session.flash_bag'
             - '@templating'
             - '@adapter.router'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
 
     #
     # Event

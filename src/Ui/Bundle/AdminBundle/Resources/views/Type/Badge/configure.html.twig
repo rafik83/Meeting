@@ -18,7 +18,7 @@
         max-width: 100%;
     }
     .badge-header-edit {
-        height: 220px;
+        height: 440px;
         margin: 10px;
     }
     .badge-footer {
@@ -117,6 +117,14 @@
         <div class="badge-header-edit">
             {{ form_row(form.header) }}
             {{ form_row(form.showHeader) }}
+            {{ form_row(form.isMirrored) }}
+            <br/>
+            {{ form_row(form.leftImage) }}
+            {{ form_row(form.removeLeftImage) }}
+            <br/>
+            {{ form_row(form.rightImage) }}
+            {{ form_row(form.removeRightImage) }}
+            {{ form_row(form.isRightImageFullHeight) }}
         </div>
         <hr>
         <div class="badge-sheet-title-edit">

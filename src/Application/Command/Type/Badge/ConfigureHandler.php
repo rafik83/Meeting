@@ -33,10 +33,36 @@ class ConfigureHandler
 
     public function handle(Configure $configure): void
     {
+        if ($configure->removeLeftImage && $configure->leftImage instanceof UploadedFile) {
+            throw new RemovingWhileAddingLeftImageException();
+        }
+
+        if ($configure->removeRightImage && $configure->rightImage instanceof UploadedFile) {
+            throw new RemovingWhileAddingRightImageException();
+        }
+
+        if ($configure->isMirrored && $configure->isRightImageFullHeight) {
+            throw new MirroringAndFullHeightImageIncompatibilityException();
+        }
+
         $badge = $configure->badge;
 
         if (!$badge instanceof Badge) {
             $badge = new Badge($configure->event, $configure->type);
+        }
+
+        if ($configure->removeLeftImage && null === $badge->getLeftImage()) {
+            throw new NoLeftImageToRemoveException();
+        }
+
+        if ($configure->removeRightImage && null === $badge->getRightImage()) {
+            throw new NoRightImageToRemoveException();
+        }
+
+        if ($configure->isRightImageFullHeight
+            && !$configure->rightImage instanceof UploadedFile
+            && null === $badge->getRightImage()) {
+            throw new NoRightImageToSetFullHeightException();
         }
 
         // save header, remove previous
@@ -50,6 +76,41 @@ class ConfigureHandler
             }
         }
 
+        // save left image, remove previous
+        $leftImage = $previousLeftImage = $badge->getLeftImage();
+
+        if ($configure->leftImage instanceof UploadedFile) {
+            $leftImage = $this->fileStorage->upload($configure->leftImage);
+
+            if (null !== $previousLeftImage) {
+                $this->fileStorage->remove($previousLeftImage);
+            }
+        }
+
+        // save right image, remove previous
+        $rightImage = $previousRightImage = $badge->getRightImage();
+
+        if ($configure->rightImage instanceof UploadedFile) {
+            $rightImage = $this->fileStorage->upload($configure->rightImage);
+
+            if (null !== $previousRightImage) {
+                $this->fileStorage->remove($previousRightImage);
+            }
+        }
+
+        // remove left image
+        if ($configure->removeLeftImage) {
+            $leftImage = null;
+            $this->fileStorage->remove($badge->getLeftImage());
+        }
+
+        // remove right image
+        if ($configure->removeRightImage) {
+            $rightImage = null;
+            $this->fileStorage->remove($badge->getRightImage());
+        }
+
+        // set data
         $badge->update(
             $header,
             $configure->showHeader,
@@ -65,7 +126,11 @@ class ConfigureHandler
             $configure->conditioned,
             $configure->conditionedByPackage,
             $configure->showCountry,
-            $configure->conditionedByStates
+            $configure->conditionedByStates,
+            $configure->isMirrored,
+            $leftImage,
+            $rightImage,
+            $configure->isRightImageFullHeight
         );
 
         if ($configure->badge instanceof Badge) {
