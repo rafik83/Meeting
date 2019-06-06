@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Proximum\Vimeet\Application\Query\Tip\Condition;
 
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
