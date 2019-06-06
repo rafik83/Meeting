@@ -9,7 +9,7 @@
        </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="tipModal-{{ tipTranslationView.id }}" tabindex="-1" role="dialog" aria-labelledby="tipModalLabel-{{ tipTranslationView.id }}">
+        <div class="modal fade {{ tipTranslationView.isOpened ? 'show-modal' : '' }}" id="tipModal-{{ tipTranslationView.id }}" tabindex="-1" role="dialog" aria-labelledby="tipModalLabel-{{ tipTranslationView.id }}">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">

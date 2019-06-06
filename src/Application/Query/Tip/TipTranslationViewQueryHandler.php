@@ -45,13 +45,18 @@ class TipTranslationViewQueryHandler
     /** @var ConditionInterface[] */
     private $conditions;
 
+    /** @var IsTipOpened */
+    private $isTipOpened;
+
     /**
      * @param TipRepositoryInterface $tipRepository
+     * @param IsTipOpened            $isTipOpened
      * @param ConditionInterface[]   $conditions
      */
-    public function __construct(TipRepositoryInterface $tipRepository, array $conditions)
+    public function __construct(TipRepositoryInterface $tipRepository, IsTipOpened $isTipOpened, array $conditions)
     {
         $this->tipRepository = $tipRepository;
+        $this->isTipOpened = $isTipOpened;
         $this->conditions = $conditions;
     }
 
@@ -82,6 +87,7 @@ class TipTranslationViewQueryHandler
                 }
             }
 
+            $tipTranslationView->isOpened = $this->isTipOpened->isSatisfiedBy($query, $tipTranslationView);
             $tipTranslationListView[] = $tipTranslationView;
         }
 

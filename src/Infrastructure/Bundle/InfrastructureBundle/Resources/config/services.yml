@@ -3624,6 +3624,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler
         arguments:
             - '@repository.tip.repository'
+            - '@Proximum\Vimeet\Application\Query\Tip\IsTipOpened'
             - [
                 '@Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmationCondition',
                 '@Proximum\Vimeet\Application\Query\Tip\Condition\CartCondition',
@@ -3638,6 +3639,8 @@ services:
     Proximum\Vimeet\Application\Query\Tip\Condition\CartCondition:
         arguments:
             - '@repository.cart_row_repository'
+
+    Proximum\Vimeet\Application\Query\Tip\IsTipOpened: ~
 
     query.tip.tip_translation_view_by_user_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQueryHandler

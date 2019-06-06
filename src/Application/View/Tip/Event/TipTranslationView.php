@@ -45,6 +45,9 @@ class TipTranslationView
     /** @var null|array */
     public $conditionOnOrders;
 
+    /** @var bool */
+    public $isOpened = false;
+
     public function __construct(
         int $id,
         string $title,
