@@ -162,19 +162,19 @@ class GetFiltersByTypeAndLocaleQueryHandler
             $items[$message->getId()] = $message->getName();
         }
 
-            $filter = [
-                'id' => TypesMapping::SHEET_MESSAGES_RECEIVED,
-                'label' => $this->translate('messaging.received', $locale),
-                'type' => 'string',
-                'input' => 'select',
-                'plugin' => 'select2',
-                'multiple' => true,
-                'optgroup' => $this->translate('optgroup.sheetInfo', $locale),
-                'values' => $items,
-                'operators' => ComparisonOperatorsByType::OPERATORS['message'] ?? [],
-            ];
+        $filter = [
+            'id'        => TypesMapping::SHEET_MESSAGES_RECEIVED,
+            'label'     => $this->translate('messaging.received', $locale),
+            'type'      => 'string',
+            'input'     => 'select',
+            'plugin'    => 'select2',
+            'multiple'  => true,
+            'optgroup'  => $this->translate('optgroup.sheetInfo', $locale),
+            'values'    => $items,
+            'operators' => ComparisonOperatorsByType::OPERATORS['message'] ?? [],
+        ];
 
-            $filters[] = $filter;
+        $filters[] = $filter;
 
         return $filters;
     }

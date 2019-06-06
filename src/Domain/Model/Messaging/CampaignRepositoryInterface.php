@@ -46,7 +46,7 @@ interface CampaignRepositoryInterface
     public function getById($id);
 
     /**
-     * @param Sheet $sheet
+     * @return Campaign[]
      */
     public function getBySheet(Sheet $sheet): array;
 }

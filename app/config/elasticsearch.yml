@@ -173,7 +173,7 @@ fos_elastica:
                             properties:
                                 key:
                                     type: string
-                        messaging.received:
+                        messagesReceived:
                             type: nested
                             properties:
                                 key:

@@ -435,7 +435,7 @@ class SheetElasticTransformerTest extends TestCase
                         ],
                     ],
                 ],
-                'messaging.received' => [44, 128]
+                'messagesReceived' => [44, 128]
             ]
         );
 
