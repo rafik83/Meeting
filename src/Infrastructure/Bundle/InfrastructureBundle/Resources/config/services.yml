@@ -2358,6 +2358,7 @@ services:
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TemplateObjectFilterTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer'
 
     Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
         arguments:
@@ -2370,6 +2371,8 @@ services:
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer:
         arguments:
             - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
+
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer:
 
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer:
         lazy: true
