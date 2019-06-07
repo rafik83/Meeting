@@ -75,6 +75,12 @@ class Tip
     private $onAgenda;
 
     /** @var bool */
+    private $onPackage;
+
+    /** @var bool */
+    private $onContacts;
+
+    /** @var bool */
     private $onConfirmationPhone;
 
     /** @var string */

@@ -33,6 +33,14 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             type: boolean
             options:
                 default: false
+        onPackage:
+            type: boolean
+            options:
+                default: false
+        onContacts:
+            type: boolean
+            options:
+                default: false
         onConfirmationPhone:
             type: boolean
             options:
