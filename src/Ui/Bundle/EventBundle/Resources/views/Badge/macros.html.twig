@@ -1,0 +1,65 @@
+{% macro write_badge(userBadgeByEventView, side) %}
+    <div class="quarterSection-container {{ side == 'right' ? 'quarterSection-container--upRight' }} quarterSection-container--ebadge">
+        <div class="quarterSection ebadge print-bg">
+            {% if userBadgeByEventView.header %}
+                <img src="{{ userBadgeByEventView.header }}" class="ebadge-image ebadge-image--logo print-bg" />
+            {% endif %}
+
+            <div class="ebadge-content">
+                <div class="company-participant ft-bold">
+                    {{ userBadgeByEventView.sheetTitle }}
+                </div>
+
+                {% if userBadgeByEventView.qrCodeIdentifier %}
+                    <div class="ebadge-qrcode">
+                        <div class="ebadge-qrcode-border">
+                            <img src="{{ userBadgeByEventView.qrCodeImage }}" /><br>
+                            <div class="ebadge-qrcode-token">ID {{ userBadgeByEventView.qrCodeIdentifier }}</div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="info-participant">
+                    <div>{{ userBadgeByEventView.firstName }}
+                        <span class="last-name-participant">{{ userBadgeByEventView.lastName }}</span>
+                    </div>
+
+                    <div class="ft-bold highlight position-participant">
+                        {{ userBadgeByEventView.position }}
+                        {% if userBadgeByEventView.country is not empty %}
+                            <br/>{{ userBadgeByEventView.country|upper }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% if userBadgeByEventView.participationTypeOrCategoryLabel %}
+                <div class="ebadge-participation-type ft-bold print-bg" style="background: {{ userBadgeByEventView.footerColor }};">
+                    <div class="ebadge-participation-type-content">
+                        <div class="ebadge-participation-type-content-text" style="color: {{ userBadgeByEventView.footerTextColor }} !important;">
+                            {{ userBadgeByEventView.participationTypeOrCategoryLabel }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro write_image(imagePath, side, fullHeight = false) %}
+{% if side == 'left' %}
+    {% set sectionContainerClasses = 'quarterSection-container quarterSection-container--downLeft' %}
+    {% set sectionClass = 'quarterSection' %}
+{% elseif fullHeight == false %}
+    {% set sectionContainerClasses = 'quarterSection-container quarterSection-container--downRight' %}
+    {% set sectionClass = 'quarterSection' %}
+{% else %}
+    {% set sectionContainerClasses = 'halfXSection-container halfXSection-container--right' %}
+    {% set sectionClass = 'halfXSection' %}
+{% endif %}
+<div class="{{ sectionContainerClasses }}">
+    <div class="{{ sectionClass }}">
+        <img src="{{ imagePath }}" class="ebadge-image print-bg" />
+    </div>
+</div>
+{% endmacro %}

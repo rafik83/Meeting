@@ -138,7 +138,11 @@ class GetUserBadgeByEventQueryHandler
             $this->getHeader($query->event, $badge),
             $badge->getFooterTextColor(),
             $badge->getFooterColor(),
-            $country
+            $country,
+            $badge->isMirrored(),
+            $badge->getLeftImage(),
+            $badge->getRightImage(),
+            $badge->isRightImageFullHeight()
         );
     }
 
