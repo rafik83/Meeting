@@ -24,7 +24,7 @@ class UpdateHandlerTest extends TestCase
         $dateTime = new \DateTime();
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $tip = new Tip('tipTitle', null, true, false, true, true, false, true, false, $dateTime);
+        $tip = new Tip('tipTitle', null, true, false, true, true, false, false,false,true, false, $dateTime);
         $tipTranslation = new TipTranslation($tip, $dateTime, 'title_en', 'en', 'content_en');
         $tip->setTranslation('en', 'title_en', 'content_en', $dateTime);
 
@@ -48,18 +48,20 @@ class UpdateHandlerTest extends TestCase
     public function testHandleUpdate()
     {
         $dateTime = new \DateTime();
-        $tip = new Tip('tipTitle', null, true, true, true, true, true, true, true, $dateTime);
+        $tip = new Tip('tipTitle', null, true, true, true, true, true, true,true,true, true, $dateTime);
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
-        $expectedTip = new Tip('newTipTitle', null, false, true, false, true, false, true, true, $dateTime);
+        $expectedTip = new Tip('newTipTitle', null, false, true, false, true, false,false,false, true, true, $dateTime);
         $tipRepository->set($expectedTip)->shouldBeCalled();
 
-        $command                      = new Update($tip);
-        $command->title               = 'newTipTitle';
+        $command = new Update($tip);
+        $command->title = 'newTipTitle';
         $command->onMeetingManagement = false;
-        $command->onPrintPlanning     = false;
-        $command->onAgenda            = false;
-        $command->translations        = [];
+        $command->onPrintPlanning = false;
+        $command->onAgenda = false;
+        $command->onPackage = false;
+        $command->onContacts = false;
+        $command->translations = [];
 
         $handler = new UpdateHandler($tipRepository->reveal(), $dateTime);
         $handler->handle($command);

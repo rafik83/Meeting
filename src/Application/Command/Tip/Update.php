@@ -39,6 +39,12 @@ class Update
     public $onAgenda;
 
     /** @var bool */
+    public $onPackage;
+
+    /** @var bool */
+    public $onContacts;
+
+    /** @var bool */
     public $onConfirmationPhone;
 
     /** @var array */
@@ -58,7 +64,9 @@ class Update
         $this->onCatalog           = $tip->isOnCatalog();
         $this->onSheet             = $tip->isOnSheet();
         $this->onAgenda            = $tip->isOnAgenda();
+        $this->onPackage           = $tip->isOnPackage();
         $this->onProgram           = $tip->isOnProgram();
+        $this->onContacts          = $tip->isOnContacts();
         $this->onConfirmationPhone = $tip->isOnConfirmationPhone();
 
         foreach ($this->tip->getTranslations() as $translation) {

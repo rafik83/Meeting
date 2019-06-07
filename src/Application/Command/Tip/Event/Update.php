@@ -30,6 +30,8 @@ class Update extends AbstractEventTip
         $this->onSheet = $tip->isOnSheet();
         $this->onProgram = $tip->isOnProgram();
         $this->onAgenda = $tip->isOnAgenda();
+        $this->onPackage = $tip->isOnPackage();
+        $this->onContacts = $tip->isOnContacts();
         $this->onConfirmationPhone = $tip->isOnConfirmationPhone();
         $this->types = $tip->getTypes();
         $this->display = $tip->getDisplay();

@@ -56,6 +56,8 @@ class Duplicator
                 $tip->isOnPrintPlanning(),
                 $tip->isOnSheet(),
                 $tip->isOnAgenda(),
+                $tip->isOnPackage(),
+                $tip->isOnContacts(),
                 $tip->isOnProgram(),
                 $tip->isOnConfirmationPhone(),
                 $this->dateTime

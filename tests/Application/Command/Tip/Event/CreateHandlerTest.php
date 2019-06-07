@@ -39,6 +39,8 @@ class CreateHandlerTest extends TestCase
             true,
             false,
             true,
+            true,
+            true,
             false,
             true,
             $dateTime
@@ -62,6 +64,8 @@ class CreateHandlerTest extends TestCase
         $create->onPrintPlanning = true;
         $create->onSheet = false;
         $create->onAgenda = true;
+        $create->onPackage = true;
+        $create->onContacts = true;
         $create->onProgram = false;
         $create->onConfirmationPhone = true;
         $create->translations = [
