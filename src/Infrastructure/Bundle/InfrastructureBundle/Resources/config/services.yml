@@ -207,6 +207,11 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
+
+    Proximum\Vimeet\Infrastructure\Repository\Tip\TipOpenedRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     repository.trace_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\TraceRepository
         arguments:
