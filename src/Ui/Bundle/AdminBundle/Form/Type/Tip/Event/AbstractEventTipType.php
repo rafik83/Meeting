@@ -52,6 +52,12 @@ abstract class AbstractEventTipType extends AbstractType
             ->add('onAgenda', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('onPackage', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('onContacts', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('onProgram', CheckboxType::class, [
                 'required' => false,
             ])
