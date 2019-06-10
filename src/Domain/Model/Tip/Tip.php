@@ -413,18 +413,12 @@ class Tip
         return $this->onAgenda;
     }
 
-    /**
-     * @return bool
-     */
-    public function isOnPackage()
+    public function isOnPackage(): bool
     {
         return $this->onPackage;
     }
 
-    /**
-     * @return bool
-     */
-    public function isOnContacts()
+    public function isOnContacts(): bool
     {
         return $this->onContacts;
     }

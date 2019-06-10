@@ -79,10 +79,10 @@ class IndexAction
             $this->engine->render(
                 '@Event/Contact/index.html.twig',
                 [
-                    'contactListView'     => $contactListView,
-                    'sheet'               => $sheet,
-                    'event'               => $event,
-                    'isEventOpen'         => $this->eventOpenAccessChecker->allowedToAccess($event),
+                    'contactListView' => $contactListView,
+                    'sheet' => $sheet,
+                    'event' => $event,
+                    'isEventOpen' => $this->eventOpenAccessChecker->allowedToAccess($event),
                     'tipTranslationViews' => $tipTranslationViews,
                 ]
             )
