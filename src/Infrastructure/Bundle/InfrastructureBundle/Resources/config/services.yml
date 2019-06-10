@@ -3636,6 +3636,7 @@ services:
                 '@Proximum\Vimeet\Application\Query\Tip\Condition\OrderCondition',
                 '@Proximum\Vimeet\Application\Query\Tip\Condition\SheetCompletionCondition',
                 '@Proximum\Vimeet\Application\Query\Tip\Condition\PendingMeetingPropositionCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\RemainingToPayCondition',
               ]
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery }
@@ -3657,6 +3658,10 @@ services:
     Proximum\Vimeet\Application\Query\Tip\Condition\PendingMeetingPropositionCondition:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\RemainingToPayCondition:
+        arguments:
+            - '@order.balance'
 
     Proximum\Vimeet\Application\Query\Tip\IsTipOpened:
         arguments:
