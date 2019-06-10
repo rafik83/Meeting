@@ -3633,6 +3633,7 @@ services:
             - [
                 '@Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmationCondition',
                 '@Proximum\Vimeet\Application\Query\Tip\Condition\CartCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\OrderCondition',
               ]
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery }
@@ -3644,6 +3645,10 @@ services:
     Proximum\Vimeet\Application\Query\Tip\Condition\CartCondition:
         arguments:
             - '@repository.cart_row_repository'
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\OrderCondition:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Order\SheetOrderStatus'
 
     Proximum\Vimeet\Application\Query\Tip\IsTipOpened:
         arguments:
