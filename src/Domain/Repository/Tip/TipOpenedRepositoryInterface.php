@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\User;
 
 interface TipOpenedRepositoryInterface
 {
-    public function add(TipOpened $tipOpened);
+    public function add(TipOpened $tipOpened): void;
 
     public function isOpened(Tip $tip, User $user): bool;
 }

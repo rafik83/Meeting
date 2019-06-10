@@ -3645,7 +3645,11 @@ services:
         arguments:
             - '@repository.cart_row_repository'
 
-    Proximum\Vimeet\Application\Query\Tip\IsTipOpened: ~
+    Proximum\Vimeet\Application\Query\Tip\IsTipOpened:
+        arguments:
+            - '@repository.tip.repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Tip\TipOpenedRepository'
+            - '@datetime'
 
     query.tip.tip_translation_view_by_user_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQueryHandler

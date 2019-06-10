@@ -26,7 +26,7 @@ class TipOpenedRepository implements TipOpenedRepositoryInterface
         $this->entityManager = $entityManager;
     }
 
-    public function add(TipOpened $tipOpened)
+    public function add(TipOpened $tipOpened): void
     {
         $this->entityManager->persist($tipOpened);
         $this->entityManager->flush($tipOpened);
@@ -37,7 +37,7 @@ class TipOpenedRepository implements TipOpenedRepositoryInterface
         return null !== $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('tipOpened.id')
+            ->select('tipOpened.openedAt')
             ->from(TipOpened::class, 'tipOpened')
             ->where('tipOpened.user = :user AND tipOpened.tip = :tip')
             ->setParameter('user', $user)
