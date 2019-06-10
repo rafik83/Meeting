@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Tip\TipTranslation;
@@ -117,7 +118,12 @@ class TipRepository implements TipRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('new \Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content, tip.title, tip.display, tip.conditionHasCart, tip.conditionHasRemainingToPay, tip.conditionIsPhoneConfirmed, tip.conditionIsCompleteSheet, tip.conditionHasPendingMeetingProposition, tip.conditionOnOrders)')
+            ->select(
+                sprintf(
+                    'new %s(tip.id, tipTranslation.title, tipTranslation.content, tip.title, tip.display, tip.conditionHasCart, tip.conditionHasRemainingToPay, tip.conditionIsPhoneConfirmed, tip.conditionIsCompleteSheet, tip.conditionHasPendingMeetingProposition, tip.conditionOnOrders)',
+                    TipTranslationView::class
+                )
+            )
             ->from(Tip::class, 'tip')
             ->join('tip.translations', 'tipTranslation', 'WITH', sprintf('tip.%s = true AND tipTranslation.locale = :locale', $context))
             ->join('tip.types', 'type', 'WITH', 'tip.event = :event and type = :type')
