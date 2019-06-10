@@ -1,4 +1,4 @@
-@admin @event @tips
+@admin @event @tips @crabe
 Feature: List of tips by event and type
   I see the list of tips affected to event
 
@@ -51,6 +51,8 @@ Feature: List of tips by event and type
               "admin.tip.column.visible.print_planning",
               "admin.tip.column.visible.onSheet",
               "admin.tip.column.visible.onAgenda",
+              "admin.tip.column.visible.onPackage",
+              "admin.tip.column.visible.onContacts",
               "admin.tip.column.visible.onProgram",
               "admin.tip.column.visible.onConfirmationPhone"
           ]
