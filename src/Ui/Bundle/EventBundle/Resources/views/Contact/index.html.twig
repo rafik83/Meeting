@@ -5,6 +5,11 @@
 {% block container_classes 'full-mobile-container' %}
 
 {% block content %}
+
+    {% if tipTranslationViews is defined %}
+        {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
+    {% endif %}
+
     <div class="profile__content">
         <header>
             <h1>
