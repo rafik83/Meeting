@@ -97,6 +97,12 @@ services:
             - '@templating'
             - '@adapter.router'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            -
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\PreviewAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # Event
