@@ -3,26 +3,6 @@
 {% block form_title 'admin.type.badge.configuration.title'|trans %}
 
 {% block form_content %}
-<style>
-    .badge-header-edit {
-        height: 440px;
-        margin: 10px;
-    }
-    .badge-footer-edit {
-        height: 150px;
-    }
-    .badge-sheet-title-edit {
-        margin: 10px;
-        height: 70px;
-    }
-    .badge-qrcode-edit {
-        height: 180px;
-    }
-    .badge-name-position-edit {
-        height: 120px;
-        margin: 10px;
-    }
-</style>
 
 {{ form_row(form.activated) }}
 <div class="col-lg-9 col-md-9 col-sm-9 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
@@ -33,7 +13,7 @@
 <hr>
 <div class="col-md-12">
     <div class="col-md-6">
-        <div class="badge-header-edit">
+        <div>
             {{ form_row(form.header) }}
             {{ form_row(form.showHeader) }}
             {{ form_row(form.isMirrored) }}
@@ -46,26 +26,27 @@
             {{ form_row(form.isRightImageFullHeight) }}
         </div>
         <hr>
-        <div class="badge-sheet-title-edit">
+        <div>
             {{ form_row(form.showSheetTitle) }}
         </div>
         <hr>
-        <div class="badge-qrcode-edit">
+        <div>
             {{ form_row(form.showQRCode) }}
         </div>
         <hr>
-        <div class="badge-name-position-edit">
+        <div>
             {{ form_row(form.showFirstName) }}
             {{ form_row(form.showLastName) }}
             {{ form_row(form.showPosition) }}
             {{ form_row(form.showCountry) }}
         </div>
         <hr>
-        <div class="badge-footer-edit">
+        <div>
             {{ form_row(form.showFooterTypeOrCategory) }}
             {{ form_row(form.footerTextColor) }}
             {{ form_row(form.footerColor) }}
         </div>
+        <hr>
         <div>
             {{ form_row(form.conditioned) }}
             {{ form_row(form.conditionedByPackage) }}<br/>
