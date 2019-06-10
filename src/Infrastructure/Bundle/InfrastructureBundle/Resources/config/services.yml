@@ -4840,6 +4840,7 @@ services:
             - '@order.balance'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@repository.invoice.invoice_repository'
+            - '@Proximum\Vimeet\Domain\Order\SheetOrderStatus'
 
     #
     # Product Transformer
@@ -5428,6 +5429,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Order\Normalizer\PromotionProductRowViewNormalizer
         tags:
             - { name: serializer.normalizer }
+
+    Proximum\Vimeet\Domain\Order\SheetOrderStatus:
+        arguments:
+            - '@order.balance'
 
     #
     # KeyDates

@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Balance;
+use Proximum\Vimeet\Domain\Order\SheetOrderStatus;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
@@ -289,7 +290,6 @@ class SheetElasticTransformerTest extends TestCase
         ;
 
         $balance = $this->prophesize(Balance::class);
-        $balance->getNotCancelledOrderVatViews($sheet->reveal())->shouldBeCalled();
         $balance->getRemainingToPay($sheet->reveal())->shouldBeCalled();
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
@@ -310,6 +310,9 @@ class SheetElasticTransformerTest extends TestCase
             ->willReturn($sheetTemplateWithTaggedDataEn)
         ;
 
+        $sheetOrderStatus = $this->prophesize(SheetOrderStatus::class);
+        $sheetOrderStatus->getStatus($sheet->reveal())->shouldBeCalled()->willReturn(Sheet\Constant::NO_ORDER);
+
         $transformer = new SheetElasticTransformer(
             $sheetInfoGuesser->reveal(),
             $participantInfoGuesser->reveal(),
@@ -320,7 +323,8 @@ class SheetElasticTransformerTest extends TestCase
             $taggedDataFactory->reveal(),
             $balance->reveal(),
             $meetingRepository->reveal(),
-            $invoiceRepository->reveal()
+            $invoiceRepository->reveal(),
+            $sheetOrderStatus->reveal()
         );
 
         $expectedDocument = new Document(
