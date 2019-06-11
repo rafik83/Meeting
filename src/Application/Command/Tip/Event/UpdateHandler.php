@@ -76,6 +76,16 @@ class UpdateHandler
             $command->onConfirmationPhone
         );
 
+        $tip->updateConditions(
+            $command->display,
+            $command->conditionOnOrders,
+            $command->conditionIsCompleteSheet,
+            $command->conditionIsPhoneConfirmed,
+            $command->conditionHasRemainingToPay,
+            $command->conditionHasPendingMeetingProposition,
+            $command->conditionHasCart
+        );
+
         $this->tipRepository->set($tip);
 
         $this->delayedEventDispatcher->dispatch(

@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-1990 - Administrate tip message conditions
 - VIMEET-1940 - Save rooming list filters
 
 ## [2.8.0] - 2019-06-05

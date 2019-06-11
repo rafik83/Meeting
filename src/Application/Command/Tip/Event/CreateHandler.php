@@ -68,6 +68,16 @@ class CreateHandler
             $tip->setType($type);
         }
 
+        $tip->updateConditions(
+            $command->display,
+            $command->conditionOnOrders,
+            $command->conditionIsCompleteSheet,
+            $command->conditionIsPhoneConfirmed,
+            $command->conditionHasRemainingToPay,
+            $command->conditionHasPendingMeetingProposition,
+            $command->conditionHasCart
+        );
+
         $this->tipRepository->add($tip);
 
         $this->delayedEventDispatcher->dispatch(
