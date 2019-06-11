@@ -1,3 +1,4 @@
+{% import '@Event/Badge/Print/macros.html.twig' as macro -%}
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,34 +9,16 @@
             font-family: RobotoRegular, HelveticaNeue, Helvetica, Calibri, sans-serif !important;
         }
 
-        .ebadge-logo {
-            max-width: 100%;
-            max-height: 44mm;
-            margin: 0 auto;
-            text-align: center;
-            display: block;
-        }
-
         .page {
             page-break-after: always;
-            clear: both;
-            width: 105mm;
-            height: 148mm;
-        }
-
-        .badge {
-            width: 98mm;
-            height: 141mm;
-            margin: 0;
-            position: relative;
-        }
-
-        .badge .badge-content {
-            margin: 0 auto;
         }
 
         .text {
             margin: 0 5mm;
+        }
+
+        .badge-content {
+            margin: 0 auto;
         }
 
         .badge .badge-content .company-participant {
@@ -51,7 +34,7 @@
             width: 100%;
         }
 
-        .badge .badge-content .qrcode {
+        .badge-content .qrcode {
             font-size: 13px;
             text-align: center;
             top: 50mm;
@@ -60,19 +43,19 @@
             color: #555555;
         }
 
-        .badge .badge-content .qrcode-border {
+        .badge-content .qrcode-border {
             border: solid 1px #ddd;
             margin: 0 auto;
             width: 34mm;
             padding: 2mm;
         }
 
-        .badge .badge-content .qrcode img {
+        .badge-content .qrcode img {
             height: 30mm;
             width: 30mm;
         }
 
-        .badge .badge-content .info-participant {
+        .badge-content .info-participant {
             max-height: 28mm;
             height: 26mm;
             margin: 0;
@@ -83,7 +66,7 @@
             width: 100%;
         }
 
-        .badge .badge-content .info-participant .name-participant {
+        .badge-content .info-participant .name-participant {
             color: #2F2F2F;
             font-size: 20px;
             font-weight: 400;
@@ -92,11 +75,11 @@
             overflow: hidden;
         }
 
-        .badge .badge-content .info-participant .name-participant .last-name-participant {
+        .badge-content .info-participant .name-participant .last-name-participant {
             text-transform: uppercase;
         }
 
-        .badge .badge-content .info-participant .position-participant {
+        .badge-content .info-participant .position-participant {
             color: #1518E7;
             font-size: 20px;
             font-weight: 700;
@@ -106,7 +89,7 @@
             width: 100%;
         }
 
-        .ebadge-participation-type {
+        .badge-participationType {
             font-size: 23px;
             height: 24mm;
             text-transform: uppercase;
@@ -116,13 +99,13 @@
             width: 100%;
         }
 
-        .ebadge-participation-type-content {
+        .badge-participationType-content {
             display: table;
             width: 100%;
             height: 100%;
         }
 
-        .ebadge-participation-type-content-text {
+        .badge-participationType-content-text {
             display: table-cell;
             vertical-align: middle;
         }
@@ -152,6 +135,86 @@
                 zoom: 0.75;
             }
         }
+
+        .quarterSection-container {
+            clear: both;
+            width: 105mm;
+            height: 148mm;
+        }
+
+        .halfXSection-container {
+            page-break-after: always;
+            clear: both;
+            width: 105mm;
+            height: 297mm;
+        }
+
+        .quarterSection {
+            position: relative;
+            width: 98mm;
+            height: 141mm;
+            margin: 0;
+        }
+
+        .halfXSection {
+            position: relative;
+            width: 98mm;
+            height: 297mm;
+            margin: 0;
+        }
+
+        .quarterSection-container--upRight {
+            position: absolute;
+            left: 105mm;
+            top: 0;
+        }
+
+        .quarterSection-container--upRight .quarterSection {
+            margin-left: 7mm;
+        }
+
+        .quarterSection-container--downLeft {
+            position: absolute;
+            top: 148mm;
+        }
+
+        .quarterSection-container--downLeft .quarterSection {
+            margin-top: 7mm;
+        }
+
+        .quarterSection-container--downRight {
+            position: absolute;
+            left: 105mm;
+            top: 148mm;
+        }
+
+        .quarterSection-container--downRight .quarterSection {
+            margin-top: 7mm;
+            margin-left: 7mm;
+        }
+
+        .halfXSection-container--right {
+            position: absolute;
+            left: 105mm;
+            top: 0;
+        }
+
+        .halfXSection-container--right .halfXSection {
+            margin-left: 7mm;
+        }
+
+        .badge-image {
+            max-width: 100%;
+            max-height: 100%;
+            margin: 0 auto;
+            text-align: center;
+            display: block;
+        }
+
+        .badge-image--logo {
+            max-height: 44mm;
+        }
+
     </style>
     <title>
         {{ userBadgeByEventView.firstName }} {{ userBadgeByEventView.lastName }} - {{ userBadgeByEventView.sheetTitle }}
@@ -159,53 +222,16 @@
 </head>
 <body>
 <div class="page">
-    <div class="badge">
-        {% if userBadgeByEventView.header %}
-            <img src="{{ userBadgeByEventView.header }}" class="ebadge-logo" />
-        {% endif %}
-
-        <div class="badge-content">
-            <div class="company-participant {% if not userBadgeByEventView.qrCodeIdentifier %}company-zone-without-qrcode{% endif %}">
-                <div class="text">{{ userBadgeByEventView.sheetTitle }}</div>
-            </div>
-
-            {% if userBadgeByEventView.qrCodeIdentifier %}
-                <div class="qrcode">
-                    <div class="qrcode-border">
-                        <img src="{{ userBadgeByEventView.qrCodeImage }}"/><br>
-                        ID {{ userBadgeByEventView.qrCodeIdentifier }}<br>
-                    </div>
-                </div>
-            {% endif %}
-
-            <div class="info-participant {% if not userBadgeByEventView.qrCodeIdentifier %}participant-zone-without-qrcode{% endif %}">
-                <div class="name-participant {% if not userBadgeByEventView.qrCodeIdentifier %}text-participant-without-qrcode{% endif %}">
-                    <div class="text">
-                        {{ userBadgeByEventView.firstName }}
-                        <span class="last-name-participant">{{ userBadgeByEventView.lastName }}</span>
-                    </div>
-                </div>
-
-                <div class="position-participant {% if not userBadgeByEventView.qrCodeIdentifier %}text-participant-without-qrcode{% endif %}">
-                    <div class="text">
-                        {{ userBadgeByEventView.position }}
-                        {% if userBadgeByEventView.country %}
-                            <br/>{{ userBadgeByEventView.country|upper }}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% if userBadgeByEventView.participationTypeOrCategoryLabel %}
-            <div class="ebadge-participation-type ft-bold" style="background: {{ userBadgeByEventView.footerColor }}; color: {{ userBadgeByEventView.footerTextColor }};">
-                <div class="ebadge-participation-type-content">
-                    <div class="ebadge-participation-type-content-text">
-                        {{ userBadgeByEventView.participationTypeOrCategoryLabel }}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    </div>
+    {{ macro.write_badge(userBadgeByEventView) }}
+    {% if userBadgeByEventView.isMirrored %}
+        {{ macro.write_badge(userBadgeByEventView, 'right') }}
+    {% endif %}
+    {% if userBadgeByEventView.leftImage %}
+        {{ macro.write_image(userBadgeByEventView.leftImage, 'left') }}
+    {% endif %}
+    {% if userBadgeByEventView.rightImage %}
+        {{ macro.write_image(userBadgeByEventView.rightImage, 'right', userBadgeByEventView.isRightImageFullHeight) }}
+    {% endif %}
 </div>
 </body>
 </html>
