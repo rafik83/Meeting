@@ -27,6 +27,7 @@ use Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
+use Proximum\Vimeet\Domain\Filter\SheetFilter;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -66,7 +67,7 @@ class SheetController extends Controller
 
         $selectedSheetsPage = $request->query->getInt('page', 1);
 
-        $sheetFilter = $this->get('filter.sheet_filter');
+        $sheetFilter = $this->get(SheetFilter::class);
         $savedFilters = $sheetFilter->get($event);
 
         // redirect to list with default filters if no parameters
