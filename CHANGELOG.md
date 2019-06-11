@@ -6,8 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1990 - Administrate tip message conditions
+- VIMEET-1940 - Save rooming list filters
 - VIMEET-1991 - Conditionnal tip message
 - VIMEET-1992 - Package and contacts list tip message
+
+## [2.8.0] - 2019-06-05
+### Fixed
+- MV-183 - Add event timezone to rooming list assigning dates
 
 ## [2.7.0] - 2019-05-29
 ### Added
