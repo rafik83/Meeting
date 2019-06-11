@@ -1,4 +1,4 @@
-@admin @event @tips @crabe
+@admin @event @tips
 Feature: List of tips by event and type
   I see the list of tips affected to event
 
