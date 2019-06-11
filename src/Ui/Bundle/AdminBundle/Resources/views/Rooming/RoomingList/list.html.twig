@@ -19,7 +19,7 @@
             <div class="col-md-3 col-md-offset-3">
                 <button type="submit" id="submit" name="submit"
                         class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
-                <a href="{{ path('admin_event_rooming_list', {'event': event.id }) }}"
+                <a href="{{ path('admin_event_rooming_list', {'event': event.id, 'reset': true }) }}"
                    class="btn btn-link">{{ 'admin.reset.filter'|trans }}</a>
             </div>
         </div>
@@ -94,8 +94,8 @@
                                             <a class="btn btn-small btn-default" href="{{ path('admin_event_rooming_assign_accommodation_stay', {
                                                 'event': event.id,
                                                 'user': detailView.userId,
-                                                'arrivalDate': userStayView.begin|date('d/m/Y'),
-                                                'departureDate': userStayView.end|date('d/m/Y')
+                                                'arrivalDate': userStayView.begin|date('d/m/Y', event.timeZone),
+                                                'departureDate': userStayView.end|date('d/m/Y', event.timeZone)
                                             }) }}">
                                                 {{ 'admin.rooming.list.assignAccommodation'|trans }}
                                             </a>

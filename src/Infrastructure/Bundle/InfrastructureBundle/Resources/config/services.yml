@@ -5790,15 +5790,17 @@ services:
     #
     # Filter
     #
-    filter.sheet_filter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter
+    Proximum\Vimeet\Domain\Filter\SheetFilter:
         arguments:
-            - '@session'
+            - '@adapter.session'
 
+    Proximum\Vimeet\Domain\Filter\RoomingListFilter:
+        arguments:
+            - '@adapter.session'
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter:
         arguments:
-            - '@filter.sheet_filter'
+            - '@Proximum\Vimeet\Domain\Filter\SheetFilter'
             - '@form.factory'
 
     #
