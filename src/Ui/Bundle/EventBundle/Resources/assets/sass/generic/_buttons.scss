@@ -106,9 +106,6 @@ button, a {
 .glyphicon { margin-right: 8px; }
 
 .alert-notification {
-  display: block;
-  margin-left: 10px;
-  float: right;
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -118,4 +115,15 @@ button, a {
   text-align: center;
   background: $color-notification;
   font-style: normal;
+
+  .sub-header & {
+    display: inline-block;
+    margin-right: .5em;
+  }
+
+  .notifs & {
+    display: block;
+    margin-left: 10px;
+    float: right;
+  }
 }

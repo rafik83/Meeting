@@ -528,4 +528,19 @@ class Cart
 
         return $mergedQuantity;
     }
+
+    public function getAbsoluteProductsQuantity(): int
+    {
+        $quantity = 0;
+        foreach ($this->rows as $cartRow) {
+            $quantity += abs($cartRow->getQuantity());
+        }
+
+        return $quantity;
+    }
+
+    public function hasProducts(): bool
+    {
+        return !empty($this->rows);
+    }
 }

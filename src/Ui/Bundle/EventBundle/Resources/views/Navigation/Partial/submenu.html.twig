@@ -6,10 +6,10 @@
                {% endfor %}
             href="{{ button.link }}" class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}">
                 <i class="{{ button.icon }}"></i>
-                <span class="name pull-left">{{ button.label|trans }}</span>
+                <span class="name pull-right">{{ button.label|trans }}</span>
 
-                {% if button.hasAlert %}
-                    <span class="alert-notification">!</span>
+                {% if button.counter is not null %}
+                    <span class="alert-notification">{{ button.counter }}</span>
                 {% endif %}
             </a>
         </li>

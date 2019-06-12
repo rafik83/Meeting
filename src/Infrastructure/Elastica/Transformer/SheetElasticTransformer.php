@@ -16,10 +16,11 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
+use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Order\Balance;
+use Proximum\Vimeet\Domain\Order\SheetOrderStatus;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
@@ -70,6 +71,12 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     /** @var TaggedDataFactory */
     private $taggedDataFactory;
 
+    /** @var SheetOrderStatus */
+    private $sheetOrderStatus;
+
+    /** @var CampaignRepositoryInterface */
+    private $campaignRepository;
+
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
@@ -80,7 +87,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         TaggedDataFactory $taggedDataFactory,
         Balance $orderBalance,
         MeetingRepositoryInterface $meetingRepository,
-        InvoiceRepositoryInterface $invoiceRepository
+        InvoiceRepositoryInterface $invoiceRepository,
+        SheetOrderStatus $sheetOrderStatus,
+        CampaignRepositoryInterface $campaignRepository
     ) {
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
@@ -92,6 +101,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $this->invoiceRepository = $invoiceRepository;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->meetingRequestRepository = $meetingRequestRepository;
+        $this->sheetOrderStatus = $sheetOrderStatus;
+        $this->campaignRepository = $campaignRepository;
     }
 
     /**
@@ -138,7 +149,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'inCatalogAt' => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
                     'booleanFilter' => TemplateBooleanFilterIdentifier::getBooleanFilterValues($registrationTemplateData),
                     'filledFilter' => TemplateFilledFilter::getFilledFilterValues($registrationTemplateData, $sheet),
-                    'orderStatus' => $this->getOrderStatus($sheet),
+                    'orderStatus' => $this->sheetOrderStatus->getStatus($sheet),
                     'hasCart' => $this->hasCart($sheet),
                     'organizationCategory' => $this->getOrganizationCategory($registrationTemplateData),
                     'content' => implode(' ', $sheetContentView->content),
@@ -166,6 +177,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'availableSlotIds' => $this->buildAvailableSlots($sheet),
                     'reminderDate' => $this->getReminderDate($sheet),
                     'nestedTaggedData' => $this->getNestedTaggedData($registrationTemplateData, $sheetTemplateData),
+                    'messagesReceived' => $this->campaignRepository->getBySheet($sheet)
                 ],
                 $sheetContentView->contentByLocale
             )
@@ -432,23 +444,6 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         );
 
         return $ids;
-    }
-
-    private function getOrderStatus(Sheet $sheet): string
-    {
-        $orderVatViews = $this->orderBalance->getNotCancelledOrderVatViews($sheet);
-
-        if (empty($orderVatViews)) {
-            return Constant::ORDER_STATUS_NO_ORDER;
-        }
-
-        $totalWithoutVat = $this->orderBalance->getTotalWithoutVat($sheet);
-
-        if ($totalWithoutVat > 0) {
-            return Constant::ORDER_STATUS_TOTAL_ORDER_SUPERIOR_ZERO;
-        }
-
-        return Constant::ORDER_STATUS_TOTAL_ORDER_EQUAL_ZERO;
     }
 
     private function getNestedTaggedDataFromTemplatData(TemplateData $templateData): array

@@ -2057,6 +2057,7 @@ services:
             - '@adapter.sendgrid_api_adapter'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
             - '@datetime'
+            - '@adapter.sheet_indexer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByType }
 
@@ -2151,6 +2152,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeeting }
 
@@ -2346,6 +2348,7 @@ services:
             - '@catalog.tagged_nomenclature_filter_getter'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@repository.messaging.message_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
@@ -2361,6 +2364,7 @@ services:
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TemplateObjectFilterTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer'
 
     Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
         arguments:
@@ -2373,6 +2377,8 @@ services:
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer:
         arguments:
             - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
+
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer:
 
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer:
         lazy: true
@@ -3633,6 +3639,10 @@ services:
             - [
                 '@Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmationCondition',
                 '@Proximum\Vimeet\Application\Query\Tip\Condition\CartCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\OrderCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\SheetCompletionCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\PendingMeetingPropositionCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\RemainingToPayCondition',
               ]
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery }
@@ -3644,6 +3654,20 @@ services:
     Proximum\Vimeet\Application\Query\Tip\Condition\CartCondition:
         arguments:
             - '@repository.cart_row_repository'
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\OrderCondition:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Order\SheetOrderStatus'
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\SheetCompletionCondition: ~
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\PendingMeetingPropositionCondition:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\RemainingToPayCondition:
+        arguments:
+            - '@order.balance'
 
     Proximum\Vimeet\Application\Query\Tip\IsTipOpened:
         arguments:
@@ -4500,7 +4524,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
-            - '@repository.cart_row_repository'
+            - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery }
 
@@ -4840,6 +4864,8 @@ services:
             - '@order.balance'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@repository.invoice.invoice_repository'
+            - '@Proximum\Vimeet\Domain\Order\SheetOrderStatus'
+            - '@repository.messaging.campaign_repository'
 
     #
     # Product Transformer
@@ -5428,6 +5454,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Order\Normalizer\PromotionProductRowViewNormalizer
         tags:
             - { name: serializer.normalizer }
+
+    Proximum\Vimeet\Domain\Order\SheetOrderStatus:
+        arguments:
+            - '@order.balance'
 
     #
     # KeyDates
