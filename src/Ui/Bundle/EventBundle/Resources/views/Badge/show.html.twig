@@ -323,4 +323,9 @@
     {% if userBadgeByEventView.rightImage %}
         {{ macro.write_image(userBadgeByEventView.rightImage, 'right', userBadgeByEventView.isRightImageFullHeight) }}
     {% endif %}
+    {% if launchPrint ?? false %}
+    <script>
+      window.print();
+    </script>
+    {% endif %}
 {% endblock %}

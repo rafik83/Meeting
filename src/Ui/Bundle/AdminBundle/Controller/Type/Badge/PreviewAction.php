@@ -49,6 +49,7 @@ class PreviewAction
                         new GetExampleBadgeByEventQuery($event, $type)
                     ),
                     'disabledNavigationMenu' => true,
+                    'launchPrint' => true,
                 ]
             )
         );
