@@ -52,7 +52,7 @@ class SheetSubmenuViewQueryHandler
             $subMenuTitle,
             $this->navigationBuilder->getRoute('event_sheet_default', ['sheet' => $query->sheet->getId()]),
             Route::isSheet($query->route),
-            false,
+            null,
             true
         );
 

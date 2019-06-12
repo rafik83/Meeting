@@ -40,6 +40,15 @@ interface MessageRepositoryInterface
     public function findByEvent(Event $event);
 
     /**
+     * Finds all messages for a given event order by name.
+     *
+     * @param Event $event
+     *
+     * @return Message[]
+     */
+    public function findByEventOrderByName(Event $event): array;
+
+    /**
      * @param MessageTranslation $messageTranslation
      */
     public function removeTranslation(MessageTranslation $messageTranslation);

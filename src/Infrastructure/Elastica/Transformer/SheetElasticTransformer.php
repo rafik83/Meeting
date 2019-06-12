@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
+use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Balance;
@@ -73,6 +74,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     /** @var SheetOrderStatus */
     private $sheetOrderStatus;
 
+    /** @var CampaignRepositoryInterface */
+    private $campaignRepository;
+
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
@@ -84,7 +88,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         Balance $orderBalance,
         MeetingRepositoryInterface $meetingRepository,
         InvoiceRepositoryInterface $invoiceRepository,
-        SheetOrderStatus $sheetOrderStatus
+        SheetOrderStatus $sheetOrderStatus,
+        CampaignRepositoryInterface $campaignRepository
     ) {
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
@@ -97,6 +102,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->meetingRequestRepository = $meetingRequestRepository;
         $this->sheetOrderStatus = $sheetOrderStatus;
+        $this->campaignRepository = $campaignRepository;
     }
 
     /**
@@ -171,6 +177,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'availableSlotIds' => $this->buildAvailableSlots($sheet),
                     'reminderDate' => $this->getReminderDate($sheet),
                     'nestedTaggedData' => $this->getNestedTaggedData($registrationTemplateData, $sheetTemplateData),
+                    'messagesReceived' => $this->campaignRepository->getBySheet($sheet)
                 ],
                 $sheetContentView->contentByLocale
             )

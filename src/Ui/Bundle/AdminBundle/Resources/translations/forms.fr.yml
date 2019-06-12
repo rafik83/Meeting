@@ -404,6 +404,7 @@ form.filter.isVisio.label: 'Est visio'
 form.filter.isVisioTested.label: 'Visio testée'
 form.filter.label: Filtrer
 form.filter.lastName.label: Nom
+form.filter.messaging.received.label: 'Est destinataire de'
 form.filter.not_filled.label: 'Non renseigné'
 form.filter.optgroup.nomenclature.label: Nomenclatures
 form.filter.optgroup.participantInfo.label: 'Info participant'

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic;
 
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\ConditionRulesTransformerInterface;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer;
@@ -42,13 +43,17 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
     /** @var TemplateObjectFilterTransformer */
     private $templateObjectFilterTransformer;
 
+    /** @var MessageTransformer */
+    private $messageTransformer;
+
     public function __construct(
         NullableTransformer $nullableTransformer,
         RadioTransformer $radioTransformer,
         TaggedNomenclatureTransformer $taggedNomenclatureTransformer,
         TextTransformer $textTransformer,
         ParticipationTypeTransformer $participationTypeTransformer,
-        TemplateObjectFilterTransformer $templateObjectFilterTransformer
+        TemplateObjectFilterTransformer $templateObjectFilterTransformer,
+        MessageTransformer $messageTransformer
     ) {
         $this->nullableTransformer = $nullableTransformer;
         $this->radioTransformer = $radioTransformer;
@@ -56,6 +61,7 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
         $this->textTransformer = $textTransformer;
         $this->participationTypeTransformer = $participationTypeTransformer;
         $this->templateObjectFilterTransformer = $templateObjectFilterTransformer;
+        $this->messageTransformer = $messageTransformer;
     }
 
     public function transform(Condition $condition): array
@@ -113,6 +119,15 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
             );
 
             return $this->participationTypeTransformer->transform($field);
+        }
+
+        if ($this->messageTransformer->supports($field)) {
+            $this->messageTransformer->setEventAndLocale(
+                $condition->getEvent(),
+                $condition->getLocale()
+            );
+
+            return $this->messageTransformer->transform($field);
         }
 
         if ($this->templateObjectFilterTransformer->supports($field)) {

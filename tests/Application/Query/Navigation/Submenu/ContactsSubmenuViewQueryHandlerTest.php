@@ -66,7 +66,7 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
             Category::CONTACT_LIST,
             '/url/to/contacts',
             true,
-            false,
+            null,
             true
         );
 
