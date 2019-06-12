@@ -68,7 +68,7 @@ class ContactsSubmenuViewQueryHandler
                 ]
             ),
             Route::isContactList($query->route),
-            false,
+            null,
             true
         );
     }

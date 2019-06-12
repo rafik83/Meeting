@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\tests\Infrastructure\Bundle\InfrastructureBundle\EventListener\Filter;
+namespace Proximum\Vimeet\Tests\Domain\Filter;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\SessionInterface;
+use Proximum\Vimeet\Domain\Filter\SheetFilter;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class SheetFilterTest extends TestCase
 {
@@ -22,7 +22,7 @@ class SheetFilterTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(1);
 
-        $sessionMock = $this->prophesize(Session::class);
+        $sessionMock = $this->prophesize(SessionInterface::class);
         $sessionMock->get('sheet_filters_1')->shouldBeCalled()->willReturn(['myfilter' => true]);
 
         $sheetFilter = new SheetFilter($sessionMock->reveal());
@@ -34,7 +34,7 @@ class SheetFilterTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(2);
 
-        $sessionMock = $this->prophesize(Session::class);
+        $sessionMock = $this->prophesize(SessionInterface::class);
         $sessionMock->set('sheet_filters_2', ['myfilters' => true])->shouldBeCalled();
 
         $sheetFilter = new SheetFilter($sessionMock->reveal());
@@ -46,7 +46,7 @@ class SheetFilterTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(3);
 
-        $sessionMock = $this->prophesize(Session::class);
+        $sessionMock = $this->prophesize(SessionInterface::class);
         $sessionMock->remove('sheet_filters_3')->shouldBeCalled();
 
         $sheetFilter = new SheetFilter($sessionMock->reveal());

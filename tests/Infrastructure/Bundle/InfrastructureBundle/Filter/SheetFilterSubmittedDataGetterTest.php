@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Filter;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Filter\SheetFilter;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Symfony\Component\Form\FormFactoryInterface;
