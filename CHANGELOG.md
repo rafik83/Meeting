@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-1995 - add products in cart counter
 - VIMEET-1990 - Administrate tip message conditions
 - VIMEET-1940 - Save rooming list filters
+- VIMEET-1250 - Sheet filter by emailing
 
 ## [2.8.0] - 2019-06-05
 ### Fixed

@@ -75,6 +75,23 @@ class MessageRepository implements MessageRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByEventOrderByName(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->from(Message::class, 'message')
+            ->select('message')
+            ->where('message.event = :event')
+            ->orderBy('message.name', 'ASC')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function removeTranslation(MessageTranslation $messageTranslation)
     {
         $this->entityManager->remove($messageTranslation);

@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -298,6 +299,9 @@ class SheetElasticTransformerTest extends TestCase
         $invoiceRepository = $this->prophesize(InvoiceRepositoryInterface::class);
         $invoiceRepository->hasInvoice($sheet->reveal())->shouldBeCalled()->willReturn(false);
 
+        $campaignRepository = $this->prophesize(CampaignRepositoryInterface::class);
+        $campaignRepository->getBySheet($sheet->reveal())->shouldBeCalled()->willReturn([44, 128]);
+
         $taggedDataFactory = $this->prophesize(TaggedDataFactory::class);
         $taggedDataFactory
             ->buildTaggedDataView($sheet->reveal(), 'fr')
@@ -320,7 +324,8 @@ class SheetElasticTransformerTest extends TestCase
             $taggedDataFactory->reveal(),
             $balance->reveal(),
             $meetingRepository->reveal(),
-            $invoiceRepository->reveal()
+            $invoiceRepository->reveal(),
+            $campaignRepository->reveal()
         );
 
         $expectedDocument = new Document(
@@ -430,6 +435,7 @@ class SheetElasticTransformerTest extends TestCase
                         ],
                     ],
                 ],
+                'messagesReceived' => [44, 128]
             ]
         );
 

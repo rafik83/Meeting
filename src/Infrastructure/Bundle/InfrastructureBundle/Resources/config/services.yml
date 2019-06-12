@@ -2052,6 +2052,7 @@ services:
             - '@adapter.sendgrid_api_adapter'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
             - '@datetime'
+            - '@adapter.sheet_indexer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByType }
 
@@ -2342,6 +2343,7 @@ services:
             - '@catalog.tagged_nomenclature_filter_getter'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@repository.messaging.message_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
@@ -2357,6 +2359,7 @@ services:
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TextTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TemplateObjectFilterTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer'
 
     Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
         arguments:
@@ -2369,6 +2372,8 @@ services:
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer:
         arguments:
             - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
+
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer:
 
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer:
         lazy: true
@@ -4816,6 +4821,7 @@ services:
             - '@order.balance'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@repository.invoice.invoice_repository'
+            - '@repository.messaging.campaign_repository'
 
     #
     # Product Transformer
