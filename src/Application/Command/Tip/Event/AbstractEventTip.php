@@ -41,6 +41,27 @@ abstract class AbstractEventTip
     /** @var bool */
     public $onConfirmationPhone;
 
+    /** @var string */
+    public $display;
+
+    /** @var null|bool */
+    public $conditionHasCart;
+
+    /** @var null|bool */
+    public $conditionHasRemainingToPay;
+
+    /** @var null|bool */
+    public $conditionIsPhoneConfirmed;
+
+    /** @var null|bool */
+    public $conditionIsCompleteSheet;
+
+    /** @var null|bool */
+    public $conditionHasPendingMeetingProposition;
+
+    /** @var null|array */
+    public $conditionOnOrders;
+
     /** @var array */
     public $translations;
 }

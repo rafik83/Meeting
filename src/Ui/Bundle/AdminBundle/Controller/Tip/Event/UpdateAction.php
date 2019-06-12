@@ -91,8 +91,8 @@ class UpdateAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $create = new Update($tip);
-        $form = $this->formFactory->create(UpdateType::class, $create, [
+        $update = new Update($tip);
+        $form = $this->formFactory->create(UpdateType::class, $update, [
             'admin'  => $admin,
             'event'  => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
@@ -100,7 +100,7 @@ class UpdateAction
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->commandBus->handle($create);
+            $this->commandBus->handle($update);
             $this->flashBag->add('success', 'flash.admin.tip.event.update.success');
 
             return new RedirectResponse($this->router->generate('admin_tip_event_list', [
