@@ -42,6 +42,7 @@ class ProgramController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_HAPPENING_ACCESS', $eventDomain->getEvent());
 
         $event = $eventDomain->getEvent();
+        $user = $userDomain->getUser();
 
         try {
             /** @var ProgramView $program */
@@ -49,7 +50,7 @@ class ProgramController extends Controller
                 new ProgramViewQuery(
                     $eventDomain->getEvent(),
                     $sheet,
-                    $userDomain->getUser(),
+                    $user,
                     $request->getLocale(),
                     null
                 )
@@ -61,7 +62,8 @@ class ProgramController extends Controller
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $sheet);
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $sheet->getType(),
+            $sheet,
+            $user,
             TipTranslationViewQueryHandler::CONTEXT_PROGRAM,
             $request->getLocale()
         );

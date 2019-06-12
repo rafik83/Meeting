@@ -94,17 +94,20 @@ class AgendaController extends Controller
             ]);
         }
 
+        $user = $userDomain->getUser();
+
         /** @var AgendaView $agenda */
         $agenda = $this->get('tactician.commandbus.query')->handle(new AgendaViewQuery(
             $eventDomain->getEvent(),
             $sheet,
             $participant,
             $request->getLocale(),
-            $userDomain->getUser()
+            $user
         ));
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $participant->getSheet()->getType(),
+            $sheet,
+            $user,
             TipTranslationViewQueryHandler::CONTEXT_AGENDA,
             $request->getLocale()
         );
@@ -114,8 +117,8 @@ class AgendaController extends Controller
         $ignorePhoneConfirmationUrl = null;
         $sendCodeViewTranslationViews = null;
 
-        if ($agenda->isPhoneValidationRequired && $participant->getUser() === $userDomain->getUser()) {
-            $mobileNumber = $request->query->get('mobile', $userDomain->getUser()->getMobile());
+        if ($agenda->isPhoneValidationRequired && $participant->getUser() === $user) {
+            $mobileNumber = $request->query->get('mobile', $user->getMobile());
             $actionRoute = $this->generateUrl(
                 'event_user_phone_validate',
                 [
@@ -134,7 +137,7 @@ class AgendaController extends Controller
             $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
                 new SendCodeForm(
                     $request,
-                    $userDomain->getUser(),
+                    $user,
                     $eventDomain->getEvent(),
                     $actionRoute,
                     $mobileNumber

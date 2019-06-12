@@ -207,6 +207,11 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet.components.paginator'
+
+    Proximum\Vimeet\Infrastructure\Repository\Tip\TipOpenedRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     repository.trace_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\TraceRepository
         arguments:
@@ -3625,12 +3630,50 @@ services:
             - '@repository.tip.repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipViewQuery }
+
     query.tip.tip_translation_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler
         arguments:
             - '@repository.tip.repository'
+            - '@Proximum\Vimeet\Application\Query\Tip\IsTipOpened'
+            - [
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmationCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\CartCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\OrderCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\SheetCompletionCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\PendingMeetingPropositionCondition',
+                '@Proximum\Vimeet\Application\Query\Tip\Condition\RemainingToPayCondition',
+              ]
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery }
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\PhoneConfirmationCondition:
+        arguments:
+            - '@domain.user_event.user_event_phone_checker'
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\CartCondition:
+        arguments:
+            - '@repository.cart_row_repository'
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\OrderCondition:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Order\SheetOrderStatus'
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\SheetCompletionCondition: ~
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\PendingMeetingPropositionCondition:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    Proximum\Vimeet\Application\Query\Tip\Condition\RemainingToPayCondition:
+        arguments:
+            - '@order.balance'
+
+    Proximum\Vimeet\Application\Query\Tip\IsTipOpened:
+        arguments:
+            - '@repository.tip.repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Tip\TipOpenedRepository'
+            - '@datetime'
 
     query.tip.tip_translation_view_by_user_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQueryHandler
@@ -4821,6 +4864,7 @@ services:
             - '@order.balance'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@repository.invoice.invoice_repository'
+            - '@Proximum\Vimeet\Domain\Order\SheetOrderStatus'
             - '@repository.messaging.campaign_repository'
 
     #
@@ -5410,6 +5454,10 @@ services:
         class: Proximum\Vimeet\Application\Components\Order\Normalizer\PromotionProductRowViewNormalizer
         tags:
             - { name: serializer.normalizer }
+
+    Proximum\Vimeet\Domain\Order\SheetOrderStatus:
+        arguments:
+            - '@order.balance'
 
     #
     # KeyDates

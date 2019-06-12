@@ -5,8 +5,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+<<<<<<< HEAD
+- VIMEET-1990 - Administrate tip message conditions
+- VIMEET-1991 - Conditionnal tip message
+=======
 - VIMEET-1995 - add products in cart counter (rebuilt of events css needed)
 - VIMEET-1990 - Administrate tip message conditions
+>>>>>>> origin/master
 - VIMEET-1940 - Save rooming list filters
 - VIMEET-1250 - Sheet filter by emailing (reindexation of all events needed)
 

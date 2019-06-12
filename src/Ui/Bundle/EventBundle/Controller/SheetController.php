@@ -32,6 +32,7 @@ use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -77,15 +78,16 @@ class SheetController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function sheetAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale = null)
+    public function sheetAction(Request $request, EventDomain $eventDomain, UserDomain $userDomain, Sheet $sheet, $locale = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $locale = $locale ?: $request->getLocale();
+        $user = $userDomain->getUser();
 
         $participantRepository = $this->get('vimeet_infrastructure.repository.participant_repository');
-        $participant           = $participantRepository->getParticipantForUserAndSheet($this->getUser(), $sheet);
+        $participant           = $participantRepository->getParticipantForUserAndSheet($user, $sheet);
 
         if (null !== $participant) {
             $registrationStepManager = $this->get('components.registration.step_manager');
@@ -122,7 +124,8 @@ class SheetController extends Controller
         $popinWelcome = $this->get('tactician.commandbus.query')->handle(new WelcomeViewQuery($sheet));
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $sheet->getType(),
+            $sheet,
+            $user,
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );
@@ -338,17 +341,19 @@ class SheetController extends Controller
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param UserDomain  $userDomain
      * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return Response
      */
-    public function updateAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key)
+    public function updateAction(Request $request, EventDomain $eventDomain, UserDomain $userDomain, Sheet $sheet, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
+        $user = $userDomain->getUser();
         $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $levelsArchitecture = [];
 
@@ -430,7 +435,8 @@ class SheetController extends Controller
         $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $sheet->getType(),
+            $sheet,
+            $user,
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );

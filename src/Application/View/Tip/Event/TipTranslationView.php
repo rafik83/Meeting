@@ -24,19 +24,53 @@ class TipTranslationView
     /** @var string */
     public $adminTitle;
 
-    /**
-     * TipTranslationView constructor.
-     *
-     * @param int    $id
-     * @param string $title
-     * @param string $content
-     * @param string $adminTitle
-     */
-    public function __construct($id, $title, $content, $adminTitle)
-    {
-        $this->id         = $id;
-        $this->title      = $title;
-        $this->content    = $content;
+    /** @var string */
+    public $display;
+
+    /** @var null|bool */
+    public $conditionHasCart;
+
+    /** @var null|bool */
+    public $conditionHasRemainingToPay;
+
+    /** @var null|bool */
+    public $conditionIsPhoneConfirmed;
+
+    /** @var null|bool */
+    public $conditionIsCompleteSheet;
+
+    /** @var null|bool */
+    public $conditionHasPendingMeetingProposition;
+
+    /** @var null|array */
+    public $conditionOnOrders;
+
+    /** @var bool */
+    public $isOpened = false;
+
+    public function __construct(
+        int $id,
+        string $title,
+        string $content,
+        string $adminTitle,
+        string $display,
+        ?bool $conditionHasCart = null,
+        ?bool $conditionHasRemainingToPay = null,
+        ?bool $conditionIsPhoneConfirmed = null,
+        ?bool $conditionIsCompleteSheet = null,
+        ?bool $conditionHasPendingMeetingProposition = null,
+        ?array $conditionOnOrders = null
+    ) {
+        $this->id = $id;
+        $this->title = $title;
+        $this->content = $content;
         $this->adminTitle = $adminTitle;
+        $this->display = $display;
+        $this->conditionHasCart = $conditionHasCart;
+        $this->conditionHasRemainingToPay = $conditionHasRemainingToPay;
+        $this->conditionIsPhoneConfirmed = $conditionIsPhoneConfirmed;
+        $this->conditionIsCompleteSheet = $conditionIsCompleteSheet;
+        $this->conditionHasPendingMeetingProposition = $conditionHasPendingMeetingProposition;
+        $this->conditionOnOrders = $conditionOnOrders;
     }
 }
