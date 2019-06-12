@@ -226,10 +226,17 @@
         .badge-image--logo {
             max-height: 44mm;
         }
+
+        .printZone-fix {
+            width: 210mm;
+            height: 297mm;
+            position: absolute;
+        }
     </style>
 </head>
 
 <body>
+    <div class="printZone-fix"></div>
     {% include '@Admin/User/Event/Badge/content.html.twig' with {
         'userBadgeByEventView' : userBadgeAndPlanningByEventView.userBadgeByEventView,
         'planning': userBadgeAndPlanningByEventView.planning

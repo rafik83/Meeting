@@ -197,6 +197,12 @@
                 font-family: RobotoRegular, HelveticaNeue, Helvetica, sans-serif !important;
             }
 
+            .printZone-fix {
+                width: 210mm;
+                height: 297mm;
+                position: absolute;
+            }
+
             .container-fluid {
                 padding: 0;
                 margin: 0;
@@ -306,6 +312,7 @@
 {% endblock %}
 
 {% block content %}
+    <div class="printZone-fix"></div>
     {{ macro.write_badge(userBadgeByEventView, 'left') }}
     {% if userBadgeByEventView.isMirrored %}
         {{ macro.write_badge(userBadgeByEventView, 'right') }}
