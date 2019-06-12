@@ -13,27 +13,27 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 
 class PackageSubmenuButtonViewQueryHandler
 {
     /** @var NavigationBuilderInterface */
     private $navigationBuilder;
 
-    /** @var CartRowRepositoryInterface */
-    private $cartRowRepository;
+    /** @var CartManager */
+    private $cartManager;
 
     /**
      * @param NavigationBuilderInterface $navigationBuilder
-     * @param CartRowRepositoryInterface $cartRowRepository
+     * @param CartManager                $cartManager
      */
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
-        CartRowRepositoryInterface $cartRowRepository
+        CartManager $cartManager
     ) {
         $this->navigationBuilder = $navigationBuilder;
-        $this->cartRowRepository = $cartRowRepository;
+        $this->cartManager = $cartManager;
     }
 
     /**
@@ -43,12 +43,14 @@ class PackageSubmenuButtonViewQueryHandler
      */
     public function handle(PackageSubmenuButtonViewQuery $query)
     {
-        $package           = $query->sheet->getPackage();
-        $hasProductsInCart = $this->cartRowRepository->hasProducts($query->sheet);
+        $package = $query->sheet->getPackage();
 
         // Package button
         if (null !== $package && true === $package->isPassable()) {
             $route = 'event_package_redirect_depending_on_context';
+
+            $cart = $this->cartManager->getCart($query->sheet);
+            $hasProductsInCart = $cart->hasProducts();
 
             if ($query->sheet->hasNotCancelledOrders() && !$hasProductsInCart) {
                 $route = 'event_order_summary_total';
@@ -56,7 +58,11 @@ class PackageSubmenuButtonViewQueryHandler
 
             $subMenuTitle = 'navigation.category.package';
 
-            if (null !== $query->staticFormulation) {
+            $absoluteProductsQuantity = $cart->getAbsoluteProductsQuantity();
+
+            if ($absoluteProductsQuantity > 0) {
+                $subMenuTitle = 'navigation.category.inCart';
+            } else if (null !== $query->staticFormulation) {
                 $subMenuTitle = $query->staticFormulation->getTitle($query->locale);
             }
 
@@ -65,7 +71,7 @@ class PackageSubmenuButtonViewQueryHandler
                 $subMenuTitle,
                 $this->navigationBuilder->getRoute($route, ['sheet' => $query->sheet->getId()]),
                 Route::isPackage($query->route),
-                true === $hasProductsInCart
+                $absoluteProductsQuantity ?: null
             );
         }
 

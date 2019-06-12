@@ -63,7 +63,7 @@ class BadgeScanSubmenuViewQueryHandler
                 ]
             ),
             Route::isBadgeScan($query->route),
-            false,
+            null,
             true
         );
     }

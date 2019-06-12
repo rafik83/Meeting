@@ -279,6 +279,7 @@ navigation.category.catalog: Catalogue
 navigation.category.contact: Contacts
 navigation.category.forms: 'Ma venue'
 navigation.category.happening: 'Gestion RDV'
+navigation.category.inCart: 'au panier'
 navigation.category.leni_badge_link: 'Badges / E-invitations'
 navigation.category.meeting: 'Gestion RDV'
 navigation.category.member_space: 'Espace participant'

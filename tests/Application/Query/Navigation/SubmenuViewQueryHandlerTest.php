@@ -72,7 +72,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'CVThèque',
                 'navigation.category.catalog.link',
                 true,
-                false,
+                null,
                 true
             ),
             new SubmenuButtonView(
@@ -80,7 +80,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'navigation.category.meeting',
                 'navigation.category.meeting.link',
                 false,
-                false,
+                null,
                 false
             ),
         ];
@@ -142,7 +142,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'navigation.category.catalog',
                 'navigation.category.catalog.link',
                 false,
-                false,
+                null,
                 true
             ),
             new SubmenuButtonView(
@@ -150,7 +150,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'navigation.category.meeting',
                 'navigation.category.meeting.link',
                 true,
-                false,
+                null,
                 false
             ),
         ];
@@ -225,7 +225,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'sheet.title',
                 'sheet.title.link',
                 false,
-                false,
+                null,
                 true
             ),
         ];
@@ -269,7 +269,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'Ma fiche',
                 'sheet.title.link',
                 false,
-                false,
+                null,
                 true
             ),
         ];
@@ -312,7 +312,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'agenda.title',
                 'agenda.title.link',
                 true,
-                false,
+                null,
                 true
             ),
             new SubmenuButtonView(
@@ -320,7 +320,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 'program.title',
                 'program.title.link',
                 false,
-                false,
+                null,
                 false
             ),
         ];
