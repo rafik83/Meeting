@@ -119,6 +119,8 @@ class TipManager
             $tip->isOnPrintPlanning(),
             $tip->isOnSheet(),
             $tip->isOnAgenda(),
+            $tip->isOnPackage(),
+            $tip->isOnContacts(),
             $tip->isOnProgram(),
             $tip->isOnConfirmationPhone()
         );
@@ -138,6 +140,8 @@ class TipManager
             $tip->isOnPrintPlanning(),
             $tip->isOnSheet(),
             $tip->isOnAgenda(),
+            $tip->isOnPackage(),
+            $tip->isOnContacts(),
             $tip->isOnProgram(),
             $tip->isOnConfirmationPhone()
         );

@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 
-class TipTranslationViewQuery
+class TipTranslationViewQuery implements Query
 {
     /** @var Sheet */
     public $sheet;

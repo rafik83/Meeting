@@ -39,6 +39,12 @@ abstract class AbstractEventTip
     public $onAgenda;
 
     /** @var bool */
+    public $onPackage;
+
+    /** @var bool */
+    public $onContacts;
+
+    /** @var bool */
     public $onConfirmationPhone;
 
     /** @var string */

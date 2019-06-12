@@ -84,6 +84,8 @@ class UpdateActionTest extends TestCase
         $this->tip->isOnSheet()->willReturn(true);
         $this->tip->isOnProgram()->willReturn(true);
         $this->tip->isOnAgenda()->willReturn(true);
+        $this->tip->isOnPackage()->willReturn(true);
+        $this->tip->isOnContacts()->willReturn(true);
         $this->tip->isOnConfirmationPhone()->willReturn(true);
         $this->tip->getTypes()->willReturn([]);
         $this->tip->getTranslations()->willReturn([]);

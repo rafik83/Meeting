@@ -62,6 +62,8 @@ class AffectHandler
             $globalTip->isOnPrintPlanning(),
             $globalTip->isOnSheet(),
             $globalTip->isOnAgenda(),
+            $globalTip->isOnPackage(),
+            $globalTip->isOnContacts(),
             $globalTip->isOnProgram(),
             $globalTip->isOnConfirmationPhone(),
             $this->dateTime

@@ -22,6 +22,8 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -187,6 +189,15 @@ class PackageController extends Controller
             )
         );
 
+        $user = $userDomain->getUser();
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet,
+            $user,
+            TipTranslationViewQueryHandler::CONTEXT_PACKAGE,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+
         return $this->render('EventBundle:Package:step.html.twig', [
             'event'                        => $eventDomain->getEvent(),
             'sheet'                        => $sheet,
@@ -198,6 +209,7 @@ class PackageController extends Controller
             'displayRemoveParticipantForm' => $displayRemoveParticipantForm,
             'participants'                 => $participants,
             'participantProductViews'      => $participantProductViews,
+            'tipTranslationViews'          => $tipTranslationViews,
         ]);
     }
 

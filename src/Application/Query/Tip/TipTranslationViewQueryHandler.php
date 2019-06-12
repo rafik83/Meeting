@@ -16,12 +16,14 @@ use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class TipTranslationViewQueryHandler
 {
-    const CONTEXT_CATALOG            = 'event_catalog_index';
+    const CONTEXT_CATALOG = 'event_catalog_index';
     const CONTEXT_MEETING_MANAGEMENT = 'event_meeting_list_request';
-    const CONTEXT_PRINT_PLANNING     = 'print_planning';
-    const CONTEXT_SHEET              = 'onSheet';
-    const CONTEXT_AGENDA             = 'onAgenda';
-    const CONTEXT_PROGRAM            = 'onProgram';
+    const CONTEXT_PRINT_PLANNING = 'print_planning';
+    const CONTEXT_SHEET = 'onSheet';
+    const CONTEXT_AGENDA = 'onAgenda';
+    const CONTEXT_PACKAGE = 'onPackage';
+    const CONTEXT_CONTACTS = 'onContacts';
+    const CONTEXT_PROGRAM = 'onProgram';
     const CONTEXT_CONFIRMATION_PHONE = 'onConfirmationPhone';
 
     /**
@@ -35,6 +37,8 @@ class TipTranslationViewQueryHandler
         self::CONTEXT_PRINT_PLANNING     => 'onPrintPlanning',
         self::CONTEXT_SHEET              => 'onSheet',
         self::CONTEXT_AGENDA             => 'onAgenda',
+        self::CONTEXT_PACKAGE            => 'onPackage',
+        self::CONTEXT_CONTACTS           => 'onContacts',
         self::CONTEXT_PROGRAM            => 'onProgram',
         self::CONTEXT_CONFIRMATION_PHONE => 'onConfirmationPhone',
     ];

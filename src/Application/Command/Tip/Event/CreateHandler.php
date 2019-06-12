@@ -55,6 +55,8 @@ class CreateHandler
             $command->onPrintPlanning,
             $command->onSheet,
             $command->onAgenda,
+            $command->onPackage,
+            $command->onContacts,
             $command->onProgram,
             $command->onConfirmationPhone,
             $this->dateTime

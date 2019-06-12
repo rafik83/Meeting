@@ -42,6 +42,8 @@ class UpdateHandlerTest extends TestCase
             true,
             false,
             true,
+            true,
+            true,
             false,
             true,
             $oldDateTime
@@ -58,6 +60,8 @@ class UpdateHandlerTest extends TestCase
             true,
             false,
             true,
+            false,
+            false,
             false,
             true,
             false,
@@ -80,6 +84,8 @@ class UpdateHandlerTest extends TestCase
                 && $tip->isOnPrintPlanning() === $expected->isOnPrintPlanning()
                 && $tip->isOnSheet() === $expected->isOnSheet()
                 && $tip->isOnAgenda() === $expected->isOnAgenda()
+                && $tip->isOnPackage() === $expected->isOnPackage()
+                && $tip->isOnContacts() === $expected->isOnContacts()
                 && $tip->isOnProgram() === $expected->isOnProgram()
                 && $tip->isOnConfirmationPhone() === $expected->isOnConfirmationPhone()
                 && $tip->getTranslationTitle('fr') === $expected->getTranslationTitle('fr')
@@ -103,6 +109,8 @@ class UpdateHandlerTest extends TestCase
         $update->onPrintPlanning = true;
         $update->onSheet = false;
         $update->onAgenda = true;
+        $update->onPackage = true;
+        $update->onContacts = true;
         $update->onProgram = false;
         $update->onConfirmationPhone = true;
         $update->translations = [

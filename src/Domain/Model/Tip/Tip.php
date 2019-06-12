@@ -24,6 +24,8 @@ class Tip
     const TRANS_VISIBLE_PRINT_PLANNING = 'admin.tip.column.visible.print_planning';
     const TRANS_VISIBLE_SHEET = 'admin.tip.column.visible.onSheet';
     const TRANS_VISIBLE_AGENDA = 'admin.tip.column.visible.onAgenda';
+    const TRANS_VISIBLE_PACKAGE = 'admin.tip.column.visible.onPackage';
+    const TRANS_VISIBLE_CONTACTS = 'admin.tip.column.visible.onContacts';
     const TRANS_VISIBLE_PROGRAM = 'admin.tip.column.visible.onProgram';
     const TRANS_VISIBLE_CONFIRMATION_PHONE = 'admin.tip.column.visible.onConfirmationPhone';
 
@@ -75,6 +77,12 @@ class Tip
     private $onAgenda;
 
     /** @var bool */
+    private $onPackage;
+
+    /** @var bool */
+    private $onContacts;
+
+    /** @var bool */
     private $onConfirmationPhone;
 
     /** @var string */
@@ -109,6 +117,8 @@ class Tip
      * @param bool               $onPrintPlanning
      * @param bool               $onSheet
      * @param bool               $onAgenda
+     * @param bool               $onPackage
+     * @param bool               $onContacts
      * @param bool               $onProgram
      * @param bool               $onConfirmationPhone
      * @param \DateTimeInterface $createdAt
@@ -121,6 +131,8 @@ class Tip
         $onPrintPlanning,
         $onSheet,
         $onAgenda,
+        $onPackage,
+        $onContacts,
         $onProgram,
         $onConfirmationPhone,
         \DateTimeInterface $createdAt
@@ -132,6 +144,8 @@ class Tip
         $this->onPrintPlanning     = $onPrintPlanning;
         $this->onSheet             = $onSheet;
         $this->onAgenda            = $onAgenda;
+        $this->onPackage           = $onPackage;
+        $this->onContacts          = $onContacts;
         $this->onProgram           = $onProgram;
         $this->onConfirmationPhone = $onConfirmationPhone;
         $this->translations        = new ArrayCollection();
@@ -149,6 +163,8 @@ class Tip
      * @param bool   $onPrintPlanning
      * @param bool   $onSheet
      * @param bool   $onAgenda
+     * @param bool   $onPackage
+     * @param bool   $onContacts
      * @param bool   $onProgram
      * @param bool   $onConfirmationPhone
      *
@@ -161,6 +177,8 @@ class Tip
         $onPrintPlanning,
         $onSheet,
         $onAgenda,
+        $onPackage,
+        $onContacts,
         $onProgram,
         $onConfirmationPhone
     ) {
@@ -170,6 +188,8 @@ class Tip
         $this->onPrintPlanning     = $onPrintPlanning;
         $this->onSheet             = $onSheet;
         $this->onAgenda            = $onAgenda;
+        $this->onPackage           = $onPackage;
+        $this->onContacts          = $onContacts;
         $this->onProgram           = $onProgram;
         $this->onConfirmationPhone = $onConfirmationPhone;
 
@@ -393,6 +413,16 @@ class Tip
         return $this->onAgenda;
     }
 
+    public function isOnPackage(): bool
+    {
+        return $this->onPackage;
+    }
+
+    public function isOnContacts(): bool
+    {
+        return $this->onContacts;
+    }
+
     /**
      * @return bool
      */
@@ -434,6 +464,14 @@ class Tip
 
         if ($this->isOnAgenda()) {
             $pagesTranslations[] = self::TRANS_VISIBLE_AGENDA;
+        }
+
+        if ($this->isOnPackage()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_PACKAGE;
+        }
+
+        if ($this->isOnContacts()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_CONTACTS;
         }
 
         if ($this->isOnProgram()) {

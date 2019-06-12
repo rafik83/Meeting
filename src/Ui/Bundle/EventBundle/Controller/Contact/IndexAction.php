@@ -6,6 +6,8 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Contact\ContactPreviewView;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -64,14 +66,24 @@ class IndexAction
             new GetContactListViewQuery($event, $participant, $request->getLocale())
         );
 
+        $user = $userDomain->getUser();
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet,
+            $user,
+            TipTranslationViewQueryHandler::CONTEXT_CONTACTS,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
+
         return new Response(
             $this->engine->render(
                 '@Event/Contact/index.html.twig',
                 [
                     'contactListView' => $contactListView,
-                    'sheet'           => $sheet,
-                    'event'           => $event,
-                    'isEventOpen'     => $this->eventOpenAccessChecker->allowedToAccess($event),
+                    'sheet' => $sheet,
+                    'event' => $event,
+                    'isEventOpen' => $this->eventOpenAccessChecker->allowedToAccess($event),
+                    'tipTranslationViews' => $tipTranslationViews,
                 ]
             )
         );
