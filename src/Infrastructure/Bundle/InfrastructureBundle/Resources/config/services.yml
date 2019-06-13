@@ -1873,6 +1873,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\ApplyPromotionCode }
 
+    Proximum\Vimeet\Application\Command\Order\RemovePromotionCodeHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.order_promotion_code_repository'
+            - '@adapter.sheet_indexer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\RemovePromotionCode }
+
     command.rule.see_what_handler:
         class: Proximum\Vimeet\Application\Command\Rule\SeeWhatHandler
         arguments:

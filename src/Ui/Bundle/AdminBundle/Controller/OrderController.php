@@ -95,8 +95,6 @@ class OrderController extends Controller
      * @param Order   $order
      *
      * @return Response
-     *
-     * @deprecated need to be rewritten
      */
     public function editAction(Request $request, Event $event, Order $order)
     {
