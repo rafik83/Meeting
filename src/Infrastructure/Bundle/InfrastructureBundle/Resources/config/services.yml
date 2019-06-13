@@ -1868,6 +1868,7 @@ services:
             - '@order.merger'
             - '@vimeet_infrastructure.repository.order_repository'
             - '@Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler'
+            - '@adapter.sheet_indexer'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\ApplyPromotionCode }
