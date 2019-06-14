@@ -27,7 +27,7 @@ class RemovePromotionCodeHandler
         $order = $removePromotionCode->order;
 
         if (!in_array($promotionCode, $order->getPromotionCodes(), true)) {
-            return;
+            throw new \InvalidArgumentException('Given promotionCode is not in this order');
         }
 
         $order->removePromotionCode($promotionCode);
