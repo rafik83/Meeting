@@ -53,6 +53,7 @@ class PromotionCodeView
     public $id;
 
     /**
+     * @param int                       $id
      * @param string                    $label
      * @param string                    $description
      * @param float                     $total
