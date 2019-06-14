@@ -18,9 +18,9 @@ admin.admin_list.table.title.firstname: Firstname
 admin.admin_list.table.title.lastname: Lastname
 admin.admin_list.table.title.role: Type
 admin.admin_list.title: 'List of backoffice users'
-admin.agenda.countPendingProposition: 'Number of received proposals to validate'
+admin.agenda.countPendingProposition: 'Number of received requests to validate'
 admin.agenda.countPlacedMeetings: 'Number of meetings'
-admin.agenda.countProposition: 'Number of proposals received'
+admin.agenda.countProposition: 'Number of requests received'
 admin.agenda.countRequest: 'Number of requests'
 admin.agenda.countSlots: 'Number of slots'
 admin.agenda.countValidatedRequest: 'Number of requests and accepted requests'
@@ -105,7 +105,7 @@ admin.agenda.sort.accepted_request.label: Approved
 admin.agenda.sort.alphabetical.label: Alphabetical
 admin.agenda.sort.asc.label: 'Ascending order'
 admin.agenda.sort.desc.label: 'Decreasing order'
-admin.agenda.sort.pending_request.label: 'Number of proposals waiting for validation'
+admin.agenda.sort.pending_request.label: 'Number of requests waiting for validation'
 admin.agenda.sort.request.label: 'Number of requests'
 admin.agenda.sort.scheduled_meeting.label: 'Number of scheduled meetings'
 admin.agenda.sort.submit.label: 'Sort profiles'
@@ -864,8 +864,8 @@ admin.sheet.details.historic.title: historic
 admin.sheet.details.invoices: Invoices
 admin.sheet.details.meeting.meeting: 'scheduled meetings'
 admin.sheet.details.meeting.proposition.approved: 'approved propositions'
-admin.sheet.details.meeting.proposition.pending: 'Pending proposals'
-admin.sheet.details.meeting.proposition.refused: 'Refused proposals'
+admin.sheet.details.meeting.proposition.pending: 'Pending requests'
+admin.sheet.details.meeting.proposition.refused: 'Refused requests'
 admin.sheet.details.meeting.proposition.title: 'Meetings requests'
 admin.sheet.details.meeting.request.approved: 'approved requests'
 admin.sheet.details.meeting.request.pending: 'Pending requests'
@@ -1359,7 +1359,7 @@ event.catalog.sheet.meetingRequest: 'Request a meeting'
 event.link.go_back_to_sheet: 'Back to sheet'
 event.link.product.cancel: Cancel
 event.link.see_catalog: 'View cataog'
-event.link.see_meeting_proposition: 'My proposals received'
+event.link.see_meeting_proposition: 'My requests received'
 event.link.see_meeting_request: 'My meeting requests'
 event.link.see_my_sheet: 'View my %type% sheet'
 event.link.see_schedule: 'View my planning %type%'
