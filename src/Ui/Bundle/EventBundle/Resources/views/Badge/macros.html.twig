@@ -2,10 +2,10 @@
     <div class="quarterSection-container {{ side == 'right' ? 'quarterSection-container--upRight' }} quarterSection-container--ebadge">
         <div class="quarterSection ebadge print-bg">
             {% if userBadgeByEventView.header %}
-                <img src="{{ userBadgeByEventView.header }}" class="ebadge-image ebadge-image--logo print-bg" />
+                <img src="{{ userBadgeByEventView.header }}" class="badge-image badge-image--logo print-bg" />
             {% endif %}
 
-            <div class="ebadge-content">
+            <div class="badge-content">
                 <div class="company-participant ft-bold">
                     {{ userBadgeByEventView.sheetTitle }}
                 </div>
@@ -34,9 +34,9 @@
             </div>
 
             {% if userBadgeByEventView.participationTypeOrCategoryLabel %}
-                <div class="ebadge-participation-type ft-bold print-bg" style="background: {{ userBadgeByEventView.footerColor }};">
-                    <div class="ebadge-participation-type-content">
-                        <div class="ebadge-participation-type-content-text" style="color: {{ userBadgeByEventView.footerTextColor }} !important;">
+                <div class="badge-participationType ft-bold print-bg" style="background: {{ userBadgeByEventView.footerColor }};">
+                    <div class="badge-participationType-content">
+                        <div class="badge-participationType-content-text" style="color: {{ userBadgeByEventView.footerTextColor }} !important;">
                             {{ userBadgeByEventView.participationTypeOrCategoryLabel }}
                         </div>
                     </div>
@@ -59,7 +59,7 @@
 {% endif %}
 <div class="{{ sectionContainerClasses }}">
     <div class="{{ sectionClass }}">
-        <img src="{{ imagePath }}" class="ebadge-image print-bg" />
+        <img src="{{ imagePath }}" class="badge-image print-bg" />
     </div>
 </div>
 {% endmacro %}

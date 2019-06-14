@@ -10,11 +10,11 @@
     {{ parent() }}
 
     <style type="text/css">
-        .ebadge-image {
+        .badge-image {
             width: 100%;
         }
 
-        .ebadge-image--logo {
+        .badge-image--logo {
             background: linear-gradient(to right, {{ event.configuration.headerLeftColor }} 0%, {{ event.configuration.headerRightColor }} 100%);
         }
 
@@ -34,14 +34,14 @@
             margin-top: 4px;
         }
 
-        .ebadge-content {
+        .badge-content {
             font-size: 20px;
             text-align: center;
             padding: 4px;
             margin: 0 auto;
         }
 
-        .ebadge-content .company-participant {
+        .badge-content .company-participant {
             height: 17mm;
             overflow: hidden;
             color: #2F2F2F;
@@ -54,7 +54,7 @@
             width: 100%;
         }
 
-        .ebadge-content .info-participant {
+        .badge-content .info-participant {
             max-height: 28mm;
             height: 26mm;
             margin: 0;
@@ -65,7 +65,7 @@
             width: 100%;
         }
 
-        .ebadge-content .info-participant .position-participant {
+        .badge-content .info-participant .position-participant {
             color: #1518E7;
             font-size: 20px;
             font-weight: 700;
@@ -79,7 +79,7 @@
             font-size: 12px;
         }
 
-        .ebadge-participation-type {
+        .badge-participationType {
             font-size: 23px;
             height: 24mm;
             text-transform: uppercase;
@@ -89,13 +89,13 @@
             width: 100%;
         }
 
-        .ebadge-participation-type-content {
+        .badge-participationType-content {
             display: table;
             width: 100%;
             height: 100%;
         }
 
-        .ebadge-participation-type-content-text {
+        .badge-participationType-content-text {
             display: table-cell;
             vertical-align: middle;
         }
@@ -120,11 +120,11 @@
                 height: 150px;
             }
 
-            .ebadge-content {
+            .badge-content {
                 position: relative;
             }
 
-            .ebadge-content .company-participant {
+            .badge-content .company-participant {
                 max-height: 17mm;
                 height: auto;
                 position: relative;
@@ -143,14 +143,14 @@
                 padding: 10px 10px 4px 10px;
             }
 
-            .ebadge-content .info-participant {
+            .badge-content .info-participant {
                 max-height: 28mm;
                 height: auto;
                 top: 0;
                 position: relative;
             }
 
-            .ebadge-participation-type {
+            .badge-participationType {
                 bottom: 80px;
                 position: fixed;
                 max-height: 24mm;
@@ -183,11 +183,11 @@
                 height: 30mm;
             }
 
-            .ebadge-content {
+            .badge-content {
                 margin-top: 7mm;
             }
 
-            .ebadge-participation-type {
+            .badge-participationType {
                 bottom: 0;
             }
         }
@@ -197,102 +197,28 @@
                 font-family: RobotoRegular, HelveticaNeue, Helvetica, sans-serif !important;
             }
 
-            .printZone-fix {
-                width: 210mm;
-                height: 297mm;
-                position: absolute;
-            }
-
             .container-fluid {
                 padding: 0;
                 margin: 0;
             }
 
+            {% include '@Admin/User/Event/Badge/commonRules.css' %}
+
             .quarterSection-container {
                 page-break-after: always;
-                clear: both;
-                width: 105mm;
-                height: 148mm;
             }
 
-            .halfXSection-container {
-                page-break-after: always;
-                clear: both;
-                width: 105mm;
-                height: 297mm;
+            .badge-image {
+                height: auto;
+                width: auto;
             }
 
-            .quarterSection {
-                position: relative;
-                width: 98mm;
-                height: 141mm;
-                margin: 0;
-            }
-
-            .halfXSection {
-                position: relative;
-                width: 98mm;
-                height: 297mm;
-                margin: 0;
-            }
-
-            .quarterSection-container--upRight {
-                position: absolute;
-                left: 105mm;
-                top: 0;
-            }
-
-            .quarterSection-container--upRight .quarterSection {
-                margin-left: 7mm;
-            }
-
-            .quarterSection-container--downLeft {
-                position: absolute;
-                top: 148mm;
-            }
-
-            .quarterSection-container--downLeft .quarterSection {
-                margin-top: 7mm;
-            }
-
-            .quarterSection-container--downRight {
-                position: absolute;
-                left: 105mm;
-                top: 148mm;
-            }
-
-            .quarterSection-container--downRight .quarterSection {
-                margin-top: 7mm;
-                margin-left: 7mm;
-            }
-
-            .halfXSection-container--right {
-                position: absolute;
-                left: 105mm;
-                top: 0;
-            }
-
-            .halfXSection-container--right .halfXSection {
-                margin-left: 7mm;
+            .badge-image--logo {
+                background: linear-gradient(to right, {{ event.configuration.headerLeftColor }} 0%, {{ event.configuration.headerRightColor }} 100%);
             }
 
             .ebadge {
                 font-size: 20px;
-            }
-
-            .ebadge-image {
-                max-height: 100%;
-                max-width: 100%;
-                width: auto;
-                margin: 0 auto;
-                text-align: center;
-                display: block;
-                height: auto;
-            }
-
-            .ebadge-image--logo {
-                max-height: 44mm;
-                background: linear-gradient(to right, {{ event.configuration.headerLeftColor }} 0%, {{ event.configuration.headerRightColor }} 100%);
             }
 
             .ebadge-qrcode-border {
@@ -304,7 +230,7 @@
                 height: 30mm;
             }
 
-            .ebadge-content {
+            .badge-content {
                 margin-top: 7mm;
             }
         }
