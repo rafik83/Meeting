@@ -77,7 +77,7 @@ class RemovePromotionCodeAction
 
         $this->csrfTokenManager->refreshToken(IntentionType::INTENTION_REMOVE_PROMOTION_CODE_FROM_ORDER);
         $this->commandBus->handle(new RemovePromotionCode($promotionCode, $order));
-        $this->flashBag->add('success', 'flash.admin.order.promotionCodeRemoved');
+        $this->flashBag->add('success', 'flash.admin.order.promotionCode.removed');
 
         return new RedirectResponse(
             $this->router->generate(

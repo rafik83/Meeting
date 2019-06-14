@@ -128,6 +128,7 @@ class OrderController extends Controller
         if ($promotionCodeChoiceForm->isSubmitted() && $promotionCodeChoiceForm->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($applyPromotionCode);
+                $this->get('session')->getFlashBag()->add('success', 'flash.admin.order.promotionCode.added');
 
                 return $this->redirectToRoute(
                     'admin_sheet_order_edit',
