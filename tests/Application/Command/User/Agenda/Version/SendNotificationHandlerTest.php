@@ -24,12 +24,13 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Agenda\Version;
+use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Agenda\Version\DiffVerbalizer;
 
 class SendNotificationHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
-    private $diffVerbalizer, $SMSNotificationCommandHandler, $mailNotificationCommandHandler, $event, $sheet, $user;
+    private $diffVerbalizer, $SMSNotificationCommandHandler, $mailNotificationCommandHandler, $event, $sheet, $user, $plannerJobRepository;
 
     public function setUp()
     {
@@ -39,6 +40,7 @@ class SendNotificationHandlerTest extends TestCase
         $this->diffVerbalizer = $this->prophesize(DiffVerbalizer::class);
         $this->SMSNotificationCommandHandler = $this->prophesize(SMSNotificationCommandHandler::class);
         $this->mailNotificationCommandHandler = $this->prophesize(MailNotificationCommandHandler::class);
+        $this->plannerJobRepository = $this->prophesize(PlannerJobRepositoryInterface::class);
     }
 
     public function testHandle()
@@ -86,7 +88,8 @@ class SendNotificationHandlerTest extends TestCase
         $sendNotificationHandler = new SendNotificationHandler(
             $this->diffVerbalizer->reveal(),
             $this->mailNotificationCommandHandler->reveal(),
-            $this->SMSNotificationCommandHandler->reveal()
+            $this->SMSNotificationCommandHandler->reveal(),
+            $this->plannerJobRepository->reveal()
         );
         $sendNotificationHandler->handle(
             new SendNotification(
