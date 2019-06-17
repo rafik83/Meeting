@@ -51,7 +51,7 @@ class SendNotificationHandler
 
         $lastPlannerJob = $this->plannerJobRepository->findLastByEvent($command->event);
 
-        if(isset($lastPlannerJob) && $lastPlannerJob->isPending()) {
+        if (null !== $lastPlannerJob && !$lastPlannerJob->isCompleted()) {
             return;
         }
 
