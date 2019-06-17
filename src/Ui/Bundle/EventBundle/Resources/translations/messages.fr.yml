@@ -311,6 +311,7 @@ navigation.links.meetingRequest.sent: 'Demandes en attente'
 navigation.links.member_space.avatar: Photo
 navigation.links.member_space.company: 'Société / Organisme'
 navigation.links.member_space.profile: Profil
+navigation.links.member_space.terms_of_sale: 'Conditions générales de participation et politique de confidentialités'
 navigation.links.notification: Notifications
 navigation.links.package.order_list: 'Liste des commandes'
 navigation.links.package.order_summary_total: Récapitulatif

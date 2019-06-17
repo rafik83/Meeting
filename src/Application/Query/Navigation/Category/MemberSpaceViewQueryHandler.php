@@ -81,6 +81,15 @@ class MemberSpaceViewQueryHandler
             );
         }
 
+        $linksView[] = new LinkView(
+            'navigation.links.member_space.terms_of_sale',
+            $this->navigationBuilder->getRoute(
+                'event_content_terms_of_sale', [
+                'sheet' => $memberSpaceQuery->sheet->getId(),
+            ]
+            )
+        );
+
         $categoryTitle = Category::MEMBER_SPACE;
 
         if (null !== $memberSpaceQuery->staticFormulation) {
