@@ -33,20 +33,20 @@ class OverlappedTimeRangeTruncater
             }
 
             if (TimeOverlap::beginIn($unavailabilityToCheck, $activatedTimeRange)) {
-                $unavailabilityToCheck->begin = $activatedTimeRange->end;
+                $unavailabilityToCheck->begin = clone $activatedTimeRange->end;
 
                 if ($unavailabilityToCheck->end < $unavailabilityToCheck->begin) {
-                    $unavailabilityToCheck->end = $unavailabilityToCheck->begin;
+                    $unavailabilityToCheck->end = clone $unavailabilityToCheck->begin;
                 }
 
                 continue;
             }
 
             if (TimeOverlap::endIn($unavailabilityToCheck, $activatedTimeRange)) {
-                $unavailabilityToCheck->end = $activatedTimeRange->begin;
+                $unavailabilityToCheck->end = clone $activatedTimeRange->begin;
 
                 if ($unavailabilityToCheck->end < $unavailabilityToCheck->begin) {
-                    $unavailabilityToCheck->begin = $unavailabilityToCheck->end;
+                    $unavailabilityToCheck->begin = clone $unavailabilityToCheck->end;
                 }
 
                 continue;
@@ -54,15 +54,15 @@ class OverlappedTimeRangeTruncater
 
             if (TimeOverlap::contains($activatedTimeRange, $unavailabilityToCheck)) {
                 $firstNeedle = clone $unavailabilityToCheck;
-                $firstNeedle->end = $activatedTimeRange->begin;
+                $firstNeedle->end = clone $activatedTimeRange->begin;
 
                 if ($firstNeedle->end > $firstNeedle->begin && $firstNeedle->getBegin() != $firstNeedle->getEnd()) {
                     $result[] = $firstNeedle;
                 }
 
                 $secondNeedle = clone $unavailabilityToCheck;
-                $secondNeedle->begin = $activatedTimeRange->end;
-                $unavailabilityToCheck = $secondNeedle;
+                $secondNeedle->begin = clone $activatedTimeRange->end;
+                $unavailabilityToCheck = clone $secondNeedle;
             }
 
             // If the needle is cut to nothing
