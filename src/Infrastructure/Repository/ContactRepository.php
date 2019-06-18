@@ -86,7 +86,7 @@ class ContactRepository implements ContactRepositoryInterface
         ;
     }
 
-    public function findByEventAndUser(Event $event, User $user): array
+    public function findByEventAndUsers(Event $event, array $users): array
     {
         return $this
             ->entityManager
@@ -95,15 +95,15 @@ class ContactRepository implements ContactRepositoryInterface
             ->from(Contact::class, 'contact')
             ->join('contact.contact', 'user')
             ->andWhere('contact.event = :event')
-            ->andWhere('contact.user = :user')
+            ->andWhere('contact.user IN (:users)')
             ->setParameters(
                 [
                     'event' => $event,
-                    'user' => $user,
+                    'users' => $users,
                 ]
             )
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
 }
