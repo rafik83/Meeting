@@ -7034,3 +7034,20 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
         tags:
             - { name: tactician.handler, typehints: true }
+
+    #
+    # Fast checkin
+    #
+    Proximum\Vimeet\Application\Command\Event\Participant\AddFastCheckinHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Command\Event\Participant\EmailCheckerHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, typehints: true }

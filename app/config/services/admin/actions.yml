@@ -595,6 +595,8 @@ services:
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@datetime'
+            - '@form.factory'
+            - '@adapter.router'
 
     #
     # OMZ
@@ -1009,3 +1011,20 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\DownloadPrintAction:
         arguments:
             - '@adapter.file_system_adapter'
+
+
+    #
+    # Fast checkin
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\AddFastCheckinAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\CheckinActionsAction:
+        arguments:
+            - '@templating'
+            - '@adapter.router'

@@ -1,0 +1,7 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <a class="btn btn-success" href="{{ path('') }}">chicken</a>
+
+    <a href="{{ badgeUrl }}" target="_blank" class="btn btn-info">{this.element.dataset.printBadge}</a>
+{% endblock %}
