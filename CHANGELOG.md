@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1999 - As an admin, remove promotion code from order
+### Fixed
+- MV-184 - Fix rooming list assign dates
+- MV-185 - Relevance filter choice by default
 
 ## [2.9.0] - 2019-06-12
 ### Added

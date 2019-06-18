@@ -49,6 +49,7 @@ class ListViewQueryHandlerTest extends TestCase
         $defaultLastRoomingDay = clone $lastEventDay;
         $event->getFirstDay()->shouldBeCalled()->willReturn($firstDay->reveal());
         $event->getLastDay()->shouldBeCalled()->willReturn($lastDay->reveal());
+        $event->getTimeZone()->shouldBeCalled()->willReturn('America/Los_Angeles');
         $firstDay->getDay()->shouldBeCalled()->willReturn($firstEventDay);
         $lastDay->getDay()->shouldBeCalled()->willReturn($lastEventDay);
 
