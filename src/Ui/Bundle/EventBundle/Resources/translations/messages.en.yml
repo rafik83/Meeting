@@ -90,6 +90,14 @@ common.next: Next
 common.required_formats: '{1} Required format is : %format%|[1, Inf[Required formats are : %format%'
 common.update: Modify
 common.validate: Submit
+contact.edit.comment: 'Edit comment'
+contact.show.comment: 'My comment (confidential)'
+contact.show.evaluation: 'Quality of contact (confidential)'
+contact.show.evaluation.1.label: 'Missed meeting'
+contact.show.evaluation.2.label: 'Not relevant'
+contact.show.evaluation.3.label: 'Long term issue'
+contact.show.evaluation.4.label: 'Medium term follow-up'
+contact.show.evaluation.5.label: 'To see again very quickly'
 error.403.content: 'Your are not allowed to reach this content.'
 error.403.title: 'Not allowed'
 error.404.content: 'This content is not available or not available any more.'
@@ -123,6 +131,8 @@ event.meeting.request.transformIntoMeeting.success: 'The meeting is scheduled fo
 event.participant.define_timezone: 'Set my time zone'
 event.registration_closed: 'Registrations are closed. If you are registered please connect to your account.'
 event.registration_not_open: 'Registrations are not opened yet.'
+event.sheet.export.fields.contact_comment: Comment
+event.sheet.export.fields.contact_evaluation: Evaluation
 event.sheet.export.fields.event_name: 'Event name'
 event.sheet.export.fields.participant_email: 'Participant email'
 event.sheet.export.fields.participant_firstname: Firstname

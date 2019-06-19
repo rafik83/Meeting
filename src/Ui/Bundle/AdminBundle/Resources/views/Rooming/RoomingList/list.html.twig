@@ -94,8 +94,8 @@
                                             <a class="btn btn-small btn-default" href="{{ path('admin_event_rooming_assign_accommodation_stay', {
                                                 'event': event.id,
                                                 'user': detailView.userId,
-                                                'arrivalDate': userStayView.begin|date('d/m/Y', event.timeZone),
-                                                'departureDate': userStayView.end|date('d/m/Y', event.timeZone)
+                                                'arrivalDate': userStayView.begin|date('d/m/Y'),
+                                                'departureDate': userStayView.end|date('d/m/Y')
                                             }) }}">
                                                 {{ 'admin.rooming.list.assignAccommodation'|trans }}
                                             </a>

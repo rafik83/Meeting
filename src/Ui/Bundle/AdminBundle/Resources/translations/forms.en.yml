@@ -878,12 +878,12 @@ form.sheet_filter.children.hasHappeningParticipation.label: 'Registration to a c
 form.sheet_filter.children.hasInvoice.label: 'Has at least one invoice'
 form.sheet_filter.children.hasNoMeetingRequest.label: 'Has done no meeting request'
 form.sheet_filter.children.hasOrder.label: Order
-form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Meeting proposals pending validation'
+form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Meeting requests pending validation'
 form.sheet_filter.children.hasRemainingToPay.label: 'Remaining to pay > 0'
 form.sheet_filter.children.hasRemainingToPay.no.label: 'No'
 form.sheet_filter.children.hasRemainingToPay.noPreference.label: 'No matter'
 form.sheet_filter.children.hasRemainingToPay.yes.label: 'yes'
-form.sheet_filter.children.hasScheduledMeeting.label: 'Has at least 1 shceduled meeting'
+form.sheet_filter.children.hasScheduledMeeting.label: 'Has at least 1 scheduled meeting'
 form.sheet_filter.children.hasSpot.label: 'Has a dedicated spot'
 form.sheet_filter.children.imported.all.label: All
 form.sheet_filter.children.imported.label: Imported

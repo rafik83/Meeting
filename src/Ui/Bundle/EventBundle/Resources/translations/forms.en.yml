@@ -29,6 +29,7 @@ form.change_password_user.children.currentPassword.label: 'Current password'
 form.change_password_user.children.plainPassword.children.first.label: 'New password'
 form.change_password_user.children.plainPassword.children.second.label: 'Confirm new password'
 form.change_password_user.children.submit.label: Submit
+form.comment.children.submit.label: Submit
 form.create_unavailability.children.day.label: 'On the'
 form.create_unavailability.children.message.label: comment
 form.create_unavailability.children.participants.label: Unavailable
@@ -61,7 +62,7 @@ form.multiple_sheet_request_filter_request_type.children.state.filter.sent: Pend
 form.multiple_sheet_request_filter_request_type.children.state.label: Status
 form.multiple_sheet_request_filter_request_type.children.submit.label: Filter
 form.multiple_sheet_request_filter_request_type.children.type.filter.all: all
-form.multiple_sheet_request_filter_request_type.children.type.filter.proposition: 'My received proposals'
+form.multiple_sheet_request_filter_request_type.children.type.filter.proposition: 'My received requests'
 form.multiple_sheet_request_filter_request_type.children.type.filter.request: 'My requests'
 form.multiple_sheet_request_filter_request_type.children.type.label: Type
 form.multiple_sheet_request_filter_request_type.children.user.label: Participant
@@ -110,11 +111,11 @@ form.search.meeting.availableSlot.choice.available: 'having availabilities'
 form.search.meeting.availableSlot.choice.everyone: All
 form.search.meeting.availableSlot.choice.slot: 'available on the %day% at %time%'
 form.search.meeting.availableSlot.label: 'who is available ?'
-form.search.meeting.state.all: 'All states'
+form.search.meeting.state.all: 'All status'
 form.search.meeting.state.approved: Approved
 form.search.meeting.state.cancelled: Cancelled
 form.search.meeting.state.label: 'My meetings'
-form.search.meeting.state.receive: 'Proposals received'
+form.search.meeting.state.receive: 'Requests received'
 form.search.meeting.state.refused: Refused
 form.search.meeting.state.sent: 'Your pending requests'
 form.search.meeting.type.label: 'My meetings'

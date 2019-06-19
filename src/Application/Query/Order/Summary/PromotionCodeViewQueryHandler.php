@@ -60,6 +60,7 @@ class PromotionCodeViewQueryHandler
         }
 
         return new PromotionCodeView(
+            $promotionCodeViewQuery->promotionCode->getId(),
             $promotionCodeViewQuery->promotionCode->getLabel($locale),
             $promotionCodeViewQuery->promotionCode->getDescription($locale),
             $promotionCodeViewQuery->promotionCode->getPrice(),
