@@ -40,7 +40,10 @@ class AddFastCheckinHandler
                 Tag::PARTICIPANT_MOBILE => $addFastCheckin->mobile,
             ],
             $this->participationTypeTemplateDataGetter->getRegistrationTemplateDataByType($addFastCheckin->type),
-            $this->participationTypeTemplateDataGetter->getSheetTemplateDataByType($addFastCheckin->type)
+            $this->participationTypeTemplateDataGetter->getSheetTemplateDataByType($addFastCheckin->type),
+            null,
+            null,
+            $addFastCheckin->hasAccessToMeetings
         );
 
         return $this->convertToParticipantHandler->handle($convertToParticipant);

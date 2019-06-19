@@ -32,6 +32,9 @@ class AddFastCheckin implements Command
     /** @var string */
     public $country;
 
+    /** @var bool */
+    public $hasAccessToMeetings;
+
     public function __construct(Event $event, string $email)
     {
         $this->event = $event;

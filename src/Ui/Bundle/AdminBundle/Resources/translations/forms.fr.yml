@@ -374,6 +374,7 @@ form.extra_parameter_update.children.submit.label: Enregistrer
 form.extra_parameter_update.children.value.label: Valeur
 form.add_fast_checkin.children.country.label: Pays du participant
 form.add_fast_checkin.children.firstname.label: Prénom
+form.add_fast_checkin.children.hasAccessToMeetings.label: A accès aux rendez-vous ?
 form.add_fast_checkin.children.lastname.label: Nom
 form.add_fast_checkin.children.mobile.label: Téléphone mobile
 form.add_fast_checkin.children.sheetTitle.label: Nom de la fiche

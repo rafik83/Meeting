@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Participant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CountryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -52,6 +53,11 @@ class AddFastCheckinType extends AbstractType
                     'locale' => $options['locale'],
                     'required' => false,
                 ]
+            )
+            ->add(
+                'hasAccessToMeetings',
+                CheckboxType::class,
+                ['required' => false]
             )
             ->add(
                 'submit',
