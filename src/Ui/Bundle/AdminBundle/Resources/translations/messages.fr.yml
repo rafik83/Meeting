@@ -194,7 +194,6 @@ admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.qrcode.checkin: Checkin
 admin.event.qrcode.date_checkin: 'Date de checkin'
-admin.event.qrcode.fastcheckin: 'Création de badge'
 admin.event.qrcode.firstName: Prénom
 admin.event.qrcode.lastName: Nom
 admin.event.qrcode.no_result: 'Pas de résultat'

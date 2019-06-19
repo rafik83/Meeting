@@ -26,12 +26,6 @@
                     {{ 'admin.event.qrcode.search'|trans }}
                 </a>
             </li>
-            <li role="presentation">
-                <a href="#fastCheckin" aria-controls="objects" role="tab" data-toggle="tab" aria-expanded="false">
-                    <i class="glyphicon glyphicon-plus-sign"></i>
-                    {{ 'admin.event.qrcode.fastcheckin'|trans }}
-                </a>
-            </li>
         </ul>
 
         <div class="tab-content">
@@ -67,10 +61,6 @@
                     data-print-badge="{{ 'admin.event.qrcode.printBadge'|trans }}"
                     data-no-result="{{ 'admin.event.qrcode.no_result'|trans }}">
                 </div>
-            </div>
-
-            <div role="tabpanel" class="tab-pane" id="fastCheckin">
-                <div>{{ form(fastCheckinEmailCheckerForm) }}</div>
             </div>
         </div>
     </div>
