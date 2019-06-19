@@ -1,0 +1,9 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block content %}
+    <h1>{{ user.lastName }} {{ user.firstName }} {{ user.email }}</h1>
+
+    <a class="btn btn-success" href="{{ path('admin_event_fast_checkin_action_checkin', {'event': eventId, 'user': userId}) }}">{{ 'admin.event.qrcode.checkin'|trans }}</a>
+
+    <a href="{{ path('admin_user_event_badge', {'event': eventId, 'user': userId}) }}" target="_blank" class="btn btn-info">{{ 'admin.event.qrcode.printBadge'|trans }}</a>
+{% endblock %}

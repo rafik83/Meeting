@@ -365,6 +365,14 @@ services:
             - '@router'
             - '@translator'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\CheckinEventEntranceAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@datetime'
+            - '@adapter.router'
+            - '@session.flash_bag'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Badge\ShowAction:
         arguments:
             - '@adapter.authorization_checker'
@@ -595,6 +603,10 @@ services:
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@datetime'
+            - '@form.factory'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@session.flash_bag'
 
     #
     # OMZ
@@ -1009,3 +1021,19 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\DownloadPrintAction:
         arguments:
             - '@adapter.file_system_adapter'
+
+    #
+    # Fast checkin
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\AddFastCheckinAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.repository.user_repository'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\CheckinActionsAction:
+        arguments:
+            - '@templating'
