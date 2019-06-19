@@ -340,6 +340,7 @@ services:
             - '@domain.user.agenda.version.diff_verbalizer'
             - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler'
             - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler'
+            - '@vimeet_infrastructure.repository.planner_job_repository'
 
     Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\NotifyUserOfChangedVersionCommandHandler:
         arguments:
