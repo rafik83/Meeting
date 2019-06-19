@@ -502,6 +502,10 @@ class Type implements WhoInterface, TypeInterface
 
     public function getPriorityMeetingRequestsNumber(): int
     {
+        if (null === $this->priorityMeetingRequestsNumber) {
+            return 0;
+        }
+
         return $this->priorityMeetingRequestsNumber;
     }
 

@@ -75,7 +75,8 @@ class CreateHandler
             $create->areAllSheetParticipantsAssignedToMeeting,
             $create->canScanParticipant,
             $create->isPackageRequired,
-            $create->isPaymentRequired
+            $create->isPaymentRequired,
+            $create->priorityMeetingRequestsNumber
         );
 
         $localesTitleAlreadyExists = [];
