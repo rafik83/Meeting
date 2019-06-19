@@ -423,6 +423,11 @@ class Order
         return $this->promotionCodes->toArray();
     }
 
+    public function removePromotionCode(Order\PromotionCode $promotionCode)
+    {
+        return $this->promotionCodes->removeElement($promotionCode);
+    }
+
     /**
      * @param Order\PromotionCode|ModelPromotionCode $promotionCode
      *
