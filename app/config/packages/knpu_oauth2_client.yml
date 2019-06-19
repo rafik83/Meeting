@@ -28,3 +28,19 @@ knpu_oauth2_client:
       # use_oidc_mode: false
       # whether to check OAuth2 "state": defaults to true
       # use_state: true
+
+    # will create service: "knpu.oauth2.client.linkedin"
+    # an instance of: KnpU\OAuth2ClientBundle\Client\Provider\LinkedInClient
+    linkedin_main:
+      type: linkedin
+      # add and configure client_id and client_secret in parameters.yml
+      client_id: '%oauth_linkedin_client_id%'
+      client_secret: '%oauth_linkedin_client_secret%'
+      redirect_route: connect_linkedin_check
+      redirect_params: {}
+      # Optional value to specify Linkedin's API version to use. As the time of writing, v1 is still used by default by league/oauth2-linkedin.
+      # api_version: null
+      # Optional value to specify fields to be requested from the profile. Since Linkedin's API upgrade from v1 to v2, fields and authorizations policy have been enforced. See https://docs.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin for more details.
+      # fields: {}
+      # whether to check OAuth2 "state": defaults to true
+      # use_state: true

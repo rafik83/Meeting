@@ -1,5 +1,19 @@
 services:
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Connect\GoogleConnectController:
+        arguments:
+            - '@knpu.oauth2.registry'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Connect\LinkedInConnectController:
+        arguments:
+            - '@knpu.oauth2.registry'
+
     Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Google\GoogleAuthenticator:
+        arguments:
+            - '@knpu.oauth2.registry'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\LinkedIn\LinkedInAuthenticator:
         arguments:
             - '@knpu.oauth2.registry'
             - '@vimeet_infrastructure.repository.user_repository'
