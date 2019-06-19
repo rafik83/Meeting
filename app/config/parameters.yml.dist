@@ -30,6 +30,9 @@ parameters:
 
     redis_dsn: 'redis://localhost'
 
+    oauth_google_client_id: 'client_id_to_change'
+    oauth_google_client_secret: 'client_secret_to_change'
+
     sendgrid_api_key: ~
 
     domain: vimeet.proximum

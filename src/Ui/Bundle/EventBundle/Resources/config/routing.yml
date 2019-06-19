@@ -457,6 +457,19 @@ event_change_password:
     defaults: { _controller: EventBundle:ChangePassword:changePassword }
 
 #
+# OAuth2
+#
+connect_google_start:
+    path:     /connect/google
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Connect\GoogleConnect:connect }
+
+connect_google_check:
+    path:     /connect/google/check
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Connect\GoogleConnect:connectCheck }
+
+#
 # Catalog
 #
 

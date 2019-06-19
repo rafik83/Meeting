@@ -1009,3 +1009,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\DownloadPrintAction:
         arguments:
             - '@adapter.file_system_adapter'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Connect\GoogleConnectController:
+        arguments:
+            - '@knpu.oauth2.registry'
