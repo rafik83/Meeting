@@ -327,6 +327,7 @@ navigation.links.planning.my_schedule: 'Mon agenda'
 navigation.links.planning.unavailability: 'Ajouter une indisponibilité'
 navigation.links.returnToSelectSheet: 'Mes fiches'
 navigation.links.sheet.locale: Version
+navigation.links.termsOfSale: 'Conditions générales de vente'
 navigation.menu: Menu
 new_password.confirm.title: 'Réinitialiser le mot de passe'
 new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'

@@ -136,6 +136,7 @@ class NavigationController extends Controller
             'isShowingRegisterButton' => $isShowingRegisterButton,
             'isHeaderDisplayedOnMobile' => Route::isHeaderDisplayedOnMobile($route),
             'registrationUrl' => $registrationUrl ?? null,
+            'activeSheet' => $sheet,
         ]);
     }
 }

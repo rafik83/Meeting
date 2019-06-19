@@ -12,6 +12,13 @@
             {{ 'navigation.links.contactUs'|trans }}
         </a>
 
+        {% if activeSheet is not null %}
+        <a href="{{ path('event_content_terms_of_sale',{'sheet': activeSheet.id}) }}" class="btn btn-primary btn-lg btn-inactive">
+            <i class="icon-Document_1"></i>
+            {{ 'navigation.links.termsOfSale'|trans }}
+        </a>
+        {% endif %}
+
         {% if is_granted('ROLE_USER') and menuHeaderView.hasMultipleSheets %}
             <a href="{{ path('event_select_sheet') }}" class="btn btn-primary btn-lg btn-inactive">
                 <i class="icon-Document_1"></i>
