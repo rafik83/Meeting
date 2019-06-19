@@ -48,7 +48,9 @@ class GetContactListUsersViewQueryHandlerTest extends TestCase
         $requestedUserSheet2->getParticipantsArray()->willReturn([$requestedParticipant->reveal()]);
 
         $request = $this->prophesize(Request::class);
-        $request->getSheetMet($participantSheet->reveal())->willReturn()
+        $request->hasNoPreference($participantSheet->reveal())->shouldBeCalled()->willReturn(false);
+        $request
+            ->getSheetMet($participantSheet->reveal())
             ->willReturn($requestedUserSheet2->reveal())
         ;
 
@@ -66,6 +68,9 @@ class GetContactListUsersViewQueryHandlerTest extends TestCase
 
         $meetingParticipants->getMeetingParticipants($request->reveal(), $participantSheet->reveal())
             ->willReturn([$participant->reveal()])
+        ;
+        $meetingParticipants->getMeetingParticipants($request->reveal(), $requestedUserSheet2->reveal())
+            ->willReturn([$requestedParticipant->reveal()])
         ;
 
         $contactRepository->findSeenUserByEventAndUser($event->reveal(), $participantUser->reveal())
