@@ -96,6 +96,8 @@ class MemberSpaceViewQueryHandler
             $categoryTitle = $memberSpaceQuery->staticFormulation->getTitle($memberSpaceQuery->locale);
         }
 
-        return new CategoryView($categoryTitle, Category::MEMBER_SPACE_ICON, $linksView, false);
+        return new CategoryView(
+            $categoryTitle, Category::MEMBER_SPACE_ICON, $linksView, true, true
+        );
     }
 }
