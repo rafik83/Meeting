@@ -12,10 +12,29 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MeetingRequestApproveType extends AbstractMeetingRequestType
 {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        /** @var Sheet $sheet */
+        $sheet = $options['sheet'];
+
+        if ($sheet->getType()->getPriorityMeetingRequestsNumber() > 0) {
+            $builder
+                ->add(
+                    'toPriority', CheckboxType::class, [
+                        'required' => false,
+                    ]
+                );
+        }
+
+        parent::buildForm($builder, $options);
+    }
+
     /**
      * {@inheritdoc}
      */

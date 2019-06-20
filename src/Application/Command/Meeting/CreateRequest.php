@@ -35,6 +35,9 @@ class CreateRequest
     /** @var User */
     public $creator;
 
+    /** @var bool */
+    public $fromPriority;
+
     /**
      * @param Event $event
      * @param Sheet $from
