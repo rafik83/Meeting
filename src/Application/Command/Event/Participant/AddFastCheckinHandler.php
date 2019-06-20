@@ -2,9 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\Participant;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter;
 use Proximum\Vimeet\Domain\Model\Participant;
 
@@ -16,12 +19,17 @@ class AddFastCheckinHandler
     /** @var ParticipationTypeTemplateDataGetter */
     private $participationTypeTemplateDataGetter;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $eventDispatcher;
+
     public function __construct(
         ConvertToParticipantHandler $convertToParticipantHandler,
-        ParticipationTypeTemplateDataGetter $participationTypeTemplateDataGetter
+        ParticipationTypeTemplateDataGetter $participationTypeTemplateDataGetter,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->convertToParticipantHandler = $convertToParticipantHandler;
         $this->participationTypeTemplateDataGetter = $participationTypeTemplateDataGetter;
+        $this->eventDispatcher = $delayedEventDispatcher;
     }
 
     public function handle(AddFastCheckin $addFastCheckin): ?Participant
@@ -46,7 +54,19 @@ class AddFastCheckinHandler
             $addFastCheckin->hasAccessToMeetings
         );
 
-        return $this->convertToParticipantHandler->handle($convertToParticipant);
+        $participant = $this->convertToParticipantHandler->handle($convertToParticipant);
+
+        if ('' !== $addFastCheckin->email) {
+            $completeProfileEvent = new CompleteProfileEvent(
+                $participant->getUser(),
+                $addFastCheckin->event,
+                $participant,
+                $addFastCheckin->event->getFallback()
+            );
+            $this->eventDispatcher->dispatch(Events::USER_PROFILE_COMPLETED, $completeProfileEvent);
+        }
+
+        return $participant;
     }
 
     private function guessEmail(AddFastCheckin $addFastCheckin): string

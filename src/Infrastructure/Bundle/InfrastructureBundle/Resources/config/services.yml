@@ -7042,6 +7042,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, typehints: true }
 
