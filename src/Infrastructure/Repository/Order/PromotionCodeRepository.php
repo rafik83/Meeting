@@ -15,6 +15,12 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
     {
         $this->entityManager = $entityManager;
     }
+
+    public function remove(PromotionCode $promotionCode): void
+    {
+        $this->entityManager->remove($promotionCode);
+        $this->entityManager->flush($promotionCode);
+    }
     
     /**
      * {@inheritdoc}

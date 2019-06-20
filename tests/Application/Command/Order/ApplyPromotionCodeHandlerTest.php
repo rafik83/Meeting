@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Order;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Order\ApplyPromotionCode;
 use Proximum\Vimeet\Application\Command\Order\ApplyPromotionCodeHandler;
 use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStock;
@@ -50,6 +51,9 @@ class ApplyPromotionCodeHandlerTest extends TestCase
     /** @var ObjectProphecy|DecrementStockHandler */
     private $decrementStockHandler;
 
+    /** @var ObjectProphecy|SheetIndexerInterface */
+    private $sheetIndexer;
+
     public function setUp()
     {
         $this->orderMerger = $this->prophesize(Merger::class);
@@ -66,11 +70,13 @@ class ApplyPromotionCodeHandlerTest extends TestCase
 
         $this->orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $this->decrementStockHandler = $this->prophesize(DecrementStockHandler::class);
+        $this->sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
 
         $this->applyPromotionCodeHandler = new ApplyPromotionCodeHandler(
             $this->orderMerger->reveal(),
             $this->orderRepository->reveal(),
             $this->decrementStockHandler->reveal(),
+            $this->sheetIndexer->reveal(),
             $this->dateTime
         );
     }
@@ -209,6 +215,7 @@ class ApplyPromotionCodeHandlerTest extends TestCase
 
         $this->orderRepository->set($this->order)->shouldBeCalled();
         $this->decrementStockHandler->handle(new DecrementStock($promotionCode))->shouldBeCalled();
+        $this->sheetIndexer->updateSheets([$this->sheet->reveal()])->shouldBeCalled();
 
         $applyPromotionCode = new ApplyPromotionCode($this->order);
         $applyPromotionCode->promotionCode = $promotionCode;

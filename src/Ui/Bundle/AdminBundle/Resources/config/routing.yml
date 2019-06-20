@@ -1774,6 +1774,15 @@ admin_order_export_file:
     methods: [GET]
     defaults: { _controller: AdminBundle:Order/Export:exportFile }
 
+admin_order_remove_promotion_code:
+    path: /event/{event}/order/{order}/remove-promotion-code/{promotionCode}
+    requirements:
+        event: \d+
+        order: \d+
+        promotionCode: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Order\RemovePromotionCodeAction }
+
 #
 # Group (Entités multi-fiches)
 #

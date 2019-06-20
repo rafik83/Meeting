@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStock;
 use Proximum\Vimeet\Application\Command\PromotionCode\DecrementStockHandler;
 use Proximum\Vimeet\Domain\Model\Order;
@@ -30,15 +31,20 @@ class ApplyPromotionCodeHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var SheetIndexerInterface */
+    private $sheetIndexer;
+
     public function __construct(
         Merger $orderMerger,
         OrderRepositoryInterface $orderRepository,
         DecrementStockHandler $decrementStockHandler,
+        SheetIndexerInterface $sheetIndexer,
         \DateTimeInterface $dateTime
     ) {
         $this->orderMerger = $orderMerger;
         $this->orderRepository = $orderRepository;
         $this->decrementStockHandler = $decrementStockHandler;
+        $this->sheetIndexer = $sheetIndexer;
         $this->dateTime = $dateTime;
     }
 
@@ -94,6 +100,7 @@ class ApplyPromotionCodeHandler
 
         $this->decrementStockHandler->handle(new DecrementStock($promotionCode));
         $this->orderRepository->set($order);
+        $this->sheetIndexer->updateSheets([$order->getSheet()]);
     }
 
     /**
