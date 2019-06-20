@@ -14,7 +14,7 @@ class Version20190619122541 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE type ADD priority_meeting_requests_number INT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE type ADD priority_meeting_requests_number INT DEFAULT 0;');
     }
 
     public function down(Schema $schema)
