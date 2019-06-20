@@ -1033,7 +1033,9 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\CheckinActionsAction:
         arguments:
             - '@templating'
+            - '@adapter.authorization_checker'

@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin;
 
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Event\Participant\AddFastCheckin;
@@ -16,6 +17,7 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class AddFastCheckinAction
 {
@@ -37,13 +39,17 @@ class AddFastCheckinAction
     /** @var UserRepositoryInterface */
     private $userRepository;
 
+    /** @var AuthorizationCheckerAdapterInterface */
+    private $authorizationCheckerAdapter;
+
     public function __construct(
         CommandBusInterface $commandBus,
         FormFactory $formFactory,
         EngineInterface $engine,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        UserRepositoryInterface $userRepository
+        UserRepositoryInterface $userRepository,
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
@@ -51,10 +57,15 @@ class AddFastCheckinAction
         $this->flashBag = $flashBag;
         $this->router = $router;
         $this->userRepository = $userRepository;
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
     public function __invoke(Request $request, AdminDomain $adminDomain, Event $event, string $email)
     {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+            throw new AccessDeniedException('Access denied');
+        }
+
         $user = $this->userRepository->findByEmail($email);
 
         $addFastCheckin = new AddFastCheckin($event, $email);
