@@ -32,6 +32,16 @@ class MeetingRequestApproveType extends AbstractMeetingRequestType
                 );
         }
 
+        if ($options['priorityNumberAvailable'] === 0) {
+            $builder
+                ->remove('toPriority')
+                ->add(
+                    'toPriority', CheckboxType::class, [
+                        'disabled' => true,
+                    ]
+                );
+        }
+
         parent::buildForm($builder, $options);
     }
 
@@ -40,7 +50,7 @@ class MeetingRequestApproveType extends AbstractMeetingRequestType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['sheet', 'locale']);
+        $resolver->setRequired(['sheet', 'locale', 'priorityNumberAvailable']);
         $resolver->setAllowedTypes('sheet', Sheet::class);
         $resolver->setDefault('placeholder_description', 'form.catalog_approve_meeting_request.children.description.placeholder');
         $resolver->setDefault('show_description', true);

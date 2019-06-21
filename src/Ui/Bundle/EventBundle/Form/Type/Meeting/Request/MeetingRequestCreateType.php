@@ -32,6 +32,16 @@ class MeetingRequestCreateType extends AbstractMeetingRequestType
                 );
         }
 
+        if ($options['priorityNumberAvailable'] === 0) {
+            $builder
+                ->remove('fromPriority')
+                ->add(
+                    'fromPriority', CheckboxType::class, [
+                        'disabled' => true,
+                    ]
+                );
+        }
+
         parent::buildForm($builder, $options);
     }
 

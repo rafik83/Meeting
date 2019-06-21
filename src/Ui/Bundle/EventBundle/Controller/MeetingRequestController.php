@@ -349,6 +349,7 @@ class MeetingRequestController extends Controller
             ]),
             'sheet'  => $sheet,
             'locale' => $request->getLocale(),
+            'priorityNumberAvailable' => $priorityNumberAvailable
         ]);
 
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
@@ -424,6 +425,7 @@ class MeetingRequestController extends Controller
             ]),
             'locale' => $request->getLocale(),
             'sheet'  => $sheet,
+            'priorityNumberAvailable' => $priorityNumberAvailable
         ]);
 
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
