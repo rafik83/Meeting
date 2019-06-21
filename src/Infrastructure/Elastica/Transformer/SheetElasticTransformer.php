@@ -154,7 +154,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     'organizationCategory' => $this->getOrganizationCategory($registrationTemplateData),
                     'content' => implode(' ', $sheetContentView->content),
                     'city' => $this->getCity($registrationTemplateData),
-                    'zipcode' => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
+                    'zipcode' => $this->getZipcode($registrationTemplateData),
                     'country' => $this->buildCountries($registrationTemplateData, $sheet->getEvent()->getLocales()),
                     'countryCode' => $this->getCountryCode($registrationTemplateData),
                     'nomenclatureItems' => $this->buildNomenclatureItems($sheet, $sheetTemplateData),
@@ -335,11 +335,11 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         return $keywords;
     }
 
-    private function getTwoFirstCharsOfFranceZipcode(TemplateData $templateData): ?string
+    private function getZipcode(TemplateData $templateData): ?string
     {
         $countryCode = $this->getCountryCode($templateData);
 
-        if ('FR' !== $countryCode) {
+        if (!in_array($countryCode, ['FR', null], true)) {
             return null;
         }
 
@@ -348,6 +348,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         if (!$zipcode) {
             return null;
         }
+
+        $zipcode = substr(str_replace(' ', '', $zipcode), 0, 5);
 
         if (4 === mb_strlen($zipcode)) {
             return '0' . $zipcode[0];
