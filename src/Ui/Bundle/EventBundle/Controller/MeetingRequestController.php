@@ -329,6 +329,8 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('User not found');
         }
 
+        $priorityNumberAvailable = $this->get('command.meeting_request.counter')->getCountSheetPriorityAvailable($sheet);
+
         $toSheet = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->getSheetById($toSheet);
@@ -375,6 +377,8 @@ class MeetingRequestController extends Controller
 
         return $this->render('EventBundle:MeetingRequest:createRequest.html.twig', [
             'form' => $form->createView(),
+            'sheet' => $sheet,
+            'priorityNumberAvailable' => $priorityNumberAvailable,
         ]);
     }
 
@@ -404,6 +408,8 @@ class MeetingRequestController extends Controller
         if (!$request->isXmlHttpRequest()) {
             throw $this->createNotFoundException('Not allowed method');
         }
+
+        $priorityNumberAvailable = $this->get('command.meeting_request.counter')->getCountSheetPriorityAvailable($sheet);
 
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
@@ -463,7 +469,9 @@ class MeetingRequestController extends Controller
 
         return $this->render('EventBundle:MeetingRequest:approvedRequest.html.twig', [
             'discussion' => $discussion,
-            'form'       => $form->createView(),
+            'sheet' => $sheet,
+            'priorityNumberAvailable' => $priorityNumberAvailable,
+            'form' => $form->createView(),
         ]);
     }
 

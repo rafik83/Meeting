@@ -417,6 +417,20 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function countBySheetWithPriority(Sheet $sheet): int
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->count()->isEnabled()
+            ->where('request.from = :sheet OR request.to = :sheet')
+            ->andWhere('request.fromPriority = true OR request.toPriority = true')
+            ->setParameter('sheet',  $sheet);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countPendingByEvent(Event $event): int
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
