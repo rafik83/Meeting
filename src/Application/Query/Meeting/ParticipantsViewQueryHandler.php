@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Meeting\MeetingParticipantView;
+use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ParticipantsViewQueryHandler
@@ -46,9 +47,9 @@ class ParticipantsViewQueryHandler
      *
      * @return MeetingParticipantView[]
      */
-    public function handle(ParticipantsViewQuery $query)
+    public function handle(ParticipantsViewQuery $query): array
     {
-        $participantView = [];
+        $meetingParticipantViews = [];
 
         foreach ($query->participants as $participant) {
             $participantInfo = $this->participantInfoGuesser->guessParticipantInfos(
@@ -56,30 +57,46 @@ class ParticipantsViewQueryHandler
                 $query->locale
             );
 
-            $participantContactEvaluation = null;
-            $participantContactComment = null;
+            $participantContactEvaluation = [];
+            $participantContactComment = [];
+
             foreach ($query->contacts as $contact) {
-                if ($participant->getUser()->getId() === $contact->getContact()->getId()) {
-                    $participantContactEvaluation = $contact->getEvaluation();
-                    $participantContactComment = $contact->getComment();
-                    break;
+                if ($participant->getUser()->getId() !== $contact->getContact()->getId()) {
+                    continue;
+                }
+
+                if ($contact->hasEvaluation()) {
+                    $participantContactEvaluation[] = $this->formatContactValue($contact, $contact->getEvaluation());
+                }
+
+                if ($contact->hasComment()) {
+                    $participantContactComment[] = $this->formatContactValue($contact, $contact->getComment());
                 }
             }
 
             $gender = $participantInfo[Tag::PARTICIPANT_GENDER];
 
-            $participantView[] = new MeetingParticipantView(
+            $meetingParticipantViews[] = new MeetingParticipantView(
                 $participantInfo[Tag::PARTICIPANT_FIRSTNAME],
                 $participantInfo[Tag::PARTICIPANT_LASTNAME],
                 $participantInfo[Tag::PARTICIPANT_POSITION],
                 $participantInfo[Tag::PARTICIPANT_PHONE],
                 $gender ? $this->translator->trans('gender.'.$gender, [], 'messages') : '',
                 $participant->getEmail(),
-                $participantContactEvaluation,
-                $participantContactComment
+                implode("\n", $participantContactEvaluation),
+                implode("\n", $participantContactComment)
             );
         }
 
-        return $participantView;
+        return $meetingParticipantViews;
+    }
+
+    private function formatContactValue(Contact $contact, string $value): string
+    {
+        return sprintf(
+            '%s: %s',
+            $contact->getUser()->getFullname(),
+            $value
+        );
     }
 }

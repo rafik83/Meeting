@@ -725,6 +725,14 @@ services:
             - '@security.csrf.token_manager'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Order\RemovePromotionCodeAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.router'
+            - '@session.flash_bag'
+            - '@security.csrf.token_manager'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
     #
     # Crisp
     #

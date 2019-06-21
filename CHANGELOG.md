@@ -4,10 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-1982 - Contacts download and list
+- VIMEET-1999 - As an admin, remove promotion code from order
 ### Fixed
 - MV-184 - Fix rooming list assign dates
 - MV-185 - Relevance filter choice by default
 - MV-186 - Show contacts list when event is opened
+- MV-188 - Index Sheet zipcode when country not defined
 
 ## [2.9.0] - 2019-06-12
 ### Added

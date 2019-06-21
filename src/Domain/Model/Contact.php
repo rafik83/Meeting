@@ -59,9 +59,19 @@ class Contact
         return $this->evaluation;
     }
 
+    public function hasEvaluation(): bool
+    {
+        return null !== $this->evaluation;
+    }
+
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    public function hasComment(): bool
+    {
+        return null !== $this->comment;
     }
 
     public function isScanned(): bool
