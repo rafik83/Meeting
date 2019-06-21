@@ -10,7 +10,8 @@ services:
     Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Google\GoogleAuthenticator:
         arguments:
             - '@knpu.oauth2.registry'
-            - '@vimeet_infrastructure.repository.user_repository'
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+            - '@Proximum\Vimeet\Application\ThirdParty\Oauth2\GetOrCreateUserHandler'
             - '@session.flash_bag'
             - '@adapter.router'
 
@@ -20,3 +21,12 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@session.flash_bag'
             - '@adapter.router'
+
+    Proximum\Vimeet\Application\ThirdParty\Oauth2\GetOrCreateUserHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
+            - '@template.template_data_factory'
+            - '@adapter.session'
+            - '@sheet.sheet_guesser'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.type_repository'

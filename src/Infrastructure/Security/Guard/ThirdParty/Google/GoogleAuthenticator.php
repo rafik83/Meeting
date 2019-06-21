@@ -7,8 +7,10 @@ use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\GoogleUser;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\ThirdParty\Oauth2\GetOrCreateUser;
+use Proximum\Vimeet\Application\ThirdParty\Oauth2\GetOrCreateUserHandler;
+use Proximum\Vimeet\Domain\Event\EventByHostResolver;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,8 +24,8 @@ class GoogleAuthenticator extends SocialAuthenticator
     /** @var ClientRegistry */
     private $clientRegistry;
 
-    /** @var UserRepositoryInterface */
-    private $userRepository;
+    /** @var EventByHostResolver */
+    private $eventByHostResolver;
 
     /** @var FlashBagInterface */
     private $flashBag;
@@ -31,14 +33,19 @@ class GoogleAuthenticator extends SocialAuthenticator
     /** @var RouterInterface */
     private $router;
 
+    /** @var GetOrCreateUserHandler */
+    private $getOrCreateUserHandler;
+
     public function __construct(
         ClientRegistry $clientRegistry,
-        UserRepositoryInterface $userRepository,
+        EventByHostResolver $eventByHostResolver,
+        GetOrCreateUserHandler $getOrCreateUserHandler,
         FlashBagInterface $flashBag,
         RouterInterface $router
     ) {
         $this->clientRegistry = $clientRegistry;
-        $this->userRepository = $userRepository;
+        $this->eventByHostResolver = $eventByHostResolver;
+        $this->getOrCreateUserHandler = $getOrCreateUserHandler;
         $this->flashBag = $flashBag;
         $this->router = $router;
     }
@@ -50,7 +57,14 @@ class GoogleAuthenticator extends SocialAuthenticator
 
     public function getCredentials(Request $request)
     {
-        return $this->fetchAccessToken($this->getGoogleClient());
+        $locale = $request->getLocale();
+        $event = $this->eventByHostResolver->resolveEventFromHostAndLocale($request->getHost(), $locale);
+
+        return [
+            'accessToken' => $this->fetchAccessToken($this->getGoogleClient()),
+            'event' => $event,
+            'locale' => $locale
+        ];
     }
 
     private function getGoogleClient(): OAuth2Client
@@ -60,15 +74,22 @@ class GoogleAuthenticator extends SocialAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        /** @var GoogleUser $googleUser */
-        $googleUser = $this->getGoogleClient()->fetchUserFromToken($credentials);
-        $user = $this->userRepository->findByEmail($googleUser->getEmail());
+        try {
+           /** @var GoogleUser $googleUser */
+            $googleUser = $this->getGoogleClient()->fetchUserFromToken($credentials['accessToken']);
 
-        if (!$user instanceof User) {
+            return $this->getOrCreateUserHandler->handle(
+                new GetOrCreateUser(
+                    $credentials['event'],
+                    $credentials['locale'],
+                    $googleUser->getEmail(),
+                    $googleUser->getFirstName(),
+                    $googleUser->getLastName()
+                )
+            );
+        } catch (\Exception $exception) {
             throw new AuthenticationException('Email not found');
         }
-
-        return $user;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
