@@ -11,10 +11,12 @@ services:
         arguments:
             - '@knpu.oauth2.registry'
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@session.flash_bag'
             - '@adapter.router'
 
     Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\LinkedIn\LinkedInAuthenticator:
         arguments:
             - '@knpu.oauth2.registry'
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@session.flash_bag'
             - '@adapter.router'

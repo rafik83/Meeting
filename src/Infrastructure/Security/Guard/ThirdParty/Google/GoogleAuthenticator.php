@@ -12,6 +12,7 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -24,16 +25,21 @@ class GoogleAuthenticator extends SocialAuthenticator
     /** @var UserRepositoryInterface */
     private $userRepository;
 
+    /** @var FlashBagInterface */
+    private $flashBag;
+
     /** @var RouterInterface */
     private $router;
 
     public function __construct(
         ClientRegistry $clientRegistry,
         UserRepositoryInterface $userRepository,
+        FlashBagInterface $flashBag,
         RouterInterface $router
     ) {
         $this->clientRegistry = $clientRegistry;
         $this->userRepository = $userRepository;
+        $this->flashBag = $flashBag;
         $this->router = $router;
     }
 
@@ -75,9 +81,9 @@ class GoogleAuthenticator extends SocialAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        $message = strtr($exception->getMessageKey(), $exception->getMessageData());
+        $this->flashBag->add('error', 'flash.oauth2.login.error');
 
-        return new Response($message, Response::HTTP_FORBIDDEN);
+        return new RedirectResponse($this->router->generate('event_login'));
     }
 
     /**
