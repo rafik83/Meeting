@@ -374,7 +374,7 @@ form.extra_parameter_update.children.submit.label: Enregistrer
 form.extra_parameter_update.children.value.label: Valeur
 form.add_fast_checkin.children.country.label: Pays du participant
 form.add_fast_checkin.children.firstname.label: Prénom
-form.add_fast_checkin.children.hasAccessToMeetings.label: A accès aux rendez-vous ?
+form.add_fast_checkin.children.hasAccessToMeetings.label: A accès aux rendez-vous
 form.add_fast_checkin.children.lastname.label: Nom
 form.add_fast_checkin.children.mobile.label: Téléphone mobile
 form.add_fast_checkin.children.sheetTitle.label: Nom de la fiche
@@ -811,7 +811,7 @@ form.rule_see_what.see_what_column: Voit
 form.schedule_config.children.scale.label: 'Echelle (en minutes)'
 form.schedule_config.children.submit.label: Enregistrer
 form.search_email_for_fast_checkin.children.email.help: si pas d'email, appuyer sur suivant
-form.search_email_for_fast_checkin.children.email.label: Email de checkin
+form.search_email_for_fast_checkin.children.email.label: Email
 form.search_email_for_fast_checkin.children.submit.label: Suivant
 form.search_facet_translation.children.enabled.label: Activé
 form.search_facet_translation.children.label.label: Label
