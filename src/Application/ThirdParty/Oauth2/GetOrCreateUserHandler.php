@@ -56,12 +56,10 @@ class GetOrCreateUserHandler
         $registerType = $this->session->getFromFlashBag('register_type');
         $typeId = array_shift($registerType);
 
-        // Case: login but email not found
         if (null === $typeId && !$user instanceof User) {
             throw new AuthenticationException('Email not found');
         }
 
-        // Case: there is a typeId
         if (null === $typeId) {
             return $user;
         }
