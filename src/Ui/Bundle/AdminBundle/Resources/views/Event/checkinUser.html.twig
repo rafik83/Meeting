@@ -10,4 +10,6 @@
     {% endif %}
 
     <a href="{{ path('admin_user_event_badge', {'event': event.id, 'user': user.id}) }}" target="_blank" class="btn btn-info">{{ 'admin.event.qrcode.printBadge'|trans }}</a>
+
+    <a href="{{ path('admin_event_qr_code_reader', {'event': event.id}) }}" type="button" class="btn btn-default">{{ 'admin.event.access_control.back'|trans }}</a>
 {% endblock %}

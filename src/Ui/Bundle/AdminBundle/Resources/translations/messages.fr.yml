@@ -151,6 +151,7 @@ admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
 admin.elasticsearch.index.confirm: 'Vous êtes sur le point de réindexer l''ensemble des événements. Êtes vous sur de vouloir réaliser cette action?'
 admin.event.access_control: 'Contrôle d''accès'
+admin.event.access_control.back: 'Retour au contrôle d''accès'
 admin.event.access.entrance: Entrées
 admin.event.access.happening.list: Conférences
 admin.event.archive.link: Archivage
