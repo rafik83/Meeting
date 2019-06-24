@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Composer;
 
@@ -99,7 +98,8 @@ class MeetingRequestViewQueryHandler
             $query->meetingRequest->hasMessage(),
             $query->isSeenByUser,
             $query->isPhoneValidationRequired,
-            $validatePhoneLink ?? null
+            $validatePhoneLink ?? null,
+            $query->isPriority
         );
     }
 

@@ -25,9 +25,23 @@
         </p>
     {% else %}
         {% if object.isStrong %}
-            <p><strong>{{ object.content }}</strong></p>
+            <p>
+                {% if isPriority %}
+                    <span title="{{ 'event.meeting.request.priority'|trans() }}">
+                        <i class="rating__icon rating__icon--star icon-EtoilePleine"></i>
+                    </span>
+                {% endif %}
+                <strong>{{ object.content }}</strong>
+            </p>
         {% else %}
-            <p>{{ object.content }}</p>
+            <p>
+                {% if isPriority %}
+                    <span title="{{ 'event.meeting.request.priority'|trans() }}">
+                        <i class="rating__icon rating__icon--star icon-EtoilePleine"></i>
+                    </span>
+                {% endif %}
+                {{ object.content }}
+            </p>
         {% endif %}
     {% endif %}
 {% endfor %}

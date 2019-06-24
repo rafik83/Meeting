@@ -12,7 +12,7 @@
                     <i class="icon-Voir_1 ft-bold"></i>
                 </a>
             {% endif %}
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: meetingRequestView.sheetName, preview: meetingRequestView.previewViews, isCatalog: isCatalog, sheetToDisplayLink: sheetToDisplayLink }, false) }}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: meetingRequestView.sheetName, preview: meetingRequestView.previewViews, isCatalog: isCatalog, isPriority: meetingRequestView.isPriority, sheetToDisplayLink: sheetToDisplayLink }, false) }}
         </div>
         <footer>
             {% if sheetToDisplayLink is not null %}
