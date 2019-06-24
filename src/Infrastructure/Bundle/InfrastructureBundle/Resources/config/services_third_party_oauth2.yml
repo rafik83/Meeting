@@ -18,7 +18,8 @@ services:
     Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\LinkedIn\LinkedInAuthenticator:
         arguments:
             - '@knpu.oauth2.registry'
-            - '@vimeet_infrastructure.repository.user_repository'
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+            - '@Proximum\Vimeet\Application\ThirdParty\Oauth2\GetOrCreateUserHandler'
             - '@session.flash_bag'
             - '@adapter.router'
 
