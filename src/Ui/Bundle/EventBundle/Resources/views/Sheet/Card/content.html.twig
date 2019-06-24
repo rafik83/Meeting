@@ -26,7 +26,7 @@
     {% else %}
         {% if object.isStrong %}
             <p>
-                {% if isPriority %}
+                {% if isPriority is defined and isPriority %}
                     <span title="{{ 'event.meeting.request.priority'|trans() }}">
                         <i class="rating__icon rating__icon--star icon-EtoilePleine"></i>
                     </span>
@@ -35,7 +35,7 @@
             </p>
         {% else %}
             <p>
-                {% if isPriority %}
+                {% if isPriority is defined and isPriority %}
                     <span title="{{ 'event.meeting.request.priority'|trans() }}">
                         <i class="rating__icon rating__icon--star icon-EtoilePleine"></i>
                     </span>

@@ -421,8 +421,7 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
         $queryBuilder->count()->isEnabled()
-            ->where('request.from = :sheet OR request.to = :sheet')
-            ->andWhere('request.fromPriority = true OR request.toPriority = true')
+            ->where('request.from = :sheet AND request.fromPriority = true OR request.to = :sheet AND request.toPriority = true')
             ->setParameter('sheet',  $sheet);
 
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();

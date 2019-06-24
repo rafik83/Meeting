@@ -22,23 +22,12 @@ class MeetingRequestApproveType extends AbstractMeetingRequestType
     {
         /** @var Sheet $sheet */
         $sheet = $options['sheet'];
+        $arrayAttributesOptions = array_merge(['required' => false], $options['priorityNumberAvailable'] === 0 ? ['disabled' => true] : []);
 
         if ($sheet->getType()->getPriorityMeetingRequestsNumber() > 0) {
             $builder
                 ->add(
-                    'toPriority', CheckboxType::class, [
-                        'required' => false,
-                    ]
-                );
-        }
-
-        if ($options['priorityNumberAvailable'] === 0) {
-            $builder
-                ->remove('toPriority')
-                ->add(
-                    'toPriority', CheckboxType::class, [
-                        'disabled' => true,
-                    ]
+                    'toPriority', CheckboxType::class, $arrayAttributesOptions
                 );
         }
 
