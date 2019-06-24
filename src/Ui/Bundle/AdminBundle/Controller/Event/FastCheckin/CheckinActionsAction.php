@@ -35,8 +35,6 @@ class CheckinActionsAction
             '@Admin/Event/checkinUser.html.twig',
             [
                 'event' => $event,
-                'eventId' => $event->getId(),
-                'userId' => $user->getId(),
                 'user' => $user,
             ]
         );
