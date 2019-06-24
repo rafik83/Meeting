@@ -398,4 +398,11 @@ interface RequestRepositoryInterface
     public function findBySheets(Event $event, array $sheets, array $states, bool $withoutMeeting): array;
   
     public function hasApprovedMeetingRequest(Sheet $sheet, Sheet $sheetMet): bool;
+
+    /**
+     * @param Event $event
+     *
+     * @return Request[]
+     */
+    public function findApprovedAndPrioritizedWithoutMeeting(Event $event): array;
 }

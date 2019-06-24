@@ -1103,4 +1103,27 @@ class RequestRepository implements RequestRepositoryInterface
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findApprovedAndPrioritizedWithoutMeeting(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->andWhere('request.event = :event')
+            ->andWhere('request.state = :approved_state')
+            ->andWhere('request.disabled = false')
+            ->andWhere('(request.fromPriority = true or request.toPriority = true)')
+            ->setParameter('event', $event)
+            ->setParameter('approved_state', Meeting\Request::STATE_APPROVED)
+        ;
+
+        $this->requestsWithoutMeeting($queryBuilder);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
