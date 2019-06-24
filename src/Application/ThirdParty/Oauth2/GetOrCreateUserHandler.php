@@ -8,6 +8,7 @@ use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -70,17 +71,10 @@ class GetOrCreateUserHandler
             throw new \InvalidArgumentException('Type not found');
         }
 
-        if ($user instanceof User) {
-            try {
-                $this->sheetGuesser->getUserSheet(
-                    $user,
-                    $getOrCreateUser->getEvent(),
-                    $getOrCreateUser->getLocale()
-                );
-
-                return $user;
-            } catch (SheetNotFoundException $sheetNotFoundException) {
-            }
+        if ($user instanceof User
+            && $this->hasSheet($getOrCreateUser->getEvent(), $user, $getOrCreateUser->getLocale())
+        ) {
+            return $user;
         }
 
         $participant = $this->convertToParticipantHandler->handle(
@@ -103,5 +97,21 @@ class GetOrCreateUserHandler
         }
 
         return $participant->getUser();
+    }
+
+    private function hasSheet(Event $event, User $user, string $locale)
+    {
+        try {
+            $this->sheetGuesser->getUserSheet(
+                $user,
+                $event,
+                $locale
+            );
+
+            return true;
+        } catch (SheetNotFoundException $sheetNotFoundException) {
+        }
+
+        return false;
     }
 }
