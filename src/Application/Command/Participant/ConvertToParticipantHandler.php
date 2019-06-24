@@ -162,7 +162,7 @@ class ConvertToParticipantHandler
         TemplateData $registrationTemplateData,
         TemplateData $sheetTemplateData,
         string $sheetState,
-        bool $hasAccessToMeetings
+        bool $toSetInCatalog
     ): Participant {
         $sheetAndParticipantTemplateDataView = $this->sheetAndParticipantTemplateDataHandler->handle(
             $dataIndexedByTag,
@@ -181,7 +181,7 @@ class ConvertToParticipantHandler
 
         $sheet->setState($sheetState);
 
-        if ($hasAccessToMeetings) {
+        if ($toSetInCatalog) {
             $sheet->setInCatalog(true);
             $sheet->setInCatalogAt($this->dateTime);
         }
