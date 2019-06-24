@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Participant;
 
+use Proximum\Vimeet\Application\Command\Event\Participant\AddFastCheckin;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CountryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
@@ -69,5 +70,6 @@ class AddFastCheckinType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['event', 'locale', 'user']);
+        $resolver->setDefaults(['data_class' => AddFastCheckin::class]);
     }
 }
