@@ -67,24 +67,17 @@ class CheckinEventEntranceAction
                     $this->dateTime
                 )
             );
+
+            $this->flashBag->add('success', 'flash.admin.checkin.success');
         } catch (\Exception $e) {
             $this->flashBag->add('error', 'flash.admin.checkin.error');
-
-            return new RedirectResponse(
-                $this->router->generate(
-                    'admin_event_fast_checkin_actions',
-                    [
-                        'event' => $event->getId(),
-                        'user' => $user->getId(),
-                    ]
-                )
-            );
         }
 
-        $this->flashBag->add('success', 'flash.admin.checkin.success');
-
         return new RedirectResponse(
-            $this->router->generate('admin_event_qr_code_reader', ['event' => $event->getId()])
+            $this->router->generate(
+                'admin_event_fast_checkin_actions',
+                ['event' => $event->getId(), 'user' => $user->getId(),]
+            )
         );
     }
 }
