@@ -13,9 +13,8 @@ class CheckinActionsAction
 {
     /** @var EngineInterface */
     private $engine;
-    /**
-     * @var AuthorizationCheckerAdapterInterface
-     */
+
+    /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
     /** @var ScanRepositoryInterface */
