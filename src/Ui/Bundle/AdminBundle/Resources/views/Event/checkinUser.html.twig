@@ -3,7 +3,11 @@
 {% block content %}
     <h1>{{ user.lastName }} {{ user.firstName }} {{ user.email }}</h1>
 
+    {% if checkinDate is null %}
     <a class="btn btn-success" href="{{ path('admin_event_fast_checkin_action_checkin', {'event': event.id, 'user': user.id}) }}">{{ 'admin.event.qrcode.checkin'|trans }}</a>
+    {% else %}
+    <button type="button" class="btn btn-success" disabled="disabled">{{ 'admin.event.qrcode.checkinAt'|trans }} {{ checkinDate|date('d/m/y H:i:s') }}</button>
+    {% endif %}
 
     <a href="{{ path('admin_user_event_badge', {'event': event.id, 'user': user.id}) }}" target="_blank" class="btn btn-info">{{ 'admin.event.qrcode.printBadge'|trans }}</a>
 {% endblock %}

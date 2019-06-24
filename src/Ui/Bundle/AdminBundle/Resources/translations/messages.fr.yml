@@ -193,6 +193,7 @@ admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.qrcode.checkin: Checkin
+admin.event.qrcode.checkinAt: Checkin le
 admin.event.qrcode.date_checkin: 'Date de checkin'
 admin.event.qrcode.fastcheckin: 'Création de badge'
 admin.event.qrcode.firstName: Prénom

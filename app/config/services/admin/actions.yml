@@ -1039,3 +1039,5 @@ services:
         arguments:
             - '@templating'
             - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@datetime'
