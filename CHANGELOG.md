@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-1999 - As an admin, remove promotion code from order
 - VIMEET-1081 - Priority meeting request number by type
-- VIMEET-1082 - Prioritize meeting request
+- VIMEET-1082 - Participants prioritize meeting request
+- VIMEET-2011 - Prioritize meeting request before planning
 ### Fixed
 - MV-184 - Fix rooming list assign dates
 - MV-185 - Relevance filter choice by default
