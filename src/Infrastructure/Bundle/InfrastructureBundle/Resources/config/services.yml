@@ -2116,6 +2116,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformApprovedRequestsByLinkedSheetsIntoMeeting }
 
+    Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformPriorityRequestsIntoMeetingHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@repository.rule_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformPriorityRequestsIntoMeeting }
+
     command.meeting.admin.delete_all_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler
         arguments:
