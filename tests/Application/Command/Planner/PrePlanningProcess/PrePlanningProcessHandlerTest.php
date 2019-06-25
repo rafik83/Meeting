@@ -7,7 +7,6 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformApprovedRequestsByLinkedSheetsIntoMeeting;
 use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcess;
 use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\PrePlanningProcessHandler;
-use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\RequestAcceptedByAllLinkedSheets;
 use Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess\TransformPriorityRequestsIntoMeeting;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -21,7 +20,7 @@ class PrePlanningProcessHandlerTest extends TestCase
      *
      * See more at https://github.com/phpspec/prophecy/issues/130
      */
-    public function testHandle()
+    public function testHandle(): void
     {
         $event = $this->prophesize(Event::class);
         $commandBus = $this->prophesize(CommandBusInterface::class);
