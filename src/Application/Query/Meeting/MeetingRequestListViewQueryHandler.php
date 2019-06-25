@@ -141,9 +141,7 @@ class MeetingRequestListViewQueryHandler
 
     private function isPriorityRequest(MeetingRequestListViewQuery $query, Request $meetingRequest): bool
     {
-        if($meetingRequest->isFromPriority() && $query->sheet === $meetingRequest->getFromSheet() ) return true;
-        if($meetingRequest->isToPriority() && $query->sheet === $meetingRequest->getToSheet() ) return true;
-
-        return false;
+        return ($meetingRequest->isFromPriority() && $query->sheet === $meetingRequest->getFromSheet())
+            || ($meetingRequest->isToPriority() && $query->sheet === $meetingRequest->getToSheet());
     }
 }

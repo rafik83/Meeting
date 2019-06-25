@@ -25,23 +25,9 @@
         </p>
     {% else %}
         {% if object.isStrong %}
-            <p>
-                {% if isPriority is defined and isPriority %}
-                    <span title="{{ 'event.meeting.request.priority'|trans() }}">
-                        <i class="rating__icon rating__icon--star icon-EtoilePleine"></i>
-                    </span>
-                {% endif %}
-                <strong>{{ object.content }}</strong>
-            </p>
+            <p><strong>{{ object.content }}</strong></p>
         {% else %}
-            <p>
-                {% if isPriority is defined and isPriority %}
-                    <span title="{{ 'event.meeting.request.priority'|trans() }}">
-                        <i class="rating__icon rating__icon--star icon-EtoilePleine"></i>
-                    </span>
-                {% endif %}
-                {{ object.content }}
-            </p>
+            <p>{{ object.content }}</p>
         {% endif %}
     {% endif %}
 {% endfor %}

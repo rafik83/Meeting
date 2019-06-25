@@ -18,8 +18,10 @@ use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQueryHandler;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 
@@ -49,6 +51,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     /** @var NomenclatureItemsGetter */
     private $nomenclatureItemsGetter;
 
+    /** @var RequestRepositoryInterface */
+    private $meetingRequestRepository;
+
     /**
      * @param SheetRepositoryInterface             $sheetRepository
      * @param SheetSearchAdapterInterface          $sheetSearchAdapter
@@ -58,6 +63,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      * @param ValidationRequiredChecker            $validationRequiredChecker
      * @param NomenclatureItemsGetter              $nomenclatureItemsGetter
+     * @param RequestRepositoryInterface           $meetingRequestRepository
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
@@ -67,7 +73,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
         ValidationRequiredChecker $validationRequiredChecker,
-        NomenclatureItemsGetter $nomenclatureItemsGetter
+        NomenclatureItemsGetter $nomenclatureItemsGetter,
+        RequestRepositoryInterface $meetingRequestRepository
     ) {
         $this->sheetRepository                      = $sheetRepository;
         $this->sheetSearchAdapter                   = $sheetSearchAdapter;
@@ -77,6 +84,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
         $this->validationRequiredChecker            = $validationRequiredChecker;
         $this->nomenclatureItemsGetter = $nomenclatureItemsGetter;
+        $this->meetingRequestRepository = $meetingRequestRepository;
     }
 
     /**
@@ -133,7 +141,12 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                             $isAnsweringMeetingRequestClosed,
                             isset($seenSheetIndexed[$sheet->getId()]),
                             $isPhoneValidationRequired,
-                            $query->showCategory
+                            $query->showCategory,
+                            $this->isPriorityRequest(
+                                $query,
+                                $this->meetingRequestRepository
+                                ->getRequestBetweenSheets($sheet, $query->viewer)
+                            )
                         )
                     );
             },
@@ -151,5 +164,16 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     private function isPhoneValidationRequiredForUser(PaginatedCatalogSheetPreviewViewQuery $query): bool
     {
         return $this->validationRequiredChecker->handle($query->viewer, $query->user);
+    }
+
+
+    private function isPriorityRequest(PaginatedCatalogSheetPreviewViewQuery $query, ?Request $meetingRequest): bool
+    {
+        if (null === $meetingRequest) {
+            return false;
+        }
+
+        return ($meetingRequest->isFromPriority() && $query->viewer === $meetingRequest->getFromSheet())
+            || ($meetingRequest->isToPriority() && $query->viewer === $meetingRequest->getToSheet());
     }
 }
