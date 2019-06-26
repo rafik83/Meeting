@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-185 - Relevance filter choice by default
 - MV-186 - Show contacts list when event is opened
 - MV-188 - Index Sheet zipcode when country not defined
+- MV-191 - Do not block meeting slot in planner pre process for linked sheets
 
 ## [2.9.0] - 2019-06-12
 ### Added
