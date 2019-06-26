@@ -60,15 +60,6 @@ class TransformPriorityRequestsIntoMeetingHandler
     }
 
     /**
-     * To order the requests :
-     *  The most important is "who see who" rules priority.
-     *  Then it's double priority (both sheets set priority)
-     *  Finally, requests are ordered by their range in sheet requests list
-     *       eg: Sheet A => request 1 as weight 1
-     *                   => request 7 as weight 7
-     *           Sheet B => request 1 as weight 1
-     *                   => request 7 as weight 7
-     *
      * @param \Proximum\Vimeet\Domain\Model\Event $event
      * @param Meeting\Request[]                   $approvedRequests
      *
@@ -80,83 +71,104 @@ class TransformPriorityRequestsIntoMeetingHandler
     ): array {
         $wswRules = $this->ruleRepository->getByEvent($event);
 
-        $weightedRequests = [];
-        $requestBySheetCounter = [];
-        foreach ($approvedRequests as $request) {
-            // 1st order weight
-            $rule = $this->getWswRule(
-                $wswRules,
-                $request->getFromSheet()->getType(),
-                $request->getToSheet()->getType()
-            );
+        usort(
+            $wswRules,
+            static function (Rule $ruleA, Rule $ruleB) {
+                return $ruleA->getPriority() <=> $ruleB->getPriority();
+            }
+        );
 
-            if ($rule !== null) {
-                $wswWeight = $rule->getPriority();
-            } else {
-                $wswWeight = 999;
+        $orderedRequests = [];
+
+        foreach ($wswRules as $rule) {
+            // double priority
+            $toTreatRequest = [];
+            foreach ($approvedRequests as $i => $approvedRequest) {
+                if ($this->isRequestConcernedByRule($rule, $approvedRequest)
+                    && $approvedRequest->isFromPriority() && $approvedRequest->isToPriority()) {
+                    $assignedSheetId = $approvedRequest->getFromSheet()->getId();
+
+                    $toTreatRequest[$assignedSheetId][] = $approvedRequest;
+                    unset($approvedRequests[$i]);
+                }
             }
 
-            // 2st order weight
-            $priorityWeight = ($request->isFromPriority() && $request->isToPriority()) ? 0 : 1;
+            $orderedRequests = $this->sortBySheetAndPushRequests($toTreatRequest, $orderedRequests);
 
-            // 3rd order weight
-            $prioritizingSheet = $request->isFromPriority() ? $request->getFromSheet() : $request->getToSheet();
-            if (!isset($requestBySheetCounter[$prioritizingSheet->getId()])) {
-                $requestBySheetCounter[$prioritizingSheet->getId()] = 0;
+            // single priority
+            $toTreatRequest = [];
+            foreach ($approvedRequests as $i => $approvedRequest) {
+                if ($this->isRequestConcernedByRule($rule, $approvedRequest)) {
+                    $assignedSheetId = $approvedRequest->isFromPriority()
+                        ? $approvedRequest->getFromSheet()->getId() : $approvedRequest->getToSheet()->getId();
+
+                    $toTreatRequest[$assignedSheetId][] = $approvedRequest;
+                    unset($approvedRequests[$i]);
+                }
             }
-            $requestBySheetCounter[$prioritizingSheet->getId()]++;
-            $requestCountWeight = $requestBySheetCounter[$prioritizingSheet->getId()];
 
-            // finish
-            $totalWeight = $wswWeight * 10000 + $priorityWeight * 1000 + $requestCountWeight;
-            $weightedRequests[] = ['request' => $request, 'weight' => $totalWeight];
+            $orderedRequests = $this->sortBySheetAndPushRequests($toTreatRequest, $orderedRequests);
         }
 
-        // sort by weight
-        usort(
-            $weightedRequests,
-            static function ($weightedRequest1, $weightedRequest2) {
-                return $weightedRequest1['weight'] <=> $weightedRequest2['weight'];
-            }
-        );
+        // not treated requests - double priority
+        $toTreatRequest = [];
+        foreach ($approvedRequests as $i => $approvedRequest) {
+            if ($approvedRequest->isFromPriority() && $approvedRequest->isToPriority()) {
+                $assignedSheetId = $approvedRequest->getFromSheet()->getId();
 
-        $orderedRequests = array_map(
-            static function ($weightedRequest) {
-                return $weightedRequest['request'];
-            },
-            $weightedRequests
-        );
+                $toTreatRequest[$assignedSheetId][] = $approvedRequest;
+                unset($approvedRequests[$i]);
+            }
+        }
+
+        $orderedRequests = $this->sortBySheetAndPushRequests($toTreatRequest, $orderedRequests);
+
+        // not treated requests - single priority
+        $toTreatRequest = [];
+        foreach ($approvedRequests as $i => $approvedRequest) {
+            $assignedSheetId = $approvedRequest->isFromPriority()
+                ? $approvedRequest->getFromSheet()->getId() : $approvedRequest->getToSheet()->getId();
+
+            $toTreatRequest[$assignedSheetId][] = $approvedRequest;
+            unset($approvedRequests[$i]);
+        }
+
+        $orderedRequests = $this->sortBySheetAndPushRequests($toTreatRequest, $orderedRequests);
 
         return $orderedRequests;
     }
 
-    /**
-     * @param Rule[] $wswRules
-     * @param Type   $typeSeer
-     * @param Type   $typeSeable
-     *
-     * @return Rule|null
-     */
-    private function getWswRule(array $wswRules, Type $typeSeer, Type $typeSeable)
+    private function isRequestConcernedByRule(Rule $wswRule, Meeting\Request $approvedRequest): bool
     {
-        foreach ($wswRules as $wswRule) {
-            $seerOk = $wswRule->getSeer() instanceof Type
+        $typeSeer = $approvedRequest->getFromSheet()->getType();
+        $typeSeable = $approvedRequest->getToSheet()->getType();
+
+        return ($wswRule->getSeer() instanceof Type
                 ? $wswRule->getSeer() === $typeSeer
-                : $wswRule->getSeer()->getTypes()->contains($typeSeer);
-
-            if (!$seerOk) {
-                continue;
-            }
-
-            $seableOk = $wswRule->getSeeable() instanceof Type
+                : $wswRule->getSeer()->getTypes()->contains($typeSeer)) &&
+            ($wswRule->getSeeable() instanceof Type
                 ? $wswRule->getSeeable() === $typeSeable
-                : $wswRule->getSeeable()->getTypes()->contains($typeSeable);
+                : $wswRule->getSeeable()->getTypes()->contains($typeSeable));
+    }
 
-            if ($seableOk) {
-                return $wswRule;
+    /**
+     * @param array             $toTreatRequest
+     * @param Meeting\Request[] $orderedRequests
+     *
+     * @return Meeting\Request[]
+     */
+    private function sortBySheetAndPushRequests(array $toTreatRequest, array $orderedRequests): array
+    {
+        while (\count($toTreatRequest)) {
+            foreach ($toTreatRequest as $sheetId => $requests) {
+                $orderedRequests[] = array_shift($requests);
+                $toTreatRequest[$sheetId] = $requests;
+                if (empty($requests)) {
+                    unset($toTreatRequest[$sheetId]);
+                }
             }
         }
 
-        return null;
+        return $orderedRequests;
     }
 }
