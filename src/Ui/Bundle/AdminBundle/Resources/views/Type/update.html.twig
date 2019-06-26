@@ -47,6 +47,7 @@
     {{ form_row(form.availabilityType) }}
     {{ form_row(form.rank, {widget_columns: 2}) }}
     {{ form_row(form.numberOfMeetingsPerPlanning, {widget_columns: 2}) }}
+    {{ form_row(form.priorityMeetingRequestsNumber, {widget_columns: 2}) }}
 
     <div class="form-group">
         {{ form_label(form.areAllSheetParticipantsAssignedToMeeting, null, { label_attr: { class: 'control-label col-md-3' }}) }}
@@ -69,7 +70,6 @@
     </div>
 
     {{ form_row(form.validationCriteria) }}
-    {{ form_row(form.priorityMeetingRequestsNumber, {widget_columns: 2}) }}
 
 {% endblock form_content %}
 
