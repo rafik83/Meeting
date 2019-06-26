@@ -54,16 +54,20 @@ class AddFastCheckinType extends AbstractType
                     'required' => false,
                 ]
             )
-            ->add(
+        ;
+
+        if ('' !== $options['data']->email) {
+            $builder->add(
                 'hasAccessToMeetings',
                 CheckboxType::class,
                 ['required' => false]
-            )
-            ->add(
-                'submit',
-                SubmitType::class
-            )
-        ;
+            );
+        }
+
+        $builder->add(
+            'submit',
+            SubmitType::class
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

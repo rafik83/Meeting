@@ -33,7 +33,7 @@ class AddFastCheckin implements Command
     public $country;
 
     /** @var bool */
-    public $hasAccessToMeetings;
+    public $hasAccessToMeetings = false;
 
     public function __construct(Event $event, string $email)
     {
