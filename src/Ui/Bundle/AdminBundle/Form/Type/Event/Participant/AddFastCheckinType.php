@@ -24,6 +24,7 @@ class AddFastCheckinType extends AbstractType
                     'event' => $options['event'],
                     'locale' => $options['locale'],
                     'user' => $options['user'],
+                    'placeholder' => '',
                 ]
             )
             ->add(
