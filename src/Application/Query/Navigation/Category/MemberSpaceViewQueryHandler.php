@@ -84,9 +84,20 @@ class MemberSpaceViewQueryHandler
         $linksView[] = new LinkView(
             'navigation.links.member_space.terms_of_sale',
             $this->navigationBuilder->getRoute(
-                'event_content_terms_of_sale', [
-                'sheet' => $memberSpaceQuery->sheet->getId(),
-            ]
+                'event_content_terms_of_sale',
+                [
+                    'sheet' => $memberSpaceQuery->sheet->getId(),
+                ]
+            )
+        );
+
+        $linksView[] = new LinkView(
+            'navigation.links.member_space.privacy_policy',
+            $this->navigationBuilder->getRoute(
+                'event_content_terms_of_sale',
+                [
+                    'sheet' => $memberSpaceQuery->sheet->getId(),
+                ]
             )
         );
 
