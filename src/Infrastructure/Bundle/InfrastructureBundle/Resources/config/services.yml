@@ -6969,6 +6969,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery }
 
+
+    Proximum\Vimeet\Application\Query\Badge\GetExampleBadgeByEventQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetExampleBadgeByEventQuery }
+
     Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

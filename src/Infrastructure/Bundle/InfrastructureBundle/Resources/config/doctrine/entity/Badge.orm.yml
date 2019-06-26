@@ -44,6 +44,16 @@ Proximum\Vimeet\Domain\Model\Badge:
             type: boolean
         conditionedByStates:
             type: json_array
+        isMirrored:
+            type: boolean
+        leftImage:
+            type: string
+            nullable: true
+        rightImage:
+            type: string
+            nullable: true
+        isRightImageFullHeight:
+            type: boolean
     manyToOne:
         type:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
