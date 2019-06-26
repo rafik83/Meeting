@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-1916 - Add new parameters to badge
 - VIMEET-1982 - Contacts download and list
 - VIMEET-1999 - As an admin, remove promotion code from order
+- VIMEET-1648 - Terms of sale links
 ### Fixed
 - MV-184 - Fix rooming list assign dates
 - MV-185 - Relevance filter choice by default

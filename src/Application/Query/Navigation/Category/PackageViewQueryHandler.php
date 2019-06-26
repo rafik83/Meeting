@@ -92,13 +92,6 @@ class PackageViewQueryHandler
             }
         }
 
-        $linksView[] = new LinkView(
-            'navigation.links.package.terms_of_sale',
-            $this->navigationBuilder->getRoute('event_content_terms_of_sale', [
-                'sheet' => $packageQuery->sheet->getId(),
-            ])
-        );
-
         $categoryTitle = Category::PACKAGE;
 
         if (null !== $packageQuery->staticFormulation) {
