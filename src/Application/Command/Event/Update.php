@@ -38,6 +38,12 @@ class Update extends AbstractEvent
     /** @var bool */
     public $visio;
 
+    /** @var bool */
+    public $enableGoogleLogin;
+
+    /** @var bool */
+    public $enableLinkedinLogin;
+
     /**
      * @param Model\Event $event
      */
@@ -65,6 +71,8 @@ class Update extends AbstractEvent
         $this->displayParticipantPositionOnPlanning = $event->getConfiguration()->displayParticipantPositionOnPlanning();
         $this->displayParticipantNameOnPlanning = $event->getConfiguration()->displayParticipantNameOnPlanning();
         $this->visio = $event->getConfiguration()->isVisio();
+        $this->enableGoogleLogin = $event->isEnableGoogleLogin();
+        $this->enableLinkedinLogin = $event->isEnableLinkedinLogin();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
