@@ -29,7 +29,9 @@
             {% block header_mobile %}{% endblock %}
 
             <div class="wrapper">
+                {% if not (disabledNavigationMenu ?? false) %}
                 {{ render(controller('EventBundle:Navigation:menu', { 'sheet': sheet is defined ? sheet : null })) }}
+                {% endif %}
             </div>
 
             {% if is_granted('ROLE_PREVIOUS_USER') and event is defined and sheet is defined %}

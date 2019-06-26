@@ -11,17 +11,16 @@
 namespace Proximum\Vimeet\Application\Query\Badge;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\Type;
 
-class GetUserBadgeByEventQuery extends AbstractGetBadgeByEventQuery
+class GetExampleBadgeByEventQuery extends AbstractGetBadgeByEventQuery
 {
-    /** @var User */
-    public $user;
+    /** @var Type */
+    public $type;
 
-    public function __construct(Event $event, User $user)
+    public function __construct(Event $event, Type $type)
     {
-        $this->user = $user;
-
         parent::__construct($event);
+        $this->type = $type;
     }
 }
