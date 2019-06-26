@@ -94,8 +94,8 @@ common.update: Modifier
 common.validate: Valider
 contact.edit.comment: 'Modifier le commentaire'
 contact.edit.later: 'Plus tard'
-contact.show.comment: 'Mon commentaire'
-contact.show.evaluation: 'Qualité du contact'
+contact.show.comment: 'Mon commentaire (confidentiel)'
+contact.show.evaluation: 'Qualité du contact (confidentiel)'
 contact.show.evaluation.1.label: 'Rdv manqué'
 contact.show.evaluation.2.label: 'Non pertinent'
 contact.show.evaluation.3.label: 'Pertinent à long terme'
@@ -279,6 +279,7 @@ navigation.category.catalog: Catalogue
 navigation.category.contact: Contacts
 navigation.category.forms: 'Ma venue'
 navigation.category.happening: 'Gestion RDV'
+navigation.category.inCart: 'au panier'
 navigation.category.leni_badge_link: 'Badges / E-invitations'
 navigation.category.meeting: 'Gestion RDV'
 navigation.category.member_space: 'Espace participant'

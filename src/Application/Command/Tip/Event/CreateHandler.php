@@ -55,6 +55,8 @@ class CreateHandler
             $command->onPrintPlanning,
             $command->onSheet,
             $command->onAgenda,
+            $command->onPackage,
+            $command->onContacts,
             $command->onProgram,
             $command->onConfirmationPhone,
             $this->dateTime
@@ -67,6 +69,16 @@ class CreateHandler
         foreach ($command->types as $type) {
             $tip->setType($type);
         }
+
+        $tip->updateConditions(
+            $command->display,
+            $command->conditionOnOrders,
+            $command->conditionIsCompleteSheet,
+            $command->conditionIsPhoneConfirmed,
+            $command->conditionHasRemainingToPay,
+            $command->conditionHasPendingMeetingProposition,
+            $command->conditionHasCart
+        );
 
         $this->tipRepository->add($tip);
 

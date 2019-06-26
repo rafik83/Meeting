@@ -732,6 +732,14 @@ services:
             - '@security.csrf.token_manager'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Order\RemovePromotionCodeAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.router'
+            - '@session.flash_bag'
+            - '@security.csrf.token_manager'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
     #
     # Crisp
     #
@@ -916,10 +924,12 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\RoomingListAction:
         arguments:
+            - '@adapter.authorization_checker'
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@form.factory'
-            - '@security.token_storage'
+            - '@Proximum\Vimeet\Domain\Filter\RoomingListFilter'
+            - '@adapter.router'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\UpdateAction:
         arguments:

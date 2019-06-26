@@ -5,6 +5,10 @@
 {% block content %}
 <section class="main">
 
+    {% if tipTranslationViews is defined %}
+        {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
+    {% endif %}
+
     {{ include('EventBundle:Package:breadcrumb.html.twig', {view: view}) }}
 
     <div class="main__container">

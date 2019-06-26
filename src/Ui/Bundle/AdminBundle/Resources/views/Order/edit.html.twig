@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
 {% block title 'admin.order.edit'|trans %}
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
@@ -20,7 +22,7 @@
                 <th class="text-right">{{ 'admin.order_edit.columns.vatRate'|trans }}</th>
                 <th class="text-right">{{ 'admin.order_edit.columns.quantity'|trans }}</th>
                 <th class="text-right">{{ 'admin.order_edit.columns.total'|trans }}</th>
-                <th>&nbsp;</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -101,7 +103,7 @@
 
             {% if order_view.promotionCodes.promotionCodes is not empty %}
                 <tr class="active">
-                    <th colspan="6">{{ 'admin.order_edit.promotionCodes'|trans }}</th>
+                    <th colspan="7">{{ 'admin.order_edit.promotionCodes'|trans }}</th>
                 </tr>
             {% endif %}
 
@@ -116,10 +118,16 @@
                     <td></td>
                     <td class="text-right">{{ promotionCode.quantity }}</td>
                     <td class="text-right">{{ promotionCode.total|localizedcurrency(promotionCode.currency) }}</td>
-                    <td></td>
+                    <td class="text-right">
+                        <a href="{{ path('admin_order_remove_promotion_code', {
+                            'event': event.id,
+                            'order': order.id,
+                            'promotionCode': promotionCode.id,
+                            '_token': csrf_token(constant('Proximum\\Vimeet\\Domain\\Intention\\IntentionType::INTENTION_REMOVE_PROMOTION_CODE_FROM_ORDER'))
+                        }) }}"><i class="glyphicon glyphicon-remove"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
-
 
             <tr class="info">
                 <th colspan="3"></th>
@@ -154,12 +162,14 @@
         </tbody>
     </table>
 
-    {{ form_start(promotion_code_choice_form) }}
-    {{ form_errors(promotion_code_choice_form) }}
-    <div class="row">
-        <div class="col-md-6">{{ form_row(promotion_code_choice_form.promotionCode) }}</div>
-        <div class="col-md-6">{{ form_row(promotion_code_choice_form.submit) }}</div>
+    <div class="well">
+        {{ form_start(promotion_code_choice_form) }}
+        {{ form_errors(promotion_code_choice_form) }}
+        <div class="row">
+            <div class="col-md-6">{{ form_row(promotion_code_choice_form.promotionCode) }}</div>
+            <div class="col-md-6">{{ form_row(promotion_code_choice_form.submit) }}</div>
+        </div>
+        {{ form_end(promotion_code_choice_form) }}
     </div>
-    {{ form_end(promotion_code_choice_form) }}
 {% endblock %}
 

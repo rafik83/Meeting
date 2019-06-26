@@ -58,6 +58,8 @@ class AffectHandlerTest extends TestCase
         $globalTip->isOnPrintPlanning()->willReturn(true);
         $globalTip->isOnSheet()->willReturn(false);
         $globalTip->isOnAgenda()->willReturn(true);
+        $globalTip->isOnPackage()->willReturn(true);
+        $globalTip->isOnContacts()->willReturn(true);
         $globalTip->isOnProgram()->willReturn(false);
         $globalTip->isOnConfirmationPhone()->willReturn(true);
         $globalTip->getTranslationTitle('fr')->willReturn('title');
@@ -70,6 +72,8 @@ class AffectHandlerTest extends TestCase
             false,
             true,
             false,
+            true,
+            true,
             true,
             false,
             true,
@@ -92,6 +96,8 @@ class AffectHandlerTest extends TestCase
                 && true ===  $tip->isOnPrintPlanning()
                 && false === $tip->isOnSheet()
                 && true === $tip->isOnAgenda()
+                && true === $tip->isOnPackage()
+                && true === $tip->isOnContacts()
                 && false === $tip->isOnProgram()
                 && true === $tip->isOnConfirmationPhone()
                 && 'title' === $tip->getTranslationTitle('fr')

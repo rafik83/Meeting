@@ -1,0 +1,20 @@
+Proximum\Vimeet\Domain\Model\Tip\TipOpened:
+    type:  entity
+    table: tip_opened
+    id:
+        tip:
+            associationKey: true
+        user:
+            associationKey: true
+    fields:
+        openedAt:
+            type: datetime
+    manyToOne:
+        tip:
+            targetEntity: Proximum\Vimeet\Domain\Model\Tip\Tip
+            joinColumn:
+                nullable: false
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                nullable: false

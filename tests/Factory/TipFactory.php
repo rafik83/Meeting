@@ -20,6 +20,8 @@ class TipFactory
     const ON_PRINT_PLANNING     = 'onPrintPlanning';
     const ON_SHEET              = 'onSheet';
     const ON_AGENDA             = 'onAgenda';
+    const ON_PACKAGE            = 'onPackage';
+    const ON_CONTACTS           = 'onContacts';
     const ON_PROGRAM            = 'onProgram';
     const ON_CONFIRMATION_PHONE = 'onConfirmationPhone';
 
@@ -41,6 +43,8 @@ class TipFactory
             self::ON_CATALOG            => true,
             self::ON_PRINT_PLANNING     => true,
             self::ON_AGENDA             => true,
+            self::ON_PACKAGE            => true,
+            self::ON_CONTACTS           => true,
             self::ON_SHEET              => true,
             self::ON_PROGRAM            => true,
             self::ON_CONFIRMATION_PHONE => true,
@@ -57,6 +61,8 @@ class TipFactory
             isset($pages[self::ON_PRINT_PLANNING]) ? $pages[self::ON_PRINT_PLANNING] : false,
             isset($pages[self::ON_SHEET]) ? $pages[self::ON_SHEET] : false,
             isset($pages[self::ON_AGENDA]) ? $pages[self::ON_AGENDA] : false,
+            isset($pages[self::ON_PACKAGE]) ? $pages[self::ON_PACKAGE] : false,
+            isset($pages[self::ON_CONTACTS]) ? $pages[self::ON_CONTACTS] : false,
             isset($pages[self::ON_PROGRAM]) ? $pages[self::ON_PROGRAM] : false,
             isset($pages[self::ON_CONFIRMATION_PHONE]) ? $pages[self::ON_CONFIRMATION_PHONE] : false,
             $dateTime

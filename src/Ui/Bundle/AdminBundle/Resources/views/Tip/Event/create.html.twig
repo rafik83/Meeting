@@ -8,3 +8,47 @@
     {{ parent() }}
     {{ include('AdminBundle:Tip:tip-js.html.twig') }}
 {% endblock %}
+
+{% block form_content %}
+    {{ form_row(form.title) }}
+    <div class="row">
+        <div class="col-md-4">
+            <h2>{{ 'form.tip.pages.title'|trans({}, 'forms') }}</h2>
+            <div class="well">
+                <div>{{ form_row(form.onMeetingManagement, {inline:true}) }}</div>
+                <div>{{ form_row(form.onCatalog, {inline:true}) }}</div>
+                <div>{{ form_row(form.onPrintPlanning, {inline:true}) }}</div>
+                <div>{{ form_row(form.onSheet, {inline:true}) }}</div>
+                <div>{{ form_row(form.onAgenda, {inline:true}) }}</div>
+                <div>{{ form_row(form.onPackage, {inline:true}) }}</div>
+                <div>{{ form_row(form.onContacts, {inline:true}) }}</div>
+                <div>{{ form_row(form.onProgram, {inline:true}) }}</div>
+                <div>{{ form_row(form.onConfirmationPhone, {inline:true}) }}</div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <h2>{{ 'form.tip_event_update.children.types.label'|trans({}, 'forms') }}</h2>
+            <div class="well">
+                {{ form_widget(form.types) }}
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <h2>{{ 'form.tip.conditions.title'|trans({}, 'forms') }}</h2>
+            <div class="well">
+                <div>{{ form_row(form.display) }}</div>
+                <div>{{ form_row(form.conditionHasCart, {inline:true}) }}</div>
+                <div>{{ form_row(form.conditionOnOrders) }}</div>
+                <div>{{ form_row(form.conditionHasRemainingToPay, {inline:true}) }}</div>
+                <div>{{ form_row(form.conditionIsPhoneConfirmed, {inline:true}) }}</div>
+                <div>{{ form_row(form.conditionIsCompleteSheet, {inline:true}) }}</div>
+                <div>{{ form_row(form.conditionHasPendingMeetingProposition, {inline:true}) }}</div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    {{ form_row(form.translations) }}
+{% endblock form_content %}

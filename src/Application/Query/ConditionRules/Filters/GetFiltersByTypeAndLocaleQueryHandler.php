@@ -20,7 +20,9 @@ use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\ConditionRules\ComparisonOperatorsByType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Filter\BooleanTemplateFilter;
+use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Repository\Messaging\MessageRepository;
 
 class GetFiltersByTypeAndLocaleQueryHandler
 {
@@ -80,16 +82,21 @@ class GetFiltersByTypeAndLocaleQueryHandler
     /** @var QueryBusInterface */
     private $queryBus;
 
+    /** @var MessageRepository */
+    private $messageRepository;
+
     public function __construct(
         TranslatorInterface $translator,
         TaggedNomenclatureFilterGetter $taggedNomenclatureFilterGetter,
         TypeRepositoryInterface $typeRepository,
-        QueryBusInterface $queryBus
+        QueryBusInterface $queryBus,
+        MessageRepository $messageRepository
     ) {
         $this->translator = $translator;
         $this->taggedNomenclatureFilterGetter = $taggedNomenclatureFilterGetter;
         $this->typeRepository = $typeRepository;
         $this->queryBus = $queryBus;
+        $this->messageRepository = $messageRepository;
     }
 
     public function handle(GetFiltersByTypeAndLocaleQuery $query): array
@@ -101,7 +108,11 @@ class GetFiltersByTypeAndLocaleQueryHandler
         $filters = $this->getFilters(self::FIELDS[$query->type], $query->locale);
 
         if ('sheet' === $query->type) {
-            $filters = array_merge($filters, $this->getNomenclatureFilters($query->event, $query->locale));
+            $filters = array_merge(
+                $filters,
+                $this->getNomenclatureFilters($query->event, $query->locale),
+                $this->getMessageFilters($query->event, $query->locale)
+            );
         }
 
         if ('user' === $query->type) {
@@ -136,6 +147,34 @@ class GetFiltersByTypeAndLocaleQueryHandler
 
             $filters[] = $filter;
         }
+
+        return $filters;
+    }
+
+    private function getMessageFilters(Event $event, string $locale): array
+    {
+        $filters = [];
+        $items = [];
+        $messages = $this->messageRepository->findByEventOrderByName($event);
+
+        /** @var Message $message */
+        foreach ($messages as $message) {
+            $items[$message->getId()] = $message->getName();
+        }
+
+        $filter = [
+            'id'        => TypesMapping::SHEET_MESSAGES_RECEIVED,
+            'label'     => $this->translate('messaging.received', $locale),
+            'type'      => 'string',
+            'input'     => 'select',
+            'plugin'    => 'select2',
+            'multiple'  => true,
+            'optgroup'  => $this->translate('optgroup.sheetInfo', $locale),
+            'values'    => $items,
+            'operators' => ComparisonOperatorsByType::OPERATORS['message'] ?? [],
+        ];
+
+        $filters[] = $filter;
 
         return $filters;
     }

@@ -74,7 +74,7 @@ class CatalogSubmenuViewQueryHandler
                     $catalogTitle,
                     $this->navigationBuilder->getRoute('event_catalog_index', ['sheet' => $query->sheet->getId()]),
                     Route::isCatalog($query->route),
-                    false,
+                    null,
                     true
                 );
             }
@@ -96,7 +96,7 @@ class CatalogSubmenuViewQueryHandler
                     ]
                 ),
                 Route::isMeetingRequest($query->route),
-                false,
+                null,
                 false
             );
         }

@@ -68,7 +68,8 @@ class ListViewQueryHandler
         $userIdsByStayId = [];
 
         foreach ($stayViews as $stayView) {
-            $stayViewsByUserId[$stayView->userId][] = new UserStayView(
+            $userId = $stayView->userId;
+            $stayViewsByUserId[$userId][] = new UserStayView(
                 $stayView->stayId,
                 MidnightTransformer::getDateAtMidnight($stayView->arrival),
                 MidnightTransformer::getDateAtMidnight($stayView->departure),
@@ -76,8 +77,7 @@ class ListViewQueryHandler
                 $stayView->roomType,
                 $stayView->roomNumber
             );
-
-            $userIdsByStayId[$stayView->stayId][] = $stayView->userId;
+            $userIdsByStayId[$stayView->stayId][] = $userId;
         }
 
         $defaultFirstRoomingDay = $this->getDefaultFirstRoomingDay($query->event);
@@ -116,7 +116,7 @@ class ListViewQueryHandler
 
         $this->assignRoommateToUserStayView($userIdsByStayId, $listDetailViews);
 
-        $this->getUserStayViewsToAssign($listDetailViews);
+        $this->getUserStayViewsToAssign($query->event, $listDetailViews);
 
         return new ListView($listDetailViews, count($listDetailViews));
     }
@@ -178,7 +178,7 @@ class ListViewQueryHandler
     /**
      * @param ListDetailView[] $listDetailViews
      */
-    private function getUserStayViewsToAssign(array &$listDetailViews): void
+    private function getUserStayViewsToAssign(Event $event, array &$listDetailViews): void
     {
         foreach ($listDetailViews as $listDetailView) {
             if (null === $listDetailView->arrivalDate
@@ -197,9 +197,10 @@ class ListViewQueryHandler
             }
 
             $period = new TimeRangeView(
-                MidnightTransformer::getDateAtMidnight($listDetailView->arrivalDate),
-                MidnightTransformer::getDateAtMidnight($listDetailView->departureDate)
+                $this->getMidnightDateNotTimezoned($listDetailView->arrivalDate, $event->getTimeZone()),
+                $this->getMidnightDateNotTimezoned($listDetailView->departureDate, $event->getTimeZone())
             );
+
             $timeRangeViews = $this->overlappedTimeRangeTruncater->truncate($period, $listDetailView->userStayViews);
 
             foreach ($timeRangeViews as $timeRangeView) {
@@ -213,6 +214,11 @@ class ListViewQueryHandler
                 }
             );
         }
+    }
+
+    private function getMidnightDateNotTimezoned(\DateTimeInterface $dateTime, string $eventTimeZone): \DateTimeInterface
+    {
+        return new \DateTime(DaysHelper::cloneDateTime($dateTime, $eventTimeZone)->format('Y-m-d 0:0:0.000'));
     }
 
     private function getDefaultFirstRoomingDay(Event $event): \DateTimeInterface

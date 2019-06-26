@@ -10,11 +10,20 @@
 
 namespace Proximum\Vimeet\Application\Query\Tip;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
 
-class TipTranslationViewQuery
+class TipTranslationViewQuery implements Query
 {
+    /** @var Sheet */
+    public $sheet;
+
+    /** @var User */
+    public $user;
+
     /** @var Event */
     public $event;
 
@@ -27,18 +36,13 @@ class TipTranslationViewQuery
     /** @var string */
     public $locale;
 
-    /**
-     * TipTranslationViewQuery constructor.
-     *
-     * @param Type   $type
-     * @param string $context
-     * @param string $locale
-     */
-    public function __construct(Type $type, $context, $locale)
+    public function __construct(Sheet $sheet, User $user, string $context, string $locale)
     {
-        $this->event   = $type->getEvent();
-        $this->type    = $type;
+        $this->sheet = $sheet;
+        $this->user = $user;
+        $this->event = $sheet->getEvent();
+        $this->type = $sheet->getType();
         $this->context = $context;
-        $this->locale  = $locale;
+        $this->locale = $locale;
     }
 }

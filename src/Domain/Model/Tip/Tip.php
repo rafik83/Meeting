@@ -24,8 +24,24 @@ class Tip
     const TRANS_VISIBLE_PRINT_PLANNING = 'admin.tip.column.visible.print_planning';
     const TRANS_VISIBLE_SHEET = 'admin.tip.column.visible.onSheet';
     const TRANS_VISIBLE_AGENDA = 'admin.tip.column.visible.onAgenda';
+    const TRANS_VISIBLE_PACKAGE = 'admin.tip.column.visible.onPackage';
+    const TRANS_VISIBLE_CONTACTS = 'admin.tip.column.visible.onContacts';
     const TRANS_VISIBLE_PROGRAM = 'admin.tip.column.visible.onProgram';
     const TRANS_VISIBLE_CONFIRMATION_PHONE = 'admin.tip.column.visible.onConfirmationPhone';
+
+    const DISPLAY_DEFAULT = 'default';
+    const DISPLAY_FIRST_TIME_OPENED = 'first_time_opened';
+    const DISPLAY_ALWAYS_OPENED = 'always_opened';
+    const DISPLAY_CHOICES = [self::DISPLAY_DEFAULT, self::DISPLAY_FIRST_TIME_OPENED, self::DISPLAY_ALWAYS_OPENED];
+
+    const CONDITION_ON_ORDERS_WITHOUT = 'without';
+    const CONDITION_ON_ORDERS_TOTAL_EQUAL_ZERO = 'total_equal_zero';
+    const CONDITION_ON_ORDERS_TOTAL_SUPERIOR_ZERO = 'total_superior_zero';
+    const CONDITION_ON_ORDERS_CHOICES = [
+        self::CONDITION_ON_ORDERS_WITHOUT,
+        self::CONDITION_ON_ORDERS_TOTAL_EQUAL_ZERO,
+        self::CONDITION_ON_ORDERS_TOTAL_SUPERIOR_ZERO
+    ];
 
     /** @var int */
     private $id;
@@ -61,7 +77,34 @@ class Tip
     private $onAgenda;
 
     /** @var bool */
+    private $onPackage;
+
+    /** @var bool */
+    private $onContacts;
+
+    /** @var bool */
     private $onConfirmationPhone;
+
+    /** @var string */
+    private $display;
+
+    /** @var null|bool */
+    private $conditionHasCart;
+
+    /** @var null|bool */
+    private $conditionHasRemainingToPay;
+
+    /** @var null|bool */
+    private $conditionIsPhoneConfirmed;
+
+    /** @var null|bool */
+    private $conditionIsCompleteSheet;
+
+    /** @var null|bool */
+    private $conditionHasPendingMeetingProposition;
+
+    /** @var null|array */
+    private $conditionOnOrders;
 
     /** @var \DateTimeInterface */
     private $createdAt;
@@ -74,18 +117,22 @@ class Tip
      * @param bool               $onPrintPlanning
      * @param bool               $onSheet
      * @param bool               $onAgenda
+     * @param bool               $onPackage
+     * @param bool               $onContacts
      * @param bool               $onProgram
      * @param bool               $onConfirmationPhone
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         $title,
-        Event $event = null,
+        ?Event $event,
         $onMeetingManagement,
         $onCatalog,
         $onPrintPlanning,
         $onSheet,
         $onAgenda,
+        $onPackage,
+        $onContacts,
         $onProgram,
         $onConfirmationPhone,
         \DateTimeInterface $createdAt
@@ -97,11 +144,14 @@ class Tip
         $this->onPrintPlanning     = $onPrintPlanning;
         $this->onSheet             = $onSheet;
         $this->onAgenda            = $onAgenda;
+        $this->onPackage           = $onPackage;
+        $this->onContacts          = $onContacts;
         $this->onProgram           = $onProgram;
         $this->onConfirmationPhone = $onConfirmationPhone;
         $this->translations        = new ArrayCollection();
         $this->types               = new ArrayCollection();
         $this->createdAt           = $createdAt;
+        $this->display             = self::DISPLAY_DEFAULT;
     }
 
     /**
@@ -113,6 +163,8 @@ class Tip
      * @param bool   $onPrintPlanning
      * @param bool   $onSheet
      * @param bool   $onAgenda
+     * @param bool   $onPackage
+     * @param bool   $onContacts
      * @param bool   $onProgram
      * @param bool   $onConfirmationPhone
      *
@@ -125,6 +177,8 @@ class Tip
         $onPrintPlanning,
         $onSheet,
         $onAgenda,
+        $onPackage,
+        $onContacts,
         $onProgram,
         $onConfirmationPhone
     ) {
@@ -134,10 +188,30 @@ class Tip
         $this->onPrintPlanning     = $onPrintPlanning;
         $this->onSheet             = $onSheet;
         $this->onAgenda            = $onAgenda;
+        $this->onPackage           = $onPackage;
+        $this->onContacts          = $onContacts;
         $this->onProgram           = $onProgram;
         $this->onConfirmationPhone = $onConfirmationPhone;
 
         return $this;
+    }
+
+    public function updateConditions(
+        string $display,
+        ?array $conditionOnOrders,
+        ?bool $conditionIsCompleteSheet,
+        ?bool $conditionIsPhoneConfirmed,
+        ?bool $conditionHasRemainingToPay,
+        ?bool $conditionHasPendingMeetingProposition,
+        ?bool $conditionHasCart
+    ) {
+        $this->display = $display;
+        $this->conditionOnOrders = $conditionOnOrders;
+        $this->conditionIsCompleteSheet = $conditionIsCompleteSheet;
+        $this->conditionIsPhoneConfirmed = $conditionIsPhoneConfirmed;
+        $this->conditionHasRemainingToPay = $conditionHasRemainingToPay;
+        $this->conditionHasPendingMeetingProposition = $conditionHasPendingMeetingProposition;
+        $this->conditionHasCart = $conditionHasCart;
     }
 
     /**
@@ -339,6 +413,16 @@ class Tip
         return $this->onAgenda;
     }
 
+    public function isOnPackage(): bool
+    {
+        return $this->onPackage;
+    }
+
+    public function isOnContacts(): bool
+    {
+        return $this->onContacts;
+    }
+
     /**
      * @return bool
      */
@@ -382,6 +466,14 @@ class Tip
             $pagesTranslations[] = self::TRANS_VISIBLE_AGENDA;
         }
 
+        if ($this->isOnPackage()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_PACKAGE;
+        }
+
+        if ($this->isOnContacts()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_CONTACTS;
+        }
+
         if ($this->isOnProgram()) {
             $pagesTranslations[] = self::TRANS_VISIBLE_PROGRAM;
         }
@@ -399,5 +491,58 @@ class Tip
     public function hasEvent(): bool
     {
         return null !== $this->event;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplay(): string
+    {
+        return $this->display;
+    }
+
+    public function isDisplayDefault(): bool
+    {
+        return self::DISPLAY_DEFAULT === $this->display;
+    }
+
+    public function isDisplayAlwaysOpened(): bool
+    {
+        return self::DISPLAY_ALWAYS_OPENED === $this->display;
+    }
+
+    public function isDisplayFirstTimeOpened(): bool
+    {
+        return self::DISPLAY_FIRST_TIME_OPENED === $this->display;
+    }
+
+    public function hasConditionCart(): ?bool
+    {
+        return $this->conditionHasCart;
+    }
+
+    public function hasConditionRemainingToPay(): ?bool
+    {
+        return $this->conditionHasRemainingToPay;
+    }
+
+    public function getConditionOnOrders(): ?array
+    {
+        return $this->conditionOnOrders;
+    }
+
+    public function hasConditionPhoneConfirmed(): ?bool
+    {
+        return $this->conditionIsPhoneConfirmed;
+    }
+
+    public function hasConditionCompleteSheet(): ?bool
+    {
+        return $this->conditionIsCompleteSheet;
+    }
+
+    public function hasConditionPendingMeetingProposition(): ?bool
+    {
+        return $this->conditionHasPendingMeetingProposition;
     }
 }

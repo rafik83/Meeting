@@ -33,10 +33,40 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             type: boolean
             options:
                 default: false
+        onPackage:
+            type: boolean
+            options:
+                default: false
+        onContacts:
+            type: boolean
+            options:
+                default: false
         onConfirmationPhone:
             type: boolean
             options:
                 default: false
+        display:
+            type: string
+            options:
+                default: 'default'
+        conditionHasCart:
+            type: boolean
+            nullable: true
+        conditionHasRemainingToPay:
+            type: boolean
+            nullable: true
+        conditionIsPhoneConfirmed:
+            type: boolean
+            nullable: true
+        conditionIsCompleteSheet:
+            type: boolean
+            nullable: true
+        conditionHasPendingMeetingProposition:
+            type: boolean
+            nullable: true
+        conditionOnOrders:
+            type: json_array
+            nullable: true
         createdAt:
             type: datetime
     oneToMany:

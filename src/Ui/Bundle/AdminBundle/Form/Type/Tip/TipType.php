@@ -41,6 +41,12 @@ class TipType extends AbstractType
             ->add('onAgenda', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('onPackage', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('onContacts', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('onConfirmationPhone', CheckboxType::class, [
                 'required' => false,
             ])

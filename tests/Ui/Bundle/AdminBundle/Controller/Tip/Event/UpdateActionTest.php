@@ -84,6 +84,8 @@ class UpdateActionTest extends TestCase
         $this->tip->isOnSheet()->willReturn(true);
         $this->tip->isOnProgram()->willReturn(true);
         $this->tip->isOnAgenda()->willReturn(true);
+        $this->tip->isOnPackage()->willReturn(true);
+        $this->tip->isOnContacts()->willReturn(true);
         $this->tip->isOnConfirmationPhone()->willReturn(true);
         $this->tip->getTypes()->willReturn([]);
         $this->tip->getTranslations()->willReturn([]);
@@ -179,12 +181,18 @@ class UpdateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->tip->getEvent()->willReturn($this->event->reveal());
+        $this->tip->getDisplay()->shouldBeCalled()->willReturn(Tip::DISPLAY_DEFAULT);
+        $this->tip->getConditionOnOrders()->shouldBeCalled()->willReturn([]);
+        $this->tip->hasConditionCart()->shouldBeCalled()->willReturn(true);
+        $this->tip->hasConditionPendingMeetingProposition()->shouldBeCalled()->willReturn(null);
+        $this->tip->hasConditionRemainingToPay()->shouldBeCalled()->willReturn(false);
+        $this->tip->hasConditionCompleteSheet()->shouldBeCalled()->willReturn(true);
+        $this->tip->hasConditionPhoneConfirmed()->shouldBeCalled()->willReturn(null);
 
         $this->event->getLocales()->willReturn(['fr', 'en']);
         $this->request->getLocale()->willReturn('fr');
         $this->event->getAvailableLocale('fr')->willReturn('fr');
         $update = new Update($this->tip->reveal());
-
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
 
@@ -244,6 +252,13 @@ class UpdateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->tip->getEvent()->willReturn($this->event->reveal());
+        $this->tip->getDisplay()->shouldBeCalled()->willReturn(Tip::DISPLAY_ALWAYS_OPENED);
+        $this->tip->getConditionOnOrders()->shouldBeCalled()->willReturn([]);
+        $this->tip->hasConditionCart()->shouldBeCalled()->willReturn(true);
+        $this->tip->hasConditionPendingMeetingProposition()->shouldBeCalled()->willReturn(null);
+        $this->tip->hasConditionRemainingToPay()->shouldBeCalled()->willReturn(false);
+        $this->tip->hasConditionCompleteSheet()->shouldBeCalled()->willReturn(true);
+        $this->tip->hasConditionPhoneConfirmed()->shouldBeCalled()->willReturn(null);
 
         $this->event->getLocales()->willReturn(['fr', 'en']);
         $this->event->getAvailableLocale('fr')->willReturn('fr');

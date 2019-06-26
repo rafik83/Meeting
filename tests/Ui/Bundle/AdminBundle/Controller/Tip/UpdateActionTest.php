@@ -91,6 +91,8 @@ class UpdateActionTest extends TestCase
         $tip->isOnCatalog()->willReturn(false);
         $tip->isOnSheet()->willReturn(false);
         $tip->isOnAgenda()->willReturn(false);
+        $tip->isOnPackage()->willReturn(false);
+        $tip->isOnContacts()->willReturn(false);
         $tip->isOnProgram()->willReturn(false);
         $tip->isOnConfirmationPhone()->willReturn(false);
         $update = new Update($tip->reveal());
@@ -143,6 +145,8 @@ class UpdateActionTest extends TestCase
         $tip->isOnCatalog()->willReturn(false);
         $tip->isOnSheet()->willReturn(false);
         $tip->isOnAgenda()->willReturn(false);
+        $tip->isOnPackage()->willReturn(false);
+        $tip->isOnContacts()->willReturn(false);
         $tip->isOnProgram()->willReturn(false);
         $tip->isOnConfirmationPhone()->willReturn(false);
         $update = new Update($tip->reveal());

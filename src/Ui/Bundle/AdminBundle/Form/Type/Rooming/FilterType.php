@@ -60,7 +60,8 @@ class FilterType extends AbstractType
         $resolver->setDefaults(
             [
                 'required' => false,
-                'method'   => 'GET',
+                'method' => 'GET',
+                'csrf_protection' => false,
             ]
         );
     }

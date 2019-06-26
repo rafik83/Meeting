@@ -50,6 +50,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnRefuseMeet
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -63,24 +64,19 @@ class MeetingRequestController extends Controller
 {
     /**
      * List all meeting request of a sheet (sent and received)
-     *
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param UserInterface $user
-     *
-     * @return Response
      */
     public function listRequestAction(
         Request $request,
         EventDomain $eventDomain,
-        Sheet $sheet,
-        UserInterface $user
-    ) {
+        UserDomain $userDomain,
+        Sheet $sheet
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted(CatalogAccessVoter::VIEW, $event);
+
+        $user = $userDomain->getUser();
 
         $availabilityConfirmation = $this->get('handler.catalog.availability_confirmation_checker_handler')
             ->handle(new AvailabilityConfirmationChecker(
@@ -201,7 +197,8 @@ class MeetingRequestController extends Controller
         $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $sheet->getType(),
+            $sheet,
+            $user,
             TipTranslationViewQueryHandler::CONTEXT_MEETING_MANAGEMENT,
             $request->getLocale()
         );

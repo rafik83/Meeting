@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Messaging\CampaignRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class CampaignRepository implements CampaignRepositoryInterface
 {
@@ -78,5 +79,21 @@ class CampaignRepository implements CampaignRepositoryInterface
         ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBySheet(Sheet $sheet): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('message.id')
+            ->from(Campaign::class, 'campaign')
+            ->join('campaign.message', 'message')
+            ->join('campaign.sheets', 'sheet', 'WITH', 'sheet = :sheet')
+            ->setParameter('sheet', $sheet);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

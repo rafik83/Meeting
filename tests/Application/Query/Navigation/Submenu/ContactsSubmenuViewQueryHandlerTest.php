@@ -18,7 +18,6 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Scan\CanScanParticipant;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class ContactsSubmenuViewQueryHandlerTest extends TestCase
@@ -34,9 +33,6 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
         $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
         $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
 
-        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
-        $canScanParticipant->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
-
         $navigationBuilder = $this->prophesize(NavigationBuilder::class);
         $navigationBuilder->getRoute(
             'event_contact_index',
@@ -48,8 +44,7 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
 
         $badgeSubmenuViewQueryHandler = new ContactsSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $accessChecker->reveal(),
-            $canScanParticipant->reveal()
+            $accessChecker->reveal()
         );
         $result = $badgeSubmenuViewQueryHandler->handle(
             new ContactsSubmenuViewQuery(
@@ -66,7 +61,7 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
             Category::CONTACT_LIST,
             '/url/to/contacts',
             true,
-            false,
+            null,
             true
         );
 
@@ -83,47 +78,11 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
         $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
         $accessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
 
-        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
-
         $navigationBuilder = $this->prophesize(NavigationBuilder::class);
 
         $badgeSubmenuViewQueryHandler = new ContactsSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $accessChecker->reveal(),
-            $canScanParticipant->reveal()
-        );
-
-        $this->assertNull(
-            $badgeSubmenuViewQueryHandler->handle(
-                new ContactsSubmenuViewQuery(
-                    $user->reveal(),
-                    $event->reveal(),
-                    'fr',
-                    $sheet->reveal(),
-                    'event_contact_index'
-                )
-            )
-        );
-    }
-
-    public function testCantScanParticipant()
-    {
-        $sheet = $this->prophesize(Sheet::class);
-        $user = $this->prophesize(User::class);
-        $event = $this->prophesize(Event::class);
-
-        $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
-        $accessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
-
-        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
-        $canScanParticipant->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
-
-        $navigationBuilder = $this->prophesize(NavigationBuilder::class);
-
-        $badgeSubmenuViewQueryHandler = new ContactsSubmenuViewQueryHandler(
-            $navigationBuilder->reveal(),
-            $accessChecker->reveal(),
-            $canScanParticipant->reveal()
+            $accessChecker->reveal()
         );
 
         $this->assertNull(

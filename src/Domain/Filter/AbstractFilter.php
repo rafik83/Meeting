@@ -8,26 +8,19 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter;
+namespace Proximum\Vimeet\Domain\Filter;
 
+use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Component\HttpFoundation\Session\Session;
 
-class SheetFilter
+abstract class AbstractFilter
 {
-    const SHEET_FILTER = 'sheet_filters';
-
-    /**
-     * @var Session
-     */
+    /** @var SessionInterface */
     private $session;
 
-    /**
-     * SheetFilter constructor.
-     *
-     * @param Session $session
-     */
-    public function __construct(Session $session)
+    abstract public function getName(): string;
+
+    public function __construct(SessionInterface $session)
     {
         $this->session = $session;
     }
@@ -56,8 +49,6 @@ class SheetFilter
     }
 
     /**
-     *  Clear sheet filters
-     *
      * @param Event $event
      */
     public function clear(Event $event)
@@ -72,6 +63,6 @@ class SheetFilter
      */
     private function getKey(Event $event)
     {
-        return sprintf('%s_%s', self::SHEET_FILTER, $event->getId());
+        return sprintf('%s_%s', $this->getName(), $event->getId());
     }
 }

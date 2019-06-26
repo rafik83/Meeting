@@ -72,7 +72,7 @@ form.admin.picto.PresFlash_2: Flash
 form.admin.picto.RDV: Rendez-vous
 form.admin.sheet.filter.children.submit.label: Filtrer
 form.admin.sheet.follower.un-assigned: 'Non assigné'
-form.apply_promotion_code.children.promotionCode.label: Code promo
+form.apply_promotion_code.children.promotionCode.label: 'Code promo'
 form.apply_promotion_code.children.submit.label: Appliquer
 form.archive_un_archive.children.archive.label: Archiver
 form.archive_un_archive.children.unArchive.label: Désarchiver
@@ -410,6 +410,7 @@ form.filter.isVisio.label: 'Est visio'
 form.filter.isVisioTested.label: 'Visio testée'
 form.filter.label: Filtrer
 form.filter.lastName.label: Nom
+form.filter.messaging.received.label: 'Est destinataire de'
 form.filter.not_filled.label: 'Non renseigné'
 form.filter.optgroup.nomenclature.label: Nomenclatures
 form.filter.optgroup.participantInfo.label: 'Info participant'
@@ -1018,7 +1019,9 @@ form.template.field.type.lib_text: Texte
 form.tip_create.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_create.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_create.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+form.tip_create.children.onContacts.label: 'Visible sur la liste des contacts'
 form.tip_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_create.children.onPackage.label: 'Visible sur le forfait de participation'
 form.tip_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
 form.tip_create.children.onProgram.label: 'Visible sur le programme'
 form.tip_create.children.onSheet.label: 'Visible sur la fiche de présentation'
@@ -1040,7 +1043,9 @@ form.tip_event_affect.children.types.label: 'Types de participation'
 form.tip_event_create.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_event_create.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_event_create.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+form.tip_event_create.children.onContacts.label: 'Visible sur la liste des contacts'
 form.tip_event_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_event_create.children.onPackage.label: 'Visible sur le forfait de participation'
 form.tip_event_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
 form.tip_event_create.children.onProgram.label: 'Visible sur le programme'
 form.tip_event_create.children.onSheet.label: 'Visible sur la fiche de présentation'
@@ -1056,7 +1061,9 @@ form.tip_event_create.children.types.label: 'Types assignés'
 form.tip_event_update.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_event_update.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_event_update.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+form.tip_event_update.children.onContacts.label: 'Visible sur la liste des contacts'
 form.tip_event_update.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_event_update.children.onPackage.label: 'Visible sur le forfait de participation'
 form.tip_event_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
 form.tip_event_update.children.onProgram.label: 'Visible sur le programme'
 form.tip_event_update.children.onSheet.label: 'Visible sur la fiche de présentation'
@@ -1072,7 +1079,9 @@ form.tip_event_update.children.types.label: 'Types assignés'
 form.tip_update.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_update.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_update.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+form.tip_update.children.onContacts.label: 'Visible sur la liste des contacts'
 form.tip_update.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_update.children.onPackage.label: 'Visible sur le forfait de participation'
 form.tip_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
 form.tip_update.children.onProgram.label: 'Visible sur le programme'
 form.tip_update.children.onSheet.label: 'Visible sur la fiche de présentation'
@@ -1084,6 +1093,21 @@ form.tip_update.children.translations.prototype.children.content.label: Contenu
 form.tip_update.children.translations.prototype.children.locale.label: Langue
 form.tip_update.children.translations.prototype.children.title.label: Libellé
 form.tip_update.children.translations.prototype.label: Traductions
+form.tip.children.conditionHasCart.label: 'A un panier'
+form.tip.children.conditionHasPendingMeetingProposition.label: 'A des propositions de RDV à valider'
+form.tip.children.conditionHasRemainingToPay.label: 'Solde restant dû > 0'
+form.tip.children.conditionIsCompleteSheet.label: 'A complété sa fiche'
+form.tip.children.conditionIsPhoneConfirmed.label: 'A confirmé son portable'
+form.tip.children.conditionOnOrders.label: Commande
+form.tip.children.conditionOnOrders.total_equal_zero: 'Total égal à zéro'
+form.tip.children.conditionOnOrders.total_superior_zero: 'Total supérieur à zéro'
+form.tip.children.conditionOnOrders.without: Sans
+form.tip.children.display.always_opened: 'Toujours forcer l’affichage'
+form.tip.children.display.default: Normal
+form.tip.children.display.first_time_opened: 'Forcer l’affichage la première fois'
+form.tip.children.display.label: Affichage
+form.tip.conditions.title: Conditions
+form.tip.pages.title: Pages
 form.transaction_find.children.beginDate.label: 'Date de début'
 form.transaction_find.children.date.placeholder: JJ/MM/AAAA
 form.transaction_find.children.endDate.label: 'Date de fin'
@@ -1120,8 +1144,7 @@ form.type_create.children.formTemplates.label: Formulaires
 form.type_create.children.formTemplates.status.draft: brouillon
 form.type_create.children.formTemplates.status.published: publié
 form.type_create.children.hidden.label: Caché
-form.type_create.children.isPackageRequired.label: Forfait requis
-form.type_update.children.isPaymentRequired.label: Règlement requis
+form.type_create.children.isPackageRequired.label: 'Forfait requis'
 form.type_create.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_create.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV max par planning'
 form.type_create.children.package.label: 'Template de forfait de participation'
@@ -1171,7 +1194,8 @@ form.type_update.children.canScanParticipant.label: 'Peut scanner un autre parti
 form.type_update.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_update.children.formTemplates.label: Formulaires
 form.type_update.children.hidden.label: Caché
-form.type_update.children.isPackageRequired.label: Forfait requis
+form.type_update.children.isPackageRequired.label: 'Forfait requis'
+form.type_update.children.isPaymentRequired.label: 'Règlement requis'
 form.type_update.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_update.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV par planning'
 form.type_update.children.package.label: 'Template de forfait de participation'
