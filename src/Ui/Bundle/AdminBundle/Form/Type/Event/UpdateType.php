@@ -73,14 +73,16 @@ class UpdateType extends AbstractEventType
                 'required' => false,
                 'help' => $this->translator->trans(
                     'form.event_update.children.googleLoginEnabled.help',
-                    ['%urls%' => implode(', ', $this->getLocalesUrl($event, 'connect_google_check'))]
+                    ['%urls%' => implode(" ; ", $this->getLocalesUrl($event, 'connect_google_check'))],
+                    'forms'
                 )
             ])
             ->add('linkedinLoginEnabled', CheckboxType::class, [
                 'required' => false,
                 'help' => $this->translator->trans(
                     'form.event_update.children.linkedinLoginEnabled.help',
-                    ['%urls%' => implode(', ', $this->getLocalesUrl($event, 'connect_linkedin_check'))]
+                    ['%urls%' => implode(" ; ", $this->getLocalesUrl($event, 'connect_linkedin_check'))],
+                    'forms'
                 )
             ])
         ;
