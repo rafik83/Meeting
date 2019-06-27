@@ -26,7 +26,7 @@ class AddFastCheckin implements Command
     /** @var string */
     public $sheetTitle;
 
-    /** @var Type */
+    /** @var Type|null */
     public $type;
 
     /** @var string */

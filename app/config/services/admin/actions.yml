@@ -1034,6 +1034,7 @@ services:
             - '@adapter.router'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@adapter.authorization_checker'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\CheckinActionsAction:
         arguments:

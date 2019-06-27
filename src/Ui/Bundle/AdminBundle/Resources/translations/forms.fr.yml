@@ -380,6 +380,7 @@ form.add_fast_checkin.children.mobile.label: Téléphone mobile
 form.add_fast_checkin.children.sheetTitle.label: Nom de la fiche
 form.add_fast_checkin.children.submit.label: Enregistrer la participation
 form.add_fast_checkin.children.type.label: Type de participation
+form.add_fast_checkin.children.type.error.missing: Le type de participation est obligatoire
 form.field.private: 'Champ privé'
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'

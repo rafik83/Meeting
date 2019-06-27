@@ -34,6 +34,10 @@ class AddFastCheckinHandler
 
     public function handle(AddFastCheckin $addFastCheckin): ?Participant
     {
+        if (null === $addFastCheckin->type) {
+            throw new TypeMissingForFastCheckinException();
+        }
+
         $convertToParticipant = new ConvertToParticipant(
             $addFastCheckin->event,
             $addFastCheckin->type,

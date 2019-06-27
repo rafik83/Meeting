@@ -5,7 +5,9 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Event\Participant\AddFastCheckin;
+use Proximum\Vimeet\Application\Command\Event\Participant\TypeMissingForFastCheckinException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -13,6 +15,7 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Participant\AddFastCheckinType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,6 +45,9 @@ class AddFastCheckinAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     public function __construct(
         CommandBusInterface $commandBus,
         FormFactory $formFactory,
@@ -49,7 +55,8 @@ class AddFastCheckinAction
         FlashBagInterface $flashBag,
         RouterInterface $router,
         UserRepositoryInterface $userRepository,
-        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
+        TranslatorInterface $translator
     ) {
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
@@ -58,6 +65,7 @@ class AddFastCheckinAction
         $this->router = $router;
         $this->userRepository = $userRepository;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
+        $this->translator = $translator;
     }
 
     public function __invoke(Request $request, AdminDomain $adminDomain, Event $event, string $email)
@@ -103,6 +111,16 @@ class AddFastCheckinAction
                         ]
                     )
                 );
+            } catch (TypeMissingForFastCheckinException $exception) {
+                $formError = new FormError(
+                    $this->translator->trans(
+                        'form.add_fast_checkin.children.type.error.missing',
+                        [],
+                        'forms',
+                        $request->getLocale()
+                    )
+                );
+                $form->get('type')->addError($formError);
             } catch (\Exception $exception) {
                 $this->flashBag->add('error', 'flash.admin.fast-checkin.add.error');
             }
