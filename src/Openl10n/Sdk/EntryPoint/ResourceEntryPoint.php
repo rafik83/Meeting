@@ -90,14 +90,24 @@ class ResourceEntryPoint extends AbstractEntryPoint
         $this->getClient()->delete('resources/'.$resource->getId());
     }
 
+    /**
+     * Note : this method had to be changed from the original openl10n-cli project.
+     * Guzzle 'form_params' mode changed to 'multipart' because :
+     *  - resource from "fopen" wasn't support (file wasn't sent)
+     *  - when "fopen" replaced by "file_get_contents", open10n server returns 500 status code
+     */
     public function import(Resource $resource, $filepath, $locale, array $options = array())
     {
+        $postData = [
+            'locale' => $locale,
+            'file' => fopen($filepath, 'r'),
+            'options' => $options,
+        ];
+
+        $formattedPostData = $this->getMultipartFormattedData($postData);
+
         $this->getClient()->post('resources/'.$resource->getId().'/import', [
-            'form_params' => [
-                'locale' => $locale,
-                'file' => fopen($filepath, 'r'),
-                'options' => $options,
-            ],
+            'multipart' => $formattedPostData,
         ]);
     }
 
@@ -112,5 +122,36 @@ class ResourceEntryPoint extends AbstractEntryPoint
         ]);
 
         return $response->getBody();
+    }
+
+    /**
+     * Note : copied from https://stackoverflow.com/a/41602399
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    private function getMultipartFormattedData(array $data): array
+    {
+        $output = [];
+
+        foreach ($data as $key => $value) {
+            if (!\is_array($value)) {
+                $output[] = ['name' => $key, 'contents' => $value];
+                continue;
+            }
+
+            foreach ($value as $multiKey => $multiValue) {
+                $multiName = $key . '[' . $multiKey . ']'
+                    . (\is_array($multiValue) ? '[' . key($multiValue) . ']' : '')
+                    . '';
+                $output[] = [
+                    'name' => $multiName,
+                    'contents' => \is_array($multiValue) ? reset($multiValue) : $multiValue,
+                ];
+            }
+        }
+
+        return $output;
     }
 }
