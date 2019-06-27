@@ -76,11 +76,11 @@ Proximum\Vimeet\Domain\Model\Event:
             type: boolean
             options:
                 default: false
-        enableGoogleLogin:
+        googleLoginEnabled:
             type: boolean
             options:
                 default: false
-        enableLinkedinLogin:
+        linkedinLoginEnabled:
             type: boolean
             options:
                 default: false

@@ -44,13 +44,13 @@ class UpdateType extends AbstractEventType
             ->add('displayParticipantPositionOnPlanning', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('enableGoogleLogin', CheckboxType::class, [
+            ->add('googleLoginEnabled', CheckboxType::class, [
                 'required' => false,
-                'help' => 'form.event_update.children.enableGoogleLogin.help'
+                'help' => 'form.event_update.children.googleLoginEnabled.help'
             ])
-            ->add('enableLinkedinLogin', CheckboxType::class, [
+            ->add('linkedinLoginEnabled', CheckboxType::class, [
                 'required' => false,
-                'help' => 'form.event_update.children.enableLinkedinLogin.help'
+                'help' => 'form.event_update.children.linkedinLoginEnabled.help'
             ])
         ;
     }
