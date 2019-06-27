@@ -90,7 +90,7 @@ form.badge_configuration.children.conditionedByPackage.label: 'Conditionné par 
 form.badge_configuration.children.conditionedByStates.label: 'Conditionné par "état de la fiche"'
 form.badge_configuration.children.footerColor.label: 'Couleur du footer'
 form.badge_configuration.children.footerTextColor.label: 'Couleur du texte du footer'
-form.badge_configuration.children.header.help: 'Par défaut le header mobile de la langue par défaut'
+form.badge_configuration.children.header.help: "Par défaut le header mobile de la langue par défaut\n<br/>Le ratio hauteur / largeur est de 30%"
 form.badge_configuration.children.header.label: 'Logo du header'
 form.badge_configuration.children.isMirrored.label: 'Badge en mirroir'
 form.badge_configuration.children.isRightImageFullHeight.label: 'Image droite toute en hauteur'
