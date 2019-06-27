@@ -41,10 +41,12 @@ availability.confirmation.action.add_unavailability: 'Add an unavailability'
 availability.confirmation.explanation.title: 'In order to have access to your meeting requests, please confirm your availability on your schedule.'
 availability.confirmation.title: 'Confirm your availabilities'
 'Bad credentials.': 'Bad credentials.'
+badge.scan.loading: 'Searching the participant''s profile ...'
+badge.scan.title: 'Scan a participant''s badge'
 badge.title: 'My badge'
 billing_info.title: 'Billing information'
 catalog.action.meeting.proposition.approved: 'Approved proposal'
-catalog.action.meeting.proposition.show.refuse: 'Refused proposal'
+catalog.action.meeting.proposition.show.refuse: 'Declined request'
 catalog.action.meeting.request.approve: 'Received proposal'
 catalog.action.meeting.request.approved: 'Accepted request'
 catalog.action.meeting.request.back: Back
@@ -52,20 +54,20 @@ catalog.action.meeting.request.create: 'Request a meeting'
 catalog.action.meeting.request.discussion: discussions
 catalog.action.meeting.request.pending: 'Pending request'
 catalog.action.meeting.request.refuse: 'Received proposal'
-catalog.action.meeting.request.show.refuse: 'Refused request'
+catalog.action.meeting.request.show.refuse: 'Request declined'
 catalog.complete_sheet: 'View sheet details'
 catalog.external.modal.content: 'To access the full profile, you need to register to the event.'
 catalog.external.modal.content.logged: 'The schedule of appointment will be available on the %catalogOnlineDate%'
 catalog.meeting_request.approve: Approve
 catalog.meeting_request.create: 'Request a meeting'
 catalog.meeting_request.pending: 'Pending request'
-catalog.meeting_request.proposition.approved: 'Accepted proposal'
+catalog.meeting_request.proposition.approved: 'Approved proposition'
 catalog.meeting_request.proposition.placed: 'Meeting planned'
-catalog.meeting_request.proposition.refused: 'Refused proposal'
-catalog.meeting_request.refuse: Refuse
+catalog.meeting_request.proposition.refused: 'Declined proposition'
+catalog.meeting_request.refuse: Decline
 catalog.meeting_request.request.approved: 'Accepted request'
 catalog.meeting_request.request.placed: 'Meeting planned'
-catalog.meeting_request.request.refused: 'Refused request'
+catalog.meeting_request.request.refused: 'Request declined'
 catalog.mobile.filters.allParticipants: 'All participants'
 catalog.mobile.filters.availableSlot.title: 'Who is available ?'
 catalog.mobile.filters.title: 'Participants'' catalogue'
@@ -91,6 +93,7 @@ common.required_formats: '{1} Required format is : %format%|[1, Inf[Required for
 common.update: Modify
 common.validate: Submit
 contact.edit.comment: 'Edit comment'
+contact.edit.later: Later
 contact.show.comment: 'My comment (confidential)'
 contact.show.evaluation: 'Quality of contact (confidential)'
 contact.show.evaluation.1.label: 'Missed meeting'
@@ -98,6 +101,7 @@ contact.show.evaluation.2.label: 'Not relevant'
 contact.show.evaluation.3.label: 'Long term issue'
 contact.show.evaluation.4.label: 'Medium term follow-up'
 contact.show.evaluation.5.label: 'To see again very quickly'
+contacts.list.title: Contacts
 error.403.content: 'Your are not allowed to reach this content.'
 error.403.title: 'Not allowed'
 error.404.content: 'This content is not available or not available any more.'
@@ -134,6 +138,7 @@ event.registration_not_open: 'Registrations are not opened yet.'
 event.sheet.export.fields.contact_comment: Comment
 event.sheet.export.fields.contact_evaluation: Evaluation
 event.sheet.export.fields.event_name: 'Event name'
+event.sheet.export.fields.has_approved_meeting_request_with: Meeting
 event.sheet.export.fields.participant_email: 'Participant email'
 event.sheet.export.fields.participant_firstname: Firstname
 event.sheet.export.fields.participant_genre: gender
@@ -150,6 +155,8 @@ event.sheet.export.fields.sheet_turnover: turnover
 event.sheet.export.fields.sheet_type: Type
 event.sheet.export.fields.sheet_website: website
 event.sheet.export.fields.sheet_zipcode: Zipcode
+event.sheet.export.value.false: 'No'
+event.sheet.export.value.true: 'Yes'
 event.sms.meeting_request.receive: '%event%: You have received a meeting request, see %link%'
 event.sms.receive_meeting_request.approved: '%event%: Your meeting request with %sheet% has been accepted. Meeting scheduled the %date% at %time% : %spot%, See %link%'
 event.sms.reminder.pending_meeting_request: '%eventTitle% : You have received %countPendingMeetingRequest% meeting requests, See %meetingRequestManagementUrl%'
@@ -196,7 +203,7 @@ group.request.list.link.home: 'back to managing my entity'
 group.request.list.no-preference: 'No preferences'
 group.request.list.state.approved: Approved
 group.request.list.state.planned: 'Meeting planned'
-group.request.list.state.refused: Refused
+group.request.list.state.refused: Declined
 group.request.list.state.sent: Pending
 group.request.list.table.header.otherSheet: 'Other profiles'
 group.request.list.table.header.participants: Participants
@@ -268,6 +275,7 @@ navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
 navigation.category.forms: 'My venue'
 navigation.category.happening: 'Meeting administration'
+navigation.category.inCart: Basket
 navigation.category.leni_badge_link: 'Badges / E-invitations'
 navigation.category.meeting: 'My meetings'
 navigation.category.member_space: 'Participant area'
@@ -284,7 +292,7 @@ navigation.links.catalog.sheet_not_in_catalog: 'Your participation is awaiting v
 navigation.links.contactUs: 'Contact us'
 navigation.links.happening.accept: 'Accepted requests'
 navigation.links.happening.approved: Approved
-navigation.links.happening.decline: 'Refused requests'
+navigation.links.happening.decline: 'Declined requests'
 navigation.links.happening.open_date: 'Available on'
 navigation.links.happening.proposal: 'Meetings requests'
 navigation.links.happening.refused: Refused
@@ -294,7 +302,7 @@ navigation.links.incoming: 'Coming soon'
 navigation.links.meetingRequest.approved: Accepted
 navigation.links.meetingRequest.open_date: 'Available on'
 navigation.links.meetingRequest.proposal: 'Meetings requests'
-navigation.links.meetingRequest.refused: Refused
+navigation.links.meetingRequest.refused: Declined
 navigation.links.meetingRequest.sent: 'Pending requests'
 navigation.links.member_space.avatar: 'Profile picture'
 navigation.links.member_space.company: 'Company / Organization'
