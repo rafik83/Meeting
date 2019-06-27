@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,15 +22,38 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class UpdateType extends AbstractEventType
 {
+    /** @var TranslatorInterface */
+    private $translator;
+
+    /** @var Event\EventUrlGeneratorInterface */
+    private $eventUrlGenerator;
+
+    public function __construct(
+        array $supportedCurrencies,
+        array $preferredLocales,
+        PrefixRepositoryInterface $prefixRepository,
+        AuthorizationCheckerInterface $authorizationChecker,
+        TranslatorInterface $translator,
+        Event\EventUrlGeneratorInterface $eventUrlGenerator
+    ) {
+        $this->eventUrlGenerator = $eventUrlGenerator;
+        $this->translator = $translator;
+        parent::__construct($supportedCurrencies, $preferredLocales, $prefixRepository, $authorizationChecker);
+    }
+
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
+
+        /** @var Event $event */
+        $event = $options['event'];
 
         $builder
             ->add('translations', CollectionType::class, [
@@ -46,11 +71,17 @@ class UpdateType extends AbstractEventType
             ])
             ->add('googleLoginEnabled', CheckboxType::class, [
                 'required' => false,
-                'help' => 'form.event_update.children.googleLoginEnabled.help'
+                'help' => $this->translator->trans(
+                    'form.event_update.children.googleLoginEnabled.help',
+                    ['%urls%' => implode(', ', $this->getLocalesUrl($event, 'connect_google_check'))]
+                )
             ])
             ->add('linkedinLoginEnabled', CheckboxType::class, [
                 'required' => false,
-                'help' => 'form.event_update.children.linkedinLoginEnabled.help'
+                'help' => $this->translator->trans(
+                    'form.event_update.children.linkedinLoginEnabled.help',
+                    ['%urls%' => implode(', ', $this->getLocalesUrl($event, 'connect_linkedin_check'))]
+                )
             ])
         ;
     }
@@ -85,5 +116,16 @@ class UpdateType extends AbstractEventType
     public function getBlockPrefix()
     {
         return 'event_update';
+    }
+
+    private function getLocalesUrl(Event $event, string $routeName)
+    {
+        $urls = [];
+
+        foreach ($event->getLocales() as $locale) {
+            $urls[$locale] = $this->eventUrlGenerator->generateEventAbsoluteUrl($event, $routeName, ['_locale' => $locale]);
+        }
+
+        return $urls;
     }
 }

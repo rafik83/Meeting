@@ -127,6 +127,8 @@ services:
             - '%infrastructure.preferred_locales%'
             - '@repository.invoice.prefix_repository'
             - '@security.authorization_checker'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.event_url_generator'
         tags:
             - { name: form.type }
     form_type_event.create_type:

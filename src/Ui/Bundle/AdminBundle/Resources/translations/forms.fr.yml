@@ -318,9 +318,9 @@ form.event_update.children.backgroundImage.label: 'Image de fond'
 form.event_update.children.country.label: Pays
 form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
-form.event_update.children.googleLoginEnabled.help: 'Il est nécessaire d’ajouter l’url de redirection dans la console Google (console.developers.google.com) : https://sous-domaine-evenement.vimeet.events/fr/connect/google/check et https://sous-domaine-evenement.vimeet.events/en/connect/google/check'
+form.event_update.children.googleLoginEnabled.help: 'Il est nécessaire d’ajouter le ou les urls de redirection dans la console Google (console.developers.google.com) : %urls%'
 form.event_update.children.googleLoginEnabled.label: 'Inscription et connexion par compte Google activé'
-form.event_update.children.linkedinLoginEnabled.help: 'Il est nécessaire d’ajouter l’url de redirection sur la console Linkedin (www.linkedin.com/developers) dans l''onglet “Auth” : https://sous-domaine-evenement.vimeet.events/fr/connect/linkedin/check et https://sous-domaine-evenement.vimeet.events/en/connect/linkedin/check'
+form.event_update.children.linkedinLoginEnabled.help: 'Il est nécessaire d’ajouter le ou les urls de redirection sur la console Linkedin (www.linkedin.com/developers) dans l''onglet “Auth” : %urls%'
 form.event_update.children.linkedinLoginEnabled.label: 'Inscription et connexion par compte Linkedin activé'
 form.event_update.children.disabledEmailChanging.label: 'Changement d''email désactivé'
 form.event_update.children.disabledPasswordChanging.label: 'Changement de mot de passe désactivé'
