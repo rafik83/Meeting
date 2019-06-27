@@ -842,6 +842,11 @@ class Event implements EventInterface, TraceableInterface
         return $this->linkedinLoginEnabled;
     }
 
+    public function hasOAuth2LoginEnabled(): bool
+    {
+        return $this->isGoogleLoginEnabled() || $this->isLinkedinLoginEnabled();
+    }
+
     /**
      * @param \DateTimeInterface $datetime
      *
