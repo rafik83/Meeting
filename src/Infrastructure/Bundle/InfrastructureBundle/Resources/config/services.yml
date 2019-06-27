@@ -4509,7 +4509,6 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.event_open_access_checker'
-            - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery }
 
@@ -6970,6 +6969,14 @@ services:
             - '@adapter.intl_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery }
+
+
+    Proximum\Vimeet\Application\Query\Badge\GetExampleBadgeByEventQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetExampleBadgeByEventQuery }
 
     Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQueryHandler:
         arguments:

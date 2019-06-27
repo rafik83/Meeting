@@ -3,149 +3,58 @@
 {% block form_title 'admin.type.badge.configuration.title'|trans %}
 
 {% block form_content %}
-<style>
-    .badge-preview {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        text-align: center;
-        border: 1px solid #000000;
-    }
-    .badge-header {
-        height: 200px;
-        margin: 10px;
-        overflow: hidden;
-        max-width: 100%;
-    }
-    .badge-header-edit {
-        height: 220px;
-        margin: 10px;
-    }
-    .badge-footer {
-        background-color: #000000;
-        color: #ffffff;
-        height: 150px;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        font-size: 30px;
-    }
-    .badge-footer-edit {
-        height: 150px;
-    }
-    .badge-sheet-title {
-        font-size: 30px;
-        margin: 10px;
-        height: 70px;
-    }
-    .badge-sheet-title-edit {
-        margin: 10px;
-        height: 70px;
-    }
-
-    .badge-qrcode {
-        margin: 10px;
-        height: 230px;
-    }
-    .badge-qrcode-edit {
-        height: 180px;
-    }
-
-    .badge-name-position {
-        font-size: 25px;
-        height: 140px;
-        margin: 10px;
-    }
-    .badge-name-position-edit {
-        height: 120px;
-        margin: 10px;
-    }
-
-</style>
 
 {{ form_row(form.activated) }}
+<div class="col-lg-9 col-md-9 col-sm-9 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+    <div class="checkbox">
+        <a href="{{ path('admin_type_badge_preview', {'event': event.id, 'type': type.id}) }}" target="_blank">{{ 'admin.type.badge.preview.link'|trans }}</a>
+    </div>
+</div>
 <hr>
 <div class="col-md-12">
     <div class="col-md-6">
-        <p>{{ 'admin.type.badge.example.explanation'|trans }}</p>
-        <div class="badge-preview">
-            <div class="badge-header" style="max-height: 200px;">
-                {% if badge is null or badge.showHeader %}
-                    {% if badge is null or badge.header is null %}
-                        <img src="{{ event.localizedMobileLogo(locale) }}" height="200"/>
-                    {% else %}
-                        <img src="{{ badge.header }}" height="200"/>
-                    {% endif %}
-                {% endif %}
-            </div>
-            <div class="badge-sheet-title">
-                {% if badge is null or (badge is not null and badge.showSheetTitle) %}
-                    {{ 'admin.type.badge.example.sheetTitle'|trans }}
-                {% endif %}
-            </div>
-            <div class="badge-qrcode">
-                {% if badge is null or badge.showQRCode %}
-                    <img src="{{ asset('assets/images/qrcode-vimeet.svg') }}" width="225"/>
-                {% endif %}
-            </div>
-            <div class="badge-name-position">
-                {% if badge is null or badge.showFirstName %}
-                    {{ 'admin.type.badge.example.firstName'|trans }}
-                {% endif %}
-                {% if badge is null or badge.showLastName %}
-                    {{ 'admin.type.badge.example.lastName'|trans }}
-                {% endif %}
-                <br/>
-                {% if badge is null or badge.showPosition %}
-                    {{ 'admin.type.badge.example.position'|trans }}
-                {% endif %}
-                <br/>
-                {% if badge and badge.showCountry %}
-                    {{ 'admin.type.badge.example.country'|trans|upper }}
-                {% endif %}
-            </div>
-            <div class="badge-footer"
-                 {% if badge is not null %}
-                     style="background-color: {{ badge.footerColor }}; color: {{ badge.footerTextColor }};"
-                 {% endif %}
-            >
-                <p>{{ type.title(locale)|upper }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="badge-header-edit">
+        <div>
             {{ form_row(form.header) }}
             {{ form_row(form.showHeader) }}
+            {{ form_row(form.isMirrored) }}
+            <br/>
+            {{ form_row(form.leftImage) }}
+            {{ form_row(form.removeLeftImage) }}
+            <br/>
+            {{ form_row(form.rightImage) }}
+            {{ form_row(form.removeRightImage) }}
+            {{ form_row(form.isRightImageFullHeight) }}
         </div>
         <hr>
-        <div class="badge-sheet-title-edit">
+        <div>
             {{ form_row(form.showSheetTitle) }}
         </div>
         <hr>
-        <div class="badge-qrcode-edit">
+        <div>
             {{ form_row(form.showQRCode) }}
         </div>
         <hr>
-        <div class="badge-name-position-edit">
+        <div>
             {{ form_row(form.showFirstName) }}
             {{ form_row(form.showLastName) }}
             {{ form_row(form.showPosition) }}
             {{ form_row(form.showCountry) }}
         </div>
         <hr>
-        <div class="badge-footer-edit">
+        <div>
             {{ form_row(form.showFooterTypeOrCategory) }}
             {{ form_row(form.footerTextColor) }}
             {{ form_row(form.footerColor) }}
         </div>
+        <hr>
+        <div>
+            {{ form_row(form.conditioned) }}
+            {{ form_row(form.conditionedByPackage) }}<br/>
+            {{ form_row(form.conditionedByStates) }}
+        </div>
     </div>
 </div>
 <div class="clearfix"></div>
-<hr>
-    {{ form_row(form.conditioned) }}
-    {{ form_row(form.conditionedByPackage) }}<br/>
-    {{ form_row(form.conditionedByStates) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_type_list', { 'event': event.id }) %}

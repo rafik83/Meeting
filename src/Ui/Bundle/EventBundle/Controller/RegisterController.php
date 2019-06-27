@@ -75,6 +75,7 @@ class RegisterController extends Controller
             return $response;
         }
 
+        $this->setFlashRegisterType($typeView->id);
         $command = new Email();
         $form    = $this->createForm(EmailType::class, $command, ['action' => $request->getUri()]);
 

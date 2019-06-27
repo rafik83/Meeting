@@ -4,7 +4,9 @@ namespace Proximum\Vimeet\Application\Query\Contact;
 
 use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -45,24 +47,53 @@ class GetContactListUsersViewQueryHandler
      */
     protected function getFromApprovedRequests(Participant $participant): array
     {
+        $metUsers = [];
         $sheet = $participant->getSheet();
-
         $requests = $this->requestRepository->findApproved($sheet);
 
-        $metUsers = [];
         foreach ($requests as $request) {
-            $requestParticipants = $this->meetingParticipants->getMeetingParticipants($request, $sheet);
-
-            if (!\in_array($participant, $requestParticipants, true)) {
+            if (!$this->isRequestNoPreferenceOrInParticipants($request, $participant)) {
                 continue;
             }
 
-            foreach ($request->getSheetMet($sheet)->getParticipantsArray() as $otherParticipant) {
-                $metUsers[] = $otherParticipant->getUser();
+            foreach ($this->getSheetParticipantsMet($request, $sheet) as $participantMet) {
+                $metUsers[] = $participantMet->getUser();
             }
         }
 
         return $metUsers;
+    }
+
+    /**
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return Participant[]
+     */
+    private function getSheetParticipantsMet(Request $request, Sheet $sheet): array
+    {
+        $sheetMet = $request->getSheetMet($sheet);
+
+        $participantsMet = $this->meetingParticipants->getMeetingParticipants($request, $sheetMet);
+
+        if (empty($participantsMet)) {
+            $participantsMet = [$sheetMet->getFirstParticipant()];
+        }
+
+        return $participantsMet;
+    }
+
+    private function isRequestNoPreferenceOrInParticipants(Request $request, Participant $participant): bool
+    {
+        $sheet = $participant->getSheet();
+
+        if ($request->hasNoPreference($sheet)) {
+            return true;
+        }
+
+        $requestParticipants = $this->meetingParticipants->getMeetingParticipants($request, $sheet);
+
+        return \in_array($participant, $requestParticipants, true);
     }
 
     /**

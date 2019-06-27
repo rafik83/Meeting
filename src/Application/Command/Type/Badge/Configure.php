@@ -76,6 +76,24 @@ class Configure implements Command
     /** @var bool */
     public $showCountry;
 
+    /** @var bool */
+    public $isMirrored;
+
+    /** @var string|null */
+    public $leftImage;
+
+    /** @var bool */
+    public $removeLeftImage;
+
+    /** @var string|null */
+    public $rightImage;
+
+    /** @var bool */
+    public $removeRightImage;
+
+    /** @var bool */
+    public $isRightImageFullHeight;
+
     public function __construct(Event $event, Type $type, ?Badge $badge = null)
     {
         $this->event = $event;
@@ -96,6 +114,8 @@ class Configure implements Command
         $this->conditionedByPackage = false;
         $this->conditionedByStates = [];
         $this->showCountry = false;
+        $this->isMirrored = false;
+        $this->isRightImageFullHeight = false;
 
         if ($badge instanceof Badge) {
             $this->showHeader = $badge->isShowHeader();
@@ -112,6 +132,8 @@ class Configure implements Command
             $this->conditionedByPackage = $badge->isConditionedByPackage();
             $this->conditionedByStates = $badge->getConditionedByStates();
             $this->showCountry = $badge->isShowCountry();
+            $this->isMirrored = $badge->isMirrored();
+            $this->isRightImageFullHeight = $badge->isRightImageFullHeight();
         }
     }
 }

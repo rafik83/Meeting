@@ -199,12 +199,12 @@ class TransformApprovedRequestsByLinkedSheetsIntoMeetingHandlerTest extends Test
 
         $this
             ->commandBus
-            ->handle(new TransformRequestIntoMeeting($request1->reveal(), Meeting::CREATED_BY_PLANNER, true, true))
+            ->handle(new TransformRequestIntoMeeting($request1->reveal(), Meeting::CREATED_BY_PLANNER, true, false))
             ->shouldBeCalled()
         ;
         $this
             ->commandBus
-            ->handle(new TransformRequestIntoMeeting($request3->reveal(), Meeting::CREATED_BY_PLANNER, true, true))
+            ->handle(new TransformRequestIntoMeeting($request3->reveal(), Meeting::CREATED_BY_PLANNER, true, false))
             ->shouldBeCalled()
         ;
 

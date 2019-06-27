@@ -1,5 +1,10 @@
-<div class="page">
-    <div class="badge">
+{% macro write_badge(userBadgeByEventView, side) %}
+<div class="quarterSection-container {% if side == 'right' %}quarterSection-container--upRight{% endif %}">
+    <div class="quarterSection badge">
+        {% if userBadgeByEventView.header %}
+            <img src="{{ userBadgeByEventView.header }}" class="badge-image badge-image--logo print-bg" />
+        {% endif %}
+
         <div class="badge-content">
             <div class="company-participant {% if not userBadgeByEventView.qrCodeIdentifier %}company-zone-without-qrcode{% endif %}">
                 <div class="text">{{ userBadgeByEventView.sheetTitle }}</div>
@@ -40,3 +45,22 @@
         </div>
     </div>
 </div>
+{% endmacro %}
+
+{% macro write_image(imagePath, side, fullHeight = false) %}
+    {% if side == 'left' %}
+        {% set sectionContainerClasses = 'quarterSection-container quarterSection-container--downLeft' %}
+        {% set sectionClass = 'quarterSection' %}
+    {% elseif fullHeight == false %}
+        {% set sectionContainerClasses = 'quarterSection-container quarterSection-container--downRight' %}
+        {% set sectionClass = 'quarterSection' %}
+    {% else %}
+        {% set sectionContainerClasses = 'halfXSection-container halfXSection-container--right' %}
+        {% set sectionClass = 'halfXSection' %}
+    {% endif %}
+    <div class="{{ sectionContainerClasses }}">
+        <div class="{{ sectionClass }}">
+            <img src="{{ imagePath }}" class="badge-image print-bg" />
+        </div>
+    </div>
+{% endmacro %}
