@@ -80,6 +80,18 @@ class Badge
     /** @var array */
     private $conditionedByStates;
 
+    /** @var bool */
+    private $isMirrored;
+
+    /** @var string|null */
+    private $leftImage;
+
+    /** @var string|null */
+    private $rightImage;
+
+    /** @var bool */
+    private $isRightImageFullHeight;
+
     public function __construct(
         Event $event,
         Type $type,
@@ -97,7 +109,11 @@ class Badge
         bool $conditioned = false,
         bool $conditionedByPackage = false,
         bool $showCountry = false,
-        array $conditionedByStates = []
+        array $conditionedByStates = [],
+        bool $isMirrored = false,
+        ?string $downLeftImage = null,
+        ?string $rightImage = null,
+        bool $isRightImageFullHeight = false
     ) {
         $this->event = $event;
         $this->type = $type;
@@ -116,6 +132,10 @@ class Badge
         $this->conditionedByPackage = $conditionedByPackage;
         $this->conditionedByStates = $conditionedByStates;
         $this->showCountry = $showCountry;
+        $this->isMirrored = $isMirrored;
+        $this->leftImage = $downLeftImage;
+        $this->rightImage = $rightImage;
+        $this->isRightImageFullHeight = $isRightImageFullHeight;
     }
 
     public static function createDefault(Event $event, Type $type): self
@@ -138,7 +158,11 @@ class Badge
         bool $conditioned = false,
         bool $conditionedByPackage = false,
         bool $showCountry = false,
-        array $conditionedByStates = []
+        array $conditionedByStates = [],
+        bool $isMirrored = false,
+        ?string $leftImage = null,
+        ?string $rightImage = null,
+        bool $isRightImageFullHeight = false
     ): void {
         $this->header = $header;
         $this->showHeader = $showHeader;
@@ -155,6 +179,10 @@ class Badge
         $this->conditionedByPackage = $conditionedByPackage;
         $this->conditionedByStates = $conditionedByStates;
         $this->showCountry = $showCountry;
+        $this->isMirrored = $isMirrored;
+        $this->leftImage = $leftImage;
+        $this->rightImage = $rightImage;
+        $this->isRightImageFullHeight = $isRightImageFullHeight;
     }
 
     public function getId(): ?int
@@ -255,5 +283,25 @@ class Badge
     public function getConditionedByStates(): array
     {
         return $this->conditionedByStates;
+    }
+
+    public function isMirrored(): bool
+    {
+        return $this->isMirrored;
+    }
+
+    public function getLeftImage(): ?string
+    {
+        return $this->leftImage;
+    }
+
+    public function getRightImage(): ?string
+    {
+        return $this->rightImage;
+    }
+
+    public function isRightImageFullHeight(): bool
+    {
+        return $this->isRightImageFullHeight;
     }
 }

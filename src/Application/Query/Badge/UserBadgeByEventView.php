@@ -45,6 +45,18 @@ class UserBadgeByEventView
     /** @var null|string */
     public $country;
 
+    /** @var bool */
+    public $isMirrored;
+
+    /** @var string|null */
+    public $leftImage;
+
+    /** @var string|null */
+    public $rightImage;
+
+    /** @var bool */
+    public $isRightImageFullHeight;
+
     public function __construct(
         ?string $sheetTitle,
         ?string $firstName,
@@ -56,7 +68,11 @@ class UserBadgeByEventView
         ?string $header,
         string $footerTextColor,
         string $footerColor,
-        ?string $country
+        ?string $country,
+        bool $isMirrored,
+        ?string $leftImage,
+        ?string $rightImage,
+        bool $isRightImageFullHeight
     ) {
         $this->sheetTitle = $sheetTitle;
         $this->firstName = $firstName;
@@ -69,5 +85,9 @@ class UserBadgeByEventView
         $this->footerTextColor = $footerTextColor;
         $this->footerColor = $footerColor;
         $this->country = $country;
+        $this->isMirrored = $isMirrored;
+        $this->leftImage = $leftImage;
+        $this->rightImage = $rightImage;
+        $this->isRightImageFullHeight = $isRightImageFullHeight;
     }
 }
