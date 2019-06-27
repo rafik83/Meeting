@@ -11,10 +11,28 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MeetingRequestUpdateType extends AbstractMeetingRequestType
 {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        /** @var Sheet $sheet */
+        $sheet = $options['sheet'];
+        $arrayAttributesOptions = array_merge(['required' => false], $options['priorityNumberAvailable'] === 0 ? ['disabled' => true] : []);
+
+        if ($sheet->getType()->getPriorityMeetingRequestsNumber() > 0) {
+            $builder
+                ->add(
+                    'isPriority', CheckboxType::class, $arrayAttributesOptions
+                );
+        }
+
+        parent::buildForm($builder, $options);
+    }
     /**
      * {@inheritdoc}
      */

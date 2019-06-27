@@ -33,6 +33,14 @@
             {% for key, child in form if key != 'submit'%}
                 {% if key == 'participants' %}
                     {{ form_row(child, {'attr': { 'data-participants-checkbox': 'here', 'data-placeholder-preference': 'form.catalog_create_meeting_request.children.participants.default.no_preference'|trans({}, 'forms') }}) }}
+                {% elseif key == 'isPriority' %}
+                    {{ form_row(child,
+                        {
+                            'label' : 'form.catalog_edit_meeting_request.children.isPriority.label'|trans({}, 'forms')~' '~'('~priorityNumberAvailable~'/'~sheet.type.priorityMeetingRequestsNumber~' restante(s))',
+                            'label_attr': { 'title': priorityNumberAvailable~'form.catalog_edit_meeting_request.children.tooltip.title'|trans({}, 'forms')~sheet.type.priorityMeetingRequestsNumber~' total'}
+                        }
+                    )
+                    }}
                 {% else %}
                     {{ form_row(child) }}
                 {% endif %}

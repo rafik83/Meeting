@@ -75,6 +75,14 @@ class UpdateMeetingRequestHandler
      */
     public function handle(UpdateMeetingRequest $updateRequest)
     {
+        if ($updateRequest->sheetEditor === $updateRequest->meetingRequest->getToSheet()) {
+            $updateRequest->meetingRequest->setToPriority($updateRequest->isPriority);
+        }
+
+        if ($updateRequest->sheetEditor === $updateRequest->meetingRequest->getFromSheet()) {
+            $updateRequest->meetingRequest->setFromPriority($updateRequest->isPriority);
+        }
+
         if (!$this->requestPermissionManager->isAllowedToEditSentOrApproved(
             $updateRequest->meetingRequest,
             $updateRequest->sheetEditor

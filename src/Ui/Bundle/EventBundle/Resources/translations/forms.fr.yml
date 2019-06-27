@@ -20,7 +20,9 @@ form.catalog_create_meeting_request.children.tooltip.title: ' demandes de rdvs p
 form.catalog_create_meeting_request.children.submit.label: 'Valider la demande de RDV'
 form.catalog_edit_meeting_request.children.description.label: 'Motiver votre demande de RDV'
 form.catalog_edit_meeting_request.children.description.placeholder: 'Ecrire un message'
+form.catalog_edit_meeting_request.children.isPriority.label: Prioritaire
 form.catalog_edit_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
+form.catalog_edit_meeting_request.children.tooltip.title: ' demandes de rdvs prioritaires restant sur '
 form.catalog_edit_meeting_request.pending.request.children.submit.label: 'Modifier la demande de RDV'
 form.catalog_edit_meeting_request.proposition.children.submit.label: Modifier
 form.catalog_edit_meeting_request.request.children.submit.label: Modifier
