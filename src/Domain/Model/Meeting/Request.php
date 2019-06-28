@@ -587,8 +587,8 @@ class Request implements MessageSubjectInterface
      */
     public function getParticipants(Sheet $sheet)
     {
-        if ($this->hasNoPreference($sheet) && 1 === $sheet->getParticipants()->count()) {
-            return [$sheet->getParticipants()->first()];
+        if ($this->hasNoPreference($sheet) && $sheet->hasOnlyOneParticipant()) {
+            return [$sheet->getFirstParticipant()];
         }
 
         if ($this->isSender($sheet)) {

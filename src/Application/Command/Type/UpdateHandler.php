@@ -73,7 +73,8 @@ class UpdateHandler
             $update->areAllSheetParticipantsAssignedToMeeting,
             $update->canScanParticipant,
             $update->isPackageRequired,
-            $update->isPaymentRequired
+            $update->isPaymentRequired,
+            $update->priorityMeetingRequestsNumber
         );
         $type->setHidden($update->hidden);
 

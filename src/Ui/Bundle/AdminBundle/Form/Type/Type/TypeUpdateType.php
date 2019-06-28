@@ -128,6 +128,10 @@ class TypeUpdateType extends AbstractType
                 'isPaymentRequired', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add(
+                'priorityMeetingRequestsNumber', IntegerType::class, [
+                'required' => false,
+            ])
         ;
     }
 

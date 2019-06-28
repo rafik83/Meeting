@@ -40,6 +40,24 @@ class ConfigureType extends AbstractType
             ->add('showHeader', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('isMirrored', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('leftImage', FileType::class, [
+                'required' => false
+            ])
+            ->add('removeLeftImage', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('rightImage', FileType::class, [
+                'required' => false
+            ])
+            ->add('removeRightImage', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('isRightImageFullHeight', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('showFooterTypeOrCategory', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
