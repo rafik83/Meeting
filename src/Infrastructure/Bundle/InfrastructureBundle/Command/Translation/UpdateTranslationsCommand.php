@@ -61,30 +61,7 @@ class UpdateTranslationsCommand extends Command
     {
         $this->push($input, $output);
 
-        $command = new Openl10n\Pull($input->getArgument('emailToNotify'), $input->getArgument('locale'));
-
-        /** @var Openl10n\PullResult $pullResult */
-        $pullResult = $this->commandBus->handle($command);
-
-        $output->writeln('<info>Skipped files</info>');
-
-        if (empty($pullResult->skippedFiles)) {
-            $output->writeln('<comment>none</comment>');
-        }
-
-        foreach ($pullResult->skippedFiles as $skippedFile) {
-            $output->writeln($skippedFile);
-        }
-
-        $output->writeln('<info>Downloaded files</info>');
-
-        foreach ($pullResult->downloadedFiles as $downloadedFile) {
-            $output->writeln($downloadedFile);
-        }
-
-        if (empty($pullResult->downloadedFiles)) {
-            $output->writeln('<comment>none</comment>');
-        }
+        $this->pull($input, $output);
 
         array_map('unlink', glob(sprintf('%s/translations/*', $this->kernelCacheDir)));
 
@@ -136,6 +113,34 @@ class UpdateTranslationsCommand extends Command
 
         foreach ($pushResult->uploadedFiles as $uploadedFile) {
             $output->writeln($uploadedFile);
+        }
+    }
+
+    protected function pull(InputInterface $input, OutputInterface $output): void
+    {
+        $command = new Openl10n\Pull($input->getArgument('emailToNotify'), $input->getArgument('locale'));
+
+        /** @var Openl10n\PullResult $pullResult */
+        $pullResult = $this->commandBus->handle($command);
+
+        $output->writeln('<info>Skipped files</info>');
+
+        if (empty($pullResult->skippedFiles)) {
+            $output->writeln('<comment>none</comment>');
+        }
+
+        foreach ($pullResult->skippedFiles as $skippedFile) {
+            $output->writeln($skippedFile);
+        }
+
+        $output->writeln('<info>Downloaded files</info>');
+
+        foreach ($pullResult->downloadedFiles as $downloadedFile) {
+            $output->writeln($downloadedFile);
+        }
+
+        if (empty($pullResult->downloadedFiles)) {
+            $output->writeln('<comment>none</comment>');
         }
     }
 }
