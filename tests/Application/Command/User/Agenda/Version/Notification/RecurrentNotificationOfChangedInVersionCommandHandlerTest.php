@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\Recurre
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
@@ -28,7 +29,7 @@ class RecurrentNotificationOfChangedInVersionCommandHandlerTest extends TestCase
     private $dateTime;
 
     /** @var ObjectProphecy */
-    private $event1, $event2, $user1, $user2, $extraDataRepository, $notifyUserOfChangedVersionCommandHandler;
+    private $event1, $event2, $user1, $user2, $extraDataRepository, $notifyUserOfChangedVersionCommandHandler, $plannerJobRepository;
 
     /** @var ObjectProphecy[] */
     private $events, $extraData;
@@ -70,6 +71,7 @@ class RecurrentNotificationOfChangedInVersionCommandHandlerTest extends TestCase
         $this->agendaVersionDiffNotificationTimeInMinutesParameters = 30;
         $this->agendaVersionDiffDDayNotificationTimeInMinutesParameters = 10;
         $this->notifyUserOfChangedVersionCommandHandler = $this->prophesize(NotifyUserOfChangedVersionCommandHandler::class);
+        $this->plannerJobRepository = $this->prophesize(PlannerJobRepositoryInterface::class);
     }
 
     public function testHandle()
@@ -100,7 +102,8 @@ class RecurrentNotificationOfChangedInVersionCommandHandlerTest extends TestCase
             $this->agendaVersionDiffNotificationTimeInMinutesParameters,
             $this->agendaVersionDiffDDayNotificationTimeInMinutesParameters,
             $this->notifyUserOfChangedVersionCommandHandler->reveal(),
-            $this->dateTime
+            $this->dateTime,
+            $this->plannerJobRepository->reveal()
         );
 
         $handler->handle(new RecurrentNotificationOfChangedInVersionCommand($this->events, false));
@@ -134,7 +137,8 @@ class RecurrentNotificationOfChangedInVersionCommandHandlerTest extends TestCase
             $this->agendaVersionDiffNotificationTimeInMinutesParameters,
             $this->agendaVersionDiffDDayNotificationTimeInMinutesParameters,
             $this->notifyUserOfChangedVersionCommandHandler->reveal(),
-            $this->dateTime
+            $this->dateTime,
+            $this->plannerJobRepository->reveal()
         );
 
         $handler->handle(new RecurrentNotificationOfChangedInVersionCommand($this->events, true));
