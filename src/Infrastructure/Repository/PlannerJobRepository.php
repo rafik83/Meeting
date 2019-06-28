@@ -67,6 +67,25 @@ class PlannerJobRepository implements PlannerJobRepositoryInterface
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function findLastByEvents(array $events): ?PlannerJob
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('plannerJob, admin')
+            ->from(PlannerJob::class, 'plannerJob')
+            ->join('plannerJob.admin', 'admin', 'WITH', 'plannerJob.event IN (:events)')
+            ->orderBy('plannerJob.createdAt', 'desc')
+            ->setParameter('events', $events)
+            ->setMaxResults(1)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
     public function countByAdmin(Admin $admin): int
     {
         return $this->entityManager

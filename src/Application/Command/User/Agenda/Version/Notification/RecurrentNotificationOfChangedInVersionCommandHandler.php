@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification;
 
+use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
@@ -30,22 +31,33 @@ class RecurrentNotificationOfChangedInVersionCommandHandler
     /** @var NotifyUserOfChangedVersionCommandHandler */
     private $notifyUserOfChangedVersionCommandHandler;
 
+    /** @var PlannerJobRepositoryInterface */
+    private $plannerJobRepository;
+
     public function __construct(
         ExtraDataRepositoryInterface $extraDataRepository,
         int $agendaVersionDiffNotificationTimeInMinutesParameters,
         int $agendaVersionDiffDDayNotificationTimeInMinutesParameters,
         NotifyUserOfChangedVersionCommandHandler $notifyUserOfChangedVersionCommandHandler,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        PlannerJobRepositoryInterface $plannerJobRepository
     ) {
         $this->extraDataRepository = $extraDataRepository;
         $this->agendaVersionDiffNotificationTimeInMinutesParameters = $agendaVersionDiffNotificationTimeInMinutesParameters;
         $this->agendaVersionDiffDDayNotificationTimeInMinutesParameters = $agendaVersionDiffDDayNotificationTimeInMinutesParameters;
         $this->notifyUserOfChangedVersionCommandHandler = $notifyUserOfChangedVersionCommandHandler;
         $this->dateTime = $dateTime;
+        $this->plannerJobRepository = $plannerJobRepository;
     }
 
     public function handle(RecurrentNotificationOfChangedInVersionCommand $command): void
     {
+        $lastPlannerJob = $this->plannerJobRepository->findLastByEvents($command->events);
+
+        if (null !== $lastPlannerJob && !$lastPlannerJob->isCompleted()) {
+            return;
+        }
+
         $date = (new \DateTime())->setTimestamp($this->dateTime->getTimestamp());
         $this->modifyDateAccordingToParameters($date, $command->dday);
 

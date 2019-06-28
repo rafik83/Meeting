@@ -33,6 +33,13 @@ interface PlannerJobRepositoryInterface
      */
     public function findLastByEvent(Event $event): ?PlannerJob;
 
+    /**
+     * @param Event[] $events
+     *
+     * @return null|PlannerJob
+     */
+    public function findLastByEvents(array $events): ?PlannerJob;
+
     public function countByAdmin(Admin $admin): int;
 
     /**
