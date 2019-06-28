@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PushCommand extends Command
 {
-    private const NAME = 'vimeet:translations:push';
+    public const NAME = 'vimeet:translations:push';
 
     /** @var string */
     private $configFilePath;

@@ -12,7 +12,9 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Tra
 
 use Proximum\Vimeet\Application\ThirdParty\Openl10n;
 use Proximum\Vimeet\Infrastructure\Adapter\CommandBus;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Openl10n\PushCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -57,8 +59,25 @@ class UpdateTranslationsCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
+        $command = $this->getApplication()->find(PushCommand::NAME);
+
+        $arguments = [
+            'command' => PushCommand::NAME,
+            '--locale'  => 'all',
+        ];
+
+        $greetInput = new ArrayInput($arguments);
+
+        $returnCode = $command->run($greetInput, $output);
+
+        if (0 !== $returnCode) {
+            $output->writeln('push command returned a bad return code');
+
+            return $returnCode;
+        }
+
         $command = new Openl10n\Pull($input->getArgument('emailToNotify'), $input->getArgument('locale'));
 
         /** @var Openl10n\PullResult $pullResult */
@@ -85,5 +104,7 @@ class UpdateTranslationsCommand extends Command
         }
 
         array_map('unlink', glob(sprintf('%s/translations/*', $this->kernelCacheDir)));
+
+        return 0;
     }
 }
