@@ -86,7 +86,7 @@ abstract class AbstractMeetingRequestType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['sheet', 'locale', 'priorityNumberAvailable']);
+        $resolver->setRequired(['sheet', 'locale', 'priorityNumberAvailable', 'meetingRequest']);
         $resolver->setDefault('placeholder_description', '');
         $resolver->setDefault('show_description', true);
     }

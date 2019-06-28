@@ -845,6 +845,7 @@ class MeetingRequestController extends Controller
                     'sheet'          => $sheet->getId(),
                     'meetingRequest' => $meetingRequest->getId(),
                 ]),
+                'meetingRequest' => $meetingRequest,
                 'priorityNumberAvailable' => $priorityNumberAvailable
             ]);
 
