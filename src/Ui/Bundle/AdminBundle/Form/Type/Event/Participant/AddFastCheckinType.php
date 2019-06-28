@@ -22,7 +22,7 @@ class AddFastCheckinType extends AbstractType
                 TypeChoiceType::class,
                 [
                     'event' => $options['event'],
-                    'locale' => $options['locale'],
+                    'locale' => $options['locale']->getAvailableLocale($options['locale']),
                     'user' => $options['user'],
                     'placeholder' => '',
                 ]
