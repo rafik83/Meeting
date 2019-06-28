@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\NotifyU
 use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\RecurrentNotificationOfChangedInVersionCommand;
 use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\RecurrentNotificationOfChangedInVersionCommandHandler;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
@@ -29,7 +30,7 @@ class RecurrentNotificationOfChangedInVersionCommandHandlerTest extends TestCase
     private $dateTime;
 
     /** @var ObjectProphecy */
-    private $event1, $event2, $user1, $user2, $extraDataRepository, $notifyUserOfChangedVersionCommandHandler, $plannerJobRepository;
+    private $event1, $event2, $user1, $user2, $extraDataRepository, $notifyUserOfChangedVersionCommandHandler, $plannerJob, $plannerJobRepository;
 
     /** @var ObjectProphecy[] */
     private $events, $extraData;
@@ -72,6 +73,7 @@ class RecurrentNotificationOfChangedInVersionCommandHandlerTest extends TestCase
         $this->agendaVersionDiffDDayNotificationTimeInMinutesParameters = 10;
         $this->notifyUserOfChangedVersionCommandHandler = $this->prophesize(NotifyUserOfChangedVersionCommandHandler::class);
         $this->plannerJobRepository = $this->prophesize(PlannerJobRepositoryInterface::class);
+        $this->plannerJob = $this->prophesize(PlannerJob::class);
     }
 
     public function testHandle()
@@ -81,6 +83,8 @@ class RecurrentNotificationOfChangedInVersionCommandHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($this->extraData)
         ;
+
+        $this->plannerJobRepository->findLastByEvents($this->events)->willReturn(null);
 
         $this->notifyUserOfChangedVersionCommandHandler
             ->handle(new NotifyUserOfChangedVersionCommand($this->event1->reveal(), $this->user1->reveal()))
@@ -116,6 +120,9 @@ class RecurrentNotificationOfChangedInVersionCommandHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($this->extraData)
         ;
+
+        $this->plannerJob->isCompleted()->willReturn(true);
+        $this->plannerJobRepository->findLastByEvents($this->events)->willReturn($this->plannerJob->reveal());
 
         $this->notifyUserOfChangedVersionCommandHandler
             ->handle(new NotifyUserOfChangedVersionCommand($this->event1->reveal(), $this->user1->reveal()))
