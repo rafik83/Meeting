@@ -12,9 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Tra
 
 use Proximum\Vimeet\Application\ThirdParty\Openl10n;
 use Proximum\Vimeet\Infrastructure\Adapter\CommandBus;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Openl10n\PushCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -61,22 +59,7 @@ class UpdateTranslationsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $command = $this->getApplication()->find(PushCommand::NAME);
-
-        $arguments = [
-            'command' => PushCommand::NAME,
-            '--locale'  => 'all',
-        ];
-
-        $greetInput = new ArrayInput($arguments);
-
-        $returnCode = $command->run($greetInput, $output);
-
-        if (0 !== $returnCode) {
-            $output->writeln('push command returned a bad return code');
-
-            return $returnCode;
-        }
+        $this->push($input, $output);
 
         $command = new Openl10n\Pull($input->getArgument('emailToNotify'), $input->getArgument('locale'));
 
@@ -106,5 +89,53 @@ class UpdateTranslationsCommand extends Command
         array_map('unlink', glob(sprintf('%s/translations/*', $this->kernelCacheDir)));
 
         return 0;
+    }
+
+    protected function push(InputInterface $input, OutputInterface $output): void
+    {
+        $command = new Openl10n\Push([$input->getArgument('locale')]);
+
+        /** @var Openl10n\PushResult $pushResult */
+        $pushResult = $this->commandBus->handle($command);
+
+        $output->writeln('<info>Added locales</info>');
+
+        if (empty($pushResult->addedLocales)) {
+            $output->writeln('<comment>none</comment>');
+        }
+
+        foreach ($pushResult->addedLocales as $addedLocale) {
+            $output->writeln($addedLocale);
+        }
+
+        $output->writeln('<info>Unknown locales</info>');
+
+        if (empty($pushResult->unknownLocales)) {
+            $output->writeln('<comment>none</comment>');
+        }
+
+        foreach ($pushResult->unknownLocales as $unknownLocale) {
+            $output->writeln($unknownLocale);
+        }
+
+        $output->writeln('<info>Created resources</info>');
+
+        if (empty($pushResult->createdFiles)) {
+            $output->writeln('<comment>none</comment>');
+        }
+
+        foreach ($pushResult->createdFiles as $createdFile) {
+            $output->writeln($createdFile);
+        }
+
+        $output->writeln('<info>Uploaded files</info>');
+
+        if (empty($pushResult->uploadedFiles)) {
+            $output->writeln('<comment>none</comment>');
+        }
+
+        foreach ($pushResult->uploadedFiles as $uploadedFile) {
+            $output->writeln($uploadedFile);
+        }
     }
 }

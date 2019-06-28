@@ -2,18 +2,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Openl10n;
 
-use GuzzleHttp\Exception\BadResponseException;
-use Proximum\Vimeet\Openl10n\Cli\File\FileHandler;
-use Proximum\Vimeet\Openl10n\Cli\Project\ProjectHandler;
-use Proximum\Vimeet\Openl10n\Cli\ServiceContainer\Configuration\ConfigurationLoader;
-use Proximum\Vimeet\Openl10n\Sdk\Api;
-use Proximum\Vimeet\Openl10n\Sdk\Config;
-use Proximum\Vimeet\Openl10n\Sdk\EntryPoint\ProjectEntryPoint;
-use Proximum\Vimeet\Openl10n\Sdk\EntryPoint\ResourceEntryPoint;
-use Proximum\Vimeet\Openl10n\Sdk\Model\Language;
-use Proximum\Vimeet\Openl10n\Sdk\Model\Resource;
+use Proximum\Vimeet\Application\ThirdParty\Openl10n;
+use Proximum\Vimeet\Infrastructure\Adapter\CommandBus;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,14 +13,14 @@ class PushCommand extends Command
 {
     public const NAME = 'vimeet:translations:push';
 
-    /** @var string */
-    private $configFilePath;
+    /** @var CommandBus */
+    private $commandBus;
 
-    public function __construct(string $configFilePath)
+    public function __construct(CommandBus $commandBus)
     {
         parent::__construct(self::NAME);
 
-        $this->configFilePath = $configFilePath;
+        $this->commandBus = $commandBus;
     }
 
     /**
@@ -47,11 +38,6 @@ class PushCommand extends Command
                 'The locale id, "default" for the source, "all" for every locales found',
                 ['default']
             )
-            ->addArgument(
-                'files',
-                InputArgument::IS_ARRAY,
-                'File list you want to push to the server'
-            )
         ;
     }
 
@@ -60,130 +46,49 @@ class PushCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //        /** @var Api $api */
-        //        $api = $this->get('api');
-        $configurationLoader = new ConfigurationLoader(
-            \dirname($this->configFilePath), basename($this->configFilePath)
-        );
-        $configArray = $configurationLoader->loadConfiguration();
+        $command = new Openl10n\Push($input->getOption('locale'));
 
-        $config = new Config($configArray['server']['hostname'], $configArray['server']['use_ssl']);
-        $config->setAuth($configArray['server']['username'], $configArray['server']['password']);
-        $api = new Api($config);
+        /** @var Openl10n\PushResult $pushResult */
+        $pushResult = $this->commandBus->handle($command);
 
-        /** @var ProjectEntryPoint $projectApi */
-        $projectApi = $api->getEntryPoint('project');
-        /** @var ResourceEntryPoint $resourceApi */
-        $resourceApi = $api->getEntryPoint('resource');
+        $output->writeln('<info>Added locales</info>');
 
-        //
-        // Get project
-        //
-        $projectSlug = (new ProjectHandler('vimeet'))->getProjectSlug();
-        $project = $projectApi->get($projectSlug);
-
-        //
-        // Get project locales
-        //
-        $languages = $projectApi->getLanguages($project->getSlug());
-        $projectLocales = array_map(
-            static function (Language $language) {
-                return $language->getLocale();
-            },
-            $languages
-        );
-
-        $defaultLocale = $project->getDefaultLocale();
-
-        // Retrieve locales option
-        $localesToPush = (array)$input->getOption('locale');
-        $localesToPush = array_unique($localesToPush);
-        $pushAllLocale = false;
-
-        // Process locales special cases
-        if (\in_array('all', $localesToPush, true)) {
-            $localesToPush = $projectLocales;
-            $pushAllLocale = true;
-        } elseif (false !== $key = array_search('default', $localesToPush, true)) {
-            unset($localesToPush[$key]);
-            $localesToPush[] = $defaultLocale;
+        if (empty($pushResult->addedLocales)) {
+            $output->writeln('<comment>none</comment>');
         }
 
-        // Deduplicate values
-        $localesToPush = array_unique($localesToPush);
+        foreach ($pushResult->addedLocales as $addedLocale) {
+            $output->writeln($addedLocale);
+        }
 
-        //
-        // Retrieve existing project's resources
-        //
-        $resources = $resourceApi->findByProject($project);
-        // Set resources' pathname as array key
-        $resources = array_combine(
-            array_map(
-                static function (Resource $resource) {
-                    return $resource->getPathname();
-                },
-                $resources
-            ),
-            $resources
-        );
+        $output->writeln('<info>Unknown locales</info>');
 
-        //
-        // Iterate over resources
-        //
-        $fileHandler = new FileHandler($configurationLoader, $configurationLoader->loadConfiguration()['files']);
-        $fileSets = $fileHandler->getFileSets();
-        $fileFilter = $input->getArgument('files');
+        if (empty($pushResult->unknownLocales)) {
+            $output->writeln('<comment>none</comment>');
+        }
 
-        foreach ($fileSets as $fileSet) {
-            $files = $fileSet->getFiles();
-            $options = $fileSet->getOptions('push');
+        foreach ($pushResult->unknownLocales as $unknownLocale) {
+            $output->writeln($unknownLocale);
+        }
 
-            foreach ($files as $file) {
-                $resourceIdentifier = $file->getPathname(['locale' => $defaultLocale]);
-                $locale = $file->getAttribute('locale');
+        $output->writeln('<info>Created resources</info>');
 
-                // Ignore non specified locales
-                if (!\in_array($locale, $localesToPush, true) && !$pushAllLocale) {
-                    continue;
-                }
+        if (empty($pushResult->createdFiles)) {
+            $output->writeln('<comment>none</comment>');
+        }
 
-                // Skip unwanted files
-                if (!empty($fileFilter) && !\in_array($file->getRelativePathname(), $fileFilter, true)) {
-                    continue;
-                }
+        foreach ($pushResult->createdFiles as $createdFile) {
+            $output->writeln($createdFile);
+        }
 
-                // Create locale if non existing
-                if (!\in_array($locale, $projectLocales, true)) {
-                    try {
-                        $output->writeln(sprintf('<info>Adding</info> locale <comment>%s</comment>', $locale));
-                        $projectApi->addLanguage($project->getSlug(), $locale);
-                        $projectLocales[] = $locale;
-                    } catch (BadResponseException $e) {
-                        $output->writeln(sprintf('<error>Unknown</error> locale <comment>%s</comment>', $locale));
-                        continue;
-                    }
-                }
+        $output->writeln('<info>Uploaded files</info>');
 
-                // Retrieve or create resource entity
-                if (isset($resources[$resourceIdentifier])) {
-                    $resource = $resources[$resourceIdentifier];
-                } else {
-                    $output->writeln(
-                        sprintf('<info>Creating</info> resource <comment>%s</comment>', $resourceIdentifier)
-                    );
+        if (empty($pushResult->uploadedFiles)) {
+            $output->writeln('<comment>none</comment>');
+        }
 
-                    $resource = new Resource($project->getSlug());
-                    $resource->setPathname($resourceIdentifier);
-                    $resourceApi->create($resource);
-
-                    $resources[$resourceIdentifier] = $resource;
-                }
-
-                $output->writeln(
-                    sprintf('<info>Uploading</info> file <comment>%s</comment>', $file->getRelativePathname())
-                );
-                $resourceApi->import($resource, $file->getAbsolutePathname(), $locale, $options);
-            }
+        foreach ($pushResult->uploadedFiles as $uploadedFile) {
+            $output->writeln($uploadedFile);
         }
     }
 }
