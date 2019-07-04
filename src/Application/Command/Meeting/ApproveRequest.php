@@ -36,7 +36,7 @@ class ApproveRequest
     public $locale;
 
     /** @var bool */
-    public $toPriority;
+    public $toPriority = false;
 
     /**
      * @param User    $editor

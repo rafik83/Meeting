@@ -75,19 +75,19 @@ class UpdateMeetingRequestHandler
      */
     public function handle(UpdateMeetingRequest $updateRequest)
     {
+        if (!$this->requestPermissionManager->isAllowedToEditSentOrApproved(
+            $updateRequest->meetingRequest,
+            $updateRequest->sheetEditor
+        )) {
+            throw new IsNotAllowedToUpdateMeetingRequestException('You are not allowed to update this request.');
+        }
+
         if ($updateRequest->sheetEditor === $updateRequest->meetingRequest->getToSheet()) {
             $updateRequest->meetingRequest->setToPriority($updateRequest->isPriority);
         }
 
         if ($updateRequest->sheetEditor === $updateRequest->meetingRequest->getFromSheet()) {
             $updateRequest->meetingRequest->setFromPriority($updateRequest->isPriority);
-        }
-
-        if (!$this->requestPermissionManager->isAllowedToEditSentOrApproved(
-            $updateRequest->meetingRequest,
-            $updateRequest->sheetEditor
-        )) {
-            throw new IsNotAllowedToUpdateMeetingRequestException('You are not allowed to update this request.');
         }
 
         $this->handleAddRemoveParticipant($updateRequest);

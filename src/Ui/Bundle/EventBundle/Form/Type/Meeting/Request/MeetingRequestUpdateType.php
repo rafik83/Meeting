@@ -23,19 +23,24 @@ class MeetingRequestUpdateType extends AbstractMeetingRequestType
     {
         /** @var Sheet $sheet */
         $sheet = $options['sheet'];
-        /** @var Request $request */
-        $request = $options['meetingRequest'];
-        $isPriority = ($request->isFromPriority() && $sheet === $request->getFromSheet())
-            || ($request->isToPriority() && $sheet === $request->getToSheet());
-
-        $isDisabled = $options['priorityNumberAvailable'] === 0 && $isPriority === false;
-
-        $arrayAttributesOptions = array_merge(['required' => false],  ['disabled' => $isDisabled], ['data' => $isPriority]);
 
         if ($sheet->getType()->getPriorityMeetingRequestsNumber() > 0) {
+            /** @var Request $request */
+            $request = $options['meetingRequest'];
+            $isPriority = ($request->isFromPriority() && $sheet === $request->getFromSheet())
+                || ($request->isToPriority() && $sheet === $request->getToSheet());
+
+            $isDisabled = $options['priorityNumberAvailable'] === 0 && $isPriority === false;
+
             $builder
                 ->add(
-                    'isPriority', CheckboxType::class, $arrayAttributesOptions
+                    'isPriority',
+                    CheckboxType::class,
+                    [
+                        'required' => false,
+                        'disabled' => $isDisabled,
+                        'data' => $isPriority
+                    ]
                 );
         }
 
@@ -47,7 +52,7 @@ class MeetingRequestUpdateType extends AbstractMeetingRequestType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-
+        $resolver->setRequired(['meetingRequest']);
         $resolver->setDefault('placeholder_description', 'form.catalog_edit_meeting_request.children.description.placeholder');
         $resolver->setDefaults([
            'data_class' => UpdateMeetingRequest::class,

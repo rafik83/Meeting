@@ -846,7 +846,7 @@ class MeetingRequestController extends Controller
                     'meetingRequest' => $meetingRequest->getId(),
                 ]),
                 'meetingRequest' => $meetingRequest,
-                'priorityNumberAvailable' => $priorityNumberAvailable
+                'priorityNumberAvailable' => $priorityNumberAvailable,
             ]);
 
             $isSubmitted = $form->handleRequest($request)->isSubmitted();
