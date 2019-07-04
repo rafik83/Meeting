@@ -310,7 +310,9 @@ navigation.links.meetingRequest.refused: Refusées
 navigation.links.meetingRequest.sent: 'Demandes en attente'
 navigation.links.member_space.avatar: Photo
 navigation.links.member_space.company: 'Société / Organisme'
+navigation.links.member_space.privacy_policy: 'Politique de confidentialités'
 navigation.links.member_space.profile: Profil
+navigation.links.member_space.terms_of_sale: 'Conditions générales de participation'
 navigation.links.notification: Notifications
 navigation.links.package.order_list: 'Liste des commandes'
 navigation.links.package.order_summary_total: Récapitulatif
@@ -326,6 +328,7 @@ navigation.links.planning.my_schedule: 'Mon agenda'
 navigation.links.planning.unavailability: 'Ajouter une indisponibilité'
 navigation.links.returnToSelectSheet: 'Mes fiches'
 navigation.links.sheet.locale: Version
+navigation.links.termsOfSale: 'Conditions générales de vente'
 navigation.menu: Menu
 new_password.confirm.title: 'Réinitialiser le mot de passe'
 new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'
@@ -426,7 +429,7 @@ package.product.unavailable: 'Non disponible'
 package.product.unitPrice: '%price% <sup>%currency% %vatMode%</sup>'
 package.product.unitPriceLabel: 'Prix unitaire'
 package.product.validate: Valider
-package.select: 'Sélectionner:'
+package.select: Sélectionner
 package.summary.billingInfo.update: 'Modifier vos informations de facturation'
 package.summary.columns.quantity: Quantité
 package.summary.columns.title: Intitulé

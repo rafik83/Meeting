@@ -43,6 +43,9 @@ class AppKernel extends Kernel
             // OVH
             new CoopTilleuls\OvhBundle\CoopTilleulsOvhBundle(),
 
+            // OAuth2
+            new KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
+
             // Vimeet
             new Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle(),
             new Proximum\Vimeet\Ui\Bundle\EventBundle\EventBundle(),

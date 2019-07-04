@@ -42,7 +42,11 @@ class GetUserBadgeAndPlanningByEventQueryHandlerTest extends TestCase
             '/path/to/header.png',
             '#ffffff',
             '#000000',
-            'France'
+            'France',
+            false,
+            null,
+            null,
+            false
         );
 
         $queryBus = $this->prophesize(QueryBusInterface::class);

@@ -77,6 +77,9 @@ class Create implements Command
     /** @var bool */
     public $isPaymentRequired = false;
 
+    /** @var int */
+    public $priorityMeetingRequestsNumber = 0;
+
     /**
      * @param Event  $event
      * @param string $locale

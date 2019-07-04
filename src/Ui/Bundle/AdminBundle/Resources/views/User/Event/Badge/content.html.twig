@@ -1,53 +1,25 @@
+{% import '@Admin/User/Event/Badge/macros.html.twig' as macro -%}
+
 <div class="page">
-    <div class="badge">
-        <div class="badge-content">
-            <div class="company-participant {% if not userBadgeByEventView.qrCodeIdentifier %}company-zone-without-qrcode{% endif %}">
-                <div class="text">{{ userBadgeByEventView.sheetTitle }}</div>
+{{ macro.write_badge(userBadgeByEventView, 'left') }}
+{% if userBadgeByEventView.isMirrored %}
+    {{ macro.write_badge(userBadgeByEventView, 'right') }}
+{% endif %}
+{% if userBadgeByEventView.leftImage %}
+    {{ macro.write_image(userBadgeByEventView.leftImage, 'left') }}
+{% endif %}
+{% if userBadgeByEventView.rightImage %}
+    {{ macro.write_image(userBadgeByEventView.rightImage, 'right', userBadgeByEventView.isRightImageFullHeight) }}
+{% endif %}
+
+{% if planning is not empty and not userBadgeByEventView.rightImage and not userBadgeByEventView.isMirrored%}
+    <div class="badge-planning">
+        <div class="badge-planning-content">
+            <div class="text-center">
+                <b>PLANNING</b>
             </div>
-
-            {% if userBadgeByEventView.qrCodeIdentifier %}
-                <div class="qrcode">
-                    <div class="qrcode-border">
-                        <img src="{{ userBadgeByEventView.qrCodeImage }}"/><br>
-                        ID {{ userBadgeByEventView.qrCodeIdentifier }}<br>
-                    </div>
-                </div>
-            {% endif %}
-
-            <div class="info-participant {% if not userBadgeByEventView.qrCodeIdentifier %}participant-zone-without-qrcode{% endif %}">
-                <div class="name-participant {% if not userBadgeByEventView.qrCodeIdentifier %}text-participant-without-qrcode{% endif %}">
-                    <div class="text">
-                        {{ userBadgeByEventView.firstName }}
-                        <span class="last-name-participant">{{ userBadgeByEventView.lastName }}</span>
-                    </div>
-                </div>
-
-                <div class="position-participant {% if not userBadgeByEventView.qrCodeIdentifier %}text-participant-without-qrcode{% endif %}">
-                    <div class="text">
-                        {{ userBadgeByEventView.position }}
-                        {% if userBadgeByEventView.country %}
-                            <br/>{{ userBadgeByEventView.country|upper }}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="type-participant">
-            {% if userBadgeByEventView.participationTypeOrCategoryLabel %}
-                {{ userBadgeByEventView.participationTypeOrCategoryLabel }}<br>
-            {% endif %}
+            {{ planning|markdown_to_html }}
         </div>
     </div>
-
-    {% if planning is not empty %}
-        <div class="badge-planning">
-            <div class="badge-planning-content">
-                <div class="text-center">
-                    <b>PLANNING</b>
-                </div>
-                {{ planning|markdown_to_html }}
-            </div>
-        </div>
-    {% endif %}
+{% endif %}
 </div>

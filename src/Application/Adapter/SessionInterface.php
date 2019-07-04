@@ -30,6 +30,14 @@ interface SessionInterface
     public function getFromFlashBag($type, array $default = []): array;
 
     /**
+     * Adds a flash message for type.
+     *
+     * @param string $type
+     * @param mixed  $message
+     */
+    public function addToFlashBag($type, $message): void;
+
+    /**
      * @param string $key
      * @param mixed  $data
      */

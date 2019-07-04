@@ -101,6 +101,11 @@ parameters:
     comexposium_username: comexposiumUsername
     comexposium_password: comexposiumPassword
 
+    oauth_google_client_id: 'client_id_to_change'
+    oauth_google_client_secret: 'client_secret_to_change'
+    oauth_linkedin_client_id: 'client_id_to_change'
+    oauth_linkedin_client_secret: 'client_secret_to_change'
+
     # Features flag
     feature_video_conference_enabled: false
     feature_video_conference_date_security_enabled: false
