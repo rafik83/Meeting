@@ -29,7 +29,7 @@ class UpdateMeetingRequest
     public $sheetEditor;
 
     /** @var bool */
-    public $isPriority;
+    public $isPriority = false;
 
     /**
      * UpdateRequest constructor.
