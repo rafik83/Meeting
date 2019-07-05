@@ -2,6 +2,7 @@
 <div class="col-md-4" data-meeting-request="{{ meetingRequestView.meetingRequest.getTypeOfRequest(sheet) }}">
     <div class="catalog__item">
         <div class="content__sheet-card">
+            {{ include('EventBundle:MeetingRequest/Partials:priorityIcon.html.twig', { 'isPriority' : meetingRequestView.isPriority }, false) }}
             {% if meetingRequestView.hasMessage and meetingRequestView.meetingRequest is not null %}
                 <a href="{{ path('event_catalog_meeting_request_discussion', { 'sheet': sheet.id, 'meetingRequest': meetingRequestView.meetingRequest.id }) }}" data-toggle="modal" data-target="#request-modal" class="pull-right no-underline ft-size-18 mg-left-8">
                     <i class="icon-Message_1 ft-bold"></i>
@@ -12,7 +13,7 @@
                     <i class="icon-Voir_1 ft-bold"></i>
                 </a>
             {% endif %}
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: meetingRequestView.sheetName, preview: meetingRequestView.previewViews, isCatalog: isCatalog, sheetToDisplayLink: sheetToDisplayLink }, false) }}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: meetingRequestView.sheetName, preview: meetingRequestView.previewViews, isCatalog: isCatalog, isPriority: meetingRequestView.isPriority, sheetToDisplayLink: sheetToDisplayLink }, false) }}
         </div>
         <footer>
             {% if sheetToDisplayLink is not null %}

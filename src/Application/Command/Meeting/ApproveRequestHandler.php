@@ -101,6 +101,8 @@ class ApproveRequestHandler
      */
     public function handle(ApproveRequest $approveRequest): ?ApproveRequestResult
     {
+        $approveRequest->request->setToPriority($approveRequest->toPriority);
+
         if (!$this->permissionManager->isAllowedToApprove(
             $approveRequest->request,
             $approveRequest->sheet

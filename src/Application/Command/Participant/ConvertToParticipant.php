@@ -44,6 +44,9 @@ class ConvertToParticipant
     /** @var string */
     public $sheetState;
 
+    /** @var bool */
+    public $toSetInCatalog;
+
     public function __construct(
         Event $event,
         Type $type,
@@ -53,7 +56,8 @@ class ConvertToParticipant
         TemplateData $registrationTemplateData,
         TemplateData $sheetTemplateData,
         ?string $userEventExtraDataType = null,
-        ?string $sheetState = null
+        ?string $sheetState = null,
+        bool $toSetInCatalog = false
     ) {
         $this->event = $event;
         $this->type = $type;
@@ -63,6 +67,7 @@ class ConvertToParticipant
         $this->registrationTemplateData = $registrationTemplateData;
         $this->sheetTemplateData = $sheetTemplateData;
         $this->userEventExtraDataType = $userEventExtraDataType;
+        $this->toSetInCatalog = $toSetInCatalog;
 
         if (null === $sheetState) {
             $sheetState = Sheet::STATE_PENDING;

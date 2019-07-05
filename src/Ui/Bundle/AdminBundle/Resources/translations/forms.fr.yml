@@ -324,6 +324,10 @@ form.event_update.children.backgroundImage.label: 'Image de fond'
 form.event_update.children.country.label: Pays
 form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
+form.event_update.children.googleLoginEnabled.help: 'Il est nécessaire d’ajouter le ou les urls de redirection dans la console Google (console.developers.google.com) : %urls%'
+form.event_update.children.googleLoginEnabled.label: 'Inscription et connexion par compte Google activé'
+form.event_update.children.linkedinLoginEnabled.help: 'Il est nécessaire d’ajouter le ou les urls de redirection sur la console Linkedin (www.linkedin.com/developers) dans l''onglet “Auth” : %urls%'
+form.event_update.children.linkedinLoginEnabled.label: 'Inscription et connexion par compte Linkedin activé'
 form.event_update.children.disabledEmailChanging.label: 'Changement d''email désactivé'
 form.event_update.children.disabledPasswordChanging.label: 'Changement de mot de passe désactivé'
 form.event_update.children.displayParticipantNameOnPlanning.label: 'Prénom et Nom des participants affichés sur le planning'
@@ -378,6 +382,15 @@ form.extra_parameter_create.children.value.label: Valeur
 form.extra_parameter_update.children.name.label: Nom
 form.extra_parameter_update.children.submit.label: Enregistrer
 form.extra_parameter_update.children.value.label: Valeur
+form.add_fast_checkin.children.country.label: Pays du participant
+form.add_fast_checkin.children.firstname.label: Prénom
+form.add_fast_checkin.children.hasAccessToMeetings.label: A accès aux rendez-vous
+form.add_fast_checkin.children.lastname.label: Nom
+form.add_fast_checkin.children.mobile.label: Téléphone mobile
+form.add_fast_checkin.children.sheetTitle.label: Nom de la fiche
+form.add_fast_checkin.children.submit.label: Enregistrer la participation
+form.add_fast_checkin.children.type.label: Type de participation
+form.add_fast_checkin.children.type.error.missing: Le type de participation est obligatoire
 form.field.private: 'Champ privé'
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'
@@ -808,6 +821,9 @@ form.rule_see_what.not_see_what_column: 'Ne voit pas'
 form.rule_see_what.see_what_column: Voit
 form.schedule_config.children.scale.label: 'Echelle (en minutes)'
 form.schedule_config.children.submit.label: Enregistrer
+form.search_email_for_fast_checkin.children.email.help: si pas d'email, appuyer sur suivant
+form.search_email_for_fast_checkin.children.email.label: Email
+form.search_email_for_fast_checkin.children.submit.label: Suivant
 form.search_facet_translation.children.enabled.label: Activé
 form.search_facet_translation.children.label.label: Label
 form.search_facet_translation.children.placeholder.label: Placeholder

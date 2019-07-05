@@ -77,7 +77,9 @@ class CreateRequestHandler
             $createRequest->creator,
             $createRequest->event,
             false,
-            null !== $createRequest->description
+            null !== $createRequest->description,
+            $createRequest->fromPriority,
+            false
         );
 
         $this->requestRepository->add($request);

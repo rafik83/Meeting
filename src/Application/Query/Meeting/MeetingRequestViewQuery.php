@@ -49,31 +49,22 @@ class MeetingRequestViewQuery
     /** @var bool */
     public $showCategory;
 
-    /**
-     * @param MeetingRequest $meetingRequest
-     * @param Sheet          $sheet
-     * @param User           $user
-     * @param string         $locale
-     * @param bool           $isMeetingPublished
-     * @param bool           $isMeetingRequestUpdateLocked
-     * @param bool           $isMeetingRequestClosed
-     * @param bool           $isAnsweringMeetingRequestClosed
-     * @param bool           $isSeenByUser
-     * @param bool           $isPhoneValidationRequired
-     * @param bool           $showCategory
-     */
+    /** @var bool */
+    public $isPriority;
+
     public function __construct(
         MeetingRequest $meetingRequest,
         Sheet $sheet,
         User $user,
-        $locale,
-        $isMeetingPublished,
-        $isMeetingRequestUpdateLocked,
-        $isMeetingRequestClosed = false,
-        $isAnsweringMeetingRequestClosed = false,
-        $isSeenByUser = false,
-        $isPhoneValidationRequired = false,
-        bool $showCategory = false
+        string $locale,
+        bool $isMeetingPublished,
+        bool $isMeetingRequestUpdateLocked,
+        bool $isMeetingRequestClosed = false,
+        bool $isAnsweringMeetingRequestClosed = false,
+        bool $isSeenByUser = false,
+        bool $isPhoneValidationRequired = false,
+        bool $showCategory = false,
+        bool $isPriority = false
     ) {
         $this->meetingRequest = $meetingRequest;
         $this->locale = $locale;
@@ -86,5 +77,6 @@ class MeetingRequestViewQuery
         $this->isSeenByUser = $isSeenByUser;
         $this->isPhoneValidationRequired = $isPhoneValidationRequired;
         $this->showCategory = $showCategory;
+        $this->isPriority = $isPriority;
     }
 }
