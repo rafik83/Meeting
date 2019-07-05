@@ -14,7 +14,7 @@
     <br>
     {{ macros.button(
         'mail.completeProfile.link'|trans({}, 'mail', mail.locale),
-        url('event_activate_account_already_known', {'participant': mail.participant.id})
+        mail.eventActivateAccountAlreadyKnownUrl
     ) }}
     <br>
 
