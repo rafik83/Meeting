@@ -35,6 +35,9 @@ class ApproveRequest
     /** @var string */
     public $locale;
 
+    /** @var bool */
+    public $toPriority = false;
+
     /**
      * @param User    $editor
      * @param Request $request

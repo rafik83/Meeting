@@ -82,6 +82,14 @@ class UpdateMeetingRequestHandler
             throw new IsNotAllowedToUpdateMeetingRequestException('You are not allowed to update this request.');
         }
 
+        if ($updateRequest->sheetEditor === $updateRequest->meetingRequest->getToSheet()) {
+            $updateRequest->meetingRequest->setToPriority($updateRequest->isPriority);
+        }
+
+        if ($updateRequest->sheetEditor === $updateRequest->meetingRequest->getFromSheet()) {
+            $updateRequest->meetingRequest->setFromPriority($updateRequest->isPriority);
+        }
+
         $this->handleAddRemoveParticipant($updateRequest);
 
         // Add message

@@ -131,6 +131,7 @@ event.meeting.request.answering.closed: 'Les validations de rendez-vous sont ter
 event.meeting.request.closed: 'Les demandes de rendez-vous sont terminées'
 event.meeting.request.locked: 'Planification en cours - Les demandes sont verrouillées'
 event.meeting.request.transformIntoMeeting.error: 'Le RDV ne peut pas être positionné faute de disponibilités communes.'
+event.meeting.request.priority: 'Demande de RDV prioritaire'
 event.meeting.request.transformIntoMeeting.success: 'RDV positionné pour %participants% le %date% à %time% : %spot%.'
 event.participant.define_timezone: 'Définir mon fuseau horaire'
 event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez-vous'
