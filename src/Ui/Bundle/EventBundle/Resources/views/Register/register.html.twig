@@ -28,6 +28,8 @@
                 </div>
             </div>
             {{ form_end(form) }}
+
+            {{ include('@Event/Security/oauth2_connect.html.twig') }}
         </div>
     </section>
     {% if form_errors(form.email) %}

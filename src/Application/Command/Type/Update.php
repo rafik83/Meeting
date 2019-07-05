@@ -73,6 +73,9 @@ class Update implements Command
     /** @var bool */
     public $isPaymentRequired = false;
 
+    /** @var int */
+    public $priorityMeetingRequestsNumber;
+
     /**
      * @param Type   $type
      * @param string $locale
@@ -97,6 +100,7 @@ class Update implements Command
         $this->canScanParticipant = $type->canScanParticipant();
         $this->isPackageRequired = $type->isPackageRequired();
         $this->isPaymentRequired = $type->isPaymentRequired();
+        $this->priorityMeetingRequestsNumber = $type->getPriorityMeetingRequestsNumber();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [

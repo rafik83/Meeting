@@ -25,7 +25,7 @@
                     {% if category.isExpandedOnMobile %}
                         {% for linkView in category.linksView if linkView.state %}
                             <a href="{{ linkView.link }}" class="btn btn-primary btn-lg btn-inactive">
-                                <i class="{{ category.icon }}"></i> {{ linkView.label }}
+                                <i class="{{ category.icon }}"></i> {{ linkView.label|trans }}
                             </a>
                         {% endfor %}
                     {% elseif category.enabledLinkView %}

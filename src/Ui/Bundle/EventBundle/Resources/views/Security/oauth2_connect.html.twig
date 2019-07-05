@@ -1,0 +1,15 @@
+{% if event.hasOAuth2LoginEnabled %}
+    <div class="styled-form text-center">
+        {% if event.isGoogleLoginEnabled %}
+            <a href="{{ path('connect_google_start') }}"><img src="{{ asset('assets/images/signin/google_signin.png') }}" alt="Sign in with Google" style="width: 100%"></a>
+        {% endif %}
+
+        {% if event.isGoogleLoginEnabled and event.isLinkedinLoginEnabled %}
+            <br><br>
+        {% endif %}
+
+        {% if event.isLinkedinLoginEnabled %}
+            <a href="{{ path('connect_linkedin_start') }}"><img src="{{ asset('assets/images/signin/linkedin_signin.png') }}" alt="Sign in with Linkedin" style="width: 98%"></a>
+        {% endif %}
+    </div>
+{% endif %}

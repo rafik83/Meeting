@@ -264,6 +264,7 @@ admin.extraParameter.type.comexposium_sso_salon: 'Comexposium SSO event'
 admin.extraParameter.type.comexposium_sso_session_salon: 'Comexposium SSO event session'
 admin.extraParameter.type.comexposium_visitor_type_id: 'Comexposium: concerned Visitor participation type id'
 admin.extraParameter.type.crisp_site_id: 'Crisp ID site'
+admin.extraParameter.type.leni_badge_link: 'LENI link for the badge'
 admin.extraParameter.type.leni_event: 'LENI event code'
 admin.extraParameter.type.leni_get_endpoint: 'LENI Get endpoint'
 admin.extraParameter.type.leni_mode: 'LENI Mode'
@@ -410,7 +411,7 @@ admin.meeting_request.set_a_meeting: 'Organise a meeting'
 admin.meeting_request.state.approved: Approved
 admin.meeting_request.state.cancelled: Cancelled
 admin.meeting_request.state.planned: Planned
-admin.meeting_request.state.refused: Refused
+admin.meeting_request.state.refused: Declined
 admin.meeting_request.state.sent: sent
 admin.meeting_request.stateUpdatedAt: 'State update'
 admin.meeting_request.title: '{0}  no meeting request|{1} meeting request |]1,Inf[ %count% meeting requests'
@@ -429,7 +430,7 @@ admin.meeting.dashboard.liveMeeting: 'Live meetings'
 admin.meeting.dashboard.meeting: Meetings
 admin.meeting.dashboard.pendingRequest: 'Pending request'
 admin.meeting.dashboard.plannedMeeting: 'Pre-arranged meetings'
-admin.meeting.dashboard.refusedRequest: Refused
+admin.meeting.dashboard.refusedRequest: Declined
 admin.meeting.dashboard.request: 'Meeting requests'
 admin.meeting.export.fields.created_type: 'Planned by'
 admin.meeting.export.fields.day: Day
@@ -856,7 +857,7 @@ admin.sheet.details.crm.record.trace.set_commercial_status.log_ok: 'Log ok'
 admin.sheet.details.crm.record.trace.set_commercial_status.log_without_ticket: 'Log without ticket'
 admin.sheet.details.crm.record.trace.set_commercial_status.no_interest: 'Not interested status'
 admin.sheet.details.crm.record.trace.set_commercial_status.none: 'No status'
-admin.sheet.details.crm.record.trace.set_commercial_status.refused_by_organizer: 'Refused by the organizer'
+admin.sheet.details.crm.record.trace.set_commercial_status.refused_by_organizer: 'Declined by the organizer'
 admin.sheet.details.crm.record.trace.set_commercial_status.registered: Registered
 admin.sheet.details.crm.record.trace.set_commercial_status.verbal_agreement: 'Verbal agreement'
 admin.sheet.details.dashboard.title: Dashboard
@@ -865,11 +866,11 @@ admin.sheet.details.invoices: Invoices
 admin.sheet.details.meeting.meeting: 'scheduled meetings'
 admin.sheet.details.meeting.proposition.approved: 'approved propositions'
 admin.sheet.details.meeting.proposition.pending: 'Pending requests'
-admin.sheet.details.meeting.proposition.refused: 'Refused requests'
+admin.sheet.details.meeting.proposition.refused: 'Declined propositions'
 admin.sheet.details.meeting.proposition.title: 'Meetings requests'
-admin.sheet.details.meeting.request.approved: 'approved requests'
+admin.sheet.details.meeting.request.approved: 'Requests approved'
 admin.sheet.details.meeting.request.pending: 'Pending requests'
-admin.sheet.details.meeting.request.refused: 'Refused requests'
+admin.sheet.details.meeting.request.refused: 'Request declined'
 admin.sheet.details.meeting.request.title: 'Meeting requests'
 admin.sheet.details.orders: Orders
 admin.sheet.details.orders_and_transactions.title: 'Orders and transactions'
@@ -918,7 +919,11 @@ admin.sheet.export.fields.following: 'Commercial follow up'
 admin.sheet.export.fields.in_catalog: 'added to the catalogue'
 admin.sheet.export.fields.order_promo_code: 'Promotion codes'
 admin.sheet.export.fields.owner_email: 'owner''email'
+admin.sheet.export.fields.owner_first_name: 'Owner''s first name'
 admin.sheet.export.fields.owner_id: 'owner''s ID'
+admin.sheet.export.fields.owner_last_name: 'Owner''s last name'
+admin.sheet.export.fields.owner_mobile: 'Owner''s mobile'
+admin.sheet.export.fields.owner_phone: 'Owner''s telephone'
 admin.sheet.export.fields.participants: 'number of participants'
 admin.sheet.export.fields.registration_date: 'Date of registration'
 admin.sheet.export.fields.remaining_to_pay: 'Remaining to pay with VAT'
@@ -1123,6 +1128,8 @@ admin.tip.column.visible.catalog: catalog
 admin.tip.column.visible.meeting_management: 'meetings management'
 admin.tip.column.visible.onAgenda: agenda
 admin.tip.column.visible.onConfirmationPhone: 'Planning and phone number confirmation (condition of the display of the phone number validation form)'
+admin.tip.column.visible.onContacts: Contacts
+admin.tip.column.visible.onPackage: Package
 admin.tip.column.visible.onProgram: program
 admin.tip.column.visible.onSheet: 'presentation sheet'
 admin.tip.column.visible.print_planning: 'plannings printing'
@@ -1195,7 +1202,7 @@ admin.transactional.mail.list.key.mail_participation_added_confirmation: 'Partic
 admin.transactional.mail.list.key.mail_pre_registered: Pre-registration
 admin.transactional.mail.list.key.mail_sheet_group_created: 'Multifiles entity created'
 admin.transactional.mail.list.key.mail_sheet_invoiced: 'Invoiced file'
-admin.transactional.mail.list.key.mail_sheet_refused: 'Refused registration'
+admin.transactional.mail.list.key.mail_sheet_refused: 'Registration denied'
 admin.transactional.mail.list.key.mail_sheet_type_changed: 'Changed type of participation'
 admin.transactional.mail.list.key.mail_sheet_validated: 'Validated regisstration'
 admin.transactional.mail.list.key.mail_sheet_validation_draft: 'Sheet back as draft'
@@ -1273,6 +1280,7 @@ admin.type.hidden: hidden
 admin.type.id: ID
 admin.type.link: 'Participation types'
 admin.type.list.title: 'participation types'
+admin.type.no_required_package: 'Package must be required'
 admin.type.package: package
 admin.type.paymentConditions.event.info.allowDeposit: 'Allow down payment'
 admin.type.paymentConditions.event.info.deposit: 'down payment percentage'
@@ -1402,7 +1410,7 @@ event.meeting.listRequest.switchListMode.oneSheet.thumbnails: 'Mosaic view'
 event.meeting.listRequest.title: 'List of your meeting requests'
 event.meeting.listRequest.to: For
 event.meeting.refusedRequest.label: 'From %fromName% to %toName%'
-event.meeting.refusedRequest.title: 'Refuse the meeting proposal'
+event.meeting.refusedRequest.title: 'Decline the meeting request'
 event.meeting.request.details.createdAt: 'Created at'
 event.meeting.request.details.from: From
 event.meeting.request.details.fromParticipant: 'Participants origin'
@@ -1414,11 +1422,11 @@ event.meeting.request.details.toParticipant: 'meeting request details to partici
 event.meeting.request.details.updatedAt: 'Change status'
 event.meeting.request.state.from.approved: Approved
 event.meeting.request.state.from.cancelled: Cancelled
-event.meeting.request.state.from.refused: Refused
+event.meeting.request.state.from.refused: Declined
 event.meeting.request.state.from.sent: Sent
 event.meeting.request.state.to.approved: Approved
 event.meeting.request.state.to.cancelled: Cancelled
-event.meeting.request.state.to.refused: Refused
+event.meeting.request.state.to.refused: Declined
 event.meeting.request.state.to.sent: Received
 event.meeting.showDetailsRequest.from: From
 event.meeting.showDetailsRequest.message: 'Your conversation'
@@ -1487,7 +1495,7 @@ event.sheet.payment.title: 'Mode of payment'
 event.sheet.reminderDate.today_reminder_date: Today
 event.sheet.state.accepted: Accepted
 event.sheet.state.pending: Pending
-event.sheet.state.refused: Refused
+event.sheet.state.refused: Declined
 event.sheet.state.validated: Validated
 event.sheet.summary.action: Action
 event.sheet.summary.product: Option
@@ -1532,9 +1540,9 @@ notification.meeting_request.canceled.withMessage: 'Meeting request canceled by 
 notification.meeting_request.canceled.withoutMessage: 'Meeting request canceled by %sheetName%'
 notification.meeting_request.participant.added.message: 'Participant added by %sheetName% for the following reason : "%message%"'
 notification.meeting_request.participant.removed.message: 'participant removed by %sheetName% for the following reason: "%message%"'
-notification.meeting_request.refused.action: 'Refused meeting request'
-notification.meeting_request.refused.withMessage: 'Request refused by %sheetName% for the following reason : "%message%"'
-notification.meeting_request.refused.withoutMessage: 'Request refused by %sheetName%'
+notification.meeting_request.refused.action: 'Declined meeting request'
+notification.meeting_request.refused.withMessage: 'Request declined by %sheetName% for the following reason : "%message%"'
+notification.meeting_request.refused.withoutMessage: 'Request declined by %sheetName%'
 notification.participant.added.action: 'Participant added'
 notification.participant.removed.action: 'Participant removed'
 planning.participant.meeting: '%spotRef% - %sheetMet%'

@@ -22,7 +22,7 @@ export.meeting_request.col.toSheetType: 'sheet asked type'
 export.meeting_request.col.updatedAt: 'updated at'
 export.meeting_request.state.approved: Accepted
 export.meeting_request.state.planned: Planned
-export.meeting_request.state.refused: Refused
+export.meeting_request.state.refused: Declined
 export.meeting_request.state.sent: Sent
 form_template_data_export.column.categoryTitle: 'Category of participation'
 form_template_data_export.column.sheetAddress: Address

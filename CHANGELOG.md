@@ -5,11 +5,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-1916 - Add new parameters to badge
+- VIMEET-1982 - Contacts download and list
 - VIMEET-1999 - As an admin, remove promotion code from order
 - VIMEET-2001 - Add fast on-site register and checkin
+- VIMEET-2009 - Google and Linkedin login enabling on one event
+- VIMEET-1081 - Priority meeting request number by type
+- VIMEET-1648 - Terms of sale links
 ### Fixed
 - MV-184 - Fix rooming list assign dates
 - MV-185 - Relevance filter choice by default
+- MV-186 - Show contacts list when event is opened
+- MV-188 - Index Sheet zipcode when country not defined
+- MV-191 - Do not block meeting slot in planner pre process for linked sheets
 
 ## [2.9.0] - 2019-06-12
 ### Added

@@ -59,6 +59,10 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
         $badge->isShowFooterType()->shouldBeCalled()->willReturn(false);
         $badge->isShowCountry()->shouldBeCalled()->willReturn(true);
         $badge->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+        $badge->isMirrored()->shouldBeCalled()->willReturn(false);
+        $badge->getLeftImage()->shouldBeCalled()->willReturn(null);
+        $badge->getRightImage()->shouldBeCalled()->willReturn(null);
+        $badge->isRightImageFullHeight()->shouldBeCalled()->willReturn(false);
 
         $category = $this->prophesize(Category::class);
         $category->getTitle('en')->shouldBeCalled()->willReturn('Exhibitor');
@@ -150,7 +154,11 @@ class GetUserBadgeByEventQueryHandlerTest extends TestCase
             '/path/to/header.png',
             '#ffffff',
             '#000000',
-            'france'
+            'france',
+            false,
+            null,
+            null,
+            false
         );
 
         $getUserBadgeByEventQueryHandler = new GetUserBadgeByEventQueryHandler(

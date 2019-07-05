@@ -183,7 +183,7 @@ class TransformApprovedRequestsByLinkedSheetsIntoMeetingHandler
             return false;
         }
 
-        $this->commandBus->handle(new TransformRequestIntoMeeting($request, Meeting::CREATED_BY_PLANNER, true, true));
+        $this->commandBus->handle(new TransformRequestIntoMeeting($request, Meeting::CREATED_BY_PLANNER, true, false));
         unset($countSheetsMetByLinkedSheet[$linkedSheetsId][$sheetMetId]);
 
         return true;

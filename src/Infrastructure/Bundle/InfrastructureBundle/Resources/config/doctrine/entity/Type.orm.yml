@@ -49,6 +49,11 @@ Proximum\Vimeet\Domain\Model\Type:
             type: boolean
             options:
                 default: false
+        priorityMeetingRequestsNumber:
+            type: integer
+            nullable: true
+            options:
+                default: 0
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria

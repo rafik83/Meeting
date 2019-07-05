@@ -20,7 +20,7 @@ form.catalog_edit_meeting_request.children.participants.label: 'Assign this meet
 form.catalog_edit_meeting_request.pending.request.children.submit.label: 'Modify the meeting request'
 form.catalog_edit_meeting_request.proposition.children.submit.label: Edit
 form.catalog_edit_meeting_request.request.children.submit.label: Edit
-form.catalog_refuse_meeting_request.children.message.label: 'Detail your refusal'
+form.catalog_refuse_meeting_request.children.message.label: 'Explain your refusal'
 form.catalog_refuse_meeting_request.children.message.placeholder: 'Write a message'
 form.catalog_refuse_meeting_request.children.submit.label: 'Refuse the meeting proposal'
 form.catalog_un_approve_meeting_request.proposition.children.submit.label: 'Cancel my acceptation'
@@ -57,7 +57,7 @@ form.multiple_sheet_request_filter_request_type.children.sheetConcerned.label: '
 form.multiple_sheet_request_filter_request_type.children.state.filter.all: All
 form.multiple_sheet_request_filter_request_type.children.state.filter.approved: Approved
 form.multiple_sheet_request_filter_request_type.children.state.filter.planned: Planned
-form.multiple_sheet_request_filter_request_type.children.state.filter.refused: Refused
+form.multiple_sheet_request_filter_request_type.children.state.filter.refused: Declined
 form.multiple_sheet_request_filter_request_type.children.state.filter.sent: Pending
 form.multiple_sheet_request_filter_request_type.children.state.label: Status
 form.multiple_sheet_request_filter_request_type.children.submit.label: Filter
@@ -116,7 +116,7 @@ form.search.meeting.state.approved: Approved
 form.search.meeting.state.cancelled: Cancelled
 form.search.meeting.state.label: 'My meetings'
 form.search.meeting.state.receive: 'Requests received'
-form.search.meeting.state.refused: Refused
+form.search.meeting.state.refused: Declined
 form.search.meeting.state.sent: 'Your pending requests'
 form.search.meeting.type.label: 'My meetings'
 form.search.objective.label: Objectives
