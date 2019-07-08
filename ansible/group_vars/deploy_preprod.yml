@@ -25,6 +25,7 @@ manala_deploy_removed:
 
 manala_deploy_tasks:
   - make: install@prod
+  - command: bin/console vimeet:translations:update
   - make: migration-and-redis-flushdb@prod
 
 manala_deploy_post_tasks:
