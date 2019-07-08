@@ -225,5 +225,5 @@ interface JobQueueInterface
         string $locale
     ): void;
 
-    public function downloadTranslations(string $emailToNotify, string $locale): void;
+    public function downloadTranslations(?string $emailToNotify = null, ?string $locale = null): void;
 }

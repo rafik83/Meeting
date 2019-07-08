@@ -484,9 +484,9 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $this->setJob($job);
     }
 
-    public function downloadTranslations(string $emailToNotify, string $locale): void
+    public function downloadTranslations(?string $emailToNotify = null, ?string $locale = null): void
     {
-        $job = new Job(UpdateTranslationsCommand::NAME, [$emailToNotify, $locale]);
+        $job = new Job(UpdateTranslationsCommand::NAME, $emailToNotify && $locale ? [$emailToNotify, $locale] : []);
 
         $this->setJob($job);
     }

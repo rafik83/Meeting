@@ -91,7 +91,7 @@ namespace :app_tasks do
   end
   task :translations_update do
     capifony_pretty_print "--> Run translations update"
-    invoke_command "cd #{latest_release} && php bin/console vimeet:translations:update", :via => run_method
+    invoke_command "cd #{latest_release} && php bin/console vimeet:translations:schedule-update", :via => run_method
     capifony_puts_ok
   end
 end

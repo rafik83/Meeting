@@ -7010,6 +7010,12 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\ScheduleUpdateTranslationsCommand:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: console.command }
+
     #
     # Contact
     #
