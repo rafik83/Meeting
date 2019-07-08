@@ -4,14 +4,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.10.0] - 2019-07-05
 ### Added
 - VIMEET-1916 - Add new parameters to badge
 - VIMEET-1982 - Contacts download and list
 - VIMEET-1999 - As an admin, remove promotion code from order
-- VIMEET-1961 - Download translations from admin UI
+- VIMEET-1961 - Update translations from admin UI and deploy process
+- VIMEET-2001 - Add fast on-site register and checkin
 - VIMEET-2009 - Google and Linkedin login enabling on one event
 - VIMEET-1081 - Priority meeting request number by type
 - VIMEET-1648 - Terms of sale links
+- VIMEET-2004 - Stop notifications on pending planner job
+- VIMEET-1082 - Prioritize meeting request
+- VIMEET-2020 - Get uploaded sheets files from a public route
 ### Fixed
 - MV-184 - Fix rooming list assign dates
 - MV-185 - Relevance filter choice by default

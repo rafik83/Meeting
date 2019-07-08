@@ -151,6 +151,7 @@ admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
 admin.elasticsearch.index.confirm: 'Vous êtes sur le point de réindexer l''ensemble des événements. Êtes vous sur de vouloir réaliser cette action?'
 admin.event.access_control: 'Contrôle d''accès'
+admin.event.access_control.back: 'Retour au contrôle d''accès'
 admin.event.access.entrance: Entrées
 admin.event.access.happening.list: Conférences
 admin.event.archive.link: Archivage
@@ -193,7 +194,9 @@ admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.qrcode.checkin: Checkin
+admin.event.qrcode.checkinAt: Checkin le
 admin.event.qrcode.date_checkin: 'Date de checkin'
+admin.event.qrcode.fastcheckin: 'Création de badge'
 admin.event.qrcode.firstName: Prénom
 admin.event.qrcode.lastName: Nom
 admin.event.qrcode.no_result: 'Pas de résultat'

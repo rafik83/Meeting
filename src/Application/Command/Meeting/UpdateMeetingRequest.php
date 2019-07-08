@@ -16,25 +16,20 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class UpdateMeetingRequest
 {
-    /**
-     * @var Request
-     */
+    /** @var Request */
     public $meetingRequest;
 
-    /**
-     * @var Participant[]
-     */
+    /** @var Participant[] */
     public $participants;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $description;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheetEditor;
+
+    /** @var bool */
+    public $isPriority = false;
 
     /**
      * UpdateRequest constructor.

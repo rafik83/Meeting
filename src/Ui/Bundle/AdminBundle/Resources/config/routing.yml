@@ -809,7 +809,7 @@ admin_sheet_batch:
     defaults: { _controller: AdminBundle:Sheet:batch }
 admin_event_qr_code_reader:
     path: /event/{event}/access
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QRCodeReaderAction }
 admin_sheet_export_sheet:
     path: /event/{event}/sheet/export/sheet
@@ -2214,3 +2214,30 @@ admin_translations_update:
     path: /translations/update
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Translation\UpdateAction
+
+#
+# fast checkin
+#
+admin_event_fast_checkin_actions:
+    path: /event/{event}/fastcheckin/user/{user}/actions
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\CheckinActionsAction
+
+admin_event_fast_checkin_form:
+    path: /event/{event}/fastcheckin/create/{email}
+    requirements:
+        event: \d+
+        email: .*
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\AddFastCheckinAction
+
+admin_event_fast_checkin_action_checkin:
+    path: /event/{event}/fastcheckin/user/{user}/checkin
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\CheckinEventEntranceAction

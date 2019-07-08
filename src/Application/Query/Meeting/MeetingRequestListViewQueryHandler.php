@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 
@@ -112,7 +113,8 @@ class MeetingRequestListViewQueryHandler
                     $isAnsweringMeetingRequestClosed,
                     isset($viewedSheetListView[$meetingRequest->getSheetMet($query->sheet)->getId()]),
                     $isPhoneValidationRequired,
-                    $query->showCategory
+                    $query->showCategory,
+                    $this->isPriorityRequest($query, $meetingRequest)
                 )
             );
 
@@ -135,5 +137,11 @@ class MeetingRequestListViewQueryHandler
     private function isPhoneValidationRequiredForUser(MeetingRequestListViewQuery $query): bool
     {
         return $this->validationRequiredChecker->handle($query->sheet, $query->user);
+    }
+
+    private function isPriorityRequest(MeetingRequestListViewQuery $query, Request $meetingRequest): bool
+    {
+        return ($meetingRequest->isFromPriority() && $query->sheet === $meetingRequest->getFromSheet())
+            || ($meetingRequest->isToPriority() && $query->sheet === $meetingRequest->getToSheet());
     }
 }

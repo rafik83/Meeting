@@ -63,4 +63,12 @@ class Counter
             $slotIds
         );
     }
+
+    public function getCountSheetPriorityAvailable(Sheet $sheet): int
+    {
+        $sheetPriorityNumberAllowed = $sheet->getType()->getPriorityMeetingRequestsNumber();
+        $sheetPriorityNumberUsed = $this->requestRepository->countBySheetWithPriority($sheet);
+
+        return $sheetPriorityNumberAllowed - $sheetPriorityNumberUsed;
+    }
 }

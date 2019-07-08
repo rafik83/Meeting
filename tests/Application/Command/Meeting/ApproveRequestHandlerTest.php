@@ -58,12 +58,13 @@ class ApproveRequestHandlerTest extends TestCase
         $participants[] = $this->createParticipantMock($sheetTo, $user4, 4, $dateTime);
 
         $request         = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user1, $event);
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1, $event, false, true);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1, $event, false, true, false, true);
         $expectedRequest->approve($dateTime);
 
         $approveRequest = new ApproveRequest($user3, $request, $sheetTo, 'fr');
         $approveRequest->participants = [$toParticipant3, $toParticipant4];
         $approveRequest->description = 'content';
+        $approveRequest->toPriority = true;
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldBeCalled();
@@ -133,6 +134,7 @@ class ApproveRequestHandlerTest extends TestCase
         $approveRequest = new ApproveRequest($user3, $request, $sheetTo, 'fr');
         $approveRequest->participants = [$toParticipant3, $toParticipant4];
         $approveRequest->description = 'content';
+        $approveRequest->toPriority = false;
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->set($expectedRequest)->shouldNotBeCalled();

@@ -105,6 +105,12 @@ class Request implements MessageSubjectInterface
     /** @var Message|null */
     private $updateOrDeleteReasonMessage;
 
+    /** @var bool */
+    private $fromPriority;
+
+    /** @var bool */
+    private $toPriority;
+
     /**
      * Request constructor.
      *
@@ -117,6 +123,8 @@ class Request implements MessageSubjectInterface
      * @param Event              $event
      * @param bool               $disabled
      * @param bool               $hasMessage
+     * @param bool               $fromPriority
+     * @param bool               $toPriority
      */
     public function __construct(
         Sheet $from,
@@ -127,20 +135,24 @@ class Request implements MessageSubjectInterface
         User $creator,
         Event $event,
         $disabled = false,
-        $hasMessage = false
+        $hasMessage = false,
+        $fromPriority = false,
+        $toPriority = false
     ) {
-        $this->from             = $from;
+        $this->from = $from;
         $this->fromParticipants = new ArrayCollection($fromParticipants);
-        $this->to               = $to;
-        $this->toParticipants   = new ArrayCollection($toParticipants);
-        $this->state            = self::STATE_SENT;
-        $this->createdAt        = $createdAt;
-        $this->stateUpdatedAt   = $createdAt;
-        $this->creator          = $creator;
-        $this->disabled         = $disabled;
-        $this->meeting          = new ArrayCollection();
-        $this->hasMessage       = $hasMessage;
-        $this->event            = $event;
+        $this->to = $to;
+        $this->toParticipants = new ArrayCollection($toParticipants);
+        $this->state = self::STATE_SENT;
+        $this->createdAt = $createdAt;
+        $this->stateUpdatedAt = $createdAt;
+        $this->creator = $creator;
+        $this->disabled = $disabled;
+        $this->meeting = new ArrayCollection();
+        $this->hasMessage = $hasMessage;
+        $this->event = $event;
+        $this->fromPriority = $fromPriority;
+        $this->toPriority = $toPriority;
     }
 
     /**
@@ -704,5 +716,25 @@ class Request implements MessageSubjectInterface
     public function getUpdateOrDeleteReasonMessage(): ?Message
     {
         return $this->updateOrDeleteReasonMessage;
+    }
+
+    public function isFromPriority(): bool
+    {
+        return $this->fromPriority;
+    }
+
+    public function setFromPriority(bool $fromPriority): void
+    {
+        $this->fromPriority = $fromPriority;
+    }
+
+    public function isToPriority(): bool
+    {
+        return $this->toPriority;
+    }
+
+    public function setToPriority(bool $toPriority): void
+    {
+        $this->toPriority = $toPriority;
     }
 }

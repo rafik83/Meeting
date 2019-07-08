@@ -107,6 +107,13 @@ interface RequestRepositoryInterface
     public function countApprovedByEvent(Event $event): int;
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countBySheetWithPriority(Sheet $sheet): int;
+
+    /**
      * @param Event $event
      *
      * @return int

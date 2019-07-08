@@ -54,10 +54,11 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         //Command
         $command = new UpdateMeetingRequest($request, $sheetFrom);
         $command->participants = [$participant1, $participant3];
+        $command->isPriority = false;
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, $event, false, true);
+        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, $event, false, true, false , false);
         $expectedMessage = new Message($request, $sheetFrom, 'modif', $datetime);
 
         //Mock
@@ -111,10 +112,11 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         //Command
         $command = new UpdateMeetingRequest($request, $sheetFrom);
         $command->participants = [$participant1, $participant3];
+        $command->isPriority = false;
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, $event, false, true);
+        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, $event, false, true, false, false);
         $expectedRequest->approve($datetime);
         $expectedMessage = new Message($request, $sheetFrom, 'modif', $datetime);
 
@@ -170,10 +172,11 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         //Command
         $command = new UpdateMeetingRequest($request, $sheetTo);
         $command->participants = [$participant1, $participant3];
+        $command->isPriority = false;
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, true);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, true, false, false);
         $expectedMessage = new Message($request, $sheetTo, 'modif', $datetime);
 
         //Mock
@@ -227,10 +230,11 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         //Command
         $command = new UpdateMeetingRequest($request, $sheetTo);
         $command->participants = [$participant1, $participant3];
+        $command->isPriority = true;
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, true);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, true, false, true);
         $expectedRequest->approve($datetime);
         $expectedMessage = new Message($request, $sheetTo, 'modif', $datetime);
 
@@ -284,10 +288,11 @@ class UpdateMeetingRequestHandlerTest extends TestCase
 
         //Command
         $command = new UpdateMeetingRequest($request, $sheetTo);
+        $command->isPriority = true;
         $command->participants = [$participant1, $participant3];
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, false);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, false, false, true);
         $expectedRequest->approve($datetime);
         $expectedMessage = new Message($expectedRequest, $sheetTo, 'modif', $datetime);
 
