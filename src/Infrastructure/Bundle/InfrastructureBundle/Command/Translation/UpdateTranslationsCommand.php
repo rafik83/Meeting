@@ -70,7 +70,7 @@ class UpdateTranslationsCommand extends Command
 
     protected function push(InputInterface $input, OutputInterface $output): void
     {
-        $command = new Openl10n\Push([$input->getArgument('locale')]);
+        $command = new Openl10n\Push();
 
         /** @var Openl10n\PushResult $pushResult */
         $pushResult = $this->commandBus->handle($command);

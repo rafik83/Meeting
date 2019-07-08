@@ -61,7 +61,7 @@ class PushHandler
         $defaultLocale = $project->getDefaultLocale();
 
         // Retrieve locales option
-        $localesToPush = $command->locale;
+        $localesToPush = $command->locales;
         $localesToPush = array_unique($localesToPush);
         $pushAllLocale = false;
 

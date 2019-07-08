@@ -7,10 +7,14 @@ use Proximum\Vimeet\Application\Command\Command;
 class Push implements Command
 {
     /** @var string[] */
-    public $locale;
+    public $locales = [];
 
-    public function __construct(array $locale)
+    public function __construct(array $locales = [])
     {
-        $this->locale = $locale;
+        $this->locales = $locales;
+
+        if (empty($locales)) {
+            $this->locales = ['fr']; // The reference locale of translations file is "fr"
+        }
     }
 }
