@@ -623,12 +623,14 @@ services:
     # Openl10n
     #
 
-    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Translation\DownloadAction:
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Translation\UpdateAction:
         arguments:
             - '@adapter.job_queue_adapter'
             - '@session.flash_bag'
             - '@adapter.router'
             - '@adapter.authorization_checker'
+            - '@templating'
+            - '@form.factory'
 
     #
     # Product

@@ -43,12 +43,12 @@ class UpdateTranslationsCommand extends Command
             ->setDescription('Update translations from openl10n')
             ->addArgument(
                 'emailToNotify',
-                InputArgument::REQUIRED,
+                InputArgument::OPTIONAL,
                 'Email of the admin to notify for completion of the task'
             )
             ->addArgument(
                 'locale',
-                InputArgument::REQUIRED,
+                InputArgument::OPTIONAL,
                 'Locale for the email'
             )
         ;

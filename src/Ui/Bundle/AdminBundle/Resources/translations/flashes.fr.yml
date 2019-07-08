@@ -167,7 +167,7 @@ flash.admin.transactional.mail.customize.customizableByType.empty.error: 'Plus a
 flash.admin.transactional.mail.customize.notCustomizableByType.error: 'Cet email transactionnel ne peut pas être personnalisé plusieurs fois'
 flash.admin.transactional.mail.customize.success: 'Email transactionnel personnalisé avec succès'
 flash.admin.transactional.mail.remove.success: 'Email transactionnel supprimé avec succès'
-flash.admin.translations.download.prepare: 'Après le téléchargement des traductions, vous recevrez un mail.'
+flash.admin.translations.download.prepare: 'La mise à jour des traductions est programmée. Vous recevrez un email lorsque la mise à jour est terminée.'
 flash.admin.type_template_field.create.success: 'Le champ a bien été créé'
 flash.admin.type_template_field.order.success: 'L''ordre des champs a bien été enregistré'
 flash.admin.type_template_field.update.success: 'Le champ a bien été mis à jour'

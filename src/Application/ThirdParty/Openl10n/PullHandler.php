@@ -120,13 +120,15 @@ class PullHandler
             }
         }
 
-        $this->mailer->send(
-            new TranslationsDownloadedMail(
-                $this->mailSender,
-                $command->emailToNotify,
-                $command->locale
-            )
-        );
+        if (null !== $command->emailToNotify) {
+            $this->mailer->send(
+                new TranslationsDownloadedMail(
+                    $this->mailSender,
+                    $command->emailToNotify,
+                    $command->locale
+                )
+            );
+        }
 
         return $pullResult;
     }

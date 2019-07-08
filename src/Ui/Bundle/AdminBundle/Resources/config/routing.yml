@@ -2210,6 +2210,7 @@ admin_event_rooming_list_download_export:
 #
 # translations
 #
-admin_translations_download_link:
-    path: /openl10n/sync
-    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Translation\DownloadAction
+admin_translations_update:
+    path: /translations/update
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Translation\UpdateAction
