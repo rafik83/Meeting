@@ -7,7 +7,10 @@
 
     <p>
         <a href="{{ path('admin_promotion_code_create', { 'event': event.id }) }}"
-           class="btn btn-success">{{ 'admin.promotion_code.new'|trans }}</a>
+           class="btn btn-info">{{ 'admin.promotion_code.new'|trans }}</a>
+
+        <a href="{{ path('admin_promotion_code_batch_create', { 'event': event.id }) }}"
+           class="btn btn-default">{{ 'admin.promotion_code.batch.new'|trans }}</a>
     </p>
 
     <table class="table">

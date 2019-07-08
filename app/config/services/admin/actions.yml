@@ -1049,3 +1049,10 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
             - '@datetime'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@form.factory'
+            - '@router'
