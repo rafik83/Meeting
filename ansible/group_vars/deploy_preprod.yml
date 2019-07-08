@@ -25,10 +25,10 @@ manala_deploy_removed:
 
 manala_deploy_tasks:
   - make: install@prod
-  - command: bin/console vimeet:translations:update
   - make: migration-and-redis-flushdb@prod
 
 manala_deploy_post_tasks:
   - command: sudo /usr/sbin/service php7.2-fpm reload
   - command: sudo supervisorctl restart all
   - command: bin/console redis:flushdb --client=doctrine -n #flush the doctrine metadata and query cache
+  - command: bin/console vimeet:translations:update
