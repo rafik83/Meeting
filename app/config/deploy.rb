@@ -36,7 +36,7 @@ set :cache_path,      "var/cache"
 set :openl10n_config_file, "openl10n.yml"
 
 # Shared
-set :shared_files,    [app_config_path + "/" + app_config_file, app_config_path + "/" + openl10n_config_file]
+set :shared_files,    [app_config_path + "/" + app_config_file, openl10n_config_file]
 set :shared_children, ["web/uploads", log_path, "web/css", "web/media", "var/shared_uploaded_files"]
 
 # Assets
