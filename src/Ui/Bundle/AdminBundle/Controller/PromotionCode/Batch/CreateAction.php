@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\PromotionCode\Batch\Create;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\Batch\CreateType;
@@ -19,6 +20,9 @@ class CreateAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
+    /** @var CommandBusInterface */
+    private $commandBus;
+
     /** @var EngineInterface */
     private $engine;
 
@@ -30,11 +34,13 @@ class CreateAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
+        CommandBusInterface $commandBus,
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
+        $this->commandBus = $commandBus;
         $this->engine = $engine;
         $this->formFactory = $formFactory;
         $this->router = $router;
@@ -58,13 +64,21 @@ class CreateAction
         );
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->commandBus->handle($create);
+
             return new RedirectResponse(
                 $this->router->generate('admin_promotion_code_list', ['event' => $event->getId()])
             );
         }
 
         return new Response(
-            $this->engine->render('@Admin/PromotionCode/Batch/create.html.twig', ['form' => $form->createView()])
+            $this->engine->render(
+                '@Admin/PromotionCode/Batch/create.html.twig',
+                [
+                    'event' => $event,
+                    'form' => $form->createView(),
+                ]
+            )
         );
     }
 }

@@ -10,37 +10,53 @@
 
 namespace Proximum\Vimeet\Application\Command\PromotionCode\Batch;
 
-use Proximum\Vimeet\Domain\Model\PromotionCode;
+use Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory;
+use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
+use Proximum\Vimeet\Domain\Promotion\Generator\CodeGeneratorInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
 class CreateHandler
 {
+    /** @var CodeGeneratorInterface */
+    private $codeGenerator;
+
+    /** @var PromotionCodeFactory */
+    private $promotionCodeFactory;
+
     /** @var PromotionCodeRepositoryInterface */
     private $promotionCodeRepository;
 
-    public function __construct(PromotionCodeRepositoryInterface $promotionCodeRepository)
-    {
+    /** @var UniqueCodeChecker */
+    private $uniqueCodeChecker;
+
+    public function __construct(
+        CodeGeneratorInterface $codeGenerator,
+        PromotionCodeFactory $promotionCodeFactory,
+        PromotionCodeRepositoryInterface $promotionCodeRepository,
+        UniqueCodeChecker $uniqueCodeChecker
+    ) {
+        $this->codeGenerator = $codeGenerator;
+        $this->promotionCodeFactory = $promotionCodeFactory;
         $this->promotionCodeRepository = $promotionCodeRepository;
+        $this->uniqueCodeChecker = $uniqueCodeChecker;
     }
 
-    public function handle(Create $command)
+    public function handle(Create $create)
     {
-        $code = '';
+        $code = $this->codeGenerator->generate($create->event, $create->prefix);
 
-        $promotionCode = new PromotionCode(
-            $command->event,
-            $command->title,
+        $promotionCode = $this->promotionCodeFactory->create(
+            $create->event,
+            $create->title,
             $code,
-            $command->stock,
-            $command->validUntil
+            $create->stock,
+            $create->validUntil,
+            $create->translations,
+            $create->promotions
         );
-
-        $this->checkUniqueCode($promotionCode);
-        $this->translate($promotionCode, $command);
-        $this->setPromotions($promotionCode, $command);
 
         $this->promotionCodeRepository->add($promotionCode);
 
-        return new CreateResult($promotionCode);
+        return;
     }
 }
