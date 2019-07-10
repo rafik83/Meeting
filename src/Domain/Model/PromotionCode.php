@@ -55,6 +55,9 @@ class PromotionCode
      */
     private $stock;
 
+    /** @var null|PromotionCodeGroup */
+    private $promotionCodeGroup;
+
     /**
      * PromotionCode constructor.
      *
@@ -328,5 +331,10 @@ class PromotionCode
     public function getSerializedData()
     {
         return json_encode($this->getData());
+    }
+
+    public function getPromotionCodeGroup(): ?PromotionCodeGroup
+    {
+        return $this->promotionCodeGroup;
     }
 }
