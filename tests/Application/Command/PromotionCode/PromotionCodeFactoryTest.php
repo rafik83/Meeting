@@ -185,8 +185,6 @@ class PromotionCodeFactoryTest extends TestCase
         );
     }
 
-
-
     public function testNoUpdatablePromotions()
     {
         $event = EventFactory::createEvent();
