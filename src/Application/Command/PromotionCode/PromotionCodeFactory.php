@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
+use Proximum\Vimeet\Domain\Model\PromotionCodeGroup;
 use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
 use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeException;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -41,14 +42,16 @@ class PromotionCodeFactory
         ?int $stock,
         ?\DateTimeInterface $validUntil,
         array $translations,
-        array $promotions
+        array $promotions,
+        ?PromotionCodeGroup $promotionCodeGroup = null
     ): PromotionCode {
         $promotionCode = new PromotionCode(
             $event,
             $title,
             $code,
             $stock,
-            $validUntil
+            $validUntil,
+            $promotionCodeGroup
         );
 
         $this->checkUniqueCode($promotionCode);

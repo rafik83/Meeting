@@ -613,4 +613,10 @@ services:
 
     Proximum\Vimeet\Application\Command\PromotionCode\Batch\CreateHandler:
         arguments:
+            - '@promotion.generator.unique_code_generator'
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory'
+            - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'
             - '@repository.promotion_code_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Batch\Create }

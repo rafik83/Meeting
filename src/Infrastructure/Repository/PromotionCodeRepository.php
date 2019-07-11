@@ -24,8 +24,6 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
     private $entityManager;
 
     /**
-     * OrderRepository constructor.
-     *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)

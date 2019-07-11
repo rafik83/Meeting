@@ -11,8 +11,9 @@
 namespace Proximum\Vimeet\Application\Command\PromotionCode\Batch;
 
 use Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory;
-use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
+use Proximum\Vimeet\Domain\Model\PromotionCodeGroup;
 use Proximum\Vimeet\Domain\Promotion\Generator\CodeGeneratorInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeGroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
 class CreateHandler
@@ -23,40 +24,49 @@ class CreateHandler
     /** @var PromotionCodeFactory */
     private $promotionCodeFactory;
 
+    /** @var PromotionCodeGroupRepositoryInterface */
+    private $promotionCodeGroupRepository;
+
     /** @var PromotionCodeRepositoryInterface */
     private $promotionCodeRepository;
 
-    /** @var UniqueCodeChecker */
-    private $uniqueCodeChecker;
+    /** @var \DateTimeInterface */
+    private $dateTime;
 
     public function __construct(
         CodeGeneratorInterface $codeGenerator,
         PromotionCodeFactory $promotionCodeFactory,
+        PromotionCodeGroupRepositoryInterface $promotionCodeGroupRepository,
         PromotionCodeRepositoryInterface $promotionCodeRepository,
-        UniqueCodeChecker $uniqueCodeChecker
+        \DateTimeInterface $dateTime
     ) {
         $this->codeGenerator = $codeGenerator;
         $this->promotionCodeFactory = $promotionCodeFactory;
+        $this->promotionCodeGroupRepository = $promotionCodeGroupRepository;
         $this->promotionCodeRepository = $promotionCodeRepository;
-        $this->uniqueCodeChecker = $uniqueCodeChecker;
+        $this->dateTime = $dateTime;
     }
 
-    public function handle(Create $create)
+    public function handle(Create $create): PromotionCodeGroup
     {
-        $code = $this->codeGenerator->generate($create->event, $create->prefix);
+        $promotionCodeGroup = new PromotionCodeGroup($create->event, $create->title, $this->dateTime);
+        $this->promotionCodeGroupRepository->add($promotionCodeGroup);
 
-        $promotionCode = $this->promotionCodeFactory->create(
-            $create->event,
-            $create->title,
-            $code,
-            $create->stock,
-            $create->validUntil,
-            $create->translations,
-            $create->promotions
-        );
+        for ($increment = 1; $increment <= $create->number; ++$increment) {
+            $code = $this->codeGenerator->generate($create->event, $create->prefix);
+            $promotionCode = $this->promotionCodeFactory->create(
+                $create->event,
+                $create->title,
+                $code,
+                $create->stock,
+                $create->validUntil,
+                $create->translations,
+                $create->promotions,
+                $promotionCodeGroup
+            );
+            $this->promotionCodeRepository->add($promotionCode);
+        }
 
-        $this->promotionCodeRepository->add($promotionCode);
-
-        return;
+        return $promotionCodeGroup;
     }
 }
