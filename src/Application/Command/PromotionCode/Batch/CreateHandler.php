@@ -49,7 +49,15 @@ class CreateHandler
 
     public function handle(Create $create): PromotionCodeGroup
     {
-        $promotionCodeGroup = new PromotionCodeGroup($create->event, $create->title, $this->dateTime);
+        $promotionCodeGroup = new PromotionCodeGroup(
+            $create->event,
+            $create->title,
+            $create->number,
+            $create->prefix,
+            $create->stock,
+            $create->validUntil,
+            $this->dateTime
+        );
         $this->promotionCodeGroupRepository->add($promotionCodeGroup);
 
         for ($increment = 1; $increment <= $create->number; ++$increment) {

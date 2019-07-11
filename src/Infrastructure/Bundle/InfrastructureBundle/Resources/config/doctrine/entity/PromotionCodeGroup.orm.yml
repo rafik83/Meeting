@@ -9,6 +9,17 @@ Proximum\Vimeet\Domain\Model\PromotionCodeGroup:
     fields:
         title:
             type: string
+        prefix:
+            type: string
+            nullable: true
+        number:
+            type: integer
+        validUntil:
+            type: datetime
+            nullable: true
+        stock:
+            type: integer
+            nullable: true
         createdAt:
             type: datetime
     manyToOne:
