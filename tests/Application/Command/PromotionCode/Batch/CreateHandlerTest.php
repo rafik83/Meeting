@@ -88,8 +88,15 @@ class CreateHandlerTest extends TestCase
         $create->translations = $translations;
         $create->promotions = $promotions;
 
-
-        $expectedPromotionCodeGroup = new PromotionCodeGroup($this->event->reveal(), 'MyPromotionCode group', $this->dateTime);
+        $expectedPromotionCodeGroup = new PromotionCodeGroup(
+            $this->event->reveal(),
+            'MyPromotionCode group',
+            2,
+            'PRECODE-',
+            null,
+            null,
+            $this->dateTime
+        );
         $this->promotionCodeGroupRepository->add($expectedPromotionCodeGroup)->shouldBeCalled();
 
         $this->codeGenerator
