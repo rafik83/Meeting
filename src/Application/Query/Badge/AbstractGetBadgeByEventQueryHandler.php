@@ -124,7 +124,7 @@ abstract class AbstractGetBadgeByEventQueryHandler
 
     abstract protected function getQrCodeIdentifier(AbstractGetBadgeByEventQuery $query): string;
 
-    abstract protected function getCountryString(AbstractGetBadgeByEventQuery $query, Badge $badge): string;
+    abstract protected function getCountryString(AbstractGetBadgeByEventQuery $query, Badge $badge): ?string;
 
     /**
      * @param AbstractGetBadgeByEventQuery $query
