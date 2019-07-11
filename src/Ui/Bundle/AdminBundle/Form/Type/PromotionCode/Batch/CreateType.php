@@ -31,16 +31,17 @@ class CreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class)
-            ->add('prefix', TextType::class, ['required' => false])
-            ->add('number', IntegerType::class, ['required' => true])
-            ->add('stock', IntegerType::class, ['required' => false])
+            ->add('title', TextType::class, ['label' => 'form.promotion_code_create.children.title.label'])
+            ->add('prefix', TextType::class, ['required' => false, 'label' => 'form.promotion_code_create.children.prefix.label'])
+            ->add('number', IntegerType::class, ['required' => true, 'label' => 'form.promotion_code_create.children.number.label'])
+            ->add('stock', IntegerType::class, ['required' => false, 'label' => 'form.promotion_code_create.children.stock.label'])
             ->add(
                 'validUntil',
                 DateTimePickerType::class,
                 [
                     'required' => false,
                     'view_timezone' => $options['event']->getTimeZone(),
+                    'label' => 'form.promotion_code_create.children.validUntil.label'
                 ]
             )
             ->add(
@@ -67,6 +68,7 @@ class CreateType extends AbstractType
                     'allow_add' => true,
                     'allow_delete' => true,
                     'error_bubbling' => false,
+                    'label' => 'form.promotion_code_create.children.promotions.label'
                 ]
             );
     }
@@ -81,5 +83,10 @@ class CreateType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Create::class,
         ]);
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'promotion_code_batch_create';
     }
 }
