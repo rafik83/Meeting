@@ -91,6 +91,10 @@ class PromotionCodeController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->notFoundIfWrongPromotionCodeEvent($event, $promotionCode);
 
+        if ($promotionCode->hasPromotionCodeGroup()) {
+            throw $this->createAccessDeniedException('Promotion code has a group.');
+        }
+
         $update = new Update($promotionCode);
         $form   = $this->createForm(UpdateType::class, $update, [
             'submit' => true,

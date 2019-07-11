@@ -345,4 +345,9 @@ class PromotionCode
     {
         return $this->promotionCodeGroup;
     }
+
+    public function hasPromotionCodeGroup(): bool
+    {
+        return null !== $this->promotionCodeGroup;
+    }
 }
