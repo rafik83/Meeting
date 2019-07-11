@@ -51,6 +51,24 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findWithoutGroupByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('promotion_code')
+            ->from(PromotionCode::class, 'promotion_code')
+            ->where('promotion_code.event = :event AND promotion_code.promotionCodeGroup IS NULL')
+            ->setParameter('event', $event)
+            ->orderBy('promotion_code.title')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByEvent(Event $event): array
     {
         $queryBuilder = $this

@@ -34,7 +34,7 @@ class PromotionCodeController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $promotionCodes = $this->get('repository.promotion_code_repository')->findByEvent($event);
+        $promotionCodes = $this->get('repository.promotion_code_repository')->findWithoutGroupByEvent($event);
 
         return $this->render('AdminBundle:PromotionCode:list.html.twig', [
             'event'           => $event,
