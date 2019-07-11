@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
@@ -26,6 +27,9 @@ class CreateAction
     /** @var EngineInterface */
     private $engine;
 
+    /** @var FlashBagInterface */
+    private $flashBag;
+
     /** @var FormFactoryInterface */
     private $formFactory;
 
@@ -36,6 +40,7 @@ class CreateAction
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         CommandBusInterface $commandBus,
         EngineInterface $engine,
+        FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
         RouterInterface $router
     ) {
@@ -44,6 +49,7 @@ class CreateAction
         $this->engine = $engine;
         $this->formFactory = $formFactory;
         $this->router = $router;
+        $this->flashBag = $flashBag;
     }
 
     public function __invoke(Request $request, Event $event)
@@ -65,6 +71,8 @@ class CreateAction
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($create);
+
+            $this->flashBag->add('success', 'flash.promotion_code.batch_create.success');
 
             return new RedirectResponse(
                 $this->router->generate('admin_promotion_code_list', ['event' => $event->getId()])

@@ -1055,5 +1055,6 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@templating'
+            - '@session.flash_bag'
             - '@form.factory'
             - '@router'
