@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PromotionCodeGroup;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeGroupRepositoryInterface;
 
@@ -31,5 +32,25 @@ class PromotionCodeGroupRepository implements PromotionCodeGroupRepositoryInterf
     {
         $this->entityManager->persist($promotionCodeGroup);
         $this->entityManager->flush($promotionCodeGroup);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return PromotionCodeGroup[]
+     */
+    public function findByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('promotionCodeGroup')
+            ->from(PromotionCodeGroup::class, 'promotionCodeGroup')
+            ->where('promotionCodeGroup.event = :event')
+            ->setParameter('event', $event)
+            ->orderBy('promotionCodeGroup.title')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

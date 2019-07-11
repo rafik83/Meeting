@@ -1050,6 +1050,9 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
             - '@datetime'
 
+    #
+    # Promotion code
+    #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\CreateAction:
         arguments:
             - '@adapter.authorization_checker'
@@ -1058,3 +1061,9 @@ services:
             - '@session.flash_bag'
             - '@form.factory'
             - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'

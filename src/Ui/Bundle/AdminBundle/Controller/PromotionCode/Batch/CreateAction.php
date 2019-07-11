@@ -75,7 +75,7 @@ class CreateAction
             $this->flashBag->add('success', 'flash.promotion_code.batch_create.success');
 
             return new RedirectResponse(
-                $this->router->generate('admin_promotion_code_list', ['event' => $event->getId()])
+                $this->router->generate('admin_promotion_code_batch_list', ['event' => $event->getId()])
             );
         }
 

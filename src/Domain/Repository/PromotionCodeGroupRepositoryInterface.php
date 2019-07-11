@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PromotionCodeGroup;
 
 interface PromotionCodeGroupRepositoryInterface
@@ -18,4 +19,11 @@ interface PromotionCodeGroupRepositoryInterface
      * @param PromotionCodeGroup $promotionCodeGroup
      */
     public function add(PromotionCodeGroup $promotionCodeGroup);
+
+    /**
+     * @param Event $event
+     *
+     * @return PromotionCodeGroup[]
+     */
+    public function findByEvent(Event $event): array;
 }

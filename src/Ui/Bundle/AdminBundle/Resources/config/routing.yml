@@ -1376,6 +1376,13 @@ admin_promotion_code_batch_create:
     requirements:
         event: \d+
 
+admin_promotion_code_batch_list:
+    path: /event/{event}/promotion_code/batch/list
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ListAction
+    methods: [GET]
+    requirements:
+        event: \d+
+
 #
 # Schedule
 #
