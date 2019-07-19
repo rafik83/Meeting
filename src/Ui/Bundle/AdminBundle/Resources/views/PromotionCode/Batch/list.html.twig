@@ -18,7 +18,7 @@
         <li role="presentation" class="active"><a href="{{ path('admin_promotion_code_batch_list', { event: event.id }) }}">{{ 'admin.promotion_code.subtitle.batch'|trans }}</a></li>
     </ul>
 
-    <table class="table">
+    <table class="table table-striped table-hover">
         <thead>
         <tr>
             <th>{{ 'admin.promotion_code.table.column.title'|trans }}</th>
@@ -42,6 +42,8 @@
                     {% endif %}
                 </td>
                 <td class="text-right">
+                    <a href="{{ path('admin_promotion_code_batch_export', { 'event': event.id, 'promotionCodeGroup': promotionCodeGroup.id }) }}"
+                       class="btn btn-default btn-sm">{{ 'admin.promotion_code.table.action.export'|trans }}</a>
                 </td>
             </tr>
         {% else %}

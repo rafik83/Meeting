@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Application\View\PromotionCode\Group\PromotioCodeExportedView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order\PromotionCode as OrderPromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
+use Proximum\Vimeet\Domain\Model\PromotionCodeGroup;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
 class PromotionCodeRepository implements PromotionCodeRepositoryInterface
@@ -150,5 +152,27 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPromotionCodeExportedViewByGroup(PromotionCodeGroup $promotionCodeGroup): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select(
+                sprintf(
+                    'NEW %s(promotionCode.code, promotionCode.title, promotionCode.validUntil, promotionCode.stock)',
+                    PromotioCodeExportedView::class
+                )
+            )
+            ->from(PromotionCode::class, 'promotionCode')
+            ->where('promotionCode.promotionCodeGroup = :promotionCodeGroup')
+            ->setParameter('promotionCodeGroup', $promotionCodeGroup)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

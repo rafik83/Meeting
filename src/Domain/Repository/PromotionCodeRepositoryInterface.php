@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Application\View\PromotionCode\Group\PromotioCodeExportedView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
+use Proximum\Vimeet\Domain\Model\PromotionCodeGroup;
 
 interface PromotionCodeRepositoryInterface
 {
@@ -60,4 +62,11 @@ interface PromotionCodeRepositoryInterface
      * @return PromotionCode
      */
     public function findByEventAndCode(Event $event, $code);
+
+    /**
+     * @param PromotionCodeGroup $promotionCodeGroup
+     *
+     * @return PromotioCodeExportedView[]
+     */
+    public function getPromotionCodeExportedViewByGroup(PromotionCodeGroup $promotionCodeGroup): array;
 }
