@@ -41,7 +41,7 @@ class GetExampleBadgeByEventQueryHandler extends AbstractGetBadgeByEventQueryHan
         return '123456789012';
     }
 
-    protected function getCountryString(AbstractGetBadgeByEventQuery $query, Badge $badge): string
+    protected function getCountryString(AbstractGetBadgeByEventQuery $query, Badge $badge): ?string
     {
         return 'Etats-Unis';
     }
