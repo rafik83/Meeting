@@ -362,6 +362,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     #
     # Handlers
     #
@@ -1627,16 +1631,15 @@ services:
     command.promotion_code.create_handler:
         class: Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory'
             - '@repository.promotion_code_repository'
-            - '@promotion.unique_code_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Create }
     command.promotion_code.update_handler:
         class: Proximum\Vimeet\Application\Command\PromotionCode\UpdateHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory'
             - '@repository.promotion_code_repository'
-            - '@promotion.unique_code_checker'
-            - '@vimeet_infrastructure.repository.order_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Update }
 

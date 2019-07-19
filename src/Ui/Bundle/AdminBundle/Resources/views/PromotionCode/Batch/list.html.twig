@@ -14,34 +14,34 @@
     </p>
 
     <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#">{{ 'admin.promotion_code.subtitle.code'|trans }}</a></li>
-        <li role="presentation"><a href="{{ path('admin_promotion_code_batch_list', { event: event.id }) }}">{{ 'admin.promotion_code.subtitle.batch'|trans }}</a></li>
+        <li role="presentation"><a href="{{ path('admin_promotion_code_list', { event: event.id }) }}">{{ 'admin.promotion_code.subtitle.code'|trans }}</a></li>
+        <li role="presentation" class="active"><a href="{{ path('admin_promotion_code_batch_list', { event: event.id }) }}">{{ 'admin.promotion_code.subtitle.batch'|trans }}</a></li>
     </ul>
 
     <table class="table">
         <thead>
         <tr>
             <th>{{ 'admin.promotion_code.table.column.title'|trans }}</th>
-            <th>{{ 'admin.promotion_code.table.column.code'|trans }}</th>
+            <th>{{ 'admin.promotion_code.table.column.number'|trans }}</th>
+            <th>{{ 'admin.promotion_code.table.column.prefix'|trans }}</th>
             <th>{{ 'admin.promotion_code.table.column.stock'|trans }}</th>
             <th>{{ 'admin.promotion_code.table.column.validUntil'|trans }}</th>
             <th class="text-right">{{ 'admin.promotion_code.table.column.action'|trans }}</th>
         </tr>
         </thead>
         <tbody>
-        {% for promotion_code in promotion_codes %}
+        {% for promotionCodeGroup in promotionCodeGroups %}
             <tr>
-                <td>{{ promotion_code.title }}</td>
-                <td>{{ promotion_code.code }}</td>
-                <td>{{ promotion_code.stock }}</td>
+                <td>{{ promotionCodeGroup.title }}</td>
+                <td>{{ promotionCodeGroup.number }}</td>
+                <td>{{ promotionCodeGroup.prefix }}</td>
+                <td>{{ promotionCodeGroup.stock }}</td>
                 <td>
-                    {% if promotion_code.validUntil is not null %}
-                        {{ promotion_code.validUntil|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                    {% if promotionCodeGroup.validUntil is not null %}
+                        {{ promotionCodeGroup.validUntil|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                     {% endif %}
                 </td>
                 <td class="text-right">
-                    <a href="{{ path('admin_promotion_code_update', { 'event': event.id, 'promotionCode': promotion_code.id }) }}"
-                       class="btn btn-primary btn-sm">{{ 'admin.promotion_code.table.action.edit'|trans }}</a>
                 </td>
             </tr>
         {% else %}

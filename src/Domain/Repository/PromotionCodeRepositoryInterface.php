@@ -30,6 +30,13 @@ interface PromotionCodeRepositoryInterface
      *
      * @return PromotionCode[]
      */
+    public function findWithoutGroupByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return PromotionCode[]
+     */
     public function findByEvent(Event $event): array;
 
     /**

@@ -24,8 +24,6 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
     private $entityManager;
 
     /**
-     * OrderRepository constructor.
-     *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
@@ -48,6 +46,24 @@ class PromotionCodeRepository implements PromotionCodeRepositoryInterface
     public function set(PromotionCode $promotionCode)
     {
         $this->entityManager->flush($promotionCode);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findWithoutGroupByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('promotion_code')
+            ->from(PromotionCode::class, 'promotion_code')
+            ->where('promotion_code.event = :event AND promotion_code.promotionCodeGroup IS NULL')
+            ->setParameter('event', $event)
+            ->orderBy('promotion_code.title')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

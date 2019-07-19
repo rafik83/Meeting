@@ -10,38 +10,36 @@
 
 namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
-use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
-use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
-class UpdateHandler extends AbstractCommandHandler
+class UpdateHandler
 {
-    /** @var OrderRepositoryInterface */
-    private $orderRepository;
+    /** @var PromotionCodeFactory */
+    private $promotionCodeFactory;
+
+    /** @var PromotionCodeRepositoryInterface */
+    private $promotionCodeRepository;
 
     public function __construct(
-        PromotionCodeRepositoryInterface $promotionCodeRepository,
-        UniqueCodeChecker $uniqueCodeChecker,
-        OrderRepositoryInterface $orderRepository
+        PromotionCodeFactory $promotionCodeFactory,
+        PromotionCodeRepositoryInterface $promotionCodeRepository
     ) {
-        parent::__construct($promotionCodeRepository, $uniqueCodeChecker);
-
-        $this->orderRepository = $orderRepository;
+        $this->promotionCodeFactory = $promotionCodeFactory;
+        $this->promotionCodeRepository = $promotionCodeRepository;
     }
-    /**
-     * @param Update $command
-     */
-    public function handle(Update $command): void
+
+    public function handle(Update $update): void
     {
-        $command->promotionCode->update($command->title, $command->code, $command->stock, $command->validUntil);
+        $promotionCode = $this->promotionCodeFactory->update(
+            $update->promotionCode,
+            $update->title,
+            $update->code,
+            $update->stock,
+            $update->validUntil,
+            $update->translations,
+            $update->promotions
+        );
 
-        $this->checkUniqueCode($command->promotionCode);
-        $this->translate($command->promotionCode, $command);
-
-        if (!$this->orderRepository->hasOrderWithPromotionCode($command->promotionCode)) {
-            $this->setPromotions($command->promotionCode, $command);
-        }
-
-        $this->promotionCodeRepository->set($command->promotionCode);
+        $this->promotionCodeRepository->set($promotionCode);
     }
 }

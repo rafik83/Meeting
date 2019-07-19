@@ -1049,3 +1049,21 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
             - '@datetime'
+
+    #
+    # Promotion code
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'

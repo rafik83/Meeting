@@ -1,0 +1,44 @@
+Proximum\Vimeet\Application\Command\PromotionCode\Batch\Create:
+    properties:
+        title:
+            - NotBlank: ~
+            - Type: { type: string }
+        number:
+            - NotBlank: ~
+            - Type: { type: integer }
+            - Range: { min: 1 }
+        validUntil:
+            - Date: ~
+        stock:
+            - Type: { type: integer }
+        translations:
+            - Count: { min: 1 }
+            - All:
+                - Collection:
+                    label:
+                        - NotBlank: ~
+                        - Type: { type: string }
+                    description:
+                        - Type: { type: string }
+        promotions:
+            - Count: { min: 1 }
+            - All:
+                - Collection:
+                    product:
+                        - NotBlank: ~
+                    type:
+                        - NotBlank: ~
+                        - Type: { type: string }
+                    value:
+                        - Type: { type: float }
+                    quantityMax:
+                        - Type: { type: integer }
+                - Expression:
+                    expression: "value['type'] === 'free' || value['value'] !== null"
+                    message: "validators.promotion_code.promotion.value.free"
+                - Expression:
+                    expression: "value['type'] !== 'percent_off' || value['value'] > 0 && value['value'] < 100"
+                    message: "validators.promotion_code.promotion.value.percent_off"
+                - Expression:
+                    expression: "value['type'] !== 'value_off' || value['value'] > 0 && value['value'] < value['product'].getUnitPrice()"
+                    message: "validators.promotion_code.promotion.value.value_off"
