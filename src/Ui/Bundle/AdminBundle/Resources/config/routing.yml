@@ -1391,6 +1391,14 @@ admin_promotion_code_batch_export:
         event: \d+
         promotionCodeGroup: \d+
 
+admin_promotion_code_batch_update:
+    path: /event/{event}/promotion_code/batch/{promotionCodeGroup}/update
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\UpdateAction
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        promotionCodeGroup: \d+
+
 #
 # Schedule
 #

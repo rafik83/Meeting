@@ -42,6 +42,8 @@
                     {% endif %}
                 </td>
                 <td class="text-right">
+                    <a href="{{ path('admin_promotion_code_batch_update', { 'event': event.id, 'promotionCodeGroup': promotionCodeGroup.id }) }}"
+                       class="btn btn-default btn-sm">{{ 'admin.promotion_code.table.action.update'|trans }}</a>
                     <a href="{{ path('admin_promotion_code_batch_export', { 'event': event.id, 'promotionCodeGroup': promotionCodeGroup.id }) }}"
                        class="btn btn-default btn-sm">{{ 'admin.promotion_code.table.action.export'|trans }}</a>
                 </td>

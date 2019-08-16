@@ -782,6 +782,13 @@ form.promotion_code_batch_create.children.promotions.prototype.children.quantity
 form.promotion_code_batch_create.children.promotions.prototype.children.type.label: Type
 form.promotion_code_batch_create.children.promotions.prototype.children.value.label: Valeur
 form.promotion_code_batch_create.children.submit.label: Enregistrer
+form.promotion_code_batch_update.children.promotions.label_add: Ajouter une promotion
+form.promotion_code_batch_update.children.promotions.label_delete: Supprimer cette promotion
+form.promotion_code_batch_update.children.promotions.prototype.children.product.label: Produit
+form.promotion_code_batch_update.children.promotions.prototype.children.quantityMax.label: 'Quantité limitée à'
+form.promotion_code_batch_update.children.promotions.prototype.children.type.label: Type
+form.promotion_code_batch_update.children.promotions.prototype.children.value.label: Valeur
+form.promotion_code_batch_update.children.submit.label: Enregistrer
 form.promotion_code_create.children.code.label: Code
 form.promotion_code_create.children.number.label: Nombre de codes
 form.promotion_code_create.children.prefix.label: Préfixe

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-1935 - Generate promo codes
 - VIMEET-2018 - Export promo codes group
+- VIMEET-2017 - Update promo codes group
 
 ## [2.10.0] - 2019-07-05
 ### Added
