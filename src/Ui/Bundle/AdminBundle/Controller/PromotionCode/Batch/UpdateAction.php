@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\PromotionCode\Batch\Update;
+use Proximum\Vimeet\Application\Query\PromotionCode\Batch\CanBeUpdatable;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PromotionCodeGroup;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\Batch\UpdateType;
@@ -21,6 +22,9 @@ class UpdateAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
+
+    /** @var CanBeUpdatable */
+    private $canBeUpdatable;
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -39,6 +43,7 @@ class UpdateAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
+        CanBeUpdatable $canBeUpdatable,
         CommandBusInterface $commandBus,
         EngineInterface $engine,
         FlashBagInterface $flashBag,
@@ -46,6 +51,7 @@ class UpdateAction
         RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
+        $this->canBeUpdatable = $canBeUpdatable;
         $this->commandBus = $commandBus;
         $this->engine = $engine;
         $this->formFactory = $formFactory;
@@ -59,6 +65,10 @@ class UpdateAction
             || $promotionCodeGroup->getEvent() !== $event
         ) {
             throw new AccessDeniedException('Access denied');
+        }
+
+        if (!$this->canBeUpdatable->isSatisfiableBy($promotionCodeGroup)) {
+            throw new AccessDeniedException('This promotion code group can not be updatable');
         }
 
         $update = new Update($promotionCodeGroup);

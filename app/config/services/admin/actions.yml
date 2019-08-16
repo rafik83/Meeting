@@ -1066,7 +1066,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@templating'
-            - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'
+            - '@Proximum\Vimeet\Application\Query\PromotionCode\Batch\PromotionCodeGroupList\GetListViewHandler'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ExportAction:
         arguments:
@@ -1077,6 +1077,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\UpdateAction:
         arguments:
             - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\PromotionCode\Batch\CanBeUpdatable'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@templating'
             - '@session.flash_bag'
