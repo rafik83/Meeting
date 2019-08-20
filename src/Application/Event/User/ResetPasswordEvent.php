@@ -37,18 +37,21 @@ class ResetPasswordEvent extends Event
      */
     private $locale;
 
-    /**
-     * @param User                   $user
-     * @param EventModel             $event
-     * @param ForgottenPasswordToken $forgottenPasswordToken
-     * @param string                 $locale
-     */
-    public function __construct(User $user, EventModel $event, ForgottenPasswordToken $forgottenPasswordToken, $locale)
-    {
-        $this->user                   = $user;
-        $this->event                  = $event;
+    /** @var bool */
+    private $requestedByAdmin;
+
+    public function __construct(
+        User $user,
+        EventModel $event,
+        ForgottenPasswordToken $forgottenPasswordToken,
+        string $locale,
+        bool $requestedByAdmin = false
+    ) {
+        $this->user = $user;
+        $this->event = $event;
         $this->forgottenPasswordToken = $forgottenPasswordToken;
-        $this->locale                 = $locale;
+        $this->locale = $locale;
+        $this->requestedByAdmin = $requestedByAdmin;
     }
 
     /**
@@ -81,5 +84,10 @@ class ResetPasswordEvent extends Event
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    public function isRequestedByAdmin(): bool
+    {
+        return $this->requestedByAdmin;
     }
 }

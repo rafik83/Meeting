@@ -1588,7 +1588,7 @@ admin_user_event_scan:
 admin_users_details:
     path: /event/{event}/users/{user}
     defaults: { _controller: AdminBundle:User:show }
-    methods: [GET]
+    methods: [GET, POST]
     requirements:
         event: \d+
         user: \d+

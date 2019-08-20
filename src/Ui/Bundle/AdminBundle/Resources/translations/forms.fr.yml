@@ -1328,6 +1328,7 @@ form.user_batch.children.sendMail.label: 'Créer la campagne'
 form.user_filter.children.participation.label: Participation
 form.user_filter.children.text_search.label: 'Nom, prénom ou email de l''utilisateur'
 form.user_filter.children.type.label: Type
+form.user.requestNewPasswordLink.submit: 'Obtenir un lien de réinitialisation de mot de passe'
 form.vatMode.ati: TTC
 form.vatMode.et: HT
 form.who_see_who.children.priority.label: 'Priorité de la règle'

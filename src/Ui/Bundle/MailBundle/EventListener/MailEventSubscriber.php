@@ -245,6 +245,10 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onUserResetPassword(UserResetPasswordEvent $event)
     {
+        if ($event->isRequestedByAdmin()) {
+            return;
+        }
+
         $participantMailView = $this->participantMailViewQueryHandler->handle(
             new ParticipantMailViewQuery(null, $event->getUser())
         );
