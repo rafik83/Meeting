@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Components\User;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Helper\NameCleaner;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
@@ -97,6 +98,10 @@ class UserInfoGuesser
                             );
                         } else {
                             $userInfo[$arrayValue] = $participantInfo[$tag];
+                        }
+
+                        if (Tag::PARTICIPANT_FIRSTNAME === $tag) {
+                            $userInfo[$arrayValue] = NameCleaner::clean($userInfo[$arrayValue]);
                         }
                     }
                 }
