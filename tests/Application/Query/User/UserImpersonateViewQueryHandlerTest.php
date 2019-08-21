@@ -24,7 +24,7 @@ class UserImpersonateViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $fromUser = AdminFactory::create('admin@vimeet.events', 'vincent', 'larose');
+        $fromUser = AdminFactory::create('admin@admin.com', 'John', 'McLane');
         $toUser   = UserFactory::create('user@vimeet.events');
 
         $account = new Account();
@@ -42,8 +42,8 @@ class UserImpersonateViewQueryHandlerTest extends TestCase
             ->willReturn('_EXIT_URL_');
 
         $expectedUserImpersonateView = new UserImpersonateView(
-            new UserView('vincent', 'larose', 'admin@vimeet.events'),
-            new UserView('francois', 'bennet', 'user@vimeet.events'),
+            new UserView('John', 'McLane', 'admin@admin.com'),
+            new UserView('Francois', 'bennet', 'user@vimeet.events'),
             '_EXIT_URL_'
         );
 

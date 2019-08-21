@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Helper\NameCleaner;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 
@@ -79,11 +80,13 @@ class ParticipantInfoGuesser
     {
         $template = $participant->getSheet()->getType()->getRegistrationTemplate();
 
-        return $this->taggedInfoGuesser->guessFirst(
-            $template,
-            $participant->getData(),
-            Tag::PARTICIPANT_FIRSTNAME,
-            $locale
+        return NameCleaner::clean(
+            $this->taggedInfoGuesser->guessFirst(
+                $template,
+                $participant->getData(),
+                Tag::PARTICIPANT_FIRSTNAME,
+                $locale
+            )
         );
     }
 

@@ -12,8 +12,12 @@ namespace Proximum\Vimeet\Domain\Helper;
 
 class NameCleaner
 {
-    public static function clean(string $name): string
+    public static function clean(?string $name): string
     {
-        return ucwords($name, ' -');
+        if (null === $name) {
+            return '';
+        }
+
+        return ucwords(mb_strtolower($name), ' -');
     }
 }

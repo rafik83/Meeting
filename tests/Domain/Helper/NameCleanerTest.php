@@ -9,9 +9,10 @@ class NameCleanerTest extends TestCase
 {
     public function testClean()
     {
-        $this->assertEquals('Jean-Paul Rouve', NameCleaner::clean('Jean-Paul Rouve'));
-        $this->assertEquals('Jean-Paul ROUVE', NameCleaner::clean('jean-paul ROUVE'));
-        $this->assertEquals('Jean Paul Rouve', NameCleaner::clean('jean paul rouve'));
-        $this->assertEquals('Jean De La Reberdière', NameCleaner::clean('jean de la Reberdière'));
+        $this->assertEquals('Jean-Paul', NameCleaner::clean('JEAN-PAUL'));
+        $this->assertEquals('Jean-Paul', NameCleaner::clean('Jean-Paul'));
+        $this->assertEquals('Jean-Paul', NameCleaner::clean('jean-paul'));
+        $this->assertEquals('Jean Paul', NameCleaner::clean('jean paul'));
+        $this->assertEquals('Jean', NameCleaner::clean('jean'));
     }
 }
