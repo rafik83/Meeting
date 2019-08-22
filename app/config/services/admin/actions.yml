@@ -1067,3 +1067,9 @@ services:
             - '@adapter.authorization_checker'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@repository.promotion_code_repository'
+            - '@adapter.serializer_adapter'

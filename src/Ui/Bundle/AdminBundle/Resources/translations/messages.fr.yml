@@ -741,6 +741,7 @@ admin.promotion_code.batch.new: 'Générer codes en série'
 admin.promotion_code.subtitle.code: 'Codes'
 admin.promotion_code.subtitle.batch: 'Codes en série'
 admin.promotion_code.table.action.edit: Modifier
+admin.promotion_code.table.action.export: Exporter
 admin.promotion_code.table.column.action: Action
 admin.promotion_code.table.column.code: Code
 admin.promotion_code.table.column.number: Nombre de codes
