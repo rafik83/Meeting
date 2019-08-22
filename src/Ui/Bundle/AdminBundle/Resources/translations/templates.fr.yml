@@ -411,4 +411,5 @@ template.upload.formats.choice.csv: Csv
 template.upload.formats.choice.image: Image
 template.upload.formats.choice.pdf: Pdf
 template.upload.formats.choice.ppt: Powerpoint
+template.upload.formats.choice.vector_image: 'Image vectorielle (.ai, .eps)'
 template.upload.formats.title: 'Formats autorisés pour l''upload'

@@ -51,10 +51,14 @@ class MultiUploadDataType extends AbstractType
 
     private function getHelp(array $formats): string
     {
+        $formatsTranslated = array_map(function (string $format) {
+            return $this->translator->trans(sprintf('%s.%s', 'template.upload.formats', $format));
+        }, $formats);
+
         return $this->translator->transChoice(
             'common.required_formats',
             \count($formats),
-            ['%format%' => implode(', ', $formats)]
+            ['%format%' => implode(', ', $formatsTranslated)]
         );
     }
 
