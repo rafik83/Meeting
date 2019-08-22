@@ -236,6 +236,7 @@ flash.package.update_product.created_negative_order: 'Une commande à quantité 
 flash.package.update_step.success: 'Les informations ont bien été enregistrées'
 flash.payment.deposit.notAvailable: 'Nous sommes désolé, l''acompte n''est plus disponible'
 flash.promotion_code.batch_create.success: 'La série de codes promo a bien été créée'
+flash.promotion_code.batch_update.success: 'La série de codes promo a bien été modifiée.'
 flash.promotion_code.create.success: 'Le code promotion a bien été créé'
 flash.promotion_code.update.success: 'Le code promotion a bien été mis à jour'
 flash.reset_password_token.success: 'Un mail vous a été envoyé avec la procédure pour créer un nouveau mot de passe'

@@ -15,10 +15,9 @@ use Proximum\Vimeet\Domain\Model\PromotionCodeGroup;
 
 interface PromotionCodeGroupRepositoryInterface
 {
-    /**
-     * @param PromotionCodeGroup $promotionCodeGroup
-     */
-    public function add(PromotionCodeGroup $promotionCodeGroup);
+    public function add(PromotionCodeGroup $promotionCodeGroup): void;
+
+    public function set(PromotionCodeGroup $promotionCodeGroup): void;
 
     /**
      * @param Event $event

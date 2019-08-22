@@ -620,3 +620,11 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Batch\Create }
+
+    Proximum\Vimeet\Application\Command\PromotionCode\Batch\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory'
+            - '@repository.promotion_code_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Batch\Update }

@@ -13,12 +13,14 @@ namespace Proximum\Vimeet\Domain\MimeType;
 final class MimeType
 {
     public const FORMAT_IMAGE = 'image';
+    public const FORMAT_VECTOR_IMAGE = 'vector_image';
     public const FORMAT_PDF = 'pdf';
     public const FORMAT_PPT = 'ppt';
     public const FORMAT_CSV = 'csv';
 
     public const AVAILABLE_MIME_TYPES_BY_FORMAT = [
         self::FORMAT_IMAGE => self::IMAGE_MIME_TYPES,
+        self::FORMAT_VECTOR_IMAGE => self::VECTOR_IMAGE_MIME_TYPES,
         self::FORMAT_PDF => self::PDF_MIME_TYPES,
         self::FORMAT_PPT => self::PPT_MIME_TYPES,
         self::FORMAT_CSV => self::CSV_MIME_TYPES,
@@ -30,6 +32,15 @@ final class MimeType
         'image/pjpeg',
         'image/png',
         'image/x-png',
+    ];
+
+    public const VECTOR_IMAGE_MIME_TYPES = [
+        'image/eps',
+        'image/x-eps',
+        'application/eps',
+        'application/x-eps',
+        'application/postscript',
+        'application/pdf',
     ];
 
     public const IMAGE_EXTENSIONS = [
