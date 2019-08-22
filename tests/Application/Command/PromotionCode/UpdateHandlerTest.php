@@ -11,11 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\Promotion;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
-use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
-use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -33,134 +29,50 @@ class UpdateHandlerTest extends TestCase
             10
         );
 
+        $translations = [
+            'fr' => [
+                'label' => 'label fr',
+                'description' => 'description fr',
+            ],
+            'en' => [
+                'label' => 'label en',
+                'description' => 'description en',
+            ],
+        ];
+
         $update = new Update($promotionCode);
+        $update->title = 'Updated title';
+        $update->translations = $translations;
 
-        $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
-        $uniqueCodeChecker = $this->prophesize(UniqueCodeChecker::class);
-        $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
-
-        $promotionCodeRepository->set($promotionCode)->shouldBeCalled();
-        $uniqueCodeChecker->hasUniqueCode($promotionCode)->shouldBeCalled()->willReturn(true);
-        $orderRepository->hasOrderWithPromotionCode($promotionCode)->shouldBeCalled()->willReturn(false);
-
-        $handler = new UpdateHandler(
-            $promotionCodeRepository->reveal(),
-            $uniqueCodeChecker->reveal(),
-            $orderRepository->reveal()
-        );
-
-        $handler->handle($update);
-    }
-
-    public function testHandleChanges(): void
-    {
-        $event = EventFactory::createEvent();
-        $product = $this->prophesize(Product::class);
-
-        $promotionCode = new PromotionCode(
+        $updatedPromotionCode = new PromotionCode(
             $event,
-            'PromotionCodeTitle',
+            'Updated title',
             'TESTCODE',
             10
         );
-
-        $update = new Update($promotionCode);
-        $update->code = 'TESTCODE2';
-        $update->stock = 8;
-        $update->translations = [
-            'fr' => [
-                'label' => 'labelFr',
-                'description' => 'descriptionFr',
-            ],
-            'en' => [
-                'label' => 'labelEn',
-                'description' => 'descriptionEn',
-            ],
-        ];
-        $update->promotions = [
-            0 => [
-                'product'     => $product->reveal(),
-                'type'        => Promotion::TYPE_VALUE_OFF,
-                'value'       => 200,
-                'quantityMax' => 1,
-            ]
-        ];
-
-        $expected = new PromotionCode($event, 'PromotionCodeTitle', 'TESTCODE2', 8);
-        $expected->translate('fr', 'labelFr', 'descriptionFr');
-        $expected->translate('en', 'labelEn', 'descriptionEn');
-        $expected->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 200, 1);
+        $updatedPromotionCode->translate('fr', 'label fr', 'description fr');
+        $updatedPromotionCode->translate('en', 'label en', 'description en');
 
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
-        $uniqueCodeChecker = $this->prophesize(UniqueCodeChecker::class);
-        $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
+        $promotionCodeRepository->set($updatedPromotionCode)->shouldBeCalled();
 
-        $promotionCodeRepository->set($expected)->shouldBeCalled();
-        $uniqueCodeChecker->hasUniqueCode($promotionCode)->shouldBeCalled()->willReturn(true);
-        $orderRepository->hasOrderWithPromotionCode($promotionCode)->shouldBeCalled()->willReturn(false);
-
-        $handler = new UpdateHandler(
-            $promotionCodeRepository->reveal(),
-            $uniqueCodeChecker->reveal(),
-            $orderRepository->reveal()
-        );
-
-        $handler->handle($update);
-    }
-
-    public function testHandleCanNotChangePromotions(): void
-    {
-        $event = EventFactory::createEvent();
-        $product = $this->prophesize(Product::class);
-
-        $promotionCode = new PromotionCode(
-            $event,
-            'PromotionCodeTitle',
-            'TESTCODE',
-            10
-        );
-        $promotionCode->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 200, 1);
-
-        $update = new Update($promotionCode);
-        $update->code = 'TESTCODE2';
-        $update->stock = 8;
-        $update->translations = [
-            'fr' => [
-                'label' => 'labelFr',
-                'description' => 'descriptionFr',
-            ],
-            'en' => [
-                'label' => 'labelEn',
-                'description' => 'descriptionEn',
-            ],
-        ];
-        $update->promotions = [
-            0 => [
-                'product'     => $product->reveal(),
-                'type'        => Promotion::TYPE_VALUE_OFF,
-                'value'       => 500,
-                'quantityMax' => 2,
-            ]
-        ];
-
-        $expected = new PromotionCode($event, 'PromotionCodeTitle', 'TESTCODE2', 8);
-        $expected->translate('fr', 'labelFr', 'descriptionFr');
-        $expected->translate('en', 'labelEn', 'descriptionEn');
-        // No change on the promotion because the promotionCode is used
-        $expected->setPromotion($product->reveal(), Promotion::TYPE_VALUE_OFF, 200, 1);
-
-        $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
-        $uniqueCodeChecker = $this->prophesize(UniqueCodeChecker::class);
-        $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
-
-        $promotionCodeRepository->set($promotionCode)->shouldBeCalled();
-        $uniqueCodeChecker->hasUniqueCode($promotionCode)->shouldBeCalled()->willReturn(true);
-        $orderRepository->hasOrderWithPromotionCode($promotionCode)->shouldBeCalled()->willReturn(true);
+        $promotionCodeFactory = $this->prophesize(PromotionCodeFactory::class);
+        $promotionCodeFactory
+            ->update(
+                $promotionCode,
+                'Updated title',
+                'TESTCODE',
+                10,
+                null,
+                $translations,
+                []
+            )
+            ->shouldBeCalled()
+            ->willReturn($updatedPromotionCode);
 
         $handler = new UpdateHandler(
-            $promotionCodeRepository->reveal(),
-            $uniqueCodeChecker->reveal(),
-            $orderRepository->reveal()
+            $promotionCodeFactory->reveal(),
+            $promotionCodeRepository->reveal()
         );
 
         $handler->handle($update);

@@ -22,6 +22,11 @@ Proximum\Vimeet\Domain\Model\PromotionCode:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
+        promotionCodeGroup:
+            targetEntity: Proximum\Vimeet\Domain\Model\PromotionCodeGroup
+            inversedBy: promotionCodes
+            joinColumn:
+                onDelete: CASCADE
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\PromotionCodeTranslation

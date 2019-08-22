@@ -41,7 +41,7 @@ class UniqueCodeGeneratorTest extends TestCase
 
     public function testGenerate()
     {
-        $this->generator->generate($this->event)->shouldBeCalled()->willReturn('code');
+        $this->generator->generate($this->event, null)->shouldBeCalled()->willReturn('code');
         $this->checker->exists($this->event, 'code')->shouldBeCalled()->willReturn(false);
 
         $this->assertEquals('code', $this->uniqueCodeGenerator->generate($this->event));
@@ -49,7 +49,7 @@ class UniqueCodeGeneratorTest extends TestCase
 
     public function testGenerateLoop()
     {
-        $this->generator->generate($this->event)->shouldBeCalled()->willReturn('code');
+        $this->generator->generate($this->event, null)->shouldBeCalled()->willReturn('code');
         $this->checker->exists($this->event, 'code')->shouldBeCalled()->willReturn(true);
         $this->checker->exists($this->event, 'code2')->shouldBeCalled()->willReturn(true);
         $this->checker->exists($this->event, 'code3')->shouldBeCalled()->willReturn(false);

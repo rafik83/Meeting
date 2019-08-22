@@ -40,9 +40,9 @@ class UniqueCodeGenerator implements CodeGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate(Event $event)
+    public function generate(Event $event, ?string $prefix = null): string
     {
-        $code   = $this->generator->generate($event);
+        $code   = $this->generator->generate($event, $prefix);
         $suffix = 2;
         $length = strlen($code);
 

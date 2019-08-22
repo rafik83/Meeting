@@ -122,7 +122,7 @@ class GetUserBadgeByEventQueryHandler extends AbstractGetBadgeByEventQueryHandle
         return $this->queryBus->handle(new QRCodeIdentifierQuery($query->event, $query->user));
     }
 
-    protected function getCountryString(AbstractGetBadgeByEventQuery $query, Badge $badge): string
+    protected function getCountryString(AbstractGetBadgeByEventQuery $query, Badge $badge): ?string
     {
         $country = null;
         $sheet = $this->firstParticipantSheetOfUserGetter->getFirstParticipantSheet($query->user, $this->userSheets);

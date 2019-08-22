@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
-use Proximum\Vimeet\Domain\Model\Product;
-
 abstract class AbstractCommand
 {
     /**
@@ -43,20 +41,4 @@ abstract class AbstractCommand
      * @var array
      */
     public $promotions = [];
-
-    /**
-     * @param Product $product
-     *
-     * @return bool
-     */
-    public function hasPromotion(Product $product)
-    {
-        foreach ($this->promotions as $promotion) {
-            if ($product === $promotion['product']) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

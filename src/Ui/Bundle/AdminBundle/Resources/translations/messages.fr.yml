@@ -737,9 +737,15 @@ admin.promotion_code.action.close: Fermer
 admin.promotion_code.error.non_unique_code: 'Ce code est déjà utilisé'
 admin.promotion_code.link: 'Codes promos'
 admin.promotion_code.new: 'Nouveau code'
+admin.promotion_code.batch.new: 'Générer codes en série'
+admin.promotion_code.subtitle.code: 'Codes'
+admin.promotion_code.subtitle.batch: 'Codes en série'
 admin.promotion_code.table.action.edit: Modifier
+admin.promotion_code.table.action.export: Exporter
 admin.promotion_code.table.column.action: Action
 admin.promotion_code.table.column.code: Code
+admin.promotion_code.table.column.number: Nombre de codes
+admin.promotion_code.table.column.prefix: Préfixe
 admin.promotion_code.table.column.stock: Stock
 admin.promotion_code.table.column.title: Titre
 admin.promotion_code.table.column.validUntil: 'Valide jusqu''au'

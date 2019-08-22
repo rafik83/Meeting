@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - MV-187 - Upload vector image
+- VIMEET-1935 - Generate promo codes
+- VIMEET-2018 - Export promo codes group
 
 ## [2.10.0] - 2019-07-05
 ### Added

@@ -14,10 +14,5 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 interface CodeGeneratorInterface
 {
-    /**
-     * @param Event $event
-     *
-     * @return string
-     */
-    public function generate(Event $event);
+    public function generate(Event $event, ?string $prefix = null): string;
 }
