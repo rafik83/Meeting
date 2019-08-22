@@ -326,6 +326,10 @@ class PromotionCode
     {
         $data = [];
 
+        /**
+         * @var string $locale
+         * @var PromotionCodeTranslation $translation
+         */
         foreach ($this->translations->toArray() as $locale => $translation) {
             $data[$locale] = $translation->getData();
         }

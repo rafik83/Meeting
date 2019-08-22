@@ -30,25 +30,31 @@
         </tr>
         </thead>
         <tbody>
-        {% for promotionCodeGroup in promotionCodeGroups %}
+        {% for promotionCodeGroupView in promotionCodeGroupViews %}
             <tr>
-                <td>{{ promotionCodeGroup.title }}</td>
-                <td>{{ promotionCodeGroup.number }}</td>
-                <td>{{ promotionCodeGroup.prefix }}</td>
-                <td>{{ promotionCodeGroup.stock }}</td>
+                <td>{{ promotionCodeGroupView.title }}</td>
+                <td>{{ promotionCodeGroupView.number }}</td>
+                <td>{{ promotionCodeGroupView.prefix }}</td>
+                <td>{{ promotionCodeGroupView.stock }}</td>
                 <td>
-                    {% if promotionCodeGroup.validUntil is not null %}
-                        {{ promotionCodeGroup.validUntil|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                    {% if promotionCodeGroupView.validUntil is not null %}
+                        {{ promotionCodeGroupView.validUntil|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                     {% endif %}
                 </td>
                 <td class="text-right">
-                    <a href="{{ path('admin_promotion_code_batch_export', { 'event': event.id, 'promotionCodeGroup': promotionCodeGroup.id }) }}"
+                    {% if promotionCodeGroupView.canBeUpdatable %}
+                        <a href="{{ path('admin_promotion_code_batch_update', { 'event': event.id, 'promotionCodeGroup': promotionCodeGroupView.id }) }}"
+                            class="btn btn-default btn-sm">{{ 'admin.promotion_code.table.action.update'|trans }}</a>
+                    {% else %}
+                        <a href="#" class="btn btn-default btn-sm" disabled data-toggle="tooltip" title="{{ 'admin.promotion_code.notUpdatable'|trans }}">{{ 'admin.promotion_code.table.action.update'|trans }}</a>
+                    {% endif %}
+                    <a href="{{ path('admin_promotion_code_batch_export', { 'event': event.id, 'promotionCodeGroup': promotionCodeGroupView.id }) }}"
                        class="btn btn-default btn-sm">{{ 'admin.promotion_code.table.action.export'|trans }}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5" class="text-center">
+                <td colspan="6" class="text-center">
                     {{ 'admin.promotion_code.table.no_result'|trans }}
                 </td>
             </tr>

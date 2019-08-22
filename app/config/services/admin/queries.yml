@@ -276,3 +276,14 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Rooming\Stay\GetSheetsByEventQuery }
+
+    Proximum\Vimeet\Application\Query\PromotionCode\Batch\PromotionCodeGroupList\GetListViewHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\PromotionCode\Batch\CanBeUpdatable'
+            - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\PromotionCode\Batch\PromotionCodeGroupList\GetListView }
+
+    Proximum\Vimeet\Application\Query\PromotionCode\Batch\CanBeUpdatable:
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
