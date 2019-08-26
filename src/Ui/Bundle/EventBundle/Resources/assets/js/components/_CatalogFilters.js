@@ -4,7 +4,7 @@ var $      = require('jquery'),
 function CatalogFilters(field, filterForm, catalog)
 {
     if ('checkbox' === field.attr('type')) {
-        var checked = $(filterForm).find('input[name="' + field.attr('name') + '"]:not([disabled]):checked');
+        var checked = $(filterForm).find('input[name="' + field.attr('name') + '"]:not(.disabled):checked');
 
         var atLeastOnChecked = $(field).closest('ul').data('message-at-least-one-checked');
 
