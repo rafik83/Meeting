@@ -109,7 +109,7 @@ class EventParticipationPreFillerTest extends TestCase
         $editableText2 = new TemplateObject\EditableText('69b3cde2', 'editable-text', [
             'tags' => ['participant_lastname', 'participant_data', 'sheet_data'],
         ], 'fr', 'fr');
-        $editableText2->setData(['text' => 'larose']);
+        $editableText2->setData(['text' => 'dupond']);
         $telephone1 = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone', 'participant_data'],
         ], 'fr', 'fr');

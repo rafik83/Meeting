@@ -114,7 +114,7 @@ class Account
      */
     public function getFirstName()
     {
-        return NameCleaner::clean($this->firstName);
+        return NameCleaner::cleanFirstName($this->firstName);
     }
 
     /**
@@ -130,7 +130,7 @@ class Account
      */
     public function getLastName()
     {
-        return $this->lastName;
+        return NameCleaner::cleanLastName($this->lastName);
     }
 
     /**

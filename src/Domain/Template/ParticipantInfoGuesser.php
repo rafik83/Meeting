@@ -62,11 +62,13 @@ class ParticipantInfoGuesser
     {
         $template = $participant->getSheet()->getType()->getRegistrationTemplate();
 
-        return $this->taggedInfoGuesser->guessFirst(
-            $template,
-            $participant->getData(),
-            Tag::PARTICIPANT_LASTNAME,
-            $locale
+        return NameCleaner::cleanLastName(
+            $this->taggedInfoGuesser->guessFirst(
+                $template,
+                $participant->getData(),
+                Tag::PARTICIPANT_LASTNAME,
+                $locale
+            )
         );
     }
 
@@ -80,7 +82,7 @@ class ParticipantInfoGuesser
     {
         $template = $participant->getSheet()->getType()->getRegistrationTemplate();
 
-        return NameCleaner::clean(
+        return NameCleaner::cleanFirstName(
             $this->taggedInfoGuesser->guessFirst(
                 $template,
                 $participant->getData(),

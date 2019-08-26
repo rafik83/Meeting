@@ -43,7 +43,7 @@ class UserImpersonateViewQueryHandlerTest extends TestCase
 
         $expectedUserImpersonateView = new UserImpersonateView(
             new UserView('John', 'McLane', 'admin@admin.com'),
-            new UserView('Francois', 'bennet', 'user@vimeet.events'),
+            new UserView('Francois', 'BENNET', 'user@vimeet.events'),
             '_EXIT_URL_'
         );
 

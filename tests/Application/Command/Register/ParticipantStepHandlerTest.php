@@ -51,7 +51,7 @@ class ParticipantStepHandlerTest extends TestCase
 
         $data = [
             '69b3cde1' => ['text' => 'Vincent'],
-            '69b3cde2' => ['text' => 'Larose'],
+            '69b3cde2' => ['text' => 'Dupond'],
             '69b3cde3' => ['text' => 'Proximum'],
             '69b3cde4' => ['text' => 'Paris'],
         ];
@@ -94,7 +94,7 @@ class ParticipantStepHandlerTest extends TestCase
 
         $expectedParticipant->setData([
             '69b3cde1' => ['text' => 'Vincent'],
-            '69b3cde2' => ['text' => 'Larose'],
+            '69b3cde2' => ['text' => 'Dupond'],
         ]);
         $expectedSheet->setRegistrationData([
             '69b3cde3' => ['text' => 'Proximum'],

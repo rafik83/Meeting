@@ -101,7 +101,11 @@ class UserInfoGuesser
                         }
 
                         if (Tag::PARTICIPANT_FIRSTNAME === $tag) {
-                            $userInfo[$arrayValue] = NameCleaner::clean($userInfo[$arrayValue]);
+                            $userInfo[$arrayValue] = NameCleaner::cleanFirstName($userInfo[$arrayValue]);
+                        }
+
+                        if (Tag::PARTICIPANT_LASTNAME === $tag) {
+                            $userInfo[$arrayValue] = NameCleaner::cleanLastName($userInfo[$arrayValue]);
                         }
                     }
                 }

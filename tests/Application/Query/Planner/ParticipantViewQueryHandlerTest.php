@@ -148,9 +148,9 @@ class ParticipantViewQueryHandlerTest extends TestCase
 
         // Expected
         $expected = [
-            new ParticipantView(1, 1, 'Firstname1 lastName1', $sheetView, [$slotView2], true),
-            new ParticipantView(2, 2, 'Firstname2 lastName2', $sheetView2, [], true),
-            new ParticipantView(3, 3, 'Firstname3 lastName3', $sheetView2, [$slotView, $slotView2]),
+            new ParticipantView(1, 1, 'Firstname1 LASTNAME1', $sheetView, [$slotView2], true),
+            new ParticipantView(2, 2, 'Firstname2 LASTNAME2', $sheetView2, [], true),
+            new ParticipantView(3, 3, 'Firstname3 LASTNAME3', $sheetView2, [$slotView, $slotView2]),
         ];
 
         $this->assertEquals($expected, $result);
