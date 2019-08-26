@@ -44,12 +44,12 @@ class ScheduleUpdateTranslationsCommand extends Command
             ->setDescription('Schedule update translations')
             ->addArgument(
                 'emailToNotify',
-                InputArgument::OPTIONAL,
+                InputArgument::REQUIRED,
                 'Email of the admin to notify for completion of the task'
             )
             ->addArgument(
                 'locale',
-                InputArgument::OPTIONAL,
+                InputArgument::REQUIRED,
                 'Locale for the email'
             )
         ;
