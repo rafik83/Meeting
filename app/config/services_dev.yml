@@ -12,6 +12,11 @@ services:
         arguments:
             - '@logger'
 
+    adapter.third_party.jenkins.build_creator_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\FakeBuildCreatorAdapter
+        arguments:
+            - '@logger'
+
     #
     # Fixture providers
     #

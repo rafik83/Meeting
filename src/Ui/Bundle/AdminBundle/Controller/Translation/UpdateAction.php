@@ -64,7 +64,7 @@ class UpdateAction
         ;
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->jobQueue->downloadTranslations($adminDomain->getAdmin()->getEmail(), $request->getLocale());
+            $this->jobQueue->scheduleUpdateTranslations($adminDomain->getAdmin()->getEmail(), $request->getLocale());
             $this->flashBag->add('success', 'flash.admin.translations.download.prepare');
 
             return new RedirectResponse($this->router->generate('admin_translations_update'));

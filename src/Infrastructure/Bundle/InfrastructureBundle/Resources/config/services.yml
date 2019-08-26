@@ -7013,7 +7013,8 @@ services:
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\ScheduleUpdateTranslationsCommand:
         arguments:
-            - '@adapter.job_queue_adapter'
+            - '@adapter.third_party.jenkins.build_creator_adapter'
+            - '%jenkins_update_translations_build_names%'
         tags:
             - { name: console.command }
 
