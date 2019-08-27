@@ -25,8 +25,8 @@ class SynchronizerTest extends TestCase
         $locale  = 'fr';
         $user    = new User('email@email.com', '__password__', '__salt__', $locale);
         $account = new User\Account();
-        $account->setFirstName('Test');
-        $account->setLastName('Truc');
+        $account->setFirstName('jean');
+        $account->setLastName('Dupond');
         $account->setPhone('Foo');
         $account->setMobile('Bar');
         $user->setAccount($account);
@@ -64,11 +64,11 @@ class SynchronizerTest extends TestCase
         $expectedEditableText1 = new TemplateObject\EditableText('69b3cde1', 'editable-text', [
             'tags' => ['participant_firstname'],
         ], $locale, $locale);
-        $expectedEditableText1->setContentValue('Test');
+        $expectedEditableText1->setContentValue('Jean');
         $expectedEditableText2 = new TemplateObject\EditableText('69b3cde2', 'editable-text', [
             'tags' => ['participant_lastname'],
         ], $locale, $locale);
-        $expectedEditableText2->setContentValue('Truc');
+        $expectedEditableText2->setContentValue('DUPOND');
         $expectedTelephone1    = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone'],
         ], $locale, $locale);

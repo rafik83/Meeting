@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Domain\Model\User;
 
+use Proximum\Vimeet\Domain\Helper\NameCleaner;
+
 class Account
 {
     /**
@@ -112,7 +114,7 @@ class Account
      */
     public function getFirstName()
     {
-        return $this->firstName;
+        return NameCleaner::cleanFirstName($this->firstName);
     }
 
     /**
@@ -128,7 +130,7 @@ class Account
      */
     public function getLastName()
     {
-        return $this->lastName;
+        return NameCleaner::cleanLastName($this->lastName);
     }
 
     /**

@@ -32,6 +32,6 @@ class FirstnameSubstitutionTest extends TestCase
         $substitution = new OwnerFirstnameSubstitution();
         $firstname    = $substitution->getValue($sheet, $locale);
 
-        $this->assertEquals('vincent', $firstname);
+        $this->assertEquals('Vincent', $firstname);
     }
 }

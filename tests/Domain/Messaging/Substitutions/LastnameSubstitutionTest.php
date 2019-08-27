@@ -23,7 +23,7 @@ class LastnameSubstitutionTest extends TestCase
     {
         $user    = UserFactory::create('vimeet@proximum.com');
         $account = new Account();
-        $account->setLastName('larose');
+        $account->setLastName('Martin');
         $user->setAccount($account);
         $event  = EventFactory::createEvent('Proximum');
         $sheet  = SheetFactory::create($event, $user);
@@ -32,6 +32,6 @@ class LastnameSubstitutionTest extends TestCase
         $substitution = new OwnerLastnameSubstitution();
         $firstname    = $substitution->getValue($sheet, $locale);
 
-        $this->assertEquals('larose', $firstname);
+        $this->assertEquals('MARTIN', $firstname);
     }
 }
