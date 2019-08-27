@@ -224,4 +224,8 @@ interface JobQueueInterface
         Admin $admin,
         string $locale
     ): void;
+
+    public function downloadTranslations(?string $emailToNotify = null, ?string $locale = null): void;
+
+    public function scheduleUpdateTranslations(?string $emailToNotify = null, ?string $locale = null): void;
 }

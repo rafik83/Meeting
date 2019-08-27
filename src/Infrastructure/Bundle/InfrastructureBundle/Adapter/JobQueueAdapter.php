@@ -51,6 +51,8 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Ind
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByTypesCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Template\Form\ExportFormTemplateDataByUsersCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\ScheduleUpdateTranslationsCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\UpdateTranslationsCommand;
 
 class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterface
 {
@@ -166,17 +168,17 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
 
         $this->setJob($job);
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function exportProductsForEvent(Event $event, Admin $admin, string $locale): void
     {
         $job = new Job(ExportCommand::NAME, [$event->getId(), $admin->getEmail(), $locale]);
-        
+
         $this->setJob($job);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -480,6 +482,23 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             $admin->getId(),
             $locale
         ]);
+
+        $this->setJob($job);
+    }
+
+    public function downloadTranslations(?string $emailToNotify = null, ?string $locale = null): void
+    {
+        $job = new Job(UpdateTranslationsCommand::NAME, $emailToNotify && $locale ? [$emailToNotify, $locale] : []);
+
+        $this->setJob($job);
+    }
+
+    public function scheduleUpdateTranslations(?string $emailToNotify = null, ?string $locale = null): void
+    {
+        $job = new Job(
+            ScheduleUpdateTranslationsCommand::NAME,
+            $emailToNotify && $locale ? [$emailToNotify, $locale] : []
+        );
 
         $this->setJob($job);
     }

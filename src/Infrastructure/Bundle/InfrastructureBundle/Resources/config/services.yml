@@ -7006,6 +7006,23 @@ services:
             - '@repository.event.extra_parameter_repository'
 
     #
+    # Translations
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\UpdateTranslationsCommand:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '%kernel.cache_dir%'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\ScheduleUpdateTranslationsCommand:
+        arguments:
+            - '@adapter.third_party.jenkins.build_creator_adapter'
+            - '%jenkins_update_translations_build_names%'
+        tags:
+            - { name: console.command }
+
+    #
     # Contact
     #
     Proximum\Vimeet\Application\Command\Contact\EditCommentHandler:
