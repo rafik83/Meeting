@@ -35,26 +35,51 @@ class IsTipOpened
             return false;
         }
 
+        $tip = $this->tipRepository->getById($tipTranslationView->id);
+
+        if (null === $tip) {
+            return false;
+        }
+
         if (Tip::DISPLAY_ALWAYS_OPENED === $tipTranslationView->display) {
-            return true;
+            return $this->handleAlwaysOpenedTip($tip, $query);
         }
 
         if (Tip::DISPLAY_FIRST_TIME_OPENED === $tipTranslationView->display) {
-            $tip = $this->tipRepository->getById($tipTranslationView->id);
+            return $this->handleFirstTimeOpenedTip($tip, $query);
+        }
 
-            if (null === $tip) {
-                return false;
-            }
+        return false;
+    }
 
-            if ($this->tipOpenedRepository->isOpened($tip, $query->user)) {
-                return false;
-            }
+    private function handleAlwaysOpenedTip(Tip $tip, TipTranslationViewQuery $query): bool
+    {
+        $tipOpened = $this->tipOpenedRepository->getByTipAndUser($tip, $query->user);
 
+        if (null === $tipOpened) {
             $this->tipOpenedRepository->add(new TipOpened($query->user, $tip, $this->dateTime));
 
             return true;
         }
 
+        if ($tipOpened->isOpenedForMoreThanTwoHours($this->dateTime)) {
+            $tipOpened->updateOpenedAt($this->dateTime);
+            $this->tipOpenedRepository->set($tipOpened);
+
+            return true;
+        }
+
         return false;
+    }
+
+    private function handleFirstTimeOpenedTip(Tip $tip, TipTranslationViewQuery $query): bool
+    {
+        if ($this->tipOpenedRepository->isOpened($tip, $query->user)) {
+            return false;
+        }
+
+        $this->tipOpenedRepository->add(new TipOpened($query->user, $tip, $this->dateTime));
+
+        return true;
     }
 }
