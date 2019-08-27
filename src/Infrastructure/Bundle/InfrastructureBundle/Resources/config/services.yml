@@ -2048,6 +2048,7 @@ services:
             - '@adapter.sendgrid_api_adapter'
             - '@Proximum\Vimeet\Domain\Messaging\GetUsersReceivers'
             - '@Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers'
+            - '@adapter.sheet_indexer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Process }
 

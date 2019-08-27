@@ -43,6 +43,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\I
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Product\ExportCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Rooming\Export\ExportRoomingListCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendCampaignCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
@@ -58,7 +59,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function sendCampaign(Campaign $campaign)
     {
-        $job = new Job('vimeet:campaign:send', [$campaign->getId()]);
+        $job = new Job(SendCampaignCommand::class, [$campaign->getId()]);
         $job->addRelatedEntity($campaign);
         $this->setJob($job);
     }

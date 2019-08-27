@@ -14,28 +14,22 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ForgottenPassword
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $email;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     */
-    public function __construct(Event $event, $locale)
+    /** @var bool */
+    public $requestedByAdmin;
+
+    public function __construct(Event $event, string $locale, bool $requestedByAdmin = false)
     {
-        $this->event  = $event;
+        $this->event = $event;
         $this->locale = $locale;
+        $this->requestedByAdmin = $requestedByAdmin;
     }
 }

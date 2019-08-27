@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Messaging\Campaign;
 
 use Proximum\Vimeet\Application\Adapter\EmailingSenderInterface;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Exception\Messaging\CampaignSendingFailedException;
 use Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers;
 use Proximum\Vimeet\Domain\Messaging\GetUsersReceivers;
@@ -30,16 +31,21 @@ class ProcessHandler
     /** @var GetSheetsReceivers */
     private $getSheetsReceivers;
 
+    /** @var SheetIndexerInterface */
+    private $sheetIndexer;
+
     public function __construct(
         CampaignRepositoryInterface $campaignRepository,
         EmailingSenderInterface $mailer,
         GetUsersReceivers $getUsersReceivers,
-        GetSheetsReceivers $getSheetsReceivers
+        GetSheetsReceivers $getSheetsReceivers,
+        SheetIndexerInterface $sheetIndexer
     ) {
         $this->campaignRepository = $campaignRepository;
         $this->mailer = $mailer;
         $this->getUsersReceivers = $getUsersReceivers;
         $this->getSheetsReceivers = $getSheetsReceivers;
+        $this->sheetIndexer = $sheetIndexer;
     }
 
     public function handle(Process $command): void
@@ -68,5 +74,7 @@ class ProcessHandler
 
         $campaign->markAsProcessed();
         $this->campaignRepository->set($campaign);
+
+        $this->sheetIndexer->updateSheets($sheets);
     }
 }

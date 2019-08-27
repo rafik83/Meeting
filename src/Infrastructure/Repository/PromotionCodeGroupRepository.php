@@ -28,9 +28,14 @@ class PromotionCodeGroupRepository implements PromotionCodeGroupRepositoryInterf
     /**
      * {@inheritdoc}
      */
-    public function add(PromotionCodeGroup $promotionCodeGroup)
+    public function add(PromotionCodeGroup $promotionCodeGroup): void
     {
         $this->entityManager->persist($promotionCodeGroup);
+        $this->entityManager->flush($promotionCodeGroup);
+    }
+
+    public function set(PromotionCodeGroup $promotionCodeGroup): void
+    {
         $this->entityManager->flush($promotionCodeGroup);
     }
 

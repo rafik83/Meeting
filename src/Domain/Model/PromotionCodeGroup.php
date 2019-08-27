@@ -106,4 +106,14 @@ class PromotionCodeGroup
     {
         return $this->promotionCodes->toArray();
     }
+
+    public function update(
+        string $title,
+        ?int $stock,
+        ?\DateTimeInterface $validUntil
+    ) {
+        $this->title = $title;
+        $this->stock = $stock;
+        $this->validUntil = $validUntil;
+    }
 }

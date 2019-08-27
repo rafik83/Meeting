@@ -17,6 +17,7 @@ class UploadObject extends EditableObject implements UploadableObjectInterface
 {
     public const ALLOWED_FORMATS = [
         MimeType::FORMAT_IMAGE,
+        MimeType::FORMAT_VECTOR_IMAGE,
         MimeType::FORMAT_PDF,
         MimeType::FORMAT_PPT,
         MimeType::FORMAT_CSV,

@@ -5,8 +5,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-1935 - Generate promo codes
+- MV-187 - Upload vector image
+- MV-189 - As an admin, generate a user reset password url
 - MV-172 - Capitalize first character of firstname
+- VIMEET-1935 - Generate promo codes
+- VIMEET-2018 - Export promo codes group
+- VIMEET-2017 - Update promo codes group
+### Fixed
+- MV-193 - Reindex sheets after sending emailing
 
 ## [2.10.0] - 2019-07-05
 ### Added

@@ -65,6 +65,8 @@
         {% endfor %}
     </ul>
 
+    {{ form(forgottenPasswordForm) }}
+
     <div class="form-group submit-section">
         <div class="col-sm-3">
             <a href="{{ path('admin_users', {'event': event.id}) }}" class="btn btn-link">

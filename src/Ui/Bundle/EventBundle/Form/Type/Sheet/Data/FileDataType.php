@@ -74,13 +74,17 @@ class FileDataType extends AbstractType
 
     private function getHelp(TemplateObject\UploadObject $uploadObject): string
     {
+        $formatsTranslated = array_map(function (string $format) {
+            return $this->translator->trans(sprintf('%s.%s', 'template.upload.formats', $format));
+        }, $uploadObject->getFormats());
+
         return sprintf(
             '%s %s',
             $uploadObject->isCrypted() ? $this->translator->trans('common.cryptedUploadFileHelp') : '',
             $this->translator->transChoice(
                 'common.required_formats',
                 \count($uploadObject->getFormats()),
-                ['%format%' => implode(', ', $uploadObject->getFormats())]
+                ['%format%' => implode(', ', $formatsTranslated)]
             )
         );
     }

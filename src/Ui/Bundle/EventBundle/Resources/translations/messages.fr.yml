@@ -516,6 +516,11 @@ summary.total: 'Total de la commande'
 summary.totalByVat: 'Total assujetti à %vatRate%%'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
+template.upload.formats.csv: csv
+template.upload.formats.image: image
+template.upload.formats.pdf: pdf
+template.upload.formats.ppt: powerpoint
+template.upload.formats.vector_image: 'image vectorielle (.ai, .eps)'
 unavailability.action.remove.title: Supprimer
 unavailability.createdBySystem.buy.title: 'Modifier mon forfait'
 unavailability.createdBySystem.explaination.title: 'Veuillez sélectionner le produit vous permettant d''accéder à ce contenu'
