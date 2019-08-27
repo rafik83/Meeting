@@ -87,6 +87,7 @@ parameters:
     jenkins_command: 'curl -v -X POST http://optaplanner:8080/job/%%buildName%%/build --user %%jenkinsUser%%:%%jenkinsPassword%% --data-urlencode json=''{"parameter": %%jenkinsParameters%%}'''
 
     jenkins_phantomjs_sheet_pdf_print_build_name: 'PhantomJsSheetPrintPdfBuild'
+    jenkins_update_translations_build_names: ['vimeet_translations_update_front1', 'vimeet_translations_update_front2']
 
     agenda_version_diff_notification_time_in_minutes: 30
     agenda_version_diff_dday_notification_time_in_minutes: 10
