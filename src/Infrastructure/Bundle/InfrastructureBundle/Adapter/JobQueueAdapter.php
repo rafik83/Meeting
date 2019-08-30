@@ -61,7 +61,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function sendCampaign(Campaign $campaign)
     {
-        $job = new Job(SendCampaignCommand::class, [$campaign->getId()]);
+        $job = new Job(SendCampaignCommand::NAME, [$campaign->getId()]);
         $job->addRelatedEntity($campaign);
         $this->setJob($job);
     }
