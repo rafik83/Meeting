@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Campaign;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Process;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler;
 use Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers;
@@ -25,6 +26,7 @@ use Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Tests\Helper\EntityId;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
 
 class ProcessHandlerTest extends TestCase
@@ -35,6 +37,8 @@ class ProcessHandlerTest extends TestCase
         $createdAt = new \DateTime();
         $receiver  = new User('user@vimeet.com', 'salt', 'password', 'fr');
         $sheet     = SheetFactory::create($event, $receiver);
+        EntityId::setId($sheet, 1337);
+
         $message   = new Message($event, $createdAt, 'test', 'test subject', 'test content');
 
         $campaign  = new Campaign($event, 'amazing campaign', [], $createdAt);
@@ -61,11 +65,15 @@ class ProcessHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([]);
 
+        $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
+        $sheetIndexer->updateSheets([1337 => $sheet])->shouldBeCalled();
+
         $handler = new ProcessHandler(
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
             $this->prophesize(GetUsersReceivers::class)->reveal(),
-            $sheetReceiver->reveal()
+            $sheetReceiver->reveal(),
+            $sheetIndexer->reveal()
         );
 
         $handler->handle(new Process($campaign));
@@ -91,7 +99,8 @@ class ProcessHandlerTest extends TestCase
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
             $this->prophesize(GetUsersReceivers::class)->reveal(),
-            $this->prophesize(GetSheetsReceivers::class)->reveal()
+            $this->prophesize(GetSheetsReceivers::class)->reveal(),
+            $this->prophesize(SheetIndexerInterface::class)->reveal()
         );
 
         $handler->handle(new Process($campaign));
@@ -118,7 +127,8 @@ class ProcessHandlerTest extends TestCase
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
             $this->prophesize(GetUsersReceivers::class)->reveal(),
-            $this->prophesize(GetSheetsReceivers::class)->reveal()
+            $this->prophesize(GetSheetsReceivers::class)->reveal(),
+            $this->prophesize(SheetIndexerInterface::class)->reveal()
         );
 
         $handler->handle(new Process($campaign));
@@ -146,7 +156,8 @@ class ProcessHandlerTest extends TestCase
             $this->prophesize(CampaignRepositoryInterface::class)->reveal(),
             $mailer,
             $this->prophesize(GetUsersReceivers::class)->reveal(),
-            $this->prophesize(GetSheetsReceivers::class)->reveal()
+            $this->prophesize(GetSheetsReceivers::class)->reveal(),
+            $this->prophesize(SheetIndexerInterface::class)->reveal()
         );
 
         $handler->handle(new Process($campaign));

@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Model\Tip;
 
+use DateInterval;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Time\DaysHelper;
 
 class TipOpened
 {
@@ -48,5 +50,18 @@ class TipOpened
     public function getOpenedAt(): \DateTimeInterface
     {
         return $this->openedAt;
+    }
+
+    public function updateOpenedAt(\DateTimeInterface $openedAt): void
+    {
+        $this->openedAt = $openedAt;
+    }
+
+    public function isOpenedForMoreThanTwoHours(\DateTimeInterface $now)
+    {
+        $expiresAt = DaysHelper::cloneDateTime($this->openedAt);
+        $expiresAt->add(new DateInterval('PT2H'));
+
+        return $expiresAt < $now;
     }
 }

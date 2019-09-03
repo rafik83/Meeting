@@ -60,6 +60,8 @@ parameters:
     phantomjs_http_user:           'phantomjs'
     phantomjs_http_password:       '7DSJD2sm8YpzfjmnXeethPuybb'
 
+    openl10n_config_file: '%kernel.root_dir%/../.openl10n.yml'
+
     user_activate_account_token_expiration: 'P7D'
 
     sentry_dsn: ~
@@ -91,6 +93,7 @@ parameters:
     jenkins_command: 'curl -v -X POST http://optaplanner:8080/job/%%buildName%%/build --user %%jenkinsUser%%:%%jenkinsPassword%% --data-urlencode json=''{"parameter": %%jenkinsParameters%%}'''
 
     jenkins_phantomjs_sheet_pdf_print_build_name: 'PhantomJsSheetPrintPdfBuild'
+    jenkins_update_translations_build_names: ['vimeet_translations_update_front1', 'vimeet_translations_update_front2']
 
     comexposium_check_user_token_endpoint: "https://comexposium-host/_plugin/Comexposium/user/checkUserToken"
     comexposium_login_endpoint: "https://comexposium-host/_login/local"

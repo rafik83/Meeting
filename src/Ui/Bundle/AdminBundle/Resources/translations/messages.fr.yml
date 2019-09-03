@@ -1271,6 +1271,7 @@ admin.transactional.mail.substitution.parameter.description.%urlSheet%: 'Lien ve
 admin.transactional.mail.substitution.parameter.description.%urlSheetWithCTA%: 'CTA avec le lien vers la fiche de participation'
 admin.transactional.mail.substitution.parameter.list.title: 'Liste des substitutions disponibles:'
 admin.transactional.notification.link: Notifications
+admin.translations.update: 'Mettre à jour les traductions'
 admin.type_content_define_terms_of_sale.link: 'Conditions générales de vente'
 admin.type_content_define_terms_of_sale.title: 'Définir les conditions générales de vente'
 admin.type.action.confirmDelete: 'Etes-vous sûr de vouloir supprimer ce type ?'

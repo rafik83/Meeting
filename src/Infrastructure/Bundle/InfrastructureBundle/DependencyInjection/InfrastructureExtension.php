@@ -64,6 +64,7 @@ class InfrastructureExtension extends Extension
         $loader->load('services_third_party_vianeo.yml');
         $loader->load('services_third_party_jenkins.yml');
         $loader->load('services_third_party_comexposium.yml');
+        $loader->load('services_third_party_openl10n.yml');
         $loader->load('services_third_party_oauth2.yml');
     }
 }

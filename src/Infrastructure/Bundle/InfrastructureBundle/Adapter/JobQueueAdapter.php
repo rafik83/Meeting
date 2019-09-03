@@ -43,6 +43,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\I
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Product\ExportCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Rooming\Export\ExportRoomingListCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendCampaignCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
@@ -50,6 +51,8 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Ind
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByTypesCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Template\Form\ExportFormTemplateDataByUsersCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\ScheduleUpdateTranslationsCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\UpdateTranslationsCommand;
 
 class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterface
 {
@@ -58,7 +61,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function sendCampaign(Campaign $campaign)
     {
-        $job = new Job('vimeet:campaign:send', [$campaign->getId()]);
+        $job = new Job(SendCampaignCommand::NAME, [$campaign->getId()]);
         $job->addRelatedEntity($campaign);
         $this->setJob($job);
     }
@@ -165,17 +168,17 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
 
         $this->setJob($job);
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function exportProductsForEvent(Event $event, Admin $admin, string $locale): void
     {
         $job = new Job(ExportCommand::NAME, [$event->getId(), $admin->getEmail(), $locale]);
-        
+
         $this->setJob($job);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -479,6 +482,23 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             $admin->getId(),
             $locale
         ]);
+
+        $this->setJob($job);
+    }
+
+    public function downloadTranslations(?string $emailToNotify = null, ?string $locale = null): void
+    {
+        $job = new Job(UpdateTranslationsCommand::NAME, $emailToNotify && $locale ? [$emailToNotify, $locale] : []);
+
+        $this->setJob($job);
+    }
+
+    public function scheduleUpdateTranslations(?string $emailToNotify = null, ?string $locale = null): void
+    {
+        $job = new Job(
+            ScheduleUpdateTranslationsCommand::NAME,
+            $emailToNotify && $locale ? [$emailToNotify, $locale] : []
+        );
 
         $this->setJob($job);
     }

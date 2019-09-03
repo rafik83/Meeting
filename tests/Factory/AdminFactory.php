@@ -21,7 +21,7 @@ class AdminFactory
      *
      * @return Admin
      */
-    public static function create($email = 'admin@vimeet.events', $firstname = 'vincent', $lastname = 'larose')
+    public static function create($email = 'admin@vimeet.events', $firstname = 'john', $lastname = 'doe')
     {
         $now = new \DateTime();
 
