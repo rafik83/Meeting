@@ -24,7 +24,7 @@ class ImpersonateUrlGeneratorAdapterTest extends TestCase
     public function testHandle()
     {
         $now   = new \DateTime();
-        $admin = new Admin('admin@proximum.com', 'salt', 'password', 'fr', 'vincent', 'larose', 'ROLE_ADMIN', $now);
+        $admin = new Admin('admin@proximum.com', 'salt', 'password', 'fr', 'Jean', 'Dupond', 'ROLE_ADMIN', $now);
         $user  = UserFactory::create();
         $event = EventFactory::createEvent();
 

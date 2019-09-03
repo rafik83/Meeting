@@ -2238,6 +2238,14 @@ admin_event_rooming_list_download_export:
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\DownloadRoomingListExportAction
 
 #
+# translations
+#
+admin_translations_update:
+    path: /translations/update
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Translation\UpdateAction
+
+#
 # fast checkin
 #
 admin_event_fast_checkin_actions:

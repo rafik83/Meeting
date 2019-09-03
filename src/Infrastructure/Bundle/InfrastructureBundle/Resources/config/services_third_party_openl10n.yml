@@ -1,0 +1,20 @@
+services:
+    Proximum\Vimeet\Application\ThirdParty\Openl10n\PullHandler:
+        arguments:
+            - '%openl10n_config_file%'
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\ThirdParty\Openl10n\PushHandler:
+        arguments:
+            - '%openl10n_config_file%'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Openl10n\PushCommand:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: console.command }

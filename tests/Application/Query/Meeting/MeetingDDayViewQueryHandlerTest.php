@@ -47,12 +47,12 @@ class MeetingDDayViewQueryHandlerTest extends TestCase
         $participantInfoGuesser
             ->guessParticipantCompleteName($participantOne->reveal(), $locale)
             ->shouldBeCalled()
-            ->willReturn('Vincent Larose');
+            ->willReturn('Vincent Dupond');
 
         $participantInfoGuesser
             ->guessParticipantCompleteName($participantTwo->reveal(), $locale)
             ->shouldBeCalled()
-            ->willReturn('Antoine Preneron');
+            ->willReturn('Antoine Martin');
 
         // Expected
         $expectedView = new MeetingDdayView(
@@ -60,7 +60,7 @@ class MeetingDDayViewQueryHandlerTest extends TestCase
             'G30',
             'Europe/Paris',
             $locale,
-            ['Vincent Larose', 'Antoine Preneron']
+            ['Vincent Dupond', 'Antoine Martin']
         );
 
         $handler = new MeetingDDayViewQueryHandler($participantInfoGuesser->reveal());

@@ -4,20 +4,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- MV-190 - Show always opened tip after two hours
+- MV-89 - Do not take account of disabled type/category (zero result) in catalog filter
+- MV-182 - Show amount included taxes when event does not have taxes
+
+## [2.11.0] - 2019-08-27
 ### Added
 - MV-187 - Upload vector image
 - MV-189 - As an admin, generate a user reset password url
+- MV-172 - Capitalize first character of firstname
 - VIMEET-1935 - Generate promo codes
 - VIMEET-2018 - Export promo codes group
 - VIMEET-2017 - Update promo codes group
 ### Fixed
-- MV-182 - Show amount included taxes when event does not have taxes
+- MV-193 - Reindex sheets after sending emailing
 
 ## [2.10.0] - 2019-07-05
 ### Added
 - VIMEET-1916 - Add new parameters to badge
 - VIMEET-1982 - Contacts download and list
 - VIMEET-1999 - As an admin, remove promotion code from order
+- VIMEET-1961 - Update translations from admin UI and deploy process
 - VIMEET-2001 - Add fast on-site register and checkin
 - VIMEET-2009 - Google and Linkedin login enabling on one event
 - VIMEET-1081 - Priority meeting request number by type

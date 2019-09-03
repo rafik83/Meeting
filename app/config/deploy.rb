@@ -33,9 +33,10 @@ set :app_config_file, "parameters.yml"
 set :app_web,         "web"
 set :log_path,        "var/logs"
 set :cache_path,      "var/cache"
+set :openl10n_config_file, "openl10n.yml"
 
 # Shared
-set :shared_files,    [app_config_path + "/" + app_config_file]
+set :shared_files,    [app_config_path + "/" + app_config_file, openl10n_config_file]
 set :shared_children, ["web/uploads", log_path, "web/css", "web/media", "var/shared_uploaded_files"]
 
 # Assets
@@ -65,6 +66,7 @@ after :deploy, 'app_tasks:php'
 after :deploy, 'app_tasks:supervisor'
 after :deploy, 'app_tasks:redisflushdb'
 after :deploy, 'deploy:cleanup'
+after :deploy, 'app_tasks:translations_update'
 
 namespace :app_tasks do
   task :php do
@@ -85,6 +87,11 @@ namespace :app_tasks do
   task :redisflushdb, :roles => :app, :except => { :no_release => true } do
     capifony_pretty_print "--> Redis Doctrine flushdb"
     invoke_command "cd #{latest_release} && make redis-flushdb@prod", :via => run_method
+    capifony_puts_ok
+  end
+  task :translations_update do
+    capifony_pretty_print "--> Run translations update"
+    invoke_command "cd #{latest_release} && php bin/console vimeet:translations:schedule-update vimeet@elao.com fr --env=prod", :via => run_method
     capifony_puts_ok
   end
 end
