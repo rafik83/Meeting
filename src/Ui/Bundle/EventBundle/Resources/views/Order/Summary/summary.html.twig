@@ -32,7 +32,7 @@
         <td><strong>{{ 'summary.totalToPay'|trans }}</strong></td>
         <td class="text-center">
             {{ summary.totalWithVat|format_amount|localizedcurrency(summary.currency) }}
-            {{ ('package.vatMode.' ~ summary.totalVatMode)|trans }}
+            {{ 'package.vatMode.ati'|trans }}
         </td>
     </tr>
     </tbody>

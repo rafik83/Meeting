@@ -32,7 +32,7 @@
                                     {% endif %}
                                 </td>
                                 <td>{{ orderVatView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
-                                <td>{{ orderVatView.totalWithVat|format_amount|localizedcurrency(orderVatView.currency) }}</td>
+                                <td>{{ orderVatView.totalWithVat|format_amount|localizedcurrency(orderVatView.currency) }} {{ 'package.vatMode.ati'|trans }}</td>
                                 <td><a target="_blank" href="{{ path('event_pro_forma', {'sheet': orderVatView.sheetId, 'order': orderVatView.orderId}) }}"><i class="icon-Note_1"></i> {{ 'order.list.pro_forma.link'|trans }}</a></td>
                             </tr>
                         {% endfor %}
