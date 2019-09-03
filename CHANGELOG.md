@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - MV-190 - Show always opened tip after two hours
+- MV-89 - Do not take account of disabled type/category (zero result) in catalog filter
 
 ## [2.11.0] - 2019-08-27
 ### Added
