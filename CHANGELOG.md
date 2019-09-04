@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-89 - Do not take account of disabled type/category (zero result) in catalog filter
 - MV-182 - Show amount included taxes when event does not have taxes
 ### Added
-- VIMEET-2019 - Impersonate as every user of a participation sheet
+- VIMEET-2019 - View multiple sheets contacts list; Impersonate as every user of a participation sheet
 
 ## [2.11.0] - 2019-08-27
 ### Added
