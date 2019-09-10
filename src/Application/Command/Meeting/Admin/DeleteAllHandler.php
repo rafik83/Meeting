@@ -10,7 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingsDeletedAllEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\NotAllowedToDeleteAllMeetingsException;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -32,19 +35,19 @@ class DeleteAllHandler
      */
     private $jobQueue;
 
-    /**
-     * @param MeetingRepositoryInterface    $meetingRepository
-     * @param MeetingPublishedAccessChecker $meetingPublishedAccessChecker
-     * @param JobQueueInterface             $jobQueue
-     */
+    /** @var DelayedEventDispatcherInterface */
+    private $eventDispatcher;
+
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
-        JobQueueInterface $jobQueue
+        JobQueueInterface $jobQueue,
+        DelayedEventDispatcherInterface $eventDispatcher
     ) {
-        $this->meetingRepository             = $meetingRepository;
+        $this->meetingRepository = $meetingRepository;
         $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
-        $this->jobQueue                      = $jobQueue;
+        $this->jobQueue = $jobQueue;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -62,5 +65,10 @@ class DeleteAllHandler
 
         $this->jobQueue->indexInCatalogSheetsByEvent($deleteAll->event);
         $this->jobQueue->aggregatePhoneValidationStatus($deleteAll->event);
+
+        $this->eventDispatcher->dispatch(
+            Events::ADMIN_MEETINGS_DELETED_ALL,
+            new MeetingsDeletedAllEvent($deleteAll->event, $deleteAll->admin)
+        );
     }
 }
