@@ -28,6 +28,7 @@ use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\SheetDetailsView;
 use Proximum\Vimeet\Application\View\Sheet\Details\SheetMeetingIndicatorView;
 use Proximum\Vimeet\Application\View\Sheet\Details\SheetParticipantsView;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -66,6 +67,9 @@ class SheetDetailQueryHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $event;
 
+    /** @var ObjectProphecy|Admin */
+    private $admin;
+
     public function setUp()
     {
         $this->recordViewsQueryHandler = $this->prophesize(RecordViewsQueryHandler::class);
@@ -77,6 +81,7 @@ class SheetDetailQueryHandlerTest extends TestCase
         $this->templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->event = $this->prophesize(Event::class);
+        $this->admin = $this->prophesize(Admin::class);
         $this->sheet->getEvent()->willReturn($this->event->reveal());
     }
 
@@ -91,7 +96,7 @@ class SheetDetailQueryHandlerTest extends TestCase
         );
 
         $this->participantDetailQueryHandler
-            ->handle(new ParticipantDetailQuery($this->sheet->reveal(), 'fr'))
+            ->handle(new ParticipantDetailQuery($this->admin->reveal(), $this->sheet->reveal(), 'fr'))
             ->shouldBeCalled()
             ->willReturn($participantViews);
 
@@ -140,7 +145,7 @@ class SheetDetailQueryHandlerTest extends TestCase
             ->willReturn([])
         ;
 
-        $query = new SheetDetailQuery($this->sheet->reveal(), 'fr');
+        $query = new SheetDetailQuery($this->admin->reveal(), $this->sheet->reveal(), 'fr');
         $handler = new SheetDetailQueryHandler(
             $this->recordViewsQueryHandler->reveal(),
             $this->traceRepository->reveal(),

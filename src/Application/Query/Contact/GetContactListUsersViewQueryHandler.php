@@ -10,6 +10,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class GetContactListUsersViewQueryHandler
 {
@@ -22,14 +23,19 @@ class GetContactListUsersViewQueryHandler
     /** @var ContactRepositoryInterface */
     private $contactRepository;
 
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MeetingParticipants $meetingParticipants,
-        ContactRepositoryInterface $contactRepository
+        ContactRepositoryInterface $contactRepository,
+        SheetRepositoryInterface $sheetRepository
     ) {
         $this->requestRepository = $requestRepository;
         $this->meetingParticipants = $meetingParticipants;
         $this->contactRepository = $contactRepository;
+        $this->sheetRepository = $sheetRepository;
     }
 
     public function handle(GetContactListUsersViewQuery $query): GetContactListUsersView
@@ -48,16 +54,26 @@ class GetContactListUsersViewQueryHandler
     protected function getFromApprovedRequests(Participant $participant): array
     {
         $metUsers = [];
-        $sheet = $participant->getSheet();
-        $requests = $this->requestRepository->findApproved($sheet);
+        $user = $participant->getUser();
 
-        foreach ($requests as $request) {
-            if (!$this->isRequestNoPreferenceOrInParticipants($request, $participant)) {
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $participant->getEvent());
+
+        foreach ($sheets as $sheet) {
+            $requests = $this->requestRepository->findApproved($sheet);
+            $participantOfSheet = $sheet->getUserParticipant($user);
+
+            if (null === $participantOfSheet) {
                 continue;
             }
 
-            foreach ($this->getSheetParticipantsMet($request, $sheet) as $participantMet) {
-                $metUsers[] = $participantMet->getUser();
+            foreach ($requests as $request) {
+                if (!$this->isRequestNoPreferenceOrInParticipants($request, $participantOfSheet)) {
+                    continue;
+                }
+
+                foreach ($this->getSheetParticipantsMet($request, $sheet) as $participantMet) {
+                    $metUsers[] = $participantMet->getUser();
+                }
             }
         }
 

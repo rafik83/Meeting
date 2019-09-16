@@ -80,7 +80,7 @@ class SheetDetailQueryHandler
             $query->sheet->getTitle(),
             $query->sheet->getState(),
             $this->participantDetailQueryHandler->handle(
-                new ParticipantDetailQuery($query->sheet, $query->locale)
+                new ParticipantDetailQuery($query->admin, $query->sheet, $query->locale)
             ),
             $this->sheetMeetingIndicatorQueryHandler->handle(
                 new SheetMeetingIndicatorQuery($query->sheet)
