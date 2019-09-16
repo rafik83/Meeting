@@ -41,6 +41,9 @@ class ParticipantView
     /** @var AvailabilityConfirmationView */
     public $availabilityConfirmationView;
 
+    /** @var string */
+    public $impersonationUrl;
+
     /**
      * @param int                          $id
      * @param string                       $email
@@ -50,24 +53,27 @@ class ParticipantView
      * @param AgendaConfirmationStatusView $agendaConfirmationStatus
      * @param PhoneValidationStatusView    $phoneValidationStatusView
      * @param AvailabilityConfirmationView $availabilityConfirmationView
+     * @param string                       $impersonationUrl
      */
     public function __construct(
         $id,
         $email,
         TemplateData $templateData,
-        $isOwner = false,
+        $isOwner,
         bool $visio,
         AgendaConfirmationStatusView $agendaConfirmationStatus,
         PhoneValidationStatusView $phoneValidationStatusView,
-        AvailabilityConfirmationView $availabilityConfirmationView
+        AvailabilityConfirmationView $availabilityConfirmationView,
+        string $impersonationUrl
     ) {
-        $this->id                        = $id;
-        $this->templateData              = $templateData;
-        $this->isOwner                   = $isOwner;
-        $this->visio                     = $visio;
-        $this->email                     = $email;
-        $this->agendaConfirmationStatus  = $agendaConfirmationStatus;
+        $this->id = $id;
+        $this->templateData = $templateData;
+        $this->isOwner = $isOwner;
+        $this->visio = $visio;
+        $this->email = $email;
+        $this->agendaConfirmationStatus = $agendaConfirmationStatus;
         $this->phoneValidationStatusView = $phoneValidationStatusView;
         $this->availabilityConfirmationView = $availabilityConfirmationView;
+        $this->impersonationUrl = $impersonationUrl;
     }
 }

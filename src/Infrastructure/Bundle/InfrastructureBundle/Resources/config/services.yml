@@ -4068,6 +4068,8 @@ services:
             - '@query.sheet.detail.participant.phone_validation_status_query_handler'
             - '@query.sheet.detail.participant.availability_confirmation_status_query_handler'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
+            - '@security.impersonate'
+            - '@adapter.event_url_generator'
 
     query.sheet.detail.participant.agenda_confirmation_status_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQueryHandler
@@ -7061,6 +7063,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, typehints: true }
 
