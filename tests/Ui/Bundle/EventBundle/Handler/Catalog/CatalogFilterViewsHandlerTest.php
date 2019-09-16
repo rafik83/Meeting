@@ -81,7 +81,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->locale
         );
 
-        $this->canDisplayObjectiveFilter->__invoke($this->sheet->reveal(), $this->locale)->shouldBeCalled()->willReturn([]);
+        $this->canDisplayObjectiveFilter->__invoke($this->sheet->reveal(), $this->locale)->shouldNotBeCalled();
 
         $searchFacetView = new SearchFacetView('type', 'label', 'placeholder', true);
         $searchFacetsView = new SearchFacetsView([$searchFacetView]);

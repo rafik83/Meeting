@@ -90,8 +90,8 @@ class SearchFacetExternalQueryHandlerTest extends TestCase
         $searchFacetsView = $handler->handle(new SearchFacetExternalViewQuery($event, $locale));
 
         $this->assertEquals($searchFacetsView, $expectedSearchFacetsView);
-        $this->assertEquals($searchFacetsView->hasType(), false);
+        $this->assertTrue($searchFacetsView->hasType());
         $this->assertEquals($searchFacetsView->getCategory(), $searchFacetCategoryView);
-        $this->assertEquals($searchFacetsView->getLocalization(), null);
+        $this->assertNull($searchFacetsView->getLocalization());
     }
 }
