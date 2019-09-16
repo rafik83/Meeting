@@ -1,5 +1,0 @@
-{% extends 'MailBundle:Mail:base.html.twig' %}
-
-{% block body %}
-    {{ 'admin.mail.meetings.deletedAll.body'|trans({'%event%': mail.event.title, '%admin%': mail.admin.displayName}, 'mail', mail.locale)|html|nl2br }}
-{% endblock %}
