@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
 {% block title 'admin.planner.index'|trans %}
 
 {% block content %}
@@ -9,17 +11,22 @@
 
         </div>
         <div class="col-md-6 text-right">
-            <a href="{{ path('admin_export_planner_data', {'event': event.id, 'mode': 'auto'}) }}" class="btn btn-primary {{ isEventOpened ? 'disabled' : '' }}">
+            <a href="{{ path('admin_export_planner_data', {'event': event.id, 'mode': 'auto'}) }}" class="btn btn-primary" {{ isEventOpened ? 'disabled tooltip' : '' }} title="{{ isEventOpened ? 'admin.planner.notAvailable'|trans : '' }}">
                 {{ 'admin.planner.run'|trans }}
             </a>
 
-            <a href="{{ path('admin_export_planner_data', {'event': event.id}) }}" class="btn btn-default">
-                {{ 'admin.planner.export'|trans }}
-            </a>
-
-            <a href="{{ path('admin_import_planner_data', {'event': event.id}) }}" class="btn btn-default">
-                {{ 'admin.planner.import.link'|trans }}
-            </a>
+            {% if not isMeetingPublished %}
+                {{ macro.delete_button(
+                    path('admin_meeting_delete_all', {'event': event.id}),
+                    'admin.meeting.action.deleteAll.title'|trans,
+                    {
+                        'class': 'btn btn-danger',
+                        'data-confirm': 'admin.meeting.action.deleteAll.confirm'|trans
+                    }
+                ) }}
+            {% else %}
+                <a href="#" class="btn btn-danger" title="{{ 'admin.meeting.action.deleteAll.meetingPublished'|trans }}" disabled tooltip>{{ 'admin.meeting.action.deleteAll.title'|trans }}</a>
+            {% endif %}
         </div>
     </div>
 

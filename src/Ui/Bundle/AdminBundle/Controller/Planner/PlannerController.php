@@ -35,11 +35,16 @@ class PlannerController extends Controller
 
         $meetingSolutions = $this->get('tactician.commandbus.query')->handle(new MeetingSolutionListQuery($event));
 
-        return $this->render('AdminBundle:Planner:index.html.twig', [
-            'event'            => $event,
-            'meetingSolutions' => $meetingSolutions,
-            'lastPlannerJob'   => $lastPlannerJob,
-            'isEventOpened'    => $isEventOpened,
-        ]);
+        return $this->render(
+            'AdminBundle:Planner:index.html.twig',
+            [
+                'event' => $event,
+                'meetingSolutions' => $meetingSolutions,
+                'lastPlannerJob' => $lastPlannerJob,
+                'isEventOpened' => $isEventOpened,
+                'isMeetingPublished' => $this->get('domain.key_dates.checker.meeting_published_access_checker')
+                    ->allowedToAccess($event),
+            ]
+        );
     }
 }
