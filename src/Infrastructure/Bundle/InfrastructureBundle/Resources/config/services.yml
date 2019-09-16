@@ -2126,7 +2126,6 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@adapter.job_queue_adapter'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll }
 
