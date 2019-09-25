@@ -15,7 +15,7 @@
                 {{ 'admin.planner.run'|trans }}
             </a>
 
-            {% if not isMeetingPublished %}
+            {% if not canDeleteMeetings %}
                 {{ macro.delete_button(
                     path('admin_meeting_delete_all', {'event': event.id}),
                     'admin.meeting.action.deleteAll.title'|trans,

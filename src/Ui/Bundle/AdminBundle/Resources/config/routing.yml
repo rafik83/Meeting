@@ -1719,7 +1719,7 @@ admin_planner:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Planner/Planner:index }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner\PlannerAction
 
 admin_export_planner_data:
     path: /event/{event}/planner/export/{mode}
