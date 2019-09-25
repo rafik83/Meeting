@@ -70,7 +70,7 @@ class PlannerAction
 
         $lastPlannerJob = $this->plannerJobRepository->findLastByEvent($event);
         $isEventOpened = $this->eventOpenAccessChecker->allowedToAccess($event);
-        $canDeleteMeetings = $this->meetingPublishedAccessChecker->allowedToAccess($event);
+        $canDeleteMeetings = !$isEventOpened && $this->meetingPublishedAccessChecker->allowedToAccess($event);
         $meetingSolutions = $this->queryBus->handle(new MeetingSolutionListQuery($event));
 
         return new Response(
