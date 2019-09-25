@@ -51,7 +51,7 @@ class SaveTreeToFileSystemCommandHandler
         $rootDir = $this->sharedUploadedFiles . '/' . uniqid();
 
         foreach ($command->uploadedObjectsTreeView->tree as $uploadedObjectNodeView) {
-            $nodeDir = $rootDir . '/' . $uploadedObjectNodeView->folder;
+            $nodeDir = $rootDir . '/' . substr($uploadedObjectNodeView->folder, 0, 255);
             $this->fileSystemAdapter->mkdir($nodeDir);
 
             foreach ($uploadedObjectNodeView->uploadedObjectsView as $uploadedObject) {
