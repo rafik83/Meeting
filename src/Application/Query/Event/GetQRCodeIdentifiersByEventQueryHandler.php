@@ -118,6 +118,13 @@ class GetQRCodeIdentifiersByEventQueryHandler
                             'user' => $userId,
                             'event' => $query->event->getId(),
                         ]
+                    ),
+                    $this->router->generate(
+                        'admin_user_event_planning',
+                        [
+                            'user' => $userId,
+                            'event' => $query->event->getId(),
+                        ]
                     )
                 );
             } catch (SheetNotFoundException $sheetNotFoundException) {

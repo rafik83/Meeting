@@ -89,8 +89,9 @@ class Checkin extends Component {
                                 <th>{this.element.dataset.sheet}</th>
                                 <th>{this.element.dataset.type}</th>
                                 <th>{this.element.dataset.dateCheckin}</th>
-                                <th></th>
-                                <th></th>
+                                <th className={"col-xs-1"}></th>
+                                <th className={"col-xs-1"}></th>
+                                <th className={"col-xs-1"}></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,6 +116,14 @@ class Checkin extends Component {
                                         <a href={participant.badgeUrl} target={'_blank'}
                                            className={'btn btn-info'}>
                                             {this.element.dataset.printBadge}
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    {this.element.dataset.showPrintBadge === 'true' &&
+                                        <a href={participant.planningUrl} target={'_blank'}
+                                           className={'btn btn-info'}>
+                                            {this.element.dataset.printPlanning}
                                         </a>
                                     }
                                 </td>
