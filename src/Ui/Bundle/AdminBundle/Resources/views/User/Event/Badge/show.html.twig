@@ -12,8 +12,10 @@
         'planning': userBadgeAndPlanningByEventView.planning
     } %}
     <script>
-        window.print();
-        window.close();
+        window.onload = function() {
+            window.print();
+            window.close();
+        }
     </script>
 </body>
 </html>
