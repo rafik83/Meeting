@@ -59,7 +59,9 @@ class ShowActionTest extends TestCase
             false,
             null,
             null,
-            false
+            false,
+            '#eee',
+            '#000'
         );
 
         $queryBus = $this->prophesize(QueryBusInterface::class);

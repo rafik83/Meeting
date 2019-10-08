@@ -74,7 +74,9 @@ abstract class AbstractGetBadgeByEventQueryHandler
             $badge->isMirrored(),
             $badge->getLeftImage(),
             $badge->getRightImage(),
-            $badge->isRightImageFullHeight()
+            $badge->isRightImageFullHeight(),
+            $query->event->getConfiguration()->getHeaderLeftColor(),
+            $query->event->getConfiguration()->getHeaderRightColor()
         );
     }
 
