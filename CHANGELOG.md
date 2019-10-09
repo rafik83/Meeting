@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- MV-195 - Badge participation type background color
 - MV-201 - Show user contact information
 
 ## [2.12.2] - 2019-09-26
