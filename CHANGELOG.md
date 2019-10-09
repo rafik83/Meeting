@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-195 - Print user planning in badge scan screen
 - MV-195 - Badge participation type background color
 - MV-201 - Show user contact information
+- MV-200 - Badge header background color
 
 ## [2.12.2] - 2019-09-26
 ### Fixed

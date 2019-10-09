@@ -2,7 +2,14 @@
  <div class="quarterSection-container {% if side == 'right' %}quarterSection-container--upRight{% endif %}">
     <div class="quarterSection badge">
         {% if userBadgeByEventView.header %}
-            <img src="{{ userBadgeByEventView.header }}" class="badge-image badge-image--logo" />
+            <div style="background: {{ userBadgeByEventView.headerLeftColor }};
+                    background: -moz-linear-gradient(left, {{ userBadgeByEventView.headerLeftColor }} 0%, {{ userBadgeByEventView.headerRightColor }} 100%);
+                    background: -webkit-linear-gradient(left, {{ userBadgeByEventView.headerLeftColor }} 0%, {{ userBadgeByEventView.headerRightColor }} 100%);
+                    background: linear-gradient(to right, {{ userBadgeByEventView.headerLeftColor }} 0%, {{ userBadgeByEventView.headerRightColor }} 100%);
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr={{ userBadgeByEventView.headerLeftColor }}, endColorstr={{ userBadgeByEventView.headerRightColor }},GradientType=1);"
+            >
+                <img src="{{ userBadgeByEventView.header }}" class="badge-image badge-image--logo" />
+            </div>
         {% endif %}
 
         <div class="badge-content">

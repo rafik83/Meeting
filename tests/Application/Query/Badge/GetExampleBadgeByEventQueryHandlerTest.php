@@ -29,6 +29,10 @@ class GetExampleBadgeByEventQueryHandlerTest extends TestCase
         $event->getFallback()->shouldBeCalled()->willReturn('en');
         $event->getLocalizedMobileLogo('en')->shouldBeCalled()->willReturn('/path/to/header.png');
 
+        $configuration = new Event\Configuration();
+        $configuration->setColors('#fff', '#fff', '#fff', '#eee', '#000', '#fff', '#fff', '#fff', '#fff');
+        $event->getConfiguration()->shouldBeCalled()->willReturn($configuration);
+
         $type = $this->prophesize(Type::class);
         $type->getTitle('en')->shouldNotBeCalled();
 
@@ -80,7 +84,9 @@ class GetExampleBadgeByEventQueryHandlerTest extends TestCase
             true,
             null,
             null,
-            false
+            false,
+            '#eee',
+            '#000'
         );
 
         $getUserBadgeByEventQueryHandler = new GetExampleBadgeByEventQueryHandler(
