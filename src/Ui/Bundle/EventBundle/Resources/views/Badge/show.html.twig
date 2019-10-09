@@ -252,7 +252,9 @@
     {% endif %}
     {% if launchPrint ?? false %}
     <script>
-      window.print();
+        window.onload = function() {
+            window.print();
+        }
     </script>
     {% endif %}
 {% endblock %}

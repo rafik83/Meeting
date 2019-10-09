@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Contact\EditComment;
 use Proximum\Vimeet\Application\Command\Contact\EditEvaluation;
 use Proximum\Vimeet\Application\Query\Contact\ContactView;
 use Proximum\Vimeet\Application\Query\Contact\GetContactViewQuery;
+use Proximum\Vimeet\Application\Query\Contact\GetMeViewQuery;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -110,13 +111,35 @@ class ShowAction
             throw new AccessDeniedException();
         }
 
+        if ($user === $contactUser) {
+            /** @var ContactView $contactView */
+            $contactView = $this->queryBus->handle(
+                new GetMeViewQuery(
+                    $event,
+                    $sheet->getUserParticipant($user) ?? $sheet->getFirstParticipant(),
+                    $request->getLocale()
+                )
+            );
+
+            return new Response(
+                $this->engine->render(
+                    '@Event/Contact/me.html.twig',
+                    [
+                        'event' => $event,
+                        'sheet' => $sheet,
+                        'contactView' => $contactView,
+                    ]
+                )
+            );
+        }
+
         $mode = $request->query->get(self::MODE_QUERY_KEY, self::MODE_VIEW);
         if (!\in_array($mode, [self::MODE_EDIT_COMMENT, self::MODE_EDIT_EVALUATION, self::MODE_VIEW], true)) {
             throw new AccessDeniedException();
         }
 
         // if owner is logged and is not a participant, it fallback to one of the participant
-        $participant = $sheet->getUserParticipant($userDomain->getUser()) ?? $sheet->getFirstParticipant();
+        $participant = $sheet->getUserParticipant($user) ?? $sheet->getFirstParticipant();
 
         /** @var ContactView $contactView */
         $contactView = $this->queryBus->handle(
