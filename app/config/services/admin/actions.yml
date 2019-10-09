@@ -48,6 +48,15 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner\PlannerAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@domain.key_dates.checker.event_open_access_checker'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@vimeet_infrastructure.repository.planner_job_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
     #
     # Type
     #

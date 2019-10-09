@@ -423,6 +423,7 @@ admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de
 admin.meeting_request.to: À
 admin.meeting.action.deleteAll.confirm: 'Êtes-vous sûr de vouloir supprimer l''ensemble des rendez-vous ?'
 admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
+admin.meeting.action.deleteAll.meetingPublished: 'Les agendas de RDV ont déjà été publiés.'
 admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce rendez-vous ?'
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.dashboard.approvedRequest: Acceptées

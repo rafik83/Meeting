@@ -25,6 +25,7 @@ use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivat
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingsDeletedAllEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\AbstractGroupEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
@@ -43,8 +44,8 @@ use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\AdminMeetingsDeletedAllMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetChangeTypeMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeOldMailAddressMail;
@@ -391,6 +392,25 @@ class MailEventSubscriber implements EventSubscriberInterface
         $this->mailer->send($mail);
     }
 
+    public function onAdminMeetingsDeletedAll(MeetingsDeletedAllEvent $meetingsDeletedAllEvent)
+    {
+        $event = $meetingsDeletedAllEvent->getEvent();
+
+        if (null === $event->getEmailTeam()) {
+            return;
+        }
+
+        $this->mailer->send(
+            new AdminMeetingsDeletedAllMail(
+                $this->sender->generate($event),
+                $event->getEmailTeam(),
+                $event->getFallback(),
+                $meetingsDeletedAllEvent->getAdmin(),
+                $event
+            )
+        );
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -399,6 +419,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         return [
             Events::ADMIN_ACCOUNT_ACTIVATED            => 'onAdminActivateAccount',
             Events::ADMIN_PASSWORD_RESET               => 'onAdminResetPassword',
+            Events::ADMIN_MEETINGS_DELETED_ALL         => 'onAdminMeetingsDeletedAll',
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION => 'onSheetAddParticipant',
             Events::USER_MAIL_CHANGED                  => 'onChangeMailAddressEvent',
             Events::USER_ACCOUNT_ACTIVATED             => 'onUserActivateAccount',
