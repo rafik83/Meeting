@@ -203,6 +203,7 @@ admin.event.qrcode.no_result: 'Pas de résultat'
 admin.event.qrcode.notfound: 'Participant inconnu'
 admin.event.qrcode.number_of_available_badge: 'Nombre de badge possible'
 admin.event.qrcode.printBadge: 'Imprimer badge et planning'
+admin.event.qrcode.printPlanning: 'Imprimer planning'
 admin.event.qrcode.scan_participants: 'Scan des participants'
 admin.event.qrcode.search: Rechercher
 admin.event.qrcode.search_by_name: 'Rechercher un participant par nom...'

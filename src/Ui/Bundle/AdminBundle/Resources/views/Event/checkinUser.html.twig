@@ -4,12 +4,13 @@
     <h1>{{ user.lastName }} {{ user.firstName }} {{ user.email }}</h1>
 
     {% if checkinDate is null %}
-    <a class="btn btn-success" href="{{ path('admin_event_fast_checkin_action_checkin', {'event': event.id, 'user': user.id}) }}">{{ 'admin.event.qrcode.checkin'|trans }}</a>
+        <a class="btn btn-success" href="{{ path('admin_event_fast_checkin_action_checkin', {'event': event.id, 'user': user.id}) }}">{{ 'admin.event.qrcode.checkin'|trans }}</a>
     {% else %}
-    <button type="button" class="btn btn-success" disabled="disabled">{{ 'admin.event.qrcode.checkinAt'|trans }} {{ checkinDate|date('d/m/y H:i:s') }}</button>
+        <button type="button" class="btn btn-success" disabled="disabled">{{ 'admin.event.qrcode.checkinAt'|trans }} {{ checkinDate|date('d/m/y H:i:s') }}</button>
     {% endif %}
 
     <a href="{{ path('admin_user_event_badge', {'event': event.id, 'user': user.id}) }}" target="_blank" class="btn btn-info">{{ 'admin.event.qrcode.printBadge'|trans }}</a>
+    <a href="{{ path('admin_user_event_planning', {'event': event.id, 'user': user.id}) }}" target="_blank" class="btn btn-info">{{ 'admin.event.qrcode.printPlanning'|trans }}</a>
 
     <a href="{{ path('admin_event_qr_code_reader', {'event': event.id}) }}" type="button" class="btn btn-default">{{ 'admin.event.access_control.back'|trans }}</a>
 {% endblock %}

@@ -355,6 +355,14 @@ admin_user_event_badge:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Badge\ShowAction }
 
+admin_user_event_planning:
+    path: /event/{event}/user/{user}/planning
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Planning\ShowAction }
+
 #
 # Category
 #

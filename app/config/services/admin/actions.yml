@@ -395,6 +395,12 @@ services:
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Planning\ShowAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Application\Command\Planning\PlanningPrintFactory'
+
     #
     # Happening
     #
