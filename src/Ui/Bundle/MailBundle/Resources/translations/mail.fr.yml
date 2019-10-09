@@ -14,6 +14,8 @@ admin.mail.invoices.print.body: "Bonjour,\nVoici le lien pour télécharger les 
 admin.mail.invoices.print.end: 'Cordialement,'
 admin.mail.invoices.print.link_label: 'Télécharger le document'
 admin.mail.invoices.print.subject: 'Génération du PDF des factures'
+admin.mail.meetings.deletedAll.subject: 'Suppression de tous les RDV'
+admin.mail.meetings.deletedAll.body: 'Tous les RDV de l''évènement "%event%" ont été supprimés par %admin%.'
 admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:"
 admin.mail.resetPassword.end: 'Bien cordialement,'
 admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'

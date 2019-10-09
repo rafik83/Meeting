@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Analytic\MeetingSolution;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class MeetingSolutionListQuery
+class MeetingSolutionListQuery implements Query
 {
     /** @var Event */
     public $event;

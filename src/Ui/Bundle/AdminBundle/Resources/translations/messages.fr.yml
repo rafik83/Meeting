@@ -203,6 +203,7 @@ admin.event.qrcode.no_result: 'Pas de résultat'
 admin.event.qrcode.notfound: 'Participant inconnu'
 admin.event.qrcode.number_of_available_badge: 'Nombre de badge possible'
 admin.event.qrcode.printBadge: 'Imprimer badge et planning'
+admin.event.qrcode.printPlanning: 'Imprimer planning'
 admin.event.qrcode.scan_participants: 'Scan des participants'
 admin.event.qrcode.search: Rechercher
 admin.event.qrcode.search_by_name: 'Rechercher un participant par nom...'
@@ -422,6 +423,7 @@ admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de
 admin.meeting_request.to: À
 admin.meeting.action.deleteAll.confirm: 'Êtes-vous sûr de vouloir supprimer l''ensemble des rendez-vous ?'
 admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
+admin.meeting.action.deleteAll.meetingPublished: 'Les agendas de RDV ont déjà été publiés.'
 admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce rendez-vous ?'
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.dashboard.approvedRequest: Acceptées

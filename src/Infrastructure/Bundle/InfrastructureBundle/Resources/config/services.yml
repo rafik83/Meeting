@@ -2126,6 +2126,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@adapter.job_queue_adapter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll }
 
@@ -6385,8 +6386,8 @@ services:
             - '%mailer_sender%'
             - '@repository.file_repository'
             - '@datetime'
-            - '@query.tip.tip_translation_view_query_handler'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Application\Command\Planning\PlanningPrintFactory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanning }
 
@@ -6397,6 +6398,14 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreator }
+
+    Proximum\Vimeet\Application\Command\Planning\PlanningPrintFactory:
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@command.planning.participant_info_guesser_cache'
+            - '@planning.displayer.participant_planning_displayer'
+            - '@sheet.sheet_guesser'
+            - '@query.tip.tip_translation_view_query_handler'
 
     #
     # Order export
@@ -7049,6 +7058,16 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, typehints: true }
+
+
+    Proximum\Vimeet\Application\Query\Contact\GetMeViewQueryHandler:
+        arguments:
+            - '@template.participant_info_guesser'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
 
     Proximum\Vimeet\Application\Query\Contact\GetContactListViewQueryHandler:
         arguments:

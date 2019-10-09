@@ -56,6 +56,10 @@
                             </a>
                         </td>
                     </tr>
+                {% else %}
+                    <tr>
+                        <td>{{ 'contacts.list.noResults'|trans }}</td>
+                    </tr>
                 {% endfor %}
             </table>
         </div>

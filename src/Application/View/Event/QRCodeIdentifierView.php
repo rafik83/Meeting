@@ -33,6 +33,9 @@ class QRCodeIdentifierView
     /** @var string */
     public $badgeUrl;
 
+    /** @var string */
+    public $planningUrl;
+
     public function __construct(
         string $identifier,
         string $firstName,
@@ -40,7 +43,8 @@ class QRCodeIdentifierView
         ?string $sheetTitle,
         ?string $participationType,
         ?\DateTime $checkin = null,
-        string $badgeUrl
+        string $badgeUrl,
+        string $planningUrl
     ) {
         $this->identifier = $identifier;
         $this->firstName = $firstName;
@@ -49,6 +53,7 @@ class QRCodeIdentifierView
         $this->participationType = $participationType;
         $this->checkin = $checkin;
         $this->badgeUrl = $badgeUrl;
+        $this->planningUrl = $planningUrl;
     }
 
     public function setSheetTitle(?string $sheetTitle): void

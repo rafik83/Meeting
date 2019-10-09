@@ -16,14 +16,11 @@ use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Components\Planning\Displayer\ParticipantPlanningDisplayer;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQuery;
 use Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Planning\PlanningOrderedBy;
-use Proximum\Vimeet\Domain\Planning\PlanningPrint;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
@@ -67,11 +64,11 @@ class ExportPlanningHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    /** @var TipTranslationViewQueryHandler */
-    private $tipTranslationViewQueryHandler;
-
     /** @var QueryBusInterface */
     private $queryBus;
+
+    /** @var PlanningPrintFactory */
+    private $planningPrintFactory;
 
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
@@ -85,22 +82,22 @@ class ExportPlanningHandler
         $mailSender,
         FileRepositoryInterface $fileRepository,
         \DateTimeInterface $dateTime,
-        TipTranslationViewQueryHandler $tipTranslationViewQueryHandler,
-        QueryBusInterface $queryBus
+        QueryBusInterface $queryBus,
+        PlanningPrintFactory $planningPrintFactory
     ) {
-        $this->participantRepository          = $participantRepository;
-        $this->participantInfoGuesserCache    = $participantInfoGuesserCache;
-        $this->sheetInfoGuesserCache          = $sheetInfoGuesserCache;
-        $this->participantPlanningDisplayer   = $participantPlanningDisplayer;
-        $this->templating                     = $templating;
-        $this->localFileStorageAdapter        = $localFileStorageAdapter;
-        $this->mailer                         = $mailer;
-        $this->printPlanningPath              = $printPlanningPath;
-        $this->mailSender                     = $mailSender;
-        $this->fileRepository                 = $fileRepository;
-        $this->dateTime                       = $dateTime;
-        $this->tipTranslationViewQueryHandler = $tipTranslationViewQueryHandler;
+        $this->participantRepository = $participantRepository;
+        $this->participantInfoGuesserCache = $participantInfoGuesserCache;
+        $this->sheetInfoGuesserCache = $sheetInfoGuesserCache;
+        $this->participantPlanningDisplayer = $participantPlanningDisplayer;
+        $this->templating = $templating;
+        $this->localFileStorageAdapter = $localFileStorageAdapter;
+        $this->mailer = $mailer;
+        $this->printPlanningPath = $printPlanningPath;
+        $this->mailSender = $mailSender;
+        $this->fileRepository = $fileRepository;
+        $this->dateTime = $dateTime;
         $this->queryBus = $queryBus;
+        $this->planningPrintFactory = $planningPrintFactory;
     }
 
     /**
@@ -156,31 +153,7 @@ class ExportPlanningHandler
                 continue;
             }
 
-            $plannings[] = new PlanningPrint(
-                $this->sheetInfoGuesserCache->guessSheetTitle($participant->getSheet(), $event->getFallback()), // Sheet title
-                $this->participantInfoGuesserCache->guessParticipantCompleteName($participant, $event->getFallback()), // Participant name
-                $this->participantPlanningDisplayer->display($event, $participant->getUser(), $participant->getLocale()), // Planning
-                $participant->getLocale(), // participant locale
-                $event->getConfiguration()->getLeftColor(), // Left Color
-                $event->getConfiguration()->getRightColor(), // Right Color
-                $event->getTitle(), // Event Title
-                $event->getDescription($event->getAvailableLocale($participant->getLocale())), // Event description
-                $event->getDomain(), // Domain
-                $participant->getSheet()->getSpot() instanceof Spot ? $participant->getSheet()->getSpot()->getReference() : null,
-                $event->getLocalizedLogo($event->getAvailableLocale($participant->getLocale())), // Event logo
-                $event->getConfiguration()->getOrganiserWebsite(), // Organiser website
-                $event->getConfiguration()->getContactFirstName(), // event contact first name
-                $event->getConfiguration()->getContactLastName(), // event contact last name
-                $event->getConfiguration()->getOrganiserPhone(), // event organiser phone
-                $event->getOrganiserEmail(), // event organiser email
-                $this->tipTranslationViewQueryHandler->handle(new TipTranslationViewQuery(
-                    $participant->getSheet(),
-                    $participant->getUser(),
-                    TipTranslationViewQueryHandler::CONTEXT_PRINT_PLANNING,
-                    $event->getAvailableLocale($participant->getLocale())
-                )) // Tip messages
-            );
-
+            $plannings[] = $this->planningPrintFactory->getPlanningPrint($user, $event, $participant);
             $printedUsers[$user->getId()] = true;
         }
 
