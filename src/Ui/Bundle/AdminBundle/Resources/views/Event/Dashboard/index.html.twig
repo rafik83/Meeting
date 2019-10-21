@@ -10,13 +10,14 @@
         event: event
     }, false) }}
 
+    {{ include('AdminBundle:Dashboard:meetings.html.twig', {
+        dashboard: dashboard.dashboardMeetingView,
+        event: event
+    }, false) }}
+
     {{ include('AdminBundle:Dashboard:sheets.html.twig', {
         dashboard: dashboard.dashboardSheetView,
         event: event
     }, false) }}
 
-    {{ include('AdminBundle:Dashboard:meetings.html.twig', {
-        dashboard: dashboard.dashboardMeetingView,
-        event: event
-    }, false) }}
 {% endblock %}
