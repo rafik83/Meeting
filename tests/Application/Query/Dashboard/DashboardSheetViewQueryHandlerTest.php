@@ -28,11 +28,11 @@ class DashboardSheetViewQueryHandlerTest extends TestCase
         $expectedView = new DashboardSheetView(
             100,
             150, [
-                new DashboardSheetTypeView(1, 70, 'fournisseur'),
-                new DashboardSheetTypeView(2, 30, 'investisseur'),
+                1 =>new DashboardSheetTypeView(1, 70, 'fournisseur'),
+                2 => new DashboardSheetTypeView(2, 30, 'investisseur'),
             ], [
-                new DashboardSheetTypeView(1, 100, 'fournisseur'),
-                new DashboardSheetTypeView(2, 50, 'investisseur'),
+                1 => new DashboardSheetTypeView(1, 100, 'fournisseur'),
+                2 => new DashboardSheetTypeView(2, 50, 'investisseur'),
             ]
         );
 
