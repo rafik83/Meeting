@@ -3812,6 +3812,7 @@ services:
     query.order.order_vat_views_by_event_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler
         arguments:
+            - '@repository.billing_info_repository'
             - '@vimeet_infrastructure.repository.order_repository'
             - '@query.order.order_vat_view_query_handler'
         tags:
