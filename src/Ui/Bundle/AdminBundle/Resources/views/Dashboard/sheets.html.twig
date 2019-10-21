@@ -24,44 +24,30 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                        </tr>
-
-                        <tr>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
-                        </tr>
+                        {% for idType, sheetType in dashboard.sheetsType %}
+                            <tr>
+                                <td>{{ sheetType.title }}</td>
+                                <td>{{ sheetType.total }}</td>
+                                <td>{{ dashboard.participantsTypeView[idType].total }}</td>
+                                <td>x</td>
+                                <td>x</td>
+                                <td>x</td>
+                                <td>x</td>
+                                <td>x</td>
+                                <td>x</td>
+                                <td>x</td>
+                                <td>x</td>
+                                <td>x</td>
+                                <td>x</td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
 
                     <tfoot>
                         <tr>
-                            <th>Totaux</th>
-                            <td>x</td>
-                            <td>x</td>
+                            <th>{{ 'admin.sheet.dashboard.by_type.total'|trans }}</th>
+                            <td>{{ dashboard.totalEnabledSheets }}</td>
+                            <td>{{ dashboard.totalParticipants }}</td>
                             <td>x</td>
                             <td>x</td>
                             <td>x</td>
@@ -75,39 +61,6 @@
                         </tr>
                     </tfoot>
                 </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <i class="icon-Document_1"></i> {{ 'admin.sheet.dashboard.totalSheet'|trans }}
-            </div>
-            <div class="panel-body text-center">
-                <h1>{{ dashboard.totalEnabledSheets }}</h1>
-                <ul class="list-unstyled">
-                    {% for sheetType in dashboard.sheetsType %}
-                        <li>{{ sheetType.title ~ ': ' ~ sheetType.total }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <i class="icon-Profil_1"></i> {{ 'admin.sheet.dashboard.totalParticipants'|trans }}
-            </div>
-            <div class="panel-body text-center">
-                <h1>{{ dashboard.totalParticipants }}</h1>
-                <ul class="list-unstyled">
-                    {% for participantType in dashboard.participantsTypeView %}
-                        <li>{{ participantType.title ~ ': ' ~ participantType.total }}</li>
-                    {% endfor %}
-                </ul>
             </div>
         </div>
     </div>
