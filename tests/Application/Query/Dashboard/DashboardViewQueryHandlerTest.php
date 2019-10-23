@@ -29,14 +29,14 @@ class DashboardViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $event  = EventFactory::createEvent();
+        $event = EventFactory::createEvent();
         $locale = 'fr';
-        $query  = new DashboardViewQuery($event, $locale);
+        $query = new DashboardViewQuery($event, $locale);
 
         //Expected
         $dashboardTransactionView = new DashboardTransactionView(100, 25, 75);
         $dashboardSheetView = new DashboardSheetView(100, 150, [], []);
-        $dashboardMeetingView = new DashboardMeetingView(200, 20, 10, 300, 20, 100);
+        $dashboardMeetingView = new DashboardMeetingView(200, 20, 10, 300, 20, 100, 33, 32, [42 => 2, 1337 => 120]);
         $dashboardViewExpected = new DashboardView(
             $dashboardTransactionView,
             $dashboardSheetView,
@@ -59,8 +59,7 @@ class DashboardViewQueryHandlerTest extends TestCase
         $dashboardMeetingHandler
             ->handle(new DashboardMeetingViewQuery($event))
             ->shouldBeCalled()
-            ->willReturn($dashboardMeetingView)
-        ;
+            ->willReturn($dashboardMeetingView);
 
         $handler = new DashboardViewQueryHandler(
             $dashboardTransactionHandler->reveal(),

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Meeting;
 
+use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardRequestView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -404,4 +405,11 @@ interface RequestRepositoryInterface
     public function findBySheets(Event $event, array $sheets, array $states, bool $withoutMeeting): array;
   
     public function hasApprovedMeetingRequest(Sheet $sheet, Sheet $sheetMet): bool;
+
+    /**
+     * @param Event $event
+     *
+     * @return DashboardRequestView[]
+     */
+    public function getDashboardRequestViewsByEvent(Event $event): array;
 }

@@ -42,15 +42,19 @@ class DashboardMeetingView
     /** @var int */
     public $meetingCreatedByPlanner;
 
+    /** @var array */
+    public $requestsByType;
+
     public function __construct(
-        int $allMeetings = 0,
-        int $meetingCreatedDayDByAdmin = 0,
-        int $meetingCreatedByParticipant = 0,
-        int $meetingCreatedByPlanner = 0,
-        int $meetingCreatedUpstreamByAdmin = 0,
-        int $approvedRequest = 0,
-        int $pendingRequest = 0,
-        int $refusedRequest = 0
+        int $allMeetings,
+        int $meetingCreatedDayDByAdmin,
+        int $meetingCreatedByParticipant,
+        int $meetingCreatedByPlanner,
+        int $meetingCreatedUpstreamByAdmin,
+        int $approvedRequest,
+        int $pendingRequest,
+        int $refusedRequest,
+        array $requestsByType
     ) {
         $this->meeting = $allMeetings;
         $this->meetingCreatedDayDByAdmin = $meetingCreatedDayDByAdmin;
@@ -62,5 +66,7 @@ class DashboardMeetingView
         $this->pendingRequest = $pendingRequest;
         $this->refusedRequest = $refusedRequest;
         $this->request = $approvedRequest + $pendingRequest + $refusedRequest;
+
+        $this->requestsByType = $requestsByType;
     }
 }

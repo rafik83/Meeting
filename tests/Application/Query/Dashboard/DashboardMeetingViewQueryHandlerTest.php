@@ -15,6 +15,7 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardMeetingViewQuery;
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardMeetingViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardRequestView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardMeetingView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -56,10 +57,22 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(10)
         ;
-        $this->meetingRepository->countUpstreamByEventAndType($this->event->reveal(), Meeting::CREATED_BY_ADMIN)->shouldNotBeCalled();
-        $this->requestRepository->countApprovedByEvent($this->event->reveal())->shouldBeCalled()->willReturn(300);
-        $this->requestRepository->countPendingByEvent($this->event->reveal())->shouldBeCalled()->willReturn(25);
-        $this->requestRepository->countRefusedByEvent($this->event->reveal())->shouldBeCalled()->willReturn(250);
+        $this->meetingRepository
+            ->countUpstreamByEventAndType(Argument::any())
+            ->shouldNotBeCalled()
+        ;
+
+        $this->requestRepository
+            ->getDashboardRequestViewsByEvent($this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([
+                new DashboardRequestView(3, Meeting\Request::STATE_SENT, null),
+                new DashboardRequestView(3, Meeting\Request::STATE_APPROVED, 1337),
+                new DashboardRequestView(7, Meeting\Request::STATE_APPROVED, null),
+                new DashboardRequestView(7, Meeting\Request::STATE_REFUSED, null),
+                new DashboardRequestView(7, Meeting\Request::STATE_REFUSED, null),
+            ])
+        ;
 
         $handler = new DashboardMeetingViewQueryHandler(
             $this->meetingRepository->reveal(),
@@ -74,9 +87,13 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
             10,
             10,
             0,
-            300,
-            25,
-            250
+            2,
+            1,
+            2,
+            [
+                3 => 2,
+                7 => 3,
+            ]
         );
 
         $this->assertEquals($expected, $result);
@@ -119,13 +136,26 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
             ->willReturn(40)
         ;
 
-        $this->meetingRepository->countUpstreamByEventAndType($this->event->reveal(), $dateTime1, Meeting::CREATED_BY_ADMIN)
+        $this->meetingRepository
+            ->countUpstreamByEventAndType(
+                $this->event->reveal(),
+                $dateTime1,
+                Meeting::CREATED_BY_ADMIN
+            )
             ->shouldBeCalled()
             ->willReturn(140);
 
-        $this->requestRepository->countApprovedByEvent($this->event->reveal())->shouldBeCalled()->willReturn(300);
-        $this->requestRepository->countPendingByEvent($this->event->reveal())->shouldBeCalled()->willReturn(25);
-        $this->requestRepository->countRefusedByEvent($this->event->reveal())->shouldBeCalled()->willReturn(250);
+        $this->requestRepository
+            ->getDashboardRequestViewsByEvent($this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([
+                new DashboardRequestView(3, Meeting\Request::STATE_SENT, null),
+                new DashboardRequestView(3, Meeting\Request::STATE_APPROVED, 1337),
+                new DashboardRequestView(7, Meeting\Request::STATE_APPROVED, null),
+                new DashboardRequestView(7, Meeting\Request::STATE_REFUSED, null),
+                new DashboardRequestView(7, Meeting\Request::STATE_REFUSED, null),
+            ])
+        ;
 
         $handler = new DashboardMeetingViewQueryHandler(
             $this->meetingRepository->reveal(),
@@ -140,9 +170,13 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
             40,
             30,
             140,
-            300,
-            25,
-            250
+            2,
+            1,
+            2,
+            [
+                3 => 2,
+                7 => 3,
+            ]
         );
 
         $this->assertEquals($expected, $result);

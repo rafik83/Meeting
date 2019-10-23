@@ -24,12 +24,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                        {% for idType, sheetType in dashboard.sheetsType %}
+                        {% for idType, sheetType in dashboard.dashboardSheetView.sheetsType %}
                             <tr>
-                                <td>{{ sheetType.title }}</td>
+                                <td class="text-left">{{ sheetType.title }}</td>
                                 <td>{{ sheetType.total }}</td>
-                                <td>{{ dashboard.participantsTypeView[idType].total }}</td>
-                                <td>x</td>
+                                <td>{{ dashboard.dashboardSheetView.participantsTypeView[idType].total }}</td>
+                                <td>{{ dashboard.dashboardMeetingView.requestsByType[idType] is defined ? dashboard.dashboardMeetingView.requestsByType[idType] : '' }}</td>
                                 <td>x</td>
                                 <td>x</td>
                                 <td>x</td>
@@ -46,9 +46,9 @@
                     <tfoot>
                         <tr>
                             <th>{{ 'admin.sheet.dashboard.by_type.total'|trans }}</th>
-                            <td>{{ dashboard.totalEnabledSheets }}</td>
-                            <td>{{ dashboard.totalParticipants }}</td>
-                            <td>x</td>
+                            <td>{{ dashboard.dashboardSheetView.totalEnabledSheets }}</td>
+                            <td>{{ dashboard.dashboardSheetView.totalParticipants }}</td>
+                            <td>{{ dashboard.dashboardMeetingView.request }}</td>
                             <td>x</td>
                             <td>x</td>
                             <td>x</td>
