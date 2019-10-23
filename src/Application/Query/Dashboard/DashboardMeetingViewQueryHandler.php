@@ -73,7 +73,8 @@ class DashboardMeetingViewQueryHandler
             $this->countApprovedRequests($dashboardRequestViews),
             $this->countPendingRequests($dashboardRequestViews),
             $this->countRefusedRequests($dashboardRequestViews),
-            $this->requestsByType($dashboardRequestViews)
+            $this->requestsByType($dashboardRequestViews),
+            $this->requestsByTypeAndState($dashboardRequestViews)
         );
     }
 
@@ -151,5 +152,36 @@ class DashboardMeetingViewQueryHandler
         }
 
         return $requestsByType;
+    }
+
+    /**
+     * @param DashboardRequestView[] $dashboardRequestViews
+     *
+     * @return array
+     */
+    private function requestsByTypeAndState(array &$dashboardRequestViews): array
+    {
+        $requestsByTypeAndState = [];
+
+        foreach ($dashboardRequestViews as $dashboardRequestView) {
+            $typeId = $dashboardRequestView->getFromTypeId();
+            $state = $dashboardRequestView->getState();
+
+            if (!isset($requestsByTypeAndState[$typeId][$state])) {
+                $requestsByTypeAndState[$typeId][$state] = 1;
+            } else {
+                ++$requestsByTypeAndState[$typeId][$state];
+            }
+
+            if ($dashboardRequestView->isPlanned()) {
+                if (!isset($requestsByTypeAndState[$typeId][Meeting\Request::STATE_PLANNED])) {
+                    $requestsByTypeAndState[$typeId][Meeting\Request::STATE_PLANNED] = 1;
+                } else {
+                    ++$requestsByTypeAndState[$typeId][Meeting\Request::STATE_PLANNED];
+                }
+            }
+        }
+
+        return $requestsByTypeAndState;
     }
 }

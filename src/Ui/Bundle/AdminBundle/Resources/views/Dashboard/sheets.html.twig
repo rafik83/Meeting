@@ -25,14 +25,15 @@
                     </thead>
                     <tbody>
                         {% for idType, sheetType in dashboard.dashboardSheetView.sheetsType %}
+                            {% set requestsByTypeAndState = dashboard.dashboardMeetingView.requestsByTypeAndState[idType] is defined ? dashboard.dashboardMeetingView.requestsByTypeAndState[idType] : [] %}
                             <tr>
                                 <td class="text-left">{{ sheetType.title }}</td>
                                 <td>{{ sheetType.total }}</td>
                                 <td>{{ dashboard.dashboardSheetView.participantsTypeView[idType].total }}</td>
                                 <td>{{ dashboard.dashboardMeetingView.requestsByType[idType] is defined ? dashboard.dashboardMeetingView.requestsByType[idType] : '' }}</td>
-                                <td>x</td>
-                                <td>x</td>
-                                <td>x</td>
+                                <td>{{ requestsByTypeAndState.approved is defined ? requestsByTypeAndState.approved : '' }}</td>
+                                <td>{{ requestsByTypeAndState.refused is defined ? requestsByTypeAndState.refused : '' }}</td>
+                                <td>{{ requestsByTypeAndState.planned is defined ? requestsByTypeAndState.planned : '' }}</td>
                                 <td>x</td>
                                 <td>x</td>
                                 <td>x</td>
@@ -49,9 +50,9 @@
                             <td>{{ dashboard.dashboardSheetView.totalEnabledSheets }}</td>
                             <td>{{ dashboard.dashboardSheetView.totalParticipants }}</td>
                             <td>{{ dashboard.dashboardMeetingView.request }}</td>
-                            <td>x</td>
-                            <td>x</td>
-                            <td>x</td>
+                            <td>{{ dashboard.dashboardMeetingView.approvedRequest }}</td>
+                            <td>{{ dashboard.dashboardMeetingView.refusedRequest }}</td>
+                            <td>{{ dashboard.dashboardMeetingView.meeting }}</td>
                             <td>x</td>
                             <td>x</td>
                             <td>x</td>

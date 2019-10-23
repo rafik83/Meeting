@@ -93,6 +93,17 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
             [
                 3 => 2,
                 7 => 3,
+            ],
+            [
+                3 => [
+                    Meeting\Request::STATE_SENT => 1,
+                    Meeting\Request::STATE_APPROVED => 1,
+                    Meeting\Request::STATE_PLANNED => 1
+                ],
+                7 => [
+                    Meeting\Request::STATE_APPROVED => 1,
+                    Meeting\Request::STATE_REFUSED => 2
+                ],
             ]
         );
 
@@ -176,6 +187,17 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
             [
                 3 => 2,
                 7 => 3,
+            ],
+            [
+                3 => [
+                    Meeting\Request::STATE_SENT => 1,
+                    Meeting\Request::STATE_APPROVED => 1,
+                    Meeting\Request::STATE_PLANNED => 1
+                ],
+                7 => [
+                    Meeting\Request::STATE_APPROVED => 1,
+                    Meeting\Request::STATE_REFUSED => 2
+                ],
             ]
         );
 

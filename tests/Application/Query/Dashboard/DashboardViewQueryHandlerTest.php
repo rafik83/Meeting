@@ -36,7 +36,7 @@ class DashboardViewQueryHandlerTest extends TestCase
         //Expected
         $dashboardTransactionView = new DashboardTransactionView(100, 25, 75);
         $dashboardSheetView = new DashboardSheetView(100, 150, [], []);
-        $dashboardMeetingView = new DashboardMeetingView(200, 20, 10, 300, 20, 100, 33, 32, [42 => 2, 1337 => 120]);
+        $dashboardMeetingView = new DashboardMeetingView(200, 20, 10, 300, 20, 100, 33, 32, [42 => 2, 1337 => 120], []);
         $dashboardViewExpected = new DashboardView(
             $dashboardTransactionView,
             $dashboardSheetView,

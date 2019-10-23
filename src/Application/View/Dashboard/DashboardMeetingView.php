@@ -45,6 +45,9 @@ class DashboardMeetingView
     /** @var array */
     public $requestsByType;
 
+    /** @var array */
+    public $requestsByTypeAndState;
+
     public function __construct(
         int $allMeetings,
         int $meetingCreatedDayDByAdmin,
@@ -54,7 +57,8 @@ class DashboardMeetingView
         int $approvedRequest,
         int $pendingRequest,
         int $refusedRequest,
-        array $requestsByType
+        array $requestsByType,
+        array $requestsByTypeAndState
     ) {
         $this->meeting = $allMeetings;
         $this->meetingCreatedDayDByAdmin = $meetingCreatedDayDByAdmin;
@@ -68,5 +72,6 @@ class DashboardMeetingView
         $this->request = $approvedRequest + $pendingRequest + $refusedRequest;
 
         $this->requestsByType = $requestsByType;
+        $this->requestsByTypeAndState = $requestsByTypeAndState;
     }
 }
