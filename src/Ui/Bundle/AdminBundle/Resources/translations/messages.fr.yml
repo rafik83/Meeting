@@ -852,12 +852,13 @@ admin.sheet.created_this_week: 'Inscrits cette semaine'
 admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
 admin.sheet.dashboard.by_type.meetings: 'Planifiés'
-admin.sheet.dashboard.by_type.meetings_evaluated_5_stars: 'Rdv noté 5'
+admin.sheet.dashboard.by_type.meetings_evaluated_5_stars: 5
 admin.sheet.dashboard.by_type.meetings_evaluated_4_stars: 4
 admin.sheet.dashboard.by_type.meetings_evaluated_3_stars: 3
 admin.sheet.dashboard.by_type.meetings_evaluated_2_stars: 2
 admin.sheet.dashboard.by_type.meetings_evaluated_1_stars: 1
-admin.sheet.dashboard.by_type.meetings_not_evaluated: 'RDV non noté'
+admin.sheet.dashboard.by_type.meetings_evaluation: 'RDV noté'
+admin.sheet.dashboard.by_type.meetings_not_evaluated: 'Non noté'
 admin.sheet.dashboard.by_type.participants: 'Nombre participants'
 admin.sheet.dashboard.by_type.requests: 'Demandes de rdv'
 admin.sheet.dashboard.by_type.requests_accepted: 'Demandes acceptées'

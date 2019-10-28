@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Dashboard;
 
+use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardContactView;
+
 class DashboardView
 {
     /** @var DashboardTransactionView */
@@ -21,18 +23,18 @@ class DashboardView
     /** @var DashboardMeetingView */
     public $dashboardMeetingView;
 
-    /**
-     * @param DashboardTransactionView $transactionView
-     * @param DashboardSheetView       $dashboardSheetView
-     * @param DashboardMeetingView     $dashboardMeetingView
-     */
+    /** @var DashboardContactView */
+    public $dashboardContactView;
+
     public function __construct(
         DashboardTransactionView $transactionView,
         DashboardSheetView $dashboardSheetView,
-        DashboardMeetingView $dashboardMeetingView
+        DashboardMeetingView $dashboardMeetingView,
+        DashboardContactView $dashboardContactView
     ) {
         $this->transactionView    = $transactionView;
         $this->dashboardSheetView = $dashboardSheetView;
         $this->dashboardMeetingView = $dashboardMeetingView;
+        $this->dashboardContactView = $dashboardContactView;
     }
 }

@@ -3575,6 +3575,7 @@ services:
             - '@query.sheet.dashboard_transaction_view_query_handler'
             - '@query.dashboard.dashboard_sheet_view_query_handler'
             - '@Proximum\Vimeet\Application\Query\Dashboard\DashboardMeetingViewQueryHandler'
+            - '@Proximum\Vimeet\Application\Query\Dashboard\DashboardContactViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery }
 
@@ -3593,6 +3594,10 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    Proximum\Vimeet\Application\Query\Dashboard\DashboardContactViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
 
     query.catalog.filtered_fields_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQueryHandler
