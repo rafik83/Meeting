@@ -465,7 +465,7 @@ admin_agenda_export_participant_export:
     path: /event/{event}/agenda/do-export-participants
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\PrepareExportAction }
 
 admin_omz_export_download:
@@ -626,7 +626,7 @@ admin_meeting_export:
     path: /event/{event}/meeting/export
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [POST]
     defaults: { _controller: AdminBundle:Meeting:export }
 
 #
@@ -1617,6 +1617,12 @@ admin_users_details:
         event: \d+
         user: \d+
 
+admin_user_contact_evaluation_export:
+    path: /event/{event}/users-contact-evaluation/export
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Contact\EvaluationExportAction
+    methods: [POST]
+    requirements:
+        event: \d+
 
 #
 # Scan

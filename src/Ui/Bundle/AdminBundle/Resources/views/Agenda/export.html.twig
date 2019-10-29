@@ -8,30 +8,43 @@
     <h1 class="page-header">{{ 'admin.agenda.export.title'|trans }}</h1>
 
     <div class="row">
-        <div class="col-md-4 text-center">
+        <div class="col-md-6 text-center">
             <div class="panel panel-default">
                 <div class="panel-heading">{{ 'admin.agenda.export.omz'|trans }}</div>
                 <div class="panel-body">
-                    <form action="{{ path('admin_agenda_export_participant_export', { 'event': event.id }) }}" method="GET">
-                        <input type="submit" class="btn btn-default btn-lg" value="{{ 'admin.agenda.export.participant_schedules.title'|trans }}" />
+                    <form action="{{ path('admin_agenda_export_participant_export', { 'event': event.id }) }}" method="POST">
+                        <input type="submit" class="btn btn-default" value="{{ 'admin.agenda.export.participant_schedules.title'|trans }}" />
                     </form>
                 </div>
             </div>
         </div>
+
         {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
-            <div class="col-md-4 text-center">
+            <div class="col-md-6 text-center">
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ 'admin.sheet.export.meetings.button.label'|trans }}</div>
                     <div class="panel-body">
-                        <form action="{{ path('admin_meeting_export', { 'event': event.id }) }}" method="GET">
-                            <input type="submit" value="{{ 'admin.sheet.export.meetings.button.label'|trans }}" class="btn btn-lg btn-default"/>
+                        <form action="{{ path('admin_meeting_export', { 'event': event.id }) }}" method="POST">
+                            <input type="submit" value="{{ 'admin.sheet.export.meetings.button.label'|trans }}" class="btn btn-default"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 text-center">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ 'admin.user.export.title'|trans }}</div>
+                    <div class="panel-body">
+                        <form action="{{ path('admin_user_contact_evaluation_export', { 'event': event.id }) }}" method="POST">
+                            <input type="submit" value="{{ 'admin.user.export.contact.evaluation'|trans }}" class="btn btn-default"/>
                         </form>
                     </div>
                 </div>
             </div>
         {% endif %}
+
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-            <div class="col-md-4 text-center">
+            <div class="col-md-6 text-center">
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ 'admin.meeting.action.deleteAll.title'|trans }}</div>
                     <div class="panel-body">
