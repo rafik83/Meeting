@@ -13,5 +13,6 @@ Feature: See the dashboard of an event
     And I should see "323,00 €" in the ".dashboard-total-orders" element
     And I should see "0,00 €" in the ".dashboard-total-paid" element
     And I should see "347,60 €" in the ".dashboard-total-remaining-to-pay" element
-    And I should see "admin.sheet.dashboard.totalSheet"
-    And I should see "admin.sheet.dashboard.totalParticipants"
+    And I should see "admin.sheet.dashboard.by_type.sheets"
+    And I should see "admin.sheet.dashboard.by_type.total"
+    And I should see "admin.sheet.dashboard.by_type.meetings_not_evaluated"

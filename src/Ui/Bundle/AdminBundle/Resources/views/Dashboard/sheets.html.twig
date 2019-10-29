@@ -34,7 +34,7 @@
                             <tr>
                                 <td class="text-left">{{ sheetType.title }}</td>
                                 <td>{{ sheetType.total }}</td>
-                                <td>{{ dashboard.dashboardSheetView.participantsTypeView[idType].total }}</td>
+                                <td>{{ dashboard.dashboardSheetView.participantsTypeView[idType].total is defined ? dashboard.dashboardSheetView.participantsTypeView[idType].total : '' }}</td>
                                 <td>{{ dashboard.dashboardMeetingView.requestsByType[idType] is defined ? dashboard.dashboardMeetingView.requestsByType[idType] : '' }}</td>
                                 <td>{{ requestsByTypeAndState.approved is defined ? requestsByTypeAndState.approved : '' }}</td>
                                 <td>{{ requestsByTypeAndState.refused is defined ? requestsByTypeAndState.refused : '' }}</td>
