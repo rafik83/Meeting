@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Contact;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
@@ -38,11 +39,14 @@ class EvaluationExportAction
             throw new AccessDeniedException('Access Denied!');
         }
 
+        $locale = $event->getAvailableLocale($request->getLocale());
+        $this->queryBus->handle(new UserContactEvaluationViewQuery($event, $locale));
+
         $exportedContent = $this->serializer->serialize(
             [],
             'csv',
             [
-                'locale' => $event->getAvailableLocale($request->getLocale()),
+                'locale' => $locale,
                 'charset' => Charset::WINDOWS_1252,
                 'csv_delimiter' => ';',
             ]

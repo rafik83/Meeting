@@ -618,4 +618,29 @@ class TypeRepository implements TypeRepositoryInterface
 
         return $types;
     }
+
+    public function getTypesAndCategoriesTranslationsByEvent(Event $event, string $locale): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('type, typeTranslation, category, categoryTranslation')
+            ->from(Type::class, 'type', 'type.id')
+            ->join(
+                'type.translations',
+                'typeTranslation',
+                'WITH',
+                'type.event = :event AND typeTranslation.locale = :locale'
+            )
+            ->leftJoin('type.categories', 'category')
+            ->leftJoin(
+                'category.translations',
+                'categoryTranslation',
+                'WITH',
+                'categoryTranslation.locale = :locale'
+            )
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale)
+            ->getQuery()
+            ->getResult();
+    }
 }
