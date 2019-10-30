@@ -40,10 +40,9 @@ class EvaluationExportAction
         }
 
         $locale = $event->getAvailableLocale($request->getLocale());
-        $this->queryBus->handle(new UserContactEvaluationViewQuery($event, $locale));
 
         $exportedContent = $this->serializer->serialize(
-            [],
+            $this->queryBus->handle(new UserContactEvaluationViewQuery($event, $locale)),
             'csv',
             [
                 'locale' => $locale,
@@ -52,6 +51,9 @@ class EvaluationExportAction
             ]
         );
 
-        return new CsvFileResponse($exportedContent, 'export_user_contact_evaluation_' . date('Y_m_d_His') . '.csv');
+        return new CsvFileResponse(
+            Charset::convertString($exportedContent),
+            'export_user_contact_evaluation_' . date('Y_m_d_His') . '.csv'
+        );
     }
 }

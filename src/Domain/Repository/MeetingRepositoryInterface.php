@@ -295,4 +295,11 @@ interface MeetingRepositoryInterface
      * @return bool
      */
     public function hasAtLeastOneMeeting(array $sheets, array $otherSheets): bool;
+
+    /**
+     * @param Event $event
+     *
+     * @return Meeting[]
+     */
+    public function getMeetingAndParticipantsByEvent(Event $event): array;
 }
