@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
+use Proximum\Vimeet\Application\Query\User\Event\Contact\UserSheetsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -472,6 +473,25 @@ class UserRepository implements UserRepositoryInterface
             ->from(User::class, 'user')
             ->join(Participant::class, 'participant', 'WITH', 'user = participant.user AND participant.participantProduct = :product')
             ->setParameter('product', $product)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getUserSheetsViewsByEvent(Event $event): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select(
+                sprintf(
+                    'new %s(user.id, user.account.firstName, user.account.lastName, sheet.id, sheet.title, type.id)',
+                    UserSheetsView::class
+                )
+            )
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'user = participant.user')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->join('sheet.type', 'type')
+            ->setParameter('event', $event)
             ->getQuery()
             ->getResult();
     }
