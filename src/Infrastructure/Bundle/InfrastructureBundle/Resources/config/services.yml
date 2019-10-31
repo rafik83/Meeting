@@ -2849,6 +2849,7 @@ services:
 
     Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationViewQueryHandler:
         arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.repository.user_repository'

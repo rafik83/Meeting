@@ -3,12 +3,16 @@
 namespace Proximum\Vimeet\Application\Query\User\Event\Contact;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class UserContactEvaluationViewQueryHandler
 {
+    /** @var ContactRepositoryInterface */
+    private $contactRepository;
+
     /** @var MeetingRepositoryInterface */
     private $meetingRepository;
 
@@ -19,10 +23,12 @@ class UserContactEvaluationViewQueryHandler
     private $userRepository;
 
     public function __construct(
+        ContactRepositoryInterface $contactRepository,
         MeetingRepositoryInterface $meetingRepository,
         TypeRepositoryInterface $typeRepository,
         UserRepositoryInterface $userRepository
     ) {
+        $this->contactRepository = $contactRepository;
         $this->meetingRepository = $meetingRepository;
         $this->typeRepository = $typeRepository;
         $this->userRepository = $userRepository;
@@ -35,6 +41,8 @@ class UserContactEvaluationViewQueryHandler
      */
     public function handle(UserContactEvaluationViewQuery $query): array
     {
+        $contactEvaluationsViews = $this->getContactEvaluationsViews($query->event);
+
         $meetingsNumberByUser = $this->getMeetingsNumberByUserAndByEvent($query->event);
         $typeAndCategoriesTranslatedIndexedByTypeId = $this->getTypeAndCategoriesTranslatedIndexedByTypeId(
             $query->event,
@@ -62,6 +70,9 @@ class UserContactEvaluationViewQueryHandler
                 continue;
             }
 
+            $contactEvaluationsView = $contactEvaluationsViews[$userId] ?? new ContactEvaluationsView($userId);
+            $meetingsNumber = $meetingsNumberByUser[$userId] ?? 0;
+
             $userContactEvaluationViews[$userId] = new UserContactEvaluationView(
                 $userId,
                 $userSheetsView->getFirstName(),
@@ -70,11 +81,46 @@ class UserContactEvaluationViewQueryHandler
                 $typeAndCategoriesTranslatedIndexedByTypeId[$userSheetsView->getTypeId()]->getCategoriesTitle(),
                 $userSheetsView->getSheetId(),
                 $userSheetsView->getSheetTitle(),
-                $meetingsNumberByUser[$userId]
+                $meetingsNumber,
+                $contactEvaluationsView->getContactsNumber(),
+                $contactEvaluationsView->getContactsNumberByEvaluation(5),
+                $contactEvaluationsView->getContactsNumberByEvaluation(4),
+                $contactEvaluationsView->getContactsNumberByEvaluation(3),
+                $contactEvaluationsView->getContactsNumberByEvaluation(2),
+                $contactEvaluationsView->getContactsNumberByEvaluation(1),
+                max(
+                    $meetingsNumber - $contactEvaluationsView->getContactsNumberEvaluated(),
+                    $contactEvaluationsView->getContactsNumberNotEvaluated()
+                )
             );
         }
 
         return array_values($userContactEvaluationViews);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return ContactEvaluationsView[] indexed by userId
+     */
+    private function getContactEvaluationsViews(Event $event): array
+    {
+        $contacts = $this->contactRepository->getByEvent($event);
+
+        /** @var ContactEvaluationsView[] $contactEvaluationsViews */
+        $contactEvaluationsViews = [];
+
+        foreach ($contacts as $contact) {
+            $userId = $contact->getUser()->getId();
+
+            if (!isset($contactEvaluationsViews[$userId])) {
+                $contactEvaluationsViews[$userId] = new ContactEvaluationsView($userId);
+            }
+
+            $contactEvaluationsViews[$userId]->addContact($contact->getEvaluation());
+        }
+
+        return $contactEvaluationsViews;
     }
 
     /**
@@ -107,7 +153,7 @@ class UserContactEvaluationViewQueryHandler
      * @param Event $event
      * @param string $locale
      *
-     * @return TypeAndCategoriesTranslated[]
+     * @return TypeAndCategoriesTranslated[] indexed by typeId
      */
     private function getTypeAndCategoriesTranslatedIndexedByTypeId(Event $event, string $locale): array
     {

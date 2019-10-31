@@ -28,6 +28,27 @@ class UserContactEvaluationView
     /** @var int */
     private $meetingsNumber;
 
+    /** @var int */
+    private $contactsNumber;
+
+    /** @var int */
+    private $contactsEvaluated5;
+
+    /** @var int */
+    private $contactsEvaluated4;
+
+    /** @var int */
+    private $contactsEvaluated3;
+
+    /** @var int */
+    private $contactsEvaluated2;
+
+    /** @var int */
+    private $contactsEvaluated1;
+
+    /** @var int */
+    private $contactsNotEvaluated;
+
     public function __construct(
         int $userId,
         ?string $firstName,
@@ -36,7 +57,14 @@ class UserContactEvaluationView
         array $categoriesTitle,
         string $sheetId,
         string $sheetTitle,
-        int $meetingsNumber
+        int $meetingsNumber,
+        int $contactsNumber,
+        int $contactsEvaluated5,
+        int $contactsEvaluated4,
+        int $contactsEvaluated3,
+        int $contactsEvaluated2,
+        int $contactsEvaluated1,
+        int $contactsNotEvaluated
     ) {
         $this->userId = $userId;
         $this->firstName = $firstName;
@@ -46,6 +74,13 @@ class UserContactEvaluationView
         $this->meetingsNumber = $meetingsNumber;
         $this->sheetsId[] = $sheetId;
         $this->sheetsTitle[] = $sheetTitle;
+        $this->contactsNumber = $contactsNumber;
+        $this->contactsEvaluated5 = $contactsEvaluated5;
+        $this->contactsEvaluated4 = $contactsEvaluated4;
+        $this->contactsEvaluated3 = $contactsEvaluated3;
+        $this->contactsEvaluated2 = $contactsEvaluated2;
+        $this->contactsEvaluated1 = $contactsEvaluated1;
+        $this->contactsNotEvaluated = $contactsNotEvaluated;
     }
 
     public function getUserId(): int
@@ -85,6 +120,41 @@ class UserContactEvaluationView
     public function getMeetingsNumber(): int
     {
         return $this->meetingsNumber;
+    }
+
+    public function getContactsNumber(): int
+    {
+        return $this->contactsNumber;
+    }
+
+    public function getContactsEvaluated5(): int
+    {
+        return $this->contactsEvaluated5;
+    }
+
+    public function getContactsEvaluated4(): int
+    {
+        return $this->contactsEvaluated4;
+    }
+
+    public function getContactsEvaluated3(): int
+    {
+        return $this->contactsEvaluated3;
+    }
+
+    public function getContactsEvaluated2(): int
+    {
+        return $this->contactsEvaluated2;
+    }
+
+    public function getContactsEvaluated1(): int
+    {
+        return $this->contactsEvaluated1;
+    }
+
+    public function getContactsNotEvaluated(): int
+    {
+        return $this->contactsNotEvaluated;
     }
 
     public function addSheet(int $sheetId, ?string $sheetTitle): void

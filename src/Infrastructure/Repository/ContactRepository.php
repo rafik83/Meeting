@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Application\Query\User\Event\Contact\ContactEvaluationView;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
@@ -102,6 +103,20 @@ class ContactRepository implements ContactRepositoryInterface
                     'users' => $users,
                 ]
             )
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getByEvent(Event $event): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('contact')
+            ->from(Contact::class, 'contact')
+            ->andWhere('contact.event = :event')
+            ->setParameter('event', $event)
             ->getQuery()
             ->getResult()
         ;
