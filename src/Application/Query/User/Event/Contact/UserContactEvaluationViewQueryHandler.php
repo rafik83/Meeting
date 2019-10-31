@@ -88,10 +88,7 @@ class UserContactEvaluationViewQueryHandler
                 $contactEvaluationsView->getContactsNumberByEvaluation(3),
                 $contactEvaluationsView->getContactsNumberByEvaluation(2),
                 $contactEvaluationsView->getContactsNumberByEvaluation(1),
-                max(
-                    $meetingsNumber - $contactEvaluationsView->getContactsNumberEvaluated(),
-                    $contactEvaluationsView->getContactsNumberNotEvaluated()
-                )
+                $contactEvaluationsView->getContactsNumberNotEvaluated()
             );
         }
 
@@ -117,7 +114,7 @@ class UserContactEvaluationViewQueryHandler
                 $contactEvaluationsViews[$userId] = new ContactEvaluationsView($userId);
             }
 
-            $contactEvaluationsViews[$userId]->addContact($contact->getEvaluation());
+            $contactEvaluationsViews[$userId]->addContact($contact->getEvaluation(), $contact->isScanned());
         }
 
         return $contactEvaluationsViews;

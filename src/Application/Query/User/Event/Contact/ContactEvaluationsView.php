@@ -21,9 +21,11 @@ class ContactEvaluationsView
         $this->userId = $userId;
     }
 
-    public function addContact(?int $evaluation): void
+    public function addContact(?int $evaluation, bool $isScanned): void
     {
-        ++$this->contactsNumber;
+        if ($isScanned) {
+            ++$this->contactsNumber;
+        }
 
         if (null !== $evaluation) {
             ++$this->contactsNumberByEvaluations[$evaluation];
@@ -52,10 +54,5 @@ class ContactEvaluationsView
     public function getContactsNumberNotEvaluated(): int
     {
         return $this->contactsNumberNotEvaluated;
-    }
-
-    public function getContactsNumberEvaluated(): int
-    {
-        return $this->contactsNumber - $this->contactsNumberNotEvaluated;
     }
 }
