@@ -11,20 +11,29 @@
 namespace Proximum\Vimeet\Application\Query\Dashboard;
 
 use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardEntranceScanView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 
 class DashboardScanViewQueryHandler
 {
+    /** @var EventOpenAccessChecker */
+    private $eventOpenAccessChecker;
+
     /** @var ScanRepositoryInterface */
     private $scanRepository;
 
-    public function __construct(ScanRepositoryInterface $scanRepository)
+    public function __construct(EventOpenAccessChecker $eventOpenAccessChecker, ScanRepositoryInterface $scanRepository)
     {
+        $this->eventOpenAccessChecker = $eventOpenAccessChecker;
         $this->scanRepository = $scanRepository;
     }
 
     public function handle(DashboardScanViewQuery $query): DashboardEntranceScanView
     {
+        if (!$this->eventOpenAccessChecker->allowedToAccess($query->event)) {
+            return new DashboardEntranceScanView(false);
+        }
+
         $visitorsByTypeAndDay = [];
         $uniqueVisitorsIndexedByUserId = [];
         $uniqueVisitorsIndexedByTypeAndUserId = [];
@@ -64,6 +73,7 @@ class DashboardScanViewQueryHandler
         $uniqueVisitorsTotal = count($uniqueVisitorsIndexedByUserId);
 
         return new DashboardEntranceScanView(
+            true,
             $formattedDays,
             $visitorsTotal,
             $uniqueVisitorsTotal,

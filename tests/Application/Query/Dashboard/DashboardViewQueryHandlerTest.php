@@ -48,6 +48,7 @@ class DashboardViewQueryHandlerTest extends TestCase
             [42 => 2, 1337 => 1]
         );
         $dashboardEntranceScanView = new DashboardEntranceScanView(
+            true,
             [
                 '2019-11-04' => new \DateTime('2019-11-04 10:00:00'),
                 '2019-11-05' => new \DateTime('2019-11-05 10:00:00'),

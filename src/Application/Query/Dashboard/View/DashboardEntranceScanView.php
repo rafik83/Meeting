@@ -4,6 +4,9 @@ namespace Proximum\Vimeet\Application\Query\Dashboard\View;
 
 class DashboardEntranceScanView
 {
+    /** @var bool */
+    private $isEventOpened;
+
     /** @var int */
     private $visitorsTotal;
 
@@ -20,6 +23,7 @@ class DashboardEntranceScanView
     private $formattedDays;
 
     /**
+     * @param bool                 $isEventOpened
      * @param \DateTimeInterface[] $formattedDays
      * @param int                  $visitorsTotal
      * @param int                  $uniqueVisitorsTotal
@@ -27,17 +31,24 @@ class DashboardEntranceScanView
      * @param array                $visitorsByTypeAndDay
      */
     public function __construct(
-        array $formattedDays,
-        int $visitorsTotal,
-        int $uniqueVisitorsTotal,
-        array $uniqueVisitorsByType,
-        array $visitorsByTypeAndDay
+        bool $isEventOpened,
+        array $formattedDays = [],
+        int $visitorsTotal = 0,
+        int $uniqueVisitorsTotal = 0,
+        array $uniqueVisitorsByType = [],
+        array $visitorsByTypeAndDay = []
     ) {
         $this->formattedDays = $formattedDays;
         $this->visitorsTotal = $visitorsTotal;
         $this->uniqueVisitorsTotal = $uniqueVisitorsTotal;
         $this->uniqueVisitorsByType = $uniqueVisitorsByType;
         $this->visitorsByTypeAndDay = $visitorsByTypeAndDay;
+        $this->isEventOpened = $isEventOpened;
+    }
+
+    public function isEventOpened(): bool
+    {
+        return $this->isEventOpened;
     }
 
     public function getVisitorsTotal(): int

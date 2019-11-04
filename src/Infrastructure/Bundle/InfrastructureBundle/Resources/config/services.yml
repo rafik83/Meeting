@@ -3602,6 +3602,7 @@ services:
 
     Proximum\Vimeet\Application\Query\Dashboard\DashboardScanViewQueryHandler:
         arguments:
+            - '@domain.key_dates.checker.event_open_access_checker'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
 
     query.catalog.filtered_fields_query_handler:
