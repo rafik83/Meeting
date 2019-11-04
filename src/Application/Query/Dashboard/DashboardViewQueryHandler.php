@@ -26,16 +26,21 @@ class DashboardViewQueryHandler
     /** @var DashboardContactViewQueryHandler */
     private $dashboardContactViewQueryHandler;
 
+    /** @var DashboardScanViewQueryHandler */
+    private $dashboardScanViewQueryHandler;
+
     public function __construct(
         DashboardTransactionViewQueryHandler $dashboardTransactionViewQueryHandler,
         DashboardSheetViewQueryHandler $dashboardSheetViewQueryHandler,
         DashboardMeetingViewQueryHandler $dashboardMeetingViewQueryHandler,
-        DashboardContactViewQueryHandler $dashboardContactViewQueryHandler
+        DashboardContactViewQueryHandler $dashboardContactViewQueryHandler,
+        DashboardScanViewQueryHandler $dashboardScanViewQueryHandler
     ) {
         $this->dashboardTransactionViewQueryHandler = $dashboardTransactionViewQueryHandler;
         $this->dashboardSheetViewQueryHandler = $dashboardSheetViewQueryHandler;
         $this->dashboardMeetingViewQueryHandler = $dashboardMeetingViewQueryHandler;
         $this->dashboardContactViewQueryHandler = $dashboardContactViewQueryHandler;
+        $this->dashboardScanViewQueryHandler = $dashboardScanViewQueryHandler;
     }
 
     /**
@@ -57,6 +62,9 @@ class DashboardViewQueryHandler
             ),
             $this->dashboardContactViewQueryHandler->handle(
                 new DashboardContactViewQuery($dashboardViewQuery->event)
+            ),
+            $this->dashboardScanViewQueryHandler->handle(
+                new DashboardScanViewQuery($dashboardViewQuery->event)
             )
         );
     }
