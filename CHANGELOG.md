@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-1998 - Dashboard with contacts indicators
+- VIMEET-1997 - Dashboard with access control indicators
 
 ## [2.13.0] - 2019-10-09
 ### Added
