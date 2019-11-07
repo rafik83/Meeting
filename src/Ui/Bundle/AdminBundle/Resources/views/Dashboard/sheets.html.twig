@@ -20,24 +20,24 @@
                     </tr>
                     <tr>
                         <th>{{ 'admin.sheet.dashboard.by_type.type'|trans }}</th>
-                        <th>{{ 'admin.sheet.dashboard.by_type.sheets'|trans }}</th>
-                        <th class="vertical-divider">{{ 'admin.sheet.dashboard.by_type.participants'|trans }}</th>
-                        <th>{{ 'admin.sheet.dashboard.by_type.requests'|trans }}</th>
-                        <th>{{ 'admin.sheet.dashboard.by_type.requests_accepted'|trans }}</th>
-                        <th>{{ 'admin.sheet.dashboard.by_type.requests_refused'|trans }}</th>
-                        <th class="vertical-divider">{{ 'admin.sheet.dashboard.by_type.meetings'|trans }}</th>
+                        <th class="text-center">{{ 'admin.sheet.dashboard.by_type.sheets'|trans }}</th>
+                        <th class="text-center vertical-divider">{{ 'admin.sheet.dashboard.by_type.participants'|trans }}</th>
+                        <th class="text-center">{{ 'admin.sheet.dashboard.by_type.requests'|trans }}</th>
+                        <th class="text-center">{{ 'admin.sheet.dashboard.by_type.requests_accepted'|trans }}</th>
+                        <th class="text-center">{{ 'admin.sheet.dashboard.by_type.requests_refused'|trans }}</th>
+                        <th class="text-center vertical-divider">{{ 'admin.sheet.dashboard.by_type.meetings'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_5_stars'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_4_stars'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_3_stars'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_2_stars'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_1_stars'|trans }}</th>
-                        <th class="vertical-divider">{{ 'admin.sheet.dashboard.by_type.meetings_not_evaluated'|trans }}</th>
+                        <th class="text-center vertical-divider">{{ 'admin.sheet.dashboard.by_type.meetings_not_evaluated'|trans }}</th>
                         {% if dashboard.dashboardEntranceScanView.eventOpened %}
                             {% for day in dashboard.dashboardEntranceScanView.formattedDays %}
-                                <th>{{ day|localizeddate('short', 'none') }}</th>
+                                <th class="text-center">{{ day|localizeddate('short', 'none') }}</th>
                             {% endfor %}
-                            <th>{{ 'admin.sheet.dashboard.total_visitors'|trans }}</th>
-                            <th>{{ 'admin.sheet.dashboard.total_unique_visitors'|trans }}</th>
+                            <th class="text-center">{{ 'admin.sheet.dashboard.total_visitors'|trans }}</th>
+                            <th class="text-center">{{ 'admin.sheet.dashboard.total_unique_visitors'|trans }}</th>
                         {% endif %}
                     </tr>
                     </thead>
