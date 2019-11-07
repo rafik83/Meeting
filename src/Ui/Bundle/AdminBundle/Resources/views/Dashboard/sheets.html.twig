@@ -8,9 +8,8 @@
                 <table class="table table-striped table-condensed table-hover">
                     <thead>
                     <tr>
-                        <th colspan="7"></th>
-                        <th colspan="5" class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluation'|trans }}</th>
-                        <th></th>
+                        <th colspan="7" class="vertical-divider"></th>
+                        <th colspan="6" class="text-center vertical-divider">{{ 'admin.sheet.dashboard.by_type.meetings_evaluation'|trans }}</th>
                         {% if dashboard.dashboardEntranceScanView.eventOpened %}
                             <th colspan="{{ dashboard.dashboardEntranceScanView.formattedDays|length }}" class="text-center">
                                 {{ 'admin.sheet.dashboard.visitors_by_day'|trans }}
@@ -22,17 +21,17 @@
                     <tr>
                         <th>{{ 'admin.sheet.dashboard.by_type.type'|trans }}</th>
                         <th>{{ 'admin.sheet.dashboard.by_type.sheets'|trans }}</th>
-                        <th>{{ 'admin.sheet.dashboard.by_type.participants'|trans }}</th>
+                        <th class="vertical-divider">{{ 'admin.sheet.dashboard.by_type.participants'|trans }}</th>
                         <th>{{ 'admin.sheet.dashboard.by_type.requests'|trans }}</th>
                         <th>{{ 'admin.sheet.dashboard.by_type.requests_accepted'|trans }}</th>
                         <th>{{ 'admin.sheet.dashboard.by_type.requests_refused'|trans }}</th>
-                        <th>{{ 'admin.sheet.dashboard.by_type.meetings'|trans }}</th>
+                        <th class="vertical-divider">{{ 'admin.sheet.dashboard.by_type.meetings'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_5_stars'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_4_stars'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_3_stars'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_2_stars'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_1_stars'|trans }}</th>
-                        <th>{{ 'admin.sheet.dashboard.by_type.meetings_not_evaluated'|trans }}</th>
+                        <th class="vertical-divider">{{ 'admin.sheet.dashboard.by_type.meetings_not_evaluated'|trans }}</th>
                         {% if dashboard.dashboardEntranceScanView.eventOpened %}
                             {% for day in dashboard.dashboardEntranceScanView.formattedDays %}
                                 <th>{{ day|localizeddate('short', 'none') }}</th>
@@ -48,17 +47,17 @@
                             <tr>
                                 <td class="text-left">{{ sheetType.title }}</td>
                                 <td>{{ sheetType.total }}</td>
-                                <td>{{ dashboard.dashboardSheetView.participantsTypeView[idType].total is defined ? dashboard.dashboardSheetView.participantsTypeView[idType].total : '' }}</td>
+                                <td class="vertical-divider">{{ dashboard.dashboardSheetView.participantsTypeView[idType].total is defined ? dashboard.dashboardSheetView.participantsTypeView[idType].total : '' }}</td>
                                 <td>{{ dashboard.dashboardMeetingView.requestsByType[idType] is defined ? dashboard.dashboardMeetingView.requestsByType[idType] : '' }}</td>
                                 <td>{{ requestsByTypeAndState.approved is defined ? requestsByTypeAndState.approved : '' }}</td>
                                 <td>{{ requestsByTypeAndState.refused is defined ? requestsByTypeAndState.refused : '' }}</td>
-                                <td>{{ requestsByTypeAndState.planned is defined ? requestsByTypeAndState.planned : '' }}</td>
+                                <td class="vertical-divider">{{ requestsByTypeAndState.planned is defined ? requestsByTypeAndState.planned : '' }}</td>
                                 <td>{{ dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][5] is defined ? dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][5] : '' }}</td>
                                 <td>{{ dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][4] is defined ? dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][4] : '' }}</td>
                                 <td>{{ dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][3] is defined ? dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][3] : '' }}</td>
                                 <td>{{ dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][2] is defined ? dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][2] : '' }}</td>
                                 <td>{{ dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][1] is defined ? dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][1] : '' }}</td>
-                                <td>{{ dashboard.dashboardContactView.meetingNotEvaluatedIndexedByFromTypeId[idType] is defined ? dashboard.dashboardContactView.meetingNotEvaluatedIndexedByFromTypeId[idType] : '' }}</td>
+                                <td class="vertical-divider">{{ dashboard.dashboardContactView.meetingNotEvaluatedIndexedByFromTypeId[idType] is defined ? dashboard.dashboardContactView.meetingNotEvaluatedIndexedByFromTypeId[idType] : '' }}</td>
                                 {% if dashboard.dashboardEntranceScanView.eventOpened %}
                                     {% for formattedDay, day in dashboard.dashboardEntranceScanView.formattedDays %}
                                         <td>{{ dashboard.dashboardEntranceScanView.visitorsByTypeAndDay(idType, formattedDay) }}</td>
@@ -74,17 +73,17 @@
                         <tr>
                             <th>{{ 'admin.sheet.dashboard.by_type.total'|trans }}</th>
                             <td>{{ dashboard.dashboardSheetView.totalEnabledSheets }}</td>
-                            <td>{{ dashboard.dashboardSheetView.totalParticipants }}</td>
+                            <td class="vertical-divider">{{ dashboard.dashboardSheetView.totalParticipants }}</td>
                             <td>{{ dashboard.dashboardMeetingView.request }}</td>
                             <td>{{ dashboard.dashboardMeetingView.approvedRequest }}</td>
                             <td>{{ dashboard.dashboardMeetingView.refusedRequest }}</td>
-                            <td>{{ dashboard.dashboardMeetingView.meeting }}</td>
+                            <td class="vertical-divider">{{ dashboard.dashboardMeetingView.meeting }}</td>
                             <td>{{ dashboard.dashboardContactView.getTotalByEvaluation(5) }}</td>
                             <td>{{ dashboard.dashboardContactView.getTotalByEvaluation(4) }}</td>
                             <td>{{ dashboard.dashboardContactView.getTotalByEvaluation(3) }}</td>
                             <td>{{ dashboard.dashboardContactView.getTotalByEvaluation(2) }}</td>
                             <td>{{ dashboard.dashboardContactView.getTotalByEvaluation(1) }}</td>
-                            <td>{{ dashboard.dashboardContactView.getTotalNotEvaluated() }}</td>
+                            <td class="vertical-divider">{{ dashboard.dashboardContactView.getTotalNotEvaluated() }}</td>
                             {% if dashboard.dashboardEntranceScanView.eventOpened %}
                                 {% for formattedDay, day in dashboard.dashboardEntranceScanView.formattedDays %}
                                     <td>{{ dashboard.dashboardEntranceScanView.totalVisitorsByDay(formattedDay) }}</td>
