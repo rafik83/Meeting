@@ -25,6 +25,11 @@ interface BillingInfoRepositoryInterface
 
     /**
      * @param Sheet[] $sheets
+     */
+    public function loadBySheets(array $sheets): void;
+
+    /**
+     * @param Sheet[] $sheets
      *
      * @return BillingInfo[]
      */

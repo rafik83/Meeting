@@ -1111,3 +1111,9 @@ services:
             - '@session.flash_bag'
             - '@form.factory'
             - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\DashboardAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@query.sheet.dashboard_view_query_handler'
+            - '@templating'

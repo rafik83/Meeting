@@ -3575,6 +3575,8 @@ services:
             - '@query.sheet.dashboard_transaction_view_query_handler'
             - '@query.dashboard.dashboard_sheet_view_query_handler'
             - '@Proximum\Vimeet\Application\Query\Dashboard\DashboardMeetingViewQueryHandler'
+            - '@Proximum\Vimeet\Application\Query\Dashboard\DashboardContactViewQueryHandler'
+            - '@Proximum\Vimeet\Application\Query\Dashboard\DashboardScanViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery }
 
@@ -3593,6 +3595,15 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    Proximum\Vimeet\Application\Query\Dashboard\DashboardContactViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+
+    Proximum\Vimeet\Application\Query\Dashboard\DashboardScanViewQueryHandler:
+        arguments:
+            - '@domain.key_dates.checker.event_open_access_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
 
     query.catalog.filtered_fields_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQueryHandler
@@ -3812,6 +3823,7 @@ services:
     query.order.order_vat_views_by_event_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler
         arguments:
+            - '@repository.billing_info_repository'
             - '@vimeet_infrastructure.repository.order_repository'
             - '@query.order.order_vat_view_query_handler'
         tags:

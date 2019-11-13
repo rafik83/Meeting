@@ -23,6 +23,8 @@ class BillingInfoRepository implements BillingInfoRepositoryInterface
      */
     private $entityManager;
 
+    private $cachedBillingInfoBySheetId;
+
     /**
      * @param EntityManager $entityManager
      */
@@ -36,6 +38,10 @@ class BillingInfoRepository implements BillingInfoRepositoryInterface
      */
     public function getBySheet(Sheet $sheet)
     {
+        if (isset($this->cachedBillingInfoBySheetId[$sheet->getId()])) {
+            return $this->cachedBillingInfoBySheetId[$sheet->getId()];
+        }
+
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
@@ -46,6 +52,18 @@ class BillingInfoRepository implements BillingInfoRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadBySheets(array $sheets): void
+    {
+        $billingInfos = $this->getBySheets($sheets);
+
+        foreach ($billingInfos as $billingInfo) {
+            $this->cachedBillingInfoBySheetId[$billingInfo->getSheet()->getId()] = $billingInfo;
+        }
     }
 
     /**
