@@ -88,7 +88,7 @@ class UserContactEvaluationViewQueryHandler
                 $contactEvaluationsView->getContactsNumberByEvaluation(3),
                 $contactEvaluationsView->getContactsNumberByEvaluation(2),
                 $contactEvaluationsView->getContactsNumberByEvaluation(1),
-                $contactEvaluationsView->getContactsNumberNotEvaluated()
+                $meetingsNumber + $contactEvaluationsView->getContactsNumberNotEvaluated()
             );
         }
 

@@ -14,7 +14,7 @@ class ContactEvaluationsView
     private $contactsNumberByEvaluations = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
 
     /** @var int */
-    private $contactsNumberNotEvaluated = 0;
+    private $contactsEvaluated = 0;
 
     public function __construct(int $userId)
     {
@@ -29,11 +29,8 @@ class ContactEvaluationsView
 
         if (null !== $evaluation) {
             ++$this->contactsNumberByEvaluations[$evaluation];
-
-            return;
+            ++$this->contactsEvaluated;
         }
-
-        ++$this->contactsNumberNotEvaluated;
     }
 
     public function getUserId(): int
@@ -53,6 +50,6 @@ class ContactEvaluationsView
 
     public function getContactsNumberNotEvaluated(): int
     {
-        return $this->contactsNumberNotEvaluated;
+        return $this->contactsNumber - $this->contactsEvaluated;
     }
 }
