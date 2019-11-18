@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
+use Proximum\Vimeet\Application\Query\User\Event\Contact\UserSheetsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -142,4 +143,11 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function findByParticipantProduct(Product $product): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return UserSheetsView[]
+     */
+    public function getUserSheetsViewsByEvent(Event $event): array;
 }

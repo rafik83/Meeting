@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-1996 - Export analytics about contact evaluations per user
 - VIMEET-1998 - Dashboard with contacts indicators
 - VIMEET-1997 - Dashboard with access control indicators
 

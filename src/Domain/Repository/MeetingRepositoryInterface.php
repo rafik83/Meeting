@@ -300,6 +300,13 @@ interface MeetingRepositoryInterface
     /**
      * @param Event $event
      *
+     * @return Meeting[]
+     */
+    public function getMeetingAndParticipantsByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
      * @return DashboardMeetingContactEvaluationView[]
      */
     public function getDashboardMeetingContactEvaluationViews(Event $event): array;

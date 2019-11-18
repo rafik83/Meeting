@@ -863,6 +863,26 @@ class MeetingRepository implements MeetingRepositoryInterface
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
+    public function getMeetingAndParticipantsByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting, fromParticipant, toParticipant')
+            ->from(Meeting::class, 'meeting', 'meeting.id')
+            ->join(
+                'meeting.fromParticipants',
+                'fromParticipant',
+                'WITH',
+                'meeting.event = :event AND meeting.state = :state'
+            )
+            ->join('meeting.toParticipants', 'toParticipant')
+            ->setParameter('event', $event)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     public function getDashboardMeetingContactEvaluationViews(Event $event): array
     {
         return $this

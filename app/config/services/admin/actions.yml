@@ -401,6 +401,12 @@ services:
             - '@templating'
             - '@Proximum\Vimeet\Application\Command\Planning\PlanningPrintFactory'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Contact\EvaluationExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.serializer_adapter'
+
     #
     # Happening
     #

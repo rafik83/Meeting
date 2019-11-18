@@ -37,4 +37,11 @@ interface ContactRepositoryInterface
      * @return Contact[]
      */
     public function findByEventAndUsers(Event $event, array $users): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return Contact[]
+     */
+    public function getByEvent(Event $event): array;
 }
