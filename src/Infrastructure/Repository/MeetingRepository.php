@@ -899,7 +899,7 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->join('fromSheet.type', 'fromType')
             ->join('meeting.fromParticipants', 'fromParticipant')
             ->join('fromParticipant.user', 'user')
-            ->leftJoin(Contact::class, 'contact', 'WITH', 'contact.user = user')
+            ->leftJoin(Contact::class, 'contact', 'WITH', 'contact.event = :event AND contact.user = user')
             ->setParameter('event', $event)
             ->setParameter('state', Meeting::STATE_SCHEDULED)
             ->getQuery()
