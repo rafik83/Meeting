@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.1] - 2019-11-08
+### Fixed
+- MV-205 - Fix contacts indicators
+
 ## [2.14.0] - 2019-11-18
 ### Added
 - VIMEET-1996 - Export analytics about contact evaluations per user
