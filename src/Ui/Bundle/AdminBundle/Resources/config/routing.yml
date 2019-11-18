@@ -1654,7 +1654,7 @@ admin_event_access_happening_scan:
 # Dashboard
 admin_dashboard:
     path: /event/{event}/dashboard
-    defaults: { _controller: AdminBundle:Dashboard:index }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\DashboardAction
     methods: [GET]
     requirements:
         event: \d+

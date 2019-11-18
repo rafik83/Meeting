@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardUserAndTypeScanView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\Scan;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
@@ -37,13 +39,8 @@ class ScanRepository implements ScanRepositoryInterface
 
     public function getUserFirstCheckinTodayByEvent(User $user, Event $event, \DateTimeInterface $dateTime): ?Scan
     {
-        $begin = (new \DateTime())
-            ->setTimestamp($dateTime->getTimestamp())
-            ->setTime(0, 0, 0);
-
-        $end = (new \DateTime())
-            ->setTimestamp($dateTime->getTimestamp())
-            ->setTime(23, 59, 59);
+        $begin = $this->getDayBegin($dateTime);
+        $end = $this->getDayEnd($dateTime);
 
         return
             $this->entityManager->createQueryBuilder()
@@ -69,13 +66,8 @@ class ScanRepository implements ScanRepositoryInterface
 
     public function isUserCheckinTodayByEvent(User $user, Event $event, \DateTimeInterface $dateTime): bool
     {
-        $begin = (new \DateTime())
-            ->setTimestamp($dateTime->getTimestamp())
-            ->setTime(0, 0, 0);
-
-        $end = (new \DateTime())
-            ->setTimestamp($dateTime->getTimestamp())
-            ->setTime(23, 59, 59);
+        $begin = $this->getDayBegin($dateTime);
+        $end = $this->getDayEnd($dateTime);
 
         return
             (int) $this->entityManager->createQueryBuilder()
@@ -98,13 +90,8 @@ class ScanRepository implements ScanRepositoryInterface
 
     public function getScanDateByUsersAndEvent(array $users, Event $event, \DateTimeInterface $dateTime): array
     {
-        $begin = (new \DateTime())
-            ->setTimestamp($dateTime->getTimestamp())
-            ->setTime(0, 0, 0);
-
-        $end = (new \DateTime())
-            ->setTimestamp($dateTime->getTimestamp())
-            ->setTime(23, 59, 59);
+        $begin = $this->getDayBegin($dateTime);
+        $end = $this->getDayEnd($dateTime);
 
         /** @var Scan[] $scans */
         $scans = $this->entityManager->createQueryBuilder()
@@ -135,14 +122,8 @@ class ScanRepository implements ScanRepositoryInterface
 
     public function isUserCheckinByEventAndSlot(User $user, Event $event, MeetingSlot $meetingSlot): bool
     {
-        $begin = (new \DateTime())
-            ->setTimestamp($meetingSlot->getBegin()->getTimestamp())
-            ->setTime(0, 0, 0)
-        ;
-        $end = (new \DateTime())
-            ->setTimestamp($meetingSlot->getEnd()->getTimestamp())
-            ->setTime(23, 59, 59)
-        ;
+        $begin = $this->getDayBegin($meetingSlot->getBegin());
+        $end = $this->getDayEnd($meetingSlot->getEnd());
 
         return
             (int) $this->entityManager->createQueryBuilder()
@@ -211,5 +192,52 @@ class ScanRepository implements ScanRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function getUserCheckinByEventAndDay(Event $event, \DateTimeInterface $dateTime): array
+    {
+        $begin = $this->getDayBegin($dateTime);
+        $end = $this->getDayEnd($dateTime);
+
+        return $this->entityManager->createQueryBuilder()
+            ->select(
+                sprintf(
+                    'DISTINCT NEW %s(IDENTITY(scan.user), IDENTITY(sheet.type))',
+                    DashboardUserAndTypeScanView::class
+                )
+            )
+            ->from(Scan::class, 'scan')
+            ->join(
+                'scan.user',
+                'user',
+                'WITH',
+                'scan.event = :event AND scan.type = :type AND scan.scannedAt >= :startAt and scan.scannedAt <= :endAt'
+            )
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->setParameters(
+                [
+                    'event' => $event,
+                    'startAt' => $begin,
+                    'endAt' => $end,
+                    'type' => Type::TYPE_EVENT_ENTRANCE,
+                ]
+            )
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function getDayBegin(\DateTimeInterface $dateTime): \DateTime
+    {
+        return (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTime(0, 0, 0);
+    }
+
+    private function getDayEnd(\DateTimeInterface $dateTime): \DateTime
+    {
+        return (new \DateTime())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTime(23, 59, 59);
     }
 }

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardMeetingContactEvaluationView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -302,4 +303,11 @@ interface MeetingRepositoryInterface
      * @return Meeting[]
      */
     public function getMeetingAndParticipantsByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return DashboardMeetingContactEvaluationView[]
+     */
+    public function getDashboardMeetingContactEvaluationViews(Event $event): array;
 }

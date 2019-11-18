@@ -51,11 +51,11 @@ class DashboardSheetViewQueryHandler
         $participantsTypeView = [];
 
         foreach ($sheetsType as $sheetType) {
-            $sheetsTypeView[] = new DashboardSheetTypeView($sheetType['id'], $sheetType['total'], $sheetType['title']);
+            $sheetsTypeView[$sheetType['id']] = new DashboardSheetTypeView($sheetType['id'], $sheetType['total'], $sheetType['title']);
         }
 
         foreach ($participantsType as $participantType) {
-            $participantsTypeView[] = new DashboardSheetTypeView($participantType['id'], $participantType['total'], $participantType['title']);
+            $participantsTypeView[$participantType['id']] = new DashboardSheetTypeView($participantType['id'], $participantType['total'], $participantType['title']);
         }
 
         return new DashboardSheetView(
