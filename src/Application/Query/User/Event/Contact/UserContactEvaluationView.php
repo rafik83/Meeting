@@ -29,7 +29,7 @@ class UserContactEvaluationView
     private $meetingsNumber;
 
     /** @var int */
-    private $contactsAddedNumber;
+    private $contactsScannedNumber;
 
     /** @var int */
     private $contactsEvaluated5;
@@ -58,7 +58,7 @@ class UserContactEvaluationView
         string $sheetId,
         string $sheetTitle,
         int $meetingsNumber,
-        int $contactsAddedNumber,
+        int $contactsScannedNumber,
         int $contactsEvaluated5,
         int $contactsEvaluated4,
         int $contactsEvaluated3,
@@ -74,7 +74,7 @@ class UserContactEvaluationView
         $this->meetingsNumber = $meetingsNumber;
         $this->sheetsId[] = $sheetId;
         $this->sheetsTitle[] = $sheetTitle;
-        $this->contactsAddedNumber = $contactsAddedNumber;
+        $this->contactsScannedNumber = $contactsScannedNumber;
         $this->contactsEvaluated5 = $contactsEvaluated5;
         $this->contactsEvaluated4 = $contactsEvaluated4;
         $this->contactsEvaluated3 = $contactsEvaluated3;
@@ -122,9 +122,9 @@ class UserContactEvaluationView
         return $this->meetingsNumber;
     }
 
-    public function getContactsAddedNumber(): int
+    public function getContactsScannedNumber(): int
     {
-        return $this->contactsAddedNumber;
+        return $this->contactsScannedNumber;
     }
 
     public function getContactsEvaluated5(): int
