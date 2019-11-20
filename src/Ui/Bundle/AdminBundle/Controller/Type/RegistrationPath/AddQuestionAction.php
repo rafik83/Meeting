@@ -11,12 +11,14 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Command\Type\RegistrationPath\AddQuestion;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Type\RegistrationPath\View\AddQuestion;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\RegistrationPath\AddQuestionType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -26,8 +28,8 @@ class AddQuestionAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /** @var QueryBusInterface */
-    private $queryBus;
+    /** @var CommandBusInterface */
+    private $commandBus;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -35,16 +37,21 @@ class AddQuestionAction
     /** @var EngineInterface */
     private $engine;
 
+    /** @var RouterInterface */
+    private $router;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine
+        EngineInterface $engine,
+        RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
+        $this->router = $router;
     }
 
     /**
@@ -61,7 +68,7 @@ class AddQuestionAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $addQuestion = new AddQuestion();
+        $addQuestion = new AddQuestion($event);
         $addQuestionForm = $this->formFactory->create(
             AddQuestionType::class,
             $addQuestion,
@@ -71,6 +78,11 @@ class AddQuestionAction
         $addQuestionForm->handleRequest($request);
 
         if ($addQuestionForm->isSubmitted() && $addQuestionForm->isValid()) {
+            $this->commandBus->handle($addQuestion);
+
+            return new RedirectResponse(
+                $this->router->generate('admin_type_registration_path_show', ['event' => $event->getId()])
+            );
         }
 
         return $this->engine->renderResponse(

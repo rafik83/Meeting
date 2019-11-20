@@ -106,9 +106,10 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AddQuestionAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@form.factory'
             - '@templating'
+            - '@adapter.router'
 
     #
     # Type Badge
