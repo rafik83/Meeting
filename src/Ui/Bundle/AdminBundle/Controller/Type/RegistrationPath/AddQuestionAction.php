@@ -61,11 +61,17 @@ class AddQuestionAction
             throw new AccessDeniedException('Access denied');
         }
 
+        $addQuestion = new AddQuestion();
         $addQuestionForm = $this->formFactory->create(
             AddQuestionType::class,
-            new AddQuestion(),
+            $addQuestion,
             ['event' => $event, 'submit' => true]
         );
+
+        $addQuestionForm->handleRequest($request);
+
+        if ($addQuestionForm->isSubmitted() && $addQuestionForm->isValid()) {
+        }
 
         return $this->engine->renderResponse(
             '@Admin/Type/RegistrationPath/addQuestion.html.twig',
