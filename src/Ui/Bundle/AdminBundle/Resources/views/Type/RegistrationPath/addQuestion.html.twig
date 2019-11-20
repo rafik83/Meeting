@@ -1,3 +1,5 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% block form_title 'admin.type.registrationPath.title'|trans %}
+{% block form_title 'admin.type.registrationPath.addQuestion'|trans %}
+
+{% block goback_link path('admin_type_registration_path_show', { event: event.id }) %}
