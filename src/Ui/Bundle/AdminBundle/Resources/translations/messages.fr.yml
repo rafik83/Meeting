@@ -1332,6 +1332,8 @@ admin.type.paymentConditions.update.title: 'Définition des conditions de paieme
 admin.type.position: Position
 admin.type.register.link: 'Lien d''inscription'
 admin.type.registration.template: 'Template d''inscription'
+admin.type.registrationPath.link: "Parcours d'inscription"
+admin.type.registrationPath.title: "Parcours d'inscription"
 admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'
 admin.type.specificPaymentConditions: 'Conditions de paiement particulières'

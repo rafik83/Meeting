@@ -93,6 +93,16 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@templating'
 
+
+    #
+    # Registration path
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\ShowAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
+
     #
     # Type Badge
     #

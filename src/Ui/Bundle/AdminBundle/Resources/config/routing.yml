@@ -329,6 +329,18 @@ admin_type_content_define_terms_of_sale:
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Content\DefineTermsOfSaleAction
 
 #
+# Registration path
+#
+
+admin_type_registration_path_show:
+    path: /event/{event}/registration-path
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\ShowAction
+
+
+#
 # Badge
 #
 admin_type_badge_configuration:
