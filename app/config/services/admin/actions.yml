@@ -103,6 +103,13 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AddQuestionAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@form.factory'
+            - '@templating'
+
     #
     # Type Badge
     #

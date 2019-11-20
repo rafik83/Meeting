@@ -7,4 +7,5 @@
 {% block content %}
     <h1 class="page-header">{{ 'admin.type.registrationPath.title'|trans }}</h1>
 
+    <a href="{{ path('admin_type_registration_path_add_question', {event: event.id}) }}">add question</a>
 {% endblock %}

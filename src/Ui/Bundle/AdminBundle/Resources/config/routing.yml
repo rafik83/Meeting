@@ -339,6 +339,12 @@ admin_type_registration_path_show:
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\ShowAction
 
+admin_type_registration_path_add_question:
+    path: /event/{event}/registration-path/add-question
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AddQuestionAction
 
 #
 # Badge
