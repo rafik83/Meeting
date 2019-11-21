@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Application\Command\Type\RegistrationPath;
 
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Type\RegistrationPath\View\Answer;
+use Proximum\Vimeet\Domain\Type\RegistrationPath\View\AnswerView;
 
 class AddQuestion implements Command
 {
@@ -17,7 +17,7 @@ class AddQuestion implements Command
      */
     public $translatedTitle = [];
 
-    /** @var Answer[] */
+    /** @var AnswerView[] */
     public $answers = [];
 
     public function __construct(Event $event)

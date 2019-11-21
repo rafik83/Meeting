@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\RegistrationPath;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Type\RegistrationPath\View\AnswerView;
 
 class Question
 {
@@ -24,10 +25,14 @@ class Question
     /** @var ArrayCollection of QuestionTranslation */
     private $translations;
 
+    /** @var ArrayCollection of AnswerView */
+    private $answers;
+
     public function __construct(Event $event)
     {
         $this->event = $event;
         $this->translations = new ArrayCollection();
+        $this->answers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -55,4 +60,47 @@ class Question
             $this->translations->set($locale, new QuestionTranslation($this, $locale, $title));
         }
     }
+
+    /**
+     * @return Answer[]
+     */
+    public function getAnswers(): array
+    {
+        return $this->answers->toArray();
+    }
+
+    /**
+     * @param AnswerView[] $answerViews
+     */
+    public function setAnswers(array $answerViews): void
+    {
+        foreach ($answerViews as $key => $answerView) {
+            $foundAnswer = $this->answers->get($key);
+
+            if ($foundAnswer instanceof Answer) {
+                foreach ($answerView->translatedTitle as $locale => $title) {
+                    $foundAnswer->translate($locale, $title);
+                }
+
+                continue;
+            }
+
+            $newAnswer = new Answer($this);
+
+            foreach ($answerView->translatedTitle as $locale => $title) {
+                $newAnswer->translate($locale, $title);
+            }
+
+            $this->answers->set($key, $newAnswer);
+        }
+
+        // Remove deleted
+//        foreach ($this->answers as $key => $value) {
+//            if (!isset($timeSlots[$key])) {
+//                $this->timeSlots->removeElement($value);
+//            }
+//        }
+    }
+
+
 }

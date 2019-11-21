@@ -18,3 +18,8 @@ Proximum\Vimeet\Domain\Model\RegistrationPath\Question:
             indexBy: locale
             cascade: ["all"]
             orphanRemoval: true
+        anwsers:
+            targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\Answer
+            mappedBy: question
+            cascade: ["all"]
+            orphanRemoval: true

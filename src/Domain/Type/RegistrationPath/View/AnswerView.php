@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Type\RegistrationPath\View;
 
-class Answer
+class AnswerView
 {
     /**
      * @var array

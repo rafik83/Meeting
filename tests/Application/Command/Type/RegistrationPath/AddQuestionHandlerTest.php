@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\RegistrationPath\Question;
 use Proximum\Vimeet\Domain\Repository\RegistrationPath\QuestionRepositoryInterface;
+use Proximum\Vimeet\Domain\Type\RegistrationPath\View\AnswerView;
 
 class AddQuestionHandlerTest extends TestCase
 {
@@ -29,17 +30,32 @@ class AddQuestionHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getLocales()->shouldBeCalled()->willReturn(['fr', 'en']);
 
-        $expectedQuestion = new Question($event->reveal());
-        $expectedQuestion->translate('fr', 'Souhaitez-vous faire des RDV ?');
-        $expectedQuestion->translate('en', 'Would you like to make meetings?');
-
-        $this->questionRepository->add($expectedQuestion)->shouldBeCalled();
-
         $addQuestion = new AddQuestion($event->reveal());
         $addQuestion->translatedTitle = [
             'fr' => 'Souhaitez-vous faire des RDV ?',
             'en' => 'Would you like to make meetings?'
         ];
+
+        $answerView1 = new AnswerView();
+        $answerView1->translatedTitle = [
+            'fr' => 'Oui',
+            'en' => 'Yes'
+        ];
+
+        $answerView2 = new AnswerView();
+        $answerView2->translatedTitle = [
+            'fr' => 'Non',
+            'en' => 'No'
+        ];
+
+        $addQuestion->answers = [$answerView1, $answerView2];
+
+        $expectedQuestion = new Question($event->reveal());
+        $expectedQuestion->translate('fr', 'Souhaitez-vous faire des RDV ?');
+        $expectedQuestion->translate('en', 'Would you like to make meetings?');
+        $expectedQuestion->setAnswers([$answerView1, $answerView2]);
+        $this->questionRepository->add($expectedQuestion)->shouldBeCalled();
+
         $this->addQuestionHandler->handle($addQuestion);
     }
 }

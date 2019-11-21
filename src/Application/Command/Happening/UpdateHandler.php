@@ -73,7 +73,7 @@ class UpdateHandler
         $this->happeningRepository->set($happening);
 
         if ($previousTypes !== $update->types) {
-            $this->eventDispatcher->dispatch(Events::HAPPENING_TYPES_UPDATED, new TypesUpdated($happening));
+            $this->eventDispatcher->dispatch(Events::HAPSpPENING_TYPES_UPDATED, new TypesUpdated($happening));
         }
 
         if ($previousBegin !== $update->begin || $previousEnd !== $update->end) {

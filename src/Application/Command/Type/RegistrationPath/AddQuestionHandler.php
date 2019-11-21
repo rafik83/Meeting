@@ -23,6 +23,8 @@ class AddQuestionHandler
             $question->translate($locale, $addQuestion->translatedTitle[$locale] ?? '');
         }
 
+        $question->setAnswers($addQuestion->answers);
+
         $this->questionRepository->add($question);
     }
 }
