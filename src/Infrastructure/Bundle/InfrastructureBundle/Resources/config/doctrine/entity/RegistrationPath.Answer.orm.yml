@@ -9,6 +9,7 @@ Proximum\Vimeet\Domain\Model\RegistrationPath\Answer:
     manyToOne:
         question:
             targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\Question
+            inversedBy: answers
             joinColumn:
                 onDelete: CASCADE
     oneToMany:

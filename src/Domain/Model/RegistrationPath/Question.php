@@ -93,14 +93,5 @@ class Question
 
             $this->answers->set($key, $newAnswer);
         }
-
-        // Remove deleted
-//        foreach ($this->answers as $key => $value) {
-//            if (!isset($timeSlots[$key])) {
-//                $this->timeSlots->removeElement($value);
-//            }
-//        }
     }
-
-
 }

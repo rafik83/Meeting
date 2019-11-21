@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\RegistrationPath;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -29,12 +28,11 @@ class AnswerCollectionType extends AbstractType
             [
                 'allow_add' => true,
                 'allow_delete' => true,
-                'entry_type' => TranslationsType::class,
+                'entry_type' => AnswerType::class,
                 'entry_options' => static function (Options $options) {
                     return [
                         'label' => false,
-                        'locales' => $options['event']->getLocales(),
-                        'entry_type' => TextareaType::class,
+                        'event' => $options['event'],
                     ];
                 }
             ]
