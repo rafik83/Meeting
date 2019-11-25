@@ -45,11 +45,6 @@ class Question
         return $this->event;
     }
 
-    private function getTranslation(string $locale): ?QuestionTranslation
-    {
-        return $this->translations->get($locale);
-    }
-
     public function translate(string $locale, string $title): void
     {
         $translation = $this->getTranslation($locale);
@@ -59,6 +54,17 @@ class Question
         } else {
             $this->translations->set($locale, new QuestionTranslation($this, $locale, $title));
         }
+    }
+
+    public function getTitle(string $locale): string
+    {
+        $translation = $this->getTranslation($locale);
+
+        if (null === $translation) {
+            return '';
+        }
+
+        return $translation->getTitle();
     }
 
     /**
@@ -93,5 +99,10 @@ class Question
 
             $this->answers->set($key, $newAnswer);
         }
+    }
+
+    private function getTranslation(string $locale): ?QuestionTranslation
+    {
+        return $this->translations->get($locale);
     }
 }

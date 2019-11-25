@@ -10,9 +10,18 @@
 
 namespace Proximum\Vimeet\Domain\Repository\RegistrationPath;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\RegistrationPath\Question;
 
 interface QuestionRepositoryInterface
 {
     public function add(Question $question);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Question[]
+     */
+    public function getQuestionsByEvent(Event $event, string $locale): array;
 }

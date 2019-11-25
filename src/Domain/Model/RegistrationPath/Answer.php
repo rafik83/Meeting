@@ -39,9 +39,15 @@ class Answer
         return $this->question;
     }
 
-    private function getTranslation(string $locale): ?AnswerTranslation
+    public function getTitle(string $locale): string
     {
-        return $this->translations->get($locale);
+        $translation = $this->getTranslation($locale);
+
+        if (null === $translation) {
+            return '';
+        }
+
+        return $translation->getTitle();
     }
 
     public function translate(string $locale, string $title): void
@@ -53,5 +59,10 @@ class Answer
         } else {
             $this->translations->set($locale, new AnswerTranslation($this, $locale, $title));
         }
+    }
+
+    private function getTranslation(string $locale): ?AnswerTranslation
+    {
+        return $this->translations->get($locale);
     }
 }
