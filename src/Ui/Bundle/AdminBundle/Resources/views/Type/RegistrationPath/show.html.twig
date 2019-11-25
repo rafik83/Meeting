@@ -11,7 +11,20 @@
         <h2>{{ eventRegistrationPathView.questionView.title }}</h2>
         <ul>
             {% for answerView in eventRegistrationPathView.questionView.answerViews %}
-                <li>{{ answerView.title }}</li>
+                <li>
+                    {{ answerView.title }}
+
+                    <div class="dropdown">
+                        <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Configurer étape suivante
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dLabel">
+                            <li><a href="#" class="btn btn-sm">Choisir un ou plusieurs types de participation</a></li>
+                            <li><a href="#" class="btn btn-sm">Créer nouvelle question</a></li>
+                        </ul>
+                    </div>
+                </li>
             {% endfor %}
         </ul>
     {% else %}
