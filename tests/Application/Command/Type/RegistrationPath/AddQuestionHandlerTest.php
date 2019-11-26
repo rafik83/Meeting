@@ -30,7 +30,7 @@ class AddQuestionHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getLocales()->shouldBeCalled()->willReturn(['fr', 'en']);
 
-        $addQuestion = new AddQuestion($event->reveal());
+        $addQuestion = new AddQuestion($event->reveal(), null);
         $addQuestion->translatedTitle = [
             'fr' => 'Souhaitez-vous faire des RDV ?',
             'en' => 'Would you like to make meetings?'
@@ -50,7 +50,7 @@ class AddQuestionHandlerTest extends TestCase
 
         $addQuestion->answers = [$answerView1, $answerView2];
 
-        $expectedQuestion = new Question($event->reveal());
+        $expectedQuestion = new Question($event->reveal(), null);
         $expectedQuestion->translate('fr', 'Souhaitez-vous faire des RDV ?');
         $expectedQuestion->translate('en', 'Would you like to make meetings?');
         $expectedQuestion->setAnswers([$answerView1, $answerView2]);
