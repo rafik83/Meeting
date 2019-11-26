@@ -15,6 +15,7 @@ form.add_question.children.answers.label: Réponses
 form.add_question.children.answers.label_add: 'Ajouter une réponse'
 form.add_question.children.answers.label_delete: 'Supprimer cette réponse'
 form.add_question.children.submit.label: Enregistrer
+form.add_question.children.translatedTitle.label: Titre de la question
 form.add_unavailability.children.from.label: De
 form.add_unavailability.children.participants.label: 'Participants concernés'
 form.add_unavailability.children.submit.label: Ajouter

@@ -22,7 +22,6 @@ class AddQuestionType extends AbstractType
                 'translatedTitle',
                 TranslationsType::class,
                 [
-                    'label' => false,
                     'locales' => $event->getLocales(),
                     'entry_type' => TextareaType::class,
                 ]
