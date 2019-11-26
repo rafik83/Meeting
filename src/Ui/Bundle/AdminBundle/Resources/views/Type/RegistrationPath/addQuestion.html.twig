@@ -3,3 +3,9 @@
 {% block form_title 'admin.type.registrationPath.addQuestion'|trans %}
 
 {% block goback_link path('admin_type_registration_path_show', { event: event.id }) %}
+
+{% block form_content %}
+    {{ form_row(form.translatedTitle) }}
+    <hr>
+    {{ form_row(form.answers) }}
+{% endblock form_content %}
