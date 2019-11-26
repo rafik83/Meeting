@@ -1,0 +1,23 @@
+<h2>{{ questionView.title }}</h2>
+<ul>
+    {% for answerView in questionView.answerViews %}
+        <li>
+            {{ answerView.title }}
+
+            {% if not answerView.nextQuestionView %}
+                <div class="dropdown">
+                    <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Configurer étape suivante
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dLabel">
+                        <li><a href="#" class="btn">Choisir un ou plusieurs types de participation</a></li>
+                        <li><a href="{{ path('admin_type_registration_path_add_question_to_answer', {event: event.id, answer: answerView.id}) }}" class="btn">Créer nouvelle question</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                {{ include('@Admin/Type/RegistrationPath/questionView.html.twig', { questionView: answerView.nextQuestionView }) }}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
