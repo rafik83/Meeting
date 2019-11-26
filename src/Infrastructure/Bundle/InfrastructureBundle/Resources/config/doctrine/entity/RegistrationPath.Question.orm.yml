@@ -14,7 +14,7 @@ Proximum\Vimeet\Domain\Model\RegistrationPath\Question:
         previousAnswer:
             targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\Answer
             joinColumn:
-                nullable: false
+                nullable: true
                 onDelete: CASCADE
     oneToMany:
         translations:
