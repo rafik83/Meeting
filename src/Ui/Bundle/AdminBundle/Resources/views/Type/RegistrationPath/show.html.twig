@@ -8,7 +8,9 @@
     <h1 class="page-header">{{ 'admin.type.registrationPath.title'|trans }}</h1>
 
     {% if eventRegistrationPathView.questionView %}
-        {{ include('@Admin/Type/RegistrationPath/questionView.html.twig', { questionView: eventRegistrationPathView.questionView }) }}
+        <div class="text-center">
+            {{ include('@Admin/Type/RegistrationPath/questionView.html.twig', { questionView: eventRegistrationPathView.questionView }) }}
+        </div>
     {% else %}
         <a href="{{ path('admin_type_registration_path_add_question', {event: event.id}) }}">add question</a>
     {% endif %}
