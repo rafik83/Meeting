@@ -5,7 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.14.1] - 2019-11-08
+## [2.14.2] - 2019-11-26
+### Fixed
+- MV-208 - Do not close badge when printing
+
+## [2.14.1] - 2019-11-19
 ### Fixed
 - MV-205 - Fix contacts indicators
 
