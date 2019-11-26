@@ -11,6 +11,11 @@ Proximum\Vimeet\Domain\Model\RegistrationPath\Question:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
+        previousAnswer:
+            targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\Answer
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\QuestionTranslation

@@ -28,11 +28,15 @@ class Question
     /** @var ArrayCollection of AnswerView */
     private $answers;
 
-    public function __construct(Event $event)
+    /** @var Answer|null */
+    private $previousAnswer;
+
+    public function __construct(Event $event, ?Answer $previousAnswer)
     {
         $this->event = $event;
         $this->translations = new ArrayCollection();
         $this->answers = new ArrayCollection();
+        $this->previousAnswer = $previousAnswer;
     }
 
     public function getId(): ?int
@@ -104,5 +108,10 @@ class Question
     private function getTranslation(string $locale): ?QuestionTranslation
     {
         return $this->translations->get($locale);
+    }
+
+    public function getPreviousAnswer(): ?Answer
+    {
+        return $this->previousAnswer;
     }
 }

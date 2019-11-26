@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Command\Type\RegistrationPath;
 
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\RegistrationPath\Answer;
 use Proximum\Vimeet\Domain\Type\RegistrationPath\View\AnswerView;
 
 class AddQuestion implements Command
@@ -20,8 +21,12 @@ class AddQuestion implements Command
     /** @var AnswerView[] */
     public $answers = [];
 
-    public function __construct(Event $event)
+    /** @var Answer|null */
+    public $previousAnswer;
+
+    public function __construct(Event $event, ?Answer $previousAnswer)
     {
         $this->event = $event;
+        $this->previousAnswer = $previousAnswer;
     }
 }

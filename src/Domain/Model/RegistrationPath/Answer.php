@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model\RegistrationPath;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class Answer
 {
@@ -32,6 +33,11 @@ class Answer
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getEvent(): Event
+    {
+        return $this->question->getEvent();
     }
 
     public function getQuestion(): Question

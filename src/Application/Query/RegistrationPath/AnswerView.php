@@ -10,9 +10,17 @@ class AnswerView
     /** @var string */
     public $title;
 
+    /** @var QuestionView|null */
+    public $nextQuestionView;
+
     public function __construct(int $id, string $title)
     {
         $this->id = $id;
         $this->title = $title;
+    }
+
+    public function setNextQuestionView(QuestionView $nextQuestionView): void
+    {
+        $this->nextQuestionView = $nextQuestionView;
     }
 }

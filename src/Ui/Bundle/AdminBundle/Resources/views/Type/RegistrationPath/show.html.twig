@@ -20,8 +20,8 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dLabel">
-                            <li><a href="#" class="btn btn-sm">Choisir un ou plusieurs types de participation</a></li>
-                            <li><a href="#" class="btn btn-sm">Créer nouvelle question</a></li>
+                            <li><a href="#" class="btn">Choisir un ou plusieurs types de participation</a></li>
+                            <li><a href="{{ path('admin_type_registration_path_add_question_to_answer', {event: event.id, answer: answerView.id}) }}" class="btn">Créer nouvelle question</a></li>
                         </ul>
                     </div>
                 </li>

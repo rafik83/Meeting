@@ -17,7 +17,9 @@ class AddQuestionHandler
 
     public function handle(AddQuestion $addQuestion)
     {
-        $question = new Question($addQuestion->event);
+        // @todo: check if previousAnswer has already a question or type de participations
+
+        $question = new Question($addQuestion->event, $addQuestion->previousAnswer);
 
         foreach ($addQuestion->event->getLocales() as $locale) {
             $question->translate($locale, $addQuestion->translatedTitle[$locale] ?? '');

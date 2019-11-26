@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Type\RegistrationPath\AddQuestion;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\RegistrationPath\Answer;
+use Proximum\Vimeet\Domain\Model\RegistrationPath\Question;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\RegistrationPath\AddQuestionType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -55,20 +57,24 @@ class AddQuestionAction
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Request     $request
+     * @param Event       $event
+     * @param Answer|null $answer
      *
      * @return Response
-     * @throws AccessDeniedException
-     *
      */
-    public function __invoke(Request $request, Event $event): Response
+    public function __invoke(Request $request, Event $event, ?Answer $answer): Response
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || (null !== $answer && $answer->getEvent() !== $event)
+        ) {
             throw new AccessDeniedException('Access denied');
         }
 
-        $addQuestion = new AddQuestion($event);
+        // @todo: check if answer is null, event has already a first question
+        // @todo: check if answer has not already a next step
+
+        $addQuestion = new AddQuestion($event, $answer);
         $addQuestionForm = $this->formFactory->create(
             AddQuestionType::class,
             $addQuestion,

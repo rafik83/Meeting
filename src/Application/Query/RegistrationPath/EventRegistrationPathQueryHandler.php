@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\RegistrationPath;
 
+use Proximum\Vimeet\Domain\Model\RegistrationPath\Answer;
 use Proximum\Vimeet\Domain\Repository\RegistrationPath\QuestionRepositoryInterface;
 
 class EventRegistrationPathQueryHandler
@@ -25,18 +26,46 @@ class EventRegistrationPathQueryHandler
     public function handle(EventRegistrationPathQuery $query): EventRegistrationPathView
     {
         $questions = $this->questionRepository->getQuestionsByEvent($query->event, $query->locale);
-        $questionView = null;
+
+        /** @var QuestionView[] $questionViews */
+        $questionViews = [];
+        $previousAnswerIdByQuestion = [];
+        $allAnswerViews = [];
+        $firstQuestionView = null;
 
         foreach ($questions as $question) {
+            $previousAnswer = $question->getPreviousAnswer();
+
+            if ($previousAnswer instanceof Answer) {
+                $previousAnswerIdByQuestion[$question->getId()] = $previousAnswer->getId();
+            }
+
             $answerViews = [];
 
             foreach ($question->getAnswers() as $answer) {
-                $answerViews[] = new AnswerView($answer->getId(), $answer->getTitle($query->locale));
+                $answerId = $answer->getId();
+                $answerView = new AnswerView($answerId, $answer->getTitle($query->locale));
+                $answerViews[] = $answerView;
+                $allAnswerViews[$answerId] = $answerView;
             }
 
-            $questionView = new QuestionView($question->getId(), $question->getTitle($query->locale), $answerViews);
+            $questionId = $question->getId();
+            $questionView = new QuestionView(
+                $questionId,
+                $question->getTitle($query->locale),
+                $answerViews
+            );
+            $questionViews[$question->getId()] = $questionView;
+
+            if (null === $previousAnswer) {
+                $firstQuestionView = $questionView;
+            }
         }
 
-        return new EventRegistrationPathView($questionView);
+        foreach ($previousAnswerIdByQuestion as $questionId => $answerId) {
+            $allAnswerViews[$answerId]->setNextQuestionView($questionViews[$questionId]);
+        }
+
+        return new EventRegistrationPathView($firstQuestionView);
     }
 }
