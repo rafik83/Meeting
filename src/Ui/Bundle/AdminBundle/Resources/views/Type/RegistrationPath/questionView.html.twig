@@ -1,8 +1,10 @@
 <div class="well">
     <div class="text-center">
         {{ questionView.title|html }}
-        <a href="#" title="{{ 'admin.type.registrationPath.updateQuestion'|trans }}"><i class="glyphicon glyphicon-edit"></i></a>
-        <a href="#" title="{{ 'admin.type.registrationPath.removeQuestion'|trans }}"><i class="glyphicon glyphicon-remove"></i></a>
+        <a href="#" title="{{ 'admin.type.registrationPath.updateQuestion'|trans }}"><i
+                    class="glyphicon glyphicon-edit"></i></a>
+        <a href="#" title="{{ 'admin.type.registrationPath.removeQuestion'|trans }}"><i
+                    class="glyphicon glyphicon-remove"></i></a>
         <hr>
     </div>
 
@@ -19,15 +21,20 @@
                     <div style="margin: 0 auto; width: 132px;">
                         <div class="dropdown">
                             <button id="dropdown-answer-{{ answerView.id }}" type="button" data-toggle="dropdown"
+                                    class="btn btn-danger btn-sm"
                                     aria-haspopup="true" aria-expanded="false">
                                 {{ 'admin.type.registrationPath.nextStep'|trans }}
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdown-answer-{{ answerView.id }}">
-                                <li><a href="{{ path('admin_type_registration_path_assign_participation_type_to_answer', {event: event.id, answer: answerView.id}) }}" class="btn">{{ 'admin.type.registrationPath.assignParticipationTypes'|trans }}</a></li>
+                                <li>
+                                    <a href="{{ path('admin_type_registration_path_assign_participation_type_to_answer', {event: event.id, answer: answerView.id}) }}"
+                                       class="btn btn-sm">{{ 'admin.type.registrationPath.assignParticipationTypes'|trans }}</a>
+                                </li>
                                 <li>
                                     <a href="{{ path('admin_type_registration_path_add_question_to_answer', {event: event.id, answer: answerView.id}) }}"
-                                       class="btn">{{ 'admin.type.registrationPath.assignNewQuestion'|trans }}</a></li>
+                                       class="btn btn-sm">{{ 'admin.type.registrationPath.assignNewQuestion'|trans }}</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -40,7 +47,8 @@
                                 <span class="badge">{{ typeView.title }}</span>
                             {% endfor %}
 
-                            <a href="#" title="{{ 'admin.type.registrationPath.removeTypes'|trans }}"><i class="glyphicon glyphicon-remove"></i></a>
+                            <a href="#" title="{{ 'admin.type.registrationPath.removeTypes'|trans }}"><i
+                                        class="glyphicon glyphicon-remove"></i></a>
                         </div>
                     {% endif %}
                 {% endif %}
