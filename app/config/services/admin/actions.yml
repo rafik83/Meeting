@@ -109,6 +109,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@form.factory'
             - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.router'
 
     #

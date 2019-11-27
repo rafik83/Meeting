@@ -11,4 +11,9 @@ class EventRegistrationPathView
     {
         $this->questionView = $questionView;
     }
+
+    public function hasQuestion(): bool
+    {
+        return null !== $this->questionView;
+    }
 }

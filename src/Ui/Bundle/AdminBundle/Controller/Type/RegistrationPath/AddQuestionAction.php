@@ -12,11 +12,13 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Type\RegistrationPath\AddQuestion;
+use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathQuery;
+use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\RegistrationPath\Answer;
-use Proximum\Vimeet\Domain\Model\RegistrationPath\Question;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\RegistrationPath\AddQuestionType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -39,6 +41,9 @@ class AddQuestionAction
     /** @var EngineInterface */
     private $engine;
 
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     /** @var RouterInterface */
     private $router;
 
@@ -47,12 +52,14 @@ class AddQuestionAction
         CommandBusInterface $commandBus,
         FormFactoryInterface $formFactory,
         EngineInterface $engine,
+        QueryBusInterface $queryBus,
         RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
+        $this->queryBus = $queryBus;
         $this->router = $router;
     }
 
@@ -71,7 +78,10 @@ class AddQuestionAction
             throw new AccessDeniedException('Access denied');
         }
 
-        // @todo: check if answer is null, event has already a first question
+        if (null === $answer) {
+            $this->checkEventHasAlreadyAFirstQuestion($event);
+        }
+
         // @todo: check if answer has not already a next step
 
         $addQuestion = new AddQuestion($event, $answer);
@@ -98,5 +108,17 @@ class AddQuestionAction
                 'form' => $addQuestionForm->createView(),
             ]
         );
+    }
+
+    private function checkEventHasAlreadyAFirstQuestion(Event $event): void
+    {
+        /** @var EventRegistrationPathView $eventRegistrationPathView */
+        $eventRegistrationPathView = $this->queryBus->handle(
+            new EventRegistrationPathQuery($event, $event->getFallback())
+        );
+
+        if ($eventRegistrationPathView->hasQuestion()) {
+            throw new AccessDeniedException('Access denied; Registration path has already a first question.');
+        }
     }
 }
