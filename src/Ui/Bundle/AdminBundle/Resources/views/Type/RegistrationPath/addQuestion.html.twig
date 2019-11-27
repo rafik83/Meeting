@@ -9,3 +9,9 @@
     <hr>
     {{ form_row(form.answers) }}
 {% endblock form_content %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/tinymce/tinymce.js') }}"></script>
+    <script src="{{ asset('assets/tinymce/init-tinymce.js') }}"></script>
+{% endblock %}

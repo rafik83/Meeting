@@ -33,6 +33,11 @@ class AnswerType extends AbstractType
                     'label' => false,
                     'locales' => $event->getLocales(),
                     'entry_type' => TextareaType::class,
+                    'entry_options' => [
+                        'attr' => [
+                            'class' => 'tinymce',
+                        ],
+                    ],
                 ]
             );
     }

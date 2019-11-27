@@ -1,6 +1,6 @@
 <div class="well">
     <div class="text-center">
-        {{ questionView.title }}
+        {{ questionView.title|html }}
         <a href="#" title="{{ 'admin.type.registrationPath.updateQuestion'|trans }}"><i class="glyphicon glyphicon-edit"></i></a>
         <hr>
     </div>
@@ -9,7 +9,7 @@
         {% for answerView in questionView.answerViews %}
             <div class="col-md-{{ 12 / questionView.answerViews|length }}">
                 <div class="text-center">
-                    {{ answerView.title }}
+                    {{ answerView.title|html }}
                 </div>
 
                 <div class="text-center"><i class="glyphicon glyphicon-arrow-down"></i></div>

@@ -24,6 +24,11 @@ class AddQuestionType extends AbstractType
                 [
                     'locales' => $event->getLocales(),
                     'entry_type' => TextareaType::class,
+                    'entry_options' => [
+                        'attr' => [
+                            'class' => 'tinymce',
+                        ],
+                    ],
                 ]
             )
             ->add('answers', AnswerCollectionType::class, ['event' => $event]);
