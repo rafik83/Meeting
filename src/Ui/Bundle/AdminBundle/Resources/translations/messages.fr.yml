@@ -1337,6 +1337,7 @@ admin.type.registrationPath.assignNewQuestion: "Créer nouvelle question"
 admin.type.registrationPath.assignParticipationTypes: "Choisir un ou plusieurs types de participation"
 admin.type.registrationPath.link: "Parcours d'inscription"
 admin.type.registrationPath.nextStep: "Etape suivante"
+admin.type.registrationPath.nextToAnswer: "Suite à la réponse"
 admin.type.registrationPath.title: "Parcours d'inscription"
 admin.type.registrationPath.updateQuestion: "Modifier la question"
 admin.type.remove.link: Supprimer

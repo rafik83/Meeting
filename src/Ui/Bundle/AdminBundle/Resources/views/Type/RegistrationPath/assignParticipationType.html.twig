@@ -5,6 +5,8 @@
 {% block goback_link path('admin_type_registration_path_show', { event: event.id }) %}
 
 {% block pre_form %}
+    <h2>{{ 'admin.type.registrationPath.nextToAnswer'|trans }}</h2>
+
     <div class="well">
         {{ questionTitle|html }}
         <hr>

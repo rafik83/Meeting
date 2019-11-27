@@ -4,6 +4,18 @@
 
 {% block goback_link path('admin_type_registration_path_show', { event: event.id }) %}
 
+{% block pre_form %}
+    {% if questionTitle and answerTitle %}
+        <h2>{{ 'admin.type.registrationPath.nextToAnswer'|trans }}</h2>
+
+        <div class="well">
+            {{ questionTitle|html }}
+            <hr>
+            {{ answerTitle|html }}
+        </div>
+    {% endif %}
+{% endblock pre_form %}
+
 {% block form_content %}
     {{ form_row(form.translatedTitle) }}
     <hr>

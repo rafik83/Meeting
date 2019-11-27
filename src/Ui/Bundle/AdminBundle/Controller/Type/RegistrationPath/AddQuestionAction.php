@@ -84,6 +84,8 @@ class AddQuestionAction
 
         // @todo: check if answer has not already a next step
 
+        $locale = $event->getAvailableLocale($request->getLocale());
+
         $addQuestion = new AddQuestion($event, $answer);
         $addQuestionForm = $this->formFactory->create(
             AddQuestionType::class,
@@ -105,6 +107,8 @@ class AddQuestionAction
             '@Admin/Type/RegistrationPath/addQuestion.html.twig',
             [
                 'event' => $event,
+                'questionTitle' => null !== $answer ? $answer->getQuestion()->getTitle($locale) : null,
+                'answerTitle' => null !== $answer ? $answer->getTitle($locale) : null,
                 'form' => $addQuestionForm->createView(),
             ]
         );
