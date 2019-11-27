@@ -354,6 +354,16 @@ admin_type_registration_path_add_question_to_answer:
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AddQuestionAction
 
+admin_type_registration_path_assign_participation_type_to_answer:
+    path: /event/{event}/registration-path/assign-participation-type-to-answer/{answer}
+    requirements:
+        event: \d+
+        answer: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AssignParticipationTypeAction
+
+
+
 #
 # Badge
 #

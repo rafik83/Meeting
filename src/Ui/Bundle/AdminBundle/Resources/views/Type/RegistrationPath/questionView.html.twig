@@ -23,7 +23,7 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdown-answer-{{ answerView.id }}">
-                                <li><a href="#" class="btn">{{ 'admin.type.registrationPath.assignParticipationTypes'|trans }}</a></li>
+                                <li><a href="{{ path('admin_type_registration_path_assign_participation_type_to_answer', {event: event.id, answer: answerView.id}) }}" class="btn">{{ 'admin.type.registrationPath.assignParticipationTypes'|trans }}</a></li>
                                 <li>
                                     <a href="{{ path('admin_type_registration_path_add_question_to_answer', {event: event.id, answer: answerView.id}) }}"
                                        class="btn">{{ 'admin.type.registrationPath.assignNewQuestion'|trans }}</a></li>

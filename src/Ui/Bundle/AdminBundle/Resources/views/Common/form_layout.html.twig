@@ -12,6 +12,8 @@
         {% block form_title '' %}
     </h1>
 
+    {% block pre_form %}{% endblock pre_form %}
+
     {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
     {{ form_errors(form) }}
 

@@ -82,6 +82,8 @@ form.apply_promotion_code.children.submit.label: Appliquer
 form.archive_un_archive.children.archive.label: Archiver
 form.archive_un_archive.children.unArchive.label: Désarchiver
 form.archive_un_archive.confirm.submit.label: 'Êtes-vous sûr de vouloir réaliser cette action ?'
+form.assign_participation_type.children.types.label: 'Types de participation'
+form.assign_participation_type.children.submit.label: Assigner
 form.authentication_token.children.file.label: 'Fichier des tokens'
 form.authentication_token.children.submit.label: 'Importer des tokens'
 form.authentication_token.import.confirm: 'Voulez-vous importer les tokens d''authentification ?'
