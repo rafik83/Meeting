@@ -93,7 +93,7 @@ class AssignParticipationTypeAction
         $assignParticipationTypeForm->handleRequest($request);
 
         if ($assignParticipationTypeForm->isSubmitted() && $assignParticipationTypeForm->isValid()) {
-            //$this->commandBus->handle($assignParticipationTypeForm);
+            $this->commandBus->handle($assignParticipationType);
 
             return new RedirectResponse(
                 $this->router->generate('admin_type_registration_path_show', ['event' => $event->getId()])

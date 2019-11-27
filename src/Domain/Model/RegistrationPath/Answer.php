@@ -24,10 +24,14 @@ class Answer
     /** @var ArrayCollection of AnswerTranslation */
     private $translations;
 
+    /** @var ArrayCollection of Type */
+    private $types;
+
     public function __construct(Question $question)
     {
         $this->question = $question;
         $this->translations = new ArrayCollection();
+        $this->types = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -70,5 +74,15 @@ class Answer
     private function getTranslation(string $locale): ?AnswerTranslation
     {
         return $this->translations->get($locale);
+    }
+
+    public function getTypes(): ArrayCollection
+    {
+        return $this->types;
+    }
+
+    public function setTypes(array $types)
+    {
+        $this->types = $types;
     }
 }

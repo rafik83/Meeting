@@ -19,3 +19,9 @@ Proximum\Vimeet\Domain\Model\RegistrationPath\Answer:
             indexBy: locale
             cascade: ["all"]
             orphanRemoval: true
+    manyToMany:
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            cascade: ["persist"]
+            joinTable:
+                name: registration_path_answer_type
