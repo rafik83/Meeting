@@ -28,5 +28,8 @@ class AddQuestion implements Command
     {
         $this->event = $event;
         $this->previousAnswer = $previousAnswer;
+
+        // create by default two empties answers
+        $this->answers = [new AnswerView(), new AnswerView()];
     }
 }
