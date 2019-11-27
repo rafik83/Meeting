@@ -7,6 +7,10 @@
 {% block content %}
     <h1 class="page-header">{{ 'admin.type.registrationPath.title'|trans }}</h1>
 
+    {% if not eventRegistrationPathView.isPathCompleted %}
+        <div class="alert alert-danger">{{ 'admin.type.registrationPath.pathNotCompleted'|trans }}</div>
+    {% endif %}
+
     {% if eventRegistrationPathView.questionView %}
         {{ include('@Admin/Type/RegistrationPath/questionView.html.twig', { questionView: eventRegistrationPathView.questionView }) }}
     {% else %}

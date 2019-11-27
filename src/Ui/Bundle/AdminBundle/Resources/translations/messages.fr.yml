@@ -1338,6 +1338,7 @@ admin.type.registrationPath.assignParticipationTypes: "Choisir un ou plusieurs t
 admin.type.registrationPath.link: "Parcours d'inscription"
 admin.type.registrationPath.nextStep: "Etape suivante"
 admin.type.registrationPath.nextToAnswer: "Suite à la réponse"
+admin.type.registrationPath.pathNotCompleted: "Le parcours d'inscription n'est pas complet. Un ou des types de participation sont requis."
 admin.type.registrationPath.title: "Parcours d'inscription"
 admin.type.registrationPath.updateQuestion: "Modifier la question"
 admin.type.registrationPath.removeQuestion: "Supprimer la question"

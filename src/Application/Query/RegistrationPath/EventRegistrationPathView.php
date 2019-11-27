@@ -16,4 +16,30 @@ class EventRegistrationPathView
     {
         return null !== $this->questionView;
     }
+
+    public function isPathCompleted(): bool
+    {
+        if (null === $this->questionView) {
+            return true;
+        }
+
+        return $this->isAnswersHasNextStep($this->questionView);
+    }
+
+    private function isAnswersHasNextStep(QuestionView $questionView): bool
+    {
+        foreach ($questionView->answerViews as $answerView) {
+            if (!$answerView->hasNextStep()) {
+                return false;
+            }
+
+            $questionView = $answerView->nextQuestionView;
+
+            if (null !== $questionView && !$this->isAnswersHasNextStep($questionView)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
