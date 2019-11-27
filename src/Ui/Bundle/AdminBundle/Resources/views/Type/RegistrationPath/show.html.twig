@@ -10,6 +10,6 @@
     {% if eventRegistrationPathView.questionView %}
         {{ include('@Admin/Type/RegistrationPath/questionView.html.twig', { questionView: eventRegistrationPathView.questionView }) }}
     {% else %}
-        <a href="{{ path('admin_type_registration_path_add_question', {event: event.id}) }}">add question</a>
+        <a href="{{ path('admin_type_registration_path_add_question', {event: event.id}) }}" class="btn btn-info">{{ 'admin.type.registrationPath.addQuestion'|trans }}</a>
     {% endif %}
 {% endblock %}

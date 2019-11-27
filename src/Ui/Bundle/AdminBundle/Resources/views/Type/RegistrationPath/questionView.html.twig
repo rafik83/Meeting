@@ -1,7 +1,7 @@
 <div class="well">
     <div class="text-center">
         {{ questionView.title }}
-        <a href="#" title="Modifier"><i class="glyphicon glyphicon-edit"></i></a>
+        <a href="#" title="{{ 'admin.type.registrationPath.updateQuestion'|trans }}"><i class="glyphicon glyphicon-edit"></i></a>
         <hr>
     </div>
 
@@ -12,22 +12,25 @@
                     {{ answerView.title }}
                 </div>
 
+                <div class="text-center"><i class="glyphicon glyphicon-arrow-down"></i></div>
+
                 {% if not answerView.nextQuestionView %}
-                    <div class="dropdown">
-                        <button id="dropdown-answer-{{ answerView.id }}" type="button" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            Configurer étape suivante
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdown-answer-{{ answerView.id }}">
-                            <li><a href="#" class="btn">Choisir un ou plusieurs types de participation</a></li>
-                            <li>
-                                <a href="{{ path('admin_type_registration_path_add_question_to_answer', {event: event.id, answer: answerView.id}) }}"
-                                   class="btn">Créer nouvelle question</a></li>
-                        </ul>
+                    <div style="margin: 0 auto; width: 132px;">
+                        <div class="dropdown">
+                            <button id="dropdown-answer-{{ answerView.id }}" type="button" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                {{ 'admin.type.registrationPath.nextStep'|trans }}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdown-answer-{{ answerView.id }}">
+                                <li><a href="#" class="btn">{{ 'admin.type.registrationPath.assignParticipationTypes'|trans }}</a></li>
+                                <li>
+                                    <a href="{{ path('admin_type_registration_path_add_question_to_answer', {event: event.id, answer: answerView.id}) }}"
+                                       class="btn">{{ 'admin.type.registrationPath.assignNewQuestion'|trans }}</a></li>
+                            </ul>
+                        </div>
                     </div>
                 {% else %}
-                    <div class="text-center"><i class="glyphicon glyphicon-arrow-down"></i></div>
                     {{ include('@Admin/Type/RegistrationPath/questionView.html.twig', { questionView: answerView.nextQuestionView }) }}
                 {% endif %}
 
