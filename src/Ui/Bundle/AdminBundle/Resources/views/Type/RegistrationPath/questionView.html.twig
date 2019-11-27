@@ -2,6 +2,7 @@
     <div class="text-center">
         {{ questionView.title|html }}
         <a href="#" title="{{ 'admin.type.registrationPath.updateQuestion'|trans }}"><i class="glyphicon glyphicon-edit"></i></a>
+        <a href="#" title="{{ 'admin.type.registrationPath.removeQuestion'|trans }}"><i class="glyphicon glyphicon-remove"></i></a>
         <hr>
     </div>
 
@@ -14,7 +15,7 @@
 
                 <div class="text-center"><i class="glyphicon glyphicon-arrow-down"></i></div>
 
-                {% if not answerView.nextQuestionView %}
+                {% if not answerView.hasNextStep %}
                     <div style="margin: 0 auto; width: 132px;">
                         <div class="dropdown">
                             <button id="dropdown-answer-{{ answerView.id }}" type="button" data-toggle="dropdown"
@@ -31,9 +32,18 @@
                         </div>
                     </div>
                 {% else %}
-                    {{ include('@Admin/Type/RegistrationPath/questionView.html.twig', { questionView: answerView.nextQuestionView }) }}
-                {% endif %}
+                    {% if answerView.hasNextQuestion %}
+                        {{ include('@Admin/Type/RegistrationPath/questionView.html.twig', { questionView: answerView.nextQuestionView }) }}
+                    {% elseif answerView.hasTypes %}
+                        <div class="text-center">
+                            {% for typeView in answerView.typeViews %}
+                                <span class="badge">{{ typeView.title }}</span>
+                            {% endfor %}
 
+                            <a href="#" title="{{ 'admin.type.registrationPath.removeTypes'|trans }}"><i class="glyphicon glyphicon-remove"></i></a>
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
         {% endfor %}
     </div>

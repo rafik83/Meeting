@@ -44,7 +44,13 @@ class EventRegistrationPathQueryHandler
 
             foreach ($question->getAnswers() as $answer) {
                 $answerId = $answer->getId();
-                $answerView = new AnswerView($answerId, $answer->getTitle($query->locale));
+                $typesViews = [];
+
+                foreach ($answer->getTypes() as $type) {
+                    $typesViews[] = new TypeView($type->getId(), $type->getTitle($query->locale));
+                }
+
+                $answerView = new AnswerView($answerId, $answer->getTitle($query->locale), $typesViews);
                 $answerViews[] = $answerView;
                 $allAnswerViews[$answerId] = $answerView;
             }

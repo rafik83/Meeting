@@ -13,14 +13,33 @@ class AnswerView
     /** @var QuestionView|null */
     public $nextQuestionView;
 
-    public function __construct(int $id, string $title)
+    /** @var TypeView[] */
+    public $typeViews;
+
+    public function __construct(int $id, string $title, array $typeViews)
     {
         $this->id = $id;
         $this->title = $title;
+        $this->typeViews = $typeViews;
     }
 
     public function setNextQuestionView(QuestionView $nextQuestionView): void
     {
         $this->nextQuestionView = $nextQuestionView;
+    }
+
+    public function hasNextQuestion(): bool
+    {
+        return null !== $this->nextQuestionView;
+    }
+
+    public function hasTypes(): bool
+    {
+        return !empty($this->typeViews);
+    }
+
+    public function hasNextStep(): bool
+    {
+        return $this->hasTypes() || $this->hasNextQuestion();
     }
 }

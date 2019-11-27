@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Domain\Model\RegistrationPath;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Application\Query\RegistrationPath\TypeView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class Answer
 {
@@ -76,9 +78,12 @@ class Answer
         return $this->translations->get($locale);
     }
 
-    public function getTypes(): ArrayCollection
+    /**
+     * @return Type[]
+     */
+    public function getTypes(): array
     {
-        return $this->types;
+        return $this->types->toArray();
     }
 
     public function setTypes(array $types)
