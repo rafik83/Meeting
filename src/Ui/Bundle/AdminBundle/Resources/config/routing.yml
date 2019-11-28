@@ -378,6 +378,13 @@ admin_type_registration_path_remove_question:
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\RemoveQuestionAction
 
+admin_type_registration_path_remove_assignation_type:
+    path: /event/{event}/registration-path/remove-assignation-type/{answer}
+    requirements:
+        event: \d+
+        answer: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\RemoveAssignationTypeAction
 
 #
 # Badge

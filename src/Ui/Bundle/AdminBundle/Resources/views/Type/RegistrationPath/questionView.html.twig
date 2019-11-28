@@ -4,7 +4,9 @@
         <a href="{{ path('admin_type_registration_path_update_question', {event: event.id, question: questionView.id}) }}"
            title="{{ 'admin.type.registrationPath.updateQuestion'|trans }}"><i
                     class="glyphicon glyphicon-edit"></i></a>
-        <a href="{{ path('admin_type_registration_path_remove_question', {event: event.id, question: questionView.id}) }}" class="btn btn-link delete-button" data-confirm="{{ 'admin.type.registrationPath.removeQuestion.confirmation'|trans }}"
+        <a href="{{ path('admin_type_registration_path_remove_question', {event: event.id, question: questionView.id}) }}"
+           class="btn btn-link delete-button"
+           data-confirm="{{ 'admin.type.registrationPath.removeQuestion.confirmation'|trans }}"
            title="{{ 'admin.type.registrationPath.removeQuestion.title'|trans }}">
             <i class="glyphicon glyphicon-remove"></i>
         </a>
@@ -50,7 +52,9 @@
                                 <span class="badge">{{ typeView.title }}</span>
                             {% endfor %}
 
-                            <a href="#" title="{{ 'admin.type.registrationPath.removeTypes'|trans }}"><i
+                            <a href="{{ path('admin_type_registration_path_remove_assignation_type', {event: event.id, answer: answerView.id}) }}"
+                               data-confirm="{{ 'admin.type.registrationPath.removeTypes.confirmation'|trans }}"
+                               title="{{ 'admin.type.registrationPath.removeTypes.title'|trans }}"><i
                                         class="glyphicon glyphicon-remove"></i></a>
                         </div>
                     {% endif %}

@@ -135,6 +135,12 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\RemoveAssignationTypeAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.router'
+
     #
     # Type Badge
     #

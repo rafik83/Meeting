@@ -93,6 +93,11 @@ class Answer
         $this->types = $types;
     }
 
+    public function removeTypes(): void
+    {
+        $this->types = new ArrayCollection();
+    }
+
     public function hasAlreadyNextStep(): bool
     {
         return !$this->types->isEmpty() || $this->hasNexQuestion();
