@@ -17,7 +17,9 @@ class AddQuestionHandler
 
     public function handle(AddQuestion $addQuestion): void
     {
-        // @todo: check if previousAnswer has already a question or type de participations
+        if (null !== $addQuestion->previousAnswer && $addQuestion->previousAnswer->hasAlreadyNextStep()) {
+            throw new \LogicException('Answer already has a next step');
+        }
 
         $question = new Question($addQuestion->event, $addQuestion->previousAnswer);
 

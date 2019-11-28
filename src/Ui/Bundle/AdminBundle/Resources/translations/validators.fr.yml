@@ -87,7 +87,7 @@ validators.promotion_code.code.already_exist: 'Ce code est déjà utilisé'
 validators.promotion_code.promotion.value.free: 'Indiquez une valeur'
 validators.promotion_code.promotion.value.percent_off: 'Indiquez un pourcentage entre 0 et 100'
 validators.promotion_code.promotion.value.value_off: 'Indiquez un montant entre 0 et le prix du produit'
-validators.registrationPath.addQuestion.answers.min: "Au moins deux réponses sont requises."
+validators.registrationPath.question.answers.min: "Au moins deux réponses sont requises."
 validators.required.email: 'L''adresse e-mail ne peut pas être vide'
 validators.required.password: 'Le mot de passe ne peut pas être vide'
 validators.rooming.accommodation.hasNoRemainingOvernightException: 'Aucune nuitée disponible pour la période donnée pour cet hébergement'

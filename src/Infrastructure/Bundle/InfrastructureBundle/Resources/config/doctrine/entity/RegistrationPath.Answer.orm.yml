@@ -19,6 +19,9 @@ Proximum\Vimeet\Domain\Model\RegistrationPath\Answer:
             indexBy: locale
             cascade: ["all"]
             orphanRemoval: true
+        nextQuestions:
+            targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\Question
+            mappedBy: previousAnswer
     manyToMany:
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type

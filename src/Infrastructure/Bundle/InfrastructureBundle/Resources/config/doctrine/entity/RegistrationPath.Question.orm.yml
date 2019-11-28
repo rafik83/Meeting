@@ -13,6 +13,7 @@ Proximum\Vimeet\Domain\Model\RegistrationPath\Question:
                 onDelete: CASCADE
         previousAnswer:
             targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\Answer
+            inversedBy: nextQuestions
             joinColumn:
                 nullable: true
                 onDelete: CASCADE

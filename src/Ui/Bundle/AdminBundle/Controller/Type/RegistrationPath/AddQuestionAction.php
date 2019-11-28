@@ -82,7 +82,9 @@ class AddQuestionAction
             $this->checkEventHasAlreadyAFirstQuestion($event);
         }
 
-        // @todo: check if answer has not already a next step
+        if (null !== $answer && $answer->hasAlreadyNextStep()) {
+            throw new \LogicException('Answer already has a next step');
+        }
 
         $locale = $event->getAvailableLocale($request->getLocale());
 

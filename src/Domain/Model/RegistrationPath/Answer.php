@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Model\RegistrationPath;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Proximum\Vimeet\Application\Query\RegistrationPath\TypeView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 
@@ -28,6 +27,9 @@ class Answer
 
     /** @var ArrayCollection of Type */
     private $types;
+
+    /** @var ArrayCollection of Question */
+    private $nextQuestions;
 
     public function __construct(Question $question)
     {
@@ -89,5 +91,26 @@ class Answer
     public function setTypes(array $types)
     {
         $this->types = $types;
+    }
+
+    public function hasAlreadyNextStep(): bool
+    {
+        return !$this->types->isEmpty() || $this->hasNexQuestion();
+    }
+
+    public function hasNexQuestion(): bool
+    {
+        return null !== $this->getNextQuestion();
+    }
+
+    public function getNextQuestion(): ?Question
+    {
+        $nextQuestion = $this->nextQuestions->first();
+
+        if (false === $nextQuestion) {
+            return null;
+        }
+
+        return $nextQuestion;
     }
 }

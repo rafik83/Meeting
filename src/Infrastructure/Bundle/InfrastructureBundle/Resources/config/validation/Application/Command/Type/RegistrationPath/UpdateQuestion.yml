@@ -1,4 +1,4 @@
-Proximum\Vimeet\Application\Command\Type\RegistrationPath\AddQuestion:
+Proximum\Vimeet\Application\Command\Type\RegistrationPath\UpdateQuestion:
     properties:
         translatedTitle:
             - Type: { type: array }
