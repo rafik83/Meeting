@@ -21,7 +21,7 @@ class AssignParticipationTypeType extends AbstractType
                 'user' => $options['admin'],
                 'expanded' => true,
                 'multiple' => true,
-                'required' => false,
+                'required' => true,
             ]
         );
     }
