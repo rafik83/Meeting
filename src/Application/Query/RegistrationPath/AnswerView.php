@@ -25,6 +25,14 @@ class AnswerView
 
     public function setNextQuestionView(QuestionView $nextQuestionView): void
     {
+        if (null !== $this->nextQuestionView) {
+            throw new \LogicException('There is already next question assigned to this answer');
+        }
+
+        if (!empty($this->typeViews)) {
+            throw new \LogicException('There is already types assigned to this answer');
+        }
+
         $this->nextQuestionView = $nextQuestionView;
     }
 
