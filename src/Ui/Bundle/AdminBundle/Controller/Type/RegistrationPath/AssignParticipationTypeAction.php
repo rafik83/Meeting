@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Type\RegistrationPath\AssignParticipationType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -40,9 +39,6 @@ class AssignParticipationTypeAction
     /** @var EngineInterface */
     private $engine;
 
-    /** @var QueryBusInterface */
-    private $queryBus;
-
     /** @var RouterInterface */
     private $router;
 
@@ -51,14 +47,12 @@ class AssignParticipationTypeAction
         CommandBusInterface $commandBus,
         FormFactoryInterface $formFactory,
         EngineInterface $engine,
-        QueryBusInterface $queryBus,
         RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
-        $this->queryBus = $queryBus;
         $this->router = $router;
     }
 
@@ -78,7 +72,9 @@ class AssignParticipationTypeAction
             throw new AccessDeniedException('Access denied');
         }
 
-        // @todo: check if answer has not already a next step
+        if ($answer->hasAlreadyNextStep()) {
+            throw new \LogicException('Answer already has a next step');
+        }
 
         $admin = $adminDomain->getAdmin();
         $locale = $event->getAvailableLocale($request->getLocale());
