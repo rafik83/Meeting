@@ -15,7 +15,7 @@ class AddQuestionHandler
         $this->questionRepository = $questionRepository;
     }
 
-    public function handle(AddQuestion $addQuestion)
+    public function handle(AddQuestion $addQuestion): void
     {
         // @todo: check if previousAnswer has already a question or type de participations
 

@@ -15,7 +15,9 @@ use Proximum\Vimeet\Domain\Model\RegistrationPath\Question;
 
 interface QuestionRepositoryInterface
 {
-    public function add(Question $question);
+    public function add(Question $question): void;
+
+    public function set(Question $question): void;
 
     /**
      * @param Event  $event

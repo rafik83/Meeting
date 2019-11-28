@@ -643,3 +643,9 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\AnswerRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\AssignParticipationType }
+
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\UpdateQuestionHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\UpdateQuestion }

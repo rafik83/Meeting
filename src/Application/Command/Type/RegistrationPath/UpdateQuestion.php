@@ -32,11 +32,13 @@ class UpdateQuestion implements Command
         $answerViews = [];
 
         foreach ($question->getAnswers() as $answer) {
+            $answerView = new AnswerView();
+
             foreach ($event->getLocales() as $locale) {
-                $answerView = new AnswerView();
                 $answerView->translatedTitle[$locale] = $answer->getTitle($locale);
-                $answerViews[] = $answerView;
             }
+
+            $answerViews[] = $answerView;
         }
 
         $this->answers = $answerViews;

@@ -84,6 +84,12 @@ class Question
      */
     public function setAnswers(array $answerViews): void
     {
+        foreach ($this->answers as $key => $answer) {
+            if (!isset($answerViews[$key])) {
+                $this->answers->remove($key);
+            }
+        }
+
         foreach ($answerViews as $key => $answerView) {
             $foundAnswer = $this->answers->get($key);
 

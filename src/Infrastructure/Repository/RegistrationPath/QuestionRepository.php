@@ -34,6 +34,14 @@ class QuestionRepository implements QuestionRepositoryInterface
         $this->entityManager->flush($question);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function set(Question $question): void
+    {
+        $this->entityManager->flush($question);
+    }
+
     public function getQuestionsByEvent(Event $event, string $locale): array
     {
         return $this->entityManager

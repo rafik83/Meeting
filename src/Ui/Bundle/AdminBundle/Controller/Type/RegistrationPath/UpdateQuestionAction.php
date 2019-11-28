@@ -87,7 +87,7 @@ class UpdateQuestionAction
         $updateQuestionForm->handleRequest($request);
 
         if ($updateQuestionForm->isSubmitted() && $updateQuestionForm->isValid()) {
-            //$this->commandBus->handle($updateQuestion);
+            $this->commandBus->handle($updateQuestion);
 
             return new RedirectResponse(
                 $this->router->generate('admin_type_registration_path_show', ['event' => $event->getId()])
