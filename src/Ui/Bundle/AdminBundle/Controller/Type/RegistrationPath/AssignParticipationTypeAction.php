@@ -62,14 +62,6 @@ class AssignParticipationTypeAction
         $this->router = $router;
     }
 
-    /**
-     * @param Request     $request
-     * @param AdminDomain $adminDomain
-     * @param Event       $event
-     * @param Answer|null $answer
-     *
-     * @return Response
-     */
     public function __invoke(Request $request, AdminDomain $adminDomain, Event $event, Answer $answer): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
