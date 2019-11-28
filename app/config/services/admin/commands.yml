@@ -649,3 +649,9 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\UpdateQuestion }
+
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveQuestionHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveQuestion }

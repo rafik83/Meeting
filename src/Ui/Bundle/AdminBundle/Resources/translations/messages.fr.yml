@@ -1341,7 +1341,8 @@ admin.type.registrationPath.nextToAnswer: "Suite à la réponse"
 admin.type.registrationPath.pathNotCompleted: "Le parcours d'inscription n'est pas complet. Un ou des types de participation sont requis."
 admin.type.registrationPath.title: "Parcours d'inscription"
 admin.type.registrationPath.updateQuestion: "Modifier la question"
-admin.type.registrationPath.removeQuestion: "Supprimer la question"
+admin.type.registrationPath.removeQuestion.confirmation: "Confirmer la suppression de cette question ?"
+admin.type.registrationPath.removeQuestion.title: "Supprimer la question"
 admin.type.registrationPath.removeTypes: "Supprimer les types assignés"
 admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'

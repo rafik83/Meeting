@@ -12,11 +12,9 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Type\RegistrationPath\UpdateQuestion;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\RegistrationPath\Answer;
 use Proximum\Vimeet\Domain\Model\RegistrationPath\Question;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\RegistrationPath\UpdateQuestionType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -40,9 +38,6 @@ class UpdateQuestionAction
     /** @var EngineInterface */
     private $engine;
 
-    /** @var QueryBusInterface */
-    private $queryBus;
-
     /** @var RouterInterface */
     private $router;
 
@@ -51,24 +46,15 @@ class UpdateQuestionAction
         CommandBusInterface $commandBus,
         FormFactoryInterface $formFactory,
         EngineInterface $engine,
-        QueryBusInterface $queryBus,
         RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
-        $this->queryBus = $queryBus;
         $this->router = $router;
     }
 
-    /**
-     * @param Request     $request
-     * @param Event       $event
-     * @param Answer|null $answer
-     *
-     * @return Response
-     */
     public function __invoke(Request $request, Event $event, Question $question): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)

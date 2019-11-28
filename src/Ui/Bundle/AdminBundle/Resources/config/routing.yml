@@ -370,6 +370,15 @@ admin_type_registration_path_update_question:
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\UpdateQuestionAction
 
+admin_type_registration_path_remove_question:
+    path: /event/{event}/registration-path/remove-question/{question}
+    requirements:
+        event: \d+
+        question: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\RemoveQuestionAction
+
+
 #
 # Badge
 #

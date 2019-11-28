@@ -42,6 +42,12 @@ class QuestionRepository implements QuestionRepositoryInterface
         $this->entityManager->flush($question);
     }
 
+    public function remove(Question $question): void
+    {
+        $this->entityManager->remove($question);
+        $this->entityManager->flush($question);
+    }
+
     public function getQuestionsByEvent(Event $event, string $locale): array
     {
         return $this->entityManager

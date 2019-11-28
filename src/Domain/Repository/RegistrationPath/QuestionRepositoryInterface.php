@@ -19,6 +19,8 @@ interface QuestionRepositoryInterface
 
     public function set(Question $question): void;
 
+    public function remove(Question $question): void;
+
     /**
      * @param Event  $event
      * @param string $locale
