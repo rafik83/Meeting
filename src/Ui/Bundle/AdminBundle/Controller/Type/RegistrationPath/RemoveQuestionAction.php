@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\RegistrationPath\Question;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class RemoveQuestionAction
@@ -28,16 +29,21 @@ class RemoveQuestionAction
     /** @var CommandBusInterface */
     private $commandBus;
 
+    /** @var FlashBagInterface */
+    private $flashBag;
+
     /** @var RouterInterface */
     private $router;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CommandBusInterface $commandBus,
+        FlashBagInterface $flashBag,
         RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
+        $this->flashBag = $flashBag;
         $this->router = $router;
     }
 
@@ -52,7 +58,7 @@ class RemoveQuestionAction
         $removeQuestion = new RemoveQuestion($question);
         $this->commandBus->handle($removeQuestion);
 
-        // @todo : flash
+        $this->flashBag->add('success', 'flash.registrationPath.removeQuestion.success');
 
         return new RedirectResponse(
             $this->router->generate('admin_type_registration_path_show', ['event' => $event->getId()])

@@ -107,6 +107,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
             - '@form.factory'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
@@ -116,6 +117,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
             - '@form.factory'
             - '@templating'
             - '@adapter.router'
@@ -124,6 +126,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
             - '@form.factory'
             - '@templating'
             - '@adapter.router'
@@ -132,12 +135,14 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
             - '@adapter.router'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\RemoveAssignationTypeAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
             - '@adapter.router'
 
     #

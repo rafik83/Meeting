@@ -25,6 +25,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class AddQuestionAction
@@ -34,6 +35,9 @@ class AddQuestionAction
 
     /** @var CommandBusInterface */
     private $commandBus;
+
+    /** @var FlashBagInterface */
+    private $flashBag;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -50,6 +54,7 @@ class AddQuestionAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CommandBusInterface $commandBus,
+        FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
         EngineInterface $engine,
         QueryBusInterface $queryBus,
@@ -57,6 +62,7 @@ class AddQuestionAction
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
+        $this->flashBag = $flashBag;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
@@ -99,6 +105,8 @@ class AddQuestionAction
 
         if ($addQuestionForm->isSubmitted() && $addQuestionForm->isValid()) {
             $this->commandBus->handle($addQuestion);
+
+            $this->flashBag->add('success', 'flash.registrationPath.addQuestion.success');
 
             return new RedirectResponse(
                 $this->router->generate('admin_type_registration_path_show', ['event' => $event->getId()])

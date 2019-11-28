@@ -23,6 +23,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class AssignParticipationTypeAction
@@ -32,6 +33,9 @@ class AssignParticipationTypeAction
 
     /** @var CommandBusInterface */
     private $commandBus;
+
+    /** @var FlashBagInterface */
+    private $flashBag;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -45,12 +49,14 @@ class AssignParticipationTypeAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CommandBusInterface $commandBus,
+        FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
         EngineInterface $engine,
         RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
+        $this->flashBag = $flashBag;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
         $this->router = $router;
@@ -90,6 +96,8 @@ class AssignParticipationTypeAction
 
         if ($assignParticipationTypeForm->isSubmitted() && $assignParticipationTypeForm->isValid()) {
             $this->commandBus->handle($assignParticipationType);
+
+            $this->flashBag->add('success', 'flash.registrationPath.assignParticipationType.success');
 
             return new RedirectResponse(
                 $this->router->generate('admin_type_registration_path_show', ['event' => $event->getId()])
