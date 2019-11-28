@@ -11,11 +11,11 @@ form.add_participant.children.data.label: 'Coordonnées du participant'
 form.add_participant.children.email.label: Email
 form.add_participant.children.submit.label: Envoyer
 form.add_products.children.submit.label: 'Valider les produits'
-form.add_question.children.answers.label: Réponses
-form.add_question.children.answers.label_add: 'Ajouter une réponse'
-form.add_question.children.answers.label_delete: 'Supprimer cette réponse'
-form.add_question.children.submit.label: Enregistrer
-form.add_question.children.translatedTitle.label: Titre de la question
+form.registration_path_question.children.answers.label: Réponses
+form.registration_path_question.children.answers.label_add: 'Ajouter une réponse'
+form.registration_path_question.children.answers.label_delete: 'Supprimer cette réponse'
+form.registration_path_question.children.submit.label: Enregistrer
+form.registration_path_question.children.translatedTitle.label: Titre de la question
 form.add_unavailability.children.from.label: De
 form.add_unavailability.children.participants.label: 'Participants concernés'
 form.add_unavailability.children.submit.label: Ajouter
