@@ -11,6 +11,11 @@ form.add_participant.children.data.label: 'Coordonnées du participant'
 form.add_participant.children.email.label: Email
 form.add_participant.children.submit.label: Envoyer
 form.add_products.children.submit.label: 'Valider les produits'
+form.registration_path_question.children.answers.label: Réponses
+form.registration_path_question.children.answers.label_add: 'Ajouter une réponse'
+form.registration_path_question.children.answers.label_delete: 'Supprimer cette réponse'
+form.registration_path_question.children.submit.label: Enregistrer
+form.registration_path_question.children.translatedTitle.label: Titre de la question
 form.add_unavailability.children.from.label: De
 form.add_unavailability.children.participants.label: 'Participants concernés'
 form.add_unavailability.children.submit.label: Ajouter
@@ -77,6 +82,8 @@ form.apply_promotion_code.children.submit.label: Appliquer
 form.archive_un_archive.children.archive.label: Archiver
 form.archive_un_archive.children.unArchive.label: Désarchiver
 form.archive_un_archive.confirm.submit.label: 'Êtes-vous sûr de vouloir réaliser cette action ?'
+form.assign_participation_type.children.types.label: 'Types de participation'
+form.assign_participation_type.children.submit.label: Assigner
 form.authentication_token.children.file.label: 'Fichier des tokens'
 form.authentication_token.children.submit.label: 'Importer des tokens'
 form.authentication_token.import.confirm: 'Voulez-vous importer les tokens d''authentification ?'
