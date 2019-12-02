@@ -132,6 +132,9 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $linkedinLoginEnabled;
 
+    /** @var bool */
+    private $accessControlEnabled = false;
+
     public function __construct(
         string $title,
         string $fallback,
