@@ -85,6 +85,9 @@ class UpdateType extends AbstractEventType
                     'forms'
                 )
             ])
+            ->add('accessControlEnabled', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 

@@ -37,7 +37,9 @@ class CheckinActionsAction
 
     public function __invoke(Event $event, User $user)
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || !$event->isAccessControlEnabled()
+        ) {
             throw new AccessDeniedException('Access denied');
         }
 
