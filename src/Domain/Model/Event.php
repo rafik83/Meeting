@@ -480,7 +480,7 @@ class Event implements EventInterface, TraceableInterface
         bool $disabledPasswordChanging,
         bool $googleLoginEnabled = false,
         bool $linkedinLoginEnabled = false,
-        bool $accessControlEnabled
+        bool $accessControlEnabled = false
     ) {
         $this->title = $title;
         $this->locales = $locales;
