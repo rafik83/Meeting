@@ -30,7 +30,7 @@ class DashboardScanViewQueryHandler
 
     public function handle(DashboardScanViewQuery $query): DashboardEntranceScanView
     {
-        if (!$this->eventOpenAccessChecker->allowedToAccess($query->event)) {
+        if (!$this->eventOpenAccessChecker->allowedToAccess($query->event) || !$query->event->isAccessControlEnabled()) {
             return new DashboardEntranceScanView(false);
         }
 

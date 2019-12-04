@@ -10,7 +10,7 @@
                     <tr>
                         <th colspan="7" class="vertical-divider"></th>
                         <th colspan="6" class="text-center vertical-divider">{{ 'admin.sheet.dashboard.by_type.meetings_evaluation'|trans }}</th>
-                        {% if dashboard.dashboardEntranceScanView.eventOpened %}
+                        {% if dashboard.dashboardEntranceScanView.enabled %}
                             <th colspan="{{ dashboard.dashboardEntranceScanView.formattedDays|length }}" class="text-center">
                                 {{ 'admin.sheet.dashboard.visitors_by_day'|trans }}
                             </th>
@@ -32,7 +32,7 @@
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_2_stars'|trans }}</th>
                         <th class="text-center">{{ 'admin.sheet.dashboard.by_type.meetings_evaluated_1_stars'|trans }}</th>
                         <th class="text-center vertical-divider">{{ 'admin.sheet.dashboard.by_type.meetings_not_evaluated'|trans }}</th>
-                        {% if dashboard.dashboardEntranceScanView.eventOpened %}
+                        {% if dashboard.dashboardEntranceScanView.enabled %}
                             {% for day in dashboard.dashboardEntranceScanView.formattedDays %}
                                 <th class="text-center">{{ day|localizeddate('short', 'none') }}</th>
                             {% endfor %}
@@ -58,7 +58,7 @@
                                 <td>{{ dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][2] is defined ? dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][2] : '' }}</td>
                                 <td>{{ dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][1] is defined ? dashboard.dashboardContactView.evaluationIndexedByTypeId[idType][1] : '' }}</td>
                                 <td class="vertical-divider">{{ dashboard.dashboardContactView.meetingNotEvaluatedIndexedByFromTypeId[idType] is defined ? dashboard.dashboardContactView.meetingNotEvaluatedIndexedByFromTypeId[idType] : '' }}</td>
-                                {% if dashboard.dashboardEntranceScanView.eventOpened %}
+                                {% if dashboard.dashboardEntranceScanView.enabled %}
                                     {% for formattedDay, day in dashboard.dashboardEntranceScanView.formattedDays %}
                                         <td>{{ dashboard.dashboardEntranceScanView.visitorsByTypeAndDay(idType, formattedDay) }}</td>
                                     {% endfor %}
@@ -84,7 +84,7 @@
                             <td>{{ dashboard.dashboardContactView.getTotalByEvaluation(2) }}</td>
                             <td>{{ dashboard.dashboardContactView.getTotalByEvaluation(1) }}</td>
                             <td class="vertical-divider">{{ dashboard.dashboardContactView.getTotalNotEvaluated() }}</td>
-                            {% if dashboard.dashboardEntranceScanView.eventOpened %}
+                            {% if dashboard.dashboardEntranceScanView.enabled %}
                                 {% for formattedDay, day in dashboard.dashboardEntranceScanView.formattedDays %}
                                     <td>{{ dashboard.dashboardEntranceScanView.totalVisitorsByDay(formattedDay) }}</td>
                                 {% endfor %}
