@@ -481,8 +481,6 @@ class Event implements EventInterface, TraceableInterface
         bool $googleLoginEnabled = false,
         bool $linkedinLoginEnabled = false,
         bool $accessControlEnabled
-
-
     ) {
         $this->title = $title;
         $this->locales = $locales;
@@ -503,7 +501,6 @@ class Event implements EventInterface, TraceableInterface
         $this->googleLoginEnabled = $googleLoginEnabled;
         $this->linkedinLoginEnabled = $linkedinLoginEnabled;
         $this->accessControlEnabled = $accessControlEnabled;
-
     }
 
     /**
