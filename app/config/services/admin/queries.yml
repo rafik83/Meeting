@@ -287,3 +287,12 @@ services:
     Proximum\Vimeet\Application\Query\PromotionCode\Batch\CanBeUpdatable:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+
+    #
+    # RegistrationPath
+    #
+    Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathQuery }

@@ -25,6 +25,7 @@ Encore
     .addEntry('tinymce/tinymce', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tinymce.js')
     .addEntry('tinymce/pages/messaging-message-tinymce', './src/Ui/Bundle/AdminBundle/Resources/assets/js/pages/messaging-message-tinymce.js')
     .addEntry('tinymce/tip/tip', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tip/tip.js')
+    .addEntry('tinymce/init-tinymce', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tinymce/init-tinymce.js')
 
     // will output as web/build/global.css
     .addStyleEntry('css/adminStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/admin.scss')

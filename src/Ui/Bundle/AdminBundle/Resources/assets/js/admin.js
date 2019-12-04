@@ -40,7 +40,10 @@ require('./zendesk/zendesk');
 
 // Init function
 
-function init(target) {
+function init(target, firstInit) {
+    if (!firstInit && $('.tinymce', target).length) {
+        tinymceInit();
+    }
 
     $('[data-collection]', target).collection()
         .on('collection:added', function (event, item) { init(item.element.get(0)); })
@@ -220,4 +223,4 @@ document.addEventListener('dom.element.added', function (event) {
 
 // Init
 
-init(document);
+init(document, true);

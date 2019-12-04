@@ -628,3 +628,36 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Batch\Update }
+
+    #
+    # RegistrationPath
+    #
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\AddQuestionHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\AddQuestion }
+
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\AssignParticipationTypeHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\AnswerRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\AssignParticipationType }
+
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\UpdateQuestionHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\UpdateQuestion }
+
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveQuestionHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveQuestion }
+
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveAssignationParticipationTypeHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\AnswerRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveAssignationParticipationType }
