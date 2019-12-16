@@ -29,6 +29,10 @@ class CustomDataConverter
         $dataIndexedByTag = [];
 
         foreach ($customDataMapping as $type => $fields) {
+            if (!is_array($fields)) {
+                continue;
+            }
+
             foreach ($fields as $tag => $fieldName) {
                 if (isset($rawUser[$fieldName])) {
                     $dataIndexedByTag[$type][$tag] = $rawUser[$fieldName];
