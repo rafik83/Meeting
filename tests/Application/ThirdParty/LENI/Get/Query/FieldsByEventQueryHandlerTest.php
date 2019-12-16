@@ -36,10 +36,12 @@ class FieldsByEventQueryHandlerTest extends TestCase
         ];
 
         $customDataMapping = [
-            'sheet_activity' => 'ZL_PROFIL',
-            'sheet_organization_staff' => 'ZL_Effectif',
-            'sheet_generic_tag_20' => 'ZL_ACTIVITE',
-            'sheet_template_generic_tag_10' => 'ZL_TypePrestation',
+            'tags' => [
+                'sheet_activity' => 'ZL_PROFIL',
+                'sheet_organization_staff' => 'ZL_Effectif',
+                'sheet_generic_tag_20' => 'ZL_ACTIVITE',
+                'sheet_template_generic_tag_10' => 'ZL_TypePrestation',
+            ],
         ];
 
         $expectedResult = [
