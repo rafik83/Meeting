@@ -83,12 +83,12 @@ class RawDataToParticipantConverterTest extends TestCase
         $dataConverter
             ->convert($customDataMappingEvent1, $rawDataUser1)
             ->shouldBeCalled()
-            ->willReturn(['tags' => ['user1-data-indexed-by-tag' => 'whatever']])
+            ->willReturn(['user1-data-indexed-by-tag' => 'whatever'])
         ;
         $dataConverter
             ->convert($customDataMappingEvent1, $rawDataUser2)
             ->shouldBeCalled()
-            ->willReturn(['tags' => ['user2-data-indexed-by-tag' => 'whatever']])
+            ->willReturn(['user2-data-indexed-by-tag' => 'whatever'])
         ;
 
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
@@ -244,17 +244,15 @@ class RawDataToParticipantConverterTest extends TestCase
         ;
 
         $registrationTemplateDataEvent1type1 = $this->prophesize(TemplateData::class);
-        $registrationTemplateDataEvent1type2 = $this->prophesize(TemplateData::class);
         $sheetTemplateDataEvent1type1 = $this->prophesize(TemplateData::class);
-        $sheetTemplateDataEvent1type2 = $this->prophesize(TemplateData::class);
 
         $dataConverter = $this->prophesize(DataConverter::class);
         $dataConverter
             ->convert($customDataMappingEvent, $rawDataUser)
             ->shouldBeCalled()
             ->willReturn([
-                'states' => ['sheet_state' => 'Y'],
-                'tags' => ['user2-data-indexed-by-tag' => 'whatever'],
+                'sheet_state' => 'Y',
+                'user2-data-indexed-by-tag' => 'whatever',
             ])
         ;
 
@@ -266,7 +264,10 @@ class RawDataToParticipantConverterTest extends TestCase
                     $eventType1->reveal(),
                     'ronald@macdonald.food',
                     'en',
-                    ['user2-data-indexed-by-tag' => 'whatever'],
+                    [
+                        'sheet_state' => 'Y',
+                        'user2-data-indexed-by-tag' => 'whatever',
+                    ],
                     $registrationTemplateDataEvent1type1->reveal(),
                     $sheetTemplateDataEvent1type1->reveal(),
                     'leni_user_id',

@@ -20,7 +20,12 @@ class DataConverterTest extends TestCase
     public function testConvert()
     {
         $rawData = ['Prenom' => 'Bruce', 'Nom' => 'Willis', 'ZL_Effectif' => 'A1', 'ZL_FONCTION' => 'F1'];
-        $customDataMapping = ['sheet_organization_staff' => 'ZL_Effectif', 'participant_position' => 'ZL_FONCTION'];
+        $customDataMapping = [
+            'tags' => [
+                'sheet_organization_staff' => 'ZL_Effectif',
+                'participant_position' => 'ZL_FONCTION'
+            ]
+        ];
 
         $expectedResult = [
             'participant_firstname' => 'Bruce',
@@ -33,8 +38,7 @@ class DataConverterTest extends TestCase
         $customDataConverter
             ->convert($customDataMapping, $rawData)
             ->shouldBeCalled()
-            ->willReturn(['sheet_organization_staff' => 'A1', 'participant_position' => 'F1'])
-        ;
+            ->willReturn(['sheet_organization_staff' => 'A1', 'participant_position' => 'F1']);
 
         $mainDataConverter = $this->prophesize(MainDataConverter::class);
         $mainDataConverter
@@ -44,10 +48,10 @@ class DataConverterTest extends TestCase
                 [
                     'participant_firstname' => 'Bruce',
                     'participant_lastname' => 'Willis',
-                    'participant_position' => null,
+                    'participant_position' => 'F1',
+                    'sheet_organization_staff' => 'A1',
                 ]
-            )
-        ;
+            );
 
         $dataConverter = new DataConverter($mainDataConverter->reveal(), $customDataConverter->reveal());
         $this->assertEquals($expectedResult, $dataConverter->convert($customDataMapping, $rawData));
