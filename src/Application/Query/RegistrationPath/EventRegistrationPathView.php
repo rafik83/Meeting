@@ -47,4 +47,30 @@ class EventRegistrationPathView
 
         return true;
     }
+
+    public function getQuestionViewById(int $id): ?QuestionView
+    {
+        return $this->findQuestionViewById($this->questionView, $id);
+    }
+
+    private function findQuestionViewById(QuestionView $questionView, int $id): ?QuestionView
+    {
+        foreach ($questionView->answerViews as $answerView) {
+            $nextQuestionView = $answerView->nextQuestionView;
+
+            if (null !== $nextQuestionView) {
+                if ($id === $nextQuestionView->id) {
+                    return $nextQuestionView;
+                }
+
+                $foundQuestionView = $this->findQuestionViewById($nextQuestionView, $id);
+
+                if ($foundQuestionView instanceof QuestionView) {
+                    return $foundQuestionView;
+                }
+            }
+        }
+
+        return null;
+    }
 }
