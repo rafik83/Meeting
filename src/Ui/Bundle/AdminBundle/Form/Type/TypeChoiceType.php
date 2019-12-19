@@ -39,9 +39,10 @@ class TypeChoiceType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event', 'locale', 'user']);
+        $resolver->setRequired(['event', 'locale', 'user', 'exceptHidden']);
         $resolver->setDefined(['orderByTitle']);
         $resolver->addAllowedTypes('orderByTitle', 'bool');
+        $resolver->addAllowedTypes('exceptHidden', 'bool');
         $resolver->setDefaults([
             'orderByTitle' => false,
             'choice_label' => function (Options $options) {
@@ -82,6 +83,16 @@ class TypeChoiceType extends AbstractType
                                 mb_strtolower($typeB->getTitle($locale));
                         }
                     );
+                }
+
+                if ($options['exceptHidden']) {
+                    foreach ($types as $key => $type) {
+                        if ($type->isHidden()) {
+                            unset($types[$key]);
+                        }
+                    }
+
+                    $types = array_values($types);
                 }
 
                 return $types;
