@@ -32,6 +32,9 @@ class UpdateType extends AbstractEventType
     /** @var Event\EventUrlGeneratorInterface */
     private $eventUrlGenerator;
 
+    /** @var AuthorizationCheckerInterface */
+    private $authorizationChecker;
+
     public function __construct(
         array $supportedCurrencies,
         array $preferredLocales,
@@ -42,6 +45,7 @@ class UpdateType extends AbstractEventType
     ) {
         $this->eventUrlGenerator = $eventUrlGenerator;
         $this->translator = $translator;
+        $this->authorizationChecker = $authorizationChecker;
         parent::__construct($supportedCurrencies, $preferredLocales, $prefixRepository, $authorizationChecker);
     }
 
@@ -84,8 +88,20 @@ class UpdateType extends AbstractEventType
                     ['%urls%' => implode(" ; ", $this->getLocalesUrl($event, 'connect_linkedin_check'))],
                     'forms'
                 )
-            ])
-        ;
+            ]);
+
+        $isSuperAdmin = $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN');
+
+        if ($isSuperAdmin) {
+            $builder
+                ->add(
+                    'accessControlEnabled',
+                    CheckboxType::class,
+                    [
+                        'required' => false,
+                    ]
+                );
+        }
     }
 
     /**

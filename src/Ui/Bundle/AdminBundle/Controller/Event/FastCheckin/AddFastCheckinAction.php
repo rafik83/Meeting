@@ -70,7 +70,9 @@ class AddFastCheckinAction
 
     public function __invoke(Request $request, AdminDomain $adminDomain, Event $event, string $email)
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || !$event->isAccessControlEnabled()
+        ) {
             throw new AccessDeniedException('Access denied');
         }
 

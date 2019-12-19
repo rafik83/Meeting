@@ -84,6 +84,10 @@ Proximum\Vimeet\Domain\Model\Event:
             type: boolean
             options:
                 default: false
+        accessControlEnabled:
+            type: boolean
+            options:
+                default: false
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address

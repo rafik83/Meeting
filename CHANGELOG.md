@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2031 - Access control can be enabled or disabled
 - VIMEET-2028 - Configure a registration path
 
 ## [2.14.2] - 2019-11-26

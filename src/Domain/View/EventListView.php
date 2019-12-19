@@ -51,6 +51,9 @@ class EventListView implements EventInterface
     /** @var bool */
     public $visio;
 
+    /** @var bool */
+    public $accessControlEnabled;
+
     /**
      * @param null|int  $id
      * @param string    $title
@@ -60,17 +63,19 @@ class EventListView implements EventInterface
      * @param bool      $visible
      * @param DayView[] $days
      * @param bool      $visio
+     * @param bool      $accessControlEnabled
      */
-    public function __construct($id, $title, $domain, array $locales, $fallback, bool $visible, array $days = [], bool $visio = false)
+    public function __construct($id, $title, $domain, array $locales, $fallback, bool $visible, array $days = [], bool $visio = false, $accessControlEnabled = false)
     {
-        $this->id       = $id;
-        $this->title    = $title;
-        $this->domain   = $domain;
-        $this->locales  = $locales;
+        $this->id = $id;
+        $this->title = $title;
+        $this->domain = $domain;
+        $this->locales = $locales;
         $this->fallback = $fallback;
-        $this->visible  = $visible;
-        $this->days     = $days;
-        $this->visio    = $visio;
+        $this->visible = $visible;
+        $this->days = $days;
+        $this->visio = $visio;
+        $this->accessControlEnabled = $accessControlEnabled;
     }
 
     /**

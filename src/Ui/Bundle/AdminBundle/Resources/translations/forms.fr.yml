@@ -310,6 +310,7 @@ form.event_practical_info_update.children.organiserName.label: Organisateur
 form.event_practical_info_update.children.organiserPhone.label: 'Téléphone de contact'
 form.event_practical_info_update.children.organiserWebsite.label: 'Site internet'
 form.event_practical_info_update.children.submit.label: Enregistrer
+form.event_update.children.accessControlEnabled.label: "Contrôle d'accès activé"
 form.event_update_design.children.backgroundColor.label: 'Couleur de fond'
 form.event_update_design.children.backgroundImage.label: 'Image de fond'
 form.event_update_design.children.headerButtonLeftColor.label: 'Couleur de gauche des boutons du Header'
