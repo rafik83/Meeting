@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2028 - Configure a registration path
+- VIMEET-2034 - Follow the registration path
 
 ## [2.14.2] - 2019-11-26
 ### Fixed
