@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathView
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\RegistrationPath\QuestionType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Component\Form\FormError;
@@ -139,6 +140,7 @@ class HomeAction
                 [
                     'event' => $event,
                     'form' => $formView,
+                    'questionView' => null,
                 ]
             )
         );
@@ -150,12 +152,22 @@ class HomeAction
     ): Response {
         $questionView = $eventRegistrationPathView->questionView;
 
+        $questionForm = $this->formFactory->create(
+            QuestionType::class,
+            null,
+            [
+                'questionView' => $questionView,
+            ]
+        );
+
         return new Response(
             $this->engine->render(
                 'EventBundle:Home:index.html.twig',
                 [
                     'event' => $event,
                     'form' => null,
+                    'questionView' => $questionView,
+                    'questionForm' => $questionForm->createView(),
                 ]
             )
         );
