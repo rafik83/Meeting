@@ -26,6 +26,11 @@ class EventRegistrationPathView
         return $this->isAnswersHasNextStep($this->questionView);
     }
 
+    public function hasRegistrationPath(): bool
+    {
+        return $this->hasQuestion() && $this->isPathCompleted();
+    }
+
     private function isAnswersHasNextStep(QuestionView $questionView): bool
     {
         foreach ($questionView->answerViews as $answerView) {

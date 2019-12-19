@@ -11,8 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathQuery;
+use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
@@ -39,6 +43,9 @@ class HomeAction
     /** @var HomeUserDispatcher */
     private $homeUserDispatcher;
 
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     /** @var RouterInterface */
     private $router;
 
@@ -53,6 +60,7 @@ class HomeAction
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         HomeUserDispatcher $homeUserDispatcher,
+        QueryBusInterface $queryBus,
         RouterInterface $router,
         TranslatorInterface $translator,
         TypeRepositoryInterface $typeRepository
@@ -61,6 +69,7 @@ class HomeAction
         $this->engine = $engine;
         $this->formFactory = $formFactory;
         $this->homeUserDispatcher = $homeUserDispatcher;
+        $this->queryBus = $queryBus;
         $this->router = $router;
         $this->translator = $translator;
         $this->typeRepository = $typeRepository;
@@ -75,6 +84,13 @@ class HomeAction
 
         if ($response instanceof RedirectResponse) {
             return $response;
+        }
+
+        /** @var EventRegistrationPathView $eventRegistrationPathView */
+        $eventRegistrationPathView = $this->queryBus->handle(new EventRegistrationPathQuery($event, $locale));
+
+        if ($eventRegistrationPathView->hasRegistrationPath()) {
+            return $this->followRegistrationPath($event, $eventRegistrationPathView);
         }
 
         $typeViews = $this->typeRepository->getVisibleTypesViewsByEvent($event, $locale);
@@ -123,6 +139,23 @@ class HomeAction
                 [
                     'event' => $event,
                     'form' => $formView,
+                ]
+            )
+        );
+    }
+
+    private function followRegistrationPath(
+        Event $event,
+        EventRegistrationPathView $eventRegistrationPathView
+    ): Response {
+        $questionView = $eventRegistrationPathView->questionView;
+
+        return new Response(
+            $this->engine->render(
+                'EventBundle:Home:index.html.twig',
+                [
+                    'event' => $event,
+                    'form' => null,
                 ]
             )
         );

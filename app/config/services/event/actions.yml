@@ -8,6 +8,7 @@ services:
             - '@templating'
             - '@form.factory'
             - '@infrastructure.route.home_dispatch.home_user_dispatcher'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.router'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.type_repository'
