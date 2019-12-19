@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Query\RegistrationPath\AnswerView;
 use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathQuery;
 use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathView;
 use Proximum\Vimeet\Application\Query\RegistrationPath\QuestionView;
+use Proximum\Vimeet\Application\Query\RegistrationPath\TypeView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher;
@@ -120,9 +121,25 @@ class HomeAction
         );
     }
 
-    private function getTypeChoiceFormViewOrRedirect(Request $request, Event $event, string $locale)
+    /**
+     * @param Request    $request
+     * @param Event      $event
+     * @param string     $locale
+     * @param TypeView[] $filteredTypeViews
+     *
+     * @return FormView|RedirectResponse|null
+     */
+    private function getTypeChoiceFormViewOrRedirect(Request $request, Event $event, string $locale, array $filteredTypeViews = [])
     {
         $typeViews = $this->typeRepository->getVisibleTypesViewsByEvent($event, $locale);
+
+        foreach ($typeViews as $key => $typeView) {
+            if (!$this->hasType($typeView, $filteredTypeViews)) {
+                unset($typeViews[$key]);
+            }
+        }
+
+        $typeViews = array_values($typeViews);
 
         if (empty($typeViews) && !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return new RedirectResponse($this->router->generate('event_login'));
@@ -153,6 +170,23 @@ class HomeAction
         }
 
         return $form->createView();
+    }
+
+    /**
+     * @param TypeView      $typeView
+     * @param TypeView[] $filteredTypeViews
+     *
+     * @return bool
+     */
+    private function hasType($typeView, array &$filteredTypeViews)
+    {
+        foreach ($filteredTypeViews as $filteredTypeView) {
+            if ($filteredTypeView->id === $typeView->id) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function followRegistrationPath(
@@ -188,7 +222,27 @@ class HomeAction
                         return $this->redirectToTypeRegistration($answerView->getTypeView()->id);
                     }
 
-                    // @todo: several types
+                    $result = $this->getTypeChoiceFormViewOrRedirect(
+                        $request,
+                        $event,
+                        $request->getLocale(),
+                        $answerView->typeViews
+                    );
+
+                    if ($result instanceof RedirectResponse) {
+                        return $result;
+                    }
+
+                    return new Response(
+                        $this->engine->render(
+                            'EventBundle:Home:index.html.twig',
+                            [
+                                'event' => $event,
+                                'form' => $result,
+                                'questionView' => null,
+                            ]
+                        )
+                    );
                 }
 
                 if (null !== $answerView->nextQuestionView) {
