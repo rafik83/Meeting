@@ -5,7 +5,7 @@
 event:
     path: /
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Home:index }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\HomeAction
 
 event_select_sheet:
     path: /select-sheet
