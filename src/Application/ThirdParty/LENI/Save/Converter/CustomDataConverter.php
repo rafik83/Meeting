@@ -34,6 +34,10 @@ class CustomDataConverter
         $dataIndexedByFieldName = [];
 
         foreach ($customDataMapping as $type => $fields) {
+            if (!is_array($fields)) {
+                continue;
+            }
+
             foreach ($fields as $identifier => $fieldName) {
                 if ($type === LeniConstants::DATA_MAPPING_FORMAT_PRODUCTS) {
                     $dataIndexedByFieldName[$fieldName] =

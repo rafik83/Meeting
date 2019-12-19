@@ -37,9 +37,19 @@ class DataConverter
      */
     public function convert(array $customDataMapping, array $rawUser): array
     {
-        return array_merge(
-            $this->mainDataConverter->convert($rawUser),
-            $this->customDataConverter->convert($customDataMapping, $rawUser)
-        );
+        $dataIndexedByTag = $this->mainDataConverter->convert($rawUser);
+        $customData = $this->customDataConverter->convert($customDataMapping, $rawUser);
+
+        foreach ($customData as $type => $data) {
+            if (!is_array($data)) {
+                continue;
+            }
+
+            foreach ($data as $tag => $value) {
+                $dataIndexedByTag[$tag] = $value;
+            }
+        }
+
+        return $dataIndexedByTag;
     }
 }
