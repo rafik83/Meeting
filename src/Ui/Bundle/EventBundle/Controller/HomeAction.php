@@ -26,6 +26,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -101,36 +102,10 @@ class HomeAction
             return $this->followRegistrationPath($request, $event, $eventRegistrationPathView, $question);
         }
 
-        $typeViews = $this->typeRepository->getVisibleTypesViewsByEvent($event, $locale);
+        $result = $this->getTypeChoiceFormViewOrRedirect($request, $event, $locale);
 
-        if (empty($typeViews) && !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return new RedirectResponse($this->router->generate('event_login'));
-        }
-
-        $formView = null;
-
-        if (!empty($typeViews)) {
-            $form = $this->formFactory->create(
-                TypeChoiceType::class,
-                null,
-                [
-                    'typeViews' => $typeViews,
-                ]
-            );
-
-            if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-                $typeView = $form->getData()['type'];
-
-                if (null === $typeView) {
-                    $form->get('type')->addError(
-                        new FormError($this->translator->trans('validators.type.required', [], 'validators'))
-                    );
-                } else {
-                    return $this->redirectToTypeRegistration($typeView->id);
-                }
-            }
-
-            $formView = $form->createView();
+        if ($result instanceof RedirectResponse) {
+            return $result;
         }
 
         return new Response(
@@ -138,11 +113,46 @@ class HomeAction
                 'EventBundle:Home:index.html.twig',
                 [
                     'event' => $event,
-                    'form' => $formView,
+                    'form' => $result,
                     'questionView' => null,
                 ]
             )
         );
+    }
+
+    private function getTypeChoiceFormViewOrRedirect(Request $request, Event $event, string $locale)
+    {
+        $typeViews = $this->typeRepository->getVisibleTypesViewsByEvent($event, $locale);
+
+        if (empty($typeViews) && !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return new RedirectResponse($this->router->generate('event_login'));
+        }
+
+        if (empty($typeViews)) {
+            return null;
+        }
+
+        $form = $this->formFactory->create(
+            TypeChoiceType::class,
+            null,
+            [
+                'typeViews' => $typeViews,
+            ]
+        );
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $typeView = $form->getData()['type'];
+
+            if (null === $typeView) {
+                $form->get('type')->addError(
+                    new FormError($this->translator->trans('validators.type.required', [], 'validators'))
+                );
+            } else {
+                return $this->redirectToTypeRegistration($typeView->id);
+            }
+        }
+
+        return $form->createView();
     }
 
     private function followRegistrationPath(
