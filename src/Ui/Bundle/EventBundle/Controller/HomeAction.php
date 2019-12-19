@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Query\RegistrationPath\AnswerView;
 use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathQuery;
 use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -91,7 +92,7 @@ class HomeAction
         $eventRegistrationPathView = $this->queryBus->handle(new EventRegistrationPathQuery($event, $locale));
 
         if ($eventRegistrationPathView->hasRegistrationPath()) {
-            return $this->followRegistrationPath($event, $eventRegistrationPathView);
+            return $this->followRegistrationPath($request, $event, $eventRegistrationPathView);
         }
 
         $typeViews = $this->typeRepository->getVisibleTypesViewsByEvent($event, $locale);
@@ -119,15 +120,7 @@ class HomeAction
                         new FormError($this->translator->trans('validators.type.required', [], 'validators'))
                     );
                 } else {
-                    if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                        return new RedirectResponse(
-                            $this->router->generate('event_participate', ['typeView' => $typeView->id])
-                        );
-                    }
-
-                    return new RedirectResponse(
-                        $this->router->generate('event_register', ['typeView' => $typeView->id])
-                    );
+                    return $this->redirectToTypeRegistration($typeView->id);
                 }
             }
 
@@ -147,6 +140,7 @@ class HomeAction
     }
 
     private function followRegistrationPath(
+        Request $request,
         Event $event,
         EventRegistrationPathView $eventRegistrationPathView
     ): Response {
@@ -160,6 +154,20 @@ class HomeAction
             ]
         );
 
+        if ($questionForm->handleRequest($request)->isSubmitted() && $questionForm->isValid()) {
+            $answerView = $questionForm->getData()['answer'];
+
+            if ($answerView instanceof AnswerView) {
+                if ($answerView->hasTypes()) {
+
+
+                    if ($answerView->hasOneType()) {
+                        return $this->redirectToTypeRegistration($answerView->getTypeView()->id);
+                    }
+                }
+            }
+        }
+
         return new Response(
             $this->engine->render(
                 'EventBundle:Home:index.html.twig',
@@ -170,6 +178,19 @@ class HomeAction
                     'questionForm' => $questionForm->createView(),
                 ]
             )
+        );
+    }
+
+    private function redirectToTypeRegistration(int $typeId): RedirectResponse
+    {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return new RedirectResponse(
+                $this->router->generate('event_participate', ['typeView' => $typeId])
+            );
+        }
+
+        return new RedirectResponse(
+            $this->router->generate('event_register', ['typeView' => $typeId])
         );
     }
 }
