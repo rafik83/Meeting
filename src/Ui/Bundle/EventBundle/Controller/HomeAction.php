@@ -277,7 +277,7 @@ class HomeAction
         Request $request,
         Event $event,
         EventRegistrationPathView $eventRegistrationPathView,
-        int $questionId
+        ?int $questionId
     ): Response {
         $questionView = $eventRegistrationPathView->questionView;
 
