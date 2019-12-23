@@ -138,66 +138,6 @@ class HomeAction
         return $this->manageQuestion($request, $event, $eventRegistrationPathView, $questionId);
     }
 
-    private function manageAnswer(
-        Request $request,
-        Event $event,
-        EventRegistrationPathView $eventRegistrationPathView,
-        int $answerId
-    ): Response {
-        $answerView = $eventRegistrationPathView->getAnswerViewById($answerId);
-
-        if (!$answerView instanceof AnswerView) {
-            throw new NotFoundHttpException('Answer not found');
-        }
-
-        $result = $this->getTypeChoiceFormViewOrRedirect(
-            $request,
-            $event,
-            $request->getLocale(),
-            $answerView->typeViews
-        );
-
-        if ($result instanceof RedirectResponse) {
-            return $result;
-        }
-
-        return new Response(
-            $this->engine->render(
-                'EventBundle:Home:index.html.twig',
-                [
-                    'event' => $event,
-                    'form' => $result,
-                    'questionView' => null,
-                    'backLink' => null,
-                ]
-            )
-        );
-    }
-
-    /**
-     * @param Event                      $event
-     * @param string                     $locale
-     * @param RegistrationPathTypeView[] $filteredTypeViews
-     *
-     * @return TypeView[]
-     */
-    private function getFilteredTypeViews(Event $event, string $locale, array $filteredTypeViews = [])
-    {
-        $typeViews = $this->typeRepository->getVisibleTypesViewsByEvent($event, $locale);
-
-        if (empty($filteredTypeViews)) {
-            return $typeViews;
-        }
-
-        foreach ($typeViews as $key => $typeView) {
-            if (!$this->hasType($typeView, $filteredTypeViews)) {
-                unset($typeViews[$key]);
-            }
-        }
-
-        return array_values($typeViews);
-    }
-
     /**
      * @param Request    $request
      * @param Event      $event
@@ -243,6 +183,30 @@ class HomeAction
         }
 
         return $form->createView();
+    }
+
+    /**
+     * @param Event                      $event
+     * @param string                     $locale
+     * @param RegistrationPathTypeView[] $filteredTypeViews
+     *
+     * @return TypeView[]
+     */
+    private function getFilteredTypeViews(Event $event, string $locale, array $filteredTypeViews = []): array
+    {
+        $typeViews = $this->typeRepository->getVisibleTypesViewsByEvent($event, $locale);
+
+        if (empty($filteredTypeViews)) {
+            return $typeViews;
+        }
+
+        foreach ($typeViews as $key => $typeView) {
+            if (!$this->hasType($typeView, $filteredTypeViews)) {
+                unset($typeViews[$key]);
+            }
+        }
+
+        return array_values($typeViews);
     }
 
     /**
@@ -340,13 +304,49 @@ class HomeAction
                     'form' => null,
                     'questionView' => $questionView,
                     'questionForm' => $questionForm->createView(),
-                    'backLink' => $this->getBackLink($questionView),
+                    'backLink' => $this->getQuestionBackLink($questionView),
                 ]
             )
         );
     }
 
-    private function getBackLink(QuestionView $questionView): ?string
+    private function manageAnswer(
+        Request $request,
+        Event $event,
+        EventRegistrationPathView $eventRegistrationPathView,
+        int $answerId
+    ): Response {
+        $answerView = $eventRegistrationPathView->getAnswerViewById($answerId);
+
+        if (!$answerView instanceof AnswerView) {
+            throw new NotFoundHttpException('Answer not found');
+        }
+
+        $result = $this->getTypeChoiceFormViewOrRedirect(
+            $request,
+            $event,
+            $request->getLocale(),
+            $answerView->typeViews
+        );
+
+        if ($result instanceof RedirectResponse) {
+            return $result;
+        }
+
+        return new Response(
+            $this->engine->render(
+                'EventBundle:Home:index.html.twig',
+                [
+                    'event' => $event,
+                    'form' => $result,
+                    'questionView' => null,
+                    'backLink' => $this->getAnswerBackLink($answerView),
+                ]
+            )
+        );
+    }
+
+    private function getQuestionBackLink(QuestionView $questionView): ?string
     {
         if (null === $questionView->previousAnswerView) {
             return null;
@@ -355,6 +355,14 @@ class HomeAction
         return $this->router->generate(
             'event_registration_path_question',
             ['question' => $questionView->previousAnswerView->questionView->id]
+        );
+    }
+
+    private function getAnswerBackLink(AnswerView $answerView): ?string
+    {
+        return $this->router->generate(
+            'event_registration_path_question',
+            ['question' => $answerView->questionView->id]
         );
     }
 }
