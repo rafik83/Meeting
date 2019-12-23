@@ -4,14 +4,30 @@
 
 {% block content %}
     <section class="main">
-        {% if form %}
-            {% form_theme form '@Ui/default.html.twig' %}
+        {% if questionView %}
+            <header>
+                {{ questionView.title|html }}
+            </header>
 
+            <div class="main__content">
+                {% form_theme questionForm '@Ui/default.html.twig' %}
+                {{ form_start(questionForm, {attr: {class: 'styled-form'}}) }}
+                {{ form_row(questionForm.answer) }}
+
+                <div class="validation">
+                    <button type="submit" class="btn btn-primary"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
+                </div>
+
+                {{ form_end(questionForm) }}
+            </div>
+
+        {% elseif form %}
             <header>
                 <h1><i class="icon-Clef"></i> {{ 'register.register_as'|trans }}</h1>
             </header>
 
             <div class="main__content">
+                {% form_theme form '@Ui/default.html.twig' %}
                 {{ form_start(form, {attr: {class: 'styled-form'}}) }}
                 {{ form_row(form.type) }}
 
@@ -24,6 +40,12 @@
         {% else %}
             <div class="important fail">
                 {{ 'register.noAvailableRegistrationType'|trans }}
+            </div>
+        {% endif %}
+
+        {% if backLink %}
+            <div class="validation">
+                <a href="{{ backLink }}" class="btn btn-secondary"><i class="icon-Precedent_3"></i> {{ 'common.back'|trans }}</a>
             </div>
         {% endif %}
     </section>

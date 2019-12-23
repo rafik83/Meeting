@@ -1,5 +1,19 @@
 services:
     #
+    # Home
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\HomeAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@form.factory'
+            - '@infrastructure.route.home_dispatch.home_user_dispatcher'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.type_repository'
+
+    #
     # Sheet
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ObjectsCollectionUpdateAction:

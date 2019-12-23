@@ -40,6 +40,12 @@ class EventRegistrationPathQueryHandler
                 $previousAnswerIdByQuestion[$question->getId()] = $previousAnswer->getId();
             }
 
+            $questionId = $question->getId();
+            $questionView = new QuestionView(
+                $questionId,
+                $question->getTitle($query->locale),
+                []
+            );
             $answerViews = [];
 
             foreach ($question->getAnswers() as $answer) {
@@ -50,17 +56,12 @@ class EventRegistrationPathQueryHandler
                     $typesViews[] = new TypeView($type->getId(), $type->getTitle($query->locale));
                 }
 
-                $answerView = new AnswerView($answerId, $answer->getTitle($query->locale), $typesViews);
+                $answerView = new AnswerView($questionView, $answerId, $answer->getTitle($query->locale), $typesViews);
                 $answerViews[] = $answerView;
                 $allAnswerViews[$answerId] = $answerView;
             }
+            $questionView->answerViews = $answerViews;
 
-            $questionId = $question->getId();
-            $questionView = new QuestionView(
-                $questionId,
-                $question->getTitle($query->locale),
-                $answerViews
-            );
             $questionViews[$question->getId()] = $questionView;
 
             if (null === $previousAnswer) {
@@ -70,6 +71,7 @@ class EventRegistrationPathQueryHandler
 
         foreach ($previousAnswerIdByQuestion as $questionId => $answerId) {
             $allAnswerViews[$answerId]->setNextQuestionView($questionViews[$questionId]);
+            $questionViews[$questionId]->setPreviousAnswerView($allAnswerViews[$answerId]);
         }
 
         return new EventRegistrationPathView($firstQuestionView);

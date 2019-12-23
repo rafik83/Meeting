@@ -10,14 +10,18 @@ class AnswerView
     /** @var string */
     public $title;
 
+    /** @var QuestionView */
+    public $questionView;
+
     /** @var QuestionView|null */
     public $nextQuestionView;
 
     /** @var TypeView[] */
     public $typeViews;
 
-    public function __construct(int $id, string $title, array $typeViews)
+    public function __construct(QuestionView $questionView, int $id, string $title, array $typeViews)
     {
+        $this->questionView = $questionView;
         $this->id = $id;
         $this->title = $title;
         $this->typeViews = $typeViews;
@@ -44,6 +48,22 @@ class AnswerView
     public function hasTypes(): bool
     {
         return !empty($this->typeViews);
+    }
+
+    public function hasOneType(): bool
+    {
+        return 1 === count($this->typeViews);
+    }
+
+    public function getTypeView(): TypeView
+    {
+        $typeView = reset($this->typeViews);
+
+        if (!$this->hasOneType() && false !== $typeView) {
+            throw new \LogicException('This question has not one type.');
+        }
+
+        return $typeView;
     }
 
     public function hasNextStep(): bool

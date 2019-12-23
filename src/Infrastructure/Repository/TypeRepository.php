@@ -159,7 +159,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getVisibleTypesViewsByEvent(Event $event, $locale)
+    public function getVisibleTypesViewsByEvent(Event $event, $locale): array
     {
         $queryBuilder = $this
             ->entityManager

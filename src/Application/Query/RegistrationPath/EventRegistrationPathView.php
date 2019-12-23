@@ -26,6 +26,11 @@ class EventRegistrationPathView
         return $this->isAnswersHasNextStep($this->questionView);
     }
 
+    public function hasRegistrationPath(): bool
+    {
+        return $this->hasQuestion() && $this->isPathCompleted();
+    }
+
     private function isAnswersHasNextStep(QuestionView $questionView): bool
     {
         foreach ($questionView->answerViews as $answerView) {
@@ -41,5 +46,61 @@ class EventRegistrationPathView
         }
 
         return true;
+    }
+
+    public function getQuestionViewById(int $id): ?QuestionView
+    {
+        return $this->findQuestionViewById($this->questionView, $id);
+    }
+
+    private function findQuestionViewById(QuestionView $questionView, int $id): ?QuestionView
+    {
+        if ($id === $questionView->id) {
+            return $questionView;
+        }
+
+        foreach ($questionView->answerViews as $answerView) {
+            $nextQuestionView = $answerView->nextQuestionView;
+
+            if (null !== $nextQuestionView) {
+                if ($id === $nextQuestionView->id) {
+                    return $nextQuestionView;
+                }
+
+                $foundQuestionView = $this->findQuestionViewById($nextQuestionView, $id);
+
+                if ($foundQuestionView instanceof QuestionView) {
+                    return $foundQuestionView;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function getAnswerViewById(int $id): ?AnswerView
+    {
+        return $this->findAnswerViewById($this->questionView, $id);
+    }
+
+    private function findAnswerViewById(QuestionView $questionView, int $id): ?AnswerView
+    {
+        foreach ($questionView->answerViews as $answerView) {
+            if ($id === $answerView->id) {
+                return $answerView;
+            }
+
+            $nextQuestionView = $answerView->nextQuestionView;
+
+            if (null !== $nextQuestionView) {
+                $foundAnswerView = $this->findAnswerViewById($nextQuestionView, $id);
+
+                if ($foundAnswerView instanceof AnswerView) {
+                    return $foundAnswerView;
+                }
+            }
+        }
+
+        return null;
     }
 }

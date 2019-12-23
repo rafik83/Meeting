@@ -19,6 +19,8 @@ class AssignParticipationTypeType extends AbstractType
                 'event' => $options['event'],
                 'locale' => $options['locale'],
                 'user' => $options['admin'],
+                'orderByTitle' => true,
+                'exceptHidden' => true,
                 'expanded' => true,
                 'multiple' => true,
                 'required' => true,

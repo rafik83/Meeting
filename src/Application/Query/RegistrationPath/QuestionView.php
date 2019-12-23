@@ -13,6 +13,9 @@ class QuestionView
     /** @var array */
     public $answerViews;
 
+    /** @var null|AnswerView */
+    public $previousAnswerView;
+
     /**
      * @param int          $id
      * @param string       $title
@@ -23,5 +26,10 @@ class QuestionView
         $this->id = $id;
         $this->title = $title;
         $this->answerViews = $answerViews;
+    }
+
+    public function setPreviousAnswerView(AnswerView $answerView)
+    {
+        $this->previousAnswerView = $answerView;
     }
 }
