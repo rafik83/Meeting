@@ -85,7 +85,8 @@ class HomeAction
         Request $request,
         EventDomain $eventDomain,
         ?UserInterface $user = null,
-        ?int $question = null
+        ?int $question = null,
+        ?int $answer = null
     ): Response {
         $locale = $request->getLocale();
         $event = $eventDomain->getEvent();
@@ -100,10 +101,59 @@ class HomeAction
         $eventRegistrationPathView = $this->queryBus->handle(new EventRegistrationPathQuery($event, $locale));
 
         if ($eventRegistrationPathView->hasRegistrationPath()) {
-            return $this->followRegistrationPath($request, $event, $eventRegistrationPathView, $question);
+            return $this->followRegistrationPath($request, $event, $eventRegistrationPathView, $question, $answer);
         }
 
         $result = $this->getTypeChoiceFormViewOrRedirect($request, $event, $locale);
+
+        if ($result instanceof RedirectResponse) {
+            return $result;
+        }
+
+        return new Response(
+            $this->engine->render(
+                'EventBundle:Home:index.html.twig',
+                [
+                    'event' => $event,
+                    'form' => $result,
+                    'questionView' => null,
+                ]
+            )
+        );
+    }
+
+    private function followRegistrationPath(
+        Request $request,
+        Event $event,
+        EventRegistrationPathView $eventRegistrationPathView,
+        ?int $questionId,
+        ?int $answerId
+    ): Response {
+        if (null !== $answerId) {
+            return $this->manageAnswer($request, $event, $eventRegistrationPathView, $answerId);
+        }
+
+        return $this->manageQuestion($request, $event, $eventRegistrationPathView, $questionId);
+    }
+
+    private function manageAnswer(
+        Request $request,
+        Event $event,
+        EventRegistrationPathView $eventRegistrationPathView,
+        int $answerId
+    ): Response {
+        $answerView = $eventRegistrationPathView->getAnswerViewById($answerId);
+
+        if (!$answerView instanceof AnswerView) {
+            throw new NotFoundHttpException('Answer not found');
+        }
+
+        $result = $this->getTypeChoiceFormViewOrRedirect(
+            $request,
+            $event,
+            $request->getLocale(),
+            $answerView->typeViews
+        );
 
         if ($result instanceof RedirectResponse) {
             return $result;
@@ -129,8 +179,12 @@ class HomeAction
      *
      * @return FormView|RedirectResponse|null
      */
-    private function getTypeChoiceFormViewOrRedirect(Request $request, Event $event, string $locale, array $filteredTypeViews = [])
-    {
+    private function getTypeChoiceFormViewOrRedirect(
+        Request $request,
+        Event $event,
+        string $locale,
+        array $filteredTypeViews = []
+    ) {
         $typeViews = $this->typeRepository->getVisibleTypesViewsByEvent($event, $locale);
 
         foreach ($typeViews as $key => $typeView) {
@@ -173,7 +227,7 @@ class HomeAction
     }
 
     /**
-     * @param TypeView      $typeView
+     * @param TypeView   $typeView
      * @param TypeView[] $filteredTypeViews
      *
      * @return bool
@@ -189,11 +243,24 @@ class HomeAction
         return false;
     }
 
-    private function followRegistrationPath(
+    private function redirectToTypeRegistration(int $typeId): RedirectResponse
+    {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return new RedirectResponse(
+                $this->router->generate('event_participate', ['typeView' => $typeId])
+            );
+        }
+
+        return new RedirectResponse(
+            $this->router->generate('event_register', ['typeView' => $typeId])
+        );
+    }
+
+    private function manageQuestion(
         Request $request,
         Event $event,
         EventRegistrationPathView $eventRegistrationPathView,
-        ?int $questionId
+        int $questionId
     ): Response {
         $questionView = $eventRegistrationPathView->questionView;
 
@@ -222,32 +289,20 @@ class HomeAction
                         return $this->redirectToTypeRegistration($answerView->getTypeView()->id);
                     }
 
-                    $result = $this->getTypeChoiceFormViewOrRedirect(
-                        $request,
-                        $event,
-                        $request->getLocale(),
-                        $answerView->typeViews
-                    );
-
-                    if ($result instanceof RedirectResponse) {
-                        return $result;
-                    }
-
-                    return new Response(
-                        $this->engine->render(
-                            'EventBundle:Home:index.html.twig',
-                            [
-                                'event' => $event,
-                                'form' => $result,
-                                'questionView' => null,
-                            ]
+                    return new RedirectResponse(
+                        $this->router->generate(
+                            'event_registration_path_answer',
+                            ['question' => $questionView->id, 'answer' => $answerView->id]
                         )
                     );
                 }
 
                 if (null !== $answerView->nextQuestionView) {
                     return new RedirectResponse(
-                        $this->router->generate('event_question', ['question' => $answerView->nextQuestionView->id])
+                        $this->router->generate(
+                            'event_registration_path_question',
+                            ['question' => $answerView->nextQuestionView->id]
+                        )
                     );
                 }
             }
@@ -263,19 +318,6 @@ class HomeAction
                     'questionForm' => $questionForm->createView(),
                 ]
             )
-        );
-    }
-
-    private function redirectToTypeRegistration(int $typeId): RedirectResponse
-    {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return new RedirectResponse(
-                $this->router->generate('event_participate', ['typeView' => $typeId])
-            );
-        }
-
-        return new RedirectResponse(
-            $this->router->generate('event_register', ['typeView' => $typeId])
         );
     }
 }

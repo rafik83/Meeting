@@ -7,12 +7,20 @@ event:
     methods:  [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\HomeAction
 
-event_question:
+event_registration_path_question:
     path: /question/{question}
     methods:  [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\HomeAction
     requirements:
         question: \d+
+
+event_registration_path_answer:
+    path: /question/{question}/answer/{answer}
+    methods:  [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\HomeAction
+    requirements:
+        question: \d+
+        answer: \d+
 
 event_select_sheet:
     path: /select-sheet
