@@ -132,7 +132,7 @@ class HomeAction
         ?int $answerId
     ): Response {
         if (null !== $answerId) {
-            return $this->manageAnswer($request, $event, $eventRegistrationPathView, $answerId);
+            return $this->manageAnswer($request, $event, $eventRegistrationPathView, $questionId, $answerId);
         }
 
         return $this->manageQuestion($request, $event, $eventRegistrationPathView, $questionId);
@@ -314,12 +314,17 @@ class HomeAction
         Request $request,
         Event $event,
         EventRegistrationPathView $eventRegistrationPathView,
+        int $questionId,
         int $answerId
     ): Response {
         $answerView = $eventRegistrationPathView->getAnswerViewById($answerId);
 
         if (!$answerView instanceof AnswerView) {
             throw new NotFoundHttpException('Answer not found');
+        }
+
+        if ($questionId !== $answerView->questionView->id) {
+            throw new NotFoundHttpException('Question not found');
         }
 
         $result = $this->getTypeChoiceFormViewOrRedirect(
