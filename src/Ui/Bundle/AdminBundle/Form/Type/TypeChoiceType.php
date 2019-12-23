@@ -44,6 +44,7 @@ class TypeChoiceType extends AbstractType
         $resolver->addAllowedTypes('orderByTitle', 'bool');
         $resolver->addAllowedTypes('exceptHidden', 'bool');
         $resolver->setDefaults([
+            'exceptHidden' => false,
             'orderByTitle' => false,
             'choice_label' => function (Options $options) {
                 return function ($type) use ($options) {
