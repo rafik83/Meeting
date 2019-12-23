@@ -55,6 +55,10 @@ class EventRegistrationPathView
 
     private function findQuestionViewById(QuestionView $questionView, int $id): ?QuestionView
     {
+        if ($id === $questionView->id) {
+            return $questionView;
+        }
+
         foreach ($questionView->answerViews as $answerView) {
             $nextQuestionView = $answerView->nextQuestionView;
 

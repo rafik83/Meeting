@@ -279,14 +279,19 @@ class HomeAction
         EventRegistrationPathView $eventRegistrationPathView,
         ?int $questionId
     ): Response {
-        $questionView = $eventRegistrationPathView->questionView;
+        if (null === $questionId) {
+            return new RedirectResponse(
+                $this->router->generate(
+                    'event_registration_path_question',
+                    ['question' => $eventRegistrationPathView->questionView->id]
+                )
+            );
+        }
 
-        if (null !== $questionId) {
-            $questionView = $eventRegistrationPathView->getQuestionViewById($questionId);
+        $questionView = $eventRegistrationPathView->getQuestionViewById($questionId);
 
-            if (!$questionView instanceof QuestionView) {
-                throw new NotFoundHttpException('Question not found');
-            }
+        if (!$questionView instanceof QuestionView) {
+            throw new NotFoundHttpException('Question not found');
         }
 
         $questionForm = $this->formFactory->create(
