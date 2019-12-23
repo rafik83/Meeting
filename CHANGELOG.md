@@ -5,12 +5,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.16.0] - 2019-12-23
+### Added
+- VIMEET-2034 - Follow the registration path
+
 ## [2.15.0] - 2019-12-19
 ### Added
 - VIMEET-2026 - Fixes for API Leni
 - VIMEET-2031 - Access control can be enabled or disabled
 - VIMEET-2028 - Configure a registration path
-- VIMEET-2034 - Follow the registration path
 
 ## [2.14.2] - 2019-11-26
 ### Fixed
