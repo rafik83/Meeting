@@ -22,28 +22,31 @@ class EventRegistrationPathViewTest extends TestCase
         $typeView1 = new TypeView(42, 'Exhibitor');
         $typeView2 = new TypeView(1242, 'Visitor');
 
-        $secondQuestionView = new QuestionView(
-            2,
-            'Where do you come from?',
-            [
-                new AnswerView(101, 'Paris', [$typeView1]),
-                new AnswerView(102, 'London', []), // missing next step
-                new AnswerView(103, 'New York', [$typeView1, $typeView2]),
-            ]
-        );
-
-        $answerView1 = new AnswerView(22, 'Yes', []);
-        $answerView1->setNextQuestionView($secondQuestionView);
-        $answerView2 = new AnswerView(23, 'No', [$typeView1]);
-
         $firstQuestionView = new QuestionView(
             1,
             'Do you do meetings?',
-            [
-                $answerView1,
-                $answerView2,
-            ]
+            []
         );
+
+        $secondQuestionView = new QuestionView(
+            2,
+            'Where do you come from?',
+            []
+        );
+        $secondQuestionView->answerViews = [
+            new AnswerView($secondQuestionView, 101, 'Paris', [$typeView1]),
+            new AnswerView($secondQuestionView, 102, 'London', []), // missing next step
+            new AnswerView($secondQuestionView, 103, 'New York', [$typeView1, $typeView2]),
+        ];
+
+        $answerView1 = new AnswerView($firstQuestionView, 22, 'Yes', []);
+        $answerView1->setNextQuestionView($secondQuestionView);
+        $answerView2 = new AnswerView($firstQuestionView, 23, 'No', [$typeView1]);
+
+        $firstQuestionView->answerViews = [
+            $answerView1,
+            $answerView2,
+        ];
 
         $eventRegistrationPathView = new EventRegistrationPathView($firstQuestionView);
 
@@ -58,26 +61,27 @@ class EventRegistrationPathViewTest extends TestCase
         $secondQuestionView = new QuestionView(
             2,
             'Where do you come from?',
-            [
-                new AnswerView(101, 'Paris', [$typeView1, $typeView2]),
-                new AnswerView(102, 'London', [$typeView2]),
-                new AnswerView(103, 'New York', [$typeView1, $typeView2]),
-            ]
+            []
         );
+        $secondQuestionView->answerViews = [
+            new AnswerView($secondQuestionView, 101, 'Paris', [$typeView1, $typeView2]),
+            new AnswerView($secondQuestionView, 102, 'London', [$typeView2]),
+            new AnswerView($secondQuestionView, 103, 'New York', [$typeView1, $typeView2]),
+        ];
 
-        $answerView1 = new AnswerView(22, 'Yes', []); // no types but a next question is assigned
-        $answerView1->setNextQuestionView($secondQuestionView);
-
-        $answerView2 = new AnswerView(23, 'No', [$typeView1]);
 
         $firstQuestionView = new QuestionView(
             1,
             'Do you do meetings?',
-            [
-                $answerView1,
-                $answerView2,
-            ]
+            []
         );
+
+        $answerView1 = new AnswerView($firstQuestionView, 22, 'Yes', []); // no types but a next question is assigned
+        $answerView1->setNextQuestionView($secondQuestionView);
+
+        $answerView2 = new AnswerView($firstQuestionView, 23, 'No', [$typeView1]);
+
+        $firstQuestionView->answerViews = [$answerView1, $answerView2];
 
         $eventRegistrationPathView = new EventRegistrationPathView($firstQuestionView);
 

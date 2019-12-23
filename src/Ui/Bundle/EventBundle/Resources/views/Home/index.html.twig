@@ -42,6 +42,12 @@
                 {{ 'register.noAvailableRegistrationType'|trans }}
             </div>
         {% endif %}
+
+        {% if backLink %}
+            <div class="validation">
+                <a href="{{ backLink }}" class="btn btn-secondary"><i class="icon-Precedent_3"></i> {{ 'common.back'|trans }}</a>
+            </div>
+        {% endif %}
     </section>
 
     <section id="type-description" class="type-description important hide">

@@ -118,6 +118,7 @@ class HomeAction
                     'event' => $event,
                     'form' => $result,
                     'questionView' => null,
+                    'backLink' => null,
                 ]
             )
         );
@@ -167,6 +168,7 @@ class HomeAction
                     'event' => $event,
                     'form' => $result,
                     'questionView' => null,
+                    'backLink' => null,
                 ]
             )
         );
@@ -338,8 +340,21 @@ class HomeAction
                     'form' => null,
                     'questionView' => $questionView,
                     'questionForm' => $questionForm->createView(),
+                    'backLink' => $this->getBackLink($questionView),
                 ]
             )
+        );
+    }
+
+    private function getBackLink(QuestionView $questionView): ?string
+    {
+        if (null === $questionView->previousAnswerView) {
+            return null;
+        }
+
+        return $this->router->generate(
+            'event_registration_path_question',
+            ['question' => $questionView->previousAnswerView->questionView->id]
         );
     }
 }

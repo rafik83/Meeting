@@ -10,14 +10,18 @@ class AnswerView
     /** @var string */
     public $title;
 
+    /** @var QuestionView */
+    public $questionView;
+
     /** @var QuestionView|null */
     public $nextQuestionView;
 
     /** @var TypeView[] */
     public $typeViews;
 
-    public function __construct(int $id, string $title, array $typeViews)
+    public function __construct(QuestionView $questionView, int $id, string $title, array $typeViews)
     {
+        $this->questionView = $questionView;
         $this->id = $id;
         $this->title = $title;
         $this->typeViews = $typeViews;

@@ -44,26 +44,31 @@ class EventRegistrationPathQueryHandlerTest extends TestCase
         $expectedSecondQuestionView = new QuestionView(
             2,
             'Where do you come from?',
-            [
-                new AnswerView(101, 'Paris', []),
-                new AnswerView(102, 'London', []),
-                new AnswerView(103, 'New York', [$typeView1, $typeView2]),
-            ]
+            []
         );
-
-        $answerView1 = new AnswerView(22, 'Yes', []);
-        $answerView1->setNextQuestionView($expectedSecondQuestionView);
-
-        $answerView2 = new AnswerView(23, 'No', []);
+        $expectedSecondQuestionView->answerViews = [
+            new AnswerView($expectedSecondQuestionView, 101, 'Paris', []),
+            new AnswerView($expectedSecondQuestionView, 102, 'London', []),
+            new AnswerView($expectedSecondQuestionView, 103, 'New York', [$typeView1, $typeView2]),
+        ];
 
         $expectedQuestionView = new QuestionView(
             1,
             'Do you do meetings?',
-            [
-                $answerView1,
-                $answerView2,
-            ]
+            []
         );
+
+        $answerView1 = new AnswerView($expectedQuestionView, 22, 'Yes', []);
+        $answerView1->setNextQuestionView($expectedSecondQuestionView);
+        $expectedSecondQuestionView->setPreviousAnswerView($answerView1);
+
+        $answerView2 = new AnswerView($expectedQuestionView, 23, 'No', []);
+
+        $expectedQuestionView->answerViews = [
+            $answerView1,
+            $answerView2,
+        ];
+
         $expectedResult = new EventRegistrationPathView($expectedQuestionView);
 
         $firstQuestionAnswerYes = $this->prophesize(Answer::class);
@@ -132,8 +137,7 @@ class EventRegistrationPathQueryHandlerTest extends TestCase
         $this->questionRepository
             ->getQuestionsByEvent($this->event->reveal(), 'en')
             ->shouldBeCalled()
-            ->willReturn([$firstQuestion, $secondQuestion])
-        ;
+            ->willReturn([$firstQuestion, $secondQuestion]);
 
         $eventRegistrationPathQuery = new EventRegistrationPathQuery($this->event->reveal(), 'en');
         $result = $this->eventRegistrationPathQueryHandler->handle($eventRegistrationPathQuery);
