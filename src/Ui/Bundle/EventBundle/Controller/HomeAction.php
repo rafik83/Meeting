@@ -18,9 +18,10 @@ use Proximum\Vimeet\Application\Query\RegistrationPath\AnswerView;
 use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathQuery;
 use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathView;
 use Proximum\Vimeet\Application\Query\RegistrationPath\QuestionView;
-use Proximum\Vimeet\Application\Query\RegistrationPath\TypeView;
+use Proximum\Vimeet\Application\Query\RegistrationPath\TypeView as RegistrationPathTypeView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\RegistrationPath\QuestionType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
@@ -172,6 +173,30 @@ class HomeAction
     }
 
     /**
+     * @param Event                      $event
+     * @param string                     $locale
+     * @param RegistrationPathTypeView[] $filteredTypeViews
+     *
+     * @return TypeView[]
+     */
+    private function getFilteredTypeViews(Event $event, string $locale, array $filteredTypeViews = [])
+    {
+        $typeViews = $this->typeRepository->getVisibleTypesViewsByEvent($event, $locale);
+
+        if (empty($filteredTypeViews)) {
+            return $typeViews;
+        }
+
+        foreach ($typeViews as $key => $typeView) {
+            if (!$this->hasType($typeView, $filteredTypeViews)) {
+                unset($typeViews[$key]);
+            }
+        }
+
+        return array_values($typeViews);
+    }
+
+    /**
      * @param Request    $request
      * @param Event      $event
      * @param string     $locale
@@ -185,15 +210,7 @@ class HomeAction
         string $locale,
         array $filteredTypeViews = []
     ) {
-        $typeViews = $this->typeRepository->getVisibleTypesViewsByEvent($event, $locale);
-
-        foreach ($typeViews as $key => $typeView) {
-            if (!$this->hasType($typeView, $filteredTypeViews)) {
-                unset($typeViews[$key]);
-            }
-        }
-
-        $typeViews = array_values($typeViews);
+        $typeViews = $this->getFilteredTypeViews($event, $locale, $filteredTypeViews);
 
         if (empty($typeViews) && !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return new RedirectResponse($this->router->generate('event_login'));
