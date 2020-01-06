@@ -38,10 +38,6 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        $oldBegin    = $update->mass->getBegin();
-        $oldEnd      = $update->mass->getEnd();
-        $oldBlocking = $update->mass->isBlocking();
-
         $update->mass->update(
             $update->category,
             $update->name,
@@ -59,15 +55,16 @@ class UpdateHandler
 
         $this->massRepository->update($update->mass);
 
-        // If change in date for a blocking mass
-        // Or if change the blocking state
-        if ((($oldBegin->format('Y/m/d H:i') !== $update->begin->format('Y/m/d H:i')
-                || $oldEnd->format('Y/m/d H:i') !== $update->end->format('Y/m/d H:i'))
-                && $update->blocking
-            ) || $oldBlocking !== $update->blocking
-        ) {
-            $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($update->mass->getEvent());
-            $this->jobQueueAdapter->aggregateAvailableSlot($update->mass->getEvent());
-        }
+        // S'inspirer de $this->userRepository->findByEventWithoutDispatch($mass->getEvent(), $mass);
+        // $usersDispatched = $this->userRepository->findByEventWithDispatch($mass);
+        // foreach ($usersDispatched as $user) {
+        //    $userTypes = $this->typeRepository->getTypesByUserIds($event, [$user->getId()]);
+        //    if (!$mass->hasAtLeastOneType($userTypes)) {
+        //        // delete User MassAssignment
+        //        $massAssignmentRepository->removeByUserAndMass($user, $mass);
+        //    }
+
+        $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($update->mass->getEvent());
+        $this->jobQueueAdapter->aggregateAvailableSlot($update->mass->getEvent());
     }
 }
