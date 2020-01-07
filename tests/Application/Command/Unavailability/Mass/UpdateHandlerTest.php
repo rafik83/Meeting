@@ -113,6 +113,83 @@ class UpdateHandlerTest extends TestCase
                 'description' => 'description',
             ],
         ];
+
+        // Handler
+        $handler = new UpdateHandler($massRepository->reveal(), $jobQueue->reveal(), $userRepository->reveal(), $typeRepository->reveal(), $massAssignmentRepository->reveal());
+        $handler->handle($update);
+    }
+
+    public function testHandleDispatch()
+    {
+        $event    = EventFactory::createEvent();
+        $oldCategory = new Category($event, 'Conference', 'old title', '#AABBCC', '#CCBBAA');
+        $category    = new Category($event, 'Conference', 'title', '#123123', '#312312');
+        $oldBegin    = new \DateTime('2016-10-10 10:00');
+        $oldEnd      = new \DateTime('2016-10-10 12:00');
+        $begin       = new \DateTime('2016-10-12 10:00');
+        $end         = new \DateTime('2016-10-12 12:00');
+
+        // Existing
+        $existingMass = new Mass(
+            $event,
+            $oldCategory,
+            'old name',
+            $oldBegin,
+            $oldEnd,
+            false
+        );
+        $existingMass->createTranslation('fr', 'vieux titre', 'vieille description');
+        $existingMass->createTranslation('en', 'old title', 'old description');
+
+        // Expected
+        $expectedMass = new Mass(
+            $event,
+            $category,
+            'name',
+            $begin,
+            $end,
+            true,
+            true,
+            [
+                ['from' => new \DateTime('2016-10-12 10:00'), 'to' => new \DateTime('2016-10-12 11:00')],
+                ['from' => new \DateTime('2016-10-12 11:00'), 'to' => new \DateTime('2016-10-12 12:00')],
+            ]
+        );
+        $expectedMass->createTranslation('fr', 'titre', 'description');
+        $expectedMass->createTranslation('en', 'title', 'description');
+
+        // Mock
+        $massRepository = $this->prophesize(MassRepositoryInterface::class);
+        $massRepository->update($expectedMass)->shouldBeCalled();
+
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
+
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $userRepository->findByEventWithDispatch($event, $existingMass)->shouldBeCalled()->willReturn([]);
+
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+
+        $massAssignmentRepository = $this->prophesize(MassAssignmentRepository::class);
+
+        // Create
+        $update               = new Update($existingMass);
+        $update->category     = $category;
+        $update->begin        = $begin;
+        $update->end          = $end;
+        $update->name         = 'name';
+        $update->blocking     = true;
+        $update->translations = [
+            'fr' => [
+                'title'       => 'titre',
+                'description' => 'description',
+            ],
+            'en' => [
+                'title'       => 'title',
+                'description' => 'description',
+            ],
+        ];
         $update->dispatch     = true;
         $update->timeSlots    = [
             ['from' => new \DateTime('2016-10-12 10:00'), 'to' => new \DateTime('2016-10-12 11:00')],
