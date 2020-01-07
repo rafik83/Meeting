@@ -100,4 +100,10 @@ interface MassAssignmentRepositoryInterface
      * @return MassAssignment[]
      */
     public function findEnabledByEventAndUsers(Event $event, array $users);
+
+    /**
+     * @param $user
+     * @param Mass $mass
+     */
+    public function removeByUserAndMass($user, Mass $mass);
 }

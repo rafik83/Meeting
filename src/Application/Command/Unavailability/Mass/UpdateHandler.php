@@ -11,11 +11,10 @@
 namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassAssignmentRepository;
-
 
 class UpdateHandler
 {
@@ -25,7 +24,7 @@ class UpdateHandler
     private $massRepository;
 
     /**
-     * @var MassAssignmentRepository
+     * @var MassAssignmentRepositoryInterface
      */
     private $massAssignmentRepository;
 
@@ -40,8 +39,13 @@ class UpdateHandler
     /** @var UserRepositoryInterface */
     private $userRepository;
 
-    public function __construct(MassRepositoryInterface $massRepository, JobQueueInterface $jobQueueAdapter, UserRepositoryInterface $userRepository, TypeRepositoryInterface $typeRepository, MassAssignmentRepository $massAssignmentRepository)
-    {
+    public function __construct(
+        MassRepositoryInterface $massRepository,
+        JobQueueInterface $jobQueueAdapter,
+        UserRepositoryInterface $userRepository,
+        TypeRepositoryInterface $typeRepository,
+        MassAssignmentRepositoryInterface $massAssignmentRepository
+    ) {
         $this->massRepository = $massRepository;
         $this->jobQueueAdapter = $jobQueueAdapter;
         $this->userRepository = $userRepository;
