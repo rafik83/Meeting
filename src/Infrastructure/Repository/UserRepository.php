@@ -262,13 +262,13 @@ class UserRepository implements UserRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select(sprintf('new %s(
-                user.id, 
-                sheet.id, 
-                user.account.firstName, 
-                user.account.lastName, 
-                sheet.title, 
-                spot.reference, 
-                typeTranslation.title, 
+                user.id,
+                sheet.id,
+                user.account.firstName,
+                user.account.lastName,
+                sheet.title,
+                spot.reference,
+                typeTranslation.title,
                 presenceDate.arrival,
                 presenceDate.departure,
                 COALESCE(presenceDate.hasArrivalHours, false),
@@ -426,6 +426,31 @@ class UserRepository implements UserRepositoryInterface
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->andWhere(
                 'NOT EXISTS (
+                    SELECT m.id FROM ' . MassAssignment::class . ' m
+                    WHERE m.mass = :mass AND m.user = user
+                )'
+            )
+            ->setParameter('mass', $mass)
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventWithDispatch(Event $event, Mass $mass): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'user = participant.user')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->andWhere(
+                'EXISTS (
                     SELECT m.id FROM ' . MassAssignment::class . ' m
                     WHERE m.mass = :mass AND m.user = user
                 )'

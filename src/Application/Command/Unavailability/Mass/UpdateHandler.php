@@ -12,6 +12,10 @@ namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassAssignmentRepository;
+
 
 class UpdateHandler
 {
@@ -20,17 +24,29 @@ class UpdateHandler
      */
     private $massRepository;
 
+    /**
+     * @var MassAssignmentRepository
+     */
+    private $massAssignmentRepository;
+
+    /**
+     * @var TypeRepositoryInterface
+     */
+    private $typeRepository;
+
     /** @var JobQueueInterface */
     private $jobQueueAdapter;
 
-    /**
-     * @param MassRepositoryInterface $massRepository
-     * @param JobQueueInterface       $jobQueueAdapter
-     */
-    public function __construct(MassRepositoryInterface $massRepository, JobQueueInterface $jobQueueAdapter)
+    /** @var UserRepositoryInterface */
+    private $userRepository;
+
+    public function __construct(MassRepositoryInterface $massRepository, JobQueueInterface $jobQueueAdapter, UserRepositoryInterface $userRepository, TypeRepositoryInterface $typeRepository, MassAssignmentRepository $massAssignmentRepository)
     {
         $this->massRepository = $massRepository;
         $this->jobQueueAdapter = $jobQueueAdapter;
+        $this->userRepository = $userRepository;
+        $this->typeRepository = $typeRepository;
+        $this->massAssignmentRepository = $massAssignmentRepository;
     }
 
     /**
@@ -55,16 +71,18 @@ class UpdateHandler
 
         $this->massRepository->update($update->mass);
 
-        // S'inspirer de $this->userRepository->findByEventWithoutDispatch($mass->getEvent(), $mass);
-        // $usersDispatched = $this->userRepository->findByEventWithDispatch($mass);
-        // foreach ($usersDispatched as $user) {
-        //    $userTypes = $this->typeRepository->getTypesByUserIds($event, [$user->getId()]);
-        //    if (!$mass->hasAtLeastOneType($userTypes)) {
-        //        // delete User MassAssignment
-        //        $massAssignmentRepository->removeByUserAndMass($user, $mass);
-        //    }
+        $usersDispatched = $this->userRepository->findByEventWithDispatch($update->mass->getEvent(), $update->mass);
+
+        foreach ($usersDispatched as $user) {
+            $userTypes = $this->typeRepository->getTypesByUserIds($update->mass->getEvent(), [$user->getId()]);
+
+            if (!$update->mass->hasAtLeastOneType($userTypes)) {
+                $this->massAssignmentRepository->removeByUserAndMass($user, $update->mass);
+            }
+        }
 
         $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($update->mass->getEvent());
         $this->jobQueueAdapter->aggregateAvailableSlot($update->mass->getEvent());
     }
 }
+
