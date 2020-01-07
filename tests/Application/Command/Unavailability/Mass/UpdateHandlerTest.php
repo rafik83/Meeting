@@ -17,7 +17,10 @@ use Proximum\Vimeet\Application\Command\Unavailability\Mass\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Repository\Unavailability\MassAssignmentRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends TestCase
@@ -72,6 +75,13 @@ class UpdateHandlerTest extends TestCase
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
         $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $userRepository->findByEventWithDispatch($event, $existing);
+
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+
+        $massAssignmentRepository = $this->prophesize(MassAssignmentRepository::class);
+
         // Create
         $update               = new Update($existing);
         $update->category     = $category;
@@ -92,7 +102,7 @@ class UpdateHandlerTest extends TestCase
         ];
 
         // Handler
-        $handler = new UpdateHandler($massRepository->reveal(), $jobQueue->reveal());
+        $handler = new UpdateHandler($massRepository->reveal(), $jobQueue->reveal(), $userRepository->reveal(), $typeRepository->reveal(), $massAssignmentRepository->reveal());
         $handler->handle($update);
     }
 
@@ -135,8 +145,15 @@ class UpdateHandlerTest extends TestCase
         $massRepository->update($expected)->shouldBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
-        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldNotBeCalled();
-        $jobQueue->aggregateAvailableSlot($event)->shouldNotBeCalled();
+        $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
+
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $userRepository->findByEventWithDispatch($event, $existing);
+
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+
+        $massAssignmentRepository = $this->prophesize(MassAssignmentRepository::class);
 
         // Create
         $update               = new Update($existing);
@@ -157,7 +174,7 @@ class UpdateHandlerTest extends TestCase
         ];
 
         // Handler
-        $handler = new UpdateHandler($massRepository->reveal(), $jobQueue->reveal());
+        $handler = new UpdateHandler($massRepository->reveal(), $jobQueue->reveal(), $userRepository->reveal(), $typeRepository->reveal(), $massAssignmentRepository->reveal());
         $handler->handle($update);
     }
 
@@ -203,6 +220,13 @@ class UpdateHandlerTest extends TestCase
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
         $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $userRepository->findByEventWithDispatch($event, $existing);
+
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+
+        $massAssignmentRepository = $this->prophesize(MassAssignmentRepository::class);
+
         // Create
         $update               = new Update($existing);
         $update->category     = $category;
@@ -222,7 +246,7 @@ class UpdateHandlerTest extends TestCase
         ];
 
         // Handler
-        $handler = new UpdateHandler($massRepository->reveal(), $jobQueue->reveal());
+        $handler = new UpdateHandler($massRepository->reveal(), $jobQueue->reveal(), $userRepository->reveal(), $typeRepository->reveal(), $massAssignmentRepository->reveal());
         $handler->handle($update);
     }
 
@@ -273,6 +297,13 @@ class UpdateHandlerTest extends TestCase
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
         $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $userRepository->findByEventWithDispatch($event, $existing);
+
+        $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
+
+        $massAssignmentRepository = $this->prophesize(MassAssignmentRepository::class);
+
         // Create
         $update               = new Update($existing);
         $update->category     = $category;
@@ -297,7 +328,7 @@ class UpdateHandlerTest extends TestCase
         ];
 
         // Handler
-        $handler = new UpdateHandler($massRepository->reveal(), $jobQueue->reveal());
+        $handler = new UpdateHandler($massRepository->reveal(), $jobQueue->reveal(), $userRepository->reveal(), $typeRepository->reveal(), $massAssignmentRepository->reveal());
         $handler->handle($update);
     }
 }
