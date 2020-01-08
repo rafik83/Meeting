@@ -74,7 +74,11 @@ function VideoConference(element) {
 
   this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
   this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
-  this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
+
+  if (this.toggleChatElement) {
+      this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
+  }
+
   this.chatInstance = null;
 
   document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
@@ -151,7 +155,9 @@ VideoConference.prototype.init = function() {
  */
 VideoConference.prototype.connect = function() {
   this.session.connect(this.token, function(error) {
-    this.toggleChatElement.classList.remove('hide');
+    if (this.toggleChatElement) {
+      this.toggleChatElement.classList.remove('hide');
+    }
 
     if (!error) {
       this.publishStream();
