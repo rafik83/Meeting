@@ -103,6 +103,9 @@ class Type implements WhoInterface, TypeInterface
     /** @var integer */
     private $priorityMeetingRequestsNumber = 0;
 
+    /** @var integer */
+    private $numberMaxOfHappeningsPerUser = null;
+
     public function __construct(Event $event)
     {
         $this->event = $event;
@@ -442,7 +445,8 @@ class Type implements WhoInterface, TypeInterface
         bool $canScanParticipant = false,
         bool $isPackageRequired = false,
         bool $isPaymentRequired = false,
-        int $priorityMeetingRequestsNumber = 0
+        int $priorityMeetingRequestsNumber = 0,
+        ?int $numberMaxOfHappeningsPerUser = null
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
@@ -455,6 +459,7 @@ class Type implements WhoInterface, TypeInterface
         $this->isPackageRequired = $isPackageRequired;
         $this->isPaymentRequired = $isPaymentRequired;
         $this->priorityMeetingRequestsNumber = $priorityMeetingRequestsNumber;
+        $this->numberMaxOfHappeningsPerUser =  $numberMaxOfHappeningsPerUser;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int
@@ -508,5 +513,9 @@ class Type implements WhoInterface, TypeInterface
     public function setPriorityMeetingRequestsNumber(int $priorityMeetingRequestsNumber): void
     {
         $this->priorityMeetingRequestsNumber = $priorityMeetingRequestsNumber;
+    }
+
+    public function getNumberMaxOfHappeningsPerUser(){
+        return $this->numberMaxOfHappeningsPerUser;
     }
 }
