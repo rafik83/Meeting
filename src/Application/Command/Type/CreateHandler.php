@@ -76,7 +76,10 @@ class CreateHandler
             $create->canScanParticipant,
             $create->isPackageRequired,
             $create->isPaymentRequired,
-            $create->priorityMeetingRequestsNumber
+            $create->priorityMeetingRequestsNumber,
+            $create->numberMaxOfHappeningsPerUser
+
+
         );
 
         $localesTitleAlreadyExists = [];
