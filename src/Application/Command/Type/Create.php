@@ -80,7 +80,7 @@ class Create implements Command
     /** @var int */
     public $priorityMeetingRequestsNumber = 0;
 
-    /** @var null|int */
+    /** @var int|null */
     public $numberMaxOfHappeningsPerUser;
 
     /**
@@ -100,3 +100,4 @@ class Create implements Command
         }
     }
 }
+
