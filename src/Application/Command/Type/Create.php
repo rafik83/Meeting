@@ -80,8 +80,8 @@ class Create implements Command
     /** @var int */
     public $priorityMeetingRequestsNumber = 0;
 
-    /** @var int */
-    public $numberMaxOfHappeningsPerUser = null;
+    /** @var null|int */
+    public $numberMaxOfHappeningsPerUser;
 
     /**
      * @param Event  $event

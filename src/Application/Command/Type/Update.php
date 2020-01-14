@@ -76,7 +76,7 @@ class Update implements Command
     /** @var int */
     public $priorityMeetingRequestsNumber;
 
-    /** @var int */
+    /** @var null|int */
     public $numberMaxOfHappeningsPerUser;
 
     /**

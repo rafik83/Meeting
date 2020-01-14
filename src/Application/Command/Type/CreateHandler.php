@@ -78,8 +78,6 @@ class CreateHandler
             $create->isPaymentRequired,
             $create->priorityMeetingRequestsNumber,
             $create->numberMaxOfHappeningsPerUser
-
-
         );
 
         $localesTitleAlreadyExists = [];
