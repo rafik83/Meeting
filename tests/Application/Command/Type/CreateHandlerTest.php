@@ -72,6 +72,7 @@ class CreateHandlerTest extends TestCase
         $create->areAllSheetParticipantsAssignedToMeeting = true;
         $create->canScanParticipant = true;
         $create->priorityMeetingRequestsNumber = 0;
+        $create->numberMaxOfHappeningsPerUser = null;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
