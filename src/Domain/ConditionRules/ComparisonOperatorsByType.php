@@ -14,10 +14,10 @@ final class ComparisonOperatorsByType
 {
     public const OPERATORS = [
         'string' => [
-            'equal',
-            'not_equal',
             'contains',
             'not_contains',
+            'equal',
+            'not_equal',
             'is_null',
             'is_not_null',
             'begins_with',
