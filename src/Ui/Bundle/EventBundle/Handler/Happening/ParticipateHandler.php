@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType;
 use Symfony\Component\Form\FormError;
@@ -68,6 +69,9 @@ class ParticipateHandler
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var HappeningParticipationRepositoryInterface */
+    private $happeningParticipationRepository;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         QuestionRepositoryInterface $questionRepository,
@@ -78,7 +82,8 @@ class ParticipateHandler
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         RouterInterface $router,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository
     ) {
         $this->participantRepository = $participantRepository;
         $this->questionRepository = $questionRepository;
@@ -90,13 +95,30 @@ class ParticipateHandler
         $this->formFactory = $formFactory;
         $this->router = $router;
         $this->translator = $translator;
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
     }
 
     public function handle(Request $request, Happening $happening, Sheet $sheet, User $user): JsonResponse
     {
+        $happeningParticipationAllowed = $sheet->getType()->getNumberMaxOfHappeningsPerUser();
+        $numberMaxOfHappeningsPerUser = $happeningParticipationAllowed === null ? 0 : $this->happeningParticipationRepository->countByUserAndEvent($user, $sheet->getEvent());
+        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
         $participant = $sheet->getUserParticipant($user);
         $selectedParticipants = $this->participantRepository->getParticipantsForHappening($sheet, $happening);
         $isUpdate = \count($selectedParticipants) > 0;
+        $isCancelParticipationAlone = $isUserAloneParticipant && $isUpdate;
+        $isParticipationAlone = $isUserAloneParticipant && !$isUpdate;
+
+        if($happeningParticipationAllowed && $isParticipationAlone && $numberMaxOfHappeningsPerUser >= $happeningParticipationAllowed){
+                return new JsonResponse(
+                    [
+                        'status' => 'show-form',
+                        'html' => $this->engine->render(
+                            'EventBundle:Program/Partials:single-participate-modal.html.twig'
+                        )
+                    ]
+                );
+        }
 
         $participants = $this
             ->participantsAllowedToAccessQueryHandler
@@ -109,10 +131,6 @@ class ParticipateHandler
         );
 
         $noAvailableParticipants = 0 === \count($availableParticipants);
-
-        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
-        $isCancelParticipationAlone = $isUserAloneParticipant && $isUpdate;
-        $isParticipationAlone = $isUserAloneParticipant && !$isUpdate;
 
         // Case : current user is not available for this happening, do not show modal
         if ($isParticipationAlone && $noAvailableParticipants) {
@@ -173,12 +191,12 @@ class ParticipateHandler
             );
         }
 
-        return new JsonResponse(
-            [
-                'status' => 'ok',
-                'label' => $isCancel ? 'participate' : 'cancel',
-            ]
-        );
+            return new JsonResponse(
+                [
+                    'status' => 'ok',
+                    'label' => $isCancel ? 'participate' : 'cancel',
+                ]
+            );
     }
 
     /**

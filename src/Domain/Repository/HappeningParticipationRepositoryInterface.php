@@ -130,6 +130,14 @@ interface HappeningParticipationRepositoryInterface
     public function checkAnyParticipation(User $user, Event $event);
 
     /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return int|null
+     */
+    public function countByUserAndEvent(User $user, Event $event);
+
+    /**
      * @param HappeningParticipation $happeningParticipation
      */
     public function update(HappeningParticipation $happeningParticipation);

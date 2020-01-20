@@ -781,3 +781,4 @@ services:
             - '@form.factory'
             - '@adapter.router'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
