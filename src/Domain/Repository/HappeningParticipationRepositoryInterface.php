@@ -135,7 +135,7 @@ interface HappeningParticipationRepositoryInterface
      *
      * @return int|null
      */
-    public function countByUserAndEvent(User $user, Event $event);
+    public function countByUserAndEvent(User $user, Event $event): int;
 
     /**
      * @param HappeningParticipation $happeningParticipation

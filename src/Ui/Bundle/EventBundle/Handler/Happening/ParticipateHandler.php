@@ -101,7 +101,7 @@ class ParticipateHandler
     public function handle(Request $request, Happening $happening, Sheet $sheet, User $user): JsonResponse
     {
         $happeningParticipationAllowed = $sheet->getType()->getNumberMaxOfHappeningsPerUser();
-        $numberMaxOfHappeningsPerUser = $happeningParticipationAllowed === null ? 0 : $this->happeningParticipationRepository->countByUserAndEvent($user, $sheet->getEvent());
+        $numberUserHappeningParticipation = $happeningParticipationAllowed === null ? 0 : $this->happeningParticipationRepository->countByUserAndEvent($user, $sheet->getEvent());
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
         $participant = $sheet->getUserParticipant($user);
         $selectedParticipants = $this->participantRepository->getParticipantsForHappening($sheet, $happening);
@@ -109,15 +109,16 @@ class ParticipateHandler
         $isCancelParticipationAlone = $isUserAloneParticipant && $isUpdate;
         $isParticipationAlone = $isUserAloneParticipant && !$isUpdate;
 
-        if($happeningParticipationAllowed && $isParticipationAlone && $numberMaxOfHappeningsPerUser >= $happeningParticipationAllowed){
-                return new JsonResponse(
-                    [
-                        'status' => 'show-form',
-                        'html' => $this->engine->render(
-                            'EventBundle:Program/Partials:single-participate-modal.html.twig'
-                        )
-                    ]
-                );
+        if($happeningParticipationAllowed && $isParticipationAlone && $numberUserHappeningParticipation >= $happeningParticipationAllowed) {
+
+            return new JsonResponse(
+                [
+                    'status' => 'show-form',
+                    'html' => $this->engine->render(
+                        'EventBundle:Program/Partials:single-participate-modal.html.twig'
+                    )
+                ]
+            );
         }
 
         $participants = $this
@@ -358,7 +359,7 @@ class ParticipateHandler
                         'productsNeededByHappening' => $productsNeededByHappening,
                         'noParticipantCanParticipate' => $noParticipantCanParticipate,
                         'locale' => $request->getLocale(),
-                        'unregistrationParticipants' => $this->getUnregistrationParticipants($participants, $happeningParticipationAllowed, $sheet)
+                        'maxNumberHappeningParticipationReached' => $this->getMaxNumberHappeningParticipationReached($participants, $happeningParticipationAllowed, $sheet)
                     ]
                 ),
             ]
@@ -373,15 +374,15 @@ class ParticipateHandler
      */
     private function getParticipantsCanNotParticipate(Happening $happening, array &$participants): array
     {
-        $participantsCanNotParticipate = [];
+        $maxNumberHappeningParticipationReached = [];
 
         foreach ($participants as $key => $participant) {
             if (!$this->participateToHappeningWithProductToBuyChecker->canParticipate($participant, $happening)) {
-                $participantsCanNotParticipate[$key] = $participant;
+                $maxNumberHappeningParticipationReached[$key] = $participant;
             }
         }
 
-        return $participantsCanNotParticipate;
+        return $maxNumberHappeningParticipationReached;
     }
 
     private function getPreviousQuestionContent(Happening $happening, User $user): ?string
@@ -426,17 +427,17 @@ class ParticipateHandler
      *
      * @return Participant[]
      */
-    private function getUnregistrationParticipants($participants, $happeningParticipationAllowed, $sheet): array
+    private function getMaxNumberHappeningParticipationReached($participants, $happeningParticipationAllowed, $sheet): array
     {
-        $participantCannotRegister = [];
+        $maxNumberHappeningParticipationReached = [];
 
         foreach ($participants as $key => $participant) {
             if ($this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $sheet->getEvent()) >= $happeningParticipationAllowed) {
-                $participantCannotRegister[$key] = $participant;
+                $maxNumberHappeningParticipationReached[$key] = $participant;
             }
         }
 
-        return $participantCannotRegister;
+        return $maxNumberHappeningParticipationReached;
     }
 
     private function createJsonResponseWithError(

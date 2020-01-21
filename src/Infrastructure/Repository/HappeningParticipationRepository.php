@@ -199,7 +199,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function countByUserAndEvent(User $user, Event $event)
+    public function countByUserAndEvent(User $user, Event $event): int
     {
         $queryBuilder = $this
             ->entityManager
@@ -214,7 +214,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->setParameter('user', $user)
             ->setParameter('event', $event);
 
-        return $queryBuilder->getQuery()->getSingleScalarResult();
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
