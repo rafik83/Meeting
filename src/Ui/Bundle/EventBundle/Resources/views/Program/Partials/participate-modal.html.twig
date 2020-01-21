@@ -47,7 +47,7 @@
         {{ form_errors(form.participants) }}
 
         {% for key, participant in form.participants %}
-            {% if unavailableParticipants[key] is defined or participantsCanNotParticipate[key] is defined %}
+            {% if unavailableParticipants[key] is defined or participantsCanNotParticipate[key] is defined or unregistrationParticipants[key] is defined and participant.vars['checked'] == false %}
                 <div class="checkbox">
                     <label class="control-label disabled">
                         {{ form_widget(participant, attrDisabled) }}
@@ -56,6 +56,8 @@
                             <span class="label label-default">{{ 'form.participate.children.participants.unavailable'|trans({}, 'forms') }}</span>
                         {% elseif not noParticipantCanParticipate and participantsCanNotParticipate[key] is defined %}
                             <a href="{{ event_package_url }}" class="btn btn-default btn-sm" title="{{ infoProductsNeededByHappening }}">{{ 'event.happening.productsNeededByHappening.order'|trans }}</a>
+                        {% elseif unregistrationParticipants[key] is defined %}
+                            <span class="label label-default">{{ 'form.participate.children.participants.unregistration'|trans({}, 'forms') }}</span>
                         {% endif %}
                     </label>
                 </div>

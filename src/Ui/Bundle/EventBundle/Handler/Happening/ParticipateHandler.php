@@ -157,7 +157,8 @@ class ParticipateHandler
             $user,
             $participants,
             $availableParticipants,
-            $selectedParticipants
+            $selectedParticipants,
+            $happeningParticipationAllowed
         );
     }
 
@@ -200,14 +201,14 @@ class ParticipateHandler
     }
 
     /**
-     * @param Request       $request
-     * @param Happening     $happening
-     * @param Sheet         $sheet
-     * @param User          $user
+     * @param Request $request
+     * @param Happening $happening
+     * @param Sheet $sheet
+     * @param User $user
      * @param Participant[] $participants
      * @param Participant[] $availableParticipants
      * @param Participant[] $selectedParticipants
-     *
+     * @param int|null $happeningParticipationAllowed
      * @return JsonResponse
      */
     private function handleParticipationWithShowingForm(
@@ -217,7 +218,8 @@ class ParticipateHandler
         User $user,
         array &$participants,
         array &$availableParticipants,
-        array &$selectedParticipants
+        array &$selectedParticipants,
+        $happeningParticipationAllowed
     ): JsonResponse {
         $isUpdate = \count($selectedParticipants) > 0;
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
@@ -356,6 +358,7 @@ class ParticipateHandler
                         'productsNeededByHappening' => $productsNeededByHappening,
                         'noParticipantCanParticipate' => $noParticipantCanParticipate,
                         'locale' => $request->getLocale(),
+                        'unregistrationParticipants' => $this->getUnregistrationParticipants($participants, $happeningParticipationAllowed, $sheet)
                     ]
                 ),
             ]
@@ -414,6 +417,26 @@ class ParticipateHandler
         }
 
         return $unavailableParticipants;
+    }
+
+    /**
+     * @param Participant[] $participants
+     * @param int|null $happeningParticipationAllowed
+     * @param Sheet $sheet
+     *
+     * @return Participant[]
+     */
+    private function getUnregistrationParticipants($participants, $happeningParticipationAllowed, $sheet): array
+    {
+        $participantCannotRegister = [];
+
+        foreach ($participants as $key => $participant) {
+            if ($this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $sheet->getEvent()) >= $happeningParticipationAllowed) {
+                $participantCannotRegister[$key] = $participant;
+            }
+        }
+
+        return $participantCannotRegister;
     }
 
     private function createJsonResponseWithError(

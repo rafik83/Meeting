@@ -88,6 +88,7 @@ form.participantAndPlanning.participantProduct.selectAnOption: '-- Sélectionnez
 form.participate.children.invitationCode.label: 'Code d''invitation'
 form.participate.children.participants.label: 'Qui participe ?'
 form.participate.children.participants.unavailable: Indisponible
+form.participate.children.participants.unregistration: Aucune participation restante
 form.participate.children.question.label: 'Posez une question aux intervenants pour préparer l''atelier'
 form.participate.children.submit.label: Participer
 form.participate.children.submitUpdate.label: Modifier
