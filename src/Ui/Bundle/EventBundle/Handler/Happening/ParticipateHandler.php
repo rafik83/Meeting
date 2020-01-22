@@ -115,7 +115,10 @@ class ParticipateHandler
                 [
                     'status' => 'show-form',
                     'html' => $this->engine->render(
-                        'EventBundle:Program/Partials:single-participate-modal.html.twig'
+                        'EventBundle:Program/Partials:max-number-happening-participation-reached.html.twig',
+                        [
+                            'title' => $happening->getTitle($request->getLocale())
+                        ]
                     )
                 ]
             );
@@ -210,6 +213,7 @@ class ParticipateHandler
      * @param Participant[] $availableParticipants
      * @param Participant[] $selectedParticipants
      * @param int|null $numberMaxOfHappeningsPerUser
+     *
      * @return JsonResponse
      */
     private function handleParticipationWithShowingForm(
@@ -262,7 +266,7 @@ class ParticipateHandler
                 : $participateForm;
 
             try {
-                $this->participateHandler->handle($participate, $sheet, $happening);
+                $this->participateHandler->handle($participate);
 
                 $label = 'participate';
 
@@ -325,9 +329,9 @@ class ParticipateHandler
                 $formOrParticipantsField->addError(
                     new FormError(
                         $this->translator->trans(
-                            'happening.participate.maxNumberHappeningParticipationReachedException',
+                            'happening.participate.maxNumberHappeningParticipationReachedForParticipant',
                             [
-                                '%fullname%' => $maxNumberHappeningParticipationReachedException->getfullNameOfParticipantReached()
+                                '%fullname%' => $maxNumberHappeningParticipationReachedException->getParticipant()->getFullname()
                             ]
                         )
                     )
@@ -385,15 +389,15 @@ class ParticipateHandler
      */
     private function getParticipantsCanNotParticipate(Happening $happening, array &$participants): array
     {
-        $maxNumberHappeningParticipationReached = [];
+        $participantsCanNotParticipate = [];
 
         foreach ($participants as $key => $participant) {
             if (!$this->participateToHappeningWithProductToBuyChecker->canParticipate($participant, $happening)) {
-                $maxNumberHappeningParticipationReached[$key] = $participant;
+                $participantsCanNotParticipate[$key] = $participant;
             }
         }
 
-        return $maxNumberHappeningParticipationReached;
+        return $participantsCanNotParticipate;
     }
 
     private function getPreviousQuestionContent(Happening $happening, User $user): ?string
@@ -438,9 +442,13 @@ class ParticipateHandler
      *
      * @return Participant[]
      */
-    private function getMaxNumberHappeningParticipationReached($participants, $numberMaxOfHappeningsPerUser, $sheet): array
+    private function getMaxNumberHappeningParticipationReached(array $participants, ?int $numberMaxOfHappeningsPerUser, Sheet $sheet): array
     {
         $maxNumberHappeningParticipationReached = [];
+
+        if (null === $numberMaxOfHappeningsPerUser) {
+            return [];
+        }
 
         foreach ($participants as $key => $participant) {
             if ($this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $sheet->getEvent()) >= $numberMaxOfHappeningsPerUser) {

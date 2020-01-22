@@ -10,28 +10,33 @@
 
 namespace Proximum\Vimeet\Application\Exception\Happening;
 
+use Proximum\Vimeet\Domain\Model\Participant;
 use Throwable;
 
 class MaxNumberHappeningParticipationReachedException extends HappeningException
 {
+
     /**
+     * @var Participant $participant
+     */
+    private $participant;
+
+    /**
+     * @param Participant $participant
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous
-     * @param string $fullNameOfParticipantReached
      */
 
-    private $fullNameOfParticipantReached;
-
-    public function __construct(string $fullNameOfParticipantReached, $message = '', $code = 0, Throwable $previous = null)
+    public function __construct(Participant $participant, $message = '', $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
-        $this->fullNameOfParticipantReached = $fullNameOfParticipantReached;
+        $this->participant = $participant;
     }
 
-    public function getfullNameOfParticipantReached(): string
+    public function getParticipant(): Participant
     {
-        return $this->fullNameOfParticipantReached;
+        return $this->participant;
     }
 }
 

@@ -22,10 +22,8 @@ use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException
 use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
 use Proximum\Vimeet\Domain\Happening\ParticipationCount;
-use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -83,9 +81,6 @@ class ParticipateHandler
 
     /**
      * @param Participate $participate
-     *
-     * @param Sheet $sheet
-     * @param Happening $happening
      * @throws MaxNumberHappeningParticipationReachedException
      * @throws NotEnoughtRemainingParticipationsException
      * @throws ParticipantMustHaveProductToParticipateException
@@ -93,19 +88,8 @@ class ParticipateHandler
      * @throws ParticipantRequiredException
      * @throws WrongInvitationCodeException
      */
-    public function handle(Participate $participate, Sheet $sheet, Happening $happening)
+    public function handle(Participate $participate)
     {
-
-        $numberMaxOfHappeningsPerUser = $sheet->getType()->getNumberMaxOfHappeningsPerUser();
-        $selectedParticipants = $this->participantRepository->getParticipantsForHappening($sheet, $happening);
-        $isUpdate = \count($selectedParticipants) > 0;
-
-        foreach ($participate->participants as $participant) {
-            if ($numberMaxOfHappeningsPerUser && $this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $sheet->getEvent()) >= $numberMaxOfHappeningsPerUser && !$isUpdate) {
-                throw new MaxNumberHappeningParticipationReachedException($participant->getFullname());
-            }
-        }
-
         if (!$participate->isUpdate
             && $participate->happening->isPrivate()
             && $participate->invitationCode !== $participate->happening->getInvitationCode()
@@ -162,7 +146,10 @@ class ParticipateHandler
                     $participate->happening,
                     $participant->getUser()
                 );
-
+                $numberMaxOfHappeningsPerUser = $participate->sheet->getType()->getNumberMaxOfHappeningsPerUser();
+                if ($numberMaxOfHappeningsPerUser && $this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $participate->sheet->getEvent()) >= $numberMaxOfHappeningsPerUser) {
+                    throw new MaxNumberHappeningParticipationReachedException($participant);
+                }
                 if (null !== $happeningParticipation) {
                     $this->happeningParticipationRepository->update(
                         $happeningParticipation->setDisabled(false)
