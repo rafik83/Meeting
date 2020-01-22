@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
+use Proximum\Vimeet\Application\Exception\Happening\MaxNumberHappeningParticipationReachedException;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantMustHaveProductToParticipateException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
@@ -21,8 +22,10 @@ use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException
 use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
 use Proximum\Vimeet\Domain\Happening\ParticipationCount;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -81,14 +84,29 @@ class ParticipateHandler
     /**
      * @param Participate $participate
      *
+     * @param Sheet $sheet
+     * @param Happening $happening
+     * @throws MaxNumberHappeningParticipationReachedException
      * @throws NotEnoughtRemainingParticipationsException
      * @throws ParticipantMustHaveProductToParticipateException
      * @throws ParticipantNotAvailableException
      * @throws ParticipantRequiredException
      * @throws WrongInvitationCodeException
      */
-    public function handle(Participate $participate)
+    public function handle(Participate $participate, Sheet $sheet, Happening $happening)
     {
+
+        $numberMaxOfHappeningsPerUser = $sheet->getType()->getNumberMaxOfHappeningsPerUser();
+        $selectedParticipants = $this->participantRepository->getParticipantsForHappening($sheet, $happening);
+        $isUpdate = \count($selectedParticipants) > 0;
+
+        foreach ($participate->participants as $participant){
+
+            if($numberMaxOfHappeningsPerUser && $this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $sheet->getEvent()) >= $numberMaxOfHappeningsPerUser && !$isUpdate) {
+                throw new MaxNumberHappeningParticipationReachedException($participant->getFullname());
+            }
+        }
+
         if (!$participate->isUpdate
             && $participate->happening->isPrivate()
             && $participate->invitationCode !== $participate->happening->getInvitationCode()

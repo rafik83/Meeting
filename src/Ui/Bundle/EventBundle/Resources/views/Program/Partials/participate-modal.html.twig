@@ -57,7 +57,7 @@
                         {% elseif not noParticipantCanParticipate and participantsCanNotParticipate[key] is defined %}
                             <a href="{{ event_package_url }}" class="btn btn-default btn-sm" title="{{ infoProductsNeededByHappening }}">{{ 'event.happening.productsNeededByHappening.order'|trans }}</a>
                         {% elseif maxNumberHappeningParticipationReached[key] is defined %}
-                            <span class="label label-default">{{ 'form.participate.children.participants.unregistration'|trans({}, 'forms') }}</span>
+                            <span class="label label-default">{{ 'happening.participate.maxNumberHappeningParticipationReached'|trans }}</span>
                         {% endif %}
                     </label>
                 </div>
