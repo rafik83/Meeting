@@ -110,9 +110,7 @@ class ParticipateHandler
         $isParticipationAlone = $isUserAloneParticipant && !$isUpdate;
         $numberUserHappeningParticipation = $numberMaxOfHappeningsPerUser === null && $isParticipationAlone ? 0 : $this->happeningParticipationRepository->countByUserAndEvent($user, $sheet->getEvent());
 
-
-        if($numberMaxOfHappeningsPerUser && $isParticipationAlone && $numberUserHappeningParticipation >= $numberMaxOfHappeningsPerUser) {
-
+        if ($numberMaxOfHappeningsPerUser && $isParticipationAlone && $numberUserHappeningParticipation >= $numberMaxOfHappeningsPerUser) {
             return new JsonResponse(
                 [
                     'status' => 'show-form',
@@ -195,12 +193,12 @@ class ParticipateHandler
             );
         }
 
-            return new JsonResponse(
-                [
-                    'status' => 'ok',
-                    'label' => $isCancel ? 'participate' : 'cancel',
-                ]
-            );
+        return new JsonResponse(
+            [
+                'status' => 'ok',
+                'label' => $isCancel ? 'participate' : 'cancel',
+            ]
+        );
     }
 
     /**

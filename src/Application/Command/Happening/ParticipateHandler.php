@@ -100,9 +100,8 @@ class ParticipateHandler
         $selectedParticipants = $this->participantRepository->getParticipantsForHappening($sheet, $happening);
         $isUpdate = \count($selectedParticipants) > 0;
 
-        foreach ($participate->participants as $participant){
-
-            if($numberMaxOfHappeningsPerUser && $this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $sheet->getEvent()) >= $numberMaxOfHappeningsPerUser && !$isUpdate) {
+        foreach ($participate->participants as $participant) {
+            if ($numberMaxOfHappeningsPerUser && $this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $sheet->getEvent()) >= $numberMaxOfHappeningsPerUser && !$isUpdate) {
                 throw new MaxNumberHappeningParticipationReachedException($participant->getFullname());
             }
         }
