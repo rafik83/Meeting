@@ -6,10 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2033 - add number max of happenings per user in participation type parameters
+- VIMEET-2040 - Set 'contains' as default operator for string filter
+- VIMEET-2042 - Clean nomenclature key, replace dot by underscore
 ### Fixed
 - MV-202 - Remove type from mass unavailability
-### Added
-- VIMEET-2040 - Set 'contains' as default operator for string filter
 
 ## [2.16.0] - 2019-12-23
 ### Added
