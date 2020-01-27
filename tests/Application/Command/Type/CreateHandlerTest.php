@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
+use Proximum\Vimeet\Domain\Model\ValidationCriteria;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -35,19 +36,19 @@ class CreateHandlerTest extends TestCase
         $package  = new Package($event, 'title', $dateTime);
         $event->setLocales(['fr'], 'fr');
 
-        $sheetTemplate        = new SheetTemplate('base toto', [], ['fr'], 'fr', $dateTime);
-        $registrationTemplate = new RegistrationTemplate('base tata', [], ['fr'], 'fr', $dateTime);
+        $sheetTemplate        = new SheetTemplate('base Exposant', [], ['fr'], 'fr', $dateTime);
+        $registrationTemplate = new RegistrationTemplate('base Exposant', [], ['fr'], 'fr', $dateTime);
         $formTemplate1 = new FormTemplate($event, 'title1', [], ['fr'], 'fr', $dateTime);
         $formTemplate2 = new FormTemplate($event, 'title2', [], ['fr'], 'fr', $dateTime);
 
         //Expected
-        $expectedSheetTemplate         = new SheetTemplate('toto', [], ['fr'], 'fr', $dateTime);
-        $expectedRegistrationTemplate  = new RegistrationTemplate('toto', [], ['fr'], 'fr', $dateTime);
+        $expectedSheetTemplate         = new SheetTemplate('Exposant', [], ['fr'], 'fr', $dateTime);
+        $expectedRegistrationTemplate  = new RegistrationTemplate('Exposant', [], ['fr'], 'fr', $dateTime);
         $expectedSheetTemplate->setEvent($event);
         $expectedRegistrationTemplate->setEvent($event);
 
         $expectedType = new Type($event);
-        $expectedType->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'toto'));
+        $expectedType->getTranslations()->set('fr', new TypeTranslation($expectedType, 'fr', 'Exposant'));
         $expectedType->getValidationCriteria()->setSheetAccepted(true);
         $expectedType->setSheetTemplate($expectedSheetTemplate);
         $expectedType->update(null, true, true, 12, false);
@@ -57,7 +58,7 @@ class CreateHandlerTest extends TestCase
 
         //Command
         $create = new Create($event, 'fr');
-        $create->translations['fr']['title'] = 'toto';
+        $create->translations['fr']['title'] = 'Exposant';
         $create->validationCriteria['sheetAccepted'] = true;
         $create->sheetTemplate = $sheetTemplate;
         $create->registrationTemplate = $registrationTemplate;
@@ -72,19 +73,31 @@ class CreateHandlerTest extends TestCase
         $create->areAllSheetParticipantsAssignedToMeeting = true;
         $create->canScanParticipant = true;
         $create->priorityMeetingRequestsNumber = 0;
+        $create->numberMaxOfHappeningsPerUser = null;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
-        $typeRepository->add(Argument::that(function ($actual) use ($expectedType) {
-            return $expectedType->getId() === $actual->getId();
+        $typeRepository->add(Argument::that(function (Type $actual) use ($expectedType) {
+            return $expectedType->getId() === $actual->getId()
+                && null === $actual->getNumberMaxOfHappeningsPerUser()
+                && Type::TYPE_MANAGEMENT_UNAVAILABLE === $actual->getAvailabilityType()
+                && null === $actual->getPosition()
+                && true === $actual->isHidden()
+                && 12 === $actual->getNumberOfMeetingsPerPlanning()
+                && false === $actual->canRemoveMeeting()
+                && true === $actual->areAllSheetParticipantsAssignedToMeeting()
+                && 0 === $actual->getPriorityMeetingRequestsNumber()
+                && 'Exposant' === $actual->getTitle('fr')
+                && new ValidationCriteria(true) == $actual->getValidationCriteria()
+            ;
         }))->shouldBeCalled();
-        $typeRepository->typeExists($event, 'fr', 'toto')->shouldBeCalled()->willReturn(false);
+        $typeRepository->typeExists($event, 'fr', 'Exposant')->shouldBeCalled()->willReturn(false);
 
         $sheetTemplateCloner = $this->prophesize(SheetTemplateCloner::class);
-        $sheetTemplateCloner->duplicate($sheetTemplate, $event, 'toto')->shouldBeCalled()->willReturn($expectedSheetTemplate);
+        $sheetTemplateCloner->duplicate($sheetTemplate, $event, 'Exposant')->shouldBeCalled()->willReturn($expectedSheetTemplate);
 
         $registrationTemplateCloner = $this->prophesize(RegistrationTemplateCloner::class);
-        $registrationTemplateCloner->duplicate($registrationTemplate, $event, 'toto')->shouldBeCalled()->willReturn($expectedRegistrationTemplate);
+        $registrationTemplateCloner->duplicate($registrationTemplate, $event, 'Exposant')->shouldBeCalled()->willReturn($expectedRegistrationTemplate);
 
         //Handler
         $handler = new CreateHandler($typeRepository->reveal(), $sheetTemplateCloner->reveal(), $registrationTemplateCloner->reveal());

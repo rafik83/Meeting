@@ -132,6 +132,10 @@ class TypeUpdateType extends AbstractType
                 'priorityMeetingRequestsNumber', IntegerType::class, [
                 'required' => false,
             ])
+            ->add(
+                'numberMaxOfHappeningsPerUser', IntegerType::class, [
+                'required' => false,
+            ])
         ;
     }
 
