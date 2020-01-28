@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Command\Happening\ParticipateHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -32,11 +33,15 @@ use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Proximum\Vimeet\Infrastructure\Repository\HappeningParticipationRepository;
+use Proximum\Vimeet\Infrastructure\Repository\ParticipantRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -753,4 +758,65 @@ class ParticipateHandlerTest extends TestCase
 
         $this->handler->handle($this->participate);
     }
+
+    //Add registration with MaxNumberHappeningParticipationReached
+    public function testMaxNumberHappeningParticipationNotReachedWithOneParticipants()
+    {
+
+        $sheet = $this->prophesize(Sheet::class);
+        $user1 = $this->prophesize(User::class);
+        $participant1 = $this->prophesize(Participant::class);
+        $participant1->getUser()->shouldBeCalled()->willReturn($user1->reveal());
+        $participants = [$participant1->reveal()];
+        $happening = $this->prophesize(Happening::class);
+        $type = $this->prophesize(Type::class);
+        $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
+        $event = $this->prophesize(Event::class);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+
+        //IsPrivate and getInvitationCode
+        $happening->isPrivate()->shouldBeCalled()->willReturn(false);
+        $happening->getInvitationCode()->shouldNotBeCalled();
+
+        // PreviousParticipant
+        $this->participantRepository->getParticipantsForHappening($sheet->reveal(), $happening->reveal())->shouldBeCalled()->willReturn([]);
+
+        //AvailableParticipant
+        $this->participantRepository->getAvailableParticipantsForHappening($participants, $happening->reveal())->shouldBeCalled()->willReturn([$participant1->reveal()]);
+
+        //ParticipationRemaining
+        $this->participationCount->getRemaining($happening->reveal())->shouldBeCalled()->willReturn(5);
+
+        // $participateToHappeningWithProductToBuyChecker
+        $this->participateToHappeningWithProductToBuyChecker->canParticipate($participant1->reveal(), $happening->reveal())->shouldBeCalled()->willReturn(true);
+
+        // HappeningParticipation
+        $this->happeningParticipationRepository->findByHappeningAndUser($happening->reveal(), $user1->reveal())->shouldBeCalled()->willReturn(null);
+
+        // Je regarde à cb de conférences il peut participer
+        $type->getNumberMaxOfHappeningsPerUser()->shouldBeCalled()->willReturn(3);
+
+        // Je regarde il a cb de participation
+        $this->happeningParticipationRepository->countByUserAndEvent($user1->reveal(), $event->reveal())->shouldBeCalled()->willReturn(2);
+
+        // Il a moins de participation de participation que de crédits alors je l'inscris
+        $this->happeningParticipationRepository->add(
+            new HappeningParticipation($happening->reveal(), $user1->reveal())
+        )->shouldBeCalled();
+
+        // Remove question
+        $happening->isQuestionAllowed()->shouldBeCalled()->willReturn(true);
+        $this->questionRepository->removeQuestionFromUserForHappening($user1->reveal(), $happening->reveal())->shouldBeCalled();
+
+        $this->handler->handle(new Participate(
+            $happening->reveal(),
+            $sheet->reveal(),
+            $user1->reveal(),
+            [$participant1->reveal()],
+            null,
+            null,
+            false
+        ));
+    }
 }
+
