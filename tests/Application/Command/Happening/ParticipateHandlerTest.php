@@ -878,7 +878,7 @@ class ParticipateHandlerTest extends TestCase
                 $happening->reveal(),
                 $sheet->reveal(),
                 $user1->reveal(),
-                [$participant1->reveal(), $participant2->reveal()],
+                $participants,
                 null,
                 null,
                 false
