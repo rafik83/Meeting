@@ -760,10 +760,8 @@ class ParticipateHandlerTest extends TestCase
         $this->handler->handle($this->participate);
     }
 
-    //Add registration with MaxNumberHappeningParticipationReached
-    public function testMaxNumberHappeningParticipationNotReachedWithOneParticipants()
+    public function testMaxNumberHappeningParticipationNotReachedWithOneParticipant()
     {
-
         $sheet = $this->prophesize(Sheet::class);
         $user1 = $this->prophesize(User::class);
         $participant1 = $this->prophesize(Participant::class);
@@ -810,7 +808,7 @@ class ParticipateHandlerTest extends TestCase
         ));
     }
 
-    public function testMaxNumberHappeningParticipationNotReachedAndReachedWithManyParticipants()
+    public function testMaxNumberHappeningParticipationReachedWithManyParticipants()
     {
         $sheet = $this->prophesize(Sheet::class);
         $user1 = $this->prophesize(User::class);
@@ -866,4 +864,3 @@ class ParticipateHandlerTest extends TestCase
         }
     }
 }
-
