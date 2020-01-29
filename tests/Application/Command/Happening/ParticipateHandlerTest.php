@@ -883,7 +883,7 @@ class ParticipateHandlerTest extends TestCase
                 null,
                 false
             ));
-        }catch(MaxNumberHappeningParticipationReachedException $maxNumberHappeningParticipationReachedException){
+        } catch (MaxNumberHappeningParticipationReachedException $maxNumberHappeningParticipationReachedException) {
             $this->assertEquals(new MaxNumberHappeningParticipationReachedException($participant2->reveal()), $maxNumberHappeningParticipationReachedException);
         }
     }
