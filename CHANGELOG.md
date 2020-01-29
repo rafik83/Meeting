@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2033 - add number max of happenings per user in participation type parameters
+- VIMEET-2041 - restriction registration when number max of happenings per user is achieved
 ### Fixed
 - MV-202 - Remove type from mass unavailability
 
