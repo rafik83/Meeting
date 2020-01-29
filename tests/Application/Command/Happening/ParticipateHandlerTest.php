@@ -775,37 +775,27 @@ class ParticipateHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
 
-        //IsPrivate and getInvitationCode
         $happening->isPrivate()->shouldBeCalled()->willReturn(false);
         $happening->getInvitationCode()->shouldNotBeCalled();
 
-        // PreviousParticipant
         $this->participantRepository->getParticipantsForHappening($sheet->reveal(), $happening->reveal())->shouldBeCalled()->willReturn([]);
 
-        //AvailableParticipant
         $this->participantRepository->getAvailableParticipantsForHappening($participants, $happening->reveal())->shouldBeCalled()->willReturn([$participant1->reveal()]);
 
-        //ParticipationRemaining
         $this->participationCount->getRemaining($happening->reveal())->shouldBeCalled()->willReturn(5);
 
-        // $participateToHappeningWithProductToBuyChecker
         $this->participateToHappeningWithProductToBuyChecker->canParticipate($participant1->reveal(), $happening->reveal())->shouldBeCalled()->willReturn(true);
 
-        // HappeningParticipation
         $this->happeningParticipationRepository->findByHappeningAndUser($happening->reveal(), $user1->reveal())->shouldBeCalled()->willReturn(null);
 
-        // Je regarde à cb de conférences il peut participer
         $type->getNumberMaxOfHappeningsPerUser()->shouldBeCalled()->willReturn(3);
 
-        // Je regarde il a cb de participation
         $this->happeningParticipationRepository->countByUserAndEvent($user1->reveal(), $event->reveal())->shouldBeCalled()->willReturn(2);
 
-        // Il a moins de participation de participation que de crédits alors je l'inscris
         $this->happeningParticipationRepository->add(
             new HappeningParticipation($happening->reveal(), $user1->reveal())
         )->shouldBeCalled();
 
-        // Remove question
         $happening->isQuestionAllowed()->shouldBeCalled()->willReturn(true);
         $this->questionRepository->removeQuestionFromUserForHappening($user1->reveal(), $happening->reveal())->shouldBeCalled();
 
@@ -836,42 +826,30 @@ class ParticipateHandlerTest extends TestCase
         $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
 
-        //IsPrivate and getInvitationCode
         $happening->isPrivate()->shouldBeCalled()->willReturn(false);
         $happening->getInvitationCode()->shouldNotBeCalled();
 
-        // PreviousParticipant
         $this->participantRepository->getParticipantsForHappening($sheet->reveal(), $happening->reveal())->shouldBeCalled()->willReturn([]);
 
-        //AvailableParticipant
         $this->participantRepository->getAvailableParticipantsForHappening($participants, $happening->reveal())->shouldBeCalled()->willReturn($participants);
 
-        //ParticipationRemaining
         $this->participationCount->getRemaining($happening->reveal())->shouldBeCalled()->willReturn(5);
 
-        // $participateToHappeningWithProductToBuyChecker
         $this->participateToHappeningWithProductToBuyChecker->canParticipate($participant1->reveal(), $happening->reveal())->shouldBeCalled()->willReturn(true);
         $this->participateToHappeningWithProductToBuyChecker->canParticipate($participant2->reveal(), $happening->reveal())->shouldBeCalled()->willReturn(true);
 
-        // HappeningParticipation
         $this->happeningParticipationRepository->findByHappeningAndUser($happening->reveal(), $user1->reveal())->shouldBeCalled()->willReturn(null);
         $this->happeningParticipationRepository->findByHappeningAndUser($happening->reveal(), $user2->reveal())->shouldBeCalled()->willReturn(null);
 
-        // Je regarde à cb de conférences il peut participer
         $type->getNumberMaxOfHappeningsPerUser()->shouldBeCalled()->willReturn(3);
 
-        // Je regarde cb de participation à le premier participant
         $this->happeningParticipationRepository->countByUserAndEvent($user1->reveal(), $event->reveal())->shouldBeCalled()->willReturn(2);
 
-        // Il a moins de participation de participation que de crédits alors je l'inscris
         $this->happeningParticipationRepository->add(
             new HappeningParticipation($happening->reveal(), $user1->reveal())
         )->shouldBeCalled();
 
-       // Je regarde cb d'inscription à le deuxième participant
         $this->happeningParticipationRepository->countByUserAndEvent($user2->reveal(), $event->reveal())->shouldBeCalled()->willReturn(3);
-
-        // Il a autant de participation de participation que de crédits alors j'annule et je lance l'exception
 
         try {
             $this->handler->handle(new Participate(
