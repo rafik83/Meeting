@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2041 - restriction registration when number max of happenings per user is achieved
 ### Fixed
 - MV-202 - Remove type from mass unavailability
+- MV-209 - Fix video test; check if chat element exists
 
 ## [2.16.0] - 2019-12-23
 ### Added
