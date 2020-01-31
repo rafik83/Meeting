@@ -1,6 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+$script = <<-SCRIPT
+printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
+echo '' > /etc/apt/sources.list.d/deb_debian_org_debian.list
+apt-get -o Acquire::Check-Valid-Until=false update
+SCRIPT
+
 app = {
   :name        => 'vimeet',
   :box         => 'manala/app-dev-debian',
@@ -34,6 +40,8 @@ Vagrant.configure(2) do |config|
     virtualbox.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
     virtualbox.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
   end
+
+  config.vm.provision "shell", inline: $script
 
   # Vm - Provision - Dotfiles
   for dotfile in ['.ssh/config', '.gitconfig', '.gitignore', '.composer/auth.json']
