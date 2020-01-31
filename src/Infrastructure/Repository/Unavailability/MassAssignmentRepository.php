@@ -213,4 +213,18 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function removeByUserAndMass($user, Mass $mass): void
+    {
+         $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete(MassAssignment::class, 'massAssignment')
+            ->where('massAssignment.user = :user')
+            ->andWhere('massAssignment.mass = :mass')
+            ->setParameter('user', $user)
+            ->setParameter('mass', $mass)
+            ->getQuery()
+            ->execute();
+    }
 }

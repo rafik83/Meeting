@@ -1962,6 +1962,9 @@ services:
         arguments:
             - '@repository.unavailability.mass_repository'
             - '@adapter.job_queue_adapter'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@repository.unavailability.mass_assignment_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Update }
     command.unavailability.mass.delete_handler:

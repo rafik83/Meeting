@@ -67,6 +67,11 @@ class NomenclatureItem
         return $this->key;
     }
 
+    public function getCleanKey(): string
+    {
+        return str_replace('.', '_', $this->key);
+    }
+
     /**
      * Get parent
      *

@@ -135,6 +135,14 @@ interface UserRepositoryInterface
      */
     public function findByEventWithoutDispatch(Event $event, Mass $mass);
 
+    /**
+     * @param Event $event
+     * @param Mass $mass
+     *
+     * @return User[]
+     */
+    public function findByEventWithDispatch(Event $event, Mass $mass): array;
+
     public function findByAuthenticationTokenAndEvent(string $token, Event $event, \DateTimeInterface $expiredAt): ?User;
 
     /**

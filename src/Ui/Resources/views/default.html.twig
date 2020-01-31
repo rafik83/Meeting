@@ -96,7 +96,7 @@
             {% for first_label_item in table %}
                 <tr>
                     <td>
-                        {{ form_row(form[first_label_item.key], { 'attr': { 'class': 'item' }, 'simple': true }) }}
+                        {{ form_row(form[first_label_item.cleanKey], { 'attr': { 'class': 'item' }, 'simple': true }) }}
                     </td>
                 </tr>
             {% endfor %}
@@ -160,7 +160,7 @@
                 {% for second_label_item in first_level_item.childrenSorted(locale) %}
                     <tr>
                         <td>
-                            {{ form_row(form[second_label_item.key], { 'attr': { 'class': 'item item-' ~ first_level_item.key }, 'simple': true }) }}
+                            {{ form_row(form[second_label_item.cleanKey], { 'attr': { 'class': 'item item-' ~ first_level_item.cleanKey }, 'simple': true }) }}
                         </td>
                     </tr>
                 {% endfor %}
@@ -169,9 +169,9 @@
         </div>
 
         <p class="link-table pull-right">
-            <button type="button" class="btn btn-link" data-check-all-button="{{ '.item-' ~ first_level_item.key }}">{{ 'nomenclature.select_all'|trans}}</button>
+            <button type="button" class="btn btn-link" data-check-all-button="{{ '.item-' ~ first_level_item.cleanKey }}">{{ 'nomenclature.select_all'|trans}}</button>
             /
-            <button type="button" class="btn btn-link" data-uncheck-all-button="{{ '.item-' ~ first_level_item.key }}">{{ 'nomenclature.select_none'|trans}}</button>
+            <button type="button" class="btn btn-link" data-uncheck-all-button="{{ '.item-' ~ first_level_item.cleanKey }}">{{ 'nomenclature.select_none'|trans}}</button>
         </p>
     </div>
 {% endblock nomenclature_first_over_two %}
@@ -190,7 +190,7 @@
             <ul class="nav nav-pills pull-left" role="tablist">
                 {% for first_level_item in nomenclature.firstLevelSorted(locale) %}
                     <li role="presentation"{% if loop.first %} class="active"{% endif %}>
-                        <a href="#{{ first_level_item.key }}" aria-controls="{{ first_level_item.key }}">
+                        <a href="#{{ first_level_item.cleanKey }}" aria-controls="{{ first_level_item.cleanKey }}">
                             {{ first_level_item.label(locale) }}
                         </a>
                     </li>
@@ -214,7 +214,7 @@
 
 {% block nomenclature_first_over_three %}
     <section class="object object--collection style--style-1 section">
-        <div id="{{ first_level_item.key }}">
+        <div id="{{ first_level_item.cleanKey }}">
             <header>
                 <h2>{{ first_level_item.label(locale) }}</h2>
             </header>
@@ -251,7 +251,7 @@
                 {% for third_label_item in second_level_item.childrenSorted(locale) %}
                     <tr>
                         <td>
-                            {{ form_row(form[third_label_item.key], { 'attr': { 'class': 'item-' ~ second_level_item.key }, 'simple': true }) }}
+                            {{ form_row(form[third_label_item.cleanKey], { 'attr': { 'class': 'item-' ~ second_level_item.cleanKey }, 'simple': true }) }}
                         </td>
                     </tr>
                 {% endfor %}
@@ -260,9 +260,9 @@
         </div>
 
         <p class="link-table pull-right">
-            <button type="button" class="btn btn-link" data-check-all-button="{{ '.item-' ~ second_level_item.key }}">{{ 'nomenclature.select_all'|trans}}</button>
+            <button type="button" class="btn btn-link" data-check-all-button="{{ '.item-' ~ second_level_item.cleanKey }}">{{ 'nomenclature.select_all'|trans}}</button>
             /
-            <button type="button" class="btn btn-link" data-uncheck-all-button="{{ '.item-' ~ second_level_item.key }}">{{ 'nomenclature.select_none'|trans}}</button>
+            <button type="button" class="btn btn-link" data-uncheck-all-button="{{ '.item-' ~ second_level_item.cleanKey }}">{{ 'nomenclature.select_none'|trans}}</button>
         </p>
     </div>
 {% endblock nomenclature_second_over_three %}

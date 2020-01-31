@@ -20,6 +20,7 @@ class MainDataConverter
         'MME' => Gender::WOMAN,
         'MLLE' => Gender::WOMAN,
         'M' => Gender::MAN,
+        'MR' => Gender::MAN,
     ];
 
     /**
@@ -57,7 +58,7 @@ class MainDataConverter
     private function getGender(array &$rawUser): ?string
     {
         return isset($rawUser[LeniConstants::LENI_COL_TITLE])
-            ? self::GENDER_MAPPING[$rawUser[LeniConstants::LENI_COL_TITLE]]
+            ? (self::GENDER_MAPPING[$rawUser[LeniConstants::LENI_COL_TITLE]] ?? null)
             : null;
     }
 

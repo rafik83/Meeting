@@ -12,12 +12,14 @@ namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Command\Happening\ParticipateHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
+use Proximum\Vimeet\Application\Exception\Happening\MaxNumberHappeningParticipationReachedException;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantMustHaveProductToParticipateException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
@@ -32,11 +34,15 @@ use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use Proximum\Vimeet\Infrastructure\Repository\HappeningParticipationRepository;
+use Proximum\Vimeet\Infrastructure\Repository\ParticipantRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -752,5 +758,109 @@ class ParticipateHandlerTest extends TestCase
         $participate->participants = [];
 
         $this->handler->handle($this->participate);
+    }
+
+    public function testMaxNumberHappeningParticipationNotReachedWithOneParticipant()
+    {
+        $sheet = $this->prophesize(Sheet::class);
+        $user1 = $this->prophesize(User::class);
+        $participant1 = $this->prophesize(Participant::class);
+        $participant1->getUser()->shouldBeCalled()->willReturn($user1->reveal());
+        $participants = [$participant1->reveal()];
+        $happening = $this->prophesize(Happening::class);
+        $type = $this->prophesize(Type::class);
+        $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
+        $event = $this->prophesize(Event::class);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+
+        $happening->isPrivate()->shouldBeCalled()->willReturn(false);
+        $happening->getInvitationCode()->shouldNotBeCalled();
+
+        $this->participantRepository->getParticipantsForHappening($sheet->reveal(), $happening->reveal())->shouldBeCalled()->willReturn([]);
+
+        $this->participantRepository->getAvailableParticipantsForHappening($participants, $happening->reveal())->shouldBeCalled()->willReturn([$participant1->reveal()]);
+
+        $this->participationCount->getRemaining($happening->reveal())->shouldBeCalled()->willReturn(5);
+
+        $this->participateToHappeningWithProductToBuyChecker->canParticipate($participant1->reveal(), $happening->reveal())->shouldBeCalled()->willReturn(true);
+
+        $this->happeningParticipationRepository->findByHappeningAndUser($happening->reveal(), $user1->reveal())->shouldBeCalled()->willReturn(null);
+
+        $type->getNumberMaxOfHappeningsPerUser()->shouldBeCalled()->willReturn(3);
+
+        $this->happeningParticipationRepository->countByUserAndEvent($user1->reveal(), $event->reveal())->shouldBeCalled()->willReturn(2);
+
+        $this->happeningParticipationRepository->add(
+            new HappeningParticipation($happening->reveal(), $user1->reveal())
+        )->shouldBeCalled();
+
+        $happening->isQuestionAllowed()->shouldBeCalled()->willReturn(true);
+        $this->questionRepository->removeQuestionFromUserForHappening($user1->reveal(), $happening->reveal())->shouldBeCalled();
+
+        $this->handler->handle(new Participate(
+            $happening->reveal(),
+            $sheet->reveal(),
+            $user1->reveal(),
+            [$participant1->reveal()],
+            null,
+            null,
+            false
+        ));
+    }
+
+    public function testMaxNumberHappeningParticipationReachedWithManyParticipants()
+    {
+        $sheet = $this->prophesize(Sheet::class);
+        $user1 = $this->prophesize(User::class);
+        $participant1 = $this->prophesize(Participant::class);
+        $participant1->getUser()->shouldBeCalled()->willReturn($user1->reveal());
+        $user2 = $this->prophesize(User::class);
+        $participant2 = $this->prophesize(Participant::class);
+        $participant2->getUser()->shouldBeCalled()->willReturn($user2->reveal());
+        $participants = [$participant1->reveal(), $participant2->reveal()];
+        $happening = $this->prophesize(Happening::class);
+        $type = $this->prophesize(Type::class);
+        $event = $this->prophesize(Event::class);
+        $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+
+        $happening->isPrivate()->shouldBeCalled()->willReturn(false);
+        $happening->getInvitationCode()->shouldNotBeCalled();
+
+        $this->participantRepository->getParticipantsForHappening($sheet->reveal(), $happening->reveal())->shouldBeCalled()->willReturn([]);
+
+        $this->participantRepository->getAvailableParticipantsForHappening($participants, $happening->reveal())->shouldBeCalled()->willReturn($participants);
+
+        $this->participationCount->getRemaining($happening->reveal())->shouldBeCalled()->willReturn(5);
+
+        $this->participateToHappeningWithProductToBuyChecker->canParticipate($participant1->reveal(), $happening->reveal())->shouldBeCalled()->willReturn(true);
+        $this->participateToHappeningWithProductToBuyChecker->canParticipate($participant2->reveal(), $happening->reveal())->shouldBeCalled()->willReturn(true);
+
+        $this->happeningParticipationRepository->findByHappeningAndUser($happening->reveal(), $user1->reveal())->shouldBeCalled()->willReturn(null);
+        $this->happeningParticipationRepository->findByHappeningAndUser($happening->reveal(), $user2->reveal())->shouldBeCalled()->willReturn(null);
+
+        $type->getNumberMaxOfHappeningsPerUser()->shouldBeCalled()->willReturn(3);
+
+        $this->happeningParticipationRepository->countByUserAndEvent($user1->reveal(), $event->reveal())->shouldBeCalled()->willReturn(2);
+
+        $this->happeningParticipationRepository->add(
+            new HappeningParticipation($happening->reveal(), $user1->reveal())
+        )->shouldBeCalled();
+
+        $this->happeningParticipationRepository->countByUserAndEvent($user2->reveal(), $event->reveal())->shouldBeCalled()->willReturn(3);
+
+        try {
+            $this->handler->handle(new Participate(
+                $happening->reveal(),
+                $sheet->reveal(),
+                $user1->reveal(),
+                $participants,
+                null,
+                null,
+                false
+            ));
+        } catch (MaxNumberHappeningParticipationReachedException $maxNumberHappeningParticipationReachedException) {
+            $this->assertEquals(new MaxNumberHappeningParticipationReachedException($participant2->reveal()), $maxNumberHappeningParticipationReachedException);
+        }
     }
 }
