@@ -35,7 +35,7 @@ class SingleType extends AbstractType
             'translation_domain' => false,
             'choice_translation_domain' => false,
             'choice_name' => function (NomenclatureItem $item = null) {
-                return $item ? $item->getKey() : null;
+                return $item ? $item->getCleanKey() : null;
             },
             'choice_value' => function (NomenclatureItem $item = null) {
                 return $item ? $item->getKey() : null;
