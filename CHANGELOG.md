@@ -87,7 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2001 - Add fast on-site register and checkin
 - VIMEET-2009 - Google and Linkedin login enabling on one event
 - VIMEET-1081 - Priority meeting request number by type
-- VIMEET-1648 - Terms of sale linksopie de 01
+- VIMEET-1648 - Terms of sale links
 - VIMEET-2004 - Stop notifications on pending planner job
 - VIMEET-1082 - Prioritize meeting request
 - VIMEET-2020 - Get uploaded sheets files from a public route
