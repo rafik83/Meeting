@@ -67,25 +67,31 @@ class TransformRequestIntoMeetingHandler
     {
         $fromSheet = $query->request->getFromSheet();
         $toSheet = $query->request->getToSheet();
-        $fromParticipants = $this->meetingParticipants->getMeetingParticipants($query->request, $fromSheet);
-        $toParticipants = $this->meetingParticipants->getMeetingParticipants($query->request, $toSheet);
 
-        if (empty($fromParticipants) || empty($toParticipants)) {
-            return null;
+        $possibleParticipants = $this->getRequestPossibleParticipants($query->request);
+
+        $fromParticipants = $toParticipants = [];
+        $slot = $spot = null;
+        foreach ($possibleParticipants['from'] as $fromParticipants) {
+            foreach ($possibleParticipants['to'] as $toParticipants) {
+                $participants = array_merge($fromParticipants, $toParticipants);
+                $slots = $this->slotFilter->getFilteredSlots(
+                    $this->meetingSlotRepository->findAvailableSlotsByParticipants($query->event, $participants)
+                );
+
+                if (empty($slots)) {
+                    continue;
+                }
+
+                [$slot, $spot] = $this->getAvailableSlotAndSpot($slots, $fromSheet, $toSheet, $participants);
+
+                if ($spot !== null) {
+                    break 2;
+                }
+            }
         }
 
-        $participants = array_merge($fromParticipants, $toParticipants);
-        $slots = $this->slotFilter->getFilteredSlots(
-            $this->meetingSlotRepository->findAvailableSlotsByParticipants($query->event, $participants)
-        );
-
-        if (empty($slots)) {
-            return null;
-        }
-
-        [$slot, $spot] = $this->getAvailableSlotAndSpot($slots, $fromSheet, $toSheet, $participants);
-
-        if (!$slot instanceof MeetingSlot || !$spot instanceof Spot) {
+        if (empty($toParticipants) || empty($fromParticipants) || $slot === null || $spot === null) {
             return null;
         }
 
@@ -135,5 +141,29 @@ class TransformRequestIntoMeetingHandler
         } catch (NoSpotsAvailableForThisSlotAndMeetingException $exception) {
             return null;
         }
+    }
+
+    private function getRequestPossibleParticipants(Meeting\Request $request): array
+    {
+        return [
+            'from' => $this->getSheetPossibleParticipants($request, $request->getFromSheet()),
+            'to' => $this->getSheetPossibleParticipants($request, $request->getToSheet()),
+        ];
+    }
+
+    private function getSheetPossibleParticipants(Meeting\Request $request, Sheet $sheet): array
+    {
+        $requestParticipants = $this->meetingParticipants->getMeetingParticipants($request, $sheet);
+
+        if (!empty($requestParticipants)) {
+            return [$requestParticipants];
+        }
+
+        $possibleParticipants = [];
+        foreach ($sheet->getParticipantsArray() as $participant) {
+            $possibleParticipants[] = [$participant];
+        }
+
+        return $possibleParticipants;
     }
 }

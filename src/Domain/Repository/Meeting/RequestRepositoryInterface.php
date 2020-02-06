@@ -409,6 +409,13 @@ interface RequestRepositoryInterface
     /**
      * @param Event $event
      *
+     * @return Request[]
+     */
+    public function findApprovedAndPrioritizedWithoutMeeting(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
      * @return DashboardRequestView[]
      */
     public function getDashboardRequestViewsByEvent(Event $event): array;
