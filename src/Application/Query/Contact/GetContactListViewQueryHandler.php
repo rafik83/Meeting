@@ -3,14 +3,19 @@
 namespace Proximum\Vimeet\Application\Query\Contact;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class GetContactListViewQueryHandler
 {
+    /** @var DDayGuesser */
+    private $dDayGuesser;
+
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
@@ -20,34 +25,49 @@ class GetContactListViewQueryHandler
     /** @var GetContactListUsersViewQueryHandler */
     private $getContactListUsersViewQueryHandler;
 
+    /** @var ScanRepositoryInterface */
+    private $scanRepository;
+
+    /** @var \DateTimeInterface */
+    private $now;
+
     public function __construct(
+        DDayGuesser $dDayGuesser,
         SheetRepositoryInterface $sheetRepository,
         ParticipantInfoGuesser $participantInfoGuesser,
-        GetContactListUsersViewQueryHandler $getContactListUsersViewQueryHandler
+        GetContactListUsersViewQueryHandler $getContactListUsersViewQueryHandler,
+        ScanRepositoryInterface $scanRepository,
+        \DateTimeInterface $now
     ) {
+        $this->dDayGuesser = $dDayGuesser;
         $this->sheetRepository = $sheetRepository;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->getContactListUsersViewQueryHandler = $getContactListUsersViewQueryHandler;
+        $this->scanRepository = $scanRepository;
+        $this->now = $now;
     }
 
     /**
      * @param GetContactListViewQuery $query
      *
-     * @return ContactPreviewView[]
+     * @return ContactListView
      */
-    public function handle(GetContactListViewQuery $query): array
+    public function handle(GetContactListViewQuery $query): ContactListView
     {
         $usersView = $this->getContactListUsersViewQueryHandler->handle(
             new GetContactListUsersViewQuery($query->event, $query->participant)
         );
 
+        $isAccessControlEnabled = $query->event->isAccessControlEnabled();
+        $isItDDay = $this->dDayGuesser->isItDDay($query->event);
+        $getCheckinStatus = $isAccessControlEnabled && $isItDDay;
+
         /** @var User[] $metUsers */
         $metUsers = array_merge($usersView->requestsUsers, $usersView->inContactsUsers);
 
-        // convert users to view
-        $contactListView = [];
-
+        $contactPreviewViews = [];
         $parsedUserIds = [];
+
         foreach ($metUsers as $contact) {
             if (isset($parsedUserIds[$contact->getId()])) {
                 continue;
@@ -74,19 +94,22 @@ class GetContactListViewQueryHandler
             );
 
             $infos = $this->participantInfoGuesser->guessParticipantInfos($participantOfContact, $query->locale);
-            $contactListView[] = new ContactPreviewView(
+            $contactPreviewViews[] = new ContactPreviewView(
                 $contact->getId(),
                 $infos[Tag::PARTICIPANT_FIRSTNAME],
                 $infos[Tag::PARTICIPANT_LASTNAME],
                 $infos[Tag::PARTICIPANT_AVATAR],
                 $contactSheetViews,
                 \in_array($contact, $usersView->requestsUsers, true),
-                !\in_array($contact, $usersView->inContactsUsers, true)
+                !\in_array($contact, $usersView->inContactsUsers, true),
+                $getCheckinStatus
+                    ? $this->scanRepository->isUserCheckinTodayByEvent($contact, $query->event, $this->now)
+                    : false
             );
         }
 
         usort(
-            $contactListView,
+            $contactPreviewViews,
             static function (ContactPreviewView $contactA, ContactPreviewView $contactB) {
                 $compare = mb_strtolower(implode($contactA->sheetTitles))
                     <=> mb_strtolower(implode($contactB->sheetTitles));
@@ -100,7 +123,7 @@ class GetContactListViewQueryHandler
             }
         );
 
-        return $contactListView;
+        return new ContactListView($isAccessControlEnabled, $isItDDay, $contactPreviewViews);
     }
 
     /**

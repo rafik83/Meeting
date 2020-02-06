@@ -25,7 +25,7 @@
 
         <div class="main__content">
             <table class="list list--users table table-striped table-bordered table-hover">
-                {% for contactPreview in contactListView %}
+                {% for contactPreview in contactListView.contactPreviewViews %}
                     <tr>
                         <td>
                             {% set showPathParameters = {'sheet': sheet.id, 'contactUser': contactPreview.contactId} %}
@@ -52,6 +52,14 @@
                                         {{ contactPreview.sheetTitles | join(', ') }}
                                     </p>
                                     <p class="name">{{ contactPreview.firstName|capitalize }} {{ contactPreview.lastName|upper }}</p>
+
+                                    {% if contactListView.showCheckinStatus %}
+                                        {% if contactPreview.isCheckedToday %}
+                                            <span class="label label-success">Présent</span>
+                                        {% else %}
+                                            <span class="label label-danger">Absent</span>
+                                        {% endif %}
+                                    {% endif %}
                                 </div>
                             </a>
                         </td>

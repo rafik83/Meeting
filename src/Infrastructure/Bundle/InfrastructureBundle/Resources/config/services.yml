@@ -7103,9 +7103,12 @@ services:
 
     Proximum\Vimeet\Application\Query\Contact\GetContactListViewQueryHandler:
         arguments:
+            - '@domain.event.day.dday_guesser'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.participant_info_guesser'
             - '@Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, typehints: true }
 
