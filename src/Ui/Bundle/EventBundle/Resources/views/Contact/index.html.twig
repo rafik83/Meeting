@@ -55,9 +55,9 @@
 
                                     {% if contactListView.showCheckinStatus %}
                                         {% if contactPreview.isCheckedToday %}
-                                            <span class="label label-success">Présent</span>
+                                            <span class="label label-success">{{ 'contacts.list.present'|trans }}</span>
                                         {% else %}
-                                            <span class="label label-danger">Absent</span>
+                                            <span class="label label-danger">{{ 'contacts.list.absent'|trans }}</span>
                                         {% endif %}
                                     {% endif %}
                                 </div>
