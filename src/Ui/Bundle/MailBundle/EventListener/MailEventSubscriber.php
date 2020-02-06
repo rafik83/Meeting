@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActivateAccountMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareChangeNewMailAccountView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareChangeOldMailAccountView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareOrderConfirmedMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareParticipantAddedMailView;
@@ -48,8 +49,6 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as Admin
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\AdminMeetingsDeletedAllMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordMail as UserResetPasswordMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -105,22 +104,18 @@ class MailEventSubscriber implements EventSubscriberInterface
      */
     public function onChangeMailAddressEvent(ChangeMailAddressEvent $event)
     {
-        $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery(null, $event->getUser())
+
+        $newMail = $this->prepareHandler->handle(
+            new PrepareChangeNewMailAccountView(
+                $event->getEvent(),
+                $event->getUser(),
+                $event->getUser()->getLocale(),
+                $event->getChangeMailToken()
+            )
         );
-
-
-        $newMail = new ChangeNewMailAddressMail(
-            $event->getEvent(),
-            $this->sender->generate($event->getEvent()),
-            $event->getChangeMailToken()->getMail(),
-            $event->getUser()->getLocale(),
-            $event->getChangeMailToken()->getToken(),
-            $event->getUser(),
-            $participantMailView
-        );
-
-        $this->mailer->send($newMail);
+        if ($newMail instanceof AbstractMail) {
+            $this->mailer->send($newMail);
+        }
 
         $oldMail = $this->prepareHandler->handle(
             new PrepareChangeOldMailAccountView(

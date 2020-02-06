@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Transactional\Mail;
 
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareChangeNewMailAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareChangeOldMailAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
@@ -56,6 +57,9 @@ class PrepareHandler
     /** @var PrepareChangeOldMailAccountMail */
     private $prepareChangeOldMailAccountMail;
 
+    /** @var PrepareChangeNewMailAccountMail */
+    private $prepareChangeNewMailAccountMail;
+
     public function __construct(
         PrepareRegisterAccountMail $prepareRegisterAccountMail,
         PrepareActivateAccountMail $prepareActivateAccountMail,
@@ -66,7 +70,8 @@ class PrepareHandler
         PrepareOrderConfirmedMail $prepareOrderConfirmedMail,
         PrepareVersionDiffChangedMail $prepareVersionDiffChangedMail,
         PrepareSheetChangeTypeMail $prepareSheetChangeTypeMail,
-        PrepareChangeOldMailAccountMail $prepareChangeOldMailAccountMail
+        PrepareChangeOldMailAccountMail $prepareChangeOldMailAccountMail,
+        PrepareChangeNewMailAccountMail $prepareChangeNewMailAccountMail
     ) {
         $this->prepareRegisterAccountMail = $prepareRegisterAccountMail;
         $this->prepareActivateAccountMail = $prepareActivateAccountMail;
@@ -78,6 +83,7 @@ class PrepareHandler
         $this->prepareVersionDiffChangedMail = $prepareVersionDiffChangedMail;
         $this->prepareSheetChangeTypeMail = $prepareSheetChangeTypeMail;
         $this->prepareChangeOldMailAccountMail = $prepareChangeOldMailAccountMail;
+        $this->prepareChangeNewMailAccountMail = $prepareChangeNewMailAccountMail;
     }
 
     public function handle(AbstractPrepareMail $prepareMail): ?AbstractMail
@@ -103,6 +109,8 @@ class PrepareHandler
                 return $this->prepareSheetChangeTypeMail->prepare($prepareMail);
             case Constant::TRANSACTIONAL_MAIL_KEY_USER_CHANGE_OLD_MAIL:
                 return $this->prepareChangeOldMailAccountMail->prepare($prepareMail);
+            case Constant::TRANSACTIONAL_MAIL_KEY_USER_CHANGE_NEW_MAIL:
+                return $this->prepareChangeNewMailAccountMail->prepare($prepareMail);
             default: return null;
         }
     }
