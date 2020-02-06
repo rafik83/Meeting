@@ -79,3 +79,11 @@ services:
     Proximum\Vimeet\Infrastructure\Repository\ContactRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\AnswerRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'

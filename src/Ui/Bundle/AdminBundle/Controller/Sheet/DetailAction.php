@@ -123,9 +123,10 @@ class DetailAction
             );
         }
 
+        $admin = $adminDomain->getAdmin();
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $sheetDetailView = $this->queryBus->handle(new SheetDetailQuery($sheet, $locale));
+        $sheetDetailView = $this->queryBus->handle(new SheetDetailQuery($admin, $sheet, $locale));
 
         $changeTypeForm = null;
 
@@ -133,7 +134,7 @@ class DetailAction
             && null === $this->invoiceRepository->isSheetInvoiced($sheet)
             && 0 === $this->meetingRepository->countMeetingsOfSheet($sheet)
         ) {
-            $changeType = new ChangeType($sheet, $sheet->getType(), $adminDomain->getAdmin(), $locale);
+            $changeType = new ChangeType($sheet, $sheet->getType(), $admin, $locale);
 
             $changeTypeForm = $this->formFactory->create(ChangeTypeType::class, $changeType, [
                 'event'  => $event,
@@ -153,7 +154,7 @@ class DetailAction
             }
         }
 
-        $addComment = new AddComment($sheet, $adminDomain->getAdmin());
+        $addComment = new AddComment($sheet, $admin);
         $addCommentForm = $this->formFactory->create(CommentType::class, $addComment, [
             'submit' => true,
         ]);
@@ -168,7 +169,7 @@ class DetailAction
             ]));
         }
 
-        $impersonationToken = $this->impersonate->getEncodedToken($adminDomain->getAdmin(), $sheet->getOwner());
+        $impersonationToken = $this->impersonate->getEncodedToken($admin, $sheet->getOwner());
 
         return $this->engine->renderResponse(self::TEMPLATE, [
             'event'              => $event,

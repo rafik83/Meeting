@@ -91,11 +91,11 @@ class ParticipantInfoGuesserTest extends TestCase
                 $this->locale
             )
             ->shouldBeCalled()
-            ->willReturn('LastName');
+            ->willReturn('DUPOND');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
-        $this->assertEquals('LastName', $guesser->guessParticipantLastName($this->participant, $this->locale));
+        $this->assertEquals('DUPOND', $guesser->guessParticipantLastName($this->participant, $this->locale));
     }
 
     public function testGuessParticipantFirstName()
@@ -110,11 +110,11 @@ class ParticipantInfoGuesserTest extends TestCase
                 $this->locale
             )
             ->shouldBeCalled()
-            ->willReturn('FirstName');
+            ->willReturn('john');
 
         $guesser = new ParticipantInfoGuesser($this->taggedInfoGuesser->reveal(), $this->templateDataFactory->reveal());
 
-        $this->assertEquals('FirstName', $guesser->guessParticipantFirstName($this->participant, $this->locale));
+        $this->assertEquals('John', $guesser->guessParticipantFirstName($this->participant, $this->locale));
     }
 
     public function testGuessParticipantInfos()

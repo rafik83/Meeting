@@ -55,7 +55,13 @@ class ShowActionTest extends TestCase
             '/path/to/header.png',
             '#ffffff',
             '#000000',
-            null
+            null,
+            false,
+            null,
+            null,
+            false,
+            '#eee',
+            '#000'
         );
 
         $queryBus = $this->prophesize(QueryBusInterface::class);

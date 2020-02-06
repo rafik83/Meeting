@@ -11,7 +11,10 @@
 namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class UpdateHandler
 {
@@ -20,17 +23,34 @@ class UpdateHandler
      */
     private $massRepository;
 
+    /**
+     * @var MassAssignmentRepositoryInterface
+     */
+    private $massAssignmentRepository;
+
+    /**
+     * @var TypeRepositoryInterface
+     */
+    private $typeRepository;
+
     /** @var JobQueueInterface */
     private $jobQueueAdapter;
 
-    /**
-     * @param MassRepositoryInterface $massRepository
-     * @param JobQueueInterface       $jobQueueAdapter
-     */
-    public function __construct(MassRepositoryInterface $massRepository, JobQueueInterface $jobQueueAdapter)
-    {
+    /** @var UserRepositoryInterface */
+    private $userRepository;
+
+    public function __construct(
+        MassRepositoryInterface $massRepository,
+        JobQueueInterface $jobQueueAdapter,
+        UserRepositoryInterface $userRepository,
+        TypeRepositoryInterface $typeRepository,
+        MassAssignmentRepositoryInterface $massAssignmentRepository
+    ) {
         $this->massRepository = $massRepository;
         $this->jobQueueAdapter = $jobQueueAdapter;
+        $this->userRepository = $userRepository;
+        $this->typeRepository = $typeRepository;
+        $this->massAssignmentRepository = $massAssignmentRepository;
     }
 
     /**
@@ -38,10 +58,6 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        $oldBegin    = $update->mass->getBegin();
-        $oldEnd      = $update->mass->getEnd();
-        $oldBlocking = $update->mass->isBlocking();
-
         $update->mass->update(
             $update->category,
             $update->name,
@@ -59,15 +75,18 @@ class UpdateHandler
 
         $this->massRepository->update($update->mass);
 
-        // If change in date for a blocking mass
-        // Or if change the blocking state
-        if ((($oldBegin->format('Y/m/d H:i') !== $update->begin->format('Y/m/d H:i')
-                || $oldEnd->format('Y/m/d H:i') !== $update->end->format('Y/m/d H:i'))
-                && $update->blocking
-            ) || $oldBlocking !== $update->blocking
-        ) {
-            $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($update->mass->getEvent());
-            $this->jobQueueAdapter->aggregateAvailableSlot($update->mass->getEvent());
+        $usersDispatched = $this->userRepository->findByEventWithDispatch($update->mass->getEvent(), $update->mass);
+
+        foreach ($usersDispatched as $user) {
+            $userTypes = $this->typeRepository->getTypesByUserIds($update->mass->getEvent(), [$user->getId()]);
+
+            if (!$update->mass->hasAtLeastOneType($userTypes)) {
+                $this->massAssignmentRepository->removeByUserAndMass($user, $update->mass);
+            }
         }
+
+        $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($update->mass->getEvent());
+        $this->jobQueueAdapter->aggregateAvailableSlot($update->mass->getEvent());
     }
 }
+

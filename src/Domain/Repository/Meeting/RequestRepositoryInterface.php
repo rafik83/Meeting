@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Repository\Meeting;
 
+use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardRequestView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -105,6 +105,13 @@ interface RequestRepositoryInterface
      * @return int
      */
     public function countApprovedByEvent(Event $event): int;
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int
+     */
+    public function countBySheetWithPriority(Sheet $sheet): int;
 
     /**
      * @param Event $event
@@ -405,4 +412,11 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function findApprovedAndPrioritizedWithoutMeeting(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return DashboardRequestView[]
+     */
+    public function getDashboardRequestViewsByEvent(Event $event): array;
 }

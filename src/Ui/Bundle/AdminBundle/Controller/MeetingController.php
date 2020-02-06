@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\View\Normalizer\EventMeetingsNormalizerView;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -82,7 +83,7 @@ class MeetingController extends Controller
      *
      * @return RedirectResponse
      */
-    public function deleteAction(Event $event)
+    public function deleteAction(Event $event, AdminDomain $adminDomain)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -91,7 +92,7 @@ class MeetingController extends Controller
         }
 
         try {
-            $this->get('tactician.commandbus')->handle(new DeleteAll($event));
+            $this->get('tactician.commandbus')->handle(new DeleteAll($event, $adminDomain->getAdmin()));
         } catch (NotAllowedToDeleteAllMeetingsException $exception) {
             $this->addFlash('error', 'flash.admin.meeting.notAllowedToDeleteAllMeetingsException');
         }

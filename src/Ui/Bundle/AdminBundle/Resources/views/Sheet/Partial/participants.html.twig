@@ -1,5 +1,4 @@
 <div class="row">
-    {% set impersonationUrl = app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet_default', {'sheet': sheet.id, '_switchto': impersonationToken}) %}
     <div class="col-md-6">
     {% if details.participants.owner.shouldBeDisplayed %}
         <div class="col-md-12">
@@ -19,7 +18,7 @@
                     {{ details.participants.owner.firstName }}  {{ details.participants.owner.lastName }}<br>
                     {{ 'admin.sheet.details.owner.mobile'|trans }}: {{ details.participants.owner.mobile }}<br>
                     {{ 'admin.sheet.details.owner.phone'|trans }}: {{ details.participants.owner.phone }}<br>
-                    <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
+                    <a href="{{ details.participants.owner.impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -69,9 +68,7 @@
                     <b>{{ 'admin.sheet.details.participant.availability_confirmation.title'|trans }}: </b><span class="label label-{{ participant.availabilityConfirmationView.indicator }}">{{ participant.availabilityConfirmationView.message|trans }}</span>
                     <br/>
 
-                    {% if participant.isOwner %}
-                        <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
-                    {% endif %}
+                    <a href="{{ participant.impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
                 </div>
             </div>
         </div>

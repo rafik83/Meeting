@@ -23,19 +23,24 @@ class DashboardViewQueryHandler
     /** @var DashboardMeetingViewQueryHandler */
     private $dashboardMeetingViewQueryHandler;
 
-    /**
-     * @param DashboardTransactionViewQueryHandler $dashboardTransactionViewQueryHandler
-     * @param DashboardSheetViewQueryHandler       $dashboardSheetViewQueryHandler
-     * @param DashboardMeetingViewQueryHandler     $dashboardMeetingViewQueryHandler
-     */
+    /** @var DashboardContactViewQueryHandler */
+    private $dashboardContactViewQueryHandler;
+
+    /** @var DashboardScanViewQueryHandler */
+    private $dashboardScanViewQueryHandler;
+
     public function __construct(
         DashboardTransactionViewQueryHandler $dashboardTransactionViewQueryHandler,
         DashboardSheetViewQueryHandler $dashboardSheetViewQueryHandler,
-        DashboardMeetingViewQueryHandler $dashboardMeetingViewQueryHandler
+        DashboardMeetingViewQueryHandler $dashboardMeetingViewQueryHandler,
+        DashboardContactViewQueryHandler $dashboardContactViewQueryHandler,
+        DashboardScanViewQueryHandler $dashboardScanViewQueryHandler
     ) {
         $this->dashboardTransactionViewQueryHandler = $dashboardTransactionViewQueryHandler;
-        $this->dashboardSheetViewQueryHandler       = $dashboardSheetViewQueryHandler;
+        $this->dashboardSheetViewQueryHandler = $dashboardSheetViewQueryHandler;
         $this->dashboardMeetingViewQueryHandler = $dashboardMeetingViewQueryHandler;
+        $this->dashboardContactViewQueryHandler = $dashboardContactViewQueryHandler;
+        $this->dashboardScanViewQueryHandler = $dashboardScanViewQueryHandler;
     }
 
     /**
@@ -45,18 +50,22 @@ class DashboardViewQueryHandler
      */
     public function handle(DashboardViewQuery $dashboardViewQuery): DashboardView
     {
-        $dashboardTransactionView = $this->dashboardTransactionViewQueryHandler->handle(
-            new DashboardTransactionViewQuery($dashboardViewQuery->event)
+        return new DashboardView(
+            $this->dashboardTransactionViewQueryHandler->handle(
+                new DashboardTransactionViewQuery($dashboardViewQuery->event)
+            ),
+            $this->dashboardSheetViewQueryHandler->handle(
+                new DashboardSheetViewQuery($dashboardViewQuery->event, $dashboardViewQuery->locale)
+            ),
+            $this->dashboardMeetingViewQueryHandler->handle(
+                new DashboardMeetingViewQuery($dashboardViewQuery->event)
+            ),
+            $this->dashboardContactViewQueryHandler->handle(
+                new DashboardContactViewQuery($dashboardViewQuery->event)
+            ),
+            $this->dashboardScanViewQueryHandler->handle(
+                new DashboardScanViewQuery($dashboardViewQuery->event)
+            )
         );
-
-        $dashboardSheetView = $this->dashboardSheetViewQueryHandler->handle(
-            new DashboardSheetViewQuery($dashboardViewQuery->event, $dashboardViewQuery->locale)
-        );
-
-        $dashboardMeetingView = $this->dashboardMeetingViewQueryHandler->handle(
-            new DashboardMeetingViewQuery($dashboardViewQuery->event)
-        );
-
-        return new DashboardView($dashboardTransactionView, $dashboardSheetView, $dashboardMeetingView);
     }
 }

@@ -186,9 +186,9 @@ interface TypeRepositoryInterface
      * @param Event  $event
      * @param string $locale
      *
-     * @return Type[]
+     * @return TypeView[]
      */
-    public function getVisibleTypesViewsByEvent(Event $event, $locale);
+    public function getVisibleTypesViewsByEvent(Event $event, $locale): array;
 
     public function hasVisibleTypeByEvent(Event $event): bool;
 
@@ -206,4 +206,12 @@ interface TypeRepositoryInterface
      * @return Type[]
      */
     public function getFromSheetMeetingRequests(Sheet $sheet, string $locale): array;
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Type[]
+     */
+    public function getTypesAndCategoriesTranslationsByEvent(Event $event, string $locale): array;
 }

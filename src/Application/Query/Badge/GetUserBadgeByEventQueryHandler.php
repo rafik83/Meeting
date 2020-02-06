@@ -17,8 +17,8 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQuery;
 use Proximum\Vimeet\Domain\Model\Badge;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
@@ -26,14 +26,8 @@ use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
 use Proximum\Vimeet\Domain\User\Sheet\FirstParticipantSheetOfUserGetter;
 use Proximum\Vimeet\Infrastructure\Adapter\IntlAdapter;
 
-class GetUserBadgeByEventQueryHandler
+class GetUserBadgeByEventQueryHandler extends AbstractGetBadgeByEventQueryHandler
 {
-    /** @var QueryBusInterface */
-    private $queryBus;
-
-    /** @var QRCodeGeneratorInterface */
-    private $qrCodeGenerator;
-
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
@@ -58,6 +52,9 @@ class GetUserBadgeByEventQueryHandler
     /** @var IntlAdapter */
     private $intlAdapter;
 
+    /** @var Sheet[] */
+    private $userSheets;
+
     public function __construct(
         QueryBusInterface $queryBus,
         QRCodeGeneratorInterface $qrCodeGenerator,
@@ -70,8 +67,6 @@ class GetUserBadgeByEventQueryHandler
         FirstParticipantSheetOfUserGetter $firstParticipantSheetOfUserGetter,
         IntlAdapter $intlAdapter
     ) {
-        $this->queryBus = $queryBus;
-        $this->qrCodeGenerator = $qrCodeGenerator;
         $this->sheetRepository = $sheetRepository;
         $this->groupNameResolver = $groupNameResolver;
         $this->categoryNameResolver = $categoryNameResolver;
@@ -80,106 +75,71 @@ class GetUserBadgeByEventQueryHandler
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->firstParticipantSheetOfUserGetter = $firstParticipantSheetOfUserGetter;
         $this->intlAdapter = $intlAdapter;
+
+        parent::__construct($queryBus, $qrCodeGenerator);
     }
 
-    public function handle(GetUserBadgeByEventQuery $query): UserBadgeByEventView
+    public function handle(AbstractGetBadgeByEventQuery $query): UserBadgeByEventView
     {
-        $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($query->user, $query->event);
+        $this->userSheets = $this->sheetRepository->getSheetsByUserAndEvent($query->user, $query->event);
 
-        if (empty($userSheets)) {
+        if (empty($this->userSheets)) {
             throw new AccessToBadgeDeniedException('Badge for this user is not activated');
         }
 
-        $type = $this->typeNameResolver->resolveTypeWithPreloadedSheets($userSheets);
-
-        /** @var Badge $badge */
-        $badge = $this->queryBus->handle(new GetBadgeConfigurationByTypeQuery($type));
-
-        if (!$badge->isActivated()) {
-            throw new AccessToBadgeDeniedException('Badge for this type is not activated');
-        }
-
-        $userInfo = $this->userInfoGuesser->getUserInfoFromParticipant(
-            $query->user,
-            $query->event->getFallback(),
-            $userSheets
-        );
-
-        $qrCodeIdentifier = null;
-        $qrCodeImageBase64 = null;
-
-        if ($badge->isShowQRCode()) {
-            $qrCodeIdentifier = $this->queryBus->handle(new QRCodeIdentifierQuery($query->event, $query->user));
-            $qrCodeImageBase64 = $this->qrCodeGenerator->generateBase64Image($qrCodeIdentifier);
-        }
-
-        $country = null;
-
-        if ($badge->isShowCountry()) {
-            $sheet = $this->firstParticipantSheetOfUserGetter->getFirstParticipantSheet($query->user, $userSheets);
-
-            if ($sheet) {
-                $sheetInfos = $this->sheetInfoGuesser->guessSheetInfos($sheet);
-
-                if (!empty($sheetInfos[Tag::SHEET_COUNTRY])) {
-                    $country = $this->intlAdapter->getCountryName($sheetInfos[Tag::SHEET_COUNTRY]);
-                }
-            }
-        }
-
-        return new UserBadgeByEventView(
-            $this->getSheetTitle($badge, $query->user, $userSheets),
-            $badge->isShowFirstName() ? $userInfo['firstName'] : null,
-            $badge->isShowLastName() ? $userInfo['lastName'] : null,
-            $badge->isShowPosition() ? $userInfo['position'] : null,
-            $this->getTypeOrCategoryLabel($badge, $userSheets),
-            $qrCodeIdentifier,
-            $qrCodeImageBase64,
-            $this->getHeader($query->event, $badge),
-            $badge->getFooterTextColor(),
-            $badge->getFooterColor(),
-            $country
-        );
+        return parent::handle($query);
     }
 
-    private function getSheetTitle(Badge $badge, User $user, array &$userSheets): ?string
+    protected function getSheetTitle(AbstractGetBadgeByEventQuery $query): string
     {
-        if (!$badge->isShowSheetTitle()) {
-            return null;
-        }
-
-        return $this->groupNameResolver->resolve($badge->getEvent(), $user, $userSheets);
+        return $this->groupNameResolver->resolve($query->event, $query->user, $this->userSheets);
     }
 
-    private function getHeader(Event $event, Badge $badge): ?string
+    protected function getCategoryString(Badge $badge): ?string
     {
-        if (!$badge->isShowHeader()) {
-            return null;
-        }
-
-        if (null !== $badge->getHeader()) {
-            return $badge->getHeader();
-        }
-
-        return $event->getLocalizedMobileLogo($event->getFallback());
-    }
-
-    private function getTypeOrCategoryLabel(Badge $badge, array &$sheets): ?string
-    {
-        if (!$badge->isShowFooterTypeOrCategory()) {
-            return null;
-        }
-
-        if ($badge->isShowFooterType()) {
-            return $badge->getType()->getTitle($badge->getEvent()->getFallback());
-        }
-
-        $category = $this->categoryNameResolver->resolveCategoryForPreloadSheets($sheets);
+        $category = $this->categoryNameResolver->resolveCategoryForPreloadSheets($this->userSheets);
 
         if (null === $category) {
             return null;
         }
 
         return $category->getTitle($badge->getEvent()->getFallback());
+    }
+
+    protected function getUserInfo(AbstractGetBadgeByEventQuery $query): array
+    {
+        $userInfo = $this->userInfoGuesser->getUserInfoFromParticipant(
+            $query->user,
+            $query->event->getFallback(),
+            $this->userSheets
+        );
+
+        return $userInfo;
+    }
+
+    protected function getQrCodeIdentifier(AbstractGetBadgeByEventQuery $query): string
+    {
+        return $this->queryBus->handle(new QRCodeIdentifierQuery($query->event, $query->user));
+    }
+
+    protected function getCountryString(AbstractGetBadgeByEventQuery $query, Badge $badge): ?string
+    {
+        $country = null;
+        $sheet = $this->firstParticipantSheetOfUserGetter->getFirstParticipantSheet($query->user, $this->userSheets);
+
+        if ($sheet) {
+            $sheetInfos = $this->sheetInfoGuesser->guessSheetInfos($sheet);
+
+            if (!empty($sheetInfos[Tag::SHEET_COUNTRY])) {
+                $country = $this->intlAdapter->getCountryName($sheetInfos[Tag::SHEET_COUNTRY]);
+            }
+        }
+
+        return $country;
+    }
+
+    protected function getType(AbstractGetBadgeByEventQuery $query): Type
+    {
+        return $this->typeNameResolver->resolveTypeWithPreloadedSheets($this->userSheets);
     }
 }

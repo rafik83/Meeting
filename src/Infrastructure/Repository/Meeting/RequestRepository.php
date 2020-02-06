@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Meeting;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardRequestView;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -410,6 +411,19 @@ class RequestRepository implements RequestRepositoryInterface
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
         $queryBuilder->count()->fromEvent($event)->approved()->isEnabled();
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countBySheetWithPriority(Sheet $sheet): int
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->count()->isEnabled()
+            ->where('request.from = :sheet AND request.fromPriority = true OR request.to = :sheet AND request.toPriority = true')
+            ->setParameter('sheet',  $sheet);
 
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -1125,5 +1139,23 @@ class RequestRepository implements RequestRepositoryInterface
         $this->requestsWithoutMeeting($queryBuilder);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDashboardRequestViewsByEvent(Event $event): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select(sprintf('NEW %s(fromType.id, request.state, meeting.id)', DashboardRequestView::class))
+            ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event AND request.disabled = false')
+            ->join('fromSheet.type', 'fromType')
+            ->leftJoin('request.meeting', 'meeting')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Meeting\MeetingSheetListView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingSheetView;
 use Proximum\Vimeet\Domain\Model\Contact;
@@ -55,16 +54,9 @@ class MeetingSheetViewQueryHandler
         $this->sheetInfoGuesser = $sheetInfoGuesser;
     }
 
-    /**
-     * @param MeetingSheetViewQuery $query
-     *
-     * @return MeetingSheetListView
-     */
-    public function handle(MeetingSheetViewQuery $query)
+    public function handle(MeetingSheetViewQuery $query): MeetingSheetListView
     {
-
-        $contacts = $this->contactRepository->findByEventAndUser($query->event, $query->user);
-
+        $contacts = $this->contactRepository->findByEventAndUsers($query->event, $query->sheet->getUsers());
         $meetingSheetViews = $this->getFromApprovedRequests($query->sheet, $query->locale, $contacts);
         $meetingSheetViews = $this->addFromContacts($meetingSheetViews, $query->event, $contacts, $query->locale);
 
@@ -84,9 +76,10 @@ class MeetingSheetViewQueryHandler
 
         foreach ($this->requestRepository->findApproved($sheet) as $meetingRequest) {
             $sheetMet = $meetingRequest->getSheetMet($sheet);
+            $participantsMet = $meetingRequest->getParticipants($sheetMet);
             $meetingSheetViews[$sheetMet->getId()] = $this->createMeetingSheetView(
                 $sheetMet,
-                $sheetMet->getParticipantsArray(),
+                !empty($participantsMet) ? $participantsMet : [$sheetMet->getFirstParticipant()],
                 $locale,
                 true,
                 $contacts
@@ -167,7 +160,7 @@ class MeetingSheetViewQueryHandler
         $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($sheet, $locale);
 
         return new MeetingSheetView(
-            $sheetTags[Tag::SHEET_TITLE],
+            $sheet->getTitle(),
             $sheetTags[Tag::SHEET_ORGANIZATION_CATEGORY],
             $sheetTags[Tag::SHEET_ORGANIZATION_TURNOVER],
             $sheetTags[Tag::SHEET_ORGANIZATION_STAFF],

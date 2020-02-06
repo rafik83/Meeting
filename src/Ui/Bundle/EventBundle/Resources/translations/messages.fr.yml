@@ -83,6 +83,7 @@ catalog.selectItemsFromNomenclatures.unSelectAll: 'Tout désélectionner'
 catalog.sheet.export.csv: Exporter
 catalog.sheet.result.total: '{0} Aucun résultat|{1} 1 résultat|]1,Inf[ %total% résultats'
 catalog.title: Catalogue
+common.back: Retour
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
 common.cryptedUploadFileHelp: 'Le fichier est chiffré et conservé de manière sécurisée.'
@@ -101,6 +102,8 @@ contact.show.evaluation.2.label: 'Non pertinent'
 contact.show.evaluation.3.label: 'Pertinent à long terme'
 contact.show.evaluation.4.label: 'A relancer à moyen terme'
 contact.show.evaluation.5.label: 'A revoir très vite'
+contact.show.me.info: 'Il s''agit de vous même ! Vous ne serez pas ajouté à la liste des contacts.'
+contacts.list.noResults: 'Aucun contact'
 contacts.list.title: Contacts
 error.403.content: 'Vous n''êtes pas autorisé à accéder à ce contenu.'
 error.403.title: 'Non autorisé'
@@ -131,6 +134,7 @@ event.meeting.request.answering.closed: 'Les validations de rendez-vous sont ter
 event.meeting.request.closed: 'Les demandes de rendez-vous sont terminées'
 event.meeting.request.locked: 'Planification en cours - Les demandes sont verrouillées'
 event.meeting.request.transformIntoMeeting.error: 'Le RDV ne peut pas être positionné faute de disponibilités communes.'
+event.meeting.request.priority: 'Demande de RDV prioritaire'
 event.meeting.request.transformIntoMeeting.success: 'RDV positionné pour %participants% le %date% à %time% : %spot%.'
 event.participant.define_timezone: 'Définir mon fuseau horaire'
 event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez-vous'
@@ -215,6 +219,8 @@ group.sheet.create.title: 'Création d''une nouvelle fiche'
 happening.participate.action: Participer
 happening.participate.detail: Détail
 happening.participate.full: Complet
+happening.participate.maxNumberHappeningParticipationReached: 'Nombre maximum d’inscription atteinte'
+happening.participate.maxNumberHappeningParticipationReachedForParticipant: '%fullname% a atteint son nombre maximum d''inscription'
 happening.participate.noParticipantSelected: 'Vous n''avez sélectionné aucun participant.'
 happening.participate.notEnoughtRemainingParticipations: '{0} Plus aucune place de disponible|{1} Il ne reste plus qu''une place disponible|]1,Inf[ Il ne reste plus que %remaining% places disponibles'
 happening.participate.participantMustHaveProductToParticipate: 'Une option est requise pour participer à cet évènement.'
@@ -310,7 +316,9 @@ navigation.links.meetingRequest.refused: Refusées
 navigation.links.meetingRequest.sent: 'Demandes en attente'
 navigation.links.member_space.avatar: Photo
 navigation.links.member_space.company: 'Société / Organisme'
+navigation.links.member_space.privacy_policy: 'Politique de confidentialités'
 navigation.links.member_space.profile: Profil
+navigation.links.member_space.terms_of_sale: 'Conditions générales de participation'
 navigation.links.notification: Notifications
 navigation.links.package.order_list: 'Liste des commandes'
 navigation.links.package.order_summary_total: Récapitulatif
@@ -326,6 +334,7 @@ navigation.links.planning.my_schedule: 'Mon agenda'
 navigation.links.planning.unavailability: 'Ajouter une indisponibilité'
 navigation.links.returnToSelectSheet: 'Mes fiches'
 navigation.links.sheet.locale: Version
+navigation.links.termsOfSale: 'Conditions générales de vente'
 navigation.menu: Menu
 new_password.confirm.title: 'Réinitialiser le mot de passe'
 new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'
@@ -426,7 +435,7 @@ package.product.unavailable: 'Non disponible'
 package.product.unitPrice: '%price% <sup>%currency% %vatMode%</sup>'
 package.product.unitPriceLabel: 'Prix unitaire'
 package.product.validate: Valider
-package.select: 'Sélectionner:'
+package.select: Sélectionner
 package.summary.billingInfo.update: 'Modifier vos informations de facturation'
 package.summary.columns.quantity: Quantité
 package.summary.columns.title: Intitulé
@@ -512,6 +521,11 @@ summary.total: 'Total de la commande'
 summary.totalByVat: 'Total assujetti à %vatRate%%'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
+template.upload.formats.csv: csv
+template.upload.formats.image: image
+template.upload.formats.pdf: pdf
+template.upload.formats.ppt: powerpoint
+template.upload.formats.vector_image: 'image vectorielle (.ai, .eps)'
 unavailability.action.remove.title: Supprimer
 unavailability.createdBySystem.buy.title: 'Modifier mon forfait'
 unavailability.createdBySystem.explaination.title: 'Veuillez sélectionner le produit vous permettant d''accéder à ce contenu'

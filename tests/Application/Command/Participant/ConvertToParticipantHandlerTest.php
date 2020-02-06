@@ -91,6 +91,8 @@ class ConvertToParticipantHandlerTest extends TestCase
         $sheet->setRegistrationData(['sheetRegistrationData']);
         $sheet->setTitle('Korben Dallas Taxi Cie');
         $sheet->setImported(true);
+        $sheet->setInCatalogAt($this->dateTime);
+        $sheet->setInCatalog(true);
 
         // Sheet must be created with "validated" state
         $sheet->setState('validated');
@@ -153,7 +155,8 @@ class ConvertToParticipantHandlerTest extends TestCase
                 $this->registrationTemplateData->reveal(),
                 $this->sheetTemplateData->reveal(),
                 null,
-                'validated' // sheet must be created with "validated" state
+                'validated', // sheet must be created with "validated" state
+                true
             )
         );
 

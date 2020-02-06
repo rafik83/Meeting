@@ -111,7 +111,8 @@ class ConvertToParticipantHandler
             $convertToParticipant->dataIndexedByTag,
             $convertToParticipant->registrationTemplateData,
             $convertToParticipant->sheetTemplateData,
-            $convertToParticipant->sheetState
+            $convertToParticipant->sheetState,
+            $convertToParticipant->toSetInCatalog
         );
 
         $this->synchronizer->set($convertToParticipant->registrationTemplateData, $user);
@@ -153,17 +154,6 @@ class ConvertToParticipantHandler
         return $user;
     }
 
-    /**
-     * @param Event        $event
-     * @param Type         $type
-     * @param User         $user
-     * @param array        $dataIndexedByTag
-     * @param TemplateData $registrationTemplateData
-     * @param TemplateData $sheetTemplateData
-     * @param string       $sheetState
-     *
-     * @return Participant
-     */
     private function createSheetAndParticipant(
         Event $event,
         Type $type,
@@ -171,7 +161,8 @@ class ConvertToParticipantHandler
         array $dataIndexedByTag,
         TemplateData $registrationTemplateData,
         TemplateData $sheetTemplateData,
-        string $sheetState
+        string $sheetState,
+        bool $toSetInCatalog
     ): Participant {
         $sheetAndParticipantTemplateDataView = $this->sheetAndParticipantTemplateDataHandler->handle(
             $dataIndexedByTag,
@@ -189,6 +180,11 @@ class ConvertToParticipantHandler
         );
 
         $sheet->setState($sheetState);
+
+        if ($toSetInCatalog) {
+            $sheet->setInCatalog(true);
+            $sheet->setInCatalogAt($this->dateTime);
+        }
 
         $participant = $this->createParticipant(
             $sheet,

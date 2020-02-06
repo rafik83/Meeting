@@ -340,6 +340,7 @@ services:
             - '@domain.user.agenda.version.diff_verbalizer'
             - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommandHandler'
             - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\SMSNotificationCommandHandler'
+            - '@vimeet_infrastructure.repository.planner_job_repository'
 
     Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\NotifyUserOfChangedVersionCommandHandler:
         arguments:
@@ -360,6 +361,7 @@ services:
             - '%agenda_version_diff_dday_notification_time_in_minutes%'
             - '@Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\NotifyUserOfChangedVersionCommandHandler'
             - '@datetime'
+            - '@vimeet_infrastructure.repository.planner_job_repository'
 
     #
     # Export OMZ
@@ -600,3 +602,62 @@ services:
             - '%mailer_sender%'
             - '%infrastructure.export_products_path%'
             - '@datetime'
+
+    #
+    # Promotion code
+    #
+    Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory:
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@promotion.unique_code_checker'
+
+    Proximum\Vimeet\Application\Command\PromotionCode\Batch\CreateHandler:
+        arguments:
+            - '@promotion.generator.unique_code_generator'
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory'
+            - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'
+            - '@repository.promotion_code_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Batch\Create }
+
+    Proximum\Vimeet\Application\Command\PromotionCode\Batch\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory'
+            - '@repository.promotion_code_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Batch\Update }
+
+    #
+    # RegistrationPath
+    #
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\AddQuestionHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\AddQuestion }
+
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\AssignParticipationTypeHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\AnswerRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\AssignParticipationType }
+
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\UpdateQuestionHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\UpdateQuestion }
+
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveQuestionHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveQuestion }
+
+    Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveAssignationParticipationTypeHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\AnswerRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveAssignationParticipationType }

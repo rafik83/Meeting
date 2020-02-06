@@ -76,6 +76,18 @@ Proximum\Vimeet\Domain\Model\Event:
             type: boolean
             options:
                 default: false
+        googleLoginEnabled:
+            type: boolean
+            options:
+                default: false
+        linkedinLoginEnabled:
+            type: boolean
+            options:
+                default: false
+        accessControlEnabled:
+            type: boolean
+            options:
+                default: false
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address

@@ -143,8 +143,8 @@ VideoConferenceTest.prototype.end = function() {
     this.progressBar.classList.remove('progress-bar-striped');
     this.videoConferencePreview.querySelector('.buttons-container').style.display = 'block';
     this.videoConferencePreview.style.display = 'block';
-    new VideoConference(this.videoConferencePreview);
     $.post(this.visioTestedUrl);
+    new VideoConference(this.videoConferencePreview);
 };
 
 module.exports = VideoConferenceTest;

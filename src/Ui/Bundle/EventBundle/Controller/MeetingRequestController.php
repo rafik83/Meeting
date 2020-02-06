@@ -329,6 +329,8 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('User not found');
         }
 
+        $priorityNumberAvailable = $this->get('command.meeting_request.counter')->getCountSheetPriorityAvailable($sheet);
+
         $toSheet = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->getSheetById($toSheet);
@@ -347,6 +349,7 @@ class MeetingRequestController extends Controller
             ]),
             'sheet'  => $sheet,
             'locale' => $request->getLocale(),
+            'priorityNumberAvailable' => $priorityNumberAvailable
         ]);
 
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
@@ -375,6 +378,8 @@ class MeetingRequestController extends Controller
 
         return $this->render('EventBundle:MeetingRequest:createRequest.html.twig', [
             'form' => $form->createView(),
+            'sheet' => $sheet,
+            'priorityNumberAvailable' => $priorityNumberAvailable,
         ]);
     }
 
@@ -405,6 +410,8 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Not allowed method');
         }
 
+        $priorityNumberAvailable = $this->get('command.meeting_request.counter')->getCountSheetPriorityAvailable($sheet);
+
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
             ->get('tactician.commandbus.query')
@@ -418,6 +425,7 @@ class MeetingRequestController extends Controller
             ]),
             'locale' => $request->getLocale(),
             'sheet'  => $sheet,
+            'priorityNumberAvailable' => $priorityNumberAvailable
         ]);
 
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
@@ -463,7 +471,9 @@ class MeetingRequestController extends Controller
 
         return $this->render('EventBundle:MeetingRequest:approvedRequest.html.twig', [
             'discussion' => $discussion,
-            'form'       => $form->createView(),
+            'sheet' => $sheet,
+            'priorityNumberAvailable' => $priorityNumberAvailable,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -791,6 +801,8 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('You are not allowed to edit this meeting request.');
         }
 
+        $priorityNumberAvailable = $this->get('command.meeting_request.counter')->getCountSheetPriorityAvailable($sheet);
+
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
             ->get('tactician.commandbus.query')
@@ -833,6 +845,8 @@ class MeetingRequestController extends Controller
                     'sheet'          => $sheet->getId(),
                     'meetingRequest' => $meetingRequest->getId(),
                 ]),
+                'meetingRequest' => $meetingRequest,
+                'priorityNumberAvailable' => $priorityNumberAvailable,
             ]);
 
             $isSubmitted = $form->handleRequest($request)->isSubmitted();
@@ -853,7 +867,7 @@ class MeetingRequestController extends Controller
                     true,
                     false,
                     $this->renderView('EventBundle:MeetingRequest:editRequestSuccess.html.twig', [
-                        'isProposition'  => $isProposition,
+                        'isProposition' => $isProposition,
                         'meetingRequest' => $meetingRequest,
                     ]),
                     $this->getParticipantsHtml($command->participants, $request->getLocale())
@@ -863,24 +877,28 @@ class MeetingRequestController extends Controller
                     false,
                     false,
                     $this->renderView('EventBundle:MeetingRequest:editRequest.html.twig', [
-                        'discussion'     => $discussion,
-                        'form'           => $form->createView(),
-                        'cancelForm'     => $cancelForm instanceof FormInterface ? $cancelForm->createView() : null,
+                        'discussion' => $discussion,
+                        'form' => $form->createView(),
+                        'cancelForm' => $cancelForm instanceof FormInterface ? $cancelForm->createView() : null,
                         'unApprovedForm' => $unApprovedForm instanceof FormInterface ? $unApprovedForm->createView() : null,
-                        'isProposition'  => $isProposition,
+                        'isProposition' => $isProposition,
                         'meetingRequest' => $meetingRequest,
+                        'sheet' => $sheet,
+                        'priorityNumberAvailable' => $priorityNumberAvailable
                     ])
                 ));
             }
         }
 
         return $this->render('EventBundle:MeetingRequest:editRequest.html.twig', [
-            'discussion'     => $discussion,
-            'form'           => $form instanceof FormInterface ? $form->createView() : $form,
-            'cancelForm'     => $cancelForm instanceof FormInterface ? $cancelForm->createView() : null,
+            'discussion' => $discussion,
+            'form' => $form instanceof FormInterface ? $form->createView() : $form,
+            'cancelForm' => $cancelForm instanceof FormInterface ? $cancelForm->createView() : null,
             'unApprovedForm' => $unApprovedForm instanceof FormInterface ? $unApprovedForm->createView() : null,
-            'isProposition'  => $isProposition,
+            'isProposition' => $isProposition,
             'meetingRequest' => $meetingRequest,
+            'sheet' => $sheet,
+            'priorityNumberAvailable' => $priorityNumberAvailable
         ]);
     }
 

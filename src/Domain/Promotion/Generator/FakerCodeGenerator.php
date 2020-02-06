@@ -18,8 +18,8 @@ class FakerCodeGenerator implements CodeGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate(Event $event)
+    public function generate(Event $event, ?string $prefix = null): string
     {
-        return strtoupper(Base::lexify('??????'));
+        return strtoupper(($prefix ?? '') . Base::lexify('??????'));
     }
 }

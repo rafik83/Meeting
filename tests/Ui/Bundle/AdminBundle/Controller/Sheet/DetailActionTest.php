@@ -140,7 +140,7 @@ class DetailActionTest extends TestCase
 
         $sheetDetailView = $this->prophesize(SheetDetailsView::class);
         $this->queryBus
-            ->handle(new SheetDetailQuery($this->sheet->reveal(), 'fr'))
+            ->handle(new SheetDetailQuery($this->admin->reveal(), $this->sheet->reveal(), 'fr'))
             ->shouldBeCalled()
             ->willReturn($sheetDetailView->reveal())
         ;
@@ -220,7 +220,7 @@ class DetailActionTest extends TestCase
 
         $sheetDetailView = $this->prophesize(SheetDetailsView::class);
         $this->queryBus
-            ->handle(new SheetDetailQuery($this->sheet->reveal(), 'fr'))
+            ->handle(new SheetDetailQuery($this->admin->reveal(), $this->sheet->reveal(), 'fr'))
             ->shouldBeCalled()
             ->willReturn($sheetDetailView->reveal())
         ;

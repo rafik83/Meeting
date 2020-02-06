@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
+use Proximum\Vimeet\Application\Exception\Happening\MaxNumberHappeningParticipationReachedException;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantMustHaveProductToParticipateException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
@@ -80,7 +81,7 @@ class ParticipateHandler
 
     /**
      * @param Participate $participate
-     *
+     * @throws MaxNumberHappeningParticipationReachedException
      * @throws NotEnoughtRemainingParticipationsException
      * @throws ParticipantMustHaveProductToParticipateException
      * @throws ParticipantNotAvailableException
@@ -145,7 +146,10 @@ class ParticipateHandler
                     $participate->happening,
                     $participant->getUser()
                 );
-
+                $numberMaxOfHappeningsPerUser = $participate->sheet->getType()->getNumberMaxOfHappeningsPerUser();
+                if ($numberMaxOfHappeningsPerUser && $this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $participate->sheet->getEvent()) >= $numberMaxOfHappeningsPerUser) {
+                    throw new MaxNumberHappeningParticipationReachedException($participant);
+                }
                 if (null !== $happeningParticipation) {
                     $this->happeningParticipationRepository->update(
                         $happeningParticipation->setDisabled(false)

@@ -49,6 +49,9 @@ class OwnerView
      */
     public $shouldBeDisplayed;
 
+    /** @var string */
+    public $impersonationUrl;
+
     /**
      * @param User   $user
      * @param string $firstName
@@ -57,15 +60,25 @@ class OwnerView
      * @param string $mobile
      * @param string $phone
      * @param bool   $shouldBeDisplayed
+     * @param string $impersonationUrl
      */
-    public function __construct(User $user, $firstName, $lastName, $email, $mobile, $phone, $shouldBeDisplayed = true)
-    {
-        $this->user              = $user;
-        $this->firstName         = $firstName;
-        $this->lastName          = $lastName;
-        $this->email             = $email;
-        $this->mobile            = $mobile;
-        $this->phone             = $phone;
+    public function __construct(
+        User $user,
+        $firstName,
+        $lastName,
+        $email,
+        $mobile,
+        $phone,
+        $shouldBeDisplayed,
+        string $impersonationUrl
+    ) {
+        $this->user = $user;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->email = $email;
+        $this->mobile = $mobile;
+        $this->phone = $phone;
         $this->shouldBeDisplayed = $shouldBeDisplayed;
+        $this->impersonationUrl = $impersonationUrl;
     }
 }

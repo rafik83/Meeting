@@ -31,10 +31,17 @@ interface ContactRepositoryInterface
     public function findSeenUserByEventAndUser(Event $event, User $user): array;
 
     /**
-     * @param Event $event
-     * @param User  $user
+     * @param Event  $event
+     * @param User[] $users
      *
      * @return Contact[]
      */
-    public function findByEventAndUser(Event $event, User $user): array;
+    public function findByEventAndUsers(Event $event, array $users): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return Contact[]
+     */
+    public function getByEvent(Event $event): array;
 }

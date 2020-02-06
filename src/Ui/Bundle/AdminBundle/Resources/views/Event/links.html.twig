@@ -170,6 +170,11 @@
                 {{ 'admin.rule.link'|trans }}
                 </a>
             </li>
+            <li>
+                <a href="{{ path('admin_type_registration_path_show', { 'event': event.id }) }}">
+                    {{ 'admin.type.registrationPath.link'|trans }}
+                </a>
+            </li>
         </ul>
     </li>
     <li class="dropdown-submenu">
@@ -246,31 +251,32 @@
     </li>
 {% endif %}
 
- {% if is_granted('ROLE_ALLOWED_TO_HOST') %}
-     {% if not is_granted('ROLE_ALLOWED_TO_ADMIN') %}
-         <li>
-             <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">
-                {{ 'admin.meeting.link'|trans }}
-             </a>
-         </li>
-     {% endif %}
-     <li class="dropdown-submenu">
-        <a href="{{ path('admin_event_qr_code_reader', { 'event': event.id }) }}">
-            {{ 'admin.event.access_control'|trans }}
-        </a>
-         <ul class="dropdown-menu">
-             <li>
-                 <a href="{{ path('admin_event_qr_code_reader', { 'event': event.id }) }}">
-                     {{ 'admin.event.access.entrance'|trans }}
-                 </a>
-             </li>
-             <li>
-                 <a href="{{ path('admin_event_access_happening_list', { 'event': event.id }) }}">
-                     {{ 'admin.event.access.happening.list'|trans }}
-                 </a>
-             </li>
-         </ul>
-    </li>
+{% if is_granted('ROLE_ALLOWED_TO_HOST') %}
+    {% if not is_granted('ROLE_ALLOWED_TO_ADMIN') %}
+        <li>
+            <a href="{{ path('admin_meeting_list', { 'event': event.id }) }}">{{ 'admin.meeting.link'|trans }}</a>
+        </li>
+    {% endif %}
+
+    {% if event.accessControlEnabled %}
+        <li class="dropdown-submenu">
+            <a href="{{ path('admin_event_qr_code_reader', { 'event': event.id }) }}">
+                {{ 'admin.event.access_control'|trans }}
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="{{ path('admin_event_qr_code_reader', { 'event': event.id }) }}">
+                        {{ 'admin.event.access.entrance'|trans }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('admin_event_access_happening_list', { 'event': event.id }) }}">
+                        {{ 'admin.event.access.happening.list'|trans }}
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
 {% endif %}
 
 {% if is_granted('ROLE_ALLOWED_TO_OPERATE') %}

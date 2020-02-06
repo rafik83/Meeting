@@ -59,9 +59,6 @@ class ShowUploadedFileActionTest extends TestCase
     private $eventDomain;
 
     /** @var ObjectProphecy */
-    private $ruleRepository;
-
-    /** @var ObjectProphecy */
     private $sheetRepository;
 
     /** @var string */
@@ -72,9 +69,6 @@ class ShowUploadedFileActionTest extends TestCase
 
     /** @var UserDomain */
     private $userDomain;
-
-    /** @var RequestRepositoryInterface */
-    private $requestRepository;
 
     public function setUp()
     {
@@ -96,21 +90,14 @@ class ShowUploadedFileActionTest extends TestCase
         $this->templateData = $this->prophesize(TemplateData::class);
         $this->templateDataFactory = $this->prophesize(TemplateDataFactory::class);
 
-        $this->ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $this->sharedUploadedFiles = 'tests/Ui/Bundle/EventBundle/Controller/Sheet';
-        $this->requestRepository  = $this->prophesize(RequestRepositoryInterface::class);
-
-        $canSeeSheet = new CanSeeSheet($this->ruleRepository->reveal(), $this->requestRepository->reveal());
 
         $this->showUploadedFileAction = new ShowUploadedFileAction(
-            $this->authorizationChecker->reveal(),
-            $this->ruleRepository->reveal(),
             $this->sheetRepository->reveal(),
             $this->templateDataFactory->reveal(),
-            $this->sharedUploadedFiles,
-            $canSeeSheet
+            $this->sharedUploadedFiles
         );
     }
 
@@ -118,17 +105,9 @@ class ShowUploadedFileActionTest extends TestCase
     {
         $file = '/Fixtures/vimeet.jpg';
 
-        $type1 = $this->prophesize(Type::class);
-        $type2 = $this->prophesize(Type::class);
-
-        $this->sheet->isInInternalCatalog()->willReturn(true);
-        $this->sheet->getType()->willReturn($type1->reveal());
-
         $sheetToDisplay = $this->prophesize(Sheet::class);
         $sheetToDisplay->getId()->willReturn(42);
-        $sheetToDisplay->isInInternalCatalog()->willReturn(true);
         $sheetToDisplay->getEvent()->willReturn($this->event->reveal());
-        $sheetToDisplay->getType()->willReturn($type2->reveal());
         $this->sheetRepository->getSheetById(42)->shouldBeCalled()->willReturn($sheetToDisplay->reveal());
 
         $this->templateDataFactory
@@ -137,12 +116,6 @@ class ShowUploadedFileActionTest extends TestCase
             ->willReturn($this->templateData->reveal())
         ;
 
-        $this->ruleRepository
-            ->getBySeerSheetAndSeeableSheet($this->sheet->reveal(), $sheetToDisplay->reveal())
-            ->shouldBeCalled()
-            ->willReturn([new Rule($this->event->reveal(), $type1->reveal(), $type2->reveal(), [])])
-        ;
-
         $this->authorizationChecker->isGranted(SheetVoter::EDIT, $this->sheet->reveal())->willReturn(true);
 
         $multiUploadObject = $this->prophesize(MultiUploadCollectionObject::class);
@@ -163,50 +136,7 @@ class ShowUploadedFileActionTest extends TestCase
             ($this->showUploadedFileAction)(
                 $this->request,
                 $this->eventDomain,
-                $this->userDomain,
-                $this->sheet->reveal(),
                 42,
-                'multi-upload-object-uid',
-                $file
-            )
-        );
-    }
-
-    public function test_displayed_sheet_and_current_sheet_are_same()
-    {
-        $file = '/Fixtures/vimeet.jpg';
-
-        $this->sheetRepository->getSheetById(1337)->shouldBeCalled()->willReturn($this->sheet->reveal());
-
-        $this->templateDataFactory
-            ->createFromSheet($this->sheet->reveal(), 'fr')
-            ->shouldBeCalled()
-            ->willReturn($this->templateData->reveal())
-        ;
-
-        $this->authorizationChecker->isGranted(SheetVoter::EDIT, $this->sheet->reveal())->willReturn(true);
-
-        $multiUploadObject = $this->prophesize(MultiUploadCollectionObject::class);
-        $multiUploadObject
-            ->hasUpload($file)
-            ->shouldBeCalled()
-            ->willReturn(true)
-        ;
-
-        $this->templateData
-            ->getObject('multi-upload-object-uid')
-            ->shouldBeCalled()
-            ->willReturn($multiUploadObject->reveal())
-        ;
-
-        $this->assertInstanceOf(
-            BinaryFileResponse::class,
-            ($this->showUploadedFileAction)(
-                $this->request,
-                $this->eventDomain,
-                $this->userDomain,
-                $this->sheet->reveal(),
-                1337,
                 'multi-upload-object-uid',
                 $file
             )

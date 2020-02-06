@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
+use Proximum\Vimeet\Application\Query\User\Event\Contact\UserSheetsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -261,13 +262,13 @@ class UserRepository implements UserRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select(sprintf('new %s(
-                user.id, 
-                sheet.id, 
-                user.account.firstName, 
-                user.account.lastName, 
-                sheet.title, 
-                spot.reference, 
-                typeTranslation.title, 
+                user.id,
+                sheet.id,
+                user.account.firstName,
+                user.account.lastName,
+                sheet.title,
+                spot.reference,
+                typeTranslation.title,
                 presenceDate.arrival,
                 presenceDate.departure,
                 COALESCE(presenceDate.hasArrivalHours, false),
@@ -436,6 +437,31 @@ class UserRepository implements UserRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventWithDispatch(Event $event, Mass $mass): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'user = participant.user')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->andWhere(
+                'EXISTS (
+                    SELECT m.id FROM ' . MassAssignment::class . ' m
+                    WHERE m.mass = :mass AND m.user = user
+                )'
+            )
+            ->setParameter('mass', $mass)
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     public function findByAuthenticationTokenAndEvent(string $token, Event $event, \DateTimeInterface $expiredAt): ?User
     {
         return $this->entityManager
@@ -472,6 +498,25 @@ class UserRepository implements UserRepositoryInterface
             ->from(User::class, 'user')
             ->join(Participant::class, 'participant', 'WITH', 'user = participant.user AND participant.participantProduct = :product')
             ->setParameter('product', $product)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getUserSheetsViewsByEvent(Event $event): array
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select(
+                sprintf(
+                    'new %s(user.id, user.account.firstName, user.account.lastName, sheet.id, sheet.title, type.id)',
+                    UserSheetsView::class
+                )
+            )
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'user = participant.user')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
+            ->join('sheet.type', 'type')
+            ->setParameter('event', $event)
             ->getQuery()
             ->getResult();
     }

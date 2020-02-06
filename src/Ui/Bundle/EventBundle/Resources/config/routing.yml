@@ -5,7 +5,22 @@
 event:
     path: /
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Home:index }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\HomeAction
+
+event_registration_path_question:
+    path: /question/{question}
+    methods:  [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\HomeAction
+    requirements:
+        question: \d+
+
+event_registration_path_answer:
+    path: /question/{question}/answer/{answer}
+    methods:  [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\HomeAction
+    requirements:
+        question: \d+
+        answer: \d+
 
 event_select_sheet:
     path: /select-sheet
@@ -203,9 +218,8 @@ event_sheet_objects_collection_update:
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ObjectsCollectionUpdateAction
 
 event_sheet_show_uploaded_file:
-    path: /sheet/{sheet}/display/{sheetToDisplayId}/show-uploaded/{objectKey}/file{path}
+    path: /file/{objectKey}/{sheetToDisplayId}{path}
     requirements:
-        sheet: \d+
         sheetToDisplayId: \d+
         objectKey: \w+
         path: .*
@@ -455,6 +469,27 @@ event_change_password:
         sheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:ChangePassword:changePassword }
+
+#
+# OAuth2
+#
+connect_google_start:
+    path:     /connect/google
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Connect\GoogleConnect:connect }
+
+connect_google_check:
+    path:     /connect/google/check
+    methods:  [GET]
+
+connect_linkedin_start:
+    path:     /connect/linkedin
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Connect\LinkedInConnect:connect }
+
+connect_linkedin_check:
+    path:     /connect/linkedin/check
+    methods:  [GET]
 
 #
 # Catalog

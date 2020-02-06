@@ -217,6 +217,27 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
             ->willReturn('/event-1337/url/to/badge/4')
         ;
 
+        $router
+            ->generate('admin_user_event_planning', ['user' => 1, 'event' => 1337])
+            ->shouldBeCalled()
+            ->willReturn('/event-1337/url/to/planning/1')
+        ;
+        $router
+            ->generate('admin_user_event_planning', ['user' => 2, 'event' => 1337])
+            ->shouldBeCalled()
+            ->willReturn('/event-1337/url/to/planning/2')
+        ;
+        $router
+            ->generate('admin_user_event_planning', ['user' => 3, 'event' => 1337])
+            ->shouldBeCalled()
+            ->willReturn('/event-1337/url/to/planning/3')
+        ;
+        $router
+            ->generate('admin_user_event_planning', ['user' => 4, 'event' => 1337])
+            ->shouldBeCalled()
+            ->willReturn('/event-1337/url/to/planning/4')
+        ;
+
         $userInfoGuesser = $this->prophesize(UserInfoGuesser::class);
         $userInfoGuesser
             ->getUserInfoFromParticipant($user1->reveal(), 'en', [$sheet1->reveal()])
@@ -260,7 +281,8 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
                         'France',
                         'Groupe A',
                         null,
-                        '/event-1337/url/to/badge/1'
+                        '/event-1337/url/to/badge/1',
+                        '/event-1337/url/to/planning/1'
                     ),
                     new QRCodeIdentifierView(
                         '00013370000002',
@@ -269,7 +291,8 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
                         'France',
                         'Groupe A',
                         $checkin,
-                        '/event-1337/url/to/badge/2'
+                        '/event-1337/url/to/badge/2',
+                        '/event-1337/url/to/planning/2'
                     ),
                     new QRCodeIdentifierView(
                         '00013370000003',
@@ -278,7 +301,8 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
                         'France',
                         'Groupe A',
                         null,
-                        '/event-1337/url/to/badge/3'
+                        '/event-1337/url/to/badge/3',
+                        '/event-1337/url/to/planning/3'
                     ),
                     new QRCodeIdentifierView(
                         '00013370000004',
@@ -287,7 +311,8 @@ class GetQRCodeIdentifiersByEventQueryHandlerTest extends TestCase
                         'Croatie',
                         'Groupe B',
                         null,
-                        '/event-1337/url/to/badge/4'
+                        '/event-1337/url/to/badge/4',
+                        '/event-1337/url/to/planning/4'
                     ),
                 ]
             ),

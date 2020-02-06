@@ -52,19 +52,24 @@ class CompleteProfileMail extends UserMail
      */
     protected $lastname;
 
+    /** @var string */
+    private $eventActivateAccountAlreadyKnownUrl;
+
     /**
      * @param Participant         $participant
      * @param string              $sender
      * @param string              $receiver
      * @param string              $locale
      * @param ParticipantInfoView $participantInfoView
+     * @param string              $eventActivateAccountAlreadyKnownUrl
      */
     public function __construct(
         Participant $participant,
         $sender,
         $receiver,
         $locale,
-        ParticipantInfoView $participantInfoView
+        ParticipantInfoView $participantInfoView,
+        string $eventActivateAccountAlreadyKnownUrl
     ) {
         parent::__construct(
             $sender,
@@ -75,6 +80,7 @@ class CompleteProfileMail extends UserMail
         );
 
         $this->participant = $participant;
+        $this->eventActivateAccountAlreadyKnownUrl = $eventActivateAccountAlreadyKnownUrl;
     }
 
     /**
@@ -93,5 +99,10 @@ class CompleteProfileMail extends UserMail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
+    }
+
+    public function getEventActivateAccountAlreadyKnownUrl(): string
+    {
+        return $this->eventActivateAccountAlreadyKnownUrl;
     }
 }

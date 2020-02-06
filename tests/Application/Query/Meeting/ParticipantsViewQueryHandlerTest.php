@@ -49,37 +49,58 @@ class ParticipantsViewQueryHandlerTest extends TestCase
         $participant2 = $this->prophesize(Participant::class);
         $participant3 = $this->prophesize(Participant::class);
 
-        $user1 = $this->prophesize(User::class);
-        $user1->getId()->shouldBeCalled()->willReturn(46);
-        $user2 = $this->prophesize(User::class);
-        $user2->getId()->shouldBeCalled()->willReturn(51);
-        $user3 = $this->prophesize(User::class);
-        $user3->getId()->shouldBeCalled()->willReturn(314);
+        $me = $this->prophesize(User::class);
+        $me->getFullname()->shouldBeCalled()->willReturn('Hervé DUPOND');
+        $myColleague = $this->prophesize(User::class);
+        $myColleague->getFullname()->shouldBeCalled()->willReturn('Samira BOUAKI');
+
+        $userContact1 = $this->prophesize(User::class);
+        $userContact1->getId()->shouldBeCalled()->willReturn(46);
+        $userContact2 = $this->prophesize(User::class);
+        $userContact2->getId()->shouldBeCalled()->willReturn(51);
+        $userContact3 = $this->prophesize(User::class);
+        $userContact3->getId()->shouldBeCalled()->willReturn(314);
 
         $contact1 = $this->prophesize(Contact::class);
         $contact2 = $this->prophesize(Contact::class);
         $contact3 = $this->prophesize(Contact::class);
+        $contact4 = $this->prophesize(Contact::class);
 
         $this->translator->trans('gender.man', [], 'messages')->shouldBeCalled()->willReturn('Monsieur');
         $this->translator->trans('gender.woman', [], 'messages')->shouldBeCalled()->willReturn('Madame');
 
-        $contact1->getContact()->shouldBeCalled()->willReturn($user1->reveal());
+        $contact1->getUser()->shouldBeCalled()->willReturn($me->reveal());
+        $contact1->getContact()->shouldBeCalled()->willReturn($userContact1->reveal());
+        $contact1->hasEvaluation()->shouldBeCalled()->willReturn(true);
         $contact1->getEvaluation()->shouldBeCalled()->willReturn(3);
-        $contact1->getComment()->shouldBeCalled()->willReturn('Le cubisme');
-        $participant1->getUser()->shouldBeCalled()->willReturn($user1->reveal());
+        $contact1->hasComment()->shouldBeCalled()->willReturn(true);
+        $contact1->getComment()->shouldBeCalled()->willReturn('To follow');
+        $participant1->getUser()->shouldBeCalled()->willReturn($userContact1->reveal());
         $participant1->getEmail()->shouldBeCalled()->willReturn('pablo@picas.so');
 
-        $contact2->getContact()->shouldBeCalled()->willReturn($user2->reveal());
+        $contact2->getUser()->shouldBeCalled()->willReturn($me->reveal());
+        $contact2->getContact()->shouldBeCalled()->willReturn($userContact2->reveal());
+        $contact2->hasEvaluation()->shouldBeCalled()->willReturn(true);
         $contact2->getEvaluation()->shouldBeCalled()->willReturn(4);
-        $contact2->getComment()->shouldBeCalled()->willReturn('');
-        $participant2->getUser()->shouldBeCalled()->willReturn($user2->reveal());
+        $contact2->hasComment()->shouldBeCalled()->willReturn(false);
+        $contact2->getComment()->shouldNotBeCalled();
+        $participant2->getUser()->shouldBeCalled()->willReturn($userContact2->reveal());
         $participant2->getEmail()->shouldBeCalled()->willReturn('paloma@picas.so');
 
-        $contact3->getContact()->shouldBeCalled()->willReturn($user3->reveal());
-        $contact3->getEvaluation()->shouldBeCalled()->willReturn(5);
-        $contact3->getComment()->shouldBeCalled()->willReturn('Haute Rennaissance');
-        $participant3->getUser()->shouldBeCalled()->willReturn($user3->reveal());
+        $contact3->getContact()->shouldBeCalled()->willReturn($userContact3->reveal());
+        $contact3->hasEvaluation()->shouldBeCalled()->willReturn(false);
+        $contact3->getEvaluation()->shouldNotBeCalled();
+        $contact3->hasComment()->shouldBeCalled()->willReturn(false);
+        $contact3->getComment()->shouldNotBeCalled();
+        $participant3->getUser()->shouldBeCalled()->willReturn($userContact3->reveal());
         $participant3->getEmail()->shouldBeCalled()->willReturn('leonardo@da.vinci');
+
+        $contact4->getUser()->shouldBeCalled()->willReturn($myColleague->reveal());
+        $contact4->getContact()->shouldBeCalled()->willReturn($userContact1->reveal());
+        $contact4->hasEvaluation()->shouldBeCalled()->willReturn(true);
+        $contact4->getEvaluation()->shouldBeCalled()->willReturn(4);
+        $contact4->hasComment()->shouldBeCalled()->willReturn(true);
+        $contact4->getComment()->shouldBeCalled()->willReturn('Interesting');
 
         $this->participantInfoGuesser
             ->guessParticipantInfos($participant1->reveal(), 'fr')
@@ -91,9 +112,6 @@ class ParticipantsViewQueryHandlerTest extends TestCase
                     Tag::PARTICIPANT_POSITION => 'painter',
                     Tag::PARTICIPANT_PHONE => '+33999',
                     Tag::PARTICIPANT_GENDER => 'man',
-                    'pablo@picas.so',
-                    3,
-                    'Le cubisme'
                 ]
             )
         ;
@@ -108,9 +126,6 @@ class ParticipantsViewQueryHandlerTest extends TestCase
                     Tag::PARTICIPANT_POSITION => 'painter',
                     Tag::PARTICIPANT_PHONE => '+33997',
                     Tag::PARTICIPANT_GENDER => 'woman',
-                    'paloma@picas.so',
-                    4,
-                    ''
                 ]
             )
         ;
@@ -125,14 +140,9 @@ class ParticipantsViewQueryHandlerTest extends TestCase
                     Tag::PARTICIPANT_POSITION => 'painter',
                     Tag::PARTICIPANT_PHONE => '+33666',
                     Tag::PARTICIPANT_GENDER => '',
-                    'leonardo@da.vinci',
-                    5,
-                    'Haute Rennaissance'
                 ]
             )
         ;
-
-
 
         $participantOfContactView1 = new MeetingParticipantView(
             'Pablo',
@@ -141,8 +151,8 @@ class ParticipantsViewQueryHandlerTest extends TestCase
             '+33999',
             'Monsieur',
             'pablo@picas.so',
-            3,
-            'Le cubisme'
+            "Hervé DUPOND: 3\nSamira BOUAKI: 4",
+            "Hervé DUPOND: To follow\nSamira BOUAKI: Interesting"
         );
         $participantOfContactView2 = new MeetingParticipantView(
             'Paloma',
@@ -151,8 +161,8 @@ class ParticipantsViewQueryHandlerTest extends TestCase
             '+33997',
             'Madame',
             'paloma@picas.so',
-            4,
-            ''
+            'Hervé DUPOND: 4',
+            null
         );
         $participantOfContactView3 = new MeetingParticipantView(
             'Leonardo',
@@ -161,8 +171,8 @@ class ParticipantsViewQueryHandlerTest extends TestCase
             '+33666',
             '',
             'leonardo@da.vinci',
-            5,
-            'Haute Rennaissance'
+            null,
+            null
         );
 
         $participantView = [$participantOfContactView1, $participantOfContactView2, $participantOfContactView3];
@@ -170,7 +180,11 @@ class ParticipantsViewQueryHandlerTest extends TestCase
         $this->assertEquals(
             $participantView,
             $this->participantsViewQueryHandler->handle(
-                new ParticipantsViewQuery([$participant1->reveal(), $participant2->reveal(), $participant3->reveal()], 'fr', [$contact1->reveal(), $contact2->reveal(), $contact3->reveal()])
+                new ParticipantsViewQuery(
+                    [$participant1->reveal(), $participant2->reveal(), $participant3->reveal()],
+                    'fr',
+                    [$contact1->reveal(), $contact2->reveal(), $contact3->reveal(), $contact4->reveal()]
+                )
             )
         );
     }

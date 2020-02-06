@@ -85,12 +85,11 @@
                                         {% endif %}
                                         <li class="total col-md-12">
                                             {{ 'package.summary.totalPlusVat'|trans }}
-                                            {% set totalVatMode = (view.mustPayVat ? 'ati' :  view.vatMode) %}
                                             <span>
                                                 {{ 'package.product.unitPrice'|trans({
                                                     '%price%': view.totalPlusVat|format_amount|localizednumber,
                                                     '%currency%': view.currency|currency_symbol,
-                                                    '%vatMode%': ('package.vatMode.' ~ totalVatMode)|trans
+                                                    '%vatMode%': 'package.vatMode.ati'|trans
                                                 })|html }}
                                             </span>
                                         </li>

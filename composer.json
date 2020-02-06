@@ -64,7 +64,10 @@
         "behat/transliterator": "^1.2",
         "snc/redis-bundle": "^2.1.7",
         "predis/predis": "^1.1",
-        "twilio/sdk": "^5.27"
+        "twilio/sdk": "^5.27",
+        "knpuniversity/oauth2-client-bundle": "^1.28",
+        "league/oauth2-google": "^3.0",
+        "league/oauth2-linkedin": "^5.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0",

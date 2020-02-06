@@ -58,10 +58,11 @@ class MeetingRequestView
     /** @var bool */
     public $isPhoneValidationRequired;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $validatePhoneLink;
+
+    /** @var string */
+    public $isPriority;
 
     /**
      * MeetingRequestView constructor.
@@ -81,6 +82,7 @@ class MeetingRequestView
      * @param bool               $isSeenByCurrentUser
      * @param bool               $isPhoneValidationRequired
      * @param string|null        $validatePhoneLink
+     * @param bool               $isPriority
      */
     public function __construct(
         Sheet $sheet,
@@ -97,23 +99,25 @@ class MeetingRequestView
         $hasMessage = false,
         $isSeenByCurrentUser = false,
         $isPhoneValidationRequired = false,
-        $validatePhoneLink = null
+        $validatePhoneLink = null,
+        $isPriority = false
     ) {
-        $this->sheet                           = $sheet;
-        $this->sheetName                       = $sheetName;
-        $this->state                           = $state;
-        $this->type                            = $type;
-        $this->createdAt                       = $createdAt;
-        $this->meetingRequest                  = $meetingRequest;
-        $this->previewViews                    = $previewViews;
-        $this->isMeetingPublished              = $isMeetingPublished;
-        $this->isMeetingRequestUpdateLocked    = $isMeetingRequestUpdateLocked;
-        $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
+        $this->sheet = $sheet;
+        $this->sheetName = $sheetName;
+        $this->state = $state;
+        $this->type = $type;
+        $this->createdAt = $createdAt;
+        $this->meetingRequest = $meetingRequest;
+        $this->previewViews = $previewViews;
+        $this->isMeetingPublished = $isMeetingPublished;
+        $this->isMeetingRequestUpdateLocked = $isMeetingRequestUpdateLocked;
+        $this->isMeetingRequestClosed = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
-        $this->hasMessage                      = $hasMessage;
-        $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
-        $this->isPhoneValidationRequired       = $isPhoneValidationRequired;
-        $this->validatePhoneLink               = $validatePhoneLink;
+        $this->hasMessage = $hasMessage;
+        $this->isSeenByCurrentUser = $isSeenByCurrentUser;
+        $this->isPhoneValidationRequired = $isPhoneValidationRequired;
+        $this->validatePhoneLink = $validatePhoneLink;
+        $this->isPriority = $isPriority;
     }
 
     /**

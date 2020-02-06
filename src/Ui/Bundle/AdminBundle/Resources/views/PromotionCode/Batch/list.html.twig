@@ -1,0 +1,65 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.promotion_code.title'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.promotion_code.title'|trans }}</h1>
+
+    <p>
+        <a href="{{ path('admin_promotion_code_create', { 'event': event.id }) }}"
+           class="btn btn-info">{{ 'admin.promotion_code.new'|trans }}</a>
+
+        <a href="{{ path('admin_promotion_code_batch_create', { 'event': event.id }) }}"
+           class="btn btn-default">{{ 'admin.promotion_code.batch.new'|trans }}</a>
+    </p>
+
+    <ul class="nav nav-tabs">
+        <li role="presentation"><a href="{{ path('admin_promotion_code_list', { event: event.id }) }}">{{ 'admin.promotion_code.subtitle.code'|trans }}</a></li>
+        <li role="presentation" class="active"><a href="{{ path('admin_promotion_code_batch_list', { event: event.id }) }}">{{ 'admin.promotion_code.subtitle.batch'|trans }}</a></li>
+    </ul>
+
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th>{{ 'admin.promotion_code.table.column.title'|trans }}</th>
+            <th>{{ 'admin.promotion_code.table.column.number'|trans }}</th>
+            <th>{{ 'admin.promotion_code.table.column.prefix'|trans }}</th>
+            <th>{{ 'admin.promotion_code.table.column.stock'|trans }}</th>
+            <th>{{ 'admin.promotion_code.table.column.validUntil'|trans }}</th>
+            <th class="text-right">{{ 'admin.promotion_code.table.column.action'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for promotionCodeGroupView in promotionCodeGroupViews %}
+            <tr>
+                <td>{{ promotionCodeGroupView.title }}</td>
+                <td>{{ promotionCodeGroupView.number }}</td>
+                <td>{{ promotionCodeGroupView.prefix }}</td>
+                <td>{{ promotionCodeGroupView.stock }}</td>
+                <td>
+                    {% if promotionCodeGroupView.validUntil is not null %}
+                        {{ promotionCodeGroupView.validUntil|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                    {% endif %}
+                </td>
+                <td class="text-right">
+                    {% if promotionCodeGroupView.canBeUpdatable %}
+                        <a href="{{ path('admin_promotion_code_batch_update', { 'event': event.id, 'promotionCodeGroup': promotionCodeGroupView.id }) }}"
+                            class="btn btn-default btn-sm">{{ 'admin.promotion_code.table.action.update'|trans }}</a>
+                    {% else %}
+                        <a href="#" class="btn btn-default btn-sm" disabled data-toggle="tooltip" title="{{ 'admin.promotion_code.notUpdatable'|trans }}">{{ 'admin.promotion_code.table.action.update'|trans }}</a>
+                    {% endif %}
+                    <a href="{{ path('admin_promotion_code_batch_export', { 'event': event.id, 'promotionCodeGroup': promotionCodeGroupView.id }) }}"
+                       class="btn btn-default btn-sm">{{ 'admin.promotion_code.table.action.export'|trans }}</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" class="text-center">
+                    {{ 'admin.promotion_code.table.no_result'|trans }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

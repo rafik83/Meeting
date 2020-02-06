@@ -55,24 +55,35 @@ class PromotionCode
      */
     private $stock;
 
+    /** @var null|PromotionCodeGroup */
+    private $promotionCodeGroup;
+
     /**
      * PromotionCode constructor.
      *
-     * @param Event              $event
-     * @param string             $title
-     * @param string             $code
-     * @param int                $stock
-     * @param \DateTimeInterface $validUntil
+     * @param Event                   $event
+     * @param string                  $title
+     * @param string                  $code
+     * @param int                     $stock
+     * @param \DateTimeInterface      $validUntil
+     * @param PromotionCodeGroup|null $promotionCodeGroup
      */
-    public function __construct(Event $event, $title, $code, $stock = null, \DateTimeInterface $validUntil = null)
-    {
-        $this->event        = $event;
-        $this->title        = $title;
-        $this->code         = $code;
-        $this->stock        = $stock;
-        $this->validUntil   = $validUntil;
-        $this->promotions   = new ArrayCollection();
+    public function __construct(
+        Event $event,
+        $title,
+        $code,
+        $stock = null,
+        \DateTimeInterface $validUntil = null,
+        ?PromotionCodeGroup $promotionCodeGroup = null
+    ) {
+        $this->event = $event;
+        $this->title = $title;
+        $this->code = $code;
+        $this->stock = $stock;
+        $this->validUntil = $validUntil;
+        $this->promotions = new ArrayCollection();
         $this->translations = new ArrayCollection();
+        $this->promotionCodeGroup = $promotionCodeGroup;
     }
 
     /**
@@ -315,6 +326,10 @@ class PromotionCode
     {
         $data = [];
 
+        /**
+         * @var string $locale
+         * @var PromotionCodeTranslation $translation
+         */
         foreach ($this->translations->toArray() as $locale => $translation) {
             $data[$locale] = $translation->getData();
         }
@@ -328,5 +343,15 @@ class PromotionCode
     public function getSerializedData()
     {
         return json_encode($this->getData());
+    }
+
+    public function getPromotionCodeGroup(): ?PromotionCodeGroup
+    {
+        return $this->promotionCodeGroup;
+    }
+
+    public function hasPromotionCodeGroup(): bool
+    {
+        return null !== $this->promotionCodeGroup;
     }
 }

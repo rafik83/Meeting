@@ -1,0 +1,19 @@
+Proximum\Vimeet\Domain\Model\RegistrationPath\AnswerTranslation:
+    type:  entity
+    table: registration_path_answer_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        locale:
+            type: string
+        title:
+            type: text
+    manyToOne:
+        answer:
+            targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\Answer
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

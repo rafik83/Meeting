@@ -151,6 +151,7 @@ admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
 admin.elasticsearch.index.confirm: 'Vous êtes sur le point de réindexer l''ensemble des événements. Êtes vous sur de vouloir réaliser cette action?'
 admin.event.access_control: 'Contrôle d''accès'
+admin.event.access_control.back: 'Retour au contrôle d''accès'
 admin.event.access.entrance: Entrées
 admin.event.access.happening.list: Conférences
 admin.event.archive.link: Archivage
@@ -193,13 +194,16 @@ admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.qrcode.checkin: Checkin
+admin.event.qrcode.checkinAt: Checkin le
 admin.event.qrcode.date_checkin: 'Date de checkin'
+admin.event.qrcode.fastcheckin: 'Création de badge'
 admin.event.qrcode.firstName: Prénom
 admin.event.qrcode.lastName: Nom
 admin.event.qrcode.no_result: 'Pas de résultat'
 admin.event.qrcode.notfound: 'Participant inconnu'
 admin.event.qrcode.number_of_available_badge: 'Nombre de badge possible'
 admin.event.qrcode.printBadge: 'Imprimer badge et planning'
+admin.event.qrcode.printPlanning: 'Imprimer planning'
 admin.event.qrcode.scan_participants: 'Scan des participants'
 admin.event.qrcode.search: Rechercher
 admin.event.qrcode.search_by_name: 'Rechercher un participant par nom...'
@@ -419,6 +423,7 @@ admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de
 admin.meeting_request.to: À
 admin.meeting.action.deleteAll.confirm: 'Êtes-vous sûr de vouloir supprimer l''ensemble des rendez-vous ?'
 admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
+admin.meeting.action.deleteAll.meetingPublished: 'Les agendas de RDV ont déjà été publiés.'
 admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce rendez-vous ?'
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.dashboard.approvedRequest: Acceptées
@@ -734,9 +739,18 @@ admin.promotion_code.action.close: Fermer
 admin.promotion_code.error.non_unique_code: 'Ce code est déjà utilisé'
 admin.promotion_code.link: 'Codes promos'
 admin.promotion_code.new: 'Nouveau code'
+admin.promotion_code.notUpdatable: 'Non modifiable car un code a été utilisé dans une commande.'
+admin.promotion_code.batch.new: 'Générer codes en série'
+admin.promotion_code.batch.update: 'Modifier codes en série'
+admin.promotion_code.subtitle.code: 'Codes'
+admin.promotion_code.subtitle.batch: 'Codes en série'
 admin.promotion_code.table.action.edit: Modifier
+admin.promotion_code.table.action.export: Exporter
+admin.promotion_code.table.action.update: Modifier
 admin.promotion_code.table.column.action: Action
 admin.promotion_code.table.column.code: Code
+admin.promotion_code.table.column.number: Nombre de codes
+admin.promotion_code.table.column.prefix: Préfixe
 admin.promotion_code.table.column.stock: Stock
 admin.promotion_code.table.column.title: Titre
 admin.promotion_code.table.column.validUntil: 'Valide jusqu''au'
@@ -837,6 +851,25 @@ admin.sheet.commercialStatus: 'Statut commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
 admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
+admin.sheet.dashboard.by_type.meetings: 'Planifiés'
+admin.sheet.dashboard.by_type.meetings_evaluated_5_stars: 5
+admin.sheet.dashboard.by_type.meetings_evaluated_4_stars: 4
+admin.sheet.dashboard.by_type.meetings_evaluated_3_stars: 3
+admin.sheet.dashboard.by_type.meetings_evaluated_2_stars: 2
+admin.sheet.dashboard.by_type.meetings_evaluated_1_stars: 1
+admin.sheet.dashboard.by_type.meetings_evaluation: 'RDV noté'
+admin.sheet.dashboard.by_type.meetings_not_evaluated: 'Non noté'
+admin.sheet.dashboard.by_type.participants: 'Nombre participants'
+admin.sheet.dashboard.by_type.requests: 'Demandes de rdv'
+admin.sheet.dashboard.by_type.requests_accepted: 'Demandes acceptées'
+admin.sheet.dashboard.by_type.requests_refused: 'Demandes refusées'
+admin.sheet.dashboard.by_type.sheets: 'Nombre de fiches'
+admin.sheet.dashboard.by_type.total: 'Totaux'
+admin.sheet.dashboard.by_type.type: 'Type de participation'
+admin.sheet.dashboard.total_visitors: 'Visiteurs'
+admin.sheet.dashboard.total_unique_visitors: 'Visiteurs uniques'
+admin.sheet.dashboard.visitors_by_day: 'Visiteurs par jour'
+admin.sheet.dashboard.sheets_participants_meetings: 'Fiches, participants et RDV'
 admin.sheet.dashboard.totalOrders: 'Total des commandes (HT)'
 admin.sheet.dashboard.totalPaid: 'Total soldé (TTC)'
 admin.sheet.dashboard.totalParticipants: 'Total participants'
@@ -1259,6 +1292,7 @@ admin.transactional.mail.substitution.parameter.description.%urlSheet%: 'Lien ve
 admin.transactional.mail.substitution.parameter.description.%urlSheetWithCTA%: 'CTA avec le lien vers la fiche de participation'
 admin.transactional.mail.substitution.parameter.list.title: 'Liste des substitutions disponibles:'
 admin.transactional.notification.link: Notifications
+admin.translations.update: 'Mettre à jour les traductions'
 admin.type_content_define_terms_of_sale.link: 'Conditions générales de vente'
 admin.type_content_define_terms_of_sale.title: 'Définir les conditions générales de vente'
 admin.type.action.confirmDelete: 'Etes-vous sûr de vouloir supprimer ce type ?'
@@ -1271,6 +1305,7 @@ admin.type.badge.example.firstName: Prénom
 admin.type.badge.example.lastName: Nom
 admin.type.badge.example.position: 'Directeur des badges '
 admin.type.badge.example.sheetTitle: 'Exemple de titre de Fiche'
+admin.type.badge.preview.link: 'aperçu du e-badge'
 admin.type.canMoveMeeting: 'Peut déplacer les RDV'
 admin.type.canRemoveMeeting: 'Peut supprimer un RDV'
 admin.type.content.specificTermsOfSale: 'CGV particulières'
@@ -1297,6 +1332,19 @@ admin.type.paymentConditions.update.title: 'Définition des conditions de paieme
 admin.type.position: Position
 admin.type.register.link: 'Lien d''inscription'
 admin.type.registration.template: 'Template d''inscription'
+admin.type.registrationPath.addQuestion: "Ajouter une question au parcours d'inscription"
+admin.type.registrationPath.assignNewQuestion: "Créer nouvelle question"
+admin.type.registrationPath.assignParticipationTypes: "Choisir un ou plusieurs types de participation"
+admin.type.registrationPath.link: "Parcours d'inscription"
+admin.type.registrationPath.nextStep: "Etape suivante"
+admin.type.registrationPath.nextToAnswer: "Suite à la réponse"
+admin.type.registrationPath.pathNotCompleted: "Le parcours d'inscription n'est pas complet. Un ou des types de participation sont requis."
+admin.type.registrationPath.title: "Parcours d'inscription"
+admin.type.registrationPath.updateQuestion: "Modifier la question"
+admin.type.registrationPath.removeQuestion.confirmation: "Confirmer la suppression de cette question ?"
+admin.type.registrationPath.removeQuestion.title: "Supprimer la question"
+admin.type.registrationPath.removeTypes.confirmation: "Confirmer la suppression des types assignés ?"
+admin.type.registrationPath.removeTypes.title: "Supprimer les types assignés"
 admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'
 admin.type.specificPaymentConditions: 'Conditions de paiement particulières'
@@ -1340,6 +1388,9 @@ admin.user.batch.selectionAll.label: 'Sélectionner les <strong>%allUsers%</stro
 admin.user.company-information: 'Informations de société'
 admin.user.contact-information: Coordonnées
 admin.user.events: Evénements
+admin.user.export.contact.evaluation: 'Exporter les stats de notes par utilisateur'
+admin.user.export.title: 'Utilisateurs'
+admin.user.requestedNewPasswordLink: 'Lien de réinitialisation de mot de passe : %url%'
 admin.users.batch.exportFormTemplate: 'Exporter les données de formulaire'
 admin.users.batch.sendMail: 'Envoyer un mail'
 admin.users.details: 'Voir le compte'

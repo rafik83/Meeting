@@ -16,6 +16,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Type\Badge\Configure;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -64,6 +65,9 @@ class ConfigureActionTest extends TestCase
     /** @var Request */
     private $request;
 
+    /** @var ObjectProphecy|TranslatorInterface */
+    private $translator;
+
     public function setUp(): void
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
@@ -73,6 +77,7 @@ class ConfigureActionTest extends TestCase
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->engine = $this->prophesize(EngineInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
+        $this->translator = $this->prophesize(TranslatorInterface::class);
 
         $this->event = $this->prophesize(Event::class);
         $this->type = $this->prophesize(Type::class);
@@ -96,7 +101,8 @@ class ConfigureActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->engine->reveal(),
-            $this->router->reveal()
+            $this->router->reveal(),
+            $this->translator->reveal()
         );
 
         $action($this->request, $this->event->reveal(), $this->type->reveal());
@@ -121,7 +127,8 @@ class ConfigureActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->engine->reveal(),
-            $this->router->reveal()
+            $this->router->reveal(),
+            $this->translator->reveal()
         );
 
         $action($this->request, $this->event->reveal(), $this->type->reveal());
@@ -176,7 +183,8 @@ class ConfigureActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->engine->reveal(),
-            $this->router->reveal()
+            $this->router->reveal(),
+            $this->translator->reveal()
         );
 
         $result = $action($this->request, $this->event->reveal(), $this->type->reveal());
@@ -233,7 +241,8 @@ class ConfigureActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->engine->reveal(),
-            $this->router->reveal()
+            $this->router->reveal(),
+            $this->translator->reveal()
         );
 
         $result = $action($this->request, $this->event->reveal(), $this->type->reveal());

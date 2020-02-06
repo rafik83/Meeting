@@ -1,0 +1,17 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.type.registrationPath.updateQuestion'|trans %}
+
+{% block goback_link path('admin_type_registration_path_show', { event: event.id }) %}
+
+{% block form_content %}
+    {{ form_row(form.translatedTitle) }}
+    <hr>
+    {{ form_row(form.answers) }}
+{% endblock form_content %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/tinymce/tinymce.js') }}"></script>
+    <script src="{{ asset('assets/tinymce/init-tinymce.js') }}"></script>
+{% endblock %}

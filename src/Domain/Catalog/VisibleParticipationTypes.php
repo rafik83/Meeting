@@ -44,11 +44,11 @@ class VisibleParticipationTypes
 
         $filteredRules = array_filter($rules, function (Rule $rule) use ($type) {
             return $rule->getSeerType() === $type
-                || !empty($rule->getSeerCategory()) && in_array($type, $rule->getSeerCategory()->getTypes());
+                || ($rule->getSeerCategory() !== null && in_array($type, $rule->getSeerCategory()->getTypes(), true));
         });
 
         foreach ($filteredRules as $rule) {
-            if (!empty($rule->getSeeableCategory())) {
+            if ($rule->getSeeableCategory() !== null) {
                 foreach ($rule->getSeeableCategory()->getTypes() as $categoryType) {
                     $visibleTypes[$categoryType->getId()] = $categoryType;
                 }

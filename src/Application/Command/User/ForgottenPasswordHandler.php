@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGener
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
+use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -61,9 +62,10 @@ class ForgottenPasswordHandler
     /**
      * @param ForgottenPassword $forgottenPassword
      *
+     * @return ForgottenPasswordToken
      * @throws EmailDoesNotExistException
      */
-    public function handle(ForgottenPassword $forgottenPassword)
+    public function handle(ForgottenPassword $forgottenPassword): ForgottenPasswordToken
     {
         $user = $this->userRepository->findByEmail($forgottenPassword->email);
 
@@ -80,9 +82,12 @@ class ForgottenPasswordHandler
             $user,
             $forgottenPassword->event,
             $forgottenPasswordToken,
-            $forgottenPassword->locale
+            $forgottenPassword->locale,
+            $forgottenPassword->requestedByAdmin
         );
 
         $this->eventDispatcher->dispatch(Events::USER_PASSWORD_RESET, $event);
+
+        return $forgottenPasswordToken;
     }
 }

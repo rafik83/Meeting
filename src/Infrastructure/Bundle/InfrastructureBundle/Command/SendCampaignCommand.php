@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SendCampaignCommand extends Command
 {
-    const NAME = 'vimeet:campaign:send';
+    public const NAME = 'vimeet:campaign:send';
 
     /**
      * @var CampaignRepositoryInterface

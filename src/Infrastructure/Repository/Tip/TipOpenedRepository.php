@@ -32,6 +32,11 @@ class TipOpenedRepository implements TipOpenedRepositoryInterface
         $this->entityManager->flush($tipOpened);
     }
 
+    public function set(TipOpened $tipOpened): void
+    {
+        $this->entityManager->flush($tipOpened);
+    }
+
     public function isOpened(Tip $tip, User $user): bool
     {
         return null !== $this
@@ -45,5 +50,20 @@ class TipOpenedRepository implements TipOpenedRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function getByTipAndUser(Tip $tip, User $user): ?TipOpened
+    {
+        return $this
+                ->entityManager
+                ->createQueryBuilder()
+                ->select('tipOpened')
+                ->from(TipOpened::class, 'tipOpened')
+                ->where('tipOpened.user = :user AND tipOpened.tip = :tip')
+                ->setParameter('user', $user)
+                ->setParameter('tip', $tip)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
     }
 }

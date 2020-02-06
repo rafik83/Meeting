@@ -114,6 +114,9 @@ class UpdateHandlerTest extends TestCase
         $update->invoicePrefix = $prefix;
         $update->analyticsCode = 'analyticsCode';
         $update->visible       = false;
+        $update->googleLoginEnabled = true;
+        $update->linkedinLoginEnabled = true;
+        $update->accessControlEnabled = true;
 
         // Expected event
         $expectedEvent  = EventFactory::createEvent();
@@ -134,7 +137,10 @@ class UpdateHandlerTest extends TestCase
             false,
             true,
             false,
-            false
+            false,
+            true,
+            true,
+            true
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));

@@ -36,7 +36,7 @@ class CreateRequest
     public $creator;
 
     /** @var bool */
-    public $fromPriority;
+    public $fromPriority = false;
 
     /**
      * @param Event $event

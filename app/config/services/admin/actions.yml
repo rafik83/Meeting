@@ -48,6 +48,15 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner\PlannerAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@domain.key_dates.checker.event_open_access_checker'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@vimeet_infrastructure.repository.planner_job_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
     #
     # Type
     #
@@ -84,6 +93,58 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@templating'
 
+
+    #
+    # Registration path
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\ShowAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AddQuestionAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AssignParticipationTypeAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@templating'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\UpdateQuestionAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@templating'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\RemoveQuestionAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\RemoveAssignationTypeAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+
     #
     # Type Badge
     #
@@ -96,6 +157,13 @@ services:
             - '@session.flash_bag'
             - '@templating'
             - '@adapter.router'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            -
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\PreviewAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # Event
@@ -365,11 +433,31 @@ services:
             - '@router'
             - '@translator'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\CheckinEventEntranceAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@datetime'
+            - '@adapter.router'
+            - '@session.flash_bag'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Badge\ShowAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Planning\ShowAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Application\Command\Planning\PlanningPrintFactory'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Contact\EvaluationExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.serializer_adapter'
 
     #
     # Happening
@@ -595,6 +683,10 @@ services:
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@datetime'
+            - '@form.factory'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@session.flash_bag'
 
     #
     # OMZ
@@ -611,6 +703,19 @@ services:
             - '@adapter.authorization_checker'
             - '@adapter.file_system_adapter'
             - '%infrastructure.export_omz_path%'
+
+    #
+    # Openl10n
+    #
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Translation\UpdateAction:
+        arguments:
+            - '@adapter.job_queue_adapter'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@form.factory'
 
     #
     # Product
@@ -1009,3 +1114,64 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\DownloadPrintAction:
         arguments:
             - '@adapter.file_system_adapter'
+
+    #
+    # Fast checkin
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\AddFastCheckinAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@adapter.authorization_checker'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\CheckinActionsAction:
+        arguments:
+            - '@templating'
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@datetime'
+
+    #
+    # Promotion code
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Application\Query\PromotionCode\Batch\PromotionCodeGroupList\GetListViewHandler'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@repository.promotion_code_repository'
+            - '@adapter.serializer_adapter'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\PromotionCode\Batch\CanBeUpdatable'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\DashboardAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@query.sheet.dashboard_view_query_handler'
+            - '@templating'

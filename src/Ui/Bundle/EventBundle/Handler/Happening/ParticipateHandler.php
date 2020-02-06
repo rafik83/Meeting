@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Happening as CommandHappening;
+use Proximum\Vimeet\Application\Exception\Happening\MaxNumberHappeningParticipationReachedException;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantMustHaveProductToParticipateException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
@@ -28,6 +29,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType;
 use Symfony\Component\Form\FormError;
@@ -68,6 +70,9 @@ class ParticipateHandler
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var HappeningParticipationRepositoryInterface */
+    private $happeningParticipationRepository;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         QuestionRepositoryInterface $questionRepository,
@@ -78,7 +83,8 @@ class ParticipateHandler
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         RouterInterface $router,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository
     ) {
         $this->participantRepository = $participantRepository;
         $this->questionRepository = $questionRepository;
@@ -90,13 +96,33 @@ class ParticipateHandler
         $this->formFactory = $formFactory;
         $this->router = $router;
         $this->translator = $translator;
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
     }
 
     public function handle(Request $request, Happening $happening, Sheet $sheet, User $user): JsonResponse
     {
+        $numberMaxOfHappeningsPerUser = $sheet->getType()->getNumberMaxOfHappeningsPerUser();
+        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
         $participant = $sheet->getUserParticipant($user);
         $selectedParticipants = $this->participantRepository->getParticipantsForHappening($sheet, $happening);
         $isUpdate = \count($selectedParticipants) > 0;
+        $isCancelParticipationAlone = $isUserAloneParticipant && $isUpdate;
+        $isParticipationAlone = $isUserAloneParticipant && !$isUpdate;
+        $numberUserHappeningParticipation = $numberMaxOfHappeningsPerUser === null && $isParticipationAlone ? 0 : $this->happeningParticipationRepository->countByUserAndEvent($user, $sheet->getEvent());
+
+        if ($numberMaxOfHappeningsPerUser && $isParticipationAlone && $numberUserHappeningParticipation >= $numberMaxOfHappeningsPerUser) {
+            return new JsonResponse(
+                [
+                    'status' => 'show-form',
+                    'html' => $this->engine->render(
+                        'EventBundle:Program/Partials:max-number-happening-participation-reached.html.twig',
+                        [
+                            'title' => $happening->getTitle($request->getLocale())
+                        ]
+                    )
+                ]
+            );
+        }
 
         $participants = $this
             ->participantsAllowedToAccessQueryHandler
@@ -109,10 +135,6 @@ class ParticipateHandler
         );
 
         $noAvailableParticipants = 0 === \count($availableParticipants);
-
-        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
-        $isCancelParticipationAlone = $isUserAloneParticipant && $isUpdate;
-        $isParticipationAlone = $isUserAloneParticipant && !$isUpdate;
 
         // Case : current user is not available for this happening, do not show modal
         if ($isParticipationAlone && $noAvailableParticipants) {
@@ -139,7 +161,8 @@ class ParticipateHandler
             $user,
             $participants,
             $availableParticipants,
-            $selectedParticipants
+            $selectedParticipants,
+            $numberMaxOfHappeningsPerUser
         );
     }
 
@@ -182,13 +205,14 @@ class ParticipateHandler
     }
 
     /**
-     * @param Request       $request
-     * @param Happening     $happening
-     * @param Sheet         $sheet
-     * @param User          $user
+     * @param Request $request
+     * @param Happening $happening
+     * @param Sheet $sheet
+     * @param User $user
      * @param Participant[] $participants
      * @param Participant[] $availableParticipants
      * @param Participant[] $selectedParticipants
+     * @param int|null $numberMaxOfHappeningsPerUser
      *
      * @return JsonResponse
      */
@@ -199,7 +223,8 @@ class ParticipateHandler
         User $user,
         array &$participants,
         array &$availableParticipants,
-        array &$selectedParticipants
+        array &$selectedParticipants,
+        $numberMaxOfHappeningsPerUser
     ): JsonResponse {
         $isUpdate = \count($selectedParticipants) > 0;
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
@@ -300,6 +325,17 @@ class ParticipateHandler
                         )
                     )
                 );
+            } catch (MaxNumberHappeningParticipationReachedException $maxNumberHappeningParticipationReachedException) {
+                $formOrParticipantsField->addError(
+                    new FormError(
+                        $this->translator->trans(
+                            'happening.participate.maxNumberHappeningParticipationReachedForParticipant',
+                            [
+                                '%fullname%' => $maxNumberHappeningParticipationReachedException->getParticipant()->getFullname()
+                            ]
+                        )
+                    )
+                );
             }
         }
 
@@ -338,6 +374,7 @@ class ParticipateHandler
                         'productsNeededByHappening' => $productsNeededByHappening,
                         'noParticipantCanParticipate' => $noParticipantCanParticipate,
                         'locale' => $request->getLocale(),
+                        'maxNumberHappeningParticipationReached' => $this->getMaxNumberHappeningParticipationReached($participants, $numberMaxOfHappeningsPerUser, $sheet)
                     ]
                 ),
             ]
@@ -396,6 +433,30 @@ class ParticipateHandler
         }
 
         return $unavailableParticipants;
+    }
+
+    /**
+     * @param Participant[] $participants
+     * @param int|null $numberMaxOfHappeningsPerUser
+     * @param Sheet $sheet
+     *
+     * @return Participant[]
+     */
+    private function getMaxNumberHappeningParticipationReached(array $participants, ?int $numberMaxOfHappeningsPerUser, Sheet $sheet): array
+    {
+        $maxNumberHappeningParticipationReached = [];
+
+        if (null === $numberMaxOfHappeningsPerUser) {
+            return [];
+        }
+
+        foreach ($participants as $key => $participant) {
+            if ($this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $sheet->getEvent()) >= $numberMaxOfHappeningsPerUser) {
+                $maxNumberHappeningParticipationReached[$key] = $participant;
+            }
+        }
+
+        return $maxNumberHappeningParticipationReached;
     }
 
     private function createJsonResponseWithError(

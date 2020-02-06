@@ -5,13 +5,98 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-1999 - As an admin, remove promotion code from order
-- VIMEET-1081 - Priority meeting request number by type
-- VIMEET-1082 - Participants prioritize meeting request
 - VIMEET-2011 - Prioritize meeting request before planning
+
+## [2.17.0] - 2019-01-31
+### Added
+- VIMEET-2033 - add number max of happenings per user in participation type parameters
+- VIMEET-2040 - Set 'contains' as default operator for string filter
+- VIMEET-2042 - Clean nomenclature key, replace dot by underscore
+- VIMEET-2041 - restriction registration when number max of happenings per user is achieved
+### Fixed
+- MV-202 - Remove type from mass unavailability
+- MV-209 - Fix video test; check if chat element exists
+
+## [2.16.0] - 2019-12-23
+### Added
+- VIMEET-2034 - Follow the registration path
+
+## [2.15.0] - 2019-12-19
+### Added
+- VIMEET-2026 - Fixes for API Leni
+- VIMEET-2031 - Access control can be enabled or disabled
+- VIMEET-2028 - Configure a registration path
+
+## [2.14.2] - 2019-11-26
+### Fixed
+- MV-208 - Do not close badge when printing
+
+## [2.14.1] - 2019-11-19
+### Fixed
+- MV-205 - Fix contacts indicators
+
+## [2.14.0] - 2019-11-18
+### Added
+- VIMEET-1996 - Export analytics about contact evaluations per user
+- VIMEET-1998 - Dashboard with contacts indicators
+- VIMEET-1997 - Dashboard with access control indicators
+
+## [2.13.0] - 2019-10-09
+### Added
+- VIMEET-2021 - As admin or organizer, delete all meetings if agenda not published
+### Fixed
+- MV-195 - Print user planning in badge scan screen
+- MV-195 - Badge participation type background color
+- MV-201 - Show user contact information
+- MV-200 - Badge header background color
+
+## [2.12.2] - 2019-09-26
+### Fixed
+- MV-195 - Wait images are loaded before printing badge
+
+## [2.12.1] - 2019-09-25
+### Fixed
+- MV-199 - Limit folder name when exporting uploaded files
+
+## [2.12.0] - 2019-09-16
+### Fixed
+- MV-190 - Show always opened tip after two hours
+- MV-89 - Do not take account of disabled type/category (zero result) in catalog filter
+- MV-182 - Show amount included taxes when event does not have taxes
+### Added
+- VIMEET-1889 - Take account of type rules when there is no categories rules
+- VIMEET-2019 - View multiple sheets contacts list; Impersonate as every user of a participation sheet
+
+## [2.11.0] - 2019-08-27
+### Added
+- MV-187 - Upload vector image
+- MV-189 - As an admin, generate a user reset password url
+- MV-172 - Capitalize first character of firstname
+- VIMEET-1935 - Generate promo codes
+- VIMEET-2018 - Export promo codes group
+- VIMEET-2017 - Update promo codes group
+### Fixed
+- MV-193 - Reindex sheets after sending emailing
+
+## [2.10.0] - 2019-07-05
+### Added
+- VIMEET-1916 - Add new parameters to badge
+- VIMEET-1982 - Contacts download and list
+- VIMEET-1999 - As an admin, remove promotion code from order
+- VIMEET-1961 - Update translations from admin UI and deploy process
+- VIMEET-2001 - Add fast on-site register and checkin
+- VIMEET-2009 - Google and Linkedin login enabling on one event
+- VIMEET-1081 - Priority meeting request number by type
+- VIMEET-1648 - Terms of sale linksopie de 01
+- VIMEET-2004 - Stop notifications on pending planner job
+- VIMEET-1082 - Prioritize meeting request
+- VIMEET-2020 - Get uploaded sheets files from a public route
 ### Fixed
 - MV-184 - Fix rooming list assign dates
 - MV-185 - Relevance filter choice by default
+- MV-186 - Show contacts list when event is opened
+- MV-188 - Index Sheet zipcode when country not defined
+- MV-191 - Do not block meeting slot in planner pre process for linked sheets
 
 ## [2.9.0] - 2019-06-12
 ### Added

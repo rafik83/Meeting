@@ -329,6 +329,64 @@ admin_type_content_define_terms_of_sale:
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Content\DefineTermsOfSaleAction
 
 #
+# Registration path
+#
+
+admin_type_registration_path_show:
+    path: /event/{event}/registration-path
+    requirements:
+        event: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\ShowAction
+
+admin_type_registration_path_add_question:
+    path: /event/{event}/registration-path/add-question
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AddQuestionAction
+
+admin_type_registration_path_add_question_to_answer:
+    path: /event/{event}/registration-path/add-question-to-answer/{answer}
+    requirements:
+        event: \d+
+        answer: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AddQuestionAction
+
+admin_type_registration_path_assign_participation_type_to_answer:
+    path: /event/{event}/registration-path/assign-participation-type-to-answer/{answer}
+    requirements:
+        event: \d+
+        answer: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AssignParticipationTypeAction
+
+admin_type_registration_path_update_question:
+    path: /event/{event}/registration-path/update-question/{question}
+    requirements:
+        event: \d+
+        question: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\UpdateQuestionAction
+
+admin_type_registration_path_remove_question:
+    path: /event/{event}/registration-path/remove-question/{question}
+    requirements:
+        event: \d+
+        question: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\RemoveQuestionAction
+
+admin_type_registration_path_remove_assignation_type:
+    path: /event/{event}/registration-path/remove-assignation-type/{answer}
+    requirements:
+        event: \d+
+        answer: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\RemoveAssignationTypeAction
+
+#
 # Badge
 #
 admin_type_badge_configuration:
@@ -339,6 +397,14 @@ admin_type_badge_configuration:
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\ConfigureAction }
 
+admin_type_badge_preview:
+    path: /event/{event}/type/{type}/badge/preview
+    requirements:
+        event: \d+
+        type: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\PreviewAction }
+
 admin_user_event_badge:
     path: /event/{event}/user/{user}/badge
     requirements:
@@ -346,6 +412,14 @@ admin_user_event_badge:
         user: \d+
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Badge\ShowAction }
+
+admin_user_event_planning:
+    path: /event/{event}/user/{user}/planning
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Planning\ShowAction }
 
 #
 # Category
@@ -449,7 +523,7 @@ admin_agenda_export_participant_export:
     path: /event/{event}/agenda/do-export-participants
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\PrepareExportAction }
 
 admin_omz_export_download:
@@ -610,7 +684,7 @@ admin_meeting_export:
     path: /event/{event}/meeting/export
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [POST]
     defaults: { _controller: AdminBundle:Meeting:export }
 
 #
@@ -801,7 +875,7 @@ admin_sheet_batch:
     defaults: { _controller: AdminBundle:Sheet:batch }
 admin_event_qr_code_reader:
     path: /event/{event}/access
-    methods: [GET]
+    methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QRCodeReaderAction }
 admin_sheet_export_sheet:
     path: /event/{event}/sheet/export/sheet
@@ -1361,6 +1435,36 @@ admin_promotion_code_update:
         event: \d+
         promotionCode: \d+
 
+admin_promotion_code_batch_create:
+    path: /event/{event}/promotion_code/batch/create
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\CreateAction
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
+admin_promotion_code_batch_list:
+    path: /event/{event}/promotion_code/batch/list
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ListAction
+    methods: [GET]
+    requirements:
+        event: \d+
+
+admin_promotion_code_batch_export:
+    path: /event/{event}/promotion_code/batch/{promotionCodeGroup}/export
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ExportAction
+    methods: [GET]
+    requirements:
+        event: \d+
+        promotionCodeGroup: \d+
+
+admin_promotion_code_batch_update:
+    path: /event/{event}/promotion_code/batch/{promotionCodeGroup}/update
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\UpdateAction
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        promotionCodeGroup: \d+
+
 #
 # Schedule
 #
@@ -1566,11 +1670,17 @@ admin_user_event_scan:
 admin_users_details:
     path: /event/{event}/users/{user}
     defaults: { _controller: AdminBundle:User:show }
-    methods: [GET]
+    methods: [GET, POST]
     requirements:
         event: \d+
         user: \d+
 
+admin_user_contact_evaluation_export:
+    path: /event/{event}/users-contact-evaluation/export
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Contact\EvaluationExportAction
+    methods: [POST]
+    requirements:
+        event: \d+
 
 #
 # Scan
@@ -1602,7 +1712,7 @@ admin_event_access_happening_scan:
 # Dashboard
 admin_dashboard:
     path: /event/{event}/dashboard
-    defaults: { _controller: AdminBundle:Dashboard:index }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\DashboardAction
     methods: [GET]
     requirements:
         event: \d+
@@ -1681,7 +1791,7 @@ admin_planner:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Planner/Planner:index }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner\PlannerAction
 
 admin_export_planner_data:
     path: /event/{event}/planner/export/{mode}
@@ -2198,3 +2308,38 @@ admin_event_rooming_list_download_export:
         hash: .+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\DownloadRoomingListExportAction
+
+#
+# translations
+#
+admin_translations_update:
+    path: /translations/update
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Translation\UpdateAction
+
+#
+# fast checkin
+#
+admin_event_fast_checkin_actions:
+    path: /event/{event}/fastcheckin/user/{user}/actions
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\CheckinActionsAction
+
+admin_event_fast_checkin_form:
+    path: /event/{event}/fastcheckin/create/{email}
+    requirements:
+        event: \d+
+        email: .*
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\AddFastCheckinAction
+
+admin_event_fast_checkin_action_checkin:
+    path: /event/{event}/fastcheckin/user/{user}/checkin
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\CheckinEventEntranceAction

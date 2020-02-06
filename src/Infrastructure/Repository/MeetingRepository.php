@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardMeetingContactEvaluationView;
+use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -859,5 +861,48 @@ class MeetingRepository implements MeetingRepositoryInterface
         ;
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    public function getMeetingAndParticipantsByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting, fromParticipant, toParticipant')
+            ->from(Meeting::class, 'meeting', 'meeting.id')
+            ->join(
+                'meeting.fromParticipants',
+                'fromParticipant',
+                'WITH',
+                'meeting.event = :event AND meeting.state = :state'
+            )
+            ->join('meeting.toParticipants', 'toParticipant')
+            ->setParameter('event', $event)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function getDashboardMeetingContactEvaluationViews(Event $event): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select(
+                sprintf(
+                    'NEW %s(fromType.id, meeting.id, contact.evaluation)',
+                    DashboardMeetingContactEvaluationView::class
+                )
+            )
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'meeting.event = :event AND meeting.state = :state')
+            ->join('fromSheet.type', 'fromType')
+            ->join('meeting.fromParticipants', 'fromParticipant')
+            ->join('fromParticipant.user', 'user')
+            ->leftJoin(Contact::class, 'contact', 'WITH', 'contact.event = :event AND contact.user = user')
+            ->setParameter('event', $event)
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->getQuery()
+            ->getResult();
     }
 }

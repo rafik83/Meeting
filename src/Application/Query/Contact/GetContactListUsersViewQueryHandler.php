@@ -4,10 +4,13 @@ namespace Proximum\Vimeet\Application\Query\Contact;
 
 use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class GetContactListUsersViewQueryHandler
 {
@@ -20,14 +23,19 @@ class GetContactListUsersViewQueryHandler
     /** @var ContactRepositoryInterface */
     private $contactRepository;
 
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MeetingParticipants $meetingParticipants,
-        ContactRepositoryInterface $contactRepository
+        ContactRepositoryInterface $contactRepository,
+        SheetRepositoryInterface $sheetRepository
     ) {
         $this->requestRepository = $requestRepository;
         $this->meetingParticipants = $meetingParticipants;
         $this->contactRepository = $contactRepository;
+        $this->sheetRepository = $sheetRepository;
     }
 
     public function handle(GetContactListUsersViewQuery $query): GetContactListUsersView
@@ -45,24 +53,63 @@ class GetContactListUsersViewQueryHandler
      */
     protected function getFromApprovedRequests(Participant $participant): array
     {
-        $sheet = $participant->getSheet();
-
-        $requests = $this->requestRepository->findApproved($sheet);
-
         $metUsers = [];
-        foreach ($requests as $request) {
-            $requestParticipants = $this->meetingParticipants->getMeetingParticipants($request, $sheet);
+        $user = $participant->getUser();
 
-            if (!\in_array($participant, $requestParticipants, true)) {
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $participant->getEvent());
+
+        foreach ($sheets as $sheet) {
+            $requests = $this->requestRepository->findApproved($sheet);
+            $participantOfSheet = $sheet->getUserParticipant($user);
+
+            if (null === $participantOfSheet) {
                 continue;
             }
 
-            foreach ($request->getSheetMet($sheet)->getParticipantsArray() as $otherParticipant) {
-                $metUsers[] = $otherParticipant->getUser();
+            foreach ($requests as $request) {
+                if (!$this->isRequestNoPreferenceOrInParticipants($request, $participantOfSheet)) {
+                    continue;
+                }
+
+                foreach ($this->getSheetParticipantsMet($request, $sheet) as $participantMet) {
+                    $metUsers[] = $participantMet->getUser();
+                }
             }
         }
 
         return $metUsers;
+    }
+
+    /**
+     * @param Request $request
+     * @param Sheet   $sheet
+     *
+     * @return Participant[]
+     */
+    private function getSheetParticipantsMet(Request $request, Sheet $sheet): array
+    {
+        $sheetMet = $request->getSheetMet($sheet);
+
+        $participantsMet = $this->meetingParticipants->getMeetingParticipants($request, $sheetMet);
+
+        if (empty($participantsMet)) {
+            $participantsMet = [$sheetMet->getFirstParticipant()];
+        }
+
+        return $participantsMet;
+    }
+
+    private function isRequestNoPreferenceOrInParticipants(Request $request, Participant $participant): bool
+    {
+        $sheet = $participant->getSheet();
+
+        if ($request->hasNoPreference($sheet)) {
+            return true;
+        }
+
+        $requestParticipants = $this->meetingParticipants->getMeetingParticipants($request, $sheet);
+
+        return \in_array($participant, $requestParticipants, true);
     }
 
     /**

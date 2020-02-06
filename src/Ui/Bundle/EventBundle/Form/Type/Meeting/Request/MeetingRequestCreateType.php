@@ -26,8 +26,11 @@ class MeetingRequestCreateType extends AbstractMeetingRequestType
         if ($sheet->getType()->getPriorityMeetingRequestsNumber() > 0) {
             $builder
                 ->add(
-                    'fromPriority', CheckboxType::class, [
+                    'fromPriority',
+                    CheckboxType::class,
+                    [
                         'required' => false,
+                        'disabled' => $options['priorityNumberAvailable'] === 0
                     ]
                 );
         }

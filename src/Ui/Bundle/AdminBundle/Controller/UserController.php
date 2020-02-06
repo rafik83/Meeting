@@ -10,15 +10,18 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery;
 use Proximum\Vimeet\Application\Query\User\UserListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\UserEvent\Exception\UserEventMissingException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -87,14 +90,57 @@ class UserController extends Controller
     }
 
     /**
-     * @param Event $event
-     * @param User  $user
+     * @param Request $request
+     * @param Event   $event
+     * @param User    $user
      *
      * @return Response
      */
-    public function showAction(Event $event, User $user)
+    public function showAction(Request $request, Event $event, User $user)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $forgottenPassword = new ForgottenPassword($event, $user->getLocale(), true);
+        $forgottenPassword->email = $user->getEmail();
+        $forgottenPasswordForm = $this->createFormBuilder(
+                [],
+                [
+                    'action' => $this->generateUrl(
+                        'admin_users_details',
+                        ['event' => $event->getId(), 'user' => $user->getId()]
+                    ),
+                    'method' => 'POST',
+                ]
+            )
+            ->add('submit', SubmitType::class, ['label' => 'form.user.requestNewPasswordLink.submit'])
+            ->getForm()
+        ;
+
+        if ($forgottenPasswordForm->handleRequest($request)->isSubmitted() && $forgottenPasswordForm->isValid()) {
+            /** @var ForgottenPasswordToken $forgottenPasswordToken */
+            $forgottenPasswordToken = $this->get('tactician.commandbus')->handle($forgottenPassword);
+            $this->addFlash(
+                'success',
+                $this->get('translator')->trans(
+                    'admin.user.requestedNewPasswordLink',
+                    [
+                        '%url%' => $this->get('adapter.event_url_generator')->generateEventAbsoluteUrl(
+                            $event,
+                            'event_create_new_password',
+                            [
+                                'token' => $forgottenPasswordToken->getToken(),
+                                '_locale' => $user->getLocale(),
+                            ]
+                        )
+                    ]
+                )
+            );
+
+            return $this->redirectToRoute(
+                'admin_users_details',
+                ['event' => $event->getId(), 'user' => $user->getId()]
+            );
+        }
 
         try {
             $view = $this
@@ -108,9 +154,10 @@ class UserController extends Controller
         }
 
         return $this->render('AdminBundle:User:show.html.twig', [
-            'event'         => $view->event,
-            'user'          => $view->user,
+            'event' => $view->event,
+            'user' => $view->user,
             'userSheetList' => $view->userSheetView,
+            'forgottenPasswordForm' => $forgottenPasswordForm->createView()
         ]);
     }
 

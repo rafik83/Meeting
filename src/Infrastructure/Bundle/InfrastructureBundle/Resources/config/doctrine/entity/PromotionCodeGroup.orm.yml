@@ -1,0 +1,34 @@
+Proximum\Vimeet\Domain\Model\PromotionCodeGroup:
+    type:  entity
+    table: promotion_code_group
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        prefix:
+            type: string
+            nullable: true
+        number:
+            type: integer
+        validUntil:
+            type: datetime
+            nullable: true
+        stock:
+            type: integer
+            nullable: true
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+    oneToMany:
+        promotionCodes:
+            targetEntity: Proximum\Vimeet\Domain\Model\PromotionCode
+            mappedBy: promotionCodeGroup
+            cascade: ["persist"]

@@ -126,6 +126,15 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $disabledPasswordChanging;
 
+    /** @var bool */
+    private $googleLoginEnabled;
+
+    /** @var bool */
+    private $linkedinLoginEnabled;
+
+    /** @var bool */
+    private $accessControlEnabled;
+
     public function __construct(
         string $title,
         string $fallback,
@@ -143,7 +152,10 @@ class Event implements EventInterface, TraceableInterface
         ?Event $duplicatedFrom = null,
         bool $welcomeEnabled = true,
         bool $disabledEmailChanging = false,
-        bool $disabledPasswordChanging = false
+        bool $disabledPasswordChanging = false,
+        bool $googleLoginEnabled = false,
+        bool $linkedinLoginEnabled = false,
+        bool $accessControlEnabled = false
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration();
@@ -169,6 +181,9 @@ class Event implements EventInterface, TraceableInterface
         $this->welcomeEnabled = $welcomeEnabled;
         $this->disabledEmailChanging = $disabledEmailChanging;
         $this->disabledPasswordChanging = $disabledPasswordChanging;
+        $this->googleLoginEnabled = $googleLoginEnabled;
+        $this->linkedinLoginEnabled = $linkedinLoginEnabled;
+        $this->accessControlEnabled = $accessControlEnabled;
     }
 
     /**
@@ -442,6 +457,9 @@ class Event implements EventInterface, TraceableInterface
      * @param bool        $welcomeEnabled
      * @param bool        $disabledEmailChanging
      * @param bool        $disabledPasswordChanging
+     * @param bool        $googleLoginEnabled
+     * @param bool        $linkedinLoginEnabled
+     * @param bool        $accessControlEnabled
      */
     public function update(
         $title,
@@ -459,7 +477,10 @@ class Event implements EventInterface, TraceableInterface
         bool $visible,
         bool $welcomeEnabled,
         bool $disabledEmailChanging,
-        bool $disabledPasswordChanging
+        bool $disabledPasswordChanging,
+        bool $googleLoginEnabled = false,
+        bool $linkedinLoginEnabled = false,
+        bool $accessControlEnabled = false
     ) {
         $this->title = $title;
         $this->locales = $locales;
@@ -477,6 +498,9 @@ class Event implements EventInterface, TraceableInterface
         $this->welcomeEnabled = $welcomeEnabled;
         $this->disabledEmailChanging = $disabledEmailChanging;
         $this->disabledPasswordChanging = $disabledPasswordChanging;
+        $this->googleLoginEnabled = $googleLoginEnabled;
+        $this->linkedinLoginEnabled = $linkedinLoginEnabled;
+        $this->accessControlEnabled = $accessControlEnabled;
     }
 
     /**
@@ -814,6 +838,26 @@ class Event implements EventInterface, TraceableInterface
     public function isDisabledPasswordChanging(): bool
     {
         return $this->disabledPasswordChanging;
+    }
+
+    public function isGoogleLoginEnabled(): bool
+    {
+        return $this->googleLoginEnabled;
+    }
+
+    public function isLinkedinLoginEnabled(): bool
+    {
+        return $this->linkedinLoginEnabled;
+    }
+
+    public function hasOAuth2LoginEnabled(): bool
+    {
+        return $this->isGoogleLoginEnabled() || $this->isLinkedinLoginEnabled();
+    }
+
+    public function isAccessControlEnabled(): bool
+    {
+        return $this->accessControlEnabled;
     }
 
     /**

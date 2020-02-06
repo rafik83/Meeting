@@ -1,0 +1,31 @@
+Proximum\Vimeet\Domain\Model\RegistrationPath\Question:
+    type:  entity
+    table: registration_path_question
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+        previousAnswer:
+            targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\Answer
+            inversedBy: nextQuestions
+            joinColumn:
+                nullable: true
+                onDelete: CASCADE
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\QuestionTranslation
+            mappedBy: question
+            indexBy: locale
+            cascade: ["all"]
+            orphanRemoval: true
+        answers:
+            targetEntity: Proximum\Vimeet\Domain\Model\RegistrationPath\Answer
+            mappedBy: question
+            cascade: ["all"]
+            orphanRemoval: true

@@ -362,6 +362,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     #
     # Handlers
     #
@@ -1627,16 +1631,15 @@ services:
     command.promotion_code.create_handler:
         class: Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory'
             - '@repository.promotion_code_repository'
-            - '@promotion.unique_code_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Create }
     command.promotion_code.update_handler:
         class: Proximum\Vimeet\Application\Command\PromotionCode\UpdateHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory'
             - '@repository.promotion_code_repository'
-            - '@promotion.unique_code_checker'
-            - '@vimeet_infrastructure.repository.order_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\PromotionCode\Update }
 
@@ -1959,6 +1962,9 @@ services:
         arguments:
             - '@repository.unavailability.mass_repository'
             - '@adapter.job_queue_adapter'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@repository.unavailability.mass_assignment_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Update }
     command.unavailability.mass.delete_handler:
@@ -2045,6 +2051,7 @@ services:
             - '@adapter.sendgrid_api_adapter'
             - '@Proximum\Vimeet\Domain\Messaging\GetUsersReceivers'
             - '@Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers'
+            - '@adapter.sheet_indexer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Process }
 
@@ -2130,6 +2137,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@adapter.job_queue_adapter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll }
 
@@ -2850,6 +2858,15 @@ services:
             - '@Proximum\Vimeet\Application\Adapter\QueryBusInterface'
             - '@Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository'
 
+    Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationViewQuery }
+
     #
     # Token component
     #
@@ -3502,6 +3519,7 @@ services:
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
             - '@domain.user.phone.validation_required_checker'
             - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
@@ -3577,6 +3595,8 @@ services:
             - '@query.sheet.dashboard_transaction_view_query_handler'
             - '@query.dashboard.dashboard_sheet_view_query_handler'
             - '@Proximum\Vimeet\Application\Query\Dashboard\DashboardMeetingViewQueryHandler'
+            - '@Proximum\Vimeet\Application\Query\Dashboard\DashboardContactViewQueryHandler'
+            - '@Proximum\Vimeet\Application\Query\Dashboard\DashboardScanViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery }
 
@@ -3595,6 +3615,15 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    Proximum\Vimeet\Application\Query\Dashboard\DashboardContactViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+
+    Proximum\Vimeet\Application\Query\Dashboard\DashboardScanViewQueryHandler:
+        arguments:
+            - '@domain.key_dates.checker.event_open_access_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
 
     query.catalog.filtered_fields_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQueryHandler
@@ -3814,6 +3843,7 @@ services:
     query.order.order_vat_views_by_event_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler
         arguments:
+            - '@repository.billing_info_repository'
             - '@vimeet_infrastructure.repository.order_repository'
             - '@query.order.order_vat_view_query_handler'
         tags:
@@ -4071,6 +4101,8 @@ services:
             - '@query.sheet.detail.participant.phone_validation_status_query_handler'
             - '@query.sheet.detail.participant.availability_confirmation_status_query_handler'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
+            - '@security.impersonate'
+            - '@adapter.event_url_generator'
 
     query.sheet.detail.participant.agenda_confirmation_status_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQueryHandler
@@ -4516,7 +4548,6 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.event_open_access_checker'
-            - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery }
 
@@ -6387,8 +6418,8 @@ services:
             - '%mailer_sender%'
             - '@repository.file_repository'
             - '@datetime'
-            - '@query.tip.tip_translation_view_query_handler'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Application\Command\Planning\PlanningPrintFactory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanning }
 
@@ -6399,6 +6430,14 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreator }
+
+    Proximum\Vimeet\Application\Command\Planning\PlanningPrintFactory:
+        arguments:
+            - '@command.planning.sheet_info_guesser_cache'
+            - '@command.planning.participant_info_guesser_cache'
+            - '@planning.displayer.participant_planning_displayer'
+            - '@sheet.sheet_guesser'
+            - '@query.tip.tip_translation_view_query_handler'
 
     #
     # Order export
@@ -6978,6 +7017,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetUserBadgeByEventQuery }
 
+
+    Proximum\Vimeet\Application\Query\Badge\GetExampleBadgeByEventQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QRCodeGeneratorAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Badge\GetExampleBadgeByEventQuery }
+
     Proximum\Vimeet\Application\Query\Badge\GetUserBadgeAndPlanningByEventQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
@@ -7000,6 +7047,23 @@ services:
     Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler:
         arguments:
             - '@repository.event.extra_parameter_repository'
+
+    #
+    # Translations
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\UpdateTranslationsCommand:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '%kernel.cache_dir%'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\ScheduleUpdateTranslationsCommand:
+        arguments:
+            - '@adapter.third_party.jenkins.build_creator_adapter'
+            - '%jenkins_update_translations_build_names%'
+        tags:
+            - { name: console.command }
 
     #
     # Contact
@@ -7027,6 +7091,16 @@ services:
         tags:
             - { name: tactician.handler, typehints: true }
 
+
+    Proximum\Vimeet\Application\Query\Contact\GetMeViewQueryHandler:
+        arguments:
+            - '@template.participant_info_guesser'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+
     Proximum\Vimeet\Application\Query\Contact\GetContactListViewQueryHandler:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
@@ -7040,5 +7114,24 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    #
+    # Fast checkin
+    #
+    Proximum\Vimeet\Application\Command\Event\Participant\AddFastCheckinHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Command\Event\Participant\EmailCheckerHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, typehints: true }

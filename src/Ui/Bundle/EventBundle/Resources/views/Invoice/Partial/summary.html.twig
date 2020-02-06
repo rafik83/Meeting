@@ -14,7 +14,7 @@
         {{ include('EventBundle:Invoice/Partial:promotion_codes.html.twig', {invoiceView: invoiceView}) }}
 
             <tr>
-                <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.totalExcludeTaxes'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong></td>
+                <td colspan="3" class="text-right"><strong>{{ ('invoice.summary.' ~ (invoiceView.vatApplicable ? 'totalExcludeTaxes' : 'totalIncludeTaxes'))|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong></td>
                 <td class="text-right">{{ invoiceView.total|format_amount|localizedcurrency(invoiceView.currency, invoiceView.eventDefaultLocale) }}</td>
             </tr>
 

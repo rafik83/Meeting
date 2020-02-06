@@ -71,7 +71,10 @@ class UpdateHandler
             $update->visible,
             $update->welcomeEnabled,
             $update->disabledEmailChanging,
-            $update->disabledPasswordChanging
+            $update->disabledPasswordChanging,
+            $update->googleLoginEnabled,
+            $update->linkedinLoginEnabled,
+            $update->accessControlEnabled
         );
 
         $event->getConfiguration()->setVisio($update->visio);

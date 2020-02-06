@@ -1,0 +1,7 @@
+Proximum\Vimeet\Domain\Type\RegistrationPath\View\AnswerView:
+    properties:
+        translatedTitle:
+            - Type: { type: array }
+            - All:
+                - NotBlank: ~
+                - Type: { type: string }

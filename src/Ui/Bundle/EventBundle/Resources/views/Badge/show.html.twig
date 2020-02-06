@@ -1,5 +1,7 @@
 {% extends 'EventBundle::base.html.twig' %}
 
+{% import '@Event/Badge/macros.html.twig' as macro %}
+
 {% block title 'badge.title'|trans %}
 
 {% block container_classes 'no-margin-mobile-container' %}
@@ -8,8 +10,11 @@
     {{ parent() }}
 
     <style type="text/css">
-        .ebadge-logo {
+        .badge-image {
             width: 100%;
+        }
+
+        .badge-image--logo {
             background: linear-gradient(to right, {{ event.configuration.headerLeftColor }} 0%, {{ event.configuration.headerRightColor }} 100%);
         }
 
@@ -29,14 +34,14 @@
             margin-top: 4px;
         }
 
-        .ebadge-content {
+        .badge-content {
             font-size: 20px;
             text-align: center;
             padding: 4px;
             margin: 0 auto;
         }
 
-        .ebadge-content .company-participant {
+        .badge-content .company-participant {
             height: 17mm;
             overflow: hidden;
             color: #2F2F2F;
@@ -49,7 +54,7 @@
             width: 100%;
         }
 
-        .ebadge-content .info-participant {
+        .badge-content .info-participant {
             max-height: 28mm;
             height: 26mm;
             margin: 0;
@@ -60,7 +65,7 @@
             width: 100%;
         }
 
-        .ebadge-content .info-participant .position-participant {
+        .badge-content .info-participant .position-participant {
             color: #1518E7;
             font-size: 20px;
             font-weight: 700;
@@ -74,7 +79,7 @@
             font-size: 12px;
         }
 
-        .ebadge-participation-type {
+        .badge-participationType {
             font-size: 23px;
             height: 24mm;
             text-transform: uppercase;
@@ -84,19 +89,26 @@
             width: 100%;
         }
 
-        .ebadge-participation-type-content {
+        .badge-participationType-content {
             display: table;
             width: 100%;
             height: 100%;
         }
 
-        .ebadge-participation-type-content-text {
+        .badge-participationType-content-text {
             display: table-cell;
             vertical-align: middle;
         }
 
+        @media screen {
+            .quarterSection-container--upRight, .quarterSection-container--downLeft,
+            .quarterSection-container--downRight, .halfXSection-container--right {
+                display: none;
+            }
+        }
+
         @media screen and (max-width: 767px) {
-            .ebadge {
+            .quarterSection {
                 height: 100vh;
             }
 
@@ -109,11 +121,11 @@
                 height: 150px;
             }
 
-            .ebadge-content {
+            .badge-content {
                 position: relative;
             }
 
-            .ebadge-content .company-participant {
+            .badge-content .company-participant {
                 max-height: 17mm;
                 height: auto;
                 position: relative;
@@ -132,14 +144,14 @@
                 padding: 10px 10px 4px 10px;
             }
 
-            .ebadge-content .info-participant {
+            .badge-content .info-participant {
                 max-height: 28mm;
                 height: auto;
                 top: 0;
                 position: relative;
             }
 
-            .ebadge-participation-type {
+            .badge-participationType {
                 bottom: 80px;
                 position: fixed;
                 max-height: 24mm;
@@ -149,15 +161,18 @@
         }
 
         @media screen and (min-width: 768px) {
-            .ebadge-container {
+            .quarterSection-container {
                 margin: 0 auto;
             }
-            .ebadge {
+            .quarterSection {
                 position: relative;
                 margin: auto;
                 width: 105mm;
-                border: 1px solid black;
                 height: 148mm;
+            }
+
+            .ebadge {
+                border: 1px solid black;
             }
 
             .ebadge-qrcode-border {
@@ -169,11 +184,11 @@
                 height: 30mm;
             }
 
-            .ebadge-content {
+            .badge-content {
                 margin-top: 7mm;
             }
 
-            .ebadge-participation-type {
+            .badge-participationType {
                 bottom: 0;
             }
         }
@@ -188,28 +203,23 @@
                 margin: 0;
             }
 
-            .ebadge-container {
+            {% include '@Admin/User/Event/Badge/commonRules.css' %}
+
+            .quarterSection-container {
                 page-break-after: always;
-                clear: both;
-                width: 105mm;
-                height: 148mm;
+            }
+
+            .badge-image {
+                height: auto;
+                width: auto;
+            }
+
+            .badge-image--logo {
+                background: linear-gradient(to right, {{ event.configuration.headerLeftColor }} 0%, {{ event.configuration.headerRightColor }} 100%);
             }
 
             .ebadge {
-                position: relative;
                 font-size: 20px;
-                width: 98mm;
-                height: 141mm;
-                margin: 0;
-            }
-
-            .ebadge-logo {
-                max-width: 100%;
-                max-height: 44mm;
-                margin: 0 auto;
-                text-align: center;
-                display: block;
-                background: linear-gradient(to right, {{ event.configuration.headerLeftColor }} 0%, {{ event.configuration.headerRightColor }} 100%);
             }
 
             .ebadge-qrcode-border {
@@ -221,7 +231,7 @@
                 height: 30mm;
             }
 
-            .ebadge-content {
+            .badge-content {
                 margin-top: 7mm;
             }
         }
@@ -229,49 +239,22 @@
 {% endblock %}
 
 {% block content %}
-    <div class="ebadge-container">
-        <div class="ebadge print-bg">
-            {% if userBadgeByEventView.header %}
-                <img src="{{ userBadgeByEventView.header }}" class="ebadge-logo print-bg" />
-            {% endif %}
-
-            <div class="ebadge-content">
-                <div class="company-participant ft-bold">
-                    {{ userBadgeByEventView.sheetTitle }}
-                </div>
-
-                {% if userBadgeByEventView.qrCodeIdentifier %}
-                    <div class="ebadge-qrcode">
-                        <div class="ebadge-qrcode-border">
-                            <img src="{{ userBadgeByEventView.qrCodeImage }}" /><br>
-                            <div class="ebadge-qrcode-token">ID {{ userBadgeByEventView.qrCodeIdentifier }}</div>
-                        </div>
-                    </div>
-                {% endif %}
-
-                <div class="info-participant">
-                    <div>{{ userBadgeByEventView.firstName }}
-                        <span class="last-name-participant">{{ userBadgeByEventView.lastName }}</span>
-                    </div>
-
-                    <div class="ft-bold highlight position-participant">
-                        {{ userBadgeByEventView.position }}
-                        {% if userBadgeByEventView.country is not empty %}
-                            <br/>{{ userBadgeByEventView.country|upper }}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            {% if userBadgeByEventView.participationTypeOrCategoryLabel %}
-                <div class="ebadge-participation-type ft-bold print-bg" style="background: {{ userBadgeByEventView.footerColor }};">
-                    <div class="ebadge-participation-type-content">
-                        <div class="ebadge-participation-type-content-text" style="color: {{ userBadgeByEventView.footerTextColor }} !important;">
-                            {{ userBadgeByEventView.participationTypeOrCategoryLabel }}
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-    </div>
+    <div class="printZone-fix"></div>
+    {{ macro.write_badge(userBadgeByEventView, 'left') }}
+    {% if userBadgeByEventView.isMirrored %}
+        {{ macro.write_badge(userBadgeByEventView, 'right') }}
+    {% endif %}
+    {% if userBadgeByEventView.leftImage %}
+        {{ macro.write_image(userBadgeByEventView.leftImage, 'left') }}
+    {% endif %}
+    {% if userBadgeByEventView.rightImage %}
+        {{ macro.write_image(userBadgeByEventView.rightImage, 'right', userBadgeByEventView.isRightImageFullHeight) }}
+    {% endif %}
+    {% if launchPrint ?? false %}
+    <script>
+        window.onload = function() {
+            window.print();
+        }
+    </script>
+    {% endif %}
 {% endblock %}

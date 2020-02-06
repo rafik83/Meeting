@@ -78,7 +78,9 @@
     {{ include('AdminBundle:Planning/Print:page.html.twig', {'planning': planning}) }}
 {% endfor %}
 <script>
-    window.print();
+    window.onload = function() {
+        window.print();
+    }
 </script>
 </body>
 </html>

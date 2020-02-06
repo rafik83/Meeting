@@ -21,6 +21,8 @@ use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Domain\Catalog\GetDisplayObjectiveFilter;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
 class CatalogFilterViewsHandler
@@ -89,40 +91,16 @@ class CatalogFilterViewsHandler
                 ->visibleParticipationCategories
                 ->getAllowedCategoriesList($sheet);
 
-            if (empty($visibleCategories)) {
-                return new CatalogFilterViewsResult(
-                    CatalogFilterViewsResult::EMPTY_CATEGORY_OR_TYPE,
-                    $categoryViews,
-                    $typeViews,
-                    $organizationCategoryViews,
-                    $positionViews,
-                    $taggedNomenclatureTagViews,
-                    $this->engine->renderResponse(
-                        'EventBundle:Catalog:no-visible-category.html.twig',
-                        ['event' => $event, 'sheet' => $sheet]
-                    ),
-                    ($this->getDisplayObjectiveFilter)($sheet, $locale)
-                );
+            if (!empty($visibleCategories)) {
+                $categoryViews = $this->queryBus->handle(new CategoryViewQuery($event, $visibleCategories, $locale));
             }
+        }
 
-            $categoryViews = $this->queryBus->handle(new CategoryViewQuery($event, $visibleCategories, $locale));
-        } else {
+        if (empty($visibleCategories)) {
             $visibleTypes = $this->visibleParticipationTypes->getAllowedTypesList($sheet);
 
             if (empty($visibleTypes)) {
-                return new CatalogFilterViewsResult(
-                    CatalogFilterViewsResult::EMPTY_CATEGORY_OR_TYPE,
-                    $categoryViews,
-                    $typeViews,
-                    $organizationCategoryViews,
-                    $positionViews,
-                    $taggedNomenclatureTagViews,
-                    $this->engine->renderResponse(
-                        'EventBundle:Catalog:no-visible-type.html.twig',
-                        ['event' => $event, 'sheet' => $sheet]
-                    ),
-                    ($this->getDisplayObjectiveFilter)($sheet, $locale)
-                );
+                return $this->getEmptyCategoryOrTypeCatalogFilterViewResult($event, $sheet);
             }
 
             $typeViews = $this->queryBus->handle(new TypeViewQuery($event, $visibleTypes, $locale));
@@ -153,6 +131,23 @@ class CatalogFilterViewsHandler
             $taggedNomenclatureTagViews,
             null,
             ($this->getDisplayObjectiveFilter)($sheet, $locale)
+        );
+    }
+
+    public function getEmptyCategoryOrTypeCatalogFilterViewResult(Event $event, Sheet $sheet): CatalogFilterViewsResult
+    {
+        return new CatalogFilterViewsResult(
+            CatalogFilterViewsResult::EMPTY_CATEGORY_OR_TYPE,
+            [],
+            [],
+            [],
+            [],
+            [],
+            $this->engine->renderResponse(
+                'EventBundle:Catalog:no-visible-type.html.twig',
+                ['event' => $event, 'sheet' => $sheet]
+            ),
+            []
         );
     }
 }

@@ -76,7 +76,7 @@ form.badge_configuration.children.conditionedByPackage.label: 'Conditioned by "h
 form.badge_configuration.children.conditionedByStates.label: 'Conditioned by "participation state" (pending, accept, validate, refuse)'
 form.badge_configuration.children.footerColor.label: 'Footer color'
 form.badge_configuration.children.footerTextColor.label: 'Footer text color'
-form.badge_configuration.children.header.help: 'By default the mobile header of the default language'
+form.badge_configuration.children.header.help: "By default the mobile header of the default language\n<br/>The height / width ratio is 30%"
 form.badge_configuration.children.header.label: 'Header logo'
 form.badge_configuration.children.showFirstName.label: 'First name display'
 form.badge_configuration.children.showFooterTypeOrCategory.choices.category: 'Participation category'
@@ -815,7 +815,7 @@ form.sheet_batch.children.printPdf.label: 'Print to PDF'
 form.sheet_batch.children.printPlanning.label: Print
 form.sheet_batch.children.printPlanningAndBadge.label: 'Badge and planning printing'
 form.sheet_batch.children.printPlanningOrderBy.label: 'Export order'
-form.sheet_batch.children.refuse.label: Refuse
+form.sheet_batch.children.refuse.label: Decline
 form.sheet_batch.children.removeCatalog.label: 'remove from the catalog'
 form.sheet_batch.children.validate.label: Submit
 form.sheet_batch.children.validateComment.label: 'Leave a comment (optional)'
@@ -835,7 +835,7 @@ form.sheet_comment.children.commercialStatus.status.log_ok: 'Log ok'
 form.sheet_comment.children.commercialStatus.status.log_without_ticket: 'Log without ticket'
 form.sheet_comment.children.commercialStatus.status.no_interest: 'not interested'
 form.sheet_comment.children.commercialStatus.status.none: 'no commercial status'
-form.sheet_comment.children.commercialStatus.status.refused_by_organizer: 'status refused by the organizer'
+form.sheet_comment.children.commercialStatus.status.refused_by_organizer: 'Access denied by the organizer'
 form.sheet_comment.children.commercialStatus.status.registered: registered
 form.sheet_comment.children.commercialStatus.status.verbal_agreement: 'verbal agreement'
 form.sheet_comment.children.filter.label: Filter
@@ -1073,11 +1073,13 @@ form.type_create.children.areAllSheetParticipantsAssignedToMeeting.label: 'All p
 form.type_create.children.availabilityType.label: 'Availability Management'
 form.type_create.children.canMoveMeeting.label: 'Can move meetings'
 form.type_create.children.canRemoveMeeting.label: 'Can delete meetings'
+form.type_create.children.canScanParticipant.label: 'Can scan another participant'
 form.type_create.children.enableUnavailabilityManagement.label: 'Can manage unavailabilities'
 form.type_create.children.formTemplates.label: Forms
 form.type_create.children.formTemplates.status.draft: Draft
 form.type_create.children.formTemplates.status.published: Oneline
 form.type_create.children.hidden.label: hidden
+form.type_create.children.isPackageRequired.label: 'Package required'
 form.type_create.children.numberOfMeetingsPerPlanning.help: 'If empty, equivalent to the number of time slots during the event'
 form.type_create.children.numberOfMeetingsPerPlanning.label: 'Max. number of meetings per schedule'
 form.type_create.children.package.label: 'Registration package template'
@@ -1123,9 +1125,12 @@ form.type_update.children.areAllSheetParticipantsAssignedToMeeting.label: 'All p
 form.type_update.children.availabilityType.label: 'Availability Management'
 form.type_update.children.canMoveMeeting.label: 'Can move meetings'
 form.type_update.children.canRemoveMeeting.label: 'Can delete meetings'
+form.type_update.children.canScanParticipant.label: 'Can scan another participant'
 form.type_update.children.enableUnavailabilityManagement.label: 'Can manage unavailabilities'
 form.type_update.children.formTemplates.label: Forms
 form.type_update.children.hidden.label: hidden
+form.type_update.children.isPackageRequired.label: 'Package required'
+form.type_update.children.isPaymentRequired.label: 'Payment required'
 form.type_update.children.numberOfMeetingsPerPlanning.help: 'If empty, equivalent to the number of time slots during the event'
 form.type_update.children.numberOfMeetingsPerPlanning.label: 'Maximum number of appointments per schedule'
 form.type_update.children.package.label: 'Registration package template'

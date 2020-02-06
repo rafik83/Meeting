@@ -41,8 +41,8 @@ class UserInfoGuesserTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([
                 Tag::PARTICIPANT_GENDER => 'woman',
-                Tag::PARTICIPANT_FIRSTNAME => 'first Name',
-                Tag::PARTICIPANT_LASTNAME => 'last Name',
+                Tag::PARTICIPANT_FIRSTNAME => 'john-paul',
+                Tag::PARTICIPANT_LASTNAME => 'DOE',
                 // The participant position is not set on purpose
                 Tag::PARTICIPANT_PHONE => 'phone',
                 Tag::PARTICIPANT_MOBILE => 'mobile',
@@ -54,8 +54,8 @@ class UserInfoGuesserTest extends TestCase
 
         $expected = [
             'gender' => 'Woman',
-            'firstName' => 'first Name',
-            'lastName' => 'last Name',
+            'firstName' => 'John-Paul',
+            'lastName' => 'DOE',
             'position' => '',
             'phone' => 'phone',
             'mobile' => 'mobile',

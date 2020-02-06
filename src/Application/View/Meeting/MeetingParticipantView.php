@@ -37,16 +37,14 @@ class MeetingParticipantView
     public $comment;
 
     /**
-     * MeetingParticipantView constructor.
-     *
-     * @param string       $firstname
-     * @param string       $lastname
-     * @param string       $position
-     * @param string       $phone
-     * @param string       $gender
-     * @param              $email
-     * @param int|null $evaluation
-     * @param string $comment
+     * @param string      $firstname
+     * @param string      $lastname
+     * @param string      $position
+     * @param string      $phone
+     * @param string      $gender
+     * @param string      $email
+     * @param string|null $evaluation
+     * @param string|null $comment
      */
     public function __construct($firstname, $lastname, $position, $phone, $gender, $email, $evaluation, $comment)
     {
