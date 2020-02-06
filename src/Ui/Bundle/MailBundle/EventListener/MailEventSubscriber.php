@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareActivateAccountMailView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareChangeOldMailAccountView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareOrderConfirmedMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareParticipantAddedMailView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PreparePreRegisterMailView;
@@ -108,14 +109,6 @@ class MailEventSubscriber implements EventSubscriberInterface
             new ParticipantMailViewQuery(null, $event->getUser())
         );
 
-        $oldMail = new ChangeOldMailAddressMail(
-            $event->getEvent(),
-            $this->sender->generate($event->getEvent()),
-            $event->getUser()->getEmail(),
-            $event->getUser()->getLocale(),
-            $event->getChangeMailToken()->getMail(),
-            $participantMailView
-        );
 
         $newMail = new ChangeNewMailAddressMail(
             $event->getEvent(),
@@ -127,8 +120,22 @@ class MailEventSubscriber implements EventSubscriberInterface
             $participantMailView
         );
 
-        $this->mailer->send($oldMail);
         $this->mailer->send($newMail);
+
+        $oldMail = $this->prepareHandler->handle(
+            new PrepareChangeOldMailAccountView(
+                $event->getEvent(),
+                $event->getUser(),
+                $event->getUser()->getLocale(),
+                $event->getChangeMailToken()
+            )
+        );
+        if (!$oldMail instanceof AbstractMail) {
+            return;
+        }
+
+        $this->mailer->send($oldMail);
+
     }
 
     /**
