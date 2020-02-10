@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class MeetingViewQueryHandler
@@ -30,9 +29,6 @@ class MeetingViewQueryHandler
     /** @var VideoMeetingAccess */
     private $videoMeetingAccess;
 
-    /** @var RequestRepositoryInterface */
-    private $requestRepository;
-
     /** @var LinkedSheetsTitle */
     private $linkedSheetsTitle;
 
@@ -40,20 +36,17 @@ class MeetingViewQueryHandler
      * @param MeetingParticipantViewQueryHandler $participantHandler
      * @param RuleRepositoryInterface            $ruleRepository
      * @param VideoMeetingAccess                 $videoMeetingAccess
-     * @param RequestRepositoryInterface         $requestRepository
      * @param LinkedSheetsTitle                  $linkedSheetsTitle
      */
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
         RuleRepositoryInterface $ruleRepository,
         VideoMeetingAccess $videoMeetingAccess,
-        RequestRepositoryInterface $requestRepository,
         LinkedSheetsTitle $linkedSheetsTitle
     ) {
         $this->participantHandler = $participantHandler;
         $this->ruleRepository = $ruleRepository;
         $this->videoMeetingAccess = $videoMeetingAccess;
-        $this->requestRepository = $requestRepository;
         $this->linkedSheetsTitle = $linkedSheetsTitle;
     }
 

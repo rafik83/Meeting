@@ -3288,6 +3288,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler
         arguments:
             - '@template.participant_info_guesser'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardViewQuery }
     query.participant.import.import_mapping_view_query_handler:
@@ -4192,7 +4194,6 @@ services:
             - '@query.agenda.meeting.meeting_participant_view_query_handler'
             - '@repository.rule_repository'
             - '@components.security.video_meeting_access'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery }

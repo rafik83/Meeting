@@ -44,8 +44,11 @@ class MeetingParticipantViewQueryHandler
      */
     public function handle(MeetingParticipantViewQuery $query)
     {
+        $isDDay = true; // @todo
+        $getCheckinStatus = $isDDay && $query->participant->getSheet()->getEvent()->isAccessControlEnabled();
+
         $card = $this->cardViewQueryHandler->handle(
-            new CardViewQuery($query->participant, $query->locale, false)
+            new CardViewQuery($query->participant, $query->locale, false, $getCheckinStatus)
         );
         $this->ruleApplyer->applyRuleForParticipantCard($card, $query->rules);
 
