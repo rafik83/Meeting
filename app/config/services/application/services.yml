@@ -44,7 +44,6 @@ services:
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\LinkUrlEventActivateNewMailWithCTASubstitution:
         arguments:
             - '@adapter.event_url_generator'
-            - '@components.token.change_mail_token_generator'
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\UserFirstNameSubstitution:
         arguments:

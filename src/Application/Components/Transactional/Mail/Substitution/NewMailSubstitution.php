@@ -17,7 +17,7 @@ class NewMailSubstitution implements SubstituteInterface
 {
     public function substitute(AbstractPrepareMail $prepareMail): string
     {
-        if ($prepareMail instanceof PrepareChangeOldMailAccountView){
+        if ($prepareMail instanceof PrepareChangeOldMailAccountView) {
             return $prepareMail->changeMailToken->getMail();
         }
 

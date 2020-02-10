@@ -32,6 +32,7 @@ class PrepareChangeOldMailAccountMail extends AbstractPrepareMailService
             }
 
             $result = $this->substitutionHandler->handle($prepareMail, $message);
+
             return new ChangeOldMailAdressCustomizedMail(
                 $prepareMail->event,
                 $this->eventSenderGuesser->generate($prepareMail->event),

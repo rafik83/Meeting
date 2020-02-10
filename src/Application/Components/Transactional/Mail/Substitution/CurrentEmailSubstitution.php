@@ -22,6 +22,5 @@ class CurrentEmailSubstitution implements SubstituteInterface
         }
 
         return '';
-
     }
 }

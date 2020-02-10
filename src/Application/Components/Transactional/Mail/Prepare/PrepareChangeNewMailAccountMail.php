@@ -45,7 +45,6 @@ class PrepareChangeNewMailAccountMail extends AbstractPrepareMailService
 
         }
 
-
         $participantMailView = $this->participantMailViewQueryHandler->handle(
             new ParticipantMailViewQuery($prepareMail->sheet, $prepareMail->user)
         );

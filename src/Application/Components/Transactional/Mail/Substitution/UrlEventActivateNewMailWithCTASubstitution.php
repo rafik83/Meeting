@@ -34,10 +34,6 @@ class UrlEventActivateNewMailWithCTASubstitution implements SubstituteInterface
     {
         $link = $this->linkUrlEventActivateNewMailWithCTASubstitution->substitute($prepareMail);
 
-        if (empty($link)) {
-            return '';
-        }
-
         return $this->templating->render('MailBundle:Mail:CTA/cta.html.twig', [
             'label' => 'mail.changeMail.link',
             'link' => $link,
