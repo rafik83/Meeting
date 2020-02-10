@@ -32,6 +32,7 @@ mail.agenda.version_diff_changed.link: 'Accéder à votre planning'
 mail.agenda.version_diff_changed.subject: '[%event%] Votre planning a changé'
 mail.changeMailNew.body: "Bonjour,\n\nVous avez choisi une nouvelle adresse comme nouvel identifiant ViMeet au lieu de %currentEmail%\n\nPour confirmer que vous êtes le propriétaire de cette adresse e-mail, veuillez cliquer sur le lien ci-dessous pour vous connecter à votre espace participant."
 mail.changeMailNew.end: Cordialement
+mail.changeMail.link: 'Confirmez votre changement de mot de passe'
 mail.changeMailNew.subject: 'Votre nouvel identifiant'
 mail.changeMailNew.validate: 'Valider votre nouvel email'
 mail.changeMailOld.body: "Bonjour,\n\nVous venez d'effectuer une demande de changement d'email pour l'email %email%.\n\nConsultez la boite email de cette nouvelle adresse pour valider le changement.\n\nSi vous n'avez pas demandé ce changement, veuillez contacter un administrateur.\n\nCordialement,"

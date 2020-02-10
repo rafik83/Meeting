@@ -127,6 +127,7 @@ final class Constant
             'availableParameters' => [
                 '%urlEventActivateNewMail%',
                 '%urlEventActivateNewMailWithCTA%',
+                '%currentEmail%',
             ],
             'isCustomizableByType' => false,
             'isHidden' => false,

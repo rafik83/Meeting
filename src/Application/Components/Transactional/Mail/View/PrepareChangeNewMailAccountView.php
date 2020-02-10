@@ -38,4 +38,12 @@ class PrepareChangeNewMailAccountView extends AbstractPrepareMail
 
         $this->changeMailToken = $changeMailToken;
     }
+
+    /**
+     * @return ChangeMailToken
+     */
+    public function getChangeMailToken(): ChangeMailToken
+    {
+        return $this->changeMailToken;
+    }
 }
