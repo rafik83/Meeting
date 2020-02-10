@@ -35,7 +35,7 @@ mail.changeMailNew.end: Cordialement
 mail.changeMail.link: 'Confirmer votre changement d''email'
 mail.changeMailNew.subject: 'Votre nouvel identifiant'
 mail.changeMailNew.validate: 'Valider votre nouvel email'
-mail.changeMailOld.body: "Bonjour,\n\nVous venez d'effectuer une demande de changement d'email pour l'email %email%.\n\nConsultez la boite email de cette nouvelle adresse pour valider le changement.\n\nSi vous n'avez pas demandé ce changement, veuillez contacter un administrateur.\n\nCordialement,"
+mail.changeMailOld.body: "Bonjour,\n\nVous venez d'effectuer une demande de changement d'email pour l'email %newMail%.\n\nConsultez la boite email de cette nouvelle adresse pour valider le changement.\n\nSi vous n'avez pas demandé ce changement, veuillez contacter un administrateur.\n\nCordialement,"
 mail.changeMailOld.subject: 'Demande de changement d''email'
 mail.completeProfile.body: "Vous avez été invité en tant que participant pour l'événement %event%.\nPour y accéder, cliquer sur le lien suivant et entrer votre mot de passe pour compléter votre profil participant."
 mail.completeProfile.end: 'Cordialement,'
