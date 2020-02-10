@@ -27,7 +27,7 @@ class ChangeNewMailAdressCustomizedMail extends AbstractCustomizedMail
     protected $sendToEmailTeam = false;
 
     /**
-     * @var ChangeMailToken
+     * @var string
      */
     protected $token;
 
@@ -36,7 +36,7 @@ class ChangeNewMailAdressCustomizedMail extends AbstractCustomizedMail
         string $sender,
         string $receiver,
         string $locale,
-        ChangeMailToken $token,
+        string $token,
         string $subject,
         string $content
     ) {

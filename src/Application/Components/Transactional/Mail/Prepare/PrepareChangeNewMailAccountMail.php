@@ -38,7 +38,7 @@ class PrepareChangeNewMailAccountMail extends AbstractPrepareMailService
                 $this->eventSenderGuesser->generate($prepareMail->event),
                 $prepareMail->changeMailToken->getMail(),
                 $prepareMail->locale,
-                $prepareMail->changeMailToken,
+                $prepareMail->changeMailToken->getToken(),
                 $result->subject,
                 $result->content
             );
@@ -54,7 +54,7 @@ class PrepareChangeNewMailAccountMail extends AbstractPrepareMailService
             $this->eventSenderGuesser->generate($prepareMail->event),
             $prepareMail->changeMailToken->getMail(),
             $prepareMail->locale,
-            $prepareMail->changeMailToken,
+            $prepareMail->changeMailToken->getToken(),
             $prepareMail->user,
             $participantMailView
         );
