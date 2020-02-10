@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Application\View\Participant\CardView;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Rule\Applyer;
@@ -37,13 +38,20 @@ class MeetingParticipantViewQueryHandlerTest extends TestCase
 
         $cardViewQueryHandler = $this->prophesize(CardViewQueryHandler::class);
         $cardViewQueryHandler
-            ->handle(new CardViewQuery($participant, 'fr', false))
+            ->handle(new CardViewQuery($participant, 'fr', false, false))
             ->shouldBeCalled()
             ->willReturn($cardView);
         $ruleApplyer          = $this->prophesize(Applyer::class);
         $ruleApplyer->applyRuleForParticipantCard($cardView, $rules)->shouldBeCalled();
 
-        $participantHandler = new MeetingParticipantViewQueryHandler($ruleApplyer->reveal(), $cardViewQueryHandler->reveal());
+        $dDayGuesser = $this->prophesize(DDayGuesser::class);
+        $dDayGuesser->isItDDay($event)->shouldBeCalled()->willReturn(true);
+
+        $participantHandler = new MeetingParticipantViewQueryHandler(
+            $ruleApplyer->reveal(),
+            $cardViewQueryHandler->reveal(),
+            $dDayGuesser->reveal()
+        );
         $result = $participantHandler->handle(new MeetingParticipantViewQuery($participant, $rules, 'fr'));
 
         $expected = new MeetingParticipantView($cardView);

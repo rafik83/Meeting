@@ -136,13 +136,10 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
-        $canSeeSheet = new CanSeeSheet($ruleRepository->reveal(), $requestRepository->reveal());
-
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
             $videoMeetingAccess->reveal(),
-            $requestRepository->reveal(),
             $linkedSheetsTitle
         );
 
@@ -248,13 +245,10 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
-        $canSeeSheet = new CanSeeSheet($ruleRepository->reveal(), $requestRepository->reveal());
-
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
             $videoMeetingAccess->reveal(),
-            $requestRepository->reveal(),
             $linkedSheetsTitle
         );
 

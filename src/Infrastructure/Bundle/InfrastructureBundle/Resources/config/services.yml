@@ -4187,6 +4187,7 @@ services:
         arguments:
             - '@domain.rule.applyer'
             - '@query.participant.card_view_query_handler'
+            - '@domain.event.day.dday_guesser'
 
     query.agenda.meeting_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler
