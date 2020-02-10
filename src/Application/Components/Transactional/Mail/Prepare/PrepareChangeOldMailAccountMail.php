@@ -26,7 +26,6 @@ class PrepareChangeOldMailAccountMail extends AbstractPrepareMailService
             $prepareMail->type
         );
 
-
         if ($message instanceof Message) {
             if (!$message->isEnabled()) {
                 return null;
@@ -43,7 +42,6 @@ class PrepareChangeOldMailAccountMail extends AbstractPrepareMailService
                 $result->content
             );
         }
-
 
         $participantMailView = $this->participantMailViewQueryHandler->handle(
             new ParticipantMailViewQuery($prepareMail->sheet, $prepareMail->user)
