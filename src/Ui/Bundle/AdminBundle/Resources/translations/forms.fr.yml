@@ -1187,6 +1187,8 @@ form.type_create.children.formTemplates.status.published: publié
 form.type_create.children.hidden.label: Caché
 form.type_create.children.isPackageRequired.label: 'Forfait requis'
 form.type_create.children.numberMaxOfHappeningsPerUser.label: 'Nombre de conférences maximum par participant'
+form.type_create.children.numberMaxOfMeetingsPerSheet.help: 'Si vide, est défini en fonction du nombre de plannings, de participants et de créneaux disponibles'
+form.type_create.children.numberMaxOfMeetingsPerSheet.label: 'Nombre de RDV max par fiche'
 form.type_create.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_create.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV max par planning'
 form.type_create.children.package.label: 'Template de forfait de participation'
@@ -1240,6 +1242,8 @@ form.type_update.children.hidden.label: Caché
 form.type_update.children.isPackageRequired.label: 'Forfait requis'
 form.type_update.children.isPaymentRequired.label: 'Règlement requis'
 form.type_update.children.numberMaxOfHappeningsPerUser.label: 'Nombre de conférences maximum par participant'
+form.type_update.children.numberMaxOfMeetingsPerSheet.help: 'Si vide, est défini en fonction du nombre de plannings, de participants et de créneaux disponibles'
+form.type_update.children.numberMaxOfMeetingsPerSheet.label: 'Nombre de RDV max par fiche'
 form.type_update.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_update.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV par planning'
 form.type_update.children.package.label: 'Template de forfait de participation'

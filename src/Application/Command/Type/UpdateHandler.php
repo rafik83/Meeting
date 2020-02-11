@@ -75,7 +75,8 @@ class UpdateHandler
             $update->isPackageRequired,
             $update->isPaymentRequired,
             $update->priorityMeetingRequestsNumber,
-            $update->numberMaxOfHappeningsPerUser
+            $update->numberMaxOfHappeningsPerUser,
+            $update->numberMaxOfMeetingsPerSheet
         );
         $type->setHidden($update->hidden);
 

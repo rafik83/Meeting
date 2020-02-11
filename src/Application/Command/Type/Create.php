@@ -83,6 +83,9 @@ class Create implements Command
     /** @var int|null */
     public $numberMaxOfHappeningsPerUser;
 
+    /** @var int|null */
+    public $numberMaxOfMeetingsPerSheet;
+
     /**
      * @param Event  $event
      * @param string $locale
