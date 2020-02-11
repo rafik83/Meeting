@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
+namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
 
 use Proximum\Vimeet\Application\Components\Mail\AbstractCustomizedMail;
 use Proximum\Vimeet\Domain\Model\Event;

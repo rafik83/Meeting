@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareChangeNewMailAccountView;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
 use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ChangeNewMailAdressCustomizedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAdressCustomizedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
 
 class PrepareChangeNewMailAccountMail extends AbstractPrepareMailService
