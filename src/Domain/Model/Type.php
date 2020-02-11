@@ -106,8 +106,8 @@ class Type implements WhoInterface, TypeInterface
     /** @var integer */
     private $numberMaxOfHappeningsPerUser = null;
 
-    /** @var integer */
-    private $numberMaxOfMeetingsPerSheet = null;
+    /** @var int|null */
+    private $numberMaxOfMeetingsPerSheet;
 
     public function __construct(Event $event)
     {
@@ -524,7 +524,7 @@ class Type implements WhoInterface, TypeInterface
         return $this->numberMaxOfHappeningsPerUser;
     }
 
-    public function getNumberMaxOfMeetingsPerSheet()
+    public function getNumberMaxOfMeetingsPerSheet(): ?int
     {
         return $this->numberMaxOfMeetingsPerSheet;
     }
