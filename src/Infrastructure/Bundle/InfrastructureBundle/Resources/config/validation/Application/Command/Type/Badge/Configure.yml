@@ -14,4 +14,5 @@ Proximum\Vimeet\Application\Command\Type\Badge\Configure:
                 message: validators.hexadecimal
         header:
             - Image:
+                maxSize: 500k
                 mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
