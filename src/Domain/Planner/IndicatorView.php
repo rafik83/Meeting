@@ -111,6 +111,13 @@ class IndicatorView
      */
     public $numberOfMeetingsPerPlanning;
 
+    /**
+     * Number of Meetings per Sheet
+     *
+     * @var int|null
+     */
+    public $numberMaxOfMeetingsPerSheet;
+
     public function __construct(
         int $slotTotal,
         int $participantsCount,
@@ -119,7 +126,8 @@ class IndicatorView
         int $meetingRequestsCount,
         int $pendingPropositionCount,
         int $massUnavailabilitiesCount,
-        ?int $numberOfMeetingsPerPlanning
+        ?int $numberOfMeetingsPerPlanning,
+        ?int $numberMaxOfMeetingsPerSheet
     ) {
         if (0 === $participantsCount) {
             throw new \InvalidArgumentException('ParticipantsCount must be > 0');
@@ -133,6 +141,7 @@ class IndicatorView
         $this->pendingPropositionCount = $pendingPropositionCount;
         $this->massUnavailabilitiesCount = $massUnavailabilitiesCount;
         $this->numberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning;
+        $this->numberMaxOfMeetingsPerSheet = $numberMaxOfMeetingsPerSheet;
 
         $this->slotCount = $slotTotal * $sheetsPlanningQuantity;
         $this->slotsParticipantsCount = $slotTotal * $participantsCount;
@@ -143,10 +152,18 @@ class IndicatorView
             ? min($numberOfMeetingsPerPlanning, $availableSlotsPerParticipant)
             : $availableSlotsPerParticipant
         ;
+
+        $maxIntermediateMeetingAvailable = $sheetsPlanningQuantity * $minNumberOfMeetingsPerPlanning;
         $this->maxMeetingAvailable = max(
             0,
-            $sheetsPlanningQuantity * $minNumberOfMeetingsPerPlanning
+            $maxIntermediateMeetingAvailable
         );
+        if ($numberMaxOfMeetingsPerSheet) {
+            $this->maxMeetingAvailable = min(
+                $numberMaxOfMeetingsPerSheet,
+                $maxIntermediateMeetingAvailable
+            );
+        }
 
         $this->availableSlotsCount = $this->slotsParticipantsCount - $unavailabilitiesCount;
         $this->possibleMeetingsQuantity = max(
