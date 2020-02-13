@@ -184,6 +184,10 @@ services:
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda\SheetAgendaAction:
+        arguments:
+            - '@templating.engine.twig'
+
     #
     # Badge
     #
