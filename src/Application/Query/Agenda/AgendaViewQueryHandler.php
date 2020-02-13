@@ -165,6 +165,10 @@ class AgendaViewQueryHandler
                     ->findByUser($participant->getUser(), $query->event, true);
             }
 
+            if ($query->allSheet) {
+                // @todo get meetingSLots
+            }
+
             if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
                 $meetings = $query->allSheet
                     ? $this->meetingRepository->findBySheet($query->sheet)

@@ -58,7 +58,12 @@ class SheetAgendaAction
         return new Response(
             $this->engine->render(
                 '@Event/Agenda/sheet_agenda.html.twig',
-                ['event' => $event, 'sheet' => $sheet, 'agenda' => $agenda]
+                [
+                    'event' => $event,
+                    'sheet' => $sheet,
+                    'agenda' => $agenda,
+                    'isVisio' => false //@todo
+                ]
             )
         );
     }
