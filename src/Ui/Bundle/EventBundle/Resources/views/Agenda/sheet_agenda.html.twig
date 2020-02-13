@@ -5,5 +5,81 @@
 {% block container_classes 'full-mobile-container' %}
 
 {% block content %}
-    Hello
+    {{ dump(agenda) }}
+
+    <div class="agenda-container">
+        <div class="agenda">
+        <header class="agenda-head">
+            <p>
+                <i class="icon icon-Calendrier"></i>
+                <span class="agenda-date" data-date="10/02/20 10:20:00">
+                    Lundi 10 février 2020
+                </span>
+            </p>
+        </header>
+
+        <table class="table table-bordered table-striped table-condensed">
+            <tr>
+                <td style="width: 1%">10h20</td>
+                <td>
+                    <div class="has-details meety">
+                        <header style=" background: rgba(0, 0, 0, 0) linear-gradient(to right, rgb(0, 51, 160) 0%, rgb(36, 81, 176) 100%) repeat scroll 0% 0% !important">
+                            <a class="content col-xs-12" href="#" style="color: white">
+                                <span class="prefix"><i class="icon icon-RDV"></i></span>
+                                <p class="title">
+                                    <b>E21</b>
+                                    &nbsp;-&nbsp;
+                                    <b>Carnot Irstea- Eaux usées et déchets</b>
+                                    &nbsp;-&nbsp;
+                                    NEREUS
+                                </p>
+                            </a>
+                        </header>
+                    </div>
+
+                    <div class="has-details meety" style="padding-top: 2px">
+                        <header style=" background: rgba(0, 0, 0, 0) linear-gradient(to right, rgb(0, 51, 160) 0%, rgb(36, 81, 176) 100%) repeat scroll 0% 0% !important;">
+                            <a class="content col-xs-12" href="#" style="color: white">
+                                <span class="prefix"><i class="icon icon-RDV"></i></span>
+                                <p class="title">
+                                    <b>E21</b>
+                                    &nbsp;-&nbsp;
+                                    <b>Carnot Irstea- Eaux usées et déchets</b>
+                                    &nbsp;-&nbsp;
+                                    NEREUS
+                                </p>
+                            </a>
+                        </header>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 1%">11h00</td>
+                <td>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 1%">10h20</td>
+                <td>
+                    <div class="has-details meety">
+                        <header style=" background: rgba(0, 0, 0, 0) linear-gradient(to right, rgb(0, 51, 160) 0%, rgb(36, 81, 176) 100%) !important;">
+                            <a class="content col-xs-12" href="#" style="color: white">
+                                <span class="prefix"><i class="icon icon-RDV"></i></span>
+                                <p class="title">
+                                    <b>E21</b>
+                                    &nbsp;-&nbsp;
+                                    <b>Carnot Irstea- Eaux usées et déchets</b>
+                                    &nbsp;-&nbsp;
+                                    NEREUS
+                                </p>
+                            </a>
+                        </header>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </div>
 {% endblock %}

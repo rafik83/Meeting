@@ -149,22 +149,27 @@ class AgendaViewQueryHandler
         $masses                  = [];
 
         if ($query->sheet->attend()) {
-            $unavailabilities = $this->unavailabilityRepository->findByUserAndEvent(
-                $participant->getUser(),
-                $query->event
-            );
+            if (!$query->allSheet) {
+                $unavailabilities = $this->unavailabilityRepository->findByUserAndEvent(
+                    $participant->getUser(),
+                    $query->event
+                );
 
-            $masses = $this->massUnavailabilityRepository->findByTypes(
-                $this->getParticipantTypes->handle($participant),
-                $query->locale
-            );
+                $masses = $this->massUnavailabilityRepository->findByTypes(
+                    $this->getParticipantTypes->handle($participant),
+                    $query->locale
+                );
 
-            $happeningParticipations = $this
-                ->happeningParticipationRepository
-                ->findByUser($participant->getUser(), $query->event, true);
+                $happeningParticipations = $this
+                    ->happeningParticipationRepository
+                    ->findByUser($participant->getUser(), $query->event, true);
+            }
 
             if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
-                $meetings = $this->meetingRepository->findByUserAndEvent($participant->getUser(), $query->event);
+                $meetings = $query->allSheet
+                    ? $this->meetingRepository->findBySheet($query->sheet)
+                    : $this->meetingRepository->findByUserAndEvent($participant->getUser(), $query->event)
+                ;
             }
         }
 

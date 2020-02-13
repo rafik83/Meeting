@@ -186,7 +186,9 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda\SheetAgendaAction:
         arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating.engine.twig'
+            - '@adapter.router'
 
     #
     # Badge
