@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2011 - Prioritize meeting request before planning
+- VIMEET-2047 - Add number max of meetings per sheet in participation type parameter
 
 ## [2.17.0] - 2019-01-31
 ### Added
