@@ -56,6 +56,8 @@ class SheetIndicatorsViewQueryHandler
     {
         $sheet = $query->sheet;
 
+        $numberMaxMeetingsPerSheet = $sheet->getType()->getNumberMaxOfMeetingsPerSheet();
+
         // Count the request per sheet
         $request = $this->requestRepository->countRequestSentBySheet($sheet);
 
@@ -65,7 +67,7 @@ class SheetIndicatorsViewQueryHandler
         $indicator            = $this->indicatorCalculator->getIndicator($sheet);
         $meetingRequestsCount = $indicator->meetingRequestsCount;
         $slotCount            = $indicator->slotCount;
-        $usableSlots          = $indicator->usableSlots;
+        $usableSlots          = $numberMaxMeetingsPerSheet ? min($indicator->usableSlots, $sheet->getType()->getNumberMaxOfMeetingsPerSheet()) : $indicator->usableSlots;
         $pendingProposition   = $indicator->pendingPropositionCount;
         $placedMeetingsNumber = $this->meetingRepository->countMeetingsOfSheet($sheet);
 
