@@ -170,6 +170,6 @@ class IndicatorView
             0,
             min($meetingRequestsCount, $this->slotCount, $this->availableSlotsCount, $this->maxMeetingAvailable)
         );
-        $this->usableSlots = max(0, min($this->slotCount, $this->availableSlotsCount));
+        $numberMaxOfMeetingsPerSheet ? $this->usableSlots = max(0, min($this->slotCount, $this->availableSlotsCount, $numberMaxOfMeetingsPerSheet)) : $this->usableSlots = max(0, min($this->slotCount, $this->availableSlotsCount));
     }
 }
