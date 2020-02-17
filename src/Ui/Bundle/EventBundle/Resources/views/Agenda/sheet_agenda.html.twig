@@ -12,31 +12,37 @@
                 <header class="agenda-head">
                     <p>
                         <i class="icon icon-Calendrier"></i>
-                        <span class="agenda-date" data-date="{{ day.day|date('d/m/y h:i:s') }}">
-                                {{ day.day|localizeddate('full', 'none', app.request.locale, agenda.timezone)|capitalize }}
-                            </span>
+                        <span class="agenda-date">
+                            {{ day.day|localizeddate('full', 'none', app.request.locale, agenda.timezone)|capitalize }}
+                        </span>
                     </p>
                 </header>
 
-                <table class="table table-bordered table-striped table-condensed">
-                    <tr>
-                        <td style="width: 1%">10h20</td> {# todo: show meetingSlots begin Hour:Minute #}
-                        <td>
-                            <div class="meets">
-                                {% for meeting in day.meetings %}
-                                    {{ include('EventBundle:Agenda:meeting.html.twig', {
-                                        'isVisio': isVisio,
-                                        'sheetId': agenda.sheet.id,
-                                        'participant': agenda.participant,
-                                        'participantId': agenda.participant.id,
-                                        'meeting': meeting,
-                                        'canMoveMeeting': agenda.canMoveMeeting,
-                                        'canRemoveMeeting' : agenda.canRemoveMeeting
-                                    }) }}
-                                {% endfor %}
-                            </div>
-                        </td>
-                    </tr>
+                {#
+                {% for meeting in day.meetings %}
+                    {{ include('EventBundle:Agenda:meeting.html.twig', {
+                        'isVisio': isVisio,
+                        'sheetId': agenda.sheet.id,
+                        'participant': agenda.participant,
+                        'participantId': agenda.participant.id,
+                        'meeting': meeting,
+                        'canMoveMeeting': agenda.canMoveMeeting,
+                        'canRemoveMeeting' : agenda.canRemoveMeeting
+                    }) }}
+                {% endfor %}
+                #}
+
+                <table class="table table-bordered table-striped table-condensed table-hover">
+                    {% for meetingSlot in day.meetingSlots %}
+                        <tr>
+                            <td style="width: 1%">{{ meetingSlot.begin|date('H:i', agenda.timezone) }}</td>
+                            <td>
+                                <div class="meets">
+                                    Hello
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </table>
             {% endfor %}
         </div>

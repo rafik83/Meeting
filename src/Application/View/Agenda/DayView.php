@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\View\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class DayView
 {
@@ -35,12 +36,13 @@ class DayView
     /** @var MeetingView[] */
     public $meetings;
 
+    /** @var MeetingSlot[] */
+    public $meetingSlots;
+
     /** @var CancelAttendanceUnavailabilityView|null */
     public $cancelAttendanceUnavailabilityView;
 
-    /**
-     * @var AvailableSlotView[]
-     */
+    /** @var AvailableSlotView[] */
     public $availableSlotViews;
 
     /** @var bool */
@@ -54,6 +56,7 @@ class DayView
      * @param UnavailabilityView[]                    $unavailabilities
      * @param MassUnavailabilityView[]                $masses
      * @param MeetingView[]                           $meetings
+     * @param MeetingSlot[]                           $meetingSlots
      * @param array                                   $availableSlotViews
      * @param CancelAttendanceUnavailabilityView|null $cancelAttendanceUnavailabilityView
      * @param bool                                    $isUnavailableForThisDay
@@ -66,6 +69,7 @@ class DayView
         array $unavailabilities,
         array $masses,
         array $meetings,
+        array $meetingSlots,
         array $availableSlotViews,
         ?CancelAttendanceUnavailabilityView $cancelAttendanceUnavailabilityView = null,
         $isUnavailableForThisDay = false
@@ -77,6 +81,7 @@ class DayView
         $this->unavailabilities = $unavailabilities;
         $this->masses = $masses;
         $this->meetings = $meetings;
+        $this->meetingSlots = $meetingSlots;
         $this->cancelAttendanceUnavailabilityView = $cancelAttendanceUnavailabilityView;
         $this->availableSlotViews = $availableSlotViews;
         $this->isUnavailableForThisDay = $isUnavailableForThisDay;

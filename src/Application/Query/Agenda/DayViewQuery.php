@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
@@ -55,11 +56,15 @@ class DayViewQuery
     /** @var bool */
     public $isUserParticipantMultipleSheet;
 
+    /** @var array|MeetingSlot[] */
+    public $meetingSlots;
+
     /**
      * @param HappeningParticipation[] $happenings
      * @param Unavailability[]         $unavailabilities
      * @param Mass[]                   $masses
      * @param Meeting[]                $meetings
+     * @param MeetingSlot[]            $meetingSlots
      */
     public function __construct(
         TimeRangeView $day,
@@ -67,12 +72,13 @@ class DayViewQuery
         Event $event,
         Participant $participant,
         User $userViewing,
-        $isUserParticipantMultipleSheet,
-        $locale,
+        bool $isUserParticipantMultipleSheet,
+        string $locale,
         array $happenings = [],
         array $unavailabilities = [],
         array $masses = [],
-        array $meetings = []
+        array $meetings = [],
+        array $meetingSlots = []
     ) {
         $this->day = $day;
         $this->currentSheet = $currentSheet;
@@ -85,6 +91,7 @@ class DayViewQuery
         $this->unavailabilities = $unavailabilities;
         $this->masses = $masses;
         $this->meetings = $meetings;
+        $this->meetingSlots = $meetingSlots;
     }
 
     /**

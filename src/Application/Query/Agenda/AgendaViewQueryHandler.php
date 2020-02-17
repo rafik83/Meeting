@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
@@ -59,6 +60,9 @@ class AgendaViewQueryHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /** @var MeetingSlotRepositoryInterface */
+    private $meetingSlotRepository;
+
     /** @var ValidationRequiredChecker */
     private $validationRequiredChecker;
 
@@ -86,6 +90,7 @@ class AgendaViewQueryHandler
         MassRepositoryInterface $massUnavailabilityRepository,
         ParticipantViewQueryHandler $participantViewQueryHandler,
         MeetingRepositoryInterface $meetingRepository,
+        MeetingSlotRepositoryInterface $meetingSlotRepository,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         ValidationRequiredChecker $validationRequiredChecker,
         ExtraDataRepository $extraDataRepository,
@@ -102,6 +107,7 @@ class AgendaViewQueryHandler
         $this->massUnavailabilityRepository = $massUnavailabilityRepository;
         $this->participantViewQueryHandler = $participantViewQueryHandler;
         $this->meetingRepository = $meetingRepository;
+        $this->meetingSlotRepository = $meetingSlotRepository;
         $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
         $this->validationRequiredChecker = $validationRequiredChecker;
         $this->extraDataRepository = $extraDataRepository;
@@ -144,10 +150,11 @@ class AgendaViewQueryHandler
             return new AgendaView([], $timezone, $sheet, $participant, $isUserAloneParticipant, $participants, false, $canMoveMeeting, $canRemoveMeeting);
         }
 
-        $unavailabilities        = [];
-        $meetings                = [];
+        $unavailabilities = [];
+        $meetings = [];
         $happeningParticipations = [];
-        $masses                  = [];
+        $masses = [];
+        $meetingSlots = [];
 
         if ($query->sheet->attend()) {
             if (!$query->allSheet) {
@@ -167,7 +174,7 @@ class AgendaViewQueryHandler
             }
 
             if ($query->allSheet) {
-                // @todo get meetingSLots
+                $meetingSlots = $this->meetingSlotRepository->findByEvent($query->event);
             }
 
             if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
@@ -191,7 +198,8 @@ class AgendaViewQueryHandler
                     $happeningParticipations,
                     $unavailabilities,
                     $masses,
-                    $meetings
+                    $meetings,
+                    $meetingSlots
                 )
             );
         }

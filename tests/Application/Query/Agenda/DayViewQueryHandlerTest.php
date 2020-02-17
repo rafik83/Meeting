@@ -210,6 +210,7 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->unavailabilityView],
             [$this->massView],
             [],
+            [],
             []
         );
 
@@ -319,6 +320,7 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->participation1, $this->participation2],
             [$this->unavailability],
             [$this->mass],
+            [],
             []
         ));
 
@@ -347,6 +349,11 @@ class DayViewQueryHandlerTest extends TestCase
             []
         );
         $availableSlotViews = new AvailableSlotView(1, $this->beginHappening1, $this->endHappening2);
+        $meetingSlot = new MeetingSlot(
+            $this->event,
+            new \DateTime('2016-10-12 11:00:00'),
+            new \DateTime('2016-10-12 11:20:00')
+        );
 
         $expected = new DayView(
             $this->startTime,
@@ -356,6 +363,7 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->unavailabilityView],
             [$this->massView],
             [$meetingView],
+            [$meetingSlot],
             [$availableSlotViews],
             null
         );
@@ -432,7 +440,8 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->participation1, $this->participation2],
             [$this->unavailability],
             [$this->mass],
-            [$meeting]
+            [$meeting],
+            [$meetingSlot]
         ));
 
         $this->assertEquals($expected, $result);
@@ -486,6 +495,7 @@ class DayViewQueryHandlerTest extends TestCase
             [],
             [],
             [],
+            [],
             new CancelAttendanceUnavailabilityView($startTime, $endTime, 'Europe/Paris')
         );
 
@@ -530,7 +540,8 @@ class DayViewQueryHandlerTest extends TestCase
             'fr',
             [$participation1, $participation2],
             [$unavailability],
-            [$mass]
+            [$mass],
+            []
         ));
         $this->assertEquals($expected, $result);
     }

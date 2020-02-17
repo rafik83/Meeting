@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\DayViewQuery;
@@ -27,6 +28,7 @@ use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
@@ -35,6 +37,7 @@ use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
@@ -54,10 +57,14 @@ class AgendaViewQueryHandlerTest extends TestCase
     /** @var ExtraDataRepository */
     private $extraDataRepository;
 
+    /** @var ObjectProphecy|MeetingSlotRepositoryInterface */
+    private $meetingSlotRepository;
+
     public function setUp()
     {
         $this->validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
         $this->extraDataRepository = $this->prophesize(ExtraDataRepository::class);
+        $this->meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
     }
 
     public function testHandle()
@@ -115,7 +122,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $massUnavailabilityRepository->findByTypes([$sheet->getType()], 'fr')->shouldBeCalled()->willReturn([$mass]);
 
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
-        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], []);
+        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], [], []);
         $dayViewQueryHandler
             ->handle(new DayViewQuery($day, $sheet, $event, $participant, $user, true, 'fr', [$happeningParticipation], [$unavailability], [$mass]))
             ->shouldBeCalled()
@@ -157,6 +164,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             $massUnavailabilityRepository->reveal(),
             $participantHandler->reveal(),
             $meetingRepository->reveal(),
+            $this->meetingSlotRepository->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $this->validationRequiredChecker->reveal(),
             $this->extraDataRepository->reveal(),
@@ -231,7 +239,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $massUnavailabilityRepository->findByTypes([$sheet->getType()], 'fr')->shouldBeCalled()->willReturn([$mass]);
 
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
-        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], []);
+        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], [], []);
         $dayViewQueryHandler
             ->handle(new DayViewQuery($day, $sheet, $event, $participant2, $user, true, 'fr', [$happeningParticipation], [$unavailability], [$mass], []))
             ->shouldBeCalled()
@@ -281,6 +289,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             $massUnavailabilityRepository->reveal(),
             $participantHandler->reveal(),
             $meetingRepository->reveal(),
+            $this->meetingSlotRepository->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $this->validationRequiredChecker->reveal(),
             $this->extraDataRepository->reveal(),
@@ -344,6 +353,11 @@ class AgendaViewQueryHandlerTest extends TestCase
         $massUnavailabilityRepository = $this->prophesize(MassRepositoryInterface::class);
         $massUnavailabilityRepository->findByTypes([$sheet->getType()], 'fr')->shouldNotBeCalled();
 
+        $meetingSlot1 = $this->prophesize(MeetingSlot::class);
+        $meetingSlot2 = $this->prophesize(MeetingSlot::class);
+        $meetingSlots = [$meetingSlot1->reveal(), $meetingSlot2->reveal()];
+        $this->meetingSlotRepository->findByEvent($event)->shouldBeCalled()->willReturn($meetingSlots);
+
         $meeting1 = $this->prophesize(Meeting::class);
         $meeting1->getId()->shouldBeCalled()->willReturn(111);
         $meeting2 = $this->prophesize(Meeting::class);
@@ -358,6 +372,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             [],
             [],
             [111 => $meeting1->reveal(), 222 => $meeting2->reveal()],
+            $meetingSlots,
             []
         );
         $dayViewQueryHandler
@@ -373,7 +388,8 @@ class AgendaViewQueryHandlerTest extends TestCase
                     [],
                     [],
                     [],
-                    [111 => $meeting1->reveal(), 222 => $meeting2->reveal()]
+                    [111 => $meeting1->reveal(), 222 => $meeting2->reveal()],
+                    $meetingSlots
                 )
             )
             ->shouldBeCalled()
@@ -421,6 +437,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             $massUnavailabilityRepository->reveal(),
             $participantHandler->reveal(),
             $meetingRepository->reveal(),
+            $this->meetingSlotRepository->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $this->validationRequiredChecker->reveal(),
             $this->extraDataRepository->reveal(),

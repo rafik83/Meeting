@@ -4227,6 +4227,7 @@ services:
             - '@repository.unavailability.mass_repository'
             - '@query.agenda.participant_view_query_handler'
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.user.agenda.phone.validation_required_checker'
             - '@repository.user.event.extra_data_repository'
