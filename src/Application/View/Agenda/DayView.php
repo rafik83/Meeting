@@ -15,6 +15,8 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class DayView
 {
+    private const MEETING_SLOT_DATE_HOUR_INDEX = 'Y-m-d H:i:s';
+
     /** @var \DateTimeInterface */
     public $begin;
 
@@ -47,6 +49,9 @@ class DayView
 
     /** @var bool */
     public $isUnavailableForThisDay;
+
+    /** @var MeetingView[] */
+    private $meetingViewsByDateBegin;
 
     /**
      * @param \DateTimeInterface                      $begin
@@ -85,6 +90,18 @@ class DayView
         $this->cancelAttendanceUnavailabilityView = $cancelAttendanceUnavailabilityView;
         $this->availableSlotViews = $availableSlotViews;
         $this->isUnavailableForThisDay = $isUnavailableForThisDay;
+
+        $this->meetingViewsByDateBegin = [];
+
+        foreach ($meetings as $meeting) {
+            $index = $meeting->getBegin()->format(self::MEETING_SLOT_DATE_HOUR_INDEX);
+
+            if (!isset($this->meetingViewsByDateBegin[$index])) {
+                $this->meetingViewsByDateBegin[$index] = [];
+            }
+
+            $this->meetingViewsByDateBegin[$index][] = $meeting;
+        }
     }
 
     /**
@@ -122,5 +139,17 @@ class DayView
     public function isSheetAttendingTheEvent(): bool
     {
         return null === $this->cancelAttendanceUnavailabilityView;
+    }
+
+    /**
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return MeetingView[]
+     */
+    public function getMeetingsBySlot(MeetingSlot $meetingSlot): array
+    {
+        $index = $meetingSlot->getBegin()->format(self::MEETING_SLOT_DATE_HOUR_INDEX);
+
+        return $this->meetingViewsByDateBegin[$index] ?? [];
     }
 }

@@ -8,7 +8,6 @@
     <div class="agenda-container">
         <div class="agenda">
             {% for day in agenda.days %}
-                {{ dump(day) }}
                 <header class="agenda-head">
                     <p>
                         <i class="icon icon-Calendrier"></i>
@@ -18,27 +17,23 @@
                     </p>
                 </header>
 
-                {#
-                {% for meeting in day.meetings %}
-                    {{ include('EventBundle:Agenda:meeting.html.twig', {
-                        'isVisio': isVisio,
-                        'sheetId': agenda.sheet.id,
-                        'participant': agenda.participant,
-                        'participantId': agenda.participant.id,
-                        'meeting': meeting,
-                        'canMoveMeeting': agenda.canMoveMeeting,
-                        'canRemoveMeeting' : agenda.canRemoveMeeting
-                    }) }}
-                {% endfor %}
-                #}
-
                 <table class="table table-bordered table-striped table-condensed table-hover">
                     {% for meetingSlot in day.meetingSlots %}
                         <tr>
                             <td style="width: 1%">{{ meetingSlot.begin|date('H:i', agenda.timezone) }}</td>
                             <td>
                                 <div class="meets">
-                                    Hello
+                                    {% for meeting in day.getMeetingsBySlot(meetingSlot) %}
+                                        {{ include('EventBundle:Agenda:meeting.html.twig', {
+                                            'isVisio': isVisio,
+                                            'sheetId': agenda.sheet.id,
+                                            'participant': agenda.participant,
+                                            'participantId': agenda.participant.id,
+                                            'meeting': meeting,
+                                            'canMoveMeeting': agenda.canMoveMeeting,
+                                            'canRemoveMeeting' : agenda.canRemoveMeeting
+                                        }) }}
+                                    {% endfor %}
                                 </div>
                             </td>
                         </tr>
