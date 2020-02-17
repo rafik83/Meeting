@@ -29,7 +29,7 @@ class MeetingView extends AbstractTimeEntityView
     /** @var MeetingParticipantView[] */
     public $participants;
 
-    /** @var string */
+    /** @var SheetMetView[] */
     public $sheetMetTitle;
 
     /** @var string */
@@ -54,7 +54,7 @@ class MeetingView extends AbstractTimeEntityView
      * @param int                      $id
      * @param string                   $userSheetTitle
      * @param int                      $sheetMetId
-     * @param array                    $sheetMetTitle
+     * @param SheetMetView[]           $sheetMetTitle
      * @param \DateTimeInterface       $begin
      * @param \DateTimeInterface       $end
      * @param string                   $spotRef

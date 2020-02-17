@@ -20,7 +20,9 @@ use Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
+use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Agenda\ParticipantView;
+use Proximum\Vimeet\Application\View\Agenda\SheetMetView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
@@ -384,7 +386,40 @@ class AgendaViewQueryHandlerTest extends TestCase
             [],
             [],
             [],
-            [111 => $meeting1->reveal(), 222 => $meeting2->reveal()],
+            [
+                111 => new MeetingView(
+                    111,
+                    'Sheet 1',
+                    1243,
+                    [new SheetMetView('Sheet other', false)],
+                    new \DateTime('2016-10-12 10:00:00'),
+                    new \DateTime('2016-10-12 10:20:00'),
+                    'A1',
+                    'Europe/Paris',
+                    '#112233',
+                    '#144555',
+                    [],
+                    false,
+                    false,
+                    false
+                ),
+                222 => new MeetingView(
+                    111,
+                    'Sheet 1',
+                    14883,
+                    [new SheetMetView('Another sheet', false)],
+                    new \DateTime('2016-10-12 10:20:00'),
+                    new \DateTime('2016-10-12 10:40:00'),
+                    'A1',
+                    'Europe/Paris',
+                    '#112233',
+                    '#144555',
+                    [],
+                    false,
+                    false,
+                    false
+                ),
+            ],
             $meetingSlots,
             []
         );
