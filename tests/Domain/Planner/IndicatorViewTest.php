@@ -133,7 +133,7 @@ class IndicatorViewTest extends TestCase
                 'expectedSlotCount' => 14,
                 'expectedSlotsParticipantsCount' => 7,
                 'expectedPossibleMeetingsQuantity' => 6,
-                'expectedUsableSlots' => 7,
+                'expectedUsableSlots' => 6,
             ],
             'three_participant_with_max_number_meetings_per_sheet_equals_to_maxMeetingAvailable' => [
                 'slotTotal' => 7,
@@ -150,7 +150,7 @@ class IndicatorViewTest extends TestCase
                 'expectedSlotCount' => 14,
                 'expectedSlotsParticipantsCount' => 21,
                 'expectedPossibleMeetingsQuantity' => 9,
-                'expectedUsableSlots' => 14,
+                'expectedUsableSlots' => 9,
             ],
             'three_participant_with_max_number_meetings_per_sheet_bigger_than_maxMeetingAvailable' => [
                 'slotTotal' => 7,
@@ -167,7 +167,7 @@ class IndicatorViewTest extends TestCase
                 'expectedSlotCount' => 14,
                 'expectedSlotsParticipantsCount' => 21,
                 'expectedPossibleMeetingsQuantity' => 4,
-                'expectedUsableSlots' => 14,
+                'expectedUsableSlots' => 6,
             ],
         ];
     }
