@@ -29,6 +29,8 @@ agenda.meeting.remove.confirm: 'Confirmer la suppression ?'
 agenda.meeting.remove.success: 'Le RDV a bien été supprimé'
 agenda.meeting.updateSlot.error: 'Impossible de déplacer ce RDV'
 agenda.participant.view: 'Agenda de %participant%'
+agenda.sheetAgenda.button.title: 'Agenda de la fiche'
+agenda.myAgenda.button.title: 'Mon agenda'
 agenda.slot.available: Disponible
 agenda.slot.imperative-presence: 'Votre présence est impérative.'
 agenda.slot.unavailable: Indisponible
