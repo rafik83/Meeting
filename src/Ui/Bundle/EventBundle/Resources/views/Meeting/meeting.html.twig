@@ -36,11 +36,14 @@
                         </div>
                     </div>
                 {% endif %}
+
                 <div class="list list--users">
                     {% for participantView in meeting.participants %}
                         {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
                     {% endfor %}
                 </div>
+
+                <p>{{ meeting.meetingOwnSheetParticipantNames }}</p>
             </div>
         </div>
         <footer>

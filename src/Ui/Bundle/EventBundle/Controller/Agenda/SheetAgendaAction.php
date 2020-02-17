@@ -36,7 +36,7 @@ class SheetAgendaAction
         $user = $userDomain->getUser();
         $participant = $sheet->getUserParticipant($user);
 
-        if (null !== $participant) {
+        if (null === $participant) {
             $participant = $sheet->getFirstParticipant();
         }
 

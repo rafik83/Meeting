@@ -4192,8 +4192,8 @@ services:
             - '@query.agenda.meeting.meeting_participant_view_query_handler'
             - '@repository.rule_repository'
             - '@components.security.video_meeting_access'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle'
+            - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery }
 
