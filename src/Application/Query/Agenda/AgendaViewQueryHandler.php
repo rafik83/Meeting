@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
@@ -81,6 +82,9 @@ class AgendaViewQueryHandler
     /** @var CanRemoveMeeting */
     private $canRemoveMeeting;
 
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
     public function __construct(
         DayRepositoryInterface $dayRepository,
         SheetRepositoryInterface $sheetRepository,
@@ -97,7 +101,8 @@ class AgendaViewQueryHandler
         GetTimezoneHelper $getTimezoneHelper,
         GetParticipantTypes $getParticipantTypes,
         CanMoveMeeting $canMoveMeeting,
-        CanRemoveMeeting $canRemoveMeeting
+        CanRemoveMeeting $canRemoveMeeting,
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->dayRepository = $dayRepository;
         $this->sheetRepository = $sheetRepository;
@@ -115,6 +120,7 @@ class AgendaViewQueryHandler
         $this->getParticipantTypes = $getParticipantTypes;
         $this->canMoveMeeting = $canMoveMeeting;
         $this->canRemoveMeeting = $canRemoveMeeting;
+        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     /**
@@ -225,7 +231,8 @@ class AgendaViewQueryHandler
             $participants,
             $isPhoneConfirmationRequired,
             $canMoveMeeting,
-            $canRemoveMeeting
+            $canRemoveMeeting,
+            $this->isParticipantVisio->isSatisfiedBy($participant)
         );
     }
 

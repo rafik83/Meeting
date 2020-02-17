@@ -152,7 +152,8 @@ class AgendaController extends Controller
             ]);
         }
 
-        return $this->render('EventBundle:Agenda:index.html.twig', [
+        return $this->render(
+            '@Event/Agenda/participant_agenda.html.twig', [
             'event' => $eventDomain->getEvent(),
             'agenda' => $agenda,
             'sheet' => $sheet,
@@ -161,7 +162,6 @@ class AgendaController extends Controller
             'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
             'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
             'participant' => $participant,
-            'isVisio' => $this->get(IsParticipantVisio::class)->isSatisfiedBy($participant),
             'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
             'isAvailabilityManagementEnabled' => $this->get(HasAvailabilityManagementEnabled::class)->isSatisfiedBy($sheet),
         ]);

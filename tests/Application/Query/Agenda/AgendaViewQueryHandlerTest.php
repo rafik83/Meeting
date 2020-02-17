@@ -34,6 +34,7 @@ use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -60,11 +61,15 @@ class AgendaViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy|MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
 
+    /** @var ObjectProphecy|IsParticipantVisio */
+    private $isParticipantVisio;
+
     public function setUp()
     {
         $this->validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
         $this->extraDataRepository = $this->prophesize(ExtraDataRepository::class);
         $this->meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+        $this->isParticipantVisio = $this->prophesize(IsParticipantVisio::class);
     }
 
     public function testHandle()
@@ -154,6 +159,8 @@ class AgendaViewQueryHandlerTest extends TestCase
         $canRemoveMeeting = $this->prophesize(CanRemoveMeeting::class);
         $canRemoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
 
+        $this->isParticipantVisio->isSatisfiedBy($participant)->shouldBeCalled()->willReturn(false);
+
         // Handler
         $handler = new AgendaViewQueryHandler(
             $dayRepository->reveal(),
@@ -171,7 +178,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             $getTimezoneHelper->reveal(),
             $getParticipantTypes->reveal(),
             $canMoveMeeting->reveal(),
-            $canRemoveMeeting->reveal()
+            $canRemoveMeeting->reveal(),
+            $this->isParticipantVisio->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant, 'fr', $user));
 
@@ -185,7 +193,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             [new ParticipantView(1, 'fullName')],
             false,
             false,
-            true
+            true,
+            false
         );
 
         $this->assertEquals($expected, $result);
@@ -279,6 +288,8 @@ class AgendaViewQueryHandlerTest extends TestCase
         $canRemoveMeeting = $this->prophesize(CanRemoveMeeting::class);
         $canRemoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
 
+        $this->isParticipantVisio->isSatisfiedBy($participant2)->shouldBeCalled()->willReturn(true);
+
         // Handler
         $handler = new AgendaViewQueryHandler(
             $dayRepository->reveal(),
@@ -296,7 +307,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             $getTimezoneHelper->reveal(),
             $getParticipantTypes->reveal(),
             $canMoveMeeting->reveal(),
-            $canRemoveMeeting->reveal()
+            $canRemoveMeeting->reveal(),
+            $this->isParticipantVisio->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user));
 
@@ -313,7 +325,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             ],
             true,
             true,
-            false
+            false,
+            true
         );
 
         $this->assertEquals($expected, $result);
@@ -428,6 +441,8 @@ class AgendaViewQueryHandlerTest extends TestCase
         $canRemoveMeeting = $this->prophesize(CanRemoveMeeting::class);
         $canRemoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
 
+        $this->isParticipantVisio->isSatisfiedBy($participant2)->shouldBeCalled()->willReturn(false);
+
         $handler = new AgendaViewQueryHandler(
             $dayRepository->reveal(),
             $sheetRepository->reveal(),
@@ -444,7 +459,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             $getTimezoneHelper->reveal(),
             $getParticipantTypes->reveal(),
             $canMoveMeeting->reveal(),
-            $canRemoveMeeting->reveal()
+            $canRemoveMeeting->reveal(),
+            $this->isParticipantVisio->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user, true));
 
@@ -460,6 +476,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             ],
             true,
             true,
+            false,
             false
         );
 

@@ -5,6 +5,8 @@
 {% block container_classes 'full-mobile-container' %}
 
 {% block content %}
+    {% set isVisio = agenda.isParticipantVisio %}
+
     {% if tipTranslationViews is defined %}
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
     {% endif %}

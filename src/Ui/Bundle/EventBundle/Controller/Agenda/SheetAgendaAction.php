@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -20,9 +19,6 @@ class SheetAgendaAction
 
     /** @var EngineInterface */
     private $engine;
-
-    /** @var RouterInterface */
-    private $router;
 
     public function __construct(QueryBusInterface $queryBus, EngineInterface $engine)
     {
@@ -64,7 +60,6 @@ class SheetAgendaAction
                     'sheet' => $sheet,
                     'agenda' => $agenda,
                     'participant' => $participant,
-                    'isVisio' => true,
                 ]
             )
         );
