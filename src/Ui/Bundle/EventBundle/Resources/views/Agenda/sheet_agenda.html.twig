@@ -31,7 +31,7 @@
     </div>
 
     <div class="agenda-container">
-        <div class="agenda">
+        <div class="agenda all-sheet">
             {% for day in agenda.days %}
                 <header class="agenda-head">
                     <p>
@@ -47,19 +47,17 @@
                         <tr>
                             <td style="width: 1%">{{ meetingSlot.begin|date('H:i', agenda.timezone) }}</td>
                             <td>
-                                <div class="meets">
-                                    {% for meeting in day.getMeetingsBySlot(meetingSlot) %}
-                                        {{ include('EventBundle:Agenda:meeting.html.twig', {
-                                            'isVisio': isVisio,
-                                            'sheetId': agenda.sheet.id,
-                                            'participant': agenda.participant,
-                                            'participantId': agenda.participant.id,
-                                            'meeting': meeting,
-                                            'canMoveMeeting': agenda.canMoveMeeting,
-                                            'canRemoveMeeting' : agenda.canRemoveMeeting
-                                        }) }}
-                                    {% endfor %}
-                                </div>
+                                {% for meeting in day.getMeetingsBySlot(meetingSlot) %}
+                                    {{ include('EventBundle:Agenda:meeting.html.twig', {
+                                        'isVisio': isVisio,
+                                        'sheetId': agenda.sheet.id,
+                                        'participant': agenda.participant,
+                                        'participantId': agenda.participant.id,
+                                        'meeting': meeting,
+                                        'canMoveMeeting': agenda.canMoveMeeting,
+                                        'canRemoveMeeting' : agenda.canRemoveMeeting
+                                    }) }}
+                                {% endfor %}
                             </td>
                         </tr>
                     {% endfor %}
