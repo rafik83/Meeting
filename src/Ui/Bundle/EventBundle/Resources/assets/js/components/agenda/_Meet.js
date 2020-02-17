@@ -67,7 +67,10 @@ Meet.prototype.handleRequestMoveMeetingButton = function () {
 
     $.get(href, function (response) {
         this.showModal(response);
-    }.bind(this));
+    }.bind(this))
+        .fail(function () {
+            alert('Operation not allowed.')
+        });
 };
 
 Meet.prototype.handleRequestRemoveMeetingButton = function () {
@@ -75,7 +78,10 @@ Meet.prototype.handleRequestRemoveMeetingButton = function () {
 
     $.get(href, function (response) {
         this.showModal(response, true);
-    }.bind(this));
+    }.bind(this))
+        .fail(function () {
+            alert('Operation not allowed.')
+        });
 };
 
 Meet.prototype.showModal = function (html, confirmation = null) {
