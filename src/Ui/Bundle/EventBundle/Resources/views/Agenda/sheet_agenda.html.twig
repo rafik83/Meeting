@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div class="agenda-container">
+    <div id="agendaAllSheet" class="agenda-container">
         <div class="agenda all-sheet">
             {% for day in agenda.days %}
                 <header class="agenda-head">
@@ -46,7 +46,7 @@
                     {% for meetingSlot in day.meetingSlots if day.hasMeetingsBySlot(meetingSlot) %}
                         <tr>
                             <td style="width: 1%">{{ meetingSlot.begin|date('H:i', agenda.timezone) }}</td>
-                            <td>
+                            <td style="padding: 0;">
                                 {% for meeting in day.getMeetingsBySlot(meetingSlot) %}
                                     {{ include('EventBundle:Agenda:meeting.html.twig', {
                                         'isVisio': isVisio,
@@ -65,4 +65,6 @@
             {% endfor %}
         </div>
     </div>
+
+    {{ include('EventBundle:Meeting:meeting-modal.html.twig') }}
 {% endblock %}

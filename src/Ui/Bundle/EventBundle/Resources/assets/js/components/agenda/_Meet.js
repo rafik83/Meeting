@@ -16,14 +16,16 @@ function Meet(agenda, element, modal) {
     this.details = this.element.querySelector('.details');
     this.moveMeetingAction = this.element.querySelector('.moveMeetingAction');
     this.removeMeetingAction = this.element.querySelector('.removeMeetingAction');
-    this.duration = this.agenda.getDuration(this.element.getAttribute('data-duration'));
-    this.start = this.agenda.getRelativeTime(this.agenda.parseTime(this.element.getAttribute('data-beginhour')));
-
-    this.end = this.start + this.duration;
+    this.open = false;
+    this.layer = 0;
     this.slots = [];
     this.scale = 1;
-    this.layer = 0;
-    this.open = false;
+
+    if (this.agenda) {
+        this.duration = this.agenda.getDuration(this.element.getAttribute('data-duration'));
+        this.start = this.agenda.getRelativeTime(this.agenda.parseTime(this.element.getAttribute('data-beginhour')));
+        this.end = this.start + this.duration;
+    }
 
     if (null !== this.moveMeetingAction) {
         this.moveMeetingAction.addEventListener('click', function (event) {
@@ -139,20 +141,23 @@ Meet.prototype.display = function () {
     this.element.style.width = this.getWidth() + '%';
     this.header.style.height = (this.getHeight() - this.margin) + 'px';
 
+    this.toggleDisplay();
+    this.updateScale();
+};
+
+Meet.prototype.toggleDisplay = function () {
     if (this.open) {
         this.element.classList.add('open');
         this.element.classList.remove('collapsed');
     } else {
         this.element.classList.remove('open');
 
-        if (this.group.isExpanded()) {
+        if (this.group && this.group.isExpanded()) {
             this.element.classList.add('collapsed');
         } else {
             this.element.classList.remove('collapsed');
         }
     }
-
-    this.updateScale();
 };
 
 /**
@@ -166,6 +171,11 @@ Meet.prototype.toggleOpen = function (event) {
     }
 
     this.open = !this.open;
+
+    if (!this.agenda) {
+        this.toggleDisplay();
+    }
+
     this.emit('change');
 };
 
