@@ -51,7 +51,8 @@ class SheetAgendaAction
                 $sheet,
                 $participant,
                 $request->getLocale(),
-                $user
+                $user,
+                true
             )
         );
 

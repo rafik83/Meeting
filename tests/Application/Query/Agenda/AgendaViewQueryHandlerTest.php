@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
@@ -291,6 +292,145 @@ class AgendaViewQueryHandlerTest extends TestCase
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user));
 
         // Expected
+        $expected = new AgendaView(
+            [$dayView],
+            'Europe/Paris',
+            $sheet,
+            $participant2,
+            false,
+            [
+                new ParticipantView(1, 'fullName'),
+                new ParticipantView(2, 'fullName2'),
+            ],
+            true,
+            true,
+            false
+        );
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function test_get_all_sheet_meetings()
+    {
+        $event        = EventFactory::createEvent();
+        $user         = new User('user@vimeet.com', 'salt', 'password', 'fr');
+        $user2        = new User('user@vimeet.com2', 'salt2', 'password2', 'fr');
+        $sheet        = SheetFactory::create($event, $user);
+        $participant  = ParticipantFactory::create($sheet, $user);
+        $participant2 = ParticipantFactory::create($sheet, $user2);
+
+        $begin = new \DateTime('2016-10-12 10:00:00');
+        $end   = new \DateTime('2016-10-12 18:00:00');
+        $day   = new TimeRangeView($begin, $end);
+
+        $dayRepository = $this->prophesize(DayRepositoryInterface::class);
+        $dayRepository->findByEvent($event)->shouldBeCalled()->willReturn([$day]);
+
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $sheetRepository->isUserParticipantMultipleSheetsInEvent($user2, $event)->shouldBeCalled()->willReturn(true);
+
+        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
+        $happeningParticipationRepository
+            ->findByUser($user2, $event, true)
+            ->shouldNotBeCalled()
+        ;
+
+        $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
+        $unavailabilityRepository->findByUserAndEvent($user2, $event)->shouldNotBeCalled();
+
+        $getParticipantTypes = $this->prophesize(GetParticipantTypes::class);
+        $getParticipantTypes->handle($participant2)->shouldNotBeCalled();
+
+        $massUnavailabilityRepository = $this->prophesize(MassRepositoryInterface::class);
+        $massUnavailabilityRepository->findByTypes([$sheet->getType()], 'fr')->shouldNotBeCalled();
+
+        $meeting1 = $this->prophesize(Meeting::class);
+        $meeting1->getId()->shouldBeCalled()->willReturn(111);
+        $meeting2 = $this->prophesize(Meeting::class);
+        $meeting2->getId()->shouldBeCalled()->willReturn(222);
+
+        $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
+        $dayView = new DayView(
+            $begin,
+            $end,
+            $event->getConfiguration()->getScheduleScale(),
+            [],
+            [],
+            [],
+            [111 => $meeting1->reveal(), 222 => $meeting2->reveal()],
+            []
+        );
+        $dayViewQueryHandler
+            ->handle(
+                new DayViewQuery(
+                    $day,
+                    $sheet,
+                    $event,
+                    $participant2,
+                    $user,
+                    true,
+                    'fr',
+                    [],
+                    [],
+                    [],
+                    [111 => $meeting1->reveal(), 222 => $meeting2->reveal()]
+                )
+            )
+            ->shouldBeCalled()
+            ->willReturn($dayView);
+
+        $participantHandler = $this->prophesize(ParticipantViewQueryHandler::class);
+        $participantHandler->handle(new ParticipantViewQuery([$participant, $participant2], 'fr'))->shouldBeCalled()->willReturn([new ParticipantView(1, 'fullName'), new ParticipantView(2, 'fullName2')]);
+
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $meetingRepository->findByUserAndEvent($user2, $event)->shouldBeCalled()->willReturn([$meeting1->reveal()]);
+        $meetingRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$meeting1->reveal(), $meeting2->reveal()]);
+
+        $meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
+        $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+
+        $reflection = new \ReflectionClass(User::class);
+        $property   = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($user, 1);
+        $property->setValue($user2, 2);
+        $property->setAccessible(false);
+
+        $this->validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(true);
+        $this->extraDataRepository
+            ->getExtraDataForEventNameAndUser($event, Type::PHONE_CONFIRMATION_IGNORED, $user)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
+        $getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
+        $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant2)->willReturn('Europe/Paris');
+
+        $canMoveMeeting = $this->prophesize(CanMoveMeeting::class);
+        $canMoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
+
+        $canRemoveMeeting = $this->prophesize(CanRemoveMeeting::class);
+        $canRemoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
+
+        $handler = new AgendaViewQueryHandler(
+            $dayRepository->reveal(),
+            $sheetRepository->reveal(),
+            $dayViewQueryHandler->reveal(),
+            $happeningParticipationRepository->reveal(),
+            $unavailabilityRepository->reveal(),
+            $massUnavailabilityRepository->reveal(),
+            $participantHandler->reveal(),
+            $meetingRepository->reveal(),
+            $meetingPublishedAccessChecker->reveal(),
+            $this->validationRequiredChecker->reveal(),
+            $this->extraDataRepository->reveal(),
+            $getTimezoneHelper->reveal(),
+            $getParticipantTypes->reveal(),
+            $canMoveMeeting->reveal(),
+            $canRemoveMeeting->reveal()
+        );
+        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user, true));
+
         $expected = new AgendaView(
             [$dayView],
             'Europe/Paris',

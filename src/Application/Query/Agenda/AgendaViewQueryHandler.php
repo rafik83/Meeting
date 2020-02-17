@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
@@ -170,10 +171,7 @@ class AgendaViewQueryHandler
             }
 
             if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
-                $meetings = $query->allSheet
-                    ? $this->meetingRepository->findBySheet($query->sheet)
-                    : $this->meetingRepository->findByUserAndEvent($participant->getUser(), $query->event)
-                ;
+                $meetings = $this->getMeetings($query);
             }
         }
 
@@ -221,6 +219,29 @@ class AgendaViewQueryHandler
             $canMoveMeeting,
             $canRemoveMeeting
         );
+    }
+
+    /**
+     * @param AgendaViewQuery $query
+     *
+     * @return Meeting[]
+     */
+    private function getMeetings(AgendaViewQuery $query): array
+    {
+        $meetings = [];
+
+        foreach ($this->meetingRepository->findByUserAndEvent($query->participant->getUser(), $query->event) as $meeting) {
+            $meetings[$meeting->getId()] = $meeting;
+        }
+
+        if ($query->allSheet) {
+            // add to user/event meetings list, all sheet meetings and deduplicate them.
+            foreach ($this->meetingRepository->findBySheet($query->sheet) as $meeting) {
+                $meetings[$meeting->getId()] = $meeting;
+            }
+        }
+
+        return $meetings;
     }
 
     /**
