@@ -152,4 +152,9 @@ class DayView
 
         return $this->meetingViewsByDateBegin[$index] ?? [];
     }
+
+    public function hasMeetingsBySlot(MeetingSlot $meetingSlot): bool
+    {
+        return !empty($this->getMeetingsBySlot($meetingSlot));
+    }
 }

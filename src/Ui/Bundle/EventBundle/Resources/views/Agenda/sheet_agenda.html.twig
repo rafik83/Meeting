@@ -43,7 +43,7 @@
                 </header>
 
                 <table class="table table-bordered table-striped table-condensed table-hover">
-                    {% for meetingSlot in day.meetingSlots %}
+                    {% for meetingSlot in day.meetingSlots if day.hasMeetingsBySlot(meetingSlot) %}
                         <tr>
                             <td style="width: 1%">{{ meetingSlot.begin|date('H:i', agenda.timezone) }}</td>
                             <td>
