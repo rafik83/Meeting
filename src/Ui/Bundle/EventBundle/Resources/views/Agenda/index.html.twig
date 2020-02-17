@@ -10,34 +10,19 @@
     {% endif %}
     <div class="row">
         <div class="col-md-6">
-            <div class="mg-tp">
             {% if agenda.isUserAloneParticipant %}
                 <i class="icon-Calendrier"></i>
                 <strong>{{ 'agenda.title'|trans }}</strong>
             {% else %}
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                        <i class="icon-Calendrier"></i>
-                        {% set currentParticipantLooked = agenda.currentParticipantView %}
-                        {% if currentParticipantLooked is not null %}
-                            {{ 'agenda.participant.view'|trans({'%participant%': currentParticipantLooked.fullName}) }}
-                        {% endif %}
-                        {% if agenda.participants|length > 1 %}<span class="caret"></span>{% endif %}
-                    </button>
-                    {% if agenda.participants|length > 1 %}
-                    <ul class="dropdown-menu">
-                        {% for participantName in agenda.participants %}
-                            <li {% if participantName.id == agenda.participant.id %}class="active"{% endif %}>
-                                <a href="{{ path('event_agenda_participant', {'participant': participantName.id, 'sheet': sheet.id}) }}">
-                                    {{ 'agenda.participant.view'|trans({'%participant%': participantName.fullName}) }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
+                <div class="btn-group" role="group">
+                    <a class="btn btn-gray" href="{{ path('event_agenda_sheet', { 'sheet': sheet.id }) }}">
+                        {{ 'agenda.sheetAgenda.button.title'|trans }}
+                    </a>
+                    <a class="btn btn-primary" href="{{ path('event_agenda_participant', { 'sheet': sheet.id, 'participant': participant.id }) }}">
+                        {{ 'agenda.myAgenda.button.title'|trans }}
+                    </a>
                 </div>
             {% endif %}
-            </div>
         </div>
         <div class="col-md-6">
             {% if sheet.attend and not isUnavailabilityManagementDisabled %}

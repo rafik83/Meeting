@@ -63,7 +63,8 @@ class SheetAgendaAction
                     'event' => $event,
                     'sheet' => $sheet,
                     'agenda' => $agenda,
-                    'isVisio' => false //@todo
+                    'participant' => $participant,
+                    'isVisio' => true,
                 ]
             )
         );
