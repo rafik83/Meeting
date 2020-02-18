@@ -364,15 +364,21 @@ class AgendaViewQueryHandlerTest extends TestCase
         $unavailabilityRepository->findByUserAndEvent($user2, $event)->shouldNotBeCalled();
 
         $getParticipantTypes = $this->prophesize(GetParticipantTypes::class);
-        $getParticipantTypes->handle($participant2)->shouldNotBeCalled();
+        $getParticipantTypes->handle($participant2)->shouldBeCalled()->willReturn([$sheet->getType()]);
 
+        $mass = $this->prophesize(Mass::class);
         $massUnavailabilityRepository = $this->prophesize(MassRepositoryInterface::class);
-        $massUnavailabilityRepository->findByTypes([$sheet->getType()], 'fr')->shouldNotBeCalled();
+        $massUnavailabilityRepository->findByTypes([$sheet->getType()], 'fr')->shouldBeCalled()->willReturn([$mass->reveal()]);
 
         $meetingSlot1 = $this->prophesize(MeetingSlot::class);
         $meetingSlot2 = $this->prophesize(MeetingSlot::class);
-        $meetingSlots = [$meetingSlot1->reveal(), $meetingSlot2->reveal()];
-        $this->meetingSlotRepository->findByEvent($event)->shouldBeCalled()->willReturn($meetingSlots);
+
+        $this->meetingSlotRepository->findByEvent($event)->shouldBeCalled()->willReturn(
+            [$meetingSlot1->reveal(), $meetingSlot2->reveal()]
+        );
+
+        $slot1 = new TimeRangeView(new \DateTime('2016-10-12 10:00:00'), new \DateTime('2016-10-12 10:10:00'));
+        $slot2 = new TimeRangeView(new \DateTime('2016-10-12 10:0:00'), new \DateTime('2016-10-12 10:10:00'));
 
         $meeting1 = $this->prophesize(Meeting::class);
         $meeting1->getId()->shouldBeCalled()->willReturn(111);
@@ -423,7 +429,10 @@ class AgendaViewQueryHandlerTest extends TestCase
                     false
                 ),
             ],
-            $meetingSlots,
+            [
+                $slot1,
+                $slot2
+            ],
             []
         );
         $dayViewQueryHandler
@@ -438,9 +447,9 @@ class AgendaViewQueryHandlerTest extends TestCase
                     'fr',
                     [],
                     [],
-                    [],
+                    [$mass->reveal()],
                     [111 => $meeting1->reveal(), 222 => $meeting2->reveal()],
-                    $meetingSlots
+                    [$meetingSlot1->reveal(), $meetingSlot2->reveal()]
                 )
             )
             ->shouldBeCalled()

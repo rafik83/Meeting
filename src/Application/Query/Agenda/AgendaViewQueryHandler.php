@@ -153,7 +153,18 @@ class AgendaViewQueryHandler
         );
 
         if (empty($eventDays)) {
-            return new AgendaView([], $timezone, $sheet, $participant, $isUserAloneParticipant, $participants, false, $canMoveMeeting, $canRemoveMeeting);
+            return new AgendaView(
+                [],
+                $timezone,
+                $sheet,
+                $participant,
+                $isUserAloneParticipant,
+                $participants,
+                false,
+                $canMoveMeeting,
+                $canRemoveMeeting,
+                false
+            );
         }
 
         $unavailabilities = [];
@@ -163,15 +174,15 @@ class AgendaViewQueryHandler
         $meetingSlots = [];
 
         if ($query->sheet->attend()) {
+            $masses = $this->massUnavailabilityRepository->findByTypes(
+                $this->getParticipantTypes->handle($participant),
+                $query->locale
+            );
+
             if (!$query->allSheet) {
                 $unavailabilities = $this->unavailabilityRepository->findByUserAndEvent(
                     $participant->getUser(),
                     $query->event
-                );
-
-                $masses = $this->massUnavailabilityRepository->findByTypes(
-                    $this->getParticipantTypes->handle($participant),
-                    $query->locale
                 );
 
                 $happeningParticipations = $this

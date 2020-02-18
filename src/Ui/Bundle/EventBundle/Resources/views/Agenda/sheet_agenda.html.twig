@@ -43,11 +43,11 @@
                 </header>
 
                 <table class="table table-bordered table-striped table-condensed table-hover">
-                    {% for meetingSlot in day.meetingSlots if day.hasMeetingsBySlot(meetingSlot) %}
+                    {% for slot in day.agendaSlots if day.hasMeetingsOrMassUnavailabilityBySlot(slot) %}
                         <tr>
-                            <td style="width: 1%">{{ meetingSlot.begin|date('H:i', agenda.timezone) }}</td>
+                            <td style="width: 1%">{{ slot.begin|date('H:i', agenda.timezone) }}</td>
                             <td style="padding: 0;">
-                                {% for meeting in day.getMeetingsBySlot(meetingSlot) %}
+                                {% for meeting in day.getMeetingViewBySlot(slot) %}
                                     {{ include('EventBundle:Agenda:meeting.html.twig', {
                                         'isVisio': isVisio,
                                         'sheetId': agenda.sheet.id,
@@ -57,6 +57,10 @@
                                         'canMoveMeeting': agenda.canMoveMeeting,
                                         'canRemoveMeeting' : agenda.canRemoveMeeting
                                     }) }}
+                                {% endfor %}
+
+                                {% for mass in day.getMassUnavailabilityViewsBySlot(slot) %}
+                                    {{ include('EventBundle:Agenda:mass.html.twig', {'isVisio': isVisio, 'mass': mass, 'participant': participant}) }}
                                 {% endfor %}
                             </td>
                         </tr>

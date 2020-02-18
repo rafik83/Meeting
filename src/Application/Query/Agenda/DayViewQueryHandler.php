@@ -73,7 +73,7 @@ class DayViewQueryHandler
         $masses = [];
         $meetings = [];
         $availableSlotViews = [];
-        $meetingSlots = [];
+        $agendaSlots = [];
 
         if ($query->currentSheet->attend()) {
             foreach ($query->happenings as $happening) {
@@ -130,7 +130,7 @@ class DayViewQueryHandler
 
             foreach ($query->meetingSlots as $meetingSlot) {
                 if (TimeOverlap::beginIn($meetingSlot, $query->day)) {
-                    $meetingSlots[] = $meetingSlot;
+                    $agendaSlots[] = new TimeRangeView($meetingSlot->getBegin(), $meetingSlot->getEnd());
                 }
             }
 
@@ -163,7 +163,7 @@ class DayViewQueryHandler
             $this->agendaCollisionManager->getUnavailabilityViews(),
             $this->agendaCollisionManager->getMassViews(),
             $this->agendaCollisionManager->getMeetingViews(),
-            $meetingSlots,
+            $agendaSlots,
             $availableSlotViews,
             $cancelAttendanceView,
             $this->isUnavailableForThisDay($query->day, $unavailabilityViews)

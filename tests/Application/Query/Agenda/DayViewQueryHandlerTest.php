@@ -366,7 +366,12 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->unavailabilityView],
             [$this->massView],
             [$meetingView],
-            [$meetingSlot],
+            [
+                '2016-10-12 11:00:00' => new TimeRangeView(
+                    new \DateTime('2016-10-12 11:00:00'),
+                    new \DateTime('2016-10-12 11:20:00')
+                )
+            ],
             [$availableSlotViews],
             null
         );
@@ -432,7 +437,7 @@ class DayViewQueryHandlerTest extends TestCase
             ->willReturn([$this->massView]);
         $this->agendaCollisionManager->getMeetingViews()->shouldBeCalled()->willReturn([$meetingView]);
 
-        $result  = $this->dayViewQueryHandler->handle(new DayViewQuery(
+        $result = $this->dayViewQueryHandler->handle(new DayViewQuery(
             $this->day,
             $this->sheet,
             $this->event,
