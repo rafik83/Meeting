@@ -7,6 +7,10 @@
 {% block content %}
     {% set isVisio = agenda.isParticipantVisio %}
 
+    {% if tipTranslationViews is defined %}
+        {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
+    {% endif %}
+
     <div class="row mg-tp">
         <div class="col-md-6">
             <div class="btn-group" role="group">

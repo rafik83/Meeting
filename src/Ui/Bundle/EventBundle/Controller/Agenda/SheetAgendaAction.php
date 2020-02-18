@@ -4,6 +4,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -60,6 +62,12 @@ class SheetAgendaAction
                     'sheet' => $sheet,
                     'agenda' => $agenda,
                     'participant' => $participant,
+                    'tipTranslationViews' => $this->queryBus->handle(new TipTranslationViewQuery(
+                        $sheet,
+                        $user,
+                        TipTranslationViewQueryHandler::CONTEXT_AGENDA,
+                        $request->getLocale()
+                    )),
                 ]
             )
         );
