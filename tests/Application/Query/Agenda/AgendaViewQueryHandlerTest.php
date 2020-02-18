@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingOwnSheetParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Agenda\ParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\SheetMetView;
@@ -392,6 +393,7 @@ class AgendaViewQueryHandlerTest extends TestCase
                     'Sheet 1',
                     1243,
                     [new SheetMetView('Sheet other', false)],
+                    [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
                     new \DateTime('2016-10-12 10:00:00'),
                     new \DateTime('2016-10-12 10:20:00'),
                     'A1',
@@ -408,6 +410,7 @@ class AgendaViewQueryHandlerTest extends TestCase
                     'Sheet 1',
                     14883,
                     [new SheetMetView('Another sheet', false)],
+                    [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
                     new \DateTime('2016-10-12 10:20:00'),
                     new \DateTime('2016-10-12 10:40:00'),
                     'A1',

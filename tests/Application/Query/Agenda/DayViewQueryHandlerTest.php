@@ -31,7 +31,9 @@ use Proximum\Vimeet\Application\View\Agenda\CancelAttendanceUnavailabilityView;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingOwnSheetParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
+use Proximum\Vimeet\Application\View\Agenda\SheetMetView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Category;
@@ -339,7 +341,8 @@ class DayViewQueryHandlerTest extends TestCase
             1,
             'userSheetTitle',
             2,
-            ['title'],
+            [new SheetMetView('Sheet title', false)],
+            [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
             $this->beginHappening1,
             $this->endHappening2,
             'ref',

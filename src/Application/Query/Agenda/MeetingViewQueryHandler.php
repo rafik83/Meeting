@@ -80,8 +80,8 @@ class MeetingViewQueryHandler
             foreach ($query->meeting->getParticipants($userSheet) as $participant) {
                 $infos = $this->participantInfoGuesser->guessParticipantInfos($participant, $query->locale);
                 $meetingOwnSheetParticipantViews[] = new MeetingOwnSheetParticipantView(
-                    $infos[Tag::PARTICIPANT_FIRSTNAME],
-                    $infos[Tag::PARTICIPANT_LASTNAME]
+                    $infos[Tag::PARTICIPANT_FIRSTNAME] ?? '',
+                    $infos[Tag::PARTICIPANT_LASTNAME] ?? ''
                 );
             }
         }
