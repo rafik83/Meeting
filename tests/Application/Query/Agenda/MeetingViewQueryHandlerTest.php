@@ -235,7 +235,10 @@ class MeetingViewQueryHandlerTest extends TestCase
         $meeting->getParticipants($sheetMet->reveal())->willReturn([$participant->reveal(), $participant2->reveal()]);
 
         $ownParticipant = $this->prophesize(Participant::class);
-        $meeting->getParticipants($sheet->reveal())->willReturn([$ownParticipant->reveal()]);
+        $ownParticipant->getUser()->shouldNotBeCalled();
+        $participant->getUser()->shouldNotBeCalled();
+
+        $meeting->getParticipants($sheet->reveal())->willReturn([$ownParticipant->reveal(), $participant->reveal()]);
 
         $participantView1 = new MeetingParticipantView($cardView);
         $participantView2 = new MeetingParticipantView($cardView2);
@@ -272,6 +275,15 @@ class MeetingViewQueryHandlerTest extends TestCase
             ])
         ;
 
+        $participantInfoGuesser
+            ->guessParticipantInfos($participant, 'fr')
+            ->shouldBeCalled()
+            ->willReturn([
+                'participant_firstname' => 'Rocky',
+                'participant_lastname' => 'Balboa',
+            ])
+        ;
+
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
@@ -286,7 +298,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             'userSheetTitle',
             1,
             [$sheetMetView],
-            [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
+            [new MeetingOwnSheetParticipantView('Korben', 'Dallas'), new MeetingOwnSheetParticipantView('Rocky', 'Balboa')],
             $begin,
             $end,
             'ref',
