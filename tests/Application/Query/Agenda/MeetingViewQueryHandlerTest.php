@@ -80,8 +80,6 @@ class MeetingViewQueryHandlerTest extends TestCase
         $sheet->getTitle()->willReturn('userSheetTitle');
         $sheetMet->getTitle()->willReturn('sheetMetTitle');
 
-        $sheet->countParticipants()->shouldBeCalled()->willReturn(1);
-
         $requestRepository
             ->hasApprovedMeetingRequest($sheet->reveal(), $sheetMetLinkedSheet->reveal())
             ->shouldBeCalled()
@@ -118,6 +116,10 @@ class MeetingViewQueryHandlerTest extends TestCase
         $meeting->getSheetMet($sheet)->willReturn($sheetMet->reveal());
         $meeting->getParticipants($sheetMet->reveal())->willReturn([$participant->reveal(), $participant2->reveal()]);
 
+        $ownParticipant = $this->prophesize(Participant::class);
+        $ownParticipant->getUser()->shouldBeCalled()->willReturn($user);
+        $meeting->getParticipants($sheet->reveal())->willReturn([$ownParticipant->reveal()]);
+
         $participantView1 = new MeetingParticipantView($cardView);
         $participantView2 = new MeetingParticipantView($cardView2);
         $participants     = [$participantView1, $participantView2];
@@ -141,7 +143,10 @@ class MeetingViewQueryHandlerTest extends TestCase
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
-        $participantInfoGuesser->guessParticipantInfos(Argument::any(), 'fr')->shouldNotBeCalled();
+        $participantInfoGuesser
+            ->guessParticipantInfos($ownParticipant, 'fr')
+            ->shouldNotBeCalled()
+        ;
 
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
@@ -201,8 +206,6 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $sheet->getTitle()->willReturn('userSheetTitle');
         $sheetMet->getTitle()->willReturn('sheetMetTitle');
-
-        $sheet->countParticipants()->shouldBeCalled()->willReturn(2);
 
         $participant  = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);

@@ -43,7 +43,9 @@
                     {% endfor %}
                 </div>
 
+                {% if (meeting.meetingOwnSheetParticipantNames) %}
                 <p>{{ 'agenda.meeting.ownSheetParticipants'|trans }} {{ meeting.meetingOwnSheetParticipantNames }}</p>
+                {% endif %}
             </div>
         </div>
         <footer>
