@@ -142,10 +142,8 @@ class MeetingView extends AbstractTimeEntityView
         return implode(', ', $this->meetingOwnSheetParticipantViews);
     }
 
-    public function hasMeetingOwnSheetParticipantNames(): string
+    public function hasMeetingOwnSheetParticipantNames(): bool
     {
-        if ($this->meetingOwnSheetParticipantViews) {
-            return true;
-        }
+        return !empty($this->meetingOwnSheetParticipantViews);
     }
 }
