@@ -76,11 +76,7 @@ class MeetingViewQueryHandler
 
         $meetingOwnSheetParticipantViews = [];
 
-        $meetingParticipants = $query->meeting->getParticipants($userSheet);
-
-        $isUserAloneMeetingParticipant = count($meetingParticipants) === 1 && $meetingParticipants[0]->getUser() === $query->user;
-
-        if (!$isUserAloneMeetingParticipant) {
+        if (!$userSheet->hasOnlyOneParticipant()) {
             foreach ($query->meeting->getParticipants($userSheet) as $participant) {
                 $infos = $this->participantInfoGuesser->guessParticipantInfos($participant, $query->locale);
                 $meetingOwnSheetParticipantViews[] = new MeetingOwnSheetParticipantView(
