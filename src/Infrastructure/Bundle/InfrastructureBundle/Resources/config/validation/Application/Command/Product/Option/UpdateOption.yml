@@ -3,7 +3,8 @@ Proximum\Vimeet\Application\Command\Product\Option\UpdateOption:
         name:
             - NotBlank: ~
         file:
-            - Image: ~
+            - Image:
+                  maxSize: 500k
         quantityMax:
             - Range:
                 min: 0

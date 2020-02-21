@@ -46,6 +46,7 @@ Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign:
                     fields:
                         logo:
                             - Image:
+                                maxSize: 500k
                                 mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
                         mobileLogo:
                             - Image:
@@ -56,4 +57,5 @@ Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign:
                 message: validators.hexadecimal
         backgroundImage:
             - Image:
+                maxSize: 500k
                 mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
