@@ -222,17 +222,12 @@ class AgendaViewQueryHandler
             );
         }
 
-        $isPhoneConfirmationRequired = false;
-
-        if (true === $this->validationRequiredChecker->handle($sheet, $query->userViewing)) {
-            if (null === $this->extraDataRepository->getExtraDataForEventNameAndUser(
+        $isPhoneConfirmationRequired = $this->validationRequiredChecker->handle($sheet, $query->userViewing)
+            && null === $this->extraDataRepository->getExtraDataForEventNameAndUser(
                 $query->event,
                 Type::PHONE_CONFIRMATION_IGNORED,
-                $query->userViewing)
-            ) {
-                $isPhoneConfirmationRequired = true;
-            }
-        }
+                $query->userViewing
+            );
 
         return new AgendaView(
             $dayViews,
@@ -256,20 +251,13 @@ class AgendaViewQueryHandler
      */
     private function getMeetings(AgendaViewQuery $query): array
     {
-        $meetings = [];
-
-        foreach ($this->meetingRepository->findByUserAndEvent($query->participant->getUser(), $query->event) as $meeting) {
-            $meetings[$meeting->getId()] = $meeting;
+        if (!$query->allSheet) {
+            return $this->meetingRepository->findByUserAndEvent($query->participant->getUser(), $query->event);
         }
 
-        if ($query->allSheet) {
-            // add to user/event meetings list, all sheet meetings and deduplicate them.
-            foreach ($this->meetingRepository->findBySheet($query->sheet) as $meeting) {
-                $meetings[$meeting->getId()] = $meeting;
-            }
-        }
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($query->userViewing, $query->event);
 
-        return $meetings;
+        return $this->meetingRepository->getBySheets($query->event, $sheets);
     }
 
     /**

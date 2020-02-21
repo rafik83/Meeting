@@ -383,9 +383,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $slot2 = new TimeRangeView(new \DateTime('2016-10-12 10:0:00'), new \DateTime('2016-10-12 10:10:00'));
 
         $meeting1 = $this->prophesize(Meeting::class);
-        $meeting1->getId()->shouldBeCalled()->willReturn(111);
         $meeting2 = $this->prophesize(Meeting::class);
-        $meeting2->getId()->shouldBeCalled()->willReturn(222);
 
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
         $dayView = new DayView(
@@ -450,7 +448,7 @@ class AgendaViewQueryHandlerTest extends TestCase
                     [],
                     [],
                     [$mass->reveal()],
-                    [111 => $meeting1->reveal(), 222 => $meeting2->reveal()],
+                    [$meeting1->reveal(), $meeting2->reveal()],
                     [$meetingSlot1->reveal(), $meetingSlot2->reveal()]
                 )
             )
@@ -460,9 +458,12 @@ class AgendaViewQueryHandlerTest extends TestCase
         $participantHandler = $this->prophesize(ParticipantViewQueryHandler::class);
         $participantHandler->handle(new ParticipantViewQuery([$participant, $participant2], 'fr'))->shouldBeCalled()->willReturn([new ParticipantView(1, 'fullName'), new ParticipantView(2, 'fullName2')]);
 
+        $sheetRepository->getSheetsByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([$sheet]);
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->findByUserAndEvent($user2, $event)->shouldBeCalled()->willReturn([$meeting1->reveal()]);
-        $meetingRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$meeting1->reveal(), $meeting2->reveal()]);
+        $meetingRepository->findByUserAndEvent($user, $event)->shouldNotBeCalled();
+        $meetingRepository->getBySheets($event, [$sheet])
+            ->shouldBeCalled()
+            ->willReturn([$meeting1->reveal(), $meeting2->reveal()]);
 
         $meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
         $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);

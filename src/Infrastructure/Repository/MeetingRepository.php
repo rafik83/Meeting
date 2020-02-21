@@ -585,6 +585,32 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getBySheets(Event $event, array $sheets): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting')
+            ->from(Meeting::class, 'meeting')
+            ->join(
+                Sheet::class,
+                'sheet',
+                'WITH',
+                'sheet.id IN (:sheets)
+                AND meeting.event = :event
+                AND (meeting.fromSheet = sheet OR meeting.toSheet = sheet)
+                AND meeting.state = :state
+            ')
+            ->setParameter('event', $event)
+            ->setParameter('sheets', $sheets)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countMeetingsBySpots(array $spots): array
     {
         $queryBuilder = $this
