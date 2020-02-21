@@ -30,7 +30,7 @@ mail.changeMailNew.body: 'Hello, you have chosen a new e-mail addresse as login 
 mail.changeMailNew.end: Regards
 mail.changeMailNew.subject: 'Your new email ID'
 mail.changeMailNew.validate: 'Validate Your new email'
-mail.changeMailOld.body: "Hello, \n\nYou have just made a request to change your email for %email%. \n\nCheck your inbox of this new address to validate the change. If you have not requested this change, please contact an administrator. \n\nRegards,"
+mail.changeMailOld.body: "Hello, \n\nYou have just made a request to change your email for %newMail%. \n\nCheck your inbox of this new address to validate the change. If you have not requested this change, please contact an administrator. \n\nRegards,"
 mail.changeMailOld.subject: 'Email change request'
 mail.completeProfile.body: 'You have been invited as participant on the event %event%. To access it, please click on the link below and chose a password to complete your member area.'
 mail.completeProfile.end: 'Best regards,'

@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2011 - Prioritize meeting request before planning
 - VIMEET-2046 - Limit upload image to 500ko
 - VIMEET-2049 - Fix nomenclature template object value: cast key to string
+### Fixed
+- MV-204 - Don't send email if avertisment of changing mail is disabled
 
 ## [2.17.0] - 2019-01-31
 ### Added

@@ -2,7 +2,7 @@
 
 {% block body %}
     {{ 'mail.changeMailOld.body'|trans({
-        '%email%': mail.newMail,
+        '%newMail%': mail.newMail,
         '%firstname%': mail.firstname|capitalize,
         '%lastname%': mail.lastname|upper,
         '%participationType%': mail.participantType

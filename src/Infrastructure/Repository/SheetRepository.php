@@ -223,7 +223,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->from(Sheet::class, 'sheet')
             ->where('sheet.event = :event AND sheet != :sheet AND EXISTS (
                    SELECT request.id FROM Entity:Meeting\Request request WHERE
-                   request.event = :event AND 
+                   request.event = :event AND
                    (
                         request.from = :sheet AND request.to = sheet
                         OR request.to = :sheet AND request.from = sheet
@@ -578,8 +578,8 @@ class SheetRepository implements SheetRepositoryInterface
         if (FilterRequestView::NO_PREFERENCE === $user) {
             $userJoinCondition = 'LEFT JOIN r.fromParticipants fp LEFT JOIN r.toParticipants tp';
             $typeCondition  =
-                '((r.from = sheet AND r.to IN (:sheets) AND tp.id IS NULL) 
-                OR 
+                '((r.from = sheet AND r.to IN (:sheets) AND tp.id IS NULL)
+                OR
                 (r.to = sheet AND r.from IN (:sheets) AND fp.id IS NULL))';
         }
 
@@ -1120,7 +1120,7 @@ class SheetRepository implements SheetRepositoryInterface
                 'sheet.participants',
                 'participant',
                 'WITH',
-                '(sheet.owner = :user OR participant.user = :user) 
+                '(sheet.owner = :user OR participant.user = :user)
                 AND sheet.event = :event
                 AND sheet.enable = true
                 AND sheet.group IS NOT NULL'
