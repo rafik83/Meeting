@@ -54,6 +54,11 @@ Proximum\Vimeet\Domain\Model\Type:
             nullable: true
             options:
                 default: 0
+        numberMaxOfHappeningsPerUser:
+            type: integer
+            nullable: true
+            options:
+                default: null
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria

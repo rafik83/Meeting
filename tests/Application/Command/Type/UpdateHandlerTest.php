@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
+use Proximum\Vimeet\Domain\Model\ValidationCriteria;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -42,7 +43,7 @@ class UpdateHandlerTest extends TestCase
         $type->setAvailabilityType(Type::TYPE_MANAGEMENT_UNAVAILABLE);
 
         $update = new Update($type, 'fr');
-        $update->translations['fr']['title'] = 'truc';
+        $update->translations['fr']['title'] = 'Exposant';
         $update->validationCriteria['sheetAccepted'] = false;
         $update->availabilityType = Type::TYPE_MANAGEMENT_NONE;
         $update->rank = 1;
@@ -50,17 +51,29 @@ class UpdateHandlerTest extends TestCase
         $update->numberOfMeetingsPerPlanning = 12;
         $update->canRemoveMeeting = false;
         $update->areAllSheetParticipantsAssignedToMeeting = true;
-        $update->priorityMeetingRequestsNumber = 0;
+        $update->priorityMeetingRequestsNumber = 2;
+        $update->numberMaxOfHappeningsPerUser = 10;
 
         //Mock
         $typeRepository             = $this->prophesize(TypeRepositoryInterface::class);
         $sheetTemplateCloner        = $this->prophesize(SheetTemplateCloner::class);
         $registrationTemplateCloner = $this->prophesize(RegistrationTemplateCloner::class);
 
-        $typeRepository->set(Argument::that(function ($actual) use ($expectedType) {
-            return $expectedType->getId() === $actual->getId();
+        $typeRepository->set(Argument::that(function (Type $actual) use ($expectedType) {
+            return $expectedType->getId() === $actual->getId()
+                && 10 === $actual->getNumberMaxOfHappeningsPerUser()
+                && Type::TYPE_MANAGEMENT_NONE === $actual->getAvailabilityType()
+                && 1 === $actual->getPosition()
+                && true === $actual->isHidden()
+                && 12 === $actual->getNumberOfMeetingsPerPlanning()
+                && false === $actual->canRemoveMeeting()
+                && true === $actual->areAllSheetParticipantsAssignedToMeeting()
+                && 2 === $actual->getPriorityMeetingRequestsNumber()
+                && 'Exposant' === $actual->getTitle('fr')
+                && new ValidationCriteria(false) == $actual->getValidationCriteria()
+            ;
         }))->shouldBeCalled();
-        $typeRepository->typeExists($event, 'fr', 'truc', $type)->willReturn(false);
+        $typeRepository->typeExists($event, 'fr', 'Exposant', $type)->willReturn(false);
 
         //Handler
         $handler = new UpdateHandler(

@@ -219,6 +219,8 @@ group.sheet.create.title: 'Création d''une nouvelle fiche'
 happening.participate.action: Participer
 happening.participate.detail: Détail
 happening.participate.full: Complet
+happening.participate.maxNumberHappeningParticipationReached: 'Nombre maximum d’inscription atteinte'
+happening.participate.maxNumberHappeningParticipationReachedForParticipant: '%fullname% a atteint son nombre maximum d''inscription'
 happening.participate.noParticipantSelected: 'Vous n''avez sélectionné aucun participant.'
 happening.participate.notEnoughtRemainingParticipations: '{0} Plus aucune place de disponible|{1} Il ne reste plus qu''une place disponible|]1,Inf[ Il ne reste plus que %remaining% places disponibles'
 happening.participate.participantMustHaveProductToParticipate: 'Une option est requise pour participer à cet évènement.'

@@ -4,10 +4,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2011 - Prioritize meeting request before planning
+- VIMEET-2046 - Limit upload image to 500ko
+- VIMEET-2049 - Fix nomenclature template object value: cast key to string
+### Fixed
 - MV-204 - Don't send email if avertisment of changing mail is disabled
 
+## [2.17.0] - 2019-01-31
+### Added
+- VIMEET-2033 - add number max of happenings per user in participation type parameters
+- VIMEET-2040 - Set 'contains' as default operator for string filter
+- VIMEET-2042 - Clean nomenclature key, replace dot by underscore
+- VIMEET-2041 - restriction registration when number max of happenings per user is achieved
 ### Fixed
 - MV-202 - Remove type from mass unavailability
+- MV-209 - Fix video test; check if chat element exists
 
 ## [2.16.0] - 2019-12-23
 ### Added

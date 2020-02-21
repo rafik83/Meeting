@@ -52,7 +52,7 @@ class Create implements Command
 
     /** @var bool */
     public $hidden;
-    
+
     /** @var string */
     public $availabilityType = Type::TYPE_MANAGEMENT_NONE;
 
@@ -80,6 +80,9 @@ class Create implements Command
     /** @var int */
     public $priorityMeetingRequestsNumber = 0;
 
+    /** @var int|null */
+    public $numberMaxOfHappeningsPerUser;
+
     /**
      * @param Event  $event
      * @param string $locale
@@ -97,3 +100,4 @@ class Create implements Command
         }
     }
 }
+

@@ -86,9 +86,15 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         );
     }
 
-    public function testMissingParticipants()
+    public function testNoPreferenceAndNoMatch(): void
     {
         $fromParticipant = $this->prophesize(Participant::class);
+        $toParticipant = $this->prophesize(Participant::class);
+
+        $this->toSheet->getParticipantsArray()->willReturn([$toParticipant->reveal()]);
+
+        $slot1 = $this->prophesize(MeetingSlot::class);
+        $slot2 = $this->prophesize(MeetingSlot::class);
 
         $request = new Request(
             $this->fromSheet->reveal(),
@@ -107,6 +113,21 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         ;
         $this->meetingParticipants
             ->getMeetingParticipants($request, $this->toSheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this->meetingSlotRepository
+            ->findAvailableSlotsByParticipants(
+                $this->event->reveal(),
+                [$fromParticipant->reveal(), $toParticipant->reveal()]
+            )
+            ->shouldBeCalled()
+            ->willReturn([$slot1->reveal(), $slot2->reveal()])
+        ;
+
+        $this->slotFilter
+            ->getFilteredSlots([$slot1->reveal(), $slot2->reveal()])
             ->shouldBeCalled()
             ->willReturn([])
         ;

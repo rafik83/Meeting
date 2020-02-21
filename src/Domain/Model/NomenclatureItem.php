@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 class NomenclatureItem
 {
     /**
-     * @var string
+     * @var mixed|string
      */
     private $key;
 
@@ -62,9 +62,14 @@ class NomenclatureItem
      *
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
-        return $this->key;
+        return (string) $this->key;
+    }
+
+    public function getCleanKey(): string
+    {
+        return str_replace('.', '_', $this->getKey());
     }
 
     /**

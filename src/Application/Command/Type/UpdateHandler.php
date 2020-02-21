@@ -61,7 +61,7 @@ class UpdateHandler
         if(!$update->isPackageRequired && $update->isPaymentRequired) {
             throw new PackageNotRequiredException();
         }
-        
+
         $type = $update->type;
         $type->update(
             $update->rank,
@@ -74,7 +74,8 @@ class UpdateHandler
             $update->canScanParticipant,
             $update->isPackageRequired,
             $update->isPaymentRequired,
-            $update->priorityMeetingRequestsNumber
+            $update->priorityMeetingRequestsNumber,
+            $update->numberMaxOfHappeningsPerUser
         );
         $type->setHidden($update->hidden);
 
