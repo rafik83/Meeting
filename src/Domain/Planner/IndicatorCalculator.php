@@ -90,7 +90,8 @@ class IndicatorCalculator
             $meetingRequestsCount,
             $pendingPropositionCount,
             $massUnavaibilitiesCount,
-            $sheet->getType()->getNumberOfMeetingsPerPlanning()
+            $sheet->getType()->getNumberOfMeetingsPerPlanning(),
+            $sheet->getType()->getNumberMaxOfMeetingsPerSheet()
         );
     }
 

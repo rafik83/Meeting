@@ -77,7 +77,8 @@ class CreateHandler
             $create->isPackageRequired,
             $create->isPaymentRequired,
             $create->priorityMeetingRequestsNumber,
-            $create->numberMaxOfHappeningsPerUser
+            $create->numberMaxOfHappeningsPerUser,
+            $create->numberMaxOfMeetingsPerSheet
         );
 
         $localesTitleAlreadyExists = [];

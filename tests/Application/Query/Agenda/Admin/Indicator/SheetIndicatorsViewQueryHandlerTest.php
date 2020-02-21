@@ -37,7 +37,7 @@ class SheetIndicatorsViewQueryHandlerTest extends TestCase
         $request = 1;
         $propositions = 1;
 
-        $indicators = new IndicatorView(1, 1, 0, 1, 1, 1, 0, 8);
+        $indicators = new IndicatorView(1, 1, 0, 1, 1, 1, 0, 8, null);
 
         $query = new SheetIndicatorsViewQuery($sheet);
         $handler = new SheetIndicatorsViewQueryHandler(
