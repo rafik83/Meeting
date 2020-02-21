@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareChangeNewMailAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareChangeOldMailAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
@@ -23,9 +25,14 @@ use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareTra
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareUserCompleteProfileMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareVersionDiffChangedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareChangeNewMailAccountView;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareChangeOldMailAccountView;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareUserRegisteredMailView;
+use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeNewMailAddressMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ChangeOldMailAddressMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountMail;
 
 class PrepareHandlerTest extends TestCase
@@ -41,7 +48,10 @@ class PrepareHandlerTest extends TestCase
         $prepareVersionDiffChangedMail,
         $prepareSheetChangeTypeMail,
         $user,
-        $event
+        $event,
+        $prepareChangeOldMailAccountMail,
+        $prepareChangeNewMailAccountMail,
+        $changeMailToken
     ;
 
     /** @var string */
@@ -61,6 +71,9 @@ class PrepareHandlerTest extends TestCase
         $this->prepareOrderConfirmedMail = $this->prophesize(PrepareOrderConfirmedMail::class);
         $this->prepareVersionDiffChangedMail = $this->prophesize(PrepareVersionDiffChangedMail::class);
         $this->prepareSheetChangeTypeMail = $this->prophesize(PrepareSheetChangeTypeMail::class);
+        $this->prepareChangeOldMailAccountMail = $this->prophesize(PrepareChangeOldMailAccountMail::class);
+        $this->prepareChangeNewMailAccountMail = $this->prophesize(PrepareChangeNewMailAccountMail::class);
+        $this->changeMailToken = $this->prophesize(ChangeMailToken::class);
     }
 
     public function testPrepareRegisterAccountMail(): void
@@ -81,6 +94,8 @@ class PrepareHandlerTest extends TestCase
         $this->prepareOrderConfirmedMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareVersionDiffChangedMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareSheetChangeTypeMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareChangeOldMailAccountMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareChangeNewMailAccountMail->prepare(Argument::any())->shouldNotBeCalled();
 
         $handler = new PrepareHandler(
             $this->prepareRegisterAccountMail->reveal(),
@@ -91,11 +106,65 @@ class PrepareHandlerTest extends TestCase
             $this->prepareTransactionTotalMail->reveal(),
             $this->prepareOrderConfirmedMail->reveal(),
             $this->prepareVersionDiffChangedMail->reveal(),
-            $this->prepareSheetChangeTypeMail->reveal()
+            $this->prepareSheetChangeTypeMail->reveal(),
+            $this->prepareChangeOldMailAccountMail->reveal(),
+            $this->prepareChangeNewMailAccountMail->reveal()
         );
 
         $result = $handler->handle($mail);
 
         $this->assertInstanceOf(RegisterAccountMail::class, $result);
+    }
+
+    public function testPrepareChangeOldAndNewMailAccountMail(): void
+    {
+        $oldMail = new PrepareChangeOldMailAccountView(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $this->locale,
+            $this->changeMailToken->reveal()
+        );
+
+        $newMail = new PrepareChangeNewMailAccountView(
+            $this->event->reveal(),
+            $this->user->reveal(),
+            $this->locale,
+            $this->changeMailToken->reveal()
+        );
+
+        $preparedOldMail = $this->prophesize(ChangeOldMailAddressMail::class);
+        $preparedNewMail = $this->prophesize(ChangeNewMailAddressMail::class);
+
+        $this->prepareRegisterAccountMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareActivateAccountMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareParticipantAddedMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->preparePreRegisterMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareUserCompleteProfileMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareTransactionTotalMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareOrderConfirmedMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareVersionDiffChangedMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareSheetChangeTypeMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareChangeOldMailAccountMail->prepare($oldMail)->shouldBeCalled()->willReturn($preparedOldMail->reveal());
+        $this->prepareChangeNewMailAccountMail->prepare($newMail)->shouldBeCalled()->willReturn($preparedNewMail->reveal());
+
+        $handler = new PrepareHandler(
+            $this->prepareRegisterAccountMail->reveal(),
+            $this->prepareActivateAccountMail->reveal(),
+            $this->prepareParticipantAddedMail->reveal(),
+            $this->preparePreRegisterMail->reveal(),
+            $this->prepareUserCompleteProfileMail->reveal(),
+            $this->prepareTransactionTotalMail->reveal(),
+            $this->prepareOrderConfirmedMail->reveal(),
+            $this->prepareVersionDiffChangedMail->reveal(),
+            $this->prepareSheetChangeTypeMail->reveal(),
+            $this->prepareChangeOldMailAccountMail->reveal(),
+            $this->prepareChangeNewMailAccountMail->reveal()
+        );
+
+        $oldResult = $handler->handle($oldMail);
+        $newResult = $handler->handle($newMail);
+
+        $this->assertInstanceOf(ChangeOldMailAddressMail::class, $oldResult);
+        $this->assertInstanceOf(ChangeNewMailAddressMail::class, $newResult);
     }
 }

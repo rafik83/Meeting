@@ -13,6 +13,8 @@ Proximum\Vimeet\Application\Command\Happening\Speaker\Create:
         organization:
             - NotBlank: ~
         logo:
-            - Image: ~
+            - Image:
+                maxSize: 500k
         photo:
-            - Image: ~
+            - Image:
+                maxSize: 500k

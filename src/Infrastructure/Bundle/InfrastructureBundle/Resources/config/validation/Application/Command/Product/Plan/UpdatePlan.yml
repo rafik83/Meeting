@@ -3,7 +3,8 @@ Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan:
         name:
             - NotBlank: ~
         file:
-            - Image: ~
+            - Image:
+                maxSize: 500k
         availabilityCurrent:
             - Range:
                 min: 0
