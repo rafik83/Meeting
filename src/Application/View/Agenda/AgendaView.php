@@ -27,6 +27,9 @@ class AgendaView
     /** @var bool */
     public $isUserAloneParticipant;
 
+    /** @var bool */
+    public $isUserParticipantMultipleSheet;
+
     /** @var ParticipantView[] */
     public $participants;
 
@@ -51,6 +54,7 @@ class AgendaView
         Sheet $sheet,
         Participant $participant,
         bool $isUserAloneParticipant,
+        bool $isUserParticipantMultipleSheet,
         array $participants,
         bool $isPhoneValidationRequired,
         bool $canMoveMeeting,
@@ -61,6 +65,7 @@ class AgendaView
         $this->sheet = $sheet;
         $this->participant = $participant;
         $this->isUserAloneParticipant = $isUserAloneParticipant;
+        $this->isUserParticipantMultipleSheet = $isUserParticipantMultipleSheet;
         $this->participants = $participants;
         $this->isPhoneValidationRequired = $isPhoneValidationRequired;
         $this->timezone = $timezone;
@@ -81,5 +86,10 @@ class AgendaView
         }
 
         return null;
+    }
+
+    public function showSheetAgenda(): bool
+    {
+        return !$this->isUserAloneParticipant || $this->isUserParticipantMultipleSheet;
     }
 }

@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
+use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeForm;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -50,18 +51,33 @@ class AgendaController extends Controller
     ): RedirectResponse {
         $this->checkAccess($eventDomain, $sheet);
 
-        $participant = $sheet->getUserParticipant($userDomain->getUser());
+        $user = $userDomain->getUser();
+        $participant = $sheet->getUserParticipant($user);
 
-        if (null !== $participant) {
+        $isUserAloneParticipant = null !== $user
+            ? ParticipantHelper::isUserAloneParticipant($user, $sheet)
+            : false
+        ;
+
+        $isUserParticipantMultipleSheet = $this->get('vimeet_infrastructure.repository.sheet_repository')
+            ->isUserParticipantMultipleSheetsInEvent($user, $eventDomain->getEvent())
+        ;
+
+        if (!$isUserAloneParticipant || $isUserParticipantMultipleSheet) {
             return $this->redirectToRoute(
-                'event_agenda_participant',
-                ['participant' => $participant->getId(), 'sheet' => $sheet->getId()]
+                'event_agenda_sheet',
+                [
+                    'sheet' => $sheet->getId(),
+                ]
             );
         }
 
         return $this->redirectToRoute(
             'event_agenda_participant',
-            ['participant' => $sheet->getFirstParticipant()->getId(), 'sheet' => $sheet->getId()]
+            [
+                'participant' => null !== $participant ? $participant->getId() : $sheet->getFirstParticipant()->getId(),
+                'sheet' => $sheet->getId(),
+            ]
         );
     }
 

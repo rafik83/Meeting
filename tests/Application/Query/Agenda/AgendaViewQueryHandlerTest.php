@@ -193,6 +193,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             $sheet,
             $participant,
             true,
+            true,
             [new ParticipantView(1, 'fullName')],
             false,
             false,
@@ -322,6 +323,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             $sheet,
             $participant2,
             false,
+            true,
             [
                 new ParticipantView(1, 'fullName'),
                 new ParticipantView(2, 'fullName2'),
@@ -517,6 +519,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             $sheet,
             $participant2,
             false,
+            true,
             [
                 new ParticipantView(1, 'fullName'),
                 new ParticipantView(2, 'fullName2'),
