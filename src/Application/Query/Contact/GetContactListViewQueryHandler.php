@@ -58,9 +58,9 @@ class GetContactListViewQueryHandler
             new GetContactListUsersViewQuery($query->event, $query->participant)
         );
 
-        $isAccessControlEnabled = $query->event->isAccessControlEnabled();
+        $showCheckinStatus = $query->event->getShowCheckinStatus();
         $isItDDay = $this->dDayGuesser->isItDDay($query->event);
-        $getCheckinStatus = $isAccessControlEnabled && $isItDDay;
+        $getCheckinStatus = $showCheckinStatus && $isItDDay;
 
         /** @var User[] $metUsers */
         $metUsers = array_merge($usersView->requestsUsers, $usersView->inContactsUsers);
@@ -123,7 +123,7 @@ class GetContactListViewQueryHandler
             }
         );
 
-        return new ContactListView($isAccessControlEnabled, $isItDDay, $contactPreviewViews);
+        return new ContactListView($showCheckinStatus, $isItDDay, $contactPreviewViews);
     }
 
     /**
