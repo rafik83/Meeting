@@ -31,7 +31,9 @@ use Proximum\Vimeet\Application\View\Agenda\CancelAttendanceUnavailabilityView;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingOwnSheetParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
+use Proximum\Vimeet\Application\View\Agenda\SheetMetView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Category;
@@ -210,6 +212,7 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->unavailabilityView],
             [$this->massView],
             [],
+            [],
             []
         );
 
@@ -319,6 +322,7 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->participation1, $this->participation2],
             [$this->unavailability],
             [$this->mass],
+            [],
             []
         ));
 
@@ -337,7 +341,8 @@ class DayViewQueryHandlerTest extends TestCase
             1,
             'userSheetTitle',
             2,
-            ['title'],
+            [new SheetMetView('Sheet title', false)],
+            [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
             $this->beginHappening1,
             $this->endHappening2,
             'ref',
@@ -347,6 +352,11 @@ class DayViewQueryHandlerTest extends TestCase
             []
         );
         $availableSlotViews = new AvailableSlotView(1, $this->beginHappening1, $this->endHappening2);
+        $meetingSlot = new MeetingSlot(
+            $this->event,
+            new \DateTime('2016-10-12 11:00:00'),
+            new \DateTime('2016-10-12 11:20:00')
+        );
 
         $expected = new DayView(
             $this->startTime,
@@ -356,6 +366,12 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->unavailabilityView],
             [$this->massView],
             [$meetingView],
+            [
+                '2016-10-12 11:00:00' => new TimeRangeView(
+                    new \DateTime('2016-10-12 11:00:00'),
+                    new \DateTime('2016-10-12 11:20:00')
+                )
+            ],
             [$availableSlotViews],
             null
         );
@@ -421,7 +437,7 @@ class DayViewQueryHandlerTest extends TestCase
             ->willReturn([$this->massView]);
         $this->agendaCollisionManager->getMeetingViews()->shouldBeCalled()->willReturn([$meetingView]);
 
-        $result  = $this->dayViewQueryHandler->handle(new DayViewQuery(
+        $result = $this->dayViewQueryHandler->handle(new DayViewQuery(
             $this->day,
             $this->sheet,
             $this->event,
@@ -432,7 +448,8 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->participation1, $this->participation2],
             [$this->unavailability],
             [$this->mass],
-            [$meeting]
+            [$meeting],
+            [$meetingSlot]
         ));
 
         $this->assertEquals($expected, $result);
@@ -486,6 +503,7 @@ class DayViewQueryHandlerTest extends TestCase
             [],
             [],
             [],
+            [],
             new CancelAttendanceUnavailabilityView($startTime, $endTime, 'Europe/Paris')
         );
 
@@ -530,7 +548,8 @@ class DayViewQueryHandlerTest extends TestCase
             'fr',
             [$participation1, $participation2],
             [$unavailability],
-            [$mass]
+            [$mass],
+            []
         ));
         $this->assertEquals($expected, $result);
     }

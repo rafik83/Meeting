@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingOwnSheetParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
 
 class MeetingView extends AbstractTimeEntityView
@@ -29,7 +30,7 @@ class MeetingView extends AbstractTimeEntityView
     /** @var MeetingParticipantView[] */
     public $participants;
 
-    /** @var string */
+    /** @var SheetMetView[] */
     public $sheetMetTitle;
 
     /** @var string */
@@ -44,6 +45,9 @@ class MeetingView extends AbstractTimeEntityView
     /** @var bool */
     public $isUserParticipantMultipleSheets;
 
+    /** @var MeetingOwnSheetParticipantView[] */
+    public $meetingOwnSheetParticipantViews;
+
     /** @var bool */
     private $isVisio;
 
@@ -51,26 +55,28 @@ class MeetingView extends AbstractTimeEntityView
     private $isVisioAvailable;
 
     /**
-     * @param int                      $id
-     * @param string                   $userSheetTitle
-     * @param int                      $sheetMetId
-     * @param array                    $sheetMetTitle
-     * @param \DateTimeInterface       $begin
-     * @param \DateTimeInterface       $end
-     * @param string                   $spotRef
-     * @param string                   $timeZone
-     * @param string                   $leftColor
-     * @param string                   $rightColor
-     * @param MeetingParticipantView[] $participants
-     * @param bool                     $isUserParticipantMultipleSheets
-     * @param bool                     $isVisio
-     * @param bool                     $isVisioAvailable
+     * @param int                              $id
+     * @param string                           $userSheetTitle
+     * @param int                              $sheetMetId
+     * @param SheetMetView[]                   $sheetMetTitle
+     * @param MeetingOwnSheetParticipantView[] $meetingOwnSheetParticipantViews
+     * @param \DateTimeInterface               $begin
+     * @param \DateTimeInterface               $end
+     * @param string                           $spotRef
+     * @param string                           $timeZone
+     * @param string                           $leftColor
+     * @param string                           $rightColor
+     * @param MeetingParticipantView[]         $participants
+     * @param bool                             $isUserParticipantMultipleSheets
+     * @param bool                             $isVisio
+     * @param bool                             $isVisioAvailable
      */
     public function __construct(
         int $id,
         $userSheetTitle,
         $sheetMetId,
         array $sheetMetTitle,
+        array $meetingOwnSheetParticipantViews,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         $spotRef,
@@ -86,6 +92,7 @@ class MeetingView extends AbstractTimeEntityView
         $this->userSheetTitle = $userSheetTitle;
         $this->sheetMetId = $sheetMetId;
         $this->sheetMetTitle = $sheetMetTitle;
+        $this->meetingOwnSheetParticipantViews = $meetingOwnSheetParticipantViews;
         $this->spotRef = $spotRef;
         $this->begin = $begin;
         $this->end = $end;
@@ -128,5 +135,15 @@ class MeetingView extends AbstractTimeEntityView
     public function isVisioAndAvailable(): bool
     {
         return $this->isVisio && $this->isVisioAvailable;
+    }
+
+    public function getMeetingOwnSheetParticipantNames(): string
+    {
+        return implode(', ', $this->meetingOwnSheetParticipantViews);
+    }
+
+    public function hasMeetingOwnSheetParticipantNames(): bool
+    {
+        return !empty($this->meetingOwnSheetParticipantViews);
     }
 }

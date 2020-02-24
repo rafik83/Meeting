@@ -14,7 +14,9 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingOwnSheetParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
+use Proximum\Vimeet\Application\View\Agenda\SheetMetView;
 use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 
 class AgendaCollisionManagerTest extends TestCase
@@ -37,7 +39,8 @@ class AgendaCollisionManagerTest extends TestCase
             1,
             'userSheetTitle',
             2,
-            ['title'],
+            [new SheetMetView('Sheet title', false)],
+            [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
             $beginHappening1,
             $endHappening1,
             'ref',

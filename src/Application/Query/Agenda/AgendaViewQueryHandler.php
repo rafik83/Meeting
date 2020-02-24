@@ -15,11 +15,14 @@ use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
@@ -58,6 +61,9 @@ class AgendaViewQueryHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /** @var MeetingSlotRepositoryInterface */
+    private $meetingSlotRepository;
+
     /** @var ValidationRequiredChecker */
     private $validationRequiredChecker;
 
@@ -76,6 +82,9 @@ class AgendaViewQueryHandler
     /** @var CanRemoveMeeting */
     private $canRemoveMeeting;
 
+    /** @var IsParticipantVisio */
+    private $isParticipantVisio;
+
     public function __construct(
         DayRepositoryInterface $dayRepository,
         SheetRepositoryInterface $sheetRepository,
@@ -85,13 +94,15 @@ class AgendaViewQueryHandler
         MassRepositoryInterface $massUnavailabilityRepository,
         ParticipantViewQueryHandler $participantViewQueryHandler,
         MeetingRepositoryInterface $meetingRepository,
+        MeetingSlotRepositoryInterface $meetingSlotRepository,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         ValidationRequiredChecker $validationRequiredChecker,
         ExtraDataRepository $extraDataRepository,
         GetTimezoneHelper $getTimezoneHelper,
         GetParticipantTypes $getParticipantTypes,
         CanMoveMeeting $canMoveMeeting,
-        CanRemoveMeeting $canRemoveMeeting
+        CanRemoveMeeting $canRemoveMeeting,
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->dayRepository = $dayRepository;
         $this->sheetRepository = $sheetRepository;
@@ -101,6 +112,7 @@ class AgendaViewQueryHandler
         $this->massUnavailabilityRepository = $massUnavailabilityRepository;
         $this->participantViewQueryHandler = $participantViewQueryHandler;
         $this->meetingRepository = $meetingRepository;
+        $this->meetingSlotRepository = $meetingSlotRepository;
         $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
         $this->validationRequiredChecker = $validationRequiredChecker;
         $this->extraDataRepository = $extraDataRepository;
@@ -108,6 +120,7 @@ class AgendaViewQueryHandler
         $this->getParticipantTypes = $getParticipantTypes;
         $this->canMoveMeeting = $canMoveMeeting;
         $this->canRemoveMeeting = $canRemoveMeeting;
+        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     /**
@@ -140,31 +153,50 @@ class AgendaViewQueryHandler
         );
 
         if (empty($eventDays)) {
-            return new AgendaView([], $timezone, $sheet, $participant, $isUserAloneParticipant, $participants, false, $canMoveMeeting, $canRemoveMeeting);
+            return new AgendaView(
+                [],
+                $timezone,
+                $sheet,
+                $participant,
+                $isUserAloneParticipant,
+                $isUserParticipantMultipleSheet,
+                $participants,
+                false,
+                $canMoveMeeting,
+                $canRemoveMeeting,
+                false
+            );
         }
 
-        $unavailabilities        = [];
-        $meetings                = [];
+        $unavailabilities = [];
+        $meetings = [];
         $happeningParticipations = [];
-        $masses                  = [];
+        $masses = [];
+        $meetingSlots = [];
 
         if ($query->sheet->attend()) {
-            $unavailabilities = $this->unavailabilityRepository->findByUserAndEvent(
-                $participant->getUser(),
-                $query->event
-            );
-
             $masses = $this->massUnavailabilityRepository->findByTypes(
                 $this->getParticipantTypes->handle($participant),
                 $query->locale
             );
 
-            $happeningParticipations = $this
-                ->happeningParticipationRepository
-                ->findByUser($participant->getUser(), $query->event, true);
+            if (!$query->allSheet) {
+                $unavailabilities = $this->unavailabilityRepository->findByUserAndEvent(
+                    $participant->getUser(),
+                    $query->event
+                );
+
+                $happeningParticipations = $this
+                    ->happeningParticipationRepository
+                    ->findByUser($participant->getUser(), $query->event, true);
+            }
+
+            if ($query->allSheet) {
+                $meetingSlots = $this->meetingSlotRepository->findByEvent($query->event);
+            }
 
             if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
-                $meetings = $this->meetingRepository->findByUserAndEvent($participant->getUser(), $query->event);
+                $meetings = $this->getMeetings($query);
             }
         }
 
@@ -184,22 +216,18 @@ class AgendaViewQueryHandler
                     $happeningParticipations,
                     $unavailabilities,
                     $masses,
-                    $meetings
+                    $meetings,
+                    $meetingSlots
                 )
             );
         }
 
-        $isPhoneConfirmationRequired = false;
-
-        if (true === $this->validationRequiredChecker->handle($sheet, $query->userViewing)) {
-            if (null === $this->extraDataRepository->getExtraDataForEventNameAndUser(
+        $isPhoneConfirmationRequired = $this->validationRequiredChecker->handle($sheet, $query->userViewing)
+            && null === $this->extraDataRepository->getExtraDataForEventNameAndUser(
                 $query->event,
                 Type::PHONE_CONFIRMATION_IGNORED,
-                $query->userViewing)
-            ) {
-                $isPhoneConfirmationRequired = true;
-            }
-        }
+                $query->userViewing
+            );
 
         return new AgendaView(
             $dayViews,
@@ -207,11 +235,29 @@ class AgendaViewQueryHandler
             $sheet,
             $participant,
             $isUserAloneParticipant,
+            $isUserParticipantMultipleSheet,
             $participants,
             $isPhoneConfirmationRequired,
             $canMoveMeeting,
-            $canRemoveMeeting
+            $canRemoveMeeting,
+            $this->isParticipantVisio->isSatisfiedBy($participant)
         );
+    }
+
+    /**
+     * @param AgendaViewQuery $query
+     *
+     * @return Meeting[]
+     */
+    private function getMeetings(AgendaViewQuery $query): array
+    {
+        if (!$query->allSheet) {
+            return $this->meetingRepository->findByUserAndEvent($query->participant->getUser(), $query->event);
+        }
+
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($query->userViewing, $query->event);
+
+        return $this->meetingRepository->getBySheets($query->event, $sheets);
     }
 
     /**

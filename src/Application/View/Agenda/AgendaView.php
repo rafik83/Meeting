@@ -27,6 +27,9 @@ class AgendaView
     /** @var bool */
     public $isUserAloneParticipant;
 
+    /** @var bool */
+    public $isUserParticipantMultipleSheet;
+
     /** @var ParticipantView[] */
     public $participants;
 
@@ -42,26 +45,33 @@ class AgendaView
     /** @var bool */
     public $canRemoveMeeting;
 
+    /** @var bool */
+    public $isParticipantVisio;
+
     public function __construct(
         array $dayViews,
         string $timezone,
         Sheet $sheet,
         Participant $participant,
         bool $isUserAloneParticipant,
+        bool $isUserParticipantMultipleSheet,
         array $participants,
         bool $isPhoneValidationRequired,
         bool $canMoveMeeting,
-        bool $canRemoveMeeting
+        bool $canRemoveMeeting,
+        bool $isParticipantVisio
     ) {
         $this->days = $dayViews;
         $this->sheet = $sheet;
         $this->participant = $participant;
         $this->isUserAloneParticipant = $isUserAloneParticipant;
+        $this->isUserParticipantMultipleSheet = $isUserParticipantMultipleSheet;
         $this->participants = $participants;
         $this->isPhoneValidationRequired = $isPhoneValidationRequired;
         $this->timezone = $timezone;
         $this->canMoveMeeting = $canMoveMeeting;
         $this->canRemoveMeeting = $canRemoveMeeting;
+        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     /**
@@ -76,5 +86,10 @@ class AgendaView
         }
 
         return null;
+    }
+
+    public function showSheetAgenda(): bool
+    {
+        return !$this->isUserAloneParticipant || $this->isUserParticipantMultipleSheet;
     }
 }

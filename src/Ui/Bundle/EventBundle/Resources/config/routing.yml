@@ -836,6 +836,13 @@ event_agenda:
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:index }
 
+event_agenda_sheet:
+    path: /sheet/{sheet}/agenda/sheet
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda\SheetAgendaAction
+
 event_agenda_participant:
     path: /sheet/{sheet}/agenda/participant/{participant}
     requirements:

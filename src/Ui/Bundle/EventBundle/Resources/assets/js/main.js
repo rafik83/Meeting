@@ -13,6 +13,7 @@ var $ = require('jquery'),
     QuantitySelector = require('./components/_QuantitySelector'),
     CatalogSheetCard = require('./components/_CatalogSheetCard'),
     Agenda = require('./components/agenda'),
+    AgendaAllSheet = require('./components/agenda/_AgendaAllSheet'),
     Program = require('./components/agenda/_Program'),
     ShowMore = require('./components/_ShowMore'),
     ShowMoreParticipants = require('./components/_ShowMoreParticipants'),
@@ -118,9 +119,17 @@ function init (target) {
     });
 
 
-    [].forEach.call(target.querySelectorAll('.agenda-container'), function (element) {
-        Agenda.init(target, element);
-    });
+    const agendaElement = document.getElementById('agenda');
+
+    if (agendaElement) {
+        Agenda.init(target, agendaElement);
+    }
+
+    const agendaAllSheetElement = document.getElementById('agendaAllSheet');
+
+    if (agendaAllSheetElement) {
+        new AgendaAllSheet(agendaAllSheetElement);
+    }
 
     [].forEach.call(target.querySelectorAll('.program-happening, .program-mass'), function(element) {
        new Program(element);
