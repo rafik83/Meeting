@@ -42,6 +42,20 @@ class CanScanParticipant
             }
         }
 
+        $plan = $order->getPlan();
+
+        if (null === $plan) {
+            return false;
+        }
+
+        $includedProducts = $plan->getIncludedOptionProduct();
+
+        foreach ($includedProducts as $includedProduct) {
+            if ($includedProduct->getIncluded()->canScanParticipant()) {
+                return true;
+            }
+        }
+
         return false;
     }
 }
