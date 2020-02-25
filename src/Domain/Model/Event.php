@@ -873,7 +873,7 @@ class Event implements EventInterface, TraceableInterface
         return $this->showCheckinStatus;
     }
 
-    public function getShowCheckinStatus(): bool
+    public function accessControlEnabledAndShowCheckinStatus(): bool
     {
         return $this->showCheckinStatus() && $this->isAccessControlEnabled();
     }
