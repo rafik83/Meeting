@@ -11,11 +11,11 @@ class ContactListView
     private $isItDDay;
 
     /** @var bool */
-    private $isAccessControlEnabled;
+    private $showCheckinStatus;
 
-    public function __construct(bool $isAccessControlEnabled, bool $isItDDay, array $contactPreviewViews)
+    public function __construct(bool $showCheckinStatus, bool $isItDDay, array $contactPreviewViews)
     {
-        $this->isAccessControlEnabled = $isAccessControlEnabled;
+        $this->showCheckinStatus = $showCheckinStatus;
         $this->isItDDay = $isItDDay;
         $this->contactPreviewViews = $contactPreviewViews;
     }
@@ -30,13 +30,8 @@ class ContactListView
         return $this->isItDDay;
     }
 
-    public function isAccessControlEnabled(): bool
-    {
-        return $this->isAccessControlEnabled;
-    }
-
     public function showCheckinStatus(): bool
     {
-        return $this->isAccessControlEnabled() && $this->isItDDay();
+        return $this->showCheckinStatus;
     }
 }

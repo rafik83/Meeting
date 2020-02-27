@@ -311,6 +311,7 @@ form.event_practical_info_update.children.organiserPhone.label: 'Téléphone de 
 form.event_practical_info_update.children.organiserWebsite.label: 'Site internet'
 form.event_practical_info_update.children.submit.label: Enregistrer
 form.event_update.children.accessControlEnabled.label: "Contrôle d'accès activé"
+form.event_update.children.showCheckinStatus.label: "Présence/absence d’un participant affichée dans les RDV et liste de contacts"
 form.event_update_design.children.backgroundColor.label: 'Couleur de fond'
 form.event_update_design.children.backgroundImage.label: 'Image de fond'
 form.event_update_design.children.headerButtonLeftColor.label: 'Couleur de gauche des boutons du Header'

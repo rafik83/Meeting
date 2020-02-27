@@ -100,6 +100,13 @@ class UpdateType extends AbstractEventType
                     [
                         'required' => false,
                     ]
+                )
+                ->add(
+                    'showCheckinStatus',
+                    CheckboxType::class,
+                    [
+                        'required' => false,
+                    ]
                 );
         }
     }

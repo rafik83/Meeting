@@ -25,7 +25,7 @@ class GetContactListViewQueryHandlerTest extends TestCase
     {
         // prepare data
         $event = $this->prophesize(Event::class);
-        $event->isAccessControlEnabled()->shouldBeCalled()->willReturn(true);
+        $event->accessControlEnabledAndShowCheckinStatus()->shouldBeCalled()->willReturn(true);
 
         //    contact list participant
         $participantSheet = $this->prophesize(Sheet::class);
