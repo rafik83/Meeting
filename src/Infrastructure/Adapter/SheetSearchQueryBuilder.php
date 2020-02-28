@@ -1078,7 +1078,7 @@ class SheetSearchQueryBuilder
             foreach ($tagFilter as $tagKey) {
                 $tagValuesBoolQuery->addShould(new Term([
                         'nestedTaggedData.values.value' => [
-                            'value' => $tagKey->key,
+                            'value' => strtolower($tagKey->key),
                         ],
                     ]
                 ));
