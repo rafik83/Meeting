@@ -10,28 +10,22 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security;
 
 use Proximum\Vimeet\Domain\Model\Admin;
-use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\Exception\DisabledException;
+use Symfony\Component\Security\Core\User\UserChecker as SymfonyUserChecker;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-class AdminChecker implements UserCheckerInterface
+class AdminChecker extends SymfonyUserChecker
 {
     public function checkPreAuth(UserInterface $user): void
     {
+        parent::checkPreAuth($user);
+
         if (!$user instanceof Admin) {
             return;
         }
 
-        // user is deleted, show a generic Account Not Found message.
-        if ($user->isDeleted()
-            || !$user->isAccountNonExpired()
-            || !$user->isEnabled()
-            || !$user->isCredentialsNonExpired()
-            || !$user->isAccountNonLocked()
-        ) {
-            throw new AuthenticationException();
+        if ($user->isDeleted()) {
+            throw new DisabledException('Account is disabled.');
         }
     }
-
-    public function checkPostAuth(UserInterface $user){}
 }
