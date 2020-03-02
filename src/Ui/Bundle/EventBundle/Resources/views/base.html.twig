@@ -50,7 +50,7 @@
         {% endblock body %}
 
         {% if event is defined %}
-            {{ render(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Crisp\\ChatAction', {'event': event})) }}
+            {{ render_esi(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Crisp\\ChatAction', {'event': event})) }}
         {% endif %}
 
         {% block javascripts %}
