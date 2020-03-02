@@ -33,8 +33,5 @@ class AdminChecker implements UserCheckerInterface
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     public function checkPostAuth(UserInterface $user){}
 }
