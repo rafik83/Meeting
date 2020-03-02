@@ -34,5 +34,5 @@ Feature: Login admin
     And I fill in "form.login.children.password.label" with "vimeet_admin"
     And I press "form.login.children.submit.label"
     Then I should be on this page "/fr/login"
-    And I should see "Account is disabled."
+    And I should see "An authentication exception occurred."
 
