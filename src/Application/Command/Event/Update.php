@@ -47,6 +47,9 @@ class Update extends AbstractEvent
     /** @var bool */
     public $accessControlEnabled;
 
+    /** @var bool */
+    public $showCheckinStatus;
+
     /**
      * @param Model\Event $event
      */
@@ -77,6 +80,7 @@ class Update extends AbstractEvent
         $this->googleLoginEnabled = $event->isGoogleLoginEnabled();
         $this->linkedinLoginEnabled = $event->isLinkedinLoginEnabled();
         $this->accessControlEnabled = $event->isAccessControlEnabled();
+        $this->showCheckinStatus = $event->showCheckinStatus();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
