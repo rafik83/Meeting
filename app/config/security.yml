@@ -57,6 +57,7 @@ security:
             host: '%admin_domain%'
             provider: admin_provider
             logout_on_user_change: true
+            user_checker: security.app.admin_checker
             form_login:
                 login_path: admin_login
                 check_path: admin_login_check
