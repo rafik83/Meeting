@@ -59,6 +59,12 @@ class CardView
      */
     public $initials;
 
+    /** @var bool */
+    public $getCheckinStatus;
+
+    /** @var bool */
+    public $isCheckedToday;
+
     /**
      * @param int    $id
      * @param bool   $editable
@@ -68,17 +74,31 @@ class CardView
      * @param string $avatar
      * @param bool   $owner
      * @param int    $sheetId
+     * @param bool   $getCheckinStatus
+     * @param bool   $isCheckedToday
      */
-    public function __construct($id, $editable, $firstname, $lastname, $position, $avatar, $owner, $sheetId)
-    {
-        $this->id        = $id;
-        $this->editable  = $editable;
+    public function __construct(
+        $id,
+        $editable,
+        $firstname,
+        $lastname,
+        $position,
+        $avatar,
+        $owner,
+        $sheetId,
+        bool $getCheckinStatus = false,
+        bool $isCheckedToday = false
+    ) {
+        $this->id = $id;
+        $this->editable = $editable;
         $this->firstname = $firstname;
-        $this->lastname  = $lastname;
-        $this->position  = $position;
-        $this->avatar    = $avatar;
-        $this->owner     = $owner;
-        $this->sheetId   = $sheetId;
+        $this->lastname = $lastname;
+        $this->position = $position;
+        $this->avatar = $avatar;
+        $this->owner = $owner;
+        $this->sheetId = $sheetId;
         $this->initials = (new GetParticipantInitials())($firstname, $lastname);
+        $this->getCheckinStatus = $getCheckinStatus;
+        $this->isCheckedToday = $isCheckedToday;
     }
 }

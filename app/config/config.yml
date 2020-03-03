@@ -11,7 +11,7 @@ parameters:
     locale: fr
 
 framework:
-    #esi:             ~
+    esi: { enabled: true }
     translator:
         fallbacks: ["%locale%"]
         logging: false
@@ -34,7 +34,7 @@ framework:
         gc_probability:  ~
         cookie_lifetime: 86400
         gc_maxlifetime:  86400
-    fragments:       ~
+    fragments: { path: /_fragment }
     http_method_override: true
     assets:
         json_manifest_path: '%kernel.project_dir%/web/assets/manifest.json'

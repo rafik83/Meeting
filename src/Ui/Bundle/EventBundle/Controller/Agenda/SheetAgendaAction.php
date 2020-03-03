@@ -58,6 +58,7 @@ class SheetAgendaAction
 
         if (null === $participant) {
             $participant = $sheet->getFirstParticipant();
+            $user = $participant->getUser();
         }
 
         /** @var AgendaView $agenda */

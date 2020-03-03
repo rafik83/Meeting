@@ -4,9 +4,10 @@ namespace Proximum\Vimeet\Application\Command\Planner\PrePlanningProcess;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Meeting\TransformRequestIntoMeeting;
+use Proximum\Vimeet\Domain\Model\Category;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Rule;
-use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
@@ -47,6 +48,10 @@ class TransformPriorityRequestsIntoMeetingHandler
 
         $approvedRequests = $this->requestRepository->findApprovedAndPrioritizedWithoutMeeting($event);
 
+        if (empty($approvedRequests)) {
+            return [];
+        }
+
         $orderedRequests = $this->getOrderedRequestsByPriorities($event, $approvedRequests);
 
         $createdMeetings = [];
@@ -60,15 +65,13 @@ class TransformPriorityRequestsIntoMeetingHandler
     }
 
     /**
-     * @param \Proximum\Vimeet\Domain\Model\Event $event
-     * @param Meeting\Request[]                   $approvedRequests
+     * @param Event             $event
+     * @param Meeting\Request[] $approvedRequests
      *
      * @return Meeting\Request[]
      */
-    private function getOrderedRequestsByPriorities(
-        \Proximum\Vimeet\Domain\Model\Event $event,
-        $approvedRequests
-    ): array {
+    private function getOrderedRequestsByPriorities(Event $event, array $approvedRequests): array
+    {
         $wswRules = $this->ruleRepository->getByEvent($event);
 
         usort(
@@ -143,12 +146,20 @@ class TransformPriorityRequestsIntoMeetingHandler
         $typeSeer = $approvedRequest->getFromSheet()->getType();
         $typeSeable = $approvedRequest->getToSheet()->getType();
 
-        return ($wswRule->getSeer() instanceof Type
-                ? $wswRule->getSeer() === $typeSeer
-                : $wswRule->getSeer()->getTypes()->contains($typeSeer)) &&
-            ($wswRule->getSeeable() instanceof Type
-                ? $wswRule->getSeeable() === $typeSeable
-                : $wswRule->getSeeable()->getTypes()->contains($typeSeable));
+        $seerRule = $wswRule->getSeer();
+        $seeableRule = $wswRule->getSeeable();
+
+        return (
+                $seerRule instanceof Category
+                    ? in_array($typeSeer, $seerRule->getTypes(), true)
+                    : $seerRule === $typeSeer
+            )
+            &&
+            (
+                $seeableRule instanceof Category
+                    ? in_array($typeSeable, $seeableRule->getTypes(), true)
+                    : $seeableRule === $typeSeable
+            );
     }
 
     /**
