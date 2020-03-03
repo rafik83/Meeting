@@ -31,6 +31,14 @@
                 </a>
             {% endfor %}
         {% endif %}
+
+        {% if participant.getCheckinStatus %}
+            {% if participant.isCheckedToday %}
+                <span class="label label-success">{{ 'contacts.list.present'|trans }}</span>
+            {% else %}
+                <span class="label label-danger">{{ 'contacts.list.absent'|trans }}</span>
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 

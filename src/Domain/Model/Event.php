@@ -135,6 +135,9 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $accessControlEnabled;
 
+    /** @var bool */
+    private $showCheckinStatus;
+
     public function __construct(
         string $title,
         string $fallback,
@@ -155,7 +158,8 @@ class Event implements EventInterface, TraceableInterface
         bool $disabledPasswordChanging = false,
         bool $googleLoginEnabled = false,
         bool $linkedinLoginEnabled = false,
-        bool $accessControlEnabled = false
+        bool $accessControlEnabled = false,
+        bool $showCheckinStatus = false
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration();
@@ -184,6 +188,7 @@ class Event implements EventInterface, TraceableInterface
         $this->googleLoginEnabled = $googleLoginEnabled;
         $this->linkedinLoginEnabled = $linkedinLoginEnabled;
         $this->accessControlEnabled = $accessControlEnabled;
+        $this->showCheckinStatus = $showCheckinStatus;
     }
 
     /**
@@ -460,6 +465,7 @@ class Event implements EventInterface, TraceableInterface
      * @param bool        $googleLoginEnabled
      * @param bool        $linkedinLoginEnabled
      * @param bool        $accessControlEnabled
+     * @param bool        $showCheckinStatus
      */
     public function update(
         $title,
@@ -480,7 +486,8 @@ class Event implements EventInterface, TraceableInterface
         bool $disabledPasswordChanging,
         bool $googleLoginEnabled = false,
         bool $linkedinLoginEnabled = false,
-        bool $accessControlEnabled = false
+        bool $accessControlEnabled = false,
+        bool $showCheckinStatus = false
     ) {
         $this->title = $title;
         $this->locales = $locales;
@@ -501,6 +508,7 @@ class Event implements EventInterface, TraceableInterface
         $this->googleLoginEnabled = $googleLoginEnabled;
         $this->linkedinLoginEnabled = $linkedinLoginEnabled;
         $this->accessControlEnabled = $accessControlEnabled;
+        $this->showCheckinStatus = $showCheckinStatus;
     }
 
     /**
@@ -858,6 +866,16 @@ class Event implements EventInterface, TraceableInterface
     public function isAccessControlEnabled(): bool
     {
         return $this->accessControlEnabled;
+    }
+
+    public function showCheckinStatus(): bool
+    {
+        return $this->showCheckinStatus;
+    }
+
+    public function accessControlEnabledAndShowCheckinStatus(): bool
+    {
+        return $this->showCheckinStatus() && $this->isAccessControlEnabled();
     }
 
     /**

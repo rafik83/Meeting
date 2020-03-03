@@ -41,13 +41,8 @@ class DDayGuesser
             return false;
         }
 
-        if ($event->getFirstDay()->getStartTime() < $this->dateTime
-            && $event->getLastDay()->getEndTime() > $this->dateTime
-        ) {
-            return true;
-        }
-
-        return false;
+        return $event->getFirstDay()->getStartTime() < $this->dateTime
+            && $event->getLastDay()->getEndTime() > $this->dateTime;
     }
 
     /**
