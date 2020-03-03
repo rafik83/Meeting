@@ -119,6 +119,11 @@ class TypeCreateType extends AbstractType
                 'numberMaxOfHappeningsPerUser', IntegerType::class, [
                 'required' => false,
             ])
+            ->add(
+                'numberMaxOfMeetingsPerSheet', IntegerType::class, [
+                'required' => false,
+                'help' => 'form.type_create.children.numberMaxOfMeetingsPerSheet.help',
+            ])
         ;
     }
 

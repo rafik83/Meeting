@@ -41,10 +41,10 @@ class SheetViewQueryHandlerTest extends TestCase
         $sheet3 = SheetFactory::create($event, null, null, $type2);
         $sheet4 = SheetFactory::create($event, null, null, $type2);
 
-        $indicator1 = new IndicatorView(1, 1, 1, 1, 1, 1, 1, null);
-        $indicator2 = new IndicatorView(2, 2, 2, 2, 2, 2, 1, null);
-        $indicator3 = new IndicatorView(3, 3, 3, 3, 3, 3, 1, null);
-        $indicator4 = new IndicatorView(10, 3, 3, 3, 35, 3, 1, 8);
+        $indicator1 = new IndicatorView(1, 1, 1, 1, 1, 1, 1, null, null);
+        $indicator2 = new IndicatorView(2, 2, 2, 2, 2, 2, 1, null, null);
+        $indicator3 = new IndicatorView(3, 3, 3, 3, 3, 3, 1, null, null);
+        $indicator4 = new IndicatorView(10, 3, 3, 3, 35, 3, 1, 8, null);
 
         // Reflection
         $reflection = new \ReflectionClass(Sheet::class);

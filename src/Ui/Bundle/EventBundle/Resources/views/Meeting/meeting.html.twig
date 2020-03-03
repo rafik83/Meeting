@@ -36,11 +36,16 @@
                         </div>
                     </div>
                 {% endif %}
+
                 <div class="list list--users">
                     {% for participantView in meeting.participants %}
                         {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
                     {% endfor %}
                 </div>
+
+                {% if (meeting.hasMeetingOwnSheetParticipantNames) %}
+                <p>{{ 'agenda.meeting.ownSheetParticipants'|trans }} {{ meeting.meetingOwnSheetParticipantNames }}</p>
+                {% endif %}
             </div>
         </div>
         <footer>

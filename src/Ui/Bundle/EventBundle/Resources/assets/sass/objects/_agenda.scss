@@ -255,6 +255,15 @@ $slotHeight: 60px;
     }
   }
 
+  .all-sheet .meet {
+    position: relative;
+    padding: 0;
+  }
+
+  .all-sheet .meet:nth-child(even) {
+    margin-top: 1px;
+  }
+
   .slotToggle {
     display: flex;
     justify-content: center;

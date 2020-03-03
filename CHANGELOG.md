@@ -5,8 +5,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-2011 - Prioritize meeting request before planning
 - VIMEET-2030 - View checkin status in contacts list and agenda
+
+## [2.20.0] - 2019-02-25
+### Fixed
+- MV-222 - Take account of plan included product that can enable participant scan
+
+## [2.19.0] - 2019-02-24
+### Added
+- VIMEET-2039 - Sheet agenda
+
+## [2.18.0] - 2019-02-21
+### Added
+- VIMEET-2011 - Prioritize meeting request before planning
+- VIMEET-2047 - Add number max of meetings per sheet in participation type parameter
+- VIMEET-2046 - Limit upload image to 500ko
+- VIMEET-2049 - Fix nomenclature template object value: cast key to string
+### Fixed
+- MV-204 - Don't send email if avertisment of changing mail is disabled
 
 ## [2.17.0] - 2019-01-31
 ### Added

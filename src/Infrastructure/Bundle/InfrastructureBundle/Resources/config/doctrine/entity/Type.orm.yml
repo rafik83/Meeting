@@ -59,6 +59,11 @@ Proximum\Vimeet\Domain\Model\Type:
             nullable: true
             options:
                 default: null
+        numberMaxOfMeetingsPerSheet:
+            type: integer
+            nullable: true
+            options:
+                default: null
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria

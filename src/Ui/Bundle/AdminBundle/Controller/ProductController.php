@@ -168,6 +168,7 @@ class ProductController extends Controller
         return $this->render('AdminBundle:Product:updatePlanning.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
+            'product' => $product
         ]);
     }
 

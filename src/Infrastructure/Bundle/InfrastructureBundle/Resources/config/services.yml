@@ -4196,6 +4196,7 @@ services:
             - '@repository.rule_repository'
             - '@components.security.video_meeting_access'
             - '@Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle'
+            - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery }
 
@@ -4229,6 +4230,7 @@ services:
             - '@repository.unavailability.mass_repository'
             - '@query.agenda.participant_view_query_handler'
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.user.agenda.phone.validation_required_checker'
             - '@repository.user.event.extra_data_repository'
@@ -4236,6 +4238,7 @@ services:
             - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
             - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
             - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
 

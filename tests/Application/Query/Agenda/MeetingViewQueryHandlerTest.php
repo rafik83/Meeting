@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingOwnSheetParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Agenda\SheetMetView;
@@ -31,7 +32,7 @@ use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
-use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
@@ -56,8 +57,6 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
 
-        $sheet = $this->prophesize(Sheet::class);
-        $sheetMet = $this->prophesize(Sheet::class);
         $linkedSheets = $this->prophesize(Sheet\LinkedSheets::class);
         $sheetMetView = new SheetMetView('sheetMetTitle', true);
         $sheetMetView2 = new SheetMetView('sheetMetLinkedSheet', false);
@@ -65,18 +64,19 @@ class MeetingViewQueryHandlerTest extends TestCase
         $sheetMetLinkedSheet = $this->prophesize(Sheet::class);
         $sheetMetLinkedSheet->getTitle()->willReturn('sheetMetLinkedSheet');
 
-        $linkedSheets->getSheets()->willReturn([$sheetMet->reveal(), $sheetMetLinkedSheet->reveal()]);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getType()->willReturn($type);
+        $sheet->getTitle()->willReturn('userSheetTitle');
+        $sheet->hasOnlyOneParticipant()->shouldBeCalled()->willReturn(true);
 
+        $sheetMet = $this->prophesize(Sheet::class);
         $sheetMet->hasLinkedSheets()->willReturn(true);
         $sheetMet->getLinkedSheets()->willReturn($linkedSheets->reveal());
-
-        $sheet->getType()->willReturn($type);
         $sheetMet->getType()->willReturn($type);
-
         $sheetMet->getId()->willReturn(2);
-
-        $sheet->getTitle()->willReturn('userSheetTitle');
         $sheetMet->getTitle()->willReturn('sheetMetTitle');
+
+        $linkedSheets->getSheets()->willReturn([$sheetMet->reveal(), $sheetMetLinkedSheet->reveal()]);
 
         $requestRepository
             ->hasApprovedMeetingRequest($sheet->reveal(), $sheetMetLinkedSheet->reveal())
@@ -114,6 +114,9 @@ class MeetingViewQueryHandlerTest extends TestCase
         $meeting->getSheetMet($sheet)->willReturn($sheetMet->reveal());
         $meeting->getParticipants($sheetMet->reveal())->willReturn([$participant->reveal(), $participant2->reveal()]);
 
+        $ownParticipant = $this->prophesize(Participant::class);
+        $meeting->getParticipants($sheet->reveal())->willReturn([$ownParticipant->reveal()]);
+
         $participantView1 = new MeetingParticipantView($cardView);
         $participantView2 = new MeetingParticipantView($cardView2);
         $participants     = [$participantView1, $participantView2];
@@ -136,11 +139,18 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
+        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $participantInfoGuesser
+            ->guessParticipantInfos($ownParticipant, 'fr')
+            ->shouldNotBeCalled()
+        ;
+
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
             $videoMeetingAccess->reveal(),
-            $linkedSheetsTitle
+            $linkedSheetsTitle,
+            $participantInfoGuesser->reveal()
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
@@ -149,6 +159,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             'userSheetTitle',
             2,
             [$sheetMetView, $sheetMetView2],
+            [],
             $begin,
             $end,
             'ref',
@@ -178,20 +189,19 @@ class MeetingViewQueryHandlerTest extends TestCase
         );
         $user = UserFactory::create();
         $type = new Type($event);
+
         $sheet = $this->prophesize(Sheet::class);
-        $sheetMet = $this->prophesize(Sheet::class);
-
-        $sheetMetView = new SheetMetView('sheetMetTitle', false);
-
-        $sheetMet->hasLinkedSheets()->willReturn(false);
-
+        $sheet->getTitle()->willReturn('userSheetTitle');
         $sheet->getType()->willReturn($type);
+        $sheet->hasOnlyOneParticipant()->shouldBeCalled()->willReturn(false);
+
+        $sheetMet = $this->prophesize(Sheet::class);
+        $sheetMet->getId()->willReturn(1);
+        $sheetMet->getTitle()->willReturn('sheetMetTitle');
+        $sheetMet->hasLinkedSheets()->willReturn(false);
         $sheetMet->getType()->willReturn($type);
 
-        $sheetMet->getId()->willReturn(1);
-
-        $sheet->getTitle()->willReturn('userSheetTitle');
-        $sheetMet->getTitle()->willReturn('sheetMetTitle');
+        $sheetMetView = new SheetMetView('sheetMetTitle', false);
 
         $participant  = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
@@ -220,6 +230,12 @@ class MeetingViewQueryHandlerTest extends TestCase
         $meeting->getSheetMet($sheet)->willReturn($sheetMet->reveal());
         $meeting->getParticipants($sheetMet->reveal())->willReturn([$participant->reveal(), $participant2->reveal()]);
 
+        $ownParticipant = $this->prophesize(Participant::class);
+        $ownParticipant->getUser()->shouldNotBeCalled();
+        $participant->getUser()->shouldNotBeCalled();
+
+        $meeting->getParticipants($sheet->reveal())->willReturn([$ownParticipant->reveal(), $participant->reveal()]);
+
         $participantView1 = new MeetingParticipantView($cardView);
         $participantView2 = new MeetingParticipantView($cardView2);
         $participants     = [$participantView1, $participantView2];
@@ -245,11 +261,31 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
+        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $participantInfoGuesser
+            ->guessParticipantInfos($ownParticipant, 'fr')
+            ->shouldBeCalled()
+            ->willReturn([
+                'participant_firstname' => 'Korben',
+                'participant_lastname' => 'Dallas',
+            ])
+        ;
+
+        $participantInfoGuesser
+            ->guessParticipantInfos($participant, 'fr')
+            ->shouldBeCalled()
+            ->willReturn([
+                'participant_firstname' => 'Rocky',
+                'participant_lastname' => 'Balboa',
+            ])
+        ;
+
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
             $ruleRepository->reveal(),
             $videoMeetingAccess->reveal(),
-            $linkedSheetsTitle
+            $linkedSheetsTitle,
+            $participantInfoGuesser->reveal()
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
@@ -258,6 +294,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             'userSheetTitle',
             1,
             [$sheetMetView],
+            [new MeetingOwnSheetParticipantView('Korben', 'Dallas'), new MeetingOwnSheetParticipantView('Rocky', 'Balboa')],
             $begin,
             $end,
             'ref',

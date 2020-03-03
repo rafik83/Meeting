@@ -136,6 +136,11 @@ class TypeUpdateType extends AbstractType
                 'numberMaxOfHappeningsPerUser', IntegerType::class, [
                 'required' => false,
             ])
+            ->add(
+                'numberMaxOfMeetingsPerSheet', IntegerType::class, [
+                'required' => false,
+                'help' => 'form.type_update.children.numberMaxOfMeetingsPerSheet.help',
+            ])
         ;
     }
 

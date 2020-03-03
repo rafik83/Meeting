@@ -79,6 +79,9 @@ class Update implements Command
     /** @var int|null */
     public $numberMaxOfHappeningsPerUser;
 
+    /** @var int|null */
+    public $numberMaxOfMeetingsPerSheet;
+
     /**
      * @param Type   $type
      * @param string $locale
@@ -105,6 +108,7 @@ class Update implements Command
         $this->isPaymentRequired = $type->isPaymentRequired();
         $this->priorityMeetingRequestsNumber = $type->getPriorityMeetingRequestsNumber();
         $this->numberMaxOfHappeningsPerUser = $type->getNumberMaxOfHappeningsPerUser();
+        $this->numberMaxOfMeetingsPerSheet = $type->getNumberMaxOfMeetingsPerSheet();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [

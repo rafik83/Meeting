@@ -11,12 +11,15 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingOwnSheetParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class MeetingViewQueryHandler
 {
@@ -32,30 +35,28 @@ class MeetingViewQueryHandler
     /** @var LinkedSheetsTitle */
     private $linkedSheetsTitle;
 
-    /**
-     * @param MeetingParticipantViewQueryHandler $participantHandler
-     * @param RuleRepositoryInterface            $ruleRepository
-     * @param VideoMeetingAccess                 $videoMeetingAccess
-     * @param LinkedSheetsTitle                  $linkedSheetsTitle
-     */
+    /** @var ParticipantInfoGuesser */
+    private $participantInfoGuesser;
+
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
         RuleRepositoryInterface $ruleRepository,
         VideoMeetingAccess $videoMeetingAccess,
-        LinkedSheetsTitle $linkedSheetsTitle
+        LinkedSheetsTitle $linkedSheetsTitle,
+        ParticipantInfoGuesser $participantInfoGuesser
     ) {
         $this->participantHandler = $participantHandler;
         $this->ruleRepository = $ruleRepository;
         $this->videoMeetingAccess = $videoMeetingAccess;
         $this->linkedSheetsTitle = $linkedSheetsTitle;
+        $this->participantInfoGuesser = $participantInfoGuesser;
     }
 
     /**
      * @param MeetingViewQuery $query
      *
-     * @throws NoSheetForUserException
-     *
      * @return MeetingView
+     * @throws NoSheetForUserException
      */
     public function handle(MeetingViewQuery $query)
     {
@@ -72,11 +73,24 @@ class MeetingViewQueryHandler
                 ->handle(new MeetingParticipantViewQuery($participant, $rules, $query->locale));
         }
 
+        $meetingOwnSheetParticipantViews = [];
+
+        if (!$userSheet->hasOnlyOneParticipant()) {
+            foreach ($query->meeting->getParticipants($userSheet) as $participant) {
+                $infos = $this->participantInfoGuesser->guessParticipantInfos($participant, $query->locale);
+                $meetingOwnSheetParticipantViews[] = new MeetingOwnSheetParticipantView(
+                    $infos[Tag::PARTICIPANT_FIRSTNAME] ?? '',
+                    $infos[Tag::PARTICIPANT_LASTNAME] ?? ''
+                );
+            }
+        }
+
         $meeting = new MeetingView(
             $query->meeting->getId(),
             $userSheet->getTitle(),
             $sheetMet->getId(),
             $sheetMetTitles,
+            $meetingOwnSheetParticipantViews,
             $query->meeting->getSlot()->getBegin(),
             $query->meeting->getSlot()->getEnd(),
             $query->meeting->getSpot()->getReference(),

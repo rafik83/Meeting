@@ -24,11 +24,15 @@ agenda.meeting.move.back: Retour
 agenda.meeting.move.button: 'Déplacer le RDV'
 agenda.meeting.move.no_available_slots: 'Le rendez-vous ne peut être déplacé car il n''y a pas de d''autres disponibilités conjointes'
 agenda.meeting.move.success: 'Le RDV a bien été déplacé'
+agenda.meeting.ownSheetParticipants: 'Participe au rendez-vous :'
 agenda.meeting.remove.button: 'Supprimer le RDV'
 agenda.meeting.remove.confirm: 'Confirmer la suppression ?'
 agenda.meeting.remove.success: 'Le RDV a bien été supprimé'
 agenda.meeting.updateSlot.error: 'Impossible de déplacer ce RDV'
 agenda.participant.view: 'Agenda de %participant%'
+agenda.sheetAgenda.button.title: 'Agenda de la fiche'
+agenda.sheetAgenda.title: 'Agenda de la fiche'
+agenda.myAgenda.button.title: 'Mon agenda'
 agenda.slot.available: Disponible
 agenda.slot.imperative-presence: 'Votre présence est impérative.'
 agenda.slot.unavailable: Indisponible

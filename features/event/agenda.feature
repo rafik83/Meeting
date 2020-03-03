@@ -38,8 +38,9 @@ Feature: Agenda
     Then I press "sheet.participant.sendInvite"
     And I should be on this page "/fr/sheet/2/fr"
     When I go to this page "/fr/sheet/2/agenda"
-    Then I should be on this page "/fr/sheet/2/agenda/participant/2"
-    And I should see "agenda.participant.view"
+    Then I should be on this page "/fr/sheet/2/agenda/sheet"
+    And I should see "agenda.myAgenda.button.title"
+    And I should see "agenda.sheetAgenda.button.title"
     Then I go to this page "/fr/sheet/2/agenda/participant/4"
     And the response status code should be 200
 

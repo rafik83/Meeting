@@ -57,7 +57,7 @@ class IndicatorCalculatorTest extends TestCase
             $this->slotAvailability->reveal()
         );
     }
-    
+
     public function testGetIndicator()
     {
         $event = $this->prophesize(Event::class);
@@ -95,6 +95,7 @@ class IndicatorCalculatorTest extends TestCase
          */
         $type = $this->prophesize(Type::class);
         $type->getNumberOfMeetingsPerPlanning()->shouldBeCalled()->willReturn(null);
+        $type->getNumberMaxOfMeetingsPerSheet()->shouldBeCalled()->willReturn(null);
         $participantSheet1 = $this->prophesize(Participant::class);
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet1->getType()->shouldBeCalled()->willReturn($type->reveal());
@@ -164,7 +165,7 @@ class IndicatorCalculatorTest extends TestCase
         ;
 
         $this->assertEquals(
-            new IndicatorView(4, 1, 1, 6, 3, 5, 1, null),
+            new IndicatorView(4, 1, 1, 6, 3, 5, 1, null, null),
             $this->indicatorCalculator->getIndicator($sheet1->reveal())
         );
 
@@ -173,6 +174,7 @@ class IndicatorCalculatorTest extends TestCase
          */
         $type2 = $this->prophesize(Type::class);
         $type2->getNumberOfMeetingsPerPlanning()->shouldBeCalled()->willReturn(null);
+        $type2->getNumberMaxOfMeetingsPerSheet()->shouldBeCalled()->willReturn(null);
         $participant1Sheet2 = $this->prophesize(Participant::class);
         $participant2Sheet2 = $this->prophesize(Participant::class);
         $sheet2 = $this->prophesize(Sheet::class);
@@ -276,7 +278,7 @@ class IndicatorCalculatorTest extends TestCase
         ;
 
         $this->assertEquals(
-            new IndicatorView(3, 2, 0, 8, 1, 2, 0, null),
+            new IndicatorView(3, 2, 0, 8, 1, 2, 0, null, null),
             $this->indicatorCalculator->getIndicator($sheet2->reveal())
         );
 
@@ -285,6 +287,7 @@ class IndicatorCalculatorTest extends TestCase
          */
         $type3 = $this->prophesize(Type::class);
         $type3->getNumberOfMeetingsPerPlanning()->shouldBeCalled()->willReturn(10);
+        $type3->getNumberMaxOfMeetingsPerSheet()->shouldBeCalled()->willReturn(null);
         $participant1Sheet3 = $this->prophesize(Participant::class);
         $participant2Sheet3 = $this->prophesize(Participant::class);
         $sheet3 = $this->prophesize(Sheet::class);
@@ -388,7 +391,7 @@ class IndicatorCalculatorTest extends TestCase
         ;
 
         $this->assertEquals(
-            new IndicatorView(3, 2, 0, 2, 1, 2, 0, 10),
+            new IndicatorView(3, 2, 0, 2, 1, 2, 0, 10, null),
             $this->indicatorCalculator->getIndicator($sheet3->reveal())
         );
     }
