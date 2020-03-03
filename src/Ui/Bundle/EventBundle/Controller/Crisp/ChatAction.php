@@ -30,10 +30,18 @@ class ChatAction
         $extraParameter = $this->queryBus->handle(new GetExtraParameterQuery($event, Type::TYPE_CRISP_SITE_ID));
         $siteId = $extraParameter instanceof Event\ExtraParameter ? $extraParameter->getValue() : null;
 
-        return new Response(
-            $this->engine->render('@Event/Crisp/chat.html.twig', [
-                'siteId' => $siteId,
-            ])
-        );
+        $response = new Response();
+
+        if (null !== $siteId) {
+            $response = new Response(
+                $this->engine->render('@Event/Crisp/chat.html.twig', [
+                    'siteId' => $siteId,
+                ])
+            );
+        }
+
+        $response->setMaxAge(3600);
+
+        return $response;
     }
 }
