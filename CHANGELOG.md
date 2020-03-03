@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - VIMEET-2011 - Hotfix: priorisation meeting request before planning
+### Added
+- VIMEET-2030 - View checkin status in contacts list and agenda
 
 ## [2.20.0] - 2019-02-25
 ### Fixed

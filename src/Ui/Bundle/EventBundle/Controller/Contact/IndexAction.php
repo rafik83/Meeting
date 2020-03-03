@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Query\Contact\ContactPreviewView;
+use Proximum\Vimeet\Application\Query\Contact\ContactListView;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
@@ -61,7 +61,7 @@ class IndexAction
 
         $event = $eventDomain->getEvent();
 
-        /** @var ContactPreviewView[] $contactListView */
+        /** @var ContactListView $contactListView */
         $contactListView = $this->queryBus->handle(
             new GetContactListViewQuery($event, $participant, $request->getLocale())
         );

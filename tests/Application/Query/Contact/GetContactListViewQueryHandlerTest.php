@@ -3,17 +3,19 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Contact;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Query\Contact\ContactListView;
 use Proximum\Vimeet\Application\Query\Contact\ContactPreviewView;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListUsersView;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQuery;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQuery;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQueryHandler;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
@@ -23,6 +25,7 @@ class GetContactListViewQueryHandlerTest extends TestCase
     {
         // prepare data
         $event = $this->prophesize(Event::class);
+        $event->accessControlEnabledAndShowCheckinStatus()->shouldBeCalled()->willReturn(true);
 
         //    contact list participant
         $participantSheet = $this->prophesize(Sheet::class);
@@ -110,23 +113,43 @@ class GetContactListViewQueryHandlerTest extends TestCase
             ->willReturn(new GetContactListUsersView([$scannedUser->reveal()], [$requestedUser->reveal()]))
         ;
 
+        $dDayGuesser = $this->prophesize(DDayGuesser::class);
+        $dDayGuesser->isItDDay($event->reveal())->shouldBeCalled()->willReturn(true);
+
+        $now = new \DateTime('2020-02-05 17:01:01');
+
+        $scanRepository = $this->prophesize(ScanRepositoryInterface::class);
+        $scanRepository
+            ->isUserCheckinTodayByEvent($requestedUser->reveal(), $event->reveal(), $now)
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+        $scanRepository
+            ->isUserCheckinTodayByEvent($scannedUser->reveal(), $event->reveal(), $now)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
         // run tests
         $query = new GetContactListViewQuery($event->reveal(), $participant->reveal(), 'fr');
         $handler = new GetContactListViewQueryHandler(
+            $dDayGuesser->reveal(),
             $sheetRepository->reveal(),
             $participantInfoGuesser->reveal(),
-            $getContactListUsersViewQueryHandler->reveal()
+            $getContactListUsersViewQueryHandler->reveal(),
+            $scanRepository->reveal(),
+            $now
         );
         $result = $handler->handle($query);
 
-        $expected = [
+        $expected = new ContactListView(true, true, [
             new ContactPreviewView(
-                42, 'Carrie', 'Fisher', 'http://far.away/leia.png', ['New Republic', 'Rebels'], true, true
+                42, 'Carrie', 'Fisher', 'http://far.away/leia.png', ['New Republic', 'Rebels'], true, true, false
             ),
             new ContactPreviewView(
-                314, 'Sam', 'Fisher', 'http://nsa.org/sam.png', ['NSA'], false, false
+                314, 'Sam', 'Fisher', 'http://nsa.org/sam.png', ['NSA'], false, false, true
             ),
-        ];
+        ]);
 
         $this->assertEquals($expected, $result);
     }

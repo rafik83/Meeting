@@ -57,7 +57,6 @@ class MeetingViewQueryHandler
      *
      * @return MeetingView
      * @throws NoSheetForUserException
-     *
      */
     public function handle(MeetingViewQuery $query)
     {

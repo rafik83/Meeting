@@ -29,15 +29,18 @@ class CardViewQuery
      */
     public $editable;
 
-    /**
-     * @param Participant $participant
-     * @param string      $locale
-     * @param bool        $editable
-     */
-    public function __construct(Participant $participant, $locale, $editable = false)
-    {
+    /** @var bool */
+    public $getCheckinStatus;
+
+    public function __construct(
+        Participant $participant,
+        string $locale,
+        bool $editable = false,
+        $getCheckinStatus = false
+    ) {
         $this->participant = $participant;
-        $this->locale      = $locale;
-        $this->editable    = $editable;
+        $this->locale = $locale;
+        $this->editable = $editable;
+        $this->getCheckinStatus = $getCheckinStatus;
     }
 }

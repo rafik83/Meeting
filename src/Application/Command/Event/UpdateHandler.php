@@ -74,7 +74,8 @@ class UpdateHandler
             $update->disabledPasswordChanging,
             $update->googleLoginEnabled,
             $update->linkedinLoginEnabled,
-            $update->accessControlEnabled
+            $update->accessControlEnabled,
+            $update->showCheckinStatus
         );
 
         $event->getConfiguration()->setVisio($update->visio);
