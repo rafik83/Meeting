@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- VIMEET-2011 - Hotfix: priorisation meeting request before planning
 ### Added
 - VIMEET-2030 - View checkin status in contacts list and agenda
 

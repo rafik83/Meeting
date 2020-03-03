@@ -30,7 +30,7 @@ class TransformPriorityRequestsIntoMeetingHandlerTest extends TestCase
         $typeBigSeller = $this->prophesize(Type::class);
         $categorySeller = $this->prophesize(Category::class);
         $categorySeller->getTypes()
-            ->willReturn(new ArrayCollection([$typeBigSeller->reveal(), $typeLittleSeller->reveal()]))
+            ->willReturn([$typeBigSeller->reveal(), $typeLittleSeller->reveal()])
         ;
 
         // "bigger seller" see "buyer" : priority 1
@@ -325,5 +325,31 @@ class TransformPriorityRequestsIntoMeetingHandlerTest extends TestCase
         ];
 
         $this->assertEquals($expected, $result);
+    }
+
+    public function test_no_requests_with_priority(): void
+    {
+        $event = $this->prophesize(Event::class);
+
+        $commandBus = $this->prophesize(CommandBusInterface::class);
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
+
+        $requestRepository->findApprovedAndPrioritizedWithoutMeeting($event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $command = new TransformPriorityRequestsIntoMeeting(
+            $event->reveal(),
+            ExportSolutionType::SOLUTION_OPTIMIZE_LOCKED
+        );
+        $handler = new TransformPriorityRequestsIntoMeetingHandler(
+            $commandBus->reveal(),
+            $requestRepository->reveal(),
+            $ruleRepository->reveal()
+        );
+
+        $this->assertEquals([], $handler->handle($command));
     }
 }
