@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2011 - Hotfix: priorisation meeting request before planning
 - Improvment: Add cache to Crisp chat component
 - MV-223 - Doesn't access to a removed account
+- MV-219 - send activate account on fastCheckin
+
 ### Added
 - VIMEET-2030 - View checkin status in contacts list and agenda
 

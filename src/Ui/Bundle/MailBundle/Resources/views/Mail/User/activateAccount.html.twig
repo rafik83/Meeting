@@ -14,7 +14,7 @@
     <br>
     {{ macros.button(
         'mail.activateAccount.activate'|trans({}, 'mail', mail.locale),
-        url('event_activate_account', {'token': mail.token})
+        mail.eventActivateAccountAlreadyKnownUrl
     ) }}
     <br>
 
