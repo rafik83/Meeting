@@ -258,6 +258,7 @@ services:
         parent: Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\AbstractPrepareMailService
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail:
+        arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
             - '@event_sender'

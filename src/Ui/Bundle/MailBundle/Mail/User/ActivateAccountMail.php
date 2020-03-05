@@ -64,7 +64,7 @@ class ActivateAccountMail extends UserMail
         $locale,
         $token,
         ParticipantInfoView $participantInfoView,
-        $eventActivateAccountAlreadyKnownUrl
+        string $eventActivateAccountAlreadyKnownUrl
     ) {
         parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
 
