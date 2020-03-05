@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Catalog;
 use Proximum\Vimeet\Domain\Catalog\View\NomenclatureFilterView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
+use Proximum\Vimeet\Domain\Model\NomenclatureItem;
 use Proximum\Vimeet\Domain\Repository\Filter\TaggedNomenclatureFilterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
@@ -60,10 +61,11 @@ class TaggedNomenclatureFilterGetter
         $nomenclatureItems = [];
 
         foreach ($nomenclatures as $nomenclature) {
-            $nomenclatureItems = array_merge(
-                $nomenclatureItems,
-                $this->buildNomenclature($nomenclature->getChildren(), $locale)
-            );
+            $nomenclatureLabelsIndexedByKey = $this->buildNomenclature($nomenclature->getChildren(), $locale);
+
+            foreach ($nomenclatureLabelsIndexedByKey as $key => $label) {
+                $nomenclatureItems[$key] = $label;
+            }
         }
 
         asort($nomenclatureItems);
@@ -129,10 +131,11 @@ class TaggedNomenclatureFilterGetter
         $nomenclatureItems = [];
 
         foreach ($nomenclatures as $nomenclature) {
-            $nomenclatureItems = array_merge(
-                $nomenclatureItems,
-                $this->buildNomenclature($nomenclature->getLastLevel(), $locale)
-            );
+            $nomenclatureLabelsIndexedByKey = $this->buildNomenclature($nomenclature->getLastLevel(), $locale);
+
+            foreach ($nomenclatureLabelsIndexedByKey as $key => $label) {
+                $nomenclatureItems[$key] = $label;
+            }
         }
 
         return new NomenclaturesItemsView($nomenclatureItems, $this->getMaxDepth($nomenclatures));
@@ -157,8 +160,8 @@ class TaggedNomenclatureFilterGetter
     }
 
     /**
-     * @param string $locale
-     * @param array  $nomenclatureItems
+     * @param string             $locale
+     * @param NomenclatureItem[] $nomenclatureItems
      *
      * @return array
      */
