@@ -7134,6 +7134,7 @@ services:
             - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@Proximum\Vimeet\Application\Command\User\ActivateAccount\SendActivateAccountFromLoginTokenHandler'
         tags:
             - { name: tactician.handler, typehints: true }
 

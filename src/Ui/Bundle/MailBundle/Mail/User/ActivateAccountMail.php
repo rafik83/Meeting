@@ -43,24 +43,33 @@ class ActivateAccountMail extends UserMail
     protected $sendToEmailTeam = false;
 
     /**
+     * @var string
+     */
+    protected $eventActivateAccountAlreadyKnownUrl;
+
+    /**
      * @param Event               $event
      * @param string              $sender
      * @param string              $receiver
      * @param string              $locale
      * @param string              $token
      * @param ParticipantInfoView $participantInfoView
+     * @param string              $eventActivateAccountAlreadyKnownUrl
      */
+
     public function __construct(
         Event $event,
         $sender,
         $receiver,
         $locale,
         $token,
-        ParticipantInfoView $participantInfoView
+        ParticipantInfoView $participantInfoView,
+        $eventActivateAccountAlreadyKnownUrl
     ) {
         parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
 
         $this->token = $token;
+        $this->eventActivateAccountAlreadyKnownUrl = $eventActivateAccountAlreadyKnownUrl;
     }
 
     /**
@@ -79,5 +88,10 @@ class ActivateAccountMail extends UserMail
         return [
             '%event%' => $this->getEvent()->getTitle(),
         ];
+    }
+
+    public function getEventActivateAccountAlreadyKnownUrl(): string
+    {
+        return $this->eventActivateAccountAlreadyKnownUrl;
     }
 }
