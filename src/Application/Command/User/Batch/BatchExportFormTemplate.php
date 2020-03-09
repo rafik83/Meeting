@@ -20,7 +20,7 @@ class BatchExportFormTemplate implements Command
     /** @var Event */
     public $event;
 
-    /** @var ?FormTemplate */
+    /** @var null|FormTemplate */
     public $formTemplate;
 
     /** @var Admin */
