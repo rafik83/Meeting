@@ -20,7 +20,7 @@ class BatchExportFormTemplate implements Command
     /** @var Event */
     public $event;
 
-    /** @var FormTemplate */
+    /** @var ?FormTemplate */
     public $formTemplate;
 
     /** @var Admin */
@@ -34,7 +34,7 @@ class BatchExportFormTemplate implements Command
 
     public function __construct(
         Event $event,
-        FormTemplate $formTemplate,
+        ?FormTemplate $formTemplate,
         Admin $admin,
         string $locale,
         array $ids
