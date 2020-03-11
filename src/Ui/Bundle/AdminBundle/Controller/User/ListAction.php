@@ -138,24 +138,14 @@ class ListAction
                 );
             }
 
-            if (!$batch->formTemplate) {
-                $this->flashBag->add('error', 'flash.admin.user.exportFormTemplate.error');
-
-                return new RedirectResponse(
-                    $this->urlGenerator->generate('admin_users_list', [
-                        'event' => $event->getId(),
-                    ])
-                );
-            }
-
             if ($batch->isExportFormTemplate) {
 
                 if (!$batch->formTemplate) {
                     $this->flashBag->add('error', 'flash.admin.user.exportFormTemplate.error');
+                } else {
+                    $this->flashBag->add('success', 'flash.admin.user.exportFormTemplate.pending');
+                    $this->commandBus->handle($batch);
                 }
-
-                $this->flashBag->add('success', 'flash.admin.user.exportFormTemplate.pending');
-                $this->commandBus->handle($batch);
 
                 return new RedirectResponse(
                     $this->urlGenerator->generate('admin_users_list', [
