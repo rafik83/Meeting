@@ -8,10 +8,12 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Event\Participant\AddFastCheckin;
 use Proximum\Vimeet\Application\Command\Event\Participant\AddFastCheckinHandler;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
+use Proximum\Vimeet\Application\Command\User\ActivateAccount\SendActivateAccountFromLoginTokenHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -36,6 +38,8 @@ class AddFastCheckinHandlerTest extends TestCase
         $registrationTemplateData = $this->prophesize(TemplateData::class);
         $sheetTemplateData = $this->prophesize(TemplateData::class);
 
+        $sendActivateAccountFromLoginTokenHandler = $this->prophesize(SendActivateAccountFromLoginTokenHandler::class);
+
         $convertToParticipantHandler->handle(Argument::any())->shouldBeCalled()
             ->willReturn($participant->reveal())
         ;
@@ -52,14 +56,15 @@ class AddFastCheckinHandlerTest extends TestCase
         ;
 
         // run test
-        $query = new AddFastCheckin($event->reveal(), 'sonia.bompastor@sport.fr');
+        $query = new AddFastCheckin($event->reveal(), 'sonia.bompastor@sport.fr', $user->reveal());
         $query->type = $type->reveal();
         $query->hasAccessToMeetings = false;
 
         $handler = new AddFastCheckinHandler(
             $convertToParticipantHandler->reveal(),
             $participationTypeTemplateDataGetter->reveal(),
-            $delayedEventDispatcher->reveal()
+            $delayedEventDispatcher->reveal(),
+            $sendActivateAccountFromLoginTokenHandler->reveal()
         );
         $handler->handle($query);
     }
@@ -72,8 +77,10 @@ class AddFastCheckinHandlerTest extends TestCase
         $event->getFallback()->willReturn('fr');
         $type = $this->prophesize(Type::class);
         $user = $this->prophesize(User::class);
+        $sheet = $this->prophesize(Sheet::class);
         $participant = $this->prophesize(Participant::class);
         $participant->getUser()->willReturn($user->reveal());
+        $participant->getSheet()->willReturn($sheet->reveal());
 
         // prophecy dependencies
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
@@ -82,6 +89,8 @@ class AddFastCheckinHandlerTest extends TestCase
 
         $registrationTemplateData = $this->prophesize(TemplateData::class);
         $sheetTemplateData = $this->prophesize(TemplateData::class);
+
+        $sendActivateAccountFromLoginTokenHandler = $this->prophesize(SendActivateAccountFromLoginTokenHandler::class);
 
         $convertToParticipantHandler->handle(Argument::any())->shouldBeCalled()
             ->willReturn($participant->reveal())
@@ -99,14 +108,15 @@ class AddFastCheckinHandlerTest extends TestCase
         ;
 
         // run tests
-        $query = new AddFastCheckin($event->reveal(), '');
+        $query = new AddFastCheckin($event->reveal(), '', null);
         $query->type = $type->reveal();
         $query->hasAccessToMeetings = false;
 
         $handler = new AddFastCheckinHandler(
             $convertToParticipantHandler->reveal(),
             $participationTypeTemplateDataGetter->reveal(),
-            $delayedEventDispatcher->reveal()
+            $delayedEventDispatcher->reveal(),
+            $sendActivateAccountFromLoginTokenHandler->reveal()
         );
         $handler->handle($query);
     }
