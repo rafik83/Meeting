@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Hotfix: Error message when no template form data to export
 
-## [2.20.0] - 2019-03-05
+## [2.21.0] - 2019-03-05
 ### Added
 - VIMEET-2030 - View checkin status in contacts list and agenda
 ### Fixed
