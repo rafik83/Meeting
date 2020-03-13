@@ -4239,6 +4239,7 @@ services:
             - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
             - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
+            - '@domain.event.day.dday_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
 

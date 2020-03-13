@@ -13,6 +13,7 @@ var $ = require('jquery'),
     QuantitySelector = require('./components/_QuantitySelector'),
     CatalogSheetCard = require('./components/_CatalogSheetCard'),
     Agenda = require('./components/agenda'),
+    AgendaRefresh = require('./components/agenda/_Refresh'),
     AgendaAllSheet = require('./components/agenda/_AgendaAllSheet'),
     Program = require('./components/agenda/_Program'),
     ShowMore = require('./components/_ShowMore'),
@@ -283,6 +284,10 @@ function init (target) {
                 });
         }
     })();
+
+    if (target.querySelector('[data-agenda-autorefresh]')) {
+        new AgendaRefresh();
+    }
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });
