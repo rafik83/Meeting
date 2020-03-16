@@ -42,6 +42,7 @@ form.admin_assign_accommodation_type.roommate.none: Aucune
 form.admin_assign_accommodation_type.roomType.double: Double
 form.admin_assign_accommodation_type.roomType.single: Simple
 form.admin_assign_accommodation_type.roomType.twin: Twin
+form.admin.email_doesnt_exist.error: 'L''adresse email de l''intervenant n''existe pas'
 form.admin_export_planning.children.orderBy.choice.participant_last_name: 'Par nom de famille du participant'
 form.admin_export_planning.children.orderBy.choice.sheet_title: 'Par nom de société'
 form.admin_export_planning.children.orderBy.choice.spot_reference: 'Par lieux, noms de société'
@@ -228,6 +229,7 @@ form.create_sheets_group.children.sheetViews.label: 'Fiche(s) de l''entité'
 form.create_sheets_group.children.sheetViews.prototype.label: Fiches
 form.create_sheets_group.children.submit.label: Créer
 form.create_sheets_group.children.title.label: 'Titre de l''entité'
+form.create_speaker.children.email.label: 'Adresse email de l''intervenant'
 form.create_speaker.children.firstname.label: Prénom
 form.create_speaker.children.lastname.label: Nom
 form.create_speaker.children.logo.label: 'Logo de la société'

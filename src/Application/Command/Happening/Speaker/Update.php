@@ -57,6 +57,11 @@ class Update
     public $photo;
 
     /**
+     * @var null|string
+     */
+    public $email;
+
+    /**
      * Create constructor.
      *
      * @param Speaker $speaker
@@ -67,6 +72,7 @@ class Update
         $this->firstname    = $speaker->getFirstname();
         $this->lastname     = $speaker->getLastname();
         $this->organization = $speaker->getOrganization();
+        $this->user         = $speaker->getUser();
 
         /*
          * @var SpeakerTranslation

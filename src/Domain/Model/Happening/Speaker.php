@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\User;
 
 class Speaker
 {
@@ -67,6 +68,11 @@ class Speaker
     private $talkings;
 
     /**
+     * @var null|User
+     */
+    private $user;
+
+    /**
      * Speaker constructor.
      *
      * @param Event  $event
@@ -75,8 +81,9 @@ class Speaker
      * @param string $organization
      * @param string $logo
      * @param string $photo
+     * @param null|User $user
      */
-    public function __construct(Event $event, $firstname, $lastname, $organization, $logo, $photo)
+    public function __construct(Event $event, $firstname, $lastname, $organization, $logo, $photo, $user)
     {
         $this->event        = $event;
         $this->firstname    = $firstname;
@@ -84,6 +91,7 @@ class Speaker
         $this->organization = $organization;
         $this->logo         = $logo;
         $this->photo        = $photo;
+        $this->user         = $user;
         $this->talkings     = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
@@ -159,6 +167,16 @@ class Speaker
     }
 
     /**
+     * Get the user speaker
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getTranslations()
@@ -174,16 +192,18 @@ class Speaker
      * @param string $organization
      * @param string $logo
      * @param string $photo
+     * @param null|User $user
      *
      * @return Speaker
      */
-    public function update($firstname, $lastname, $organization, $logo, $photo)
+    public function update($firstname, $lastname, $organization, $logo, $photo, $user)
     {
         $this->firstname    = $firstname;
         $this->lastname     = $lastname;
         $this->organization = $organization;
         $this->logo         = $logo;
         $this->photo        = $photo;
+        $this->user         = $user;
 
         return $this;
     }

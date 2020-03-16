@@ -929,6 +929,7 @@ services:
         arguments:
             - '@repository.happening.speaker'
             - '@adapter.local_file_storage'
+            - '@vimeet_infrastructure.repository.user_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Speaker\Create }
     command.happening.speaker.update_handler:

@@ -13,14 +13,17 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Create;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Delete;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Update;
+use Proximum\Vimeet\Application\Exception\Speaker\EmailDoesNotExistException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Speaker\CreateSpeakerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Speaker\UpdateSpeakerType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 class SpeakerController extends Controller
 {
@@ -50,15 +53,24 @@ class SpeakerController extends Controller
     public function createAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $translator = new Translator($request->getLocale());
 
         $command = new Create($event);
         $form    = $this->createForm(CreateSpeakerType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.admin.speaker.create.success');
+            try {
+                $this->get('tactician.commandbus')->handle($command);
+                $this->addFlash('success', 'flash.admin.speaker.create.success');
 
-            return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
+                return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
+            } catch (EmailDoesNotExistException $emailDoesNotExistException) {
+                $error =  new FormError($translator->trans(
+                    $this->get('translator')->trans('form.admin.email_doesnt_exist.error', [], 'forms')
+                ));
+
+                $form->addError($error);
+            }
         }
 
         return $this->render('AdminBundle:Speaker:create.html.twig', [
