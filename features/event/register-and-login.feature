@@ -22,11 +22,11 @@ Feature: Register and login user
     When I fill in "email_email" with "test@test.com"
     And I press "common.next"
     Then the response status code should be 200
-    When I fill in "register_new_user_password_first" with "p@ssw0rd"
-    And I fill in "register_new_user_password_second" with "p@ssw0rd"
+    When I fill in "register_new_user_password_first" with "P1ssw0rd"
+    And I fill in "register_new_user_password_second" with "P1ssw0rd"
     And I press "common.next"
     Then the response status code should be 200
-    Then I should see "Profil"
+    And I should see "Profil"
     And I should see "register.step"
     And I should see "1/3"
 
@@ -38,8 +38,8 @@ Feature: Register and login user
     When I fill in "email_email" with "user@example.net"
     And I press "common.next"
     Then the response status code should be 200
-    When I fill in "register_new_user_password_first" with "mypassword"
-    And I fill in "register_new_user_password_second" with "mypassword"
+    When I fill in "register_new_user_password_first" with "My p1ssw0rd"
+    And I fill in "register_new_user_password_second" with "My p1ssw0rd"
     And I press "common.next"
     Then the response status code should be 200
     And I should see "Mon profil"
@@ -61,7 +61,7 @@ Feature: Register and login user
     And I press "common.next"
     Then the response status code should be 200
     And I should see "test@test.com"
-    When I fill in "login_password" with "p@ssw0rd"
+    When I fill in "login_password" with "P1ssw0rd"
     And I press "login.connect"
     Then the response status code should be 200
     And I should be on this page "/fr/"
@@ -102,8 +102,8 @@ Feature: Register and login user
     When I fill in "email_email" with "test_unfinished_step@test.com"
     And I press "common.next"
     Then the response status code should be 200
-    When I fill in "register_new_user_password_first" with "p@ssw0rd"
-    And I fill in "register_new_user_password_second" with "p@ssw0rd"
+    When I fill in "register_new_user_password_first" with "P1ssw0rd"
+    And I fill in "register_new_user_password_second" with "P1ssw0rd"
     And I press "common.next"
     Then the response status code should be 200
     Then I should see "Profil"
