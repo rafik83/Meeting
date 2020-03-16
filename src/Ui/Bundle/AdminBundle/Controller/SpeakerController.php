@@ -23,7 +23,6 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\Translator;
 
 class SpeakerController extends Controller
 {
@@ -64,7 +63,9 @@ class SpeakerController extends Controller
                 $this->addFlash('success', 'flash.admin.speaker.create.success');
 
                 return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
+
             } catch (EmailDoesNotExistException $emailDoesNotExistException) {
+
                 $error =  new FormError($translator->trans(
                     $this->get('translator')->trans('form.admin.email_doesnt_exist.error', [], 'forms')
                 ));
