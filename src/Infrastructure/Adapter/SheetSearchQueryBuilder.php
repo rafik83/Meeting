@@ -1066,7 +1066,7 @@ class SheetSearchQueryBuilder
             $tagBoolQuery = new BoolQuery();
             $tagBoolQuery->addMust(new Term([
                 'nestedTaggedData.tag' => [
-                    'value' => $tag,
+                    'value' => mb_strtolower($tag),
                 ],
             ]));
 
@@ -1078,7 +1078,7 @@ class SheetSearchQueryBuilder
             foreach ($tagFilter as $tagKey) {
                 $tagValuesBoolQuery->addShould(new Term([
                         'nestedTaggedData.values.value' => [
-                            'value' => $tagKey->key,
+                            'value' => mb_strtolower($tagKey->key),
                         ],
                     ]
                 ));
