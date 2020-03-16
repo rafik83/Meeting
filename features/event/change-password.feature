@@ -52,7 +52,7 @@ When I am logged, I need to be able to change my password
       | form.change_password_user.children.plainPassword.children.first.label  | Good1Password |
       | form.change_password_user.children.plainPassword.children.second.label | Good1Password |
     And I press "common.validate"
-    Then I should see "validators.change_password.success"
+    Then I should see "flash.change_password.success"
 
   Scenario: Change the password failed
     Given I am logged with "test_carnot@proximum.com" on event "http://rdv-carnot-2016.vimeet.proximum"
