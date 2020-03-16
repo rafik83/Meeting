@@ -4,3 +4,7 @@ services:
             - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\Generator'
         tags:
             - { name: kernel.event_subscriber }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\AuthenticationFailureSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
