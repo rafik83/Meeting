@@ -42,7 +42,7 @@ form.admin_assign_accommodation_type.roommate.none: Aucune
 form.admin_assign_accommodation_type.roomType.double: Double
 form.admin_assign_accommodation_type.roomType.single: Simple
 form.admin_assign_accommodation_type.roomType.twin: Twin
-form.admin.email_does_not_exist.error: 'L''adresse email de l''intervenant n''existe pas'
+form.speaker.email_does_not_exist.error: 'L''adresse email de l''intervenant n''existe pas'
 form.admin_export_planning.children.orderBy.choice.participant_last_name: 'Par nom de famille du participant'
 form.admin_export_planning.children.orderBy.choice.sheet_title: 'Par nom de société'
 form.admin_export_planning.children.orderBy.choice.spot_reference: 'Par lieux, noms de société'

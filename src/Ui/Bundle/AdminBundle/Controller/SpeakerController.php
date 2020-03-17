@@ -68,7 +68,7 @@ class SpeakerController extends Controller
             } catch (EmailDoesNotExistException $emailDoesNotExistException) {
 
                 $error =  new FormError($translator->trans(
-                    $this->get('translator')->trans('form.admin.email_does_not_exist.error', [], 'forms')
+                    $this->get('translator')->trans('form.speaker.email_does_not_exist.error', [], 'forms')
                 ));
 
                 $form->addError($error);
@@ -108,7 +108,7 @@ class SpeakerController extends Controller
             } catch (EmailDoesNotExistException $emailDoesNotExistException) {
 
                 $error =  new FormError($translator->trans(
-                    $this->get('translator')->trans('form.admin.email_does_not_exist.error', [], 'forms')
+                    $this->get('translator')->trans('form.speaker.email_does_not_exist.error', [], 'forms')
                 ));
 
                 $form->addError($error);
