@@ -41,6 +41,7 @@ agenda.unavailability.add: 'Ajouter une indisponibilité'
 agenda.unavailability.back: Retour
 agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibilité ?'
 agenda.unavailability.remove: Supprimer
+authentication.remaining_attempt: '{1} Dernière tentative avant que votre compte soit bloqué pour 15 minutes.|]1,Inf[ %remainingAttempt% tentatives restantes'
 availability.confirmation.action.add_unavailability: 'Ajouter une indisponibilité'
 availability.confirmation.explanation.title: 'Afin d''accéder à la prise de rendez-vous nous vous remercions de confirmer vos disponibilités pour la planification des rendez-vous.'
 availability.confirmation.title: 'Confirmer vos disponibilités'

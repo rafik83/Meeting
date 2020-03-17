@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -111,6 +112,7 @@ class SecurityController extends Controller
 
         $event = $eventDomain->getEvent();
 
+        $now = $this->get('datetime');
         $typeFlashBag = $this->get('session')->getFlashBag()->get('register_type');
         $typeId       = array_shift($typeFlashBag);
         $type         = null;
@@ -137,6 +139,16 @@ class SecurityController extends Controller
         }
 
         $this->addFlash('login_email', $email);
+        $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
+
+        if (null !== $user && $user->isTemporaryDisabledDueToFailedAuthentication($now)) {
+            return $this->render('EventBundle:Security:account_temporary_disabled.html.twig', [
+                'event' => $event,
+                'username' => $email,
+                'typeId' => $typeId,
+                'type' => $type,
+            ]);
+        }
 
         $form = $this->createForm(LoginType::class, ['username' => $email], [
             'action' => $this->generateUrl('event_login_check'),
@@ -144,6 +156,20 @@ class SecurityController extends Controller
 
         if (null !== $error) {
             $form->get('password')->addError(new FormError($error->getMessage()));
+
+            if ($error instanceof BadCredentialsException && null !== $user) {
+                $remainingAuthenticationAttempt = $user->getRemainingAuthenticationAttempt($now);
+
+                $form->get('password')->addError(
+                    new FormError(
+                        $this->get('translator')->transChoice(
+                            'authentication.remaining_attempt',
+                            $remainingAuthenticationAttempt,
+                            ['%remainingAttempt%' => $remainingAuthenticationAttempt]
+                        )
+                    )
+                );
+            }
         }
 
         return $this->render('EventBundle:Security:login_second_step.html.twig', [
