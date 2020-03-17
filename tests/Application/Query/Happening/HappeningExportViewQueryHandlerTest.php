@@ -35,7 +35,7 @@ class HappeningExportViewQueryHandlerTest extends TestCase
 
         $happening = new Happening($event, $begin, $end, $category, []);
 
-        $speaker = new Happening\Speaker($event, 'Martin', 'Simon', 'Amazon', '/logo.png', '/photo.png');
+        $speaker = new Happening\Speaker($event, 'Martin', 'Simon', 'Amazon', '/logo.png', '/photo.png', null);
         $speakerTranslation = new Happening\SpeakerTranslation($speaker, $locale, 'Chef');
         $speaker->setTranslation($speakerTranslation);
 

@@ -26,11 +26,11 @@ class SpeakerViewQueryHandlerTest extends TestCase
         $category  = new Happening\Category($event, '', 1, '#aaa', '#bbb');
         $happening = new Happening($event, $begin, $end, $category, []);
 
-        $speaker1            = new Happening\Speaker($event, 'john', 'doh', 'google', '', '');
+        $speaker1            = new Happening\Speaker($event, 'john', 'doh', 'google', '', '', null);
         $speaker1Translation = new Happening\SpeakerTranslation($speaker1, $locale, 'developer');
         $speaker1->getTranslations()->set($locale, $speaker1Translation);
 
-        $speaker2            = new Happening\Speaker($event, 'foo', 'bar', 'microsoft', '', '');
+        $speaker2            = new Happening\Speaker($event, 'foo', 'bar', 'microsoft', '', '', null);
         $speaker2Translation = new Happening\SpeakerTranslation($speaker2, $locale, 'ceo');
         $speaker2->getTranslations()->set($locale, $speaker2Translation);
 
