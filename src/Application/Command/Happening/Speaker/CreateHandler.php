@@ -53,17 +53,17 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $emailsEvent = $this->userRepository->findByEvent($create->event);
+        $usersByEvent = $this->userRepository->findByEvent($create->event);
         $emailSpeaker = $create->email;
 
         $userSpeaker = null;
 
         if ($emailSpeaker !== null) {
 
-            foreach ($emailsEvent as $emailEvent) {
+            foreach ($usersByEvent as $user) {
 
-                if ($emailEvent->getEmail() === $emailSpeaker) {
-                    $userSpeaker = $emailEvent;
+                if ($user->getEmail() === $emailSpeaker) {
+                    $userSpeaker = $user;
                     break;
                 }
             }
