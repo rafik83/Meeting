@@ -42,7 +42,7 @@ form.admin_assign_accommodation_type.roommate.none: Aucune
 form.admin_assign_accommodation_type.roomType.double: Double
 form.admin_assign_accommodation_type.roomType.single: Simple
 form.admin_assign_accommodation_type.roomType.twin: Twin
-form.admin.email_doesnt_exist.error: 'L''adresse email de l''intervenant n''existe pas'
+form.admin.email_does_not_exist.error: 'L''adresse email de l''intervenant n''existe pas'
 form.admin_export_planning.children.orderBy.choice.participant_last_name: 'Par nom de famille du participant'
 form.admin_export_planning.children.orderBy.choice.sheet_title: 'Par nom de société'
 form.admin_export_planning.children.orderBy.choice.spot_reference: 'Par lieux, noms de société'
@@ -1328,6 +1328,7 @@ form.update_sheets_group.children.email.label: 'Email du manager'
 form.update_sheets_group.children.forceSheetTitle.label: 'Forcer le nom de la fiche plutôt que le nom de l''entité sur les badges'
 form.update_sheets_group.children.submit.label: Enregistrer
 form.update_sheets_group.children.title.label: 'Titre de l''entité'
+form.update_speaker.children.email.label: 'Adresse email de l''intervenant'
 form.update_speaker.children.firstname.label: Prénom
 form.update_speaker.children.lastname.label: Nom
 form.update_speaker.children.logo.label: 'Logo de la société'

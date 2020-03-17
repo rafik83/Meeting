@@ -83,7 +83,7 @@ class Speaker
      * @param string $photo
      * @param null|User $user
      */
-    public function __construct(Event $event, $firstname, $lastname, $organization, $logo, $photo, $user)
+    public function __construct(Event $event, $firstname, $lastname, $organization, $logo, $photo, ?User $user)
     {
         $this->event        = $event;
         $this->firstname    = $firstname;
@@ -169,9 +169,9 @@ class Speaker
     /**
      * Get the user speaker
      *
-     * @return User
+     * @return null|User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -196,7 +196,7 @@ class Speaker
      *
      * @return Speaker
      */
-    public function update($firstname, $lastname, $organization, $logo, $photo, $user)
+    public function update($firstname, $lastname, $organization, $logo, $photo, ?User $user)
     {
         $this->firstname    = $firstname;
         $this->lastname     = $lastname;

@@ -68,7 +68,7 @@ class SpeakerController extends Controller
             } catch (EmailDoesNotExistException $emailDoesNotExistException) {
 
                 $error =  new FormError($translator->trans(
-                    $this->get('translator')->trans('form.admin.email_doesnt_exist.error', [], 'forms')
+                    $this->get('translator')->trans('form.admin.email_does_not_exist.error', [], 'forms')
                 ));
 
                 $form->addError($error);
@@ -91,15 +91,28 @@ class SpeakerController extends Controller
     public function updateAction(Request $request, Event $event, Speaker $speaker)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $translator = new Translator($request->getLocale());
 
         $command = new Update($speaker);
         $form    = $this->createForm(UpdateSpeakerType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.admin.speaker.update.success');
+            try {
+                $this->get('tactician.commandbus')->handle($command);
+                $this->addFlash('success', 'flash.admin.speaker.update.success');
 
-            return $this->redirectToRoute('admin_happening_speaker_update', ['event' => $event->getId(), 'speaker' => $speaker->getId()]);
+                return $this->redirectToRoute(
+                    'admin_happening_speaker_update',
+                    ['event' => $event->getId(), 'speaker' => $speaker->getId()]
+                );
+            } catch (EmailDoesNotExistException $emailDoesNotExistException) {
+
+                $error =  new FormError($translator->trans(
+                    $this->get('translator')->trans('form.admin.email_does_not_exist.error', [], 'forms')
+                ));
+
+                $form->addError($error);
+            }
         }
 
         return $this->render('AdminBundle:Speaker:update.html.twig', [

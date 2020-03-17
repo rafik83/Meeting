@@ -53,20 +53,15 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
-        $usersByEvent = $this->userRepository->findByEvent($create->event);
+        $userSpeaker = null;
         $emailSpeaker = $create->email;
 
-        $userSpeaker = null;
+        if ($emailSpeaker) {
+            $userSpeaker = $this->userRepository->findByEventAndEmail($create->event, $create->email);
+        }
 
-        if ($emailSpeaker !== null) {
-
-            foreach ($usersByEvent as $user) {
-
-                if ($user->getEmail() === $emailSpeaker) {
-                    $userSpeaker = $user;
-                    break;
-                }
-            }
+        if ($emailSpeaker !== null && $userSpeaker === null) {
+            throw new EmailDoesNotExistException();
         }
 
         $speaker = new Speaker(
@@ -84,9 +79,6 @@ class CreateHandler
                 $locale,
                 new SpeakerTranslation($speaker, $locale, $translation['position'])
             );
-        }
-        if ($emailSpeaker !== null && $userSpeaker === null) {
-                throw new EmailDoesNotExistException();
         }
 
         $this->speakerRepository->add($speaker);
