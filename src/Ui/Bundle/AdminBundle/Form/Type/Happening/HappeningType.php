@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -86,6 +87,9 @@ abstract class HappeningType extends AbstractType
                 'allow_delete'   => true,
             ])
             ->add('invitationCode', TextType::class, [
+                'required' => false,
+            ])
+            ->add('visioConfEnabled', CheckboxType::class, [
                 'required' => false,
             ])
         ;

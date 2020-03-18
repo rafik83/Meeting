@@ -42,4 +42,7 @@ class AbstractHappeningCommand implements Command
 
     /** @var null|string */
     public $invitationCode;
+
+    /** @var bool */
+    public $visioConfEnabled;
 }

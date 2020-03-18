@@ -53,7 +53,9 @@ class UpdateHandler
             $update->types,
             $update->questionAllowed,
             $update->limitParticipant,
+            $update->visioConfEnabled,
             $update->invitationCode
+
         );
 
         foreach ($update->translations as $locale => $translation) {

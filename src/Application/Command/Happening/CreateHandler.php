@@ -39,7 +39,8 @@ class CreateHandler
             $create->types,
             $create->questionAllowed,
             $create->limitParticipant,
-            $create->invitationCode
+            $create->invitationCode,
+            $create->visioConfEnabled
         );
 
         foreach ($create->translations as $locale => $translation) {

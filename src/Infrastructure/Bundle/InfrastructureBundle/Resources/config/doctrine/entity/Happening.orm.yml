@@ -21,6 +21,10 @@ Proximum\Vimeet\Domain\Model\Happening:
         invitationCode:
             type: string
             nullable: true
+        visioConfEnabled:
+            type: boolean
+            options:
+                default: false
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation
