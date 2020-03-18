@@ -7,7 +7,10 @@ services:
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\AuthenticationFailureSubscriber:
         arguments:
+            - '@request_stack'
+            - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: kernel.event_subscriber }

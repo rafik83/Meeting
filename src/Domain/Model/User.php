@@ -30,9 +30,10 @@ class User extends AbstractUser implements MailRecipientInterface
      */
     private $welcomed = false;
 
+    /** @var int */
     private $failedAuthentication = 0;
 
-    /** @var \DateTimeInterface */
+    /** @var null|\DateTimeInterface */
     private $lastFailedAuthentication;
 
     /**
@@ -242,7 +243,7 @@ class User extends AbstractUser implements MailRecipientInterface
         return $this->account->getGender();
     }
 
-    public function updateLastFailedAuthentication(\DateTimeInterface $now)
+    public function updateLastFailedAuthentication(\DateTimeInterface $now): void
     {
         if ($this->isLastFailedAuthenticationExpired($now)) {
             $this->failedAuthentication = 0;
