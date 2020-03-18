@@ -56,7 +56,6 @@ class UpdateHandler
             $update->limitParticipant,
             $update->webinar,
             $update->invitationCode
-
         );
 
         foreach ($update->translations as $locale => $translation) {
