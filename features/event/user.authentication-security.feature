@@ -34,3 +34,4 @@ Feature: User authentication security
     And I press "login.connect"
     Then I should be on this page "/fr/login-second-step"
     And I should see "authentication.account_temporary_disabled"
+    And the "user.account_temporary_disabled" mail should be sent to "user@example.net" from "no-reply@super-event.vimeet.proximum"
