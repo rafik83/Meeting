@@ -32,6 +32,14 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
+        if ($create->webinar) {
+            foreach ($create->talkings as $talking) {
+                if ($talking["speaker"]->getUser() === null) {
+                    throw new SpeakerNotUserException();
+                }
+            }
+        }
+
         $happening = new Happening(
             $create->event,
             $create->begin,
@@ -53,17 +61,6 @@ class CreateHandler
 
         // Set speakers
         $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $create->talkings));
-
-        if ($create->webinar) {
-
-            foreach ($create->talkings as $talking) {
-
-                if ($talking["speaker"]->getUser() === null) {
-
-                    throw new SpeakerNotUserException();
-                }
-            }
-        }
 
         $this->happeningRepository->add($happening);
     }

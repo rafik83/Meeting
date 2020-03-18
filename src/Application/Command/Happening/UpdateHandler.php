@@ -42,6 +42,14 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
+        if ($update->webinar) {
+            foreach ($update->talkings as $talking) {
+                if ($talking["speaker"]->getUser() === null) {
+                    throw new SpeakerNotUserException();
+                }
+            }
+        }
+
         $previousTypes = $update->happening->getTypes();
         $previousBegin = $update->happening->getBegin();
         $previousEnd   = $update->happening->getEnd();
@@ -71,17 +79,6 @@ class UpdateHandler
 
         // Set speakers
         $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $update->talkings));
-
-        if ($update->webinar) {
-
-            foreach ($update->talkings as $talking) {
-
-                if ($talking["speaker"]->getUser() === null) {
-
-                    throw new SpeakerNotUserException();
-                }
-            }
-        }
 
         $this->happeningRepository->set($happening);
 
