@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\DatesUpdated;
 use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
+use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class UpdateHandler
@@ -71,6 +72,17 @@ class UpdateHandler
 
         // Set speakers
         $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $update->talkings));
+
+        if ($update->visioConfEnabled) {
+
+            foreach ($update->talkings as $talking) {
+
+                if ($talking["speaker"]->getUser() === null) {
+
+                    throw new SpeakerNotUserException();
+                }
+            }
+        }
 
         $this->happeningRepository->set($happening);
 

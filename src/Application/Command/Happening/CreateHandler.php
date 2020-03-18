@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
+use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
@@ -52,6 +53,17 @@ class CreateHandler
 
         // Set speakers
         $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $create->talkings));
+
+        if ($create->visioConfEnabled) {
+
+            foreach ($create->talkings as $talking) {
+
+                if ($talking["speaker"]->getUser() === null) {
+
+                    throw new SpeakerNotUserException();
+                }
+            }
+        }
 
         $this->happeningRepository->add($happening);
     }

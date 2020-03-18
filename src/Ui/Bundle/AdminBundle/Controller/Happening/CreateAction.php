@@ -14,16 +14,19 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Happening\Create;
+use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 
 class CreateAction
 {
@@ -47,6 +50,9 @@ class CreateAction
     /** @var FlashBagInterface */
     private $flashBag;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
      * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
      * @param FormFactoryInterface                 $formFactory
@@ -54,6 +60,7 @@ class CreateAction
      * @param RouterInterface                      $router
      * @param CommandBusInterface                  $commandBus
      * @param FlashBagInterface                    $flashBag
+     * @param TranslatorInterface                  $translator
      */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -61,7 +68,8 @@ class CreateAction
         EngineInterface $engine,
         RouterInterface $router,
         CommandBusInterface $commandBus,
-        FlashBagInterface $flashBag
+        FlashBagInterface $flashBag,
+        TranslatorInterface $translator
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
@@ -69,6 +77,7 @@ class CreateAction
         $this->router = $router;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
+        $this->translator = $translator;
     }
 
     /**
@@ -93,12 +102,17 @@ class CreateAction
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->commandBus->handle($create);
-            $this->flashBag->add('success', 'flash.admin.happening.create.success');
+            try {
+                $this->commandBus->handle($create);
+                $this->flashBag->add('success', 'flash.admin.happening.create.success');
 
-            return new RedirectResponse(
-                $this->router->generate('admin_happening_list', ['event' => $event->getId()])
-            );
+                return new RedirectResponse(
+                    $this->router->generate('admin_happening_list', ['event' => $event->getId()])
+                );
+            } catch (SpeakerNotUserException $speakerNotUserException) {
+                $error = new FormError($this->translator->trans('form.happening_create.speaker_not_user.error', [], 'forms'));
+                $form->get('translations')->get($request->getLocale())->addError($error);
+            }
         }
 
         return $this->engine->renderResponse(self::TEMPLATE, [
