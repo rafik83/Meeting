@@ -482,7 +482,7 @@ form.happening_create.children.talkings.prototype.children.speaker.label: Interv
 form.happening_create.children.translations.prototype.children.description.label: Description
 form.happening_create.children.translations.prototype.children.title.label: Titre
 form.happening_create.children.types.label: 'Types ayant accès'
-form.happening_create.children.visioConfEnabled.label: 'Visio conférence activé'
+form.happening_create.children.webinar.label: 'Visio conférence activé'
 form.happening_create.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
@@ -499,7 +499,7 @@ form.happening_update.children.talkings.prototype.children.speaker.label: Interv
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
 form.happening_update.children.types.label: 'Types ayant accès'
-form.happening_update.children.visioConfEnabled.label: 'Visio conférence activé'
+form.happening_update.children.webinar.label: 'Visio conférence activé'
 form.happening_update.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'

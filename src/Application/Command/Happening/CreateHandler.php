@@ -41,7 +41,7 @@ class CreateHandler
             $create->questionAllowed,
             $create->limitParticipant,
             $create->invitationCode,
-            $create->visioConfEnabled
+            $create->webinar
         );
 
         foreach ($create->translations as $locale => $translation) {
@@ -54,7 +54,7 @@ class CreateHandler
         // Set speakers
         $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $create->talkings));
 
-        if ($create->visioConfEnabled) {
+        if ($create->webinar) {
 
             foreach ($create->talkings as $talking) {
 

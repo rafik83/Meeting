@@ -44,5 +44,5 @@ class AbstractHappeningCommand implements Command
     public $invitationCode;
 
     /** @var bool */
-    public $visioConfEnabled;
+    public $webinar;
 }

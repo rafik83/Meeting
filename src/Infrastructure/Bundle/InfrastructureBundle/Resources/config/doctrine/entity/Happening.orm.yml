@@ -21,7 +21,7 @@ Proximum\Vimeet\Domain\Model\Happening:
         invitationCode:
             type: string
             nullable: true
-        visioConfEnabled:
+        webinar:
             type: boolean
             options:
                 default: false

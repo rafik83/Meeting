@@ -89,7 +89,7 @@ abstract class HappeningType extends AbstractType
             ->add('invitationCode', TextType::class, [
                 'required' => false,
             ])
-            ->add('visioConfEnabled', CheckboxType::class, [
+            ->add('webinar', CheckboxType::class, [
                 'required' => false,
             ])
         ;

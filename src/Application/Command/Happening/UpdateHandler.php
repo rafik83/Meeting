@@ -54,7 +54,7 @@ class UpdateHandler
             $update->types,
             $update->questionAllowed,
             $update->limitParticipant,
-            $update->visioConfEnabled,
+            $update->webinar,
             $update->invitationCode
 
         );
@@ -73,7 +73,7 @@ class UpdateHandler
         // Set speakers
         $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $update->talkings));
 
-        if ($update->visioConfEnabled) {
+        if ($update->webinar) {
 
             foreach ($update->talkings as $talking) {
 
