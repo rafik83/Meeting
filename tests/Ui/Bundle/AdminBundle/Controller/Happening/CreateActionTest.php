@@ -16,6 +16,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Happening\Create;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -64,6 +65,9 @@ class CreateActionTest extends TestCase
     /** @var AdminDomain */
     private $adminDomain;
 
+    /** @var ObjectProphecy */
+    private $translator;
+
     public function setUp()
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
@@ -79,6 +83,7 @@ class CreateActionTest extends TestCase
         $this->event->getLocales()->willReturn(['fr']);
         $this->request->getLocale()->willReturn('de');
         $this->event->getAvailableLocale('de')->willReturn('fr');
+        $this->translator = $this->prophesize(TranslatorInterface::class);
     }
 
     public function testAccessDenied()
@@ -97,7 +102,8 @@ class CreateActionTest extends TestCase
             $this->engine->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->flashBag->reveal()
+            $this->flashBag->reveal(),
+            $this->translator->reveal()
         );
 
         $action($this->request->reveal(), $this->event->reveal(), $this->adminDomain);
@@ -145,7 +151,8 @@ class CreateActionTest extends TestCase
             $this->engine->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->flashBag->reveal()
+            $this->flashBag->reveal(),
+            $this->translator->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->adminDomain);
@@ -195,7 +202,8 @@ class CreateActionTest extends TestCase
             $this->engine->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->flashBag->reveal()
+            $this->flashBag->reveal(),
+            $this->translator->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->adminDomain);
