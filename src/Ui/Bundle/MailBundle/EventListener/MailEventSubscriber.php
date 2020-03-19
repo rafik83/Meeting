@@ -42,7 +42,7 @@ use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteP
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordConfirmEvent;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent as UserResetPasswordEvent;
-use Proximum\Vimeet\Application\Event\User\UserTemporaryDisabledEvent;
+use Proximum\Vimeet\Application\Event\User\UserTemporarilyDisabledEvent;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
@@ -53,7 +53,7 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminRe
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordMail as UserResetPasswordMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\UserAccountTemporaryDisabledMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\UserAccountTemporarilyDisabledMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MailEventSubscriber implements EventSubscriberInterface
@@ -416,13 +416,13 @@ class MailEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onUserAccountTemporaryDisabled(UserTemporaryDisabledEvent $userTemporaryDisabledEvent): void
+    public function onUserAccountTemporarilyDisabled(UserTemporarilyDisabledEvent $userTemporarilyDisabledEvent): void
     {
-        $event = $userTemporaryDisabledEvent->getEvent();
-        $user = $userTemporaryDisabledEvent->getUser();
+        $event = $userTemporarilyDisabledEvent->getEvent();
+        $user = $userTemporarilyDisabledEvent->getUser();
 
         $this->mailer->send(
-            new UserAccountTemporaryDisabledMail(
+            new UserAccountTemporarilyDisabledMail(
                 $event,
                 $this->sender->generate($event),
                 $user->getEmail(),
@@ -449,7 +449,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::USER_PROFILE_COMPLETED             => 'onUserCompleteProfile',
             Events::USER_REGISTERED                    => 'onUserRegistered',
             Events::USER_RESET_PASSWORD_CONFIRMED      => 'onUserResetPasswordConfirm',
-            Events::USER_ACCOUNT_TEMPORARY_DISABLED    => 'onUserAccountTemporaryDisabled',
+            Events::USER_ACCOUNT_TEMPORARILY_DISABLED  => 'onUserAccountTemporarilyDisabled',
             Events::EVENT_PRE_REGISTERED               => 'onUserPreRegistered',
             Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
             Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',

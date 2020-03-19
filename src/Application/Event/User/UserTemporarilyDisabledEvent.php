@@ -6,7 +6,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\EventDispatcher\Event as EventDispatcherEvent;
 
-class UserTemporaryDisabledEvent extends EventDispatcherEvent
+class UserTemporarilyDisabledEvent extends EventDispatcherEvent
 {
     /** @var User */
     private $user;

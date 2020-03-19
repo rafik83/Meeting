@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\User\UserTemporaryDisabledEvent;
+use Proximum\Vimeet\Application\Event\User\UserTemporarilyDisabledEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -70,7 +70,7 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
         $user->updateLastFailedAuthentication($this->dateTime);
         $this->userRepository->set($user);
 
-        if (!$user->isTemporaryDisabledDueToFailedAuthentication($this->dateTime)) {
+        if (!$user->isTemporarilyDisabledDueToFailedAuthentication($this->dateTime)) {
             return;
         }
 
@@ -87,8 +87,8 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
         }
 
         $this->eventDispatcher->dispatch(
-            Events::USER_ACCOUNT_TEMPORARY_DISABLED,
-            new UserTemporaryDisabledEvent($event, $user)
+            Events::USER_ACCOUNT_TEMPORARILY_DISABLED,
+            new UserTemporarilyDisabledEvent($event, $user)
         );
     }
 }

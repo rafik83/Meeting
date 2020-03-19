@@ -265,7 +265,7 @@ class User extends AbstractUser implements MailRecipientInterface
         return $lastFailedAuthenticationPLus15Minutes < $now;
     }
 
-    public function isTemporaryDisabledDueToFailedAuthentication(\DateTimeInterface $now): bool
+    public function isTemporarilyDisabledDueToFailedAuthentication(\DateTimeInterface $now): bool
     {
         if (self::FAILED_AUTHENTICATION_MAX > $this->failedAuthentication) {
             return false;

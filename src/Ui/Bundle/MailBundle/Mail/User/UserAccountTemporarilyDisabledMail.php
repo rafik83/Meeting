@@ -15,10 +15,10 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class UserAccountTemporaryDisabledMail extends UserMail
+class UserAccountTemporarilyDisabledMail extends UserMail
 {
-    public const SUBJECT = 'mail.userAccountTemporaryDisabled.subject';
-    public const TEMPLATE = 'MailBundle:Mail:User/userAccountTemporaryDisabled.html.twig';
+    public const SUBJECT = 'mail.userAccountTemporarilyDisabled.subject';
+    public const TEMPLATE = 'MailBundle:Mail:User/userAccountTemporarilyDisabled.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;
@@ -27,7 +27,7 @@ class UserAccountTemporaryDisabledMail extends UserMail
     protected $template = self::TEMPLATE;
 
     /** @var string */
-    protected $messageId = Events::USER_ACCOUNT_TEMPORARY_DISABLED;
+    protected $messageId = Events::USER_ACCOUNT_TEMPORARILY_DISABLED;
 
     /** @var bool */
     protected $sendToEmailTeam = true;

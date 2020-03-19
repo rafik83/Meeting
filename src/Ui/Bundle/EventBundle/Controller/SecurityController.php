@@ -141,8 +141,9 @@ class SecurityController extends Controller
         $this->addFlash('login_email', $email);
         $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
 
-        if (null !== $user && $user->isTemporaryDisabledDueToFailedAuthentication($now)) {
-            return $this->render('EventBundle:Security:account_temporary_disabled.html.twig', [
+        if (null !== $user && $user->isTemporarilyDisabledDueToFailedAuthentication($now)) {
+            return $this->render(
+                '@Event/Security/account_temporarily_disabled.html.twig', [
                 'event' => $event,
                 'username' => $email,
                 'typeId' => $typeId,

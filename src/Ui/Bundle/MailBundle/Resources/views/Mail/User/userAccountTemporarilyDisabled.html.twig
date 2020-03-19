@@ -1,7 +1,7 @@
 {% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
-    {{ 'mail.userAccountTemporaryDisabled.body'|trans({
+    {{ 'mail.userAccountTemporarilyDisabled.body'|trans({
         '%event%': mail.event.title,
         '%firstname%': mail.firstname|capitalize,
         '%lastname%': mail.lastname|upper
