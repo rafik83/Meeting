@@ -10,7 +10,9 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
-agenda.availability.available_sheets: 'Voir les participants disponible'
+agenda.availability.available_sheets: '{1} Voir le participant disponible|]1,Inf[ Voir les %availableSheets% participants disponibles'
+agenda.availability.available_sheets_with_proposition: '{1} Voir une proposition de RDV|]1,Inf[ Voir les %availableSheets% propositions de RDV'
+agenda.availability.available_participant_for_this_slot: 'Voir les participants disponible'
 agenda.availability.define: 'Définir mes disponibilités'
 agenda.availability.fail_message_on_save: 'L''enregistrement de vos disponibilités a échoué. Une erreur inattendue du serveur s''est produite.'
 agenda.availability.hide: 'Cacher mes disponibilités'
