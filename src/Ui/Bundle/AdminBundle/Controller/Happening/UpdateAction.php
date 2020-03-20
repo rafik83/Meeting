@@ -121,7 +121,7 @@ class UpdateAction
                 );
             } catch (SpeakerNotUserException $speakerNotUserException) {
                 $error = new FormError($this->translator->trans('form.happening_update.speaker_not_user.error', [], 'forms'));
-                $form->get('translations')->get($request->getLocale())->addError($error);
+                $form->addError($error);
             }
         }
 
