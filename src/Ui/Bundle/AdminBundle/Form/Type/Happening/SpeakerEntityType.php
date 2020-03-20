@@ -22,20 +22,28 @@ class SpeakerEntityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event']);
-        $resolver->setDefaults([
-            'class'        => Speaker::class,
-            'query_builder' => function (Options $options) {
-                return function (EntityRepository $entityRepository) use ($options) {
-                    return $entityRepository
-                        ->createQueryBuilder('speaker')
-                        ->where('speaker.event = :event')
-                        ->setParameter('event', $options['event'])
-                        ->orderBy('speaker.lastname', 'asc')
-                        ->addOrderBy('speaker.firstname', 'asc');
-                };
-            },
-            'choice_label' => 'name',
-        ]);
+        $resolver->setDefaults(
+            [
+                'class' => Speaker::class,
+                'query_builder' => function (Options $options) {
+                    return function (EntityRepository $entityRepository) use ($options) {
+                        return $entityRepository
+                            ->createQueryBuilder('speaker')
+                            ->where('speaker.event = :event')
+                            ->setParameter('event', $options['event'])
+                            ->orderBy('speaker.lastname', 'asc')
+                            ->addOrderBy('speaker.firstname', 'asc');
+                    };
+                },
+                'choice_label' => function (Speaker $speaker) {
+                    if ($speaker->getUser() === null) {
+                        return $speaker->getName();
+                    }
+
+                    return $speaker->getName() . ' (Lié à un utilisateur)';
+                },
+            ]
+        );
     }
 
     public function getParent()

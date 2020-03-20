@@ -213,7 +213,7 @@ class Speaker
      */
     public function getName()
     {
-        return $this->firstname . ' ' . mb_strtoupper($this->lastname);
+        return ucfirst($this->firstname) . ' ' . mb_strtoupper($this->lastname);
     }
 
     /**
