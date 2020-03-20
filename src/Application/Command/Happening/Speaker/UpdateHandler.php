@@ -62,12 +62,12 @@ class UpdateHandler
             $userSpeaker = $this->userRepository->findByEventAndEmail($update->speaker->getEvent(), $update->email);
         }
 
-        foreach ($update->translations as $locale => $translation) {
-            $update->speaker->getTranslations()->get($locale)->update($translation['position']);
-        }
-
         if ($emailSpeaker !== null && $userSpeaker === null) {
             throw new EmailDoesNotExistException();
+        }
+
+        foreach ($update->translations as $locale => $translation) {
+            $update->speaker->getTranslations()->get($locale)->update($translation['position']);
         }
 
         $this->speakerRepository->set($update->speaker->update(

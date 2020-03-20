@@ -53,7 +53,7 @@ class SpeakerController extends Controller
     public function createAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $translator = new Translator($request->getLocale());
+        $translator = $this->get('translator');
 
         $command = new Create($event);
         $form    = $this->createForm(CreateSpeakerType::class, $command);
@@ -64,14 +64,12 @@ class SpeakerController extends Controller
                 $this->addFlash('success', 'flash.admin.speaker.create.success');
 
                 return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
-
             } catch (EmailDoesNotExistException $emailDoesNotExistException) {
-
                 $error =  new FormError($translator->trans(
-                    $this->get('translator')->trans('form.speaker.email_does_not_exist.error', [], 'forms')
+                    $translator->trans('form.speaker.email_does_not_exist.error', [], 'forms')
                 ));
 
-                $form->addError($error);
+                $form->get('email')->addError($error);
             }
         }
 
@@ -91,7 +89,7 @@ class SpeakerController extends Controller
     public function updateAction(Request $request, Event $event, Speaker $speaker)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $translator = new Translator($request->getLocale());
+        $translator = $this->get('translator');
 
         $command = new Update($speaker);
         $form    = $this->createForm(UpdateSpeakerType::class, $command);
@@ -106,12 +104,11 @@ class SpeakerController extends Controller
                     ['event' => $event->getId(), 'speaker' => $speaker->getId()]
                 );
             } catch (EmailDoesNotExistException $emailDoesNotExistException) {
-
                 $error =  new FormError($translator->trans(
-                    $this->get('translator')->trans('form.speaker.email_does_not_exist.error', [], 'forms')
+                    $translator->trans('form.speaker.email_does_not_exist.error', [], 'forms')
                 ));
 
-                $form->addError($error);
+                $form->get('email')->addError($error);
             }
         }
 
