@@ -4979,10 +4979,10 @@ onetime@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/onetime/-/onetime-1.1.0.tgz#a1f7838f8314c516f05ecefcbc4ccfe04b4ed789"
 
-opentok-layout-js@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/opentok-layout-js/-/opentok-layout-js-0.5.1.tgz#907d8af955542e9e41b67df281645bde052b7efa"
-  integrity sha1-kH2K+VVULp5Btn3ygWRb3gUrfvo=
+opentok-layout-js@3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/opentok-layout-js/-/opentok-layout-js-3.4.0.tgz#55cc4ec40fcb2c2348738a128996d98d27a37722"
+  integrity sha512-V1Kl1v9HcW1r+qNejAdbawVhtqGu4LMXbRK5UebaVTSbNvJvGXRrwLuLkntxXnf8l2Zp4eXzjSoJ8k0CZu8eWQ==
 
 opentok-network-test-js@^2.0.0:
   version "2.0.0"

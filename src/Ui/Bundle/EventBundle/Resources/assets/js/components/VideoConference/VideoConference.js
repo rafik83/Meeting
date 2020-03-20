@@ -2,7 +2,7 @@
 
 var TokboxInstance = require('./TokboxInstance').TokboxInstance;
 var CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL;
-var openTokLayout = require('opentok-layout-js');
+var initLayoutContainer = require('opentok-layout-js');
 var openTokTextChat = require('opentok-text-chat');
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
@@ -56,7 +56,7 @@ function VideoConference(element) {
       endMeetingButton.addEventListener('click', this.disconnect.bind(this));
   }
 
-  this.layout = openTokLayout.initLayoutContainer(this.layoutContainer).layout;
+  this.layout = initLayoutContainer(this.layoutContainer).layout;
 
   this.publisher = new Publisher(this.publisherContainer);
   this.publisherStream = null;
