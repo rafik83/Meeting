@@ -501,6 +501,7 @@ form.happening_update.children.translations.prototype.children.title.label: Titr
 form.happening_update.children.types.label: 'Types ayant accès'
 form.happening_update.children.webinar.label: 'Webinaire activé'
 form.happening_update.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
+form.happening_create_update.speaker_linked_to_user: '%name% (Lié à un utilisateur)'
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer

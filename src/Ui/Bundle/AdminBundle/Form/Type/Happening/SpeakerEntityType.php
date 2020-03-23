@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
 use Doctrine\ORM\EntityRepository;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -19,6 +20,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SpeakerEntityType extends AbstractType
 {
+    /** @var TranslatorInterface */
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event']);
@@ -40,7 +49,10 @@ class SpeakerEntityType extends AbstractType
                         return $speaker->getName();
                     }
 
-                    return $speaker->getName() . ' (Lié à un utilisateur)';
+                    return $this->translator->trans('form.happening_create_update.speaker_linked_to_user', [
+                        '%name%' => $speaker->getName()
+                    ], 'forms');
+
                 },
             ]
         );
