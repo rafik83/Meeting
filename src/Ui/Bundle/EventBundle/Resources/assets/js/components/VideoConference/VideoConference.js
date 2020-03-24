@@ -6,6 +6,7 @@ var initLayoutContainer = require('opentok-layout-js');
 var openTokTextChat = require('opentok-text-chat');
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
+var Counter = require('./Counter');
 var $ = require('jquery');
 
 /**
@@ -437,53 +438,7 @@ VideoConference.prototype.countDownBeforeEnd = function() {
       return;
     }
 
-    var _this = this;
-
-    var meetingEndTime = parseInt(this.meetingEndTime);
-    var meetingStartTime = parseInt(this.meetingStartTime);
-    var currentTime = parseInt(this.currentTime);
-
-    var totalTime = meetingEndTime - meetingStartTime;
-    var warningTime = Math.floor(totalTime * 0.8);
-    var remainingTime = meetingEndTime - currentTime;
-
-    var seconds = Math.floor(remainingTime % 60);
-    var minutes = Math.floor((remainingTime/60) % 60);
-    var hours = Math.floor((remainingTime/(60*60)) % 24);
-
-    if (hours > 0) {
-        minutes += hours * 60;
-    }
-
-    var timerInterval = setInterval(function(){
-        if (remainingTime <= 0) {
-            _this.timerContainer.classList.add('warning');
-            _this.countDownContainer.innerHTML = `00:00`;
-            clearInterval(timerInterval);
-
-            return;
-        }
-
-        currentTime++;
-        remainingTime--;
-
-        if (currentTime >= (meetingStartTime + warningTime)) {
-            _this.timerContainer.classList.add('warning');
-        }
-
-        if (0 === parseInt(seconds)) {
-            seconds = 59;
-            minutes--;
-        } else {
-            seconds--;
-        }
-
-        if (seconds < 10) {
-            seconds = '0' + seconds;
-        }
-
-        _this.countDownContainer.innerHTML = `${minutes}:${seconds}`;
-    }, 1000);
+    new Counter(this.meetingStartTime, this.meetingEndTime, this.currentTime, this.countDownContainer, this.timerContainer);
 };
 
 module.exports = VideoConference;
