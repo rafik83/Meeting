@@ -65,9 +65,9 @@ class SpeakerController extends Controller
 
                 return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
             } catch (EmailDoesNotExistException $emailDoesNotExistException) {
-                $error =  new FormError($translator->trans(
+                $error =  new FormError(
                     $translator->trans('form.speaker.email_does_not_exist.error', [], 'forms')
-                ));
+                );
 
                 $form->get('email')->addError($error);
             }
@@ -104,9 +104,9 @@ class SpeakerController extends Controller
                     ['event' => $event->getId(), 'speaker' => $speaker->getId()]
                 );
             } catch (EmailDoesNotExistException $emailDoesNotExistException) {
-                $error =  new FormError($translator->trans(
+                $error =  new FormError(
                     $translator->trans('form.speaker.email_does_not_exist.error', [], 'forms')
-                ));
+                );
 
                 $form->get('email')->addError($error);
             }

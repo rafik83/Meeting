@@ -229,7 +229,7 @@ form.create_sheets_group.children.sheetViews.label: 'Fiche(s) de l''entité'
 form.create_sheets_group.children.sheetViews.prototype.label: Fiches
 form.create_sheets_group.children.submit.label: Créer
 form.create_sheets_group.children.title.label: 'Titre de l''entité'
-form.create_speaker.children.email.label: 'Lié à un utilisateur, email :'
+form.create_speaker.children.email.label: 'Lié à un utilisateur, email'
 form.create_speaker.children.firstname.label: Prénom
 form.create_speaker.children.lastname.label: Nom
 form.create_speaker.children.logo.label: 'Logo de la société'
@@ -1328,7 +1328,7 @@ form.update_sheets_group.children.email.label: 'Email du manager'
 form.update_sheets_group.children.forceSheetTitle.label: 'Forcer le nom de la fiche plutôt que le nom de l''entité sur les badges'
 form.update_sheets_group.children.submit.label: Enregistrer
 form.update_sheets_group.children.title.label: 'Titre de l''entité'
-form.update_speaker.children.email.label: 'Lié à un utilisateur, email :'
+form.update_speaker.children.email.label: 'Lié à un utilisateur, email'
 form.update_speaker.children.firstname.label: Prénom
 form.update_speaker.children.lastname.label: Nom
 form.update_speaker.children.logo.label: 'Logo de la société'
