@@ -130,6 +130,17 @@ Webinar.prototype.init = function () {
         this.layout();
     }.bind(this));
 
+    let connectionCount = 0;
+
+    this.session.on("connectionCreated", function(event) {
+        connectionCount++;
+        console.log('connectionCreated, total ' + connectionCount)
+    });
+    this.session.on("connectionDestroyed", function(event) {
+        connectionCount--;
+        console.log('connectionDestroyed, total ' + connectionCount)
+    });
+
     this.session.on('streamDestroyed', function () {
         window.setTimeout(this.layout, 100);
     }.bind(this));
