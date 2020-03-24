@@ -42,6 +42,13 @@ Subscriber.prototype.onVideoElementCreated = function (event) {
 
   // start fullscreen
   fullscreenButton.addEventListener("click", function() {
+
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+
+      return;
+    }
+
     var el = subscriberElement,
       rfs = el.requestFullscreen
         || el.webkitRequestFullScreen
