@@ -354,6 +354,12 @@ services:
         tags:
             - { name: form.type }
 
+    form_type.speaker_entity_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\SpeakerEntityType
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
     #
     # Value Resolver
     #
