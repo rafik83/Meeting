@@ -139,8 +139,13 @@ class ListAction
             }
 
             if ($batch->isExportFormTemplate) {
-                $this->commandBus->handle($batch);
-                $this->flashBag->add('success', 'flash.admin.user.exportFormTemplate.pending');
+
+                if (!$batch->formTemplate) {
+                    $this->flashBag->add('error', 'flash.admin.user.exportFormTemplate.error');
+                } else {
+                    $this->flashBag->add('success', 'flash.admin.user.exportFormTemplate.pending');
+                    $this->commandBus->handle($batch);
+                }
 
                 return new RedirectResponse(
                     $this->urlGenerator->generate('admin_users_list', [

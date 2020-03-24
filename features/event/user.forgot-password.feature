@@ -29,8 +29,8 @@ Feature: Forgot Password
     And the response status code should be 200
     And I should see "new_password.title"
     And I fill in the following:
-      |form.new_password.children.password.children.first.label  | newpassword |
-      |form.new_password.children.password.children.second.label | newpassword |
+      |form.new_password.children.password.children.first.label  | newpassword7A |
+      |form.new_password.children.password.children.second.label | newpassword7A |
     And I press "common.validate"
     Then I should be on "/fr/participant/1/step/1"
     And the response status code should be 200

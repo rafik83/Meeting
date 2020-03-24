@@ -4,13 +4,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2059 - Assign a conference to a webinar / Add error message when speaker is not a user
+
+## [2.23.0] - 2019-03-16
+### Added
+- VIMEET-2055 - New password security
+
+## [2.22.0] - 2019-03-13
+### Added
+- VIMEET-1493 - Auto refresh agenda when it is event D day
 ### Fixed
-- Improvment: Add cache to Crisp chat component
-- MV-223 - Doesn't access to a removed account
-- VIMEET-2011 - Hotfix: priorisation meeting request before planning
+- Hotfix: Error message when no template form data to export
+
+## [2.21.0] - 2019-03-05
 ### Added
 - VIMEET-2030 - View checkin status in contacts list and agenda
-- VIMEET-2059 - Assign a conference to a webinar / Add error message when speaker is not a user
+### Fixed
+- VIMEET-2054 - Fix catalog nomenclature filters
+- VIMEET-2011 - Hotfix: priorisation meeting request before planning
+- MV-223 - Doesn't access to a removed account
+- MV-219 - send activate account on fastCheckin
+- Improvment: Add cache to Crisp chat component
 
 ## [2.20.0] - 2019-02-25
 ### Fixed

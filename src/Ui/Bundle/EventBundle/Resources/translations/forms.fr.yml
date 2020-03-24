@@ -100,6 +100,7 @@ form.payment_choice.children.paymentMode.bank_card: 'Carte bancaire'
 form.payment_choice.children.paymentMode.bank_check: Chèque
 form.payment_choice.children.paymentMode.bank_transfer: Virement
 form.payment_choice.children.paymentMode.paypal: 'Carte bancaire ou Paypal'
+form.password.rules: 'Votre mot de passe doit comporter au moins une majuscule, une minuscule, un chiffre et au moins 8 caractères.'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
 form.remove_meeting.children.content.label: 'Commentaire à destination de votre interlocuteur'

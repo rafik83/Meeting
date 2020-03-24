@@ -78,14 +78,7 @@ class AddFastCheckinAction
 
         $user = $this->userRepository->findByEmail($email);
 
-        $addFastCheckin = new AddFastCheckin($event, $email);
-
-        if ($user instanceof User) {
-            $addFastCheckin->firstname = $user->getFirstName();
-            $addFastCheckin->lastname = $user->getLastName();
-            $addFastCheckin->mobile = $user->getMobile();
-            $addFastCheckin->country = $user->getCountry();
-        }
+        $addFastCheckin = new AddFastCheckin($event, $email, $user);
 
         $form = $this->formFactory->create(
             AddFastCheckinType::class,
