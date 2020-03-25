@@ -111,7 +111,7 @@ Webinar.prototype.init = function () {
         return;
     }
 
-    this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
+    this.session = TokboxInstance.initSession(this.apiKey, this.sessionId, {connectionEventsSuppressed: !this.isSpeaker});
 
     this.session.on('streamCreated', function (event) {
         const subscriberContainer = document.createElement('div');
