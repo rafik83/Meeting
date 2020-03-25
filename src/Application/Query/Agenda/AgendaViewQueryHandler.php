@@ -170,6 +170,7 @@ class AgendaViewQueryHandler
                 false,
                 $canMoveMeeting,
                 $canRemoveMeeting,
+                false,
                 false
             );
         }
