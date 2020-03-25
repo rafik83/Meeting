@@ -21,6 +21,9 @@ Proximum\Vimeet\Domain\Model\Happening:
         invitationCode:
             type: string
             nullable: true
+        webinarSessionId:
+            type: string
+            nullable: true
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

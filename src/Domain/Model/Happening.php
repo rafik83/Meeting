@@ -65,6 +65,9 @@ class Happening implements TimeRangeInterface
     /** @var ArrayCollection of Product */
     private $products;
 
+    /** @var null|string */
+    private $webinarSessionId;
+
     /**
      * @param Event              $event
      * @param \DateTimeInterface $begin
@@ -415,5 +418,20 @@ class Happening implements TimeRangeInterface
     public function hasProducts(): bool
     {
         return !$this->products->isEmpty();
+    }
+
+    public function hasWebinarSessionId(): bool
+    {
+        return null !== $this->webinarSessionId;
+    }
+
+    public function getWebinarSessionId(): ?string
+    {
+        return $this->webinarSessionId;
+    }
+
+    public function setWebinarSessionId(string $webinarSessionId): void
+    {
+        $this->webinarSessionId = $webinarSessionId;
     }
 }

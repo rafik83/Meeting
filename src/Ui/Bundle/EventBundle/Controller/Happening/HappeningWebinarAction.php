@@ -11,11 +11,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
-use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -30,19 +29,21 @@ class HappeningWebinarAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
+
     /** @var EngineInterface */
     private $engine;
-    /** @var VideoConferenceAdapterInterface */
-    private $videoConferenceAdapter;
+
+    /** @var QueryBusInterface */
+    private $queryBus;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         EngineInterface $engine,
-        VideoConferenceAdapterInterface $videoConferenceAdapter
+        QueryBusInterface $queryBus
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->engine = $engine;
-        $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->queryBus = $queryBus;
     }
 
     public function __invoke(
@@ -68,23 +69,9 @@ class HappeningWebinarAction
             throw new NotFoundHttpException('Happening or sheet not in this event');
         }
 
-        $session = $this->videoConferenceAdapter->createSession();
-        $token = $this->videoConferenceAdapter->generateAccessToken(
-            $session,
-            $happening->getEnd()
-        );
-        $sessionId = $session->getSessionId();
+        // @todo: check if happening is a webinar
 
-        $isSpeaker = false;
-
-        $webinarView = new WebinarView(
-            $token,
-            $sessionId,
-            $this->videoConferenceAdapter->getApiKey(),
-            $isSpeaker,
-            new TimeRangeView($happening->getBegin(), $happening->getEnd()),
-            new \DateTime()
-        );
+        $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user));
 
         return new Response(
             $this->engine->render(

@@ -71,7 +71,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@templating'
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # Meeting
