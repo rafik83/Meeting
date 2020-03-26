@@ -16,6 +16,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Happening\Update;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -68,6 +69,9 @@ class UpdateActionTest extends TestCase
     /** @var ObjectProphecy */
     private $happening;
 
+    /** @var ObjectProphecy */
+    private $translator;
+
     public function setUp()
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
@@ -84,6 +88,7 @@ class UpdateActionTest extends TestCase
         $this->request->getLocale()->willReturn('de');
         $this->event->getAvailableLocale('de')->willReturn('fr');
         $this->happening = $this->prophesize(Happening::class);
+        $this->translator = $this->prophesize(TranslatorInterface::class);
     }
 
     public function testAccessDenied()
@@ -102,7 +107,8 @@ class UpdateActionTest extends TestCase
             $this->engine->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->flashBag->reveal()
+            $this->flashBag->reveal(),
+            $this->translator->reveal()
         );
 
         $action($this->request->reveal(), $this->event->reveal(), $this->happening->reveal(), $this->adminDomain);
@@ -128,7 +134,8 @@ class UpdateActionTest extends TestCase
             $this->engine->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->flashBag->reveal()
+            $this->flashBag->reveal(),
+            $this->translator->reveal()
         );
 
         $action($this->request->reveal(), $this->event->reveal(), $this->happening->reveal(), $this->adminDomain);
@@ -153,6 +160,7 @@ class UpdateActionTest extends TestCase
         $this->happening->getSpeakers()->willReturn([]);
         $this->happening->getTypes()->willReturn([]);
         $this->happening->getInvitationCode()->shouldBeCalled()->willReturn('toto');
+        $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
 
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
@@ -195,7 +203,8 @@ class UpdateActionTest extends TestCase
             $this->engine->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->flashBag->reveal()
+            $this->flashBag->reveal(),
+            $this->translator->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->happening->reveal(), $this->adminDomain);
@@ -222,6 +231,7 @@ class UpdateActionTest extends TestCase
         $this->happening->getSpeakers()->willReturn([]);
         $this->happening->getTypes()->willReturn([]);
         $this->happening->getInvitationCode()->shouldBeCalled()->willReturn('toto');
+        $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
 
         $form = $this->prophesize(Form::class);
         $update = new Update($this->happening->reveal());
@@ -261,7 +271,8 @@ class UpdateActionTest extends TestCase
             $this->engine->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->flashBag->reveal()
+            $this->flashBag->reveal(),
+            $this->translator->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->happening->reveal(), $this->adminDomain);

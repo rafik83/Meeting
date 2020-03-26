@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\DatesUpdated;
 use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
+use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class UpdateHandler
@@ -41,6 +42,14 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
+        if ($update->webinar) {
+            foreach ($update->talkings as $talking) {
+                if ($talking["speaker"]->getUser() === null) {
+                    throw new SpeakerNotUserException();
+                }
+            }
+        }
+
         $previousTypes = $update->happening->getTypes();
         $previousBegin = $update->happening->getBegin();
         $previousEnd   = $update->happening->getEnd();
@@ -53,6 +62,7 @@ class UpdateHandler
             $update->types,
             $update->questionAllowed,
             $update->limitParticipant,
+            $update->webinar,
             $update->invitationCode
         );
 

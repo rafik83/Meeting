@@ -69,6 +69,7 @@ class CreateHandlerTest extends TestCase
             ],
         ];
         $create->invitationCode = 'toto';
+        $create->webinar = false;
 
         $handler = new CreateHandler($happeningRepository->reveal());
         $handler->handle($create);

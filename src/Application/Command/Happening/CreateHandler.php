@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
+use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
@@ -31,6 +32,14 @@ class CreateHandler
      */
     public function handle(Create $create)
     {
+        if ($create->webinar) {
+            foreach ($create->talkings as $talking) {
+                if ($talking["speaker"]->getUser() === null) {
+                    throw new SpeakerNotUserException();
+                }
+            }
+        }
+
         $happening = new Happening(
             $create->event,
             $create->begin,
@@ -39,7 +48,8 @@ class CreateHandler
             $create->types,
             $create->questionAllowed,
             $create->limitParticipant,
-            $create->invitationCode
+            $create->invitationCode,
+            $create->webinar
         );
 
         foreach ($create->translations as $locale => $translation) {

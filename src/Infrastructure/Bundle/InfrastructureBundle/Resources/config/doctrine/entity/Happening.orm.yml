@@ -21,6 +21,10 @@ Proximum\Vimeet\Domain\Model\Happening:
         invitationCode:
             type: string
             nullable: true
+        webinar:
+            type: boolean
+            options:
+                default: false
         webinarSessionId:
             type: string
             nullable: true

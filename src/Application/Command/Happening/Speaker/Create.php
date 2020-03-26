@@ -51,6 +51,11 @@ class Create
     public $photo;
 
     /**
+     * @var null|string
+     */
+    public $email;
+
+    /**
      * Create constructor.
      *
      * @param Event $event
