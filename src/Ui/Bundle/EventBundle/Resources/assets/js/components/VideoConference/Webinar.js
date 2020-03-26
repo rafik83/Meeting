@@ -45,6 +45,9 @@ function Webinar(element, isSpeaker) {
     this.layout = initLayoutContainer(this.layoutContainer).layout;
 
     if (this.isSpeaker) {
+        this.viewersCount = 0;
+        this.viewersContainer = element.querySelector('.viewers');
+
         this.timerContainer = element.querySelector('.timer');
         this.countDownContainer = element.querySelector('.timer span.countdown');
 
@@ -130,16 +133,15 @@ Webinar.prototype.init = function () {
         this.layout();
     }.bind(this));
 
-    let connectionCount = 0;
-
     this.session.on("connectionCreated", function(event) {
-        connectionCount++;
-        console.log('connectionCreated, total ' + connectionCount)
-    });
+        ++this.viewersCount;
+        this.updateViewers();
+    }.bind(this));
+
     this.session.on("connectionDestroyed", function(event) {
-        connectionCount--;
-        console.log('connectionDestroyed, total ' + connectionCount)
-    });
+        --this.viewersCount;
+        this.updateViewers();
+    }.bind(this));
 
     this.session.on('streamDestroyed', function () {
         window.setTimeout(this.layout, 100);
@@ -150,6 +152,13 @@ Webinar.prototype.init = function () {
     });
 
     this.connect();
+};
+
+Webinar.prototype.updateViewers = function () {
+    // remove speaker
+    const viewersCount = this.viewersCount - 1;
+
+    this.viewersContainer.textContent = '' + viewersCount;
 };
 
 /**

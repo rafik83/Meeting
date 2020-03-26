@@ -238,6 +238,7 @@ happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
 happening.webinar.end: 'Arrêter'
 happening.webinar.endingAt: 'Fin du webinar dans'
+happening.webinar.viewers: 'Connectés :'
 happening.webinar.screenshare.start: 'Partager mon écran'
 happening.webinar.screenshare.end: 'Arrêter le partage de mon écran'
 invoice.list.column.date: Date

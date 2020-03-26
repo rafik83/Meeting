@@ -1,16 +1,21 @@
 .webinar, .video-conference, .video-conference-preview {
+  .viewers-container {
+    color: white;
+  }
+
   .timer-container {
     z-index: 9999;
     background: rgba(0, 0, 0, 0.5);
     position: absolute;
     bottom: 10px;
     left: 10px;
+    padding: 5px;
+
     .timer {
       color: #fff;
       font-size: 18px;
       line-height: 22px;
       font-family: OpenSans, Helvetica, sans-serif;
-      padding: 10px;
     }
     .warning {
       font-weight: bold;
@@ -34,9 +39,7 @@
       transition: background .2s ease-in-out;
       display: inline-block;
       background-color: #fff;
-      &.screensharing {
-        margin-right: 10px;
-      }
+
       &.btn-off, &.btn-off:hover, &.btn-off:focus {
         background-color: $bg-fail-color;
       }
