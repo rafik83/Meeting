@@ -6,3 +6,6 @@ Proximum\Vimeet\Application\Command\Register\RegisterNewUser:
             - Length:
                 min: 8
                 minMessage: validators.password.min
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneNumber: ~
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneUppercase: ~
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneLowercase: ~

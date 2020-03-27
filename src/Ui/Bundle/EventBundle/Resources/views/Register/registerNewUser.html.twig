@@ -24,6 +24,9 @@
                         <p>{{ email }}</p>
                     </div>
                     {{ form_row(form.password) }}
+
+                    <p class="alert alert-warning">{{ 'form.password.rules'|trans({}, 'forms') }}</p>
+
                     <div class="validation">
                         <button type="submit" class="btn btn-primary"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
                     </div>

@@ -20,6 +20,15 @@ Proximum\Vimeet\Domain\Model\User:
             type: boolean
             options:
                 default: false
+        failedAuthentication:
+            type: integer
+            options:
+                default: 0
+        lastFailedAuthentication:
+            type: datetime
+            nullable: true
+            options:
+                default: null
     embedded:
         account:
             class: Proximum\Vimeet\Domain\Model\User\Account

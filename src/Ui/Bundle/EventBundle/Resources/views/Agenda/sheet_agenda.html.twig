@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <div id="agendaAllSheet" class="agenda-container">
+    <div id="agendaAllSheet" class="agenda-container" {% if agenda.isItDDay %}data-agenda-autorefresh{% endif %}>
         <div class="agenda all-sheet">
             {% for day in agenda.days %}
                 <header class="agenda-head">

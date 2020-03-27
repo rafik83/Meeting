@@ -41,7 +41,7 @@ class MeetingParticipantViewQueryHandler
     {
         $event = $query->participant->getSheet()->getEvent();
         $isDDay = $this->dDayGuesser->isItDDay($event);
-        $getCheckinStatus = $isDDay && $event->isAccessControlEnabled();
+        $getCheckinStatus = $isDDay && $event->accessControlEnabledAndShowCheckinStatus();
 
         $card = $this->cardViewQueryHandler->handle(
             new CardViewQuery($query->participant, $query->locale, false, $getCheckinStatus)

@@ -16,7 +16,7 @@ Feature: Activate Account
     When I go to this page "http://rdv-carnot-2016.vimeet.proximum/@fr/activate/azertyuiopqsdfghjklmwxcvbn"
     And the response status code should be 200
     Then I fill in the following:
-      | form.activate_account_password.children.password.children.first.label  | newpassword |
-      | form.activate_account_password.children.password.children.second.label | newpassword |
+      | form.activate_account_password.children.password.children.first.label  | P1ssW0rd |
+      | form.activate_account_password.children.password.children.second.label | P1ssW0rd |
     And I press "common.validate"
     Then I should be on this page "/fr/account/sheet/1/participant/2/profile"

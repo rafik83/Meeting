@@ -5,6 +5,8 @@ namespace Proximum\Vimeet\Application\Command\Event\Participant;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
+use Proximum\Vimeet\Application\Command\User\ActivateAccount\SendActivateAccountFromLoginToken;
+use Proximum\Vimeet\Application\Command\User\ActivateAccount\SendActivateAccountFromLoginTokenHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
@@ -22,14 +24,19 @@ class AddFastCheckinHandler
     /** @var DelayedEventDispatcherInterface */
     private $eventDispatcher;
 
+    /** @var SendActivateAccountFromLoginTokenHandler */
+    private $sendActivateAccountFromLoginTokenHandler;
+
     public function __construct(
         ConvertToParticipantHandler $convertToParticipantHandler,
         ParticipationTypeTemplateDataGetter $participationTypeTemplateDataGetter,
-        DelayedEventDispatcherInterface $delayedEventDispatcher
+        DelayedEventDispatcherInterface $delayedEventDispatcher,
+        SendActivateAccountFromLoginTokenHandler $sendActivateAccountFromLoginTokenHandler
     ) {
         $this->convertToParticipantHandler = $convertToParticipantHandler;
         $this->participationTypeTemplateDataGetter = $participationTypeTemplateDataGetter;
         $this->eventDispatcher = $delayedEventDispatcher;
+        $this->sendActivateAccountFromLoginTokenHandler = $sendActivateAccountFromLoginTokenHandler;
     }
 
     public function handle(AddFastCheckin $addFastCheckin): ?Participant
@@ -60,7 +67,11 @@ class AddFastCheckinHandler
 
         $participant = $this->convertToParticipantHandler->handle($convertToParticipant);
 
-        if ('' !== $addFastCheckin->email) {
+        if ($participant === null) {
+            return null;
+        }
+
+        if ($addFastCheckin->isUserKnown) {
             $completeProfileEvent = new CompleteProfileEvent(
                 $participant->getUser(),
                 $addFastCheckin->event,
@@ -68,6 +79,11 @@ class AddFastCheckinHandler
                 $addFastCheckin->event->getFallback()
             );
             $this->eventDispatcher->dispatch(Events::USER_PROFILE_COMPLETED, $completeProfileEvent);
+        }
+
+        if (!$addFastCheckin->isUserKnown) {
+            $sendActivateAccountFromLoginToken = new SendActivateAccountFromLoginToken($participant->getSheet(), $participant->getUser());
+            $this->sendActivateAccountFromLoginTokenHandler->handle($sendActivateAccountFromLoginToken);
         }
 
         return $participant;

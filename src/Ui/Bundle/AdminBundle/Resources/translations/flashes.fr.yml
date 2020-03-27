@@ -189,6 +189,7 @@ flash.admin.unavailability.mass.delete.success: 'L''indisponibilité de masse a 
 flash.admin.unavailability.mass.dispatch.fail: 'Le dispatch n''a pas pu être réalisé car certaines indisponibilités de masse n''ont pas de créneau de dispatch défini'
 flash.admin.unavailability.mass.dispatch.success: 'Dispatch réalisé avec succès'
 flash.admin.unavailability.mass.update.success: 'L''indisponibilité de masse a bien été mis à jour'
+flash.admin.user.exportFormTemplate.error: 'Vous n''avez pas séléctionné de template de formulaire'
 flash.admin.user.exportFormTemplate.pending: 'Votre export est planifié pour votre sélection, vous receverez un mail avec le fichier'
 flash.billing.update_info.success: 'Vos informations de facturation ont été mis à jour'
 flash.change_mail_activate.success: 'Votre nouveau mail est maintenant associé à votre compte'
