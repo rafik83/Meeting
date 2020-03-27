@@ -2,7 +2,6 @@ var Meet = require('./_Meet'),
     Slot = require('./_Slot'),
     Planner = require('./_Planner'),
     ResizeHandler = require('./_ResizeHandler'),
-    AvailableSheetsForSlot = require('./_AvailableSheetsForSlot'),
     moment = require('moment');
 
 /**
@@ -46,10 +45,6 @@ function Agenda(element) {
     if (moment(this.agendaDate, 'MM/DD/YY').format('MM/DD/YY') === moment().format('MM/DD/YY')) {
         [].forEach.call(this.slots, this.scrollOnSlot.bind(this));
     }
-
-    [].forEach.call(element.querySelectorAll('.meet.available'), function(slotAvailable) {
-        AvailableSheetsForSlot(slotAvailable, slotAvailable.getAttribute('data-slot-id'));
-    });
 
     this.resize.on('resized', this.onResize);
 }

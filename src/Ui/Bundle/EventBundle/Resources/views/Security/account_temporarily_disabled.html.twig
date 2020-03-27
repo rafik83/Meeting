@@ -1,0 +1,49 @@
+{% extends 'EventBundle:Register:base.html.twig' %}
+
+{% block title %}
+    {% if type %}
+        {{ 'register.register'|trans }} "{{ type.title }}"
+    {% else %}
+        {{ 'login.title'|trans }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+        <header>
+            {% if type %}
+                <h1><i class="icon-Clef"></i> {{ 'register.register'|trans }} <span>"{{ type.title }}"</span></h1>
+            {% else %}
+                <h1><i class="icon-Clef"></i> {{ 'login.connection'|trans }} <span>"{{ 'login.memberArea'|trans }}"</span></h1>
+            {% endif %}
+        </header>
+
+        <div class="main__content" id="login-form">
+            <div class="styled-form">
+            {% if typeId %}
+                <a href="{{ path('event_register', {'typeView': typeId}) }}" class="back"><i class="icon-Retour"></i></a>
+            {% else %}
+                <a href="{{ path('event_login') }}" class="back"><i class="icon-Retour"></i></a>
+            {% endif %}
+                <div class="inputs">
+                    <div class="identity">
+                        <div class="avatar">
+                            <img src="{{ asset('assets/images/dummy/default-user.svg') }}">
+                        </div>
+                        <p>{{ username }}</p>
+                    </div>
+
+                    <div class="important fail">
+                        {{ 'authentication.account_temporarily_disabled'|trans }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sub-form">
+            <a href="{{ path('event_forgotten_password') }}" class="btn key">
+                {{ 'login.forgot_password'|trans }}
+            </a>
+        </div>
+    </section>
+{% endblock %}
