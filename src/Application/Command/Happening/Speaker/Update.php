@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Happening\Speaker;
 
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation;
+use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Update
@@ -57,6 +58,11 @@ class Update
     public $photo;
 
     /**
+     * @var null|string
+     */
+    public $email;
+
+    /**
      * Create constructor.
      *
      * @param Speaker $speaker
@@ -67,6 +73,9 @@ class Update
         $this->firstname    = $speaker->getFirstname();
         $this->lastname     = $speaker->getLastname();
         $this->organization = $speaker->getOrganization();
+        if ($speaker->getUser()) {
+            $this->email = $speaker->getUser()->getEmail();
+        }
 
         /*
          * @var SpeakerTranslation

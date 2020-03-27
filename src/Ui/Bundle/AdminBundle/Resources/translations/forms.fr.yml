@@ -42,6 +42,7 @@ form.admin_assign_accommodation_type.roommate.none: Aucune
 form.admin_assign_accommodation_type.roomType.double: Double
 form.admin_assign_accommodation_type.roomType.single: Simple
 form.admin_assign_accommodation_type.roomType.twin: Twin
+form.speaker.email_does_not_exist.error: 'Aucun compte n''existe sur cet évènement correspondant à cet email'
 form.admin_export_planning.children.orderBy.choice.participant_last_name: 'Par nom de famille du participant'
 form.admin_export_planning.children.orderBy.choice.sheet_title: 'Par nom de société'
 form.admin_export_planning.children.orderBy.choice.spot_reference: 'Par lieux, noms de société'
@@ -228,6 +229,7 @@ form.create_sheets_group.children.sheetViews.label: 'Fiche(s) de l''entité'
 form.create_sheets_group.children.sheetViews.prototype.label: Fiches
 form.create_sheets_group.children.submit.label: Créer
 form.create_sheets_group.children.title.label: 'Titre de l''entité'
+form.create_speaker.children.email.label: 'Lié à un utilisateur, email'
 form.create_speaker.children.firstname.label: Prénom
 form.create_speaker.children.lastname.label: Nom
 form.create_speaker.children.logo.label: 'Logo de la société'
@@ -480,6 +482,8 @@ form.happening_create.children.talkings.prototype.children.speaker.label: Interv
 form.happening_create.children.translations.prototype.children.description.label: Description
 form.happening_create.children.translations.prototype.children.title.label: Titre
 form.happening_create.children.types.label: 'Types ayant accès'
+form.happening_create.children.webinar.label: 'Webinaire activé'
+form.happening_create.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
 form.happening_update.children.end.label: 'Date de fin'
@@ -495,6 +499,9 @@ form.happening_update.children.talkings.prototype.children.speaker.label: Interv
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
 form.happening_update.children.types.label: 'Types ayant accès'
+form.happening_update.children.webinar.label: 'Webinaire activé'
+form.happening_update.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
+form.happening_create_update.speaker_linked_to_user: '%name% (Lié à un utilisateur)'
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
@@ -1326,6 +1333,7 @@ form.update_sheets_group.children.email.label: 'Email du manager'
 form.update_sheets_group.children.forceSheetTitle.label: 'Forcer le nom de la fiche plutôt que le nom de l''entité sur les badges'
 form.update_sheets_group.children.submit.label: Enregistrer
 form.update_sheets_group.children.title.label: 'Titre de l''entité'
+form.update_speaker.children.email.label: 'Lié à un utilisateur, email'
 form.update_speaker.children.firstname.label: Prénom
 form.update_speaker.children.lastname.label: Nom
 form.update_speaker.children.logo.label: 'Logo de la société'

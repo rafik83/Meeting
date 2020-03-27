@@ -13,12 +13,15 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Happening\Update;
+use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +51,9 @@ class UpdateAction
     /** @var FlashBagInterface */
     private $flashBag;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
      * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
      * @param FormFactoryInterface                 $formFactory
@@ -55,6 +61,7 @@ class UpdateAction
      * @param RouterInterface                      $router
      * @param CommandBusInterface                  $commandBus
      * @param FlashBagInterface                    $flashBag
+     * @param TranslatorInterface                  $translator
      */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -62,7 +69,8 @@ class UpdateAction
         EngineInterface $engine,
         RouterInterface $router,
         CommandBusInterface $commandBus,
-        FlashBagInterface $flashBag
+        FlashBagInterface $flashBag,
+        TranslatorInterface $translator
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
@@ -70,6 +78,7 @@ class UpdateAction
         $this->router = $router;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
+        $this->translator = $translator;
     }
 
     /**
@@ -97,13 +106,23 @@ class UpdateAction
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->commandBus->handle($update);
-            $this->flashBag->add('success', 'flash.admin.happening.update.success');
+            try {
+                $this->commandBus->handle($update);
+                $this->flashBag->add('success', 'flash.admin.happening.update.success');
 
-            return new RedirectResponse($this->router->generate('admin_happening_update', [
-                'event'     => $event->getId(),
-                'happening' => $happening->getId(),
-            ]));
+                return new RedirectResponse(
+                    $this->router->generate(
+                        'admin_happening_update',
+                        [
+                            'event' => $event->getId(),
+                            'happening' => $happening->getId(),
+                        ]
+                    )
+                );
+            } catch (SpeakerNotUserException $speakerNotUserException) {
+                $error = new FormError($this->translator->trans('form.happening_update.speaker_not_user.error', [], 'forms'));
+                $form->addError($error);
+            }
         }
 
         return $this->engine->renderResponse(self::TEMPLATE, [

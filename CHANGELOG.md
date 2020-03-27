@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2059 - Assign a conference to a webinar / Add error message when speaker is not a user
 - VIMEET-2063 - Login security: disable temporarily for 15 mintes user account after 5 wrong attempts
 - VIMEET-2056 - Delete ajax request count participants
 
