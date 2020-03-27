@@ -1,8 +1,0 @@
-<a href="{{ path('event_catalog_index', {
-    'sheet': sheet.id,
-    'availableSlot': 'catalog_slot',
-    'slot_id': slot.id,
-    'orderBy': 'relevance'
-}) }}">
-    {{ 'agenda.availability.available_sheets'|transchoice(countAvailableSheets, {'%availableSheets%': countAvailableSheets}) }}
-</a>

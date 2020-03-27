@@ -118,7 +118,18 @@
                                              data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
                                              data-slot-id="{{ availableSlotView.id }}"
                                         >
-                                            <header><div class="content"></div></header>
+                                            <header>
+                                                <div class="content">
+                                                    <a href="{{ path('event_catalog_index', {
+                                                        'sheet': sheet.id,
+                                                        'availableSlot': 'catalog_slot',
+                                                        'slot_id': availableSlotView.id,
+                                                        'orderBy': 'relevance'
+                                                    }) }}">
+                                                        {{ 'agenda.availability.available_participant_for_this_slot'|trans }}
+                                                    </a>
+                                                </div>
+                                            </header>
                                         </div>
                                     {% endfor %}
                                 {% else %}
