@@ -10,29 +10,24 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 
 class HappeningViewQueryHandler
 {
-    /**
-     * @var SpeakerViewQueryHandler
-     */
+    /** @var CanAccessToWebinar */
+    private $canAccessToWebinar;
+
+    /** @var SpeakerViewQueryHandler */
     private $speakerHandler;
 
-    /**
-     * @param SpeakerViewQueryHandler $speakerHandler
-     */
-    public function __construct(SpeakerViewQueryHandler $speakerHandler)
+    public function __construct(CanAccessToWebinar $canAccessToWebinar, SpeakerViewQueryHandler $speakerHandler)
     {
+        $this->canAccessToWebinar = $canAccessToWebinar;
         $this->speakerHandler = $speakerHandler;
     }
 
-    /**
-     * @param HappeningViewQuery $query
-     *
-     * @return HappeningView
-     */
-    public function handle(HappeningViewQuery $query)
+    public function handle(HappeningViewQuery $query): HappeningView
     {
         $happening = $query->happening;
         $speakers  = $this->speakerHandler->handle(
@@ -50,7 +45,9 @@ class HappeningViewQueryHandler
             $happening->getCategory()->getLeftColor(),
             $happening->getCategory()->getRightColor(),
             $query->event->getTimeZone(),
-            $happening->getLimitParticipant()
+            $happening->getLimitParticipant(),
+            $happening->isWebinar(),
+            $happening->isWebinar() && $this->canAccessToWebinar->isSatisfiableBy($happening)
         );
     }
 }

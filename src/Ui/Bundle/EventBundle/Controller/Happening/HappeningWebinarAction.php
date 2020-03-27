@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -22,7 +23,6 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 
@@ -30,6 +30,9 @@ class HappeningWebinarAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
+
+    /** @var CanAccessToWebinar */
+    private $canAccessToWebinar;
 
     /** @var EngineInterface */
     private $engine;
@@ -39,10 +42,12 @@ class HappeningWebinarAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
+        CanAccessToWebinar $canAccessToWebinar,
         EngineInterface $engine,
         QueryBusInterface $queryBus
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
+        $this->canAccessToWebinar = $canAccessToWebinar;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
     }
@@ -60,17 +65,14 @@ class HappeningWebinarAction
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_HAPPENING_ACCESS', $event)
             || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
             || !$this->authorizationCheckerAdapter->isGranted(ParticipationVoter::PARTICIPATE, $sheet)
+            || !$this->canAccessToWebinar->isSatisfiableBy($happening)
+            || $happening->getEvent() !== $event
+            || $sheet->getEvent() !== $event
         ) {
             throw new AccessDeniedException('Access denied to this happening');
         }
 
         $user = $userDomain->getUser();
-
-        if ($happening->getEvent() !== $event || $sheet->getEvent() !== $event) {
-            throw new NotFoundHttpException('Happening or sheet not in this event');
-        }
-
-        // @todo: check if happening is a webinar
 
         /** @var WebinarView $webinarView */
         $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user));

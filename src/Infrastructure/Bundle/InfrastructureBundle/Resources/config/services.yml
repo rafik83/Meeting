@@ -4205,6 +4205,7 @@ services:
     query.agenda.happening_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
             - '@query.agenda.speaker_view_query_handler'
     query.agenda.day_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\DayViewQueryHandler
