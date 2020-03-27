@@ -122,6 +122,10 @@ Webinar.prototype.init = function () {
         this.layout();
     }.bind(this));
 
+    this.session.on('streamPropertyChanged', (event) => {
+        //console.log(event.changedProperty === 'hasVideo', event.newValue);
+    });
+
     this.session.on('connectionCreated', function (event) {
         ++this.viewersCount;
         this.updateViewers();
