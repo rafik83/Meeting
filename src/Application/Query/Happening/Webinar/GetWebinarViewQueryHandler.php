@@ -26,9 +26,7 @@ class GetWebinarViewQueryHandler
     public function handle(GetWebinarViewQuery $query): WebinarView
     {
         $happening = $query->getHappening();
-
-        // @todo: check if happening has user as a speaker
-        $isSpeaker = true;
+        $isSpeaker = $happening->hasSpeaker($query->getUser());
 
         $session = $happening->hasWebinarSessionId()
             ? $this->videoConferenceAdapter->getSession($happening->getWebinarSessionId())

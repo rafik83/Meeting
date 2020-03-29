@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
 use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
@@ -141,9 +142,10 @@ class AgendaViewQueryHandler
         $sheet = $query->sheet;
         $canMoveMeeting = $this->canMoveMeeting->isSatisfiedBy($sheet);
         $canRemoveMeeting = $this->canRemoveMeeting->isSatisfiedBy($sheet);
+        $user = $participant->getUser();
 
         $isUserParticipantMultipleSheet = $this->sheetRepository->isUserParticipantMultipleSheetsInEvent(
-            $participant->getUser(),
+            $user,
             $query->event
         );
 
@@ -188,13 +190,11 @@ class AgendaViewQueryHandler
 
             if (!$query->allSheet) {
                 $unavailabilities = $this->unavailabilityRepository->findByUserAndEvent(
-                    $participant->getUser(),
+                    $user,
                     $query->event
                 );
 
-                $happeningParticipations = $this
-                    ->happeningParticipationRepository
-                    ->findByUser($participant->getUser(), $query->event, true);
+                $happeningParticipations = $this->getHappeningParticipations($query);
             }
 
             if ($query->allSheet) {
@@ -265,6 +265,28 @@ class AgendaViewQueryHandler
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($query->userViewing, $query->event);
 
         return $this->meetingRepository->getBySheets($query->event, $sheets);
+    }
+
+    private function getHappeningParticipations(AgendaViewQuery $query): array
+    {
+        $user = $query->participant->getUser();
+        $event = $query->event;
+
+        $happeningParticipations = $this
+            ->happeningParticipationRepository
+            ->findByUser($query->userViewing, $query->event, true);
+
+        foreach ($happeningParticipations as $happeningParticipation) {
+            $happeningsFound[$happeningParticipation->getHappening()->getId()] = true;
+        }
+
+        foreach ($this->happeningParticipationRepository->findBySpeaker($user, $event) as $happeningParticipation) {
+            if (!isset($happeningsFound[$happeningParticipation->getHappening()->getId()])) {
+                $happeningParticipations[] = $happeningParticipation;
+            }
+        }
+
+        return $happeningParticipations;
     }
 
     /**

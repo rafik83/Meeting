@@ -76,7 +76,6 @@ class HappeningWebinarAction
 
         /** @var WebinarView $webinarView */
         $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user));
-        $webinarView->isSpeaker = $request->query->getBoolean('isSpeaker', false);
 
         return new Response(
             $this->engine->render(

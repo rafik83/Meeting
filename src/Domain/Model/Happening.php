@@ -275,6 +275,18 @@ class Happening implements TimeRangeInterface
             ->toArray();
     }
 
+    public function hasSpeaker(User $user): bool
+    {
+        /** @var Talking $talking */
+        foreach ($this->getTalkings() as $talking) {
+            if ($talking->getSpeaker()->getUser() === $user) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param array $speakers
      *
