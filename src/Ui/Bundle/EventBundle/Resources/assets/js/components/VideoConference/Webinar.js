@@ -51,7 +51,7 @@ function Webinar(element, isSpeaker) {
         this.countDownContainer = element.querySelector('.timer span.countdown');
 
         this.endScreenSharingButton = element.querySelector('#end-screensharing');
-        this.endScreenSharingButton.addEventListener('click', this.endScreenshare.bind(this));
+        this.endScreenSharingButton.addEventListener('click', this.handleStopScreensharing.bind(this));
 
         this.toggleAudioElement = element.querySelector('#toggle-audio');
         this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
@@ -242,11 +242,15 @@ Webinar.prototype.handlePublish = function (error) {
  */
 Webinar.prototype.handlePublishScreensharing = function (error) {
     if (error) {
+        console.error(error);
         this.showError(error);
-    } else {
-        this.startScreenSharingButton.classList.add('hide');
-        this.endScreenSharingButton.classList.remove('hide');
+        this.handleStopScreensharing();
+
+        return;
     }
+
+    this.startScreenSharingButton.classList.add('hide');
+    this.endScreenSharingButton.classList.remove('hide');
 };
 
 Webinar.prototype.showError = function (error) {
@@ -295,21 +299,10 @@ Webinar.prototype.screenshare = function () {
 };
 
 /**
- * End screensharing requested by user using the UI
- */
-Webinar.prototype.endScreenshare = function () {
-    if (this.publisherScreen.isScreensharing()) {
-        this.publisherScreen.destroy();
-        this.handleStopScreensharing();
-    }
-};
-
-/**
  * Handle stop screen sharing
  */
 Webinar.prototype.handleStopScreensharing = function () {
     this.publisherScreen.destroy();
-
     this.startScreenSharingButton.classList.remove('hide');
     this.endScreenSharingButton.classList.add('hide');
 
@@ -411,10 +404,12 @@ Webinar.prototype.toggleVideo = function () {
     if (publisher.stream.hasVideo) {
         publisher.publishVideo(false);
         this.toggleButton(this.toggleVideoElement, false);
-    } else {
-        publisher.publishVideo(true);
-        this.toggleButton(this.toggleVideoElement, true);
+
+        return;
     }
+
+    publisher.publishVideo(true);
+    this.toggleButton(this.toggleVideoElement, true);
 };
 
 Webinar.prototype.installChromeExtension = function () {
