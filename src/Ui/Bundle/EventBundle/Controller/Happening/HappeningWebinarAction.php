@@ -75,7 +75,7 @@ class HappeningWebinarAction
         $user = $userDomain->getUser();
 
         /** @var WebinarView $webinarView */
-        $webinarView = $this->commandBus->handle(new GetWebinarViewCommand($happening, $user));
+        $webinarView = $this->commandBus->handle(new GetWebinarViewCommand($happening, $user, $request->getLocale()));
 
         return new Response(
             $this->engine->render(

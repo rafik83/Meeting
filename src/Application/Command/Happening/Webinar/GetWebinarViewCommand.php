@@ -14,10 +14,14 @@ class GetWebinarViewCommand implements Command
     /** @var User */
     private $user;
 
-    public function __construct(Happening $happening, User $user)
+    /** @var string */
+    private $locale;
+
+    public function __construct(Happening $happening, User $user, string $locale)
     {
         $this->happening = $happening;
         $this->user = $user;
+        $this->locale = $locale;
     }
 
     public function getHappening(): Happening
@@ -28,5 +32,10 @@ class GetWebinarViewCommand implements Command
     public function getUser(): User
     {
         return $this->user;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 }

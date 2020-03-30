@@ -47,6 +47,7 @@ class GetWebinarViewCommandHandler
         }
 
         return new WebinarView(
+            $happening->getTitle($command->getLocale()),
             $token,
             $sessionId,
             $this->videoConferenceAdapter->getApiKey(),

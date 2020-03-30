@@ -20,6 +20,7 @@ function Webinar(element, isSpeaker) {
     this.currentTime = element.getAttribute('data-current-time');
     this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
     this.userCompleteName = element.getAttribute('data-user-complete-name');
+    this.helperContainer = element.querySelector('.video-helper');
 
     this.notCompatibleBrowserMessage = element.getAttribute(
         'data-not-compatible-browser-message'
@@ -113,6 +114,8 @@ Webinar.prototype.init = function () {
     this.session = TokboxInstance.initSession(this.apiKey, this.sessionId, {connectionEventsSuppressed: !this.isSpeaker});
 
     this.session.on('streamCreated', function (event) {
+        this.helperContainer.classList.add('hide');
+
         const subscriberManager = new Subscriber(this.session, this.layoutContainer);
         const subscriber = subscriberManager.subscribe(event);
 

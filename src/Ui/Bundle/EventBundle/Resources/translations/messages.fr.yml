@@ -245,6 +245,7 @@ happening.webinar.start: 'Démarrer'
 happening.webinar.viewers: 'Connectés :'
 happening.webinar.screenshare.start: 'Partager mon écran'
 happening.webinar.screenshare.end: 'Arrêter le partage de mon écran'
+happening.webinar.waiting.message: 'Le webinaire va démarrer dans quelques instants.'
 invoice.list.column.date: Date
 invoice.list.column.number: 'N° facture'
 invoice.list.column.totalExcludeTaxes: 'Total HT'

@@ -15,6 +15,9 @@ use Proximum\Vimeet\Domain\Time\TimeRangeView;
 class WebinarView
 {
     /** @var string */
+    public $happeningTitle;
+
+    /** @var string */
     public $token;
 
     /** @var string */
@@ -33,6 +36,7 @@ class WebinarView
     public $currentTime;
 
     public function __construct(
+        string $happeningTitle,
         string $token,
         string $sessionId,
         string $apiKey,
@@ -40,6 +44,7 @@ class WebinarView
         TimeRangeView $slot,
         \DateTimeInterface $currentTime
     ) {
+        $this->happeningTitle = $happeningTitle;
         $this->token = $token;
         $this->sessionId = $sessionId;
         $this->apiKey = $apiKey;
