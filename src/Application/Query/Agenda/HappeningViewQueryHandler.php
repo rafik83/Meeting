@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
-use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
+use Proximum\Vimeet\Application\Components\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 
 class HappeningViewQueryHandler

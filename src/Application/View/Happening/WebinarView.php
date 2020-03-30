@@ -16,14 +16,19 @@ class WebinarView
 {
     /** @var string */
     public $token;
+
     /** @var string */
     public $sessionId;
+
     /** @var string */
     public $apiKey;
+
     /** @var bool */
     public $isSpeaker;
+
     /** @var TimeRangeView */
     public $slot;
+
     /** @var \DateTimeInterface */
     public $currentTime;
 

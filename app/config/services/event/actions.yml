@@ -70,9 +70,9 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningWebinarAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Application\Components\Happening\Webinar\CanAccessToWebinar'
             - '@templating'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     #
     # Meeting

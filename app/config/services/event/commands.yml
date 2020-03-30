@@ -50,6 +50,14 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccount\SendActivateAccountFromLoginToken }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\GetWebinarViewCommandHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@adapter.video_conference_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\GetWebinarViewCommand }
+
     #
     # Unavailabilities
     #

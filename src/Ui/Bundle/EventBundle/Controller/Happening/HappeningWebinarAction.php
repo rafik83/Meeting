@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
-use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Components\Happening\Webinar\CanAccessToWebinar;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\GetWebinarViewCommand;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -37,19 +37,19 @@ class HappeningWebinarAction
     /** @var EngineInterface */
     private $engine;
 
-    /** @var QueryBusInterface */
-    private $queryBus;
+    /** @var CommandBusInterface */
+    private $commandBus;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar,
         EngineInterface $engine,
-        QueryBusInterface $queryBus
+        CommandBusInterface $commandBus
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
         $this->engine = $engine;
-        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
     }
 
     public function __invoke(
@@ -75,7 +75,7 @@ class HappeningWebinarAction
         $user = $userDomain->getUser();
 
         /** @var WebinarView $webinarView */
-        $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user));
+        $webinarView = $this->commandBus->handle(new GetWebinarViewCommand($happening, $user));
 
         return new Response(
             $this->engine->render(

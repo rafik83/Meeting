@@ -1,13 +1,13 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
+namespace Proximum\Vimeet\Application\Command\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
-class GetWebinarViewQueryHandler
+class GetWebinarViewCommandHandler
 {
     /** @var HappeningRepositoryInterface */
     private $happeningRepository;
@@ -23,10 +23,10 @@ class GetWebinarViewQueryHandler
         $this->videoConferenceAdapter = $videoConferenceAdapter;
     }
 
-    public function handle(GetWebinarViewQuery $query): WebinarView
+    public function handle(GetWebinarViewCommand $command): WebinarView
     {
-        $happening = $query->getHappening();
-        $isSpeaker = $happening->hasSpeaker($query->getUser());
+        $happening = $command->getHappening();
+        $isSpeaker = $happening->hasSpeaker($command->getUser());
 
         $session = $happening->hasWebinarSessionId()
             ? $this->videoConferenceAdapter->getSession($happening->getWebinarSessionId())
