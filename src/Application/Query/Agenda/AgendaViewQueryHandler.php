@@ -16,8 +16,10 @@ use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
 use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
@@ -194,7 +196,7 @@ class AgendaViewQueryHandler
                     $query->event
                 );
 
-                $happeningParticipations = $this->getHappeningParticipations($query);
+                $happeningParticipations = $this->getHappeningParticipations($query->event, $user);
             }
 
             if ($query->allSheet) {
@@ -267,14 +269,11 @@ class AgendaViewQueryHandler
         return $this->meetingRepository->getBySheets($query->event, $sheets);
     }
 
-    private function getHappeningParticipations(AgendaViewQuery $query): array
+    private function getHappeningParticipations(Event $event, User $user): array
     {
-        $user = $query->participant->getUser();
-        $event = $query->event;
-
         $happeningParticipations = $this
             ->happeningParticipationRepository
-            ->findByUser($query->userViewing, $query->event, true);
+            ->findByUser($user, $event, true);
 
         foreach ($happeningParticipations as $happeningParticipation) {
             $happeningsFound[$happeningParticipation->getHappening()->getId()] = true;
