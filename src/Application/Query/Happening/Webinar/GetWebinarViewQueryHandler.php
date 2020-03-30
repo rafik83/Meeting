@@ -11,9 +11,13 @@ class GetWebinarViewQueryHandler
     /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
 
-    public function __construct(VideoConferenceAdapterInterface $videoConferenceAdapter)
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
+    public function __construct(VideoConferenceAdapterInterface $videoConferenceAdapter, \DateTimeInterface $dateTime)
     {
         $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(GetWebinarViewQuery $query): WebinarView
@@ -43,7 +47,7 @@ class GetWebinarViewQueryHandler
             $this->videoConferenceAdapter->getApiKey(),
             $isSpeaker,
             new TimeRangeView($happening->getBegin(), $happening->getEnd()),
-            new \DateTime()
+            $this->dateTime
         );
     }
 }
