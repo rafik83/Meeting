@@ -4,22 +4,15 @@ namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
-use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class GetWebinarViewQueryHandler
 {
-    /** @var HappeningRepositoryInterface */
-    private $happeningRepository;
-
     /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
 
-    public function __construct(
-        HappeningRepositoryInterface $happeningRepository,
-        VideoConferenceAdapterInterface $videoConferenceAdapter
-    ) {
-        $this->happeningRepository = $happeningRepository;
+    public function __construct(VideoConferenceAdapterInterface $videoConferenceAdapter)
+    {
         $this->videoConferenceAdapter = $videoConferenceAdapter;
     }
 
@@ -28,9 +21,11 @@ class GetWebinarViewQueryHandler
         $happening = $query->getHappening();
         $isSpeaker = $happening->hasSpeaker($query->getUser());
 
-        $session = $happening->hasWebinarSessionId()
-            ? $this->videoConferenceAdapter->getSession($happening->getWebinarSessionId())
-            : $this->videoConferenceAdapter->createSession();
+        if (!$happening->hasWebinarSessionId()) {
+            throw new \LogicException('Happening webinar session id not created');
+        }
+
+        $session = $this->videoConferenceAdapter->getSession($happening->getWebinarSessionId());
 
         $token = $this->videoConferenceAdapter->generateAccessToken(
             $session,
@@ -40,11 +35,6 @@ class GetWebinarViewQueryHandler
         );
 
         $sessionId = $session->getSessionId();
-
-        if (!$happening->hasWebinarSessionId()) {
-            $happening->setWebinarSessionId($sessionId);
-            $this->happeningRepository->set($happening);
-        }
 
         return new WebinarView(
             $happening->getTitle($query->getLocale()),

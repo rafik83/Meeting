@@ -40,7 +40,6 @@ services:
 
     Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQueryHandler:
         arguments:
-            - '@vimeet_infrastructure.repository.happening_repository'
             - '@adapter.video_conference_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery }

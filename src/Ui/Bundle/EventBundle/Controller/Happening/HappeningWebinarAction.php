@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCommand;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
@@ -34,6 +36,9 @@ class HappeningWebinarAction
     /** @var CanAccessToWebinar */
     private $canAccessToWebinar;
 
+    /** @var CommandBusInterface */
+    private $commandBus;
+
     /** @var EngineInterface */
     private $engine;
 
@@ -43,11 +48,13 @@ class HappeningWebinarAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar,
+        CommandBusInterface $commandBus,
         EngineInterface $engine,
         QueryBusInterface $queryBus
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
+        $this->commandBus = $commandBus;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
     }
@@ -73,6 +80,8 @@ class HappeningWebinarAction
         }
 
         $user = $userDomain->getUser();
+
+        $this->commandBus->handle(new StartWebinarSessionCommand($happening));
 
         /** @var WebinarView $webinarView */
         $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale()));
