@@ -162,3 +162,5 @@ mail.thirdParty.comexposium.sso.participantAdded.link: Connectez-vous
 mail.thirdParty.comexposium.sso.participantAdded.subject: '[%event%] Activer votre compte'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
+mail.userAccountTemporarilyDisabled.subject: 'Votre compte utilisateur a été désactivé temporairement'
+mail.userAccountTemporarilyDisabled.body: "%firstname% %lastname%,\n\nVotre compte a été désactivé pour une durée de 15 minutes suite à des tentatives de connexion.\n\nBien cordialement,"

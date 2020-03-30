@@ -4,8 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.24.0] - 2019-03-30
 ### Added
 - VIMEET-2059 - Assign a conference to a webinar / Add error message when speaker is not a user
+- VIMEET-2063 - Login security: disable temporarily for 15 mintes user account after 5 wrong attempts
+- VIMEET-2056 - Delete ajax request count participants
 
 ## [2.23.0] - 2019-03-16
 ### Added
