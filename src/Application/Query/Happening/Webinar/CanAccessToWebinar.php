@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Components\Happening\Webinar;
+namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Time\DaysHelper;

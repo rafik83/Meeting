@@ -23,7 +23,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler'
 
-    Proximum\Vimeet\Application\Components\Happening\Webinar\CanAccessToWebinar:
+    Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar:
         arguments:
             - '@datetime'
             - '%feature_video_conference_date_security_enabled%'

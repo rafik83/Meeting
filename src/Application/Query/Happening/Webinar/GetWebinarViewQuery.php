@@ -1,12 +1,12 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Command\Happening\Webinar;
+namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
-use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\User;
 
-class GetWebinarViewCommand implements Command
+class GetWebinarViewQuery implements Query
 {
     /** @var Happening */
     private $happening;

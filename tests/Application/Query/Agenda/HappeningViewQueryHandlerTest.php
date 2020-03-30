@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Components\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\Query\Agenda\HappeningViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
