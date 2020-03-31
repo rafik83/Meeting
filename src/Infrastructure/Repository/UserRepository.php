@@ -242,6 +242,27 @@ class UserRepository implements UserRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function findByEventAndEmail(Event $event, string $email): ?User
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user = user AND user.email = :email')
+            ->join(
+                'participant.sheet',
+                'sheet',
+                'WITH',
+                'sheet.event = :event'
+            )
+            ->setParameter('event', $event)
+            ->setParameter('email', $email)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
     public function findOwnersWithEnabledSheetByEvent(Event $event): array
     {
         $queryBuilder = $this

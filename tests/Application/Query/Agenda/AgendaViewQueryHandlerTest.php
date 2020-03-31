@@ -24,6 +24,7 @@ use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingOwnSheetParticipantVi
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Agenda\ParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\SheetMetView;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
@@ -67,12 +68,16 @@ class AgendaViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy|IsParticipantVisio */
     private $isParticipantVisio;
 
+    /** @var ObjectProphecy|DDayGuesser */
+    private $dDayGuesser;
+
     public function setUp()
     {
         $this->validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
         $this->extraDataRepository = $this->prophesize(ExtraDataRepository::class);
         $this->meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $this->isParticipantVisio = $this->prophesize(IsParticipantVisio::class);
+        $this->dDayGuesser = $this->prophesize(DDayGuesser::class);
     }
 
     public function testHandle()
@@ -164,6 +169,8 @@ class AgendaViewQueryHandlerTest extends TestCase
 
         $this->isParticipantVisio->isSatisfiedBy($participant)->shouldBeCalled()->willReturn(false);
 
+        $this->dDayGuesser->isItDDay($event)->shouldBeCalled()->willReturn(false);
+
         // Handler
         $handler = new AgendaViewQueryHandler(
             $dayRepository->reveal(),
@@ -182,7 +189,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             $getParticipantTypes->reveal(),
             $canMoveMeeting->reveal(),
             $canRemoveMeeting->reveal(),
-            $this->isParticipantVisio->reveal()
+            $this->isParticipantVisio->reveal(),
+            $this->dDayGuesser->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant, 'fr', $user));
 
@@ -198,6 +206,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             false,
             false,
             true,
+            false,
             false
         );
 
@@ -294,6 +303,8 @@ class AgendaViewQueryHandlerTest extends TestCase
 
         $this->isParticipantVisio->isSatisfiedBy($participant2)->shouldBeCalled()->willReturn(true);
 
+        $this->dDayGuesser->isItDDay($event)->shouldBeCalled()->willReturn(false);
+
         // Handler
         $handler = new AgendaViewQueryHandler(
             $dayRepository->reveal(),
@@ -312,7 +323,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             $getParticipantTypes->reveal(),
             $canMoveMeeting->reveal(),
             $canRemoveMeeting->reveal(),
-            $this->isParticipantVisio->reveal()
+            $this->isParticipantVisio->reveal(),
+            $this->dDayGuesser->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user));
 
@@ -331,7 +343,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             true,
             true,
             false,
-            true
+            true,
+            false
         );
 
         $this->assertEquals($expected, $result);
@@ -493,6 +506,8 @@ class AgendaViewQueryHandlerTest extends TestCase
 
         $this->isParticipantVisio->isSatisfiedBy($participant2)->shouldBeCalled()->willReturn(false);
 
+        $this->dDayGuesser->isItDDay($event)->shouldBeCalled()->willReturn(true);
+
         $handler = new AgendaViewQueryHandler(
             $dayRepository->reveal(),
             $sheetRepository->reveal(),
@@ -510,7 +525,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             $getParticipantTypes->reveal(),
             $canMoveMeeting->reveal(),
             $canRemoveMeeting->reveal(),
-            $this->isParticipantVisio->reveal()
+            $this->isParticipantVisio->reveal(),
+            $this->dDayGuesser->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user, true));
 
@@ -528,7 +544,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             true,
             true,
             false,
-            false
+            false,
+            true
         );
 
         $this->assertEquals($expected, $result);

@@ -53,7 +53,7 @@
             {% endif %}
         </div>
     </div>
-    <div id="agenda" class="agenda-container" data-event-availabilities-ko-message="{{ 'agenda.availability.ko_message_on_save'|trans }}" data-event-availabilities-fail-message="{{ 'agenda.availability.fail_message_on_save'|trans }}" data-event-unavailabilities-create-url="{{ path('event_unavailabilities_create', {'sheet': sheet.id, 'participant': participant.id}) }}"
+    <div id="agenda" class="agenda-container" {% if agenda.isItDDay %}data-agenda-autorefresh{% endif %} data-event-availabilities-ko-message="{{ 'agenda.availability.ko_message_on_save'|trans }}" data-event-availabilities-fail-message="{{ 'agenda.availability.fail_message_on_save'|trans }}" data-event-unavailabilities-create-url="{{ path('event_unavailabilities_create', {'sheet': sheet.id, 'participant': participant.id}) }}"
         data-slot-available="{{ 'agenda.slot.available'|trans }}" data-slot-unavailable="{{ 'agenda.slot.unavailable'|trans }}" data-slot-imperative-presence="{{ 'agenda.slot.imperative-presence'|trans }}">
         <div class="row">
             {% for day in agenda.days %}
@@ -118,7 +118,18 @@
                                              data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
                                              data-slot-id="{{ availableSlotView.id }}"
                                         >
-                                            <header><div class="content"></div></header>
+                                            <header>
+                                                <div class="content">
+                                                    <a href="{{ path('event_catalog_index', {
+                                                        'sheet': sheet.id,
+                                                        'availableSlot': 'catalog_slot',
+                                                        'slot_id': availableSlotView.id,
+                                                        'orderBy': 'relevance'
+                                                    }) }}">
+                                                        {{ 'agenda.availability.available_participant_for_this_slot'|trans }}
+                                                    </a>
+                                                </div>
+                                            </header>
                                         </div>
                                     {% endfor %}
                                 {% else %}
