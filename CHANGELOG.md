@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improvment: Add cache to Crisp chat component
 - MV-223 - Doesn't access to a removed account
 - VIMEET-2011 - Hotfix: priorisation meeting request before planning
+- MV-220 - Fix logo error when ordering logo in the purchase tunnel
 ### Added
 - VIMEET-2030 - View checkin status in contacts list and agenda
 
