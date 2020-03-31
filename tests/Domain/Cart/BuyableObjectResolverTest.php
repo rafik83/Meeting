@@ -134,11 +134,7 @@ class BuyableObjectResolverTest extends TestCase
         $this->order->getPlan()->shouldBeCalled()->willReturn($this->product->reveal());
         $this->product->getIncludedProduct($this->product->reveal())->shouldBeCalled()->willReturn(null);
 
-        $this->cart->getCartRowForProduct($this->product->reveal())->shouldBeCalled()->willReturn($this->cartRow->reveal());
-        $this->cartRow->getQuantity()->shouldBeCalled()->willReturn(1);
         $this->cart->getOrderCartQuantity($this->product->reveal(), $this->order->reveal())->shouldBeCalled()->willReturn(1);
-
-
 
         $resolver = new BuyableObjectResolver(
             $this->cartManager->reveal(),
@@ -159,9 +155,7 @@ class BuyableObjectResolverTest extends TestCase
         $this->order->getPlan()->shouldBeCalled()->willReturn($this->product->reveal());
         $this->product->getIncludedProduct($this->product->reveal())->shouldBeCalled()->willReturn(null);
 
-        $this->cart->getCartRowForProduct($this->product->reveal())->shouldBeCalled()->willReturn(null);
-
-        $this->cart->setProduct($this->product->reveal(), 1)->shouldBeCalled();
+        $this->cart->getOrderCartQuantity($this->product->reveal(), $this->order->reveal())->shouldBeCalled()->willReturn(1);
 
         $resolver = new BuyableObjectResolver(
             $this->cartManager->reveal(),
