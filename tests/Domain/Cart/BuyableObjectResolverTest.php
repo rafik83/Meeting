@@ -14,57 +14,38 @@ use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\IdToProductTransformer;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class BuyableObjectResolverTest extends TestCase
 {
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|Product
-     */
+    /** @var ObjectProphecy */
     private $product;
 
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|Cart
-     */
+    /** @var ObjectProphecy */
     private $cart;
 
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|Order
-     */
+    /** @var ObjectProphecy */
     private $order;
 
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|CartRow
-     */
+    /** @var ObjectProphecy */
     private $cartRow;
 
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|IdToProductTransformer
-     */
+    /** @var ObjectProphecy */
     private $productTransformer;
 
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|TemplateObject
-     */
+    /** @var ObjectProphecy */
     private $templateObject;
 
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|CartManager
-     */
+    /** @var ObjectProphecy */
     private $cartManager;
 
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|TemplateProductGuesser
-     */
+    /** @var ObjectProphecy */
     private $templateProductGuesser;
 
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|Merger
-     */
+    /** @var ObjectProphecy */
     private $orderMerger;
 
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|Sheet
-     */
+    /** @var ObjectProphecy */
     private $sheet;
 
     public function setup()
@@ -146,7 +127,7 @@ class BuyableObjectResolverTest extends TestCase
         $resolver->addPayableProduct($this->templateObject->reveal(), $this->cart->reveal(), $this->order->reveal());
     }
 
-    Public function testNoCartRowAndOrderWithThisProduct()
+    public function testNoCartRowAndOrderWithThisProduct()
     {
         $this->templateObject->getSelectedProduct()->shouldBeCalled()->willReturn(1);
         $this->product->getId()->willReturn(1);
@@ -165,6 +146,29 @@ class BuyableObjectResolverTest extends TestCase
         );
 
         $resolver->addPayableProduct($this->templateObject->reveal(), $this->cart->reveal(), $this->order->reveal());
+    }
+
+    public function testCartQuantityToZeroAndNoOrderRow()
+    {
+        $this->templateObject->getSelectedProduct()->shouldBeCalled()->willReturn(1);
+        $this->product->getId()->willReturn(1);
+        $this->productTransformer->transform(1)->shouldBeCalled()->willReturn($this->product->reveal());
+
+        $this->cart->getPlanRow()->shouldBeCalled()->willReturn(null);
+
+        $this->cart->getCartRowForProduct($this->product->reveal())->shouldBeCalled()->willReturn($this->cartRow->reveal());
+
+        $this->cartRow->getQuantity()->shouldBeCalled()->willReturn(0);
+        $this->cartRow->setQuantity(1)->shouldBeCalled();
+
+        $resolver = new BuyableObjectResolver(
+            $this->cartManager->reveal(),
+            $this->productTransformer->reveal(),
+            $this->templateProductGuesser->reveal(),
+            $this->orderMerger->reveal()
+        );
+
+        $resolver->addPayableProduct($this->templateObject->reveal(), $this->cart->reveal(), null);
     }
 }
 
