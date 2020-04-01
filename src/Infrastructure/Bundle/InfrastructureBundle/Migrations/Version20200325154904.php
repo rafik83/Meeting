@@ -14,7 +14,7 @@ class Version20200325154904 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE happening ADD webinar_session_id VARCHAR(255) DEFAULT NULL, DROP webinar');
+        $this->addSql('ALTER TABLE happening ADD webinar_session_id VARCHAR(255) DEFAULT NULL');
     }
 
     public function down(Schema $schema)
