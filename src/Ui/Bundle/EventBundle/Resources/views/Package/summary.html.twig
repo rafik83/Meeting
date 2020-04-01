@@ -75,7 +75,7 @@
                                                 <li class="col-md-12">
                                                     {{ 'package.summary.totalVat'|trans({'%vat%': vatView.vatRate }) }}
                                                     <span>
-                                                        {{ 'package.product.priceWithCurrency'|trans({
+                                                        {{ 'package.product.price'|trans({
                                                             '%price%': vatView.totalVat|format_amount|localizedcurrency(view.currency),
                                                         })|html }}
                                                     </span>
