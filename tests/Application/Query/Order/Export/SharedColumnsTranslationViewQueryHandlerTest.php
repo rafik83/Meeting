@@ -23,7 +23,7 @@ class SharedColumnsTranslationViewQueryHandlerTest extends TestCase
         $adminLocale = 'fr';
         $translator = $this->prophesize(TranslatorInterface::class);
         $translator->trans('order.column.order_id', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Order id');
-        $translator->trans('order.column.order_date', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('27/06/2020');
+        $translator->trans('order.column.order_date', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Date de la commande');
         $translator->trans('order.column.sheet_id', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Sheet id');
         $translator->trans('order.column.sheet_title', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Sheet title');
         $translator->trans('order.column.invoice_number', [], 'export', $adminLocale)->shouldBeCalled()->willReturn('Invoice number');
@@ -51,7 +51,7 @@ class SharedColumnsTranslationViewQueryHandlerTest extends TestCase
 
         $expected = new SharedColumnsTranslationView(
             'Order id',
-            '27/06/2020',
+            'Date de la commande',
             'Sheet id',
             'Sheet title',
             'Invoice number',

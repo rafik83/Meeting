@@ -39,7 +39,7 @@ class SharedColumnsTranslationView
     /** @var string */
     public $orderId;
 
-    /** @var \DateTimeInterface */
+    /** @var string */
     public $orderDate;
 
     /** @var string */
