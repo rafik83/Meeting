@@ -44,6 +44,12 @@ function Webinar(element, isSpeaker) {
     this.layoutContainer = element.querySelector('.layout-container');
     this.layout = initLayoutContainer(this.layoutContainer).layout;
 
+    const endWebinarButton = element.querySelector('.end-webinar');
+
+    if (endWebinarButton) {
+        endWebinarButton.addEventListener('click', this.disconnect.bind(this));
+    }
+
     if (this.isSpeaker) {
         this.viewersCount = 0;
         this.viewersContainer = element.querySelector('.viewers');
@@ -63,16 +69,11 @@ function Webinar(element, isSpeaker) {
         this.startScreenSharingButton = element.querySelector('#start-screensharing');
         this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
 
-        const endWebinarButton = element.querySelector('.end-webinar');
-        if (endWebinarButton) {
-            endWebinarButton.addEventListener('click', this.disconnect.bind(this));
-        }
-
         this.publisher = new Publisher(this.layoutContainer);
         this.publisherStream = null;
     }
 
-    var resizeTimeout;
+    let resizeTimeout;
     window.onresize = function () {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(function () {
