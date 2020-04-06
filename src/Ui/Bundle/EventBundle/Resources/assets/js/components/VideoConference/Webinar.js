@@ -128,10 +128,6 @@ Webinar.prototype.init = function () {
         this.layout();
     }.bind(this));
 
-    this.session.on('streamPropertyChanged', (event) => {
-        //console.log(event.changedProperty === 'hasVideo', event.newValue);
-    });
-
     this.session.on('connectionCreated', function (event) {
         ++this.viewersCount;
         this.updateViewers();
@@ -372,13 +368,17 @@ Webinar.prototype.toggleChat = function () {
         this.initChat();
         this.chatInstance.showTextChat();
         this.chatInstance.deliverUnsentMessages();
+        this.element.classList.add('chat-opened');
+        this.layout();
 
         return;
     }
 
-    this.chatInstance.hideTextChat();
+    this.element.classList.remove('chat-opened');
     this.chatContainer.classList.add('hide');
+    this.chatInstance.hideTextChat();
     this.toggleButton(this.toggleChatElement, false);
+    this.layout();
 };
 
 /**
