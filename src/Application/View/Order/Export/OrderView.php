@@ -15,7 +15,7 @@ class OrderView
     /** @var int */
     public $orderId;
 
-    /** @var \DateTimeInterface */
+    /** @var string */
     public $orderDate;
 
     /** @var int */
@@ -56,7 +56,7 @@ class OrderView
 
     /**
      * @param int                       $orderId
-     * @param \DateTimeInterface        $orderDate
+     * @param string                    $orderDate
      * @param int                       $sheetId
      * @param string                    $sheetTitle
      * @param string                    $invoiceNumber
