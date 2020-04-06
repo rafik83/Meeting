@@ -137,6 +137,7 @@ class OrderViewQueryHandler
 
         return new OrderView(
             $query->order->getId(),
+            $query->order->getCreatedAt(),
             $sheet->getId(),
             $this->sheetInfoGuesserCache->guessSheetTitle($sheet, $query->locale),
             $invoiceNumber,
