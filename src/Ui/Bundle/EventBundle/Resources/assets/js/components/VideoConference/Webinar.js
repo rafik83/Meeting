@@ -62,15 +62,16 @@ function Webinar(element, isSpeaker) {
 
         this.toggleAudioElement = element.querySelector('#toggle-audio');
         this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
+        this.enableAudio = true;
 
         this.toggleVideoElement = element.querySelector('#toggle-video');
         this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
+        this.enableVideo = true;
 
         this.startScreenSharingButton = element.querySelector('#start-screensharing');
         this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
 
         this.publisher = new Publisher(this.layoutContainer);
-        this.publisherStream = null;
     }
 
     let resizeTimeout;
@@ -211,7 +212,8 @@ Webinar.prototype.publishStream = function () {
     const publisher = this.publisher.create({});
 
     this.session.publish(publisher, this.handlePublish.bind(this));
-    this.publisherStream = publisher;
+    publisher.publishVideo(this.enableVideo);
+    publisher.publishAudio(this.enableAudio);
 
     this.layout();
 };
@@ -237,6 +239,59 @@ Webinar.prototype.handlePublish = function (error) {
     }
 };
 
+Webinar.prototype.showError = function (error) {
+    switch (error.name) {
+        case 'OT_USER_MEDIA_ACCESS_DENIED':
+            alert(this.accessDeniedErrorMessage);
+            break;
+        default:
+            alert('There was an error: ' + error.name + ', ' + error.message);
+            break;
+    }
+};
+
+/**
+ * Start screensharing
+ */
+Webinar.prototype.screenshare = function () {
+    if (!this.isSpeaker) {
+        return;
+    }
+
+    if (this.session === null) {
+        alert('You cannot start screensharing outside of a session');
+        return;
+    }
+
+    TokboxInstance.checkScreenSharingCapability(function (response) {
+        if (!response.supported || response.extensionRegistered === false) {
+            alert(this.notCompatibleBrowserMessage);
+            return;
+        }
+
+        if (response.extensionRegistered && response.extensionInstalled === false) {
+            this.installChromeExtension();
+            return;
+        }
+
+        const publisherStream = this.publisher.publisher;
+        publisherStream.publishVideo(false);
+        publisherStream.element.style.display = 'none';
+        this.toggleVideoElement.style.display = 'none';
+
+        this.publisherScreen = new Publisher(this.layoutContainer);
+        const publisherScreen = this.publisherScreen.create({
+            videoSource: 'screen',
+            publishAudio: true
+        });
+
+        this.session.publish(publisherScreen, this.handlePublishScreensharing.bind(this));
+        this.layout();
+
+        publisherScreen.on('mediaStopped', this.handleStopScreensharing.bind(this));
+    }.bind(this));
+};
+
 /**
  * Callback after screensharing started
  *
@@ -255,60 +310,21 @@ Webinar.prototype.handlePublishScreensharing = function (error) {
     this.endScreenSharingButton.classList.remove('hide');
 };
 
-Webinar.prototype.showError = function (error) {
-    switch (error.name) {
-        case 'OT_USER_MEDIA_ACCESS_DENIED':
-            alert(this.accessDeniedErrorMessage);
-            break;
-        default:
-            alert('There was an error: ' + error.name + ', ' + error.message);
-            break;
-    }
-};
-
-/**
- * Start screensharing
- */
-Webinar.prototype.screenshare = function () {
-    if (this.session === null) {
-        alert('You cannot start screensharing outside of a session');
-        return;
-    }
-
-    TokboxInstance.checkScreenSharingCapability(function (response) {
-        if (!response.supported || response.extensionRegistered === false) {
-            alert(this.notCompatibleBrowserMessage);
-            return;
-        }
-
-        if (response.extensionRegistered && response.extensionInstalled === false) {
-            this.installChromeExtension();
-            return;
-        }
-
-        this.publisherScreen = new Publisher(this.layoutContainer);
-
-        const publisherScreen = this.publisherScreen.create({
-            videoSource: 'screen',
-            publishAudio: true
-        });
-
-        this.session.publish(publisherScreen, this.handlePublishScreensharing.bind(this));
-        this.layout();
-
-        publisherScreen.on('mediaStopped', this.handleStopScreensharing.bind(this));
-    }.bind(this));
-};
-
 /**
  * Handle stop screen sharing
  */
 Webinar.prototype.handleStopScreensharing = function () {
-    this.publisherScreen.destroy();
+    if (this.publisherScreen) {
+        this.publisherScreen.destroy();
+    }
+
+    const publisherStream = this.publisher.publisher;
+    publisherStream.publishVideo(this.enableVideo);
+    publisherStream.element.style.display = 'block';
+
     this.startScreenSharingButton.classList.remove('hide');
     this.endScreenSharingButton.classList.add('hide');
-
-    this.layout();
+    this.toggleVideoElement.style.display = 'inline-block';
 };
 
 /**
@@ -385,19 +401,16 @@ Webinar.prototype.toggleChat = function () {
  * Toggle audio stream
  */
 Webinar.prototype.toggleAudio = function () {
-    // if publisher stream is destroy because of stop screensharing, use previous stream
-    let publisher = null;
-
-    if (this.publisher.publisher.stream === null) {
-        publisher = this.publisherStream;
-    } else {
-        publisher = this.publisher.isScreensharing() ?
-            this.publisherStream : // get camera stream instead of screensharing stream
-            this.publisher.publisher;
+    if (!this.publisher.publisher) {
+        return;
     }
 
+    const publisher = this.publisher.publisher;
     const enableAudio = !publisher.stream.hasAudio;
+
     publisher.publishAudio(enableAudio);
+
+    this.enableAudio = enableAudio;
     this.toggleButton(this.toggleAudioElement, enableAudio);
 };
 
@@ -405,17 +418,17 @@ Webinar.prototype.toggleAudio = function () {
  * Toggle video stream
  */
 Webinar.prototype.toggleVideo = function () {
-    const publisher = this.publisher.publisher;
-
-    if (publisher.stream.hasVideo) {
-        publisher.publishVideo(false);
-        this.toggleButton(this.toggleVideoElement, false);
-
+    if (!this.publisher.publisher) {
         return;
     }
 
-    publisher.publishVideo(true);
-    this.toggleButton(this.toggleVideoElement, true);
+    const publisher = this.publisher.publisher;
+    const enableVideo = !publisher.stream.hasVideo;
+
+    publisher.publishVideo(enableVideo);
+
+    this.enableVideo = enableVideo;
+    this.toggleButton(this.toggleVideoElement, enableVideo);
 };
 
 Webinar.prototype.installChromeExtension = function () {
