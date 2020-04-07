@@ -126,6 +126,7 @@ class OrderViewQueryHandler
         $formatterOrderDate = \IntlDateFormatter::create(
             $query->locale,
             \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
             $query->event->getTimeZone()
         );
 
