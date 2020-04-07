@@ -69,7 +69,7 @@ class OrderViewQueryHandlerTest extends TestCase
         $order->getId()->willReturn(2);
         $order->getSheet()->willReturn($sheet->reveal());
         $sheet->getId()->willReturn(3);
-        $order->getCreatedAt()->willReturn('10/12/16');
+        $order->getCreatedAt()->willReturn(new \DateTime('2016-10-12'));
 
         $row1 = $this->prophesize(Order\Row::class);
         $row1->isProduct()->willReturn(true);
