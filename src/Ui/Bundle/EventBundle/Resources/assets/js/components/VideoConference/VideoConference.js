@@ -361,13 +361,17 @@ VideoConference.prototype.toggleChat = function () {
     this.initChat();
     this.chatInstance.showTextChat();
     this.chatInstance.deliverUnsentMessages();
+    this.element.classList.add('chat-opened');
+    this.layout();
 
     return;
   }
 
+  this.element.classList.remove('chat-opened');
   this.chatInstance.hideTextChat();
   this.chatContainer.classList.add('hide');
   this.toggleButton(this.toggleChatElement, false);
+  this.layout();
 };
 
 /**

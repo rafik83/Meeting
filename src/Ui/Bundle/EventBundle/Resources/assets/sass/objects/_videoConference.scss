@@ -3,13 +3,17 @@
     color: white;
   }
 
+  .timer-container, .buttons-container {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 18px;
+  }
+
   .timer-container {
     z-index: 9999;
-    background: rgba(0, 0, 0, 0.5);
     position: absolute;
-    bottom: 10px;
-    left: 10px;
-    padding: 5px;
+    bottom: 1px;
+    left: 1px;
+    padding: 10px;
 
     .timer {
       color: #fff;
@@ -26,8 +30,10 @@
   .buttons-container {
     z-index: 9999;
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 1px;
+    right: 1px;
+    padding: 5px;
+
     .btn {
       position: relative;
       font-size: 15px;
