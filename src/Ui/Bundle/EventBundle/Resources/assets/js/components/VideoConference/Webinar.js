@@ -44,6 +44,8 @@ function Webinar(element, isSpeaker) {
     this.layoutContainer = element.querySelector('.layout-container');
     this.layout = initLayoutContainer(this.layoutContainer).layout;
 
+    this.hasScreenSharing = false;
+
     const endWebinarButton = element.querySelector('.end-webinar');
 
     if (endWebinarButton) {
@@ -73,6 +75,8 @@ function Webinar(element, isSpeaker) {
 
         this.publisher = new Publisher(this.layoutContainer);
     }
+
+    this.streams = [];
 
     let resizeTimeout;
     window.onresize = function () {
@@ -126,6 +130,19 @@ Webinar.prototype.init = function () {
         const fullscreenButton = this.createFullscreenButton();
         subscriber.element.appendChild(fullscreenButton);
 
+        if ('screen' === event.stream.videoType) {
+            this.hasScreenSharing = true;
+            this.streams.forEach((stream) => {
+                stream.element.style.display = 'none';
+            });
+        } else {
+            this.streams.push(subscriber);
+        }
+
+        if (this.hasScreenSharing && 'screen' !== subscriber.stream.videoType) {
+            subscriber.element.style.display = 'none';
+        }
+
         this.layout();
     }.bind(this));
 
@@ -143,12 +160,23 @@ Webinar.prototype.init = function () {
         event.preventDefault();
 
         this.session.getSubscribersForStream(event.stream).forEach((subscriber) => {
+            this.streams = this.streams.filter(stream => stream !== subscriber);
+
             subscriber.element.classList.remove('ot-layout');
+
             setTimeout(() => {
                 subscriber.destroy();
                 this.layout();
             }, 200);
         });
+
+        if ('screen' === event.stream.videoType) {
+            this.hasScreenSharing = false;
+
+            this.streams.forEach((stream) => {
+                stream.element.style.display = 'block';
+            });
+        }
     }.bind(this));
 
     this.session.on('sessionDisconnected', function () {
@@ -260,6 +288,11 @@ Webinar.prototype.screenshare = function () {
 
     if (this.session === null) {
         alert('You cannot start screensharing outside of a session');
+        return;
+    }
+
+    if (this.hasScreenSharing) {
+        alert('Un screenshare est en cours.');
         return;
     }
 
