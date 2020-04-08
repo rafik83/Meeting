@@ -124,6 +124,7 @@ Webinar.prototype.init = function () {
             this.helperContainer.classList.add('hide');
         }
 
+
         const subscriberManager = new Subscriber(this.session, this.layoutContainer);
         const subscriber = subscriberManager.subscribe(event);
 
@@ -132,7 +133,16 @@ Webinar.prototype.init = function () {
 
         if ('screen' === event.stream.videoType) {
             this.hasScreenSharing = true;
+
             this.streams.forEach((stream) => {
+
+                if (this.publisher) {
+                    const publisherStream = this.publisher.publisher;
+                    publisherStream.publishVideo(false);
+                    publisherStream.element.style.display = 'none';
+                    this.toggleVideoElement.style.display = 'none';
+                }
+
                 stream.element.style.display = 'none';
             });
         } else {
@@ -141,6 +151,14 @@ Webinar.prototype.init = function () {
 
         if (this.hasScreenSharing && 'screen' !== subscriber.stream.videoType) {
             subscriber.element.style.display = 'none';
+
+            if (this.publisher) {
+                const publisherStream = this.publisher.publisher;
+                publisherStream.publishVideo(false);
+                publisherStream.element.style.display = 'none';
+                this.toggleVideoElement.style.display = 'none';
+            }
+
         }
 
         this.layout();
@@ -176,6 +194,13 @@ Webinar.prototype.init = function () {
             this.streams.forEach((stream) => {
                 stream.element.style.display = 'block';
             });
+
+            if (this.publisher) {
+                const publisherStream = this.publisher.publisher;
+                publisherStream.publishVideo(this.enableVideo);
+                publisherStream.element.style.display = 'block';
+                this.toggleVideoElement.style.display = 'inline-block';
+            }
         }
     }.bind(this));
 
@@ -339,6 +364,12 @@ Webinar.prototype.handlePublishScreensharing = function (error) {
         return;
     }
 
+    this.hasScreenSharing = true;
+    this.streams.forEach((stream) => {
+        stream.element.style.display = 'none';
+    });
+    this.layout();
+
     this.startScreenSharingButton.classList.add('hide');
     this.endScreenSharingButton.classList.remove('hide');
 };
@@ -351,9 +382,14 @@ Webinar.prototype.handleStopScreensharing = function () {
         this.publisherScreen.destroy();
     }
 
+    this.hasScreenSharing = false;
     const publisherStream = this.publisher.publisher;
     publisherStream.publishVideo(this.enableVideo);
     publisherStream.element.style.display = 'block';
+    this.streams.forEach((stream) => {
+        stream.element.style.display = 'block';
+    });
+    this.layout();
 
     this.startScreenSharingButton.classList.remove('hide');
     this.endScreenSharingButton.classList.add('hide');
