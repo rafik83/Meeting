@@ -37,10 +37,14 @@ function Webinar(element, isSpeaker) {
 
     this.chatContainer = element.querySelector('.chat-container');
     this.chatInstance = null;
+
     this.toggleChatElement = element.querySelector('#toggle-chat');
-    if (this.toggleChatElement) {
-        this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
-    }
+    this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
+
+    this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
+
+    this.joinButton = element.querySelector('[data-webinar-join-button]');
+    this.joinButton.addEventListener('click', this.join.bind(this));
 
     this.layoutContainer = element.querySelector('.layout-container');
     this.layout = initLayoutContainer(this.layoutContainer).layout;
@@ -52,14 +56,13 @@ function Webinar(element, isSpeaker) {
     if (endWebinarButton) {
         endWebinarButton.addEventListener('click', this.disconnect.bind(this));
     }
+    this.timerContainer = element.querySelector('.timer');
+    this.countDownContainer = element.querySelector('.timer span.countdown');
 
     if (this.isSpeaker) {
         this.viewersCount = 0;
         this.viewersContainer = element.querySelector('.viewers');
         this.thereIsAlreadyAScreenShareInProgressMessage = element.getAttribute('data-screen-share-already-in-progress-message');
-
-        this.timerContainer = element.querySelector('.timer');
-        this.countDownContainer = element.querySelector('.timer span.countdown');
 
         this.endScreenSharingButton = element.querySelector('#end-screensharing');
         this.endScreenSharingButton.addEventListener('click', this.handleStopScreensharing.bind(this));
@@ -93,21 +96,13 @@ function Webinar(element, isSpeaker) {
     document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
     document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
 
-    // Init
-    this.init();
     this.countDownBeforeEnd();
 }
 
-/**
- * Handle exit fullscreen and rebuild Tokbox UI layout
- */
-Webinar.prototype.exitFullscreenHandler = function () {
-    if (document.webkitIsFullScreen
-        || document.mozFullScreen
-        || document.msFullscreenElement !== null
-    ) {
-        this.layout();
-    }
+Webinar.prototype.join = function () {
+    this.hideElement(this.joinButton);
+    this.showElement(this.webinarWaitingMessage);
+    this.init();
 };
 
 /**
@@ -122,9 +117,7 @@ Webinar.prototype.init = function () {
     this.session = TokboxInstance.initSession(this.apiKey, this.sessionId, {connectionEventsSuppressed: !this.isSpeaker});
 
     this.session.on('streamCreated', function (event) {
-        if (this.helperContainer) {
-            this.helperContainer.classList.add('hide');
-        }
+        this.hideElement(this.helperContainer);
 
         const subscriberManager = new Subscriber(this.session, this.layoutContainer);
         const subscriber = subscriberManager.subscribe(event);
@@ -199,9 +192,10 @@ Webinar.prototype.updateViewers = function () {
  */
 Webinar.prototype.connect = function () {
     this.session.connect(this.token, function (error) {
-        if (this.toggleChatElement) {
-            this.toggleChatElement.classList.remove('hide');
-        }
+        this.showElement(this.toggleChatElement);
+        this.showElement(this.toggleAudioElement);
+        this.showElement(this.toggleVideoElement);
+        this.showElement(this.startScreenSharingButton);
 
         if (!error) {
             if (this.isSpeaker) {
@@ -213,6 +207,22 @@ Webinar.prototype.connect = function () {
 
         console.error(error);
     }.bind(this));
+};
+
+Webinar.prototype.hideElement = function (element) {
+    if (!element) {
+        return;
+    }
+
+    element.classList.add('hide');
+};
+
+Webinar.prototype.showElement = function (element) {
+    if (!element) {
+        return;
+    }
+
+    element.classList.remove('hide');
 };
 
 /**
@@ -238,6 +248,7 @@ Webinar.prototype.initChat = function () {
  *  Publish your camera and microphone stream
  */
 Webinar.prototype.publishStream = function () {
+    this.hideElement(this.helperContainer);
     const publisher = this.publisher.create({});
 
     this.session.publish(publisher, this.handlePublish.bind(this));
@@ -341,8 +352,8 @@ Webinar.prototype.handlePublishScreensharing = function (error) {
     this.hasScreenSharing = true;
     this.layout();
 
-    this.startScreenSharingButton.classList.add('hide');
-    this.endScreenSharingButton.classList.remove('hide');
+    this.hideElement(this.startScreenSharingButton);
+    this.showElement(this.endScreenSharingButton);
 };
 
 /**
@@ -359,8 +370,8 @@ Webinar.prototype.handleStopScreensharing = function () {
     this.showSubscribers();
     this.layout();
 
-    this.startScreenSharingButton.classList.remove('hide');
-    this.endScreenSharingButton.classList.add('hide');
+    this.showElement(this.startScreenSharingButton);
+    this.hideElement(this.endScreenSharingButton);
 };
 
 /**
@@ -380,6 +391,15 @@ Webinar.prototype.createFullscreenButton = function () {
     fullscreenButton.appendChild(icon);
 
     return fullscreenButton;
+};
+
+Webinar.prototype.exitFullscreenHandler = function () {
+    if (document.webkitIsFullScreen
+        || document.mozFullScreen
+        || document.msFullscreenElement !== null
+    ) {
+        this.layout();
+    }
 };
 
 /**
@@ -416,7 +436,7 @@ Webinar.prototype.toggleButton = function (button, isOn) {
 Webinar.prototype.toggleChat = function () {
     if (this.chatContainer.classList.contains('hide')) {
         this.toggleButton(this.toggleChatElement, true);
-        this.chatContainer.classList.remove('hide');
+        this.showElement(this.chatContainer);
         this.initChat();
         this.chatInstance.showTextChat();
         this.chatInstance.deliverUnsentMessages();
@@ -427,7 +447,7 @@ Webinar.prototype.toggleChat = function () {
     }
 
     this.element.classList.remove('chat-opened');
-    this.chatContainer.classList.add('hide');
+    this.hideElement(this.chatContainer);
     this.chatInstance.hideTextChat();
     this.toggleButton(this.toggleChatElement, false);
     this.layout();

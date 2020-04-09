@@ -13,6 +13,9 @@
          data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-user-complete-name="{{ userCompleteName }}"
+         data-webinar-start-time="{{ webinarView.slot.begin.timestamp }}"
+         data-webinar-end-time="{{ webinarView.slot.end.timestamp }}"
+         data-current-time="{{ webinarView.currentTime.timestamp }}"
     >
         <div class="layout-container"></div>
         <div class="chat-container hide"></div>
@@ -20,7 +23,15 @@
         <div class="video-helper">
             <h1>{{ webinarView.happeningTitle }}</h1>
 
-            <div><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
+            <button class="btn btn-primary" data-webinar-join-button>{{ 'happening.webinar.start'|trans }}</button>
+            <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
+        </div>
+
+        <div class="timer-container">
+            <div class="timer">
+                {{ 'happening.webinar.endingAt'|trans }}
+                <span class="countdown"></span>
+            </div>
         </div>
 
         <div class="buttons-container">
