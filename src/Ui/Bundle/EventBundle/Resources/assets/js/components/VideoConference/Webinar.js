@@ -134,7 +134,7 @@ Webinar.prototype.init = function () {
             this.subscribers.push(subscriber);
         }
 
-        if (this.hasScreenSharing && this.isScrenShareStream(subscriber.stream)) {
+        if (this.hasScreenSharing && !this.isScrenShareStream(subscriber.stream)) {
             this.hidePublisher();
             subscriber.element.style.display = 'none';
         }
