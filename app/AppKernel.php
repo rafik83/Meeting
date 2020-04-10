@@ -30,8 +30,6 @@ class AppKernel extends Kernel
             new Payum\Bundle\PayumBundle\PayumBundle(),
 
             // JMS Job Queue
-            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-            new JMS\AopBundle\JMSAopBundle(),
             new JMS\JobQueueBundle\JMSJobQueueBundle(),
 
             // Redis
