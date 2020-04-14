@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2090 - Improve video conference meeting UX
+- VIMEET-2078 - Keywords search from Sheet Query Builder
 
 ## [2.25.0] - 2020-03-30
 ### Added
