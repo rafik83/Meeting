@@ -19,12 +19,14 @@ use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class HappeningViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
         $event = EventFactory::createEvent();
+        $user = UserFactory::create();
 
         // Data
         $beginHappening1 = new \DateTime('2016-10-12 12:00:00');
@@ -71,13 +73,14 @@ class HappeningViewQueryHandlerTest extends TestCase
         $speakerViewQueryHandler->handle(new SpeakerViewQuery($happening1, 'fr'))->shouldBeCalled()->willReturn([]);
 
         $canAccessToWebinar = $this->prophesize(CanAccessToWebinar::class);
-        $canAccessToWebinar->isSatisfiableBy($happening1)->shouldBeCalled()->willReturn(false);
+        $canAccessToWebinar->isSatisfiableBy($happening1, $user)->shouldBeCalled()->willReturn(false);
 
         $handler = new HappeningViewQueryHandler(
             $canAccessToWebinar->reveal(),
             $speakerViewQueryHandler->reveal()
         );
         $result = $handler->handle(new HappeningViewQuery(
+            $user,
             $happening1,
             $event,
             'fr'

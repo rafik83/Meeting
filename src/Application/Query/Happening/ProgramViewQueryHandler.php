@@ -80,6 +80,7 @@ class ProgramViewQueryHandler
                 new DayViewQuery(
                     $programViewQuery->event,
                     $programViewQuery->sheet,
+                    $programViewQuery->user,
                     $day,
                     $programViewQuery->locale,
                     $programViewQuery->category,

@@ -80,6 +80,7 @@ class DayViewQueryHandler
                 if (TimeOverlap::beginIn($happening->getHappening(), $query->day)) {
                     $happeningViews[] = $this->happeningHandler->handle(
                         new HappeningViewQuery(
+                            $query->participant->getUser(),
                             $happening->getHappening(),
                             $query->event,
                             $query->locale

@@ -246,6 +246,7 @@ class DayViewQueryHandlerTest extends TestCase
         $this->happeningViewQueryHandler
             ->handle(
                 new HappeningViewQuery(
+                    $this->user,
                     $this->happening1,
                     $this->event,
                     'fr'
@@ -257,6 +258,7 @@ class DayViewQueryHandlerTest extends TestCase
         $this->happeningViewQueryHandler
             ->handle(
                 new HappeningViewQuery(
+                    $this->user,
                     $this->happening2,
                     $this->event,
                     'fr'
@@ -378,6 +380,7 @@ class DayViewQueryHandlerTest extends TestCase
 
         $this->happeningViewQueryHandler->handle(
             new HappeningViewQuery(
+                $this->user,
                 $this->happening1,
                 $this->event,
                 'fr'
@@ -385,6 +388,7 @@ class DayViewQueryHandlerTest extends TestCase
         )->shouldBeCalled()->willReturn($this->expectedHappeningViews[0]);
         $this->happeningViewQueryHandler->handle(
             new HappeningViewQuery(
+                $this->user,
                 $this->happening2,
                 $this->event,
                 'fr'
@@ -510,6 +514,7 @@ class DayViewQueryHandlerTest extends TestCase
         // Mock
         $this->happeningViewQueryHandler->handle(
             new HappeningViewQuery(
+                $user,
                 $happening1,
                 $event,
                 'fr'

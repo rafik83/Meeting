@@ -67,19 +67,18 @@ class HappeningWebinarAction
         UserDomain $userDomain
     ): Response {
         $event = $eventDomain->getEvent();
+        $user = $userDomain->getUser();
 
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_HAPPENING_ACCESS', $event)
             || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
             || !$this->authorizationCheckerAdapter->isGranted(ParticipationVoter::PARTICIPATE, $sheet)
-            || !$this->canAccessToWebinar->isSatisfiableBy($happening)
+            || !$this->canAccessToWebinar->isSatisfiableBy($happening, $user)
             || $happening->getEvent() !== $event
             || $sheet->getEvent() !== $event
         ) {
             throw new AccessDeniedException('Access denied to this happening');
         }
-
-        $user = $userDomain->getUser();
 
         $this->commandBus->handle(new StartWebinarSessionCommand($happening));
 

@@ -25,6 +25,7 @@ services:
 
     Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar:
         arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@datetime'
             - '%feature_video_conference_date_security_enabled%'
             - '%feature_video_conference_enabled%'

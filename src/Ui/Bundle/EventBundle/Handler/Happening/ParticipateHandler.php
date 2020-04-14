@@ -201,7 +201,7 @@ class ParticipateHandler
             );
         }
 
-        if (!$isCancel && $this->canAccessToWebinar->isSatisfiableBy($happening)) {
+        if (!$isCancel && $this->canAccessToWebinar->isSatisfiableBy($happening, $participant->getUser())) {
             return new JsonResponse(
                 [
                     'status' => 'ok',
@@ -292,7 +292,7 @@ class ParticipateHandler
                     $label = true === $isUserAloneParticipant ? 'cancel' : 'update';
                 }
 
-                if ($this->canAccessToWebinar->isSatisfiableBy($happening)) {
+                if ($this->canAccessToWebinar->isSatisfiableBy($happening, $user)) {
                     return new JsonResponse(
                         [
                             'status' => 'ok',

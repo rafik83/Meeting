@@ -46,6 +46,7 @@ class HappeningViewQueryHandler
     public function handle(HappeningViewQuery $query)
     {
         $happening = $query->happening;
+        $user = $query->user;
 
         $happeningCategoryView = $this->categoryViewQueryHandler->handle(
             new CategoryViewQuery($happening, $query->locale)
@@ -67,7 +68,7 @@ class HappeningViewQueryHandler
             $query->event->getTimeZone(),
             $happening->getLimitParticipant(),
             false,
-            $happening->isWebinar() && $this->canAccessToWebinar->isSatisfiableBy($happening)
+            $happening->isWebinar() && $this->canAccessToWebinar->isSatisfiableBy($happening, $user)
         );
     }
 }
