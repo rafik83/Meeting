@@ -4066,6 +4066,7 @@ services:
         arguments:
             - '@query.happening.speaker_view_query_handler'
             - '@query.happening.category_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
     query.happening.speaker_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\SpeakerViewQueryHandler
     query.happening.category_view_query_handler:

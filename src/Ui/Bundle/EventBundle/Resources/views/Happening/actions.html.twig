@@ -1,11 +1,11 @@
 {% if sheet.attend %}
 <div class="actions">
-    {% if showWebinarStartButton is defined and showWebinarStartButton and happening.webinarOpened %}
-        <a class="btn btn-primary start-visio"
+    {% if happening.webinarOpened %}
+        <a class="{{ isActionButtonsOnDetails ? 'btn btn-primary' : '' }}"
            href="{{ path('event_sheet_happening_webinar', { happening: happening.id, sheet: sheet.id }) }}"
            target="_blank"
         >
-            <i class="icon-{{ happening.picto }}"></i> {{ 'happening.webinar.start'|trans }}
+            <i class="icon-{{ happening.picto }} happeningParticipateIcon"></i> {{ 'happening.webinar.start'|trans }}
         </a>
     {% else %}
         {% if happening.hasParticipations or not happening.isFull %}
