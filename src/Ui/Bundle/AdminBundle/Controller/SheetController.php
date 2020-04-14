@@ -117,17 +117,19 @@ class SheetController extends Controller
         }
 
         $locale = $event->getAvailableLocale($request->getLocale());
+        $user = $this->getUser();
 
         // Pagination
         try {
+            $conditions = $this->get(RuleStorageInterface::class)->getRules($event, $locale, 'sheet');
             $query = new PaginatedSheetListViewQuery(
                 $event,
                 $filters,
                 $selectedSheetsPage,
                 self::SHEETS_PER_PAGE, // number of sheets by page
                 $locale,
-                $this->getUser(),
-                $this->get(RuleStorageInterface::class)->getRules($event, $locale, 'sheet')
+                $user,
+                $conditions
             );
             /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);
@@ -143,7 +145,7 @@ class SheetController extends Controller
         ));
 
         // Batch
-        $batch = new Batch($event, $this->getUser(), $locale);
+        $batch = new Batch($event, $user, $locale);
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids' => $sheets->map(function (SheetListView $listView) {
                 return $listView->id;

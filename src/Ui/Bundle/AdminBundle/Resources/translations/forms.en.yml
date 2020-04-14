@@ -380,6 +380,7 @@ form.filter.email.label: Email
 form.filter.firstName.label: Firstname
 form.filter.isVisio.label: 'Is visio'
 form.filter.isVisioTested.label: 'Visio tested'
+form.filter.keywords.label: 'Keywords'
 form.filter.label: Filter
 form.filter.lastName.label: Lastname
 form.filter.optgroup.nomenclature.label: Nomenclatures
