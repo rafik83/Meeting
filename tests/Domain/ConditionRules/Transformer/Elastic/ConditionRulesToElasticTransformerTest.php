@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Domain\ConditionRules\Transformer\Elastic;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\KeywordTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\NullableTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer;
@@ -137,6 +138,8 @@ class ConditionRulesToElasticTransformerTest extends TestCase
         $templateObjectFilterTransformer->supports(Argument::any())->shouldBeCalled()->willReturn(false);
         $messageTransform = $this->prophesize(MessageTransformer::class);
         $messageTransform->supports(Argument::any())->shouldBeCalled()->willReturn(false);
+        $keywordsTransform = $this->prophesize(KeywordTransformer::class);
+        $keywordsTransform->supports(Argument::any())->shouldBeCalled()->willReturn(false);
 
         $transformer = new ConditionRulesToElasticTransformer(
             $nullableTransformer,
@@ -145,7 +148,8 @@ class ConditionRulesToElasticTransformerTest extends TestCase
             $textTransformer,
             $participationTypeTransformer->reveal(),
             $templateObjectFilterTransformer->reveal(),
-            $messageTransform->reveal()
+            $messageTransform->reveal(),
+            $keywordsTransform->reveal()
         );
         $result = $transformer->transform($condition);
 
