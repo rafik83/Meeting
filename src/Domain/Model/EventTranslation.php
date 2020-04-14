@@ -66,6 +66,12 @@ class EventTranslation
     /** @var string|null */
     private $mobileLogoExtension;
 
+    /** @var string|null */
+    private $notificationImage;
+
+    /** @var string|null */
+    private $notificationImageExtension;
+
     /**
      * @param Event       $event
      * @param string      $locale
