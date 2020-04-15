@@ -12,7 +12,7 @@ class TemplateObjectFilterTransformerTest extends TestCase
 {
     public function testTransformNotSupport(): void
     {
-        $field = new Field('status', new ComparisonOperatorIn(), 'checkbox', ['none', 'yes']);
+        $field = new Field('status', new ComparisonOperatorIn(), 'checkbox', ['none', 'yes'], 'fr');
 
         $templateObjectFilterTransformer = new TemplateObjectFilterTransformer();
         $result = $templateObjectFilterTransformer->transform($field);
@@ -24,7 +24,7 @@ class TemplateObjectFilterTransformerTest extends TestCase
 
     public function testTransformCheckbox(): void
     {
-        $field = new Field('templateObjectFilters.57eced1b99305', new ComparisonOperatorIn(), 'checkbox', ['none', 'yes']);
+        $field = new Field('templateObjectFilters.57eced1b99305', new ComparisonOperatorIn(), 'checkbox', ['none', 'yes'], 'fr');
 
         $templateObjectFilterTransformer = new TemplateObjectFilterTransformer();
         $result = $templateObjectFilterTransformer->transform($field);
@@ -67,7 +67,7 @@ class TemplateObjectFilterTransformerTest extends TestCase
 
     public function testTransformEmptyCheckbox(): void
     {
-        $field = new Field('templateObjectFilters.57eced1b99305', new ComparisonOperatorIn(), 'checkbox', []);
+        $field = new Field('templateObjectFilters.57eced1b99305', new ComparisonOperatorIn(), 'checkbox', [], 'FR');
 
         $templateObjectFilterTransformer = new TemplateObjectFilterTransformer();
         $result = $templateObjectFilterTransformer->transform($field);
@@ -84,7 +84,7 @@ class TemplateObjectFilterTransformerTest extends TestCase
 
     public function testTransformRadioFilled(): void
     {
-        $field = new Field('templateObjectFilters.57eced1b99305', new ComparisonOperatorEqual(), 'radio', true);
+        $field = new Field('templateObjectFilters.57eced1b99305', new ComparisonOperatorEqual(), 'radio', true, 'FR');
 
         $templateObjectFilterTransformer = new TemplateObjectFilterTransformer();
         $result = $templateObjectFilterTransformer->transform($field);
@@ -114,7 +114,7 @@ class TemplateObjectFilterTransformerTest extends TestCase
 
     public function testTransformRadioNotFilled(): void
     {
-        $field = new Field('templateObjectFilters.57eced1b99305', new ComparisonOperatorEqual(), 'radio', false);
+        $field = new Field('templateObjectFilters.57eced1b99305', new ComparisonOperatorEqual(), 'radio', false, 'FR');
 
         $templateObjectFilterTransformer = new TemplateObjectFilterTransformer();
         $result = $templateObjectFilterTransformer->transform($field);

@@ -23,7 +23,7 @@ class TextTransformerTest extends TestCase
         $textTransformer = new TextTransformer();
 
         $result1 = $textTransformer->transform(
-            new Field('lastName', new ComparisonOperatorNotContains(), 'text', 'marchois')
+            new Field('lastName', new ComparisonOperatorNotContains(), 'text', 'marchois', 'FR')
         );
 
         $expectedResult1 = [
@@ -39,7 +39,7 @@ class TextTransformerTest extends TestCase
         ];
 
         $result2 = $textTransformer->transform(
-            new Field('participants.lastname', new ComparisonOperatorEndsWith(), 'text', 'hieu')
+            new Field('participants.lastname', new ComparisonOperatorEndsWith(), 'text', 'hieu', 'FR')
         );
 
         $expectedResult2 = [

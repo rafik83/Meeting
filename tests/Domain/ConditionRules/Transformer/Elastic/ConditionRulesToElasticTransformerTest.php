@@ -43,21 +43,21 @@ class ConditionRulesToElasticTransformerTest extends TestCase
             'fr',
             new LogicalOperatorAnd,
             [
-                new Field('spotReference', new ComparisonOperatorEqual, 'text', 'A1'),
+                new Field('spotReference', new ComparisonOperatorEqual(), 'text', 'A1', 'fr'),
                 new Condition(
                     $event->reveal(),
                     'fr',
                     new LogicalOperatorOr,
                     [
-                        new Field('sheetName', new ComparisonOperatorContains, 'text', 'S1'),
-                        new Field('spotReference', new ComparisonOperatorBeginsWith(), 'text', 'U'),
+                        new Field('sheetName', new ComparisonOperatorContains(), 'text', 'S1', 'fr'),
+                        new Field('spotReference', new ComparisonOperatorBeginsWith(), 'text', 'U', 'fr'),
                         new Condition(
                             $event->reveal(),
                             'fr',
                             new LogicalOperatorAnd,
                             [
-                                new Field('lastName', new ComparisonOperatorNotContains(), 'text', 'test'),
-                                new Field('firstName', new ComparisonOperatorNotNull, 'text', 'mathieu'),
+                                new Field('lastName', new ComparisonOperatorNotContains(), 'text', 'test', 'fr'),
+                                new Field('firstName', new ComparisonOperatorNotNull(), 'text', 'mathieu', 'fr'),
                             ]
                         ),
                     ]

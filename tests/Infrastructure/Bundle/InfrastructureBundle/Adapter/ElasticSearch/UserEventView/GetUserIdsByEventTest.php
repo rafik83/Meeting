@@ -33,7 +33,7 @@ class GetUserIdsByEventTest extends TestCase
             $event->reveal(),
             'fr',
             new LogicalOperatorAnd,
-            [ new Field('field', new ComparisonOperatorEqual, 'text', 'A1') ]
+            [ new Field('field', new ComparisonOperatorEqual, 'text', 'A1', 'FR') ]
         );
 
         $event->getId()->willReturn(42);

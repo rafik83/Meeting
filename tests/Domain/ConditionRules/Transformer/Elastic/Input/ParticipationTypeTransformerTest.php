@@ -21,7 +21,7 @@ class ParticipationTypeTransformerTest extends TestCase
 {
     public function testTransform(): void
     {
-        $field = new Field('participation_type', new ComparisonOperatorIn(), 'select', [1, 2]);
+        $field = new Field('participation_type', new ComparisonOperatorIn(), 'select', [1, 2], 'FR');
         $event = $this->prophesize(Event::class);
 
         $getSheetIdsByFilters = $this->prophesize(GetSheetIdsByFilters::class);

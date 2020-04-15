@@ -76,24 +76,24 @@ class ConditionRulesParserTest extends TestCase
 
         $expectedResult = new Condition(
             $event->reveal(),
-            'fr',
+            'FR',
             new LogicalOperatorAnd,
             [
-                new Field('Activity', new ComparisonOperatorEqual, 'text', 'A1'),
+                new Field('Activity', new ComparisonOperatorEqual, 'text', 'A1', 'FR'),
                 new Condition(
                     $event->reveal(),
-                    'fr',
+                    'FR',
                     new LogicalOperatorOr,
                     [
-                        new Field('Sector', new ComparisonOperatorContains, 'checkbox', ['S1', 'S3']),
-                        new Field('Universe', new ComparisonOperatorEqual, 'text', 'U4'),
+                        new Field('Sector', new ComparisonOperatorContains, 'checkbox', ['S1', 'S3'], 'FR'),
+                        new Field('Universe', new ComparisonOperatorEqual, 'text', 'U4', 'FR'),
                         new Condition(
                             $event->reveal(),
-                            'fr',
+                            'FR',
                             new LogicalOperatorAnd,
                             [
-                                new Field('LastName', new ComparisonOperatorNull, 'text', ''),
-                                new Field('FirstName', new ComparisonOperatorNotNull, 'text', 'mathieu'),
+                                new Field('LastName', new ComparisonOperatorNull, 'text', '', 'FR'),
+                                new Field('FirstName', new ComparisonOperatorNotNull, 'text', 'mathieu', 'FR'),
                             ]
                         ),
                     ]
@@ -101,7 +101,7 @@ class ConditionRulesParserTest extends TestCase
             ]
         );
 
-        $result = ConditionRulesParser::parse($event->reveal(), 'fr', $conditions);
+        $result = ConditionRulesParser::parse($event->reveal(), 'FR', $conditions);
 
         $this->assertEquals($expectedResult, $result);
     }
