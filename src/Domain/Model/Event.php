@@ -161,24 +161,24 @@ class Event implements EventInterface, TraceableInterface
         bool $accessControlEnabled = false,
         bool $showCheckinStatus = false
     ) {
-        $this->translations   = new ArrayCollection();
-        $this->configuration  = new Configuration();
+        $this->translations = new ArrayCollection();
+        $this->configuration = new Configuration();
         $this->paymentAddress = new Address('', '', '', '');
-        $this->days           = new ArrayCollection();
-        $this->title          = $title;
-        $this->fallback       = $fallback;
-        $this->locales        = $locales;
-        $this->mode           = $mode;
-        $this->vat            = $vat;
-        $this->country        = $country;
-        $this->currency       = $currency;
-        $this->timeZone       = $timeZone;
-        $this->domain         = $domain;
-        $this->organiserName  = $organiserName;
-        $this->emailTeam      = $emailTeam;
-        $this->invoicePrefix  = $invoicePrefix;
-        $this->assetPath      = '';
-        $this->visible        = $visible;
+        $this->days = new ArrayCollection();
+        $this->title = $title;
+        $this->fallback = $fallback;
+        $this->locales = $locales;
+        $this->mode = $mode;
+        $this->vat = $vat;
+        $this->country = $country;
+        $this->currency = $currency;
+        $this->timeZone = $timeZone;
+        $this->domain = $domain;
+        $this->organiserName = $organiserName;
+        $this->emailTeam = $emailTeam;
+        $this->invoicePrefix = $invoicePrefix;
+        $this->assetPath = '';
+        $this->visible = $visible;
         $this->userAgendaVersionsGenerated = false;
         $this->archived = false;
         $this->duplicatedFrom = $duplicatedFrom;
@@ -392,8 +392,6 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * @deprecated
-     *
      * @return string
      */
     public function getLogo()
@@ -402,8 +400,6 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * @deprecated
-     *
      * @param string $logo
      * @param string $logoExtension
      */
@@ -711,8 +707,6 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * @throws DayNotDefinedException
-     *
      * @return Event\Day
      */
     public function getFirstDay()
@@ -727,8 +721,6 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * @throws DayNotDefinedException
-     *
      * @return Event\Day
      */
     public function getLastDay()
@@ -881,8 +873,6 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @param \DateTimeInterface $datetime
      *
-     * @throws DayNotDefinedException
-     *
      * @return bool
      */
     public function isFinished(\DateTimeInterface $datetime): bool
@@ -922,12 +912,28 @@ class Event implements EventInterface, TraceableInterface
         ;
     }
 
+    public function getLocalizedNotificationImage(string $locale): ?string
+    {
+        return $this->translations->containsKey($locale)
+            ? $this->translations->get($locale)->getNotificationImage()
+            : null;
+    }
+
+    public function getLocalizedNotificationImageExtension(string $locale): ?string
+    {
+        return $this->translations->containsKey($locale)
+            ? $this->translations->get($locale)->getNotificationImageExtension()
+            : null;
+    }
+
     public function updateLocalizedLogos(
         string $locale,
         ?string $logo = null,
         ?string $logoExtension = null,
         ?string $mobileLogo = null,
-        ?string $mobileLogoExtension = null
+        ?string $mobileLogoExtension = null,
+        ?string $notificationImage = null,
+        ?string $notificationImageExtension = null
     ): void {
         if ($this->translations->containsKey($locale)) {
             $this->translations
@@ -936,9 +942,10 @@ class Event implements EventInterface, TraceableInterface
                     $logo,
                     $logoExtension,
                     $mobileLogo,
-                    $mobileLogoExtension
-                )
-            ;
+                    $mobileLogoExtension,
+                    $notificationImage,
+                    $notificationImageExtension
+                );
 
             return;
         }
@@ -948,7 +955,9 @@ class Event implements EventInterface, TraceableInterface
             $logo,
             $logoExtension,
             $mobileLogo,
-            $mobileLogoExtension
+            $mobileLogoExtension,
+            $notificationImage,
+            $notificationImageExtension
         );
         $this->translations->set($locale, $eventTranslation);
     }

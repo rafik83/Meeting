@@ -273,15 +273,35 @@ class EventTranslation
         return $this->mobileLogoExtension;
     }
 
+    /**
+     * @return null|string
+     */
+    public function getNotificationImage(): ?string
+    {
+        return $this->notificationImage;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNotificationImageExtension(): ?string
+    {
+        return $this->notificationImageExtension;
+    }
+
     public function updateLogoAndMobileLogo(
         ?string $logo = null,
         ?string $logoExtension = null,
         ?string $mobileLogo = null,
-        ?string $mobileLogoExtension = null
+        ?string $mobileLogoExtension = null,
+        ?string $notificationImage = null,
+        ?string $notificationImageExtension = null
     ): void {
         $this->logo = $logo;
         $this->logoExtension = $logoExtension;
         $this->mobileLogo = $mobileLogo;
         $this->mobileLogoExtension = $mobileLogoExtension;
+        $this->notificationImage = $notificationImage;
+        $this->notificationImageExtension = $notificationImageExtension;
     }
 }

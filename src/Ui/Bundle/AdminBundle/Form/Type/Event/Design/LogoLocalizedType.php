@@ -23,6 +23,12 @@ class LogoLocalizedType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('notificationImage', FileType::class, [
+                'required' => false,
+                'attr'     => [
+                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
+                ],
+            ])
             ->add('logo', FileType::class, [
                 'required' => false,
                 'attr'     => [
