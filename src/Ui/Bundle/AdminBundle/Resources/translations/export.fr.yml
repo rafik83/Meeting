@@ -60,6 +60,7 @@ order.column.customRow.total: 'Ligne supplémentaire %customRowIndex% prix total
 order.column.customRow.unitPrice: 'Ligne supplémentaire %customRowIndex% prix unitaire (HT)'
 order.column.invoice_date: 'Date de facture'
 order.column.invoice_number: 'Numéro de facture'
+order.column.order_date: 'Date de la commande'
 order.column.order_id: 'Id Commande'
 order.column.order_total_vat: 'Total TVA'
 order.column.order_total_with_vat: 'Total TTC'

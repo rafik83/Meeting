@@ -62,6 +62,16 @@ Remove a dependency:
 
         ⇒ yarn remove <package>
 
+Upgrade a dependency:
+
+        ⇒ yarn upgrade <package>@<version>
+
+Then check if everything ok (please check package version release notes).
+
+To do not forget to rebuild js bundles:
+
+        ⇒ make build
+
 ### Migrations
 
 Drop DB and generate migrations diff:

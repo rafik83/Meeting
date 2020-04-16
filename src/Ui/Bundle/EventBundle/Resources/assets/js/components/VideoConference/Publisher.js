@@ -35,10 +35,6 @@ Publisher.prototype.create = function(options) {
     this.handleError
   );
 
-  this.publisher.on('streamCreated', function(event) {
-    console.log('publisherSTREAM', event.stream.id);
-  });
-
   return this.publisher;
 };
 

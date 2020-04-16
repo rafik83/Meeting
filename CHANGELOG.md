@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2094 - Convert nomenclature key to lowercase in admin search qeury builder and in aggregation
+- VIMEET-2025 - Add order date in the order export
+- VIMEET-2060 - Assist to a webinar as a speaker or a viewer. Screensharing for speaker; Chat for both
 
 ## [2.24.0] - 2020-03-30
 ### Added

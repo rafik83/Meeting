@@ -69,6 +69,7 @@ class OrderViewQueryHandlerTest extends TestCase
         $order->getId()->willReturn(2);
         $order->getSheet()->willReturn($sheet->reveal());
         $sheet->getId()->willReturn(3);
+        $order->getCreatedAt()->willReturn(new \DateTime('2016-10-12'));
 
         $row1 = $this->prophesize(Order\Row::class);
         $row1->isProduct()->willReturn(true);
@@ -156,6 +157,7 @@ class OrderViewQueryHandlerTest extends TestCase
 
         $expected = new OrderView(
             2,
+            '10/12/16',
             3,
             'sheet title',
             'invoicePrefix2017-0001',

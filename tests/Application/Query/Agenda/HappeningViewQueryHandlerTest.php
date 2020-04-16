@@ -15,15 +15,18 @@ use Proximum\Vimeet\Application\Query\Agenda\HappeningViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class HappeningViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
         $event = EventFactory::createEvent();
+        $user = UserFactory::create();
 
         // Data
         $beginHappening1 = new \DateTime('2016-10-12 12:00:00');
@@ -34,7 +37,11 @@ class HappeningViewQueryHandlerTest extends TestCase
             $beginHappening1,
             $endHappening1,
             $categoryH1,
-            []
+            [],
+            false,
+            null,
+            null,
+            true
         );
         $happening1->setTranslation(new Happening\HappeningTranslation($happening1, 'fr', 'title', 'description'));
 
@@ -55,17 +62,25 @@ class HappeningViewQueryHandlerTest extends TestCase
             'Conference',
             '#123123',
             '#123123',
-            'Europe/Paris'
+            'Europe/Paris',
+            null,
+            true,
+            false
         );
 
         // Mock
         $speakerViewQueryHandler = $this->prophesize(SpeakerViewQueryHandler::class);
         $speakerViewQueryHandler->handle(new SpeakerViewQuery($happening1, 'fr'))->shouldBeCalled()->willReturn([]);
 
+        $canAccessToWebinar = $this->prophesize(CanAccessToWebinar::class);
+        $canAccessToWebinar->isSatisfiableBy($happening1, $user)->shouldBeCalled()->willReturn(false);
+
         $handler = new HappeningViewQueryHandler(
+            $canAccessToWebinar->reveal(),
             $speakerViewQueryHandler->reveal()
         );
         $result = $handler->handle(new HappeningViewQuery(
+            $user,
             $happening1,
             $event,
             'fr'
