@@ -53,6 +53,7 @@ use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Tests\Helper\EntityId;
 
 class AgendaViewQueryHandlerTest extends TestCase
 {
@@ -111,6 +112,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $happeningParticipationRepository->findByUser($user, $event, true)->shouldBeCalled()->willReturn([
             $happeningParticipation,
         ]);
+        $happeningParticipationRepository->findBySpeaker($user, $event)->shouldBeCalled()->willReturn([]);
 
         $this->validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(true);
         $this->extraDataRepository
@@ -230,8 +232,15 @@ class AgendaViewQueryHandlerTest extends TestCase
         $mass     = new Mass($event, $category, 'name', $begin, $end, true);
 
         $categoryH = new Happening\Category($event, 'picto', 1, 'leftColor', 'rightColor');
-        $happening = new Happening($event, $begin, $end, $categoryH, [], false, 100);
-        $happeningParticipation = new HappeningParticipation($happening, $user2);
+
+        $happening1 = new Happening($event, $begin, $end, $categoryH, [], false, 100);
+        EntityId::setId($happening1, 111);
+
+        $happening2 = new Happening($event, $begin, $end, $categoryH, [], false, 100, null, true);
+        EntityId::setId($happening2, 222);
+
+        $happeningParticipation1 = new HappeningParticipation($happening1, $user2);
+        $happeningParticipation2 = new HappeningParticipation($happening2, $user2);
 
         $unavailability = new Unavailability($user2, $event, $begin, $end);
 
@@ -247,9 +256,12 @@ class AgendaViewQueryHandlerTest extends TestCase
             ->findByUser($user2, $event, true)
             ->shouldBeCalled()
             ->willReturn([
-                $happeningParticipation,
+                $happeningParticipation1,
             ])
         ;
+        $happeningParticipationRepository->findBySpeaker($user2, $event)->shouldBeCalled()->willReturn(
+            [$happeningParticipation1, $happeningParticipation2]
+        );
 
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
         $unavailabilityRepository->findByUserAndEvent($user2, $event)->shouldBeCalled()->willReturn([$unavailability]);
@@ -263,7 +275,21 @@ class AgendaViewQueryHandlerTest extends TestCase
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
         $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], [], []);
         $dayViewQueryHandler
-            ->handle(new DayViewQuery($day, $sheet, $event, $participant2, $user, true, 'fr', [$happeningParticipation], [$unavailability], [$mass], []))
+            ->handle(
+                new DayViewQuery(
+                    $day,
+                    $sheet,
+                    $event,
+                    $participant2,
+                    $user,
+                    true,
+                    'fr',
+                    [$happeningParticipation1, $happeningParticipation2],
+                    [$unavailability],
+                    [$mass],
+                    []
+                )
+            )
             ->shouldBeCalled()
             ->willReturn($dayView)
         ;
@@ -374,6 +400,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             ->findByUser($user2, $event, true)
             ->shouldNotBeCalled()
         ;
+        $happeningParticipationRepository->findBySpeaker($user2, $event)->shouldNotBeCalled();
 
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
         $unavailabilityRepository->findByUserAndEvent($user2, $event)->shouldNotBeCalled();

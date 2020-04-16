@@ -98,6 +98,7 @@ class ProgramViewQueryHandlerTest extends TestCase
         $dayViewQueryHandler->handle(new DayViewQuery(
             $event,
             $sheet,
+            $user,
             $eventDay1,
              'fr',
             null,
@@ -106,6 +107,7 @@ class ProgramViewQueryHandlerTest extends TestCase
         $dayViewQueryHandler->handle(new DayViewQuery(
             $event,
             $sheet,
+            $user,
             $eventDay2,
             'fr',
             null,

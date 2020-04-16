@@ -1,0 +1,22 @@
+<?php
+
+namespace Proximum\Vimeet\Application\Command\Happening\Webinar;
+
+use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Domain\Model\Happening;
+
+class StartWebinarSessionCommand implements Command
+{
+    /** @var Happening */
+    private $happening;
+
+    public function __construct(Happening $happening)
+    {
+        $this->happening = $happening;
+    }
+
+    public function getHappening(): Happening
+    {
+        return $this->happening;
+    }
+}
