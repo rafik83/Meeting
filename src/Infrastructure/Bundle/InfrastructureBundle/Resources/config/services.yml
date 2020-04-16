@@ -7068,6 +7068,11 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\PullTranslationsCommand:
+        parent: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\UpdateTranslationsCommand
+        tags:
+            - { name: console.command }
+
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\ScheduleUpdateTranslationsCommand:
         arguments:
             - '@adapter.third_party.jenkins.build_creator_adapter'
