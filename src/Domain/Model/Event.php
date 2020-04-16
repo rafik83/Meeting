@@ -393,6 +393,8 @@ class Event implements EventInterface, TraceableInterface
 
     /**
      * @return string
+     * @deprecated
+     *
      */
     public function getLogo()
     {
@@ -402,6 +404,9 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @param string $logo
      * @param string $logoExtension
+     *
+     * @deprecated
+     *
      */
     public function setLogo($logo, $logoExtension)
     {
@@ -708,6 +713,8 @@ class Event implements EventInterface, TraceableInterface
 
     /**
      * @return Event\Day
+     * @throws DayNotDefinedException
+     *
      */
     public function getFirstDay()
     {
@@ -722,6 +729,8 @@ class Event implements EventInterface, TraceableInterface
 
     /**
      * @return Event\Day
+     * @throws DayNotDefinedException
+     *
      */
     public function getLastDay()
     {
@@ -874,6 +883,8 @@ class Event implements EventInterface, TraceableInterface
      * @param \DateTimeInterface $datetime
      *
      * @return bool
+     * @throws DayNotDefinedException
+     *
      */
     public function isFinished(\DateTimeInterface $datetime): bool
     {
