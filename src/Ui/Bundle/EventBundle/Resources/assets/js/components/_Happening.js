@@ -41,7 +41,7 @@ Happening.prototype.handleRequestParticipateButton = function ()
             alert(response.message);
             this.enableParticipateAction();
         } else {
-            this.validateParticipation(response.label);
+            this.validateParticipation(response);
         }
     }.bind(this))
     .fail(function () {
@@ -93,17 +93,24 @@ Happening.prototype.handleRequestForm = function (form)
             this.enableParticipateAction();
         } else {
             $(this.modal).modal('hide');
-            this.validateParticipation(response.label);
+            this.validateParticipation(response);
         }
     }.bind(this));
 
     return false;
 };
 
-Happening.prototype.validateParticipation = function (label) {
+Happening.prototype.validateParticipation = function (response) {
     this.enableParticipateAction();
+    const label = response.label;
 
     if (label == undefined) {
+        return;
+    }
+
+    if ('redirect' === label) {
+        document.location.href = response.redirectTo;
+
         return;
     }
 

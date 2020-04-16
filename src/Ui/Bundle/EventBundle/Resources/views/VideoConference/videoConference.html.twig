@@ -34,7 +34,15 @@
 
             {% if meetingView is defined %}
                 <br>
-                <h1>{{ meetingView.sheetMetTitle }}</h1>
+                <h1>
+                    {% for sheetMetView in meetingView.sheetMetTitle %}
+                        {% if sheetMetView.isHighlighted %}
+                            <b>{{ sheetMetView.title }}</b>
+                        {% else %}
+                            {{ sheetMetView.title }}
+                        {% endif %}
+                    {% endfor %}
+                </h1>
 
                 <div class="list list--users">
                     {% for participantView in meetingView.participants %}

@@ -4,24 +4,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2025 - Add order date in the order export
+- VIMEET-2060 - Assist to a webinar as a speaker or a viewer. Screensharing for speaker; Chat for both
 
-## [2.24.0] - 2019-03-30
+## [2.24.0] - 2020-03-30
 ### Added
 - VIMEET-2059 - Assign a conference to a webinar / Add error message when speaker is not a user
 - VIMEET-2063 - Login security: disable temporarily for 15 mintes user account after 5 wrong attempts
 - VIMEET-2056 - Delete ajax request count participants
 
-## [2.23.0] - 2019-03-16
+## [2.23.0] - 2020-03-16
 ### Added
 - VIMEET-2055 - New password security
 
-## [2.22.0] - 2019-03-13
+## [2.22.0] - 2020-03-13
 ### Added
 - VIMEET-1493 - Auto refresh agenda when it is event D day
 ### Fixed
 - Hotfix: Error message when no template form data to export
 
-## [2.21.0] - 2019-03-05
+## [2.21.0] - 2020-03-05
 ### Added
 - VIMEET-2030 - View checkin status in contacts list and agenda
 ### Fixed
@@ -31,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-219 - send activate account on fastCheckin
 - Improvment: Add cache to Crisp chat component
 
-## [2.20.0] - 2019-02-25
+## [2.20.0] - 2020-02-25
 ### Fixed
 - MV-222 - Take account of plan included product that can enable participant scan
 
@@ -39,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2039 - Sheet agenda
 
-## [2.18.0] - 2019-02-21
+## [2.18.0] - 2020-02-21
 ### Added
 - VIMEET-2011 - Prioritize meeting request before planning
 - VIMEET-2047 - Add number max of meetings per sheet in participation type parameter
@@ -48,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV-204 - Don't send email if avertisment of changing mail is disabled
 
-## [2.17.0] - 2019-01-31
+## [2.17.0] - 2020-01-31
 ### Added
 - VIMEET-2033 - add number max of happenings per user in participation type parameters
 - VIMEET-2040 - Set 'contains' as default operator for string filter
