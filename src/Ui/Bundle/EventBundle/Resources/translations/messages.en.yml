@@ -406,7 +406,6 @@ package.product.includedProduct: 'Included:'
 package.product.label: 'Title & Description'
 package.product.notDeletableSince: 'can not be removed sincel %date%'
 package.product.outOfStock: 'Sold out'
-package.product.priceWithCurrency: '%price% <sup>%currency%</sup>'
 package.product.quantity: Quantity
 package.product.quantityMax: 'Maximum quantity reached'
 package.product.quantityMaxInformation: 'Max: %quantityMax%'
