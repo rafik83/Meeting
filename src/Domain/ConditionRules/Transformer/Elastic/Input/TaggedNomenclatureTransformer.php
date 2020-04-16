@@ -83,7 +83,7 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
             $query['bool']['must'][] = [
                 'term' => [
                     $this->getTagSearchMapping() => [
-                        'value' => $tag,
+                        'value' => mb_strtolower($tag),
                     ],
                 ],
             ];
@@ -105,7 +105,7 @@ class TaggedNomenclatureTransformer implements InputTransformerInterface
             $nestedQuery['bool']['should'][] = [
                 'term' => [
                     $this->getKeysSearchMapping() => [
-                        'value' => $key,
+                        'value' => mb_strtolower($key),
                     ],
                 ],
             ];
