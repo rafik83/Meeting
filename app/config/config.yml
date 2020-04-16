@@ -233,6 +233,10 @@ sentry:
     options:
         environment: "%kernel.environment%"
         error_types: E_ALL & ~E_WARNING & ~E_DEPRECATED & ~E_USER_DEPRECATED & ~E_USER_NOTICE & ~E_USER_WARNING & ~E_NOTICE & ~E_COMPILE_WARNING & ~E_CORE_WARNING
+        excluded_exceptions:
+            - Symfony\Component\Security\Core\Exception\AccessDeniedException
+            - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+            - Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException
 
 coop_tilleuls_ovh:
     endpoint_name:      "%ovh_endpoint_name%"

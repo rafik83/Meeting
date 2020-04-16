@@ -3,42 +3,42 @@ Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign:
         textColor:
             - NotBlank: ~
             - Regex:
-                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         leftColor:
             - NotBlank: ~
             - Regex:
-                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         headerLeftColor:
             - NotBlank: ~
             - Regex:
-                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         rightColor:
             - NotBlank: ~
             - Regex:
-                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         headerRightColor:
             - NotBlank: ~
             - Regex:
-                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         headerButtonTextColor:
             - NotBlank: ~
             - Regex:
-                  pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                  pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                   message: validators.hexadecimal
         headerButtonLeftColor:
             - NotBlank: ~
             - Regex:
-                  pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                  pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                   message: validators.hexadecimal
         headerButtonRightColor:
             - NotBlank: ~
             - Regex:
-                  pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                  pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                   message: validators.hexadecimal
         localizedImages:
             - All:
@@ -47,15 +47,15 @@ Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign:
                         logo:
                             - Image:
                                 maxSize: 500k
-                                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
+                                mimeTypes: !php/const Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
                         mobileLogo:
                             - Image:
-                                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
+                                mimeTypes: !php/const Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
         backgroundColor:
             - Regex:
-                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         backgroundImage:
             - Image:
                 maxSize: 500k
-                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
+                mimeTypes: !php/const Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE

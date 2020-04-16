@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening;
 
+use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\View\Happening\HappeningView;
 
 class HappeningViewQueryHandler
@@ -24,18 +25,17 @@ class HappeningViewQueryHandler
      */
     private $categoryViewQueryHandler;
 
-    /**
-     * HappeningViewQueryHandler constructor.
-     *
-     * @param SpeakerViewQueryHandler  $speakerViewQueryHandler
-     * @param CategoryViewQueryHandler $categoryViewQueryHandler
-     */
+    /** @var CanAccessToWebinar */
+    private $canAccessToWebinar;
+
     public function __construct(
         SpeakerViewQueryHandler $speakerViewQueryHandler,
-        CategoryViewQueryHandler $categoryViewQueryHandler
+        CategoryViewQueryHandler $categoryViewQueryHandler,
+        CanAccessToWebinar $canAccessToWebinar
     ) {
         $this->speakerViewQueryHandler  = $speakerViewQueryHandler;
         $this->categoryViewQueryHandler = $categoryViewQueryHandler;
+        $this->canAccessToWebinar = $canAccessToWebinar;
     }
 
     /**
@@ -46,6 +46,7 @@ class HappeningViewQueryHandler
     public function handle(HappeningViewQuery $query)
     {
         $happening = $query->happening;
+        $user = $query->user;
 
         $happeningCategoryView = $this->categoryViewQueryHandler->handle(
             new CategoryViewQuery($happening, $query->locale)
@@ -65,7 +66,9 @@ class HappeningViewQueryHandler
             null, // Happening Picture
             $speakerView,
             $query->event->getTimeZone(),
-            $happening->getLimitParticipant()
+            $happening->getLimitParticipant(),
+            false,
+            $happening->isWebinar() && $this->canAccessToWebinar->isSatisfiableBy($happening, $user)
         );
     }
 }
