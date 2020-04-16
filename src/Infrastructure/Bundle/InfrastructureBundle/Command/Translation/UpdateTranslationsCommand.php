@@ -22,9 +22,10 @@ class UpdateTranslationsCommand extends Command
     const NAME = 'vimeet:translations:update';
 
     /** @var CommandBus */
-    private $commandBus;
+    protected $commandBus;
+
     /** @var string */
-    private $kernelCacheDir;
+    protected $kernelCacheDir;
 
     public function __construct(CommandBus $commandBus, string $kernelCacheDir)
     {

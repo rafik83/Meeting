@@ -21,7 +21,6 @@ use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorA
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
     const DELAY_AFTER_END_TIME = '+15 minutes';
-    const TOKEN_GENERATION_DEFAULT_OPTIONS = ['role' => Role::PUBLISHER];
     const SESSION_DEFAULT_OPTIONS = ['mediaMode' => MediaMode::ROUTED];
 
     /** @var OpenTok */
@@ -59,8 +58,12 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function generateAccessToken(Session $session, \DateTimeInterface $endDateTime, array $options = []): string
-    {
+    public function generateAccessToken(
+        Session $session,
+        \DateTimeInterface $endDateTime,
+        array $options = [],
+        bool $isPublisher = true
+    ): string {
         if (true === $this->hasSecurity) {
             $sessionEndDate = new \DateTime($endDateTime->format('Y-m-d H:i:s.u'));
 
@@ -71,10 +74,10 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
             $options['expireTime'] = $sessionEndDate->getTimeStamp();
         }
 
+        $options['role'] = $isPublisher ? Role::PUBLISHER : Role::SUBSCRIBER;
+
         try {
-            return $this->openTok->generateToken($session->getSessionId(), array_merge(
-                self::TOKEN_GENERATION_DEFAULT_OPTIONS, $options
-            ));
+            return $this->openTok->generateToken($session->getSessionId(), $options);
         } catch (InvalidArgumentException $argumentException) {
             throw new InvalidTokenGeneratorArgumentsException();
         }

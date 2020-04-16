@@ -41,7 +41,7 @@ class NomenclatureTagViewQueryHandler
             );
 
             foreach ($nomenclaturesItemsViews->nomenclaturesItems as $itemKey => $itemLabel) {
-                $nomenclatureTagViews[] = new NomenclatureTagView($itemKey, $itemLabel);
+                $nomenclatureTagViews[] = new NomenclatureTagView(mb_strtolower($itemKey), $itemLabel);
             }
 
             $nomenclatureTagViewsIndexedByTag[$tag] = new NomenclatureTagViews(

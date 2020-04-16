@@ -412,4 +412,29 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findBySpeaker(User $user, Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening')
+            ->from(Happening::class, 'happening')
+            ->join('happening.talkings', 'talking', 'WITH', 'happening.event = :event')
+            ->join('talking.speaker', 'speaker', 'WITH', 'speaker.user = :user')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+        ;
+
+        $happeningParticipations = [];
+
+        foreach ($queryBuilder->getQuery()->getResult() as $happening) {
+            $happeningParticipations[] = new HappeningParticipation($happening, $user);
+        }
+
+        return $happeningParticipations;
+    }
 }

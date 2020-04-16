@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\View\Order\Export;
 class SharedColumnsTranslationView
 {
     public const COLUMN_ORDER_ID                = 'order_id';
+    public const COLUMN_ORDER_DATE              = 'order_date';
     public const COLUMN_SHEET_ID                = 'sheet_id';
     public const COLUMN_SHEET_TITLE             = 'sheet_title';
     public const COLUMN_INVOICE_NUMBER          = 'invoice_number';
@@ -37,6 +38,9 @@ class SharedColumnsTranslationView
 
     /** @var string */
     public $orderId;
+
+    /** @var string */
+    public $orderDate;
 
     /** @var string */
     public $sheetId;
@@ -103,6 +107,7 @@ class SharedColumnsTranslationView
 
     /**
      * @param string $orderId
+     * @param string $orderDate
      * @param string $sheetId
      * @param string $sheetTitle
      * @param string $invoiceNumber
@@ -127,6 +132,7 @@ class SharedColumnsTranslationView
      */
     public function __construct(
         $orderId,
+        $orderDate,
         $sheetId,
         $sheetTitle,
         $invoiceNumber,
@@ -150,6 +156,7 @@ class SharedColumnsTranslationView
         $totalWithVat
     ) {
         $this->orderId    = $orderId;
+        $this->orderDate  = $orderDate;
         $this->sheetId    = $sheetId;
         $this->sheetTitle = $sheetTitle;
         $this->invoiceNumber = $invoiceNumber;
@@ -180,6 +187,7 @@ class SharedColumnsTranslationView
     {
         return [
             self::COLUMN_ORDER_ID                => $this->orderId,
+            self::COLUMN_ORDER_DATE              => $this->orderDate,
             self::COLUMN_SHEET_ID                => $this->sheetId,
             self::COLUMN_SHEET_TITLE             => $this->sheetTitle,
             self::COLUMN_INVOICE_NUMBER          => $this->invoiceNumber,

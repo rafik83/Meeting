@@ -46,6 +46,8 @@ class HappeningView extends AbstractTimeEntityView implements ProgramElementView
 
     /** @var string */
     public $timeZone;
+    /** @var bool */
+    private $canAccessToWebinar;
 
     /**
      * HappeningView constructor.
@@ -73,19 +75,21 @@ class HappeningView extends AbstractTimeEntityView implements ProgramElementView
         array $speakers,
         $timeZone,
         $limitParticipant = null,
-        $isFull = false
+        $isFull = false,
+        bool $canAccessToWebinar = false
     ) {
-        $this->id               = $id;
-        $this->category         = $category;
-        $this->begin            = $beginHour;
-        $this->end              = $endHour;
-        $this->title            = $title;
-        $this->description      = $description;
-        $this->picture          = $picture;
-        $this->speakers         = $speakers;
-        $this->isFull           = $isFull;
+        $this->id = $id;
+        $this->category = $category;
+        $this->begin = $beginHour;
+        $this->end = $endHour;
+        $this->title = $title;
+        $this->description = $description;
+        $this->picture = $picture;
+        $this->speakers = $speakers;
+        $this->isFull = $isFull;
         $this->limitParticipant = $limitParticipant;
-        $this->timeZone         = $timeZone;
+        $this->timeZone = $timeZone;
+        $this->canAccessToWebinar = $canAccessToWebinar;
     }
 
     /**
@@ -214,5 +218,10 @@ class HappeningView extends AbstractTimeEntityView implements ProgramElementView
     public function isMassUnavailabilityView(): bool
     {
         return false;
+    }
+
+    public function webinarOpened(): bool
+    {
+        return $this->canAccessToWebinar;
     }
 }
