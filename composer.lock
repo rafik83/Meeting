@@ -6035,16 +6035,16 @@
         },
         {
             "name": "sendgrid/php-http-client",
-            "version": "3.10.5",
+            "version": "3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sendgrid/php-http-client.git",
-                "reference": "931a5a426fa3c3e31ecd8ad15597b2b183dad5db"
+                "reference": "bec48e0e2e41331438ba7872805b86c45387178d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sendgrid/php-http-client/zipball/931a5a426fa3c3e31ecd8ad15597b2b183dad5db",
-                "reference": "931a5a426fa3c3e31ecd8ad15597b2b183dad5db",
+                "url": "https://api.github.com/repos/sendgrid/php-http-client/zipball/bec48e0e2e41331438ba7872805b86c45387178d",
+                "reference": "bec48e0e2e41331438ba7872805b86c45387178d",
                 "shasum": ""
             },
             "require": {
@@ -6071,7 +6071,7 @@
                 },
                 {
                     "name": "Elmer Thomas",
-                    "email": "ethomas@twilio.com"
+                    "email": "elmer@thinkingserious.com"
                 }
             ],
             "description": "HTTP REST client, simplified for PHP",
@@ -6083,7 +6083,7 @@
                 "rest",
                 "sendgrid"
             ],
-            "time": "2020-03-18T19:45:45+00:00"
+            "time": "2017-05-05T06:15:41+00:00"
         },
         {
             "name": "sendgrid/sendgrid",
