@@ -74,7 +74,7 @@ class ExportUploadedObjectsBySheetsActionTest extends TestCase
         $extraData = new Event\ExtraData(
             $event->reveal(),
             Type::ADMIN_SHEET_BATCH_IDS,
-            '1,2,3',
+            '1, 2, 3',
             $datetime
         );
 
@@ -85,7 +85,7 @@ class ExportUploadedObjectsBySheetsActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null);
 
-        $jobQueue->exportUploadedObjectsBySheets($event->reveal(), $admin->removeEvent(), $extraData);
+        $jobQueue->exportUploadedObjectsBySheets($event->reveal(), $admin->reveal(), $extraData)->shouldBeCalled();
         $flashBag->add('success', 'flash.admin.event.export.uploaded_objects.success')->shouldBeCalled();
 
         $action = new ExportUploadedObjectsBySheetsAction(
