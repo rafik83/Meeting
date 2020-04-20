@@ -48,6 +48,9 @@ class TipTranslationView
     /** @var bool */
     public $isOpened = false;
 
+    /** @var string */
+    public $image = null;
+
     public function __construct(
         int $id,
         string $title,
@@ -59,7 +62,8 @@ class TipTranslationView
         ?bool $conditionIsPhoneConfirmed = null,
         ?bool $conditionIsCompleteSheet = null,
         ?bool $conditionHasPendingMeetingProposition = null,
-        ?array $conditionOnOrders = null
+        ?array $conditionOnOrders = null,
+        ?string $image = null
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -72,5 +76,16 @@ class TipTranslationView
         $this->conditionIsCompleteSheet = $conditionIsCompleteSheet;
         $this->conditionHasPendingMeetingProposition = $conditionHasPendingMeetingProposition;
         $this->conditionOnOrders = $conditionOnOrders;
+        $this->image = $image;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
     }
 }
