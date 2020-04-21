@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2025 - Add order date in the order export
 - VIMEET-2060 - Assist to a webinar as a speaker or a viewer. Screensharing for speaker; Chat for both
+- VIMEET-2050 - Can define an image to the header notification
 
 ## [2.24.0] - 2020-03-30
 ### Added
