@@ -45,6 +45,16 @@ class EventUrlGenerator implements EventUrlGeneratorInterface
         );
     }
 
+    public function generateImageAbsoluteUrl(Event $event, string $locale)
+    {
+        return sprintf(
+            '%s://%s%s',
+            $this->scheme,
+            $event->getDomain(),
+            $event->getLocalizedNotificationImage($locale)
+        );
+    }
+
     public function generateBaseEventAbsoluteUrl(Event $event): string
     {
         return sprintf(
