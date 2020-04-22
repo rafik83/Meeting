@@ -87,11 +87,19 @@ function VideoConference(element) {
   document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
 
-  // Init
-  this.init();
+  this.joinButton = element.querySelector('[data-meeting-join-button]');
+  this.joinButton.addEventListener('click', this.join.bind(this));
+  this.meetingWaitingMessage = element.querySelector('[data-meeting-waiting-message]');
+
   this.saveParticipantPresence();
   this.countDownBeforeEnd();
 }
+
+VideoConference.prototype.join = function () {
+    this.hideElement(this.joinButton);
+    this.showElement(this.meetingWaitingMessage);
+    this.init();
+};
 
 /**
  * Handle exit fullscreen and rebuild Tokbox UI layout
@@ -156,9 +164,10 @@ VideoConference.prototype.init = function() {
  */
 VideoConference.prototype.connect = function() {
   this.session.connect(this.token, function(error) {
-    if (this.toggleChatElement) {
-      this.toggleChatElement.classList.remove('hide');
-    }
+    this.showElement(this.toggleChatElement);
+    this.showElement(this.toggleAudioElement);
+    this.showElement(this.toggleVideoElement);
+    this.showElement(this.startScreenSharingButton);
 
     if (!error) {
       this.publishStream();
@@ -443,6 +452,22 @@ VideoConference.prototype.countDownBeforeEnd = function() {
     }
 
     new Counter(this.meetingStartTime, this.meetingEndTime, this.currentTime, this.countDownContainer, this.timerContainer);
+};
+
+VideoConference.prototype.hideElement = function (element) {
+    if (!element) {
+        return;
+    }
+
+    element.classList.add('hide');
+};
+
+VideoConference.prototype.showElement = function (element) {
+    if (!element) {
+        return;
+    }
+
+    element.classList.remove('hide');
 };
 
 module.exports = VideoConference;
