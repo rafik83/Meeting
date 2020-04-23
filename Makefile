@@ -96,10 +96,10 @@ install: install-app install-db install-db@test install-db-fixtures install-db-f
 
 install@test: install-app@test install-db@test install-db-fixtures@test install-dep build@prod
 
-install@prod: install-app install-dep build@prod
+install@prod: install-dep build@prod
 
-install-app:
-	composer --no-progress --no-interaction install
+composer-install:
+	composer install --no-progress --no-interaction --ignore-platform-reqs
 
 install-app@test:
 	SYMFONY_ENV=test composer --no-progress --no-interaction install
