@@ -114,11 +114,11 @@ class AppExtension extends \Twig_Extension
         );
     }
 
-    public function generateImageUrl(Event $event, string $locale): string
+    public function generateImageUrl(Event $event, string $path): string
     {
         return $this->eventUrlGenerator->generateImageAbsoluteUrl(
             $event,
-            $locale
+            $path
         );
     }
 
