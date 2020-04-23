@@ -39,7 +39,6 @@ function VideoConference(element) {
     'data-user-denied-media-access'
   );
 
-  this.publisherContainer = element.querySelector('.publisher-container');
   this.layoutContainer = element.querySelector('.layout-container');
   this.helperContainer = element.querySelector('.video-helper');
   this.chatContainer = element.querySelector('.chat-container');
@@ -59,7 +58,7 @@ function VideoConference(element) {
 
   this.layout = initLayoutContainer(this.layoutContainer).layout;
 
-  this.publisher = new Publisher(this.publisherContainer);
+  this.publisher = new Publisher(this.layoutContainer);
   this.publisherStream = null;
 
   var resizeTimeout;
@@ -96,9 +95,9 @@ function VideoConference(element) {
 }
 
 VideoConference.prototype.join = function () {
-    this.hideElement(this.joinButton);
-    this.showElement(this.meetingWaitingMessage);
-    this.init();
+  this.hideElement(this.joinButton);
+  this.showElement(this.meetingWaitingMessage);
+  this.init();
 };
 
 /**
@@ -122,34 +121,32 @@ VideoConference.prototype.init = function() {
     return;
   }
 
-  // Create Tokbox Session
-
   this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
-  // Session Event Listener
-
   this.session.on('streamCreated', function(event) {
-    var subscriberContainer = document.createElement('div');
-    this.layoutContainer.appendChild(subscriberContainer);
-
-    var subscriberManager = new Subscriber(this.session, subscriberContainer);
+    const subscriberManager = new Subscriber(this.session, this.layoutContainer);
     var subscriber = subscriberManager.subscribe(event);
 
     var fullscreenButton = this.createFullscreenButton();
 
     subscriber.element.appendChild(fullscreenButton);
+    subscriber.element.classList.add('OT_big');
+    this.layout();
 
     this.helperContainer.classList.add('hide');
-
-    var infoContainer = document.createElement('div');
-    infoContainer.classList.add('subscriber-info');
-    subscriberContainer.appendChild(infoContainer);
-
-    this.layout();
   }.bind(this));
 
-  this.session.on('streamDestroyed', function() {
-    window.setTimeout(this.layout, 100);
+  this.session.on('streamDestroyed', function (event) {
+    event.preventDefault();
+
+    this.session.getSubscribersForStream(event.stream).forEach((subscriber) => {
+      subscriber.element.classList.remove('ot-layout');
+
+      setTimeout(() => {
+        subscriber.destroy();
+        this.layout();
+      }, 200);
+    });
   }.bind(this));
 
   this.session.on('sessionDisconnected', function() {
