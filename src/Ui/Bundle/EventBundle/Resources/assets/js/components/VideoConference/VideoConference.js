@@ -58,6 +58,7 @@ function VideoConference(element) {
 
   this.layout = initLayoutContainer(this.layoutContainer).layout;
 
+  this.subscribers = [];
   this.publisher = new Publisher(this.layoutContainer);
   this.publisherStream = null;
 
@@ -130,8 +131,10 @@ VideoConference.prototype.init = function() {
     var fullscreenButton = this.createFullscreenButton();
 
     subscriber.element.appendChild(fullscreenButton);
-    subscriber.element.classList.add('OT_big');
+    this.maximize(subscriber.element);
     this.layout();
+
+    this.subscribers.push(subscriber);
 
     this.helperContainer.classList.add('hide');
   }.bind(this));
@@ -154,6 +157,14 @@ VideoConference.prototype.init = function() {
   });
 
   this.connect();
+};
+
+VideoConference.prototype.maximize = function(element) {
+  element.classList.add('OT_big');
+};
+
+VideoConference.prototype.minimize = function(element) {
+  element.classList.remove('OT_big');
 };
 
 /**
@@ -197,10 +208,7 @@ VideoConference.prototype.initChat = function () {
  *  Publish your camera and microphone stream
  */
 VideoConference.prototype.publishStream = function() {
-  // create video view
   var publisher = this.publisher.create({});
-
-  // publish video to other participant
   this.session.publish(publisher, this.handlePublish.bind(this));
   this.publisherStream = publisher;
 
@@ -236,14 +244,11 @@ VideoConference.prototype.handlePublish = function(error) {
 VideoConference.prototype.handlePublishScreensharing = function(error) {
   if (error) {
     this.showError(error);
-  } else {
-    if (this.publisherStream !== null) {
-      this.publisher.disableVideo(this.publisherStream);
-    }
-
-    this.startScreenSharingButton.classList.add('hide');
-    this.endScreenSharingButton.classList.remove('hide');
+    return;
   }
+
+  this.startScreenSharingButton.classList.add('hide');
+  this.endScreenSharingButton.classList.remove('hide');
 };
 
 VideoConference.prototype.showError = function(error) {
@@ -277,15 +282,20 @@ VideoConference.prototype.screenshare = function() {
       return;
     }
 
-    // start screensharing
-    var publisher = this.publisher.create({
+    const publisher = this.publisher.create({
       videoSource: 'screen',
       publishAudio: true
     });
 
     this.session.publish(publisher, this.handlePublishScreensharing.bind(this));
+    this.maximize(publisher.element);
 
-    // stop screensharing
+    this.subscribers.forEach((subscriber) => {
+      this.minimize(subscriber.element);
+    });
+
+    this.layout();
+
     publisher.on('mediaStopped', this.handleStopScreensharing.bind(this));
   }.bind(this));
 };
@@ -304,8 +314,6 @@ VideoConference.prototype.endScreenshare = function() {
  * Handle stop screen sharing
  */
 VideoConference.prototype.handleStopScreensharing = function() {
-  this.publisherStream.publishVideo(true);
-  this.publisherStream.element.style.display = 'block';
   this.startScreenSharingButton.classList.remove('hide');
   this.endScreenSharingButton.classList.add('hide');
 };
