@@ -54,7 +54,7 @@ Enable/Disable php xdebug
 
 ### Update
 
-To update the application:
+To update the application, for example after git branch checkout:
 
         ⇒ make update-app
 

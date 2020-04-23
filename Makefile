@@ -128,7 +128,7 @@ clearcache:
 	bin/console cache:clear --env=dev
 	make redis-flushdb@vm
 
-update-app:
+update-app@vm:
 	composer install
 	make build
 	bin/console doctrine:migrations:migrate
