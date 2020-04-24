@@ -30,6 +30,7 @@
         <div class="publisher-container"></div>
         <div class="chat-container hide"></div>
         <div class="video-helper">
+            {{ include('EventBundle:Visio:settings.html.twig') }}
             <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
 
             {% if meetingView is defined %}

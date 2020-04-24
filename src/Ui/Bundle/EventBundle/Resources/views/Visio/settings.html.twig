@@ -1,0 +1,30 @@
+<section class="main">
+    <header>
+        <h1>{{ 'event.visio.settings.title'|trans }}</h1>
+    </header>
+
+    <div class="main__content">
+        <div class="row">
+            <div class="col-md-5">
+                <label for="visio-video-source-select">{{ 'event.visio.settings.selectVideo'|trans }}</label>
+                <select id="visio-video-source-select" name="video-source" class="form-control" required>
+                </select>
+                <hr/>
+                <br/>
+                <label for="visio-audio-source-select">{{ 'event.visio.settings.selectAudio'|trans }}</label>
+                <select id="visio-audio-source-select" name="audio-source" class="form-control" required>
+                </select>
+            </div>
+            <div class="col-md-7">
+                <span>{{ 'event.visio.settings.preview'|trans }}</span>
+                <video id="visio-video-box" class="img-responsive" autoplay playsinline muted></video>
+                <br/>
+                <div class="progress">
+                    <div class="progress-bar" id="visio-audio-volume" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                        <span class="sr-only" id="visio-audio-volume-sr">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

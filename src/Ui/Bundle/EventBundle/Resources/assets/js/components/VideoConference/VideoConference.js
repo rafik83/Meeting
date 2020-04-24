@@ -8,6 +8,7 @@ var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var Counter = require('./Counter');
 var $ = require('jquery');
+var Settings = require('./Settings');
 
 /**
  * @constructor
@@ -16,6 +17,14 @@ var $ = require('jquery');
  */
 function VideoConference(element) {
   this.element = element;
+
+  this.settings = new Settings(
+        document.getElementById('visio-audio-source-select'),
+        document.getElementById('visio-video-source-select'),
+        document.getElementById('visio-video-box'),
+        document.getElementById('visio-audio-volume')
+  );
+  this.settings.init();
 
   this.token = element.getAttribute('data-token');
   this.sessionId = element.getAttribute('data-session-id');
@@ -192,7 +201,10 @@ VideoConference.prototype.initChat = function () {
  */
 VideoConference.prototype.publishStream = function() {
   // create video view
-  var publisher = this.publisher.create({});
+  var publisher = this.publisher.create({
+      audioSource: this.settings.getAudioSource(),
+      videoSource: this.settings.getVideoSource()
+  });
 
   // publish video to other participant
   this.session.publish(publisher, this.handlePublish.bind(this));

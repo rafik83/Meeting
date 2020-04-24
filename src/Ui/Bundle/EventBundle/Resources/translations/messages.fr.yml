@@ -194,6 +194,10 @@ event.visio.test.testSuccessful: 'Test réussi !'
 event.visio.test.title: 'Test de votre configuration rendez-vous visio'
 event.visio.test.video: Vidéo
 event.visio.welcome: 'Bienvenue sur %event%'
+event.visio.settings.preview: 'Aperçu de vos règlages :'
+event.visio.settings.selectAudio: 'Sélectionner votre micro :'
+event.visio.settings.selectVideo: 'Sélectionner votre caméra :'
+event.visio.settings.title: 'Paramètres de votre visio'
 form_template.fill_step.participant: 'Formulaire pour %participant%'
 form_template.fill_step.step_title: 'Étape %currentStep% / %totalStep%'
 gender.man: Monsieur
