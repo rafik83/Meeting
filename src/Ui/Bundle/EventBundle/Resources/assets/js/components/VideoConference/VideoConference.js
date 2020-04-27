@@ -19,10 +19,7 @@ function VideoConference(element) {
   this.element = element;
 
   this.settings = new Settings(
-        document.getElementById('visio-audio-source-select'),
-        document.getElementById('visio-video-source-select'),
-        document.getElementById('visio-video-box'),
-        document.getElementById('visio-audio-volume')
+      document.getElementById('video-settings-section')
   );
   this.settings.init();
 
@@ -66,11 +63,6 @@ function VideoConference(element) {
       endMeetingButton.addEventListener('click', this.disconnect.bind(this));
   }
 
-  this.layout = initLayoutContainer(this.layoutContainer).layout;
-
-  this.publisher = new Publisher(this.publisherContainer);
-  this.publisherStream = null;
-
   var resizeTimeout;
   window.onresize = function() {
     clearTimeout(resizeTimeout);
@@ -91,15 +83,24 @@ function VideoConference(element) {
 
   this.chatInstance = null;
 
-  document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
+  addEventListener('visio-settings-validate', () => {
+      // Init video conference
+      this.element.querySelector('.video-participant-list').classList.remove('hide');
+      this.element.querySelector('.buttons-container').classList.remove('hide');
+      this.layout = initLayoutContainer(this.layoutContainer).layout;
 
-  // Init
-  this.init();
-  this.saveParticipantPresence();
-  this.countDownBeforeEnd();
+      this.publisher = new Publisher(this.publisherContainer);
+      this.publisherStream = null;
+
+      document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
+      document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
+      document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
+      document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
+
+      this.init();
+      this.saveParticipantPresence();
+      this.countDownBeforeEnd();
+  })
 }
 
 /**

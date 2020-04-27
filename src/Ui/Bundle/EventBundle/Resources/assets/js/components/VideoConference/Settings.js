@@ -5,18 +5,21 @@ const WEBAUDIO_ANALYZER_SMOOTING_TIME = 0.8;
  * @constructor
  */
 function Settings(
-    audioSourceSelect,
-    videoSourceSelect,
-    videoBox,
-    audioVolumeProgressBar
+    videoSettingsContainer
 ) {
+    this.videoSettingsContainer = videoSettingsContainer;
+    this.settingsFocus = false;
+    this.requestPermissionModal = this.videoSettingsContainer.querySelector('#visio-request-permission');
+    this.settingsModal = this.videoSettingsContainer.querySelector('#visio-settings');
     this.audioDeviceId = null;
     this.videoDeviceId = null;
 
-    this.audioSourceSelect = audioSourceSelect;
-    this.videoSourceSelect = videoSourceSelect;
-    this.videoBox = videoBox;
-    this.audioVolumeProgressBar = audioVolumeProgressBar;
+    this.validateSettingsButton = this.settingsModal.querySelector('#visio-settings-validate');
+    this.requestPermissionButton = this.requestPermissionModal.querySelector('#visio-request-permission-ask');
+    this.audioSourceSelect = this.settingsModal.querySelector('#visio-audio-source-select');
+    this.videoSourceSelect = this.settingsModal.querySelector('#visio-video-source-select');
+    this.videoBox = this.settingsModal.querySelector('#visio-video-box');
+    this.audioVolumeProgressBar = this.settingsModal.querySelector('#visio-audio-volume');
 
     this.constraints = {
         video: true,
@@ -28,7 +31,6 @@ function Settings(
 }
 
 Settings.prototype.getUserMedia = function () {
-    console.log(this.constraints);
     navigator.mediaDevices
         .getUserMedia(this.constraints)
         .then(
@@ -48,9 +50,15 @@ Settings.prototype.getUserMedia = function () {
                     this.currentStream = stream;
                 }
 
+                this.settingsModal.classList.remove('hide');
+                this.requestPermissionModal.classList.add('hide');
+
                 this.handleDevices();
             }
         ).catch((error) => {
+            this.requestPermissionModal.classList.add('hide');
+            this.settingsModal.classList.remove('hide');
+
             console.error(error);
             // Check error as it can be caused by a denial of the user permission
         });
@@ -76,7 +84,6 @@ Settings.prototype.audioLevelCheck = function (currentStream) {
 
     this.context.resume();
     this.analyser = this.context.createAnalyser() || this.context.webkitCreateAnalyser();
-    console.log(this.analyser);
 
     this.analyser.smoothingTimeConstant = WEBAUDIO_ANALYZER_SMOOTING_TIME;
     this.analyser.fftSize = WEBAUDIO_ANALYZER_FFT_SIZE;
@@ -183,6 +190,14 @@ Settings.prototype.prepareEventListener = function () {
         });
         this.prepareConstraints();
         this.getUserMedia();
+    });
+
+    this.requestPermissionButton.addEventListener('click', (event) => {
+        this.getUserMedia();
+    })
+
+    this.validateSettingsButton.addEventListener('click', (event) => {
+        this.closeSettings();
     })
 };
 
@@ -201,8 +216,24 @@ Settings.prototype.prepareConstraints = function () {
     }
 };
 
+Settings.prototype.closeSettings = function () {
+    // Hide all modals and container.
+    this.requestPermissionModal.classList.add('hide');
+    this.settingsModal.classList.add('hide');
+    this.videoSettingsContainer.classList.add('hide');
+
+    this.settingsFocus = false;
+
+    var htmlEvent = document.createEvent('HTMLEvents');
+    htmlEvent.initEvent('visio-settings-validate', true, true);
+    dispatchEvent(htmlEvent);
+}
+
 Settings.prototype.init = function () {
-    this.getUserMedia();
+    this.settingsFocus = true;
+    this.videoSettingsContainer.classList.remove('hide');
+    this.requestPermissionModal.classList.remove('hide');
+    this.settingsModal.classList.add('hide');
 }
 
 // Theses methods do not need to be link to the Settings component.
