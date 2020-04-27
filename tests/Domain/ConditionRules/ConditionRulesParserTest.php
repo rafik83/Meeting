@@ -76,24 +76,24 @@ class ConditionRulesParserTest extends TestCase
 
         $expectedResult = new Condition(
             $event->reveal(),
-            'FR',
+            'fr',
             new LogicalOperatorAnd,
             [
-                new Field('Activity', new ComparisonOperatorEqual, 'text', 'A1', 'FR'),
+                new Field('Activity', new ComparisonOperatorEqual, 'text', 'A1', 'fr'),
                 new Condition(
                     $event->reveal(),
-                    'FR',
+                    'fr',
                     new LogicalOperatorOr,
                     [
-                        new Field('Sector', new ComparisonOperatorContains, 'checkbox', ['S1', 'S3'], 'FR'),
-                        new Field('Universe', new ComparisonOperatorEqual, 'text', 'U4', 'FR'),
+                        new Field('Sector', new ComparisonOperatorContains, 'checkbox', ['S1', 'S3'], 'fr'),
+                        new Field('Universe', new ComparisonOperatorEqual, 'text', 'U4', 'fr'),
                         new Condition(
                             $event->reveal(),
-                            'FR',
+                            'fr',
                             new LogicalOperatorAnd,
                             [
-                                new Field('LastName', new ComparisonOperatorNull, 'text', '', 'FR'),
-                                new Field('FirstName', new ComparisonOperatorNotNull, 'text', 'mathieu', 'FR'),
+                                new Field('LastName', new ComparisonOperatorNull, 'text', '', 'fr'),
+                                new Field('FirstName', new ComparisonOperatorNotNull, 'text', 'mathieu', 'fr'),
                             ]
                         ),
                     ]
@@ -101,7 +101,7 @@ class ConditionRulesParserTest extends TestCase
             ]
         );
 
-        $result = ConditionRulesParser::parse($event->reveal(), 'FR', $conditions);
+        $result = ConditionRulesParser::parse($event->reveal(), 'fr', $conditions);
 
         $this->assertEquals($expectedResult, $result);
     }

@@ -22,7 +22,7 @@ class TaggedNomenclatureTransformerTest extends TestCase
     public function testTransform(): void
     {
         $event = $this->prophesize(Event::class);
-        $field = new Field('nestedTaggedData.1', new ComparisonOperatorIn(), 'checkbox', ['57eced1b99305', '57eced1b994ef'], 'FR');
+        $field = new Field('nestedTaggedData.1', new ComparisonOperatorIn(), 'checkbox', ['57eced1b99305', '57eced1b994ef'], 'fr');
         $getTagsByNomenclature = $this->prophesize(GetTagsByNomenclature::class);
         $getTagsByNomenclature->__invoke($field, $event->reveal(), 'fr')
             ->shouldBeCalled()
