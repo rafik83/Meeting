@@ -52,6 +52,12 @@ Enable/Disable php xdebug
 * *phpMyAdmin*: http://vimeet.proximum:1979
 * *ElasticSearch HEAD*: http://vimeet.proximum:9200/_plugin/head/
 
+### Update
+
+To update the application, for example after git branch checkout:
+
+        ⇒ make update-app
+
 ### Yarn
 
 Install a package:
