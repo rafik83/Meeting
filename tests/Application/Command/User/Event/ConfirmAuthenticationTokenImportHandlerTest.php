@@ -25,10 +25,10 @@ class ConfirmAuthenticationTokenImportHandlerTest extends TestCase
 {
     public function testHandle()
     {
+        $now = new \DateTime('2020-03-24');
         $event = EventFactory::createEvent();
         $authenticationTokenRepository = $this->prophesize(AuthenticationTokenRepositoryInterface::class);
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $datetime = $this->prophesize(\DateTime::class);
         $user = $this->prophesize(User::class);
 
         $authenticationTokenImport1 = new AuthenticationTokenImport(
@@ -62,7 +62,7 @@ class ConfirmAuthenticationTokenImportHandlerTest extends TestCase
                 $user->reveal(),
                 $event,
                 'AABBCCDDEE',
-                $datetime->reveal(),
+                $now,
                 new \DateTime('2020-01-01')
             )
         )
@@ -71,7 +71,7 @@ class ConfirmAuthenticationTokenImportHandlerTest extends TestCase
         $handler = new ConfirmAuthenticationTokenImportHandler(
             $authenticationTokenRepository->reveal(),
             $userRepository->reveal(),
-            $datetime->reveal()
+            $now
         );
         $handler->handle(new ConfirmAuthenticationTokenImport([
             $authenticationTokenImport1,
