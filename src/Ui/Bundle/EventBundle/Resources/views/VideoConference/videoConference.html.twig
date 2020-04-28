@@ -4,6 +4,9 @@
     <link rel="chrome-webstore-item" href="{{ visio_screen_sharing_chrome_extension }}">
 {% endblock %}
 
+{% block body_attributes %}
+style="background-color: #000;"
+{% endblock %}
 {% block body %}
     {% set participantPresenceAction = null %}
     {% if participant is defined and meeting is defined and sheet is defined %}

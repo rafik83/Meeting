@@ -1,4 +1,20 @@
-<section class="main" id="video-settings-section">
+{#<div style="display: flex;
+justify-content: center;
+align-items: center;
+width: 100vw;
+height: 100vh;
+">#}
+<section
+    id="video-settings-section"
+    {#
+    style="
+        border: 15px;
+        background: #ffffff;
+        padding: 10px;
+        max-width: 90vw;
+        border-radius: 4px;
+    "#}
+>
     <header>
         <h1>{{ 'event.visio.settings.title'|trans }}</h1>
     </header>
@@ -24,11 +40,17 @@
                 <select id="visio-audio-source-select" name="audio-source" class="form-control" required>
                 </select>
                 <hr />
-                <label>{{ 'event.visio.settings.testAudio'|trans }}</label>
-                <audio controls>
+                <audio id="visio-audio-output">
                     <source src="{{ asset('assets/sounds/fight-bell.mp3') }}" type="audio/mp3">
                     Your browser does not support the audio element.
                 </audio>
+                <button
+                    class="btn btn-gray"
+                    onclick="document.getElementById('visio-audio-output').play();"
+                    title="{{ 'event.visio.settings.testAudioHelp'|trans }}"
+                >
+                    <i class="glyphicon glyphicon-volume-up"></i> {{ 'event.visio.settings.testAudio'|trans }}
+                </button>
             </div>
             <div class="col-md-7">
                 <span>{{ 'event.visio.settings.preview'|trans }}</span>
@@ -49,3 +71,5 @@
         </div>
     </div>
 </section>
+
+{#</div>#}

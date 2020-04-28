@@ -9,6 +9,8 @@ function Settings(
 ) {
     this.videoSettingsContainer = videoSettingsContainer;
     this.settingsFocus = false;
+    this.requestPermissionModalFocus = false;
+    this.settingsModalFocus = false;
     this.requestPermissionModal = this.videoSettingsContainer.querySelector('#visio-request-permission');
     this.settingsModal = this.videoSettingsContainer.querySelector('#visio-settings');
     this.audioDeviceId = null;
@@ -58,6 +60,8 @@ Settings.prototype.getUserMedia = function () {
         ).catch((error) => {
             this.requestPermissionModal.classList.add('hide');
             this.settingsModal.classList.remove('hide');
+            this.requestPermissionModalFocus = true;
+            this.settingsModalFocus = false;
 
             console.error(error);
             // Check error as it can be caused by a denial of the user permission
@@ -111,7 +115,6 @@ Settings.prototype.audioLevelCheck = function (currentStream) {
             this.audioVolumeProgressBar.setAttribute('style', `width: ${percentage}`)
             this.audioVolumeProgressBar.setAttribute('aria-valuenow', percentageAudioLevel.toString());
             this.audioVolumeProgressBar.innerHtml = `<span class="sr-only">${percentage}</span>`;
-            console.log(audioLevelGlobal);
         },
         200
     );
@@ -199,6 +202,16 @@ Settings.prototype.prepareEventListener = function () {
     this.validateSettingsButton.addEventListener('click', (event) => {
         this.closeSettings();
     })
+
+    // Event dispatched when a device is plugged or unplugged from the computer/device of the user.
+    // Not compatible with safari and IE.
+    navigator.mediaDevices.ondevicechange = () => {
+        // Useless to handle the devices of the settings modal is not focused.
+        // As the permission modal can be focused.
+        if (true === this.settingsModalFocus) {
+            this.handleDevices();
+        }
+    };
 };
 
 Settings.prototype.prepareConstraints = function () {
@@ -223,14 +236,18 @@ Settings.prototype.closeSettings = function () {
     this.videoSettingsContainer.classList.add('hide');
 
     this.settingsFocus = false;
+    this.requestPermissionModalFocus = false;
+    this.settingsModalFocus = false;
 
-    var htmlEvent = document.createEvent('HTMLEvents');
+    const htmlEvent = document.createEvent('HTMLEvents');
     htmlEvent.initEvent('visio-settings-validate', true, true);
     dispatchEvent(htmlEvent);
 }
 
 Settings.prototype.init = function () {
     this.settingsFocus = true;
+    this.requestPermissionModalFocus = false;
+    this.settingsModalFocus = true;
     this.videoSettingsContainer.classList.remove('hide');
     this.requestPermissionModal.classList.remove('hide');
     this.settingsModal.classList.add('hide');
