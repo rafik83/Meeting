@@ -129,9 +129,9 @@ clearcache:
 	make redis-flushdb@vm
 
 update-app@vm:
-	composer install
+	make composer-install
 	make build
-	bin/console doctrine:migrations:migrate
+	bin/console doctrine:migrations:migrate --no-interaction
 	make redis-flushdb@vm
 
 #########
