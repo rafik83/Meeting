@@ -1,13 +1,15 @@
 const WEBAUDIO_ANALYZER_FFT_SIZE = 2048;
-const WEBAUDIO_ANALYZER_SMOOTING_TIME = 0.8;
+const WEBAUDIO_ANALYZER_SMOOTHING_TIME = 0.8;
 
 /**
  * @constructor
  */
 function Settings(
-    videoSettingsContainer
+    videoSettingsContainer,
+    settingsValidateCallback
 ) {
     this.videoSettingsContainer = videoSettingsContainer;
+    this.settingsValidateCallback = settingsValidateCallback;
     this.settingsFocus = false;
     this.requestPermissionModalFocus = false;
     this.settingsModalFocus = false;
@@ -89,7 +91,7 @@ Settings.prototype.audioLevelCheck = function (currentStream) {
     this.context.resume();
     this.analyser = this.context.createAnalyser() || this.context.webkitCreateAnalyser();
 
-    this.analyser.smoothingTimeConstant = WEBAUDIO_ANALYZER_SMOOTING_TIME;
+    this.analyser.smoothingTimeConstant = WEBAUDIO_ANALYZER_SMOOTHING_TIME;
     this.analyser.fftSize = WEBAUDIO_ANALYZER_FFT_SIZE;
 
     const source = this.context.createMediaStreamSource(currentStream) || this.context.webkitCreateMediaStreamSource(currentStream);
@@ -177,22 +179,22 @@ Settings.prototype.handleDevices = function () {
 };
 
 Settings.prototype.prepareEventListener = function () {
-    this.audioSourceSelect.addEventListener('change', (event) => {
-        this.audioDeviceId = this.audioSourceSelect.value;
+    const onDeviceSelectChange = () => {
         this.currentStream.getTracks().forEach(function (track) {
             track.stop();
         });
         this.prepareConstraints();
         this.getUserMedia();
+    };
+
+    this.audioSourceSelect.addEventListener('change', (event) => {
+        this.audioDeviceId = this.audioSourceSelect.value;
+        onDeviceSelectChange();
     });
 
     this.videoSourceSelect.addEventListener('change', (event) => {
         this.videoDeviceId = this.videoSourceSelect.value;
-        this.currentStream.getTracks().forEach(function (track) {
-            track.stop();
-        });
-        this.prepareConstraints();
-        this.getUserMedia();
+        onDeviceSelectChange();
     });
 
     this.requestPermissionButton.addEventListener('click', (event) => {
@@ -201,6 +203,7 @@ Settings.prototype.prepareEventListener = function () {
 
     this.validateSettingsButton.addEventListener('click', (event) => {
         this.closeSettings();
+        this.settingsValidateCallback();
     })
 
     // Event dispatched when a device is plugged or unplugged from the computer/device of the user.
@@ -238,6 +241,15 @@ Settings.prototype.closeSettings = function () {
     this.settingsFocus = false;
     this.requestPermissionModalFocus = false;
     this.settingsModalFocus = false;
+
+    // Disable all the tracks used by the settings,
+    // To avoid video consumption if the user disable the video or the mic during the meeting.
+    this.currentStream.getTracks().forEach(function (track) {
+        track.enabled = false;
+    });
+    this.currentStream = null;
+    this.videoBox.srcObject = null;
+    this.context.suspend && this.context.suspend();
 
     const htmlEvent = document.createEvent('HTMLEvents');
     htmlEvent.initEvent('visio-settings-validate', true, true);

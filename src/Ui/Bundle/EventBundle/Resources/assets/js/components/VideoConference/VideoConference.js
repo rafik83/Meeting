@@ -17,13 +17,10 @@ var Settings = require('./Settings');
  */
 function VideoConference(element) {
   this.element = element;
-
-  this.settings = new Settings(
-      document.getElementById('video-settings-section')
-  );
-  this.settings.init();
+  this.typeScreenShare = 'screen';
 
   this.token = element.getAttribute('data-token');
+  this.session = null;
   this.sessionId = element.getAttribute('data-session-id');
   this.apiKey = element.getAttribute('data-api-key');
   this.participantPresenceAction = element.getAttribute('data-participant-presence-action');
@@ -45,34 +42,54 @@ function VideoConference(element) {
     'data-user-denied-media-access'
   );
 
-  this.publisherContainer = element.querySelector('.publisher-container');
   this.layoutContainer = element.querySelector('.layout-container');
   this.helperContainer = element.querySelector('.video-helper');
   this.chatContainer = element.querySelector('.chat-container');
   this.timerContainer = element.querySelector('.timer');
   this.countDownContainer = element.querySelector('.timer span.countdown');
 
-  var endMeetingButton = element.querySelector('.end-meeting');
   this.startScreenSharingButton = element.querySelector('#start-screensharing');
   this.endScreenSharingButton = element.querySelector('#end-screensharing');
   this.toggleAudioElement = element.querySelector('#toggle-audio');
   this.toggleVideoElement = element.querySelector('#toggle-video');
   this.toggleChatElement = element.querySelector('#toggle-chat');
 
+  this.subscribers = [];
+  this.publisherStream = null;
+  this.publisherScreen = null;
+
+  this.chatInstance = null;
+
+  var endMeetingButton = this.element.querySelector('.end-meeting');
   if (endMeetingButton) {
-      endMeetingButton.addEventListener('click', this.disconnect.bind(this));
+    endMeetingButton.addEventListener('click', this.disconnect.bind(this));
   }
+
+  this.settingsContainer = this.element.querySelector('[data-meeting-settings-container]');
+  this.meetingWaitingMessage = this.element.querySelector('[data-meeting-waiting-message]');
+  this.meetingHelperWaitingContainer = this.element.querySelector('[data-meeting-waiting-helper]');
+
+  this.settings = new Settings(
+    this.settingsContainer.querySelector('#video-settings-section'),
+    this.join.bind(this)
+  );
+  this.settings.init();
+}
+
+VideoConference.prototype.join = function () {
+  this.layout = initLayoutContainer(this.layoutContainer).layout;
+  this.publisher = new Publisher(this.layoutContainer);
 
   var resizeTimeout;
   window.onresize = function() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(function() {
-      this.layout();
+        this.layout();
     }.bind(this), 20);
   }.bind(this);
 
   this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
-  this.endScreenSharingButton.addEventListener('click', this.endScreenshare.bind(this));
+  this.endScreenSharingButton.addEventListener('click', this.handleStopScreensharing.bind(this));
 
   this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
   this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
@@ -81,27 +98,18 @@ function VideoConference(element) {
       this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
   }
 
-  this.chatInstance = null;
+  document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
 
-  addEventListener('visio-settings-validate', () => {
-      // Init video conference
-      this.element.querySelector('.video-participant-list').classList.remove('hide');
-      this.element.querySelector('.buttons-container').classList.remove('hide');
-      this.layout = initLayoutContainer(this.layoutContainer).layout;
-
-      this.publisher = new Publisher(this.publisherContainer);
-      this.publisherStream = null;
-
-      document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
-      document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
-      document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
-      document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
-
-      this.init();
-      this.saveParticipantPresence();
-      this.countDownBeforeEnd();
-  })
-}
+  this.saveParticipantPresence();
+  this.countDownBeforeEnd();
+  this.showElement(this.meetingHelperWaitingContainer);
+  this.showElement(this.meetingWaitingMessage);
+  this.hideElement(this.settingsContainer);
+  this.init();
+};
 
 /**
  * Handle exit fullscreen and rebuild Tokbox UI layout
@@ -124,34 +132,42 @@ VideoConference.prototype.init = function() {
     return;
   }
 
-  // Create Tokbox Session
-
   this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
-  // Session Event Listener
-
   this.session.on('streamCreated', function(event) {
-    var subscriberContainer = document.createElement('div');
-    this.layoutContainer.appendChild(subscriberContainer);
+    const subscriberManager = new Subscriber(this.session, this.layoutContainer);
+    const subscriber = subscriberManager.subscribe(event);
 
-    var subscriberManager = new Subscriber(this.session, subscriberContainer);
-    var subscriber = subscriberManager.subscribe(event);
-
-    var fullscreenButton = this.createFullscreenButton();
-
+    const fullscreenButton = this.createFullscreenButton();
     subscriber.element.appendChild(fullscreenButton);
 
+    if (this.isScreenShareStream(event.stream)) {
+      this.minimizeAllSubscribers();
+    }
+
+    this.maximize(subscriber.element);
+    this.subscribers.push(subscriber);
     this.helperContainer.classList.add('hide');
-
-    var infoContainer = document.createElement('div');
-    infoContainer.classList.add('subscriber-info');
-    subscriberContainer.appendChild(infoContainer);
-
     this.layout();
+
   }.bind(this));
 
-  this.session.on('streamDestroyed', function() {
-    window.setTimeout(this.layout, 100);
+  this.session.on('streamDestroyed', function (event) {
+    event.preventDefault();
+
+    this.session.getSubscribersForStream(event.stream).forEach((subscriber) => {
+      this.subscribers = this.subscribers.filter(stream => stream !== subscriber);
+      subscriber.element.classList.remove('ot-layout');
+
+      if (this.isScreenShareStream(event.stream)) {
+        this.maximizeAllSubscribers();
+      }
+
+      setTimeout(() => {
+        subscriber.destroy();
+        this.layout();
+      }, 200);
+    });
   }.bind(this));
 
   this.session.on('sessionDisconnected', function() {
@@ -161,20 +177,43 @@ VideoConference.prototype.init = function() {
   this.connect();
 };
 
+VideoConference.prototype.maximize = function(element) {
+  element.classList.add('OT_big');
+};
+
+VideoConference.prototype.minimize = function(element) {
+  element.classList.remove('OT_big');
+};
+
+VideoConference.prototype.minimizeAllSubscribers = function() {
+  this.subscribers.forEach((subscriber) => {
+    this.minimize(subscriber.element);
+  });
+};
+
+VideoConference.prototype.maximizeAllSubscribers = function() {
+  this.subscribers.forEach((subscriber) => {
+    this.maximize(subscriber.element);
+  });
+};
+
 /**
  * Connect to the session, create and publish your stream
  */
 VideoConference.prototype.connect = function() {
   this.session.connect(this.token, function(error) {
-    if (this.toggleChatElement) {
-      this.toggleChatElement.classList.remove('hide');
-    }
+    this.showElement(this.toggleChatElement);
+    this.showElement(this.toggleAudioElement);
+    this.showElement(this.toggleVideoElement);
+    this.showElement(this.startScreenSharingButton);
 
     if (!error) {
       this.publishStream();
-    } else {
-      console.log(error);
+
+      return;
     }
+
+    console.log(error);
   }.bind(this));
 };
 
@@ -201,13 +240,11 @@ VideoConference.prototype.initChat = function () {
  *  Publish your camera and microphone stream
  */
 VideoConference.prototype.publishStream = function() {
-  // create video view
-  var publisher = this.publisher.create({
-      audioSource: this.settings.getAudioSource(),
-      videoSource: this.settings.getVideoSource()
-  });
-
   // publish video to other participant
+  var publisher = this.publisher.create({
+    audioSource: this.settings.getAudioSource(),
+    videoSource: this.settings.getVideoSource()
+  });
   this.session.publish(publisher, this.handlePublish.bind(this));
   this.publisherStream = publisher;
 
@@ -218,9 +255,11 @@ VideoConference.prototype.publishStream = function() {
  * Disconnect from the session
  */
 VideoConference.prototype.disconnect = function() {
-  this.session.disconnect();
-  this.session.off();
-  this.session = null;
+  if (null !== this.session) {
+    this.session.disconnect();
+    this.session.off();
+    this.session = null;
+  }
 
   if (window.opener) {
     window.opener.location.reload(true);
@@ -242,15 +281,15 @@ VideoConference.prototype.handlePublish = function(error) {
  */
 VideoConference.prototype.handlePublishScreensharing = function(error) {
   if (error) {
+    console.error(error);
     this.showError(error);
-  } else {
-    if (this.publisherStream !== null) {
-      this.publisher.disableVideo(this.publisherStream);
-    }
+    this.handleStopScreensharing();
 
-    this.startScreenSharingButton.classList.add('hide');
-    this.endScreenSharingButton.classList.remove('hide');
+    return;
   }
+
+  this.startScreenSharingButton.classList.add('hide');
+  this.endScreenSharingButton.classList.remove('hide');
 };
 
 VideoConference.prototype.showError = function(error) {
@@ -284,35 +323,32 @@ VideoConference.prototype.screenshare = function() {
       return;
     }
 
-    // start screensharing
-    var publisher = this.publisher.create({
+    this.publisherScreen = new Publisher(this.layoutContainer);
+    const publisherScreen = this.publisherScreen.create({
       videoSource: 'screen',
       publishAudio: true
     });
 
-    this.session.publish(publisher, this.handlePublishScreensharing.bind(this));
+    this.session.publish(publisherScreen, this.handlePublishScreensharing.bind(this));
+    this.minimizeAllSubscribers();
+    this.maximize(publisherScreen.element);
+    this.layout();
 
-    // stop screensharing
-    publisher.on('mediaStopped', this.handleStopScreensharing.bind(this));
+    publisherScreen.on('mediaStopped', this.handleStopScreensharing.bind(this));
   }.bind(this));
-};
-
-/**
- * End screensharing requested by user using the UI
- */
-VideoConference.prototype.endScreenshare = function() {
-  if (this.publisher.isScreensharing()) {
-    this.publisher.destroy();
-    this.handleStopScreensharing();
-  }
 };
 
 /**
  * Handle stop screen sharing
  */
 VideoConference.prototype.handleStopScreensharing = function() {
-  this.publisherStream.publishVideo(true);
-  this.publisherStream.element.style.display = 'block';
+  if (!this.publisherScreen) {
+    return;
+  }
+
+  this.publisherScreen.destroy();
+  this.maximizeAllSubscribers();
+  this.layout();
   this.startScreenSharingButton.classList.remove('hide');
   this.endScreenSharingButton.classList.add('hide');
 };
@@ -391,42 +427,20 @@ VideoConference.prototype.toggleChat = function () {
  * Toggle audio stream
  */
 VideoConference.prototype.toggleAudio = function() {
-  // if publisher stream is destroy because of stop screensharing, use previous stream
-  var publisher = null;
-
-  if (this.publisher.publisher.stream === null) {
-    publisher = this.publisherStream;
-  } else {
-    publisher = this.publisher.isScreensharing() ?
-      this.publisherStream : // get camera stream instead of screensharing stream
-      this.publisher.publisher;
-  }
-
-  if (publisher.stream.hasAudio) {
-    publisher.publishAudio(false);
-    this.toggleButton(this.toggleAudioElement, false);
-  } else {
-    this.toggleButton(this.toggleAudioElement, true);
-    publisher.publishAudio(true);
-  }
+  const publisher = this.publisherStream;
+  const enableAudio = !publisher.stream.hasAudio;
+  publisher.publishAudio(enableAudio);
+  this.toggleButton(this.toggleAudioElement, enableAudio);
 };
 
 /**
  * Toggle video stream
  */
 VideoConference.prototype.toggleVideo = function() {
-  // if publisher stream is destroy because of stop screensharing, use previous stream
-  var publisher = this.publisher.publisher.stream !== null ?
-      this.publisher.publisher :
-      this.publisherStream;
-
-  if (publisher.stream.hasVideo) {
-    publisher.publishVideo(false);
-    this.toggleButton(this.toggleVideoElement, false);
-  } else {
-    publisher.publishVideo(true);
-    this.toggleButton(this.toggleVideoElement, true);
-  }
+  const publisher = this.publisherStream;
+  const enableVideo = !publisher.stream.hasVideo;
+  publisher.publishVideo(enableVideo);
+  this.toggleButton(this.toggleVideoElement, enableVideo);
 };
 
 VideoConference.prototype.installChromeExtension = function () {
@@ -458,5 +472,24 @@ VideoConference.prototype.countDownBeforeEnd = function() {
     new Counter(this.meetingStartTime, this.meetingEndTime, this.currentTime, this.countDownContainer, this.timerContainer);
 };
 
-module.exports = VideoConference;
+VideoConference.prototype.isScreenShareStream = function (stream) {
+  return this.typeScreenShare === stream.videoType;
+};
 
+VideoConference.prototype.hideElement = function (element) {
+    if (!element) {
+        return;
+    }
+
+    element.classList.add('hide');
+};
+
+VideoConference.prototype.showElement = function (element) {
+    if (!element) {
+        return;
+    }
+
+    element.classList.remove('hide');
+};
+
+module.exports = VideoConference;

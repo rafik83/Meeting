@@ -4,9 +4,6 @@
     <link rel="chrome-webstore-item" href="{{ visio_screen_sharing_chrome_extension }}">
 {% endblock %}
 
-{% block body_attributes %}
-style="background-color: #000;"
-{% endblock %}
 {% block body %}
     {% set participantPresenceAction = null %}
     {% if participant is defined and meeting is defined and sheet is defined %}
@@ -30,54 +27,56 @@ style="background-color: #000;"
          {% endif %}
     >
         <div class="layout-container"></div>
-        <div class="publisher-container"></div>
         <div class="chat-container hide"></div>
-        <div class="video-helper">
+        <div class="video-helper" data-meeting-settings-container>
             {{ include('EventBundle:Visio:settings.html.twig') }}
-            <div class="video-participant-list hide">
+        </div>
+        <div class="video-helper hide" data-meeting-waiting-helper>
+            {% if meetingView is defined %}
+                <h1>
+                    {% for sheetMetView in meetingView.sheetMetTitle %}
+                        {% if sheetMetView.isHighlighted %}
+                            <b>{{ sheetMetView.title }}</b>
+                        {% else %}
+                            {{ sheetMetView.title }}
+                        {% endif %}
+                    {% endfor %}
+                </h1>
+
+                <div class="list list--users">
+                    {% for participantView in meetingView.participants %}
+                        {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
+                    {% endfor %}
+                </div>
+
+                <hr>
+            {% endif %}
+
+            <div data-meeting-waiting-message class="hide">
                 <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
-
-                {% if meetingView is defined %}
-                    <br>
-                    <h1>
-                        {% for sheetMetView in meetingView.sheetMetTitle %}
-                            {% if sheetMetView.isHighlighted %}
-                                <b>{{ sheetMetView.title }}</b>
-                            {% else %}
-                                {{ sheetMetView.title }}
-                            {% endif %}
-                        {% endfor %}
-                    </h1>
-
-                    <div class="list list--users">
-                        {% for participantView in meetingView.participants %}
-                            {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
             </div>
         </div>
 
         {% if meetingView is defined %}
-        <div class="timer-container">
-            <div class="timer">
-                {{ 'meeting.video.endingAt'|trans }}
-                <span class="countdown"></span>
+            <div class="timer-container">
+                <div class="timer">
+                    {{ 'meeting.video.endingAt'|trans }}
+                    <span class="countdown"></span>
+                </div>
             </div>
-        </div>
         {% endif %}
 
-        <div class="buttons-container hide">
-            <button id="toggle-audio" class="btn">
+        <div class="buttons-container">
+            <button id="toggle-audio" class="btn hide">
                 <i class="icon-Conference icon-center"></i>
             </button>
-            <button id="toggle-video" class="btn">
+            <button id="toggle-video" class="btn hide">
                 <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
             </button>
             <button id="toggle-chat" class="btn btn-off hide">
                 <i class="icon-Commentaire icon-center"></i>
             </button>
-            <button id="start-screensharing" class="btn screensharing">
+            <button id="start-screensharing" class="btn screensharing hide">
                 <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.start'|trans }}
             </button>
             <button id="end-screensharing" class="btn screensharing hide">
@@ -88,5 +87,4 @@ style="background-color: #000;"
             </button>
         </div>
     </div>
-{% endblock body %}
-
+{% endblock %}
