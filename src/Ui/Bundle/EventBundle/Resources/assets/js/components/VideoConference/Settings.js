@@ -16,31 +16,89 @@ function Settings(
     this.requestPermissionModal = this.videoSettingsContainer.querySelector('#visio-request-permission');
     this.settingsModal = this.videoSettingsContainer.querySelector('#visio-settings');
     this.requestPermissionErrorContainer = this.videoSettingsContainer.querySelector('#visio-request-permission-error');
+
     this.audioDeviceId = null;
     this.videoDeviceId = null;
+
+    this.videoDetected = true;
+    this.audioDetected = true;
 
     this.validateSettingsButton = this.settingsModal.querySelector('#visio-settings-validate');
     this.requestPermissionButton = this.requestPermissionModal.querySelector('#visio-request-permission-ask');
     this.audioSourceSelect = this.settingsModal.querySelector('#visio-audio-source-select');
+    this.videoSourceSelectContainer = this.settingsModal.querySelector('.visio-settings-video-select');
     this.videoSourceSelect = this.settingsModal.querySelector('#visio-video-source-select');
+    this.videoSourceNoVideoContainer = this.settingsModal.querySelector('.visio-settings-video-select-error');
     this.videoBox = this.settingsModal.querySelector('#visio-video-box');
     this.audioVolumeProgressBar = this.settingsModal.querySelector('#visio-audio-volume');
-
-    this.constraints = {
-        video: true,
-        audio: true
-    }
     this.currentStream = null;
     this.audioLevelCheckIntervalId = null;
+    this.isRetryingDeviceSearch = false;
+
+    this.constraints = {
+        video: this.videoDetected,
+        audio: this.audioDetected
+    };
+
+    this.detectDevices();
     this.prepareEventListener();
+
+    // Permissions message container
+    this.permissionDenialMessage = this.videoSettingsContainer.querySelector('[data-visio-request-permission-denial-message]');
+    this.deviceNotFoundMessage = this.videoSettingsContainer.querySelector('[data-visio-request-permission-device-not-found]');
+    this.micNotFoundMessage = this.videoSettingsContainer.querySelector('[data-visio-request-permission-mic-not-found]');
 }
+
+Settings.prototype.detectDevices = function() {
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+        let audioDevices = [];
+        let videoDevices = [];
+
+        devices.forEach((mediaDevice) => {
+            const kind = mediaDevice.kind;
+
+            if (kind === 'videoinput') {
+                videoDevices.push(mediaDevice);
+                this.videoDetected = true;
+            }
+
+            if (kind === 'audioinput') {
+                audioDevices.push(mediaDevice);
+                this.audioDetected = true;
+            }
+        });
+
+        if (audioDevices.length === 0) {
+            showElement(this.requestPermissionErrorContainer);
+            showElement(this.micNotFoundMessage);
+
+            if (this.requestPermissionModalFocus) {
+                this.requestPermissionButton.disabled = true;
+            } else {
+                this.validateSettingsButton.disabled = true;
+            }
+        }
+
+        if (videoDevices.length === 0) {
+            this.noCameraDetected();
+        }
+    });
+}
+
+Settings.prototype.noCameraDetected = function () {
+    this.videoDetected = false;
+    this.videoDeviceId = null;
+    this.prepareConstraints();
+    hideElement(this.videoSourceSelectContainer);
+    hideElement(this.videoBox);
+    showElement(this.videoSourceNoVideoContainer);
+};
 
 Settings.prototype.getUserMedia = function () {
     navigator.mediaDevices
         .getUserMedia(this.constraints)
         .then(
             (stream) => {
-                const videoStream = stream.getVideoTracks();
                 const audioStream = stream.getAudioTracks();
 
                 if (audioStream.length > 0) {
@@ -49,10 +107,14 @@ Settings.prototype.getUserMedia = function () {
                     this.audioLevelCheck(stream);
                 }
 
-                if (videoStream.length > 0) {
-                    this.videoDeviceId = videoStream[0].getSettings().deviceId;
-                    this.videoBox.srcObject = stream;
-                    this.currentStream = stream;
+                if (this.videoDetected) {
+                    const videoStream = stream.getVideoTracks();
+
+                    if (videoStream.length > 0) {
+                        this.videoDeviceId = videoStream[0].getSettings().deviceId;
+                        this.videoBox.srcObject = stream;
+                        this.currentStream = stream;
+                    }
                 }
 
                 showElement(this.settingsModal);
@@ -67,9 +129,29 @@ Settings.prototype.getUserMedia = function () {
             showElement(this.requestPermissionModal);
             hideElement(this.settingsModal);
 
-            //permission denied in browser
             if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
+                //permission denied in browser
                 showElement(this.requestPermissionErrorContainer);
+                showElement(this.permissionDenialMessage);
+            } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
+                this.detectDevices();
+
+                //required track is missing. Can be caused by a missing webcam.
+                this.noCameraDetected();
+
+                // Retry without camera.
+                if (false === this.isRetryingDeviceSearch) {
+                    this.isRetryingDeviceSearch = true;
+                    this.getUserMedia();
+
+                    this.requestPermissionModalFocus = true;
+                    this.settingsModalFocus = false;
+
+                    console.error(error);
+                } else {
+                    showElement(this.requestPermissionErrorContainer);
+                    showElement(this.deviceNotFoundMessage);
+                }
             }
 
             this.requestPermissionModalFocus = true;
@@ -207,9 +289,12 @@ Settings.prototype.prepareEventListener = function () {
         onDeviceSelectChange();
     });
 
-    this.requestPermissionButton.addEventListener('click', (event) => {
-        this.getUserMedia();
-    });
+    // No event to attach if there is no mic.
+    if (this.audioDetected) {
+        this.requestPermissionButton.addEventListener('click', (event) => {
+            this.getUserMedia();
+        });
+    }
 
     this.validateSettingsButton.addEventListener('click', (event) => {
         this.closeSettings();
@@ -228,17 +313,23 @@ Settings.prototype.prepareEventListener = function () {
 };
 
 Settings.prototype.prepareConstraints = function () {
+    let audio = this.audioDetected;
+    let video = this.videoDetected;
+
+    if (this.audioDeviceId) {
+        audio = {
+            exact: this.audioDeviceId
+        };
+    }
+
+    if (this.videoDeviceId) {
+        video = {
+            exact: this.videoDeviceId
+        };
+    }
     this.constraints = {
-        audio: {
-            deviceId: {
-                exact: this.audioDeviceId
-            }
-        },
-        video: {
-            deviceId: {
-                exact: this.videoDeviceId
-            }
-        }
+        audio: audio,
+        video: video,
     }
 };
 
@@ -254,9 +345,11 @@ Settings.prototype.closeSettings = function () {
 
     // Disable all the tracks used by the settings,
     // To avoid video consumption if the user disable the video or the mic during the meeting.
-    this.currentStream.getTracks().forEach(function (track) {
-        track.enabled = false;
-    });
+    if (this.currentStream) {
+        this.currentStream.getTracks().forEach(function (track) {
+            track.enabled = false;
+        });
+    }
     this.currentStream = null;
     this.videoBox.srcObject = null;
     this.context.suspend && this.context.suspend();

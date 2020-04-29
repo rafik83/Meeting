@@ -43,7 +43,6 @@ function VideoConference(element) {
   );
 
   this.layoutContainer = element.querySelector('.layout-container');
-  this.helperContainer = element.querySelector('.video-helper');
   this.chatContainer = element.querySelector('.chat-container');
   this.timerContainer = element.querySelector('.timer');
   this.countDownContainer = element.querySelector('.timer span.countdown');
@@ -147,7 +146,7 @@ VideoConference.prototype.init = function() {
 
     this.maximize(subscriber.element);
     this.subscribers.push(subscriber);
-    this.helperContainer.classList.add('hide');
+    this.hideElement(this.meetingHelperWaitingContainer);
     this.layout();
 
   }.bind(this));
