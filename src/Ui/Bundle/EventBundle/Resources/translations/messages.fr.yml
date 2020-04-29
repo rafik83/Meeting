@@ -195,6 +195,7 @@ event.visio.test.title: 'Test de votre configuration rendez-vous visio'
 event.visio.test.video: Vidéo
 event.visio.welcome: 'Bienvenue sur %event%'
 event.visio.settings.askPermissions: 'Activer votre caméra et votre micro'
+event.visio.settings.askPermissionsDenial: 'Vous devez valider les permissions pour pouvoir rejoindre un rendez-vous visio. Rechargez la page pour réessayer. Si le problème persiste, contactez un administrateur.'
 event.visio.settings.askPermissionsDescription: "Vous êtes sur le point de rejoindre un rendez-vous visio.\nPour que les autres participants puissent vous voir et vous entendre, votre navigateur va vous demander l'autorisation d'accéder à votre caméra et votre micro.\nVous aurez la posibilité de les désactiver à n'importe quel moment du rendez-vous."
 event.visio.settings.preview: 'Aperçu de vos règlages :'
 event.visio.settings.selectAudio: 'Sélectionner votre micro :'

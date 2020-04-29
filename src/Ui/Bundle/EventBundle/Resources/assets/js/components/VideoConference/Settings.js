@@ -15,6 +15,7 @@ function Settings(
     this.settingsModalFocus = false;
     this.requestPermissionModal = this.videoSettingsContainer.querySelector('#visio-request-permission');
     this.settingsModal = this.videoSettingsContainer.querySelector('#visio-settings');
+    this.requestPermissionErrorContainer = this.videoSettingsContainer.querySelector('#visio-request-permission-error');
     this.audioDeviceId = null;
     this.videoDeviceId = null;
 
@@ -54,14 +55,23 @@ Settings.prototype.getUserMedia = function () {
                     this.currentStream = stream;
                 }
 
-                this.settingsModal.classList.remove('hide');
-                this.requestPermissionModal.classList.add('hide');
+                showElement(this.settingsModal);
+                hideElement(this.requestPermissionModal);
+                hideElement(this.requestPermissionErrorContainer);
+                this.requestPermissionModalFocus = false;
+                this.settingsModalFocus = true;
 
                 this.handleDevices();
             }
         ).catch((error) => {
-            this.requestPermissionModal.classList.add('hide');
-            this.settingsModal.classList.remove('hide');
+            showElement(this.requestPermissionModal);
+            hideElement(this.settingsModal);
+
+            //permission denied in browser
+            if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
+                showElement(this.requestPermissionErrorContainer);
+            }
+
             this.requestPermissionModalFocus = true;
             this.settingsModalFocus = false;
 
@@ -199,12 +209,12 @@ Settings.prototype.prepareEventListener = function () {
 
     this.requestPermissionButton.addEventListener('click', (event) => {
         this.getUserMedia();
-    })
+    });
 
     this.validateSettingsButton.addEventListener('click', (event) => {
         this.closeSettings();
         this.settingsValidateCallback();
-    })
+    });
 
     // Event dispatched when a device is plugged or unplugged from the computer/device of the user.
     // Not compatible with safari and IE.
@@ -234,9 +244,9 @@ Settings.prototype.prepareConstraints = function () {
 
 Settings.prototype.closeSettings = function () {
     // Hide all modals and container.
-    this.requestPermissionModal.classList.add('hide');
-    this.settingsModal.classList.add('hide');
-    this.videoSettingsContainer.classList.add('hide');
+    hideElement(this.requestPermissionModal);
+    hideElement(this.settingsModal);
+    hideElement(this.videoSettingsContainer);
 
     this.settingsFocus = false;
     this.requestPermissionModalFocus = false;
@@ -258,11 +268,11 @@ Settings.prototype.closeSettings = function () {
 
 Settings.prototype.init = function () {
     this.settingsFocus = true;
-    this.requestPermissionModalFocus = false;
-    this.settingsModalFocus = true;
-    this.videoSettingsContainer.classList.remove('hide');
-    this.requestPermissionModal.classList.remove('hide');
-    this.settingsModal.classList.add('hide');
+    this.requestPermissionModalFocus = true;
+    this.settingsModalFocus = false;
+    showElement(this.videoSettingsContainer);
+    showElement(this.requestPermissionModal);
+    hideElement(this.settingsModal);
 }
 
 // Theses methods do not need to be link to the Settings component.
@@ -307,5 +317,13 @@ animateLevel = function (newLevel, lastLevel) {
 
     return parseFloat(value.toFixed(3));
 }
+
+showElement = function(element) {
+    element.classList.remove('hide');
+};
+
+hideElement = function (element) {
+    element.classList.add('hide');
+};
 
 module.exports = Settings;

@@ -11,6 +11,12 @@
                 <button class="btn btn-primary" id="visio-request-permission-ask" autofocus>
                     <i class="icon-Video_2"></i> {{ 'event.visio.settings.askPermissions'|trans }}
                 </button>
+                <div id="visio-request-permission-error" class="hide">
+                    <hr>
+                    <p class="important fail">
+                        {{ 'event.visio.settings.askPermissionsDenial'|trans }}
+                    </p>
+                </div>
             </div>
         </div>
         <div id="visio-settings" class="row hide">
