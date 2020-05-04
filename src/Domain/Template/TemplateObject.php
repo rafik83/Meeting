@@ -367,11 +367,11 @@ class TemplateObject extends AbstractChild
         return $this->taggedDataViews;
     }
 
-    protected function getTaggedDataContent(): array
+    protected function getTaggedDataContent(?string $locale = null): array
     {
         return array_map(
-            function (TaggedDataView $taggedDataView) {
-                return $taggedDataView->content;
+            static function (TaggedDataView $taggedDataView) use ($locale) {
+                return $taggedDataView->translations[$locale] ?? $taggedDataView->content;
             },
             $this->getTaggedDataViews()
         );
