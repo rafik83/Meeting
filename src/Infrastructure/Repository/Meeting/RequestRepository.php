@@ -378,7 +378,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->select('request')
             ->from(Request::class, 'request')
             ->where('
-                (request.from = :sheet OR request.to = :sheet) AND 
+                (request.from = :sheet OR request.to = :sheet) AND
                 (request.state = :stateApproved OR request.state = :stateRefused)
             ')
             ->setParameter('sheet', $sheet)
@@ -547,14 +547,14 @@ class RequestRepository implements RequestRepositoryInterface
                 'request.from',
                 'fromSheet',
                 'WITH',
-                'fromSheet.event = :event AND fromSheet.inCatalog = true 
+                'fromSheet.event = :event AND fromSheet.inCatalog = true
                 AND fromSheet.enable = true AND fromSheet.attend = true'
             )
             ->join(
                 'request.to',
                 'toSheet',
                 'WITH',
-                'toSheet.event = :event AND toSheet.inCatalog = true 
+                'toSheet.event = :event AND toSheet.inCatalog = true
                 AND toSheet.enable = true AND toSheet.attend = true'
             )
             ->join('fromSheet.participants', 'fromParticipants')
@@ -997,7 +997,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->leftjoin('request.fromParticipants', 'fromParticipant')
             ->leftjoin('request.toParticipants', 'toParticipant')
             ->where(
-                'request.state = :approved AND request.disabled = false 
+                'request.state = :approved AND request.disabled = false
                 AND (fromParticipant.id = :participant OR toParticipant.id = :participant)'
             )
             ->andWhere('NOT EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)')
@@ -1020,7 +1020,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->leftjoin('request.fromParticipants', 'fromParticipant')
             ->leftjoin('request.toParticipants', 'toParticipant')
             ->where(
-                '(fromParticipant.id = :participant OR toParticipant.id = :participant) 
+                '(fromParticipant.id = :participant OR toParticipant.id = :participant)
                 AND request.disabled = false'
             )
             ->setParameter('participant', $participant)

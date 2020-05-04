@@ -52,11 +52,16 @@ class Counter
         );
 
         $slotIds = array_map(
-            function (AvailableSlotView $availableSlotView) {
+            static function (AvailableSlotView $availableSlotView) {
                 return $availableSlotView->id;
             },
             $slotAvailableViews
         );
+
+        // Avoid request if no slot is available on the sheet side.
+        if (empty($slotIds)) {
+            return 0;
+        }
 
         return $this->requestRepository->countPendingPropositionReceivedBySheetWithAvailableToSheet(
             $sheet,
