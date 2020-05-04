@@ -125,7 +125,7 @@ Webinar.prototype.init = function () {
         const fullscreenButton = this.createFullscreenButton();
         subscriber.element.appendChild(fullscreenButton);
 
-        if (this.isScrenShareStream(event.stream)) {
+        if (this.isScreenShareStream(event.stream)) {
             this.hasScreenSharing = true;
             this.hidePublisher();
             this.hideSubscribers();
@@ -133,7 +133,7 @@ Webinar.prototype.init = function () {
             this.subscribers.push(subscriber);
         }
 
-        if (this.hasScreenSharing && !this.isScrenShareStream(subscriber.stream)) {
+        if (this.hasScreenSharing && !this.isScreenShareStream(subscriber.stream)) {
             this.hidePublisher();
             this.hideElement(subscriber.element);
         }
@@ -165,7 +165,7 @@ Webinar.prototype.init = function () {
             }, 200);
         });
 
-        if (this.isScrenShareStream(event.stream)) {
+        if (this.isScreenShareStream(event.stream)) {
             this.hasScreenSharing = false;
             this.showPublisher();
             this.showSubscribers();
@@ -534,7 +534,7 @@ Webinar.prototype.showSubscribers = function () {
     });
 };
 
-Webinar.prototype.isScrenShareStream = function (stream) {
+Webinar.prototype.isScreenShareStream = function (stream) {
     return this.typeScreenShare === stream.videoType;
 };
 
