@@ -337,6 +337,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Adapter\JobRepositoryAdapter
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@jms_job_queue.job_manager'
     repository.video_conference_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\VideoConferenceRepository
         arguments:
