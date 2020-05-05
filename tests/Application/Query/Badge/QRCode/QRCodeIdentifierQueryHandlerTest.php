@@ -27,7 +27,7 @@ class QRCodeIdentifierQueryHandlerTest extends TestCase
 
         $qrCodeIdentifierQueryHandler = new QRCodeIdentifierQueryHandler();
         $this->assertEquals(
-            '0000004201337',
+            '000004201337',
             $qrCodeIdentifierQueryHandler->handle(new QRCodeIdentifierQuery($event->reveal(), $user->reveal()))
         );
     }
