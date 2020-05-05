@@ -436,7 +436,6 @@ package.product.includedProduct: 'Inclus :'
 package.product.label: 'Intitulé & descriptions'
 package.product.notDeletableSince: 'Non supprimable depuis le %date%'
 package.product.outOfStock: Epuisé
-package.product.priceWithCurrency: '%price% <sup>%currency%</sup>'
 package.product.quantity: Quantité
 package.product.quantityMax: 'Quantité maximum atteinte'
 package.product.quantityMaxInformation: 'Max : %quantityMax%'
