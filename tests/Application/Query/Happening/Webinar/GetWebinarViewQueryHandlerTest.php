@@ -72,7 +72,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 'api key',
                 true,
                 new TimeRangeView(new \DateTime('2020-03-30 11:55:00'), new \DateTime('2020-03-30 12:15:00')),
-                $this->dateTime
+                $this->dateTime,
+                'https://techinnov-2019.vimeet.proximum/uploads/2020/05/5eb19075cb5e6_5db949c0ac76b-techinnov-desktop-2019.png'
             ),
             $this->getWebinarViewQueryHandler->handle(new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en'))
         );

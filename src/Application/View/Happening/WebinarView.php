@@ -35,6 +35,9 @@ class WebinarView
     /** @var \DateTimeInterface */
     public $currentTime;
 
+    /** @var string|null */
+    public $headerImage;
+
     public function __construct(
         string $happeningTitle,
         string $token,
@@ -42,7 +45,8 @@ class WebinarView
         string $apiKey,
         bool $isSpeaker,
         TimeRangeView $slot,
-        \DateTimeInterface $currentTime
+        \DateTimeInterface $currentTime,
+        ?string $headerImage
     ) {
         $this->happeningTitle = $happeningTitle;
         $this->token = $token;
@@ -51,5 +55,6 @@ class WebinarView
         $this->isSpeaker = $isSpeaker;
         $this->slot = $slot;
         $this->currentTime = $currentTime;
+        $this->headerImage = $headerImage;
     }
 }

@@ -91,6 +91,23 @@ function Webinar(element, isSpeaker) {
         }.bind(this), 20);
     }.bind(this);
 
+    const fullscreenButton = this.createFullscreenButton();
+    this.element.appendChild(fullscreenButton);
+    fullscreenButton.addEventListener("click", function() {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            return;
+        }
+
+        const element = this.element;
+        const rfs = element.requestFullscreen
+            || element.webkitRequestFullScreen
+            || element.mozRequestFullScreen
+            || element.msRequestFullscreen
+        ;
+        rfs.call(element);
+    }.bind(this));
+
     document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
     document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
     document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
@@ -121,9 +138,6 @@ Webinar.prototype.init = function () {
 
         const subscriberManager = new Subscriber(this.session, this.layoutContainer);
         const subscriber = subscriberManager.subscribe(event);
-
-        const fullscreenButton = this.createFullscreenButton();
-        subscriber.element.appendChild(fullscreenButton);
 
         if (this.isScreenShareStream(event.stream)) {
             this.hasScreenSharing = true;

@@ -17,7 +17,11 @@
          data-webinar-end-time="{{ webinarView.slot.end.timestamp }}"
          data-current-time="{{ webinarView.currentTime.timestamp }}"
     >
-        <div class="layout-container"></div>
+        {% if webinarView.headerImage %}
+            <div><img src="{{ webinarView.headerImage }}" class="img-responsive" style="margin: auto"></div>
+        {% endif %}
+
+        <div class="layout-container" {% if webinarView.headerImage %}style="top:100px"{% endif %}></div>
         <div class="chat-container hide"></div>
 
         <div class="video-helper">
