@@ -111,7 +111,8 @@ class GetFiltersByTypeAndLocaleQueryHandler
             $filters = array_merge(
                 $filters,
                 $this->getNomenclatureFilters($query->event, $query->locale),
-                $this->getMessageFilters($query->event, $query->locale)
+                $this->getMessageFilters($query->event, $query->locale),
+                $this->getKeywordFilters($query->locale)
             );
         }
 
@@ -147,6 +148,22 @@ class GetFiltersByTypeAndLocaleQueryHandler
 
             $filters[] = $filter;
         }
+
+        return $filters;
+    }
+
+    private function getKeywordFilters(string $locale): array
+    {
+        $filters = [];
+        $id = TypesMapping::SHEET_VIEW_KEYWORD;
+
+        $filters[] = [
+            'id' => $id,
+            'label' => $this->translate($id, $locale),
+            'type' => 'string',
+            'optgroup' => $this->translate('optgroup.sheetInfo', $locale),
+            'operators' => ComparisonOperatorsByType::OPERATORS['keywords'] ?? [],
+        ];
 
         return $filters;
     }

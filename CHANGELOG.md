@@ -4,8 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2090 - Improve video conference meeting UX
+- VIMEET-2078 - Keywords search from Sheet Query Builder
 ### Fixed
 - MV-232 - Participant can access to all own sheet video meeting
+- MV-234 - Fix sheet / participant export with dates filters
 
 ## [2.25.0] - 2020-03-30
 ### Added

@@ -42,5 +42,8 @@ final class ComparisonOperatorsByType
             'in',
             'not_in',
         ],
+        'keywords' => [
+            'contains'
+        ]
     ];
 }

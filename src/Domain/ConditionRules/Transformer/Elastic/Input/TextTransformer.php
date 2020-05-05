@@ -25,7 +25,7 @@ use Proximum\Vimeet\Domain\ConditionRules\View\Field;
 
 class TextTransformer implements InputTransformerInterface
 {
-    private const CLEAN_SEARCH_FIELD_REGEX = '/[\+\-\/=&|:\?!^(){}\[\]><"~]/';
+    public const CLEAN_SEARCH_FIELD_REGEX = '/[\+\-\/=&|:\?!^(){}\[\]><"~]/';
 
     public function transform(Field $field): array
     {
