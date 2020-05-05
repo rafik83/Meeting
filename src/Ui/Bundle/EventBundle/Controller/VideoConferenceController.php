@@ -61,7 +61,6 @@ class VideoConferenceController extends Controller
         if (false === $sheet->hasParticipant($participant)
             || false === $sheet->hasUser($user)
             || ($meeting->getToSheet() !== $sheet && $sheet !== $meeting->getFromSheet())
-            || (false === $meeting->hasFromParticipant($participant) && false === $meeting->hasToParticipant($participant))
         ) {
             throw $this->createAccessDeniedException('Meeting is not accessible');
         }
