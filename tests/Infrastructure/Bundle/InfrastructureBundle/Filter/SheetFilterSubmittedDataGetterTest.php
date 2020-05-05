@@ -80,7 +80,7 @@ class SheetFilterSubmittedDataGetterTest extends TestCase
             ->createNamed(
                 '',
                 SheetFilterType::class,
-                ['whatever' => 'filter'],
+                SheetFilterType::getDefaultFilters(),
                 [
                     'event' => $event->reveal(),
                     'user' => $admin->reveal(),
