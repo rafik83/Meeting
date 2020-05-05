@@ -42,6 +42,12 @@ class HappeningView extends AbstractTimeEntityView
     /** @var string */
     public $timeZone;
 
+    /** @var bool */
+    public $webinar;
+
+    /** @var bool */
+    public $webinarOpened;
+
     /**
      * @param int                $id
      * @param \DateTimeInterface $begin
@@ -54,6 +60,8 @@ class HappeningView extends AbstractTimeEntityView
      * @param string             $rightColor
      * @param string             $timeZone
      * @param null|int           $limitParticipant
+     * @param bool               $webinar
+     * @param bool               $webinarOpened
      */
     public function __construct(
         $id,
@@ -66,19 +74,23 @@ class HappeningView extends AbstractTimeEntityView
         $leftColor,
         $rightColor,
         $timeZone,
-        $limitParticipant = null
+        $limitParticipant = null,
+        bool $webinar = false,
+        bool $webinarOpened = false
     ) {
-        $this->id               = $id;
-        $this->begin            = $begin;
-        $this->end              = $end;
-        $this->title            = $title;
-        $this->description      = $description;
-        $this->speakers         = $speakers;
-        $this->picto            = $picto;
-        $this->leftColor        = $leftColor;
-        $this->rightColor       = $rightColor;
-        $this->timeZone         = $timeZone;
+        $this->id = $id;
+        $this->begin = $begin;
+        $this->end = $end;
+        $this->title = $title;
+        $this->description = $description;
+        $this->speakers = $speakers;
+        $this->picto = $picto;
+        $this->leftColor = $leftColor;
+        $this->rightColor = $rightColor;
+        $this->timeZone = $timeZone;
         $this->limitParticipant = $limitParticipant;
+        $this->webinar = $webinar;
+        $this->webinarOpened = $webinarOpened;
     }
 
     /**

@@ -12,9 +12,13 @@ namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\User;
 
 class HappeningViewQuery
 {
+    /** @var User */
+    public $user;
+
     /**
      * @var Happening
      */
@@ -30,17 +34,11 @@ class HappeningViewQuery
      */
     public $event;
 
-    /**
-     * HappeningViewQuery constructor.
-     *
-     * @param Happening $happening
-     * @param Event     $event
-     * @param string    $locale
-     */
-    public function __construct(Happening $happening, Event $event, $locale)
+    public function __construct(User $user, Happening $happening, Event $event, $locale)
     {
+        $this->user = $user;
         $this->happening = $happening;
-        $this->event     = $event;
-        $this->locale    = $locale;
+        $this->event = $event;
+        $this->locale = $locale;
     }
 }

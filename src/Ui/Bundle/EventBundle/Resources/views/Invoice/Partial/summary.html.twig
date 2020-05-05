@@ -23,11 +23,11 @@
                 {% for vatView in invoiceView.vatListView.vatViews %}
                     <tr>
                         <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.totalByVat'|trans({'%vatRate%': vatView.vatRate}, 'invoices', invoiceView.eventDefaultLocale) }}</strong></td>
-                        <td class="text-right">{{ vatView.total|format_amount|localizedcurrency(invoiceView.currency) }} {{ ('package.vatMode.' ~ vatView.vatMode)|trans }}</td>
+                        <td class="text-right">{{ vatView.total|format_amount|localizedcurrency(invoiceView.currency, invoiceView.eventDefaultLocale) }} {{ ('package.vatMode.' ~ vatView.vatMode)|trans }}</td>
                     </tr>
                     <tr>
                         <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.vatRate'|trans({'%vatRate%': vatView.vatRate}, 'invoices', invoiceView.eventDefaultLocale) }}</strong></td>
-                        <td class="text-right">{{ vatView.totalVat|format_amount|localizedcurrency(invoiceView.currency) }}</td>
+                        <td class="text-right">{{ vatView.totalVat|format_amount|localizedcurrency(invoiceView.currency, invoiceView.eventDefaultLocale) }}</td>
                     </tr>
                 {% endfor %}
             {% else %}

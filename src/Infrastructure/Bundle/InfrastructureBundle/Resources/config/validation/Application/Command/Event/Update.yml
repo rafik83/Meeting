@@ -9,7 +9,7 @@ Proximum\Vimeet\Application\Command\Event\Update:
             - Length:
                 max: 63
             - Regex:
-                pattern: !php/const:Proximum\Vimeet\Domain\Model\Event::DOMAIN_VALIDATION_REGEX
+                pattern: !php/const Proximum\Vimeet\Domain\Model\Event::DOMAIN_VALIDATION_REGEX
         timeZone:
             - NotBlank: ~
         locales:

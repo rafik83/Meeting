@@ -432,6 +432,7 @@ form.filter.filled.label: Renseigné
 form.filter.firstName.label: Prénom
 form.filter.isVisio.label: 'Est visio'
 form.filter.isVisioTested.label: 'Visio testée'
+form.filter.keywords.label: 'Mots clés'
 form.filter.label: Filtrer
 form.filter.lastName.label: Nom
 form.filter.messaging.received.label: 'Est destinataire de'

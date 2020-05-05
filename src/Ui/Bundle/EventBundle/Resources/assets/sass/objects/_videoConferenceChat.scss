@@ -1,22 +1,21 @@
-.chat-container {
-  position: absolute;
-  bottom: 54px;
-  width: 40%;
-  height: 300px;
-  z-index: 9999;
-  overflow: hidden;
-  right: 0;
+.chat-opened {
+  .layout-container {
+    width: 75%;
+  }
 }
 
-@media screen and (max-width: 767px) {
-  .chat-container {
-    width: 100%;
-  }
+.chat-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 25%;
+  height: 100%;
+  z-index: 9999;
+  overflow: hidden;
 }
 
 .ots-text-chat {
   margin: 0 10px;
-  border-radius: 8px;
   background: white;
 
   .ots-messages-header {
@@ -28,7 +27,7 @@
   }
 
   .ots-messages-holder {
-    height: 250px;
+    height: calc(100vh - 100px);
     overflow: hidden;
     overflow-y: scroll
   }
@@ -173,7 +172,7 @@
     position: relative;
     width: 100%;
     height: 34px;
-    border-top: 1px solid #c6c6c6;
+    border: 1px solid #c6c6c6;
     padding-right: 70px
   }
 
@@ -192,13 +191,11 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 50px;
-    height: 33px;
+    width: 51px;
+    height: 32px;
     background-color: #f2f2f2;
-    border-left: 1px solid #c6c6c6;
     outline: 0;
     border: 0;
-    border-left: 1px solid #c6c6c6;
     font-family: 'PictoOutline';
   }
 
@@ -237,5 +234,17 @@
 
   .ots-user-prof-info hr {
     margin: 36px 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .chat-container {
+    width: 100%;
+  }
+
+  .chat-opened {
+    .layout-container {
+      width: 100%;
+    }
   }
 }

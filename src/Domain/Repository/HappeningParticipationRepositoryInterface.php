@@ -156,4 +156,12 @@ interface HappeningParticipationRepositoryInterface
      * @return HappeningParticipation[]
      */
     public function findByHappening(Happening $happening): array;
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findBySpeaker(User $user, Event $event): array;
 }

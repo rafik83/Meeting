@@ -28,11 +28,14 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class DayViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
+        $user = UserFactory::create();
+
         $event     = EventFactory::createEvent();
         $sheet     = $this->prophesize(Sheet::class);
         $type      = $this->prophesize(Type::class);
@@ -147,6 +150,7 @@ class DayViewQueryHandlerTest extends TestCase
         $happeningViewQueryHandler = $this->prophesize(HappeningViewQueryHandler::class);
         $happeningViewQueryHandler->handle(
             new HappeningViewQuery(
+                $user,
                 $happening1,
                 $event,
                 'fr'
@@ -154,6 +158,7 @@ class DayViewQueryHandlerTest extends TestCase
         )->shouldBeCalled()->willReturn($happeningView1);
         $happeningViewQueryHandler->handle(
             new HappeningViewQuery(
+                $user,
                 $happening2,
                 $event,
                 'fr'
@@ -174,6 +179,7 @@ class DayViewQueryHandlerTest extends TestCase
         $result = $handler->handle(new DayViewQuery(
             $event,
             $sheet->reveal(),
+            $user,
             $eventDay,
             'fr',
             $category,

@@ -2378,6 +2378,8 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
+    Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\ContentQueryBuilder: ~
+
     Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQueryHandler:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery }
@@ -2391,6 +2393,7 @@ services:
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TemplateObjectFilterTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\KeywordTransformer'
 
     Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
         arguments:
@@ -2404,7 +2407,10 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
 
-    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer:
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\KeywordTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\ContentQueryBuilder'
 
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer:
         lazy: true
@@ -4066,6 +4072,7 @@ services:
         arguments:
             - '@query.happening.speaker_view_query_handler'
             - '@query.happening.category_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
     query.happening.speaker_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\SpeakerViewQueryHandler
     query.happening.category_view_query_handler:
@@ -4205,6 +4212,7 @@ services:
     query.agenda.happening_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\HappeningViewQueryHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
             - '@query.agenda.speaker_view_query_handler'
     query.agenda.day_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\DayViewQueryHandler
@@ -7063,6 +7071,11 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '%kernel.cache_dir%'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\PullTranslationsCommand:
+        parent: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\UpdateTranslationsCommand
         tags:
             - { name: console.command }
 

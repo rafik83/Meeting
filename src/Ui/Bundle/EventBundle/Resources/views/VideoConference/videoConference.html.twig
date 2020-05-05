@@ -27,21 +27,33 @@
          {% endif %}
     >
         <div class="layout-container"></div>
-        <div class="publisher-container"></div>
         <div class="chat-container hide"></div>
         <div class="video-helper">
-            <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
-
             {% if meetingView is defined %}
-                <br>
-                <h1>{{ meetingView.sheetMetTitle }}</h1>
+                <h1>
+                    {% for sheetMetView in meetingView.sheetMetTitle %}
+                        {% if sheetMetView.isHighlighted %}
+                            <b>{{ sheetMetView.title }}</b>
+                        {% else %}
+                            {{ sheetMetView.title }}
+                        {% endif %}
+                    {% endfor %}
+                </h1>
 
                 <div class="list list--users">
                     {% for participantView in meetingView.participants %}
                         {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
                     {% endfor %}
                 </div>
+
+                <hr>
             {% endif %}
+
+            <button class="btn btn-primary" data-meeting-join-button>{{ 'meeting.video.start'|trans }}</button>
+
+            <div data-meeting-waiting-message class="hide">
+                <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
+            </div>
         </div>
 
         {% if meetingView is defined %}
@@ -54,16 +66,16 @@
         {% endif %}
 
         <div class="buttons-container">
-            <button id="toggle-audio" class="btn">
+            <button id="toggle-audio" class="btn hide">
                 <i class="icon-Conference icon-center"></i>
             </button>
-            <button id="toggle-video" class="btn">
+            <button id="toggle-video" class="btn hide">
                 <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
             </button>
             <button id="toggle-chat" class="btn btn-off hide">
                 <i class="icon-Commentaire icon-center"></i>
             </button>
-            <button id="start-screensharing" class="btn screensharing">
+            <button id="start-screensharing" class="btn screensharing hide">
                 <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.start'|trans }}
             </button>
             <button id="end-screensharing" class="btn screensharing hide">

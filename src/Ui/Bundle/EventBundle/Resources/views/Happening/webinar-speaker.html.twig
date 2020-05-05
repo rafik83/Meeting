@@ -1,0 +1,65 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block head_link %}
+    <link rel="chrome-webstore-item" href="{{ visio_screen_sharing_chrome_extension }}">
+{% endblock %}
+
+{% block body %}
+    <div class="webinar webinar-speaker"
+         data-api-key="{{ webinarView.apiKey }}"
+         data-token="{{ webinarView.token }}"
+         data-session-id="{{ webinarView.sessionId }}"
+         data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
+         data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
+         data-screen-share-already-in-progress-message="{{ 'happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress'|trans }}"
+         data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
+         data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
+         data-user-complete-name="{{ userCompleteName }}"
+         data-webinar-start-time="{{ webinarView.slot.begin.timestamp }}"
+         data-webinar-end-time="{{ webinarView.slot.end.timestamp }}"
+         data-current-time="{{ webinarView.currentTime.timestamp }}"
+    >
+        <div class="layout-container"></div>
+        <div class="chat-container hide"></div>
+
+        <div class="video-helper">
+            <h1>{{ webinarView.happeningTitle }}</h1>
+
+            <button class="btn btn-primary" data-webinar-join-button>{{ 'happening.webinar.start'|trans }}</button>
+            <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
+        </div>
+
+        <div class="timer-container">
+            <div class="timer">
+                {{ 'happening.webinar.endingAt'|trans }}
+                <span class="countdown"></span>
+            </div>
+            <div class="viewers-container">
+                {{ 'happening.webinar.viewers'|trans }}
+                <span class="viewers">0</span>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <button id="toggle-audio" class="btn hide">
+                <i class="icon-Conference icon-center"></i>
+            </button>
+            <button id="toggle-video" class="btn hide">
+                <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
+            </button>
+            <button id="toggle-chat" class="btn btn-off hide">
+                <i class="icon-Commentaire icon-center"></i>
+            </button>
+            <button id="start-screensharing" class="btn screensharing hide">
+                <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.screenshare.start'|trans }}
+            </button>
+            <button id="end-screensharing" class="btn screensharing hide">
+                <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.screenshare.end'|trans }}
+            </button>
+            <button class="btn btn-primary end-webinar">
+                <i class="icon-Disconnect"></i> {{ 'happening.webinar.end'|trans }}
+            </button>
+        </div>
+    </div>
+{% endblock body %}
+

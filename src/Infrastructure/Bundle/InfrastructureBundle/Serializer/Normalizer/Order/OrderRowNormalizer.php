@@ -34,6 +34,7 @@ class OrderRowNormalizer implements NormalizerInterface
 
         $data = [
             SharedColumnsTranslationView::COLUMN_ORDER_ID                => $object->orderId,
+            SharedColumnsTranslationView::COLUMN_ORDER_DATE              => $object->orderDate,
             SharedColumnsTranslationView::COLUMN_SHEET_ID                => $object->sheetId,
             SharedColumnsTranslationView::COLUMN_SHEET_TITLE             => $this->convertCharset($object->sheetTitle),
             SharedColumnsTranslationView::COLUMN_INVOICE_NUMBER          => $object->invoiceNumber,

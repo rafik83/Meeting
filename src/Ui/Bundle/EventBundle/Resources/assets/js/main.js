@@ -32,6 +32,7 @@ var $ = require('jquery'),
     PackageParticipantProducts = require('./components/_PackageParticipantProducts'),
     CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField'),
     VideoConferenceTest = require('./components/VideoConference/VideoTest'),
+    Webinar = require('./components/VideoConference/Webinar'),
     DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker')
 ;
 
@@ -270,6 +271,14 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('[data-toggle-visibility]'), function (element) {
         new ToggleVisibility(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('.webinar-speaker'), function (element) {
+        new Webinar(element, true);
+    });
+
+    [].forEach.call(target.querySelectorAll('.webinar-viewer'), function (element) {
+        new Webinar(element, false);
     });
 
     (function () {

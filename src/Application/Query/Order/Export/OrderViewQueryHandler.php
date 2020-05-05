@@ -123,6 +123,15 @@ class OrderViewQueryHandler
             $invoiceDate   = $formatter[$eventId]->format($query->order->getInvoice()->getCreatedAt());
         }
 
+        $formatterOrderDate = \IntlDateFormatter::create(
+            $query->locale,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
+            $query->event->getTimeZone()
+        );
+
+        $orderDate = $formatterOrderDate->format($query->order->getCreatedAt());
+
         $vatListView = $this->vatListViewQueryHandler->handle(
             new VatListViewQuery(
                 $query->order,
@@ -137,6 +146,7 @@ class OrderViewQueryHandler
 
         return new OrderView(
             $query->order->getId(),
+            $orderDate,
             $sheet->getId(),
             $this->sheetInfoGuesserCache->guessSheetTitle($sheet, $query->locale),
             $invoiceNumber,

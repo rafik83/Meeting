@@ -22,3 +22,10 @@ services:
     Proximum\Vimeet\Application\Components\Contact\CanParticipantSeeContact:
         arguments:
             - '@Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler'
+
+    Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@datetime'
+            - '%feature_video_conference_date_security_enabled%'
+            - '%feature_video_conference_enabled%'

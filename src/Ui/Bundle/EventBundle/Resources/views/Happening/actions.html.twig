@@ -1,5 +1,13 @@
+{% if sheet.attend %}
 <div class="actions">
-    {% if sheet.attend %}
+    {% if happening.webinarOpened %}
+        <a class="{{ isActionButtonsOnDetails ? 'btn btn-primary' : '' }}"
+           href="{{ path('event_sheet_happening_webinar', { happening: happening.id, sheet: sheet.id }) }}"
+           target="_blank"
+        >
+            <i class="icon-{{ happening.picto }} happeningParticipateIcon"></i> {{ 'happening.webinar.start'|trans }}
+        </a>
+    {% else %}
         {% if happening.hasParticipations or not happening.isFull %}
             <a href="{{ path('event_sheet_happening_participate', { 'sheet': sheet.id, 'happening': happening.id }) }}"
                class="happeningParticipateAction"
@@ -22,3 +30,4 @@
         {% endif %}
     {% endif %}
 </div>
+{% endif %}

@@ -222,16 +222,12 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
     private function getSheetContentView(Sheet $sheet): SheetContentView
     {
-        if (!$sheet->isInExternalOrInternalCatalog()) {
-            return new SheetContentView([], []);
-        }
-
         $content = [];
         $contentByLocale = [];
 
         foreach ($sheet->getEvent()->getLocales() as $locale) {
             $templateData = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale);
-            $localeContent = $this->getSearchableContent($templateData->getObjects());
+            $localeContent = $this->getSearchableContent($templateData->getObjects(), $locale);
 
             // Add locale content in same field
             $content[] = $localeContent;
@@ -244,13 +240,13 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         return new SheetContentView($contentByLocale, $content);
     }
 
-    private function getSearchableContent(array $templatesObjects): string
+    private function getSearchableContent(array $templatesObjects, string $locale): string
     {
         $searchableContent = [];
 
         foreach ($templatesObjects as $templateObject) {
             if ($templateObject instanceof SearchableObjectInterface) {
-                $content = $templateObject->getSearchableContent();
+                $content = $templateObject->getSearchableContent($locale);
 
                 if (\is_array($content)) {
                     foreach ($content as $item) {
@@ -421,7 +417,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
             if (isset($items['items'])) {
                 foreach ($items['items'] as $item) {
-                    $nomenclatureItems[]['key'] = $item;
+                    $nomenclatureItems[]['key'] = mb_strtolower($item);
                 }
             }
         }

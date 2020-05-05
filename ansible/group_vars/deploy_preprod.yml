@@ -24,6 +24,7 @@ manala_deploy_removed:
 #########
 
 manala_deploy_tasks:
+  - make: composer-install
   - make: install@prod
   - make: migration-and-redis-flushdb@prod
 

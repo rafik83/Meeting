@@ -15,6 +15,9 @@ class OrderView
     /** @var int */
     public $orderId;
 
+    /** @var string */
+    public $orderDate;
+
     /** @var int */
     public $sheetId;
 
@@ -53,6 +56,7 @@ class OrderView
 
     /**
      * @param int                       $orderId
+     * @param string                    $orderDate
      * @param int                       $sheetId
      * @param string                    $sheetTitle
      * @param string                    $invoiceNumber
@@ -67,6 +71,7 @@ class OrderView
      */
     public function __construct(
         $orderId,
+        $orderDate,
         $sheetId,
         $sheetTitle,
         $invoiceNumber,
@@ -80,6 +85,7 @@ class OrderView
         array $customRowsViews
     ) {
         $this->orderId = $orderId;
+        $this->orderDate = $orderDate;
         $this->sheetId = $sheetId;
         $this->sheetTitle = $sheetTitle;
         $this->invoiceNumber = $invoiceNumber;

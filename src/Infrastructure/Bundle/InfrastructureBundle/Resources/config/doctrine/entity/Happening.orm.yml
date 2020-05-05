@@ -25,6 +25,9 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: boolean
             options:
                 default: false
+        webinarSessionId:
+            type: string
+            nullable: true
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

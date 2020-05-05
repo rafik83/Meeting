@@ -5,17 +5,17 @@ Proximum\Vimeet\Application\Command\Type\Badge\Configure:
         footerTextColor:
             - NotBlank: ~
             - Regex:
-                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         footerColor:
             - NotBlank: ~
             - Regex:
-                pattern: !php/const:Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
+                pattern: !php/const Proximum\Vimeet\Domain\Constraint\HexColorValidation::HEX_REGEX
                 message: validators.hexadecimal
         header:
             - Image:
                 maxSize: 500k
-                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
+                mimeTypes: !php/const Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
         leftImage:
             - Image:
                 maxSize: 500k

@@ -912,6 +912,14 @@ event_sheet_happening_participate:
     methods:  [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningParticipateAction }
 
+event_sheet_happening_webinar:
+    path: /sheet/{sheet}/happening/{happening}/webinar
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningWebinarAction
+
 #
 # Unavailability
 #

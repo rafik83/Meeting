@@ -17,7 +17,7 @@ function Subscriber(session, container) {
  */
 Subscriber.prototype.subscribe = function (event) {
   var subscriberOptions = {
-    insertMode: 'replace',
+    insertMode: 'append',
     showControls: false,
     width: '100%',
     height: '100%'
@@ -42,6 +42,13 @@ Subscriber.prototype.onVideoElementCreated = function (event) {
 
   // start fullscreen
   fullscreenButton.addEventListener("click", function() {
+
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+
+      return;
+    }
+
     var el = subscriberElement,
       rfs = el.requestFullscreen
         || el.webkitRequestFullScreen

@@ -62,7 +62,7 @@ class DayViewQueryHandler
 
         foreach ($happenings as $happening) {
             $happeningViews[] = $this->happeningViewQueryHandler->handle(
-                new HappeningViewQuery($happening, $query->event, $query->locale)
+                new HappeningViewQuery($query->user, $happening, $query->event, $query->locale)
             );
         }
 

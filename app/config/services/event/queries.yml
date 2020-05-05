@@ -38,6 +38,13 @@ services:
             - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetRegistrationInfoQueryHandler'
             - '@Proximum\Vimeet\Domain\Sheet\CanSeeSheet'
 
+    Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQueryHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery }
+
     #
     # Participant
     #

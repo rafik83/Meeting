@@ -96,10 +96,10 @@ install: install-app install-db install-db@test install-db-fixtures install-db-f
 
 install@test: install-app@test install-db@test install-db-fixtures@test install-dep build@prod
 
-install@prod: install-app install-dep build@prod
+install@prod: install-dep build@prod
 
-install-app:
-	composer --no-progress --no-interaction install
+composer-install:
+	composer install --no-progress --no-interaction --ignore-platform-reqs
 
 install-app@test:
 	SYMFONY_ENV=test composer --no-progress --no-interaction install
@@ -126,6 +126,12 @@ install-dep:
 
 clearcache:
 	bin/console cache:clear --env=dev
+	make redis-flushdb@vm
+
+update-app@vm:
+	make composer-install
+	make build
+	bin/console doctrine:migrations:migrate --no-interaction
 	make redis-flushdb@vm
 
 #########
@@ -157,34 +163,15 @@ build-all-assets@prod: build@prod
 # Translations #
 ################
 
-## Translations push
-trans-push: trans-openl10n-push
-
-trans-openl10n-push:
-	openl10n push --locale=all
-
 ## Translations pull
-trans-pull: trans-openl10n-pull
+trans-pull@vm: trans-openl10n-pull@vm
 
-trans-openl10n-pull:
-	openl10n pull --locale=all
+trans-openl10n-pull@vm:
+	bin/console vimeet:translations:pull; \
 
 ## Translations sync
-trans-sync:
-	openl10n push --locale=all
-	openl10n pull --locale=all
-
-trans-pr:
-	read -p "Are you on master branch and you have Hub (github) installed (y/n)?" CONFIRM; \
-	if [ "$$CONFIRM" = "y" ]; then \
-	  make trans-sync; \
-	  git branch -D update-translations; \
-	  git checkout -b update-translations; \
-	  git add .; \
-	  git commit -m "Update translations"; \
-	  git push origin update-translations; \
-	  hub pull-request -m "Update translations"; \
-	fi
+trans-sync@vm:
+	bin/console vimeet:translations:update; \
 
 ########
 # Test #

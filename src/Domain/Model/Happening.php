@@ -68,6 +68,9 @@ class Happening implements TimeRangeInterface
     /** @var bool */
     private $webinar;
 
+    /** @var null|string */
+    private $webinarSessionId;
+
     /**
      * @param Event              $event
      * @param \DateTimeInterface $begin
@@ -272,6 +275,18 @@ class Happening implements TimeRangeInterface
             ->toArray();
     }
 
+    public function hasSpeaker(User $user): bool
+    {
+        /** @var Talking $talking */
+        foreach ($this->getTalkings() as $talking) {
+            if ($talking->getSpeaker()->getUser() === $user) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param array $speakers
      *
@@ -424,6 +439,21 @@ class Happening implements TimeRangeInterface
     public function hasProducts(): bool
     {
         return !$this->products->isEmpty();
+    }
+
+    public function hasWebinarSessionId(): bool
+    {
+        return null !== $this->webinarSessionId;
+    }
+
+    public function getWebinarSessionId(): ?string
+    {
+        return $this->webinarSessionId;
+    }
+
+    public function setWebinarSessionId(string $webinarSessionId): void
+    {
+        $this->webinarSessionId = $webinarSessionId;
     }
 
     public function isWebinar(): bool

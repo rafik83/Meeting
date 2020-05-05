@@ -239,6 +239,14 @@ happening.participate.wrongInvitationCode: 'Code d''invitation incorrect'
 happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
 happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
+happening.webinar.end: 'Arrêter'
+happening.webinar.endingAt: 'Fin du webinaire dans'
+happening.webinar.start: 'Démarrer'
+happening.webinar.viewers: 'Connectés :'
+happening.webinar.screenshare.start: 'Partager mon écran'
+happening.webinar.screenshare.end: 'Arrêter le partage de mon écran'
+happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress: 'Il y a déjà un partage d''écran en cours.'
+happening.webinar.waiting.message: 'Le webinaire va démarrer dans quelques instants.'
 invoice.list.column.date: Date
 invoice.list.column.number: 'N° facture'
 invoice.list.column.totalExcludeTaxes: 'Total HT'
@@ -428,7 +436,6 @@ package.product.includedProduct: 'Inclus :'
 package.product.label: 'Intitulé & descriptions'
 package.product.notDeletableSince: 'Non supprimable depuis le %date%'
 package.product.outOfStock: Epuisé
-package.product.priceWithCurrency: '%price% <sup>%currency%</sup>'
 package.product.quantity: Quantité
 package.product.quantityMax: 'Quantité maximum atteinte'
 package.product.quantityMaxInformation: 'Max : %quantityMax%'

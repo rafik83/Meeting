@@ -582,9 +582,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@opentok/client@^2.14.7":
-  version "2.14.7"
-  resolved "https://registry.yarnpkg.com/@opentok/client/-/client-2.14.7.tgz#c63e44fe39fbd93ac5582e57ec4c9ae4b7b81bff"
+"@opentok/client@^2.17.0":
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/@opentok/client/-/client-2.17.0.tgz#c81d7510c1e4bec0ad6825c1155f2aa1bab1451b"
+  integrity sha512-2UowZ5rKTPDtgZ5Ew32oYEuJEFkjNvLfxOejuUAfDDeT69GllF9NSKuG9+HoXwoOztYeFUwaWkKTFJEfGk6boQ==
 
 "@symfony/webpack-encore@^0.21":
   version "0.21.0"
@@ -1051,12 +1052,12 @@ axios@^0.15.3:
   dependencies:
     follow-redirects "1.0.0"
 
-axios@^0.17.1:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.17.1.tgz#2d8e3e5d0bdbd7327f91bc814f5c57660f81824d"
+axios@^0.19.0:
+  version "0.19.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
+  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
   dependencies:
-    follow-redirects "^1.2.5"
-    is-buffer "^1.1.5"
+    follow-redirects "1.5.10"
 
 babel-code-frame@^6.26.0:
   version "6.26.0"
@@ -2024,7 +2025,7 @@ debug@2.6.9, debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8:
   dependencies:
     ms "2.0.0"
 
-debug@^3.1.0:
+debug@=3.1.0, debug@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
   dependencies:
@@ -2841,15 +2842,16 @@ follow-redirects@1.0.0:
   dependencies:
     debug "^2.2.0"
 
+follow-redirects@1.5.10:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
+  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
+  dependencies:
+    debug "=3.1.0"
+
 follow-redirects@^1.0.0:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.2.tgz#5a9d80e0165957e5ef0c1210678fc5c4acb9fb03"
-  dependencies:
-    debug "^3.1.0"
-
-follow-redirects@^1.2.5:
-  version "1.5.7"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.7.tgz#a39e4804dacb90202bca76a9e2ac10433ca6a69a"
   dependencies:
     debug "^3.1.0"
 
@@ -4978,19 +4980,28 @@ onetime@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/onetime/-/onetime-1.1.0.tgz#a1f7838f8314c516f05ecefcbc4ccfe04b4ed789"
 
-opentok-layout-js@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/opentok-layout-js/-/opentok-layout-js-0.5.1.tgz#907d8af955542e9e41b67df281645bde052b7efa"
+opentok-layout-js@3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/opentok-layout-js/-/opentok-layout-js-3.4.0.tgz#55cc4ec40fcb2c2348738a128996d98d27a37722"
+  integrity sha512-V1Kl1v9HcW1r+qNejAdbawVhtqGu4LMXbRK5UebaVTSbNvJvGXRrwLuLkntxXnf8l2Zp4eXzjSoJ8k0CZu8eWQ==
 
-opentok-network-test-js@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/opentok-network-test-js/-/opentok-network-test-js-2.0.0.tgz#abeae5a0354ca7be911c3a65f902f75f2d48ccf0"
+opentok-network-test-js@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/opentok-network-test-js/-/opentok-network-test-js-2.1.0.tgz#07b323732818f7e6c3f22f9322e2273c37fc1e18"
+  integrity sha512-EYJTBdXB/405EV3AcCWRLf9UjDAO+PXKigrh+EXjHrzG1Q9xp95DTlMrq4bQmsydgiPsuzMb5Jj6ZIxgoAgBhw==
   dependencies:
-    axios "^0.17.1"
-    opentok-solutions-logging "^1.0.14"
+    axios "^0.19.0"
+    opentok-solutions-logging "^1.0.15"
     promise "^8.0.1"
 
-opentok-solutions-logging@^1.0.14, opentok-solutions-logging@^1.0.6:
+opentok-solutions-logging@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/opentok-solutions-logging/-/opentok-solutions-logging-1.0.15.tgz#47e6463eaae03ce302c585587b95dfbc8c185cad"
+  integrity sha512-o8alNMf+A1Vd4oLFTP26F87qLm9xYokEi97QKR+n7+ZZfa/IlwrWM54msA65yyB+0YLbk7qHxNFfJ2ezGb+xOg==
+  dependencies:
+    axios "^0.19.0"
+
+opentok-solutions-logging@^1.0.6:
   version "1.0.14"
   resolved "https://registry.yarnpkg.com/opentok-solutions-logging/-/opentok-solutions-logging-1.0.14.tgz#6f36a698e1c7d3360dc54f97195a191d02d175ec"
   dependencies:

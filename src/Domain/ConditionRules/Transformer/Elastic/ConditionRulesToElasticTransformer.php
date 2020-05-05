@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic;
 
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\ConditionRulesTransformerInterface;
+use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\KeywordTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TaggedNomenclatureTransformer;
@@ -46,6 +47,9 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
     /** @var MessageTransformer */
     private $messageTransformer;
 
+    /** @var KeywordTransformer */
+    private $keywordTransformer;
+
     public function __construct(
         NullableTransformer $nullableTransformer,
         RadioTransformer $radioTransformer,
@@ -53,7 +57,8 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
         TextTransformer $textTransformer,
         ParticipationTypeTransformer $participationTypeTransformer,
         TemplateObjectFilterTransformer $templateObjectFilterTransformer,
-        MessageTransformer $messageTransformer
+        MessageTransformer $messageTransformer,
+        KeywordTransformer $keywordTransformer
     ) {
         $this->nullableTransformer = $nullableTransformer;
         $this->radioTransformer = $radioTransformer;
@@ -62,6 +67,7 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
         $this->participationTypeTransformer = $participationTypeTransformer;
         $this->templateObjectFilterTransformer = $templateObjectFilterTransformer;
         $this->messageTransformer = $messageTransformer;
+        $this->keywordTransformer = $keywordTransformer;
     }
 
     public function transform(Condition $condition): array
@@ -132,6 +138,10 @@ class ConditionRulesToElasticTransformer implements ConditionRulesTransformerInt
 
         if ($this->templateObjectFilterTransformer->supports($field)) {
             return $this->templateObjectFilterTransformer->transform($field);
+        }
+
+        if ($this->keywordTransformer->supports($field)) {
+            return $this->keywordTransformer->transform($field);
         }
 
         if ($this->nullableTransformer->supports($field)) {

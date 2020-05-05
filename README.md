@@ -52,6 +52,12 @@ Enable/Disable php xdebug
 * *phpMyAdmin*: http://vimeet.proximum:1979
 * *ElasticSearch HEAD*: http://vimeet.proximum:9200/_plugin/head/
 
+### Update
+
+To update the application, for example after git branch checkout:
+
+        ⇒ make update-app
+
 ### Yarn
 
 Install a package:
@@ -62,6 +68,16 @@ Remove a dependency:
 
         ⇒ yarn remove <package>
 
+Upgrade a dependency:
+
+        ⇒ yarn upgrade <package>@<version>
+
+Then check if everything ok (please check package version release notes).
+
+To do not forget to rebuild js bundles:
+
+        ⇒ make build
+
 ### Migrations
 
 Drop DB and generate migrations diff:
@@ -70,36 +86,21 @@ Drop DB and generate migrations diff:
 
 ### Localization
 
-#### Create a Pull-Request on Github with updated translations
-
-Requirements: install [Hub](https://github.com/github/hub)
-
-Run:
-
-        $ make trans-pr
-
-#### Or synchronize manually translations:
-
-        ⇒ make trans-sync
-
 All translations are stored on https://openl10n.vimeet.events (check 1password for access).
 If not exists, create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
-
-You need to install Docker on your machine (not available in the VM). You can install an [alias](https://github.com/manala/docker-images/tree/master/openl10n-cli#integration) to have the `openl10n` command.
-
-Synchronize translations files :
-
-        ⇒ make trans-sync
-
-or use one of these commands according to your needs:
-
-        ⇒ openl10n push --locale=all
-        ⇒ openl10n pull --locale=all
 
 Remarks :
 
 - Translations on Openl10n are never deleted or updated with a `push` command. Only new translations will be added.
 - Your locale translations will be updated with a `pull` command (new, update or delete).
+
+#### Pull translations from openl10n.vimeet.events
+
+        $ make trans-pull@vm
+
+#### Or synchronize manually translations:
+
+        ⇒ make trans-sync@vm
 
 ### Deployment
 
