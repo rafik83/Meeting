@@ -183,6 +183,19 @@ Un job correspond une instance de l'entité `JMS\JobQueueBundle\Entity\Job`. Cha
 
 Pour ajouter un job, ajouter une méthode dans `Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter` et injecter la classe dans le service programmant le job.
 
+### Tester son code sur un autre terminal
+
+Pour tester le rendu ou son code sur un autre terminal (un téléphone portable par exemple), vous pouvez utiliser [ngrok](https://ngrok.com/) qui est installé dans la _VM_.
+
+Lancez la commande suivante dans la vm:
+
+    ngrok http 80
+
+Vous obtiendrez en sortie une url en https.
+- Si vous souhaitez tester la partie admin, vous pouvez directement utiliser cette url.
+- Si vous souhaitez tester un événement en particulier, vous devez modifier l'url de cet événement (champ `Domaine (complet)` dans l'édition d'un événement) avec l'url fourni par ngrok.
+
+
 ### More documentations
 
 See [Vimeet documentation](docs/index.md)
