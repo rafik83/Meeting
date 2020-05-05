@@ -59,7 +59,7 @@ class TaggedDataFactory
      *
      * @return TemplateData sheetTemplate
      */
-    public function buildTaggedDataView(Sheet $sheet, $locale, array $rules = [])
+    public function buildTaggedDataView(Sheet $sheet, $locale, array $rules = []): TemplateData
     {
         $this->createTaggedDataView($sheet, $locale);
 
@@ -119,6 +119,12 @@ class TaggedDataFactory
                     continue;
                 }
 
+                // No use to do all this as we will not attached the taggedDataViews
+                // if it already exists for this tag.
+                if (isset($this->taggedDataViews[$sheet->getId()][$tag])) {
+                    continue;
+                }
+
                 if ($object instanceof TemplateObject\Nomenclature) {
                     $value = implode(', ', $object->getNomenclatureLabelOfItems());
                 } elseif ($object instanceof TemplateObject\DateTime) {
@@ -128,7 +134,7 @@ class TaggedDataFactory
                         $value = $object->getFormattedDate($locale);
                     }
                 } else {
-                    $value = $object->getContentValueLocalize();
+                    $value = $object->getContentValueLocalize($locale);
                 }
 
                 $taggedDataView = new TaggedDataView(

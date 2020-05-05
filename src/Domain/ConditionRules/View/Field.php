@@ -26,12 +26,21 @@ class Field implements RuleInterface
     /** @var string|array|null */
     private $value;
 
-    public function __construct(string $field, ComparisonOperatorInterface $comparisonOperator, string $input, $value)
-    {
+    /** @var string */
+    private $locale;
+
+    public function __construct(
+        string $field,
+        ComparisonOperatorInterface $comparisonOperator,
+        string $input,
+        $value,
+        string $locale
+    ) {
         $this->field = $field;
         $this->comparisonOperator = $comparisonOperator;
         $this->input = $input;
         $this->value = $value;
+        $this->locale = $locale;
     }
 
     public function getField(): string
@@ -52,5 +61,10 @@ class Field implements RuleInterface
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 }

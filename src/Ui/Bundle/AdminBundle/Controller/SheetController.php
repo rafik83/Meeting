@@ -55,8 +55,9 @@ class SheetController extends Controller
     private const SHEETS_PER_PAGE = 100;
 
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Request     $request
+     * @param Event       $event
+     * @param AdminDomain $adminDomain
      *
      * @return Response
      */
@@ -69,6 +70,7 @@ class SheetController extends Controller
 
         $sheetFilter = $this->get(SheetFilter::class);
         $savedFilters = $sheetFilter->get($event);
+        $admin = $adminDomain->getAdmin();
 
         // redirect to list with default filters if no parameters
         if (!$this->isRequestContainFilters($request) && empty($savedFilters)) {
@@ -97,7 +99,7 @@ class SheetController extends Controller
         $sheetFilterForm = $this->createFilterForm(SheetFilterType::class, $filters, [
             'event' => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
-            'user' => $adminDomain->getAdmin(),
+            'user' => $admin,
         ]);
 
         $isFiltered = $sheetFilterForm->handleRequest($request)->isSubmitted() && $sheetFilterForm->isValid();
@@ -120,14 +122,15 @@ class SheetController extends Controller
 
         // Pagination
         try {
+            $conditions = $this->get(RuleStorageInterface::class)->getRules($event, $locale, 'sheet');
             $query = new PaginatedSheetListViewQuery(
                 $event,
                 $filters,
                 $selectedSheetsPage,
                 self::SHEETS_PER_PAGE, // number of sheets by page
                 $locale,
-                $this->getUser(),
-                $this->get(RuleStorageInterface::class)->getRules($event, $locale, 'sheet')
+                $admin,
+                $conditions
             );
             /** @var PaginatedResult $sheets */
             $sheets = $this->get('tactician.commandbus.query')->handle($query);
@@ -138,12 +141,12 @@ class SheetController extends Controller
         }
 
         $types = $this->get('tactician.commandbus.query')->handle(new GetAllowedTypesByAdminQuery(
-            $adminDomain->getAdmin(),
+            $admin,
             $event
         ));
 
         // Batch
-        $batch = new Batch($event, $this->getUser(), $locale);
+        $batch = new Batch($event, $admin, $locale);
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids' => $sheets->map(function (SheetListView $listView) {
                 return $listView->id;
@@ -194,22 +197,24 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $admin = $adminDomain->getAdmin();
+
         $filters = $this->get(SheetFilterSubmittedDataGetter::class)->handle(
             $event,
-            $adminDomain->getAdmin(),
+            $admin,
             $request->getLocale()
         );
 
         $selectedSheetsPage = $request->query->getInt('page', 1);
         $batch = new Batch(
             $event,
-            $adminDomain->getAdmin(),
+            $admin,
             $event->getAvailableLocale($request->getLocale()),
             $filters
         );
 
         $types = $this->get('tactician.commandbus.query')->handle(new GetAllowedTypesByAdminQuery(
-            $adminDomain->getAdmin(),
+            $admin,
             $event
         ));
 
