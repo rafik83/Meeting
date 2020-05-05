@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Adapter;
 
 use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
-use JMS\JobQueueBundle\Entity\Repository\JobRepository;
+use JMS\JobQueueBundle\Entity\Repository\JobManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Adapter\JobRepositoryAdapterInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
@@ -22,20 +22,17 @@ class JobRepositoryAdapter implements JobRepositoryAdapterInterface
     /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @param EntityManager $entityManager
-     */
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
+    /** @var JobManager */
+    private $jobManager;
 
     /**
-     * @return JobRepository
+     * @param EntityManager $entityManager
+     * @param JobManager    $jobManager
      */
-    public function getJobRepository(): JobRepository
+    public function __construct(EntityManager $entityManager, JobManager $jobManager)
     {
-        return $this->entityManager->getRepository('JMSJobQueueBundle:Job');
+        $this->entityManager = $entityManager;
+        $this->jobManager = $jobManager;
     }
 
     /**
@@ -44,7 +41,7 @@ class JobRepositoryAdapter implements JobRepositoryAdapterInterface
     public function findGenerateVersionJobForEvent(Event $event): ?Job
     {
         /** @var Job[] $jobs */
-        $jobs = $this->getJobRepository()->findAllForRelatedEntity($event);
+        $jobs = $this->jobManager->findAllForRelatedEntity($event);
 
         foreach ($jobs as $job) {
             if (GenerateVersionsCommand::NAME === $job->getCommand() && !$job->isCanceled()) {

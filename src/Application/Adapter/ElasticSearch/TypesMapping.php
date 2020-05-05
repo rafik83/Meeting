@@ -33,6 +33,7 @@ final class TypesMapping
     public const USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_VALUE = 'value';
     public const SHEET_VIEW_SHEET_NAME = 'sheetName';
     public const SHEET_VIEW_SPOT_REFERENCE = 'spotReference';
+    public const SHEET_VIEW_KEYWORD = 'keywords';
     public const SHEET_VIEW_PARTICIPANTS_LASTNAME = 'participants.lastname';
     public const SHEET_VIEW_PARTICIPANTS_EMAIL = 'participants.email';
     public const SHEET_VIEW_TAGGED_NOMENCLATURE = 'nestedTaggedData';
@@ -108,6 +109,9 @@ final class TypesMapping
         ],
         self::SHEET_VIEW_SPOT_REFERENCE => [
             'path' => self::SHEET_VIEW_SPOT_REFERENCE,
+        ],
+        self::SHEET_VIEW_KEYWORD => [
+            'path' => self::SHEET_VIEW_KEYWORD,
         ],
         self::SHEET_VIEW_PARTICIPANTS_LASTNAME => [
             'path' => self::SHEET_VIEW_PARTICIPANTS_LASTNAME,

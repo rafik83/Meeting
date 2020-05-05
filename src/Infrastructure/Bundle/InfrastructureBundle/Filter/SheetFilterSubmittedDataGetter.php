@@ -32,16 +32,13 @@ class SheetFilterSubmittedDataGetter
 
     public function handle(Event $event, Admin $user, string $locale)
     {
-        $filters = $this->sheetFilter->get($event);
-
-        if (null === $filters) {
-            $filters = SheetFilterType::getDefaultFilters();
-        }
+        $defaultFilters = SheetFilterType::getDefaultFilters();
+        $filters = $this->sheetFilter->get($event) ?? $defaultFilters;
 
         $sheetFilterForm = $this->formFactory->createNamed(
             '',
             SheetFilterType::class,
-            $filters,
+            $defaultFilters,
             [
                 'event' => $event,
                 'user' => $user,

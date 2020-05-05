@@ -19,7 +19,7 @@ class MessageTransformerTest extends TestCase
 {
     public function testTransform(): void
     {
-        $field = new Field('messagesReceived', new ComparisonOperatorIn(), 'select', [1, 9]);
+        $field = new Field('messagesReceived', new ComparisonOperatorIn(), 'select', [1, 9], 'fr');
         $event = $this->prophesize(Event::class);
 
         $messageTransformer = new MessageTransformer();

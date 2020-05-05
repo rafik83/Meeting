@@ -71,7 +71,8 @@ class ConditionRulesParser
             $initialRule['field'],
             self::getComparisonOperator($initialRule['operator']),
             $initialRule['input'],
-            $initialRule['value']
+            $initialRule['value'],
+            $locale
         );
     }
 

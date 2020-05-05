@@ -28,7 +28,10 @@
     >
         <div class="layout-container"></div>
         <div class="chat-container hide"></div>
-        <div class="video-helper">
+        <div class="video-helper" data-meeting-settings-container>
+            {{ include('EventBundle:Visio:settings.html.twig') }}
+        </div>
+        <div class="video-helper hide" data-meeting-waiting-helper>
             {% if meetingView is defined %}
                 <h1>
                     {% for sheetMetView in meetingView.sheetMetTitle %}
@@ -49,20 +52,18 @@
                 <hr>
             {% endif %}
 
-            <button class="btn btn-primary" data-meeting-join-button>{{ 'meeting.video.start'|trans }}</button>
-
             <div data-meeting-waiting-message class="hide">
                 <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
             </div>
         </div>
 
         {% if meetingView is defined %}
-        <div class="timer-container">
-            <div class="timer">
-                {{ 'meeting.video.endingAt'|trans }}
-                <span class="countdown"></span>
+            <div class="timer-container">
+                <div class="timer">
+                    {{ 'meeting.video.endingAt'|trans }}
+                    <span class="countdown"></span>
+                </div>
             </div>
-        </div>
         {% endif %}
 
         <div class="buttons-container">
@@ -86,5 +87,4 @@
             </button>
         </div>
     </div>
-{% endblock body %}
-
+{% endblock %}

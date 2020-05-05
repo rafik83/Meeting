@@ -8,6 +8,7 @@ var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var Counter = require('./Counter');
 var $ = require('jquery');
+var Settings = require('./Settings');
 
 /**
  * @constructor
@@ -19,6 +20,7 @@ function VideoConference(element) {
   this.typeScreenShare = 'screen';
 
   this.token = element.getAttribute('data-token');
+  this.session = null;
   this.sessionId = element.getAttribute('data-session-id');
   this.apiKey = element.getAttribute('data-api-key');
   this.participantPresenceAction = element.getAttribute('data-participant-presence-action');
@@ -41,34 +43,47 @@ function VideoConference(element) {
   );
 
   this.layoutContainer = element.querySelector('.layout-container');
-  this.helperContainer = element.querySelector('.video-helper');
   this.chatContainer = element.querySelector('.chat-container');
   this.timerContainer = element.querySelector('.timer');
   this.countDownContainer = element.querySelector('.timer span.countdown');
 
-  var endMeetingButton = element.querySelector('.end-meeting');
   this.startScreenSharingButton = element.querySelector('#start-screensharing');
   this.endScreenSharingButton = element.querySelector('#end-screensharing');
   this.toggleAudioElement = element.querySelector('#toggle-audio');
   this.toggleVideoElement = element.querySelector('#toggle-video');
   this.toggleChatElement = element.querySelector('#toggle-chat');
 
-  if (endMeetingButton) {
-      endMeetingButton.addEventListener('click', this.disconnect.bind(this));
-  }
-
-  this.layout = initLayoutContainer(this.layoutContainer).layout;
-
   this.subscribers = [];
-  this.publisher = new Publisher(this.layoutContainer);
   this.publisherStream = null;
   this.publisherScreen = null;
+
+  this.chatInstance = null;
+
+  var endMeetingButton = this.element.querySelector('.end-meeting');
+  if (endMeetingButton) {
+    endMeetingButton.addEventListener('click', this.disconnect.bind(this));
+  }
+
+  this.settingsContainer = this.element.querySelector('[data-meeting-settings-container]');
+  this.meetingWaitingMessage = this.element.querySelector('[data-meeting-waiting-message]');
+  this.meetingHelperWaitingContainer = this.element.querySelector('[data-meeting-waiting-helper]');
+
+  this.settings = new Settings(
+    this.settingsContainer.querySelector('#video-settings-section'),
+    this.join.bind(this)
+  );
+  this.settings.init();
+}
+
+VideoConference.prototype.join = function () {
+  this.layout = initLayoutContainer(this.layoutContainer).layout;
+  this.publisher = new Publisher(this.layoutContainer);
 
   var resizeTimeout;
   window.onresize = function() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(function() {
-      this.layout();
+        this.layout();
     }.bind(this), 20);
   }.bind(this);
 
@@ -82,24 +97,16 @@ function VideoConference(element) {
       this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
   }
 
-  this.chatInstance = null;
-
   document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
 
-  this.joinButton = element.querySelector('[data-meeting-join-button]');
-  this.joinButton.addEventListener('click', this.join.bind(this));
-  this.meetingWaitingMessage = element.querySelector('[data-meeting-waiting-message]');
-
   this.saveParticipantPresence();
   this.countDownBeforeEnd();
-}
-
-VideoConference.prototype.join = function () {
-  this.hideElement(this.joinButton);
+  this.showElement(this.meetingHelperWaitingContainer);
   this.showElement(this.meetingWaitingMessage);
+  this.hideElement(this.settingsContainer);
   this.init();
 };
 
@@ -139,7 +146,7 @@ VideoConference.prototype.init = function() {
 
     this.maximize(subscriber.element);
     this.subscribers.push(subscriber);
-    this.helperContainer.classList.add('hide');
+    this.hideElement(this.meetingHelperWaitingContainer);
     this.layout();
 
   }.bind(this));
@@ -232,7 +239,11 @@ VideoConference.prototype.initChat = function () {
  *  Publish your camera and microphone stream
  */
 VideoConference.prototype.publishStream = function() {
-  var publisher = this.publisher.create({});
+  // publish video to other participant
+  var publisher = this.publisher.create({
+    audioSource: this.settings.getAudioSource(),
+    videoSource: this.settings.getVideoSource()
+  });
   this.session.publish(publisher, this.handlePublish.bind(this));
   this.publisherStream = publisher;
 
@@ -243,9 +254,11 @@ VideoConference.prototype.publishStream = function() {
  * Disconnect from the session
  */
 VideoConference.prototype.disconnect = function() {
-  this.session.disconnect();
-  this.session.off();
-  this.session = null;
+  if (null !== this.session) {
+    this.session.disconnect();
+    this.session.off();
+    this.session = null;
+  }
 
   if (window.opener) {
     window.opener.location.reload(true);
@@ -479,4 +492,3 @@ VideoConference.prototype.showElement = function (element) {
 };
 
 module.exports = VideoConference;
-

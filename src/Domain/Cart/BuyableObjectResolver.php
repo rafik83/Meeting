@@ -149,15 +149,19 @@ class BuyableObjectResolver
                 return;
             }
 
+            // handle new order
+            if (null !== $orderMerged) {
+                $quantity = $cart->getOrderCartQuantity($product, $orderMerged);
+
+                if ($quantity > 0) {
+                    return;
+                }
+            }
+
             $cartRow = $cart->getCartRowForProduct($product);
 
             if (null !== $cartRow) {
                 $quantity = $cartRow->getQuantity();
-
-                // handle new order
-                if (null !== $orderMerged) {
-                    $quantity = $cart->getOrderCartQuantity($product, $orderMerged);
-                }
 
                 // add payable option
                 if ($quantity < 1) {
