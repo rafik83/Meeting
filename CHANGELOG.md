@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2090 - Improve video conference meeting UX
 - VIMEET-2078 - Keywords search from Sheet Query Builder
 ### Fixed
+- MV-220 - Fix logo error when ordering logo in the purchase tunnel
 - MV-232 - Participant can access to all own sheet video meeting
 - MV-234 - Fix sheet / participant export with dates filters
 
