@@ -12,9 +12,9 @@
                             {% if mail.event is not null %}
                                 {% set notificationImagePath = mail.event.localizedNotificationImage(mail.locale) %}
                                 {% if notificationImagePath is not null %}
-                                    <img src="{{ imageUrl(mail.event, notificationImagePath) }}" class="img-responsive">
+                                    <p style="text-align:center;"><img src="{{ imageUrl(mail.event, notificationImagePath) }}" class="img-responsive"></p>
                                 {% endif %}
-                            {% endif %} }}
+                            {% endif %}
                             {% block body %}
                             {% endblock %}
                         </td>
