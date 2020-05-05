@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2090 - Improve video conference meeting UX
+### Fixed
+- MV-234 - Fix sheet / participant export with dates filters
 
 ## [2.25.0] - 2020-03-30
 ### Added
