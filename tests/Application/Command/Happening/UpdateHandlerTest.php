@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Happening\Update;
 use Proximum\Vimeet\Application\Command\Happening\UpdateHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -23,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UpdateHandlerTest extends TestCase
 {
@@ -59,6 +61,12 @@ class UpdateHandlerTest extends TestCase
         $newCategory->setTranslation($newCatTranslation2);
         $newType = $this->prophesize(Type::class);
 
+        $webinarHeaderImageEn = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'png'])
+            ->getMock();
+
         // Expected
         $expectedSubEvent     = new Happening(
             $event,
@@ -71,7 +79,13 @@ class UpdateHandlerTest extends TestCase
             'titi'
         );
         $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'test', 'ok');
-        $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'tset', 'ko');
+        $expectedTranslation2 = new Happening\HappeningTranslation(
+            $expectedSubEvent,
+            'en',
+            'tset',
+            'ko',
+            '/path/webinarHeaderImageEn.jpg'
+        );
 
         $expectedSubEvent->setTranslation($expectedTranslation);
         $expectedSubEvent->setTranslation($expectedTranslation2);
@@ -97,15 +111,32 @@ class UpdateHandlerTest extends TestCase
             'fr' => [
                 'title'       => 'test',
                 'description' => 'ok',
+                'currentWebinarHeaderImage' => null,
+                'webinarHeaderImage' => null,
             ],
             'en' => [
                 'title'       => 'tset',
                 'description' => 'ko',
+                'currentWebinarHeaderImage' => '/path/currentWebinarHeaderImageEn.jpg',
+                'webinarHeaderImage' => $webinarHeaderImageEn,
             ],
         ];
         $update->invitationCode = 'titi';
 
-        $handler = new UpdateHandler($happeningRepository->reveal(), $eventDispatcher->reveal());
+        $fileStorage = $this->prophesize(FileStorageInterface::class);
+        $fileStorage
+            ->remove('/path/currentWebinarHeaderImageEn.jpg')
+            ->shouldBeCalled()
+        ;
+        $fileStorage
+            ->upload($webinarHeaderImageEn)
+            ->shouldBeCalled()
+            ->willReturn('/path/webinarHeaderImageEn.jpg')
+        ;
+
+        $handler = new UpdateHandler(
+            $happeningRepository->reveal(), $fileStorage->reveal(), $eventDispatcher->reveal()
+        );
         $handler->handle($update);
     }
 }

@@ -10,26 +10,26 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CreateHandler
 {
     /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
-    /**
-     * @param HappeningRepositoryInterface $happeningRepository
-     */
-    public function __construct(HappeningRepositoryInterface $happeningRepository)
+    /** @var FileStorageInterface */
+    private $fileStorage;
+
+    public function __construct(HappeningRepositoryInterface $happeningRepository, FileStorageInterface $fileStorage)
     {
         $this->happeningRepository = $happeningRepository;
+        $this->fileStorage = $fileStorage;
     }
 
-    /**
-     * @param Create $create
-     */
     public function handle(Create $create)
     {
         if ($create->webinar) {
@@ -53,7 +53,21 @@ class CreateHandler
         );
 
         foreach ($create->translations as $locale => $translation) {
-            $happening->setTranslation(new Happening\HappeningTranslation($happening, $locale, $translation['title'], $translation['description']));
+            $webinarHeaderImage = null;
+
+            if ($translation['webinarHeaderImage'] instanceof UploadedFile) {
+                $webinarHeaderImage = $this->fileStorage->upload($translation['webinarHeaderImage']);
+            }
+
+            $happening->setTranslation(
+                new Happening\HappeningTranslation(
+                    $happening,
+                    $locale,
+                    $translation['title'],
+                    $translation['description'],
+                    $webinarHeaderImage
+                )
+            );
         }
 
         // Sort speakers by position

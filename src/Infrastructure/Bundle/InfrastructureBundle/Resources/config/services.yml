@@ -870,12 +870,14 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\CreateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Create }
     command.happening.update_handler:
         class: Proximum\Vimeet\Application\Command\Happening\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@adapter.local_file_storage'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Update }
