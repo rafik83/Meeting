@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1c72b8b1370f69fd4765bd801b70e2f",
+    "content-hash": "60da95b6bf70c0f6d397b1302932a8bb",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1659,63 +1659,6 @@
             "time": "2020-02-13T22:36:52+00:00"
         },
         {
-            "name": "elao/form-bundle",
-            "version": "v2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Elao/ElaoFormBundle.git",
-                "reference": "c0bf152cf9204476934fae19268f86f24d678eb8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoFormBundle/zipball/c0bf152cf9204476934fae19268f86f24d678eb8",
-                "reference": "c0bf152cf9204476934fae19268f86f24d678eb8",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/form": "~2.8|~3.0",
-                "symfony/twig-bridge": "~2.8|~3.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Elao\\Bundle\\FormBundle\\": "."
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Elao",
-                    "homepage": "http://www.elao.com"
-                },
-                {
-                    "name": "Thomas Jarrand",
-                    "homepage": "https://github.com/Tom32i"
-                },
-                {
-                    "name": "Maxime Colin",
-                    "homepage": "https://github.com/maximecolin"
-                }
-            ],
-            "description": "Various Form improvements",
-            "homepage": "https://github.com/Elao/ElaoFormBundle",
-            "keywords": [
-                "collection",
-                "elao",
-                "form",
-                "javascript"
-            ],
-            "time": "2018-11-08T14:55:26+00:00"
-        },
-        {
             "name": "elao/form-translation-bundle",
             "version": "v2.0.1",
             "source": {
@@ -1769,61 +1712,6 @@
                 "translation"
             ],
             "time": "2018-03-09T15:12:32+00:00"
-        },
-        {
-            "name": "elao/theme-twitter-bootstrap-3-bundle",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Elao/ElaoThemeTwitterBootstrap3Bundle.git",
-                "reference": "024e50ed688305577b0512329ec64724ddb5bf6d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Elao/ElaoThemeTwitterBootstrap3Bundle/zipball/024e50ed688305577b0512329ec64724ddb5bf6d",
-                "reference": "024e50ed688305577b0512329ec64724ddb5bf6d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.4"
-            },
-            "suggest": {
-                "elao/form-bundle": "~2.0@dev"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Elao\\Bundle\\Theme\\TwitterBootstrap3Bundle\\": "."
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Elao",
-                    "homepage": "http://www.elao.com"
-                },
-                {
-                    "name": "Thomas Jarrand",
-                    "homepage": "https://github.com/Tom32i"
-                }
-            ],
-            "description": "Twitter Bootstrap 3 theme bundle for ElaoThemeBundle",
-            "homepage": "https://github.com/Elao/ElaoThemeTwitterBootstrap3Bundle",
-            "keywords": [
-                "bootstrap",
-                "elao",
-                "theme-bundle",
-                "twitter"
-            ],
-            "time": "2016-06-07T15:42:52+00:00"
         },
         {
             "name": "endroid/qr-code",
@@ -4457,12 +4345,12 @@
             "version": "v1.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/whiteoctober/Pagerfanta.git",
+                "url": "https://github.com/BabDev/Pagerfanta.git",
                 "reference": "8400ab498e500018cff9a099ac22555e7949aa9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/8400ab498e500018cff9a099ac22555e7949aa9a",
+                "url": "https://api.github.com/repos/BabDev/Pagerfanta/zipball/8400ab498e500018cff9a099ac22555e7949aa9a",
                 "reference": "8400ab498e500018cff9a099ac22555e7949aa9a",
                 "shasum": ""
             },
@@ -11457,9 +11345,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "elao/theme-twitter-bootstrap-3-bundle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
