@@ -197,6 +197,18 @@ class Happening implements TimeRangeInterface
         return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
     }
 
+    public function getWebinarHeaderImage($locale): ?string
+    {
+        /** @var null|HappeningTranslation $translation */
+        $translation = $this->translations->get($locale);
+
+        if (null === $translation) {
+            return null;
+        }
+
+        return $translation->getWebinarHeaderImage();
+    }
+
     /**
      * @param HappeningTranslation $translation
      */

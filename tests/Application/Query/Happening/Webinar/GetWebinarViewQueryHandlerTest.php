@@ -48,6 +48,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->hasSpeaker($user->reveal())->shouldBeCalled()->willReturn(true);
         $happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:55:00'));
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
+        $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -73,7 +74,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 new TimeRangeView(new \DateTime('2020-03-30 11:55:00'), new \DateTime('2020-03-30 12:15:00')),
                 $this->dateTime,
-                'https://techinnov-2019.vimeet.proximum/uploads/2020/05/5eb19075cb5e6_5db949c0ac76b-techinnov-desktop-2019.png'
+                '/path/image.jpg'
             ),
             $this->getWebinarViewQueryHandler->handle(new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en'))
         );
