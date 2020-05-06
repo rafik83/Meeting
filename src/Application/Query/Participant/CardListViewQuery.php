@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class CardListViewQuery
+class CardListViewQuery implements \Proximum\Vimeet\Application\Query\Query
 {
     /**
      * @var string

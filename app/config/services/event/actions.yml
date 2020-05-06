@@ -27,6 +27,11 @@ services:
             - '@Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\SetArrayContentToBlock'
             - '@adapter.router'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ChangeParticipantOrderAction:
+        arguments:
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ShowUploadedFileAction:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'

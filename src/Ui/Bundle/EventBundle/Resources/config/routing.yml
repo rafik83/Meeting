@@ -271,6 +271,15 @@ event_sheet_handle_remove_participant:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:SheetParticipant:handleRemoveParticipant }
 
+event_sheet_change_order_participant:
+    path:   /sheet/{sheet}/{locale}/{key}/participants/change-order
+    requirements:
+        sheet: \d+
+        locale: '[a-z]{2}'
+        key: \w+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ChangeParticipantOrderAction}
+
 event_sheet_remove_image:
     path: /sheet/{sheet}/{locale}/{key}/image/remove
     requirements:

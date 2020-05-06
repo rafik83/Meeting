@@ -37,6 +37,9 @@
         <footer>
             <a href="{{ path('event_sheet_remove_participant', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
                 <i class="icon-Effacer"></i> {{ 'sheet.object.action.remove'|trans }} {{ item.label(locale, fallback) }}
+            </a><br>
+            <a href="{{ path('event_sheet_change_order_participant', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}">
+                Modifier l'ordre des participants
             </a>
         </footer>
     {% endif %}
