@@ -99,7 +99,7 @@ install@test: install-app@test install-db@test install-db-fixtures@test install-
 install@prod: install-dep build@prod
 
 composer-install:
-	php bin/composer.phar install --no-progress --no-interaction --ignore-platform-reqs
+	php bin/composer.phar install --no-progress --no-interaction
 
 install-app@test:
 	SYMFONY_ENV=test php bin/composer.phar --no-progress --no-interaction install
