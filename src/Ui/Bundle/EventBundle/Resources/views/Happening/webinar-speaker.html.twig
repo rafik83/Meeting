@@ -4,6 +4,8 @@
     <link rel="chrome-webstore-item" href="{{ visio_screen_sharing_chrome_extension }}">
 {% endblock %}
 
+{% block body_attributes 'class="background-black"' %}
+
 {% block body %}
     <div class="webinar webinar-speaker"
          data-api-key="{{ webinarView.apiKey }}"
