@@ -12,6 +12,7 @@
 /var/shared_uploaded_files
 /vendor/
 /bin/*
+!/bin/composer.phar
 /build/
 !bin/console
 !bin/symfony_requirements
