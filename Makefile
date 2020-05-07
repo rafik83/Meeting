@@ -92,7 +92,7 @@ lint@test: lint
 ###########
 
 ## Install application
-install: install-app install-db install-db@test install-db-fixtures install-db-fixtures@test install-dep build
+install: composer-install install-db install-db@test install-db-fixtures install-db-fixtures@test install-dep build
 
 install@test: install-app@test install-db@test install-db-fixtures@test install-dep build@prod
 
