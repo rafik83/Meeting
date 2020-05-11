@@ -1,93 +1,17 @@
-{% extends 'AdminBundle::base.html.twig' %}
+{% extends 'EventBundle::base.html.twig' %}
 
 {% block content %}
-    <style>
-        .change-order-container{
-            width: 80%;
-            margin: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .one-participant{
-            display: flex;
-            justify-content: center;
-            margin:auto;
-            width: 95%;
-            border: 1px solid black;
-            margin: 20px 0;
-            padding: 20px 0;
-        }
-
-        .one-participant__avatar{
-            width: 30%;
-            display: flex;
-            align-items: center;
-            justify-content:center;
-        }
-
-        .one-participant__avatar .avatar{
-            background-color: #d0d0d0;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 30px;
-        }
-
-        .one-participant__avatar .avatar p{
-            font-size: 35px;
-            color: white;
-        }
-
-        .one-participant__infos{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width: 70%;
-            align-items:center;
-        }
-
-        .one-participant__infos .position{
-            color: #00398c;
-            text-transform: uppercase;
-        }
-
-        .change-order-container p{
-            margin: 0px;
-        }
-
-        @media screen and (min-width: 900px) {
-            .change-order-container{
-                flex-direction: row;
-                width: 100%;
-            }
-            .one-participant{
-                width: 33%;
-                margin: 20px 20px;
-            }
-        }
-    </style>
-    <div class="change-order-container">
-        {% for participant in participants.cardViews %}
-            <div class="one-participant">
-                <div class="one-participant__avatar">
-                    <div class="avatar">
-                        {% if participant.avatar == null %}
-                        <p>{{ participant.initials }}</p>
-                        {% else %}
-                        <img src="{{ participant.avatar}}" alt="{{ participant.initials }}">
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="one-participant__infos">
-                    <p class="fullname">{{ participant.firstname|capitalize }} {{ participant.lastname|upper }}</p>
-                    <p class="position">{{ participant.position }}</p>
-                </div>
-            </div>
-        {% endfor %}
+<div class="section-change-order">
+    <div class="section__content">
+        <div class="list list--users sheet-participants-list-users">
+            {% for participant in participants.cardViews %}
+                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
+            {% endfor %}
+        </div>
     </div>
+</div>
+
+
 {% endblock %}
 
 
