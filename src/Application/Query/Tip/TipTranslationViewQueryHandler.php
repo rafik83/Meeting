@@ -92,6 +92,7 @@ class TipTranslationViewQueryHandler
             }
 
             $tipTranslationView->isOpened = $this->isTipOpened->isSatisfiedBy($query, $tipTranslationView);
+            $tipTranslationView->setImage($query->event->getLocalizedNotificationImage($query->locale));
             $tipTranslationListView[] = $tipTranslationView;
         }
 

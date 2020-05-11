@@ -15,6 +15,7 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.close'|trans }}"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="tipModal-{{ tipTranslationView.id }}-title">{{ tipTranslationView.title }}</h4>
+                        <p><img class="img-responsive" style="margin: auto;" src="{{ tipTranslationView.image }}"></p>
                     </div>
                     <div class="modal-body">
                         {{ tipTranslationView.content|html }}

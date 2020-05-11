@@ -325,6 +325,7 @@ form.event_update_design.children.leftColor.label: 'Couleur de gauche des CTA'
 form.event_update_design.children.localizedImages.prototype.children.logo.label: 'Header desktop'
 form.event_update_design.children.localizedImages.prototype.children.mobileLogo.label: 'Header mobile'
 form.event_update_design.children.localizedImages.prototype.children.undefined: 'Non défini'
+form.event_update_design.children.localizedImages.prototype.children.notificationImage.label: 'Image de notification'
 form.event_update_design.children.removeBackgroundImage.label: 'Supprimer l''image de fond actuelle'
 form.event_update_design.children.rightColor.label: 'Couleur de droite des CTA'
 form.event_update_design.children.submit.label: Sauvegarder

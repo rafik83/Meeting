@@ -73,36 +73,45 @@ class UpdateDesignHandlerTest extends TestCase
         $this->event->getLocalizedLogoExtension('fr')->willReturn('png');
         $this->event->getLocalizedMobileLogo('fr')->willReturn(null);
         $this->event->getLocalizedMobileLogoExtension('fr')->willReturn(null);
+        $this->event->getLocalizedNotificationImage('fr')->willReturn('notificationImageFr.png');
+        $this->event->getLocalizedNotificationImageExtension('fr')->willReturn('png');
 
         $this->event->getLocalizedLogo('en')->willReturn('logoEn.jpeg');
         $this->event->getLocalizedLogoExtension('en')->willReturn('jpeg');
         $this->event->getLocalizedMobileLogo('en')->willReturn('mobileLogoEn.jpeg');
         $this->event->getLocalizedMobileLogoExtension('en')->willReturn('jpeg');
+        $this->event->getLocalizedNotificationImage('en')->willReturn(null);
+        $this->event->getLocalizedNotificationImageExtension('en')->willReturn(null);
 
         $this->guidelineGenerator->generate($this->event->reveal())->shouldBeCalled()->willReturn('/path/asset/main.css');
         $this->fileStorage->remove('logoFr.png')->shouldBeCalled();
         $this->fileStorage->remove('mobileLogoEn.jpeg')->shouldBeCalled();
         $this->fileStorage->remove(null)->shouldBeCalled();
+        $this->fileStorage->remove('notificationImageFr.png')->shouldBeCalled();
         $this->fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
             return true;
-        }))->shouldBeCalled()->willReturn('toto.jpeg', 'tata.png', 'background.png');
+        }))->shouldBeCalled()->willReturn('newLogoFr.jpeg',  'newNotificationImageFr.png', 'newMobileLogoEn.png', 'background.png');
         $this->fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
             return true;
         }))->shouldBeCalled()->willReturn('jpeg', 'png');
 
         $this->event->updateLocalizedLogos(
             'fr',
-            'toto.jpeg',
+            'newLogoFr.jpeg',
             'jpeg',
             null,
-            null
+            null,
+            'newNotificationImageFr.png',
+            'png'
         )->shouldBeCalled();
         $this->event->updateLocalizedLogos(
             'en',
             'logoEn.jpeg',
             'jpeg',
-            'tata.png',
-            'png'
+            'newMobileLogoEn.png',
+            'png',
+            null,
+            null
         )->shouldBeCalled();
         $this->configuration->setBackgroundImage('background.png')->shouldBeCalled();
         $this->configuration->setColors(
@@ -136,15 +145,22 @@ class UpdateDesignHandlerTest extends TestCase
             ->enableOriginalConstructor()
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
             ->getMock();
+        $file4 = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'png'])
+            ->getMock();
 
         $updateDesign->localizedImages = [
             'fr' => [
                 'logo' => $file1,
                 'mobileLogo' => null,
+                'notificationImage' => $file4
             ],
             'en' => [
                 'logo' => null,
                 'mobileLogo' => $file2,
+                'notificationImage' => null
             ],
         ];
 
@@ -188,6 +204,12 @@ class UpdateDesignHandlerTest extends TestCase
         $this->event->getLocalizedMobileLogo('en')->willReturn('mobileLogoEn.jpeg');
         $this->event->getLocalizedMobileLogoExtension('en')->willReturn('jpeg');
 
+        $this->event->getLocalizedNotificationImage('fr')->willReturn(null);
+        $this->event->getLocalizedNotificationImageExtension('fr')->willReturn(null);
+
+        $this->event->getLocalizedNotificationImage('en')->willReturn(null);
+        $this->event->getLocalizedNotificationImageExtension('en')->willReturn(null);
+
         $this->guidelineGenerator->generate($this->event->reveal())->shouldBeCalled()->willReturn('/path/asset/main.css');
         $this->removeImageHandler->handle(new RemoveImage($this->event->reveal()))->shouldBeCalled();
 
@@ -196,6 +218,8 @@ class UpdateDesignHandlerTest extends TestCase
             'logoFr.png',
             'png',
             null,
+            null,
+             null,
             null
         )->shouldBeCalled();
         $this->event->updateLocalizedLogos(
@@ -203,7 +227,9 @@ class UpdateDesignHandlerTest extends TestCase
             'logoEn.jpeg',
             'jpeg',
             'mobileLogoEn.jpeg',
-            'jpeg'
+            'jpeg',
+            null,
+            null
         )->shouldBeCalled();
         $this->configuration->setColors(
             '#CCCCC2',
@@ -226,10 +252,12 @@ class UpdateDesignHandlerTest extends TestCase
             'fr' => [
                 'logo' => null,
                 'mobileLogo' => null,
+                'notificationImage' => null
             ],
             'en' => [
                 'logo' => null,
                 'mobileLogo' => null,
+                'notificationImage' => null
             ],
         ];
 
@@ -273,6 +301,12 @@ class UpdateDesignHandlerTest extends TestCase
         $this->event->getLocalizedMobileLogo('en')->willReturn('mobileLogoEn.jpeg');
         $this->event->getLocalizedMobileLogoExtension('en')->willReturn('jpeg');
 
+        $this->event->getLocalizedNotificationImage('fr')->willReturn(null);
+        $this->event->getLocalizedNotificationImageExtension('fr')->willReturn(null);
+
+        $this->event->getLocalizedNotificationImage('en')->willReturn(null);
+        $this->event->getLocalizedNotificationImageExtension('en')->willReturn(null);
+
         $this->guidelineGenerator->generate($this->event->reveal())->shouldNotBeCalled();
         $this->removeImageHandler->handle(new RemoveImage($this->event->reveal()))->shouldNotBeCalled();
 
@@ -281,6 +315,8 @@ class UpdateDesignHandlerTest extends TestCase
             'logoFr.png',
             'png',
             null,
+            null,
+            null,
             null
         )->shouldBeCalled();
         $this->event->updateLocalizedLogos(
@@ -288,7 +324,9 @@ class UpdateDesignHandlerTest extends TestCase
             'logoEn.jpeg',
             'jpeg',
             'mobileLogoEn.jpeg',
-            'jpeg'
+            'jpeg',
+            null,
+            null
         )->shouldBeCalled();
         $this->configuration->setColors(
             '#CCCCCC',
@@ -311,10 +349,12 @@ class UpdateDesignHandlerTest extends TestCase
             'fr' => [
                 'logo' => null,
                 'mobileLogo' => null,
+                'notificationImage' => null
             ],
             'en' => [
                 'logo' => null,
                 'mobileLogo' => null,
+                'notificationImage' => null
             ],
         ];
 
