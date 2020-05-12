@@ -30,7 +30,7 @@ class HappeningTranslation
     private $happening;
 
     /**
-     * @var null|string
+     * @var string
      */
     private $title;
 
@@ -47,7 +47,7 @@ class HappeningTranslation
     public function __construct(
         Happening $happening,
         string $locale,
-        ?string $title,
+        string $title,
         ?string $description,
         ?string $webinarHeaderImage = null
     ) {
