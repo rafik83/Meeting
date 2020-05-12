@@ -109,6 +109,26 @@ VideoConference.prototype.join = function () {
       this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
   }
 
+  const fullscreenButton = this.createFullscreenButton();
+  this.element.appendChild(fullscreenButton);
+
+  fullscreenButton.addEventListener("click", () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+      return;
+    }
+
+    const element = this.element;
+
+    const rfs = element.requestFullscreen
+        || element.webkitRequestFullScreen
+        || element.mozRequestFullScreen
+        || element.msRequestFullscreen
+    ;
+
+    rfs.call(element);
+  });
+
   document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
@@ -151,9 +171,6 @@ VideoConference.prototype.init = function() {
   this.session.on('streamCreated', function(event) {
     const subscriberManager = new Subscriber(this.session, this.layoutContainer);
     const subscriber = subscriberManager.subscribe(event);
-
-    const fullscreenButton = this.createFullscreenButton();
-    subscriber.element.appendChild(fullscreenButton);
 
     if (this.isScreenShareStream(event.stream)) {
       this.minimizeAllSubscribers();
