@@ -12,39 +12,25 @@ namespace Proximum\Vimeet\Domain\Model;
 
 class EventTranslation
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $locale;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $description;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $bankInfo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $billingAddress;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $paymentCondition;
 
     /**
@@ -71,6 +57,9 @@ class EventTranslation
 
     /** @var string|null */
     private $notificationImageExtension;
+
+    /** @var string|null */
+    private $visioHeader = null;
 
     /**
      * @param Event       $event
@@ -303,5 +292,16 @@ class EventTranslation
         $this->mobileLogoExtension = $mobileLogoExtension;
         $this->notificationImage = $notificationImage;
         $this->notificationImageExtension = $notificationImageExtension;
+    }
+
+    public function updateVisioSettings(
+        ?string $header
+    ): void {
+        $this->visioHeader = $header;
+    }
+
+    public function getVisioHeader(): ?string
+    {
+        return $this->visioHeader;
     }
 }

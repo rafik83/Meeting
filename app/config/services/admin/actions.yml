@@ -48,6 +48,15 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\VisioSettingsAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@router'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner\PlannerAction:
         arguments:
             - '@adapter.authorization_checker'

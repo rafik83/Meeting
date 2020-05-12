@@ -41,6 +41,9 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
         notificationImageExtension:
             type: string
             nullable: true
+        visioHeader:
+            type: string
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

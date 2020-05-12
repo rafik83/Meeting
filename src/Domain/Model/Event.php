@@ -937,6 +937,36 @@ class Event implements EventInterface, TraceableInterface
             : null;
     }
 
+    public function getLocalizedVisioHeader(string $locale): ?string
+    {
+        /** @var null|EventTranslation $translation */
+        $translation = $this->translations->get($locale);
+
+        if (null === $translation) {
+            return null;
+        }
+
+        return $translation->getVisioHeader();
+    }
+
+    public function updateLocalizedVisioHeader(
+        string $locale,
+        ?string $header
+    ): void {
+        if ($this->translations->containsKey($locale)) {
+            $this->translations
+                ->get($locale)
+                ->updateVisioSettings($header)
+            ;
+
+            return;
+        }
+
+        $eventTranslation = new EventTranslation($this, $locale, '');
+        $eventTranslation->updateVisioSettings($header);
+        $this->translations->set($locale, $eventTranslation);
+    }
+
     public function updateLocalizedLogos(
         string $locale,
         ?string $logo = null,

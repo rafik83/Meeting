@@ -687,6 +687,13 @@ admin_meeting_export:
     methods: [POST]
     defaults: { _controller: AdminBundle:Meeting:export }
 
+admin_meeting_visio_settings:
+    path: /event/{event}/meeting/visio/settings
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\VisioSettingsAction
+
 #
 # Spot
 #
