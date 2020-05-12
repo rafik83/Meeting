@@ -81,6 +81,7 @@ class AppExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('eventUrl', [$this, 'generateEventUrl']),
+            new \Twig_SimpleFunction('imageUrl', [$this, 'generateImageUrl'])
         ];
     }
 
@@ -110,6 +111,14 @@ class AppExtension extends \Twig_Extension
             $event,
             $routeName,
             $parameters
+        );
+    }
+
+    public function generateImageUrl(Event $event, string $path): string
+    {
+        return $this->eventUrlGenerator->generateImageAbsoluteUrl(
+            $event,
+            $path
         );
     }
 

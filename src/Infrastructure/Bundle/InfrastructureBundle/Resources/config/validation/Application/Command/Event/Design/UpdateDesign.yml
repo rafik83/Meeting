@@ -44,6 +44,10 @@ Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign:
             - All:
                 - Collection:
                     fields:
+                        notificationImage:
+                            - Image:
+                                  maxSize: 500k
+                                  mimeTypes: !php/const Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
                         logo:
                             - Image:
                                 maxSize: 500k

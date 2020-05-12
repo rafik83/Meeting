@@ -35,6 +35,12 @@ Proximum\Vimeet\Domain\Model\EventTranslation:
         mobileLogoExtension:
             type: string
             nullable: true
+        notificationImage:
+            type: string
+            nullable: true
+        notificationImageExtension:
+            type: string
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
