@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Happening\Create;
 use Proximum\Vimeet\Application\Command\Happening\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -19,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CreateHandlerTest extends TestCase
 {
@@ -40,8 +42,19 @@ class CreateHandlerTest extends TestCase
 
         // Expected
         $expectedSubEvent     = new Happening($event, $begin, $end, $category, [$type->reveal()], true, 10, 'toto');
-        $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'truc', 'bidule');
-        $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'trac', 'machin');
+        $expectedTranslation = new Happening\HappeningTranslation(
+            $expectedSubEvent,
+            'fr',
+            'Comment faire un RDV ?',
+            'Explications sur comment faire un RDV'
+        );
+        $expectedTranslation2 = new Happening\HappeningTranslation(
+            $expectedSubEvent,
+            'en',
+            'How to do a meeting?',
+            'All you want to know about doing good meeting.',
+            '/path/webinarHeaderImageEn.jpg'
+        );
 
         $expectedSubEvent->setTranslation($expectedTranslation);
         $expectedSubEvent->setTranslation($expectedTranslation2);
@@ -49,6 +62,12 @@ class CreateHandlerTest extends TestCase
         // Mock
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
         $happeningRepository->add($expectedSubEvent)->shouldBeCalled();
+
+        $webinarHeaderImageEn = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'png'])
+            ->getMock();
 
         // Command
         $create                   = new Create($event);
@@ -60,18 +79,28 @@ class CreateHandlerTest extends TestCase
         $create->types            = [$type->reveal()];
         $create->translations     = [
             'fr' => [
-                'title'       => 'truc',
-                'description' => 'bidule',
+                'title' => 'Comment faire un RDV ?',
+                'description' => 'Explications sur comment faire un RDV',
+                'webinarHeaderImage' => null,
             ],
             'en' => [
-                'title'       => 'trac',
-                'description' => 'machin',
+                'title' => 'How to do a meeting?',
+                'description' => 'All you want to know about doing good meeting.',
+                'webinarHeaderImage' => $webinarHeaderImageEn,
             ],
         ];
         $create->invitationCode = 'toto';
         $create->webinar = false;
 
-        $handler = new CreateHandler($happeningRepository->reveal());
+
+        $fileStorage = $this->prophesize(FileStorageInterface::class);
+        $fileStorage
+            ->upload($webinarHeaderImageEn)
+            ->shouldBeCalled()
+            ->willReturn('/path/webinarHeaderImageEn.jpg')
+        ;
+
+        $handler = new CreateHandler($happeningRepository->reveal(), $fileStorage->reveal());
         $handler->handle($create);
     }
 }

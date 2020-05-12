@@ -30,29 +30,32 @@ class HappeningTranslation
     private $happening;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $title;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $description;
 
     /**
-     * HappeningTranslation constructor.
-     *
-     * @param Happening $happening
-     * @param string    $locale
-     * @param string    $title
-     * @param string    $description
+     * @var null|string
      */
-    public function __construct(Happening $happening, $locale, $title, $description)
-    {
-        $this->happening   = $happening;
-        $this->locale      = $locale;
-        $this->title       = $title;
+    private $webinarHeaderImage;
+
+    public function __construct(
+        Happening $happening,
+        string $locale,
+        ?string $title,
+        ?string $description,
+        ?string $webinarHeaderImage = null
+    ) {
+        $this->happening = $happening;
+        $this->locale = $locale;
+        $this->title = $title;
         $this->description = $description;
+        $this->webinarHeaderImage = $webinarHeaderImage;
     }
 
     /**
@@ -127,17 +130,15 @@ class HappeningTranslation
         $this->description = $description;
     }
 
-    /**
-     * @param string $title
-     * @param string $description
-     *
-     * @return HappeningTranslation
-     */
-    public function update($title, $description)
+    public function getWebinarHeaderImage(): ?string
     {
-        $this->title       = $title;
-        $this->description = $description;
+        return $this->webinarHeaderImage;
+    }
 
-        return $this;
+    public function update(string $title, ?string $description, ?string $webinarHeaderImage): void
+    {
+        $this->title = $title;
+        $this->description = $description;
+        $this->webinarHeaderImage = $webinarHeaderImage;
     }
 }

@@ -47,7 +47,8 @@ class GetWebinarViewQueryHandler
             $this->videoConferenceAdapter->getApiKey(),
             $isSpeaker,
             new TimeRangeView($happening->getBegin(), $happening->getEnd()),
-            $this->dateTime
+            $this->dateTime,
+            $happening->getWebinarHeaderImage($query->getLocale())
         );
     }
 }

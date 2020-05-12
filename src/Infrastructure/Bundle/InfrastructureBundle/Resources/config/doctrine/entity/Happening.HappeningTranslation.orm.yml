@@ -12,6 +12,9 @@ Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
         description:
             type: text
             nullable: true
+        webinarHeaderImage:
+            type: string
+            nullable: true
         locale:
             type: string
     manyToOne:

@@ -11,11 +11,13 @@
 namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\DatesUpdated;
 use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
 use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UpdateHandler
 {
@@ -25,16 +27,17 @@ class UpdateHandler
     /** @var DelayedEventDispatcherInterface */
     private $eventDispatcher;
 
-    /**
-     * @param HappeningRepositoryInterface    $happeningRepository
-     * @param DelayedEventDispatcherInterface $eventDispatcher
-     */
+    /** @var FileStorageInterface */
+    private $fileStorage;
+
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
+        FileStorageInterface $fileStorage,
         DelayedEventDispatcherInterface $eventDispatcher
     ) {
         $this->happeningRepository = $happeningRepository;
         $this->eventDispatcher = $eventDispatcher;
+        $this->fileStorage = $fileStorage;
     }
 
     /**
@@ -67,7 +70,23 @@ class UpdateHandler
         );
 
         foreach ($update->translations as $locale => $translation) {
-            $happening->updateTranslation($locale, $translation['title'], $translation['description']);
+            $currentWebinarHeaderImage = $translation['currentWebinarHeaderImage'];
+            $webinarHeaderImage = $currentWebinarHeaderImage;
+
+            if ($translation['webinarHeaderImage'] instanceof UploadedFile) {
+                if ($currentWebinarHeaderImage) {
+                    $this->fileStorage->remove($currentWebinarHeaderImage);
+                }
+
+                $webinarHeaderImage = $this->fileStorage->upload($translation['webinarHeaderImage']);
+            }
+
+            $happening->updateTranslation(
+                $locale,
+                $translation['title'],
+                $translation['description'],
+                $webinarHeaderImage
+            );
         }
 
         array_walk($update->talkings, function (array &$talking, $key) {

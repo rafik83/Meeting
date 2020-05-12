@@ -128,3 +128,16 @@
         {% endfor %}
     </div>
 {% endblock %}
+
+{% block _happening_update_translations_entry_webinarHeaderImage_row %}
+    {{ form_row(form) }}
+
+    {% if form.parent.vars.data.currentWebinarHeaderImage %}
+        <label class="col-lg-3 col-md-3 col-sm-3 control-label">
+            {{ 'form.happening_create.children.translations.prototype.children.currentWebinarHeaderImage.label'|trans({}, 'forms') }}
+        </label>
+        <div class="col-lg-9 col-md-9 col-sm-9">
+            <img src="{{ form.parent.vars.data.currentWebinarHeaderImage }}" class="img-responsive">
+        </div>
+    {% endif %}
+{% endblock %}
