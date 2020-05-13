@@ -1,6 +1,14 @@
 .chat-opened {
-  .layout-container {
+  .layout-container, .webinar-header {
     width: 75%;
+  }
+}
+
+.webinar-header {
+  width: 100%;
+
+  img {
+    margin: auto;
   }
 }
 
