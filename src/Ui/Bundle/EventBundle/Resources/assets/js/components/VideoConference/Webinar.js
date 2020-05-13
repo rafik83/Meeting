@@ -93,7 +93,7 @@ function Webinar(element, isSpeaker) {
 
     const fullscreenButton = this.createFullscreenButton();
     this.element.appendChild(fullscreenButton);
-    fullscreenButton.addEventListener("click", function() {
+    fullscreenButton.addEventListener('click', () => {
         if (document.fullscreenElement) {
             document.exitFullscreen();
             return;
@@ -106,7 +106,7 @@ function Webinar(element, isSpeaker) {
             || element.msRequestFullscreen
         ;
         rfs.call(element);
-    }.bind(this));
+    });
 
     document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
     document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
