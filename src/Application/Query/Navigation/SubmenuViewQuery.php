@@ -10,36 +10,27 @@
 
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\StaticFormulation;
 use Proximum\Vimeet\Domain\Model\User;
 
-class SubmenuViewQuery
+class SubmenuViewQuery implements Query
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $route;
 
-    /**
-     * @var null|Sheet
-     */
+    /** @var null|Sheet */
     public $sheet;
 
-    /**
-     * @var null|User
-     */
+    /** @var null|User */
     public $user;
 
     /** @var StaticFormulation[] */

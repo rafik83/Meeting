@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class HeaderViewQuery
+class HeaderViewQuery implements Query
 {
     /**
      * @var Event

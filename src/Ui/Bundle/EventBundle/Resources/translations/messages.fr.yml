@@ -325,6 +325,7 @@ navigation.category.package: 'Forfait de participation'
 navigation.category.planning: Agenda
 navigation.category.program: Programme
 navigation.category.sheet: 'Fiche de présentation'
+navigation.category.visio_test: 'Tester ma visio'
 navigation.close: Fermer
 navigation.links.billing.billing_info: 'Informations de facturation'
 navigation.links.billing.order_history: 'Historique des commandes'

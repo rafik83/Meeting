@@ -72,14 +72,14 @@ class StaticFormulationListViewQueryHandler
         $generics = [];
         foreach (Constant::STATIC_FORMULATION_LIST as $key => $data) {
             $typesUsed = $customized[$key]['typesUsed'] ?? [];
-            $remainingTypes = array_filter($types, function (Type $type) use ($typesUsed) {
+            $remainingTypes = array_filter($types, static function (Type $type) use ($typesUsed) {
                 return !isset($typesUsed[$type->getId()]);
             });
 
             $generics[$key] = new GenericStaticFormulationView(
                 $key,
                 $this->translator->trans($data['label'], [], 'messages', $locale),
-                array_map(function (Type $type) use ($locale) {
+                array_map(static function (Type $type) use ($locale) {
                     return $type->getTitle($locale);
                 }, $remainingTypes)
             );

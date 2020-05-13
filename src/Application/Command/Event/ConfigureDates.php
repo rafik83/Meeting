@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ConfigureDates
+class ConfigureDates implements Command
 {
     /** @var Event */
     public $event;
@@ -60,8 +61,15 @@ class ConfigureDates
     public $closeAnsweringMeetingRequestDate;
 
     /**
-     * ConfigureDates constructor.
+     * "la date d'activation du button de test visio"
      *
+     * Date after which the visio test button is shown on the menu.
+     *
+     * @var \DateTimeInterface|null
+     */
+    public $enableVisioTestMenuButtonDate;
+
+    /**
      * @param Event $event
      */
     public function __construct(Event $event)
@@ -77,6 +85,7 @@ class ConfigureDates
         $this->registrationOpenDate             = $event->getConfiguration()->getRegistrationOpenDate();
         $this->registrationCloseDate            = $event->getConfiguration()->getRegistrationCloseDate();
         $this->enableBadgeForParticipantDate    = $event->getConfiguration()->getEnableBadgeForParticipantDate();
+        $this->enableVisioTestMenuButtonDate    = $event->getConfiguration()->getEnableVisioTestMenuButtonDate();
     }
 
     public function addCatalogOnlineDateButEventHasNoDate(): bool
