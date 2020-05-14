@@ -5,7 +5,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateVisioSettings;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Visio\UpdateVisioSettings;
+use Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever;
+use Proximum\Vimeet\Application\Query\Visio\UpdateVisioSettingsViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Meeting\Visio\SettingsType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -39,13 +42,21 @@ class VisioSettingsAction
     /** @var FlashBagInterface */
     private $flashBag;
 
+    /** @var VisioSettingsRetriever */
+    private $visioSettingsRetriever;
+
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
         FlashBagInterface $flashBag,
         CommandBusInterface $commandBus,
+        QueryBusInterface $queryBus,
         EngineInterface $engine,
-        RouterInterface $router
+        RouterInterface $router,
+        VisioSettingsRetriever $visioSettingsRetriever
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
@@ -53,6 +64,8 @@ class VisioSettingsAction
         $this->engine = $engine;
         $this->router = $router;
         $this->flashBag = $flashBag;
+        $this->visioSettingsRetriever = $visioSettingsRetriever;
+        $this->queryBus = $queryBus;
     }
 
     public function __invoke(
@@ -63,7 +76,9 @@ class VisioSettingsAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $updateVisioSettings = new UpdateVisioSettings($event);
+        $visioSettings = $this->visioSettingsRetriever->get($event);
+
+        $updateVisioSettings = new UpdateVisioSettings($event, $visioSettings);
         $form = $this->formFactory->create(SettingsType::class, $updateVisioSettings, [
             'submit' => true,
         ]);
@@ -78,9 +93,12 @@ class VisioSettingsAction
             );
         }
 
+        $updateVisioSettingsView = $this->queryBus->handle(new UpdateVisioSettingsViewQuery($event, $visioSettings));
+
         return new Response(
             $this->engine->render(self::TEMPLATE, [
                 'event' => $event,
+                'view' => $updateVisioSettingsView,
                 'form' => $form->createView(),
             ])
         );

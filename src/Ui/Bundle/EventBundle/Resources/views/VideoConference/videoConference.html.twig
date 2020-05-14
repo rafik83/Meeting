@@ -28,15 +28,13 @@
             data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
         {% endif %}
     >
-        {% set availableLocale = event.availableLocale(app.request.locale) %}
-        {% set visioHeader = event.localizedVisioHeader(availableLocale) %}
-        {% if visioHeader %}
-            <div>
-                <img src="{{ visioHeader }}" class="img-responsive" style="margin: auto">
+        {% if videoConferenceView.hasHeader %}
+            <div class="visio-header">
+                <img src="{{ videoConferenceView.header }}" class="img-responsive">
             </div>
         {% endif %}
 
-        <div class="layout-container" {% if visioHeader %}style="top:125px"{% endif %}></div>
+        <div class="layout-container" {% if videoConferenceView.hasHeader %}style="top:125px"{% endif %}></div>
         <div class="chat-container hide"></div>
         <div class="video-helper" data-meeting-settings-container>
             {{ include('EventBundle:Visio:settings.html.twig') }}

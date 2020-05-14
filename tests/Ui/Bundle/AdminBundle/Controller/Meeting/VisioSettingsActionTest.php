@@ -8,8 +8,13 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateVisioSettings;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Visio\UpdateVisioSettings;
+use Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever;
+use Proximum\Vimeet\Application\Query\Visio\UpdateVisioSettingsViewQuery;
+use Proximum\Vimeet\Application\View\Visio\UpdateVisioSettingsView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Visio\VisioSettings;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\VisioSettingsAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Meeting\Visio\SettingsType;
 use Symfony\Component\Form\Form;
@@ -49,20 +54,32 @@ class VisioSettingsActionTest extends TestCase
     /** @var ObjectProphecy */
     private $request;
 
-    public function setUp()
+    /** @var ObjectProphecy */
+    private $queryBus;
+
+    /** @var ObjectProphecy */
+    private $visioSettingsRetriever;
+
+    /** @var ObjectProphecy */
+    private $visioSettings;
+
+    public function setUp(): void
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->engine = $this->prophesize(EngineInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
+        $this->visioSettingsRetriever = $this->prophesize(VisioSettingsRetriever::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
+        $this->queryBus = $this->prophesize(QueryBusInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->event = $this->prophesize(Event::class);
         $this->request = $this->prophesize(Request::class);
         $this->event->getLocales()->willReturn(['fr']);
+        $this->visioSettings = $this->prophesize(VisioSettings::class);
     }
 
-    public function testAccessDenied()
+    public function testAccessDenied(): void
     {
         $this->expectException(AccessDeniedException::class);
 
@@ -77,8 +94,10 @@ class VisioSettingsActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->commandBus->reveal(),
+            $this->queryBus->reveal(),
             $this->engine->reveal(),
-            $this->router->reveal()
+            $this->router->reveal(),
+            $this->visioSettingsRetriever->reveal()
         );
 
         $action(
@@ -87,7 +106,7 @@ class VisioSettingsActionTest extends TestCase
         );
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
@@ -95,10 +114,27 @@ class VisioSettingsActionTest extends TestCase
             ->willReturn(true)
         ;
 
+        $this->visioSettingsRetriever->get($this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn($this->visioSettings->reveal())
+        ;
+
+        $view = $this->prophesize(UpdateVisioSettingsView::class);
+        $this->queryBus
+            ->handle(
+                new UpdateVisioSettingsViewQuery(
+                    $this->event->reveal(),
+                    $this->visioSettings->reveal()
+                )
+            )
+            ->shouldBeCalled()
+            ->willReturn($view->reveal())
+        ;
+
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
         $form->createView()->willReturn($formView->reveal());
-        $update = new UpdateVisioSettings($this->event->reveal());
+        $update = new UpdateVisioSettings($this->event->reveal(), $this->visioSettings->reveal());
         $this->formFactory
             ->create(
                 SettingsType::class,
@@ -118,6 +154,7 @@ class VisioSettingsActionTest extends TestCase
                 [
                     'event' => $this->event->reveal(),
                     'form' => $formView->reveal(),
+                    'view' => $view->reveal(),
                 ]
             )
             ->shouldBeCalled()
@@ -129,8 +166,10 @@ class VisioSettingsActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->commandBus->reveal(),
+            $this->queryBus->reveal(),
             $this->engine->reveal(),
-            $this->router->reveal()
+            $this->router->reveal(),
+            $this->visioSettingsRetriever->reveal()
         );
 
         $result = $action(
@@ -141,7 +180,7 @@ class VisioSettingsActionTest extends TestCase
         $this->assertInstanceOf(Response::class, $result);
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
@@ -149,8 +188,23 @@ class VisioSettingsActionTest extends TestCase
             ->willReturn(true)
         ;
 
+        $this->visioSettingsRetriever->get($this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn($this->visioSettings->reveal())
+        ;
+
+        $this->queryBus
+            ->handle(
+                new UpdateVisioSettingsViewQuery(
+                    $this->event->reveal(),
+                    $this->visioSettings->reveal()
+                )
+            )
+            ->shouldNotBeCalled()
+        ;
+
         $form = $this->prophesize(Form::class);
-        $update = new UpdateVisioSettings($this->event->reveal());
+        $update = new UpdateVisioSettings($this->event->reveal(), $this->visioSettings->reveal());
         $this->formFactory
             ->create(
                 SettingsType::class,
@@ -180,8 +234,10 @@ class VisioSettingsActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->commandBus->reveal(),
+            $this->queryBus->reveal(),
             $this->engine->reveal(),
-            $this->router->reveal()
+            $this->router->reveal(),
+            $this->visioSettingsRetriever->reveal()
         );
 
         $result = $action(

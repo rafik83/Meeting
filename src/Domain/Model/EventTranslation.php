@@ -58,9 +58,6 @@ class EventTranslation
     /** @var string|null */
     private $notificationImageExtension;
 
-    /** @var string|null */
-    private $visioHeader = null;
-
     /**
      * @param Event       $event
      * @param string      $locale
@@ -292,16 +289,5 @@ class EventTranslation
         $this->mobileLogoExtension = $mobileLogoExtension;
         $this->notificationImage = $notificationImage;
         $this->notificationImageExtension = $notificationImageExtension;
-    }
-
-    public function updateVisioSettings(
-        ?string $header
-    ): void {
-        $this->visioHeader = $header;
-    }
-
-    public function getVisioHeader(): ?string
-    {
-        return $this->visioHeader;
     }
 }

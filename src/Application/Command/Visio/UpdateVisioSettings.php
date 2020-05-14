@@ -1,10 +1,11 @@
 <?php
 
 
-namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
+namespace Proximum\Vimeet\Application\Command\Visio;
 
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Visio\VisioSettings;
 
 class UpdateVisioSettings implements Command
 {
@@ -12,14 +13,18 @@ class UpdateVisioSettings implements Command
     public $event;
 
     /** @var array */
-    public $localizedVisioHeaders = [];
+    public $localizedVisioSettings = [];
 
-    public function __construct(Event $event)
+    /** @var VisioSettings */
+    public $visioSettings;
+
+    public function __construct(Event $event, VisioSettings $visioSettings)
     {
         $this->event = $event;
+        $this->visioSettings = $visioSettings;
 
         foreach ($event->getLocales() as $locale) {
-            $this->localizedVisioHeaders[$locale] = [
+            $this->localizedVisioSettings[$locale] = [
                 'header' => null,
                 'removeHeader' => false,
             ];

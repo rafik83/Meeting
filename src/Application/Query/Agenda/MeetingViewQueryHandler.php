@@ -63,7 +63,7 @@ class MeetingViewQueryHandler
      * @return MeetingView
      * @throws NoSheetForUserException
      */
-    public function handle(MeetingViewQuery $query)
+    public function handle(MeetingViewQuery $query): MeetingView
     {
         $userSheet = $query->meeting->getSheetOfUser($query->user);
         $sheetMet = $query->meeting->getSheetMet($userSheet);
@@ -95,7 +95,7 @@ class MeetingViewQueryHandler
             $query->meeting->getSlot()->getEnd()->getTimestamp() - $this->now->getTimestamp()
         );
 
-        $meeting = new MeetingView(
+        return new MeetingView(
             $query->meeting->getId(),
             $userSheet->getTitle(),
             $sheetMet->getId(),
@@ -114,7 +114,5 @@ class MeetingViewQueryHandler
             $query->meeting->getSpot()->isVisio(),
             $this->videoMeetingAccess->allowedToAccess($query->meeting)
         );
-
-        return $meeting;
     }
 }

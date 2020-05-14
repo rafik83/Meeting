@@ -54,8 +54,10 @@ services:
             - '@form.factory'
             - '@session.flash_bag'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating'
             - '@router'
+            - '@Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner\PlannerAction:
         arguments:

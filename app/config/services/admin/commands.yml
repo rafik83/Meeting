@@ -35,12 +35,20 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateStatus }
 
-    Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateVisioSettingsHandler:
+    #
+    # Visio
+    #
+    Proximum\Vimeet\Application\Command\Visio\CreateVisioSettingsHandler:
         arguments:
-            - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Visio\CreateVisioSettings }
+    Proximum\Vimeet\Application\Command\Visio\UpdateVisioSettingsHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository'
             - '@adapter.local_file_storage'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateVisioSettings }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Visio\UpdateVisioSettings }
 
     #
     # Rooming

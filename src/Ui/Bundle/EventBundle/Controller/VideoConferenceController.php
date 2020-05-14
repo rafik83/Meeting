@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Infrastructure\Adapter\QueryBus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\VideoMeetingAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -74,7 +75,11 @@ class VideoConferenceController extends Controller
 
         /** @var VideoConferenceView $videoConferenceView */
         $videoConferenceView = $this->get('tactician.commandbus')->handle(
-            new RequestAccess($meeting, $userDomain->getUser())
+            new RequestAccess(
+                $meeting,
+                $userDomain->getUser(),
+                $event->getAvailableLocale($request->getLocale())
+            )
         );
 
         return $this->render(
@@ -110,6 +115,7 @@ class VideoConferenceController extends Controller
      * Opened page to test the Video Conference feature with a sessionId
      */
     public function accessSessionVideoTestAction(
+        Request $request,
         EventDomain $eventDomain,
         ?UserDomain $userDomain,
         string $sessionId
@@ -118,19 +124,24 @@ class VideoConferenceController extends Controller
             return $this->redirectToRoute('event_video_conference_create_session_test');
         }
 
+        $event = $eventDomain->getEvent();
         $userCompleteName = null !== $userDomain ? $userDomain->getUser()->getAccount()->getCompleteName() : 'N/A';
 
         try {
             /** @var VideoConferenceView $videoConferenceView */
             $videoConferenceView = $this->get('tactician.commandbus')->handle(
-                new RequestTestAccess($sessionId)
+                new RequestTestAccess(
+                    $event,
+                    $sessionId,
+                    $event->getAvailableLocale($request->getLocale())
+                )
             );
         } catch (InvalidTokenGeneratorArgumentsException $exception) {
             throw $this->createNotFoundException('The sessionId is not valid');
         }
 
         return $this->render('EventBundle:VideoConference:videoConference.html.twig', [
-            'event' => $eventDomain->getEvent(),
+            'event' => $event,
             'userCompleteName' => $userCompleteName,
             'videoConferenceView' => $videoConferenceView,
         ]);

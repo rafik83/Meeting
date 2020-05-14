@@ -1,6 +1,6 @@
-Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateVisioSettings:
+Proximum\Vimeet\Application\Command\Visio\UpdateVisioSettings:
     properties:
-        localizedVisioHeaders:
+        localizedVisioSettings:
             - All:
                   - Collection:
                         fields:

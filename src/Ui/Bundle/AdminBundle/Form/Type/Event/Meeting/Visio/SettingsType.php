@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Meeting\Visio;
 
-use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateVisioSettings;
+use Proximum\Vimeet\Application\Command\Visio\UpdateVisioSettings;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,8 +19,8 @@ class SettingsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('localizedVisioHeaders', CollectionType::class, [
-                'entry_type' => HeaderLocalizedType::class,
+            ->add('localizedVisioSettings', CollectionType::class, [
+                'entry_type' => VisioSettingsLocalizedType::class,
                 'label' => false,
                 'required' => false,
             ]);
@@ -29,9 +29,9 @@ class SettingsType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
-        foreach ($view->children['localizedVisioHeaders'] as $translation) {
+        foreach ($view->children['localizedVisioSettings'] as $translation) {
             $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
         }
     }

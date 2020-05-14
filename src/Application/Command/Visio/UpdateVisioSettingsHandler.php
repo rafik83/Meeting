@@ -1,42 +1,43 @@
 <?php
 
 
-namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
+namespace Proximum\Vimeet\Application\Command\Visio;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Visio\VisioSettingsRepositoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UpdateVisioSettingsHandler
 {
-    /** @var EventRepositoryInterface */
-    private $eventRepository;
+    /** @var VisioSettingsRepositoryInterface */
+    private $visioSettingsRepository;
 
     /** @var FileStorageInterface */
     private $fileStorage;
 
     public function __construct(
-        EventRepositoryInterface $eventRepository,
+        VisioSettingsRepositoryInterface $visioSettingsRepository,
         FileStorageInterface $fileStorage
     ) {
-        $this->eventRepository = $eventRepository;
+        $this->visioSettingsRepository = $visioSettingsRepository;
         $this->fileStorage = $fileStorage;
     }
 
     public function handle(UpdateVisioSettings $updateVisioSettings): void
     {
         $event = $updateVisioSettings->event;
+        $visioSettings = $updateVisioSettings->visioSettings;
 
         $currentHeaders = [];
         foreach ($event->getLocales() as $locale) {
-            $currentHeaders[$locale] = $event->getLocalizedVisioHeader($locale);
+            $currentHeaders[$locale] = $visioSettings->getHeader($locale);
         }
 
-        foreach ($updateVisioSettings->localizedVisioHeaders as $locale => $header) {
+        foreach ($updateVisioSettings->localizedVisioSettings as $locale => $visioSettingsLocalized) {
             $currentVisioHeaderImage = $currentHeaders[$locale] ?? null;
             $visioHeaderImage = $currentVisioHeaderImage;
 
-            if (true === $header['removeHeader']
+            if (true === $visioSettingsLocalized['removeHeader']
                 && null  !== $currentVisioHeaderImage
             ) {
                 $this->fileStorage->remove($currentVisioHeaderImage);
@@ -45,20 +46,20 @@ class UpdateVisioSettingsHandler
                 $visioHeaderImage = null;
             }
 
-            if ($header['header'] instanceof UploadedFile) {
+            if ($visioSettingsLocalized['header'] instanceof UploadedFile) {
                 if (null !== $currentVisioHeaderImage) {
                     $this->fileStorage->remove($currentVisioHeaderImage);
                 }
 
-                $visioHeaderImage = $this->fileStorage->upload($header['header']);
+                $visioHeaderImage = $this->fileStorage->upload($visioSettingsLocalized['header']);
             }
 
-            $event->updateLocalizedVisioHeader(
+            $visioSettings->updateTranslation(
                 $locale,
                 $visioHeaderImage
             );
         }
 
-        $this->eventRepository->set($event);
+        $this->visioSettingsRepository->update($visioSettings);
     }
 }

@@ -300,9 +300,9 @@ form.event_create.children.visio.label: 'Evenement dématérialisé'
 form.event_create.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event_duplicate.children.event.label: Événement
 form.event_duplicate.children.submit.label: Créer
-form.event_meeting_visio_settings.children.localizedVisioHeaders.prototype.children.header.label: 'Header des RDVs Visio'
-form.event_meeting_visio_settings.children.localizedVisioHeaders.prototype.children.header.missing: 'Image non défini actuellement'
-form.event_meeting_visio_settings.children.localizedVisioHeaders.prototype.children.removeHeader.label: 'Supprimer ce header'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.header.label: 'Header des RDVs Visio'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.header.missing: 'Image non défini actuellement'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.removeHeader.label: 'Supprimer ce header'
 form.event_meeting_visio_settings.children.submit.label: 'Enregistrer'
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'

@@ -87,3 +87,7 @@ services:
     Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\AnswerRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
