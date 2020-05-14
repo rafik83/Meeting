@@ -212,7 +212,7 @@ class SheetSearchQueryBuilder
     /**
      * @param array $filters
      */
-    protected function filterByContent(array &$filters)
+    protected function filterByContent(array &$filters): void
     {
         if (!isset($filters[SearchFields::FILTER_CONTENT])
             || empty($filters[SearchFields::FILTER_CONTENT])
@@ -220,10 +220,18 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $search = str_replace('|', ' ', $filters[SearchFields::FILTER_CONTENT]);
+        $search = explode('|', $filters[SearchFields::FILTER_CONTENT]);
 
         $builder = new ContentQueryBuilder();
-        $this->query->addMust($builder->getElasticaQuery($search, $this->locale));
+        $boolQuery = new BoolQuery();
+
+        foreach ($search as $value) {
+            $boolQuery->addShould(
+                $builder->getElasticaQuery($value, $this->locale)
+            );
+        }
+
+        $this->query->addMust($boolQuery);
     }
 
     /**
