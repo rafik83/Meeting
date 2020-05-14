@@ -1,10 +1,10 @@
 .chat-opened {
-  .layout-container, .webinar-header {
+  .layout-container, .webinar-header, .visio-header {
     width: 75%;
   }
 }
 
-.webinar-header {
+.webinar-header, .visio-header {
   width: 100%;
 
   img {
