@@ -58,10 +58,11 @@ function Webinar(element, isSpeaker) {
     }
     this.timerContainer = element.querySelector('.timer');
     this.countDownContainer = element.querySelector('.timer span.countdown');
+    this.viewersCount = 0;
+    this.viewersContainer = element.querySelector('.viewers-container');
+    this.viewersTextContainer = element.querySelector('.viewers');
 
     if (this.isSpeaker) {
-        this.viewersCount = 0;
-        this.viewersContainer = element.querySelector('.viewers');
         this.thereIsAlreadyAScreenShareInProgressMessage = element.getAttribute('data-screen-share-already-in-progress-message');
 
         this.endScreenSharingButton = element.querySelector('#end-screensharing');
@@ -131,7 +132,7 @@ Webinar.prototype.init = function () {
         return;
     }
 
-    this.session = TokboxInstance.initSession(this.apiKey, this.sessionId, {connectionEventsSuppressed: !this.isSpeaker});
+    this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
     this.session.on('streamCreated', function (event) {
         this.hideElement(this.helperContainer);
@@ -194,7 +195,7 @@ Webinar.prototype.init = function () {
 };
 
 Webinar.prototype.updateViewers = function () {
-    this.viewersContainer.textContent = this.viewersCount;
+    this.viewersTextContainer.textContent = this.viewersCount;
 };
 
 /**
@@ -206,6 +207,8 @@ Webinar.prototype.connect = function () {
         this.showElement(this.toggleAudioElement);
         this.showElement(this.toggleVideoElement);
         this.showElement(this.startScreenSharingButton);
+        this.showElement(this.timerContainer);
+        this.showElement(this.viewersContainer);
 
         if (!error) {
             if (this.isSpeaker) {
