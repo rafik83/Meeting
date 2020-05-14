@@ -272,15 +272,21 @@ Webinar.prototype.publishStream = function () {
  * Disconnect from the session
  */
 Webinar.prototype.disconnect = function () {
-    this.session.disconnect();
-    this.session.off();
+    if (this.session) {
+        this.session.disconnect();
+        this.session.off();
+    }
+
     this.session = null;
 
     if (window.opener) {
         window.opener.location.reload(true);
+        window.close();
+
+        return;
     }
 
-    window.close();
+    window.history.go(-1);
 };
 
 Webinar.prototype.handlePublish = function (error) {
