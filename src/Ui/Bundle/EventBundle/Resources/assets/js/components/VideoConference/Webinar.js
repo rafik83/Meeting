@@ -194,10 +194,7 @@ Webinar.prototype.init = function () {
 };
 
 Webinar.prototype.updateViewers = function () {
-    // remove speaker
-    const viewersCount = this.viewersCount - 1;
-
-    this.viewersContainer.textContent = '' + viewersCount;
+    this.viewersContainer.textContent = this.viewersCount;
 };
 
 /**
