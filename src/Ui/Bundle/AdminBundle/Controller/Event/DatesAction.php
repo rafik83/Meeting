@@ -20,14 +20,19 @@ class DatesAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
+
     /** @var FormFactoryInterface */
     private $formFactory;
+
     /** @var CommandBusInterface */
     private $commandBus;
+
     /** @var FlashBagInterface */
     private $flashBag;
+
     /** @var RouterInterface */
     private $router;
+
     /** @var EngineInterface */
     private $engine;
 
@@ -47,13 +52,7 @@ class DatesAction
         $this->engine = $engine;
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function __invoke(Request $request, Event $event)
+    public function __invoke(Request $request, Event $event): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
             throw new AccessDeniedException('Access denied');

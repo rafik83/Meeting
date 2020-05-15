@@ -54,7 +54,7 @@ final class Category
     const FORMS      = 'navigation.category.forms';
     const FORMS_ICON = 'icon-Info_1';
 
-    public const VISIO = 'navigation.category.visio';
+    public const VISIO = 'navigation.category.visio_test';
     public const VISIO_ICON = 'icon-Video_2';
 
     public static $categories = [
