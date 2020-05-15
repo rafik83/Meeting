@@ -517,7 +517,7 @@ Webinar.prototype.countDownBeforeEnd = function () {
         return;
     }
 
-    new Counter(parseInt(this.timeRemaining), parseInt(this.warningRemainingTime), this.countDownContainer, this.timerContainer);
+    new Counter(parseInt(this.timeRemaining, 10), parseInt(this.warningRemainingTime, 10), this.countDownContainer, this.timerContainer);
 };
 
 Webinar.prototype.hidePublisher = function () {
