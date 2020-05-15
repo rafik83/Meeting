@@ -83,6 +83,8 @@ final class Route
     public const NOTIFICATION = 'event_notification_list';
 
     public const VISIO_TEST_CONFIGURATION = 'event_video_conference_create_network_test';
+    public const VISIO_TEST_SHEET_CREATE_TEST = 'event_sheet_video_conference_create_network_test';
+    public const VISIO_TEST_SHEET_CONFIGURATION = 'event_sheet_video_conference_network_test';
 
     public static function isSheet(string $route): bool
     {
@@ -114,6 +116,11 @@ final class Route
     public static function isNotification(string $route): bool
     {
         return self::NOTIFICATION === $route;
+    }
+
+    public static function isVisioTestConfigurationWithSheetContext(string $route): bool
+    {
+        return $route === self::VISIO_TEST_SHEET_CONFIGURATION;
     }
 
     public static function isAgenda(string $route): bool

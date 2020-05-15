@@ -30,7 +30,7 @@
 
             <div class="wrapper">
                 {% if not (disabledNavigationMenu ?? false) %}
-                {{ render(controller('EventBundle:Navigation:menu', { 'sheet': sheet is defined ? sheet : null })) }}
+                {{ render(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Navigation\\MenuAction', { 'sheet': sheet is defined ? sheet : null })) }}
                 {% endif %}
             </div>
 

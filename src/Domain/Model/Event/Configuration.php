@@ -80,6 +80,9 @@ class Configuration
     /** @var null|\DateTimeInterface "la date d'activation des notifications SMS" */
     private $smsActivationDate;
 
+    /** @var null|\DateTimeInterface "la date d'activation du button de test visio" */
+    private $enableVisioTestMenuButtonDate;
+
     /** @var bool */
     private $meetingRequestUpdateLocked;
 
@@ -392,66 +395,52 @@ class Configuration
         \DateTimeInterface $agendaOnlineDate = null,
         \DateTimeInterface $registrationOpenDate = null,
         \DateTimeInterface $registrationCloseDate = null,
-        \DateTimeInterface $enableBadgeForParticipantDate = null
-    ) {
-        $this->catalogOnlineDate                = $catalogOnlineDate;
-        $this->happeningsOpenDate               = $happeningsOpenDate;
-        $this->schedulePublishDate              = $schedulePublishDate;
-        $this->closeMeetingRequestDate          = $closeMeetingRequestDate;
+        \DateTimeInterface $enableBadgeForParticipantDate = null,
+        \DateTimeInterface $enableVisioTestMenuButtonDate = null
+    ): self {
+        $this->catalogOnlineDate = $catalogOnlineDate;
+        $this->happeningsOpenDate = $happeningsOpenDate;
+        $this->schedulePublishDate = $schedulePublishDate;
+        $this->closeMeetingRequestDate = $closeMeetingRequestDate;
         $this->closeAnsweringMeetingRequestDate = $closeAnsweringMeetingRequestDate;
-        $this->smsActivationDate                = $smsActivationDate;
-        $this->agendaOnlineDate                 = $agendaOnlineDate;
-        $this->registrationOpenDate             = $registrationOpenDate;
-        $this->registrationCloseDate            = $registrationCloseDate;
-        $this->enableBadgeForParticipantDate    = $enableBadgeForParticipantDate;
+        $this->smsActivationDate = $smsActivationDate;
+        $this->agendaOnlineDate = $agendaOnlineDate;
+        $this->registrationOpenDate = $registrationOpenDate;
+        $this->registrationCloseDate = $registrationCloseDate;
+        $this->enableBadgeForParticipantDate = $enableBadgeForParticipantDate;
+        $this->enableVisioTestMenuButtonDate = $enableVisioTestMenuButtonDate;
 
         return $this;
     }
 
-    /**
-     * Get catalogOnlineDate
-     *
-     * @return \DateTimeInterface|null
-     */
-    public function getCatalogOnlineDate()
+    public function getCatalogOnlineDate(): ?\DateTimeInterface
     {
         return $this->catalogOnlineDate;
     }
 
-    /**
-     * Get happeningsOpenDate
-     *
-     * @return \DateTimeInterface|null
-     */
-    public function getHappeningsOpenDate()
+    public function getHappeningsOpenDate(): ?\DateTimeInterface
     {
         return $this->happeningsOpenDate;
     }
 
-    /**
-     * Get schedulePublishDate
-     *
-     * @return \DateTimeInterface|null
-     */
-    public function getSchedulePublishDate()
+    public function getSchedulePublishDate(): ?\DateTimeInterface
     {
         return $this->schedulePublishDate;
     }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getCloseMeetingRequestDate()
+    public function getCloseMeetingRequestDate(): ?\DateTimeInterface
     {
         return $this->closeMeetingRequestDate;
     }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getCloseAnsweringMeetingRequestDate()
+    public function getCloseAnsweringMeetingRequestDate(): ?\DateTimeInterface
     {
         return $this->closeAnsweringMeetingRequestDate;
+    }
+
+    public function getEnableVisioTestMenuButtonDate(): ?\DateTimeInterface
+    {
+        return $this->enableVisioTestMenuButtonDate;
     }
 
     /**

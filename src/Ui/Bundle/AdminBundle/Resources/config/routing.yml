@@ -202,7 +202,7 @@ admin_event_configure_dates:
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Event:dates }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\DatesAction
 
 admin_event_search_facets:
     path: /event/{event}/search-facets

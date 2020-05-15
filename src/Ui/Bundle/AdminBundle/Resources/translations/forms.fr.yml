@@ -264,6 +264,7 @@ form.event_configure_date.children.closeAnsweringMeetingRequestDate.label: 'Bloq
 form.event_configure_date.children.closeMeetingRequestDate.label: 'Bloquer la demande de rendez-vous'
 form.event_configure_date.children.enableBadgeForParticipantDate.help: 'Active l''envoi automatique du badge par email'
 form.event_configure_date.children.enableBadgeForParticipantDate.label: 'Active l''affichage du badge pour le participant'
+form.event_configure_date.children.enableVisioTestMenuButtonDate.label: 'Active l''affichage du bouton de test de visio dans le menu'
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
 form.event_configure_date.children.registrationCloseDate.label: 'Date de clôture des inscriptions'
 form.event_configure_date.children.registrationOpenDate.label: 'Date d''ouverture des inscriptions'

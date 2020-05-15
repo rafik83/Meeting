@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2096 - Add image header to webinar
 - VIMEET-2050 - Can define an image to the header notification
+- VIMEET-2118 - Add visio test menu button
 
 ## [2.26.0] - 2020-05-05
 ### Added

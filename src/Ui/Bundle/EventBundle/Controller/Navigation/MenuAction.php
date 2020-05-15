@@ -1,15 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Navigation;
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
-
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery;
 use Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery;
@@ -17,18 +10,52 @@ use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
+use Proximum\Vimeet\Domain\Repository\StaticFormulation\StaticFormulationRepositoryInterface;
 use Proximum\Vimeet\Domain\StaticFormulation\Constant;
 use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository;
+use Symfony\Component\Templating\EngineInterface;
 
-class NavigationController extends Controller
+class MenuAction
 {
+    /** @var EngineInterface */
+    private $engine;
+
+    /** @var QueryBusInterface */
+    private $queryBus;
+
+    /** @var RequestStack */
+    private $requestStack;
+    /** @var IsValidatedRequiredPackageMissing */
+    private $isValidatedRequiredPackageMissing;
+
+    /** @var IsValidatedTransactionMissing */
+    private $isValidatedTransactionMissing;
+
+    /** @var StaticFormulationRepositoryInterface */
+    private $staticFormulationRepository;
+
+    public function __construct(
+        RequestStack $requestStack,
+        EngineInterface $engine,
+        QueryBusInterface $queryBus,
+        IsValidatedRequiredPackageMissing $isValidatedRequiredPackageMissing,
+        IsValidatedTransactionMissing $isValidatedTransactionMissing,
+        StaticFormulationRepositoryInterface $staticFormulationRepository
+    ) {
+        $this->engine = $engine;
+        $this->queryBus = $queryBus;
+        $this->requestStack = $requestStack;
+        $this->isValidatedRequiredPackageMissing = $isValidatedRequiredPackageMissing;
+        $this->isValidatedTransactionMissing = $isValidatedTransactionMissing;
+        $this->staticFormulationRepository = $staticFormulationRepository;
+    }
+
     /**
      * @param Request         $request
      * @param EventDomain     $eventDomain
@@ -38,29 +65,27 @@ class NavigationController extends Controller
      *
      * @return Response
      */
-    public function menuAction(
+    public function __invoke(
         Request $request,
         EventDomain $eventDomain,
         UserDomain $userDomain = null,
         Sheet $sheet = null,
         $registration = false
-    ) {
+    ): Response {
         $event = $eventDomain->getEvent();
         $locale = $request->getLocale();
         $user = $userDomain instanceof UserDomain ? $userDomain->getUser() : null;
 
-        $masterRequest = $this->get('request_stack')->getMasterRequest();
+        $masterRequest = $this->requestStack->getMasterRequest();
 
         if (null === $masterRequest) {
             throw new AccessDeniedException('This controller must be used as embedded');
         }
 
-        $isValidatedRequiredPackageMissing = $this->get(IsValidatedRequiredPackageMissing::class);
-        $isValidatedTransactionMissing = $this->get(IsValidatedTransactionMissing::class);
         $route = $masterRequest->get('_route', Route::EVENT);
         $routeParameters = $masterRequest->get('_route_params');
 
-        $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
+        $menuHeaderView = $this->queryBus->handle(
             new HeaderViewQuery(
                 $eventDomain->getEvent(),
                 $request->getLocale(),
@@ -76,15 +101,15 @@ class NavigationController extends Controller
         $submenuView = null;
 
         $canDisplayMenus = null !== $user && false === $registration &&
-            (null === $sheet || !$isValidatedRequiredPackageMissing->isSatisfiedBy($sheet)) &&
-            (null === $sheet || !$isValidatedTransactionMissing->isSatisfiedBy($sheet));
+            (null === $sheet || !$this->isValidatedRequiredPackageMissing->isSatisfiedBy($sheet)) &&
+            (null === $sheet || !$this->isValidatedTransactionMissing->isSatisfiedBy($sheet));
 
         if ($canDisplayMenus) {
             $staticFormulationsIndexedByCategories = [];
 
             if (null !== $sheet) {
                 $staticFormulations = $this
-                    ->get(StaticFormulationRepository::class)
+                    ->staticFormulationRepository
                     ->findByTypeAndLocale(
                         $sheet->getType(),
                         $locale
@@ -99,7 +124,7 @@ class NavigationController extends Controller
             }
 
 
-            $menuView = $this->get('tactician.commandbus.query')->handle(
+            $menuView = $this->queryBus->handle(
                 new MenuViewQuery(
                     $event,
                     $locale,
@@ -109,7 +134,7 @@ class NavigationController extends Controller
                 )
             );
 
-            $submenuView = $this->get('tactician.commandbus.query')->handle(
+            $submenuView = $this->queryBus->handle(
                 new SubmenuViewQuery(
                     $event,
                     $locale,
@@ -122,20 +147,22 @@ class NavigationController extends Controller
         }
 
         if (Route::EXTERNAL_CATALOG === $route) {
-            $registrationUrl = $this->get('tactician.commandbus.query')->handle(
+            $registrationUrl = $this->queryBus->handle(
                 new CatalogVisibilityRegistrationUrlQuery($event)
             );
         }
 
         $isShowingRegisterButton = Route::EVENT !== $route && null === $user;
 
-        return $this->render('EventBundle::Navigation/header.html.twig', [
-            'menuHeaderView' => $menuHeaderView,
-            'menuView' => $menuView,
-            'submenuView' => $submenuView,
-            'isShowingRegisterButton' => $isShowingRegisterButton,
-            'isHeaderDisplayedOnMobile' => Route::isHeaderDisplayedOnMobile($route),
-            'registrationUrl' => $registrationUrl ?? null,
-        ]);
+        return new Response(
+            $this->engine->render('EventBundle::Navigation/header.html.twig', [
+                'menuHeaderView' => $menuHeaderView,
+                'menuView' => $menuView,
+                'submenuView' => $submenuView,
+                'isShowingRegisterButton' => $isShowingRegisterButton,
+                'isHeaderDisplayedOnMobile' => Route::isHeaderDisplayedOnMobile($route),
+                'registrationUrl' => $registrationUrl ?? null,
+            ])
+        );
     }
 }

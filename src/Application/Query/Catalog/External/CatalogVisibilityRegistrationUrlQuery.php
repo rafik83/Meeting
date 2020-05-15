@@ -10,13 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog\External;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class CatalogVisibilityRegistrationUrlQuery
+class CatalogVisibilityRegistrationUrlQuery implements Query
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
     /**

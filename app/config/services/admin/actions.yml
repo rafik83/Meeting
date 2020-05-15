@@ -205,6 +205,15 @@ services:
             - '@adapter.router'
             - '@templating.engine.twig'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\DatesAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@router'
+            - '@templating.engine.twig'
+
     #
     # Sheet Template
     #
