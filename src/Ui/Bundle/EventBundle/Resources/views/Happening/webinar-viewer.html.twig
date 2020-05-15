@@ -34,18 +34,19 @@
             <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
         </div>
 
-        <div class="timer-container">
-            <div class="timer hide">
-                {{ 'happening.webinar.endingAt'|trans }}
-                <span class="countdown"></span>
-            </div>
-            <div class="viewers-container hide">
-                {{ 'happening.webinar.viewers'|trans }}
-                <span class="viewers">0</span>
-            </div>
-        </div>
-
         <div class="buttons-container">
+            <div class="viewers-container hide" title="{{ 'happening.webinar.viewers'|trans }}">
+                <span class="viewers">0</span>
+                <i class="icon-Profil_1"></i>
+            </div>
+
+            <div class="timer-container">
+                <div class="timer hide">
+                    {{ 'happening.webinar.endingAt'|trans }}
+                    <span class="countdown"></span>
+                </div>
+            </div>
+
             <button id="toggle-chat" class="btn btn-off hide">
                 <i class="icon-Commentaire icon-center"></i>
             </button>

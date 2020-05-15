@@ -83,6 +83,8 @@ function VideoConference(
   } else {
     this.join();
   }
+
+  this.countDownBeforeEnd();
 }
 
 VideoConference.prototype.join = function () {
@@ -113,7 +115,6 @@ VideoConference.prototype.join = function () {
   document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
 
   this.saveParticipantPresence();
-  this.countDownBeforeEnd();
   this.showElement(this.meetingHelperWaitingContainer);
   this.showElement(this.meetingWaitingMessage);
 

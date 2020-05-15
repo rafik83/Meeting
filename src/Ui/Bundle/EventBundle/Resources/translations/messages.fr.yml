@@ -255,7 +255,7 @@ happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y p
 happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
 happening.webinar.end: 'Arrêter'
-happening.webinar.endingAt: 'Fin du webinaire dans'
+happening.webinar.endingAt: 'Fin dans'
 happening.webinar.start: 'Démarrer'
 happening.webinar.viewers: 'Connectés :'
 happening.webinar.screenshare.start: 'Partager mon écran'
@@ -278,7 +278,7 @@ login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace participant'
 meeting.video.chat.waitingMessage: 'Les messages seront remis une fois votre contact connecté.'
 meeting.video.end: 'Arrêter le RDV'
-meeting.video.endingAt: 'Fin du rendez-vous dans'
+meeting.video.endingAt: 'Fin dans'
 meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video ou annulé le lancement du partage d'écran.\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques ou le lancement du partage d'écran."
 meeting.video.installScreenSharingExtensionMessage: 'Merci d''installer notre extension de partage d''écran.'
 meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
