@@ -39,8 +39,7 @@ class GetWebinarViewQueryHandler
         );
 
         $sessionId = $session->getSessionId();
-        $timeRemainingInSeconds = $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp();
-        $timeRemainingInSeconds = $timeRemainingInSeconds > 0 ? $timeRemainingInSeconds : 0;
+        $timeRemainingInSeconds = max(0, $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp());
 
         return new WebinarView(
             $happening->getTitle($query->getLocale()),

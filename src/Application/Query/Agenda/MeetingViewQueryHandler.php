@@ -90,8 +90,10 @@ class MeetingViewQueryHandler
             }
         }
 
-        $timeRemainingInSeconds = $query->meeting->getSlot()->getEnd()->getTimestamp() - $this->now->getTimestamp();
-        $timeRemainingInSeconds = $timeRemainingInSeconds > 0 ? $timeRemainingInSeconds : 0;
+        $timeRemainingInSeconds = max(
+            0,
+            $query->meeting->getSlot()->getEnd()->getTimestamp() - $this->now->getTimestamp()
+        );
 
         $meeting = new MeetingView(
             $query->meeting->getId(),
