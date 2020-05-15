@@ -15,7 +15,10 @@ var Settings = require('./Settings');
  *
  * @param {Element} element
  */
-function VideoConference(element) {
+function VideoConference(
+    element,
+    useSettings = true
+) {
   this.element = element;
   this.typeScreenShare = 'screen';
 
@@ -68,11 +71,17 @@ function VideoConference(element) {
   this.meetingWaitingMessage = this.element.querySelector('[data-meeting-waiting-message]');
   this.meetingHelperWaitingContainer = this.element.querySelector('[data-meeting-waiting-helper]');
 
-  this.settings = new Settings(
-    this.settingsContainer.querySelector('#video-settings-section'),
-    this.join.bind(this)
-  );
-  this.settings.init();
+  this.useSettings = useSettings;
+
+  if (this.useSettings) {
+    this.settings = new Settings(
+        this.settingsContainer.querySelector('#video-settings-section'),
+        this.join.bind(this)
+    );
+    this.settings.init();
+  } else {
+    this.join();
+  }
 }
 
 VideoConference.prototype.join = function () {
@@ -106,7 +115,11 @@ VideoConference.prototype.join = function () {
   this.countDownBeforeEnd();
   this.showElement(this.meetingHelperWaitingContainer);
   this.showElement(this.meetingWaitingMessage);
-  this.hideElement(this.settingsContainer);
+
+  if (this.settingsContainer) {
+    this.hideElement(this.settingsContainer);
+  }
+
   this.init();
 };
 
@@ -239,11 +252,16 @@ VideoConference.prototype.initChat = function () {
  *  Publish your camera and microphone stream
  */
 VideoConference.prototype.publishStream = function() {
-  // publish video to other participant
-  var publisher = this.publisher.create({
-    audioSource: this.settings.getAudioSource(),
-    videoSource: this.settings.getVideoSource()
-  });
+  if (this.useSettings) {
+    // publish video to other participant
+    var publisher = this.publisher.create({
+      audioSource: this.settings.getAudioSource(),
+      videoSource: this.settings.getVideoSource()
+    });
+  } else {
+    var publisher = this.publisher.create({});
+  }
+
   this.session.publish(publisher, this.handlePublish.bind(this));
   this.publisherStream = publisher;
 

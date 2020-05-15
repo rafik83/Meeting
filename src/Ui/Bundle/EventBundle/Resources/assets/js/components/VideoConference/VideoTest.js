@@ -144,7 +144,7 @@ VideoConferenceTest.prototype.end = function() {
     this.videoConferencePreview.querySelector('.buttons-container').style.display = 'block';
     this.videoConferencePreview.style.display = 'block';
     $.post(this.visioTestedUrl);
-    new VideoConference(this.videoConferencePreview);
+    new VideoConference(this.videoConferencePreview, false);
 };
 
 module.exports = VideoConferenceTest;
