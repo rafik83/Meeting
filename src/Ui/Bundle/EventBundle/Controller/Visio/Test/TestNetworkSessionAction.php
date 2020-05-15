@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,8 +44,12 @@ class TestNetworkSessionAction
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
-    public function __invoke(EventDomain $eventDomain, UserDomain $userDomain, string $sessionId): Response
-    {
+    public function __invoke(
+        EventDomain $eventDomain,
+        UserDomain $userDomain,
+        string $sessionId,
+        ?Sheet $sheet = null
+    ): Response {
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             throw new AccessDeniedException();
         }
@@ -62,6 +67,7 @@ class TestNetworkSessionAction
             $this->engine->render(
                 'EventBundle:VideoConference:testNetworkAudioVideo.html.twig',
                 [
+                    'sheet' => $sheet,
                     'event' => $eventDomain->getEvent(),
                     'videoConferenceView' => $videoConferenceView,
                 ]

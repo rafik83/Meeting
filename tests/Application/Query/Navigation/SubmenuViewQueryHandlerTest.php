@@ -21,7 +21,6 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQueryHa
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -36,7 +35,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SubmenuViewQueryHandlerTest extends TestCase
 {
-    public function testCatalogHandle()
+    public function testCatalogHandle(): void
     {
         $datetime = new \DateTime();
         $event = EventFactory::createEvent();
@@ -118,7 +117,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
     }
 
-    public function testSheetHasLinkedSheets()
+    public function testSheetHasLinkedSheets(): void
     {
         $datetime = new \DateTime();
         $event = EventFactory::createEvent();
@@ -160,11 +159,9 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $sheet->getEvent()
             ->shouldBeCalled()
             ->willReturn($event);
-        ;
         $sheet->getType()
             ->shouldBeCalled()
             ->willReturn($who->reveal());
-        ;
 
         $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
         $ruleRepository->getByEventAndSeer($event, $who->reveal())
@@ -201,7 +198,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
     }
 
-    public function testSheetHandle()
+    public function testSheetHandle(): void
     {
         $datetime = new \DateTime();
         $event = EventFactory::createEvent();
@@ -243,7 +240,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
     }
 
-    public function testSheetHandleWithStaticFormulation()
+    public function testSheetHandleWithStaticFormulation(): void
     {
         $datetime = new \DateTime();
         $event = EventFactory::createEvent();
@@ -287,7 +284,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
     }
 
-    public function testAgendaHandle()
+    public function testAgendaHandle(): void
     {
         $datetime = new \DateTime();
         $event = EventFactory::createEvent();

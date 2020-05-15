@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="wrapper profile">
-        {{ render(controller('EventBundle:Navigation:menu', { 'registration': true })) }}
+        {{ render(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Navigation\\MenuAction', { 'registration': true })) }}
 
         {% if is_granted('ROLE_PREVIOUS_USER') and event is defined and sheet is defined %}
             {{ render(controller('EventBundle:Security:impersonatingSheetGroupManagerToSheetUser', { 'event': event, 'sheet': sheet })) }}

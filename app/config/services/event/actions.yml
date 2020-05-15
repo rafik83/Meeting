@@ -269,3 +269,15 @@ services:
             - '@Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled'
             - '@Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled'
             - '@session'
+
+    #
+    # Navigation
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Navigation\MenuAction:
+        arguments:
+            - '@request_stack'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
+            - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
+            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'

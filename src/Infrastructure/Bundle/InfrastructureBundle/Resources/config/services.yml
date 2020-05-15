@@ -4619,6 +4619,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery }
 
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQueryHandler:
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQuery }
+
     ##
     # Mass Assignment query handler
     ##

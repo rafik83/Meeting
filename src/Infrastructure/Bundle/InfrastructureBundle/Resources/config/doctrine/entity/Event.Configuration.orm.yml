@@ -55,6 +55,9 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         registrationCloseDate:
             type: datetime
             nullable: true
+        enableVisioTestMenuButtonDate:
+            type: datetime
+            nullable: true
         meetingRequestUpdateLocked:
             type: boolean
             options:

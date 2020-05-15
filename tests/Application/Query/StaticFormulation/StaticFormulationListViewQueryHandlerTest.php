@@ -29,7 +29,7 @@ use Proximum\Vimeet\Domain\StaticFormulation\Constant;
 
 class StaticFormulationListViewQueryHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $key = Constant::STATIC_FORMULATION_KEY_SHEET;
         $event = $this->prophesize(Event::class);
@@ -166,6 +166,16 @@ class StaticFormulationListViewQueryHandlerTest extends TestCase
             ->willReturn('My venue')
         ;
 
+        $translator
+            ->trans(
+                Constant::STATIC_FORMULATION_LIST[Constant::STATIC_FORMULATION_KEY_VISIO_TEST]['label'],
+                [],
+                'messages',
+                'fr'
+            )->shouldBeCalled()
+            ->willReturn('Visio test')
+        ;
+
         $query = new StaticFormulationListViewQuery($event->reveal(), 'en');
         $handler = new StaticFormulationListViewQueryHandler(
             $typeRepository->reveal(),
@@ -296,6 +306,18 @@ class StaticFormulationListViewQueryHandlerTest extends TestCase
             ),
             []
         );
+        $view11 = new StaticFormulationView(
+            Constant::STATIC_FORMULATION_KEY_VISIO_TEST,
+            new GenericStaticFormulationView(
+                Constant::STATIC_FORMULATION_KEY_VISIO_TEST,
+                'Visio test',
+                [
+                    'type 1',
+                    'type 2',
+                ]
+            ),
+            []
+        );
         $views = [
             $view1,
             $view2,
@@ -307,6 +329,7 @@ class StaticFormulationListViewQueryHandlerTest extends TestCase
             $view8,
             $view9,
             $view10,
+            $view11,
         ];
 
         $expected = new StaticFormulationListView($views);
