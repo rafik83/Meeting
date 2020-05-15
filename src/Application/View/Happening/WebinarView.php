@@ -35,6 +35,12 @@ class WebinarView
     /** @var \DateTimeInterface */
     public $currentTime;
 
+    /** @var int */
+    public $timeRemainingInSeconds;
+
+    /** @var int */
+    public $warningTimeRemainingInSeconds;
+
     /** @var string|null */
     public $headerImage;
 
@@ -46,6 +52,8 @@ class WebinarView
         bool $isSpeaker,
         TimeRangeView $slot,
         \DateTimeInterface $currentTime,
+        int $timeRemainingInSeconds,
+        int $warningTimeRemainingInSeconds,
         ?string $headerImage
     ) {
         $this->happeningTitle = $happeningTitle;
@@ -55,6 +63,8 @@ class WebinarView
         $this->isSpeaker = $isSpeaker;
         $this->slot = $slot;
         $this->currentTime = $currentTime;
+        $this->timeRemainingInSeconds = $timeRemainingInSeconds;
+        $this->warningTimeRemainingInSeconds = $warningTimeRemainingInSeconds;
         $this->headerImage = $headerImage;
     }
 }

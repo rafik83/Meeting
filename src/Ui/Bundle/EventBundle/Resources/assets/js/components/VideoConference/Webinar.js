@@ -16,9 +16,10 @@ function Webinar(element, isSpeaker) {
     this.token = element.getAttribute('data-token');
     this.sessionId = element.getAttribute('data-session-id');
     this.apiKey = element.getAttribute('data-api-key');
-    this.webinarEndTime = element.getAttribute('data-webinar-end-time');
-    this.webinarStartTime = element.getAttribute('data-webinar-start-time');
-    this.currentTime = element.getAttribute('data-current-time');
+
+    this.timeRemaining = element.getAttribute('data-time-remaining');
+    this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
+
     this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
     this.userCompleteName = element.getAttribute('data-user-complete-name');
     this.helperContainer = element.querySelector('.video-helper');
@@ -516,7 +517,7 @@ Webinar.prototype.countDownBeforeEnd = function () {
         return;
     }
 
-    new Counter(this.webinarStartTime, this.webinarEndTime, this.currentTime, this.countDownContainer, this.timerContainer);
+    new Counter(parseInt(this.timeRemaining), parseInt(this.warningRemainingTime), this.countDownContainer, this.timerContainer);
 };
 
 Webinar.prototype.hidePublisher = function () {

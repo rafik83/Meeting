@@ -39,6 +39,8 @@ class GetWebinarViewQueryHandler
         );
 
         $sessionId = $session->getSessionId();
+        $timeRemainingInSeconds = $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp();
+        $timeRemainingInSeconds = $timeRemainingInSeconds > 0 ? $timeRemainingInSeconds : 0;
 
         return new WebinarView(
             $happening->getTitle($query->getLocale()),
@@ -48,6 +50,8 @@ class GetWebinarViewQueryHandler
             $isSpeaker,
             new TimeRangeView($happening->getBegin(), $happening->getEnd()),
             $this->dateTime,
+            $timeRemainingInSeconds,
+            round($timeRemainingInSeconds * 0.2),
             $happening->getWebinarHeaderImage($query->getLocale())
         );
     }

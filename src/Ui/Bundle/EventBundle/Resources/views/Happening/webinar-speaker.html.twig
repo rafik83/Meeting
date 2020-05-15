@@ -17,9 +17,8 @@
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-user-complete-name="{{ userCompleteName }}"
-         data-webinar-start-time="{{ webinarView.slot.begin.timestamp }}"
-         data-webinar-end-time="{{ webinarView.slot.end.timestamp }}"
-         data-current-time="{{ webinarView.currentTime.timestamp }}"
+         data-time-remaining="{{ webinarView.timeRemainingInSeconds }}"
+         data-warning-time-remaining="{{ webinarView.warningTimeRemainingInSeconds }}"
     >
         {% if webinarView.headerImage %}
             <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>

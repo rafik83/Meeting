@@ -20,11 +20,11 @@
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-participant-presence-action="{{ participantPresenceAction }}"
          data-user-complete-name="{{ userCompleteName }}"
-         {% if meetingView is defined %}
-             data-meeting-start-time="{{ meetingView.begin.timestamp }}"
-             data-meeting-end-time="{{ meetingView.end.timestamp }}"
-             data-current-time="{{ currentTime }}"
-         {% endif %}
+
+        {% if meetingView is defined %}
+            data-time-remaining="{{ meetingView.timeRemainingInSeconds }}"
+            data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
+        {% endif %}
     >
         <div class="layout-container"></div>
         <div class="chat-container hide"></div>

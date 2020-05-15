@@ -27,9 +27,10 @@ function VideoConference(
   this.sessionId = element.getAttribute('data-session-id');
   this.apiKey = element.getAttribute('data-api-key');
   this.participantPresenceAction = element.getAttribute('data-participant-presence-action');
-  this.meetingEndTime = element.getAttribute('data-meeting-end-time');
-  this.meetingStartTime = element.getAttribute('data-meeting-start-time');
-  this.currentTime = element.getAttribute('data-current-time');
+
+  this.timeRemaining = element.getAttribute('data-time-remaining');
+  this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
+
   this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
   this.userCompleteName = element.getAttribute('data-user-complete-name');
 
@@ -486,7 +487,7 @@ VideoConference.prototype.countDownBeforeEnd = function() {
       return;
     }
 
-    new Counter(this.meetingStartTime, this.meetingEndTime, this.currentTime, this.countDownContainer, this.timerContainer);
+    new Counter(parseInt(this.timeRemaining), parseInt(this.warningRemainingTime), this.countDownContainer, this.timerContainer);
 };
 
 VideoConference.prototype.isScreenShareStream = function (stream) {
