@@ -43,6 +43,8 @@ class AgendaCollisionManagerTest extends TestCase
             [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
             $beginHappening1,
             $endHappening1,
+            10,
+            8,
             'ref',
             'Europe/Paris',
             'leftColor',

@@ -33,6 +33,12 @@ class MeetingView extends AbstractTimeEntityView
     /** @var SheetMetView[] */
     public $sheetMetTitle;
 
+    /** @var int */
+    public $timeRemainingInSeconds;
+
+    /** @var int */
+    public $warningTimeRemainingInSeconds;
+
     /** @var string */
     public $timeZone;
 
@@ -62,6 +68,8 @@ class MeetingView extends AbstractTimeEntityView
      * @param MeetingOwnSheetParticipantView[] $meetingOwnSheetParticipantViews
      * @param \DateTimeInterface               $begin
      * @param \DateTimeInterface               $end
+     * @param int                              $timeRemainingInSeconds
+     * @param int                              $warningTimeRemainingInSeconds
      * @param string                           $spotRef
      * @param string                           $timeZone
      * @param string                           $leftColor
@@ -79,6 +87,8 @@ class MeetingView extends AbstractTimeEntityView
         array $meetingOwnSheetParticipantViews,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
+        int $timeRemainingInSeconds,
+        int $warningTimeRemainingInSeconds,
         $spotRef,
         $timeZone,
         $leftColor,
@@ -96,6 +106,8 @@ class MeetingView extends AbstractTimeEntityView
         $this->spotRef = $spotRef;
         $this->begin = $begin;
         $this->end = $end;
+        $this->timeRemainingInSeconds = $timeRemainingInSeconds;
+        $this->warningTimeRemainingInSeconds = $warningTimeRemainingInSeconds;
         $this->timeZone = $timeZone;
         $this->leftColor = $leftColor;
         $this->rightColor = $rightColor;

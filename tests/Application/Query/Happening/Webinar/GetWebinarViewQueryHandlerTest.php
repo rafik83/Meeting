@@ -74,6 +74,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 new TimeRangeView(new \DateTime('2020-03-30 11:55:00'), new \DateTime('2020-03-30 12:15:00')),
                 $this->dateTime,
+                900,
+                180,
                 '/path/image.jpg'
             ),
             $this->getWebinarViewQueryHandler->handle(new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en'))

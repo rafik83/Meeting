@@ -38,18 +38,23 @@ class MeetingViewQueryHandler
     /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
+    /** @var \DateTimeInterface */
+    private $now;
+
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
         RuleRepositoryInterface $ruleRepository,
         VideoMeetingAccess $videoMeetingAccess,
         LinkedSheetsTitle $linkedSheetsTitle,
-        ParticipantInfoGuesser $participantInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        \DateTimeInterface $now
     ) {
         $this->participantHandler = $participantHandler;
         $this->ruleRepository = $ruleRepository;
         $this->videoMeetingAccess = $videoMeetingAccess;
         $this->linkedSheetsTitle = $linkedSheetsTitle;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->now = $now;
     }
 
     /**
@@ -85,6 +90,11 @@ class MeetingViewQueryHandler
             }
         }
 
+        $timeRemainingInSeconds = max(
+            0,
+            $query->meeting->getSlot()->getEnd()->getTimestamp() - $this->now->getTimestamp()
+        );
+
         $meeting = new MeetingView(
             $query->meeting->getId(),
             $userSheet->getTitle(),
@@ -93,6 +103,8 @@ class MeetingViewQueryHandler
             $meetingOwnSheetParticipantViews,
             $query->meeting->getSlot()->getBegin(),
             $query->meeting->getSlot()->getEnd(),
+            $timeRemainingInSeconds,
+            round($timeRemainingInSeconds * 0.2),
             $query->meeting->getSpot()->getReference(),
             $query->event->getTimeZone(),
             $query->event->getConfiguration()->getLeftColor(),

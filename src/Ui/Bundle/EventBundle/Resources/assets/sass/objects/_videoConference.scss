@@ -5,19 +5,18 @@
 .webinar, .video-conference, .video-conference-preview {
   .viewers-container {
     color: white;
+    display: inline-block;
+    padding: 0 10px;
   }
 
-  .timer-container, .buttons-container {
+  .buttons-container {
     background: rgba(0, 0, 0, 0.5);
     border-radius: 18px;
   }
 
   .timer-container {
-    z-index: 9999;
-    position: absolute;
-    bottom: 1px;
-    left: 1px;
-    padding: 10px;
+    padding: 0 10px;
+    display: inline-block;
 
     .timer {
       color: #fff;

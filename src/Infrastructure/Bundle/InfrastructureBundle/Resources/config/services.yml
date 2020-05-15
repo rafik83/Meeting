@@ -4209,6 +4209,7 @@ services:
             - '@components.security.video_meeting_access'
             - '@Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle'
             - '@template.participant_info_guesser'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery }
 
