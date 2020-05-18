@@ -12,32 +12,32 @@ namespace Proximum\Vimeet\Application\View\Meeting;
 
 class VideoConferenceView
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $token;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $apiKey;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $sessionId;
 
-    /**
-     * VideoConferenceView constructor.
-     *
-     * @param string $token
-     * @param string $sessionId
-     * @param string $apiKey
-     */
-    public function __construct(string $token, string $sessionId, string $apiKey)
-    {
-        $this->token     = $token;
-        $this->apiKey    = $apiKey;
+    /** @var string|null */
+    public $header;
+
+    public function __construct(
+        string $token,
+        string $sessionId,
+        string $apiKey,
+        ?string $header = null
+    ) {
+        $this->token = $token;
+        $this->apiKey = $apiKey;
         $this->sessionId = $sessionId;
+        $this->header = $header;
+    }
+
+    public function hasHeader(): bool
+    {
+        return null !== $this->header;
     }
 }

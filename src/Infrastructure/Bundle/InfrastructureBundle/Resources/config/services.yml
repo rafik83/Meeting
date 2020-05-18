@@ -2438,7 +2438,7 @@ services:
         arguments:
             - '@adapter.video_conference_adapter'
             - '@repository.video_conference_repository'
-            - '%feature_video_conference_enabled%'
+            - '@Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\RequestAccess }
 
@@ -2446,6 +2446,7 @@ services:
         class: Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccessHandler
         arguments:
             - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess }

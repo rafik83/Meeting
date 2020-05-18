@@ -4,6 +4,8 @@
     <link rel="chrome-webstore-item" href="{{ visio_screen_sharing_chrome_extension }}">
 {% endblock %}
 
+{% block body_attributes 'class="background-black"' %}
+
 {% block body %}
     {% set participantPresenceAction = null %}
     {% if participant is defined and meeting is defined and sheet is defined %}
@@ -26,7 +28,13 @@
             data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
         {% endif %}
     >
-        <div class="layout-container"></div>
+        {% if videoConferenceView.hasHeader %}
+            <div class="visio-header">
+                <img src="{{ videoConferenceView.header }}" class="img-responsive">
+            </div>
+        {% endif %}
+
+        <div class="layout-container" {% if videoConferenceView.hasHeader %}style="top:125px"{% endif %}></div>
         <div class="chat-container hide"></div>
         <div class="video-helper" data-meeting-settings-container>
             {{ include('EventBundle:Visio:settings.html.twig') }}

@@ -1,0 +1,14 @@
+Proximum\Vimeet\Application\Command\Visio\UpdateVisioSettings:
+    properties:
+        localizedVisioSettings:
+            - All:
+                  - Collection:
+                        fields:
+                            removeHeader: ~
+                            hasHeader: ~
+                            header:
+                                - Image:
+                                      maxSize: 500k
+                                      mimeTypes: !php/const Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
+                                      minHeight: 125
+                                      maxHeight: 125

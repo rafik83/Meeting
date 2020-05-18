@@ -21,13 +21,16 @@ class RequestAccess
     /** @var User */
     public $user;
 
-    /**
-     * @param Meeting $meeting
-     * @param User    $user
-     */
-    public function __construct(Meeting $meeting, User $user)
-    {
+    /** @var string */
+    public $locale;
+
+    public function __construct(
+        Meeting $meeting,
+        User $user,
+        string $locale
+    ) {
         $this->meeting = $meeting;
         $this->user    = $user;
+        $this->locale = $locale;
     }
 }

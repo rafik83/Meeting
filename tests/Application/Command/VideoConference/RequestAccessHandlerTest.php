@@ -13,17 +13,20 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccess;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccessHandler;
+use Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\VideoConference;
 use Proximum\Vimeet\Domain\Model\VideoConferenceToken;
+use Proximum\Vimeet\Domain\Model\Visio\VisioSettings;
 use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
 
 class RequestAccessHandlerTest extends TestCase
 {
-    public function testHandleWithoutExistingVideoConference()
+    public function testHandleWithoutExistingVideoConference(): void
     {
         $slotEnd = new \DateTime();
         $meeting = $this->prophesize(Meeting::class);
@@ -40,6 +43,13 @@ class RequestAccessHandlerTest extends TestCase
 
         $session->getSessionId()->shouldBeCalled()->willReturn('T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9');
         $videoConferenceAdapter->getApiKey()->shouldBeCalled()->willReturn('API_KEY');
+
+        $event = $this->prophesize(Event::class);
+        $meeting->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+        $visioSettings = $this->prophesize(VisioSettings::class);
+        $visioSettings->getHeader('fr')->shouldBeCalled()->willReturn('header.png');
+        $visioSettingsRetriever = $this->prophesize(VisioSettingsRetriever::class);
+        $visioSettingsRetriever->get($event->reveal())->shouldBeCalled()->willReturn($visioSettings->reveal());
 
         $videoConferenceRepository->findByMeeting($meeting->reveal())
             ->shouldBeCalled()
@@ -63,17 +73,25 @@ class RequestAccessHandlerTest extends TestCase
 
         $handler = new RequestAccessHandler(
             $videoConferenceAdapter->reveal(),
-            $videoConferenceRepository->reveal()
+            $videoConferenceRepository->reveal(),
+            $visioSettingsRetriever->reveal()
         );
 
         // Expected
         $expectedVideoConferenceView = new VideoConferenceView(
             'TOKEN',
             'T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9',
-            'API_KEY'
+            'API_KEY',
+            'header.png'
         );
 
-        $videoConferenceView = $handler->handle(new RequestAccess($meeting->reveal(), $user->reveal()));
+        $videoConferenceView = $handler->handle(
+            new RequestAccess(
+                $meeting->reveal(),
+                $user->reveal(),
+                'fr'
+            )
+        );
 
         $this->assertEquals($expectedVideoConferenceView, $videoConferenceView);
     }
@@ -97,6 +115,13 @@ class RequestAccessHandlerTest extends TestCase
         $videoConference->getTokenByUser($user->reveal())->willReturn(null);
         $videoConference->getSessionId()->willReturn('T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9');
         $videoConferenceInterface->getApiKey()->shouldBeCalled()->willReturn('API_KEY');
+
+        $event = $this->prophesize(Event::class);
+        $meeting->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+        $visioSettings = $this->prophesize(VisioSettings::class);
+        $visioSettings->getHeader('fr')->shouldBeCalled()->willReturn('header.png');
+        $visioSettingsRetriever = $this->prophesize(VisioSettingsRetriever::class);
+        $visioSettingsRetriever->get($event->reveal())->shouldBeCalled()->willReturn($visioSettings->reveal());
 
         $videoConferenceRepository->findByMeeting($meeting->reveal())
             ->shouldBeCalled()
@@ -126,17 +151,25 @@ class RequestAccessHandlerTest extends TestCase
 
         $handler = new RequestAccessHandler(
             $videoConferenceInterface->reveal(),
-            $videoConferenceRepository->reveal()
+            $videoConferenceRepository->reveal(),
+            $visioSettingsRetriever->reveal()
         );
 
         // Expected
         $expectedVideoConferenceView = new VideoConferenceView(
             'TOKEN',
             'T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9',
-            'API_KEY'
+            'API_KEY',
+            'header.png'
         );
 
-        $videoConferenceView = $handler->handle(new RequestAccess($meeting->reveal(), $user->reveal()));
+        $videoConferenceView = $handler->handle(
+            new RequestAccess(
+                $meeting->reveal(),
+                $user->reveal(),
+                'fr'
+            )
+        );
 
         $this->assertEquals($expectedVideoConferenceView, $videoConferenceView);
     }

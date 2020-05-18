@@ -1,0 +1,37 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title %}
+    {{ 'admin.meeting.visio.settings.title'|trans }}
+{% endblock %}
+
+{% block form_title 'admin.meeting.visio.settings.title'|trans %}
+
+
+{% block form_content %}
+    {% for updateVisioSettingsLocalizedView in view.updateVisioSettingsLocalizedViews %}
+        <div>
+            <div class="col-md-2 text-right">
+                <b>{{ updateVisioSettingsLocalizedView.locale|locale }}</b>
+            </div>
+            <div class="col-md-10">
+                {{ form_row(form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.header) }}
+
+                <div class="text-center">
+                {% if updateVisioSettingsLocalizedView.hasHeader %}
+                    <img src="{{ asset(updateVisioSettingsLocalizedView.header) }}" class="img-responsive"/>
+                {% else %}
+                    <p>{{ 'form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.header.missing'|trans({}, 'forms') }}</p>
+                {% endif %}
+                </div><br>
+                {% if form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.removeHeader is defined %}
+                    {{ form_row(form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.removeHeader) }}
+                {% endif %}
+                <hr>
+            </div>
+        </div>
+    {% endfor %}
+
+    {{ form_row(form.localizedVisioSettings) }}
+{% endblock form_content %}
+
+{% block goback_link path('admin_event_list') %}

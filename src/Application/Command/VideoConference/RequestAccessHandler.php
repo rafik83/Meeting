@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\VideoConference;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Domain\Model\VideoConference;
@@ -25,16 +26,17 @@ class RequestAccessHandler
     /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
 
-    /**
-     * @param VideoConferenceAdapterInterface    $videoConferenceAdapter
-     * @param VideoConferenceRepositoryInterface $videoConferenceRepository
-     */
+    /** @var VisioSettingsRetriever */
+    private $visioSettingsRetriever;
+
     public function __construct(
         VideoConferenceAdapterInterface $videoConferenceAdapter,
-        VideoConferenceRepositoryInterface $videoConferenceRepository
+        VideoConferenceRepositoryInterface $videoConferenceRepository,
+        VisioSettingsRetriever $visioSettingsRetriever
     ) {
         $this->videoConferenceRepository = $videoConferenceRepository;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->visioSettingsRetriever = $visioSettingsRetriever;
     }
 
     /**
@@ -47,6 +49,7 @@ class RequestAccessHandler
     public function handle(RequestAccess $requestAccess): VideoConferenceView
     {
         $videoConference = $this->videoConferenceRepository->findByMeeting($requestAccess->meeting);
+        $visioSettings = $this->visioSettingsRetriever->get($requestAccess->meeting->getEvent());
 
         if (null !== $videoConference) {
             $videoConferenceToken = $videoConference->getTokenByUser($requestAccess->user);
@@ -73,7 +76,8 @@ class RequestAccessHandler
             return new VideoConferenceView(
                 $token,
                 $videoConference->getSessionId(),
-                $this->videoConferenceAdapter->getApiKey()
+                $this->videoConferenceAdapter->getApiKey(),
+                $visioSettings->getHeader($requestAccess->locale)
             );
         }
 
@@ -95,7 +99,8 @@ class RequestAccessHandler
         return new VideoConferenceView(
             $token,
             $session->getSessionId(),
-            $this->videoConferenceAdapter->getApiKey()
+            $this->videoConferenceAdapter->getApiKey(),
+            $visioSettings->getHeader($requestAccess->locale)
         );
     }
 }
