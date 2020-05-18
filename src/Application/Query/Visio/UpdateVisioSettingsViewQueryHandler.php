@@ -14,7 +14,10 @@ class UpdateVisioSettingsViewQueryHandler
         foreach ($query->event->getLocales() as $locale) {
             $visioSettingsLocalizeViews[$locale] = new UpdateVisioSettingsLocalizedView(
                 $locale,
-                $query->visioSettings->getHeader($locale)
+                $query->visioSettings->getHeader($locale),
+                $query->visioSettings->getEndSound($locale),
+                $query->visioSettings->getEndImage($locale),
+                $query->visioSettings->getEndMessage($locale)
             );
         }
 

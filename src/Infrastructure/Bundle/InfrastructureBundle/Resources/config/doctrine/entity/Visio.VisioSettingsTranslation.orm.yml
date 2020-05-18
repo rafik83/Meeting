@@ -12,6 +12,15 @@ Proximum\Vimeet\Domain\Model\Visio\VisioSettingsTranslation:
         header:
             type: string
             nullable: true
+        endSound:
+            type: string
+            nullable: true
+        endImage:
+            type: string
+            nullable: true
+        endMessage:
+            type: string
+            nullable: true
     manyToOne:
         visioSettings:
             targetEntity: Proximum\Vimeet\Domain\Model\Visio\VisioSettings
