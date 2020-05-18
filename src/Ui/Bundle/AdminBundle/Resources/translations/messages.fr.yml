@@ -478,7 +478,7 @@ admin.meeting.list.status.canceled: 'N''a pas eu lieu'
 admin.meeting.list.status.confirmed: Confirmé
 admin.meeting.list.status.not_confirmed: 'Non confirmé'
 admin.meeting.list.title: 'RDV positionnés'
-admin.meeting.visio.settings.title: 'Paramètres des Rendez-Vous Visio'
+admin.meeting.visio.settings.title: 'Paramètres des rendez-vous visio'
 admin.menu.link: Menu
 admin.messaging_campaign.recipients.billing_contact: 'Contact facturation de la fiche'
 admin.messaging_campaign.recipients.participants: 'Tous les participants de la fiche'

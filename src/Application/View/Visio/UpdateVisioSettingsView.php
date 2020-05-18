@@ -7,6 +7,9 @@ class UpdateVisioSettingsView
     /** @var UpdateVisioSettingsLocalizedView[] */
     public $updateVisioSettingsLocalizedViews;
 
+    /**
+     * @param UpdateVisioSettingsLocalizedView[] $updateVisioSettingsLocalizedViews
+     */
     public function __construct(
         array $updateVisioSettingsLocalizedViews
     ) {

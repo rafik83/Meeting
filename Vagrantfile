@@ -7,12 +7,6 @@ echo '' > /etc/apt/sources.list.d/deb_debian_org_debian.list
 apt-get -o Acquire::Check-Valid-Until=false update
 SCRIPT
 
-class VagrantPlugins::ProviderVirtualBox::Action::Network
-  def dhcp_server_matches_config?(dhcp_server, config)
-    true
-  end
-end
-
 app = {
   :name        => 'vimeet',
   :box         => 'manala/app-dev-debian',
