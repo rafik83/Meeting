@@ -496,9 +496,9 @@ sheet.edit.object: 'Compléter "%label%"'
 sheet.maxParticipantReached: 'Nombre maximum de participants atteint'
 sheet.object.action.add: 'Ajouter :'
 sheet.object.action.backToSheet: 'Retour à la fiche'
-sheet.object.action.changeOrder: 'Modifier l''ordre'
 sheet.object.action.edit: Compléter
 sheet.object.action.remove: 'Supprimer :'
+sheet.object.action.sortParticipants: 'Modifier l''ordre'
 sheet.object.boolean.false: Non
 sheet.object.boolean.true: Oui
 sheet.object.image.label: 'Votre image actuelle'

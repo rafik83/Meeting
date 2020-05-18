@@ -33,6 +33,7 @@ var $ = require('jquery'),
     CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField'),
     VideoConferenceTest = require('./components/VideoConference/VideoTest'),
     Webinar = require('./components/VideoConference/Webinar'),
+    SortParticipants = require('./components/_SortParticipants'),
     DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker')
 ;
 
@@ -297,6 +298,10 @@ function init (target) {
     if (target.querySelector('[data-agenda-autorefresh]')) {
         new AgendaRefresh();
     }
+
+    [].forEach.call(target.querySelectorAll('.sort-participants'), function (element) {
+        new SortParticipants(element);
+    });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

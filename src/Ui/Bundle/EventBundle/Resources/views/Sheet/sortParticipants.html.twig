@@ -1,17 +1,25 @@
 {% extends 'EventBundle::base.html.twig' %}
 
 {% block content %}
-<div class="section-change-order">
-    <div class="section__content">
-        <div class="list list--users sheet-participants-list-users">
-            {% for participant in participants.cardViews %}
-                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
-            {% endfor %}
-        </div>
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1><i class="icon-Preferences_1"></i> {{ 'sheet.object.action.sortParticipants'|trans }}</h1>
+            </header>
+
+            <div class="main__content">
+                {#{{ form_start(form, {attr: {class: 'styled-form'}}) }}#}
+                <div class="styled-form">
+
+                <div class="list list--users sort-participants">
+                    {% for participant in participants.cardViews %}
+                        {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
+                    {% endfor %}
+                </div>
+                </div>
+            </div>
+        </section>
     </div>
-</div>
-
-
 {% endblock %}
 
 
