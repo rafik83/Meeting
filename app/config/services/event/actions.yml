@@ -29,9 +29,13 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\SortParticipantsAction:
         arguments:
-            - '@templating'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@router'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ShowUploadedFileAction:
         arguments:

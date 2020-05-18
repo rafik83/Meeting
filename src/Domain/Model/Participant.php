@@ -79,7 +79,7 @@ class Participant implements MailRecipientInterface
     private $registrationDate;
 
     /** @var int */
-    private $rank;
+    private $rank = 0;
 
     public function __construct(
         Sheet $sheet,
