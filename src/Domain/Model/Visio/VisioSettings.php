@@ -29,6 +29,9 @@ class VisioSettings
                 new VisioSettingsTranslation(
                     $this,
                     $locale,
+                    null,
+                    null,
+                    null,
                     null
                 )
             );
