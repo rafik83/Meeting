@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 
-class ChangeParticipantOrderAction
+class SortParticipantsAction
 {
     /** @var EngineInterface */
     private $engine;
@@ -32,8 +33,7 @@ class ChangeParticipantOrderAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    public function __construct
-    (
+    public function __construct(
         EngineInterface $engine,
         QueryBusInterface $queryBus,
         AuthorizationCheckerAdapterInterface $authorizationChecker
@@ -44,27 +44,28 @@ class ChangeParticipantOrderAction
     }
 
     public function __invoke(
-        Sheet $sheet,
-        UserDomain $userDomain,
         Request $request,
+        EventDomain $eventDomain,
+        UserDomain $userDomain,
+        Sheet $sheet,
         string $key
     ) {
-
         if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)
         ) {
             throw new AccessDeniedException();
         }
 
+        $event = $eventDomain->getEvent();
         $locale = $request->getLocale();
         $cardListViewQuery = new CardListViewQuery($sheet, $userDomain->getUser(), $locale, false);
         $participants = $this->queryBus->handle($cardListViewQuery);
-        $event = $sheet->getEvent();
 
         return new Response(
             $this->engine->render(
-                '@Event/Sheet/changeOrderParticipant.html.twig',
+                '@Event/Sheet/sortParticipants.html.twig',
                 [
+                    'sheet' => $sheet,
                     'participants' => $participants,
                     'event' => $event,
                     'uid' => $key

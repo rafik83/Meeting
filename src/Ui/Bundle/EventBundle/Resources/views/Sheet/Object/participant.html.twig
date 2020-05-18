@@ -35,7 +35,7 @@
 
     {% if not isCatalog and participants.cardViews|length > 1 %}
         <footer>
-            <a href="{{ path('event_sheet_change_order_participant', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" class="btn btn-gray">
+            <a href="{{ path('event_sheet_sort_participants', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" class="btn btn-gray">
                 <i class="icon-Preferences_1"></i> {{ 'sheet.object.action.changeOrder'|trans }}
             </a>
             <br>

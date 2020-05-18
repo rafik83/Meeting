@@ -27,7 +27,7 @@ services:
             - '@Proximum\Vimeet\Domain\Template\ObjectsCollectionBlock\SetArrayContentToBlock'
             - '@adapter.router'
 
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ChangeParticipantOrderAction:
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\SortParticipantsAction:
         arguments:
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
