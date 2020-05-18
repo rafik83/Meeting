@@ -24,9 +24,11 @@ class UpdateVisioSettings implements Command
         $this->visioSettings = $visioSettings;
 
         foreach ($event->getLocales() as $locale) {
+            $hasHeader = $visioSettings->hasHeader($locale);
             $this->localizedVisioSettings[$locale] = [
                 'header' => null,
                 'removeHeader' => false,
+                'hasHeader' => $hasHeader,
             ];
         }
     }

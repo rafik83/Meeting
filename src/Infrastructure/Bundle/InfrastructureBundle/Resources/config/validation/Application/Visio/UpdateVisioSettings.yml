@@ -5,6 +5,7 @@ Proximum\Vimeet\Application\Command\Visio\UpdateVisioSettings:
                   - Collection:
                         fields:
                             removeHeader: ~
+                            hasHeader: ~
                             header:
                                 - Image:
                                       maxSize: 500k

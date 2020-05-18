@@ -62,6 +62,18 @@ class VisioSettings
         return $translation->getHeader();
     }
 
+    public function hasHeader(string $locale): bool
+    {
+        /** @var VisioSettingsTranslation $translation */
+        $translation = $this->translations->get($locale);
+
+        if (null === $translation) {
+            return false;
+        }
+
+        return null !== $translation->getHeader();
+    }
+
     public function updateTranslation(
         string $locale,
         ?string $header

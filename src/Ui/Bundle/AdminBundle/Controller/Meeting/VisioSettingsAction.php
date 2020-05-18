@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;

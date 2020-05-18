@@ -119,6 +119,8 @@ class VisioSettingsActionTest extends TestCase
             ->willReturn($this->visioSettings->reveal())
         ;
 
+        $this->visioSettings->hasHeader('fr')->shouldBeCalled()->willReturn(true);
+
         $view = $this->prophesize(UpdateVisioSettingsView::class);
         $this->queryBus
             ->handle(
@@ -192,6 +194,8 @@ class VisioSettingsActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($this->visioSettings->reveal())
         ;
+
+        $this->visioSettings->hasHeader('fr')->shouldBeCalled()->willReturn(true);
 
         $this->queryBus
             ->handle(
