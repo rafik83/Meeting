@@ -7,6 +7,7 @@ var openTokTextChat = require('opentok-text-chat');
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var Counter = require('./Counter');
+var Settings = require('./Settings');
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -43,9 +44,7 @@ function Webinar(element, isSpeaker) {
     this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
-
     this.joinButton = element.querySelector('[data-webinar-join-button]');
-    this.joinButton.addEventListener('click', this.join.bind(this));
 
     this.layoutContainer = element.querySelector('.layout-container');
     this.layout = initLayoutContainer(this.layoutContainer).layout;
@@ -62,26 +61,6 @@ function Webinar(element, isSpeaker) {
     this.viewersCount = 0;
     this.viewersContainer = element.querySelector('.viewers-container');
     this.viewersTextContainer = element.querySelector('.viewers');
-
-    if (this.isSpeaker) {
-        this.thereIsAlreadyAScreenShareInProgressMessage = element.getAttribute('data-screen-share-already-in-progress-message');
-
-        this.endScreenSharingButton = element.querySelector('#end-screensharing');
-        this.endScreenSharingButton.addEventListener('click', this.handleStopScreensharing.bind(this));
-
-        this.toggleAudioElement = element.querySelector('#toggle-audio');
-        this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
-        this.enableAudio = true;
-
-        this.toggleVideoElement = element.querySelector('#toggle-video');
-        this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
-        this.enableVideo = true;
-
-        this.startScreenSharingButton = element.querySelector('#start-screensharing');
-        this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
-
-        this.publisher = new Publisher(this.layoutContainer);
-    }
 
     this.subscribers = [];
 
@@ -103,9 +82,9 @@ function Webinar(element, isSpeaker) {
 
         const element = this.element;
         const rfs = element.requestFullscreen
-            || element.webkitRequestFullScreen
-            || element.mozRequestFullScreen
-            || element.msRequestFullscreen
+          || element.webkitRequestFullScreen
+          || element.mozRequestFullScreen
+          || element.msRequestFullscreen
         ;
         rfs.call(element);
     });
@@ -116,6 +95,38 @@ function Webinar(element, isSpeaker) {
     document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
 
     this.countDownBeforeEnd();
+
+    if (!this.isSpeaker) {
+        this.joinButton.addEventListener('click', this.join.bind(this));
+
+        return;
+    }
+
+    this.thereIsAlreadyAScreenShareInProgressMessage = element.getAttribute('data-screen-share-already-in-progress-message');
+
+    this.endScreenSharingButton = element.querySelector('#end-screensharing');
+    this.endScreenSharingButton.addEventListener('click', this.handleStopScreensharing.bind(this));
+
+    this.toggleAudioElement = element.querySelector('#toggle-audio');
+    this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
+    this.enableAudio = true;
+
+    this.toggleVideoElement = element.querySelector('#toggle-video');
+    this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
+    this.enableVideo = true;
+
+    this.startScreenSharingButton = element.querySelector('#start-screensharing');
+    this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
+
+    this.settingsContainer = this.element.querySelector('[data-settings-container]');
+
+    this.publisher = new Publisher(this.layoutContainer);
+
+    this.settings = new Settings(
+      this.settingsContainer.querySelector('#video-settings-section'),
+      this.join.bind(this)
+    );
+    this.settings.init();
 }
 
 Webinar.prototype.join = function () {
