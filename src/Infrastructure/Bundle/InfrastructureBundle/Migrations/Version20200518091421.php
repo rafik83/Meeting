@@ -14,7 +14,7 @@ final class Version20200518091421 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE visio_settings_translation ADD end_sound VARCHAR(255) DEFAULT NULL, ADD end_image VARCHAR(255) DEFAULT NULL, ADD end_message VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE visio_settings_translation ADD end_sound VARCHAR(255) DEFAULT NULL, ADD end_image VARCHAR(255) DEFAULT NULL, ADD end_message LONGTEXT DEFAULT NULL');
     }
 
     public function down(Schema $schema) : void

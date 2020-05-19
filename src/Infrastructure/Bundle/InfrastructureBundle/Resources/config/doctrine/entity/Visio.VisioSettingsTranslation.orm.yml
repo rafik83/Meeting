@@ -19,7 +19,7 @@ Proximum\Vimeet\Domain\Model\Visio\VisioSettingsTranslation:
             type: string
             nullable: true
         endMessage:
-            type: string
+            type: text
             nullable: true
     manyToOne:
         visioSettings:
