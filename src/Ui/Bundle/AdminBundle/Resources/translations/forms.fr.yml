@@ -302,6 +302,7 @@ form.event_duplicate.children.event.label: Événement
 form.event_duplicate.children.submit.label: Créer
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endImage.label: 'Image de fin'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endImage.missing: 'Image de fin non défini'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.help: 'Format autorisé: .mp3, .webm'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.label: 'Son de fin'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.missing: 'Son de fin non défini'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endMessage.label: 'Message de fin'

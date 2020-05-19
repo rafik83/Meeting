@@ -28,6 +28,7 @@ class VisioSettingsLocalizedType extends AbstractType
             ])
             ->add('endSound', FileType::class, [
                 'required' => false,
+                'help' => 'form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.help',
                 'attr' => [
                     'accept' => implode(', ', Audio::SUPPORTED_MIME_TYPE),
                 ],
