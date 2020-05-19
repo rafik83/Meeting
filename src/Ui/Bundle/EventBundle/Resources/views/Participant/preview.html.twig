@@ -39,6 +39,10 @@
                 <span class="label label-danger">{{ 'contacts.list.absent'|trans }}</span>
             {% endif %}
         {% endif %}
+
+        {% if form is defined %}
+            {{ form|html }}
+        {% endif %}
     </div>
 </div>
 

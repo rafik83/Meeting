@@ -4,17 +4,23 @@
     <div class="profile__content">
         <section class="main">
             <header>
-                <h1><i class="icon-Preferences_1"></i> {{ 'sheet.object.action.sortParticipants'|trans }}</h1>
+                <h1><i class="icon-Preferences_1"></i> {{ 'sheet.sortParticipants.title'|trans }}</h1>
             </header>
 
             <div class="main__content">
                 {{ form_start(sortForm, {attr: {class: 'styled-form'}}) }}
 
                 <div class="list list--users sort-participants">
+                    <p>
+                        {{ 'sheet.sortParticipants.description'|trans }}
+                        <a href="#" data-edit-sort-participants>{{ 'sheet.sortParticipants.alternativeDescription'|trans }}</a>
+                    </p>
+
+                    <hr>
+
                     {% for cardView in cardListView.cardViews %}
                         <div data-participant>
-                            {{ include('EventBundle:Participant:preview.html.twig', { 'participant': cardView }) }}
-                            {{ form_widget(sortForm.children[cardView.id], { 'attr': {'class': 'ahide'} }) }}
+                            {{ include('EventBundle:Participant:preview.html.twig', { 'participant': cardView, 'form': form_widget(sortForm.children[cardView.id], { 'attr': {'class': 'hide'} }) }) }}
                         </div>
                     {% endfor %}
                 </div>

@@ -24,7 +24,7 @@ class SortParticipantsHandler
             $rank = $sortParticipants->getParticipantRank($participant->getId());
 
             // Inverse rank in order to manage new participant with rank 0
-            $participant->setRank($countParticipants - $rank);
+            $participant->setRank(1 + $countParticipants - $rank);
 
             $this->participantRepository->set($participant);
         }

@@ -17,7 +17,7 @@ class SortParticipants implements Command
     {
         $this->sheet = $sheet;
 
-        $rank = 0;
+        $rank = 1;
 
         foreach ($sheet->getParticipantsArray() as $participant) {
             $this->participantsRank[$participant->getId()] = $rank;

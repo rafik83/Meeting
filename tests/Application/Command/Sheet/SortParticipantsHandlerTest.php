@@ -37,12 +37,12 @@ class SortParticipantsHandlerTest extends TestCase
         $participantRepository->set($participant3->reveal())->shouldBeCalled();
 
         $sortParticipants = new SortParticipants($sheet->reveal());
-        $this->assertEquals(0, $sortParticipants->getParticipantRank(111));
-        $this->assertEquals(1, $sortParticipants->getParticipantRank(222));
-        $this->assertEquals(2, $sortParticipants->getParticipantRank(333));
-        $sortParticipants->__set(111, 0);
-        $sortParticipants->__set(222, 2);
-        $sortParticipants->__set(333, 1);
+        $this->assertEquals(1, $sortParticipants->getParticipantRank(111));
+        $this->assertEquals(2, $sortParticipants->getParticipantRank(222));
+        $this->assertEquals(3, $sortParticipants->getParticipantRank(333));
+        $sortParticipants->__set(111, 1);
+        $sortParticipants->__set(222, 3);
+        $sortParticipants->__set(333, 2);
 
         $sortParticipantsHandler = new SortParticipantsHandler($participantRepository->reveal());
         $sortParticipantsHandler->handle($sortParticipants);
