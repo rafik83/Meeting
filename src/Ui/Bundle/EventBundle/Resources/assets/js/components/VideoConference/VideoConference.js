@@ -71,6 +71,9 @@ function VideoConference(
   this.settingsContainer = this.element.querySelector('[data-meeting-settings-container]');
   this.meetingWaitingMessage = this.element.querySelector('[data-meeting-waiting-message]');
   this.meetingHelperWaitingContainer = this.element.querySelector('[data-meeting-waiting-helper]');
+  this.endSound = this.element.getAttribute('data-visio-meeting-end-sound');
+  this.hasEndMessageOrImage = this.element.getAttribute('data-visio-meeting-end-warning');
+  this.endContainer = this.element.querySelector('[data-visio-meeting-end-container]');
 
   this.useSettings = useSettings;
 
@@ -505,7 +508,24 @@ VideoConference.prototype.countDownBeforeEnd = function() {
       return;
     }
 
-    new Counter(parseInt(this.timeRemaining, 10), parseInt(this.warningRemainingTime, 10), this.countDownContainer, this.timerContainer);
+    const countDownEndCallback = () => {
+        if (this.hasEndMessageOrImage) {
+            $(this.endContainer).modal();
+        }
+
+        if (this.endSound) {
+            const endSoundAudio = new Audio(this.endSound);
+            endSoundAudio.play();
+        }
+    };
+
+    new Counter(
+        parseInt(this.timeRemaining, 10),
+        parseInt(this.warningRemainingTime, 10),
+        this.countDownContainer,
+        this.timerContainer,
+        countDownEndCallback.bind(this)
+    );
 };
 
 VideoConference.prototype.isScreenShareStream = function (stream) {

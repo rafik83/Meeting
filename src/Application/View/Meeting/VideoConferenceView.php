@@ -63,6 +63,16 @@ class VideoConferenceView
 
     public function hasEndMessage(): bool
     {
+        return null !== $this->endMessage;
+    }
+
+    public function hasEndImage(): bool
+    {
+        return null !== $this->endImage;
+    }
+
+    public function hasEndMessageOrImage(): bool
+    {
         return null !== $this->endImage
             || null !== $this->endMessage
         ;
