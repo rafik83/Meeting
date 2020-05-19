@@ -14,7 +14,7 @@
                     {% for cardView in cardListView.cardViews %}
                         <div data-participant>
                             {{ include('EventBundle:Participant:preview.html.twig', { 'participant': cardView }) }}
-                            {{ form_widget(sortForm.children[cardView.id], { 'attr': {'class': 'hide'} }) }}
+                            {{ form_widget(sortForm.children[cardView.id], { 'attr': {'class': 'ahide'} }) }}
                         </div>
                     {% endfor %}
                 </div>

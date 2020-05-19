@@ -15,17 +15,14 @@ class SortParticipantsHandlerTest extends TestCase
     {
         $participant1 = $this->prophesize(Participant::class);
         $participant1->getId()->shouldBeCalled()->willReturn(111);
-        $participant1->getRank()->shouldBeCalled()->willReturn(10);
         $participant1->setRank(3)->shouldBeCalled();
 
         $participant2 = $this->prophesize(Participant::class);
         $participant2->getId()->shouldBeCalled()->willReturn(222);
-        $participant2->getRank()->shouldBeCalled()->willReturn(2);
         $participant2->setRank(1)->shouldBeCalled();
 
         $participant3 = $this->prophesize(Participant::class);
         $participant3->getId()->shouldBeCalled()->willReturn(333);
-        $participant3->getRank()->shouldBeCalled()->willReturn(1);
         $participant3->setRank(2)->shouldBeCalled();
 
         $sheet = $this->prophesize(Sheet::class);
@@ -40,6 +37,9 @@ class SortParticipantsHandlerTest extends TestCase
         $participantRepository->set($participant3->reveal())->shouldBeCalled();
 
         $sortParticipants = new SortParticipants($sheet->reveal());
+        $this->assertEquals(0, $sortParticipants->getParticipantRank(111));
+        $this->assertEquals(1, $sortParticipants->getParticipantRank(222));
+        $this->assertEquals(2, $sortParticipants->getParticipantRank(333));
         $sortParticipants->__set(111, 0);
         $sortParticipants->__set(222, 2);
         $sortParticipants->__set(333, 1);
