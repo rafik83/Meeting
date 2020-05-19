@@ -272,11 +272,9 @@ event_sheet_handle_remove_participant:
     defaults: { _controller: EventBundle:SheetParticipant:handleRemoveParticipant }
 
 event_sheet_sort_participants:
-    path:   /sheet/{sheet}/{locale}/{key}/sort-participants
+    path:   /sheet/{sheet}/sort-participants
     requirements:
         sheet: \d+
-        locale: '[a-z]{2}'
-        key: \w+
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\SortParticipantsAction
 

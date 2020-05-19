@@ -74,8 +74,7 @@ class SortParticipantsAction
         Request $request,
         EventDomain $eventDomain,
         UserDomain $userDomain,
-        Sheet $sheet,
-        string $key
+        Sheet $sheet
     ): Response {
         $event = $eventDomain->getEvent();
 
@@ -87,7 +86,6 @@ class SortParticipantsAction
         }
 
         $locale = $request->getLocale();
-        $cardListView = $this->queryBus->handle(new CardListViewQuery($sheet, $userDomain->getUser(), $locale, false));
 
         $sortParticipants = new SortParticipants($sheet);
         $sortForm = $this->formFactory->create(
@@ -108,6 +106,8 @@ class SortParticipantsAction
             return new RedirectResponse($this->router->generate('event_sheet', ['sheet' => $sheet->getId()]));
         }
 
+        $cardListView = $this->queryBus->handle(new CardListViewQuery($sheet, $userDomain->getUser(), $locale, false));
+
         return new Response(
             $this->engine->render(
                 '@Event/Sheet/sortParticipants.html.twig',
@@ -115,7 +115,6 @@ class SortParticipantsAction
                     'sheet' => $sheet,
                     'cardListView' => $cardListView,
                     'event' => $event,
-                    'uid' => $key,
                     'sortForm' => $sortForm->createView(),
                 ]
             )
