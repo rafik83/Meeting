@@ -200,7 +200,7 @@ class ParticipantDenormalizerTest extends TestCase
         $sheetRepository
             ->add(
                 Argument::that(
-                    function (Sheet $sheet) {
+                    static function (Sheet $sheet) {
                         return 'User already exists in DB' === $sheet->getTitle()
                             && $sheet->isImported()
                         ;
@@ -237,7 +237,7 @@ class ParticipantDenormalizerTest extends TestCase
         $sheetRepository
             ->add(
                 Argument::that(
-                    function (Sheet $sheet) {
+                    static function (Sheet $sheet) {
                         return 'Ma Petite Tribu' === $sheet->getTitle()
                             && $sheet->isImported()
                         ;
@@ -248,7 +248,7 @@ class ParticipantDenormalizerTest extends TestCase
         ;
 
         $callBackParticipant1 = Argument::that(
-            function (Participant $participant) {
+            static function (Participant $participant) {
                 return 'User already exists in DB' === $participant->getSheet()->getTitle()
                     && 'julie@gmail.com' === $participant->getUser()->getEmail()
                     && $participant->isImported();
@@ -299,7 +299,7 @@ class ParticipantDenormalizerTest extends TestCase
         ;
 
         $participantRepository
-            ->add(Argument::that(function(Participant $participant) {
+            ->add(Argument::that(static function(Participant $participant) {
                 return $participant->getEmail() === 'jean@gmail.com'
                     || $participant->getEmail() === 'julie@gmail.com'
                 ;
