@@ -82,11 +82,13 @@ class Update implements Command
     /** @var int|null */
     public $numberMaxOfMeetingsPerSheet;
 
-    /**
-     * @param Type   $type
-     * @param string $locale
-     */
-    public function __construct(Type $type, $locale)
+    /** @var bool */
+    public $canEvaluateMeeting;
+
+    /** @var bool */
+    public $mustEvaluateMeeting;
+
+    public function __construct(Type $type, string $locale)
     {
         $this->sheetTemplate = $type->getSheetTemplate();
         $this->package = $type->getPackage();
@@ -109,6 +111,8 @@ class Update implements Command
         $this->priorityMeetingRequestsNumber = $type->getPriorityMeetingRequestsNumber();
         $this->numberMaxOfHappeningsPerUser = $type->getNumberMaxOfHappeningsPerUser();
         $this->numberMaxOfMeetingsPerSheet = $type->getNumberMaxOfMeetingsPerSheet();
+        $this->canEvaluateMeeting = $type->canEvaluateMeeting();
+        $this->mustEvaluateMeeting = $type->mustEvaluateMeeting();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [
