@@ -1,6 +1,12 @@
 'use strict';
 
-function Counter(timeRemaining, warningRemainingTime, countDownContainer, timerContainer) {
+function Counter(
+    timeRemaining,
+    warningRemainingTime,
+    countDownContainer,
+    timerContainer,
+    countDownEndCallback = null
+) {
     if (!countDownContainer) {
         return;
     }
@@ -14,6 +20,10 @@ function Counter(timeRemaining, warningRemainingTime, countDownContainer, timerC
             timerContainer.classList.add('warning');
             countDownContainer.innerHTML = `00:00`;
             clearInterval(timerInterval);
+
+            if (countDownEndCallback) {
+                countDownEndCallback();
+            }
 
             return;
         }

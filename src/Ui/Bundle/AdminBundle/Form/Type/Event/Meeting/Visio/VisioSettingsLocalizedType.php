@@ -2,10 +2,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Meeting\Visio;
 
+use Proximum\Vimeet\Domain\Event\Audio;
 use Proximum\Vimeet\Domain\Event\Image;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -24,7 +26,22 @@ class VisioSettingsLocalizedType extends AbstractType
                     'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
                 ],
             ])
-
+            ->add('endSound', FileType::class, [
+                'required' => false,
+                'help' => 'form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.help',
+                'attr' => [
+                    'accept' => implode(', ', Audio::SUPPORTED_MIME_TYPE),
+                ],
+            ])
+            ->add('endImage', FileType::class, [
+                'required' => false,
+                'attr' => [
+                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
+                ],
+            ])
+            ->add('endMessage', TextareaType::class, [
+                'required' => false,
+            ])
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event) {
@@ -34,6 +51,22 @@ class VisioSettingsLocalizedType extends AbstractType
             if (isset($settings['hasHeader']) && $settings['hasHeader'] === true) {
                 $form
                     ->add('removeHeader', CheckboxType::class, [
+                        'required' => false,
+                    ])
+                ;
+            }
+
+            if (isset($settings['hasEndSound']) && $settings['hasEndSound'] === true) {
+                $form
+                    ->add('removeEndSound', CheckboxType::class, [
+                        'required' => false,
+                    ])
+                ;
+            }
+
+            if (isset($settings['hasEndImage']) && $settings['hasEndImage'] === true) {
+                $form
+                    ->add('removeEndImage', CheckboxType::class, [
                         'required' => false,
                     ])
                 ;

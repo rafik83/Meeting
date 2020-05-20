@@ -21,13 +21,37 @@ class UpdateVisioSettingsHandlerTest extends TestCase
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
             ->getMock()
         ;
+        $sound = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'wav'])
+            ->getMock()
+        ;
+        $header = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'png'])
+            ->getMock()
+        ;
 
         $event = $this->prophesize(Event::class);
         $event->getLocales()->shouldBeCalled()->willReturn(['fr', 'en']);
 
         $visioSettings = new VisioSettings($event->reveal());
-        $visioSettings->updateTranslation('fr', '/test_fr.jpeg');
-        $visioSettings->updateTranslation('en', '/test_en.jpeg');
+        $visioSettings->updateTranslation(
+            'fr',
+            '/old_header_fr.jpeg',
+            '/old_sound_fr.wav',
+            null,
+            null
+        );
+        $visioSettings->updateTranslation(
+            'en',
+            '/old_header_en.jpeg',
+            null,
+            '/old_end_image_en.jpeg',
+            'old message in en'
+        );
 
         $updateVisioSettings = new UpdateVisioSettings(
             $event->reveal(),
@@ -35,24 +59,50 @@ class UpdateVisioSettingsHandlerTest extends TestCase
         );
         $updateVisioSettings->localizedVisioSettings = [
             'fr' => [
-                'header' => $image,
+                'header' => $header,
                 'removeHeader' => false,
+                'endSound' => null,
+                'removeEndSound' => false,
+                'endImage' => $image,
+                'removeEndImage' => false,
+                'endMessage' => 'end message in fr',
             ],
             'en' => [
                 'header' => null,
                 'removeHeader' => true,
+                'endSound' => $sound,
+                'removeEndSound' => false,
+                'endImage' => null,
+                'removeEndImage' => true,
+                'endMessage' => 'end message in en',
             ]
         ];
 
         $visioSettingsRepository = $this->prophesize(VisioSettingsRepositoryInterface::class);
         $fileStorage = $this->prophesize(FileStorageInterface::class);
 
-        $fileStorage->remove('/test_fr.jpeg')->shouldBeCalled();
-        $fileStorage->remove('/test_en.jpeg')->shouldBeCalled();
-        $fileStorage->upload($image)->shouldBeCalled()->willReturn('/new_test_fr.jpeg');
+        $fileStorage->remove('/old_header_fr.jpeg')->shouldBeCalled();
+        $fileStorage->remove('/old_header_en.jpeg')->shouldBeCalled();
+        $fileStorage->remove('/old_end_image_en.jpeg')->shouldBeCalled();
+        $fileStorage->upload($header)->shouldBeCalled()->willReturn('/header_fr.jpeg');
+        $fileStorage->upload($sound)->shouldBeCalled()->willReturn('/sound_en.wav');
+        $fileStorage->upload($image)->shouldBeCalled()->willReturn('/end_image_fr.jpeg');
 
         $expected = new VisioSettings($event->reveal());
-        $expected->updateTranslation('fr', '/new_test_fr.jpeg');
+        $expected->updateTranslation(
+            'fr',
+            '/header_fr.jpeg',
+            '/old_sound_fr.wav',
+            '/end_image_fr.jpeg',
+            'end message in fr'
+        );
+        $expected->updateTranslation(
+            'en',
+            null,
+            '/sound_en.wav',
+            null,
+            'end message in en'
+        );
 
         $visioSettingsRepository->update($expected)->shouldBeCalled();
 

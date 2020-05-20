@@ -17,14 +17,29 @@ class VisioSettingsTranslation
     /** @var string|null */
     private $header;
 
+    /** @var null|string */
+    private $endSound;
+
+    /** @var null|string */
+    private $endImage;
+
+    /** @var null|string */
+    private $endMessage;
+
     public function __construct(
         VisioSettings $visioSettings,
         string $locale,
-        ?string $header = null
+        ?string $header = null,
+        ?string $endSound = null,
+        ?string $endImage = null,
+        ?string $endMessage = null
     ) {
         $this->visioSettings = $visioSettings;
         $this->locale = $locale;
         $this->header = $header;
+        $this->endSound = $endSound;
+        $this->endImage = $endImage;
+        $this->endMessage = $endMessage;
     }
 
     public function getId(): ?int
@@ -47,8 +62,30 @@ class VisioSettingsTranslation
         return $this->header;
     }
 
-    public function update(?string $header): void
+    public function getEndSound(): ?string
     {
+        return $this->endSound;
+    }
+
+    public function getEndImage(): ?string
+    {
+        return $this->endImage;
+    }
+
+    public function getEndMessage(): ?string
+    {
+        return $this->endMessage;
+    }
+
+    public function update(
+        ?string $header,
+        ?string $endSound = null,
+        ?string $endImage = null,
+        ?string $endMessage = null
+    ): void {
         $this->header = $header;
+        $this->endSound = $endSound;
+        $this->endImage = $endImage;
+        $this->endMessage = $endMessage;
     }
 }

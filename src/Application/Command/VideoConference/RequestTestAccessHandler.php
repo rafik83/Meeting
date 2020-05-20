@@ -57,7 +57,10 @@ class RequestTestAccessHandler
             $token,
             $session->getSessionId(),
             $this->videoConferenceAdapter->getApiKey(),
-            $visioSettings->getHeader($requestTestAccess->locale)
+            $visioSettings->getHeader($requestTestAccess->locale),
+            $visioSettings->getEndSound($requestTestAccess->locale),
+            $visioSettings->getEndImage($requestTestAccess->locale),
+            $visioSettings->getEndMessage($requestTestAccess->locale)
         );
     }
 }
