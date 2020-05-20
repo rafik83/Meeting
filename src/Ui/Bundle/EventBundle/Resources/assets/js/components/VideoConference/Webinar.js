@@ -274,7 +274,10 @@ Webinar.prototype.initChat = function () {
  */
 Webinar.prototype.publishStream = function () {
     this.hideElement(this.helperContainer);
-    const publisher = this.publisher.create({});
+    const publisher = this.publisher.create({
+        audioSource: this.settings.getAudioSource(),
+        videoSource: this.settings.getVideoSource()
+    });
 
     this.session.publish(publisher, this.handlePublish.bind(this));
     publisher.publishVideo(this.enableVideo);
