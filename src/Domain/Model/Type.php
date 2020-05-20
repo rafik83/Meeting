@@ -109,6 +109,12 @@ class Type implements WhoInterface, TypeInterface
     /** @var int|null */
     private $numberMaxOfMeetingsPerSheet;
 
+    /** @var bool */
+    private $canEvaluateMeeting = true;
+
+    /** @var bool */
+    private $mustEvaluateMeeting = false;
+
     public function __construct(Event $event)
     {
         $this->event = $event;
