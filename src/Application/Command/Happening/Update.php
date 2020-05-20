@@ -29,7 +29,14 @@ class Update extends AbstractHappeningCommand
         $this->questionAllowed  = $happening->isQuestionAllowed();
         $this->limitParticipant = $happening->getLimitParticipant();
         $this->invitationCode   = $happening->getInvitationCode();
-        $this->webinar = $happening->isWebinar();
+
+        if ($happening->isWebinar()) {
+            $this->happeningType = self::TYPE_WEBINAR;
+        }
+
+        if ($happening->isInteractiveWebinar()) {
+            $this->happeningType = self::TYPE_WEBINAR_INTERACTIVE;
+        }
 
         foreach ($happening->getEvent()->getLocales() as $locale) {
             if ($happening->getTranslations()->containsKey($locale)) {

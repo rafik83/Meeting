@@ -41,7 +41,7 @@ class CreateHandlerTest extends TestCase
         $type = $this->prophesize(Type::class);
 
         // Expected
-        $expectedSubEvent     = new Happening($event, $begin, $end, $category, [$type->reveal()], true, 10, 'toto');
+        $expectedSubEvent     = new Happening($event, $begin, $end, $category, [$type->reveal()], true, 10, 'toto', true, true);
         $expectedTranslation = new Happening\HappeningTranslation(
             $expectedSubEvent,
             'fr',
@@ -90,8 +90,7 @@ class CreateHandlerTest extends TestCase
             ],
         ];
         $create->invitationCode = 'toto';
-        $create->webinar = false;
-
+        $create->happeningType = 'webinar_interactive';
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage
