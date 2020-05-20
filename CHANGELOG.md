@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2088 - Sort sheet participants
 - VIMEET-2101 - Add end sound, image and message to visio meeting
 
 ## [2.28.0] - 2020-05-18

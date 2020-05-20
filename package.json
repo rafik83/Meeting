@@ -36,6 +36,7 @@
     "react-qr-reader": "^2.1.0",
     "sass-loader": "^7.1",
     "select2": "4.0.5",
+    "sortablejs": "^1.10.2",
     "tinymce": "^4.5.1",
     "vue": "^2.1.8",
     "vuex": "^2.3.1"

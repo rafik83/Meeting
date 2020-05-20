@@ -102,6 +102,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
             cascade: ['persist']
             mappedBy: sheet
+            orderBy: { rank: DESC }
         orders:
             targetEntity: Proximum\Vimeet\Domain\Model\Order
             mappedBy: sheet

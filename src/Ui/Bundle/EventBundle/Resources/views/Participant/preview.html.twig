@@ -39,6 +39,10 @@
                 <span class="label label-danger">{{ 'contacts.list.absent'|trans }}</span>
             {% endif %}
         {% endif %}
+
+        {% if sortFormWidget is defined %}
+            {{ sortFormWidget|html }}
+        {% endif %}
     </div>
 </div>
 
