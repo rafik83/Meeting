@@ -61,6 +61,8 @@ class UpdateDesignHandler
             $logoExtension = $event->getLocalizedLogoExtension($locale);
             $mobileLogo = $event->getLocalizedMobileLogo($locale);
             $mobileLogoExtension = $event->getLocalizedMobileLogoExtension($locale);
+            $notificationImage = $event->getLocalizedNotificationImage($locale);
+            $notificationImageExtension = $event->getLocalizedNotificationImageExtension($locale);
 
             if ($localizedImage['logo'] instanceof UploadedFile) {
                 $logoToRemove = $event->getLocalizedLogo($locale);
@@ -78,12 +80,22 @@ class UpdateDesignHandler
                 $mobileLogo = $this->fileStorage->upload($localizedImage['mobileLogo']);
             }
 
+            if ($localizedImage['notificationImage'] instanceof UploadedFile) {
+                $logoToRemove = $event->getLocalizedNotificationImage($locale);
+                $this->fileStorage->remove($logoToRemove);
+
+                $notificationImageExtension = $this->fileStorage->getExtension($localizedImage['notificationImage']);
+                $notificationImage = $this->fileStorage->upload($localizedImage['notificationImage']);
+            }
+
             $event->updateLocalizedLogos(
                 $locale,
                 $logo,
                 $logoExtension,
                 $mobileLogo,
-                $mobileLogoExtension
+                $mobileLogoExtension,
+                $notificationImage,
+                $notificationImageExtension
             );
         }
 

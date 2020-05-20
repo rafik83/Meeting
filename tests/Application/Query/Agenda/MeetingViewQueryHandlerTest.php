@@ -150,7 +150,8 @@ class MeetingViewQueryHandlerTest extends TestCase
             $ruleRepository->reveal(),
             $videoMeetingAccess->reveal(),
             $linkedSheetsTitle,
-            $participantInfoGuesser->reveal()
+            $participantInfoGuesser->reveal(),
+            new \DateTime('2016-10-12 10:08:00.000')
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
@@ -162,6 +163,8 @@ class MeetingViewQueryHandlerTest extends TestCase
             [],
             $begin,
             $end,
+            6720,
+            1344,
             'ref',
             'Europe/Paris',
             'leftColor',
@@ -285,7 +288,8 @@ class MeetingViewQueryHandlerTest extends TestCase
             $ruleRepository->reveal(),
             $videoMeetingAccess->reveal(),
             $linkedSheetsTitle,
-            $participantInfoGuesser->reveal()
+            $participantInfoGuesser->reveal(),
+            new \DateTime('2016-10-12 10:05:00.000')
         );
 
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
@@ -297,6 +301,8 @@ class MeetingViewQueryHandlerTest extends TestCase
             [new MeetingOwnSheetParticipantView('Korben', 'Dallas'), new MeetingOwnSheetParticipantView('Rocky', 'Balboa')],
             $begin,
             $end,
+            6900,
+            1380,
             'ref',
             'Europe/Paris',
             'leftColor',

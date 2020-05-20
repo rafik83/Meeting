@@ -1,6 +1,14 @@
 .chat-opened {
-  .layout-container {
+  .layout-container, .webinar-header, .visio-header {
     width: 75%;
+  }
+}
+
+.webinar-header, .visio-header {
+  width: 100%;
+
+  img {
+    margin: auto;
   }
 }
 

@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class VisioTestedActionTest extends TestCase
 {
-    public function testAction()
+    public function testAction(): void
     {
         $request = $this->prophesize(Request::class);
 

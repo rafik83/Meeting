@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
-use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
 use Proximum\Vimeet\Application\Command\Event\Update as EventUpdate;
@@ -19,7 +18,6 @@ use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedExcepti
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfigurationType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
@@ -247,32 +245,6 @@ class EventController extends Controller
         return $this->render('AdminBundle:Event/PracticalInfo:update.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function datesAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $command = new ConfigureDates($event);
-        $form    = $this->createForm(ConfigureDatesType::class, $command, ['event' => $event, 'submit' => true]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-            $this->addFlash('success', 'flash.admin.event.configure_dates.success');
-
-            return $this->redirectToRoute('admin_event_configure_dates', ['event' => $event->getId()]);
-        }
-
-        return $this->render('AdminBundle:Event:dates.html.twig', [
-            'form'  => $form->createView(),
-            'event' => $event,
         ]);
     }
 }

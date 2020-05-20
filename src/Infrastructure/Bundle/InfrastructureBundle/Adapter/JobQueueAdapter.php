@@ -59,7 +59,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function sendCampaign(Campaign $campaign)
+    public function sendCampaign(Campaign $campaign): void
     {
         $job = new Job(SendCampaignCommand::NAME, [$campaign->getId()]);
         $job->addRelatedEntity($campaign);
@@ -115,7 +115,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         string $emailToNotify,
         string $locale,
         string $orderBy
-    ) {
+    ): void {
         $job = new Job(PrintPdfCommand::NAME, [
             sprintf('--sheetIds=%s', implode(',', $sheetIds)),
             sprintf('--eventId=%s', $event->getId()),
@@ -130,7 +130,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function generateInvoice(Event $event, array $sheetIds, Admin $admin)
+    public function generateInvoice(Event $event, array $sheetIds, Admin $admin): void
     {
         $job = new Job(GenerateInvoiceCommand::NAME, [
             'eventId'  => $event->getId(),
@@ -162,7 +162,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function exportOrdersForEvent(Event $event, Admin $admin, $locale)
+    public function exportOrdersForEvent(Event $event, Admin $admin, $locale): void
     {
         $job = new Job(ExportOrderCommand::NAME, [$event->getId(), $admin->getEmail(), $locale]);
 
@@ -190,7 +190,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         string $solutionType,
         bool $isModeAuto,
         ?PlannerJob $plannerJob
-    ) {
+    ): void {
         $job = new Job(
             ExportPlannerCommand::NAME,
             [
@@ -220,7 +220,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         Admin $admin,
         $locale,
         ?PlannerJob $plannerJob = null
-    ) {
+    ): void {
         $job = new Job(ImportPlannerCommand::NAME, [
             $file->getId(),
             $event->getId(),
@@ -235,18 +235,24 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function indexSheetsBySheetTemplate(SheetTemplate $sheetTemplate)
+    public function indexSheetsBySheetTemplate(SheetTemplate $sheetTemplate): void
     {
-        $job = new Job(IndexSheetsBySheetTemplateCommand::NAME, [$sheetTemplate->getId()]);
+        $command = IndexSheetsBySheetTemplateCommand::NAME;
+        $args = [$sheetTemplate->getId()];
+
+        $job = new Job($command, $args);
         $this->setJob($job);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function indexSheetsByRegistrationTemplate(RegistrationTemplate $registrationTemplate)
+    public function indexSheetsByRegistrationTemplate(RegistrationTemplate $registrationTemplate): void
     {
-        $job = new Job(IndexSheetsByRegistrationTemplateCommand::NAME, [$registrationTemplate->getId()]);
+        $command = IndexSheetsByRegistrationTemplateCommand::NAME;
+        $args = [$registrationTemplate->getId()];
+
+        $job = new Job($command, $args);
         $this->setJob($job);
     }
 
@@ -286,19 +292,22 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function aggregateEventUsersFullUnavailability(Event $event, $onlyInCatalog = false)
+    public function aggregateEventUsersFullUnavailability(Event $event, $onlyInCatalog = false): void
     {
-        $job = new Job(UsersFullUnavailabilityByEventAggregateCommand::NAME, [
+        $command = UsersFullUnavailabilityByEventAggregateCommand::NAME;
+        $args =  [
             $event->getId(),
             $onlyInCatalog,
-        ]);
+        ];
+
+        $job = new Job($command, $args);
         $this->setJob($job);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function aggregateUsersFullUnavailability(Event $event, array $users)
+    public function aggregateUsersFullUnavailability(Event $event, array $users): void
     {
         if (!empty($users)) {
             $job = new Job(UsersFullUnavailabilityAggregateCommand::NAME, [
@@ -314,7 +323,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function aggregateParticipantAssignedToRequest(Event $event)
+    public function aggregateParticipantAssignedToRequest(Event $event): void
     {
         $job = new Job(ParticipantAssignedToRequestAggregateCommand::NAME, [$event->getId()]);
         $this->setJob($job);
@@ -323,18 +332,21 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function aggregateAvailableSlot(Event $event)
+    public function aggregateAvailableSlot(Event $event): void
     {
-        $job = new Job(AvailableSlotCalculatorCommand::NAME, [
+        $command = AvailableSlotCalculatorCommand::NAME;
+        $args = [
             sprintf('--event=%s', $event->getId()),
-        ]);
+        ];
+
+        $job = new Job($command, $args);
         $this->setJob($job);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function aggregateSheetAvailableSlot(Sheet $sheet)
+    public function aggregateSheetAvailableSlot(Sheet $sheet): void
     {
         $job = new Job(
             AvailableSlotCalculatorCommand::NAME,
@@ -351,7 +363,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function aggregatePhoneValidationStatus(Event $event)
+    public function aggregatePhoneValidationStatus(Event $event): void
     {
         $job = new Job(PhoneValidationStatusCalculatorCommand::NAME, [
             sprintf('--event=%s', $event->getId()),
@@ -363,7 +375,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function generateMeetingSolutionAnalytic(Event $event)
+    public function generateMeetingSolutionAnalytic(Event $event): void
     {
         $job = new Job(GenerateMeetingSolutionCommand::NAME, [$event->getId()]);
         $this->setJob($job);
@@ -406,7 +418,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function sendEmailing(Event $event, array $sheetIds, $emailName)
+    public function sendEmailing(Event $event, array $sheetIds, $emailName): void
     {
         $job = new Job(
             SendEmailingCommand::NAME,
@@ -424,7 +436,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      * @param \DateTime $dateTime
      * @param Job|null  $job
      */
-    public function scheduleVersionGeneration(Event $event, \DateTime $dateTime, Job $job = null)
+    public function scheduleVersionGeneration(Event $event, \DateTime $dateTime, Job $job = null): void
     {
         if (null !== $job) {
             $job->setExecuteAfter($dateTime);

@@ -347,6 +347,8 @@ class DayViewQueryHandlerTest extends TestCase
             [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
             $this->beginHappening1,
             $this->endHappening2,
+            100,
+            20,
             'ref',
             'Europe/Paris',
             'leftColor',

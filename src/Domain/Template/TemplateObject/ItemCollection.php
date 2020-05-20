@@ -153,7 +153,7 @@ class ItemCollection extends TemplateObject implements SearchableObjectInterface
     /**
      * {@inheritdoc}
      */
-    public function getSearchableContent()
+    public function getSearchableContent(?string $locale = null)
     {
         $this->buildItems($this->getData());
 

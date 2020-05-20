@@ -16,9 +16,10 @@ function Webinar(element, isSpeaker) {
     this.token = element.getAttribute('data-token');
     this.sessionId = element.getAttribute('data-session-id');
     this.apiKey = element.getAttribute('data-api-key');
-    this.webinarEndTime = element.getAttribute('data-webinar-end-time');
-    this.webinarStartTime = element.getAttribute('data-webinar-start-time');
-    this.currentTime = element.getAttribute('data-current-time');
+
+    this.timeRemaining = element.getAttribute('data-time-remaining');
+    this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
+
     this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
     this.userCompleteName = element.getAttribute('data-user-complete-name');
     this.helperContainer = element.querySelector('.video-helper');
@@ -58,10 +59,11 @@ function Webinar(element, isSpeaker) {
     }
     this.timerContainer = element.querySelector('.timer');
     this.countDownContainer = element.querySelector('.timer span.countdown');
+    this.viewersCount = 0;
+    this.viewersContainer = element.querySelector('.viewers-container');
+    this.viewersTextContainer = element.querySelector('.viewers');
 
     if (this.isSpeaker) {
-        this.viewersCount = 0;
-        this.viewersContainer = element.querySelector('.viewers');
         this.thereIsAlreadyAScreenShareInProgressMessage = element.getAttribute('data-screen-share-already-in-progress-message');
 
         this.endScreenSharingButton = element.querySelector('#end-screensharing');
@@ -91,6 +93,23 @@ function Webinar(element, isSpeaker) {
         }.bind(this), 20);
     }.bind(this);
 
+    const fullscreenButton = this.createFullscreenButton();
+    this.element.appendChild(fullscreenButton);
+    fullscreenButton.addEventListener('click', () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            return;
+        }
+
+        const element = this.element;
+        const rfs = element.requestFullscreen
+            || element.webkitRequestFullScreen
+            || element.mozRequestFullScreen
+            || element.msRequestFullscreen
+        ;
+        rfs.call(element);
+    });
+
     document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
     document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
     document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
@@ -114,7 +133,7 @@ Webinar.prototype.init = function () {
         return;
     }
 
-    this.session = TokboxInstance.initSession(this.apiKey, this.sessionId, {connectionEventsSuppressed: !this.isSpeaker});
+    this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
     this.session.on('streamCreated', function (event) {
         this.hideElement(this.helperContainer);
@@ -122,10 +141,7 @@ Webinar.prototype.init = function () {
         const subscriberManager = new Subscriber(this.session, this.layoutContainer);
         const subscriber = subscriberManager.subscribe(event);
 
-        const fullscreenButton = this.createFullscreenButton();
-        subscriber.element.appendChild(fullscreenButton);
-
-        if (this.isScrenShareStream(event.stream)) {
+        if (this.isScreenShareStream(event.stream)) {
             this.hasScreenSharing = true;
             this.hidePublisher();
             this.hideSubscribers();
@@ -133,7 +149,7 @@ Webinar.prototype.init = function () {
             this.subscribers.push(subscriber);
         }
 
-        if (this.hasScreenSharing && !this.isScrenShareStream(subscriber.stream)) {
+        if (this.hasScreenSharing && !this.isScreenShareStream(subscriber.stream)) {
             this.hidePublisher();
             this.hideElement(subscriber.element);
         }
@@ -165,7 +181,7 @@ Webinar.prototype.init = function () {
             }, 200);
         });
 
-        if (this.isScrenShareStream(event.stream)) {
+        if (this.isScreenShareStream(event.stream)) {
             this.hasScreenSharing = false;
             this.showPublisher();
             this.showSubscribers();
@@ -180,10 +196,7 @@ Webinar.prototype.init = function () {
 };
 
 Webinar.prototype.updateViewers = function () {
-    // remove speaker
-    const viewersCount = this.viewersCount - 1;
-
-    this.viewersContainer.textContent = '' + viewersCount;
+    this.viewersTextContainer.textContent = this.viewersCount;
 };
 
 /**
@@ -195,6 +208,8 @@ Webinar.prototype.connect = function () {
         this.showElement(this.toggleAudioElement);
         this.showElement(this.toggleVideoElement);
         this.showElement(this.startScreenSharingButton);
+        this.showElement(this.timerContainer);
+        this.showElement(this.viewersContainer);
 
         if (!error) {
             if (this.isSpeaker) {
@@ -261,15 +276,21 @@ Webinar.prototype.publishStream = function () {
  * Disconnect from the session
  */
 Webinar.prototype.disconnect = function () {
-    this.session.disconnect();
-    this.session.off();
+    if (this.session) {
+        this.session.disconnect();
+        this.session.off();
+    }
+
     this.session = null;
 
     if (window.opener) {
         window.opener.location.reload(true);
+        window.close();
+
+        return;
     }
 
-    window.close();
+    window.history.go(-1);
 };
 
 Webinar.prototype.handlePublish = function (error) {
@@ -496,7 +517,7 @@ Webinar.prototype.countDownBeforeEnd = function () {
         return;
     }
 
-    new Counter(this.webinarStartTime, this.webinarEndTime, this.currentTime, this.countDownContainer, this.timerContainer);
+    new Counter(parseInt(this.timeRemaining, 10), parseInt(this.warningRemainingTime, 10), this.countDownContainer, this.timerContainer);
 };
 
 Webinar.prototype.hidePublisher = function () {
@@ -534,7 +555,7 @@ Webinar.prototype.showSubscribers = function () {
     });
 };
 
-Webinar.prototype.isScrenShareStream = function (stream) {
+Webinar.prototype.isScreenShareStream = function (stream) {
     return this.typeScreenShare === stream.videoType;
 };
 

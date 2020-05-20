@@ -1,0 +1,18 @@
+Proximum\Vimeet\Domain\Model\Visio\VisioSettings:
+    type:  entity
+    table: visio_settings
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    oneToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Visio\VisioSettingsTranslation
+            mappedBy: visioSettings
+            indexBy: locale
+            cascade: ["all"]
+            orphanRemoval: true

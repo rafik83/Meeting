@@ -39,6 +39,7 @@ class GetWebinarViewQueryHandler
         );
 
         $sessionId = $session->getSessionId();
+        $timeRemainingInSeconds = max(0, $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp());
 
         return new WebinarView(
             $happening->getTitle($query->getLocale()),
@@ -47,7 +48,10 @@ class GetWebinarViewQueryHandler
             $this->videoConferenceAdapter->getApiKey(),
             $isSpeaker,
             new TimeRangeView($happening->getBegin(), $happening->getEnd()),
-            $this->dateTime
+            $this->dateTime,
+            $timeRemainingInSeconds,
+            round($timeRemainingInSeconds * 0.2),
+            $happening->getWebinarHeaderImage($query->getLocale())
         );
     }
 }

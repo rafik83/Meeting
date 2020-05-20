@@ -264,6 +264,7 @@ form.event_configure_date.children.closeAnsweringMeetingRequestDate.label: 'Bloq
 form.event_configure_date.children.closeMeetingRequestDate.label: 'Bloquer la demande de rendez-vous'
 form.event_configure_date.children.enableBadgeForParticipantDate.help: 'Active l''envoi automatique du badge par email'
 form.event_configure_date.children.enableBadgeForParticipantDate.label: 'Active l''affichage du badge pour le participant'
+form.event_configure_date.children.enableVisioTestMenuButtonDate.label: 'Active l''affichage du bouton de test de visio dans le menu'
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
 form.event_configure_date.children.registrationCloseDate.label: 'Date de clôture des inscriptions'
 form.event_configure_date.children.registrationOpenDate.label: 'Date d''ouverture des inscriptions'
@@ -299,6 +300,18 @@ form.event_create.children.visio.label: 'Evenement dématérialisé'
 form.event_create.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event_duplicate.children.event.label: Événement
 form.event_duplicate.children.submit.label: Créer
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endImage.label: 'Image de fin'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endImage.missing: 'Image de fin non défini'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.help: 'Format autorisé: .mp3, .webm, .wav'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.label: 'Son de fin'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.missing: 'Son de fin non défini'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endMessage.label: 'Message de fin'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.header.label: 'Image d''entête des RDVs Visio'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.header.missing: 'Image non défini actuellement'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.removeEndImage.label: 'Supprimer l''image de fin'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.removeEndSound.label: 'Supprimer le son de fin'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.removeHeader.label: 'Supprimer ce header'
+form.event_meeting_visio_settings.children.submit.label: 'Enregistrer'
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
@@ -325,6 +338,7 @@ form.event_update_design.children.leftColor.label: 'Couleur de gauche des CTA'
 form.event_update_design.children.localizedImages.prototype.children.logo.label: 'Header desktop'
 form.event_update_design.children.localizedImages.prototype.children.mobileLogo.label: 'Header mobile'
 form.event_update_design.children.localizedImages.prototype.children.undefined: 'Non défini'
+form.event_update_design.children.localizedImages.prototype.children.notificationImage.label: 'Image de notification'
 form.event_update_design.children.removeBackgroundImage.label: 'Supprimer l''image de fond actuelle'
 form.event_update_design.children.rightColor.label: 'Couleur de droite des CTA'
 form.event_update_design.children.submit.label: Sauvegarder
@@ -432,6 +446,7 @@ form.filter.filled.label: Renseigné
 form.filter.firstName.label: Prénom
 form.filter.isVisio.label: 'Est visio'
 form.filter.isVisioTested.label: 'Visio testée'
+form.filter.keywords.label: 'Mots clés'
 form.filter.label: Filtrer
 form.filter.lastName.label: Nom
 form.filter.messaging.received.label: 'Est destinataire de'
@@ -481,6 +496,8 @@ form.happening_create.children.talkings.prototype.children.position.label: Posit
 form.happening_create.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_create.children.translations.prototype.children.description.label: Description
 form.happening_create.children.translations.prototype.children.title.label: Titre
+form.happening_create.children.translations.prototype.children.webinarHeaderImage.label: Image entête de webinaire
+form.happening_create.children.translations.prototype.children.currentWebinarHeaderImage.label: Image actuelle
 form.happening_create.children.types.label: 'Types ayant accès'
 form.happening_create.children.webinar.label: 'Webinaire activé'
 form.happening_create.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
@@ -498,6 +515,7 @@ form.happening_update.children.talkings.prototype.children.position.label: Posit
 form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
+form.happening_update.children.translations.prototype.children.webinarHeaderImage.label: Image entête de webinaire
 form.happening_update.children.types.label: 'Types ayant accès'
 form.happening_update.children.webinar.label: 'Webinaire activé'
 form.happening_update.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'

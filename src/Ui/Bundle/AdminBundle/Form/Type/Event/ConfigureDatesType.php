@@ -19,7 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ConfigureDatesType extends AbstractType
 {
-    const CONFIGURATION_DATES = [
+    private const CONFIGURATION_DATES = [
         'catalogOnlineDate',
         'happeningsOpenDate',
         'schedulePublishDate',
@@ -30,9 +30,10 @@ class ConfigureDatesType extends AbstractType
         'registrationOpenDate',
         'registrationCloseDate',
         'enableBadgeForParticipantDate',
+        'enableVisioTestMenuButtonDate',
     ];
 
-    const CONFIGURATION_DATES_HELP = [
+    private const CONFIGURATION_DATES_HELP = [
         'enableBadgeForParticipantDate' => 'form.event_configure_date.children.enableBadgeForParticipantDate.help',
     ];
 

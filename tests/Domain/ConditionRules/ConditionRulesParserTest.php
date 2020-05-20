@@ -79,21 +79,21 @@ class ConditionRulesParserTest extends TestCase
             'fr',
             new LogicalOperatorAnd,
             [
-                new Field('Activity', new ComparisonOperatorEqual, 'text', 'A1'),
+                new Field('Activity', new ComparisonOperatorEqual, 'text', 'A1', 'fr'),
                 new Condition(
                     $event->reveal(),
                     'fr',
                     new LogicalOperatorOr,
                     [
-                        new Field('Sector', new ComparisonOperatorContains, 'checkbox', ['S1', 'S3']),
-                        new Field('Universe', new ComparisonOperatorEqual, 'text', 'U4'),
+                        new Field('Sector', new ComparisonOperatorContains, 'checkbox', ['S1', 'S3'], 'fr'),
+                        new Field('Universe', new ComparisonOperatorEqual, 'text', 'U4', 'fr'),
                         new Condition(
                             $event->reveal(),
                             'fr',
                             new LogicalOperatorAnd,
                             [
-                                new Field('LastName', new ComparisonOperatorNull, 'text', ''),
-                                new Field('FirstName', new ComparisonOperatorNotNull, 'text', 'mathieu'),
+                                new Field('LastName', new ComparisonOperatorNull, 'text', '', 'fr'),
+                                new Field('FirstName', new ComparisonOperatorNotNull, 'text', 'mathieu', 'fr'),
                             ]
                         ),
                     ]

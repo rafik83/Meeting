@@ -296,3 +296,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\QuestionRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathQuery }
+
+    #
+    # Visio
+    #
+    Proximum\Vimeet\Application\Query\Visio\UpdateVisioSettingsViewQueryHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Visio\UpdateVisioSettingsViewQuery }

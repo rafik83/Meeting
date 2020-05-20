@@ -112,7 +112,10 @@ class MeetingViewQueryHandler
                 'navigation.links.meetingRequest.open_date',
                 null,
                 null,
-                new StateButtonView(false, $catalogOnlineDateFormatted ? $catalogOnlineDateFormatted : '')
+                new StateButtonView(
+                    false,
+                    false !== $catalogOnlineDateFormatted ? $catalogOnlineDateFormatted : ''
+                )
             );
         }
 

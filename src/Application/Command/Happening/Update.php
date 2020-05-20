@@ -33,16 +33,21 @@ class Update extends AbstractHappeningCommand
 
         foreach ($happening->getEvent()->getLocales() as $locale) {
             if ($happening->getTranslations()->containsKey($locale)) {
+                /** @var Happening\HappeningTranslation $translation */
                 $translation = $happening->getTranslations()->get($locale);
 
                 $this->translations[$locale] = [
-                    'title'       => $translation->getTitle(),
+                    'title' => $translation->getTitle(),
                     'description' => $translation->getDescription(),
+                    'currentWebinarHeaderImage' => $translation->getWebinarHeaderImage(),
+                    'webinarHeaderImage' => null,
                 ];
             } else {
                 $this->translations[$locale] = [
-                    'title'       => '',
+                    'title' => '',
                     'description' => '',
+                    'currentWebinarHeaderImage' => null,
+                    'webinarHeaderImage' => null,
                 ];
             }
         }

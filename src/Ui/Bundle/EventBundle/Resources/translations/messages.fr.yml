@@ -194,6 +194,21 @@ event.visio.test.testSuccessful: 'Test réussi !'
 event.visio.test.title: 'Test de votre configuration rendez-vous visio'
 event.visio.test.video: Vidéo
 event.visio.welcome: 'Bienvenue sur %event%'
+event.visio.settings.audioVolumeBar.label: 'Sensibilité de votre micro :'
+event.visio.settings.audioVolumeBar.help: 'Parlez pour faire bouger cette bar et tester la sensibilité de votre micro.'
+event.visio.settings.askPermissions: 'Activer votre caméra et votre micro'
+event.visio.settings.askPermissionsDenial: 'Vous devez valider les permissions pour pouvoir rejoindre un rendez-vous visio. Rechargez la page pour réessayer. Si le problème persiste, contactez nous.'
+event.visio.settings.askPermissionsDeviceNotFound: 'Une erreur s''est produite lors de la demande d''acceptation des permissions, vérifiez que vous disposez bien d''au moins un micro branché à votre terminal.'
+event.visio.settings.askPermissionsMicNotFound: 'Vous devez au moins avoir un micro branché pour rejoindre un rendez-vous visio. Branchez ou activez un micro sur votre terminal et rafraichissez la page pour rejoindre le rendez-vous.'
+event.visio.settings.askPermissionsDescription: "Vous êtes sur le point de rejoindre un rendez-vous visio.\nPour que les autres participants puissent vous voir et vous entendre, votre navigateur va vous demander l'autorisation d'accéder à votre caméra et votre micro.\nVous aurez la posibilité de les désactiver à n'importe quel moment du rendez-vous."
+event.visio.settings.preview: 'Aperçu de vos règlages :'
+event.visio.settings.selectAudio: 'Sélectionner votre micro :'
+event.visio.settings.selectVideo: 'Sélectionner votre caméra :'
+event.visio.settings.selectVideoNotFound: 'Aucune caméra ne semble présente, vous pouvez effectuer l''appel visio en audio uniquement ou brancher une caméra et rafraichir la page.'
+event.visio.settings.startMeeting: 'Démarrer le rendez-vous visio'
+event.visio.settings.testAudio: 'Tester votre sortie audio'
+event.visio.settings.testAudioHelp: 'Cliquer pour entendre un son et tester votre sortie audio'
+event.visio.settings.title: 'Paramètres de votre visio'
 form_template.fill_step.participant: 'Formulaire pour %participant%'
 form_template.fill_step.step_title: 'Étape %currentStep% / %totalStep%'
 gender.man: Monsieur
@@ -240,7 +255,7 @@ happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y p
 happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
 happening.webinar.end: 'Arrêter'
-happening.webinar.endingAt: 'Fin du webinaire dans'
+happening.webinar.endingAt: 'Fin dans'
 happening.webinar.start: 'Démarrer'
 happening.webinar.viewers: 'Connectés :'
 happening.webinar.screenshare.start: 'Partager mon écran'
@@ -263,7 +278,7 @@ login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace participant'
 meeting.video.chat.waitingMessage: 'Les messages seront remis une fois votre contact connecté.'
 meeting.video.end: 'Arrêter le RDV'
-meeting.video.endingAt: 'Fin du rendez-vous dans'
+meeting.video.endingAt: 'Fin dans'
 meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video ou annulé le lancement du partage d'écran.\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques ou le lancement du partage d'écran."
 meeting.video.installScreenSharingExtensionMessage: 'Merci d''installer notre extension de partage d''écran.'
 meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
@@ -310,6 +325,7 @@ navigation.category.package: 'Forfait de participation'
 navigation.category.planning: Agenda
 navigation.category.program: Programme
 navigation.category.sheet: 'Fiche de présentation'
+navigation.category.visio_test: 'Tester ma visio'
 navigation.close: Fermer
 navigation.links.billing.billing_info: 'Informations de facturation'
 navigation.links.billing.order_history: 'Historique des commandes'

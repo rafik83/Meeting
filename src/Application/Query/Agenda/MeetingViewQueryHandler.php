@@ -38,18 +38,23 @@ class MeetingViewQueryHandler
     /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
+    /** @var \DateTimeInterface */
+    private $now;
+
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
         RuleRepositoryInterface $ruleRepository,
         VideoMeetingAccess $videoMeetingAccess,
         LinkedSheetsTitle $linkedSheetsTitle,
-        ParticipantInfoGuesser $participantInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        \DateTimeInterface $now
     ) {
         $this->participantHandler = $participantHandler;
         $this->ruleRepository = $ruleRepository;
         $this->videoMeetingAccess = $videoMeetingAccess;
         $this->linkedSheetsTitle = $linkedSheetsTitle;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->now = $now;
     }
 
     /**
@@ -58,7 +63,7 @@ class MeetingViewQueryHandler
      * @return MeetingView
      * @throws NoSheetForUserException
      */
-    public function handle(MeetingViewQuery $query)
+    public function handle(MeetingViewQuery $query): MeetingView
     {
         $userSheet = $query->meeting->getSheetOfUser($query->user);
         $sheetMet = $query->meeting->getSheetMet($userSheet);
@@ -85,7 +90,12 @@ class MeetingViewQueryHandler
             }
         }
 
-        $meeting = new MeetingView(
+        $timeRemainingInSeconds = max(
+            0,
+            $query->meeting->getSlot()->getEnd()->getTimestamp() - $this->now->getTimestamp()
+        );
+
+        return new MeetingView(
             $query->meeting->getId(),
             $userSheet->getTitle(),
             $sheetMet->getId(),
@@ -93,6 +103,8 @@ class MeetingViewQueryHandler
             $meetingOwnSheetParticipantViews,
             $query->meeting->getSlot()->getBegin(),
             $query->meeting->getSlot()->getEnd(),
+            $timeRemainingInSeconds,
+            round($timeRemainingInSeconds * 0.2),
             $query->meeting->getSpot()->getReference(),
             $query->event->getTimeZone(),
             $query->event->getConfiguration()->getLeftColor(),
@@ -102,7 +114,5 @@ class MeetingViewQueryHandler
             $query->meeting->getSpot()->isVisio(),
             $this->videoMeetingAccess->allowedToAccess($query->meeting)
         );
-
-        return $meeting;
     }
 }

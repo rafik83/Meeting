@@ -49,3 +49,11 @@ services:
             - '@domain.user.agenda.version.diff_checker'
             - '@domain.user.agenda.version.diff_verbalizer'
             - '@datetime'
+
+    #
+    # Visio
+    #
+    Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository'
+            - '@Proximum\Vimeet\Application\Command\Visio\CreateVisioSettingsHandler'

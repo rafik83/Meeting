@@ -10,19 +10,16 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
 
 abstract class AbstractJobQueueAdapter
 {
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
 
     /**
-     * JobQueueAdapter constructor.
-     *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
@@ -30,11 +27,37 @@ abstract class AbstractJobQueueAdapter
         $this->entityManager = $entityManager;
     }
 
+    protected function hasAlreadyJobPending(string $command, array $args): bool
+    {
+        $pendingJob = $this->entityManager
+            ->createQuery("SELECT j FROM JMSJobQueueBundle:Job j
+                WHERE j.command = :command
+                AND j.args = :args
+                AND j.state = :state
+            ")
+            ->setParameter('command', $command)
+            ->setParameter('args', $args, Types::JSON)
+            ->setParameter('state', Job::STATE_PENDING)
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
+
+        return null !== $pendingJob;
+    }
+
     /**
      * @param Job $job
      */
-    protected function setJob(Job $job)
+    protected function setJob(Job $job): void
     {
+        $command = $job->getCommand();
+        $args = $job->getArgs();
+
+        // Avoid to set a job when the same job is already pending.
+        if ($this->hasAlreadyJobPending($command, $args)) {
+            return;
+        }
+
         $this->entityManager->persist($job);
         $this->entityManager->flush($job);
     }
@@ -42,7 +65,7 @@ abstract class AbstractJobQueueAdapter
     /**
      * @param Job $job
      */
-    protected function updateJob(Job $job)
+    protected function updateJob(Job $job): void
     {
         $this->entityManager->flush($job);
     }

@@ -14,7 +14,7 @@ class GetTagsByNomenclatureTest extends TestCase
 {
     public function test__invoke()
     {
-        $field = new Field('nestedTaggedData.1', new ComparisonOperatorIn(), 'checkbox', ['57eced1b99305', '57eced1b994ef']);
+        $field = new Field('nestedTaggedData.1', new ComparisonOperatorIn(), 'checkbox', ['57eced1b99305', '57eced1b994ef'], 'fr');
         $event = $this->prophesize(Event::class);
         $nomenclatureFilterViews = [
             1 => new NomenclatureFilterView(1, 'mbappe', ['u58b57c0ecbdb3' => 'dribble'], [0 => 'tag', 1 => 'tag2']),

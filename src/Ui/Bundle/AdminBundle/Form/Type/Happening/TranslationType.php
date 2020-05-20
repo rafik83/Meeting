@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
+use Proximum\Vimeet\Domain\Event\Image;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,6 +30,12 @@ class TranslationType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
+            ])
+            ->add('webinarHeaderImage', FileType::class, [
+                'required' => false,
+                'attr' => [
+                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
+                ],
             ])
         ;
     }

@@ -4,6 +4,8 @@
     <link rel="chrome-webstore-item" href="{{ visio_screen_sharing_chrome_extension }}">
 {% endblock %}
 
+{% block body_attributes 'class="background-black"' %}
+
 {% block body %}
     {% set participantPresenceAction = null %}
     {% if participant is defined and meeting is defined and sheet is defined %}
@@ -20,20 +22,31 @@
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-participant-presence-action="{{ participantPresenceAction }}"
          data-user-complete-name="{{ userCompleteName }}"
-         {% if meetingView is defined %}
-             data-meeting-start-time="{{ meetingView.begin.timestamp }}"
-             data-meeting-end-time="{{ meetingView.end.timestamp }}"
-             data-current-time="{{ currentTime }}"
-         {% endif %}
-    >
-        <div class="layout-container"></div>
-        <div class="publisher-container"></div>
-        <div class="chat-container hide"></div>
-        <div class="video-helper">
-            <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
 
+        {% if meetingView is defined %}
+            data-time-remaining="{{ meetingView.timeRemainingInSeconds }}"
+            data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
+        {% endif %}
+
+        {% if videoConferenceView.hasEndSound %}
+            data-visio-meeting-end-sound="{{ asset(videoConferenceView.endSound) }}"
+        {% endif %}
+
+         data-visio-meeting-end-warning="{{ videoConferenceView.hasEndMessageOrImage }}"
+    >
+        {% if videoConferenceView.hasHeader %}
+            <div class="visio-header">
+                <img src="{{ videoConferenceView.header }}" class="img-responsive">
+            </div>
+        {% endif %}
+
+        <div class="layout-container" {% if videoConferenceView.hasHeader %}style="top:125px"{% endif %}></div>
+        <div class="chat-container hide"></div>
+        <div class="video-helper" data-meeting-settings-container>
+            {{ include('EventBundle:Visio:settings.html.twig') }}
+        </div>
+        <div class="video-helper hide" data-meeting-waiting-helper>
             {% if meetingView is defined %}
-                <br>
                 <h1>
                     {% for sheetMetView in meetingView.sheetMetTitle %}
                         {% if sheetMetView.isHighlighted %}
@@ -49,29 +62,59 @@
                         {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
                     {% endfor %}
                 </div>
-            {% endif %}
-        </div>
 
-        {% if meetingView is defined %}
-        <div class="timer-container">
-            <div class="timer">
-                {{ 'meeting.video.endingAt'|trans }}
-                <span class="countdown"></span>
+                <hr>
+            {% endif %}
+
+            <div data-meeting-waiting-message class="hide">
+                <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
             </div>
         </div>
-        {% endif %}
+        <div class="modal" tabindex="-1" role="dialog" data-visio-meeting-end-container>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        {% if videoConferenceView.hasEndImage %}
+                            <img src="{{ asset(videoConferenceView.endImage) }}" class="img-responsive" style="margin: 0 auto;"/>
+                            <br>
+                        {% endif %}
+                        {% if videoConferenceView.hasEndMessage %}
+                            <p>{{ videoConferenceView.endMessage|nl2br }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'modal.close'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="buttons-container">
-            <button id="toggle-audio" class="btn">
+            {% if meetingView is defined %}
+                <div class="timer-container">
+                    <div class="timer">
+                        {{ 'meeting.video.endingAt'|trans }}
+                        <span class="countdown"></span>
+                    </div>
+                </div>
+            {% endif %}
+
+            <button id="toggle-audio" class="btn hide">
                 <i class="icon-Conference icon-center"></i>
             </button>
-            <button id="toggle-video" class="btn">
+            <button id="toggle-video" class="btn hide">
                 <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
             </button>
             <button id="toggle-chat" class="btn btn-off hide">
                 <i class="icon-Commentaire icon-center"></i>
             </button>
-            <button id="start-screensharing" class="btn screensharing">
+            <button id="start-screensharing" class="btn screensharing hide">
                 <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.start'|trans }}
             </button>
             <button id="end-screensharing" class="btn screensharing hide">
@@ -82,5 +125,4 @@
             </button>
         </div>
     </div>
-{% endblock body %}
-
+{% endblock %}

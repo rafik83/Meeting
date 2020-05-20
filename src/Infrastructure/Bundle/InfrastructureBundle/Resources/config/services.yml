@@ -337,6 +337,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Adapter\JobRepositoryAdapter
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@jms_job_queue.job_manager'
     repository.video_conference_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\VideoConferenceRepository
         arguments:
@@ -869,12 +870,14 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\CreateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@adapter.local_file_storage'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Create }
     command.happening.update_handler:
         class: Proximum\Vimeet\Application\Command\Happening\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@adapter.local_file_storage'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Update }
@@ -2378,6 +2381,8 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery }
 
+    Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\ContentQueryBuilder: ~
+
     Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQueryHandler:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuery }
@@ -2391,6 +2396,7 @@ services:
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\TemplateObjectFilterTransformer'
             - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\KeywordTransformer'
 
     Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature:
         arguments:
@@ -2404,7 +2410,10 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\ConditionRules\GetTagsByNomenclature'
 
-    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer:
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\MessageTransformer: ~
+    Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\KeywordTransformer:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\ContentQueryBuilder'
 
     Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\Input\ParticipationTypeTransformer:
         lazy: true
@@ -2429,7 +2438,7 @@ services:
         arguments:
             - '@adapter.video_conference_adapter'
             - '@repository.video_conference_repository'
-            - '%feature_video_conference_enabled%'
+            - '@Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\RequestAccess }
 
@@ -2437,6 +2446,7 @@ services:
         class: Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccessHandler
         arguments:
             - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess }
@@ -4200,6 +4210,7 @@ services:
             - '@components.security.video_meeting_access'
             - '@Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle'
             - '@template.participant_info_guesser'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery }
 
@@ -4608,6 +4619,13 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\BadgeLink\LeniBadgeLinkParametersQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery }
+
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQueryHandler:
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQuery }
 
     ##
     # Mass Assignment query handler

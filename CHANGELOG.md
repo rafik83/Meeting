@@ -6,6 +6,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2088 - Sort sheet participants
+- VIMEET-2101 - Add end sound, image and message to visio meeting
+
+## [2.28.0] - 2020-05-18
+### Added
+- VIMEET-2095 - Add image header to visio meeting
+
+## [2.27.0] - 2020-05-15
+### Added
+- VIMEET-2096 - Add image header to webinar
+- VIMEET-2050 - Can define an image to the header notification
+- VIMEET-2118 - Add visio test menu button
+### Fixed
+- MV-230 - Webinar and counter fixes
+
+## [2.26.0] - 2020-05-05
+### Added
+- VIMEET-2090 - Improve video conference meeting UX
+- VIMEET-2078 - Keywords search from Sheet Query Builder
+- VIMEET-2067 - Visio settings
+### Fixed
+- MV-220 - Fix logo error when ordering logo in the purchase tunnel
+- MV-232 - Participant can access to all own sheet video meeting
+- MV-234 - Fix sheet / participant export with dates filters
+- Hotfix - Avoid pending job to be rescheduled
 
 ## [2.25.0] - 2020-03-30
 ### Added

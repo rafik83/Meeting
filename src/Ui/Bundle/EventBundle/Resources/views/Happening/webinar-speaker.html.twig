@@ -4,6 +4,8 @@
     <link rel="chrome-webstore-item" href="{{ visio_screen_sharing_chrome_extension }}">
 {% endblock %}
 
+{% block body_attributes 'class="background-black"' %}
+
 {% block body %}
     <div class="webinar webinar-speaker"
          data-api-key="{{ webinarView.apiKey }}"
@@ -15,32 +17,38 @@
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-user-complete-name="{{ userCompleteName }}"
-         data-webinar-start-time="{{ webinarView.slot.begin.timestamp }}"
-         data-webinar-end-time="{{ webinarView.slot.end.timestamp }}"
-         data-current-time="{{ webinarView.currentTime.timestamp }}"
+         data-time-remaining="{{ webinarView.timeRemainingInSeconds }}"
+         data-warning-time-remaining="{{ webinarView.warningTimeRemainingInSeconds }}"
     >
-        <div class="layout-container"></div>
+        {% if webinarView.headerImage %}
+            <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>
+        {% endif %}
+
+        <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}></div>
         <div class="chat-container hide"></div>
 
         <div class="video-helper">
             <h1>{{ webinarView.happeningTitle }}</h1>
 
-            <button class="btn btn-primary" data-webinar-join-button>{{ 'happening.webinar.start'|trans }}</button>
+            <div class="text-center">
+                <button class="btn btn-primary" data-webinar-join-button>{{ 'happening.webinar.start'|trans }}</button>
+            </div>
             <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
         </div>
 
-        <div class="timer-container">
-            <div class="timer">
-                {{ 'happening.webinar.endingAt'|trans }}
-                <span class="countdown"></span>
-            </div>
-            <div class="viewers-container">
-                {{ 'happening.webinar.viewers'|trans }}
-                <span class="viewers">0</span>
-            </div>
-        </div>
-
         <div class="buttons-container">
+            <div class="viewers-container hide" title="{{ 'happening.webinar.viewers'|trans }}">
+                <span class="viewers">0</span>
+                <i class="icon-Profil_1"></i>
+            </div>
+
+            <div class="timer-container">
+                <div class="timer hide">
+                    {{ 'happening.webinar.endingAt'|trans }}
+                    <span class="countdown"></span>
+                </div>
+            </div>
+
             <button id="toggle-audio" class="btn hide">
                 <i class="icon-Conference icon-center"></i>
             </button>

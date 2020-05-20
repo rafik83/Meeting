@@ -24,8 +24,6 @@ class ConfigureDatesHandler
     private $eventDispatcher;
 
     /**
-     * ConfigureDatesHandler constructor.
-     *
      * @param EventRepositoryInterface        $eventRepository
      * @param DelayedEventDispatcherInterface $eventDispatcher
      */
@@ -40,7 +38,7 @@ class ConfigureDatesHandler
     /**
      * @param ConfigureDates $configureDates
      */
-    public function handle(ConfigureDates $configureDates)
+    public function handle(ConfigureDates $configureDates): void
     {
         $configureDates->event->getConfiguration()->setDates(
             $configureDates->catalogOnlineDate,
@@ -52,7 +50,8 @@ class ConfigureDatesHandler
             $configureDates->agendaOnlineDate,
             $configureDates->registrationOpenDate,
             $configureDates->registrationCloseDate,
-            $configureDates->enableBadgeForParticipantDate
+            $configureDates->enableBadgeForParticipantDate,
+            $configureDates->enableVisioTestMenuButtonDate
         );
 
         $this->eventRepository->set($configureDates->event);

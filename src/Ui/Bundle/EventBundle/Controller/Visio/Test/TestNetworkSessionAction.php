@@ -15,8 +15,10 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -43,16 +45,26 @@ class TestNetworkSessionAction
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
-    public function __invoke(EventDomain $eventDomain, UserDomain $userDomain, string $sessionId): Response
-    {
+    public function __invoke(
+        Request $request,
+        EventDomain $eventDomain,
+        UserDomain $userDomain,
+        string $sessionId,
+        ?Sheet $sheet = null
+    ): Response {
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             throw new AccessDeniedException();
         }
+        $event = $eventDomain->getEvent();
 
         try {
             /** @var VideoConferenceView $videoConferenceView */
             $videoConferenceView = $this->commandBus->handle(
-                new RequestTestAccess($sessionId)
+                new RequestTestAccess(
+                    $event,
+                    $sessionId,
+                    $event->getAvailableLocale($request->getLocale())
+                )
             );
         } catch (InvalidTokenGeneratorArgumentsException $exception) {
             throw new NotFoundHttpException('The sessionId is not valid');
@@ -62,7 +74,8 @@ class TestNetworkSessionAction
             $this->engine->render(
                 'EventBundle:VideoConference:testNetworkAudioVideo.html.twig',
                 [
-                    'event' => $eventDomain->getEvent(),
+                    'sheet' => $sheet,
+                    'event' => $event,
                     'videoConferenceView' => $videoConferenceView,
                 ]
             )

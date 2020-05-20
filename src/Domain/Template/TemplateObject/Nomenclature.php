@@ -344,7 +344,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     /**
      * {@inheritdoc}
      */
-    public function getSearchableContent()
+    public function getSearchableContent(?string $locale = null)
     {
         return $this->getLabelsOfAllSelectedLevels();
     }

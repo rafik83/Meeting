@@ -1,60 +1,43 @@
 'use strict';
 
-function Counter(startTime, endTime, currentTime, countDownContainer, timerContainer) {
+function Counter(
+    timeRemaining,
+    warningRemainingTime,
+    countDownContainer,
+    timerContainer,
+    countDownEndCallback = null
+) {
     if (!countDownContainer) {
         return;
     }
 
-    this.countDownContainer = countDownContainer;
-    this.timerContainer = timerContainer;
+    const endTime = new Date(new Date().getTime() + timeRemaining * 1000);
 
-    const _this = this;
+    const timerInterval = setInterval(() => {
+        const remainingTime = Math.round((endTime.getTime() - new Date().getTime()) / 1000);
 
-    const endTimeValue = parseInt(endTime);
-    const startTimeValue = parseInt(startTime);
-    let currentTimeValue = parseInt(currentTime);
-
-    const totalTime = endTimeValue - startTimeValue;
-    const warningTime = Math.floor(totalTime * 0.8);
-    let remainingTime = endTimeValue - currentTimeValue;
-
-    let seconds = Math.floor(remainingTime % 60);
-    let minutes = Math.floor((remainingTime / 60) % 60);
-    let hours = Math.floor((remainingTime / (60 * 60)) % 24);
-
-    if (hours > 0) {
-        minutes += hours * 60;
-    }
-
-    var timerInterval = setInterval(function () {
         if (remainingTime <= 0) {
-            _this.timerContainer.classList.add('warning');
-            _this.countDownContainer.innerHTML = `00:00`;
+            timerContainer.classList.add('warning');
+            countDownContainer.innerHTML = `00:00`;
             clearInterval(timerInterval);
+
+            if (countDownEndCallback) {
+                countDownEndCallback();
+            }
 
             return;
         }
 
-        currentTimeValue++;
-        remainingTime--;
-
-        if (currentTimeValue >= (startTimeValue + warningTime)) {
-            _this.timerContainer.classList.add('warning');
+        if (remainingTime <= warningRemainingTime) {
+            timerContainer.classList.add('warning');
         }
 
-        if (0 === parseInt(seconds)) {
-            seconds = 59;
-            minutes--;
-        } else {
-            seconds--;
-        }
+        const hours = Math.floor((remainingTime / (60 * 60)) % 24);
+        const minutes = hours * 60 + Math.floor((remainingTime / 60) % 60);
+        const seconds = Math.floor(remainingTime % 60);
 
-        if (seconds < 10) {
-            seconds = '0' + seconds;
-        }
-
-        _this.countDownContainer.innerHTML = `${minutes}:${seconds}`;
-    }, 1000);
+        countDownContainer.innerHTML = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    }, 500);
 }
 
 module.exports = Counter;

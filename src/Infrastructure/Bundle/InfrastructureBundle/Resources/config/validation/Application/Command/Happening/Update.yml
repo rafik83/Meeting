@@ -2,6 +2,8 @@ Proximum\Vimeet\Application\Command\Happening\Update:
     properties:
         category:
             - NotNull: ~
+        webinar:
+            - Type: bool
         translations:
             - All:
                 - Collection:
@@ -9,6 +11,13 @@ Proximum\Vimeet\Application\Command\Happening\Update:
                         title:
                             - NotBlank: ~
                         description: ~
+                        webinarHeaderImage:
+                            - Image:
+                                  maxSize: 500k
+                                  mimeTypes: !php/const Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
+                                  minHeight: 125
+                                  maxHeight: 125
+                        currentWebinarHeaderImage: ~
         begin:
             - NotNull: ~
         end:

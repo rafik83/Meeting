@@ -14,7 +14,6 @@ use Elastica\Filter\Exists;
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Filtered;
 use Elastica\Query\Match;
-use Elastica\Query\MultiMatch;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
 use Elastica\Query\Term;
@@ -37,18 +36,11 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Type\TypeInterface;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
-use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
+use Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\ContentQueryBuilder;
 use Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\NomenclatureQueryBuilder;
 
 class SheetSearchQueryBuilder
 {
-    const BOOSTER_SHEET_NAME      = 5;
-    const BOOSTER_LOCALE_CONTENT  = 3;
-    const BOOSTER_DEFAULT_CONTENT = 2;
-
-    // Percentage content minimum should match
-    const CONTENT_MINIMUM_SHOULD_MATCH = 90;
-
     /**
      * @var BoolQuery
      */
@@ -220,7 +212,7 @@ class SheetSearchQueryBuilder
     /**
      * @param array $filters
      */
-    protected function filterByContent(array &$filters)
+    protected function filterByContent(array &$filters): void
     {
         if (!isset($filters[SearchFields::FILTER_CONTENT])
             || empty($filters[SearchFields::FILTER_CONTENT])
@@ -228,28 +220,18 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $search = str_replace('|', ' ', $filters[SearchFields::FILTER_CONTENT]);
+        $search = explode('|', $filters[SearchFields::FILTER_CONTENT]);
 
-        // Boost sheetname and content
-        $fields = [
-            sprintf('sheetName^%s', $this->initialBooster * self::BOOSTER_SHEET_NAME),
-            sprintf('content^%s', $this->initialBooster * self::BOOSTER_DEFAULT_CONTENT),
-        ];
+        $builder = new ContentQueryBuilder();
+        $boolQuery = new BoolQuery();
 
-        if (in_array($this->locale, AvailableLocales::getAvailableLocalesForContent())) {
-            // If locale field is available
-            $fields[] = sprintf('content_%s^%s', $this->locale, $this->initialBooster * self::BOOSTER_LOCALE_CONTENT);
+        foreach ($search as $value) {
+            $boolQuery->addShould(
+                $builder->getElasticaQuery($value, $this->locale)
+            );
         }
 
-        $multiMatch = new MultiMatch();
-        $multiMatch
-            ->setMinimumShouldMatch(self::CONTENT_MINIMUM_SHOULD_MATCH . '%')
-            ->setFields($fields)
-            ->setType(MultiMatch::TYPE_CROSS_FIELDS)
-            ->setQuery($search)
-        ;
-
-        $this->query->addMust($multiMatch);
+        $this->query->addMust($boolQuery);
     }
 
     /**

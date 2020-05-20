@@ -55,6 +55,9 @@ class UpdateDesign implements Command
     /** @var string */
     public $headerButtonTextColor;
 
+    /** @var UploadedFile|null */
+    public $notificationImage;
+
     public function __construct(Event $event)
     {
         $this->event = $event;
@@ -68,11 +71,13 @@ class UpdateDesign implements Command
         $this->textColor = $event->getConfiguration()->getTextColor();
         $this->backgroundColor = $event->getConfiguration()->getBackgroundColor();
         $this->localizedImages = [];
+        $this->notificationImage = [];
 
         foreach ($event->getLocales() as $locale) {
             $this->localizedImages[$locale] = [
                 'logo' => null,
                 'mobileLogo' => null,
+                'notificationImage' => null
             ];
         }
     }

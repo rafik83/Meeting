@@ -1066,19 +1066,34 @@ event_video_conference_access_session_test:
     requirements:
         sessionId: .*
     methods: [GET]
-    defaults: { _controller: EventBundle:VideoConference:accessSessionVideoTest }
+    controller: EventBundle:VideoConference:accessSessionVideoTest
 
 event_video_conference_create_network_test:
     path: /video/network/test
     methods: [GET]
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\CreateTestNetworkSessionAction }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\CreateTestNetworkSessionAction
 
 event_video_conference_network_test:
     path: /video/network/test/{sessionId}
     requirements:
         sessionId: .+
     methods: [GET]
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\TestNetworkSessionAction }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\TestNetworkSessionAction
+
+event_sheet_video_conference_create_network_test:
+    path: /sheet/{sheet}/video/network/test
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\CreateTestNetworkSessionAction
+
+event_sheet_video_conference_network_test:
+    path: /sheet/{sheet}/video/network/test/{sessionId}
+    requirements:
+        sheet: \d+
+        sessionId: .+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\TestNetworkSessionAction
 
 event_video_conference_network_tested:
     path: /video/network/tested

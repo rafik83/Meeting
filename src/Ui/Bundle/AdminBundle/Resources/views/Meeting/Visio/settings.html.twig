@@ -1,0 +1,67 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title %}
+    {{ 'admin.meeting.visio.settings.title'|trans }}
+{% endblock %}
+
+{% block form_title 'admin.meeting.visio.settings.title'|trans %}
+
+{% block form_content %}
+    <div class="row">
+    {% for updateVisioSettingsLocalizedView in view.updateVisioSettingsLocalizedViews %}
+        <div class="col-md-2 text-right">
+            <b>{{ updateVisioSettingsLocalizedView.locale|locale }}</b>
+        </div>
+        <div class="col-md-10">
+            {{ form_row(form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.header) }}
+
+            <div class="text-center">
+            {% if updateVisioSettingsLocalizedView.hasHeader %}
+                <img src="{{ asset(updateVisioSettingsLocalizedView.header) }}" class="img-responsive" style="margin: 0 auto"/>
+            {% else %}
+                <p>{{ 'form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.header.missing'|trans({}, 'forms') }}</p>
+            {% endif %}
+            </div><br>
+            {% if form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.removeHeader is defined %}
+                {{ form_row(form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.removeHeader) }}
+            {% endif %}
+            <hr>
+
+            {{ form_row(form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.endSound) }}
+            <div class="text-center">
+                {% if updateVisioSettingsLocalizedView.hasEndSound %}
+                    <audio controls>
+                        <source src="{{ asset(updateVisioSettingsLocalizedView.endSound) }}"/>
+                    </audio>
+                {% else %}
+                    <p>{{ 'form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.missing'|trans({}, 'forms') }}</p>
+                {% endif %}
+            </div><br>
+            {% if form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.removeEndSound is defined %}
+                {{ form_row(form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.removeEndSound) }}
+            {% endif %}
+            <hr>
+
+            {{ form_row(form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.endImage) }}
+            <div class="text-center">
+                {% if updateVisioSettingsLocalizedView.hasEndImage %}
+                    <img src="{{ asset(updateVisioSettingsLocalizedView.endImage) }}" class="img-responsive" style="margin: 0 auto"/>
+                {% else %}
+                    <p>{{ 'form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endImage.missing'|trans({}, 'forms') }}</p>
+                {% endif %}
+            </div><br>
+            {% if form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.removeEndImage is defined %}
+                {{ form_row(form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.removeEndImage) }}
+            {% endif %}
+            <hr>
+
+            {{ form_row(form.localizedVisioSettings[updateVisioSettingsLocalizedView.locale].children.endMessage) }}
+            <hr>
+        </div>
+    {% endfor %}
+    </div>
+
+    {{ form_row(form.localizedVisioSettings) }}
+{% endblock form_content %}
+
+{% block goback_link path('admin_event_list') %}

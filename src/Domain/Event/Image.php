@@ -12,11 +12,12 @@ namespace Proximum\Vimeet\Domain\Event;
 
 class Image
 {
-    const SUPPORTED_MIME_TYPE = [
+    public const SUPPORTED_MIME_TYPE = [
         'image/jpeg',
         'image/pjpeg',
         'image/png',
         'image/x-png',
         'image/svg+xml',
+        'image/gif',
     ];
 }

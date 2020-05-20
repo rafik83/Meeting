@@ -37,6 +37,9 @@ abstract class HappeningType extends AbstractType
 
         $builder
             ->add('category', CategoryType::class, ['event' => $event, 'locale' => $options['locale']])
+            ->add('webinar', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationType::class,
                 'label'      => false,
@@ -87,9 +90,6 @@ abstract class HappeningType extends AbstractType
                 'allow_delete'   => true,
             ])
             ->add('invitationCode', TextType::class, [
-                'required' => false,
-            ])
-            ->add('webinar', CheckboxType::class, [
                 'required' => false,
             ])
         ;

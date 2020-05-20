@@ -12,39 +12,25 @@ namespace Proximum\Vimeet\Domain\Model;
 
 class EventTranslation
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $locale;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $description;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $bankInfo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $billingAddress;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $paymentCondition;
 
     /**
@@ -65,6 +51,12 @@ class EventTranslation
 
     /** @var string|null */
     private $mobileLogoExtension;
+
+    /** @var string|null */
+    private $notificationImage;
+
+    /** @var string|null */
+    private $notificationImageExtension;
 
     /**
      * @param Event       $event
@@ -267,15 +259,35 @@ class EventTranslation
         return $this->mobileLogoExtension;
     }
 
+    /**
+     * @return null|string
+     */
+    public function getNotificationImage(): ?string
+    {
+        return $this->notificationImage;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNotificationImageExtension(): ?string
+    {
+        return $this->notificationImageExtension;
+    }
+
     public function updateLogoAndMobileLogo(
         ?string $logo = null,
         ?string $logoExtension = null,
         ?string $mobileLogo = null,
-        ?string $mobileLogoExtension = null
+        ?string $mobileLogoExtension = null,
+        ?string $notificationImage = null,
+        ?string $notificationImageExtension = null
     ): void {
         $this->logo = $logo;
         $this->logoExtension = $logoExtension;
         $this->mobileLogo = $mobileLogo;
         $this->mobileLogoExtension = $mobileLogoExtension;
+        $this->notificationImage = $notificationImage;
+        $this->notificationImageExtension = $notificationImageExtension;
     }
 }

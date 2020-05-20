@@ -1,0 +1,27 @@
+Proximum\Vimeet\Domain\Model\Visio\VisioSettingsTranslation:
+    type:  entity
+    table: visio_settings_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        locale:
+            type: string
+        header:
+            type: string
+            nullable: true
+        endSound:
+            type: string
+            nullable: true
+        endImage:
+            type: string
+            nullable: true
+        endMessage:
+            type: text
+            nullable: true
+    manyToOne:
+        visioSettings:
+            targetEntity: Proximum\Vimeet\Domain\Model\Visio\VisioSettings
+            inversedBy: translations
