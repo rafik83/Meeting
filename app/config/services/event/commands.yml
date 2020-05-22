@@ -82,3 +82,10 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Contact\Add }
+
+    #
+    # Meeting
+    #
+    Proximum\Vimeet\Application\Command\Meeting\EvaluateMeetingHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'

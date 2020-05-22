@@ -854,6 +854,7 @@ event_agenda_participant:
     path: /sheet/{sheet}/agenda/participant/{participant}
     requirements:
         sheet: \d+
+        participant: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:participant }
 
@@ -882,16 +883,6 @@ event_participant_timezone:
         sheet: \d+
         participant: \d+
     methods: [GET, POST]
-
-event_agenda_count_sheets_available_by_slot:
-    path: /sheet/{sheet}/agenda/participant/{participant}/sheets-available-by-slot/{slot}
-    requirements:
-        sheet: \d+
-        participant: \d+
-        slot: \d+
-    methods: [GET]
-    defaults: { _controller: EventBundle:Agenda:countSheetsAvailableBySlot }
-
 
 event_agenda_ignore_phone_confirmation:
     path: /sheet/{sheet}/agenda/participant/{participant}/ignore-phone-validation-popup

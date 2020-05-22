@@ -74,6 +74,7 @@ final class Route
     ];
 
     public const AGENDA_DEFAULT = 'event_agenda';
+    public const AGENDA_PARTICIPANT = 'event_agenda_participant';
     public const AGENDA_CONFIRMATION = 'event_user_event_token_confirm_agenda';
 
     public const PROGRAM = 'happening_program';
