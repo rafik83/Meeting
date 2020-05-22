@@ -121,4 +121,24 @@ class ContactRepository implements ContactRepositoryInterface
             ->getResult()
         ;
     }
+
+    public function hasEvaluateContactByEventAndUser(Event $event, User $user, User $contact): bool
+    {
+        return null !== $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('contact.evaluation')
+            ->from(Contact::class, 'contact')
+            ->andWhere('contact.event = :event')
+            ->andWhere('contact.user = :user')
+            ->andWhere('contact.contact = :contact')
+            ->andWhere('contact.evaluation IS NOT NULL')
+            ->setParameter('event', $event)
+            ->setParameter('user', $user)
+            ->setParameter('contact', $contact)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

@@ -1,12 +1,11 @@
 {% extends 'EventBundle::base.html.twig' %}
 
-{% block title contactView.firstName|capitalize ~ ' ' ~ contactView.lastName|upper %}
-
 {% block content %}
     <div class="profile__content">
         <div class="main__content">
             <div class="preview">
                 <div class="list list--users">
+                    {% for contactView in contacts %}
                     <div class="user clearfix">
                         <div class="user__avatar">
                             <div class="avatar">
@@ -28,51 +27,20 @@
                             </p>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
 
-                <p class="text-center"><strong>{{ 'contact.show.evaluation'|trans }}</strong></p>
+                <p class="text-center"><strong>{{ 'event.meeting.evaluation.label'|trans }}</strong></p>
                 <div class="text-center">
                     {{ form_start(ratingForm) }}
                     {{ form_widget(ratingForm.evaluation) }}
                     {{ form_end(ratingForm) }}
 
-                    {% if mode == constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_EVALUATION') %}
-                        <p><a class="btn btn-link" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId, (constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_QUERY_KEY')): constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_COMMENT')}) }}">{{ 'contact.edit.later'|trans }}</a></p>
-                    {% else %}
-                        {% if contactView.evaluation is not null %}
-                            <p><i>{{ ('contact.show.evaluation.' ~ contactView.evaluation ~ '.label')|trans }}</i></p>
-                        {% endif %}
-                    {% endif %}
+                    <a class="btn btn-link" href="{{ path('event_agenda_participant', {'sheet': sheet.id, 'participant': participant.id}) }}">
+                        {{ 'event.meeting.evaluation.skip'|trans }}
+                    </a>
                 </div>
-
-                {% if mode == constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_VIEW') %}
-                    <p class="text-center">
-                        <strong>{{ 'contact.show.comment'|trans }} {% if not contactView.comment %}<a class="btn btn-link" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId, (constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_QUERY_KEY')): constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_COMMENT')}) }}" title="{{ 'contact.edit.comment'|trans }}"><i class="icon icon-Editer_1"></i></a>{% endif %}</strong>
-                    </p>
-
-                    {% if contactView.comment %}
-                        <p>
-                            {{ contactView.comment|nl2br }}
-                            <a class="btn btn-link" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId, (constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_QUERY_KEY')): constant('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Contact\\ShowAction::MODE_EDIT_COMMENT')}) }}" title="{{ 'contact.edit.comment'|trans }}"><i class="icon icon-Editer_1"></i></a>
-                        </p>
-                    {% endif %}
-                {% endif %}
-
-                {% if commentForm is not null %}
-                    <p class="text-center"><strong>{{ 'contact.show.comment'|trans }}</strong></p>
-                    <div class="text-center">
-                        {{ form_start(commentForm) }}
-                        {{ form_widget(commentForm.comment) }}
-
-                        <p class="clearfix">
-                            {{ form_widget(commentForm.submit, {attr:{class:'pull-right mg-tp'}}) }}
-                            <a class="btn btn-link pull-right mg-tp" href="{{ path('event_contact_show', {'sheet': sheet.id, 'contactUser': contactView.seenUserId}) }}">{{ 'contact.edit.later'|trans }}</a>
-                        </p>
-
-                        {{ form_end(commentForm) }}
-                    </div>
-                {% endif %}
             </div>
         </div>
     </div>
-{% endblock %}
+{% endblock content %}

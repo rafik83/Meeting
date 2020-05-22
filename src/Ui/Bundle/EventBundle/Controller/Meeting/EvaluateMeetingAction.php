@@ -3,7 +3,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Meeting\EvaluateMeeting;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
+use Proximum\Vimeet\Application\Query\Contact\GetContactViewQuery;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -37,10 +40,14 @@ class EvaluateMeetingAction
     /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         EngineInterface $engine,
         CommandBusInterface $commandBus,
+        QueryBusInterface $queryBus,
         RouterInterface $router,
         FormFactoryInterface $formFactory
     ) {
@@ -49,6 +56,7 @@ class EvaluateMeetingAction
         $this->router = $router;
         $this->formFactory = $formFactory;
         $this->authorizationChecker = $authorizationChecker;
+        $this->queryBus = $queryBus;
     }
 
     public function __invoke(
@@ -67,19 +75,20 @@ class EvaluateMeetingAction
             throw new AccessDeniedException();
         }
 
-        $form = $this->formFactory->create(EvaluateMeetingType::class, [
-            'submit' => true,
-        ]);
+        $event = $eventDomain->getEvent();
+        $user = $userDomain->getUser();
+        $participant = $sheet->getUserParticipant($user);
+
+        if (!$participant instanceof Participant) {
+            $participant = $sheet->getFirstParticipant();
+        }
+
+        $evaluateMeeting = new EvaluateMeeting($event, $sheet, $meeting, $user);
+        $form = $this->formFactory->create(EvaluateMeetingType::class, $evaluateMeeting, []);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $user = $userDomain->getUser();
-            $participant = $sheet->getUserParticipant($user);
-
-            if (!$participant instanceof Participant) {
-                $participant = $sheet->getFirstParticipant();
-            }
+            $this->commandBus->handle($evaluateMeeting);
 
             return new RedirectResponse(
                 $this->router->generate(Route::AGENDA_PARTICIPANT, [
@@ -89,10 +98,26 @@ class EvaluateMeetingAction
             );
         }
 
+        $locale = $event->getAvailableLocale($request->getLocale());
+        $contacts = [];
+
+        foreach ($meeting->getMetParticipants($sheet) as $metParticipant) {
+            $contacts[] = $this->queryBus->handle(new GetContactViewQuery(
+                $event,
+                $sheet,
+                $participant,
+                $metParticipant->getUser(),
+                $locale
+            ));
+        }
+
         return new Response(
             $this->engine->render('@Event/Meeting/evaluate-meeting.html.twig', [
                 'event' => $eventDomain->getEvent(),
                 'sheet' => $sheet,
+                'participant' => $participant,
+                'ratingForm' => $form->createView(),
+                'contacts' => $contacts,
             ])
         );
     }

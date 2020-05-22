@@ -43,6 +43,8 @@ final class Route
     public const MEETING_REQUEST_LIST = 'event_meeting_list_request';
     public const MEETING_REQUEST_MERGED_LIST = 'event_meeting_request_merged_list';
 
+    public const MEETING_EVALUATION = 'event_meeting_evaluation';
+
     public const PACKAGE = [
         'event_package_step',
         'event_package_add_participant',

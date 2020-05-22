@@ -25,8 +25,13 @@ class Contact
     /** @var bool */
     private $scanned;
 
-    public function __construct(Event $event, User $user, User $contact, \DateTimeInterface $createdAt, bool $scanned = false)
-    {
+    public function __construct(
+        Event $event,
+        User $user,
+        User $contact,
+        \DateTimeInterface $createdAt,
+        bool $scanned = false
+    ) {
         $this->event = $event;
         $this->user = $user;
         $this->contact = $contact;

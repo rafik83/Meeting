@@ -1125,6 +1125,17 @@ event_sheet_user_badge_scan_handle:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ScanHandleAction }
 
 #
+# Meeting
+#
+event_meeting_evaluation:
+    path: /sheet/{sheet}/meeting/{meeting}/evaluate
+    requirements:
+        sheet: \d+
+        meeting: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\EvaluateMeetingAction
+
+#
 # Custom
 #
 event_styleguide:

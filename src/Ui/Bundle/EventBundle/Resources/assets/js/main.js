@@ -263,18 +263,8 @@ function init (target) {
         new ToggleVisibility(element);
     });
 
-    (function () {
-        const evaluationForm = target.querySelector('form[name="evaluation"]');
-
-        if (null !== evaluationForm) {
-            evaluationForm.querySelectorAll('[name="evaluation[evaluation]"]')
-                .forEach(function (evaluationInput) {
-                    evaluationInput.addEventListener('change', function () {
-                        evaluationForm.submit();
-                    });
-                });
-        }
-    })();
+    addSubmitEventListenerOnElementChange(target, 'evaluation', 'evaluation');
+    addSubmitEventListenerOnElementChange(target, 'evaluate_meeting', 'evaluation');
 
     if (target.querySelector('[data-agenda-autorefresh]')) {
         new AgendaRefresh();
@@ -283,6 +273,20 @@ function init (target) {
     [].forEach.call(target.querySelectorAll('.sort-participants'), function (element) {
         new SortParticipants(element);
     });
+}
+
+function addSubmitEventListenerOnElementChange(target, formName, elementName) {
+    const form = target.querySelector(`form[name="${formName}"]`);
+
+    if (null !== form) {
+        form.querySelectorAll(`[name="${formName}[${elementName}]"]`)
+            .forEach(function (elementInput) {
+                elementInput.addEventListener('change', function () {
+                    form.submit();
+                });
+            })
+        ;
+    }
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });
