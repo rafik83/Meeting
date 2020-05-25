@@ -27,12 +27,10 @@
         <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}></div>
         <div class="chat-container hide"></div>
 
-        <div class="video-helper">
+        <div class="video-helper" data-settings-container>
             <h1>{{ webinarView.happeningTitle }}</h1>
-
-            <div class="text-center">
-                <button class="btn btn-primary" data-webinar-join-button>{{ 'happening.webinar.start'|trans }}</button>
-            </div>
+            <hr>
+            {{ include('EventBundle:Visio:settings.html.twig') }}
             <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
         </div>
 
