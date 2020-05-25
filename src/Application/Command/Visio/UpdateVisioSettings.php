@@ -25,10 +25,23 @@ class UpdateVisioSettings implements Command
 
         foreach ($event->getLocales() as $locale) {
             $hasHeader = $visioSettings->hasHeader($locale);
+            $hasEndSound = $visioSettings->hasEndSound($locale);
+            $hasEndImage = $visioSettings->hasEndImage($locale);
+
             $this->localizedVisioSettings[$locale] = [
                 'header' => null,
                 'removeHeader' => false,
                 'hasHeader' => $hasHeader,
+
+                'endSound' => null,
+                'removeEndSound' => false,
+                'hasEndSound' => $hasEndSound,
+
+                'endImage' => null,
+                'removeEndImage' => false,
+                'hasEndImage' => $hasEndImage,
+
+                'endMessage' => $visioSettings->getEndMessage($locale),
             ];
         }
     }

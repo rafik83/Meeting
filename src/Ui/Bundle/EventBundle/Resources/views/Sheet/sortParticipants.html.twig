@@ -1,0 +1,40 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1><i class="icon-Preferences_1"></i> {{ 'sheet.sortParticipants.title'|trans }}</h1>
+            </header>
+
+            <div class="main__content">
+                {{ form_start(sortForm, {attr: {class: 'styled-form'}}) }}
+
+                <div class="list list--users sort-participants">
+                    <p>
+                        {{ 'sheet.sortParticipants.description'|trans }}
+                        <a href="#" data-edit-sort-participants>{{ 'sheet.sortParticipants.alternativeDescription'|trans }}</a>
+                    </p>
+
+                    <hr>
+
+                    {% for cardView in cardListView.cardViews %}
+                        <div data-participant>
+                            {{ include('EventBundle:Participant:preview.html.twig', { 'participant': cardView, 'sortFormWidget': form_widget(sortForm.children[cardView.id], { 'attr': {'class': 'hide'} }) }) }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="validation">
+                    {{ form_row(sortForm.submit) }}
+                </div>
+
+                {{ form_end(sortForm) }}
+            </div>
+
+            <a href="{{ path('event_sheet', {sheet: sheet.id}) }}" class="btn btn-gray pull-left">
+                <i class="icon-Retour"></i> {{ 'common.backToSheet'|trans }}
+            </a>
+        </section>
+    </div>
+{% endblock %}

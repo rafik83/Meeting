@@ -134,3 +134,12 @@ table.list--users {
     margin-bottom: 0;
   }
 }
+
+.sort-participants {
+  .user {
+    background: white;
+    padding: 10px;
+    cursor: ns-resize;
+    border-radius: 5px;
+  }
+}

@@ -35,7 +35,11 @@
 
     {% if not isCatalog and participants.cardViews|length > 1 %}
         <footer>
-            <a href="{{ path('event_sheet_remove_participant', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal">
+            <a href="{{ path('event_sheet_sort_participants', { 'sheet': sheet.id }) }}" class="btn btn-gray">
+                <i class="icon-Preferences_1"></i> {{ 'sheet.object.action.sortParticipants'|trans }}
+            </a>
+            <br>
+            <a href="{{ path('event_sheet_remove_participant', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal" class="btn btn-gray">
                 <i class="icon-Effacer"></i> {{ 'sheet.object.action.remove'|trans }} {{ item.label(locale, fallback) }}
             </a>
         </footer>

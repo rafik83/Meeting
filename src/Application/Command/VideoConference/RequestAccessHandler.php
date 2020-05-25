@@ -77,7 +77,10 @@ class RequestAccessHandler
                 $token,
                 $videoConference->getSessionId(),
                 $this->videoConferenceAdapter->getApiKey(),
-                $visioSettings->getHeader($requestAccess->locale)
+                $visioSettings->getHeader($requestAccess->locale),
+                $visioSettings->getEndSound($requestAccess->locale),
+                $visioSettings->getEndImage($requestAccess->locale),
+                $visioSettings->getEndMessage($requestAccess->locale)
             );
         }
 
@@ -100,7 +103,10 @@ class RequestAccessHandler
             $token,
             $session->getSessionId(),
             $this->videoConferenceAdapter->getApiKey(),
-            $visioSettings->getHeader($requestAccess->locale)
+            $visioSettings->getHeader($requestAccess->locale),
+            $visioSettings->getEndSound($requestAccess->locale),
+            $visioSettings->getEndImage($requestAccess->locale),
+            $visioSettings->getEndMessage($requestAccess->locale)
         );
     }
 }

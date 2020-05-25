@@ -28,38 +28,77 @@ class UpdateVisioSettingsHandler
         $event = $updateVisioSettings->event;
         $visioSettings = $updateVisioSettings->visioSettings;
 
-        $currentHeaders = [];
+        $currentSettings = [];
         foreach ($event->getLocales() as $locale) {
-            $currentHeaders[$locale] = $visioSettings->getHeader($locale);
+            $currentSettings[$locale] = [
+                'header' => $visioSettings->getHeader($locale),
+                'endSound' => $visioSettings->getEndSound($locale),
+                'endImage' => $visioSettings->getEndImage($locale),
+            ];
         }
 
         foreach ($updateVisioSettings->localizedVisioSettings as $locale => $visioSettingsLocalized) {
-            $currentVisioHeaderImage = $currentHeaders[$locale] ?? null;
-            $visioHeaderImage = $currentVisioHeaderImage;
-
-            if (true === $visioSettingsLocalized['removeHeader']
-                && null  !== $currentVisioHeaderImage
-            ) {
-                $this->fileStorage->remove($currentVisioHeaderImage);
-
-                $currentVisioHeaderImage = null;
-                $visioHeaderImage = null;
-            }
-
-            if ($visioSettingsLocalized['header'] instanceof UploadedFile) {
-                if (null !== $currentVisioHeaderImage) {
-                    $this->fileStorage->remove($currentVisioHeaderImage);
-                }
-
-                $visioHeaderImage = $this->fileStorage->upload($visioSettingsLocalized['header']);
-            }
+            $visioHeaderImage = $this->handleFile(
+                'header',
+                'removeHeader',
+                $currentSettings,
+                $locale,
+                $visioSettingsLocalized
+            );
+            $visioEndSound = $this->handleFile(
+                'endSound',
+                'removeEndSound',
+                $currentSettings,
+                $locale,
+                $visioSettingsLocalized
+            );
+            $visioEndImage = $this->handleFile(
+                'endImage',
+                'removeEndImage',
+                $currentSettings,
+                $locale,
+                $visioSettingsLocalized
+            );
 
             $visioSettings->updateTranslation(
                 $locale,
-                $visioHeaderImage
+                $visioHeaderImage,
+                $visioEndSound,
+                $visioEndImage,
+                $visioSettingsLocalized['endMessage']
             );
         }
 
         $this->visioSettingsRepository->update($visioSettings);
+    }
+
+    private function handleFile(
+        string $variableName,
+        string $removeVariableName,
+        array &$currentSettings,
+        string $locale,
+        array &$data
+    ): ?string {
+        $currentFile = $currentSettings[$locale][$variableName] ?? null;
+        $visioFile = $currentFile;
+
+        if (true === $data[$removeVariableName]
+            && null  !== $currentFile
+        ) {
+            $this->fileStorage->remove($currentFile);
+
+            $currentFile = null;
+            $visioFile = null;
+        }
+
+        if ($data[$variableName] instanceof UploadedFile) {
+            if (null !== $currentFile) {
+                $this->fileStorage->remove($currentFile);
+            }
+
+            $visioFile = $this->fileStorage->upload($data[$variableName]);
+        }
+
+        return $visioFile;
     }
 }

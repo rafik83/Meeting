@@ -514,6 +514,7 @@ sheet.object.action.add: 'Ajouter :'
 sheet.object.action.backToSheet: 'Retour à la fiche'
 sheet.object.action.edit: Compléter
 sheet.object.action.remove: 'Supprimer :'
+sheet.object.action.sortParticipants: 'Modifier l''ordre'
 sheet.object.boolean.false: Non
 sheet.object.boolean.true: Oui
 sheet.object.image.label: 'Votre image actuelle'
@@ -527,6 +528,9 @@ sheet.participant.seeLess.title: 'Voir moins'
 sheet.participant.seeMore.title: 'Voir plus'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.request_meeting: 'Demander un RDV'
+sheet.sortParticipants.title: 'Modifier l''ordre'
+sheet.sortParticipants.description: 'Déplacer les participants pour définir le nouvel ordre'
+sheet.sortParticipants.alternativeDescription: 'ou activer la saisie de l''ordre'
 sheet.submit.completeYourSheet: 'Completer ma fiche'
 sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'

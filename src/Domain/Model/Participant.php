@@ -78,6 +78,9 @@ class Participant implements MailRecipientInterface
     /** @var \DateTimeInterface */
     private $registrationDate;
 
+    /** @var int */
+    private $rank = 0;
+
     public function __construct(
         Sheet $sheet,
         User $user,
@@ -372,5 +375,15 @@ class Participant implements MailRecipientInterface
     public function getRegistrationDate(): \DateTimeInterface
     {
         return $this->registrationDate;
+    }
+
+    public function getRank(): int
+    {
+        return $this->rank;
+    }
+
+    public function setRank(int $rank): void
+    {
+        $this->rank = $rank;
     }
 }

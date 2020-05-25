@@ -48,6 +48,9 @@ class RequestAccessHandlerTest extends TestCase
         $meeting->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $visioSettings = $this->prophesize(VisioSettings::class);
         $visioSettings->getHeader('fr')->shouldBeCalled()->willReturn('header.png');
+        $visioSettings->getEndSound('fr')->shouldBeCalled()->willReturn('sound.png');
+        $visioSettings->getEndImage('fr')->shouldBeCalled()->willReturn('end_image.png');
+        $visioSettings->getEndMessage('fr')->shouldBeCalled()->willReturn('message');
         $visioSettingsRetriever = $this->prophesize(VisioSettingsRetriever::class);
         $visioSettingsRetriever->get($event->reveal())->shouldBeCalled()->willReturn($visioSettings->reveal());
 
@@ -82,7 +85,10 @@ class RequestAccessHandlerTest extends TestCase
             'TOKEN',
             'T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9',
             'API_KEY',
-            'header.png'
+            'header.png',
+            'sound.png',
+            'end_image.png',
+            'message'
         );
 
         $videoConferenceView = $handler->handle(
@@ -96,7 +102,7 @@ class RequestAccessHandlerTest extends TestCase
         $this->assertEquals($expectedVideoConferenceView, $videoConferenceView);
     }
 
-    public function testHandleWithExistingVideoConference()
+    public function testHandleWithExistingVideoConference(): void
     {
         $slotEnd = new \DateTime();
         $meeting = $this->prophesize(Meeting::class);
@@ -120,6 +126,9 @@ class RequestAccessHandlerTest extends TestCase
         $meeting->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $visioSettings = $this->prophesize(VisioSettings::class);
         $visioSettings->getHeader('fr')->shouldBeCalled()->willReturn('header.png');
+        $visioSettings->getEndSound('fr')->shouldBeCalled()->willReturn('sound.png');
+        $visioSettings->getEndImage('fr')->shouldBeCalled()->willReturn('end_image.png');
+        $visioSettings->getEndMessage('fr')->shouldBeCalled()->willReturn('message');
         $visioSettingsRetriever = $this->prophesize(VisioSettingsRetriever::class);
         $visioSettingsRetriever->get($event->reveal())->shouldBeCalled()->willReturn($visioSettings->reveal());
 
@@ -160,7 +169,10 @@ class RequestAccessHandlerTest extends TestCase
             'TOKEN',
             'T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9',
             'API_KEY',
-            'header.png'
+            'header.png',
+            'sound.png',
+            'end_image.png',
+            'message'
         );
 
         $videoConferenceView = $handler->handle(

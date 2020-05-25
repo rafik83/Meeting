@@ -58,6 +58,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCommand }
 
+    Proximum\Vimeet\Application\Command\Sheet\SortParticipantsHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SortParticipants }
+
     #
     # Unavailabilities
     #
