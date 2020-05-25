@@ -74,6 +74,7 @@ class VideoConferenceController extends Controller
 
         $redirectResponse = ($this->get(PreviousMeetingEvaluationCheckerHandler::class))(
             new PreviousMeetingEvaluationChecker(
+                $request->getUri(),
                 $event,
                 $sheet,
                 $user,
@@ -99,7 +100,11 @@ class VideoConferenceController extends Controller
             )
         );
 
-        $endRedirectLink = ($this->get(EndVisioRedirectHandler::class))(new EndVisioRedirect($sheet, $participant, $meeting));
+        $endRedirectLink = ($this->get(EndVisioRedirectHandler::class))(new EndVisioRedirect(
+            $sheet,
+            $participant,
+            $meeting
+        ));
 
         return $this->render(
             'EventBundle:VideoConference:videoConference.html.twig',

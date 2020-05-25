@@ -21,7 +21,11 @@ class PreviousMeetingEvaluationChecker
     /** @var Meeting */
     public $meeting;
 
+    /** @var string */
+    public $origin;
+
     public function __construct(
+        string $origin,
         Event $event,
         Sheet $sheet,
         User $user,
@@ -31,5 +35,6 @@ class PreviousMeetingEvaluationChecker
         $this->sheet = $sheet;
         $this->user = $user;
         $this->meeting = $meeting;
+        $this->origin = $origin;
     }
 }

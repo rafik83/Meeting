@@ -81,6 +81,7 @@ class PreviousMeetingEvaluationCheckerHandler
                     [
                         'sheet' => $sheet->getId(),
                         'meeting' => $meeting->getId(),
+                        'redirectTo' => $previousMeetingEvaluationChecker->origin
                     ]
                 )
             );

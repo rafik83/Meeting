@@ -90,6 +90,12 @@ class EvaluateMeetingAction
         if ($form->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($evaluateMeeting);
 
+            $redirectTo = $request->query->get('redirectTo');
+
+            if ($redirectTo) {
+                return new RedirectResponse($redirectTo);
+            }
+
             return new RedirectResponse(
                 $this->router->generate(Route::AGENDA_PARTICIPANT, [
                     'sheet' => $sheet->getId(),

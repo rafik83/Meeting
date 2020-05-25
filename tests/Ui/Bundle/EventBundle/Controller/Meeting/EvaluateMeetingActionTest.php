@@ -55,7 +55,8 @@ class EvaluateMeetingActionTest extends TestCase
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->authorizationChecker = $this->prophesize(AuthorizationCheckerInterface::class);
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
-        $this->request = $this->prophesize(Request::class);
+        $this->request = new Request([]);
+        $this->request->setLocale('fr');
         $this->event = $this->prophesize(Event::class);
         $this->user = $this->prophesize(User::class);
         $this->sheet = $this->prophesize(Sheet::class);
@@ -97,7 +98,7 @@ class EvaluateMeetingActionTest extends TestCase
             ->willReturn($form)
         ;
 
-        $form->handleRequest($this->request->reveal())
+        $form->handleRequest($this->request)
             ->shouldBeCalled()
         ;
 
@@ -145,7 +146,6 @@ class EvaluateMeetingActionTest extends TestCase
         ;
 
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
-        $this->request->getLocale()->shouldBeCalled()->willReturn('fr');
         $this->event->getAvailableLocale('fr')->shouldBeCalled()->willReturn('fr');
         $formView = $this->prophesize(FormView::class);
         $form->createView()->shouldBeCalled()->willReturn($formView->reveal());
@@ -174,7 +174,7 @@ class EvaluateMeetingActionTest extends TestCase
         $eventDomain = new EventDomain($this->event->reveal());
         $userDomain = new UserDomain($this->user->reveal());
         $action(
-            $this->request->reveal(),
+            $this->request,
             $eventDomain,
             $userDomain,
             $this->sheet->reveal(),
@@ -214,7 +214,7 @@ class EvaluateMeetingActionTest extends TestCase
             ->willReturn($form)
         ;
 
-        $form->handleRequest($this->request->reveal())
+        $form->handleRequest($this->request)
             ->shouldBeCalled()
         ;
 
@@ -259,7 +259,7 @@ class EvaluateMeetingActionTest extends TestCase
         $eventDomain = new EventDomain($this->event->reveal());
         $userDomain = new UserDomain($this->user->reveal());
         $result = $action(
-            $this->request->reveal(),
+            $this->request,
             $eventDomain,
             $userDomain,
             $this->sheet->reveal(),
@@ -268,5 +268,89 @@ class EvaluateMeetingActionTest extends TestCase
 
         $this->assertInstanceOf(RedirectResponse::class, $result);
         $this->assertEquals('/route/to/agenda', $result->getTargetUrl());
+    }
+
+    public function testInvokeHandleRedirectTo(): void
+    {
+        $this->request = new Request([
+            'redirectTo' => 'https://event.vimeet.proximum/app_test.php/fr/test/test'
+        ]);
+        $this->request->setLocale('fr');
+        $this->sheet->getEvent()->shouldBeCalled()->willReturn($this->event->reveal());
+        $this->meeting->isVisio()->shouldBeCalled()->willReturn(true);
+        $this->meeting->hasSheet($this->sheet->reveal())->shouldBeCalled()->willReturn(true);
+
+        $this->authorizationChecker
+            ->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this->authorizationChecker
+            ->isGranted(SheetVoter::EDIT, $this->sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $command = new EvaluateMeeting(
+            $this->event->reveal(),
+            $this->sheet->reveal(),
+            $this->meeting->reveal(),
+            $this->user->reveal()
+        );
+
+        $form = $this->prophesize(Form::class);
+        $this->formFactory
+            ->create(EvaluateMeetingType::class, $command, [])
+            ->shouldBeCalled()
+            ->willReturn($form)
+        ;
+
+        $form->handleRequest($this->request)
+            ->shouldBeCalled()
+        ;
+
+        $form->isSubmitted()->shouldBeCalled()->willReturn(true);
+        $form->isValid()->shouldBeCalled()->willReturn(true);
+        $form->createView()->shouldNotBeCalled();
+
+        $this->queryBus
+            ->handle(Argument::any())
+            ->shouldNotBeCalled()
+        ;
+
+        $this->commandBus
+            ->handle($command)
+            ->shouldBeCalled()
+        ;
+
+        $this->router->generate(Route::AGENDA_PARTICIPANT, Argument::any())->shouldNotBeCalled();
+
+        $this->engine
+            ->render('@Event/Meeting/evaluate-meeting.html.twig', Argument::any())
+            ->shouldNotBeCalled()
+        ;
+
+        $action = new EvaluateMeetingAction(
+            $this->authorizationChecker->reveal(),
+            $this->engine->reveal(),
+            $this->commandBus->reveal(),
+            $this->queryBus->reveal(),
+            $this->router->reveal(),
+            $this->formFactory->reveal()
+        );
+
+        $eventDomain = new EventDomain($this->event->reveal());
+        $userDomain = new UserDomain($this->user->reveal());
+        $result = $action(
+            $this->request,
+            $eventDomain,
+            $userDomain,
+            $this->sheet->reveal(),
+            $this->meeting->reveal()
+        );
+
+        $this->assertInstanceOf(RedirectResponse::class, $result);
+        $this->assertEquals('https://event.vimeet.proximum/app_test.php/fr/test/test', $result->getTargetUrl());
     }
 }

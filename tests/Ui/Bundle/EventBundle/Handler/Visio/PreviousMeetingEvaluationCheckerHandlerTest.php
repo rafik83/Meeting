@@ -51,6 +51,7 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
         );
 
         $command = new PreviousMeetingEvaluationChecker(
+            'origin',
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
@@ -114,6 +115,7 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
         );
 
         $command = new PreviousMeetingEvaluationChecker(
+            'origin',
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
@@ -213,6 +215,7 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
         );
 
         $command = new PreviousMeetingEvaluationChecker(
+            'origin',
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
@@ -303,10 +306,10 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
         $previousMeeting->getId()->shouldBeCalled()->willReturn(11);
         $this->router
             ->generate(
-                'event_meeting_evaluation',
-                [
+                'event_meeting_evaluation', [
                     'sheet' => 12,
                     'meeting' => 11,
+                    'redirectTo' => 'origin'
                 ]
             )->shouldBeCalled()
             ->willReturn('/route/to/redirect')
@@ -320,6 +323,7 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
         );
 
         $command = new PreviousMeetingEvaluationChecker(
+            'origin',
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
