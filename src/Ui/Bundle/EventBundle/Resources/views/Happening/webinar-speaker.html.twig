@@ -7,6 +7,10 @@
 {% block body_attributes 'class="background-black"' %}
 
 {% block body %}
+    {% if app.request.query.get('demo-video') %}
+        <video id="video" style="position: absolute; z-index: 10000" width="320" height="240" crossOrigin="anonymous" preload="auto" controls controlslist="disablePictureInPicture nodownload nofullscreen noremoteplayback" disablePictureInPicture src="https://opentok.github.io/opentok-web-samples/Publish-Video/video/BigBuckBunny_320x180.mp4"></video>
+    {% endif %}
+
     <div class="webinar webinar-speaker"
          data-api-key="{{ webinarView.apiKey }}"
          data-token="{{ webinarView.token }}"
