@@ -104,7 +104,7 @@ class EvaluateMeetingAction
             );
         }
 
-        $locale = $event->getAvailableLocale($request->getLocale());
+        $locale = $request->getLocale();
         $contacts = [];
 
         foreach ($meeting->getMetParticipants($sheet) as $metParticipant) {

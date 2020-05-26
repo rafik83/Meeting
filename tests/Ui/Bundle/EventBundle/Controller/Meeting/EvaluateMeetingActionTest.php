@@ -146,7 +146,6 @@ class EvaluateMeetingActionTest extends TestCase
         ;
 
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
-        $this->event->getAvailableLocale('fr')->shouldBeCalled()->willReturn('fr');
         $formView = $this->prophesize(FormView::class);
         $form->createView()->shouldBeCalled()->willReturn($formView->reveal());
 
