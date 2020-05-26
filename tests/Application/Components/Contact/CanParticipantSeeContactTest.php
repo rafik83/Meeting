@@ -28,7 +28,7 @@ class CanParticipantSeeContactTest extends TestCase
         $getContactListUsersViewQueryHandler->handle(
             new GetContactListUsersViewQuery($event->reveal(), $seerParticipant->reveal())
         )
-            ->willReturn(new GetContactListUsersView([], [$seenUser->reveal()]))
+            ->willReturn(new GetContactListUsersView([], [$seenUser->reveal()], []))
         ;
 
         // run tests
@@ -53,7 +53,7 @@ class CanParticipantSeeContactTest extends TestCase
         $getContactListUsersViewQueryHandler->handle(
             new GetContactListUsersViewQuery($event->reveal(), $seerParticipant->reveal())
         )
-            ->willReturn(new GetContactListUsersView([], []))
+            ->willReturn(new GetContactListUsersView([], [], []))
         ;
 
         // run tests
