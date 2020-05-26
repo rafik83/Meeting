@@ -148,6 +148,8 @@ Webinar.prototype.init = function () {
 
     this.session.on('streamCreated', function (event) {
         this.hideElement(this.helperContainer);
+        console.log(event.stream);
+
 
         const subscriberManager = new Subscriber(this.session, this.layoutContainer);
         const subscriber = subscriberManager.subscribe(event);
@@ -328,6 +330,44 @@ Webinar.prototype.showError = function (error) {
  * Start screensharing
  */
 Webinar.prototype.screenshare = function () {
+
+    const videoElement = document.createElement('video');
+    videoElement.setAttribute('crossOrigin', 'anonymous');
+    videoElement.setAttribute('controls', '');
+    videoElement.src = 'https://opentok.github.io/opentok-web-samples/Publish-Video/video/BigBuckBunny_320x180.mp4';
+    videoElement.classList.add('OT_big');
+    this.layoutContainer.appendChild(videoElement);
+    this.layout();
+
+    const videoStream = videoElement.captureStream();
+    let publisher;
+
+    const publish = () => {
+        const videoTracks = videoStream.getVideoTracks();
+        const audioTracks = videoStream.getAudioTracks();
+
+        console.log(publisher, videoTracks, audioTracks);
+
+        if (!publisher && videoTracks.length > 0 && audioTracks.length > 0) {
+            videoStream.removeEventListener('addtrack', publish);
+
+            const publisherVideo = new Publisher(this.layoutContainer);
+            publisher = publisherVideo.create({
+                videoSource: videoTracks[0],
+                audioSource: audioTracks[0],
+                fitMode: 'contain',
+            });
+
+            console.log('hello');
+
+            this.session.publish(publisher, error => console.error(error));
+        }
+    };
+    videoStream.addEventListener('addtrack', publish);
+    publish();
+
+    return;
+
     if (!this.isSpeaker) {
         return;
     }
