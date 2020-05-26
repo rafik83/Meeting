@@ -31,7 +31,8 @@ var $ = require('jquery'),
     PackageParticipantProducts = require('./components/_PackageParticipantProducts'),
     CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField'),
     SortParticipants = require('./components/_SortParticipants'),
-    DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker')
+    DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker'),
+    addSubmitEventListenerOnElementChange = require('./components/form/_AddSubmitEventListenerOnElementChange')
 ;
 
 require('bootstrap');
@@ -273,20 +274,6 @@ function init (target) {
     [].forEach.call(target.querySelectorAll('.sort-participants'), function (element) {
         new SortParticipants(element);
     });
-}
-
-function addSubmitEventListenerOnElementChange(target, formName, elementName) {
-    const form = target.querySelector(`form[name="${formName}"]`);
-
-    if (null !== form) {
-        form.querySelectorAll(`[name="${formName}[${elementName}]"]`)
-            .forEach(function (elementInput) {
-                elementInput.addEventListener('change', function () {
-                    form.submit();
-                });
-            })
-        ;
-    }
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });
