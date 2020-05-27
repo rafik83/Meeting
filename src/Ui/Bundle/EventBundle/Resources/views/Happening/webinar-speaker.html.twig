@@ -8,7 +8,7 @@
 
 {% block body %}
     {% if app.request.query.get('demo-video') %}
-        <video id="video" style="position: absolute; z-index: 10000" width="320" height="240" crossOrigin="anonymous" preload="auto" controls controlslist="disablePictureInPicture nodownload nofullscreen noremoteplayback" disablePictureInPicture src="https://opentok.github.io/opentok-web-samples/Publish-Video/video/BigBuckBunny_320x180.mp4"></video>
+        <span id="video"></span>
     {% endif %}
 
     <div class="webinar webinar-speaker"
