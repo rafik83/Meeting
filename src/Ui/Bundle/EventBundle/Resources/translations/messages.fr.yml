@@ -256,6 +256,10 @@ happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
 happening.webinar.end: 'Arrêter'
 happening.webinar.endingAt: 'Fin dans'
+happening.webinar.media.share: 'Partager'
+happening.webinar.media.videoshare.title: 'Partager une vidéo'
+happening.webinar.media.videoshare.url: 'Url de la vidéo'
+happening.webinar.media.stopSharing: 'Arrêter le partage'
 happening.webinar.start: 'Démarrer'
 happening.webinar.viewers: 'Connectés :'
 happening.webinar.screenshare.start: 'Partager mon écran'

@@ -7,10 +7,6 @@
 {% block body_attributes 'class="background-black"' %}
 
 {% block body %}
-    {% if app.request.query.get('demo-video') %}
-        <span id="video"></span>
-    {% endif %}
-
     <div class="webinar webinar-speaker"
          data-api-key="{{ webinarView.apiKey }}"
          data-token="{{ webinarView.token }}"
@@ -65,6 +61,13 @@
             </button>
             <button id="end-screensharing" class="btn screensharing hide">
                 <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.screenshare.end'|trans }}
+            </button>
+
+            <button id="media-start-sharing" class="btn screensharing">
+                <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.media.share'|trans }}
+            </button>
+            <button id="media-stop-sharing" class="btn screensharing hide">
+                <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.media.stopSharing'|trans }}
             </button>
             <button class="btn btn-primary end-webinar">
                 <i class="icon-Disconnect"></i> {{ 'happening.webinar.end'|trans }}

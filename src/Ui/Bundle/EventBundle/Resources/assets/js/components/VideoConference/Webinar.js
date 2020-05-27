@@ -119,6 +119,32 @@ function Webinar(element, isSpeaker) {
     this.startScreenSharingButton = element.querySelector('#start-screensharing');
     this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
 
+    this.sharePopover = $('#media-start-sharing', this.element);
+    //this.sharePopover.popover('destroy');
+    this.sharePopover.popover({
+        animation: false,
+        html : true,
+        placement: 'top',
+        trigger: 'click',
+        content: function() {
+            return '<button data-share-screen class="btn btn-block btn-sm">Share my screen</button>' +
+              '<button data-share-video class="btn btn-block btn-sm">Share a video</button>';
+        }
+    });
+
+    this.sharePopover.on('shown.bs.popover', () => {
+        console.log('shown.bs.popover');
+        const shareScreenButton = this.element.querySelector('[data-share-screen]');
+        shareScreenButton.addEventListener('click', this.screenshare.bind(this));
+
+        const shareVideoButton = this.element.querySelector('[data-share-video]');
+        shareVideoButton.addEventListener('click', this.shareVideo.bind(this));
+    });
+
+    this.sharePopover.on('hidden.bs.popover', () => {
+        console.log('hidden.bs.popover');
+    });
+
     this.settingsContainer = this.element.querySelector('[data-settings-container]');
 
     this.publisher = new Publisher(this.layoutContainer);
@@ -328,6 +354,11 @@ Webinar.prototype.showError = function (error) {
 };
 
 Webinar.prototype.shareVideo = function () {
+    this.sharePopover.popover('hide');
+
+    const url = window.prompt('Url video');
+    console.log(url);
+
     const videoElement = document.createElement('video');
     videoElement.src = 'https://opentok.github.io/opentok-web-samples/Publish-Video/video/BigBuckBunny_320x180.mp4';
     videoElement.setAttribute('crossOrigin', 'anonymous');
@@ -375,13 +406,6 @@ Webinar.prototype.shareVideo = function () {
  * Start screensharing
  */
 Webinar.prototype.screenshare = function () {
-    const video = document.querySelector('#video');
-
-    if (video) {
-        this.shareVideo(video);
-        return;
-    }
-
     if (!this.isSpeaker) {
         return;
     }
@@ -395,6 +419,8 @@ Webinar.prototype.screenshare = function () {
         alert(this.thereIsAlreadyAScreenShareInProgressMessage);
         return;
     }
+
+    this.sharePopover.popover('hide');
 
     TokboxInstance.checkScreenSharingCapability(function (response) {
         if (!response.supported || response.extensionRegistered === false) {
