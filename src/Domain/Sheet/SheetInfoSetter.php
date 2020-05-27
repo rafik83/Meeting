@@ -40,18 +40,26 @@ class SheetInfoSetter
             }
         }
 
-        // Remove the title on the sheet title object also if present
+        $sheet->setRegistrationData($templateData->getSheetData());
+        $this->removePreviousSheetTitleInTemplateObjects($sheet);
+    }
+
+    private function removePreviousSheetTitleInTemplateObjects(Sheet $sheet): void
+    {
         $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet);
 
         foreach ($sheetTemplateData->getObjects() as $object) {
-            if ($object instanceof EditableText
+            if ($object instanceof ContentObjectInterface
                 && in_array($object->getTag(), [Template\Tag::SHEET_TITLE, Template\Tag::SHEET_ORGANIZATION], true)
             ) {
-                $object->setContent(null);
+                $object->setContentValue(null);
+
+                if ($object instanceof EditableText) {
+                    $object->eraseData();
+                }
             }
         }
 
-        $sheet->setRegistrationData($templateData->getSheetData());
         $sheet->setData($sheetTemplateData->getData());
     }
 }
