@@ -87,7 +87,8 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
                         'sheet_website' => 'https://www.site.web'
                     ],
                     'products' => [
-                        '' => true
+                        1 => true,
+                        2 => true,
                     ]
                 ]
             )
@@ -184,13 +185,13 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
         $productAttributedToParticipantRepository
             ->findProductIdsAttributedByUserAndEvent($user->reveal(), $event->reveal())
             ->shouldBeCalled()
-            ->willReturn([1])
+            ->willReturn([['id' => 1]])
         ;
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->getProductIdsOfUserForEvent($user->reveal(), $event->reveal())
             ->shouldBeCalled()
-            ->willReturn([2]);
+            ->willReturn([['id' => 2]]);
 
         $leniUserCustomDataQueryHandler = new LeniUserCustomDataQueryHandler(
             $typeConverter->reveal(),
