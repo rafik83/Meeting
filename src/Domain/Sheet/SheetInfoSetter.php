@@ -14,15 +14,13 @@ use Proximum\Vimeet\Application\Components\Sheet\Template;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
 class SheetInfoSetter
 {
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @param TemplateDataFactory $templateDataFactory
-     */
     public function __construct(TemplateDataFactory $templateDataFactory)
     {
         $this->templateDataFactory = $templateDataFactory;
@@ -32,7 +30,7 @@ class SheetInfoSetter
      * @param Sheet  $sheet
      * @param string $title
      */
-    public function setSheetTitle(Sheet $sheet, $title)
+    public function setSheetTitle(Sheet $sheet, $title): void
     {
         $templateData = $this->templateDataFactory->createRegistrationFromSheet($sheet);
 
@@ -43,5 +41,25 @@ class SheetInfoSetter
         }
 
         $sheet->setRegistrationData($templateData->getSheetData());
+        $this->removePreviousSheetTitleInTemplateObjects($sheet);
+    }
+
+    private function removePreviousSheetTitleInTemplateObjects(Sheet $sheet): void
+    {
+        $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet);
+
+        foreach ($sheetTemplateData->getObjects() as $object) {
+            if ($object instanceof ContentObjectInterface
+                && in_array($object->getTag(), [Template\Tag::SHEET_TITLE, Template\Tag::SHEET_ORGANIZATION], true)
+            ) {
+                $object->setContentValue(null);
+
+                if ($object instanceof EditableText) {
+                    $object->eraseData();
+                }
+            }
+        }
+
+        $sheet->setData($sheetTemplateData->getData());
     }
 }
