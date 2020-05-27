@@ -26,6 +26,8 @@ class MeetingPropositionFromAvailableSheetsQueryHandler
     }
 
     /**
+     * @deprecated This code is not used anymore.
+     *
      * @param MeetingPropositionFromAvailableSheetsQuery $meetingPropositionFromAvailableSheetsQuery
      *
      * @return int
