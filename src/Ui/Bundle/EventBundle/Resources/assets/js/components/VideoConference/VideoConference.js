@@ -10,7 +10,7 @@ var Counter = require('./Counter');
 var $ = require('jquery');
 var Settings = require('./Settings');
 
-require('bootstrap');
+require('bootstrap/js/modal');
 
 /**
  * @constructor
