@@ -29,6 +29,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\Exception\UploadNotAllowedOnFirstStepOfRegistrationTemplateException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
+use Proximum\Vimeet\Domain\User\Security\CanPasswordBeDefinedWithActivationEmail;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
@@ -59,6 +60,8 @@ class RegisterController extends Controller
      */
     public function registerAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
+        $event = $eventDomain->getEvent();
+
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->hasSheets($this->getUser(), $eventDomain->getEvent())) {
                 return $this->redirectToRoute('event');
@@ -81,10 +84,17 @@ class RegisterController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $command->email = StringHelper::trimSpacesAndNonBreakSpaces($command->email);
+
+            if ($this->get(CanPasswordBeDefinedWithActivationEmail::class)->isSatisfiedBy($event, $command->email)) {
+                $this->addFlash('login_email', $command->email);
+
+                return $this->redirectToRoute('event_login_send_activation_mail');
+            }
+
             $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($command->email);
 
             if ($user) {
-                if ($this->hasSheets($user, $eventDomain->getEvent())) {
+                if ($this->hasSheets($user, $event)) {
                     $this->addFlash('success', 'flash.event.register.already_known.login');
                 } else {
                     $this->setFlashRegisterType($typeView->id);
@@ -103,7 +113,7 @@ class RegisterController extends Controller
 
         return $this->render('EventBundle:Register:register.html.twig', [
             'form' => $form->createView(),
-            'event' => $eventDomain->getEvent(),
+            'event' => $event,
             'typeView' => $typeView,
             'typeDescription' => $this->get('markdown')->toHtml($typeView->description),
         ]);
