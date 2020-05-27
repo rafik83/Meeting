@@ -35,11 +35,11 @@ class LoginHandlerTest extends TestCase
                     'accept' => 'application/json',
                     'content-type' => 'application/json',
                 ],
-                [
+                json_encode([
                     'username' => $comexposiumSsoUsername,
                     'password' => $comexposiumSsoPassword,
                     'expiresIn' => '12h',
-                ]
+                ], true)
             )
             ->shouldBeCalled()
             ->willReturn($expectedResponse)

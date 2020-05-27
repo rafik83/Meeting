@@ -49,7 +49,7 @@ class TokenChecker
                     'content-type'  => 'application/json',
                     'Authorization' => sprintf('Bearer %s', $token),
                 ],
-                ['email' => $mail]
+                json_encode(['email' => $mail])
             );
 
             if (200 !== $response->statusCode) {

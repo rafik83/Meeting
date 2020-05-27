@@ -51,11 +51,11 @@ class LoginHandler
                     'accept' => 'application/json',
                     'content-type' => 'application/json',
                 ],
-                [
+                json_encode([
                     'username' => $this->comexposiumSsoUsername,
                     'password' => $this->comexposiumSsoPassword,
                     'expiresIn' => '12h',
-                ]
+                ], true)
             );
 
             if (200 !== $response->statusCode) {
