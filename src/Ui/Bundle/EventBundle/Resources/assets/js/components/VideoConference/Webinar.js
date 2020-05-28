@@ -112,6 +112,7 @@ function Webinar(element, isSpeaker) {
 
     this.mediaShareUrlVideoMessage = element.getAttribute('data-media-share-url-video-message');
     this.mediaShareUrlVideoSecurityErrorMessage = element.getAttribute('data-media-share-url-video-security-error-message');
+    this.mediaShareUrlVideoLoadingErrorMessage = element.getAttribute('data-media-share-url-video-loading-error-message');
     this.mediaShareButtonScreenShareMessage = element.getAttribute('data-media-share-button-screenshare-message');
     this.mediaShareButtonVideoShareMessage = element.getAttribute('data-media-share-button-videoshare-message');
 
@@ -244,6 +245,10 @@ Webinar.prototype.connect = function () {
 };
 
 Webinar.prototype.initShareMedia = function () {
+    if (!this.isSpeaker) {
+        return;
+    }
+
     this.mediaStartSharingButton.addEventListener('click', () => this.sharePopover.popover('toggle'));
     this.showElement(this.mediaStartSharingButton);
 
@@ -402,6 +407,10 @@ Webinar.prototype.shareVideo = function () {
     this.layoutContainer.appendChild(videoElement);
     this.shareVideoElement = videoElement;
     this.shareVideoElement.play();
+    this.shareVideoElement.addEventListener('error', () => {
+        this.handleStopSharing();
+        alert(this.mediaShareUrlVideoLoadingErrorMessage);
+    }, true);
 
     const stream = videoElement.mozCaptureStream ? videoElement.mozCaptureStream() : videoElement.captureStream();
     let publisher;

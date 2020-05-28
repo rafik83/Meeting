@@ -287,6 +287,7 @@ meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périph
 meeting.video.installScreenSharingExtensionMessage: 'Merci d''installer notre extension de partage d''écran.'
 meeting.video.media.share.urlVideo: 'Url du fichier vidéo'
 meeting.video.media.share.urlVideo.securityError: 'L''Url de la vidéo doit être sécurisée, commençant par https://'
+meeting.video.media.share.urlVideo.loadingError: 'Impossible de lire cette Url. Vérifiez qu''il s''agit d''un format vidéo adapté pour le web et que le fichier est en libre accès.'
 meeting.video.media.share.button.screenShare: 'Mon écran'
 meeting.video.media.share.button.videoShare: 'Une vidéo'
 meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
