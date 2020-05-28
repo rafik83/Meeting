@@ -397,13 +397,6 @@ Webinar.prototype.shareVideo = function () {
 
     this.layoutContainer.appendChild(videoElement);
 
-    /*
-    if (!videoElement.captureStream || videoElement.mozCaptureStream) {
-        alert('This browser does not support VideoElement.captureStream().');
-        return;
-    }
-    */
-
     const stream = videoElement.mozCaptureStream ? videoElement.mozCaptureStream() : videoElement.captureStream();
     console.log(stream);
     let publisher;
