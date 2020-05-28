@@ -119,31 +119,8 @@ function Webinar(element, isSpeaker) {
     this.startScreenSharingButton = element.querySelector('#start-screensharing');
     this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
 
-    this.sharePopover = $('#media-start-sharing', this.element);
-    //this.sharePopover.popover('destroy');
-    this.sharePopover.popover({
-        animation: false,
-        html : true,
-        placement: 'top',
-        trigger: 'click',
-        content: function() {
-            return '<button data-share-screen class="btn btn-block btn-sm">Share my screen</button>' +
-              '<button data-share-video class="btn btn-block btn-sm">Share a video</button>';
-        }
-    });
-
-    this.sharePopover.on('shown.bs.popover', () => {
-        console.log('shown.bs.popover');
-        const shareScreenButton = this.element.querySelector('[data-share-screen]');
-        shareScreenButton.addEventListener('click', this.screenshare.bind(this));
-
-        const shareVideoButton = this.element.querySelector('[data-share-video]');
-        shareVideoButton.addEventListener('click', this.shareVideo.bind(this));
-    });
-
-    this.sharePopover.on('hidden.bs.popover', () => {
-        console.log('hidden.bs.popover');
-    });
+    this.mediaStartSharingButtonSelector = '#media-start-sharing';
+    this.sharePopover = $(this.mediaStartSharingButtonSelector, this.element);
 
     this.settingsContainer = this.element.querySelector('[data-settings-container]');
 
@@ -175,8 +152,6 @@ Webinar.prototype.init = function () {
 
     this.session.on('streamCreated', function (event) {
         this.hideElement(this.helperContainer);
-        console.log(event.stream);
-
 
         const subscriberManager = new Subscriber(this.session, this.layoutContainer);
         const subscriber = subscriberManager.subscribe(event);
@@ -250,6 +225,7 @@ Webinar.prototype.connect = function () {
         this.showElement(this.startScreenSharingButton);
         this.showElement(this.timerContainer);
         this.showElement(this.viewersContainer);
+        this.initShareMedia();
 
         if (!error) {
             if (this.isSpeaker) {
@@ -261,6 +237,33 @@ Webinar.prototype.connect = function () {
 
         console.error(error);
     }.bind(this));
+};
+
+Webinar.prototype.initShareMedia = function () {
+    const mediaStartSharingButton = this.element.querySelector(this.mediaStartSharingButtonSelector, this.element);
+    mediaStartSharingButton.addEventListener('click', () => this.sharePopover.popover('toggle'));
+    this.showElement(mediaStartSharingButton);
+
+    this.sharePopover.popover({
+        animation: false,
+        html : true,
+        placement: 'top',
+        trigger: 'manual',
+        content: function() {
+            return '<div class="text-center">' +
+              '<button data-share-screen class="btn btn-sm">Share my screen</button><br>' +
+              '<button data-share-video class="btn btn-sm">Share a video</button>' +
+              '</div>';
+        }
+    });
+
+    this.sharePopover.on('shown.bs.popover', () => {
+        const shareScreenButton = this.element.querySelector('[data-share-screen]');
+        shareScreenButton.addEventListener('click', this.screenshare.bind(this));
+
+        const shareVideoButton = this.element.querySelector('[data-share-video]');
+        shareVideoButton.addEventListener('click', this.shareVideo.bind(this));
+    });
 };
 
 Webinar.prototype.hideElement = function (element) {
@@ -353,14 +356,33 @@ Webinar.prototype.showError = function (error) {
     }
 };
 
+Webinar.prototype.askUrlVideo = function (previousUrl) {
+    const url = window.prompt('Url video', previousUrl);
+
+    if (!url) {
+        return;
+    }
+
+    if ('https://' !== url.substr(0,8)) {
+        alert('Url must be secure: https://...');
+
+        return this.askUrlVideo(url);
+    }
+
+    return url;
+};
+
 Webinar.prototype.shareVideo = function () {
     this.sharePopover.popover('hide');
 
-    const url = window.prompt('Url video');
-    console.log(url);
+    const url = this.askUrlVideo();
+
+    if (!url) {
+        return;
+    }
 
     const videoElement = document.createElement('video');
-    videoElement.src = 'https://opentok.github.io/opentok-web-samples/Publish-Video/video/BigBuckBunny_320x180.mp4';
+    videoElement.src = url;
     videoElement.setAttribute('crossOrigin', 'anonymous');
     videoElement.setAttribute('controls', '');
     videoElement.setAttribute('preload', 'auto');
@@ -368,7 +390,6 @@ Webinar.prototype.shareVideo = function () {
     videoElement.setAttribute('disablePictureInPicture', '');
     videoElement.classList.add('OT_big');
     this.layoutContainer.appendChild(videoElement);
-    this.layout();
 
     if (!videoElement.captureStream) {
         alert('This browser does not support VideoElement.captureStream(). You must use Google Chrome.');
@@ -377,7 +398,8 @@ Webinar.prototype.shareVideo = function () {
 
     const stream = videoElement.captureStream();
     let publisher;
-    const publish = () => {
+
+    const publishVideo = () => {
         const videoTracks = stream.getVideoTracks();
         const audioTracks = stream.getAudioTracks();
         if (!publisher && videoTracks.length > 0 && audioTracks.length > 0) {
@@ -398,8 +420,11 @@ Webinar.prototype.shareVideo = function () {
             this.session.publish(publisher, error => console.error(error));
         }
     };
-    stream.addEventListener('addtrack', publish);
-    publish();
+
+    stream.addEventListener('addtrack', publishVideo);
+    publishVideo();
+
+    this.layout();
 };
 
 /**
