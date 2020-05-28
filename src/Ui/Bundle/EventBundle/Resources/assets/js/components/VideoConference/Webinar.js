@@ -389,6 +389,8 @@ Webinar.prototype.shareVideo = function () {
         return;
     }
 
+    this.hideElement(this.mediaStartSharingButton);
+
     const videoElement = document.createElement('video');
     videoElement.src = url;
     videoElement.setAttribute('crossOrigin', 'anonymous');
@@ -399,6 +401,7 @@ Webinar.prototype.shareVideo = function () {
     videoElement.classList.add('OT_big');
     this.layoutContainer.appendChild(videoElement);
     this.shareVideoElement = videoElement;
+    this.shareVideoElement.play();
 
     const stream = videoElement.mozCaptureStream ? videoElement.mozCaptureStream() : videoElement.captureStream();
     let publisher;
@@ -421,7 +424,7 @@ Webinar.prototype.shareVideo = function () {
                 this.handleStopSharing();
             });
 
-            this.session.publish(publisher, this.handlePublishScreensharing.bind(this));
+            this.session.publish(publisher, this.handlePublishMediaSharing.bind(this));
         }
     };
 
@@ -451,6 +454,7 @@ Webinar.prototype.screenshare = function () {
         return;
     }
 
+    this.hideElement(this.mediaStartSharingButton);
     this.sharePopover.popover('hide');
 
     TokboxInstance.checkScreenSharingCapability(function (response) {
@@ -473,7 +477,7 @@ Webinar.prototype.screenshare = function () {
             publishAudio: true
         });
 
-        this.session.publish(publisherScreen, this.handlePublishScreensharing.bind(this));
+        this.session.publish(publisherScreen, this.handlePublishMediaSharing.bind(this));
         this.layout();
 
         publisherScreen.on('mediaStopped', this.handleStopSharing.bind(this));
@@ -485,7 +489,7 @@ Webinar.prototype.screenshare = function () {
  *
  * @param {Object} error
  */
-Webinar.prototype.handlePublishScreensharing = function (error) {
+Webinar.prototype.handlePublishMediaSharing = function (error) {
     if (error) {
         console.error(error);
         this.showError(error);
@@ -497,7 +501,6 @@ Webinar.prototype.handlePublishScreensharing = function (error) {
     this.hasMediaSharing = true;
     this.layout();
 
-    this.hideElement(this.mediaStartSharingButton);
     this.showElement(this.endSharingButton);
 };
 
