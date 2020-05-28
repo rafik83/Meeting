@@ -3,12 +3,19 @@
 /**
  * @param {Session} session
  * @param {Node} container
+ * @param {Object} subscribersNameMapping
  * @constructor
  */
-function Subscriber(session, container) {
+function Subscriber(
+    session,
+    container,
+    subscribersNameMapping = {}
+) {
   this.session = session;
   this.container = container;
   this.subscriber = null;
+  this.subscriberId = null;
+  this.subscribersNameMapping = subscribersNameMapping;
 }
 
 /**
@@ -26,7 +33,6 @@ Subscriber.prototype.subscribe = function (event) {
   this.subscriber = this.session.subscribe(event.stream, this.container, subscriberOptions, this.handleError);
 
   // Subscriber events
-
   this.subscriber.on('videoElementCreated', this.onVideoElementCreated.bind(this));
 
   return this.subscriber;
@@ -36,9 +42,21 @@ Subscriber.prototype.subscribe = function (event) {
  * Dispatched to indicate the video element was created
  */
 Subscriber.prototype.onVideoElementCreated = function (event) {
-  var subscriberElement = event.target.element;
+  const subscriberElement = event.target.element;
 
-  var fullscreenButton = subscriberElement.querySelector('.start-fullscreen-button');
+  if (this.subscriber && this.subscriber.stream) {
+    this.subscriberId = this.subscriber.stream.name;
+  }
+
+  if (this.subscriberId && this.subscribersNameMapping.hasOwnProperty(this.subscriberId)) {
+      let subscriberName = document.createElement('span');
+      subscriberName.classList.add('visio-user-name');
+      subscriberName.textContent = this.subscribersNameMapping[this.subscriberId].name;
+
+      subscriberElement.appendChild(subscriberName);
+  }
+
+  const fullscreenButton = subscriberElement.querySelector('.start-fullscreen-button');
 
   if (!fullscreenButton) {
     return;

@@ -73,7 +73,8 @@ class MeetingViewQueryHandler
         $participants = [];
 
         foreach ($query->meeting->getParticipants($sheetMet) as $participant) {
-            $participants[] = $this
+            $userId = $participant->getUser()->getId();
+            $participants[$userId] = $this
                 ->participantHandler
                 ->handle(new MeetingParticipantViewQuery($participant, $rules, $query->locale));
         }
@@ -82,10 +83,13 @@ class MeetingViewQueryHandler
 
         if (!$userSheet->hasOnlyOneParticipant()) {
             foreach ($query->meeting->getParticipants($userSheet) as $participant) {
+                $userId = $participant->getUser()->getId();
                 $infos = $this->participantInfoGuesser->guessParticipantInfos($participant, $query->locale);
-                $meetingOwnSheetParticipantViews[] = new MeetingOwnSheetParticipantView(
+                $meetingOwnSheetParticipantViews[$userId] = new MeetingOwnSheetParticipantView(
                     $infos[Tag::PARTICIPANT_FIRSTNAME] ?? '',
-                    $infos[Tag::PARTICIPANT_LASTNAME] ?? ''
+                    $infos[Tag::PARTICIPANT_LASTNAME] ?? '',
+                    $infos[Tag::PARTICIPANT_POSITION] ?? ''
+
                 );
             }
         }

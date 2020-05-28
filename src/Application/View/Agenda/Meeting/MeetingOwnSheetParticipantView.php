@@ -10,15 +10,22 @@ class MeetingOwnSheetParticipantView
     /** @var string */
     public $lastName;
 
+    /** @var string|null */
+    public $position;
+
     public function __toString()
     {
         return $this->getFullName();
     }
 
-    public function __construct(string $firstName, string $lastName)
-    {
+    public function __construct(
+        string $firstName,
+        string $lastName,
+        ?string $position
+    ) {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->position = $position;
     }
 
     public function getFullName()

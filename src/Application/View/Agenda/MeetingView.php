@@ -158,4 +158,11 @@ class MeetingView extends AbstractTimeEntityView
     {
         return !empty($this->meetingOwnSheetParticipantViews);
     }
+
+    public function getSheetMetTitles(): string
+    {
+        return implode(', ', array_map(static function ($sheetTitle) {
+            return $sheetTitle->getTitle();
+        }, $this->sheetMetTitle));
+    }
 }

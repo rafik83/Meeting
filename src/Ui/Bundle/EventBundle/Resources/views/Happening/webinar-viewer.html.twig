@@ -22,6 +22,14 @@
          data-user-complete-name="{{ userCompleteName }}"
          data-time-remaining="{{ webinarView.timeRemainingInSeconds }}"
          data-warning-time-remaining="{{ webinarView.warningTimeRemainingInSeconds }}"
+         data-current-user-id="{{ webinarView.currentUserId }}"
+         data-subscriber-mapping='{
+           {% for speakerView in webinarView.speakers %}
+           "{{ speakerView.userId }}": {
+           "name": "{{ speakerView.firstName }} {{ speakerView.lastName }} ({{ speakerView.position }}) - {{ speakerView.organization }}"
+           }{% if not loop.last %},{% endif %}
+           {% endfor %}
+         }'
     >
         {% if webinarView.headerImage %}
             <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>
