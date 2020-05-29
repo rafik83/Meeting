@@ -18,16 +18,13 @@ use Proximum\Vimeet\Application\View\Agenda\Meeting\MeetingOwnSheetParticipantVi
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle;
-use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class MeetingViewQueryHandler
 {
     /** @var MeetingParticipantViewQueryHandler */
     private $participantHandler;
-
-    /** @var RuleRepositoryInterface */
-    private $ruleRepository;
 
     /** @var VideoMeetingAccess */
     private $videoMeetingAccess;
@@ -43,14 +40,12 @@ class MeetingViewQueryHandler
 
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
-        RuleRepositoryInterface $ruleRepository,
         VideoMeetingAccess $videoMeetingAccess,
         LinkedSheetsTitle $linkedSheetsTitle,
         ParticipantInfoGuesser $participantInfoGuesser,
         \DateTimeInterface $now
     ) {
         $this->participantHandler = $participantHandler;
-        $this->ruleRepository = $ruleRepository;
         $this->videoMeetingAccess = $videoMeetingAccess;
         $this->linkedSheetsTitle = $linkedSheetsTitle;
         $this->participantInfoGuesser = $participantInfoGuesser;
@@ -69,7 +64,14 @@ class MeetingViewQueryHandler
         $sheetMet = $query->meeting->getSheetMet($userSheet);
 
         $sheetMetTitles = $this->linkedSheetsTitle->getSheetMetViews($userSheet, $sheetMet);
-        $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->currentSheet, $sheetMet);
+        $rules = [
+            new Rule(
+                $query->event,
+                $query->currentSheet->getType(),
+                $sheetMet->getType(),
+                Tag::getAll()
+            )
+        ];
         $participants = [];
         $subscriberNamesMapping = [];
 
