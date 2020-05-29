@@ -73,6 +73,8 @@ function Webinar(element, isSpeaker) {
 
     if (this.subscribersNameMapping) {
         this.subscribersNameMapping = JSON.parse(this.subscribersNameMapping);
+    } else {
+        this.subscribersNameMapping = {};
     }
 
     let resizeTimeout;

@@ -65,6 +65,8 @@ function VideoConference(
 
   if (this.subscribersNameMapping) {
       this.subscribersNameMapping = JSON.parse(this.subscribersNameMapping);
+  } else {
+      this.subscribersNameMapping = {};
   }
 
   this.publisherStream = null;
@@ -84,7 +86,7 @@ function VideoConference(
   this.hasEndMessageOrImage = this.element.getAttribute('data-visio-meeting-end-warning');
   this.endContainer = this.element.querySelector('[data-visio-meeting-end-container]');
 
-  this.useSettings = false;//useSettings;
+  this.useSettings = useSettings;
 
   if (this.useSettings) {
     this.settings = new Settings(
