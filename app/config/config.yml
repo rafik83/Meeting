@@ -175,8 +175,14 @@ tactician:
 liip_imagine:
     driver: imagick
     resolvers:
-       default:
-          web_path: ~
+        default:
+            web_path: ~
+    loaders:
+        default:
+            filesystem:
+                data_root:
+                    - "%kernel.root_dir%/../web"
+                    - "%kernel.root_dir%/../../../shared/web"
     filter_sets:
         cache: ~
         event_header_logo:
