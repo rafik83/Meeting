@@ -4,6 +4,11 @@
     <link rel="chrome-webstore-item" href="{{ visio_screen_sharing_chrome_extension }}">
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/visio.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 <section class="main">
     <header>

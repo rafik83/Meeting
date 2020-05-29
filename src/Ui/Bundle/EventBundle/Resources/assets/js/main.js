@@ -27,12 +27,9 @@ var $ = require('jquery'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
     FilterRequestByType = require('./components/MeetingRequest/_FilterByType'),
     CatalogPagination = require('./components/_CatalogPagination'),
-    VideoConference = require('./components/VideoConference/VideoConference'),
     IgnorePhoneConfirmation = require('./components/agenda/_IgnorePhoneConfirmation'),
     PackageParticipantProducts = require('./components/_PackageParticipantProducts'),
     CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField'),
-    VideoConferenceTest = require('./components/VideoConference/VideoTest'),
-    Webinar = require('./components/VideoConference/Webinar'),
     SortParticipants = require('./components/_SortParticipants'),
     DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker')
 ;
@@ -250,14 +247,6 @@ function init (target) {
         new CatalogPagination(element);
     });
 
-    [].forEach.call(target.querySelectorAll('.video-conference'), function (element) {
-        new VideoConference(element);
-    });
-
-    [].forEach.call(target.querySelectorAll('.video-conference-test'), function (element) {
-        new VideoConferenceTest(element);
-    });
-
     [].forEach.call(target.querySelectorAll('[data-ajax-autocomplete]'), function (element) {
         new AjaxAutocomplete(element);
     });
@@ -272,14 +261,6 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('[data-toggle-visibility]'), function (element) {
         new ToggleVisibility(element);
-    });
-
-    [].forEach.call(target.querySelectorAll('.webinar-speaker'), function (element) {
-        new Webinar(element, true);
-    });
-
-    [].forEach.call(target.querySelectorAll('.webinar-viewer'), function (element) {
-        new Webinar(element, false);
     });
 
     (function () {

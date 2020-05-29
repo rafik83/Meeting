@@ -157,6 +157,8 @@ class SheetRepository implements SheetRepositoryInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated This request is not used anymore.
      */
     public function countAvailableSheetsInCatalogWithTypesByEvent(
         Event $event,
