@@ -290,15 +290,15 @@ VideoConference.prototype.initChat = function () {
  */
 VideoConference.prototype.publishStream = function() {
   const defaultOptions = {
-    name: this.currentUserId,
+    name: this.currentUserId ? this.currentUserId : null
   };
 
   if (this.useSettings) {
     // publish video to other participant
     var publisher = this.publisher.create({
+      ...defaultOptions,
       audioSource: this.settings.getAudioSource(),
       videoSource: this.settings.getVideoSource(),
-      ...defaultOptions
     });
   } else {
     var publisher = this.publisher.create(defaultOptions);
@@ -400,7 +400,7 @@ VideoConference.prototype.screenshare = function() {
     const publisherScreen = this.publisherScreen.create({
       videoSource: 'screen',
       publishAudio: true,
-      name: this.currentUserId
+      name: this.currentUserId ? this.currentUserId : null
     });
 
     publisherScreen.on('videoElementCreated', this.onVideoElementCreated.bind(this));
