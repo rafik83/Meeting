@@ -77,4 +77,24 @@ class WebinarView
         $this->headerImage = $headerImage;
         $this->speakers = $speakers;
     }
+
+    public function getSubscribersNameMapping(): string
+    {
+        $mapping = [];
+
+        foreach ($this->speakers as $speaker) {
+            $mapping[$speaker->userId] = [
+                'name' => $speaker->firstName
+                    . ' '
+                    . $speaker->lastName
+                    . ' ('
+                    . $speaker->position
+                    . ') - '
+                    . $speaker->organization
+                ,
+            ];
+        }
+
+        return json_encode($mapping);
+    }
 }

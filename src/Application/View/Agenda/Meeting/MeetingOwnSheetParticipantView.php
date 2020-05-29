@@ -21,7 +21,7 @@ class MeetingOwnSheetParticipantView
     public function __construct(
         string $firstName,
         string $lastName,
-        ?string $position
+        ?string $position = null
     ) {
         $this->firstName = $firstName;
         $this->lastName = $lastName;

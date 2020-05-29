@@ -162,7 +162,7 @@ class DayViewQueryHandlerTest extends TestCase
     /** @var DayViewQueryHandler */
     private $dayViewQueryHandler;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->currentTime = new \DateTime('2016-10-12 15:00:00');
         $this->event = EventFactory::createEvent();
@@ -241,7 +241,7 @@ class DayViewQueryHandlerTest extends TestCase
         );
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $this->happeningViewQueryHandler
             ->handle(
@@ -331,7 +331,7 @@ class DayViewQueryHandlerTest extends TestCase
         $this->assertEquals($this->expectedDayView, $result);
     }
 
-    public function testHandleWithMeeting()
+    public function testHandleWithMeeting(): void
     {
         $user2       = UserFactory::create('test2@test.fr');
         $sheet2      = SheetFactory::create($this->event, $user2);
@@ -344,7 +344,7 @@ class DayViewQueryHandlerTest extends TestCase
             'userSheetTitle',
             2,
             [new SheetMetView('Sheet title', false)],
-            [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
+            [new MeetingOwnSheetParticipantView('Korben', 'Dallas', 'Dev')],
             $this->beginHappening1,
             $this->endHappening2,
             100,
@@ -353,6 +353,7 @@ class DayViewQueryHandlerTest extends TestCase
             'Europe/Paris',
             'leftColor',
             'rightColor',
+            [],
             []
         );
         $availableSlotViews = new AvailableSlotView(1, $this->beginHappening1, $this->endHappening2);
@@ -461,7 +462,7 @@ class DayViewQueryHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleCancelAttendance()
+    public function testHandleCancelAttendance(): void
     {
         $event     = EventFactory::createEvent();
         $user      = UserFactory::create();
@@ -561,7 +562,7 @@ class DayViewQueryHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testDayIsFullUnavailable()
+    public function testDayIsFullUnavailable(): void
     {
         $day1 = new TimeRangeView(new \DateTime('2018-10-25 10:00:00'), new \DateTime('2018-10-25 19:00:00'));
         $day2 = new TimeRangeView(new \DateTime('2018-10-26 09:00:00'), new \DateTime('2018-10-26 17:00:00'));

@@ -33,18 +33,7 @@
             data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
 
             data-current-user-id="{{ currentUserId }}"
-            data-subscriber-mapping='{
-            {% for userId, participantView in meetingView.participants %}
-                "{{ userId }}": {
-                "name": "{{ participantView.card.firstname }} {{ participantView.card.lastname }} ({{ participantView.card.position }}) - {{ meetingView.sheetMetTitles }}"
-                },
-            {% endfor %}
-            {% for userId, sheetParticipantView in meetingView.meetingOwnSheetParticipantViews %}
-                "{{ userId }}": {
-                "name": "{{ sheetParticipantView.firstName }} {{ sheetParticipantView.lastName }} ({{ sheetParticipantView.position }}) - {{ meetingView.userSheetTitle }}"
-                }{% if not loop.last %},{% endif %}
-            {% endfor %}
-}'
+            data-subscriber-mapping="{{ meetingView.subscribersNameMappingEncoded }}"
         {% endif %}
 
         {% if videoConferenceView.hasEndSound %}

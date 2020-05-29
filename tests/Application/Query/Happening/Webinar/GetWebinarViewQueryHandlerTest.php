@@ -58,6 +58,11 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $speaker1->getOrganization()->willReturn('Fairness');
         $speaker2->getOrganization()->willReturn('Proximum');
 
+        $speakers = [
+            $speaker1,
+            $speaker2,
+        ];
+
         $happening = $this->prophesize(Happening::class);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
             'Webinar: how to work remotely during the Covid-19 crisis'
@@ -65,6 +70,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->hasWebinarSessionId()->shouldBeCalled()->willReturn(true);
         $happening->getWebinarSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
         $happening->hasSpeaker($user->reveal())->shouldBeCalled()->willReturn(true);
+        $happening->getSpeakers()->shouldBeCalled()->willReturn($speakers);
         $happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:55:00'));
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
@@ -84,7 +90,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             true
         )->shouldBeCalled()->willReturn('User token');
 
-        $speakers = [
+        $speakerViews = [
             new WebinarSpeakerView(
                 1,
                 'Jeanne',
@@ -109,7 +115,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 'webinar-session-id',
                 'api key',
                 true,
-                $speakers,
+                $speakerViews,
                 new TimeRangeView(new \DateTime('2020-03-30 11:55:00'), new \DateTime('2020-03-30 12:15:00')),
                 $this->dateTime,
                 900,

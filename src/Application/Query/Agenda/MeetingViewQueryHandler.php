@@ -71,27 +71,56 @@ class MeetingViewQueryHandler
         $sheetMetTitles = $this->linkedSheetsTitle->getSheetMetViews($userSheet, $sheetMet);
         $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($query->currentSheet, $sheetMet);
         $participants = [];
+        $subscriberNamesMapping = [];
+
+        $sheetMetTitlesImplode = implode(', ', array_map(static function ($sheetTitle) {
+            return $sheetTitle->getTitle();
+        }, $sheetMetTitles));
 
         foreach ($query->meeting->getParticipants($sheetMet) as $participant) {
             $userId = $participant->getUser()->getId();
-            $participants[$userId] = $this
+            $meetingParticipantView = $this
                 ->participantHandler
                 ->handle(new MeetingParticipantViewQuery($participant, $rules, $query->locale));
+
+            $participants[] = $meetingParticipantView;
+            $subscriberNamesMapping[$userId] = [
+                'name' => $meetingParticipantView->card->firstname
+                    . ' '
+                    . $meetingParticipantView->card->lastname
+                    . ' ('
+                    . $meetingParticipantView->card->position
+                    . ') - '
+                    . $sheetMetTitlesImplode
+                ,
+            ];
         }
 
         $meetingOwnSheetParticipantViews = [];
 
-        if (!$userSheet->hasOnlyOneParticipant()) {
-            foreach ($query->meeting->getParticipants($userSheet) as $participant) {
-                $userId = $participant->getUser()->getId();
-                $infos = $this->participantInfoGuesser->guessParticipantInfos($participant, $query->locale);
-                $meetingOwnSheetParticipantViews[$userId] = new MeetingOwnSheetParticipantView(
-                    $infos[Tag::PARTICIPANT_FIRSTNAME] ?? '',
-                    $infos[Tag::PARTICIPANT_LASTNAME] ?? '',
-                    $infos[Tag::PARTICIPANT_POSITION] ?? ''
+        foreach ($query->meeting->getParticipants($userSheet) as $participant) {
+            $userId = $participant->getUser()->getId();
+            $infos = $this->participantInfoGuesser->guessParticipantInfos($participant, $query->locale);
+            $meetingOwnSheetParticipantView = new MeetingOwnSheetParticipantView(
+                $infos[Tag::PARTICIPANT_FIRSTNAME] ?? '',
+                $infos[Tag::PARTICIPANT_LASTNAME] ?? '',
+                $infos[Tag::PARTICIPANT_POSITION] ?? ''
+            );
 
-                );
+            if (!$userSheet->hasOnlyOneParticipant()) {
+                $meetingOwnSheetParticipantViews[] = $meetingOwnSheetParticipantView;
             }
+
+            $subscriberNamesMapping[$userId] = [
+                'name' => $meetingOwnSheetParticipantView->firstName
+                    . ' '
+                    . $meetingOwnSheetParticipantView->lastName
+                    . ' ('
+                    . $meetingOwnSheetParticipantView->position
+                    . ') - '
+                    . $userSheet->getTitle()
+                ,
+            ];
         }
 
         $timeRemainingInSeconds = max(
@@ -114,6 +143,7 @@ class MeetingViewQueryHandler
             $query->event->getConfiguration()->getLeftColor(),
             $query->event->getConfiguration()->getRightColor(),
             $participants,
+            $subscriberNamesMapping,
             $query->isUserParticipantMultipleSheets,
             $query->meeting->getSpot()->isVisio(),
             $this->videoMeetingAccess->allowedToAccess($query->meeting)

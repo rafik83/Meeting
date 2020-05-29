@@ -60,6 +60,9 @@ class MeetingView extends AbstractTimeEntityView
     /** @var bool */
     private $isVisioAvailable;
 
+    /** @var array */
+    public $subscribersNameMapping;
+
     /**
      * @param int                              $id
      * @param string                           $userSheetTitle
@@ -75,6 +78,7 @@ class MeetingView extends AbstractTimeEntityView
      * @param string                           $leftColor
      * @param string                           $rightColor
      * @param MeetingParticipantView[]         $participants
+     * @param array                            $subscribersNameMapping
      * @param bool                             $isUserParticipantMultipleSheets
      * @param bool                             $isVisio
      * @param bool                             $isVisioAvailable
@@ -94,6 +98,7 @@ class MeetingView extends AbstractTimeEntityView
         $leftColor,
         $rightColor,
         array $participants,
+        array $subscribersNameMapping = [],
         $isUserParticipantMultipleSheets = false,
         bool $isVisio = false,
         bool $isVisioAvailable = false
@@ -115,6 +120,7 @@ class MeetingView extends AbstractTimeEntityView
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
         $this->isVisio = $isVisio;
         $this->isVisioAvailable = $isVisioAvailable;
+        $this->subscribersNameMapping = $subscribersNameMapping;
     }
 
     /**
@@ -164,5 +170,10 @@ class MeetingView extends AbstractTimeEntityView
         return implode(', ', array_map(static function ($sheetTitle) {
             return $sheetTitle->getTitle();
         }, $this->sheetMetTitle));
+    }
+
+    public function getSubscribersNameMappingEncoded(): string
+    {
+        return json_encode($this->subscribersNameMapping);
     }
 }
