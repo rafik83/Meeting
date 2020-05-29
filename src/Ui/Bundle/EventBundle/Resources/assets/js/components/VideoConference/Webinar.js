@@ -8,6 +8,9 @@ var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var Counter = require('./Counter');
 var Settings = require('./Settings');
+var $ = require('jquery');
+require('bootstrap/js/tooltip');
+require('bootstrap/js/popover'); // popover require tooltip
 
 function Webinar(element, isSpeaker) {
     this.element = element;
