@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2124 - Share a video in a webinar
+- VIMEET-2139 - Do not hide participants stream; maximize screen or video sharing
 
 ## [2.29.0] - 2020-05-25
 ### Added
