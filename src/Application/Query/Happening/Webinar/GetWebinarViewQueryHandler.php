@@ -23,7 +23,7 @@ class GetWebinarViewQueryHandler
     public function handle(GetWebinarViewQuery $query): WebinarView
     {
         $happening = $query->getHappening();
-        $isSpeaker = $happening->hasSpeaker($query->getUser());
+        $isSpeaker = $happening->isInteractiveWebinar() || $happening->hasSpeaker($query->getUser());
 
         if (!$happening->hasWebinarSessionId()) {
             throw new \LogicException('Happening webinar session id not created');

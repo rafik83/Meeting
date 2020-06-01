@@ -45,6 +45,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         );
         $happening->hasWebinarSessionId()->shouldBeCalled()->willReturn(true);
         $happening->getWebinarSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
+        $happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
         $happening->hasSpeaker($user->reveal())->shouldBeCalled()->willReturn(true);
         $happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:55:00'));
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
