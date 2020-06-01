@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2124 - Share a video in a webinar
 - VIMEET-2139 - Do not hide participants stream; maximize screen or video sharing
 
+## [2.30.0] - 2020-05-29
+### Fixed
+- MV-237 - Check user imported and no password in register path
+
 ## [2.29.0] - 2020-05-25
 ### Added
 - VIMEET-2117 - Webinar audio/video settings
