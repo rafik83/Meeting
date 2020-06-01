@@ -15,6 +15,7 @@ Encore
 
     // will output as web/build/app.js
     .addEntry('js/main', './src/Ui/Bundle/EventBundle/Resources/assets/js/main.js')
+    .addEntry('js/visio', './src/Ui/Bundle/EventBundle/Resources/assets/js/visio.js')
     .addEntry('js/badge-scan', './src/Ui/Bundle/EventBundle/Resources/assets/js/components/badge/scan.js')
     .addEntry('js/admin', './src/Ui/Bundle/AdminBundle/Resources/assets/js/admin.js')
     .addEntry('js/chart', './src/Ui/Bundle/AdminBundle/Resources/assets/js/chart.js')
@@ -55,7 +56,7 @@ Encore
         // In case you imported plugins individually, you must also require them here:
         Util: "exports-loader?Util!bootstrap/js/dist/util",
         Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
-        Modal: "exports-loader?Modal!bootstrap/js/dist/model"
+        Modal: "exports-loader?Modal!bootstrap/js/dist/modal"
     }))
 
     .enableSourceMaps(!Encore.isProduction())
