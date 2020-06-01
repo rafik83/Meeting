@@ -7,11 +7,16 @@ var openTokTextChat = require('opentok-text-chat');
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var Counter = require('./Counter');
+var Settings = require('./Settings');
+var $ = require('jquery');
+require('bootstrap/js/tooltip');
+require('bootstrap/js/popover'); // popover require tooltip
 
 function Webinar(element, isSpeaker) {
     this.element = element;
     this.isSpeaker = isSpeaker;
     this.typeScreenShare = 'screen';
+    this.typeCustomShare = 'custom';
 
     this.token = element.getAttribute('data-token');
     this.sessionId = element.getAttribute('data-session-id');
@@ -43,14 +48,13 @@ function Webinar(element, isSpeaker) {
     this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
-
     this.joinButton = element.querySelector('[data-webinar-join-button]');
-    this.joinButton.addEventListener('click', this.join.bind(this));
 
     this.layoutContainer = element.querySelector('.layout-container');
     this.layout = initLayoutContainer(this.layoutContainer).layout;
 
-    this.hasScreenSharing = false;
+    this.shareVideoElement = null;
+    this.hasMediaSharing = false;
 
     const endWebinarButton = element.querySelector('.end-webinar');
 
@@ -62,26 +66,6 @@ function Webinar(element, isSpeaker) {
     this.viewersCount = 0;
     this.viewersContainer = element.querySelector('.viewers-container');
     this.viewersTextContainer = element.querySelector('.viewers');
-
-    if (this.isSpeaker) {
-        this.thereIsAlreadyAScreenShareInProgressMessage = element.getAttribute('data-screen-share-already-in-progress-message');
-
-        this.endScreenSharingButton = element.querySelector('#end-screensharing');
-        this.endScreenSharingButton.addEventListener('click', this.handleStopScreensharing.bind(this));
-
-        this.toggleAudioElement = element.querySelector('#toggle-audio');
-        this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
-        this.enableAudio = true;
-
-        this.toggleVideoElement = element.querySelector('#toggle-video');
-        this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
-        this.enableVideo = true;
-
-        this.startScreenSharingButton = element.querySelector('#start-screensharing');
-        this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
-
-        this.publisher = new Publisher(this.layoutContainer);
-    }
 
     this.subscribers = [];
 
@@ -103,9 +87,9 @@ function Webinar(element, isSpeaker) {
 
         const element = this.element;
         const rfs = element.requestFullscreen
-            || element.webkitRequestFullScreen
-            || element.mozRequestFullScreen
-            || element.msRequestFullscreen
+          || element.webkitRequestFullScreen
+          || element.mozRequestFullScreen
+          || element.msRequestFullscreen
         ;
         rfs.call(element);
     });
@@ -116,6 +100,45 @@ function Webinar(element, isSpeaker) {
     document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
 
     this.countDownBeforeEnd();
+
+    if (!this.isSpeaker) {
+        this.joinButton.addEventListener('click', this.join.bind(this));
+
+        return;
+    }
+
+    this.thereIsAlreadyAScreenShareInProgressMessage = element.getAttribute('data-screen-share-already-in-progress-message');
+
+    this.mediaStartSharingButtonSelector = '#media-start-sharing';
+    this.sharePopover = $(this.mediaStartSharingButtonSelector, this.element);
+    this.mediaStartSharingButton = this.element.querySelector(this.mediaStartSharingButtonSelector, this.element);
+
+    this.mediaShareUrlVideoMessage = element.getAttribute('data-media-share-url-video-message');
+    this.mediaShareUrlVideoSecurityErrorMessage = element.getAttribute('data-media-share-url-video-security-error-message');
+    this.mediaShareUrlVideoLoadingErrorMessage = element.getAttribute('data-media-share-url-video-loading-error-message');
+    this.mediaShareButtonScreenShareMessage = element.getAttribute('data-media-share-button-screenshare-message');
+    this.mediaShareButtonVideoShareMessage = element.getAttribute('data-media-share-button-videoshare-message');
+
+    this.endSharingButton = element.querySelector('#media-stop-sharing');
+    this.endSharingButton.addEventListener('click', this.handleStopSharing.bind(this));
+
+    this.toggleAudioElement = element.querySelector('#toggle-audio');
+    this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
+    this.enableAudio = true;
+
+    this.toggleVideoElement = element.querySelector('#toggle-video');
+    this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
+    this.enableVideo = true;
+
+    this.settingsContainer = this.element.querySelector('[data-settings-container]');
+
+    this.publisher = new Publisher(this.layoutContainer);
+
+    this.settings = new Settings(
+      this.settingsContainer.querySelector('#video-settings-section'),
+      this.join.bind(this)
+    );
+    this.settings.init();
 }
 
 Webinar.prototype.join = function () {
@@ -142,16 +165,15 @@ Webinar.prototype.init = function () {
         const subscriber = subscriberManager.subscribe(event);
 
         if (this.isScreenShareStream(event.stream)) {
-            this.hasScreenSharing = true;
-            this.hidePublisher();
-            this.hideSubscribers();
+            this.hasMediaSharing = true;
+            this.minimizeAllSubscribers();
+            this.maximize(subscriber.element);
         } else {
             this.subscribers.push(subscriber);
         }
 
-        if (this.hasScreenSharing && !this.isScreenShareStream(subscriber.stream)) {
-            this.hidePublisher();
-            this.hideElement(subscriber.element);
+        if (this.hasMediaSharing && !this.isScreenShareStream(subscriber.stream)) {
+            this.minimize(subscriber.element)
         }
 
         this.layout();
@@ -182,9 +204,8 @@ Webinar.prototype.init = function () {
         });
 
         if (this.isScreenShareStream(event.stream)) {
-            this.hasScreenSharing = false;
-            this.showPublisher();
-            this.showSubscribers();
+            this.hasMediaSharing = false;
+            this.maximizeAllSubscribers();
         }
     }.bind(this));
 
@@ -207,9 +228,10 @@ Webinar.prototype.connect = function () {
         this.showElement(this.toggleChatElement);
         this.showElement(this.toggleAudioElement);
         this.showElement(this.toggleVideoElement);
-        this.showElement(this.startScreenSharingButton);
+        this.showElement(this.mediaStartSharingButton);
         this.showElement(this.timerContainer);
         this.showElement(this.viewersContainer);
+        this.initShareMedia();
 
         if (!error) {
             if (this.isSpeaker) {
@@ -221,6 +243,36 @@ Webinar.prototype.connect = function () {
 
         console.error(error);
     }.bind(this));
+};
+
+Webinar.prototype.initShareMedia = function () {
+    if (!this.isSpeaker) {
+        return;
+    }
+
+    this.mediaStartSharingButton.addEventListener('click', () => this.sharePopover.popover('toggle'));
+    this.showElement(this.mediaStartSharingButton);
+
+    this.sharePopover.popover({
+        animation: false,
+        html : true,
+        placement: 'top',
+        trigger: 'manual',
+        content: () => {
+            return `<div class="text-center">
+                <button data-share-screen class="btn">${this.mediaShareButtonScreenShareMessage}</button><br />
+                <button data-share-video class="btn">${this.mediaShareButtonVideoShareMessage}</button>
+              </div>`;
+        }
+    });
+
+    this.sharePopover.on('shown.bs.popover', () => {
+        const shareScreenButton = this.element.querySelector('[data-share-screen]');
+        shareScreenButton.addEventListener('click', this.screenshare.bind(this));
+
+        const shareVideoButton = this.element.querySelector('[data-share-video]');
+        shareVideoButton.addEventListener('click', this.shareVideo.bind(this));
+    });
 };
 
 Webinar.prototype.hideElement = function (element) {
@@ -263,7 +315,10 @@ Webinar.prototype.initChat = function () {
  */
 Webinar.prototype.publishStream = function () {
     this.hideElement(this.helperContainer);
-    const publisher = this.publisher.create({});
+    const publisher = this.publisher.create({
+        audioSource: this.settings.getAudioSource(),
+        videoSource: this.settings.getVideoSource()
+    });
 
     this.session.publish(publisher, this.handlePublish.bind(this));
     publisher.publishVideo(this.enableVideo);
@@ -310,6 +365,97 @@ Webinar.prototype.showError = function (error) {
     }
 };
 
+Webinar.prototype.askUrlVideo = function (previousUrl) {
+    const url = window.prompt(this.mediaShareUrlVideoMessage, previousUrl);
+
+    if (!url) {
+        return;
+    }
+
+    if ('https://' !== url.substr(0,8)) {
+        alert(this.mediaShareUrlVideoSecurityErrorMessage);
+
+        return this.askUrlVideo(url);
+    }
+
+    return url;
+};
+
+Webinar.prototype.shareVideo = function () {
+    this.sharePopover.popover('hide');
+
+    if (this.hasMediaSharing) {
+        alert(this.thereIsAlreadyAScreenShareInProgressMessage);
+        return;
+    }
+
+    const videoElement = document.createElement('video');
+    videoElement.setAttribute('crossOrigin', 'anonymous');
+    videoElement.setAttribute('controls', '');
+    videoElement.setAttribute('preload', 'auto');
+    videoElement.setAttribute('controlslist', 'disablePictureInPicture nodownload nofullscreen noremoteplayback');
+    videoElement.setAttribute('disablePictureInPicture', '');
+    this.layoutContainer.appendChild(videoElement);
+    this.shareVideoElement = videoElement;
+
+    if (!videoElement.captureStream) {
+        alert(this.notCompatibleBrowserMessage);
+        this.handleStopSharing();
+        return;
+    }
+
+    const url = this.askUrlVideo();
+
+    if (!url) {
+        return;
+    }
+
+    this.hideElement(this.mediaStartSharingButton);
+
+    videoElement.addEventListener('error', () => {
+        this.handleStopSharing();
+        alert(this.mediaShareUrlVideoLoadingErrorMessage);
+    }, true);
+
+    videoElement.src = url;
+    videoElement.play();
+
+    const stream = videoElement.mozCaptureStream ? videoElement.mozCaptureStream() : videoElement.captureStream();
+
+    let publisher;
+
+    const publishVideo = () => {
+        const videoTracks = stream.getVideoTracks();
+        const audioTracks = stream.getAudioTracks();
+
+        if (!publisher && videoTracks.length > 0 && audioTracks.length > 0) {
+            stream.removeEventListener('addtrack', publishVideo);
+
+            this.publisherScreen = new Publisher(null);
+            publisher = this.publisherScreen.create({
+                videoSource: videoTracks[0],
+                audioSource: audioTracks[0],
+                fitMode: 'contain',
+                insertDefaultUI: false,
+            });
+
+            publisher.on('destroyed', () => {
+                this.handleStopSharing();
+            });
+
+            this.session.publish(publisher, this.handlePublishMediaSharing.bind(this));
+            this.layout();
+        }
+    };
+
+    stream.addEventListener('addtrack', publishVideo);
+    publishVideo();
+
+    this.minimizeAllSubscribers();
+    this.maximize(videoElement);
+    this.layout();
+};
+
 /**
  * Start screensharing
  */
@@ -323,10 +469,13 @@ Webinar.prototype.screenshare = function () {
         return;
     }
 
-    if (this.hasScreenSharing) {
+    if (this.hasMediaSharing) {
         alert(this.thereIsAlreadyAScreenShareInProgressMessage);
         return;
     }
+
+    this.hideElement(this.mediaStartSharingButton);
+    this.sharePopover.popover('hide');
 
     TokboxInstance.checkScreenSharingCapability(function (response) {
         if (!response.supported || response.extensionRegistered === false) {
@@ -339,19 +488,19 @@ Webinar.prototype.screenshare = function () {
             return;
         }
 
-        this.hidePublisher();
-        this.hideSubscribers();
-
         this.publisherScreen = new Publisher(this.layoutContainer);
         const publisherScreen = this.publisherScreen.create({
             videoSource: this.typeScreenShare,
             publishAudio: true
         });
 
-        this.session.publish(publisherScreen, this.handlePublishScreensharing.bind(this));
+        this.session.publish(publisherScreen, this.handlePublishMediaSharing.bind(this));
+
+        this.minimizeAllSubscribers();
+        this.maximize(publisherScreen.element);
         this.layout();
 
-        publisherScreen.on('mediaStopped', this.handleStopScreensharing.bind(this));
+        publisherScreen.on('mediaStopped', this.handleStopSharing.bind(this));
     }.bind(this));
 };
 
@@ -360,38 +509,41 @@ Webinar.prototype.screenshare = function () {
  *
  * @param {Object} error
  */
-Webinar.prototype.handlePublishScreensharing = function (error) {
+Webinar.prototype.handlePublishMediaSharing = function (error) {
     if (error) {
         console.error(error);
         this.showError(error);
-        this.handleStopScreensharing();
+        this.handleStopSharing();
 
         return;
     }
 
-    this.hasScreenSharing = true;
+    this.hasMediaSharing = true;
     this.layout();
 
-    this.hideElement(this.startScreenSharingButton);
-    this.showElement(this.endScreenSharingButton);
+    this.showElement(this.endSharingButton);
 };
 
 /**
  * Handle stop screen sharing
  */
-Webinar.prototype.handleStopScreensharing = function () {
+Webinar.prototype.handleStopSharing = function () {
     if (this.publisherScreen) {
         this.publisherScreen.destroy();
     }
 
-    this.hasScreenSharing = false;
+    if (this.shareVideoElement) {
+        this.shareVideoElement.remove();
+        this.shareVideoElement = null;
+    }
 
-    this.showPublisher();
-    this.showSubscribers();
+    this.hasMediaSharing = false;
+
+    this.maximizeAllSubscribers();
     this.layout();
 
-    this.showElement(this.startScreenSharingButton);
-    this.hideElement(this.endScreenSharingButton);
+    this.showElement(this.mediaStartSharingButton);
+    this.hideElement(this.endSharingButton);
 };
 
 /**
@@ -477,15 +629,14 @@ Webinar.prototype.toggleChat = function () {
  * Toggle audio stream
  */
 Webinar.prototype.toggleAudio = function () {
-    if (!this.publisher.publisher) {
+    const publisher = this.publisher.publisher;
+
+    if (!publisher || !publisher.stream) {
         return;
     }
 
-    const publisher = this.publisher.publisher;
     const enableAudio = !publisher.stream.hasAudio;
-
     publisher.publishAudio(enableAudio);
-
     this.enableAudio = enableAudio;
     this.toggleButton(this.toggleAudioElement, enableAudio);
 };
@@ -494,15 +645,14 @@ Webinar.prototype.toggleAudio = function () {
  * Toggle video stream
  */
 Webinar.prototype.toggleVideo = function () {
-    if (!this.publisher.publisher) {
+    const publisher = this.publisher.publisher;
+
+    if (!publisher || !publisher.stream) {
         return;
     }
 
-    const publisher = this.publisher.publisher;
     const enableVideo = !publisher.stream.hasVideo;
-
     publisher.publishVideo(enableVideo);
-
     this.enableVideo = enableVideo;
     this.toggleButton(this.toggleVideoElement, enableVideo);
 };
@@ -520,43 +670,28 @@ Webinar.prototype.countDownBeforeEnd = function () {
     new Counter(parseInt(this.timeRemaining, 10), parseInt(this.warningRemainingTime, 10), this.countDownContainer, this.timerContainer);
 };
 
-Webinar.prototype.hidePublisher = function () {
-    if (!this.publisher) {
-        return;
-    }
-
-    const publisherStream = this.publisher.publisher;
-    publisherStream.publishVideo(false);
-    this.hideElement(publisherStream.element);
-    this.hideElement(this.toggleVideoElement);
-};
-
-Webinar.prototype.showPublisher = function () {
-    if (!this.publisher) {
-        return;
-    }
-
-    const publisherStream = this.publisher.publisher;
-    publisherStream.publishVideo(this.enableVideo);
-
-    this.showElement(publisherStream.element);
-    this.showElement(this.toggleVideoElement);
-};
-
-Webinar.prototype.hideSubscribers = function () {
-    this.subscribers.forEach((subscriber) => {
-        this.hideElement(subscriber.element);
-    });
-};
-
-Webinar.prototype.showSubscribers = function () {
-    this.subscribers.forEach((subscriber) => {
-        this.showElement(subscriber.element);
-    });
-};
-
 Webinar.prototype.isScreenShareStream = function (stream) {
-    return this.typeScreenShare === stream.videoType;
+    return [this.typeScreenShare, this.typeCustomShare].includes(stream.videoType);
+};
+
+Webinar.prototype.maximize = function(element) {
+    element.classList.add('OT_big');
+};
+
+Webinar.prototype.minimize = function(element) {
+    element.classList.remove('OT_big');
+};
+
+Webinar.prototype.minimizeAllSubscribers = function() {
+    this.subscribers.forEach((subscriber) => {
+        this.minimize(subscriber.element);
+    });
+};
+
+Webinar.prototype.maximizeAllSubscribers = function() {
+    this.subscribers.forEach((subscriber) => {
+        this.maximize(subscriber.element);
+    });
 };
 
 module.exports = Webinar;

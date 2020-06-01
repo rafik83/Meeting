@@ -34,6 +34,8 @@ class SheetsAvailableBySlotQueryHandler
     }
 
     /**
+     * @deprecated This code is not used anymore.
+     *
      * @param SheetsAvailableBySlotQuery $query
      *
      * @return int

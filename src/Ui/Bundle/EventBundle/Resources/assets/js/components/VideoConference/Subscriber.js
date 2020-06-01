@@ -40,6 +40,10 @@ Subscriber.prototype.onVideoElementCreated = function (event) {
 
   var fullscreenButton = subscriberElement.querySelector('.start-fullscreen-button');
 
+  if (!fullscreenButton) {
+    return;
+  }
+
   // start fullscreen
   fullscreenButton.addEventListener("click", function() {
 

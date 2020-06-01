@@ -38,13 +38,6 @@ class CreateHandler
     /** @var DelayedEventDispatcherInterface */
     private $eventDispatcher;
 
-    /**
-     * @param SheetRepositoryInterface        $sheetRepository
-     * @param SheetInfoSetter                 $sheetInfoSetter
-     * @param ParticipantRepositoryInterface  $participantRepository
-     * @param DelayedEventDispatcherInterface $eventDispatcher
-     * @param \DateTimeInterface              $datetime
-     */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoSetter $sheetInfoSetter,
@@ -59,10 +52,7 @@ class CreateHandler
         $this->datetime              = $datetime;
     }
 
-    /**
-     * @param Create $command
-     */
-    public function handle(Create $command)
+    public function handle(Create $command): void
     {
         $originalSheet = $command->sheet;
 

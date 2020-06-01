@@ -46,7 +46,7 @@ class TokenCheckerTest extends TestCase
                     'content-type' => 'application/json',
                     'Authorization' => 'Bearer ' . $token,
                 ],
-                ['email' => $email]
+                json_encode(['email' => $email], true)
             )
             ->shouldBeCalled()
             ->willReturn($response)
@@ -73,7 +73,7 @@ class TokenCheckerTest extends TestCase
                     'content-type' => 'application/json',
                     'Authorization' => 'Bearer ' . $token,
                 ],
-                ['email' => $email]
+                json_encode(['email' => $email], true)
             )
             ->shouldBeCalled()
             ->willReturn($response)
@@ -100,7 +100,7 @@ class TokenCheckerTest extends TestCase
                     'content-type' => 'application/json',
                     'Authorization' => 'Bearer ' . $token,
                 ],
-                ['email' => $email]
+                json_encode(['email' => $email], true)
             )
             ->shouldBeCalled()
             ->willReturn($response)
@@ -125,7 +125,7 @@ class TokenCheckerTest extends TestCase
                     'content-type' => 'application/json',
                     'Authorization' => 'Bearer ' . $token,
                 ],
-                ['email' => $email]
+                json_encode(['email' => $email], true)
             )
             ->shouldBeCalled()
             ->willThrow(ServerErrorException::class)

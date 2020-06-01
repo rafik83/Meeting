@@ -49,6 +49,15 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         return null;
     }
 
+    public function eraseData(): void
+    {
+        if ($this->isTranslatable()) {
+            $this->data[self::TEXT] = [];
+        } else {
+            $this->data[self::TEXT] = null;
+        }
+    }
+
     /**
      * @param string|array $content
      *

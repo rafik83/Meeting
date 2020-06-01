@@ -444,7 +444,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         return $ids;
     }
 
-    private function getNestedTaggedDataFromTemplatData(TemplateData $templateData): array
+    private function getNestedTaggedDataFromTemplateData(TemplateData $templateData): array
     {
         $nestedTaggedData = [];
 
@@ -495,8 +495,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     {
         return array_values(
             array_merge(
-                $this->getNestedTaggedDataFromTemplatData($registrationTemplateData),
-                $this->getNestedTaggedDataFromTemplatData($sheetTemplateData)
+                $this->getNestedTaggedDataFromTemplateData($registrationTemplateData),
+                $this->getNestedTaggedDataFromTemplateData($sheetTemplateData)
             )
         );
     }

@@ -4,6 +4,11 @@
     <link rel="chrome-webstore-item" href="{{ visio_screen_sharing_chrome_extension }}">
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/visio.js') }}"></script>
+{% endblock %}
+
 {% block body_attributes 'class="background-black"' %}
 
 {% block body %}
@@ -14,6 +19,11 @@
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
          data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
          data-screen-share-already-in-progress-message="{{ 'happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress'|trans }}"
+         data-media-share-url-video-message="{{ 'meeting.video.media.share.urlVideo'|trans }}"
+         data-media-share-url-video-security-error-message="{{ 'meeting.video.media.share.urlVideo.securityError'|trans }}"
+         data-media-share-url-video-loading-error-message="{{ 'meeting.video.media.share.urlVideo.loadingError'|trans }}"
+         data-media-share-button-screenshare-message="{{ 'meeting.video.media.share.button.screenShare'|trans }}"
+         data-media-share-button-videoshare-message="{{ 'meeting.video.media.share.button.videoShare'|trans }}"
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-user-complete-name="{{ userCompleteName }}"
@@ -27,12 +37,10 @@
         <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}></div>
         <div class="chat-container hide"></div>
 
-        <div class="video-helper">
+        <div class="video-helper" data-settings-container>
             <h1>{{ webinarView.happeningTitle }}</h1>
-
-            <div class="text-center">
-                <button class="btn btn-primary" data-webinar-join-button>{{ 'happening.webinar.start'|trans }}</button>
-            </div>
+            <hr>
+            {{ include('EventBundle:Visio:settings.html.twig') }}
             <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
         </div>
 
@@ -58,12 +66,14 @@
             <button id="toggle-chat" class="btn btn-off hide">
                 <i class="icon-Commentaire icon-center"></i>
             </button>
-            <button id="start-screensharing" class="btn screensharing hide">
-                <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.screenshare.start'|trans }}
+
+            <button id="media-start-sharing" class="btn screensharing hide">
+                <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.media.share'|trans }}
             </button>
-            <button id="end-screensharing" class="btn screensharing hide">
-                <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.screenshare.end'|trans }}
+            <button id="media-stop-sharing" class="btn screensharing hide">
+                <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.media.stopSharing'|trans }}
             </button>
+
             <button class="btn btn-primary end-webinar">
                 <i class="icon-Disconnect"></i> {{ 'happening.webinar.end'|trans }}
             </button>
