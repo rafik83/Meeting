@@ -45,6 +45,12 @@ class HappeningView
     /** @var bool */
     public $hasProducts;
 
+    /** @var bool */
+    public $isWebinar;
+
+    /** @var bool */
+    public $isInteractiveWebinar;
+
     /**
      * @param int                $id
      * @param string             $title
@@ -66,22 +72,26 @@ class HappeningView
         \DateTimeInterface $end,
         bool $questionAllowed,
         ?int $limit = null,
-        int $participations,
+        int $participations = 0,
         array $speakers = [],
-        bool $isPrivate,
-        bool $hasProducts = false
+        bool $isPrivate = false,
+        bool $hasProducts = false,
+        bool $isWebinar = false,
+        bool $isInteractiveWebinar = false
     ) {
-        $this->id              = $id;
-        $this->title           = $title;
-        $this->categoryTitle   = $categoryTitle;
-        $this->begin           = $begin;
-        $this->end             = $end;
+        $this->id = $id;
+        $this->title = $title;
+        $this->categoryTitle = $categoryTitle;
+        $this->begin = $begin;
+        $this->end = $end;
         $this->questionAllowed = $questionAllowed;
-        $this->limit           = $limit;
-        $this->participations  = $participations;
-        $this->speakers        = $speakers;
-        $this->isPrivate       = $isPrivate;
-        $this->hasProducts     = $hasProducts;
+        $this->limit = $limit;
+        $this->participations = $participations;
+        $this->speakers = $speakers;
+        $this->isPrivate = $isPrivate;
+        $this->hasProducts = $hasProducts;
+        $this->isWebinar = $isWebinar;
+        $this->isInteractiveWebinar = $isInteractiveWebinar;
     }
 
     /**

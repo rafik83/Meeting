@@ -64,7 +64,9 @@ class HappeningViewQueryHandler
             $participation,
             $speakerView,
             $query->happening->isPrivate(),
-            $query->happening->hasProducts()
+            $query->happening->hasProducts(),
+            $query->happening->isWebinar(),
+            $query->happening->isInteractiveWebinar()
         );
     }
 }
