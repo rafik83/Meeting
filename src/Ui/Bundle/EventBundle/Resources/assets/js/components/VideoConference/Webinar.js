@@ -389,6 +389,21 @@ Webinar.prototype.shareVideo = function () {
         return;
     }
 
+    const videoElement = document.createElement('video');
+    videoElement.setAttribute('crossOrigin', 'anonymous');
+    videoElement.setAttribute('controls', '');
+    videoElement.setAttribute('preload', 'auto');
+    videoElement.setAttribute('controlslist', 'disablePictureInPicture nodownload nofullscreen noremoteplayback');
+    videoElement.setAttribute('disablePictureInPicture', '');
+    this.layoutContainer.appendChild(videoElement);
+    this.shareVideoElement = videoElement;
+
+    if (!videoElement.captureStream) {
+        alert(this.notCompatibleBrowserMessage);
+        this.handleStopSharing();
+        return;
+    }
+
     const url = this.askUrlVideo();
 
     if (!url) {
@@ -397,30 +412,22 @@ Webinar.prototype.shareVideo = function () {
 
     this.hideElement(this.mediaStartSharingButton);
 
-    const videoElement = document.createElement('video');
-    videoElement.src = url;
-    videoElement.setAttribute('crossOrigin', 'anonymous');
-    videoElement.setAttribute('controls', '');
-    videoElement.setAttribute('preload', 'auto');
-    videoElement.setAttribute('controlslist', 'disablePictureInPicture nodownload nofullscreen noremoteplayback');
-    videoElement.setAttribute('disablePictureInPicture', '');
-    this.layoutContainer.appendChild(videoElement);
-    this.shareVideoElement = videoElement;
-    this.shareVideoElement.play();
-    this.shareVideoElement.addEventListener('error', () => {
+    videoElement.addEventListener('error', () => {
         this.handleStopSharing();
         alert(this.mediaShareUrlVideoLoadingErrorMessage);
     }, true);
 
-    this.minimizeAllSubscribers();
-    this.maximize(videoElement);
+    videoElement.src = url;
+    videoElement.play();
 
     const stream = videoElement.mozCaptureStream ? videoElement.mozCaptureStream() : videoElement.captureStream();
+
     let publisher;
 
     const publishVideo = () => {
         const videoTracks = stream.getVideoTracks();
         const audioTracks = stream.getAudioTracks();
+
         if (!publisher && videoTracks.length > 0 && audioTracks.length > 0) {
             stream.removeEventListener('addtrack', publishVideo);
 
@@ -437,12 +444,15 @@ Webinar.prototype.shareVideo = function () {
             });
 
             this.session.publish(publisher, this.handlePublishMediaSharing.bind(this));
+            this.layout();
         }
     };
 
     stream.addEventListener('addtrack', publishVideo);
     publishVideo();
 
+    this.minimizeAllSubscribers();
+    this.maximize(videoElement);
     this.layout();
 };
 
@@ -621,7 +631,7 @@ Webinar.prototype.toggleChat = function () {
 Webinar.prototype.toggleAudio = function () {
     const publisher = this.publisher.publisher;
 
-    if (!publisher) {
+    if (!publisher || !publisher.stream) {
         return;
     }
 
@@ -637,7 +647,7 @@ Webinar.prototype.toggleAudio = function () {
 Webinar.prototype.toggleVideo = function () {
     const publisher = this.publisher.publisher;
 
-    if (!publisher) {
+    if (!publisher || !publisher.stream) {
         return;
     }
 
