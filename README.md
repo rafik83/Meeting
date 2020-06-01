@@ -52,6 +52,17 @@ Enable/Disable php xdebug
 * *phpMyAdmin*: http://vimeet.proximum:1979
 * *ElasticSearch HEAD*: http://vimeet.proximum:9200/_plugin/head/
 
+### Known issues
+
+* Landrush not working on Ubuntu.
+Get your VM ip, into your VM (`vagrant ssh`): `$ ip addr show`
+You will get something like: `... eth1: <BROADCAST... inet 172.28.128.3/24`. 
+Add in your /etc/hosts the needed *.vimeet.proximum subdomains:
+```
+172.28.128.3 admin.vimeet.proximum
+172.28.128.3 event*.vimeet.proximum
+```
+
 ### Update
 
 To update the application, for example after git branch checkout:
