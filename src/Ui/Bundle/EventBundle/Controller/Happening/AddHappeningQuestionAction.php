@@ -18,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +57,6 @@ class AddHappeningQuestionAction
 
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_HAPPENING_ACCESS', $event)
-            || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
             || !$this->authorizationCheckerAdapter->isGranted(ParticipationVoter::PARTICIPATE, $sheet)
             || !$this->canAccessToWebinar->isSatisfiableBy($happening, $user)
             || $happening->getEvent() !== $event
@@ -67,16 +65,17 @@ class AddHappeningQuestionAction
             throw new AccessDeniedException('Access denied to this happening');
         }
 
-        $data = json_decode($request->getContent(), true);
-        if (empty($data['questionContent'])) {
+        $payload = json_decode($request->getContent(), true);
+
+        if (empty($payload['questionContent'])) {
             throw new BadRequestHttpException('Empty content for question');
         }
 
         $this->commandBus->handle(new AddHappeningQuestion(
             $happening,
             $sheet,
-            $userDomain->getUser(),
-            $data['questionContent']
+            $user,
+            $payload['questionContent']
         ));
 
         return new JsonResponse(
