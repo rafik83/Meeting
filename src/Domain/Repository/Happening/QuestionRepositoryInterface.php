@@ -43,4 +43,11 @@ interface QuestionRepositoryInterface
      * @return Question|null
      */
     public function findByHappeningAndSheet(Happening $happening, Sheet $sheet);
+
+    /**
+     * @param Happening $happening
+     *
+     * @return Question[]
+     */
+    public function getByHappening(Happening $happening): array;
 }

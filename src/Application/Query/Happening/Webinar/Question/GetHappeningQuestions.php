@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
+namespace Proximum\Vimeet\Application\Query\Happening\Webinar\Question;
 
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Happening;

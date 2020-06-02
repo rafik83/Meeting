@@ -45,9 +45,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery }
 
-    Proximum\Vimeet\Application\Query\Happening\Webinar\GetHappeningQuestionsHandler:
+    Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestionsHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_question_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetHappeningQuestions }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestions }
 
     #
     # Participant

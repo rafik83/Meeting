@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
-use Proximum\Vimeet\Application\Query\Happening\Webinar\GetHappeningQuestions;
+use Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestions;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -22,7 +22,6 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class GetHappeningQuestionsAction
@@ -52,7 +51,7 @@ class GetHappeningQuestionsAction
         Sheet $sheet,
         Happening $happening,
         UserDomain $userDomain
-    ): Response {
+    ): JsonResponse {
         $event = $eventDomain->getEvent();
         $user = $userDomain->getUser();
 

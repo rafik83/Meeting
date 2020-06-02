@@ -96,4 +96,21 @@ class QuestionRepository implements QuestionRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByHappening(Happening $happening): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('question')
+            ->from(Question::class, 'question')
+            ->where('question.happening = :happening')
+            ->setParameter('happening', $happening)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
