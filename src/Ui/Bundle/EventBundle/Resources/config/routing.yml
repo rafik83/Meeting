@@ -935,6 +935,13 @@ event_sheet_happening_webinar_questions:
     methods:  [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\GetHappeningQuestionsAction
 
+event_sheet_happening_webinar_question_add:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/add
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\AddHappeningQuestionAction
 
 #
 # Unavailability
