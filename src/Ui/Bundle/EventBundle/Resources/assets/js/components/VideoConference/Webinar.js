@@ -41,11 +41,12 @@ function Webinar(element, isSpeaker) {
         'data-user-denied-media-access'
     );
 
+    this.sideContainer = element.querySelector('.side-container');
     this.chatContainer = element.querySelector('.chat-container');
     this.chatInstance = null;
 
-    this.toggleChatElement = element.querySelector('#toggle-chat');
-    this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
+    this.toggleSideBarElement = element.querySelector('#toggle-sidebar');
+    this.toggleSideBarElement.addEventListener('click', this.toggleSideBar.bind(this));
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
     this.joinButton = element.querySelector('[data-webinar-join-button]');
@@ -225,13 +226,19 @@ Webinar.prototype.updateViewers = function () {
  */
 Webinar.prototype.connect = function () {
     this.session.connect(this.token, function (error) {
-        this.showElement(this.toggleChatElement);
+        this.showElement(this.toggleSideBarElement);
         this.showElement(this.toggleAudioElement);
         this.showElement(this.toggleVideoElement);
         this.showElement(this.mediaStartSharingButton);
         this.showElement(this.timerContainer);
         this.showElement(this.viewersContainer);
         this.initShareMedia();
+
+        const hasToggleSideBar = 'none' !== getComputedStyle(this.toggleSideBarElement).display;
+
+        if (!hasToggleSideBar) {
+            this.toggleSideBar();
+        }
 
         if (!error) {
             if (this.isSpeaker) {
@@ -605,10 +612,10 @@ Webinar.prototype.toggleButton = function (button, isOn) {
 /**
  * Toggle Chat
  */
-Webinar.prototype.toggleChat = function () {
-    if (this.chatContainer.classList.contains('hide')) {
-        this.toggleButton(this.toggleChatElement, true);
-        this.showElement(this.chatContainer);
+Webinar.prototype.toggleSideBar = function () {
+    if (this.sideContainer.classList.contains('hide')) {
+        this.toggleButton(this.toggleSideBarElement, true);
+        this.showElement(this.sideContainer);
         this.initChat();
         this.chatInstance.showTextChat();
         this.chatInstance.deliverUnsentMessages();
@@ -619,9 +626,9 @@ Webinar.prototype.toggleChat = function () {
     }
 
     this.element.classList.remove('chat-opened');
-    this.hideElement(this.chatContainer);
+    this.hideElement(this.sideContainer);
     this.chatInstance.hideTextChat();
-    this.toggleButton(this.toggleChatElement, false);
+    this.toggleButton(this.toggleSideBarElement, false);
     this.layout();
 };
 
