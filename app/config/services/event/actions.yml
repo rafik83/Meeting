@@ -95,7 +95,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
-            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     #
     # Meeting

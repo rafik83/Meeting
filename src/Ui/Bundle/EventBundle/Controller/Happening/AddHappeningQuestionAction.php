@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion;
-use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -33,17 +33,17 @@ class AddHappeningQuestionAction
     /** @var CanAccessToWebinar */
     private $canAccessToWebinar;
 
-    /** @var AddHappeningQuestionHandler */
-    private $addHappeningQuestionHandler;
+    /** @var CommandBusInterface */
+    private $commandBus;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar,
-        AddHappeningQuestionHandler $addHappeningQuestionHandler
+        CommandBusInterface $commandBus
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
-        $this->addHappeningQuestionHandler = $addHappeningQuestionHandler;
+        $this->commandBus = $commandBus;
     }
 
     public function __invoke(
@@ -72,7 +72,7 @@ class AddHappeningQuestionAction
             throw new BadRequestHttpException('Empty content for question');
         }
 
-        $this->addHappeningQuestionHandler->handle(new AddHappeningQuestion(
+        $this->commandBus->handle(new AddHappeningQuestion(
             $happening,
             $sheet,
             $userDomain->getUser(),
