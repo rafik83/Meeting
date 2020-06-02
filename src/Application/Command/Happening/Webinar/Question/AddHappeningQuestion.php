@@ -7,7 +7,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class AddHappeningQuestionCommand implements Command
+class AddHappeningQuestion implements Command
 {
     /** @var Happening */
     private $happening;
@@ -30,7 +30,6 @@ class AddHappeningQuestionCommand implements Command
         $this->sheet = $sheet;
         $this->createdBy = $createdBy;
         $this->content = $content;
-        $this->createdAt = new \DateTime();
     }
 
     public function getHappening(): Happening
@@ -51,10 +50,5 @@ class AddHappeningQuestionCommand implements Command
     public function getContent(): string
     {
         return $this->content;
-    }
-
-    public function getCreatedAt(): \DateTimeInterface
-    {
-        return $this->createdAt;
     }
 }

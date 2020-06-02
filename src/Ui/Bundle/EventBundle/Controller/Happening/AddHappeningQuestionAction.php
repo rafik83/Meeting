@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
-use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionCommand;
-use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionCommandHandler;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -33,17 +33,17 @@ class AddHappeningQuestionAction
     /** @var CanAccessToWebinar */
     private $canAccessToWebinar;
 
-    /** @var AddHappeningQuestionCommandHandler */
-    private $addHappeningQuestionCommandHandler;
+    /** @var AddHappeningQuestionHandler */
+    private $addHappeningQuestionHandler;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar,
-        AddHappeningQuestionCommandHandler $addHappeningQuestionCommandHandler
+        AddHappeningQuestionHandler $addHappeningQuestionHandler
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
-        $this->addHappeningQuestionCommandHandler = $addHappeningQuestionCommandHandler;
+        $this->addHappeningQuestionHandler = $addHappeningQuestionHandler;
     }
 
     public function __invoke(
@@ -72,7 +72,7 @@ class AddHappeningQuestionAction
             throw new BadRequestHttpException('Empty content for question');
         }
 
-        $this->addHappeningQuestionCommandHandler->handle(new AddHappeningQuestionCommand(
+        $this->addHappeningQuestionHandler->handle(new AddHappeningQuestion(
             $happening,
             $sheet,
             $userDomain->getUser(),

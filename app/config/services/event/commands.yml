@@ -58,11 +58,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCommand }
 
-    Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionCommandHandler:
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\AddHappeningQuestionCommand }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion }
 
     Proximum\Vimeet\Application\Command\Sheet\SortParticipantsHandler:
         arguments:
