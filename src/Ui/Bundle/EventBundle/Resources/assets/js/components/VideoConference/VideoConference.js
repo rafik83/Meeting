@@ -318,7 +318,7 @@ VideoConference.prototype.onVideoElementCreated = function (event) {
     if (this.subscribersNameMapping.hasOwnProperty(this.currentUserId)) {
         let publisherName = document.createElement('span');
         publisherName.classList.add('visio-user-name');
-        publisherName.textContent = this.subscribersNameMapping[this.currentUserId].name;
+        publisherName.textContent = this.subscribersNameMapping[this.currentUserId];
 
         publisherElement.appendChild(publisherName);
     }

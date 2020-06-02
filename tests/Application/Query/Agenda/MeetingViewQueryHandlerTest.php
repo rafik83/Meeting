@@ -156,10 +156,10 @@ class MeetingViewQueryHandlerTest extends TestCase
                 'participant_position' => 'Taxi Driver',
             ])
         ;
-        $subscribersNameMapping = [
-            112233 => ['name' => 'firstName2 lastName2 (position2) - sheetMetTitle, sheetMetLinkedSheet'],
-            334455 => ['name' => 'firstName1 lastName1 (position1) - sheetMetTitle, sheetMetLinkedSheet'],
-            556677 => ['name' => 'Korben Dallas (Taxi Driver) - Korben Dallas LTD']
+        $participantInfos = [
+            112233 => 'firstName2 lastName2 (position2) - sheetMetTitle, sheetMetLinkedSheet',
+            334455 => 'firstName1 lastName1 (position1) - sheetMetTitle, sheetMetLinkedSheet',
+            556677 => 'Korben Dallas (Taxi Driver) - Korben Dallas LTD',
         ];
 
         $meetingHandler = new MeetingViewQueryHandler(
@@ -186,7 +186,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             'leftColor',
             'rightColor',
             $participants,
-            $subscribersNameMapping,
+            $participantInfos,
             true
         );
 
@@ -297,10 +297,10 @@ class MeetingViewQueryHandlerTest extends TestCase
         ;
 
 
-        $subscribersNameMapping = [
-            6789 => ['name' => 'Korben Dallas (Developer) - userSheetTitle'],
-            1234 => ['name' => 'firstName2 lastName2 (position2) - sheetMetTitle'],
-            4321 => ['name' => 'firstName1 lastName1 (position1) - sheetMetTitle'],
+        $participantInfos = [
+            6789 => 'Korben Dallas (Developer) - userSheetTitle',
+            1234 => 'firstName2 lastName2 (position2) - sheetMetTitle',
+            4321 => 'firstName1 lastName1 (position1) - sheetMetTitle',
         ];
 
         $meetingHandler = new MeetingViewQueryHandler(
@@ -329,7 +329,7 @@ class MeetingViewQueryHandlerTest extends TestCase
             'leftColor',
             'rightColor',
             $participants,
-            $subscribersNameMapping,
+            $participantInfos,
             true
         );
 

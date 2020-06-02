@@ -73,7 +73,7 @@ class MeetingViewQueryHandler
             )
         ];
         $participants = [];
-        $subscriberNamesMapping = [];
+        $participantInfosByUserId = [];
 
         $sheetMetTitlesImplode = implode(', ', array_map(static function ($sheetTitle) {
             return $sheetTitle->getTitle();
@@ -86,16 +86,15 @@ class MeetingViewQueryHandler
                 ->handle(new MeetingParticipantViewQuery($participant, $rules, $query->locale));
 
             $participants[] = $meetingParticipantView;
-            $subscriberNamesMapping[$userId] = [
-                'name' => $meetingParticipantView->card->firstname
-                    . ' '
-                    . $meetingParticipantView->card->lastname
-                    . ' ('
-                    . $meetingParticipantView->card->position
-                    . ') - '
-                    . $sheetMetTitlesImplode
-                ,
-            ];
+
+            $participantPosition = !empty($meetingParticipantView->card->position) ? '(' . $meetingParticipantView->card->position . ')' : '';
+            $participantInfosByUserId[$userId] = sprintf(
+                '%s %s %s - %s',
+                $meetingParticipantView->card->firstname,
+                $meetingParticipantView->card->lastname,
+                $participantPosition,
+                $sheetMetTitlesImplode
+             );
         }
 
         $meetingOwnSheetParticipantViews = [];
@@ -113,16 +112,14 @@ class MeetingViewQueryHandler
                 $meetingOwnSheetParticipantViews[] = $meetingOwnSheetParticipantView;
             }
 
-            $subscriberNamesMapping[$userId] = [
-                'name' => $meetingOwnSheetParticipantView->firstName
-                    . ' '
-                    . $meetingOwnSheetParticipantView->lastName
-                    . ' ('
-                    . $meetingOwnSheetParticipantView->position
-                    . ') - '
-                    . $userSheet->getTitle()
-                ,
-            ];
+            $participantPosition = !empty($meetingOwnSheetParticipantView->position) ? '(' . $meetingOwnSheetParticipantView->position . ')' : '';
+            $participantInfosByUserId[$userId] = sprintf(
+                '%s %s %s - %s',
+                $meetingOwnSheetParticipantView->firstName,
+                $meetingOwnSheetParticipantView->lastName,
+                $participantPosition,
+                $userSheet->getTitle()
+            );
         }
 
         $timeRemainingInSeconds = max(
@@ -145,7 +142,7 @@ class MeetingViewQueryHandler
             $query->event->getConfiguration()->getLeftColor(),
             $query->event->getConfiguration()->getRightColor(),
             $participants,
-            $subscriberNamesMapping,
+            $participantInfosByUserId,
             $query->isUserParticipantMultipleSheets,
             $query->meeting->getSpot()->isVisio(),
             $this->videoMeetingAccess->allowedToAccess($query->meeting)

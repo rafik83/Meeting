@@ -51,7 +51,7 @@ Subscriber.prototype.onVideoElementCreated = function (event) {
   if (this.subscriberId && this.subscribersNameMapping.hasOwnProperty(this.subscriberId)) {
       let subscriberName = document.createElement('span');
       subscriberName.classList.add('visio-user-name');
-      subscriberName.textContent = this.subscribersNameMapping[this.subscriberId].name;
+      subscriberName.textContent = this.subscribersNameMapping[this.subscriberId];
 
       subscriberElement.appendChild(subscriberName);
   }

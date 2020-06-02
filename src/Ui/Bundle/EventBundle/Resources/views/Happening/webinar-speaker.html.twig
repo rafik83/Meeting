@@ -30,7 +30,7 @@
          data-time-remaining="{{ webinarView.timeRemainingInSeconds }}"
          data-warning-time-remaining="{{ webinarView.warningTimeRemainingInSeconds }}"
          data-current-user-id="{{ webinarView.currentUserId }}"
-         data-subscriber-mapping="{{ webinarView.subscribersNameMapping }}"
+         data-subscriber-mapping="{{ webinarView.speakerInfosByUserId }}"
     >
         {% if webinarView.headerImage %}
             <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>
