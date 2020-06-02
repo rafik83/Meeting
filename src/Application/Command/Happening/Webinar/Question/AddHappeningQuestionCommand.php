@@ -18,6 +18,9 @@ class AddHappeningQuestionCommand implements Command
     /** @var User */
     private $createdBy;
 
+    /** @var \DateTimeInterface */
+    private $createdAt;
+
     /** @var string */
     private $content;
 
@@ -27,6 +30,7 @@ class AddHappeningQuestionCommand implements Command
         $this->sheet = $sheet;
         $this->createdBy = $createdBy;
         $this->content = $content;
+        $this->createdAt = new \DateTime();
     }
 
     public function getHappening(): Happening
@@ -47,5 +51,10 @@ class AddHappeningQuestionCommand implements Command
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function getCreatedAt(): \DateTimeInterface
+    {
+        return $this->createdAt;
     }
 }

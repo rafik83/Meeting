@@ -18,7 +18,7 @@ class AddHappeningQuestionCommandHandler
 
     public function handle(AddHappeningQuestionCommand $command)
     {
-        $question = new Question($command->getHappening(), $command->getSheet(), $command->getCreatedBy(), new \DateTime(), $command->getContent());
+        $question = new Question($command->getHappening(), $command->getSheet(), $command->getCreatedBy(), $command->getCreatedAt(), $command->getContent());
 
         $this->questionRepository->add($question);
     }
