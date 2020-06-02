@@ -11,6 +11,7 @@
 * [Vagrant 2.2.6](https://www.vagrantup.com/downloads.html)
 * [VirtualBox 5.2.4](https://www.virtualbox.org/wiki/Downloads)
 * [Vagrant Landrush 1.2.0](https://github.com/phinze/landrush)
+* On linux: [NFS server](http://nfs.sourceforge.net/), can be installed with `sudo apt install nfs-kernel-server`
 
 ### Setup
 
