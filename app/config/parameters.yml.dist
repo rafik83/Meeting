@@ -116,3 +116,4 @@ parameters:
     feature_availability_confirmation_enabled: true
     feature_registration_template_builder_enabled: false
     feature_product_vat_enabled: false
+    liip_imagine_data_root: "%kernel.project_dir%/web"

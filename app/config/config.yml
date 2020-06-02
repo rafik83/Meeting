@@ -181,8 +181,7 @@ liip_imagine:
         default:
             filesystem:
                 data_root:
-                    - "%kernel.root_dir%/../web"
-                    - "%kernel.root_dir%/../../../shared/web"
+                    - "%liip_imagine_data_root%"
     filter_sets:
         cache: ~
         event_header_logo:
