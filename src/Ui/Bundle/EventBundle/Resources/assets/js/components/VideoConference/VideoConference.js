@@ -307,6 +307,8 @@ VideoConference.prototype.disconnect = function() {
 
       if (redirectLink) {
           window.location.replace(redirectLink);
+
+          return;
       }
   }
 
