@@ -33,26 +33,38 @@ class GetHappeningQuestionsHandlerTest extends TestCase
 
         $event = EventFactory::createEvent();
 
-        $user1 = new User('user1@vimeet.com', '__salt__', '__password__', 'fr');
-        $account1 = new User\Account();
-        $account1->setFirstName('Jean');
-        $account1->setLastName('Dupond');
-        $user1->setAccount($account1);
+        $user1 = $this->prophesize(User::class)
+            ->willBeConstructedWith(['user1@vimeet.com', '__salt__', '__password__', 'fr']);
+        $user1->getFirstName()
+            ->shouldBeCalled()
+            ->willReturn('Jean');
+        $user1->getLastName()
+            ->shouldBeCalled()
+            ->willReturn('Dupond');
+        $user1->getAvatar()
+            ->shouldBeCalled()
+            ->willReturn(null);
 
-        $user2 = new User('user2@vimeet.com', '__salt__', '__password__', 'fr');
-        $account2 = new User\Account();
-        $account2->setFirstName('George');
-        $account2->setLastName('Doe');
-        $user2->setAccount($account2);
+        $user2 = $this->prophesize(User::class)
+            ->willBeConstructedWith(['user1@vimeet.com', '__salt__', '__password__', 'fr']);
+        $user2->getFirstName()
+            ->shouldBeCalled()
+            ->willReturn('George');
+        $user2->getLastName()
+            ->shouldBeCalled()
+            ->willReturn('DOE');
+        $user2->getAvatar()
+            ->shouldBeCalled()
+            ->willReturn(null);
 
-        $sheet1 = SheetFactory::create($event, $user1);
+        $sheet1 = SheetFactory::create($event, $user1->reveal());
         $sheet1->setTitle('World Company');
 
-        $sheet2 = SheetFactory::create($event, $user2);
+        $sheet2 = SheetFactory::create($event, $user2->reveal());
         $sheet2->setTitle('Cola inc.');
 
-        $question1 = new Question($happening->reveal(), $sheet1, $user1, new \DateTime('2020-06-01 17:00:00'), 'The solution is already deployed?');
-        $question2 = new Question($happening->reveal(), $sheet2, $user2, new \DateTime('2020-05-29 15:00:00'), 'What is the environmental impact of the AI?');
+        $question1 = new Question($happening->reveal(), $sheet1, $user1->reveal(), new \DateTime('2020-06-01 17:00:00'), 'The solution is already deployed?');
+        $question2 = new Question($happening->reveal(), $sheet2, $user2->reveal(), new \DateTime('2020-05-29 15:00:00'), 'What is the environmental impact of the AI?');
 
         $this->questionRepository
             ->getByHappening($happening->reveal())
@@ -66,7 +78,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
                 new QuestionView(
                     'The solution is already deployed?',
                     'Jean',
-                    'DUPOND',
+                    'Dupond',
                     null,
                     'World Company',
                     new \DateTime('2020-06-01 17:00:00')
