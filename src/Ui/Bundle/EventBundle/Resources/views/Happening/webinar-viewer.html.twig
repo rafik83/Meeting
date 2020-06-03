@@ -29,13 +29,14 @@
 
         <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}></div>
 
+        <div data-hide-on-desktop class="hide-on-desktop"></div>
+
         <div class="side-container hide">
-            <div class="chat-container">
-                <div class="btn-group mg-tp" role="group">
-                    <a class="btn btn-primary" href="#">Chat</a>
-                    <a class="btn btn-gray" href="#">Questions</a>
-                </div>
+            <div class="btn-group" role="group">
+                <a class="btn btn-primary" href="#">Chat</a>
+                <a class="btn btn-gray" href="#">Questions</a>
             </div>
+            <div class="chat-container"></div>
             <div class="questions-container"></div>
         </div>
 

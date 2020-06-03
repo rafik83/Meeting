@@ -29,6 +29,9 @@ function Webinar(element, isSpeaker) {
     this.userCompleteName = element.getAttribute('data-user-complete-name');
     this.helperContainer = element.querySelector('.video-helper');
 
+    const hideOnDesktop = element.querySelector('[data-hide-on-desktop]');
+    this.isMobile = 'none' !== getComputedStyle(hideOnDesktop).display;
+
     this.notCompatibleBrowserMessage = element.getAttribute(
         'data-not-compatible-browser-message'
     );
@@ -77,23 +80,6 @@ function Webinar(element, isSpeaker) {
             this.layout();
         }.bind(this), 20);
     }.bind(this);
-
-    const fullscreenButton = this.createFullscreenButton();
-    this.element.appendChild(fullscreenButton);
-    fullscreenButton.addEventListener('click', () => {
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-            return;
-        }
-
-        const element = this.element;
-        const rfs = element.requestFullscreen
-          || element.webkitRequestFullScreen
-          || element.mozRequestFullScreen
-          || element.msRequestFullscreen
-        ;
-        rfs.call(element);
-    });
 
     document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
     document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
@@ -232,11 +218,10 @@ Webinar.prototype.connect = function () {
         this.showElement(this.mediaStartSharingButton);
         this.showElement(this.timerContainer);
         this.showElement(this.viewersContainer);
+        this.createFullscreenButton();
         this.initShareMedia();
 
-        const hasToggleSideBar = 'none' !== getComputedStyle(this.toggleSideBarElement).display;
-
-        if (!hasToggleSideBar) {
+        if (!this.isMobile) {
             this.toggleSideBar();
         }
 
@@ -553,23 +538,37 @@ Webinar.prototype.handleStopSharing = function () {
     this.hideElement(this.endSharingButton);
 };
 
-/**
- * Create fullscreen button node element
- *
- * @returns {Element}
- */
 Webinar.prototype.createFullscreenButton = function () {
+    if (this.isMobile) {
+        return;
+    }
+
     var fullscreenButton = document.createElement('button');
     var icon = document.createElement('i');
     icon.classList.add('glyphicon');
     icon.classList.add('glyphicon-fullscreen');
 
     fullscreenButton.classList.add('btn');
-    fullscreenButton.classList.add('btn-default');
+    fullscreenButton.classList.add('btn-gray');
     fullscreenButton.classList.add('start-fullscreen-button');
     fullscreenButton.appendChild(icon);
 
-    return fullscreenButton;
+    this.element.appendChild(fullscreenButton);
+
+    fullscreenButton.addEventListener('click', () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            return;
+        }
+
+        const element = this.element;
+        const rfs = element.requestFullscreen
+          || element.webkitRequestFullScreen
+          || element.mozRequestFullScreen
+          || element.msRequestFullscreen
+        ;
+        rfs.call(element);
+    });
 };
 
 Webinar.prototype.exitFullscreenHandler = function () {
