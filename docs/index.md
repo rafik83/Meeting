@@ -1,7 +1,7 @@
 # Vimeet documentation
 
 - Project
-  - [Workflow](Project/workflow.md)
+  - [Workflow](Project/Workflow.md)
   - [Symfony update](Project/SymfonyUpdate.md)
   - [Jenkins](Project/Jenkins.md)
 
