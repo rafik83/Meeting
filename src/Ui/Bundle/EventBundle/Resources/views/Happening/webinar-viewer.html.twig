@@ -33,11 +33,23 @@
 
         <div class="side-container hide">
             <div class="btn-group" role="group">
-                <a class="btn btn-primary" href="#">Chat</a>
-                <a class="btn btn-gray" href="#">Questions</a>
+                <a class="btn btn-primary" href="#" data-chat-button>Chat</a>
+                <a class="btn btn-gray" href="#" data-questions-button>Questions</a>
             </div>
-            <div class="chat-container"></div>
-            <div class="questions-container"></div>
+            <div class="chat-container" data-chat-container></div>
+            <div class="hide" data-questions-container>
+                <table class="table table-striped table-hover table-condensed">
+                    <tr>
+                        <td>Question 1</td>
+                    </tr>
+                    <tr>
+                        <td>Question 2</td>
+                    </tr>
+                    <tr>
+                        <td>Question 3</td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
         <div class="video-helper">

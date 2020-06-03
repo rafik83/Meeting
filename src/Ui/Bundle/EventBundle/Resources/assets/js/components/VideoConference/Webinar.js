@@ -45,8 +45,14 @@ function Webinar(element, isSpeaker) {
     );
 
     this.sideContainer = element.querySelector('.side-container');
-    this.chatContainer = element.querySelector('.chat-container');
+
+    this.chatContainer = element.querySelector('[data-chat-container]');
+    this.questionsContainer = element.querySelector('[data-questions-container]');
     this.chatInstance = null;
+    this.chatButton = element.querySelector('[data-chat-button]');
+    this.chatButton.addEventListener('click', this.showChat.bind(this));
+    this.questionsButton = element.querySelector('[data-questions-button]');
+    this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
 
     this.toggleSideBarElement = element.querySelector('#toggle-sidebar');
     this.toggleSideBarElement.addEventListener('click', this.toggleSideBar.bind(this));
@@ -608,9 +614,29 @@ Webinar.prototype.toggleButton = function (button, isOn) {
     button.classList.add('btn-off');
 };
 
-/**
- * Toggle Chat
- */
+Webinar.prototype.showChat = function (event) {
+    event.preventDefault();
+
+    this.questionsButton.classList.remove('btn-primary');
+    this.questionsButton.classList.add('btn-gray');
+    this.chatButton.classList.remove('btn-gray');
+    this.chatButton.classList.add('btn-primary');
+    this.hideElement(this.questionsContainer);
+    this.showElement(this.chatContainer);
+};
+
+Webinar.prototype.showQuestions = function (event) {
+    event.preventDefault();
+
+    this.chatButton.classList.remove('btn-primary');
+    this.chatButton.classList.add('btn-gray');
+    this.questionsButton.classList.remove('btn-gray');
+    this.questionsButton.classList.add('btn-primary');
+
+    this.hideElement(this.chatContainer);
+    this.showElement(this.questionsContainer);
+};
+
 Webinar.prototype.toggleSideBar = function () {
     if (this.sideContainer.classList.contains('hide')) {
         this.toggleButton(this.toggleSideBarElement, true);
