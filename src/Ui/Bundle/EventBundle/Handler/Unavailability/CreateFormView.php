@@ -14,10 +14,10 @@ use Symfony\Component\Form\FormView;
 
 class CreateFormView
 {
-    const XML_HTTP_REQUEST_RESPONSE = 'xml_http_request';
-    const HANDLER_SUCCESS           = 'handle_success';
-    const HANDLER_ERROR             = 'handle_error';
-    const CREATE_FORM               = 'create_form';
+    public const XML_HTTP_REQUEST_RESPONSE = 'xml_http_request';
+    public const HANDLER_SUCCESS           = 'handle_success';
+    public const HANDLER_ERROR             = 'handle_error';
+    public const CREATE_FORM               = 'create_form';
 
     /** @var string */
     public $type;
@@ -25,10 +25,6 @@ class CreateFormView
     /** @var FormView */
     public $formView;
 
-    /**
-     * @param string   $type
-     * @param FormView $formView
-     */
     public function __construct(string $type, FormView $formView)
     {
         $this->type = $type;

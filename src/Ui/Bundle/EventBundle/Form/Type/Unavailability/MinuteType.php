@@ -19,11 +19,11 @@ class MinuteType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'choices'            => range(0, 55, 5),
-            'choice_label'       => function ($minute) {
+            'choices' => range(0, 55, 5),
+            'choice_label' => static function ($minute) {
                 return $minute < 10 ? sprintf('0%s', $minute) : $minute;
             },
             'translation_domain' => false,
@@ -33,7 +33,7 @@ class MinuteType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }
@@ -41,7 +41,7 @@ class MinuteType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'unavailability_minute';
     }

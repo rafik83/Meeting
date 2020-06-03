@@ -15,42 +15,30 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Time\DaysHelper;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class Create implements Command
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var Participant[]
-     */
+    /** @var Participant[] */
     public $participants;
 
-    /**
-     * @var Event\Day
-     */
+    /** @var TimeRangeView */
     public $day;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $time;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $message;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /** @var string */
@@ -58,11 +46,9 @@ class Create implements Command
 
     public function __construct(Event $event, Sheet $sheet, User $user, string $locale, string $timezone)
     {
-        $this->event  = $event;
-        $this->sheet  = $sheet;
+        $this->event = $event;
+        $this->sheet = $sheet;
         $this->locale = $locale;
-        $this->day    = $event->getFirstDay();
-
         $participant = $sheet->getUserParticipant($user);
 
         if (null !== $participant) {
@@ -71,12 +57,15 @@ class Create implements Command
 
         $this->locale = $locale;
         $this->timezone = $timezone;
+
+        $firstDay = $event->getFirstDay();
+        $this->day = new TimeRangeView(
+            DaysHelper::cloneDateTime($firstDay->getStartTime(), $timezone),
+            DaysHelper::cloneDateTime($firstDay->getEndTime(), $timezone)
+        );
     }
 
-    /**
-     * @return bool
-     */
-    public function validateDate()
+    public function validateDate(): bool
     {
         if (!isset($this->time['begin']['hour'])
             || !isset($this->time['begin']['minute'])

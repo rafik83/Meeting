@@ -11,45 +11,32 @@
 namespace Proximum\Vimeet\Application\Exception\Unavailability;
 
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class TimeOutOfRangeException extends UnavailabilityException
 {
-    const BEGIN = 'begin';
-    const END   = 'end';
+    public const BEGIN = 'begin';
+    public const END   = 'end';
 
-    /**
-     * @var Day
-     */
+    /** @var TimeRangeView */
     public $day;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $period;
 
-    /**
-     * @param Day    $day
-     * @param string $period
-     */
-    public function __construct(Day $day, $period)
+    public function __construct(TimeRangeView $day, $period)
     {
         parent::__construct('Time selected is out of range');
-        $this->day    = $day;
+        $this->day = $day;
         $this->period = $period;
     }
 
-    /**
-     * @return bool
-     */
-    public function isOutOfRangeAtEndOfDay()
+    public function isOutOfRangeAtEndOfDay(): bool
     {
         return self::END === $this->period;
     }
 
-    /**
-     * @return bool
-     */
-    public function isOutOfRangeAtBeginOfDay()
+    public function isOutOfRangeAtBeginOfDay(): bool
     {
         return self::BEGIN === $this->period;
     }

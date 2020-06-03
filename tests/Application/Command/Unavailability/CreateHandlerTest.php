@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use Proximum\Vimeet\Application\Command\Unavailability\CreateHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -37,28 +38,19 @@ use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class CreateHandlerTest extends TestCase
 {
-    /**
-     * @var UnavailabilityRepositoryInterface
-     */
+    /** @var UnavailabilityRepositoryInterface|ObjectProphecy */
     private $unavailabilityRepository;
 
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface|ObjectProphecy */
     private $participantRepository;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser|ObjectProphecy */
     private $paticipantInfoGuesser;
 
-    /** @var DelayedEventDispatcher */
+    /** @var DelayedEventDispatcher|ObjectProphecy */
     private $eventDispatcher;
 
-    /**
-     * Init mock for the suite test
-     */
-    public function setUp()
+    public function setUp(): void
     {
         $this->unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
         $this->participantRepository    = $this->prophesize(ParticipantRepositoryInterface::class);
@@ -66,7 +58,7 @@ class CreateHandlerTest extends TestCase
         $this->eventDispatcher          = $this->prophesize(DelayedEventDispatcher::class);
     }
 
-    public function testCheckTimeOutOfDayFunctionWithBegin()
+    public function testCheckTimeOutOfDayFunctionWithBegin(): void
     {
         $this->expectException(TimeOutOfRangeException::class);
 
@@ -95,7 +87,7 @@ class CreateHandlerTest extends TestCase
         $method->invokeArgs($handler, [$create, $begin, $end]);
     }
 
-    public function testCheckTimeOutOfDayFunctionWithEnd()
+    public function testCheckTimeOutOfDayFunctionWithEnd(): void
     {
         $this->expectException(TimeOutOfRangeException::class);
 
@@ -124,7 +116,7 @@ class CreateHandlerTest extends TestCase
         $method->invokeArgs($handler, [$create, $begin, $end]);
     }
 
-    public function testCheckTimeOutOfDayFunctionWithoutException()
+    public function testCheckTimeOutOfDayFunctionWithoutException(): void
     {
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -153,7 +145,7 @@ class CreateHandlerTest extends TestCase
         $this->assertTrue(true, 'Must not throw an exception');
     }
 
-    public function testCheckParticipantsConflict()
+    public function testCheckParticipantsConflict(): void
     {
         $this->expectException(ParticipantsSelectedWithMeetingOrHappeningException::class);
 
@@ -188,7 +180,7 @@ class CreateHandlerTest extends TestCase
         $method->invokeArgs($handler, [$create, $begin, $end, 'fr']);
     }
 
-    public function testCheckParticipantsConflictWithoutConflict()
+    public function testCheckParticipantsConflictWithoutConflict(): void
     {
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -223,7 +215,7 @@ class CreateHandlerTest extends TestCase
         $this->assertTrue(true, 'Must not throw an exception');
     }
 
-    public function testTruncateOvertimeWithBeginOvertime()
+    public function testTruncateOvertimeWithBeginOvertime(): void
     {
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -253,7 +245,7 @@ class CreateHandlerTest extends TestCase
         $this->assertEquals($endCheck, $end);
     }
 
-    public function testTruncateOvertimeWithEndAndBeginOvertime()
+    public function testTruncateOvertimeWithEndAndBeginOvertime(): void
     {
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -282,7 +274,7 @@ class CreateHandlerTest extends TestCase
         $this->assertEquals($endTime, $end);
     }
 
-    public function testTruncateOvertimeWithNoOvertime()
+    public function testTruncateOvertimeWithNoOvertime(): void
     {
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -313,7 +305,7 @@ class CreateHandlerTest extends TestCase
         $this->assertEquals($endCheck, $end);
     }
 
-    public function testPrepareBeginAndEnd()
+    public function testPrepareBeginAndEnd(): void
     {
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -349,7 +341,7 @@ class CreateHandlerTest extends TestCase
         $this->assertEquals($expectedEnd, $end);
     }
 
-    public function testPrepareBeginAndEndWithOtherTimeZoneNewYork()
+    public function testPrepareBeginAndEndWithOtherTimeZoneNewYork(): void
     {
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -404,7 +396,7 @@ class CreateHandlerTest extends TestCase
         $this->assertEquals($expectedEnd, $end);
     }
 
-    public function testPrepareBeginAndEndWithOtherTimeZoneLondon()
+    public function testPrepareBeginAndEndWithOtherTimeZoneLondon(): void
     {
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -459,7 +451,7 @@ class CreateHandlerTest extends TestCase
         $this->assertEquals($expectedEnd, $end);
     }
 
-    public function testPrepareBeginAndEndWithString()
+    public function testPrepareBeginAndEndWithString(): void
     {
         $startTime = new \DateTime('2016-10-12 10:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -531,7 +523,7 @@ class CreateHandlerTest extends TestCase
         $this->assertEquals($expectedEnd, $end);
     }
 
-    public function testPrepareBeginAndEndWithDifferentDayEnd()
+    public function testPrepareBeginAndEndWithDifferentDayEnd(): void
     {
         $startTime = new \DateTime('2016-10-11 11:00:00.000');
         $endTime   = new \DateTime('2016-10-12 02:00:00.000');
@@ -586,7 +578,7 @@ class CreateHandlerTest extends TestCase
         $this->assertEquals($expectedEnd, $end);
     }
 
-    public function testPrepareBeginAndEndWithDifferentDayEndAndLargeTimeZone()
+    public function testPrepareBeginAndEndWithDifferentDayEndAndLargeTimeZone(): void
     {
         $startTime = new \DateTime('2016-10-11 18:00:00.000');
         $endTime   = new \DateTime('2016-10-12 04:00:00.000');
@@ -641,7 +633,7 @@ class CreateHandlerTest extends TestCase
         $this->assertEquals($expectedEnd, $end);
     }
 
-    public function testHandleNoParticipantException()
+    public function testHandleNoParticipantException(): void
     {
         $this->expectException(NoParticipantSelectedException::class);
 
@@ -664,7 +656,7 @@ class CreateHandlerTest extends TestCase
         $handler->handle($create);
     }
 
-    public function testHandleCorrect()
+    public function testHandleCorrect(): void
     {
         $startTime = new \DateTime('2016-10-12 08:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -720,7 +712,7 @@ class CreateHandlerTest extends TestCase
         $handler->handle($create);
     }
 
-    public function testHandleWithMessage()
+    public function testHandleWithMessage(): void
     {
         $startTime = new \DateTime('2016-10-12 08:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -778,7 +770,7 @@ class CreateHandlerTest extends TestCase
         $handler->handle($create);
     }
 
-    public function testHandleCorrectWithRemove()
+    public function testHandleCorrectWithRemove(): void
     {
         $startTime = new \DateTime('2016-10-12 08:00:00.000');
         $endTime   = new \DateTime('2016-10-12 18:00:00.000');
@@ -838,7 +830,7 @@ class CreateHandlerTest extends TestCase
         $handler->handle($create);
     }
 
-    public function testHandleExceptionSheetDoesNotAttendEvent()
+    public function testHandleExceptionSheetDoesNotAttendEvent(): void
     {
         $this->expectException(CanNotCreateUnavailabilityException::class);
 
@@ -896,7 +888,7 @@ class CreateHandlerTest extends TestCase
         $handler->handle($create);
     }
 
-    public function testHandleSystemUnavailabilityAlreadyExistsSideToNewOne()
+    public function testHandleSystemUnavailabilityAlreadyExistsSideToNewOne(): void
     {
         $day = $this->prophesize(Day::class);
         $day->getDay()->willReturn(new \DateTime('2018-04-02 08:00:00.000'));
@@ -980,7 +972,7 @@ class CreateHandlerTest extends TestCase
         $handler->handle($create);
     }
 
-    public function testParticipantsWithUnavailabilityException()
+    public function testParticipantsWithUnavailabilityException(): void
     {
         $this->expectException(ParticipantsWithUnavailabilityException::class);
 

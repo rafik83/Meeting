@@ -110,10 +110,10 @@ class UnavailabilityController extends Controller
         }
 
         return $this->render('EventBundle:Unavailability:create.html.twig', [
-            'event'               => $event,
-            'participant'         => $participant,
-            'agenda'              => $agenda,
-            'sheet'               => $sheet,
+            'event' => $event,
+            'participant' => $participant,
+            'agenda' => $agenda,
+            'sheet' => $sheet,
             'form_unavailability' => $createFormView->formView,
             'tipTranslationViews' => $tipTranslationViews,
             'timezone' => $timezone,
@@ -207,7 +207,7 @@ class UnavailabilityController extends Controller
         Unavailability $unavailability,
         Participant $participant,
         Sheet $sheet
-    ) {
+    ): RedirectResponse {
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_REMOVE, $sheet);
@@ -234,7 +234,7 @@ class UnavailabilityController extends Controller
      * @param Sheet       $sheet
      * @param Participant $participant
      */
-    private function checkSheetHasParticipant(Sheet $sheet, Participant $participant)
+    private function checkSheetHasParticipant(Sheet $sheet, Participant $participant): void
     {
         if (!$sheet->hasParticipant($participant)) {
             throw $this->createNotFoundException(
