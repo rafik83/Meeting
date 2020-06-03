@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\EvaluateMeetingAction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\EvaluateMeetingType;
@@ -43,6 +44,7 @@ class EvaluateMeetingActionTest extends TestCase
         $event,
         $user,
         $sheet,
+        $type,
         $meeting,
         $participant
     ;
@@ -60,6 +62,9 @@ class EvaluateMeetingActionTest extends TestCase
         $this->event = $this->prophesize(Event::class);
         $this->user = $this->prophesize(User::class);
         $this->sheet = $this->prophesize(Sheet::class);
+        $this->type = $this->prophesize(Type::class);
+        $this->sheet->getType()->willReturn($this->type->reveal());
+        $this->type->canEvaluateMeeting()->shouldBeCalled()->willReturn(true);
         $this->meeting = $this->prophesize(Meeting::class);
         $this->participant = $this->prophesize(Participant::class);
 
@@ -71,6 +76,7 @@ class EvaluateMeetingActionTest extends TestCase
         $this->sheet->getEvent()->shouldBeCalled()->willReturn($this->event->reveal());
         $this->meeting->isVisio()->shouldBeCalled()->willReturn(true);
         $this->meeting->hasSheet($this->sheet->reveal())->shouldBeCalled()->willReturn(true);
+        $this->type->mustEvaluateMeeting()->shouldBeCalled()->willReturn(true);
 
         $this->authorizationChecker
             ->isGranted('IS_AUTHENTICATED_REMEMBERED')
@@ -156,6 +162,7 @@ class EvaluateMeetingActionTest extends TestCase
                 'participant' => $this->participant->reveal(),
                 'ratingForm' => $formView->reveal(),
                 'contacts' => [$contactView1->reveal(), $contactView2->reveal()],
+                'mustEvaluateMeeting' => true,
             ])
             ->shouldBeCalled()
             ->willReturn('<html></html>')

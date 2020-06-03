@@ -71,6 +71,7 @@ class EvaluateMeetingAction
             || !$meeting->hasSheet($sheet)
             || !$meeting->isVisio()
             || $eventDomain->getEvent() !== $sheet->getEvent()
+            || !$sheet->getType()->canEvaluateMeeting()
         ) {
             throw new AccessDeniedException();
         }
@@ -124,6 +125,7 @@ class EvaluateMeetingAction
                 'participant' => $participant,
                 'ratingForm' => $form->createView(),
                 'contacts' => $contacts,
+                'mustEvaluateMeeting' => $sheet->getType()->mustEvaluateMeeting(),
             ])
         );
     }

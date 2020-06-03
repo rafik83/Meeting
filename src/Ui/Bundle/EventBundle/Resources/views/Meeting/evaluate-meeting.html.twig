@@ -36,9 +36,11 @@
                     {{ form_widget(ratingForm.evaluation) }}
                     {{ form_end(ratingForm) }}
 
+                    {% if not mustEvaluateMeeting %}
                     <a class="btn btn-link" href="{{ path('event_agenda_participant', {'sheet': sheet.id, 'participant': participant.id}) }}">
                         {{ 'event.meeting.evaluation.skip'|trans }}
                     </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
