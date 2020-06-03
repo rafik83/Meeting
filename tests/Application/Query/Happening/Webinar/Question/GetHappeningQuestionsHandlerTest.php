@@ -33,8 +33,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
 
         $event = EventFactory::createEvent();
 
-        $user1 = $this->prophesize(User::class)
-            ->willBeConstructedWith(['user1@vimeet.com', '__salt__', '__password__', 'fr']);
+        $user1 = $this->prophesize(User::class);
         $user1->getFirstName()
             ->shouldBeCalled()
             ->willReturn('Jean');
@@ -45,8 +44,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null);
 
-        $user2 = $this->prophesize(User::class)
-            ->willBeConstructedWith(['user1@vimeet.com', '__salt__', '__password__', 'fr']);
+        $user2 = $this->prophesize(User::class);
         $user2->getFirstName()
             ->shouldBeCalled()
             ->willReturn('George');
