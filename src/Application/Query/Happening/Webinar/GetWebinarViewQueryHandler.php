@@ -3,12 +3,18 @@
 namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
+use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler;
+use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class GetWebinarViewQueryHandler
 {
+    /** @var GetUserParticipantInfosHandler */
+    private $getUserParticipantInfosHandler;
+
     /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
 
@@ -16,9 +22,11 @@ class GetWebinarViewQueryHandler
     private $dateTime;
 
     public function __construct(
+        GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         \DateTimeInterface $dateTime
     ) {
+        $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->dateTime = $dateTime;
     }
@@ -56,6 +64,26 @@ class GetWebinarViewQueryHandler
             );
         }
 
+        $participantViews = [];
+
+        if ($happening->isInteractiveWebinar()) {
+            foreach ($happening->getParticipations() as $happeningParticipation) {
+                $user = $happeningParticipation->getUser();
+
+                $participantView = $this->getUserParticipantInfosHandler->handle(
+                    new GetUserParticipantInfos($happening->getEvent(), $user, $query->getLocale())
+                );
+
+                $participantViews[] = new WebinarParticipantView(
+                    $user->getId(),
+                    $participantView->firstName,
+                    $participantView->lastName,
+                    $participantView->position,
+                    $participantView->getSheetTitle()
+                );
+            }
+        }
+
         return new WebinarView(
             $query->getUser()->getId(),
             $happening->getTitle($query->getLocale()),
@@ -64,6 +92,7 @@ class GetWebinarViewQueryHandler
             $this->videoConferenceAdapter->getApiKey(),
             $isSpeaker,
             $speakers,
+            $participantViews,
             new TimeRangeView($happening->getBegin(), $happening->getEnd()),
             $this->dateTime,
             $timeRemainingInSeconds,
