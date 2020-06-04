@@ -12,18 +12,23 @@
   }
 }
 
-.chat-container {
+.side-container {
+  background: white;
+  padding: 10px;
+  height: calc(100vh - 50px);
   position: absolute;
   top: 0;
   right: 0;
   width: 25%;
-  height: 100%;
   z-index: 9999;
   overflow: hidden;
 }
 
+.chat-container {
+
+}
+
 .ots-text-chat {
-  margin: 0 10px;
   background: white;
 
   .ots-messages-header {
@@ -35,13 +40,10 @@
   }
 
   .ots-messages-holder {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 160px);
     overflow: hidden;
-    overflow-y: scroll
-  }
-
-  .ots-messages-holder.has-alert {
-    padding-top: 10px;
+    overflow-y: scroll;
+    margin-top: 10px;
   }
 
   .ots-messages-holder .ots-messages-alert {
@@ -49,7 +51,7 @@
     padding: 10px;
     min-height: 24px;
     background: rgba(248, 231, 28, 0.25);
-    margin: 0 10px 10px;
+    margin: 0 0 10px;
     text-align: center;
     color: #ad7212;
     font-size: 14px;
@@ -246,7 +248,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  .chat-container {
+  .side-container {
     width: 100%;
   }
 

@@ -29,6 +29,9 @@ function Webinar(element, isSpeaker) {
     this.userCompleteName = element.getAttribute('data-user-complete-name');
     this.helperContainer = element.querySelector('.video-helper');
 
+    const hideOnDesktop = element.querySelector('[data-hide-on-desktop]');
+    this.isMobile = 'none' !== getComputedStyle(hideOnDesktop).display;
+
     this.notCompatibleBrowserMessage = element.getAttribute(
         'data-not-compatible-browser-message'
     );
@@ -41,11 +44,18 @@ function Webinar(element, isSpeaker) {
         'data-user-denied-media-access'
     );
 
-    this.chatContainer = element.querySelector('.chat-container');
-    this.chatInstance = null;
+    this.sideContainer = element.querySelector('.side-container');
 
-    this.toggleChatElement = element.querySelector('#toggle-chat');
-    this.toggleChatElement.addEventListener('click', this.toggleChat.bind(this));
+    this.chatContainer = element.querySelector('[data-chat-container]');
+    this.questionsContainer = element.querySelector('[data-questions-container]');
+    this.chatInstance = null;
+    this.chatButton = element.querySelector('[data-chat-button]');
+    this.chatButton.addEventListener('click', this.showChat.bind(this));
+    this.questionsButton = element.querySelector('[data-questions-button]');
+    this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
+
+    this.toggleSideBarElement = element.querySelector('#toggle-sidebar');
+    this.toggleSideBarElement.addEventListener('click', this.toggleSideBar.bind(this));
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
     this.joinButton = element.querySelector('[data-webinar-join-button]');
@@ -76,23 +86,6 @@ function Webinar(element, isSpeaker) {
             this.layout();
         }.bind(this), 20);
     }.bind(this);
-
-    const fullscreenButton = this.createFullscreenButton();
-    this.element.appendChild(fullscreenButton);
-    fullscreenButton.addEventListener('click', () => {
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-            return;
-        }
-
-        const element = this.element;
-        const rfs = element.requestFullscreen
-          || element.webkitRequestFullScreen
-          || element.mozRequestFullScreen
-          || element.msRequestFullscreen
-        ;
-        rfs.call(element);
-    });
 
     document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
     document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
@@ -225,13 +218,18 @@ Webinar.prototype.updateViewers = function () {
  */
 Webinar.prototype.connect = function () {
     this.session.connect(this.token, function (error) {
-        this.showElement(this.toggleChatElement);
+        this.showElement(this.toggleSideBarElement);
         this.showElement(this.toggleAudioElement);
         this.showElement(this.toggleVideoElement);
         this.showElement(this.mediaStartSharingButton);
         this.showElement(this.timerContainer);
         this.showElement(this.viewersContainer);
+        this.createFullscreenButton();
         this.initShareMedia();
+
+        if (!this.isMobile) {
+            this.toggleSideBar();
+        }
 
         if (!error) {
             if (this.isSpeaker) {
@@ -546,23 +544,37 @@ Webinar.prototype.handleStopSharing = function () {
     this.hideElement(this.endSharingButton);
 };
 
-/**
- * Create fullscreen button node element
- *
- * @returns {Element}
- */
 Webinar.prototype.createFullscreenButton = function () {
+    if (this.isMobile) {
+        return;
+    }
+
     var fullscreenButton = document.createElement('button');
     var icon = document.createElement('i');
     icon.classList.add('glyphicon');
     icon.classList.add('glyphicon-fullscreen');
 
     fullscreenButton.classList.add('btn');
-    fullscreenButton.classList.add('btn-default');
+    fullscreenButton.classList.add('btn-gray');
     fullscreenButton.classList.add('start-fullscreen-button');
     fullscreenButton.appendChild(icon);
 
-    return fullscreenButton;
+    this.element.appendChild(fullscreenButton);
+
+    fullscreenButton.addEventListener('click', () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            return;
+        }
+
+        const element = this.element;
+        const rfs = element.requestFullscreen
+          || element.webkitRequestFullScreen
+          || element.mozRequestFullScreen
+          || element.msRequestFullscreen
+        ;
+        rfs.call(element);
+    });
 };
 
 Webinar.prototype.exitFullscreenHandler = function () {
@@ -602,13 +614,33 @@ Webinar.prototype.toggleButton = function (button, isOn) {
     button.classList.add('btn-off');
 };
 
-/**
- * Toggle Chat
- */
-Webinar.prototype.toggleChat = function () {
-    if (this.chatContainer.classList.contains('hide')) {
-        this.toggleButton(this.toggleChatElement, true);
-        this.showElement(this.chatContainer);
+Webinar.prototype.showChat = function (event) {
+    event.preventDefault();
+
+    this.questionsButton.classList.remove('btn-primary');
+    this.questionsButton.classList.add('btn-gray');
+    this.chatButton.classList.remove('btn-gray');
+    this.chatButton.classList.add('btn-primary');
+    this.hideElement(this.questionsContainer);
+    this.showElement(this.chatContainer);
+};
+
+Webinar.prototype.showQuestions = function (event) {
+    event.preventDefault();
+
+    this.chatButton.classList.remove('btn-primary');
+    this.chatButton.classList.add('btn-gray');
+    this.questionsButton.classList.remove('btn-gray');
+    this.questionsButton.classList.add('btn-primary');
+
+    this.hideElement(this.chatContainer);
+    this.showElement(this.questionsContainer);
+};
+
+Webinar.prototype.toggleSideBar = function () {
+    if (this.sideContainer.classList.contains('hide')) {
+        this.toggleButton(this.toggleSideBarElement, true);
+        this.showElement(this.sideContainer);
         this.initChat();
         this.chatInstance.showTextChat();
         this.chatInstance.deliverUnsentMessages();
@@ -619,9 +651,9 @@ Webinar.prototype.toggleChat = function () {
     }
 
     this.element.classList.remove('chat-opened');
-    this.hideElement(this.chatContainer);
+    this.hideElement(this.sideContainer);
     this.chatInstance.hideTextChat();
-    this.toggleButton(this.toggleChatElement, false);
+    this.toggleButton(this.toggleSideBarElement, false);
     this.layout();
 };
 

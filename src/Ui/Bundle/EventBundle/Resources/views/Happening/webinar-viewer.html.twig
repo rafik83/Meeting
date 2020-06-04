@@ -28,7 +28,29 @@
         {% endif %}
 
         <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}></div>
-        <div class="chat-container hide"></div>
+
+        <div data-hide-on-desktop class="hide-on-desktop"></div>
+
+        <div class="side-container hide">
+            <div class="btn-group" role="group">
+                <a class="btn btn-primary" href="#" data-chat-button>Chat</a>
+                <a class="btn btn-gray" href="#" data-questions-button>Questions</a>
+            </div>
+            <div class="chat-container" data-chat-container></div>
+            <div class="hide" data-questions-container>
+                <table class="table table-striped table-hover table-condensed">
+                    <tr>
+                        <td>Question 1</td>
+                    </tr>
+                    <tr>
+                        <td>Question 2</td>
+                    </tr>
+                    <tr>
+                        <td>Question 3</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
         <div class="video-helper">
             <h1>{{ webinarView.happeningTitle }}</h1>
@@ -52,7 +74,7 @@
                 </div>
             </div>
 
-            <button id="toggle-chat" class="btn btn-off hide">
+            <button id="toggle-sidebar" class="btn btn-off hide hide-on-desktop">
                 <i class="icon-Commentaire icon-center"></i>
             </button>
 

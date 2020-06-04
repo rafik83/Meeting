@@ -35,7 +35,16 @@
         {% endif %}
 
         <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}></div>
-        <div class="chat-container hide"></div>
+
+        <div class="side-container hide">
+            <div class="chat-container">
+                <div class="btn-group mg-tp" role="group">
+                    <a class="btn btn-primary" href="#">Chat</a>
+                    <a class="btn btn-gray" href="#">Questions</a>
+                </div>
+            </div>
+            <div class="questions-container"></div>
+        </div>
 
         <div class="video-helper" data-settings-container>
             <h1>{{ webinarView.happeningTitle }}</h1>
@@ -63,7 +72,7 @@
             <button id="toggle-video" class="btn hide">
                 <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
             </button>
-            <button id="toggle-chat" class="btn btn-off hide">
+            <button id="toggle-sidebar" class="btn btn-off hide hide-on-desktop">
                 <i class="icon-Commentaire icon-center"></i>
             </button>
 
