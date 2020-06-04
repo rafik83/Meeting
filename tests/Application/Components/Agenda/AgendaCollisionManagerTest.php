@@ -40,7 +40,7 @@ class AgendaCollisionManagerTest extends TestCase
             'userSheetTitle',
             2,
             [new SheetMetView('Sheet title', false)],
-            [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
+            [new MeetingOwnSheetParticipantView('Korben', 'Dallas', 'Dev')],
             $beginHappening1,
             $endHappening1,
             10,

@@ -60,6 +60,15 @@ function VideoConference(
   this.toggleChatElement = element.querySelector('#toggle-chat');
 
   this.subscribers = [];
+  this.subscribersNameMapping = element.getAttribute('data-subscriber-mapping');
+  this.currentUserId = element.getAttribute('data-current-user-id');
+
+  if (this.subscribersNameMapping) {
+      this.subscribersNameMapping = JSON.parse(this.subscribersNameMapping);
+  } else {
+      this.subscribersNameMapping = {};
+  }
+
   this.publisherStream = null;
   this.publisherScreen = null;
 
@@ -174,7 +183,11 @@ VideoConference.prototype.init = function() {
   this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
   this.session.on('streamCreated', function(event) {
-    const subscriberManager = new Subscriber(this.session, this.layoutContainer);
+    const subscriberManager = new Subscriber(
+        this.session,
+        this.layoutContainer,
+        this.subscribersNameMapping
+    );
     const subscriber = subscriberManager.subscribe(event);
 
     if (this.isScreenShareStream(event.stream)) {
@@ -276,20 +289,39 @@ VideoConference.prototype.initChat = function () {
  *  Publish your camera and microphone stream
  */
 VideoConference.prototype.publishStream = function() {
+  const defaultOptions = {
+    name: this.currentUserId ? this.currentUserId : null
+  };
+
   if (this.useSettings) {
     // publish video to other participant
     var publisher = this.publisher.create({
+      ...defaultOptions,
       audioSource: this.settings.getAudioSource(),
-      videoSource: this.settings.getVideoSource()
+      videoSource: this.settings.getVideoSource(),
     });
   } else {
-    var publisher = this.publisher.create({});
+    var publisher = this.publisher.create(defaultOptions);
   }
 
+  publisher.on('videoElementCreated', this.onVideoElementCreated.bind(this));
   this.session.publish(publisher, this.handlePublish.bind(this));
   this.publisherStream = publisher;
 
   this.layout();
+};
+
+VideoConference.prototype.onVideoElementCreated = function (event) {
+    const publisherElement = event.target.element;
+
+    // Show user name on video element.
+    if (this.subscribersNameMapping.hasOwnProperty(this.currentUserId)) {
+        let publisherName = document.createElement('span');
+        publisherName.classList.add('visio-user-name');
+        publisherName.textContent = this.subscribersNameMapping[this.currentUserId];
+
+        publisherElement.appendChild(publisherName);
+    }
 };
 
 /**
@@ -367,8 +399,11 @@ VideoConference.prototype.screenshare = function() {
     this.publisherScreen = new Publisher(this.layoutContainer);
     const publisherScreen = this.publisherScreen.create({
       videoSource: 'screen',
-      publishAudio: true
+      publishAudio: true,
+      name: this.currentUserId ? this.currentUserId : null
     });
+
+    publisherScreen.on('videoElementCreated', this.onVideoElementCreated.bind(this));
 
     this.session.publish(publisherScreen, this.handlePublishScreensharing.bind(this));
     this.minimizeAllSubscribers();

@@ -31,6 +31,9 @@
         {% if meetingView is defined %}
             data-time-remaining="{{ meetingView.timeRemainingInSeconds }}"
             data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
+
+            data-current-user-id="{{ currentUserId }}"
+            data-subscriber-mapping="{{ meetingView.participantInfosByUserIdEncoded }}"
         {% endif %}
 
         {% if videoConferenceView.hasEndSound %}
