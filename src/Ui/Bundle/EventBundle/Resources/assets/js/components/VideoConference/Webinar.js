@@ -435,6 +435,7 @@ Webinar.prototype.shareVideo = function () {
     const url = this.askUrlVideo();
 
     if (!url) {
+        this.handleStopSharing();
         return;
     }
 
