@@ -43,8 +43,8 @@
             </div>
             <div class="chat-container" data-chat-container></div>
             <div class="hide" data-questions-container
-                data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: happening.id }) }}">
-                <form action="{{ path('event_sheet_happening_webinar_question_add', {sheet: sheet.id, happening: happening.id }) }}" data-questions-form>
+                data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: webinarView.happeningId }) }}">
+                <form action="{{ path('event_sheet_happening_webinar_question_add', {sheet: sheet.id, happening: webinarView.happeningId }) }}" data-questions-form>
                     <input type="text" name="content">
                     <button type="submit">Envoyer ma question</button>
                 </form>

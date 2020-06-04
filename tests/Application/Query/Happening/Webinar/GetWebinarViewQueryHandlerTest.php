@@ -40,6 +40,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $user = $this->prophesize(User::class);
 
         $happening = $this->prophesize(Happening::class);
+        $happening->getId()->shouldBeCalled()->willReturn(1);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
             'Webinar: how to work remotely during the Covid-19 crisis'
         );
@@ -67,6 +68,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
 
         $this->assertEquals(
             new WebinarView(
+                1,
                 'Webinar: how to work remotely during the Covid-19 crisis',
                 'User token',
                 'webinar-session-id',

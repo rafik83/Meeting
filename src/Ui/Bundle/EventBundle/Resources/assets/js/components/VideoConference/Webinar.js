@@ -49,6 +49,10 @@ function Webinar(element, isSpeaker) {
     this.chatContainer = element.querySelector('[data-chat-container]');
     this.questionsContainer = element.querySelector('[data-questions-container]');
     this.questionsForm = element.querySelector('[data-questions-form]');
+    this.questionsFormContent = this.questionsForm.querySelector('input[name="content"]');
+    this.questionsFormAction = this.questionsForm.getAttribute('action');
+    this.questionsFormSubmit = this.questionsForm.querySelector('button[type="submit"]');
+
     this.chatInstance = null;
     this.chatButton = element.querySelector('[data-chat-button]');
     if (this.chatButton) {
@@ -652,9 +656,9 @@ Webinar.prototype.initQuestions = function () {
         response.forEach((item) => {
             const trEl = document.createElement('tr');
             const nameEl = trEl.appendChild(document.createElement('td'));
-            nameEl.innerHTML = item.firstName + ' ' + item.lastName;
+            nameEl.textContent = item.firstName + ' ' + item.lastName;
             const contentEl = trEl.appendChild(document.createElement('td'));
-            contentEl.innerHTML = item.questionContent;
+            contentEl.textContent = item.questionContent;
             $questionsContainerTable[0].appendChild(trEl);
         });
     }.bind(this))
@@ -665,12 +669,11 @@ Webinar.prototype.initQuestions = function () {
 
 Webinar.prototype.submitQuestion = function (event) {
     event.preventDefault();
-    const questionContentEl = this.questionsForm.querySelector('input[name="content"]');
-    const action = this.questionsForm.getAttribute('action');
 
-    $.post(action, JSON.stringify({questionContent: questionContentEl.value}), function (response) {
+    $.post(this.questionsFormAction, JSON.stringify({questionContent: this.questionsFormContent.value}), function (response) {
+        this.questionsFormSubmit.removeAttribute('disabled');
         if (response.status === 'ok') {
-            questionContentEl.value = '';
+            this.questionsFormContent.value = '';
             this.initQuestions();
         } else {
             this.showError('Question creation failed');
