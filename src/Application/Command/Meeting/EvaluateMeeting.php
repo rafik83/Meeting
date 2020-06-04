@@ -16,7 +16,7 @@ class EvaluateMeeting implements Command
     /** @var Meeting */
     public $meeting;
 
-    /** @var int */
+    /** @var int|null */
     public $evaluation;
 
     /** @var Sheet */
@@ -33,7 +33,7 @@ class EvaluateMeeting implements Command
     ) {
         $this->meeting = $meeting;
         $this->sheet = $sheet;
-        $this->evaluation = 0;
+        $this->evaluation = null;
         $this->event = $event;
         $this->user = $user;
     }

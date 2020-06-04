@@ -25,6 +25,10 @@ class EvaluateMeetingHandler
 
     public function handle(EvaluateMeeting $command): void
     {
+        if (null === $command->evaluation) {
+            return;
+        }
+
         $event = $command->event;
         $participants = $command->meeting->getMetParticipants($command->sheet);
 
