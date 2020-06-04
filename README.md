@@ -11,6 +11,7 @@
 * [Vagrant 2.2.6](https://www.vagrantup.com/downloads.html)
 * [VirtualBox 5.2.4](https://www.virtualbox.org/wiki/Downloads)
 * [Vagrant Landrush 1.2.0](https://github.com/phinze/landrush)
+* On linux: [NFS server](http://nfs.sourceforge.net/), can be installed with `sudo apt install nfs-kernel-server`
 
 ### Setup
 
@@ -51,6 +52,17 @@ Enable/Disable php xdebug
 * *Supervisor*: http://vimeet.proximum:9001
 * *phpMyAdmin*: http://vimeet.proximum:1979
 * *ElasticSearch HEAD*: http://vimeet.proximum:9200/_plugin/head/
+
+### Known issues
+
+* Landrush not working on Ubuntu.
+Get your VM ip, into your VM (`vagrant ssh`): `$ ip addr show`
+You will get something like: `... eth1: <BROADCAST... inet 172.28.128.3/24`. 
+Add in your /etc/hosts the needed *.vimeet.proximum subdomains:
+```
+172.28.128.3 admin.vimeet.proximum
+172.28.128.3 event*.vimeet.proximum
+```
 
 ### Update
 
