@@ -33,7 +33,7 @@ class EvaluateMeeting implements Command
     ) {
         $this->meeting = $meeting;
         $this->sheet = $sheet;
-        $this->evaluation = 3;
+        $this->evaluation = 0;
         $this->event = $event;
         $this->user = $user;
     }
