@@ -93,6 +93,7 @@ class HappeningWebinarAction
                 [
                     'event' => $event,
                     'sheet' => $sheet,
+                    'happening' => $happening,
                     'userCompleteName' => $user->getAccount()->getCompleteName(),
                     'webinarView' => $webinarView,
                 ]

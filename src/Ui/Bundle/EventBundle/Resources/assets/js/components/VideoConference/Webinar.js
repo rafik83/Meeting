@@ -30,7 +30,7 @@ function Webinar(element, isSpeaker) {
     this.helperContainer = element.querySelector('.video-helper');
 
     const hideOnDesktop = element.querySelector('[data-hide-on-desktop]');
-    this.isMobile = 'none' !== getComputedStyle(hideOnDesktop).display;
+    this.isMobile = hideOnDesktop && 'none' !== getComputedStyle(hideOnDesktop).display;
 
     this.notCompatibleBrowserMessage = element.getAttribute(
         'data-not-compatible-browser-message'
@@ -48,11 +48,15 @@ function Webinar(element, isSpeaker) {
 
     this.chatContainer = element.querySelector('[data-chat-container]');
     this.questionsContainer = element.querySelector('[data-questions-container]');
+    this.questionsForm = element.querySelector('[data-questions-form]');
     this.chatInstance = null;
     this.chatButton = element.querySelector('[data-chat-button]');
-    this.chatButton.addEventListener('click', this.showChat.bind(this));
+    if (this.chatButton) {
+        this.chatButton.addEventListener('click', this.showChat.bind(this));
+    }
     this.questionsButton = element.querySelector('[data-questions-button]');
     this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
+    this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
 
     this.toggleSideBarElement = element.querySelector('#toggle-sidebar');
     this.toggleSideBarElement.addEventListener('click', this.toggleSideBar.bind(this));
@@ -635,7 +639,47 @@ Webinar.prototype.showQuestions = function (event) {
 
     this.hideElement(this.chatContainer);
     this.showElement(this.questionsContainer);
+
+    this.initQuestions();
 };
+
+Webinar.prototype.initQuestions = function () {
+    const href = this.questionsContainer.getAttribute('data-href');
+
+    const $questionsContainerTable = $(this.questionsContainer).find('table');
+    $questionsContainerTable.empty();
+    $.get(href, function (response) {
+        response.forEach((item) => {
+            const trEl = document.createElement('tr');
+            const nameEl = trEl.appendChild(document.createElement('td'));
+            nameEl.innerHTML = item.firstName + ' ' + item.lastName;
+            const contentEl = trEl.appendChild(document.createElement('td'));
+            contentEl.innerHTML = item.questionContent;
+            $questionsContainerTable[0].appendChild(trEl);
+        });
+    }.bind(this))
+    .fail(function () {
+        console.error('Failed to load webinar questions');
+    }.bind(this));
+}
+
+Webinar.prototype.submitQuestion = function (event) {
+    event.preventDefault();
+    const questionContentEl = this.questionsForm.querySelector('input[name="content"]');
+    const action = this.questionsForm.getAttribute('action');
+
+    $.post(action, JSON.stringify({questionContent: questionContentEl.value}), function (response) {
+        if (response.status === 'ok') {
+            questionContentEl.value = '';
+            this.initQuestions();
+        } else {
+            this.showError('Question creation failed');
+        }
+    }.bind(this))
+    .fail(function () {
+        this.showError('Question creation failed');
+    }.bind(this));
+}
 
 Webinar.prototype.toggleSideBar = function () {
     if (this.sideContainer.classList.contains('hide')) {
@@ -654,6 +698,7 @@ Webinar.prototype.toggleSideBar = function () {
     this.hideElement(this.sideContainer);
     this.chatInstance.hideTextChat();
     this.toggleButton(this.toggleSideBarElement, false);
+    this.initQuestions();
     this.layout();
 };
 
