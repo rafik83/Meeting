@@ -212,7 +212,11 @@ Webinar.prototype.init = function () {
 
     this.session.on('sessionDisconnected', function () {
         this.layout();
-    });
+    }.bind(this));
+
+    this.session.on('signal:QuestionsUpdate', function (event) {
+        this.initQuestions();
+    }.bind(this));
 
     this.connect();
 };
@@ -674,7 +678,15 @@ Webinar.prototype.submitQuestion = function (event) {
         this.questionsFormSubmit.removeAttribute('disabled');
         if (response.status === 'ok') {
             this.questionsFormContent.value = '';
-            this.initQuestions();
+            this.session.signal({
+                    type: 'QuestionsUpdate'
+                },
+                function (error) {
+                    if (error) {
+                        console.error('QuestionsUpdate signal error', error);
+                    }
+                }
+            );
         } else {
             this.showError('Question creation failed');
         }
