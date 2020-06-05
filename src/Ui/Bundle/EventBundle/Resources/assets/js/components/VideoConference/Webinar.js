@@ -516,18 +516,24 @@ Webinar.prototype.screenshare = function () {
             return;
         }
 
-        this.publisherScreen = new Publisher(this.layoutContainer);
+        this.publisherScreen = new Publisher(null);
         const publisherScreen = this.publisherScreen.create({
             videoSource: this.typeScreenShare,
             publishAudio: true,
-            name: this.currentUserId
+            name: this.currentUserId,
+            insertDefaultUI: false,
         });
 
-        publisherScreen.on('videoElementCreated', this.onVideoElementCreated.bind(this));
+        this.screenElement = document.createElement('div');
+        this.screenElement.textContent = 'You share your screen';
+        this.screenElement.style.backgroundColor = 'pink';
+        this.layoutContainer.appendChild(this.screenElement);
+
+        //publisherScreen.on('videoElementCreated', this.onVideoElementCreated.bind(this));
         this.session.publish(publisherScreen, this.handlePublishMediaSharing.bind(this));
 
         this.minimizeAllSubscribers();
-        this.maximize(publisherScreen.element);
+        this.maximize(this.screenElement);
         this.layout();
 
         publisherScreen.on('mediaStopped', this.handleStopSharing.bind(this));
@@ -560,6 +566,7 @@ Webinar.prototype.handlePublishMediaSharing = function (error) {
 Webinar.prototype.handleStopSharing = function () {
     if (this.publisherScreen) {
         this.publisherScreen.destroy();
+        this.screenElement.remove();
     }
 
     if (this.shareVideoElement) {
