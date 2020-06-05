@@ -110,6 +110,7 @@ class QuestionRepository implements QuestionRepositoryInterface
             ->where('question.happening = :happening')
             ->andWhere('question.askedDuringWebinar = true')
             ->setParameter('happening', $happening)
+            ->orderBy('question.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;

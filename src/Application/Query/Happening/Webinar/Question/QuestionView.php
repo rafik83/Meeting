@@ -14,6 +14,9 @@ class QuestionView
     public $lastName;
 
     /** @var string|null */
+    public $position;
+
+    /** @var string|null */
     public $avatar;
 
     /** @var string|null */
@@ -26,6 +29,7 @@ class QuestionView
         string $questionContent,
         string $firstName,
         string $lastName,
+        ?string $position,
         ?string $avatar,
         ?string $sheetTitle,
         \DateTimeInterface $createdAt
@@ -33,6 +37,7 @@ class QuestionView
         $this->questionContent = $questionContent;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->position = $position;
         $this->avatar = $avatar;
         $this->sheetTitle = $sheetTitle;
         $this->createdAt = $createdAt;

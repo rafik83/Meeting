@@ -673,8 +673,8 @@ Webinar.prototype.initQuestions = function () {
             authorNameEl.textContent = item.firstName + ' ' + item.lastName;
             if (item.sheetTitle) {
                 const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
-                authorTitleEl.textContent = item.sheetTitle;
-                authorTitleEl.classList.add('question-author-title')
+                authorTitleEl.textContent = [item.position, item.sheetTitle].filter((item) => !!item).join(', ');
+                authorTitleEl.classList.add('question-author-title');
             }
 
             const avatarEl = authorEl.appendChild(document.createElement('span'));

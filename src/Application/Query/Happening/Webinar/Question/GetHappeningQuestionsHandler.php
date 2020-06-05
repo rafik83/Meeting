@@ -26,6 +26,7 @@ class GetHappeningQuestionsHandler
                 $question->getContent(),
                 $author->getFirstName(),
                 $author->getLastName(),
+                $author->getPosition(),
                 $author->getAvatar(),
                 $question->getSheet()->getTitle(),
                 $question->getCreatedAt()
