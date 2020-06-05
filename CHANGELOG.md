@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - MV-236 - Add unavailability with a different timezone
+- Add number validator for priority meeting request number
 
 ## [2.31.0] - 2020-06-01
 ### Added
