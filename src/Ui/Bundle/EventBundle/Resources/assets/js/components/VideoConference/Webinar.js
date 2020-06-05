@@ -654,16 +654,37 @@ Webinar.prototype.showQuestions = function (event) {
 Webinar.prototype.initQuestions = function () {
     const href = this.questionsContainer.getAttribute('data-href');
 
-    const $questionsContainerTable = $(this.questionsContainer).find('table');
-    $questionsContainerTable.empty();
+    const $questionsList = $(this.questionsContainer).find('.questions-list');
+
     $.get(href, function (response) {
+        $questionsList.empty();
         response.forEach((item) => {
-            const trEl = document.createElement('tr');
-            const nameEl = trEl.appendChild(document.createElement('td'));
-            nameEl.textContent = item.firstName + ' ' + item.lastName;
-            const contentEl = trEl.appendChild(document.createElement('td'));
+            const rowEl = document.createElement('div');
+            rowEl.classList.add('question-row');
+
+            const contentEl = rowEl.appendChild(document.createElement('div'));
+            contentEl.classList.add('question-content');
             contentEl.textContent = item.questionContent;
-            $questionsContainerTable[0].appendChild(trEl);
+
+            const authorEl = rowEl.appendChild(document.createElement('div'));
+            authorEl.classList.add('question-author');
+            const authorNameEl = authorEl.appendChild(document.createElement('span'));
+            authorNameEl.classList.add('question-author-name');
+            authorNameEl.textContent = item.firstName + ' ' + item.lastName;
+            if (item.sheetTitle) {
+                const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
+                authorTitleEl.textContent = item.sheetTitle;
+                authorTitleEl.classList.add('question-author-title')
+            }
+
+            const avatarEl = authorEl.appendChild(document.createElement('span'));
+            if (item.avatar) {
+                const imgEl = avatarEl.appendChild(document.createElement('img'));
+                imgEl.setAttribute('src', item.avatar);
+                imgEl.classList.add('question-author-avatar')
+            }
+
+            $questionsList[0].appendChild(rowEl);
         });
     }.bind(this))
     .fail(function () {
