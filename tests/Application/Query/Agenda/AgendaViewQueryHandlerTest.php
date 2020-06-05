@@ -72,7 +72,7 @@ class AgendaViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy|DDayGuesser */
     private $dDayGuesser;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
         $this->extraDataRepository = $this->prophesize(ExtraDataRepository::class);
@@ -81,7 +81,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $this->dDayGuesser = $this->prophesize(DDayGuesser::class);
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $event       = EventFactory::createEvent();
         $user        = new User('user@vimeet.com', 'salt', 'password', 'fr');
@@ -215,7 +215,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleMultipleParticipant()
+    public function testHandleMultipleParticipant(): void
     {
         $event        = EventFactory::createEvent();
         $user         = new User('user@vimeet.com', 'salt', 'password', 'fr');
@@ -376,7 +376,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function test_get_all_sheet_meetings()
+    public function test_get_all_sheet_meetings(): void
     {
         $event        = EventFactory::createEvent();
         $user         = new User('user@vimeet.com', 'salt', 'password', 'fr');
@@ -439,7 +439,7 @@ class AgendaViewQueryHandlerTest extends TestCase
                     'Sheet 1',
                     1243,
                     [new SheetMetView('Sheet other', false)],
-                    [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
+                    [new MeetingOwnSheetParticipantView('Korben', 'Dallas', 'Dev')],
                     new \DateTime('2016-10-12 10:00:00'),
                     new \DateTime('2016-10-12 10:20:00'),
                     10,
@@ -448,6 +448,7 @@ class AgendaViewQueryHandlerTest extends TestCase
                     'Europe/Paris',
                     '#112233',
                     '#144555',
+                    [],
                     [],
                     false,
                     false,
@@ -458,7 +459,7 @@ class AgendaViewQueryHandlerTest extends TestCase
                     'Sheet 1',
                     14883,
                     [new SheetMetView('Another sheet', false)],
-                    [new MeetingOwnSheetParticipantView('Korben', 'Dallas')],
+                    [new MeetingOwnSheetParticipantView('Korben', 'Dallas', 'Dev')],
                     new \DateTime('2016-10-12 10:20:00'),
                     new \DateTime('2016-10-12 10:40:00'),
                     100,
@@ -467,6 +468,7 @@ class AgendaViewQueryHandlerTest extends TestCase
                     'Europe/Paris',
                     '#112233',
                     '#144555',
+                    [],
                     [],
                     false,
                     false,

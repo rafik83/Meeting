@@ -68,6 +68,14 @@ function Webinar(element, isSpeaker) {
     this.viewersTextContainer = element.querySelector('.viewers');
 
     this.subscribers = [];
+    this.subscribersNameMapping = element.getAttribute('data-subscriber-mapping');
+    this.currentUserId = element.getAttribute('data-current-user-id');
+
+    if (this.subscribersNameMapping) {
+        this.subscribersNameMapping = JSON.parse(this.subscribersNameMapping);
+    } else {
+        this.subscribersNameMapping = {};
+    }
 
     let resizeTimeout;
     window.onresize = function () {
@@ -161,7 +169,11 @@ Webinar.prototype.init = function () {
     this.session.on('streamCreated', function (event) {
         this.hideElement(this.helperContainer);
 
-        const subscriberManager = new Subscriber(this.session, this.layoutContainer);
+        const subscriberManager = new Subscriber(
+            this.session,
+            this.layoutContainer,
+            this.subscribersNameMapping
+        );
         const subscriber = subscriberManager.subscribe(event);
 
         if (this.isScreenShareStream(event.stream)) {
@@ -317,14 +329,30 @@ Webinar.prototype.publishStream = function () {
     this.hideElement(this.helperContainer);
     const publisher = this.publisher.create({
         audioSource: this.settings.getAudioSource(),
-        videoSource: this.settings.getVideoSource()
+        videoSource: this.settings.getVideoSource(),
+        name: this.currentUserId
     });
+
+    publisher.on('videoElementCreated', this.onVideoElementCreated.bind(this));
 
     this.session.publish(publisher, this.handlePublish.bind(this));
     publisher.publishVideo(this.enableVideo);
     publisher.publishAudio(this.enableAudio);
 
     this.layout();
+};
+
+Webinar.prototype.onVideoElementCreated = function (event) {
+    const publisherElement = event.target.element;
+
+    // Show user name on video element.
+    if (this.subscribersNameMapping.hasOwnProperty(this.currentUserId)) {
+        let publisherName = document.createElement('span');
+        publisherName.classList.add('visio-user-name');
+        publisherName.textContent = this.subscribersNameMapping[this.currentUserId];
+
+        publisherElement.appendChild(publisherName);
+    }
 };
 
 /**
@@ -491,9 +519,11 @@ Webinar.prototype.screenshare = function () {
         this.publisherScreen = new Publisher(this.layoutContainer);
         const publisherScreen = this.publisherScreen.create({
             videoSource: this.typeScreenShare,
-            publishAudio: true
+            publishAudio: true,
+            name: this.currentUserId
         });
 
+        publisherScreen.on('videoElementCreated', this.onVideoElementCreated.bind(this));
         this.session.publish(publisherScreen, this.handlePublishMediaSharing.bind(this));
 
         this.minimizeAllSubscribers();

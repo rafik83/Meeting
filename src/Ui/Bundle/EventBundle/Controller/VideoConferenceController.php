@@ -113,6 +113,7 @@ class VideoConferenceController extends Controller
                 'sheet' => $sheet,
                 'participant' => $participant,
                 'userCompleteName' => $user->getAccount()->getCompleteName(),
+                'currentUserId' => $user->getId(),
                 'meeting' => $meeting,
                 'videoConferenceView' => $videoConferenceView,
                 'meetingView' => $meetingView,
