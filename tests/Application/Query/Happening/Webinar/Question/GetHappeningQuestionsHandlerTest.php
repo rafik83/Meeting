@@ -44,6 +44,9 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         $user1->getAvatar()
             ->shouldBeCalled()
             ->willReturn(null);
+        $user1->getPosition()
+            ->shouldBeCalled()
+            ->willReturn(null);
 
         $user2 = $this->prophesize(User::class);
         $user2->getFirstName()
@@ -55,6 +58,9 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         $user2->getAvatar()
             ->shouldBeCalled()
             ->willReturn(null);
+        $user2->getPosition()
+            ->shouldBeCalled()
+            ->willReturn('Employee');
 
         $sheet1 = SheetFactory::create($event, $user1->reveal());
         $sheet1->setTitle('World Company');
@@ -79,6 +85,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
                     'Jean',
                     'Dupond',
                     null,
+                    null,
                     'World Company',
                     new \DateTime('2020-06-01 17:00:00')
                 ),
@@ -86,6 +93,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
                     'What is the environmental impact of the AI?',
                     'George',
                     'DOE',
+                    'Employee',
                     null,
                     'Cola inc.',
                     new \DateTime('2020-05-29 15:00:00')
