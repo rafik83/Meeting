@@ -6,6 +6,9 @@ Proximum\Vimeet\Application\Command\Type\Update:
             - NotBlank: ~
         package:
             - NotBlank: ~
+        numberOfMeetingsPerPlanning:
+            - Type: {type: integer}
+            - GreaterThanOrEqual: 0
         priorityMeetingRequestsNumber:
             - Type: {type: integer}
             - NotBlank: ~
