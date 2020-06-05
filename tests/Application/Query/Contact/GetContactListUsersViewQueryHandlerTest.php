@@ -8,12 +8,14 @@ use Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQuery;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler;
 use Proximum\Vimeet\Domain\Meeting\MeetingParticipants;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class GetContactListUsersViewQueryHandlerTest extends TestCase
@@ -30,7 +32,6 @@ class GetContactListUsersViewQueryHandlerTest extends TestCase
         $participant = $this->prophesize(Participant::class);
         $participant->getSheet()->shouldBeCalled()->willReturn($participantSheet->reveal());
         $participant->getUser()->shouldBeCalled()->willReturn($participantUser->reveal());
-        $participant->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $participantSheet
             ->getUserParticipant($participantUser->reveal())
             ->shouldBeCalled()
@@ -65,6 +66,7 @@ class GetContactListUsersViewQueryHandlerTest extends TestCase
         $scannedUser = $this->prophesize(User::class);
 
         // prophesy dependencies
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $meetingParticipants = $this->prophesize(MeetingParticipants::class);
         $contactRepository = $this->prophesize(ContactRepositoryInterface::class);
@@ -91,9 +93,40 @@ class GetContactListUsersViewQueryHandlerTest extends TestCase
             ->willReturn([$participantSheet->reveal()])
         ;
 
+        $meeting1 = $this->prophesize(Meeting::class);
+        $meeting2 = $this->prophesize(Meeting::class);
+
+        $userMeeting1 = $this->prophesize(User::class);
+        $userMeeting2 = $this->prophesize(User::class);
+        $userMeeting3 = $this->prophesize(User::class);
+        $participant1MetInMeeting1 = $this->prophesize(Participant::class);
+        $participant2MetInMeeting1 = $this->prophesize(Participant::class);
+        $participant1MetInMeeting2 = $this->prophesize(Participant::class);
+
+        $meeting1->getMetParticipants($participantSheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$participant1MetInMeeting1->reveal(), $participant2MetInMeeting1->reveal()])
+        ;
+
+        $meeting2->getMetParticipants($participantSheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$participant1MetInMeeting2->reveal()])
+        ;
+
+        $participant1MetInMeeting1->getUser()->shouldBeCalled()->willReturn($userMeeting1->reveal());
+        $participant2MetInMeeting1->getUser()->shouldBeCalled()->willReturn($userMeeting2->reveal());
+        $participant1MetInMeeting2->getUser()->shouldBeCalled()->willReturn($userMeeting3->reveal());
+
+        $meetingRepository
+            ->getBySheets($event->reveal(), [$participantSheet->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$meeting1->reveal(), $meeting2->reveal()])
+        ;
+
         // run tests
         $query = new GetContactListUsersViewQuery($event->reveal(), $participant->reveal());
         $handler = new GetContactListUsersViewQueryHandler(
+            $meetingRepository->reveal(),
             $requestRepository->reveal(),
             $meetingParticipants->reveal(),
             $contactRepository->reveal(),
@@ -103,7 +136,8 @@ class GetContactListUsersViewQueryHandlerTest extends TestCase
 
         $expected = new GetContactListUsersView(
             [$requestedUser->reveal(), $scannedUser->reveal()],
-            [$requestedUser->reveal()]
+            [$requestedUser->reveal()],
+            [$userMeeting1->reveal(), $userMeeting2->reveal(), $userMeeting3->reveal()]
         );
 
         $this->assertEquals($expected, $result);

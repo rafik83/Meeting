@@ -20,28 +20,15 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class CreateHandler
 {
-    /**
-     * @var TypeRepositoryInterface
-     */
+    /** @var TypeRepositoryInterface */
     private $typeRepository;
 
-    /**
-     * @var SheetTemplateCloner
-     */
+    /** @var SheetTemplateCloner */
     private $sheetTemplateCloner;
 
-    /**
-     * @var RegistrationTemplateCloner
-     */
+    /** @var RegistrationTemplateCloner */
     private $registrationTemplateCloner;
 
-    /**
-     * CreateHandler constructor.
-     *
-     * @param TypeRepositoryInterface    $typeRepository
-     * @param SheetTemplateCloner        $sheetTemplateCloner
-     * @param RegistrationTemplateCloner $registrationTemplateCloner
-     */
     public function __construct(
         TypeRepositoryInterface $typeRepository,
         SheetTemplateCloner $sheetTemplateCloner,
@@ -58,7 +45,7 @@ class CreateHandler
      * @throws PackageNotRequiredException
      * @throws TypeAlreadyExistsException
      */
-    public function handle(Create $create)
+    public function handle(Create $create): void
     {
         if(!$create->isPackageRequired && $create->isPaymentRequired) {
             throw new PackageNotRequiredException();
@@ -78,7 +65,9 @@ class CreateHandler
             $create->isPaymentRequired,
             $create->priorityMeetingRequestsNumber,
             $create->numberMaxOfHappeningsPerUser,
-            $create->numberMaxOfMeetingsPerSheet
+            $create->numberMaxOfMeetingsPerSheet,
+            $create->canEvaluateMeeting,
+            $create->canEvaluateMeeting ? $create->mustEvaluateMeeting : false
         );
 
         $localesTitleAlreadyExists = [];

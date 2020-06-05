@@ -25,8 +25,13 @@ class GetContactViewQuery implements Query
     /** @var string */
     public $locale;
 
-    public function __construct(Event $event, Sheet $userSheet, Participant $seerParticipant, User $contact, string $locale)
-    {
+    public function __construct(
+        Event $event,
+        Sheet $userSheet,
+        Participant $seerParticipant,
+        User $contact,
+        string $locale
+    ) {
         $this->event = $event;
         $this->userSheet = $userSheet;
         $this->seerParticipant = $seerParticipant;

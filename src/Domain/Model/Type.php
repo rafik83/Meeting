@@ -109,6 +109,12 @@ class Type implements WhoInterface, TypeInterface
     /** @var int|null */
     private $numberMaxOfMeetingsPerSheet;
 
+    /** @var bool */
+    private $canEvaluateMeeting = true;
+
+    /** @var bool */
+    private $mustEvaluateMeeting = false;
+
     public function __construct(Event $event)
     {
         $this->event = $event;
@@ -450,7 +456,9 @@ class Type implements WhoInterface, TypeInterface
         bool $isPaymentRequired = false,
         int $priorityMeetingRequestsNumber = 0,
         ?int $numberMaxOfHappeningsPerUser = null,
-        ?int $numberMaxOfMeetingsPerSheet = null
+        ?int $numberMaxOfMeetingsPerSheet = null,
+        bool $canEvaluateMeeting = true,
+        bool $mustEvaluateMeeting = false
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
@@ -465,6 +473,8 @@ class Type implements WhoInterface, TypeInterface
         $this->priorityMeetingRequestsNumber = $priorityMeetingRequestsNumber;
         $this->numberMaxOfHappeningsPerUser =  $numberMaxOfHappeningsPerUser;
         $this->numberMaxOfMeetingsPerSheet = $numberMaxOfMeetingsPerSheet;
+        $this->canEvaluateMeeting = $canEvaluateMeeting;
+        $this->mustEvaluateMeeting = $mustEvaluateMeeting;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int
@@ -527,5 +537,15 @@ class Type implements WhoInterface, TypeInterface
     public function getNumberMaxOfMeetingsPerSheet(): ?int
     {
         return $this->numberMaxOfMeetingsPerSheet;
+    }
+
+    public function canEvaluateMeeting(): bool
+    {
+        return $this->canEvaluateMeeting;
+    }
+
+    public function mustEvaluateMeeting(): bool
+    {
+        return $this->mustEvaluateMeeting;
     }
 }

@@ -31,7 +31,8 @@ var $ = require('jquery'),
     PackageParticipantProducts = require('./components/_PackageParticipantProducts'),
     CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField'),
     SortParticipants = require('./components/_SortParticipants'),
-    DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker')
+    DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker'),
+    addSubmitEventListenerOnElementChange = require('./components/form/_AddSubmitEventListenerOnElementChange')
 ;
 
 require('bootstrap');
@@ -263,18 +264,8 @@ function init (target) {
         new ToggleVisibility(element);
     });
 
-    (function () {
-        const evaluationForm = target.querySelector('form[name="evaluation"]');
-
-        if (null !== evaluationForm) {
-            evaluationForm.querySelectorAll('[name="evaluation[evaluation]"]')
-                .forEach(function (evaluationInput) {
-                    evaluationInput.addEventListener('change', function () {
-                        evaluationForm.submit();
-                    });
-                });
-        }
-    })();
+    addSubmitEventListenerOnElementChange(target, 'evaluation', 'evaluation');
+    addSubmitEventListenerOnElementChange(target, 'evaluate_meeting', 'evaluation');
 
     if (target.querySelector('[data-agenda-autorefresh]')) {
         new AgendaRefresh();

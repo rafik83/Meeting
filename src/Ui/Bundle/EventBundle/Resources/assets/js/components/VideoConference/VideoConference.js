@@ -65,9 +65,9 @@ function VideoConference(
 
   this.chatInstance = null;
 
-  var endMeetingButton = this.element.querySelector('.end-meeting');
-  if (endMeetingButton) {
-    endMeetingButton.addEventListener('click', this.disconnect.bind(this));
+  this.endMeetingButton = this.element.querySelector('.end-meeting');
+  if (this.endMeetingButton) {
+    this.endMeetingButton.addEventListener('click', this.disconnect.bind(this));
   }
 
   this.settingsContainer = this.element.querySelector('[data-meeting-settings-container]');
@@ -300,6 +300,16 @@ VideoConference.prototype.disconnect = function() {
     this.session.disconnect();
     this.session.off();
     this.session = null;
+  }
+
+  if (this.endMeetingButton) {
+      const redirectLink = this.endMeetingButton.getAttribute('data-visio-end-redirect-link');
+
+      if (redirectLink) {
+          window.location.replace(redirectLink);
+
+          return;
+      }
   }
 
   if (window.opener) {
