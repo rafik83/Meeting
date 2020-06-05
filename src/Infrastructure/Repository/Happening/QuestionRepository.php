@@ -100,7 +100,7 @@ class QuestionRepository implements QuestionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByHappening(Happening $happening): array
+    public function getByHappeningDuringWebinar(Happening $happening): array
     {
         return $this
             ->entityManager
@@ -108,6 +108,7 @@ class QuestionRepository implements QuestionRepositoryInterface
             ->select('question')
             ->from(Question::class, 'question')
             ->where('question.happening = :happening')
+            ->andWhere('question.askedDuringWebinar = true')
             ->setParameter('happening', $happening)
             ->getQuery()
             ->getResult()

@@ -47,6 +47,12 @@ class Question
     private $content;
 
     /**
+     * Has question been ask during webinar (true), or on registration (false)
+     * @var bool
+     */
+    private $askedDuringWebinar;
+
+    /**
      * Question constructor.
      *
      * @param Happening          $happening
@@ -60,13 +66,15 @@ class Question
         Sheet $sheet,
         User $createdBy,
         \DateTimeInterface $createdAt,
-        $content
+        $content,
+        $askedDuringWebinar = false
     ) {
         $this->happening = $happening;
-        $this->sheet     = $sheet;
+        $this->sheet = $sheet;
         $this->createdBy = $createdBy;
         $this->createdAt = $createdAt;
-        $this->content   = $content;
+        $this->content = $content;
+        $this->askedDuringWebinar = $askedDuringWebinar;
     }
 
     /**
@@ -115,5 +123,13 @@ class Question
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAskedDuringWebinar()
+    {
+        return $this->askedDuringWebinar;
     }
 }

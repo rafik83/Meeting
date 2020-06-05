@@ -16,7 +16,7 @@ class GetHappeningQuestionsHandler
 
     public function handle(GetHappeningQuestions $query): array
     {
-        $questions = $this->questionRepository->getByHappening($query->getHappening());
+        $questions = $this->questionRepository->getByHappeningDuringWebinar($query->getHappening());
         $questionViews = [];
 
         foreach ($questions as $question) {

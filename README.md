@@ -84,6 +84,10 @@ Drop DB and generate migrations diff:
 
         ⇒ make migrations
 
+To generate migration file:
+        => make redis-flushdb@vm
+        => bin/console doctrine:migrations:diff
+
 ### Localization
 
 All translations are stored on https://openl10n.vimeet.events (check 1password for access).

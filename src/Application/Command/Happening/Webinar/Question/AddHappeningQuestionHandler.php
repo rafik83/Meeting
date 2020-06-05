@@ -10,6 +10,9 @@ class AddHappeningQuestionHandler
     /** @var QuestionRepositoryInterface */
     private $questionRepository;
 
+    /** @var \DateTimeInterface */
+    private $datetime;
+
     public function __construct(
         QuestionRepositoryInterface $questionRepository,
         \DateTimeInterface $datetime
@@ -20,7 +23,14 @@ class AddHappeningQuestionHandler
 
     public function handle(AddHappeningQuestion $command)
     {
-        $question = new Question($command->getHappening(), $command->getSheet(), $command->getCreatedBy(), $this->datetime, $command->getContent());
+        $question = new Question(
+            $command->getHappening(),
+            $command->getSheet(),
+            $command->getCreatedBy(),
+            $this->datetime,
+            $command->getContent(),
+            true
+        );
 
         $this->questionRepository->add($question);
     }

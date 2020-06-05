@@ -49,5 +49,5 @@ interface QuestionRepositoryInterface
      *
      * @return Question[]
      */
-    public function getByHappening(Happening $happening): array;
+    public function getByHappeningDuringWebinar(Happening $happening): array;
 }

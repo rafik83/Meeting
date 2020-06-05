@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Happening\Webinar\Question;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestions;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestionsHandler;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\Question\QuestionView;
@@ -18,7 +19,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
     /** @var GetHappeningQuestionsHandler */
     private $getHappeningQuestionsHandler;
 
-    /** @var QuestionRepositoryInterface */
+    /** @var ObjectProphecy|QuestionRepositoryInterface */
     private $questionRepository;
 
     protected function setUp()
@@ -65,7 +66,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         $question2 = new Question($happening->reveal(), $sheet2, $user2->reveal(), new \DateTime('2020-05-29 15:00:00'), 'What is the environmental impact of the AI?');
 
         $this->questionRepository
-            ->getByHappening($happening->reveal())
+            ->getByHappeningDuringWebinar($happening->reveal())
             ->shouldBeCalled()
             ->willReturn([$question1, $question2]);
 
