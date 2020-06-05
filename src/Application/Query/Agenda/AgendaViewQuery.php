@@ -18,29 +18,19 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class AgendaViewQuery implements Query
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var Participant
-     */
+    /** @var Participant */
     public $participant;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var User
-     */
+    /** @var User */
     public $userViewing;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /** @var bool */

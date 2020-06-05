@@ -16,6 +16,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Time\DaysHelper;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -25,20 +27,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateType extends AbstractType
 {
-    const MESSAGE_MAX_LENGTH = 150;
+    public const MESSAGE_MAX_LENGTH = 150;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $guesser;
 
     /** @var TranslatorAdapter */
     private $translator;
 
-    /**
-     * @param ParticipantInfoGuesser $guesser
-     * @param TranslatorAdapter      $translator
-     */
     public function __construct(ParticipantInfoGuesser $guesser, TranslatorAdapter $translator)
     {
         $this->guesser      = $guesser;
@@ -48,7 +44,7 @@ class CreateType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var Sheet $sheet */
         $sheet  = $options['sheet'];
@@ -57,20 +53,22 @@ class CreateType extends AbstractType
         $locale = $options['locale'];
         $timezone = $options['timezone'];
 
-        if (count($event->getDays()) > 1) {
+        $days = $this->prepareDays($event->getDays(), $timezone);
+
+        if (count($days) > 1) {
             $builder
                 ->add('day', DayType::class, [
-                    'event'     => $event,
+                    'days' => $days,
                     'formatter' => DayHelper::getFormatter($locale, $timezone),
-                    'locale'    => $locale,
-                    'required'  => true,
+                    'locale' => $locale,
+                    'required' => true,
                 ]);
         }
 
         $builder
             ->add('time', TimeRangeType::class, [
-                'event'    => $event,
-                'label'    => false,
+                'days' => $days,
+                'label' => false,
                 'timezone' => $timezone,
                 'required' => true,
             ])
@@ -79,12 +77,12 @@ class CreateType extends AbstractType
         if (true !== $options['isUserAloneParticipant']) {
             $builder
                 ->add('participants', ChoiceType::class, [
-                    'choices'      => $sheet->getParticipants()->toArray(),
+                    'choices' => $sheet->getParticipants()->toArray(),
                     'choice_label' => function (Participant $participant) use ($locale) {
                         return $this->guesser->guessParticipantCompleteName($participant, $locale);
                     },
-                    'expanded'     => true,
-                    'multiple'     => true,
+                    'expanded' => true,
+                    'multiple' => true,
                 ])
             ;
         }
@@ -93,7 +91,7 @@ class CreateType extends AbstractType
             ->add('message', TextareaType::class, [
                 'required' => false,
                 'attr' => [
-                    'data-text-max-length-indicator'    => self::MESSAGE_MAX_LENGTH,
+                    'data-text-max-length-indicator' => self::MESSAGE_MAX_LENGTH,
                     'data-text-max-length-translations' => sprintf(
                         '%s|%s|%s',
                         $this->translator->trans(
@@ -120,7 +118,7 @@ class CreateType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('event');
         $resolver->setRequired('timezone');
@@ -135,8 +133,28 @@ class CreateType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'create_unavailability';
+    }
+
+    /**
+     * @param Event\Day[] $days
+     * @param string $timeZone
+     *
+     * @return array
+     */
+    private function prepareDays(array $days, string $timeZone): array
+    {
+        $timezonedTimeRangeViews = [];
+
+        foreach ($days as $day) {
+            $timezonedTimeRangeViews[] = new TimeRangeView(
+                DaysHelper::cloneDateTime($day->getBegin(), $timeZone),
+                DaysHelper::cloneDateTime($day->getEnd(), $timeZone)
+            );
+        }
+
+        return DaysHelper::splitDays($timezonedTimeRangeViews);
     }
 }

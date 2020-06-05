@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2102 - Evaluate visio meeting
+- VIMEET-2128 - Show participant name on visio
+
+### Fixed
+- MV-236 - Add unavailability with a different timezone
 
 ## [2.31.0] - 2020-06-01
 ### Added

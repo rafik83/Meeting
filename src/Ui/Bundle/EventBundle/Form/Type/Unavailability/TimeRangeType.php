@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability;
 
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,34 +20,32 @@ class TimeRangeType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var Event $event */
-        $event = $options['event'];
-        $days  = $event->getDays();
+        $days = $options['days'];
         $timezone = $options['timezone'];
 
         if (!empty($days)) {
-            $begins = array_map(function (Event\Day $day) use ($timezone) {
-                $clone = $day->getStartTime();
+            $begins = array_map(static function (TimeRangeView $day) use ($timezone) {
+                $clone = $day->getBegin();
                 $clone->setTimezone(new \DateTimeZone($timezone));
 
                 return $clone;
             }, $days);
 
-            usort($begins, function (\DateTime $one, \DateTime $another) {
-                return intval($one->format('H')) - intval($another->format('H'));
+            usort($begins, static function (\DateTime $one, \DateTime $another) {
+                return (int) ($one->format('H')) - (int) ($another->format('H'));
             });
 
-            $ends = array_map(function (Event\Day $day) use ($timezone) {
-                $clone = $day->getEndTime();
+            $ends = array_map(static function (TimeRangeView $day) use ($timezone) {
+                $clone = $day->getEnd();
                 $clone->setTimezone(new \DateTimeZone($timezone));
 
                 return $clone;
             }, $days);
 
-            usort($ends, function (\DateTime $one, \DateTime $another) {
-                return  intval($another->format('H')) - intval($one->format('H'));
+            usort($ends, static function (\DateTime $one, \DateTime $another) {
+                return  (int) ($another->format('H')) - (int) ($one->format('H'));
             });
 
             $beginHour = $begins[0]->format('H');
@@ -68,10 +66,9 @@ class TimeRangeType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired('event');
+        $resolver->setRequired('days');
         $resolver->setRequired('timezone');
-        $resolver->setAllowedTypes('event', Event::class);
     }
 }
