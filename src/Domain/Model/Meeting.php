@@ -414,10 +414,7 @@ class Meeting implements MessageSubjectInterface
         $this->spot = $spot;
     }
 
-    /**
-     * @return bool
-     */
-    public function isBlockedSpot()
+    public function isBlockedSpot(): bool
     {
         return $this->blockedSpot;
     }
@@ -438,10 +435,7 @@ class Meeting implements MessageSubjectInterface
         $this->blockedSlot = true;
     }
 
-    /**
-     * @return bool
-     */
-    public function isBlockedSlot()
+    public function isBlockedSlot(): bool
     {
         return $this->blockedSlot;
     }
@@ -451,7 +445,7 @@ class Meeting implements MessageSubjectInterface
      *
      * @return Participant[]
      */
-    public function getParticipants(Sheet $sheet)
+    public function getParticipants(Sheet $sheet): array
     {
         if ($sheet === $this->fromSheet) {
             return $this->getFromParticipantsArray();
@@ -461,6 +455,25 @@ class Meeting implements MessageSubjectInterface
 
         return [];
     }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Participant[]
+     */
+    public function getMetParticipants(Sheet $sheet): array
+    {
+        if ($sheet === $this->fromSheet) {
+            return $this->getToParticipantsArray();
+        }
+
+        if ($sheet === $this->toSheet) {
+            return $this->getFromParticipantsArray();
+        }
+
+        return [];
+    }
+
 
     public function getCreatedType(): string
     {

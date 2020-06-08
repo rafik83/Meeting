@@ -39,12 +39,6 @@ class CreateHandler
     /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * @param UnavailabilityRepositoryInterface $unavailabilityRepository
-     * @param ParticipantRepositoryInterface    $participantRepository
-     * @param ParticipantInfoGuesser            $participantInfoGuesser
-     * @param DelayedEventDispatcher            $eventDispatcher
-     */
     public function __construct(
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         ParticipantRepositoryInterface $participantRepository,
@@ -66,7 +60,7 @@ class CreateHandler
      * @throws TimeOutOfRangeException
      * @throws ParticipantsWithUnavailabilityException
      */
-    public function handle(Create $create)
+    public function handle(Create $create): void
     {
         $locale = $create->locale;
 
@@ -170,20 +164,17 @@ class CreateHandler
         }
     }
 
-    /**
-     * @param Create             $create
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     */
-    private function truncateOvertime(Create $create, \DateTimeInterface &$begin, \DateTimeInterface &$end)
+    private function truncateOvertime(Create $create, \DateTimeInterface &$begin, \DateTimeInterface &$end): void
     {
         // Truncate unavailability with start time and end time of day if out of period
-        if ($begin < $create->day->getStartTime()) {
-            $begin = clone $create->day->getStartTime();
+        if ($begin < $create->day->getBegin()) {
+            $begin = clone $create->day->getBegin();
+            $begin->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
         }
 
-        if ($end > $create->day->getEndTime()) {
-            $end = clone $create->day->getEndTime();
+        if ($end > $create->day->getEnd()) {
+            $end = clone $create->day->getEnd();
+            $end->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
         }
     }
 
@@ -200,7 +191,7 @@ class CreateHandler
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         $locale
-    ) {
+    ): void {
         // If Participant selected have conflict with happening or meeting
         $participantsWithoutConflict = $this
             ->participantRepository
@@ -208,7 +199,7 @@ class CreateHandler
 
         $participantWithConflict = array_filter(
             $create->participants,
-            function (Participant $participant) use ($participantsWithoutConflict) {
+            static function (Participant $participant) use ($participantsWithoutConflict) {
                 return !\in_array($participant, $participantsWithoutConflict, true);
             }
         );
@@ -243,12 +234,12 @@ class CreateHandler
      *
      * @throws TimeOutOfRangeException
      */
-    private function checkTimeOutOfDay(Create $create, \DateTimeInterface $begin, \DateTimeInterface $end)
+    private function checkTimeOutOfDay(Create $create, \DateTimeInterface $begin, \DateTimeInterface $end): void
     {
         // If time selected is out of range of the selected day
-        if ($begin >= $create->day->getEndTime()) {
+        if ($begin >= $create->day->getEnd()) {
             throw new TimeOutOfRangeException($create->day, TimeOutOfRangeException::END);
-        } elseif ($end <= $create->day->getStartTime()) {
+        } elseif ($end <= $create->day->getBegin()) {
             throw new TimeOutOfRangeException($create->day, TimeOutOfRangeException::BEGIN);
         }
     }
@@ -258,10 +249,9 @@ class CreateHandler
      *
      * @return array
      */
-    private function prepareBeginAndEnd(Create $create)
+    private function prepareBeginAndEnd(Create $create): array
     {
-        $dayCloned = clone $create->day->getDay();
-        $dayCloned->setTimeZone(new \DateTimeZone($create->timezone));
+        $dayCloned = clone $create->day->getBegin();
 
         $begin = clone $dayCloned;
         $begin->modify(sprintf('%s:%s', $create->time['begin']['hour'], $create->time['begin']['minute']));

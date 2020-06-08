@@ -19,16 +19,16 @@ class TimeType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('hour', HourType::class, [
-                'choices'  => $options['hours'],
+                'choices' => $options['hours'],
                 'required' => true,
-                'label'    => false,
+                'label' => false,
             ])
             ->add('minute', MinuteType::class, [
-                'label'    => false,
+                'label' => false,
                 'required' => true,
             ])
         ;
@@ -37,7 +37,7 @@ class TimeType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('hours');
     }
@@ -45,7 +45,7 @@ class TimeType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'unavailability_time';
     }

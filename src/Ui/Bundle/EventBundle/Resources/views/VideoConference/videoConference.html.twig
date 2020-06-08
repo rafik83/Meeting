@@ -31,6 +31,9 @@
         {% if meetingView is defined %}
             data-time-remaining="{{ meetingView.timeRemainingInSeconds }}"
             data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
+
+            data-current-user-id="{{ currentUserId }}"
+            data-subscriber-mapping="{{ meetingView.participantInfosByUserIdEncoded }}"
         {% endif %}
 
         {% if videoConferenceView.hasEndSound %}
@@ -125,7 +128,12 @@
             <button id="end-screensharing" class="btn screensharing hide">
                 <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.end'|trans }}
             </button>
-            <button class="btn btn-primary end-meeting">
+            <button
+                class="btn btn-primary end-meeting"
+                {% if endRedirectLink is defined %}
+                    data-visio-end-redirect-link="{{ endRedirectLink }}"
+                {% endif %}
+            >
                 <i class="icon-Disconnect"></i> {{ 'meeting.video.end'|trans }}
             </button>
         </div>

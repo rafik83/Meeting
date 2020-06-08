@@ -4206,7 +4206,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler
         arguments:
             - '@query.agenda.meeting.meeting_participant_view_query_handler'
-            - '@repository.rule_repository'
             - '@components.security.video_meeting_access'
             - '@Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle'
             - '@template.participant_info_guesser'
@@ -7147,6 +7146,7 @@ services:
 
     Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler:
         arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'

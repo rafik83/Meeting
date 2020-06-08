@@ -318,4 +318,11 @@ interface MeetingRepositoryInterface
      * @return DashboardMeetingContactEvaluationView[]
      */
     public function getDashboardMeetingContactEvaluationViews(Event $event): array;
+
+    public function getPreviousVisioMeeting(
+        Event $event,
+        Sheet $sheet,
+        Participant $participant,
+        \DateTimeInterface $begin
+    ): ?Meeting;
 }

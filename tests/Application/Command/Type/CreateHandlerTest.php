@@ -74,10 +74,12 @@ class CreateHandlerTest extends TestCase
         $create->canScanParticipant = true;
         $create->priorityMeetingRequestsNumber = 0;
         $create->numberMaxOfHappeningsPerUser = null;
+        $create->canEvaluateMeeting = true;
+        $create->mustEvaluateMeeting = true;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
-        $typeRepository->add(Argument::that(function (Type $actual) use ($expectedType) {
+        $typeRepository->add(Argument::that(static function (Type $actual) use ($expectedType) {
             return $expectedType->getId() === $actual->getId()
                 && null === $actual->getNumberMaxOfHappeningsPerUser()
                 && Type::TYPE_MANAGEMENT_UNAVAILABLE === $actual->getAvailabilityType()
@@ -89,6 +91,8 @@ class CreateHandlerTest extends TestCase
                 && 0 === $actual->getPriorityMeetingRequestsNumber()
                 && 'Exposant' === $actual->getTitle('fr')
                 && new ValidationCriteria(true) == $actual->getValidationCriteria()
+                && $actual->canEvaluateMeeting()
+                && $actual->mustEvaluateMeeting()
             ;
         }))->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'Exposant')->shouldBeCalled()->willReturn(false);

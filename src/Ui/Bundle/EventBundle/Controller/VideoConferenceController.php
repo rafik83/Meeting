@@ -21,6 +21,10 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Adapter\QueryBus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\VideoMeetingAccessVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirect;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirectHandler;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
@@ -68,6 +72,20 @@ class VideoConferenceController extends Controller
 
         $event = $eventDomain->getEvent();
 
+        $redirectResponse = ($this->get(PreviousMeetingEvaluationCheckerHandler::class))(
+            new PreviousMeetingEvaluationChecker(
+                $request->getUri(),
+                $event,
+                $sheet,
+                $user,
+                $meeting
+            )
+        );
+
+        if ($redirectResponse instanceof RedirectResponse) {
+            return $redirectResponse;
+        }
+
         /** @var MeetingView $meetingView */
         $meetingView = $this->get('tactician.commandbus')->handle(
             new MeetingViewQuery($meeting, $sheet, false, $userDomain->getUser(), $event, $request->getLocale())
@@ -82,6 +100,12 @@ class VideoConferenceController extends Controller
             )
         );
 
+        $endRedirectLink = ($this->get(EndVisioRedirectHandler::class))(new EndVisioRedirect(
+            $sheet,
+            $participant,
+            $meeting
+        ));
+
         return $this->render(
             'EventBundle:VideoConference:videoConference.html.twig',
             [
@@ -89,10 +113,12 @@ class VideoConferenceController extends Controller
                 'sheet' => $sheet,
                 'participant' => $participant,
                 'userCompleteName' => $user->getAccount()->getCompleteName(),
+                'currentUserId' => $user->getId(),
                 'meeting' => $meeting,
                 'videoConferenceView' => $videoConferenceView,
                 'meetingView' => $meetingView,
                 'currentTime' => $this->get('datetime')->getTimestamp(),
+                'endRedirectLink' => $endRedirectLink,
             ]
         );
     }

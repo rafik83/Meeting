@@ -86,11 +86,13 @@ class Create implements Command
     /** @var int|null */
     public $numberMaxOfMeetingsPerSheet;
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     */
-    public function __construct(Event $event, $locale)
+    /** @var bool */
+    public $canEvaluateMeeting = true;
+
+    /** @var bool */
+    public $mustEvaluateMeeting = false;
+
+    public function __construct(Event $event, string $locale)
     {
         $this->event  = $event;
         $this->locale = $locale;

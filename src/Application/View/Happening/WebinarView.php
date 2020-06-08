@@ -47,13 +47,21 @@ class WebinarView
     /** @var string|null */
     public $headerImage;
 
+    /** @var WebinarSpeakerView[] */
+    public $speakers;
+
+    /** @var int */
+    public $currentUserId;
+
     public function __construct(
         int $happeningId,
+        int $currentUserId,
         string $happeningTitle,
         string $token,
         string $sessionId,
         string $apiKey,
         bool $isSpeaker,
+        array $speakers,
         TimeRangeView $slot,
         \DateTimeInterface $currentTime,
         int $timeRemainingInSeconds,
@@ -61,6 +69,7 @@ class WebinarView
         ?string $headerImage
     ) {
         $this->happeningId = $happeningId;
+        $this->currentUserId = $currentUserId;
         $this->happeningTitle = $happeningTitle;
         $this->token = $token;
         $this->sessionId = $sessionId;
@@ -71,5 +80,27 @@ class WebinarView
         $this->timeRemainingInSeconds = $timeRemainingInSeconds;
         $this->warningTimeRemainingInSeconds = $warningTimeRemainingInSeconds;
         $this->headerImage = $headerImage;
+        $this->speakers = $speakers;
+    }
+
+    public function getSpeakerInfosByUserId(): string
+    {
+        $mapping = [];
+
+        foreach ($this->speakers as $speaker) {
+            $position = null !== $speaker->position ? '(' . $speaker->position . ')' : '';
+            $organization = null !== $speaker->organization ? '- ' . $speaker->organization : '';
+            $speakerInfo = sprintf(
+                '%s %s %s %s',
+                $speaker->firstName,
+                $speaker->lastName,
+                $position,
+                $organization
+            );
+
+            $mapping[$speaker->userId] = $speakerInfo;
+        }
+
+        return json_encode($mapping);
     }
 }

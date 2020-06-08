@@ -60,6 +60,9 @@ class MeetingView extends AbstractTimeEntityView
     /** @var bool */
     private $isVisioAvailable;
 
+    /** @var array */
+    public $participantInfosByUserId;
+
     /**
      * @param int                              $id
      * @param string                           $userSheetTitle
@@ -75,6 +78,7 @@ class MeetingView extends AbstractTimeEntityView
      * @param string                           $leftColor
      * @param string                           $rightColor
      * @param MeetingParticipantView[]         $participants
+     * @param array                            $participantInfosByUserId
      * @param bool                             $isUserParticipantMultipleSheets
      * @param bool                             $isVisio
      * @param bool                             $isVisioAvailable
@@ -94,6 +98,7 @@ class MeetingView extends AbstractTimeEntityView
         $leftColor,
         $rightColor,
         array $participants,
+        array $participantInfosByUserId = [],
         $isUserParticipantMultipleSheets = false,
         bool $isVisio = false,
         bool $isVisioAvailable = false
@@ -115,6 +120,7 @@ class MeetingView extends AbstractTimeEntityView
         $this->isUserParticipantMultipleSheets = $isUserParticipantMultipleSheets;
         $this->isVisio = $isVisio;
         $this->isVisioAvailable = $isVisioAvailable;
+        $this->participantInfosByUserId = $participantInfosByUserId;
     }
 
     /**
@@ -157,5 +163,17 @@ class MeetingView extends AbstractTimeEntityView
     public function hasMeetingOwnSheetParticipantNames(): bool
     {
         return !empty($this->meetingOwnSheetParticipantViews);
+    }
+
+    public function getSheetMetTitles(): string
+    {
+        return implode(', ', array_map(static function ($sheetTitle) {
+            return $sheetTitle->getTitle();
+        }, $this->sheetMetTitle));
+    }
+
+    public function getParticipantInfosByUserIdEncoded(): string
+    {
+        return json_encode($this->participantInfosByUserId);
     }
 }

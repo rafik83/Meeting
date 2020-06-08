@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Participant\GetParticipantTypes;
@@ -132,11 +131,6 @@ class AgendaViewQueryHandler
         $this->dDayGuesser = $dDayGuesser;
     }
 
-    /**
-     * @param AgendaViewQuery $query
-     *
-     * @return AgendaView
-     */
     public function handle(AgendaViewQuery $query): AgendaView
     {
         $eventDays = $this->dayRepository->findByEvent($query->event);

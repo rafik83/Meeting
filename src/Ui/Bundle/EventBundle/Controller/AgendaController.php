@@ -13,12 +13,9 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled;
 use Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQuery;
-use Proximum\Vimeet\Application\Query\Agenda\MeetingPropositionFromAvailableSheets\MeetingPropositionFromAvailableSheetsQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
@@ -29,21 +26,12 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class AgendaController extends Controller
 {
-    /**
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param UserDomain  $userDomain
-     *
-     * @return RedirectResponse
-     */
     public function indexAction(
         EventDomain $eventDomain,
         Sheet $sheet,
@@ -81,15 +69,6 @@ class AgendaController extends Controller
         );
     }
 
-    /**
-     * @param EventDomain $eventDomain
-     * @param Request     $request
-     * @param Participant $participant
-     * @param Sheet       $sheet
-     * @param UserDomain  $userDomain
-     *
-     * @return Response
-     */
     public function participantAction(
         EventDomain $eventDomain,
         Request $request,

@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateForm;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateFormHandler;
@@ -65,7 +66,7 @@ class CreateFormHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $formView;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->form = $this->prophesize(Form::class);
         $this->formView = $this->prophesize(FormView::class);
@@ -86,8 +87,13 @@ class CreateFormHandlerTest extends TestCase
         $this->commandBus = $this->prophesize(CommandBus::class);
     }
 
-    public function testHandleXmlHttpRequest()
+    public function testHandleXmlHttpRequest(): void
     {
+        $day = $this->prophesize(Event\Day::class);
+        $day->getDay()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getStartTime()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getEndTime()->willReturn(new \DateTime('2017-10-10 18:10:10.000'));
+        $this->event->getFirstDay()->willReturn($day->reveal());
         $expected = new CreateFormView(CreateFormView::XML_HTTP_REQUEST_RESPONSE, $this->formView->reveal());
 
         $command = new Create(
@@ -127,8 +133,13 @@ class CreateFormHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleValidForm()
+    public function testHandleValidForm(): void
     {
+        $day = $this->prophesize(Event\Day::class);
+        $day->getDay()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getStartTime()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getEndTime()->willReturn(new \DateTime('2017-10-10 18:10:10.000'));
+        $this->event->getFirstDay()->willReturn($day->reveal());
         $expected = new CreateFormView(CreateFormView::HANDLER_SUCCESS, $this->formView->reveal());
 
         $command = new Create(
@@ -173,8 +184,13 @@ class CreateFormHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleNoParticipantSelectedException()
+    public function testHandleNoParticipantSelectedException(): void
     {
+        $day = $this->prophesize(Event\Day::class);
+        $day->getDay()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getStartTime()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getEndTime()->willReturn(new \DateTime('2017-10-10 18:10:10.000'));
+        $this->event->getFirstDay()->willReturn($day->reveal());
         $expected = new CreateFormView(CreateFormView::HANDLER_ERROR, $this->formView->reveal());
 
         $command = new Create(
@@ -228,8 +244,13 @@ class CreateFormHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleParticipantsSelectedWithMeetingOrHappeningException()
+    public function testHandleParticipantsSelectedWithMeetingOrHappeningException(): void
     {
+        $day = $this->prophesize(Event\Day::class);
+        $day->getDay()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getStartTime()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getEndTime()->willReturn(new \DateTime('2017-10-10 18:10:10.000'));
+        $this->event->getFirstDay()->willReturn($day->reveal());
         $expected = new CreateFormView(CreateFormView::HANDLER_ERROR, $this->formView->reveal());
 
         $command = new Create(
@@ -290,11 +311,17 @@ class CreateFormHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleTimeOutOfRangeException()
+    public function testHandleTimeOutOfRangeException(): void
     {
         $this->event->getTimeZone()->willReturn('Europe/Paris');
         $day = $this->prophesize(Event\Day::class);
         $day->getDay()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getStartTime()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getEndTime()->willReturn(new \DateTime('2017-10-10 18:10:10.000'));
+        $timeRange = new TimeRangeView(
+            new \DateTime('2017-10-10 10:10:10.000', new \DateTimeZone('Europe/Paris')),
+            new \DateTime('2017-10-10 18:10:10.000', new \DateTimeZone('Europe/Paris'))
+        );
         $this->event->getFirstDay()->willReturn($day->reveal());
         $expected = new CreateFormView(CreateFormView::HANDLER_ERROR, $this->formView->reveal());
 
@@ -319,7 +346,7 @@ class CreateFormHandlerTest extends TestCase
         $this->form->isSubmitted()->shouldBeCalled()->willReturn(true);
         $this->form->isValid()->shouldBeCalled()->willReturn(true);
 
-        $exception = new TimeOutOfRangeException($day->reveal(), TimeOutOfRangeException::BEGIN);
+        $exception = new TimeOutOfRangeException($timeRange, TimeOutOfRangeException::BEGIN);
         $this->commandBus->handle($command)->shouldBeCalled()->willThrow($exception);
         $this->translator
             ->trans(
@@ -353,11 +380,17 @@ class CreateFormHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleTimeOutOfRangeEndOfDayException()
+    public function testHandleTimeOutOfRangeEndOfDayException(): void
     {
         $this->event->getTimeZone()->willReturn('Europe/Paris');
         $day = $this->prophesize(Event\Day::class);
         $day->getDay()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getStartTime()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getEndTime()->willReturn(new \DateTime('2017-10-10 18:10:10.000'));
+        $timeRange = new TimeRangeView(
+            new \DateTime('2017-10-10 10:10:10.000', new \DateTimeZone('Europe/Paris')),
+            new \DateTime('2017-10-10 18:10:10.000', new \DateTimeZone('Europe/Paris'))
+        );
         $this->event->getFirstDay()->willReturn($day->reveal());
         $expected = new CreateFormView(CreateFormView::HANDLER_ERROR, $this->formView->reveal());
 
@@ -382,7 +415,7 @@ class CreateFormHandlerTest extends TestCase
         $this->form->isSubmitted()->shouldBeCalled()->willReturn(true);
         $this->form->isValid()->shouldBeCalled()->willReturn(true);
 
-        $exception = new TimeOutOfRangeException($day->reveal(), TimeOutOfRangeException::END);
+        $exception = new TimeOutOfRangeException($timeRange, TimeOutOfRangeException::END);
         $this->commandBus->handle($command)->shouldBeCalled()->willThrow($exception);
         $this->translator
             ->trans(
@@ -416,8 +449,13 @@ class CreateFormHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
+        $day = $this->prophesize(Event\Day::class);
+        $day->getDay()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getStartTime()->willReturn(new \DateTime('2017-10-10 10:10:10.000'));
+        $day->getEndTime()->willReturn(new \DateTime('2017-10-10 18:10:10.000'));
+        $this->event->getFirstDay()->willReturn($day->reveal());
         $expected = new CreateFormView(CreateFormView::CREATE_FORM, $this->formView->reveal());
 
         $command = new Create(
