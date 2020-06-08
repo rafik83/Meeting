@@ -72,6 +72,12 @@ Proximum\Vimeet\Domain\Model\Type:
             type: boolean
             options:
                 default: false
+        phoneAccessMinEvaluation:
+            type: smallint
+            nullable: true
+        emailAccessMinEvaluation:
+            type: smallint
+            nullable: true
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria

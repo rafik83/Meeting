@@ -88,6 +88,12 @@ class Update implements Command
     /** @var bool */
     public $mustEvaluateMeeting;
 
+    /** @var int|null */
+    public $phoneAccessMinEvaluation;
+
+    /** @var int|null */
+    public $emailAccessMinEvaluation;
+
     public function __construct(Type $type, string $locale)
     {
         $this->sheetTemplate = $type->getSheetTemplate();
@@ -113,6 +119,8 @@ class Update implements Command
         $this->numberMaxOfMeetingsPerSheet = $type->getNumberMaxOfMeetingsPerSheet();
         $this->canEvaluateMeeting = $type->canEvaluateMeeting();
         $this->mustEvaluateMeeting = $type->mustEvaluateMeeting();
+        $this->phoneAccessMinEvaluation = $type->getPhoneAccessMinEvaluation();
+        $this->emailAccessMinEvaluation = $type->getEmailAccessMinEvaluation();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [
