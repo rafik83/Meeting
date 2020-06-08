@@ -1,6 +1,5 @@
-
-var CheckAllCheckbox     = require('./_CheckAllCheckbox');
-var BatchSelectionHelper = require('./_BatchSelectionHelper');
+import CheckAllCheckbox from "./_CheckAllCheckbox";
+import BatchSelectionHelper from "./_BatchSelectionHelper";
 
 /**
  * Batch component
@@ -169,4 +168,4 @@ Batch.prototype.transchoice = function (item, message, count)
     item.innerHTML = message.split('|')[count > 1 ? 1 : 0].replace('%count%', count);
 };
 
-module.exports = Batch;
+export default Batch;

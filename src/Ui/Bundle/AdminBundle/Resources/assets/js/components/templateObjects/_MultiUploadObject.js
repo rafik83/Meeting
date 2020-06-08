@@ -1,4 +1,4 @@
-var Form = require('./../template/_Form');
+import Form from './../template/_Form';
 
 function MultiUploadObject(element, locale, builderType)
 {
@@ -50,4 +50,4 @@ MultiUploadObject.prototype.save = function ()
     return true;
 };
 
-module.exports = MultiUploadObject;
+export default MultiUploadObject;

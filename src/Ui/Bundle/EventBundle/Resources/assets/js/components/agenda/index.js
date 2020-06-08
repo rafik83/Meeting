@@ -1,21 +1,12 @@
-var Availability = require('./availability/_Availability'),
-    Agenda = require('./_Agenda'),
-    AvailabilityStorage = require('./availability/_Storage'),
-    Toggle = require('./../_Toggle');
+import Availability from "./availability/_Availability";
+import Agenda from "./_Agenda";
+import AvailabilityStorage from './availability/_Storage';
+import Toggle from "../_Toggle";
 
 var agendaAvailabilities = [];
 var availabilityStorage = null;
 var agendaContainer = null;
 var agendas = [];
-
-function init(target, element) {
-    agendaContainer = element;
-
-    initMain(target);
-    initUI(target);
-    initStorage(target);
-    initTooltip();
-}
 
 function initTooltip() {
     var availableMessage = agendaContainer.getAttribute('data-slot-available');
@@ -181,4 +172,11 @@ function initStorage() {
     });
 }
 
-module.exports = {init: init};
+export function init(target, element) {
+    agendaContainer = element;
+
+    initMain(target);
+    initUI(target);
+    initStorage(target);
+    initTooltip();
+}

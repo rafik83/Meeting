@@ -22,4 +22,4 @@ Confirm.prototype.onClick = function (event)
     }
 };
 
-module.exports = Confirm;
+export default Confirm;

@@ -383,7 +383,7 @@ Settings.prototype.init = function () {
  * @param samples
  * @returns {number}
  */
-timeDomainDataToAudioLevel = function (samples) {
+function timeDomainDataToAudioLevel(samples) {
     let maxVolume = 0;
 
     const length = samples.length;
@@ -404,7 +404,7 @@ timeDomainDataToAudioLevel = function (samples) {
  *
  * @returns {number}
  */
-animateLevel = function (newLevel, lastLevel) {
+function animateLevel(newLevel, lastLevel) {
     let value = 0;
     const diff = lastLevel - newLevel;
 
@@ -419,12 +419,12 @@ animateLevel = function (newLevel, lastLevel) {
     return parseFloat(value.toFixed(3));
 }
 
-showElement = function(element) {
+function showElement(element) {
     element.classList.remove('hide');
-};
+}
 
-hideElement = function (element) {
+function hideElement(element) {
     element.classList.add('hide');
-};
+}
 
-module.exports = Settings;
+export default Settings;

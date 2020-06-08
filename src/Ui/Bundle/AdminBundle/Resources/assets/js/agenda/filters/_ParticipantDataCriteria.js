@@ -1,4 +1,4 @@
-var Criteria = require('./_Criteria');
+import Criteria from "./_Criteria";
 
 /**
  * @param {string} participantData
@@ -32,4 +32,4 @@ ParticipantDataCriteria.prototype.meetCriteria = function(sheets) {
     return sheets;
 };
 
-module.exports = ParticipantDataCriteria;
+export default ParticipantDataCriteria;

@@ -52,4 +52,4 @@ ProductSelector.prototype.closest = function (item, tag) {
     return item.tagName === tag ? item : this.closest(item.parentNode, tag);
 };
 
-module.exports = ProductSelector;
+export default ProductSelector;

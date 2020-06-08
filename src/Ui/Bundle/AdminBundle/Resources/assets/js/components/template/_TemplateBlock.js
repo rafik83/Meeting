@@ -1,6 +1,6 @@
-var $        = require('jquery'),
-    Form     = require('./_Form'),
-    Sortable = require('./../_Sortable');
+import $ from 'jquery';
+import Form from './_Form';
+import Sortable from './../_Sortable';
 
 /**
  * Template Block
@@ -181,4 +181,4 @@ TemplateBlock.prototype.sortable = function (element)
   });
 };
 
-module.exports = TemplateBlock;
+export default TemplateBlock;

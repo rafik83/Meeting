@@ -1,4 +1,4 @@
-var Criteria = require('./_Criteria');
+import Criteria from "./_Criteria";
 
 /**
  * @param {array} types
@@ -25,4 +25,4 @@ TypeCriteria.prototype.meetCriteria = function(sheets) {
     return sheets;
 };
 
-module.exports = TypeCriteria;
+export default TypeCriteria;

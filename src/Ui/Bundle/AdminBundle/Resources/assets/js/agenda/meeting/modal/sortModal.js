@@ -1,9 +1,9 @@
-var sortSheetForm = require('./../form/sortSheetForm'),
-    options       = require('../../../vueComponents/options');
+import options from '../../../vueComponents/options';
+import sortSheetForm from "./../form/sortSheetForm";
 
 var DEFAULT_SELECTED_SORT = 'alphabeticalAsc';
 
-module.exports = {
+export default {
     template: '#sort-modal',
     delimiters: options.delimiters,
     props: ['sheets', 'show'],

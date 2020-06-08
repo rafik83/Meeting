@@ -1,6 +1,6 @@
-var EventEmitter = require('./../_EventEmitter'),
-    SlotToggle = require('./_SlotToggle'),
-    DayToggle = require('./_DayToggle');
+import EventEmitter from "../_EventEmitter";
+import SlotToggle from "./_SlotToggle";
+import DayToggle from "./_DayToggle";
 
 /**
  * Availability constructor
@@ -77,4 +77,4 @@ Availability.prototype.isParticipantFullyUnavailable = function () {
     return !oneCheck;
 };
 
-module.exports = Availability;
+export default Availability;

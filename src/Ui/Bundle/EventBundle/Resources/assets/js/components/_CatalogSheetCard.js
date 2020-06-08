@@ -1,8 +1,7 @@
-var $ = require('jquery'),
-    CatalogSheetCardButton = require('./_CatalogSheetCardButton'),
-    CatalogSheetCardRequestCheckbox = require('./_CatalogSheetCardRequestCheckbox'),
-    EditableTextIndicator = require('./_EditableTextIndicator')
-;
+import $ from 'jquery';
+import CatalogSheetCardButton from "./_CatalogSheetCardButton";
+import CatalogSheetCardRequestCheckbox from "./_CatalogSheetCardRequestCheckbox";
+import EditableTextIndicator from "./_EditableTextIndicator";
 
 function CatalogSheetCard(element, modal) {
     this.element = element;
@@ -134,4 +133,4 @@ CatalogSheetCard.prototype.handleRequestForm = function (form) {
     return false;
 };
 
-module.exports = CatalogSheetCard;
+export default CatalogSheetCard;

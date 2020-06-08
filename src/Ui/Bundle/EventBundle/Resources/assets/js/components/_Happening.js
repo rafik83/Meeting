@@ -1,5 +1,5 @@
-var $                     = require('jquery'),
-    EditableTextIndicator = require('./_EditableTextIndicator');
+import $ from 'jquery';
+import EditableTextIndicator from "./_EditableTextIndicator";
 
 function Happening(happening, modal)
 {
@@ -135,4 +135,4 @@ Happening.prototype.validateParticipation = function (response) {
     }
 };
 
-module.exports = Happening;
+export default Happening;

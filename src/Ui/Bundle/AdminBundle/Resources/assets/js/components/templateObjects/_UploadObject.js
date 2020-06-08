@@ -1,6 +1,5 @@
-var Form = require('./../template/_Form'),
-    TemplateTaggableObject = require('./../template/_TemplateTaggableObject')
-;
+import Form from './../template/_Form';
+import TemplateTaggableObject from './../template/_TemplateTaggableObject';
 
 /**
  * UploadObject
@@ -83,4 +82,4 @@ UploadObject.prototype.toggleDisplayLabelFilter = function (displayed)
     this.filterLabel.style.display = displayed ? 'block' : 'none';
 };
 
-module.exports = UploadObject;
+export default UploadObject;

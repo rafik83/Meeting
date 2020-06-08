@@ -1,4 +1,4 @@
-var Form = require('./../template/_Form');
+import Form from './../template/_Form';
 
 /**
  * ParticipantObject
@@ -38,4 +38,4 @@ ParticipantObject.prototype.save = function ()
   return true;
 };
 
-module.exports = ParticipantObject;
+export default ParticipantObject;

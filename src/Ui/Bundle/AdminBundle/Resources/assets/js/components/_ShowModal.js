@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 function ShowModal(element) {
     this.element = element;
@@ -6,4 +6,4 @@ function ShowModal(element) {
     $(this.element).modal('show');
 }
 
-module.exports = ShowModal;
+export default ShowModal;
