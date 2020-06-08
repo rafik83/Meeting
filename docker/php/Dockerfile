@@ -1,8 +1,8 @@
-#ARG PHP_VERSION=7.2
-FROM php:7.2-fpm
+#ARG PHP_VERSION=7.4
+FROM php:7.4-fpm
 
 RUN apt-get update
-RUN apt-get install -y make wget gnupg tzdata git
+RUN apt-get install -y make wget gnupg tzdata
 RUN curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
@@ -20,6 +20,7 @@ RUN apt-get update \
     libtool \
     libicu-dev \
     openssh-client \
+    libzip-dev \
     unzip \
     zlib1g-dev \
     libicu-dev \

@@ -43,7 +43,7 @@ services:
             - proxy
 
     php:
-        image: teamparis/v_php:latest
+        build: docker/php
         working_dir: /srv
         environment:
             TZ: "Europe/Paris"
