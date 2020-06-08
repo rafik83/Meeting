@@ -1207,6 +1207,7 @@ form.type_create.children.canEvaluateMeeting.label: 'Le participant peut noter s
 form.type_create.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_create.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_create.children.canScanParticipant.label: 'Peut scanner un autre participant'
+form.type_create.children.emailAccessMinEvaluation.label: 'Note requise pour l''accès à l''adresse email'
 form.type_create.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_create.children.formTemplates.label: Formulaires
 form.type_create.children.formTemplates.status.draft: brouillon
@@ -1221,6 +1222,7 @@ form.type_create.children.numberMaxOfMeetingsPerSheet.label: 'Nombre de RDV max 
 form.type_create.children.numberOfMeetingsPerPlanning.help: 'Si vide, équivalent au nombre de créneaux de l''événement'
 form.type_create.children.numberOfMeetingsPerPlanning.label: 'Nombre de RDV max par planning'
 form.type_create.children.package.label: 'Template de forfait de participation'
+form.type_create.children.phoneAccessMinEvaluation.label: 'Note requise pour l''accès aux coordonnées téléphoniques'
 form.type_create.children.priorityMeetingRequestsNumber.label: 'Nombre de rdvs prioritaires'
 form.type_create.children.rank.label: Position
 form.type_create.children.registrationTemplate.label: 'Template d''Inscription'

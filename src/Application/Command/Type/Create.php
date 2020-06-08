@@ -92,6 +92,12 @@ class Create implements Command
     /** @var bool */
     public $mustEvaluateMeeting = false;
 
+    /** @var int|null */
+    public $phoneAccessMinEvaluation;
+
+    /** @var int|null */
+    public $emailAccessMinEvaluation;
+
     public function __construct(Event $event, string $locale)
     {
         $this->event  = $event;

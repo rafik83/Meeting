@@ -123,6 +123,27 @@ class TypeCreateType extends AbstractType
             ->add('mustEvaluateMeeting', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('mustEvaluateMeeting', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('mustEvaluateMeeting', CheckboxType::class, [
+                'required' => false,
+            ])
+        ;
+
+        $grades = range(1, 5);
+        $gradeChoices = array_combine($grades, $grades);
+        $builder
+            ->add('phoneAccessMinEvaluation', ChoiceType::class, [
+                'required' => false,
+                'placeholder' => 'admin.type.management.none.label',
+                'choices' => $gradeChoices,
+            ])
+            ->add('emailAccessMinEvaluation', ChoiceType::class, [
+                'required' => false,
+                'placeholder' => 'admin.type.management.none.label',
+                'choices' => $gradeChoices,
+            ])
         ;
     }
 
