@@ -18,9 +18,6 @@ class AddHappeningQuestion implements Command
     /** @var User */
     private $createdBy;
 
-    /** @var \DateTimeInterface */
-    private $createdAt;
-
     /** @var string */
     private $content;
 

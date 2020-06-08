@@ -54,7 +54,8 @@ class AddHappeningQuestionHandlerTest extends TestCase
             $sheet,
             $createdBy->reveal(),
             $this->datetime,
-            'Can you develop your point about green IT?'
+            'Can you develop your point about green IT?',
+            true
         );
 
         $this->questionRepository->add($expectedQuestion)
