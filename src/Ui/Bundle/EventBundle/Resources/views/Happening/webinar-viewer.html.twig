@@ -33,31 +33,7 @@
 
         <div data-hide-on-desktop class="hide-on-desktop"></div>
 
-        <div class="side-container hide">
-            <div class="btn-group" role="group">
-                <a class="btn btn-primary" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }}</a>
-                <a class="btn btn-gray" href="#" data-questions-button>{{ 'happening.webinar.questions.tab'|trans }}</a>
-            </div>
-            <div class="chat-container" data-chat-container></div>
-            <div class="hide"
-                data-questions-container
-                data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
-            >
-                <div class="questions-list">
-                    {# content filled with javascript #}
-                </div>
-                <form
-                    action="{{ path('event_sheet_happening_webinar_question_add', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
-                    class="questions-form"
-                    data-questions-form
-                >
-                    <input type="text" name="content" placeholder="{{ 'happening.webinar.questions.add'|trans }}">
-                    <button type="submit" class="btn btn-primary">
-                        <span class="icon-Ouvrir_4"></span>
-                    </button>
-                </form>
-            </div>
-        </div>
+        {% include 'EventBundle:Happening:webinar-sidebar.html.twig' %}
 
         <div class="video-helper">
             <h1>{{ webinarView.happeningTitle }}</h1>
