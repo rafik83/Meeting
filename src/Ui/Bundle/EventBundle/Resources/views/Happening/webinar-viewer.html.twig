@@ -33,8 +33,8 @@
 
         <div class="side-container hide">
             <div class="btn-group" role="group">
-                <a class="btn btn-primary" href="#" data-chat-button>Chat</a>
-                <a class="btn btn-gray" href="#" data-questions-button>Questions</a>
+                <a class="btn btn-primary" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }}</a>
+                <a class="btn btn-gray" href="#" data-questions-button>{{ 'happening.webinar.questions.tab'|trans }}</a>
             </div>
             <div class="chat-container" data-chat-container></div>
             <div class="hide"
@@ -49,7 +49,7 @@
                     class="questions-form"
                     data-questions-form
                 >
-                    <input type="text" name="content" placeholder="Ajoutez votre question">
+                    <input type="text" name="content" placeholder="{{ 'happening.webinar.questions.add'|trans }}">
                     <button type="submit" class="btn btn-primary">
                         <span class="icon-Ouvrir_4"></span>
                     </button>
