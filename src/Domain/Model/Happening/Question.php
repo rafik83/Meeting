@@ -80,7 +80,7 @@ class Question
     /**
      * @return Happening
      */
-    public function getHappening()
+    public function getHappening(): Happening
     {
         return $this->happening;
     }
@@ -88,7 +88,7 @@ class Question
     /**
      * @return Sheet
      */
-    public function getSheet()
+    public function getSheet(): Sheet
     {
         return $this->sheet;
     }
@@ -96,7 +96,7 @@ class Question
     /**
      * @return User
      */
-    public function getCreatedBy()
+    public function getCreatedBy(): User
     {
         return $this->createdBy;
     }
@@ -104,7 +104,7 @@ class Question
     /**
      * @return \DateTimeInterface
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -112,7 +112,7 @@ class Question
     /**
      * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -128,7 +128,7 @@ class Question
     /**
      * @return bool
      */
-    public function getAskedDuringWebinar()
+    public function getAskedDuringWebinar(): bool
     {
         return $this->askedDuringWebinar;
     }
