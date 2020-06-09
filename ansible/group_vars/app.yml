@@ -9,7 +9,7 @@ app_options:
   mysql:                 true
   mysql_version:         '5.6'
   elasticsearch:         true
-  elasticsearch_version: '1.7'
+  elasticsearch_version: '5'
   redis:                 true
   redis_version:         '5'
 
@@ -181,9 +181,9 @@ app_patterns:
   # Elasticsearch #
   #################
 
-  elasticsearch_plugins:
-    - name:       head
-      repository: mobz/elasticsearch-head
+  #elasticsearch_plugins:
+  #  - name:       head
+  #    repository: mobz/elasticsearch-head
 
   ########
   # Cron #

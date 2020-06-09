@@ -25,7 +25,7 @@ services:
             - proxy
 
     elasticsearch:
-        image: elasticsearch:1.7
+        image: elasticsearch:5.6.16
         ports:
             - "9200:9200"
         networks:

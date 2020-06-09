@@ -28,7 +28,7 @@ fos_elastica:
                                 max_gram: 20
             types:
                 sheet:
-                    mappings:
+                    properties:
                         id:
                             type: integer
                             index: "not_analyzed"
