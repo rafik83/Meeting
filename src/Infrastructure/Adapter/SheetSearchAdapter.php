@@ -129,6 +129,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         } else {
             $query = new Query($builder->getQuery());
             $query->addSort(['sheetName.raw' => 'asc']);
+            $query->setFieldDataFields(['sheetName.raw']);
         }
 
         return $query;
@@ -257,7 +258,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $query = new Query();
         $query->setRawQuery($queryToArray);
-        $query->setFields(['id']);
+        $query->setStoredFields(['id']);
 
         return array_map(static function (Result $sheet) {
             return $sheet->id[0];
@@ -301,7 +302,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     {
         $results = $this->getSearchResults($event, $filters, $locale);
 
-        $sheetIds = array_map(function (Result $result) {
+        $sheetIds = array_map(static function (Result $result) {
             return $result->id;
         }, $results);
 
@@ -322,7 +323,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query = new Query($builder->getQuery());
         $query->addAggregation($this->findCityQuery($event, $filter))
             ->addAggregation($this->findCountryQuery($event, $filter, $locale))
-            ->setSize(0);
+            ->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
         return $this->searchable->search($query)->getAggregations();
     }
@@ -345,7 +346,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $countryAggregations->setSize(1000);
 
         $query->addAggregation($countryAggregations);
-        $query->setSize(0);
+        $query->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
         return $this->searchable->search($query)->getAggregations();
     }
@@ -365,16 +366,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $matchKeyword = new Query\Term(['keywords.label_autocomplete' => $filter]);
         $matchLocale  = new Query\Match('keywords.locale', $locale);
 
-        $boolQuery = new Query\BoolQuery();
-        $boolQuery->addMust($matchKeyword);
-        $boolQuery->addMust($matchLocale);
+        $filterKeywordQuery = new Query\BoolQuery();
+        $filterKeywordQuery->addMust($matchKeyword);
+        $filterKeywordQuery->addMust($matchLocale);
 
-        // To FIX, Filter does not exist anymore
-        $filterKeywordQuery = new FilterQuery();
-        $filterKeywordQuery->setQuery($boolQuery);
-
-        $filterEventQuery = new FilterQuery();
-        $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
+        $filterEventQuery = new Query\Match('event', $event->getId());
 
         $keywordAggregations = new Terms('keyword');
         $keywordAggregations->setField('keywords.label');
@@ -393,7 +389,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query = new Query($builder->getQuery());
         $query->addAggregation($filterKeywordsEvent)
             ->addAggregation($this->findSheetNameQuery($event, $filter))
-            ->setSize(0);
+            ->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
         return $this->searchable->search($query)->getAggregations();
     }
@@ -542,7 +538,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $availableSlotIds,
             $sheetsToExclude
         );
-        $query   = new Query($builder->getQuery());
+        $query = new Query($builder->getQuery());
 
         if (self::ES_FIELD_POSITION === $elasticField) {
             $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_POSITION));
@@ -552,7 +548,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $query->addAggregation($this->getAggregation($elasticField));
         }
 
-        $query->setSize(0);
+        $query->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
         $result = $this->searchable->search($query);
 
@@ -568,7 +564,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     {
         $aggregation = new Terms($field);
         $aggregation->setField($field);
-        $aggregation->setSize(0);
+        $aggregation->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
         return $aggregation;
     }
@@ -599,16 +595,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $matchCity->addMust(new Query\Match('event', $event->getId()));
         $matchCity->addMust(new Query\Match('city_autocomplete', $filter));
 
-        $filterQuery = new FilterQuery();
-        $filterQuery->setQuery($matchCity);
-
         $citiesAggregations = new Terms('cities');
         $citiesAggregations->setField('city');
         $citiesAggregations->setSize(10);
 
         $cities = new Filter('cities_aggs');
         $cities->addAggregation($citiesAggregations);
-        $cities->setFilter($filterQuery);
+        $cities->setFilter($matchCity);
 
         return $cities;
     }
@@ -622,8 +615,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     private function findCountryQuery(Event $event, string $filter, string $locale): Filter
     {
-        $filterEventQuery = new FilterQuery();
-        $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
+        $filterEventQuery = new Query\Match('event', $event->getId());
+        //$filterEventQuery->setQuery();
 
         // country
         $matchCountry = new Query\Match('country.label_autocomplete', $filter);
@@ -633,8 +626,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $boolQuery->addMust($matchCountry);
         $boolQuery->addMust($matchLocale);
 
-        $filterCountryQuery = new FilterQuery();
-        $filterCountryQuery->setQuery($boolQuery);
+        //$filterCountryQuery = new Query();
+        //$filterCountryQuery->setQuery($boolQuery);
 
         $countryAggregations = new Terms('countries');
         $countryAggregations->setField('country.label');
@@ -642,7 +635,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $filterCountries = new Filter('countries_filter');
         $filterCountries->addAggregation($countryAggregations);
-        $filterCountries->setFilter($filterCountryQuery);
+        $filterCountries->setFilter($boolQuery);
 
         $nestedCountryAggregations = new Nested('countries', 'country');
         $nestedCountryAggregations->addAggregation($filterCountries);
@@ -667,9 +660,10 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $sheetAggregation = new Terms('sheetname');
         $sheetAggregation->setField('sheetName.raw');
+        $sheetAggregation->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
-        $filterQuery     = new FilterQuery($boolQuery);
-        $filterSheetName = new Filter('sheet', $filterQuery);
+        //$filterQuery     = new FilterQuery($boolQuery);
+        $filterSheetName = new Filter('sheet', $boolQuery);
         $filterSheetName->addAggregation($sheetAggregation);
 
         return $filterSheetName;
