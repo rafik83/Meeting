@@ -369,6 +369,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $boolQuery->addMust($matchKeyword);
         $boolQuery->addMust($matchLocale);
 
+        // To FIX, Filter does not exist anymore
         $filterKeywordQuery = new FilterQuery();
         $filterKeywordQuery->setQuery($boolQuery);
 
