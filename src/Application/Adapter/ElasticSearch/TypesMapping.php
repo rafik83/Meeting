@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 
 final class TypesMapping
 {
-    public const USER_EVENT_VIEW_ID = 'id';
+    public const USER_EVENT_VIEW_ID = 'uid';
     public const USER_EVENT_VIEW_EVENT_ID = 'eventId';
     public const USER_EVENT_VIEW_USER_ID = 'userId';
     public const USER_EVENT_VIEW_FIRSTNAME = 'firstName';

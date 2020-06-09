@@ -226,7 +226,7 @@ fos_elastica:
                             type: nested
                             properties:
                                 id:
-                                    type: integer
+                                    type: long
                     persistence:
                         elastica_to_model_transformer:
                             ignore_missing: true

@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\UserEventView;
 class UserEventView
 {
     /** @var string */
-    public $id;
+    public $uid;
 
     /** @var int */
     public $eventId;
@@ -57,7 +57,7 @@ class UserEventView
         array $sheets,
         array $templateObjectFilters
     ) {
-        $this->id = self::generateId($eventId, $userId);
+        $this->uid = self::generateId($eventId, $userId);
         $this->eventId = $eventId;
         $this->userId = $userId;
         $this->firstName = $firstName;

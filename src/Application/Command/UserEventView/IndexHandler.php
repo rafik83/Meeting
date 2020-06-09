@@ -49,6 +49,6 @@ class IndexHandler
             );
         }
 
-        $this->elasticSearchPersister->persist('id', $this->userEventViewsFactory->getByEvent($command->event));
+        $this->elasticSearchPersister->persist('uid', $this->userEventViewsFactory->getByEvent($command->event));
     }
 }
