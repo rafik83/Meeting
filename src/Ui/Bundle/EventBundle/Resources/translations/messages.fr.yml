@@ -290,6 +290,7 @@ meeting.video.media.share.urlVideo.securityError: 'L''Url de la vidéo doit êtr
 meeting.video.media.share.urlVideo.loadingError: 'Impossible de lire cette Url. Vérifiez qu''il s''agit d''un format vidéo adapté pour le web et que le fichier est en libre accès.'
 meeting.video.media.share.button.screenShare: 'Mon écran'
 meeting.video.media.share.button.videoShare: 'Une vidéo'
+meeting.video.media.share.screenShareStatus: 'Vous partagez votre écran'
 meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
 meeting.video.screenshare: 'Partage d''écran'
 meeting.video.screenshare.end: 'Arrêter le partage'
