@@ -85,6 +85,7 @@ function VideoConference(
   this.endSound = this.element.getAttribute('data-visio-meeting-end-sound');
   this.hasEndMessageOrImage = this.element.getAttribute('data-visio-meeting-end-warning');
   this.endContainer = this.element.querySelector('[data-visio-meeting-end-container]');
+  this.mediaShareScreenShareStatusMessage = this.element.getAttribute('data-media-screenShareStatus-message');
 
   this.useSettings = useSettings;
 
@@ -183,6 +184,10 @@ VideoConference.prototype.init = function() {
   this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
   this.session.on('streamCreated', function(event) {
+    // Show chat and screen share buttons when there are another participant
+    this.showElement(this.toggleChatElement);
+    this.showElement(this.startScreenSharingButton);
+
     const subscriberManager = new Subscriber(
         this.session,
         this.layoutContainer,
@@ -251,10 +256,8 @@ VideoConference.prototype.maximizeAllSubscribers = function() {
  */
 VideoConference.prototype.connect = function() {
   this.session.connect(this.token, function(error) {
-    this.showElement(this.toggleChatElement);
     this.showElement(this.toggleAudioElement);
     this.showElement(this.toggleVideoElement);
-    this.showElement(this.startScreenSharingButton);
 
     if (!error) {
       this.publishStream();
@@ -372,7 +375,6 @@ VideoConference.prototype.handlePublishScreensharing = function(error) {
   }
 
   this.startScreenSharingButton.classList.add('hide');
-  this.endScreenSharingButton.classList.remove('hide');
 };
 
 VideoConference.prototype.showError = function(error) {
@@ -406,18 +408,33 @@ VideoConference.prototype.screenshare = function() {
       return;
     }
 
-    this.publisherScreen = new Publisher(this.layoutContainer);
+    this.publisherScreen = new Publisher(null);
     const publisherScreen = this.publisherScreen.create({
       videoSource: 'screen',
       publishAudio: true,
-      name: this.currentUserId ? this.currentUserId : null
+      name: this.currentUserId ? this.currentUserId : null,
+      insertDefaultUI: false,
     });
 
-    publisherScreen.on('videoElementCreated', this.onVideoElementCreated.bind(this));
+    const endSharingButton = document.createElement('button');
+    endSharingButton.textContent = this.endScreenSharingButton.textContent;
+    endSharingButton.classList.add('btn');
+    endSharingButton.classList.add('btn-primary');
+    endSharingButton.addEventListener('click', this.handleStopScreensharing.bind(this));
+
+    this.screenElement = document.createElement('div');
+    this.screenElement.classList.add('screen-share-in-progress');
+    const screenCenteredElement = document.createElement('div');
+    screenCenteredElement.textContent = this.mediaShareScreenShareStatusMessage;
+    screenCenteredElement.appendChild(document.createElement('hr'));
+    screenCenteredElement.appendChild(endSharingButton);
+
+    this.screenElement.appendChild(screenCenteredElement);
+    this.layoutContainer.appendChild(this.screenElement);
 
     this.session.publish(publisherScreen, this.handlePublishScreensharing.bind(this));
     this.minimizeAllSubscribers();
-    this.maximize(publisherScreen.element);
+    this.maximize(this.screenElement);
     this.layout();
 
     publisherScreen.on('mediaStopped', this.handleStopScreensharing.bind(this));
@@ -433,10 +450,10 @@ VideoConference.prototype.handleStopScreensharing = function() {
   }
 
   this.publisherScreen.destroy();
+  this.screenElement.remove();
   this.maximizeAllSubscribers();
   this.layout();
   this.startScreenSharingButton.classList.remove('hide');
-  this.endScreenSharingButton.classList.add('hide');
 };
 
 /**
