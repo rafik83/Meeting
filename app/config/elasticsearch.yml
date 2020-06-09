@@ -92,7 +92,6 @@ fos_elastica:
                                             type: string
                         filledFilter:
                             type: nested
-                            index: "not_analyzed"
                             properties:
                                 key:
                                     type: string
