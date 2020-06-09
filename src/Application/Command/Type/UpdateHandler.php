@@ -67,9 +67,7 @@ class UpdateHandler
             $update->numberMaxOfHappeningsPerUser,
             $update->numberMaxOfMeetingsPerSheet,
             $update->canEvaluateMeeting,
-            $update->canEvaluateMeeting ? $update->mustEvaluateMeeting : false,
-            $update->phoneAccessMinEvaluation,
-            $update->emailAccessMinEvaluation
+            $update->canEvaluateMeeting ? $update->mustEvaluateMeeting : false
         );
         $type->setHidden($update->hidden);
 

@@ -19,6 +19,3 @@ Proximum\Vimeet\Application\Command\Type\Update:
                         title:
                             - NotBlank: ~
                         description: ~
-        phoneAccessMinEvaluation:
-            - Type: {type: integer}
-            - Range: {min: 1, max: 5}

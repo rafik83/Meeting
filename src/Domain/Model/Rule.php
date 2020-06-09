@@ -57,6 +57,12 @@ class Rule
      */
     private $priority;
 
+    /** @var int|null */
+    private $phoneAccessMinEvaluation;
+
+    /** @var int|null */
+    private $emailAccessMinEvaluation;
+
     /**
      * Rule constructor.
      *
@@ -200,6 +206,16 @@ class Rule
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    public function getPhoneAccessMinEvaluation(): ?int
+    {
+        return $this->phoneAccessMinEvaluation;
+    }
+
+    public function getEmailAccessMinEvaluation(): ?int
+    {
+        return $this->emailAccessMinEvaluation;
     }
 
     /**

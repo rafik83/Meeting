@@ -115,12 +115,6 @@ class Type implements WhoInterface, TypeInterface
     /** @var bool */
     private $mustEvaluateMeeting = false;
 
-    /** @var int|null */
-    private $phoneAccessMinEvaluation;
-
-    /** @var int|null */
-    private $emailAccessMinEvaluation;
-
     public function __construct(Event $event)
     {
         $this->event = $event;
@@ -464,9 +458,7 @@ class Type implements WhoInterface, TypeInterface
         ?int $numberMaxOfHappeningsPerUser = null,
         ?int $numberMaxOfMeetingsPerSheet = null,
         bool $canEvaluateMeeting = true,
-        bool $mustEvaluateMeeting = false,
-        ?int $phoneAccessMinEvaluation = null,
-        ?int $emailAccessMinEvaluation = null
+        bool $mustEvaluateMeeting = false
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
@@ -483,8 +475,6 @@ class Type implements WhoInterface, TypeInterface
         $this->numberMaxOfMeetingsPerSheet = $numberMaxOfMeetingsPerSheet;
         $this->canEvaluateMeeting = $canEvaluateMeeting;
         $this->mustEvaluateMeeting = $mustEvaluateMeeting;
-        $this->phoneAccessMinEvaluation = $phoneAccessMinEvaluation;
-        $this->emailAccessMinEvaluation = $emailAccessMinEvaluation;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int
@@ -557,15 +547,5 @@ class Type implements WhoInterface, TypeInterface
     public function mustEvaluateMeeting(): bool
     {
         return $this->mustEvaluateMeeting;
-    }
-
-    public function getPhoneAccessMinEvaluation(): ?int
-    {
-        return $this->phoneAccessMinEvaluation;
-    }
-
-    public function getEmailAccessMinEvaluation(): ?int
-    {
-        return $this->emailAccessMinEvaluation;
     }
 }
