@@ -67,12 +67,12 @@ class CreateFormHandler
 
         $create = new Create($event, $sheet, $user, $request->getLocale(), $createForm->timezone);
         $form = $this->formFactory->create(CreateType::class, $create, [
-            'action'                 => $createForm->actionUrl,
+            'action' => $createForm->actionUrl,
             'isUserAloneParticipant' => $isUserAloneParticipant,
-            'event'                  => $event,
-            'locale'                 => $request->getLocale(),
-            'sheet'                  => $sheet,
-            'timezone'               => $timezone,
+            'event' => $event,
+            'locale' => $request->getLocale(),
+            'sheet' => $sheet,
+            'timezone' => $timezone,
         ]);
 
         // If the page is called by an ajax request, only show the form
@@ -101,8 +101,8 @@ class CreateFormHandler
                             $this->translator->trans(
                                 'validators.unavailability.timeOutOfRange.begin',
                                 [
-                                    '%day%' => DayHelper::getFormatter($request->getLocale(), $event->getTimeZone())
-                                        ->format($exception->day->getDay()),
+                                    '%day%' => DayHelper::getFormatter($request->getLocale(), $timezone)
+                                        ->format($exception->day->getBegin()),
                                 ],
                                 'validators'
                             )
@@ -114,8 +114,8 @@ class CreateFormHandler
                             $this->translator->trans(
                                 'validators.unavailability.timeOutOfRange.end',
                                 [
-                                    '%day%' => DayHelper::getFormatter($request->getLocale(), $event->getTimeZone())
-                                        ->format($exception->day->getDay()),
+                                    '%day%' => DayHelper::getFormatter($request->getLocale(), $timezone)
+                                        ->format($exception->day->getEnd()),
                                 ],
                                 'validators'
                             )

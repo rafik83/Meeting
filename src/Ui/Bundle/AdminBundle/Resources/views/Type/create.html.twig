@@ -63,6 +63,19 @@
     {{ form_row(form.numberMaxOfHappeningsPerUser, {widget_columns: 2}) }}
 
     {{ form_row(form.validationCriteria) }}
+    <hr>
+    <div class="form-group">
+        {{ form_label(form.canEvaluateMeeting, null, { label_attr: { class: 'control-label col-md-3' }}) }}
+        <div class="col-md-9 checkbox">
+            {{ form_widget(form.canEvaluateMeeting) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(form.mustEvaluateMeeting, null, { label_attr: { class: 'control-label col-md-3' }}) }}
+        <div class="col-md-9 checkbox">
+            {{ form_widget(form.mustEvaluateMeeting) }}
+        </div>
+    </div>
 
 {% endblock form_content %}
 

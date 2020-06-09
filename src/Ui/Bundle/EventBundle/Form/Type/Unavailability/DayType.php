@@ -21,21 +21,20 @@ class DayType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired('event');
         $resolver->setRequired('locale');
         $resolver->setRequired('formatter');
-        $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setRequired('days');
 
         $resolver->setDefaults([
-            'required'                  => true,
-            'choices'                   => function (Options $options) {
-                return $options['event']->getDays();
+            'required' => true,
+            'choices' => static function (Options $options) {
+                return $options['days'];
             },
-            'choice_label'              => function (Options $options) {
-                return function (Event\Day $day) use ($options) {
-                    return $options['formatter']->format($day->getDay());
+            'choice_label' => static function (Options $options) {
+                return static function ($day) use ($options) {
+                    return $options['formatter']->format($day->getBegin());
                 };
             },
             'choice_translation_domain' => false,
@@ -45,7 +44,7 @@ class DayType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }
@@ -53,7 +52,7 @@ class DayType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'unavailability_day';
     }

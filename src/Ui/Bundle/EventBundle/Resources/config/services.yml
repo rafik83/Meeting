@@ -786,3 +786,14 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationCheckerHandler:
+        arguments:
+            - '@router.default'
+            - '@session.flash_bag'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirectHandler:
+        arguments:
+            - '@adapter.router'

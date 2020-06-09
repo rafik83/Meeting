@@ -1208,6 +1208,7 @@ form.type_content_define_terms_of_sale.children.enabled.label: 'Activer la perso
 form.type_content_define_terms_of_sale.children.submit.label: Valider
 form.type_create.children.areAllSheetParticipantsAssignedToMeeting.label: 'Tous les participants sont affectés à tous les RDV d’une fiche'
 form.type_create.children.availabilityType.label: 'Gestion de disponibilité'
+form.type_create.children.canEvaluateMeeting.label: 'Le participant peut noter son rendez-vous'
 form.type_create.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_create.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_create.children.canScanParticipant.label: 'Peut scanner un autre participant'
@@ -1217,6 +1218,8 @@ form.type_create.children.formTemplates.status.draft: brouillon
 form.type_create.children.formTemplates.status.published: publié
 form.type_create.children.hidden.label: Caché
 form.type_create.children.isPackageRequired.label: 'Forfait requis'
+form.type_create.children.isPaymentRequired.label: 'Règlement requis'
+form.type_create.children.mustEvaluateMeeting.label: 'Le participant doit noter son rendez-vous'
 form.type_create.children.numberMaxOfHappeningsPerUser.label: 'Nombre de conférences maximum par participant'
 form.type_create.children.numberMaxOfMeetingsPerSheet.help: 'Si vide, est défini en fonction du nombre de plannings, de participants et de créneaux disponibles'
 form.type_create.children.numberMaxOfMeetingsPerSheet.label: 'Nombre de RDV max par fiche'
@@ -1264,6 +1267,7 @@ form.type_template.sheet.event: 'Templates de l''événément'
 form.type_template.sheet.organizer: 'Mes templates de Participation'
 form.type_update.children.areAllSheetParticipantsAssignedToMeeting.label: 'Tous les participants sont affectés à tous les RDV d’une fiche'
 form.type_update.children.availabilityType.label: 'Gestion de disponibilité'
+form.type_update.children.canEvaluateMeeting.label: 'Le participant peut noter son rendez-vous'
 form.type_update.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_update.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_update.children.canScanParticipant.label: 'Peut scanner un autre participant'
@@ -1272,6 +1276,7 @@ form.type_update.children.formTemplates.label: Formulaires
 form.type_update.children.hidden.label: Caché
 form.type_update.children.isPackageRequired.label: 'Forfait requis'
 form.type_update.children.isPaymentRequired.label: 'Règlement requis'
+form.type_update.children.mustEvaluateMeeting.label: 'Le participant doit noter son rendez-vous'
 form.type_update.children.numberMaxOfHappeningsPerUser.label: 'Nombre de conférences maximum par participant'
 form.type_update.children.numberMaxOfMeetingsPerSheet.help: 'Si vide, est défini en fonction du nombre de plannings, de participants et de créneaux disponibles'
 form.type_update.children.numberMaxOfMeetingsPerSheet.label: 'Nombre de RDV max par fiche'

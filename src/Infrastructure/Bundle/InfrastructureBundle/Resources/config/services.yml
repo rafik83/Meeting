@@ -7146,6 +7146,7 @@ services:
 
     Proximum\Vimeet\Application\Query\Contact\GetContactListUsersViewQueryHandler:
         arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Domain\Meeting\MeetingParticipants'
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'

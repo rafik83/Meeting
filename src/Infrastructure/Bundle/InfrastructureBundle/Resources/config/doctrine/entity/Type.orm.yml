@@ -64,6 +64,14 @@ Proximum\Vimeet\Domain\Model\Type:
             nullable: true
             options:
                 default: null
+        canEvaluateMeeting:
+            type: boolean
+            options:
+                default: true
+        mustEvaluateMeeting:
+            type: boolean
+            options:
+                default: false
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria

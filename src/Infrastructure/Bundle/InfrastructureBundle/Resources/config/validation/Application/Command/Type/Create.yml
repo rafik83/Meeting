@@ -9,6 +9,9 @@ Proximum\Vimeet\Application\Command\Type\Create:
         numberOfMeetingsPerPlanning:
             - Type: {type: integer}
             - GreaterThanOrEqual: 0
+        priorityMeetingRequestsNumber:
+            - Type: {type: integer}
+            - NotBlank: ~
         translations:
             - All:
                 - Collection:

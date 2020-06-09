@@ -10,6 +10,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class GetContactListUsersViewQueryHandler
@@ -26,7 +27,11 @@ class GetContactListUsersViewQueryHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
     public function __construct(
+        MeetingRepositoryInterface $meetingRepository,
         RequestRepositoryInterface $requestRepository,
         MeetingParticipants $meetingParticipants,
         ContactRepositoryInterface $contactRepository,
@@ -36,35 +41,64 @@ class GetContactListUsersViewQueryHandler
         $this->meetingParticipants = $meetingParticipants;
         $this->contactRepository = $contactRepository;
         $this->sheetRepository = $sheetRepository;
+        $this->meetingRepository = $meetingRepository;
     }
 
     public function handle(GetContactListUsersViewQuery $query): GetContactListUsersView
     {
-        $requestedUsers = $this->getFromApprovedRequests($query->participant);
-        $scannedUsers = $this->getFromContacts($query->event, $query->participant->getUser());
+        $user = $query->participant->getUser();
+        $event = $query->event;
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
-        return new GetContactListUsersView($scannedUsers, $requestedUsers);
+        $metUsersInMeeting = $this->getMetUsersInMeeting($event, $sheets);
+        $requestedUsers = $this->getFromApprovedRequests($sheets, $user);
+        $scannedUsers = $this->getFromContacts($event, $user);
+
+        return new GetContactListUsersView($scannedUsers, $requestedUsers, $metUsersInMeeting);
+    }
+
+    private function getMetUsersInMeeting(Event $event, array $sheets): array
+    {
+        $meetings = $this->meetingRepository->getBySheets($event, $sheets);
+        $users = [];
+
+        foreach ($meetings as $meeting) {
+            $participantsMet = [];
+            foreach ($sheets as $sheet) {
+                $participantsMet = $meeting->getMetParticipants($sheet);
+
+                if (!empty($participantsMet)) {
+                    break 1;
+                }
+            }
+
+            foreach ($participantsMet as $participantMet) {
+                $users[] = $participantMet->getUser();
+            }
+        }
+
+        return $users;
     }
 
     /**
-     * @param Participant $participant
+     * @param Sheet[] $sheets
+     * @param User    $user
      *
      * @return User[]
      */
-    protected function getFromApprovedRequests(Participant $participant): array
+    protected function getFromApprovedRequests(array $sheets, User $user): array
     {
         $metUsers = [];
-        $user = $participant->getUser();
-
-        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $participant->getEvent());
 
         foreach ($sheets as $sheet) {
-            $requests = $this->requestRepository->findApproved($sheet);
             $participantOfSheet = $sheet->getUserParticipant($user);
 
+            // Avoid a request if the user is not participating on the sheet.
             if (null === $participantOfSheet) {
                 continue;
             }
+
+            $requests = $this->requestRepository->findApproved($sheet);
 
             foreach ($requests as $request) {
                 if (!$this->isRequestNoPreferenceOrInParticipants($request, $participantOfSheet)) {

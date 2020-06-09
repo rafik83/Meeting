@@ -53,13 +53,15 @@ class UpdateHandlerTest extends TestCase
         $update->areAllSheetParticipantsAssignedToMeeting = true;
         $update->priorityMeetingRequestsNumber = 2;
         $update->numberMaxOfHappeningsPerUser = 10;
+        $update->canEvaluateMeeting = false;
+        $update->mustEvaluateMeeting = true;
 
         //Mock
         $typeRepository             = $this->prophesize(TypeRepositoryInterface::class);
         $sheetTemplateCloner        = $this->prophesize(SheetTemplateCloner::class);
         $registrationTemplateCloner = $this->prophesize(RegistrationTemplateCloner::class);
 
-        $typeRepository->set(Argument::that(function (Type $actual) use ($expectedType) {
+        $typeRepository->set(Argument::that(static function (Type $actual) use ($expectedType) {
             return $expectedType->getId() === $actual->getId()
                 && 10 === $actual->getNumberMaxOfHappeningsPerUser()
                 && Type::TYPE_MANAGEMENT_NONE === $actual->getAvailabilityType()
@@ -71,6 +73,8 @@ class UpdateHandlerTest extends TestCase
                 && 2 === $actual->getPriorityMeetingRequestsNumber()
                 && 'Exposant' === $actual->getTitle('fr')
                 && new ValidationCriteria(false) == $actual->getValidationCriteria()
+                && !$actual->canEvaluateMeeting()
+                && !$actual->mustEvaluateMeeting()
             ;
         }))->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'Exposant', $type)->willReturn(false);

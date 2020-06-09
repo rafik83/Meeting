@@ -32,7 +32,7 @@ class TypeCreateType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('sheetTemplate', SheetTemplateChoiceType::class, [
@@ -95,34 +95,33 @@ class TypeCreateType extends AbstractType
             ->add('canMoveMeeting', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add(
-                'areAllSheetParticipantsAssignedToMeeting', CheckboxType::class, [
+            ->add('areAllSheetParticipantsAssignedToMeeting', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add(
-                'canScanParticipant', CheckboxType::class, [
+            ->add('canScanParticipant', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add(
-                'isPackageRequired', CheckboxType::class, [
+            ->add('isPackageRequired', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add(
-                'isPaymentRequired', CheckboxType::class, [
+            ->add('isPaymentRequired', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add(
-                'priorityMeetingRequestsNumber', IntegerType::class, [
+            ->add('priorityMeetingRequestsNumber', IntegerType::class, [
                 'required' => false,
             ])
-            ->add(
-                'numberMaxOfHappeningsPerUser', IntegerType::class, [
+            ->add('numberMaxOfHappeningsPerUser', IntegerType::class, [
                 'required' => false,
             ])
-            ->add(
-                'numberMaxOfMeetingsPerSheet', IntegerType::class, [
+            ->add('numberMaxOfMeetingsPerSheet', IntegerType::class, [
                 'required' => false,
                 'help' => 'form.type_create.children.numberMaxOfMeetingsPerSheet.help',
+            ])
+            ->add('canEvaluateMeeting', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('mustEvaluateMeeting', CheckboxType::class, [
+                'required' => false,
             ])
         ;
     }

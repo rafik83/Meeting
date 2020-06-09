@@ -12,9 +12,16 @@ class GetContactListUsersView
     /** @var User[] */
     public $requestsUsers;
 
-    public function __construct(array $scannedUsers, array $requestsUsers)
-    {
+    /** @var User[] */
+    public $metInMeetingUsers;
+
+    public function __construct(
+        array $scannedUsers,
+        array $requestsUsers,
+        array $metInMeetingUsers = []
+    ) {
         $this->inContactsUsers = $scannedUsers;
         $this->requestsUsers = $requestsUsers;
+        $this->metInMeetingUsers = $metInMeetingUsers;
     }
 }

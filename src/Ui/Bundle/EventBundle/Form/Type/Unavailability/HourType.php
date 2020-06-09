@@ -19,12 +19,12 @@ class HourType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $hours = range(0, 23);
         $resolver->setDefaults([
-            'choices'            => $hours,
-            'choice_label'       => function ($hour) {
+            'choices' => $hours,
+            'choice_label' => static function ($hour) {
                 return $hour < 10 ? sprintf('0%s', $hour) : $hour;
             },
             'translation_domain' => false,
@@ -34,7 +34,7 @@ class HourType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }
@@ -42,7 +42,7 @@ class HourType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'unavailability_hour';
     }

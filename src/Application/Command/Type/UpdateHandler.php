@@ -20,26 +20,15 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class UpdateHandler
 {
-    /**
-     * @var TypeRepositoryInterface
-     */
+    /** @var TypeRepositoryInterface */
     private $typeRepository;
 
-    /**
-     * @var SheetTemplateCloner
-     */
+    /** @var SheetTemplateCloner */
     private $sheetTemplateCloner;
 
-    /**
-     * @var RegistrationTemplateCloner
-     */
+    /** @var RegistrationTemplateCloner */
     private $registrationTemplateCloner;
 
-    /**
-     * @param TypeRepositoryInterface    $typeRepository
-     * @param SheetTemplateCloner        $sheetTemplateCloner
-     * @param RegistrationTemplateCloner $registrationTemplateCloner
-     */
     public function __construct(
         TypeRepositoryInterface $typeRepository,
         SheetTemplateCloner $sheetTemplateCloner,
@@ -56,7 +45,7 @@ class UpdateHandler
      * @throws PackageNotRequiredException
      * @throws TypeAlreadyExistsException
      */
-    public function handle(Update $update)
+    public function handle(Update $update): void
     {
         if(!$update->isPackageRequired && $update->isPaymentRequired) {
             throw new PackageNotRequiredException();
@@ -76,7 +65,9 @@ class UpdateHandler
             $update->isPaymentRequired,
             $update->priorityMeetingRequestsNumber,
             $update->numberMaxOfHappeningsPerUser,
-            $update->numberMaxOfMeetingsPerSheet
+            $update->numberMaxOfMeetingsPerSheet,
+            $update->canEvaluateMeeting,
+            $update->canEvaluateMeeting ? $update->mustEvaluateMeeting : false
         );
         $type->setHidden($update->hidden);
 
@@ -123,7 +114,7 @@ class UpdateHandler
      *
      * @return SheetTemplate
      */
-    private function getSheetTemplate(Update $update, Type $type)
+    private function getSheetTemplate(Update $update, Type $type): SheetTemplate
     {
         return $update->sheetTemplate->getEvent() === $update->type->getEvent()
             ? $update->sheetTemplate
@@ -140,7 +131,7 @@ class UpdateHandler
      *
      * @return RegistrationTemplate
      */
-    private function getRegistrationTemplate(Update $update, Type $type)
+    private function getRegistrationTemplate(Update $update, Type $type): RegistrationTemplate
     {
         return $update->registrationTemplate->getEvent() === $update->type->getEvent()
             ? $update->registrationTemplate

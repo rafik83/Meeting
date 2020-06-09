@@ -931,4 +931,33 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->getQuery()
             ->getResult();
     }
+
+    public function getPreviousVisioMeeting(
+        Event $event,
+        Sheet $sheet,
+        Participant $participant,
+        \DateTimeInterface $begin
+    ): ?Meeting {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'meeting.event = :event AND meeting.state = :state')
+            ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.id = :sheet OR fromSheet = :sheet')
+            ->join('meeting.spot', 'spot', 'WITH', 'spot.visio = true')
+            ->join('meeting.slot', 'slot', 'WITH', 'slot.begin < :begin')
+            ->join('meeting.fromParticipants', 'from_participant')
+            ->join('meeting.toParticipants', 'to_participant', 'WITH', 'to_participant.id = :participant OR from_participant.id = :participant')
+            ->orderBy('slot.begin', 'DESC')
+            ->setParameter('event', $event)
+            ->setParameter('sheet', $sheet)
+            ->setParameter('begin', $begin)
+            ->setParameter('participant', $participant)
+            ->setParameter('state', Meeting::STATE_SCHEDULED)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

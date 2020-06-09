@@ -135,6 +135,8 @@ event.info.contact: 'Informations pratiques'
 event.info.privacyPolicy.content: "Les informations recueillies sont enregistrées dans un fichier informatisé par Vimeet pour votre participation à cet événement.\n\nElles sont conservées pendant 2 ans et sont destinées à l'organisateur de l'événement basé dans l'Union européenne.\n\nConformément à la loi européenne sur la protection des données personnelles, vous pouvez exercer votre droit d'accès aux données vous concernant et les faire rectifier ou supprimer en contactant : cnil@vi-meet.com"
 event.info.privacyPolicy.title: 'Politique de confidentialité'
 event.invisible.label: Invisible
+event.meeting.evaluation.label: 'Pour accéder au prochain rendez-vous vous devez noter la pertinence business de ce rendez-vous (confidentiel) :'
+event.meeting.evaluation.skip: 'Plus tard'
 event.meeting.listRequest.contact.export: 'Télécharger mes contacts'
 event.meeting.listRequest.filter.all: Toutes
 event.meeting.listRequest.filter.propositions: 'Propositions reçues'

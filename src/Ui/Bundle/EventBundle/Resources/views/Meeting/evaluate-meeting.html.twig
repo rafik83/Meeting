@@ -1,0 +1,48 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block content %}
+    <div class="profile__content">
+        <div class="main__content">
+            <div class="preview">
+                <div class="list list--users">
+                    {% for contactView in contacts %}
+                    <div class="user clearfix">
+                        <div class="user__avatar">
+                            <div class="avatar">
+                                {% if contactView.avatar %}
+                                    <img src="{{ contactView.avatar|imagine_filter('user_avatar') }}"
+                                         alt="{{ contactView.initials }} avatar">
+                                {% else %}
+                                    <p>{{ contactView.initials }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="user__infos">
+                            <p class="name">{{ contactView.firstName|capitalize }} {{ contactView.lastName|upper }}</p>
+                            <p class="job">{{ contactView.position }}</p>
+                            <p>
+                                {% for contactSheetView in contactView.contactSheetViews %}
+                                    <a href="{{ contactSheetView.url }}">{{ contactSheetView.title }}</a>{{ not loop.last ? ', ' : '' }}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <p class="text-center"><strong>{{ 'event.meeting.evaluation.label'|trans }}</strong></p>
+                <div class="text-center">
+                    {{ form_start(ratingForm) }}
+                    {{ form_widget(ratingForm.evaluation) }}
+                    {{ form_end(ratingForm) }}
+
+                    {% if not mustEvaluateMeeting %}
+                    <a class="btn btn-link" href="{{ path('event_agenda_participant', {'sheet': sheet.id, 'participant': participant.id}) }}">
+                        {{ 'event.meeting.evaluation.skip'|trans }}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
