@@ -104,7 +104,6 @@ fos_elastica:
                             type: integer
                         followUp:
                             type: integer
-                            nullable: true
                             null_value: 0
                         commercialStatus:
                             type: string
@@ -164,7 +163,6 @@ fos_elastica:
                             type: boolean
                         reminderDate:
                             type: date
-                            nullable: true
                         organizationCategory:
                             type: string
                             index: "not_analyzed"
