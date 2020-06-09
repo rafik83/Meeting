@@ -220,11 +220,15 @@ class Rule
 
     /**
      * @param array $what
-     * @param int   $priority
+     * @param int $priority
+     * @param int|null $phoneAccessMinEvaluation
+     * @param int|null $emailAccessMinEvaluation
      */
-    public function update(array $what, $priority)
+    public function update(array $what, $priority, ?int $phoneAccessMinEvaluation, ?int $emailAccessMinEvaluation)
     {
         $this->what     = $what;
         $this->priority = $priority;
+        $this->phoneAccessMinEvaluation = $phoneAccessMinEvaluation;
+        $this->emailAccessMinEvaluation = $emailAccessMinEvaluation;
     }
 }
