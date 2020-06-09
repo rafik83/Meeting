@@ -213,7 +213,7 @@ class Sheet implements TraceableInterface
         array $data,
         User $owner,
         DateTimeInterface $createdAt,
-        Group $group = null
+        ?Group $group = null
     ) {
         $this->event        = $event;
         $this->type         = $type;
@@ -295,7 +295,7 @@ class Sheet implements TraceableInterface
      *
      * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
@@ -305,7 +305,7 @@ class Sheet implements TraceableInterface
      *
      * @return Type
      */
-    public function getType()
+    public function getType(): Type
     {
         return $this->type;
     }
@@ -491,7 +491,7 @@ class Sheet implements TraceableInterface
      *
      * @return DateTimeInterface
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -565,7 +565,7 @@ class Sheet implements TraceableInterface
      *
      * @return User
      */
-    public function getOwner()
+    public function getOwner(): User
     {
         return $this->owner;
     }
@@ -1055,7 +1055,7 @@ class Sheet implements TraceableInterface
     /**
      * @return null|Group
      */
-    public function getGroup()
+    public function getGroup(): ?Group
     {
         return $this->group;
     }

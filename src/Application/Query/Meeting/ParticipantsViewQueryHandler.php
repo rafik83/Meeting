@@ -50,6 +50,8 @@ class ParticipantsViewQueryHandler
     public function handle(ParticipantsViewQuery $query): array
     {
         $meetingParticipantViews = [];
+        $phoneVisible = true;
+        $emailVisible = true;
 
         foreach ($query->participants as $participant) {
             $participantInfo = $this->participantInfoGuesser->guessParticipantInfos(
@@ -80,9 +82,9 @@ class ParticipantsViewQueryHandler
                 $participantInfo[Tag::PARTICIPANT_FIRSTNAME],
                 $participantInfo[Tag::PARTICIPANT_LASTNAME],
                 $participantInfo[Tag::PARTICIPANT_POSITION],
-                $participantInfo[Tag::PARTICIPANT_PHONE],
+                $phoneVisible ? $participantInfo[Tag::PARTICIPANT_PHONE] : $this->translator->trans('info not available'),
                 $gender ? $this->translator->trans('gender.'.$gender, [], 'messages') : '',
-                $participant->getEmail(),
+                $emailVisible ? $participant->getEmail() : $this->translator->trans('info not available'),
                 implode("\n", $participantContactEvaluation),
                 implode("\n", $participantContactComment)
             );
