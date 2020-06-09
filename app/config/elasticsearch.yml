@@ -205,7 +205,6 @@ fos_elastica:
                                     analyzer: "autocomplete"
                         country:
                             type: nested
-                            index: "not_analyzed"
                             properties:
                                 label:
                                     type: string
@@ -218,7 +217,6 @@ fos_elastica:
                                     index: "not_analyzed"
                         keywords:
                             type: nested
-                            index: "not_analyzed"
                             properties:
                                 label:
                                     type: string
