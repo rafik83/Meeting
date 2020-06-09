@@ -195,11 +195,9 @@ fos_elastica:
                             type: string
                             index: "not_analyzed"
                         city:
-                            type: multi_field
+                            type: string
+                            analyzer: "lowercaseAnalyzer"
                             fields:
-                                city:
-                                    type: string
-                                    analyzer: "lowercaseAnalyzer"
                                 city_autocomplete:
                                     type: string
                                     analyzer: "autocomplete"
