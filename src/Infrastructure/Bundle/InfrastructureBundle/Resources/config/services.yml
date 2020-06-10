@@ -2781,6 +2781,11 @@ services:
         arguments:
             - '@template.participant_info_guesser'
 
+    contact.export_rules_resolver:
+        class: Proximum\Vimeet\Application\Components\Contact\ExportRulesResolver
+        arguments:
+            - '@repository.rule_repository'
+
     vimeet_infrastructure.application.components.sorted_sheet:
         class: Proximum\Vimeet\Application\Components\Sheet\SortedSheet
         arguments:
@@ -4754,6 +4759,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQueryHandler
         arguments:
             - '@template.participant_info_guesser'
+            - '@contact.export_rules_resolver'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
     query.meeting_request.status_list_view_query_handler:

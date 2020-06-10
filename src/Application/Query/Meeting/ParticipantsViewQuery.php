@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class ParticipantsViewQuery
 {
@@ -24,17 +25,22 @@ class ParticipantsViewQuery
     /** @var Contact[] */
     public $contacts;
 
+    /** @var Sheet */
+    public $seerSheet;
+
     /**
      * ParticipantsViewQuery constructor.
      *
      * @param Participant[] $participants
      * @param string        $locale
      * @param Contact[]     $contacts
+     * @param Sheet         $seerSheet
      */
-    public function __construct(array $participants, $locale, array $contacts)
+    public function __construct(array $participants, $locale, array $contacts, Sheet $seerSheet)
     {
         $this->participants = $participants;
         $this->locale = $locale;
         $this->contacts = $contacts;
+        $this->seerSheet = $seerSheet;
     }
 }

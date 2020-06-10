@@ -80,12 +80,12 @@ class SeeWhatType extends AbstractType
         $builder
             ->add('phoneAccessMinEvaluation', ChoiceType::class, [
                 'required' => false,
-                'placeholder' => 'admin.type.management.none.label',
+                'placeholder' => 'form.rule_see_what.children.unrestricted',
                 'choices' => $gradeChoices,
             ])
             ->add('emailAccessMinEvaluation', ChoiceType::class, [
                 'required' => false,
-                'placeholder' => 'admin.type.management.none.label',
+                'placeholder' => 'form.rule_see_what.children.unrestricted',
                 'choices' => $gradeChoices,
             ])
         ;
