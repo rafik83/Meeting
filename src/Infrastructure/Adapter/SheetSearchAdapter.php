@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
-use Elastica\Filter\Query as FilterQuery;
 use Elastica\Query;
 use Elastica\Query\FunctionScore;
 use Elastica\Result;
@@ -616,7 +615,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     private function findCountryQuery(Event $event, string $filter, string $locale): Filter
     {
         $filterEventQuery = new Query\Match('event', $event->getId());
-        //$filterEventQuery->setQuery();
 
         // country
         $matchCountry = new Query\Match('country.label_autocomplete', $filter);
@@ -625,9 +623,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $boolQuery = new Query\BoolQuery();
         $boolQuery->addMust($matchCountry);
         $boolQuery->addMust($matchLocale);
-
-        //$filterCountryQuery = new Query();
-        //$filterCountryQuery->setQuery($boolQuery);
 
         $countryAggregations = new Terms('countries');
         $countryAggregations->setField('country.label');
@@ -662,7 +657,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $sheetAggregation->setField('sheetName.raw');
         $sheetAggregation->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
-        //$filterQuery     = new FilterQuery($boolQuery);
         $filterSheetName = new Filter('sheet', $boolQuery);
         $filterSheetName->addAggregation($sheetAggregation);
 
