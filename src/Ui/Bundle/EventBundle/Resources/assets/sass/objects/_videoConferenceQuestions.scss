@@ -20,14 +20,20 @@
     }
 
     .question-author {
+      align-items: flex-end;
       background-color: $gray-lighter;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
       padding: 4px 10px;
       text-align: right;
     }
 
     .question-author-name {
-      display: inline-block;
-      vertical-align: bottom;
+      align-items: flex-end;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .question-author-title {
@@ -39,12 +45,16 @@
     }
 
     .question-author-avatar {
-      border-radius: 50%;
-      display: inline-block;
-      height: 32px;
-      margin-left: 10px;
-      object-fit: cover;
-      width: 32px;
+      align-self: center;
+
+      img {
+        border-radius: 50%;
+        display: inline-block;
+        height: 32px;
+        margin-left: 10px;
+        object-fit: cover;
+        width: 32px;
+      }
     }
   }
 }

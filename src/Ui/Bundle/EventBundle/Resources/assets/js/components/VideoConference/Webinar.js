@@ -700,7 +700,8 @@ Webinar.prototype.initQuestions = function () {
             authorEl.classList.add('question-author');
             const authorNameEl = authorEl.appendChild(document.createElement('span'));
             authorNameEl.classList.add('question-author-name');
-            authorNameEl.textContent = item.firstName + ' ' + item.lastName;
+            const authorNameTextEl = authorNameEl.appendChild(document.createElement('span'));
+            authorNameTextEl.textContent = item.firstName + ' ' + item.lastName;
             if (item.sheetTitle) {
                 const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
                 authorTitleEl.textContent = [item.position, item.sheetTitle].filter((item) => !!item).join(', ');
@@ -709,9 +710,9 @@ Webinar.prototype.initQuestions = function () {
 
             const avatarEl = authorEl.appendChild(document.createElement('span'));
             if (item.avatar) {
+                avatarEl.classList.add('question-author-avatar');
                 const imgEl = avatarEl.appendChild(document.createElement('img'));
                 imgEl.setAttribute('src', item.avatar);
-                imgEl.classList.add('question-author-avatar')
             }
 
             $questionsList[0].appendChild(rowEl);
