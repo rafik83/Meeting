@@ -12,13 +12,16 @@ namespace Proximum\Vimeet\Tests\Application\Query\Meeting;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Components\Contact\ExportRulesResolver;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Rule\ExportRule;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ParticipantsViewQueryHandlerTest extends TestCase
@@ -32,19 +35,26 @@ class ParticipantsViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy|ParticipantsViewQueryHandler */
     private $participantsViewQueryHandler;
 
+    /** @var ObjectProphecy|ExportRulesResolver */
+    private $exportRulesResolver;
+
     public function setUp()
     {
         $this->participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $this->exportRulesResolver = $this->prophesize(ExportRulesResolver::class);
         $this->translator = $this->prophesize(TranslatorInterface::class);
 
         $this->participantsViewQueryHandler = new ParticipantsViewQueryHandler(
             $this->participantInfoGuesser->reveal(),
+            $this->exportRulesResolver->reveal(),
             $this->translator->reveal()
         );
     }
 
     public function testHandle()
     {
+        $sheet = $this->prophesize(Sheet::class);
+
         $participant1 = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
         $participant3 = $this->prophesize(Participant::class);
@@ -66,6 +76,7 @@ class ParticipantsViewQueryHandlerTest extends TestCase
         $contact3 = $this->prophesize(Contact::class);
         $contact4 = $this->prophesize(Contact::class);
 
+        $this->translator->trans('event.meeting.listRequest.contact.unavailable', [], 'messages')->shouldBeCalled()->willReturn('Monsieur');
         $this->translator->trans('gender.man', [], 'messages')->shouldBeCalled()->willReturn('Monsieur');
         $this->translator->trans('gender.woman', [], 'messages')->shouldBeCalled()->willReturn('Madame');
 
@@ -76,6 +87,7 @@ class ParticipantsViewQueryHandlerTest extends TestCase
         $contact1->hasComment()->shouldBeCalled()->willReturn(true);
         $contact1->getComment()->shouldBeCalled()->willReturn('To follow');
         $participant1->getUser()->shouldBeCalled()->willReturn($userContact1->reveal());
+        $participant1->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
         $participant1->getEmail()->shouldBeCalled()->willReturn('pablo@picas.so');
 
         $contact2->getUser()->shouldBeCalled()->willReturn($me->reveal());
@@ -86,6 +98,7 @@ class ParticipantsViewQueryHandlerTest extends TestCase
         $contact2->getComment()->shouldNotBeCalled();
         $participant2->getUser()->shouldBeCalled()->willReturn($userContact2->reveal());
         $participant2->getEmail()->shouldBeCalled()->willReturn('paloma@picas.so');
+        $participant2->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
 
         $contact3->getContact()->shouldBeCalled()->willReturn($userContact3->reveal());
         $contact3->hasEvaluation()->shouldBeCalled()->willReturn(false);
@@ -94,6 +107,7 @@ class ParticipantsViewQueryHandlerTest extends TestCase
         $contact3->getComment()->shouldNotBeCalled();
         $participant3->getUser()->shouldBeCalled()->willReturn($userContact3->reveal());
         $participant3->getEmail()->shouldBeCalled()->willReturn('leonardo@da.vinci');
+        $participant3->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
 
         $contact4->getUser()->shouldBeCalled()->willReturn($myColleague->reveal());
         $contact4->getContact()->shouldBeCalled()->willReturn($userContact1->reveal());
@@ -177,13 +191,19 @@ class ParticipantsViewQueryHandlerTest extends TestCase
 
         $participantView = [$participantOfContactView1, $participantOfContactView2, $participantOfContactView3];
 
+        $this->exportRulesResolver
+            ->getExportRule($sheet->reveal(), $sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(new ExportRule(null, null));
+
         $this->assertEquals(
             $participantView,
             $this->participantsViewQueryHandler->handle(
                 new ParticipantsViewQuery(
                     [$participant1->reveal(), $participant2->reveal(), $participant3->reveal()],
                     'fr',
-                    [$contact1->reveal(), $contact2->reveal(), $contact3->reveal(), $contact4->reveal()]
+                    [$contact1->reveal(), $contact2->reveal(), $contact3->reveal(), $contact4->reveal()],
+                    $sheet->reveal()
                 )
             )
         );
