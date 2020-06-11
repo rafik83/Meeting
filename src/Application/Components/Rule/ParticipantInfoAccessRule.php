@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Rule;
+namespace Proximum\Vimeet\Application\Components\Rule;
 
-class ExportRule
+class ParticipantInfoAccessRule
 {
     /** @var int|null */
     private $phoneAccessMinEvaluation;

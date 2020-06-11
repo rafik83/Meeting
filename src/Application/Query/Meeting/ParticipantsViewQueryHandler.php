@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Components\Contact\ExportRulesResolver;
+use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRulesResolver;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Domain\Model\Contact;
@@ -25,9 +25,9 @@ class ParticipantsViewQueryHandler
     private $participantInfoGuesser;
 
     /**
-     * @var ExportRulesResolver
+     * @var ParticipantInfoAccessRulesResolver
      */
-    private $exportRulesResolver;
+    private $participantInfoAccessRulesResolver;
 
     /**
      * @var TranslatorInterface
@@ -42,11 +42,11 @@ class ParticipantsViewQueryHandler
      */
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
-        ExportRulesResolver $exportRulesResolver,
+        ParticipantInfoAccessRulesResolver $participantInfoAccessRulesResolver,
         TranslatorInterface $translator
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->exportRulesResolver = $exportRulesResolver;
+        $this->participantInfoAccessRulesResolver = $participantInfoAccessRulesResolver;
         $this->translator = $translator;
     }
 
@@ -71,7 +71,7 @@ class ParticipantsViewQueryHandler
             $participantContactComment = [];
 
 
-            $exportRule = $this->exportRulesResolver->getExportRule($query->seerSheet, $participant->getSheet());
+            $participantInfoAccessRule = $this->participantInfoAccessRulesResolver->getParticipantInfoAccessRule($query->seerSheet, $participant->getSheet());
             $evaluation = null;
 
             foreach ($query->contacts as $contact) {
@@ -95,9 +95,9 @@ class ParticipantsViewQueryHandler
                 $participantInfo[Tag::PARTICIPANT_FIRSTNAME],
                 $participantInfo[Tag::PARTICIPANT_LASTNAME],
                 $participantInfo[Tag::PARTICIPANT_POSITION],
-                $exportRule->isPhoneVisible($evaluation) ? $participantInfo[Tag::PARTICIPANT_PHONE] : $unavailableMessage,
+                $participantInfoAccessRule->isPhoneVisible($evaluation) ? $participantInfo[Tag::PARTICIPANT_PHONE] : $unavailableMessage,
                 $gender ? $this->translator->trans('gender.'.$gender, [], 'messages') : '',
-                $exportRule->isEmailVisible($evaluation) ? $participant->getEmail() : $unavailableMessage,
+                $participantInfoAccessRule->isEmailVisible($evaluation) ? $participant->getEmail() : $unavailableMessage,
                 implode("\n", $participantContactEvaluation),
                 implode("\n", $participantContactComment)
             );

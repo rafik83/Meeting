@@ -2782,7 +2782,7 @@ services:
             - '@template.participant_info_guesser'
 
     contact.export_rules_resolver:
-        class: Proximum\Vimeet\Application\Components\Contact\ExportRulesResolver
+        class: Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRule
         arguments:
             - '@repository.rule_repository'
 

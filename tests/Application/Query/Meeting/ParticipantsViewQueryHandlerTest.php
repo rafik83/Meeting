@@ -12,7 +12,8 @@ namespace Proximum\Vimeet\Tests\Application\Query\Meeting;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Components\Contact\ExportRulesResolver;
+use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRule;
+use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRulesResolver;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQueryHandler;
@@ -21,7 +22,6 @@ use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Rule\ExportRule;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ParticipantsViewQueryHandlerTest extends TestCase
@@ -35,18 +35,18 @@ class ParticipantsViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy|ParticipantsViewQueryHandler */
     private $participantsViewQueryHandler;
 
-    /** @var ObjectProphecy|ExportRulesResolver */
-    private $exportRulesResolver;
+    /** @var ObjectProphecy|ParticipantInfoAccessRulesResolver */
+    private $participantInfoAccessRulesResolver;
 
     public function setUp()
     {
         $this->participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
-        $this->exportRulesResolver = $this->prophesize(ExportRulesResolver::class);
+        $this->participantInfoAccessRulesResolver = $this->prophesize(participantInfoAccessRulesResolver::class);
         $this->translator = $this->prophesize(TranslatorInterface::class);
 
         $this->participantsViewQueryHandler = new ParticipantsViewQueryHandler(
             $this->participantInfoGuesser->reveal(),
-            $this->exportRulesResolver->reveal(),
+            $this->participantInfoAccessRulesResolver->reveal(),
             $this->translator->reveal()
         );
     }
@@ -191,10 +191,10 @@ class ParticipantsViewQueryHandlerTest extends TestCase
 
         $participantView = [$participantOfContactView1, $participantOfContactView2, $participantOfContactView3];
 
-        $this->exportRulesResolver
-            ->getExportRule($sheet->reveal(), $sheet->reveal())
+        $this->participantInfoAccessRulesResolver
+            ->getParticipantInfoAccessRule($sheet->reveal(), $sheet->reveal())
             ->shouldBeCalled()
-            ->willReturn(new ExportRule(null, null));
+            ->willReturn(new ParticipantInfoAccessRule(null, null));
 
         $this->assertEquals(
             $participantView,

@@ -8,22 +8,23 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Components\Contact;
+namespace Proximum\Vimeet\Application\Components\Rule;
 
+use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRule;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
-use Proximum\Vimeet\Domain\Rule\ExportRule;
 
 /**
- * Get an ExportRule from 2 sheets, to be used in contact export
+ * Get a ParticipantInfoAccessRule from 2 sheets, to be used in contact export
  */
-class ExportRulesResolver
+class ParticipantInfoAccessRulesResolver
 {
     /** @var RuleRepositoryInterface */
     private $ruleRepository;
 
+    /** @var Rule[] */
     private $rules;
 
     public function __construct(RuleRepositoryInterface $ruleRepository)
@@ -31,7 +32,7 @@ class ExportRulesResolver
         $this->ruleRepository = $ruleRepository;
     }
 
-    public function getExportRule(Sheet $seerSheet, Sheet $seeableSheet): ExportRule
+    public function getParticipantInfoAccessRule(Sheet $seerSheet, Sheet $seeableSheet): ParticipantInfoAccessRule
     {
         $phoneAccessMinEvaluation = null;
         $emailAccessMinEvaluation = null;
@@ -76,7 +77,7 @@ class ExportRulesResolver
             }
         }
 
-        return new ExportRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation);
+        return new ParticipantInfoAccessRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation);
     }
 
     private function loadRules(Event $event): array
