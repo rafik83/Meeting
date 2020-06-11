@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2102 - Evaluate visio meeting
+- VIMEET-2126 - Hide participants phone / email in contact export if evaluations are below a user-defined floor
 - VIMEET-2128 - Show participant name on visio
 
 ### Fixed
