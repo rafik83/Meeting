@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Query\User\Event\Participant;
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class GetUserParticipantInfosHandler
@@ -21,6 +22,10 @@ class GetUserParticipantInfosHandler
         $this->sheetGuesser = $sheetGuesser;
     }
 
+    /**
+     * @throws ParticipantNotFoundException
+     * @throws SheetNotFoundException
+     */
     public function handle(GetUserParticipantInfos $query): ParticipantView
     {
         $sheet = $this->sheetGuesser->getUserSheet($query->user, $query->event, $query->locale);

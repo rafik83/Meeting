@@ -3,6 +3,8 @@
 namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
@@ -70,9 +72,15 @@ class GetWebinarViewQueryHandler
             foreach ($happening->getParticipations() as $happeningParticipation) {
                 $user = $happeningParticipation->getUser();
 
-                $participantView = $this->getUserParticipantInfosHandler->handle(
-                    new GetUserParticipantInfos($happening->getEvent(), $user, $query->getLocale())
-                );
+                try {
+                    $participantView = $this->getUserParticipantInfosHandler->handle(
+                        new GetUserParticipantInfos($happening->getEvent(), $user, $query->getLocale())
+                    );
+                } catch (ParticipantNotFoundException $participantNotFoundException) {
+                    continue;
+                } catch (SheetNotFoundException $sheetNotFoundException) {
+                    continue;
+                }
 
                 $participantViews[] = new WebinarParticipantView(
                     $user->getId(),
