@@ -2781,8 +2781,8 @@ services:
         arguments:
             - '@template.participant_info_guesser'
 
-    contact.export_rules_resolver:
-        class: Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRule
+    rule.participant_info_access_rules_resolver:
+        class: Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRulesResolver
         arguments:
             - '@repository.rule_repository'
 
@@ -4759,7 +4759,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQueryHandler
         arguments:
             - '@template.participant_info_guesser'
-            - '@contact.export_rules_resolver'
+            - '@rule.participant_info_access_rules_resolver'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
     query.meeting_request.status_list_view_query_handler:

@@ -20,7 +20,6 @@ class ParticipantInfoAccessRule
 
     public function __construct(?int $phoneAccessMinEvaluation, ?int $emailAccessMinEvaluation)
     {
-
         $this->phoneAccessMinEvaluation = $phoneAccessMinEvaluation;
         $this->emailAccessMinEvaluation = $emailAccessMinEvaluation;
     }
