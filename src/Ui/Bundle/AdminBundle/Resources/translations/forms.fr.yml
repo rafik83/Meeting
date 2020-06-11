@@ -864,8 +864,8 @@ form.registration_template_create.children.title.label: 'Titre du nouveau templa
 form.registration_template_duplicate.children.event.label: 'Événement de destination du nouveau template'
 form.registration_template_duplicate.children.submit.label: Dupliquer
 form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
-form.rule_see_what.children.emailAccessMinEvaluation.label: 'Dans l''export, masquer l''adresse email pour les notes de 1 à'
-form.rule_see_what.children.phoneAccessMinEvaluation.label: 'Dans l''export, masquer les coordonnées téléphoniques pour les notes de 1 à'
+form.rule_see_what.children.emailAccessMinEvaluation.label: 'Dans l''export des contacts, masquer l''adresse email pour les notes de 1 à'
+form.rule_see_what.children.phoneAccessMinEvaluation.label: 'Dans l''export des contacts, masquer les coordonnées téléphoniques pour les notes de 1 à'
 form.rule_see_what.children.priority.label: 'Priorité de la règle'
 form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'
 form.rule_see_what.children.submit.label: 'Enregistrer la règle'
