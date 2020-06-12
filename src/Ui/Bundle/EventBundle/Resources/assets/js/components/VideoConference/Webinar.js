@@ -127,6 +127,7 @@ function Webinar(element, isSpeaker) {
     this.mediaShareUrlVideoLoadingErrorMessage = element.getAttribute('data-media-share-url-video-loading-error-message');
     this.mediaShareButtonScreenShareMessage = element.getAttribute('data-media-share-button-screenshare-message');
     this.mediaShareButtonVideoShareMessage = element.getAttribute('data-media-share-button-videoshare-message');
+    this.mediaShareScreenShareStatusMessage = element.getAttribute('data-media-screenShareStatus-message');
 
     this.endSharingButton = element.querySelector('#media-stop-sharing');
     this.endSharingButton.addEventListener('click', this.handleStopSharing.bind(this));
@@ -482,6 +483,7 @@ Webinar.prototype.shareVideo = function () {
                 this.handleStopSharing();
             });
 
+            this.showElement(this.endSharingButton);
             this.session.publish(publisher, this.handlePublishMediaSharing.bind(this));
             this.layout();
         }
@@ -527,18 +529,34 @@ Webinar.prototype.screenshare = function () {
             return;
         }
 
-        this.publisherScreen = new Publisher(this.layoutContainer);
+        this.publisherScreen = new Publisher(null);
         const publisherScreen = this.publisherScreen.create({
             videoSource: this.typeScreenShare,
             publishAudio: true,
-            name: this.currentUserId
+            name: this.currentUserId,
+            insertDefaultUI: false,
         });
 
-        publisherScreen.on('videoElementCreated', this.onVideoElementCreated.bind(this));
+        const endSharingButton = document.createElement('button');
+        endSharingButton.textContent = this.endSharingButton.textContent;
+        endSharingButton.classList.add('btn');
+        endSharingButton.classList.add('btn-primary');
+        endSharingButton.addEventListener('click', this.handleStopSharing.bind(this));
+
+        this.screenElement = document.createElement('div');
+        this.screenElement.classList.add('screen-share-in-progress');
+        const screenCenteredElement = document.createElement('div');
+        screenCenteredElement.textContent = this.mediaShareScreenShareStatusMessage;
+        screenCenteredElement.appendChild(document.createElement('hr'));
+        screenCenteredElement.appendChild(endSharingButton);
+
+        this.screenElement.appendChild(screenCenteredElement);
+        this.layoutContainer.appendChild(this.screenElement);
+
         this.session.publish(publisherScreen, this.handlePublishMediaSharing.bind(this));
 
         this.minimizeAllSubscribers();
-        this.maximize(publisherScreen.element);
+        this.maximize(this.screenElement);
         this.layout();
 
         publisherScreen.on('mediaStopped', this.handleStopSharing.bind(this));
@@ -561,8 +579,6 @@ Webinar.prototype.handlePublishMediaSharing = function (error) {
 
     this.hasMediaSharing = true;
     this.layout();
-
-    this.showElement(this.endSharingButton);
 };
 
 /**
@@ -571,6 +587,7 @@ Webinar.prototype.handlePublishMediaSharing = function (error) {
 Webinar.prototype.handleStopSharing = function () {
     if (this.publisherScreen) {
         this.publisherScreen.destroy();
+        this.screenElement.remove();
     }
 
     if (this.shareVideoElement) {
