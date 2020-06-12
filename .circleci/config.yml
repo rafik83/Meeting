@@ -19,8 +19,8 @@ jobs:
           name: "[cache] restoring packages"
           keys:
             - package-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            # - package-master-{{ checksum "package-lock.json" }}
-            # - package-master
+            - package-master-{{ checksum "package-lock.json" }}
+            - package-master
       - restore_cache:
           key: dockerize-{{ arch }}-v0.6.1
       - run:
