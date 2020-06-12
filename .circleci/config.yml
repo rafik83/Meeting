@@ -41,6 +41,7 @@ jobs:
             dockerize -wait tcp://localhost:3306 -timeout 1m
             docker-compose -p vimeet exec php make install-app@test
             docker-compose -p vimeet exec php make install-db@test
+            docker-compose -p vimeet run node yarn install
             docker-compose -p vimeet run node make build@prod
       - run:
           name: "[test] phpunit"
