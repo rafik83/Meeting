@@ -5,6 +5,6 @@ WORKDIR /srv
 RUN apk --no-cache --update --virtual build-dependencies add \
     python \
     make \
-    g++ \
-    && yarn install --pure-lockfile \
-    && apk del build-dependencies
+    g++
+
+RUN yarn install --pure-lockfile
