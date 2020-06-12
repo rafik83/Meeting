@@ -1,5 +1,10 @@
-FROM node:14.4
+FROM node:14.4-alpine
 
-RUN apt-get update
-RUN apt-get install -y make
-RUN npm install -g sass
+WORKDIR /srv
+
+RUN apk --no-cache --update --virtual build-dependencies add \
+    python \
+    make \
+    g++ \
+    && yarn install --pure-lockfile \
+    && apk del build-dependencies

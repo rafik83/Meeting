@@ -53,3 +53,14 @@ services:
             - proxy
         depends_on:
             - database
+
+    node:
+        build:
+            context: .
+            dockerfile: docker/node/Dockerfile
+        working_dir: /srv
+        environment:
+            - NODE_SASS_PLATFORM=alpine
+            - NODE_ENV=dev
+        volumes:
+            - ./:/srv
