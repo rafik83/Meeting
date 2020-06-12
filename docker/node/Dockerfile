@@ -8,3 +8,4 @@ RUN apk --no-cache --update --virtual build-dependencies add \
     g++
 
 RUN yarn install --pure-lockfile
+RUN npm rebuild node-sass
