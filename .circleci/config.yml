@@ -20,7 +20,7 @@ jobs:
           keys:
             - package-{{ .Branch }}-{{ checksum "yarn.lock" }}
             - package-master-{{ checksum "yarn.lock" }}
-            - package-master
+            # - package-master
       - restore_cache:
           key: dockerize-{{ arch }}-v0.6.1
       - run:
