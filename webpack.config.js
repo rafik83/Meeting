@@ -13,6 +13,9 @@ Encore
     // empty the outputPath dir before each build
     .cleanupOutputBeforeBuild()
 
+    // allow sass/scss files to be processed
+    .enableSassLoader()
+
     // will output as web/build/app.js
     .addEntry('js/main', './src/Ui/Bundle/EventBundle/Resources/assets/js/main.js')
     .addEntry('js/visio', './src/Ui/Bundle/EventBundle/Resources/assets/js/visio.js')
@@ -32,9 +35,6 @@ Encore
     .addStyleEntry('css/adminStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/admin.scss')
     .addStyleEntry('css/mainStyle', './src/Ui/Bundle/EventBundle/Resources/assets/sass/main.scss')
     .addStyleEntry('tinymce/tinymceStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/tinymce.scss')
-
-    // allow sass/scss files to be processed
-    .enableSassLoader()
 
     // allow legacy applications to use $/jQuery as a global variable
     .autoProvidejQuery()
