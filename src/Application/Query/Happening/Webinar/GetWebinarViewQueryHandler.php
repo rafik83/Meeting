@@ -3,12 +3,20 @@
 namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
+use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler;
+use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class GetWebinarViewQueryHandler
 {
+    /** @var GetUserParticipantInfosHandler */
+    private $getUserParticipantInfosHandler;
+
     /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
 
@@ -16,9 +24,11 @@ class GetWebinarViewQueryHandler
     private $dateTime;
 
     public function __construct(
+        GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         \DateTimeInterface $dateTime
     ) {
+        $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->dateTime = $dateTime;
     }
@@ -26,7 +36,7 @@ class GetWebinarViewQueryHandler
     public function handle(GetWebinarViewQuery $query): WebinarView
     {
         $happening = $query->getHappening();
-        $isSpeaker = $happening->hasSpeaker($query->getUser());
+        $isSpeaker = $happening->isInteractiveWebinar() || $happening->hasSpeaker($query->getUser());
 
         if (!$happening->hasWebinarSessionId()) {
             throw new \LogicException('Happening webinar session id not created');
@@ -56,6 +66,32 @@ class GetWebinarViewQueryHandler
             );
         }
 
+        $participantViews = [];
+
+        if ($happening->isInteractiveWebinar()) {
+            foreach ($happening->getParticipations() as $happeningParticipation) {
+                $user = $happeningParticipation->getUser();
+
+                try {
+                    $participantView = $this->getUserParticipantInfosHandler->handle(
+                        new GetUserParticipantInfos($happening->getEvent(), $user, $query->getLocale())
+                    );
+                } catch (ParticipantNotFoundException $participantNotFoundException) {
+                    continue;
+                } catch (SheetNotFoundException $sheetNotFoundException) {
+                    continue;
+                }
+
+                $participantViews[] = new WebinarParticipantView(
+                    $user->getId(),
+                    $participantView->firstName,
+                    $participantView->lastName,
+                    $participantView->position,
+                    $participantView->getSheetTitle()
+                );
+            }
+        }
+
         return new WebinarView(
             $query->getUser()->getId(),
             $happening->getTitle($query->getLocale()),
@@ -64,6 +100,7 @@ class GetWebinarViewQueryHandler
             $this->videoConferenceAdapter->getApiKey(),
             $isSpeaker,
             $speakers,
+            $participantViews,
             new TimeRangeView($happening->getBegin(), $happening->getEnd()),
             $this->dateTime,
             $timeRemainingInSeconds,

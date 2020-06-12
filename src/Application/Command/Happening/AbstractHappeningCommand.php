@@ -16,6 +16,10 @@ use Proximum\Vimeet\Domain\Model\Type;
 
 class AbstractHappeningCommand implements Command
 {
+    public const TYPE_DEFAULT = 'default';
+    public const TYPE_WEBINAR = 'webinar';
+    public const TYPE_WEBINAR_INTERACTIVE = 'webinar_interactive';
+
     /** @var Category */
     public $category;
 
@@ -45,4 +49,16 @@ class AbstractHappeningCommand implements Command
 
     /** @var bool */
     public $webinar;
+
+    /** @var string */
+    public $happeningType = self::TYPE_DEFAULT;
+
+    public function isWebinar(): bool
+    {
+        return self::TYPE_WEBINAR === $this->happeningType || self::TYPE_WEBINAR_INTERACTIVE === $this->happeningType;
+    }
+    public function isInteractiveWebinar(): bool
+    {
+        return self::TYPE_WEBINAR_INTERACTIVE === $this->happeningType;
+    }
 }

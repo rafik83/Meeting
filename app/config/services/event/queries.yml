@@ -40,6 +40,7 @@ services:
 
     Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQueryHandler:
         arguments:
+            - '@Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler'
             - '@adapter.video_conference_adapter'
             - '@datetime'
         tags:
@@ -53,6 +54,13 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\Sheet\ParticipantListViewQuery }
+
+    Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler:
+        arguments:
+            - '@template.participant_info_guesser'
+            - '@sheet.sheet_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos }
 
     #
     # Form Template

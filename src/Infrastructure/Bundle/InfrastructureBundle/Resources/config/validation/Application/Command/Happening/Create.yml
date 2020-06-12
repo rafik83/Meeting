@@ -2,8 +2,7 @@ Proximum\Vimeet\Application\Command\Happening\Create:
     properties:
         category:
             - NotNull: ~
-        webinar:
-            - Type: bool
+        happeningType: ~
         translations:
             - All:
                 - Collection:

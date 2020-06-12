@@ -2,8 +2,7 @@ Proximum\Vimeet\Application\Command\Happening\Update:
     properties:
         category:
             - NotNull: ~
-        webinar:
-            - Type: bool
+        happeningType: ~
         translations:
             - All:
                 - Collection:

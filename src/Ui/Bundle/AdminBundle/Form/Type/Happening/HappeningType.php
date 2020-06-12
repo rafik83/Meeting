@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
+use Proximum\Vimeet\Application\Command\Happening\AbstractHappeningCommand;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
@@ -37,8 +38,14 @@ abstract class HappeningType extends AbstractType
 
         $builder
             ->add('category', CategoryType::class, ['event' => $event, 'locale' => $options['locale']])
-            ->add('webinar', CheckboxType::class, [
-                'required' => false,
+            ->add('happeningType', ChoiceType::class, [
+                'choices' => [
+                    'form.happening.happeningType.default.label' => AbstractHappeningCommand::TYPE_DEFAULT,
+                    'form.happening.happeningType.webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR,
+                    'form.happening.happeningType.interactive_webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR_INTERACTIVE,
+                ],
+                'expanded' => true,
+                'required' => true,
             ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationType::class,

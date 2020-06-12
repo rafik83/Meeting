@@ -33,7 +33,7 @@
             data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
 
             data-current-user-id="{{ currentUserId }}"
-            data-subscriber-mapping="{{ meetingView.participantInfosByUserIdEncoded }}"
+            data-subscriber-mapping="{{ meetingView.participantInfosByUserId|json_encode }}"
         {% endif %}
 
         {% if videoConferenceView.hasEndSound %}

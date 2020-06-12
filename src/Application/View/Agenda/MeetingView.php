@@ -171,9 +171,4 @@ class MeetingView extends AbstractTimeEntityView
             return $sheetTitle->getTitle();
         }, $this->sheetMetTitle));
     }
-
-    public function getParticipantInfosByUserIdEncoded(): string
-    {
-        return json_encode($this->participantInfosByUserId);
-    }
 }

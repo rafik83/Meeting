@@ -45,7 +45,7 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        if ($update->webinar) {
+        if ($update->isWebinar()) {
             foreach ($update->talkings as $talking) {
                 if ($talking["speaker"]->getUser() === null) {
                     throw new SpeakerNotUserException();
@@ -65,7 +65,8 @@ class UpdateHandler
             $update->types,
             $update->questionAllowed,
             $update->limitParticipant,
-            $update->webinar,
+            $update->isWebinar(),
+            $update->isInteractiveWebinar(),
             $update->invitationCode
         );
 

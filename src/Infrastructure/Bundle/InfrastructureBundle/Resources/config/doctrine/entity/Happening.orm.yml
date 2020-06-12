@@ -25,6 +25,10 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: boolean
             options:
                 default: false
+        interactiveWebinar:
+            type: boolean
+            options:
+                default: false
         webinarSessionId:
             type: string
             nullable: true

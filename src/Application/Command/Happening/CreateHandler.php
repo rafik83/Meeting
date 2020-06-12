@@ -32,7 +32,7 @@ class CreateHandler
 
     public function handle(Create $create)
     {
-        if ($create->webinar) {
+        if ($create->isWebinar()) {
             foreach ($create->talkings as $talking) {
                 if ($talking["speaker"]->getUser() === null) {
                     throw new SpeakerNotUserException();
@@ -49,7 +49,8 @@ class CreateHandler
             $create->questionAllowed,
             $create->limitParticipant,
             $create->invitationCode,
-            $create->webinar
+            $create->isWebinar(),
+            $create->isInteractiveWebinar()
         );
 
         foreach ($create->translations as $locale => $translation) {
