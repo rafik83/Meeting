@@ -22,6 +22,8 @@ Proximum\Vimeet\Domain\Model\Happening:
         __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 14:15:00.000'))>, <(new DateTime('12-10-2016 16:15:00.000'))>, '@category_flash', ['@event_asddays_2016_type_fournisseur']]
     happening_03:
         __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 11:00:00.000'))>, <(new DateTime('12-10-2016 12:30:00.000'))>, '@category_conference', ['@event_asddays_2016_type_fournisseur']]
+    happening_04:
+        __construct: ['@event_asddays_2016', <(new DateTime('today 00:00:00.000'))>, <(new DateTime('today 23:59:59.999'))>, '@category_conference', ['@event_asddays_2016_type_fournisseur'], true, null, null, true]
 
 Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
     happening_01_translation_fr:
@@ -36,9 +38,17 @@ Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
         __construct: ['@happening_03', 'fr', 'Conférence 3', "<realText()>"]
     happening_03_translation_en:
         __construct: ['@happening_03', 'en', 'Conférence 3', "<realText()>"]
+    happening_03_translation_fr:
+        __construct: ['@happening_04', 'fr', 'Webinaire', "<realText()>"]
+    happening_03_translation_en:
+        __construct: ['@happening_04', 'en', 'Webinar', "<realText()>"]
 
 Proximum\Vimeet\Domain\Model\HappeningParticipation:
     happening_participation_01:
         __construct: ['@happening_03', '@user_asddays_1']
     happening_participation_02:
         __construct: ['@happening_02', '@user_asddays_2']
+    happening_participation_03:
+        __construct: ['@happening_04', '@user_asddays_1']
+    happening_participation_04:
+        __construct: ['@happening_04', '@user_asddays_2']

@@ -30,7 +30,10 @@
         {% endif %}
 
         <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}></div>
-        <div class="chat-container hide"></div>
+
+        <div data-hide-on-desktop class="hide-on-desktop"></div>
+
+        {% include 'EventBundle:Happening:webinar-sidebar.html.twig' %}
 
         <div class="video-helper">
             <h1>{{ webinarView.happeningTitle }}</h1>
@@ -54,7 +57,7 @@
                 </div>
             </div>
 
-            <button id="toggle-chat" class="btn btn-off hide">
+            <button id="toggle-sidebar" class="btn btn-off hide hide-on-desktop">
                 <i class="icon-Commentaire icon-center"></i>
             </button>
 
