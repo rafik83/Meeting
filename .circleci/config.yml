@@ -41,7 +41,6 @@ jobs:
             dockerize -wait tcp://localhost:3306 -timeout 1m
             docker-compose -p vimeet exec php make install-app@test
             docker-compose -p vimeet exec php make install-db@test
-            docker-compose -p vimeet exec php make install-dep
             docker build docker/node --tag vimeet_node
             docker run -v $(pwd):/app -w /app vimeet_node yarn install
             docker run -v $(pwd):/app -w /app vimeet_node make build@prod
