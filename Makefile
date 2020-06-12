@@ -94,8 +94,7 @@ lint@test: lint
 ## Install application
 install: composer-install install-db install-db@test install-db-fixtures install-db-fixtures@test install-dep build
 
-# install@test: install-app@test install-db@test install-db-fixtures@test install-dep build@prod
-install@test: install-app@test install-db@test install-db-fixtures@test
+install@test: install-app@test install-db@test install-db-fixtures@test install-dep build@prod
 
 install@prod: install-dep build@prod
 
@@ -103,7 +102,7 @@ composer-install:
 	composer install --no-progress --no-interaction --ignore-platform-reqs
 
 install-app@test:
-	SYMFONY_ENV=test composer --no-progress --no-interaction install
+	SYMFONY_ENV=test composer --no-progress --no-interaction composer-install install-db install-db@test install-db-fixtures install-db-fixtures@test
 
 install-db:
 	bin/console doctrine:database:drop --force --if-exists
