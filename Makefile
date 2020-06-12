@@ -102,7 +102,7 @@ composer-install:
 	composer install --no-progress --no-interaction --ignore-platform-reqs
 
 install-app@test:
-	SYMFONY_ENV=test composer --no-progress --no-interaction composer-install install-db install-db@test install-db-fixtures install-db-fixtures@test
+	SYMFONY_ENV=test composer install --no-progress --no-interaction
 
 install-db:
 	bin/console doctrine:database:drop --force --if-exists
