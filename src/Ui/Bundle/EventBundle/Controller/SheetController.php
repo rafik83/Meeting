@@ -167,6 +167,8 @@ class SheetController extends Controller
         $sheetToDisplay,
         $locale
     ) {
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         $sheetToDisplay = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->getSheetById($sheetToDisplay);
@@ -193,6 +195,8 @@ class SheetController extends Controller
     }
 
     /**
+     * No access restriction, to allow phantomjs to open this route
+     *
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param User        $user
