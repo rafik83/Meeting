@@ -49,10 +49,7 @@ class CreateHandler
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * @param Create $command
-     */
-    public function handle(Create $command)
+    public function handle(Create $command): void
     {
         $group = new Group(
             $command->event,

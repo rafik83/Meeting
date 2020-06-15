@@ -659,11 +659,16 @@ form.package_update.children.templateData.children.blocks.prototype.label: 'Libe
 form.package_update.children.title.label: 'Titre du template'
 form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Envoyer
+form.participant_import.children.allowMultiSheet.choice.no: 'Non'
+form.participant_import.children.allowMultiSheet.choice.yes: 'Oui'
+form.participant_import.children.allowMultiSheet.label: 'Autoriser le multi-fiche'
 form.participant_import.children.charset.label: Encodage
 form.participant_import.children.file.label: 'Fichier CSV'
 form.participant_import.children.submit.label: Importer
 form.participant_import.children.type.label: Type
+form.participant_import.children.type.placeholder: 'Sélectionner un type'
 form.participant_import.field.ignore: Ignorer
+form.participant_import.field.group_title: 'Titre de l''entité'
 form.participant_import.field.mail: Email
 form.participant_update_agenda_confirmation_status.children.status.choice.confirmed: Confirmé
 form.participant_update_agenda_confirmation_status.children.status.choice.not_confirmed: 'Non confirmé'

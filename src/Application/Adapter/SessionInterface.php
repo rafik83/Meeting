@@ -41,7 +41,7 @@ interface SessionInterface
      * @param string $key
      * @param mixed  $data
      */
-    public function set($key, $data);
+    public function set($key, $data): void;
 
     /**
      * @param string $key

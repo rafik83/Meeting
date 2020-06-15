@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Serializer\Denormalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
@@ -17,65 +9,43 @@ use Proximum\Vimeet\Domain\Template\Validator\Error\ValidatorError;
 
 class ParticipantImportLogger
 {
-    const EXISTING_PARTICIPATIONS = 'existing_participations';
-    const FILE_PARTICIPATIONS     = 'file_participations';
-    const CREATED_SHEETS          = 'created_sheets';
-    const CREATED_USERS           = 'created_users';
-    const IMPORT_ERRORS           = 'import_errors';
-    const PARTICIPANT_IMPORT_ID   = 'participant_import_id';
+    public const EXISTING_PARTICIPATIONS = 'existing_participations';
+    public const FILE_PARTICIPATIONS = 'file_participations';
+    public const CREATED_SHEETS = 'created_sheets';
+    public const CREATED_USERS = 'created_users';
+    public const IMPORT_ERRORS = 'import_errors';
+    public const PARTICIPANT_IMPORT_ID = 'participant_import_id';
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $existingParticipations = 0;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $fileParticipations = 0;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $createdSheets = 0;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $createdUsers = 0;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $errors = [];
 
-    /**
-     * @var TranslatorInterface
-     */
+    /** @var TranslatorInterface */
     private $translatorAdapter;
 
-    /**
-     * @var Sheet[]
-     */
+    /** @var Sheet[] */
     private $sheets = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $emails = [];
 
-    /**
-     * @param TranslatorInterface $translatorAdapter
-     */
     public function __construct(TranslatorInterface $translatorAdapter)
     {
         $this->translatorAdapter = $translatorAdapter;
     }
 
-    /**
-     * @param int $fileParticipations
-     */
-    public function init($fileParticipations)
+    public function init(int $fileParticipations): void
     {
         $this->fileParticipations = $fileParticipations;
     }
@@ -86,7 +56,7 @@ class ParticipantImportLogger
      * @param array|string   $data
      * @param string         $locale
      */
-    public function addError($row, ValidatorError $validatorError, $data, $locale)
+    public function addError($row, ValidatorError $validatorError, $data, $locale): void
     {
         $newError = [
             $row + 2, // Because of array index and first line deletion, +2 to retrieve the good csv line number
@@ -102,25 +72,19 @@ class ParticipantImportLogger
         $this->errors[] = implode(';', $newError);
     }
 
-    /**
-     * @param User $user
-     */
-    public function userImported(User $user)
+    public function userImported(User $user): void
     {
         $this->emails[] = mb_strtolower($user->getEmail());
         ++$this->createdUsers;
     }
 
-    /**
-     * @param Sheet $sheet
-     */
-    public function sheetImported(Sheet $sheet)
+    public function sheetImported(Sheet $sheet): void
     {
         $this->sheets[] = $sheet;
         ++$this->createdSheets;
     }
 
-    public function existingParticipations()
+    public function existingParticipations(): void
     {
         ++$this->existingParticipations;
     }
@@ -130,15 +94,12 @@ class ParticipantImportLogger
      *
      * @return bool
      */
-    public function isImported($fileEmail)
+    public function isImported($fileEmail): bool
     {
         return in_array(mb_strtolower($fileEmail), $this->emails);
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             self::EXISTING_PARTICIPATIONS => $this->existingParticipations,
@@ -152,7 +113,7 @@ class ParticipantImportLogger
     /**
      * @return Sheet[]
      */
-    public function getSheets()
+    public function getSheets(): array
     {
         return $this->sheets;
     }

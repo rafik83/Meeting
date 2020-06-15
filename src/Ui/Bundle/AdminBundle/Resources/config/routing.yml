@@ -904,18 +904,22 @@ admin_participant_export:
         file: \d+
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\ExportAction }
+
 admin_sheet_import:
     path: /event/{event}/sheet/import
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Sheet:import }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ConfigureImportAction
+
 admin_sheet_import_mapping:
     path: /event/{event}/sheet/{type}/import/mapping
     requirements:
         event: \d+
+        type: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Sheet:importMapping }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ImportMappingAction
+
 admin_sheet_import_result:
     path: /event/{event}/sheet/{type}/import/result
     requirements:

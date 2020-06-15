@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Serializer\Denormalizer;
 
 use Proximum\Vimeet\Application\Components\Import\MappingGuesser;
@@ -23,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -36,6 +29,7 @@ use Proximum\Vimeet\Domain\Template\Validator\Error\EmailError;
 use Proximum\Vimeet\Domain\Template\Validator\Error\EmailExistError;
 use Proximum\Vimeet\Domain\Template\Validator\ObjectValidatorFactory;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use function count;
 
 class ParticipantDenormalizer implements DenormalizerInterface
 {
@@ -71,11 +65,24 @@ class ParticipantDenormalizer implements DenormalizerInterface
     /** @var ParticipantOfSheetWithPackageParticipantAndPlanningDisabled */
     private $participantOfSheetWithPackageParticipantAndPlanningDisabled;
 
+    /** @var User[] */
+    private $users = [];
+
+    /** @var Sheet[] indexed by user email */
+    private $userSheets = [];
+
+    /** @var array */
+    private $userGroupTitles = [];
+
+    /** @var GroupRepositoryInterface */
+    private $groupRepository;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         UserRepositoryInterface $userRepository,
         SheetRepositoryInterface $sheetRepository,
         UserEventRepositoryInterface $userEventRepository,
+        GroupRepositoryInterface $groupRepository,
         TemplateDataFactory $templateDataFactory,
         EmailValidator $emailValidator,
         Synchronizer $synchronizer,
@@ -93,6 +100,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $this->importLogger = $importLogger;
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled = $participantOfSheetWithPackageParticipantAndPlanningDisabled;
         $this->dateTime = $dateTime;
+        $this->groupRepository = $groupRepository;
     }
 
     /**
@@ -101,22 +109,26 @@ class ParticipantDenormalizer implements DenormalizerInterface
     public function denormalize($data, $class, $format = null, array $context = [])
     {
         $event = $context['event'];
-        $ownerEmails = $this->sheetRepository->getOwnerEmails($event);
-        $participantEmails = $this->participantRepository->getParticipantEmailsForEvent($event);
+        $allowMultiSheet = $context['allowMultiSheet'] ?? false;
 
         // Owners and Participant indexed by email
         $participants = [];
-        $owners       = [];
+        $owners = [];
 
-        foreach ($participantEmails as $participantEmail) {
-            $participants[strtolower($participantEmail['email'])] = $participantEmail['email'];
+        if (!$allowMultiSheet) {
+            $participantEmails = $this->participantRepository->getParticipantEmailsForEvent($event);
+
+            foreach ($participantEmails as $participantEmail) {
+                $participants[strtolower($participantEmail['email'])] = $participantEmail['email'];
+            }
+
+            $ownerEmails = $this->sheetRepository->getOwnerEmails($event);
+            foreach ($ownerEmails as $ownerEmail) {
+                $owners[strtolower($ownerEmail['email'])] = $ownerEmail['email'];
+            }
         }
 
-        foreach ($ownerEmails as $ownerEmail) {
-            $owners[strtolower($ownerEmail['email'])] = $ownerEmail['email'];
-        }
-
-        $this->importLogger->init(\count($data));
+        $this->importLogger->init(count($data));
 
         $mappingGuesser = new MappingGuesser($context['mappings']);
 
@@ -143,18 +155,26 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 continue;
             }
 
-            if ($this->importLogger->isImported($email)) {
-                $this->importLogger->addError($key, new EmailExistError($email, true), $email, $context['locale']);
-                continue;
-            }
+            if (!$allowMultiSheet) {
+                if ($this->importLogger->isImported($email)) {
+                    $this->importLogger->addError($key, new EmailExistError($email, true), $email, $context['locale']);
+                    continue;
+                }
 
-            if ($this->isAlreadyOwner($email, $owners) || $this->isAlreadyParticipant($email, $participants)) {
-                $this->importLogger->existingParticipations();
-                continue;
+                if ($this->isAlreadyOwner($email, $owners) || $this->isAlreadyParticipant($email, $participants)) {
+                    $this->importLogger->existingParticipations();
+                    continue;
+                }
             }
 
             try {
-                list($sheetRegistrationData, $sheetData, $participantData, $sheetTitle) = $this->handleRow(
+                [
+                    $sheetRegistrationData,
+                    $sheetData,
+                    $participantData,
+                    $sheetTitle,
+                    $groupTitle,
+                ] = $this->handleRow(
                     $row,
                     $mappingGuesser,
                     $registrationTemplate,
@@ -166,6 +186,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $context,
                     $email,
                     $sheetTitle,
+                    $groupTitle,
                     $sheetRegistrationData,
                     $sheetData,
                     $participantData,
@@ -187,7 +208,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null): bool
     {
         return Participant::class === $type && self::FORMAT === $format;
     }
@@ -214,14 +235,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
         return isset($owners[$email]);
     }
 
-    /**
-     * @param string $email
-     *
-     * @return User
-     */
     private function getUser(string $email): ?User
     {
-        return $this->userRepository->findByEmail($email);
+        if (isset($this->users[$email])) {
+            return $this->users[$email];
+        }
+
+        $user = $this->userRepository->findByEmail($email);
+        $this->users[$email] = $user;
+
+        return $user;
     }
 
     /**
@@ -242,11 +265,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
         TemplateData $registrationTemplate,
         TemplateData $sheetTemplate,
         array $context
-    ) {
+    ): array {
         $sheetRegistrationData = [];
         $participantData = [];
         $sheetData = [];
         $sheetTitle = '';
+        $groupTitle = '';
 
         // clear previous data before process current imported participant row
         $registrationTemplate->clear();
@@ -258,6 +282,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
             if (false === $objectKey
                 || ParticipantImportTag::REGISTRATION_FIELD_MAIL === $objectKey
             ) {
+                continue;
+            }
+
+            if (ParticipantImportTag::FIELD_GROUP_TITLE === $objectKey) {
+                $groupTitle = $column;
+
                 continue;
             }
 
@@ -332,7 +362,13 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
         }
 
-        return [$sheetRegistrationData, $sheetData, $participantData, $sheetTitle];
+        return [
+            $sheetRegistrationData,
+            $sheetData,
+            $participantData,
+            $sheetTitle,
+            $groupTitle,
+        ];
     }
 
     private function handleColumn(
@@ -341,7 +377,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $locale
     ): void {
         if ($templateObject instanceof TemplateObject\Nomenclature) {
-            $items    = $this->denormalizerNomenclatureItems($column);
+            $items = $this->denormalizerNomenclatureItems($column);
             $itemKeys = [];
 
             foreach ($items as $item) {
@@ -354,12 +390,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         }
     }
 
-    /**
-     * @param $phone
-     *
-     * @return string
-     */
-    private function denormalizerPhoneNumber($phone)
+    private function denormalizerPhoneNumber($phone): string
     {
         return preg_replace("/(\\'+)|(\\s)+/", '', $phone);
     }
@@ -368,7 +399,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     {
         $dataItems = explode(';', $data);
 
-        return array_map(function ($element) {
+        return array_map(static function ($element) {
             return str_replace(TemplateObject\Nomenclature::SEMICOLON_ESCAPE_CHAR, ';', $element);
         }, $dataItems);
     }
@@ -377,19 +408,23 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param array        $context
      * @param string       $email
      * @param string       $sheetTitle
+     * @param string       $groupTitle
      * @param array        $sheetRegistrationData
+     * @param array        $sheetData
      * @param array        $participantData
      * @param TemplateData $registrationTemplate
      */
     private function createEntities(
         array $context,
         $email,
-        $sheetTitle,
+        string $sheetTitle,
+        string $groupTitle,
         $sheetRegistrationData,
         $sheetData,
         $participantData,
         TemplateData $registrationTemplate
     ): void {
+        $event = $context['event'];
         $user = $this->getUser($email);
 
         if (!$user instanceof User) {
@@ -398,14 +433,71 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             $this->userRepository->add($user);
             $this->importLogger->userImported($user);
+
+            $this->userSheets[$email] = [];
+            $this->users[$email] = $user;
         }
 
-        $sheet = new Sheet($context['event'], $context['type'], $sheetData, $user, $this->dateTime);
+        $group = null;
+        $allowMultiSheet = $context['allowMultiSheet'] ?? false;
+        if ($allowMultiSheet) {
+            // First run, get the user sheets.
+            if (!isset($this->userSheets[$email])) {
+                $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
+                $this->userSheets[$email] = $sheets;
+            }
+
+            // Existing sheet for user.
+            if (!empty($this->userSheets[$email])) {
+                $firstSheet = null;
+
+                /** @var Sheet $userSheet */
+                foreach ($this->userSheets[$email] as $userSheet) {
+                    if ($firstSheet === null) {
+                        $firstSheet = $userSheet;
+                    }
+
+                    if ($userSheet->hasGroup()) {
+                        $group = $userSheet->getGroup();
+                        break;
+                    }
+                }
+
+                if (!$group instanceof Sheet\Group) {
+                    if (isset($this->userGroupTitles[$email])) {
+                        $groupTitle = $this->userGroupTitles[$email];
+                    }
+
+                    $group = new Sheet\Group(
+                        $event,
+                        $user,
+                        $groupTitle,
+                        true,
+                        $this->dateTime,
+                        null
+                    );
+
+                    $this->groupRepository->add($group);
+
+                    if (!$firstSheet->hasGroup()) {
+                        $firstSheet->setGroup($group);
+                        $this->sheetRepository->set($firstSheet);
+                    }
+                }
+            }
+        }
+
+        $sheet = new Sheet($event, $context['type'], $sheetData, $user, $this->dateTime);
         $sheet->setImported(true);
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getFullname();
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getEmail();
         $sheet->setTitle($sheetTitle);
         $sheet->setRegistrationData($sheetRegistrationData);
+
+        if ($group instanceof Sheet\Group) {
+            $sheet->setGroup($group);
+        }
+
         $this->sheetRepository->add($sheet);
 
         $participant = new Participant(
@@ -419,12 +511,21 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $this->participantRepository->add($participant);
         $sheet->addParticipant($participant); // required to have participant in array sheet array collection
 
+        /* @todo to remove ? */
         $this->userEventRepository->add(new UserEvent($user, $context['event'], $context['type']));
+
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled->handle($participant);
 
         $this->importLogger->sheetImported($sheet);
 
         $this->synchronizer->set($registrationTemplate, $user);
+
+        $this->userSheets[$user->getEmail()][] = $sheet;
+
+        // Keep the group title of the first row with one.
+        if (!isset($this->userGroupTitles[$email])) {
+            $this->userGroupTitles[$email] = $groupTitle;
+        }
     }
 
     /**

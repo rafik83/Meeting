@@ -74,7 +74,8 @@ class GroupManager
     {
         $sheet = $this->sheetManager->create($event, $user);
 
-        $this->sheetRepository->set($sheet->setGroup($group));
+        $sheet->setGroup($group);
+        $this->sheetRepository->set($sheet);
 
         return $group;
     }
