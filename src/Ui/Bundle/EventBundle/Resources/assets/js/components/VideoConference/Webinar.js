@@ -743,27 +743,40 @@ Webinar.prototype.initQuestions = function () {
 
 Webinar.prototype.submitQuestion = function (event) {
     event.preventDefault();
+    const questionContent = this.questionsFormContent.value;
 
-    $.post(this.questionsFormAction, JSON.stringify({questionContent: this.questionsFormContent.value}), function (response) {
-        this.questionsFormSubmit.removeAttribute('disabled');
+    if ('' === questionContent) {
+        window.setTimeout(() => this.questionsFormSubmit.disabled = false, 100);
+        return;
+    }
+
+    this.questionsFormContent.value = '';
+
+    $.post(this.questionsFormAction, JSON.stringify({questionContent: questionContent}), (response) => {
+        this.questionsFormSubmit.disabled = false;
+
         if (response.status === 'ok') {
-            this.questionsFormContent.value = '';
             this.session.signal({
                     type: 'QuestionsUpdate'
                 },
-                function (error) {
+                (error) => {
                     if (error) {
                         console.error('QuestionsUpdate signal error', error);
                     }
                 }
             );
-        } else {
-            this.showError('Question creation failed');
+
+            return;
         }
-    }.bind(this))
-    .fail(function () {
+
+        this.questionsFormContent.value = questionContent;
         this.showError('Question creation failed');
-    }.bind(this));
+    })
+    .fail(() => {
+        this.questionsFormSubmit.disabled = false;
+        this.questionsFormContent.value = questionContent;
+        this.showError('Question creation failed');
+    });
 }
 
 Webinar.prototype.toggleSideBar = function () {
