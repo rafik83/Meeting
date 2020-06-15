@@ -15,6 +15,10 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Delay event processing after response is sent.
+ * @see docs/Infrastructure/DelayedEventDispatcher.md
+ */
 class DelayedEventDispatcher implements EventDispatcherInterface, DelayedEventDispatcherInterface
 {
     /**

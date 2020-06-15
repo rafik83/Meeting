@@ -1,0 +1,8 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% block body %}
+    {{ 'mail.userAccountTemporarilyDisabled.body'|trans({
+        '%firstname%': mail.receiverUser.firstname|capitalize,
+        '%lastname%': mail.receiverUser.lastname|upper
+    }, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

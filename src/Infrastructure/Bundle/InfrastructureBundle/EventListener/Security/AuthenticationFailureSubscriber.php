@@ -4,14 +4,15 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\AdminTemporarilyDisabledEvent;
 use Proximum\Vimeet\Application\Event\User\UserTemporarilyDisabledEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\AuthenticationEvents;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
 
 class AuthenticationFailureSubscriber implements EventSubscriberInterface
@@ -56,7 +57,7 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
     {
         $token = $authenticationFailureEvent->getAuthenticationToken();
 
-        if (!$token instanceof UsernamePasswordToken || 'main' !== $token->getProviderKey()) {
+        if (!$token instanceof UsernamePasswordToken || !in_array($token->getProviderKey(), ['main', 'admin'], true)) {
             return;
         }
 
@@ -80,6 +81,16 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
             return;
         }
 
+        // admin firewall, no related event
+        if ($token->getProviderKey() === 'admin') {
+            $this->eventDispatcher->dispatch(
+                Events::ADMIN_ACCOUNT_TEMPORARILY_DISABLED,
+                new AdminTemporarilyDisabledEvent($user, $user->getLocale())
+            );
+            return;
+        }
+
+        // main firewall, get related event
         $event = $this->eventRepository->getEventByDomain($request->getHost());
 
         if (!$event instanceof Event) {
