@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Sortable from './_Sortable';
+import * as Sortable from "./_Sortable";
 
 function SortableCollection(element, group)
 {

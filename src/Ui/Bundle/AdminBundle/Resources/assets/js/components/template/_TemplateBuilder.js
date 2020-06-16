@@ -2,13 +2,14 @@ import LoadingButton from "../_LoadingButton";
 import TemplateBlock from "./_TemplateBlock";
 import guidGenerator from "./_GuidGenerator";
 import normalizeTemplate from "./_NormalizeTemplate";
-import Sortable from "./../_Sortable";
+import * as Sortable from "./../_Sortable";
 import TemplateObject from './_TemplateObject';
 
 /**
  * TemplateBuilder
  *
  * @param element
+ * @param builderType
  * @constructor
  */
 function TemplateBuilder(element, builderType)

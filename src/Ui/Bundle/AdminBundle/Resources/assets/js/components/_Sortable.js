@@ -4,7 +4,7 @@
  * @license MIT
  */
 
-export default (function (factory) {
+(function (factory) {
     "use strict";
 
     if (typeof define === "function" && define.amd) {

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import Form from './_Form';
-import Sortable from './../_Sortable';
+import * as Sortable from "./../_Sortable";
 
 /**
  * Template Block

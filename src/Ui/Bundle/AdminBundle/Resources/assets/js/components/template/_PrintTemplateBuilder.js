@@ -2,7 +2,7 @@ import LoadingButton from "../_LoadingButton";
 import TemplateBlock from "./_TemplateBlock";
 import guidGenerator from "./_GuidGenerator";
 import normalizeTemplate from "./_NormalizeTemplate";
-import Sortable from "./../_Sortable";
+import * as Sortable from "./../_Sortable";
 
 /**
  * PrintTemplateBuilder
