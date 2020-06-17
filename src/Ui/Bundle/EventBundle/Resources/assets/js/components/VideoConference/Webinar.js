@@ -48,6 +48,7 @@ function Webinar(element, isSpeaker) {
 
     this.chatContainer = element.querySelector('[data-chat-container]');
     this.questionsContainer = element.querySelector('[data-questions-container]');
+    this.questionsList = this.questionsContainer.querySelector('.questions-list');
     this.questionsForm = element.querySelector('[data-questions-form]');
     this.questionsFormContent = this.questionsForm.querySelector('input[name="content"]');
     this.questionsFormAction = this.questionsForm.getAttribute('action');
@@ -702,7 +703,7 @@ Webinar.prototype.showQuestions = function (event) {
 Webinar.prototype.initQuestions = function () {
     const href = this.questionsContainer.getAttribute('data-href');
 
-    const $questionsList = $(this.questionsContainer).find('.questions-list');
+    const $questionsList = $(this.questionsList);
 
     $.get(href, function (response) {
         $questionsList.empty();
@@ -765,6 +766,8 @@ Webinar.prototype.submitQuestion = function (event) {
                     }
                 }
             );
+
+            this.questionsList.scrollTop = 0;
 
             return;
         }
