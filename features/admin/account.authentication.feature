@@ -1,0 +1,37 @@
+@event @package
+Feature: Admin account authentication security
+
+  Scenario: My account is temporarily disabled after 5 wrong attempts
+    Given the database is purged
+    And the user "user@example.net" is created
+    When I go to this page "http://admin.vimeet.proximum/fr/login"
+    And I fill in "login_username" with "user@example.net"
+    And I fill in "login_password" with "Wrong-Password"
+    And I press "login_submit"
+    Then I should be on this page "/fr/login"
+    And I should see "Invalid credentials"
+    And I should see "authentication.remaining_attempt"
+    When I fill in "login_username" with "user@example.net"
+    And I fill in "login_password" with "Wrong-Password"
+    And I press "login_submit"
+    Then I should be on this page "/fr/login"
+    And I should see "Invalid credentials"
+    And I should see "authentication.remaining_attempt"
+    When I fill in "login_username" with "user@example.net"
+    And I fill in "login_password" with "Wrong-Password"
+    And I press "login_submit"
+    Then I should be on this page "/fr/login"
+    And I should see "Invalid credentials"
+    And I should see "authentication.remaining_attempt"
+    When I fill in "login_username" with "user@example.net"
+    And I fill in "login_password" with "Wrong-Password"
+    And I press "login_submit"
+    Then I should be on this page "/fr/login"
+    And I should see "Invalid credentials"
+    And I should see "authentication.remaining_attempt"
+    When I fill in "login_username" with "user@example.net"
+    And I fill in "login_password" with "Wrong-Password"
+    And I press "login_submit"
+    Then I should be on this page "/fr/login"
+    And I should see "authentication.account_temporarily_disabled"
+    And the "admin.account_temporarily_disabled" mail should be sent to "user@example.net" from "vimeet@proximum.com"
