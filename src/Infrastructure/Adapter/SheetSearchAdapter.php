@@ -592,7 +592,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     {
         $matchCity = new Query\BoolQuery();
         $matchCity->addMust(new Query\Match('event', $event->getId()));
-        $matchCity->addMust(new Query\Match('city_autocomplete', $filter));
+        $matchCity->addMust(new Query\Match('city.city_autocomplete', $filter));
 
         $citiesAggregations = new Terms('cities');
         $citiesAggregations->setField('city');
