@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin;
 
 use Proximum\Vimeet\Application\Components\Mail\AdminMail;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\Admin;
 
 class AccountTemporarilyDisabledMail extends AdminMail
 {
@@ -35,7 +35,7 @@ class AccountTemporarilyDisabledMail extends AdminMail
         $sender,
         $receiver,
         $locale,
-        User $receiverUser = null
+        Admin $receiverUser = null
     ) {
         parent::__construct($sender, $receiver, $locale, null, $receiverUser);
     }

@@ -3,7 +3,7 @@ Feature: Admin account authentication security
 
   Scenario: My account is temporarily disabled after 5 wrong attempts
     Given the database is purged
-    And the user "user@example.net" is created
+    And the super admin "user@example.net" is created
     When I go to this page "http://admin.vimeet.proximum/fr/login"
     And I fill in "login_username" with "user@example.net"
     And I fill in "login_password" with "Wrong-Password"
