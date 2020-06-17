@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class AccountTemporarilyDisabledMail extends AdminMail
 {
-    public const SUBJECT = 'mail.userAccountTemporarilyDisabled.subject';
+    public const SUBJECT = 'admin.mail.userAccountTemporarilyDisabled.subject';
     public const TEMPLATE = 'MailBundle:Mail:Admin/accountTemporarilyDisabled.html.twig';
 
     /** @var string */

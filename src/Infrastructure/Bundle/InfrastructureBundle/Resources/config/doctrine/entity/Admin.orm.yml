@@ -30,6 +30,15 @@ Proximum\Vimeet\Domain\Model\Admin:
         deletedAt:
             type: datetime
             nullable: true
+        failedAuthentication:
+            type: integer
+            options:
+                default: 0
+        lastFailedAuthentication:
+            type: datetime
+            nullable: true
+            options:
+                default: null
     manyToMany:
         events:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

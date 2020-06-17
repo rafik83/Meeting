@@ -45,21 +45,21 @@ class SecurityController extends Controller
 
         $email = $authenticationUtils->getLastUsername();
         if ($email !== null) {
-            $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
+            $admin = $this->get('repository.admin_repository')->findByEmail($email);
         } else {
-            $user = null;
+            $admin = null;
         }
 
-        if (null !== $user && $user->isTemporarilyDisabledDueToFailedAuthentication($now)) {
+        if (null !== $admin && $admin->isTemporarilyDisabledDueToFailedAuthentication($now)) {
             return $this->render(
                 '@Admin/Security/account_temporarily_disabled.html.twig', [
                 'username' => $email,
-                'admins' => null,
+                'admins' => [],
             ]);
         }
 
-        if ($error instanceof BadCredentialsException && null !== $user) {
-            $remainingAuthenticationAttempt = $user->getRemainingAuthenticationAttempt($now);
+        if ($error instanceof BadCredentialsException && null !== $admin) {
+            $remainingAuthenticationAttempt = $admin->getRemainingAuthenticationAttempt($now);
 
             $form->get('password')->addError(
                 new FormError(
