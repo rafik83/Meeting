@@ -610,31 +610,42 @@ Webinar.prototype.createFullscreenButton = function () {
         return;
     }
 
-    var fullscreenButton = document.createElement('button');
-    var icon = document.createElement('i');
+    const fullscreenButton = document.createElement('button');
+    const icon = document.createElement('i');
+    const startFullScreenClass = 'glyphicon-fullscreen';
+    const endFullScreenClass = 'icon-Reduire_3';
     icon.classList.add('glyphicon');
-    icon.classList.add('glyphicon-fullscreen');
+    icon.classList.add(startFullScreenClass);
 
     fullscreenButton.classList.add('btn');
     fullscreenButton.classList.add('btn-gray');
     fullscreenButton.classList.add('start-fullscreen-button');
+    fullscreenButton.classList.add('OT_ignore');
     fullscreenButton.appendChild(icon);
 
-    this.element.appendChild(fullscreenButton);
+    this.layoutContainer.appendChild(fullscreenButton);
 
     fullscreenButton.addEventListener('click', () => {
         if (document.fullscreenElement) {
+            icon.classList.remove(endFullScreenClass);
+            icon.classList.add('glyphicon');
+            icon.classList.add(startFullScreenClass);
             document.exitFullscreen();
             return;
         }
 
-        const element = this.element;
+        icon.classList.remove('glyphicon');
+        icon.classList.remove(startFullScreenClass);
+        icon.classList.add(endFullScreenClass);
+
+        const element = this.layoutContainer;
         const rfs = element.requestFullscreen
           || element.webkitRequestFullScreen
           || element.mozRequestFullScreen
           || element.msRequestFullscreen
         ;
         rfs.call(element);
+        this.layout();
     });
 };
 
