@@ -2,6 +2,8 @@ admin.mail.activateAccount.activate: 'Activer votre compte'
 admin.mail.activateAccount.body: "Bonjour,\n\nVous avez été invité en tant que collaborateur sur Vimeet\n\nPour y accéder, cliquer sur le lien suivant et entrer un mot de passe pour activer votre compte:"
 admin.mail.activateAccount.end: ''
 admin.mail.activateAccount.subject: 'Activer votre compte'
+admin.mail.userAccountTemporarilyDisabled.subject: 'Votre compte utilisateur a été désactivé temporairement'
+admin.mail.userAccountTemporarilyDisabled.body: "%firstname% %lastname%,\n\nVotre compte a été désactivé pour une durée de 15 minutes suite à des tentatives de connexion.\n\nBien cordialement,"
 admin.mail.export_form_template_data.body: "Bonjour,\nVoici le fichier comportant l'export des données du formulaire de template\n"
 admin.mail.export_form_template_data.end: "Cordialement\n"
 admin.mail.export_form_template_data.file_link: 'Fichier CSV'
