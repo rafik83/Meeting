@@ -145,10 +145,14 @@ There are two branches and two command to deploy for each environment:
         
 After a deploy, you will need to do manually some commands at prod or preprod ([an issue is opened to automatize that](https://github.com/proximum/vimeet/issues/770)) :
 
-- Update Elastic Search index:
+- Update Elastic Search index (all events):
 
         ⇒ bin/console vimeet:elasticsearch:index --env=prod
-    
+
+- Update Elastic Search index for only one event (save time when indexing in local dev):
+
+        ⇒ bin/console vimeet:event:index-sheets {eventId} no-reset --env=dev
+
 - Rebuild events assets:
 
         ⇒ bin/console vimeet:event:build-guideline-asset

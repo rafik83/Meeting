@@ -15,24 +15,22 @@ use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRulesResolv
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Domain\Model\Contact;
+use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ParticipantsViewQueryHandler
 {
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
-    /**
-     * @var ParticipantInfoAccessRulesResolver
-     */
+    /** @var ParticipantInfoAccessRulesResolver */
     private $participantInfoAccessRulesResolver;
 
-    /**
-     * @var TranslatorInterface
-     */
+    /** @var TranslatorInterface */
     private $translator;
+
+    /** @var ContactRepositoryInterface */
+    private $contactRepository;
 
     /**
      * ParticipantsViewQueryHandler constructor.
@@ -43,11 +41,13 @@ class ParticipantsViewQueryHandler
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         ParticipantInfoAccessRulesResolver $participantInfoAccessRulesResolver,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        ContactRepositoryInterface $contactRepository
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->participantInfoAccessRulesResolver = $participantInfoAccessRulesResolver;
         $this->translator = $translator;
+        $this->contactRepository = $contactRepository;
     }
 
     /**
@@ -72,7 +72,11 @@ class ParticipantsViewQueryHandler
 
 
             $participantInfoAccessRule = $this->participantInfoAccessRulesResolver->getParticipantInfoAccessRule($query->seerSheet, $participant->getSheet());
-            $evaluation = null;
+            $evaluation = $this->contactRepository->findMinEvaluationByEventAndUser(
+                $query->seerSheet->getEvent(),
+                $participant->getUser(),
+                $query->seerSheet->getUsers()
+            );
 
             foreach ($query->contacts as $contact) {
                 if ($participant->getUser()->getId() !== $contact->getContact()->getId()) {

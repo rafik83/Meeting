@@ -10,6 +10,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Meeting;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRule;
@@ -19,9 +20,11 @@ use Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\MeetingParticipantView;
 use Proximum\Vimeet\Domain\Model\Contact;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ParticipantsViewQueryHandlerTest extends TestCase
@@ -38,22 +41,37 @@ class ParticipantsViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy|ParticipantInfoAccessRulesResolver */
     private $participantInfoAccessRulesResolver;
 
+    /** @var ObjectProphecy|ContactRepositoryInterface */
+    private $contactRepository;
+
     public function setUp()
     {
         $this->participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $this->participantInfoAccessRulesResolver = $this->prophesize(participantInfoAccessRulesResolver::class);
         $this->translator = $this->prophesize(TranslatorInterface::class);
+        $this->contactRepository = $this->prophesize(ContactRepositoryInterface::class);
 
         $this->participantsViewQueryHandler = new ParticipantsViewQueryHandler(
             $this->participantInfoGuesser->reveal(),
             $this->participantInfoAccessRulesResolver->reveal(),
-            $this->translator->reveal()
+            $this->translator->reveal(),
+            $this->contactRepository->reveal()
         );
     }
 
     public function testHandle()
     {
         $sheet = $this->prophesize(Sheet::class);
+
+        $event = $this->prophesize(Event::class);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+        $sheet->getUsers()->shouldBeCalled()->willReturn([]);
+
+        $this->contactRepository->findMinEvaluationByEventAndUser(
+            $event->reveal(),
+            Argument::type(User::class),
+            []
+        )->shouldBeCalled()->willReturn(null);
 
         $participant1 = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
