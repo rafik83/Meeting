@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Serializer\Denormalizer\Exception\InvalidObjectC
 use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -65,7 +66,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
     /** @var ParticipantOfSheetWithPackageParticipantAndPlanningDisabled */
     private $participantOfSheetWithPackageParticipantAndPlanningDisabled;
 
-    /** @var User[] */
+    /** @var User[] indexed by user email */
     private $users = [];
 
     /** @var Sheet[] indexed by user email */
@@ -270,7 +271,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $participantData = [];
         $sheetData = [];
         $sheetTitle = '';
-        $groupTitle = '';
+        $groupTitle = null;
 
         // clear previous data before process current imported participant row
         $registrationTemplate->clear();
@@ -408,7 +409,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param array        $context
      * @param string       $email
      * @param string       $sheetTitle
-     * @param string       $groupTitle
+     * @param null|string  $groupTitle
      * @param array        $sheetRegistrationData
      * @param array        $sheetData
      * @param array        $participantData
@@ -418,7 +419,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         array $context,
         $email,
         string $sheetTitle,
-        string $groupTitle,
+        ?string $groupTitle,
         $sheetRegistrationData,
         $sheetData,
         $participantData,
@@ -428,64 +429,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $user = $this->getUser($email);
 
         if (!$user instanceof User) {
-            $user = new User($email, '', '', $context['locale']);
-            $user->setAccount(new User\Account());
-
-            $this->userRepository->add($user);
-            $this->importLogger->userImported($user);
-
-            $this->userSheets[$email] = [];
-            $this->users[$email] = $user;
+            $user = $this->createUser($email, $context['locale']);
         }
 
-        $group = null;
-        $allowMultiSheet = $context['allowMultiSheet'] ?? false;
-        if ($allowMultiSheet) {
-            // First run, get the user sheets.
-            if (!isset($this->userSheets[$email])) {
-                $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
-                $this->userSheets[$email] = $sheets;
-            }
-
-            // Existing sheet for user.
-            if (!empty($this->userSheets[$email])) {
-                $firstSheet = null;
-
-                /** @var Sheet $userSheet */
-                foreach ($this->userSheets[$email] as $userSheet) {
-                    if ($firstSheet === null) {
-                        $firstSheet = $userSheet;
-                    }
-
-                    if ($userSheet->hasGroup()) {
-                        $group = $userSheet->getGroup();
-                        break;
-                    }
-                }
-
-                if (!$group instanceof Sheet\Group) {
-                    if (isset($this->userGroupTitles[$email])) {
-                        $groupTitle = $this->userGroupTitles[$email];
-                    }
-
-                    $group = new Sheet\Group(
-                        $event,
-                        $user,
-                        $groupTitle,
-                        true,
-                        $this->dateTime,
-                        null
-                    );
-
-                    $this->groupRepository->add($group);
-
-                    if (!$firstSheet->hasGroup()) {
-                        $firstSheet->setGroup($group);
-                        $this->sheetRepository->set($firstSheet);
-                    }
-                }
-            }
-        }
+        $group = $this->getGroup(
+            $email,
+            $user,
+            $event,
+            $groupTitle,
+            $context
+        );
 
         $sheet = new Sheet($event, $context['type'], $sheetData, $user, $this->dateTime);
         $sheet->setImported(true);
@@ -526,6 +479,82 @@ class ParticipantDenormalizer implements DenormalizerInterface
         if (!isset($this->userGroupTitles[$email])) {
             $this->userGroupTitles[$email] = $groupTitle;
         }
+    }
+
+    private function createUser(string $email, string $locale): User
+    {
+        $user = new User($email, '', '', $locale);
+        $user->setAccount(new User\Account());
+
+        $this->userRepository->add($user);
+        $this->importLogger->userImported($user);
+
+        $this->userSheets[$email] = [];
+        $this->users[$email] = $user;
+
+        return $user;
+    }
+
+    private function getGroup(
+        string $email,
+        User $user,
+        Event $event,
+        ?string $groupTitle,
+        array $context
+    ): ?Sheet\Group {
+        $group = null;
+        $allowMultiSheet = $context['allowMultiSheet'] ?? false;
+
+        if (!$allowMultiSheet) {
+            return null;
+        }
+
+        // Get the user sheets on the first run.
+        if (!isset($this->userSheets[$email])) {
+            $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
+            $this->userSheets[$email] = $sheets;
+        }
+
+        // Existing sheet for user.
+        if (!empty($this->userSheets[$email])) {
+            $firstSheet = null;
+
+            /** @var Sheet $userSheet */
+            foreach ($this->userSheets[$email] as $userSheet) {
+                if ($firstSheet === null) {
+                    $firstSheet = $userSheet;
+                }
+
+                if ($userSheet->hasGroup()) {
+                    $group = $userSheet->getGroup();
+                    break;
+                }
+            }
+
+            if (!$group instanceof Sheet\Group) {
+                if (isset($this->userGroupTitles[$email])) {
+                    $groupTitle = $this->userGroupTitles[$email];
+                }
+
+                $group = new Sheet\Group(
+                    $event,
+                    $user,
+                    $groupTitle,
+                    true,
+                    $this->dateTime,
+                    null
+                );
+
+                $this->groupRepository->add($group);
+
+                if (!$firstSheet->hasGroup()) {
+                    $firstSheet->setGroup($group);
+                    $this->sheetRepository->set($firstSheet);
+                }
+            }
+        }
+
+        return $group;
     }
 
     /**
