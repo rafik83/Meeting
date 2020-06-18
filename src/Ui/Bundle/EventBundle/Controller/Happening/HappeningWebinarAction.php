@@ -80,7 +80,7 @@ class HappeningWebinarAction
             throw new AccessDeniedException('Access denied to this happening');
         }
 
-        $this->commandBus->handle(new StartWebinarSessionCommand($happening));
+        $this->commandBus->handle(new StartWebinarSessionCommand($happening, $user));
 
         /** @var WebinarView $webinarView */
         $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale()));
