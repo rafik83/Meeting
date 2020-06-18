@@ -29,8 +29,7 @@ function Webinar(element, isSpeaker) {
     this.userCompleteName = element.getAttribute('data-user-complete-name');
     this.helperContainer = element.querySelector('.video-helper');
 
-    const hideOnDesktop = element.querySelector('[data-hide-on-desktop]');
-    this.isMobile = hideOnDesktop && 'none' !== getComputedStyle(hideOnDesktop).display;
+    this.isMobile = 768 > (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 
     this.notCompatibleBrowserMessage = element.getAttribute(
         'data-not-compatible-browser-message'
