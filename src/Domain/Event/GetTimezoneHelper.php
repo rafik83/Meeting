@@ -10,8 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Event;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
+use Proximum\Vimeet\Application\Components\Participant\ParticipantGuesser;
 use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -22,13 +23,13 @@ class GetTimezoneHelper
     /** @var IsParticipantVisio */
     private $isParticipantVisio;
 
-    /** @var SheetGuesser */
-    private $sheetGuesser;
+    /** @var ParticipantGuesser */
+    private $participantGuesser;
 
-    public function __construct(IsParticipantVisio $isParticipantVisio, SheetGuesser $sheetGuesser)
+    public function __construct(IsParticipantVisio $isParticipantVisio, ParticipantGuesser $participantGuesser)
     {
         $this->isParticipantVisio = $isParticipantVisio;
-        $this->sheetGuesser = $sheetGuesser;
+        $this->participantGuesser = $participantGuesser;
     }
 
     public function getTimezoneByEventAndParticipant(Event $event, Participant $participant): string
@@ -42,13 +43,14 @@ class GetTimezoneHelper
 
     public function getTimezoneByEventAndUser(Event $event, User $user): string
     {
-        $sheet = $this->sheetGuesser->getUserSheet($user, $event, $event->getLocaleFallback());
-        $participant = $sheet->getUserParticipant($user);
+        try {
+            $participant = $this->participantGuesser->getUserEventParticipant($user, $event);
 
-        if (!$participant) {
-            throw new ParticipantNotFoundException('Participant not found in the given sheet');
+            return $this->getTimezoneByEventAndParticipant($event, $participant);
+        } catch (ParticipantNotFoundException $exception) {
+        } catch (SheetNotFoundException $exception) {
         }
 
-        return $this->getTimezoneByEventAndParticipant($event, $participant);
+        return $event->getTimeZone();
     }
 }
