@@ -2,8 +2,6 @@ admin.mail.activateAccount.activate: 'Activate your account'
 admin.mail.activateAccount.body: 'Hello, you have been invited as contributor on Vimeet. To be able to access it, please click on the following link and enter a password to activate you account:'
 admin.mail.activateAccount.end: ''
 admin.mail.activateAccount.subject: 'Activate your account'
-admin.mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"
-admin.mail.transaction.confirm.subject: '[%event%] Your payment has been received'
 admin.mail.export_form_template_data.body: 'Hello, here is the file with the export of the template form data'
 admin.mail.export_form_template_data.end: Regards
 admin.mail.export_form_template_data.file_link: 'CSV file'
@@ -157,3 +155,5 @@ mail.thirdParty.comexposium.sso.participantAdded.body: 'Hello %firstname% %lastn
 mail.thirdParty.comexposium.sso.participantAdded.end: Regards
 mail.thirdParty.comexposium.sso.participantAdded.link: Login
 mail.thirdParty.comexposium.sso.participantAdded.subject: '[%event%] Activate your account'
+mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"
+mail.transaction.confirm.subject: '[%event%] Your payment has been received'
