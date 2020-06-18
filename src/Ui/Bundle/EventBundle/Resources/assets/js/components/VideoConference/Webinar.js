@@ -587,7 +587,11 @@ Webinar.prototype.handlePublishMediaSharing = function (error) {
 Webinar.prototype.handleStopSharing = function () {
     if (this.publisherScreen) {
         this.publisherScreen.destroy();
+    }
+
+    if (this.screenElement) {
         this.screenElement.remove();
+        this.screenElement = null;
     }
 
     if (this.shareVideoElement) {
