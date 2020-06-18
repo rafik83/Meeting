@@ -723,7 +723,11 @@ Webinar.prototype.initQuestions = function () {
 
             const contentEl = rowEl.appendChild(document.createElement('div'));
             contentEl.classList.add('question-content');
-            contentEl.textContent = item.questionContent;
+            const questionCreatedAt = document.createElement('small');
+            questionCreatedAt.classList.add('pull-right');
+            questionCreatedAt.textContent = item.createdAt;
+            contentEl.appendChild(questionCreatedAt);
+            contentEl.appendChild(document.createTextNode(item.questionContent));
 
             const authorEl = rowEl.appendChild(document.createElement('div'));
             authorEl.classList.add('question-author');
@@ -731,6 +735,7 @@ Webinar.prototype.initQuestions = function () {
             authorNameEl.classList.add('question-author-name');
             const authorNameTextEl = authorNameEl.appendChild(document.createElement('span'));
             authorNameTextEl.textContent = item.firstName + ' ' + item.lastName;
+
             if (item.sheetTitle) {
                 const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
                 authorTitleEl.textContent = [item.position, item.sheetTitle].filter((item) => !!item).join(', ');

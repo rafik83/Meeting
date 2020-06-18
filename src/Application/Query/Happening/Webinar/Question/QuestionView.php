@@ -22,7 +22,7 @@ class QuestionView
     /** @var string|null */
     public $sheetTitle;
 
-    /** @var \DateTimeInterface */
+    /** @var string */
     public $createdAt;
 
     public function __construct(
@@ -32,7 +32,7 @@ class QuestionView
         ?string $position,
         ?string $avatar,
         ?string $sheetTitle,
-        \DateTimeInterface $createdAt
+        string $createdAt
     ) {
         $this->questionContent = $questionContent;
         $this->firstName = $firstName;
