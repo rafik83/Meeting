@@ -84,6 +84,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@datetime'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\GetHappeningQuestionsAction:
         arguments:
