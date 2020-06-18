@@ -42,7 +42,7 @@ class DayHelper
         );
     }
 
-    public static function getMediumHourFormatter($locale, $timeZone): \IntlDateFormatter
+    public static function getMediumHourFormatter(string $locale, string $timeZone): \IntlDateFormatter
     {
         return \IntlDateFormatter::create(
             $locale,
