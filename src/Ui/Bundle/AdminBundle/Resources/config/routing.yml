@@ -935,7 +935,8 @@ admin_sheet_import_result:
         event: \d+
         type: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Sheet:importResult }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ResultAction
+
 admin_sheet_assign_spot:
     path: /event/{event}/sheet/{sheet}/assign-spot
     requirements:

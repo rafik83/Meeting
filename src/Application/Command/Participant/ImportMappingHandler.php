@@ -53,6 +53,7 @@ class ImportMappingHandler
     public function handle(ImportMapping $importMapping): void
     {
         $filename = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
+        $mappings = $this->removeIgnoreFields($importMapping->getMappings());
 
         /** @var ParticipantImportLogger $importLogger */
         $importLogger = $this->serializerAdapter->deserialize(
@@ -61,7 +62,7 @@ class ImportMappingHandler
             'csv',
             [
                 'csv_delimiter' => ';',
-                'mappings' => $this->removeIgnoreFields($importMapping->getMappings()),
+                'mappings' => $mappings,
                 'event' => $importMapping->event,
                 'type' => $importMapping->type,
                 'locale' => $importMapping->locale,
@@ -72,7 +73,9 @@ class ImportMappingHandler
         $participantImport = new ParticipantImport(
             $importMapping->type,
             $importLogger->toArray(),
-            $this->date
+            $mappings,
+            $this->date,
+            $importMapping->importMappingView->savedImportMapping
         );
 
         $this->participantImportRepository->add($participantImport);
@@ -84,6 +87,8 @@ class ImportMappingHandler
 
         $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
         $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_CHARSET);
+        $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_SAVED_MAPPING);
+        $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_ALLOW_MULTI_SHEET);
 
         $this->eventDispatcher->dispatch(Events::PARTICIPANT_IMPORTED, new ParticipantImportedEvent(
             $importMapping->admin,

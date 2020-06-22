@@ -697,6 +697,12 @@ services:
             - '@templating.engine.twig'
             - '@session.flash_bag'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ResultAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@query.participant.import.import_result_view_query_handler'
+            - '@templating.engine.twig'
+
     #
     # Availability Time Range
     #

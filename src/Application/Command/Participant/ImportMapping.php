@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet\ImportMapping as SheetImportMapping;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class ImportMapping implements Command
@@ -38,13 +39,30 @@ class ImportMapping implements Command
         Type $type,
         Admin $admin,
         string $locale,
-        ImportMappingView $importMappingView
+        ImportMappingView $importMappingView,
+        ?SheetImportMapping $sheetImportMapping
     ) {
         $this->event = $event;
         $this->type = $type;
         $this->locale = $locale;
         $this->admin = $admin;
         $this->importMappingView = $importMappingView;
+
+        if ($sheetImportMapping instanceof SheetImportMapping) {
+            $map = $sheetImportMapping->getMapping();
+            $associatedMapping = [];
+
+            $csvHeaders = $this->importMappingView->fieldHeaders;
+            $csvHeadersFlip = array_flip($csvHeaders);
+
+            foreach ($map as $key => $value) {
+                if (isset($csvHeadersFlip[$key])) {
+                    $associatedMapping[$csvHeadersFlip[$key]] = $value;
+                }
+            }
+
+            $this->mappings = $associatedMapping;
+        }
     }
 
     public function isEmailInMappings(): bool

@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\View\Participant;
 
+use Proximum\Vimeet\Domain\Model\Sheet\ImportMapping;
+
 class ImportMappingView
 {
     /**
@@ -21,13 +23,18 @@ class ImportMappingView
     /** @var bool */
     public $allowMultiSheet;
 
+    /** @var ImportMapping|null */
+    public $savedImportMapping;
+
     public function __construct(
         array $fieldHeaders,
         array $registrationHeaders,
-        bool $allowMultiSheet
+        bool $allowMultiSheet,
+        ?ImportMapping $savedImportMapping
     ) {
         $this->fieldHeaders = $fieldHeaders;
         $this->registrationHeaders = $registrationHeaders;
         $this->allowMultiSheet = $allowMultiSheet;
+        $this->savedImportMapping = $savedImportMapping;
     }
 }
