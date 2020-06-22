@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2102 - Evaluate visio meeting
 - VIMEET-2128 - Show participant name on visio
 - VIMEET-2140 - Screen share without feedback
+- VIMEET-2158 - Webinar fixes and improvement
 - VIMEET-2150 - Block account in admin login after 5 failed attempts
 
 ### Fixed

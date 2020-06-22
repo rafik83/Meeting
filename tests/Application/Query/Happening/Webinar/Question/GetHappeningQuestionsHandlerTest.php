@@ -7,6 +7,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestions;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestionsHandler;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\Question\QuestionView;
+use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\User;
@@ -22,17 +23,26 @@ class GetHappeningQuestionsHandlerTest extends TestCase
     /** @var ObjectProphecy|QuestionRepositoryInterface */
     private $questionRepository;
 
+    /** @var ObjectProphecy|GetTimezoneHelper */
+    private $getTimezoneHelper;
+
     protected function setUp()
     {
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $this->getHappeningQuestionsHandler = new GetHappeningQuestionsHandler($this->questionRepository->reveal());
+        $this->getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
+
+        $this->getHappeningQuestionsHandler = new GetHappeningQuestionsHandler(
+            $this->questionRepository->reveal(),
+            $this->getTimezoneHelper->reveal()
+        );
     }
 
     public function test_get_questions_list()
     {
-        $happening = $this->prophesize(Happening::class);
-
         $event = EventFactory::createEvent();
+
+        $happening = $this->prophesize(Happening::class);
+        $happening->getEvent()->shouldBeCalled()->willReturn($event);
 
         $user1 = $this->prophesize(User::class);
         $user1->getFirstName()
@@ -68,15 +78,23 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         $sheet2 = SheetFactory::create($event, $user2->reveal());
         $sheet2->setTitle('Cola inc.');
 
-        $question1 = new Question($happening->reveal(), $sheet1, $user1->reveal(), new \DateTime('2020-06-01 17:00:00'), 'The solution is already deployed?');
-        $question2 = new Question($happening->reveal(), $sheet2, $user2->reveal(), new \DateTime('2020-05-29 15:00:00'), 'What is the environmental impact of the AI?');
+        $question1 = new Question($happening->reveal(), $sheet1, $user1->reveal(), new \DateTime('2020-06-01 17:23:42'), 'The solution is already deployed?');
+        $question2 = new Question($happening->reveal(), $sheet2, $user2->reveal(), new \DateTime('2020-05-29 08:00:00'), 'What is the environmental impact of the AI?');
+
+        $this->getTimezoneHelper
+            ->getTimezoneByEventAndUser($event, $user1->reveal())
+            ->shouldBeCalled()
+            ->willReturn('Europe/Paris')
+        ;
 
         $this->questionRepository
             ->getByHappeningDuringWebinar($happening->reveal())
             ->shouldBeCalled()
             ->willReturn([$question1, $question2]);
 
-        $result = $this->getHappeningQuestionsHandler->handle(new GetHappeningQuestions($happening->reveal()));
+        $result = $this->getHappeningQuestionsHandler->handle(
+            new GetHappeningQuestions($happening->reveal(), $user1->reveal(), 'en')
+        );
 
         $this->assertEquals(
             [
@@ -87,7 +105,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
                     null,
                     null,
                     'World Company',
-                    new \DateTime('2020-06-01 17:00:00')
+                    '7:23:42 PM'
                 ),
                 new QuestionView(
                     'What is the environmental impact of the AI?',
@@ -96,7 +114,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
                     'Employee',
                     null,
                     'Cola inc.',
-                    new \DateTime('2020-05-29 15:00:00')
+                    '10:00:00 AM'
                 )
             ],
             $result

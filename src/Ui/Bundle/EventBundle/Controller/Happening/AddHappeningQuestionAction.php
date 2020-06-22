@@ -69,7 +69,7 @@ class AddHappeningQuestionAction
 
         $payload = json_decode($request->getContent(), true);
 
-        if (empty($payload['questionContent'])) {
+        if (!isset($payload['questionContent'])) {
             throw new BadRequestHttpException('Empty content for question');
         }
 

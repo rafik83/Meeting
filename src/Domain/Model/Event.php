@@ -339,8 +339,14 @@ class Event implements EventInterface, TraceableInterface
      * Get fallback.
      *
      * @return string
+     * @deprecated use getLocaleFallback()
      */
     public function getFallback()
+    {
+        return $this->getLocaleFallback();
+    }
+
+    public function getLocaleFallback(): string
     {
         return $this->fallback;
     }

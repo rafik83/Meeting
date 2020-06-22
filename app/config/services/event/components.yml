@@ -5,6 +5,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\CartRowParticipantRepository'
             - '@template.participant_info_guesser'
 
+    Proximum\Vimeet\Application\Components\Participant\ParticipantGuesser:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
     Proximum\Vimeet\Application\Components\Template\Object\UploadObjectDownloadPathGetter:
         arguments:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
