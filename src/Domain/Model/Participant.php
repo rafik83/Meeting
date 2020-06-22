@@ -367,6 +367,11 @@ class Participant implements MailRecipientInterface
         return $this->timezone;
     }
 
+    public function getTimezoneFormatted(): ?string
+    {
+        return str_replace(['_', '/'], [' ', ' / '], $this->timezone);
+    }
+
     public function setTimezone(string $timezone): void
     {
         $this->timezone = $timezone;

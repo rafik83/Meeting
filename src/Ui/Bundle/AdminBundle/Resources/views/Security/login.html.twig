@@ -8,6 +8,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">{{ 'login.title'|trans }}</div>
                 <div class="panel-body">
+                    {% block form %}
                     {% if error %}
                         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
@@ -27,6 +28,7 @@
 
                     {{ form_rest(form) }}
                     {{ form_end(form) }}
+                    {% endblock %}
                 </div>
             </div>
 

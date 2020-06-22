@@ -41,4 +41,14 @@ class DayHelper
             $timeZone
         );
     }
+
+    public static function getMediumHourFormatter(string $locale, string $timeZone): \IntlDateFormatter
+    {
+        return \IntlDateFormatter::create(
+            $locale,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::MEDIUM,
+            $timeZone
+        );
+    }
 }

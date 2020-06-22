@@ -5630,6 +5630,7 @@ services:
     Proximum\Vimeet\Domain\Event\GetTimezoneHelper:
         arguments:
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
+            - '@Proximum\Vimeet\Application\Components\Participant\ParticipantGuesser'
     domain.event.has_sheet:
         class: Proximum\Vimeet\Domain\Event\HasSheet
         arguments:

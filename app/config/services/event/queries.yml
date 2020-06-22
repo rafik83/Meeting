@@ -49,6 +49,7 @@ services:
     Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestionsHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestions }
 
