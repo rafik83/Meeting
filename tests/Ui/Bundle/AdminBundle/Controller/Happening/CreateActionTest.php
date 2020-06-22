@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\CreateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
