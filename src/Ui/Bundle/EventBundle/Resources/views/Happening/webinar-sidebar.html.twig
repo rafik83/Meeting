@@ -4,7 +4,7 @@
         <a class="btn btn-primary" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }}</a>
         <a class="btn btn-gray" href="#" data-questions-button>{{ 'happening.webinar.questions.tab'|trans }}</a>
     </div>
-    <div class="chat-container" data-chat-container></div>
+    <div data-chat-container></div>
     <div class="hide"
         data-questions-container
         data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
