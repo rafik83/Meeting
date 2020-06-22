@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Mail;
 
+use Proximum\Vimeet\Domain\Model\AbstractUser;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 
 class AdminMail extends AbstractMail
 {
@@ -31,19 +31,19 @@ class AdminMail extends AbstractMail
     private $receiverUser;
 
     /**
-     * @param string     $sender
-     * @param string     $receiver
-     * @param string     $locale
-     * @param User|null  $senderUser
-     * @param User|null  $receiverUser
+     * @param string             $sender
+     * @param string             $receiver
+     * @param string             $locale
+     * @param AbstractUser|null  $senderUser
+     * @param AbstractUser|null  $receiverUser
      * @param Event|null $event
      */
     public function __construct(
         $sender,
         $receiver,
         $locale,
-        User $senderUser = null,
-        User $receiverUser = null,
+        ?AbstractUser $senderUser = null,
+        ?AbstractUser $receiverUser = null,
         Event $event = null
     ) {
         parent::__construct($sender, $receiver, $locale);

@@ -5,15 +5,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2131 - Add datetime when user connects to a webinar (like a scan in conference)
+
+## [2.32.0] - 2020-06-18
+### Added
 - VIMEET-2141 - Webinar questions
 - VIMEET-2102 - Evaluate visio meeting
 - VIMEET-2128 - Show participant name on visio
 - VIMEET-2140 - Screen share without feedback
 - VIMEET-2158 - Webinar fixes and improvement
+- VIMEET-2150 - Block account in admin login after 5 failed attempts
 
 ### Fixed
 - MV-236 - Add unavailability with a different timezone
 - Add number validator for priority meeting request number
+- Fix happening speakers display in program page
+- VIMEET-2148 - Restrict PDF access
 
 ## [2.31.0] - 2020-06-01
 ### Added

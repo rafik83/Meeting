@@ -175,8 +175,13 @@ tactician:
 liip_imagine:
     driver: imagick
     resolvers:
-       default:
-          web_path: ~
+        default:
+            web_path: ~
+    loaders:
+        default:
+            filesystem:
+                data_root:
+                    - "%liip_imagine_data_root%"
     filter_sets:
         cache: ~
         event_header_logo:

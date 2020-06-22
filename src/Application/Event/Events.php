@@ -64,6 +64,7 @@ final class Events
     public const ORDER_CONFIRMED = 'order.confirm';
     public const ORDER_UPDATED = 'order.updated';
     public const ADMIN_ACCOUNT_ACTIVATED = 'admin.account_activated';
+    public const ADMIN_ACCOUNT_TEMPORARILY_DISABLED = 'admin.account_temporarily_disabled';
     public const ADMIN_PASSWORD_RESET = 'admin.password_reset';
     public const ADMIN_MEETINGS_DELETED_ALL = 'admin.meetings.deleted_all';
     public const USER_ACCOUNT_ACTIVATED = 'user.account_activated';

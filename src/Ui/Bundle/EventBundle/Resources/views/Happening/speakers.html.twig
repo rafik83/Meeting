@@ -7,31 +7,27 @@
         </p>
     </div>
 </div>
-<div class="row">
-    {% for speaker in happening.speakers %}
+
+{% for speaker in happening.speakers %}
+    <div class="row">
         {% if speaker.hasCompanyPicture %}
             <div class="col-md-4 text-center">
                 <img src="{{ speaker.companyPicture|imagine_filter('program_company_logo') }}"/>
             </div>
         {% endif %}
-        <div class="col-md-8">
+        <div class="col-md-8 {{ not speaker.hasCompanyPicture ? 'col-md-offset-4' : '' }}">
             <div class="list list--users">
                 <div class="user clearfix">
-                    {% if speaker.hasPicture %}
-                        <div class="user__avatar">
-                            <span class="bullet"></span>
-                            <div class="avatar">
+                    <div class="user__avatar">
+                        <span class="bullet"></span>
+                        <div class="avatar">
+                            {% if speaker.hasPicture %}
                                 <img src="{{ speaker.picture|imagine_filter('user_avatar') }}" alt="{{ speaker.firstname|first }}." title="{{ speaker.lastname }}">
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="user__avatar">
-                            <span class="bullet"></span>
-                            <div class="avatar">
+                            {% else %}
                                 <p>{{ speaker.initials }}</p>
-                            </div>
+                            {% endif %}
                         </div>
-                    {% endif %}
+                    </div>
                     <div class="user__infos">
                         <p class="name">{{ speaker.firstname|capitalize }} {{ speaker.lastname|upper }}</p>
                         <p class="job">{{ speaker.position }}</p>
@@ -39,5 +35,5 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
-</div>
+    </div>
+{% endfor %}
