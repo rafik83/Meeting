@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.33.0] - 2020-06-22
 ### Added
 - VIMEET-2142 - Import multi sheet for user
 - VIMEET-2131 - Add datetime when user connects to a webinar (like a scan in conference)
