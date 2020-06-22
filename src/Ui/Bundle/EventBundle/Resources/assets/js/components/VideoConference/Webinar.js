@@ -20,6 +20,7 @@ function Webinar(element, isSpeaker) {
 
     this.startFullScreenClass = 'glyphicon-fullscreen';
     this.endFullScreenClass = 'icon-Reduire_3';
+    this.onFullscreenClass = 'fullscreen-webinar-button';
 
     this.token = element.getAttribute('data-token');
     this.sessionId = element.getAttribute('data-session-id');
@@ -330,7 +331,7 @@ Webinar.prototype.initChat = function () {
         sender: {
             alias: this.userCompleteName,
         },
-        textChatContainer: '.chat-container',
+        textChatContainer: '[data-chat-container]',
         waitingMessage: this.chatWaitingMessage,
         alwaysOpen: true
     });
@@ -659,6 +660,7 @@ Webinar.prototype.createFullscreenButton = function () {
     fullscreenButton.classList.add('btn-gray');
     fullscreenButton.classList.add('start-fullscreen-button');
     fullscreenButton.classList.add('OT_ignore');
+    fullscreenButton.classList.add(this.onFullscreenClass);
     fullscreenButton.appendChild(this.iconFullscreenButton);
 
     this.layoutContainer.appendChild(fullscreenButton);
@@ -701,20 +703,18 @@ Webinar.prototype.changeFullscreenHandler = function () {
 };
 
 Webinar.prototype.toggleFullscreenAndSidebarButtons = function (isFullScreen) {
-    const onFullscreenClass = 'fullscreen-webinar-button';
-
     if (isFullScreen) {
         this.hideElement(this.toggleSidebarButton);
 
         if (this.fullscreenButton) {
-            this.fullscreenButton.classList.remove(onFullscreenClass);
+            this.fullscreenButton.classList.remove(this.onFullscreenClass);
         }
 
         return;
     }
 
     if (this.fullscreenButton) {
-        this.fullscreenButton.classList.add(onFullscreenClass);
+        this.fullscreenButton.classList.add(this.onFullscreenClass);
     }
 
     if (this.iconFullscreenButton) {
