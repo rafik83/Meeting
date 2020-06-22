@@ -12,6 +12,18 @@
   }
 }
 
+.chat-container {
+  background: white;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 25%;
+  height: calc(100vh - 50px);
+  z-index: 9999;
+  overflow: hidden;
+}
+
 .side-container {
   background: white;
   padding: 10px;
