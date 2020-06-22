@@ -6009,6 +6009,7 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@repository.sheet.group_repository'
             - '@template.template_data_factory'
             - '@validator.email_validator'
             - '@account.synchronizer'

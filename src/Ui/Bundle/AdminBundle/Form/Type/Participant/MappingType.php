@@ -20,7 +20,7 @@ class MappingType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         foreach ($options['csvHeaders'] as $key => $csvHeader) {
             $builder->add($key, ChoiceType::class, [
@@ -33,7 +33,7 @@ class MappingType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['csvHeaders', 'registrationHeaders']);
     }

@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2142 - Import multi sheet for user
 - VIMEET-2131 - Add datetime when user connects to a webinar (like a scan in conference)
 - VIMEET-2158 - Webinar fixes and improvement
 - VIMEET-2144 - Webinar is always open to speaker

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Participant\Import;
 
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
@@ -73,6 +65,11 @@ class ImportMappingViewQueryHandler
             ParticipantImportTag::REGISTRATION_FIELD_MAIL => 'form.participant_import.field.mail',
         ];
 
+        $allowMultiSheet = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_ALLOW_MULTI_SHEET) ?? false;
+        if ($allowMultiSheet) {
+            $headers[ParticipantImportTag::FIELD_GROUP_TITLE] = 'form.participant_import.field.group_title';
+        }
+
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($query->type, $query->locale);
         $templateObjects = $registrationTemplate->getParticipantAndSheetDataExceptedImageObject();
 
@@ -107,6 +104,6 @@ class ImportMappingViewQueryHandler
             }
         }
 
-        return new ImportMappingView($csvHeaders, $headers);
+        return new ImportMappingView($csvHeaders, $headers, $allowMultiSheet);
     }
 }

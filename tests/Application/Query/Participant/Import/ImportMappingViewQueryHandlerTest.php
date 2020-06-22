@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Participant\Import;
 
 use PHPUnit\Framework\TestCase;
@@ -43,11 +35,17 @@ class ImportMappingViewQueryHandlerTest extends TestCase
             ->willReturn(tempnam(sys_get_temp_dir(), ''))
         ;
 
+        $session->get(ParticipantImportTag::PARTICIPANT_IMPORT_ALLOW_MULTI_SHEET)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
         $data = [
             0 => [
                 'firstName' => 'firstName',
                 'lastName' => 'lastName',
                 'email' => 'email',
+                'group_title' => 'group_title',
                 'position' => 'position',
                 'staff' => 'staff',
                 'country' => 'country',
@@ -56,6 +54,7 @@ class ImportMappingViewQueryHandlerTest extends TestCase
                 'Jean',
                 'Dupont',
                 'jean.dupont@example.net',
+                'Group',
                 'Director',
                 '10 - 25',
                 'France',
@@ -144,12 +143,14 @@ class ImportMappingViewQueryHandlerTest extends TestCase
             $translator->reveal()
         );
 
-        $result = $handler->handle(new ImportMappingViewQuery($type->reveal(), 'fr'));
+        $query = new ImportMappingViewQuery($type->reveal(), 'fr');
+        $result = $handler->handle($query);
 
         $fieldHeaders = [
             'firstName',
             'lastName',
             'email',
+            'group_title',
             'position',
             'staff',
             'country',
@@ -157,6 +158,7 @@ class ImportMappingViewQueryHandlerTest extends TestCase
         $headers = [
             ParticipantImportTag::REGISTRATION_FIELD_IGNORE => 'form.participant_import.field.ignore',
             ParticipantImportTag::REGISTRATION_FIELD_MAIL => 'form.participant_import.field.mail',
+            ParticipantImportTag::FIELD_GROUP_TITLE => 'form.participant_import.field.group_title',
             'key1' => 'Inscription : object1',
             'key2' => 'Inscription : object2',
             'key3' => 'Inscription : object3',
@@ -166,7 +168,7 @@ class ImportMappingViewQueryHandlerTest extends TestCase
             'key7' => 'Fiche : object7',
 
         ];
-        $expected = new ImportMappingView($fieldHeaders, $headers);
+        $expected = new ImportMappingView($fieldHeaders, $headers, true);
 
         $this->assertEquals($expected, $result);
     }

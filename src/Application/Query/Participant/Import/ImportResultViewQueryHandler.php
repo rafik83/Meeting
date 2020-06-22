@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Participant\Import;
 
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
@@ -17,32 +9,19 @@ use Proximum\Vimeet\Domain\View\Normalizer\ParticipantDenormalizerView;
 
 class ImportResultViewQueryHandler
 {
-    /**
-     * @var SessionInterface
-     */
+    /** @var SessionInterface */
     private $session;
 
-    /**
-     * @var ParticipantImportRepositoryInterface
-     */
+    /** @var ParticipantImportRepositoryInterface */
     private $participantImportRepository;
 
-    /**
-     * ImportResultViewQueryHandler constructor.
-     *
-     * @param SessionInterface                     $session
-     * @param ParticipantImportRepositoryInterface $participantImportRepository
-     */
     public function __construct(SessionInterface $session, ParticipantImportRepositoryInterface $participantImportRepository)
     {
         $this->session = $session;
         $this->participantImportRepository = $participantImportRepository;
     }
 
-    /**
-     * @return ParticipantDenormalizerView
-     */
-    public function handle()
+    public function handle(): ParticipantDenormalizerView
     {
         $participantImportId = $this->session->get(ParticipantImportLogger::PARTICIPANT_IMPORT_ID);
 

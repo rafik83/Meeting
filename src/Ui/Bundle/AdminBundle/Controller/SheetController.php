@@ -356,40 +356,6 @@ class SheetController extends Controller
     /**
      * @param Request $request
      * @param Event   $event
-     *
-     * @return Response
-     */
-    public function importAction(Request $request, Event $event)
-    {
-        $this->checkAccess($event);
-
-        $import = new Import();
-
-        $form = $this->createForm(ImportType::class, $import, [
-            'event'  => $event,
-            'locale' => $event->getAvailableLocale($request->getLocale()),
-            'user'   => $this->getUser(),
-            'submit' => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($import);
-
-            return $this->redirectToRoute('admin_sheet_import_mapping', [
-                'event' => $event->getId(),
-                'type'  => $import->type->getId(),
-            ]);
-        }
-
-        return $this->render('AdminBundle:Sheet:import.html.twig', [
-            'form'  => $form->createView(),
-            'event' => $event,
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
      * @param Type    $type
      *
      * @return Response

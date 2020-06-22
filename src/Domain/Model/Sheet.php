@@ -1075,16 +1075,9 @@ class Sheet implements TraceableInterface
         return $this->group ? $this->group->getTitle() : null;
     }
 
-    /**
-     * @param Group $group
-     *
-     * @return $this
-     */
-    public function setGroup(Group $group)
+    public function setGroup(Group $group): void
     {
         $this->group = $group;
-
-        return $this;
     }
 
     public function setLinkedSheets(LinkedSheets $linkedSheets): self

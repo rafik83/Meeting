@@ -387,10 +387,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $this->mailer->send($mail);
     }
 
-    /**
-     * @param SheetGroupCreatedEvent $event
-     */
-    public function onSheetGroupCreated(SheetGroupCreatedEvent $event)
+    public function onSheetGroupCreated(SheetGroupCreatedEvent $event): void
     {
         $mail = $this->getSheetGroupMail($event);
 
