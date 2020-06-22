@@ -32,12 +32,6 @@ class ParticipantsViewQueryHandler
     /** @var ContactRepositoryInterface */
     private $contactRepository;
 
-    /**
-     * ParticipantsViewQueryHandler constructor.
-     *
-     * @param ParticipantInfoGuesser $participantInfoGuesser
-     * @param TranslatorInterface    $translator
-     */
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         ParticipantInfoAccessRulesResolver $participantInfoAccessRulesResolver,
@@ -58,10 +52,18 @@ class ParticipantsViewQueryHandler
     public function handle(ParticipantsViewQuery $query): array
     {
         $meetingParticipantViews = [];
+        $event = $query->seerSheet->getEvent();
 
-        $unavailableMessage = $this->translator->trans('event.meeting.listRequest.contact.unavailable', [], 'messages');
+        $unavailableMessage = $this->translator->trans(
+            'event.meeting.listRequest.contact.unavailable',
+            [],
+            'messages',
+            $query->locale
+        );
 
         foreach ($query->participants as $participant) {
+            $reverseEvaluation = null;
+
             $participantInfo = $this->participantInfoGuesser->guessParticipantInfos(
                 $participant,
                 $query->locale
@@ -70,12 +72,9 @@ class ParticipantsViewQueryHandler
             $participantContactEvaluation = [];
             $participantContactComment = [];
 
-
-            $participantInfoAccessRule = $this->participantInfoAccessRulesResolver->getParticipantInfoAccessRule($query->seerSheet, $participant->getSheet());
-            $evaluation = $this->contactRepository->findMinEvaluationByEventAndUser(
-                $query->seerSheet->getEvent(),
-                $participant->getUser(),
-                $query->seerSheet->getUsers()
+            $participantInfoAccessRule = $this->participantInfoAccessRulesResolver->getParticipantInfoAccessRule(
+                $query->seerSheet,
+                $participant->getSheet()
             );
 
             foreach ($query->contacts as $contact) {
@@ -85,7 +84,6 @@ class ParticipantsViewQueryHandler
 
                 if ($contact->hasEvaluation()) {
                     $participantContactEvaluation[] = $this->formatContactValue($contact, $contact->getEvaluation());
-                    $evaluation = is_null($evaluation) ? $contact->getEvaluation() : min($contact->getEvaluation(), $evaluation);
                 }
 
                 if ($contact->hasComment()) {
@@ -93,15 +91,26 @@ class ParticipantsViewQueryHandler
                 }
             }
 
+            // Get the evaluation from contact to seer user
+            $reverseEvaluation = $this->contactRepository->getEvaluationContactByEventAndUser(
+                $event,
+                $participant->getUser(),
+                $query->seerUser
+            );
+
             $gender = $participantInfo[Tag::PARTICIPANT_GENDER];
 
             $meetingParticipantViews[] = new MeetingParticipantView(
                 $participantInfo[Tag::PARTICIPANT_FIRSTNAME],
                 $participantInfo[Tag::PARTICIPANT_LASTNAME],
                 $participantInfo[Tag::PARTICIPANT_POSITION],
-                $participantInfoAccessRule->isPhoneVisible($evaluation) ? $participantInfo[Tag::PARTICIPANT_PHONE] : $unavailableMessage,
-                $gender ? $this->translator->trans('gender.'.$gender, [], 'messages') : '',
-                $participantInfoAccessRule->isEmailVisible($evaluation) ? $participant->getEmail() : $unavailableMessage,
+                $participantInfoAccessRule->isPhoneVisible($reverseEvaluation)
+                    ? $participantInfo[Tag::PARTICIPANT_PHONE]
+                    : $unavailableMessage,
+                $gender ? $this->translator->trans('gender.' . $gender, [], 'messages') : '',
+                $participantInfoAccessRule->isEmailVisible($reverseEvaluation)
+                    ? $participant->getEmail()
+                    : $unavailableMessage,
                 implode("\n", $participantContactEvaluation),
                 implode("\n", $participantContactComment)
             );

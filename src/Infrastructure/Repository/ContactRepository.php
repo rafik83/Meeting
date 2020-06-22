@@ -107,28 +107,6 @@ class ContactRepository implements ContactRepositoryInterface
         ;
     }
 
-    public function findMinEvaluationByEventAndUser(Event $event, User $user, array $evaluatedUsers): ?int
-    {
-        return $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('MIN(contact.evaluation) AS evaluation')
-            ->from(Contact::class, 'contact')
-            ->join('contact.contact', 'user', 'WITH', 'contact.contact IN(:evaluatedUsers)')
-            ->andWhere('contact.event = :event')
-            ->andWhere('contact.user = :user')
-            ->setParameters(
-                [
-                    'event' => $event,
-                    'user' => $user,
-                    'evaluatedUsers' => $evaluatedUsers,
-                ]
-            )
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
-    }
-
     public function getByEvent(Event $event): array
     {
         return $this
@@ -145,7 +123,12 @@ class ContactRepository implements ContactRepositoryInterface
 
     public function hasEvaluateContactByEventAndUser(Event $event, User $user, User $contact): bool
     {
-        return null !== $this
+        return null !== $this->getEvaluationContactByEventAndUser($event, $user, $contact);
+    }
+
+    public function getEvaluationContactByEventAndUser(Event $event, User $user, User $contact): ?int
+    {
+        return $this
             ->entityManager
             ->createQueryBuilder()
             ->select('contact.evaluation')
@@ -159,7 +142,6 @@ class ContactRepository implements ContactRepositoryInterface
             ->setParameter('contact', $contact)
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 }

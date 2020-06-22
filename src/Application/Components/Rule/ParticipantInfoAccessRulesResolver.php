@@ -82,7 +82,7 @@ class ParticipantInfoAccessRulesResolver
 
     private function loadRules(Event $event): array
     {
-        if (is_null($this->rules)) {
+        if ($this->rules === null) {
             $allRules = $this->ruleRepository->getByEvent($event);
             // index rules by "who"
             $this->rules = array_reduce($allRules, function ($carry, Rule $rule) {

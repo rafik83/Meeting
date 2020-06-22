@@ -38,8 +38,6 @@ interface ContactRepositoryInterface
      */
     public function findByEventAndUsers(Event $event, array $users): array;
 
-    public function findMinEvaluationByEventAndUser(Event $event, User $user, array $evaluatedUsers): ?int;
-
     /**
      * @param Event $event
      *
@@ -48,4 +46,6 @@ interface ContactRepositoryInterface
     public function getByEvent(Event $event): array;
 
     public function hasEvaluateContactByEventAndUser(Event $event, User $user, User $contact): bool;
+
+    public function getEvaluationContactByEventAndUser(Event $event, User $user, User $contact): ?int;
 }
