@@ -37,6 +37,7 @@ use Proximum\Vimeet\Application\Event\Sheet\SheetGroupUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountFromLoginEvent as UserActivateAccountFromLoginEvent;
+use Proximum\Vimeet\Application\Event\User\AdminTemporarilyDisabledEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteProfileEvent;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
@@ -47,9 +48,10 @@ use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\AccountTemporarilyDisabledMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\AdminMeetingsDeletedAllMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\AdminMeetingsDeletedAllMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordMail as UserResetPasswordMail;
@@ -191,6 +193,18 @@ class MailEventSubscriber implements EventSubscriberInterface
         );
 
         $this->mailer->send($mail);
+    }
+
+    public function onAdminAccountTemporarilyDisabled(AdminTemporarilyDisabledEvent $event): void
+    {
+        $this->mailer->send(
+            new AccountTemporarilyDisabledMail(
+                $this->sender->generate(),
+                $event->getAdmin()->getEmail(),
+                $event->getLocale(),
+                $event->getAdmin()
+            )
+        );
     }
 
     /**
@@ -436,6 +450,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         return [
             Events::ADMIN_ACCOUNT_ACTIVATED            => 'onAdminActivateAccount',
+            Events::ADMIN_ACCOUNT_TEMPORARILY_DISABLED => 'onAdminAccountTemporarilyDisabled',
             Events::ADMIN_PASSWORD_RESET               => 'onAdminResetPassword',
             Events::ADMIN_MEETINGS_DELETED_ALL         => 'onAdminMeetingsDeletedAll',
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION => 'onSheetAddParticipant',

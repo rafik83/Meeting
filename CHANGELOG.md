@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2142 - Import multi sheet for user
+- VIMEET-2131 - Add datetime when user connects to a webinar (like a scan in conference)
+- VIMEET-2158 - Webinar fixes and improvement
+- VIMEET-2144 - Webinar is always open to speaker
 
 ## [2.32.0] - 2020-06-18
 ### Added
@@ -13,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2102 - Evaluate visio meeting
 - VIMEET-2128 - Show participant name on visio
 - VIMEET-2140 - Screen share without feedback
+- VIMEET-2150 - Block account in admin login after 5 failed attempts
 
 ### Fixed
 - MV-236 - Add unavailability with a different timezone

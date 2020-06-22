@@ -4,26 +4,21 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\User\UserTemporarilyDisabledEvent;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Application\Event\User\AdminTemporarilyDisabledEvent;
+use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
 
-class AuthenticationFailureSubscriber implements EventSubscriberInterface
+class AdminAuthenticationFailureSubscriber implements EventSubscriberInterface
 {
     /** @var RequestStack */
     private $requestStack;
 
-    /** @var EventRepositoryInterface */
-    private $eventRepository;
-
-    /** @var UserRepositoryInterface */
-    private $userRepository;
+    /** @var AdminRepositoryInterface */
+    private $adminRepository;
 
     /** @var DelayedEventDispatcherInterface */
     private $eventDispatcher;
@@ -33,14 +28,12 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
 
     public function __construct(
         RequestStack $requestStack,
-        EventRepositoryInterface $eventRepository,
-        UserRepositoryInterface $userRepository,
+        AdminRepositoryInterface $adminRepository,
         DelayedEventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->requestStack = $requestStack;
-        $this->eventRepository = $eventRepository;
-        $this->userRepository = $userRepository;
+        $this->adminRepository = $adminRepository;
         $this->eventDispatcher = $eventDispatcher;
         $this->dateTime = $dateTime;
     }
@@ -56,21 +49,21 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
     {
         $token = $authenticationFailureEvent->getAuthenticationToken();
 
-        if (!$token instanceof UsernamePasswordToken || $token->getProviderKey() !== 'main') {
+        if (!$token instanceof UsernamePasswordToken || $token->getProviderKey() !== 'admin') {
             return;
         }
 
         $email = $token->getUser();
-        $user = $this->userRepository->findByEmail($email);
+        $admin = $this->adminRepository->findByEmail($email);
 
-        if (null === $user) {
+        if (null === $admin) {
             return;
         }
 
-        $user->updateLastFailedAuthentication($this->dateTime);
-        $this->userRepository->set($user);
+        $admin->updateLastFailedAuthentication($this->dateTime);
+        $this->adminRepository->set($admin);
 
-        if (!$user->isTemporarilyDisabledDueToFailedAuthentication($this->dateTime)) {
+        if (!$admin->isTemporarilyDisabledDueToFailedAuthentication($this->dateTime)) {
             return;
         }
 
@@ -80,15 +73,9 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event = $this->eventRepository->getEventByDomain($request->getHost());
-
-        if (!$event instanceof Event) {
-            return;
-        }
-
         $this->eventDispatcher->dispatch(
-            Events::USER_ACCOUNT_TEMPORARILY_DISABLED,
-            new UserTemporarilyDisabledEvent($event, $user)
+            Events::ADMIN_ACCOUNT_TEMPORARILY_DISABLED,
+            new AdminTemporarilyDisabledEvent($admin, $admin->getLocale())
         );
     }
 }

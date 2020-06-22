@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening\Webinar\Question;
 
+use Proximum\Vimeet\Domain\Event\Day\DayHelper;
+use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 
 class GetHappeningQuestionsHandler
@@ -9,14 +11,23 @@ class GetHappeningQuestionsHandler
     /** @var QuestionRepositoryInterface */
     private $questionRepository;
 
-    public function __construct(QuestionRepositoryInterface $questionRepository)
+    /** @var GetTimezoneHelper */
+    private $getTimezoneHelper;
+
+    public function __construct(QuestionRepositoryInterface $questionRepository, GetTimezoneHelper $getTimezoneHelper)
     {
         $this->questionRepository = $questionRepository;
+        $this->getTimezoneHelper = $getTimezoneHelper;
     }
 
     public function handle(GetHappeningQuestions $query): array
     {
         $questions = $this->questionRepository->getByHappeningDuringWebinar($query->getHappening());
+
+        $timezone = $this->getTimezoneHelper
+            ->getTimezoneByEventAndUser($query->getHappening()->getEvent(), $query->getUser());
+        $mediumHourFormatter = DayHelper::getMediumHourFormatter($query->getLocale(), $timezone);
+
         $questionViews = [];
 
         foreach ($questions as $question) {
@@ -29,7 +40,7 @@ class GetHappeningQuestionsHandler
                 $author->getPosition(),
                 $author->getAvatar(),
                 $question->getSheet()->getTitle(),
-                $question->getCreatedAt()
+                $mediumHourFormatter->format($question->getCreatedAt())
             );
         }
 

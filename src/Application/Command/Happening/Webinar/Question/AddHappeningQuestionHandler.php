@@ -21,8 +21,12 @@ class AddHappeningQuestionHandler
         $this->datetime = $datetime;
     }
 
-    public function handle(AddHappeningQuestion $command)
+    public function handle(AddHappeningQuestion $command): void
     {
+        if ('' === trim($command->getContent())) {
+            return;
+        }
+
         $question = new Question(
             $command->getHappening(),
             $command->getSheet(),

@@ -22,6 +22,8 @@ admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'
 admin.mail.resetPassword.subject: 'Mot de passe oublié'
 admin.mail.translations.downloaded.body: "Bonjour,\nLes traductions ont été téléchargés depuis openl10n.\n"
 admin.mail.translations.downloaded.subject: 'Téléchargement des traductions'
+admin.mail.userAccountTemporarilyDisabled.subject: 'Votre compte utilisateur a été désactivé temporairement'
+admin.mail.userAccountTemporarilyDisabled.body: "%firstname% %lastname%,\n\nVotre compte a été désactivé pour une durée de 15 minutes suite à des tentatives de connexion.\n\nBien cordialement,"
 mail.activateAccount.activate: 'Activer votre compte'
 mail.activateAccount.body: "Bonjour,\n\nVous avez reçu une invitation pour participer à l’événement %event%.\n\nPour vous enregistrer en ligne et accéder à votre espace participant, cliquez sur le lien ci-dessous."
 mail.activateAccount.end: 'Bien cordialement,'

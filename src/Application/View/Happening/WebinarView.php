@@ -120,7 +120,7 @@ class WebinarView
                 $participantView->lastName,
                 $position,
                 $sheetTitle
-            );;
+            );
         }
 
         return json_encode($mapping);
