@@ -11,15 +11,12 @@
 namespace Proximum\Vimeet\Domain\Model;
 
 use Proximum\Vimeet\Domain\Model\User\Account;
-use Proximum\Vimeet\Domain\Time\DaysHelper;
 
 /**
  * "Compte utilisateur".
  */
 class User extends AbstractUser implements MailRecipientInterface
 {
-    private const FAILED_AUTHENTICATION_MAX = 5;
-
     /**
      * @var Account
      */
@@ -29,12 +26,6 @@ class User extends AbstractUser implements MailRecipientInterface
      * @var bool
      */
     private $welcomed = false;
-
-    /** @var int */
-    private $failedAuthentication = 0;
-
-    /** @var null|\DateTimeInterface */
-    private $lastFailedAuthentication;
 
     /**
      * @param string $email
@@ -241,41 +232,5 @@ class User extends AbstractUser implements MailRecipientInterface
         }
 
         return $this->account->getGender();
-    }
-
-    public function updateLastFailedAuthentication(\DateTimeInterface $now): void
-    {
-        if ($this->isLastFailedAuthenticationExpired($now)) {
-            $this->failedAuthentication = 0;
-        }
-
-        $this->lastFailedAuthentication = $now;
-        ++$this->failedAuthentication;
-    }
-
-    public function isLastFailedAuthenticationExpired(\DateTimeInterface $now): bool
-    {
-        if (null === $this->lastFailedAuthentication) {
-            return true;
-        }
-
-        $lastFailedAuthenticationPLus15Minutes = DaysHelper::cloneDateTime($this->lastFailedAuthentication);
-        $lastFailedAuthenticationPLus15Minutes->add(new \DateInterval('PT15M'));
-
-        return $lastFailedAuthenticationPLus15Minutes < $now;
-    }
-
-    public function isTemporarilyDisabledDueToFailedAuthentication(\DateTimeInterface $now): bool
-    {
-        if (self::FAILED_AUTHENTICATION_MAX > $this->failedAuthentication) {
-            return false;
-        }
-
-        return !$this->isLastFailedAuthenticationExpired($now);
-    }
-
-    public function getRemainingAuthenticationAttempt(\DateTimeInterface $now): int
-    {
-        return self::FAILED_AUTHENTICATION_MAX - $this->failedAuthentication;
     }
 }

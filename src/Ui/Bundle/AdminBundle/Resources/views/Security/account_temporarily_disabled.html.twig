@@ -1,0 +1,7 @@
+{% extends 'AdminBundle:Security:login.html.twig' %}
+
+{% block form %}
+<div class="alert alert-danger">
+    {{ 'authentication.account_temporarily_disabled'|trans }}
+</div>
+{% endblock %}

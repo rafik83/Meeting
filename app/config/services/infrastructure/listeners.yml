@@ -14,3 +14,12 @@ services:
             - '@datetime'
         tags:
             - { name: kernel.event_subscriber }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\AdminAuthenticationFailureSubscriber:
+        arguments:
+            - '@request_stack'
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: kernel.event_subscriber }
