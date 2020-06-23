@@ -71,6 +71,29 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SortParticipants }
 
+    Proximum\Vimeet\Application\Command\Happening\Export\ExportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\Export }
+
+    Proximum\Vimeet\Application\Command\Happening\Export\PersistContentHandler:
+        arguments:
+            - '@adapter.local_file_storage'
+            - '@repository.file_repository'
+            - '%infrastructure.export_happening_participants_path%'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\PersistContent }
+
+    Proximum\Vimeet\Application\Command\Happening\Export\NotifyHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\Notify }
+
     #
     # Unavailabilities
     #
