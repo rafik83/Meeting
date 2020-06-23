@@ -133,7 +133,9 @@ To deploy to preprod and prod, you need to be connected to VPN with this  ~/.ssh
                 User www-data
                 Hostname 10.11.0.32
 
-There are two branches and two command to deploy for each environment:
+[Capistrano 2](https://rubygems.org/gems/capistrano/versions/2.15.9) and [Capifony](https://everzet.github.io/capifony/) must be installed.
+
+There are two branches and two commands to deploy for each environment (to be launched from local machine, not VM):
 
 - `preprod`
 
@@ -142,7 +144,7 @@ There are two branches and two command to deploy for each environment:
 - `prod`
 
         $ make deploy@prod
-        
+
 After a deploy, you will need to do manually some commands at prod or preprod ([an issue is opened to automatize that](https://github.com/proximum/vimeet/issues/770)) :
 
 - Update Elastic Search index (all events):
