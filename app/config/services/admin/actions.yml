@@ -701,7 +701,12 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@query.participant.import.import_result_view_query_handler'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@templating.engine.twig'
+            - '@router.default'
+            - '@session.flash_bag'
+            - '@translator'
 
     #
     # Availability Time Range

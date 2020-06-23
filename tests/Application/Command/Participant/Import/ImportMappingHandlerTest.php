@@ -113,7 +113,7 @@ class ImportMappingHandlerTest extends TestCase
             'Facture - Adresse' => 'address',
         ];
 
-        $this->assertEquals($expectedReMapping, $command->getMappings());
+        $this->assertEquals($expectedReMapping, $command->getMappingsIndexedByFileHeader());
 
         $session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE)->shouldBeCalled()->willReturn($filename);
         $localFileStorage->remove($filename, true)->shouldBeCalled();

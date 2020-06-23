@@ -13,7 +13,7 @@ class ParticipantImport
     private $type;
 
     /** @var array */
-    private $mapping = [];
+    private $mapping;
 
     /** @var array */
     private $result;

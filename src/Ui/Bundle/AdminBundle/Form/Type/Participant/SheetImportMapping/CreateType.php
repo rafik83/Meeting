@@ -28,4 +28,12 @@ class CreateType extends AbstractType
     {
         $resolver->setDefaults(['data_class' => CreateMapping::class]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix(): string
+    {
+        return 'sheet_import_mapping_create';
+    }
 }

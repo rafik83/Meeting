@@ -13,11 +13,14 @@ use Proximum\Vimeet\Domain\Model\Type;
 class ImportMapping implements Command
 {
     /**
-     * A mapping array of csv headers keys and their registration headers key
+     * A mapping array of csv headers index and their registration headers key
      *
      * @var array
      */
     private $mappings = [];
+
+    /** @var array */
+    private $mappingsIndexedByFileHeader = [];
 
     /** @var Event */
     public $event;
@@ -48,8 +51,9 @@ class ImportMapping implements Command
         $this->admin = $admin;
         $this->importMappingView = $importMappingView;
 
-        if ($sheetImportMapping instanceof SheetImportMapping) {
+        if ($sheetImportMapping instanceof SheetImportMapping && empty($this->mappings)) {
             $map = $sheetImportMapping->getMapping();
+            $this->mappingsIndexedByFileHeader = $map;
             $associatedMapping = [];
 
             $csvHeaders = $this->importMappingView->fieldHeaders;
@@ -92,6 +96,8 @@ class ImportMapping implements Command
 
     public function setMappings(array $mappingIndexedByInt): void
     {
+        $this->mappings = $mappingIndexedByInt;
+
         $mappingIndexedByFileHeader = [];
 
         foreach ($mappingIndexedByInt as $key => $field) {
@@ -100,11 +106,16 @@ class ImportMapping implements Command
             }
         }
 
-        $this->mappings = $mappingIndexedByFileHeader;
+        $this->mappingsIndexedByFileHeader = $mappingIndexedByFileHeader;
     }
 
     public function getMappings(): array
     {
         return $this->mappings;
+    }
+
+    public function getMappingsIndexedByFileHeader(): array
+    {
+        return $this->mappingsIndexedByFileHeader;
     }
 }

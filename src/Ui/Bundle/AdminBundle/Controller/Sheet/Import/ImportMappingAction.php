@@ -104,6 +104,7 @@ class ImportMappingAction
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            dump($request);
             $this->commandBus->handle($importMapping);
 
             return new RedirectResponse($this->router->generate('admin_sheet_import_result', [

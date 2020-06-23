@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant\Import;
 
+use Proximum\Vimeet\Domain\Exception\Sheet\ImportMapping\TitleNotUniqueException;
 use Proximum\Vimeet\Domain\Model\Sheet\ImportMapping;
 use Proximum\Vimeet\Domain\Repository\Sheet\ImportMappingRepositoryInterface;
 
@@ -27,8 +28,7 @@ class CreateMappingHandler
             $createMapping->event,
             $createMapping->title
         )) {
-            /** @todo change exception to a domain one */
-            Throw new \InvalidArgumentException('Same title for mapping');
+            Throw new TitleNotUniqueException("Title already used : $createMapping->title");
         }
 
         $mapping = new ImportMapping(

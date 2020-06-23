@@ -7,9 +7,11 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Participant\Import\CreateMapping;
 use Proximum\Vimeet\Application\Command\Participant\Import\UpdateMapping;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportResultViewQueryHandler;
+use Proximum\Vimeet\Domain\Exception\Sheet\ImportMapping\TitleNotUniqueException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\SheetImportMapping\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\SheetImportMapping\SaveType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +20,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ResultAction
 {
@@ -42,6 +45,9 @@ class ResultAction
     /** @var FlashBagInterface */
     private $flashBag;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         ImportResultViewQueryHandler $importResultViewQueryHandler,
@@ -49,7 +55,8 @@ class ResultAction
         CommandBusInterface $commandBus,
         EngineInterface $engine,
         RouterInterface $router,
-        FlashBagInterface $flashBag
+        FlashBagInterface $flashBag,
+        TranslatorInterface $translator
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->importResultViewQueryHandler = $importResultViewQueryHandler;
@@ -58,13 +65,13 @@ class ResultAction
         $this->commandBus = $commandBus;
         $this->router = $router;
         $this->flashBag = $flashBag;
+        $this->translator = $translator;
     }
 
     public function __invoke(Request $request, Event $event): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
             || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ADMIN')
-            || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_PARTICIPANT_IMPORT_ACCESS')
         ) {
             throw new AccessDeniedException('Access denied');
         }
@@ -73,6 +80,7 @@ class ResultAction
 
         $createForm = null;
         $updateForm = null;
+        $existingImportMapping = false;
 
         $participantImport = $participantDenormalizerView->participantImport;
         if ($participantImport->hasDiffInMapping()) {
@@ -86,17 +94,31 @@ class ResultAction
             ]);
 
             if ($createForm->handleRequest($request)->isSubmitted() && $createForm->isValid()) {
-                $this->commandBus->handle($create);
-                $this->flashBag->add('success', 'flash.admin.event.sheet.import_mapping.create.success');
+                try {
+                    $this->commandBus->handle($create);
+                    $this->flashBag->add('success', 'flash.admin.event.sheet.import_mapping.create.success');
 
-                return new RedirectResponse(
-                    $this->router->generate('admin_sheet', [
-                        'event' => $event->getId()
-                    ])
-                );
+                    return new RedirectResponse(
+                        $this->router->generate('admin_sheet', [
+                            'event' => $event->getId()
+                        ])
+                    );
+                } catch (TitleNotUniqueException $exception) {
+                    $createForm->get('title')->addError(
+                        new FormError(
+                            $this->translator->trans(
+                                'validators.admin.sheet.import_mapping.title.not_unique',
+                                [],
+                                'validators'
+                            )
+                        )
+                    );
+                }
+
             }
 
             if ($participantImport->hasImportMapping()) {
+                $existingImportMapping = true;
                 $updateMapping = new UpdateMapping(
                     $participantImport->getImportMapping(),
                     $participantImport->getMapping()
@@ -123,6 +145,7 @@ class ResultAction
             'view' => $participantDenormalizerView,
             'createForm' => $createForm !== null ? $createForm->createView() : null,
             'updateForm' => $updateForm !== null ? $updateForm->createView() : null,
+            'existingImportMapping' => $existingImportMapping,
         ]));
     }
 }

@@ -14,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use function Clue\StreamFilter\fun;
 
 class ImportType extends AbstractType
 {
@@ -51,17 +50,24 @@ class ImportType extends AbstractType
                 ],
                 'required' => true,
             ])
-            ->add('mapping', ChoiceType::class, [
-                'expanded' => false,
-                'multiple' => false,
-                'required' => false,
-                'choices' => $this->sheetImportMappingRepository->getByEvent($options['event']),
-                'choice_label' => static function (ImportMapping $importMapping) {
-                    return $importMapping->getTitle();
-                },
-                'choice_translation_domain' => false,
-            ])
         ;
+
+        $mappingChoices = $this->sheetImportMappingRepository->getByEvent($options['event']);
+
+        if (!empty($mappingChoices)) {
+            $builder
+                ->add('mapping', ChoiceType::class, [
+                    'expanded' => false,
+                    'multiple' => false,
+                    'required' => false,
+                    'choices' => $mappingChoices,
+                    'choice_label' => static function (ImportMapping $importMapping) {
+                        return $importMapping->getTitle();
+                    },
+                    'choice_translation_domain' => false,
+                ])
+            ;
+        }
     }
 
     /**
