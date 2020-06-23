@@ -127,7 +127,8 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                     [$sheetMet1Participant->reveal()],
                     'fr',
                     [$contactScanned1->reveal(), $contactScanned2->reveal(), $contactScanned3->reveal()],
-                    $sheet->reveal()
+                    $sheet->reveal(),
+                    $user
                 )
             )
             ->shouldBeCalled()
@@ -186,7 +187,8 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                     ],
                     'fr',
                     [$contactScanned1->reveal(), $contactScanned2->reveal(), $contactScanned3->reveal()],
-                    $sheet->reveal()
+                    $sheet->reveal(),
+                    $user
                 )
             )
             ->shouldBeCalled()
@@ -312,7 +314,8 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
                     ],
                     'fr',
                     [$contactScanned1->reveal(), $contactScanned2->reveal(), $contactScanned3->reveal()],
-                    $sheet->reveal()
+                    $sheet->reveal(),
+                    $user
                 )
             )
             ->shouldBeCalled()

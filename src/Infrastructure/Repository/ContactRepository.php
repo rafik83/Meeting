@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -142,6 +143,6 @@ class ContactRepository implements ContactRepositoryInterface
             ->setParameter('contact', $contact)
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
     }
 }

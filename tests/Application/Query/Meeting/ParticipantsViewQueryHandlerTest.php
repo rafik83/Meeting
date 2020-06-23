@@ -65,21 +65,23 @@ class ParticipantsViewQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
-        $sheet->getUsers()->shouldBeCalled()->willReturn([]);
 
-        $this->contactRepository->findMinEvaluationByEventAndUser(
+        $me = $this->prophesize(User::class);
+        $me->getId()->shouldBeCalled()->willReturn(1);
+        $me->getFullname()->shouldBeCalled()->willReturn('Hervé DUPOND');
+
+        $this->contactRepository->getEvaluationContactByEventAndUser(
             $event->reveal(),
             Argument::type(User::class),
-            []
+            $me->reveal()
         )->shouldBeCalled()->willReturn(null);
 
         $participant1 = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
         $participant3 = $this->prophesize(Participant::class);
 
-        $me = $this->prophesize(User::class);
-        $me->getFullname()->shouldBeCalled()->willReturn('Hervé DUPOND');
         $myColleague = $this->prophesize(User::class);
+        $myColleague->getId()->shouldBeCalled()->willReturn(2);
         $myColleague->getFullname()->shouldBeCalled()->willReturn('Samira BOUAKI');
 
         $userContact1 = $this->prophesize(User::class);
@@ -94,7 +96,8 @@ class ParticipantsViewQueryHandlerTest extends TestCase
         $contact3 = $this->prophesize(Contact::class);
         $contact4 = $this->prophesize(Contact::class);
 
-        $this->translator->trans('event.meeting.listRequest.contact.unavailable', [], 'messages')->shouldBeCalled()->willReturn('Monsieur');
+        $this->translator->trans('event.meeting.listRequest.contact.insufficient_evaluation', [], 'messages', 'fr')->shouldBeCalled()->willReturn('Insufficient evaluation');
+        $this->translator->trans('event.meeting.listRequest.contact.unavailable', [], 'messages', 'fr')->shouldBeCalled()->willReturn('Contact unavailable');
         $this->translator->trans('gender.man', [], 'messages')->shouldBeCalled()->willReturn('Monsieur');
         $this->translator->trans('gender.woman', [], 'messages')->shouldBeCalled()->willReturn('Madame');
 
@@ -221,7 +224,8 @@ class ParticipantsViewQueryHandlerTest extends TestCase
                     [$participant1->reveal(), $participant2->reveal(), $participant3->reveal()],
                     'fr',
                     [$contact1->reveal(), $contact2->reveal(), $contact3->reveal(), $contact4->reveal()],
-                    $sheet->reveal()
+                    $sheet->reveal(),
+                    $me->reveal()
                 )
             )
         );

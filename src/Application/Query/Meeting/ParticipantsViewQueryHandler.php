@@ -54,6 +54,13 @@ class ParticipantsViewQueryHandler
         $meetingParticipantViews = [];
         $event = $query->seerSheet->getEvent();
 
+        $insufficientEvaluationMessage = $this->translator->trans(
+            'event.meeting.listRequest.contact.insufficient_evaluation',
+            [],
+            'messages',
+            $query->locale
+        );
+
         $unavailableMessage = $this->translator->trans(
             'event.meeting.listRequest.contact.unavailable',
             [],
@@ -77,6 +84,8 @@ class ParticipantsViewQueryHandler
                 $participant->getSheet()
             );
 
+            $ownEvaluation = null;
+
             foreach ($query->contacts as $contact) {
                 if ($participant->getUser()->getId() !== $contact->getContact()->getId()) {
                     continue;
@@ -84,6 +93,9 @@ class ParticipantsViewQueryHandler
 
                 if ($contact->hasEvaluation()) {
                     $participantContactEvaluation[] = $this->formatContactValue($contact, $contact->getEvaluation());
+                    if ($contact->getUser()->getId() === $query->seerUser->getId()) {
+                        $ownEvaluation = $contact->getEvaluation();
+                    }
                 }
 
                 if ($contact->hasComment()) {
@@ -98,19 +110,31 @@ class ParticipantsViewQueryHandler
                 $query->seerUser
             );
 
+            if (!$participantInfoAccessRule->isPhoneVisible($ownEvaluation)) {
+                $phoneValue = $insufficientEvaluationMessage;
+            } else if (!$participantInfoAccessRule->isPhoneVisible($reverseEvaluation)) {
+                $phoneValue = $unavailableMessage;
+            } else {
+                $phoneValue = $participantInfo[Tag::PARTICIPANT_PHONE];
+            }
+
+            if (!$participantInfoAccessRule->isEmailVisible($ownEvaluation)) {
+                $emailValue = $insufficientEvaluationMessage;
+            } else if (!$participantInfoAccessRule->isEmailVisible($reverseEvaluation)) {
+                $emailValue = $unavailableMessage;
+            } else {
+                $emailValue = $participant->getEmail();
+            }
+
             $gender = $participantInfo[Tag::PARTICIPANT_GENDER];
 
             $meetingParticipantViews[] = new MeetingParticipantView(
                 $participantInfo[Tag::PARTICIPANT_FIRSTNAME],
                 $participantInfo[Tag::PARTICIPANT_LASTNAME],
                 $participantInfo[Tag::PARTICIPANT_POSITION],
-                $participantInfoAccessRule->isPhoneVisible($reverseEvaluation)
-                    ? $participantInfo[Tag::PARTICIPANT_PHONE]
-                    : $unavailableMessage,
+                $phoneValue,
                 $gender ? $this->translator->trans('gender.' . $gender, [], 'messages') : '',
-                $participantInfoAccessRule->isEmailVisible($reverseEvaluation)
-                    ? $participant->getEmail()
-                    : $unavailableMessage,
+                $emailValue,
                 implode("\n", $participantContactEvaluation),
                 implode("\n", $participantContactComment)
             );
