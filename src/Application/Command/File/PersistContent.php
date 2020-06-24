@@ -19,7 +19,7 @@ class PersistContent implements Command
     public function __construct(Event $event, string $content, string $filenamePattern)
     {
         if (2 !== substr_count($filenamePattern, '%s')) {
-            throw new \InvalidArgumentException('filenamePattern must contains two placeholder (%s)');
+            throw new \InvalidArgumentException('filenamePattern must contain two placeholder (%s)');
         }
 
         $this->event = $event;
