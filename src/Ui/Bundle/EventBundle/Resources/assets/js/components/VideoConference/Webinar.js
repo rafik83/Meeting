@@ -75,6 +75,13 @@ function Webinar(element, isSpeaker) {
     this.shareVideoElement = null;
     this.hasMediaSharing = false;
 
+    const liveUrl = element.getAttribute('data-live-url');
+    if (liveUrl) {
+        this.liveUrl = liveUrl;
+    } else {
+        this.liveUrl = null;
+    }
+
     const endWebinarButton = element.querySelector('.end-webinar');
 
     if (endWebinarButton) {
@@ -156,7 +163,12 @@ function Webinar(element, isSpeaker) {
 
 Webinar.prototype.join = function () {
     this.hideElement(this.joinButton);
-    this.showElement(this.webinarWaitingMessage);
+    if (this.liveUrl) {
+        this.hideElement(this.helperContainer);
+        this.liveVideo();
+    } else {
+        this.showElement(this.webinarWaitingMessage);
+    }
     this.init();
 };
 
@@ -498,6 +510,18 @@ Webinar.prototype.shareVideo = function () {
 
     this.minimizeAllSubscribers();
     this.maximize(videoElement);
+    this.layout();
+};
+
+Webinar.prototype.liveVideo = function () {
+    const liveElement = document.createElement('iframe');
+    liveElement.setAttribute('src', this.liveUrl);
+    liveElement.setAttribute('frameborder', '0');
+    liveElement.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture');
+    this.layoutContainer.appendChild(liveElement);
+
+    this.minimizeAllSubscribers();
+    this.maximize(liveElement);
     this.layout();
 };
 
