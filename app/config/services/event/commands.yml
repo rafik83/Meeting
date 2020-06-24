@@ -82,7 +82,7 @@ services:
         arguments:
             - '@adapter.local_file_storage'
             - '@repository.file_repository'
-            - '%infrastructure.export_happening_participants_path%'
+            - '%infrastructure.common_export_path%'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\PersistContent }
@@ -90,6 +90,8 @@ services:
     Proximum\Vimeet\Application\Command\Happening\Export\NotifyHandler:
         arguments:
             - '@adapter.mailer_adapter'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
             - '%mailer_sender%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\Notify }
