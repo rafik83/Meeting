@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -53,11 +54,11 @@ class DownloadAction
             throw new NotFoundHttpException(sprintf('File %s not found', $file->getId()));
         }
 
-        if ('csv' === pathinfo($path, PATHINFO_EXTENSION)) {
+        if ('csv' !== pathinfo($path, PATHINFO_EXTENSION)) {
             return new CsvFileResponse(file_get_contents($path), basename($path));
         }
 
-        $response = new Response(file_get_contents($path));
+        $response = new BinaryFileResponse($path);
         $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, basename($path));
         $response->headers->set('Content-Disposition', $disposition);
 
