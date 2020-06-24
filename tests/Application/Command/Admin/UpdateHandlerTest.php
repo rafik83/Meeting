@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Admin;
 
 use PHPUnit\Framework\TestCase;
@@ -23,10 +15,10 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
-        $dateTime           = new \DateTime();
-        $admin              = new Admin(
+        $dateTime = new \DateTime();
+        $admin = new Admin(
             'test@test.com',
             '__salt__',
             null,
@@ -36,13 +28,13 @@ class UpdateHandlerTest extends TestCase
             Admin::ROLE_ORGANIZER,
             $dateTime
         );
-        $command            = new Update($admin);
-        $command->email     = 'test@test.com';
-        $command->password  = 'password2';
+        $command = new Update($admin);
+        $command->email = 'test@test.com';
+        $command->password = 'password2';
         $command->firstname = 'toto';
-        $command->lastname  = 'tata';
-        $command->role      = Admin::ROLE_ORGANIZER;
-        $command->events    = [];
+        $command->lastname = 'tata';
+        $command->role = Admin::ROLE_ORGANIZER;
+        $command->events = [];
 
         $expectedAdmin = new Admin(
             'test@test.com',
@@ -66,17 +58,22 @@ class UpdateHandlerTest extends TestCase
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
         $adminRepository->set($expectedAdmin)->shouldBeCalled();
 
-        $handler = new UpdateHandler($adminRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $handler = new UpdateHandler(
+            $adminRepository->reveal(),
+            $passwordEncoder->reveal(),
+            $saltGenerator->reveal(),
+            $dateTime
+        );
         $handler->handle($command);
     }
 
-    public function testHandleWithEvents()
+    public function testHandleWithEvents(): void
     {
         $dateTime = new \DateTime();
-        $event    = EventFactory::createEvent();
-        $event2   = EventFactory::createEvent();
-        $event3   = EventFactory::createEvent();
-        $admin    = new Admin(
+        $event = EventFactory::createEvent();
+        $event2 = EventFactory::createEvent();
+        $event3 = EventFactory::createEvent();
+        $admin = new Admin(
             'test@test.com',
             '__salt__',
             null,
@@ -89,13 +86,13 @@ class UpdateHandlerTest extends TestCase
         $admin->addEvent($event);
         $admin->addEvent($event3);
 
-        $command            = new Update($admin);
-        $command->email     = 'test4@test.com';
-        $command->password  = 'password';
+        $command = new Update($admin);
+        $command->email = 'test4@test.com';
+        $command->password = 'password';
         $command->firstname = 'toto';
-        $command->lastname  = 'tata';
-        $command->role      = Admin::ROLE_ORGANIZER;
-        $command->events    = [
+        $command->lastname = 'tata';
+        $command->role = Admin::ROLE_ORGANIZER;
+        $command->events = [
             0 => $event,
             1 => $event2,
         ];
@@ -117,7 +114,7 @@ class UpdateHandlerTest extends TestCase
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');
 
         $passwordEncoder = $this->prophesize(PasswordEncoderInterface::class);
-        $passwordEncoder->encode(Argument::that(function (Admin $user) use ($admin) {
+        $passwordEncoder->encode(Argument::that(static function (Admin $user) use ($admin) {
             return $user->getEmail() === $admin->getEmail();
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 
@@ -125,16 +122,21 @@ class UpdateHandlerTest extends TestCase
         $adminRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
         $adminRepository->set($expectedAdmin)->shouldBeCalled();
 
-        $handler = new UpdateHandler($adminRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $handler = new UpdateHandler(
+            $adminRepository->reveal(),
+            $passwordEncoder->reveal(),
+            $saltGenerator->reveal(),
+            $dateTime
+        );
         $handler->handle($command);
     }
 
-    public function testEmailAlreadyExistsException()
+    public function testEmailAlreadyExistsException(): void
     {
         $this->expectException(EmailAlreadyExistsException::class);
 
         $dateTime = new \DateTime();
-        $admin    = new Admin(
+        $admin = new Admin(
             'test@test.com',
             '__salt__',
             null,
@@ -145,25 +147,30 @@ class UpdateHandlerTest extends TestCase
             $dateTime
         );
 
-        $command            = new Update($admin);
-        $command->email     = 'test4@test.com';
-        $command->password  = 'password';
+        $command = new Update($admin);
+        $command->email = 'test4@test.com';
+        $command->password = 'password';
         $command->firstname = 'toto';
-        $command->lastname  = 'tata';
-        $command->role      = Admin::ROLE_ORGANIZER;
-        $command->events    = [];
+        $command->lastname = 'tata';
+        $command->role = Admin::ROLE_ORGANIZER;
+        $command->events = [];
 
         $saltGenerator = $this->prophesize(SaltGeneratorInterface::class);
         $saltGenerator->generate()->shouldNotBeCalled();
 
         $passwordEncoder = $this->prophesize(PasswordEncoderInterface::class);
-        $passwordEncoder->encode()->shouldNotBeCalled();
+        $passwordEncoder->encode(Argument::any())->shouldNotBeCalled();
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
         $adminRepository->emailExists($command->email)->shouldBeCalled()->willReturn(true);
-        $adminRepository->add()->shouldNotBeCalled();
+        $adminRepository->add(Argument::any())->shouldNotBeCalled();
 
-        $handler = new UpdateHandler($adminRepository->reveal(), $passwordEncoder->reveal(), $saltGenerator->reveal());
+        $handler = new UpdateHandler(
+            $adminRepository->reveal(),
+            $passwordEncoder->reveal(),
+            $saltGenerator->reveal(),
+            $dateTime
+        );
         $handler->handle($command);
     }
 }

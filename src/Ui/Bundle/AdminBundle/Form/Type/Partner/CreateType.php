@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner;
 
 use Proximum\Vimeet\Application\Command\Partner\Create;
@@ -21,7 +13,7 @@ class CreateType extends PartnerType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $choices = $this->buildChoices($options['events'], $options['locale']);
 
@@ -47,15 +39,14 @@ class CreateType extends PartnerType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired([
             'events',
-            'user',
             'locale',
         ]);
         $resolver->setDefaults([
-            'data_class'        => Create::class,
+            'data_class' => Create::class,
             'password_required' => true,
         ]);
     }
@@ -63,7 +54,7 @@ class CreateType extends PartnerType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'create_partner';
     }

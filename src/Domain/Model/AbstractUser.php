@@ -177,7 +177,7 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
      */
     public function updatePassword($salt, $password)
     {
-        $this->salt     = $salt;
+        $this->salt = $salt;
         $this->password = $password;
 
         return $this;
