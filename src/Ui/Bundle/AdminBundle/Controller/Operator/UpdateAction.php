@@ -60,7 +60,7 @@ class UpdateAction
         $this->errorFactory = $errorFactory;
     }
 
-    public function updateAction(
+    public function __invoke(
         Request $request,
         AdminDomain $adminDomain,
         Admin $operator

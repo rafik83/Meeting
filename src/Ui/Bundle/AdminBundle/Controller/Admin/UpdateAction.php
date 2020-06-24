@@ -59,7 +59,7 @@ class UpdateAction
         $this->errorFactory = $errorFactory;
     }
 
-    public function updateAction(Request $request, Admin $admin): Response
+    public function __invoke(Request $request, Admin $admin): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('Access denied for admin not super admin');
