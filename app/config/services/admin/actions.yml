@@ -513,8 +513,7 @@ services:
             - '@adapter.authorization_checker'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportAction:
         arguments:

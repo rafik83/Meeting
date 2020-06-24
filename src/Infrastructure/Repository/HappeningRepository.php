@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 

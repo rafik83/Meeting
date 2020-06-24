@@ -32,6 +32,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Ind
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\ExportParticipantsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\PrintInvoicesCommand;
@@ -513,5 +514,10 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         );
 
         $this->setJob($job);
+    }
+
+    public function exportHappeningParticipants(Event $event, Admin $admin, string $locale): void
+    {
+        $this->setJob(new Job(ExportParticipantsCommand::NAME, [$event->getId(), $admin->getId(), $locale]));
     }
 }

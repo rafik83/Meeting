@@ -78,14 +78,21 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\Export }
 
-    Proximum\Vimeet\Application\Command\Happening\Export\PersistContentHandler:
+    Proximum\Vimeet\Application\Command\Happening\Export\ScheduleExportHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\ScheduleExport }
+
+    Proximum\Vimeet\Application\Command\File\PersistContentHandler:
         arguments:
             - '@adapter.local_file_storage'
             - '@repository.file_repository'
             - '%infrastructure.common_export_path%'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\PersistContent }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\File\PersistContent }
 
     Proximum\Vimeet\Application\Command\Happening\Export\NotifyHandler:
         arguments:

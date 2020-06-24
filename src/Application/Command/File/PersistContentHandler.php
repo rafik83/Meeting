@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Command\Happening\Export;
+namespace Proximum\Vimeet\Application\Command\File;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Domain\Model\File;
@@ -32,14 +32,9 @@ class PersistContentHandler
         $this->pathToExport = $pathToExport;
     }
 
-    /**
-     * @param PersistContent $command
-     *
-     * @return File
-     */
     public function handle(PersistContent $command): File
     {
-        $fileName = sprintf('export_happening_participants_%s.csv', $this->dateTime->format('Y_m_d_His'));
+        $fileName = sprintf($command->filenamePattern, $command->event->getId(), $this->dateTime->format('Y_m_d_His'));
 
         $path = $this->fileStorage->create(
             $command->content,
