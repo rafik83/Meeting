@@ -1096,7 +1096,7 @@ admin_happening_participant_export:
     path: /event/{event}/happening/export
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction }
 
 admin_happening_export:
