@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV-243 - Add media link in sheet pdf printing
 
+### Added
+- VIMEET-2157 - Save import mapping
+
 ## [2.35.1] - 2020-06-30
 ### Fixed
 - Hotfix - Get / export many happening questions instead of one or null
