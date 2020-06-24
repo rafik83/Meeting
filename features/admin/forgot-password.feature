@@ -5,14 +5,7 @@ Feature: Forgot Password Admin
 
   Background: Re-init the database and load the fixtures
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | Admin.yml                                                                |
+    And the super admin "test@test.com" is created
 
   Scenario: I can not request a token for a non-existent account
     When I go to this page "/fr/login"
@@ -37,8 +30,8 @@ Feature: Forgot Password Admin
     And the response status code should be 200
     And I should see "new_password.title"
     And I fill in the following:
-      | form.new_password.children.password.children.first.label  | testtest |
-      | form.new_password.children.password.children.second.label | testtest |
+      | form.new_password.children.password.children.first.label  | testTEST1234 |
+      | form.new_password.children.password.children.second.label | testTEST1234 |
     And I press "form.new_password.children.submit.label"
     Then I should be on this page "/fr/event"
     And I should see "flash.new_password.success"
