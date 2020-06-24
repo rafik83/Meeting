@@ -493,7 +493,7 @@ form.happening_create.children.liveUrl.help: 'Uniquement pour les webinaires, ex
 form.happening_create.children.liveUrl.label: 'Url de l''iframe pour la diffusion d''un live'
 form.happening_create.children.questionAllowed.answer.false: Non
 form.happening_create.children.questionAllowed.answer.true: Oui
-form.happening_create.children.questionAllowed.label: 'Question des participants'
+form.happening_create.children.questionAllowed.label: 'Question des participants lors de l''inscription'
 form.happening_create.children.submit.label: Envoyer
 form.happening_create.children.talkings.label: Intervenants
 form.happening_create.children.talkings.label_add: Ajouter
@@ -514,7 +514,7 @@ form.happening_update.children.happeningType.label: Type
 form.happening_update.children.invitationCode.label: 'Code d''invitation'
 form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_update.children.liveUrl.label: 'Url de l''iframe pour la diffusion d''un live'
-form.happening_update.children.questionAllowed.label: 'Question des participants'
+form.happening_update.children.questionAllowed.label: 'Question des participants lors de l''inscription'
 form.happening_update.children.submit.label: Envoyer
 form.happening_update.children.talkings.label: Intervenants
 form.happening_update.children.talkings.label_add: Ajouter
