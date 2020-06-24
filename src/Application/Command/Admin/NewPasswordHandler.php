@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
@@ -17,51 +9,34 @@ use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
 class NewPasswordHandler
 {
-    /**
-     * @var AdminRepositoryInterface
-     */
+    /** @var AdminRepositoryInterface */
     private $adminRepository;
 
-    /**
-     * @var PasswordEncoderInterface
-     */
+    /** @var PasswordEncoderInterface */
     private $encoder;
 
-    /**
-     * @var SaltGeneratorInterface
-     */
+    /** @var SaltGeneratorInterface */
     private $saltGenerator;
 
-    /**
-     * @var ForgottenPasswordTokenRepositoryInterface
-     */
+    /** @var ForgottenPasswordTokenRepositoryInterface */
     private $forgottenPasswordToken;
 
-    /**
-     * @param AdminRepositoryInterface                  $adminRepository
-     * @param PasswordEncoderInterface                  $encoder
-     * @param SaltGeneratorInterface                    $saltGenerator
-     * @param ForgottenPasswordTokenRepositoryInterface $forgottenPasswordToken
-     */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         PasswordEncoderInterface $encoder,
         SaltGeneratorInterface $saltGenerator,
         ForgottenPasswordTokenRepositoryInterface $forgottenPasswordToken
     ) {
-        $this->adminRepository        = $adminRepository;
-        $this->encoder                = $encoder;
-        $this->saltGenerator          = $saltGenerator;
+        $this->adminRepository = $adminRepository;
+        $this->encoder = $encoder;
+        $this->saltGenerator = $saltGenerator;
         $this->forgottenPasswordToken = $forgottenPasswordToken;
     }
 
-    /**
-     * @param NewPassword $newPassword
-     */
-    public function handle(NewPassword $newPassword)
+    public function handle(NewPassword $newPassword): void
     {
-        $admin    = $newPassword->admin;
-        $salt     = $this->saltGenerator->generate();
+        $admin = $newPassword->admin;
+        $salt = $this->saltGenerator->generate();
         $password = $this->encoder->encode($admin->updatePassword($salt, null), $newPassword->password);
 
         $admin->updatePassword($salt, $password);
