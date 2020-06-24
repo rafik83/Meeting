@@ -75,12 +75,7 @@ function Webinar(element, isSpeaker) {
     this.shareVideoElement = null;
     this.hasMediaSharing = false;
 
-    const liveUrl = element.getAttribute('data-live-url');
-    if (liveUrl) {
-        this.liveUrl = liveUrl;
-    } else {
-        this.liveUrl = null;
-    }
+    this.liveUrl = element.getAttribute('data-live-url');
 
     const endWebinarButton = element.querySelector('.end-webinar');
 
