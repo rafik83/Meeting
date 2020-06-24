@@ -42,3 +42,5 @@ Proximum\Vimeet\Application\Command\Happening\Update:
                             - NotNull: ~
                         position:
                             - NotNull: ~
+        liveUrl:
+            - Url: ~

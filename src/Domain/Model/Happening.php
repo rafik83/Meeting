@@ -74,18 +74,9 @@ class Happening implements TimeRangeInterface
     /** @var null|string */
     private $webinarSessionId;
 
-    /**
-     * @param Event              $event
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     * @param CategoryHappening  $category
-     * @param array              $types
-     * @param bool               $questionAllowed
-     * @param int|null           $limitParticipant
-     * @param null|string        $invitationCode
-     * @param bool               $webinar
-     * @param bool               $interactiveWebinar
-     */
+    /** @var null|string */
+    private $liveUrl;
+
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
@@ -96,23 +87,25 @@ class Happening implements TimeRangeInterface
         ?int $limitParticipant = null,
         ?string $invitationCode = null,
         bool $webinar = false,
-        bool $interactiveWebinar = false
+        bool $interactiveWebinar = false,
+        ?string $liveUrl = null
     ) {
-        $this->event            = $event;
-        $this->begin            = $begin;
-        $this->end              = $end;
-        $this->category         = $category;
-        $this->translations     = new ArrayCollection();
-        $this->talkings         = new ArrayCollection();
-        $this->participations   = new ArrayCollection();
-        $this->questions        = new ArrayCollection();
-        $this->types            = new ArrayCollection($types);
-        $this->questionAllowed  = $questionAllowed;
+        $this->event = $event;
+        $this->begin = $begin;
+        $this->end = $end;
+        $this->category = $category;
+        $this->translations = new ArrayCollection();
+        $this->talkings = new ArrayCollection();
+        $this->participations = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->types = new ArrayCollection($types);
+        $this->questionAllowed = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
-        $this->invitationCode   = $invitationCode;
+        $this->invitationCode = $invitationCode;
         $this->products = new ArrayCollection();
         $this->webinar = $webinar;
         $this->interactiveWebinar = $interactiveWebinar;
+        $this->liveUrl = $liveUrl;
     }
 
     /**
@@ -231,17 +224,6 @@ class Happening implements TimeRangeInterface
         return $this->translations;
     }
 
-    /**
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     * @param CategoryHappening  $category
-     * @param array              $types
-     * @param bool               $questionAllowed
-     * @param int|null           $limitParticipant
-     * @param bool               $webinar
-     * @param bool               $interactiveWebinar
-     * @param null|string        $invitationCode
-     */
     public function update(
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
@@ -251,17 +233,19 @@ class Happening implements TimeRangeInterface
         ?int $limitParticipant,
         bool $webinar,
         bool $interactiveWebinar,
-        ?string $invitationCode = null
+        ?string $invitationCode = null,
+        ?string $liveUrl = null
     ) {
-        $this->begin            = $begin;
-        $this->end              = $end;
-        $this->types            = new ArrayCollection($types);
-        $this->category         = $category;
-        $this->questionAllowed  = $questionAllowed;
+        $this->begin = $begin;
+        $this->end = $end;
+        $this->types = new ArrayCollection($types);
+        $this->category = $category;
+        $this->questionAllowed = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
-        $this->invitationCode   = $invitationCode;
+        $this->invitationCode = $invitationCode;
         $this->webinar = $webinar;
         $this->interactiveWebinar = $interactiveWebinar;
+        $this->liveUrl = $liveUrl;
     }
 
     public function updateTranslation(string $locale, string $title, ?string $description, ?string $webinarHeaderImage)
@@ -482,5 +466,10 @@ class Happening implements TimeRangeInterface
     public function isInteractiveWebinar(): bool
     {
         return $this->interactiveWebinar;
+    }
+
+    public function getLiveUrl(): ?string
+    {
+        return $this->liveUrl;
     }
 }

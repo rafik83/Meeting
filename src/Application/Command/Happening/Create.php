@@ -17,17 +17,14 @@ class Create extends AbstractHappeningCommand
     /** @var Event */
     public $event;
 
-    /**
-     * @param Event $event
-     */
     public function __construct(Event $event)
     {
-        $this->event         = $event;
+        $this->event = $event;
         $this->questionAllowed = false;
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [
-                'title'       => '',
+                'title' => '',
                 'description' => '',
             ];
         }
