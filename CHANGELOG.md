@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 - Suppression de la librairie elao/form-bundle pour ramener sa logique en interne
 
+### Added
+- VIMEET-2149 - Change Admin password algorithm to argon2i and increase length
+
 ## [2.35.1] - 2020-06-30
 ### Fixed
 - Hotfix - Get / export many happening questions instead of one or null
