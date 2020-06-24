@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Application\Components\Security\PasswordGenerator;
 
 class Create implements Command
 {
@@ -30,6 +31,6 @@ class Create implements Command
     public function __construct(string $locale)
     {
         $this->locale = $locale;
-        $this->password = substr(md5(uniqid()), 0, 8);
+        $this->password = PasswordGenerator::generate(12);
     }
 }

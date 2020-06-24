@@ -91,7 +91,7 @@ class UpdateAction
                 $this->commandBus->handle($update);
                 $this->flashBag->add('success', 'flash.admin.partner.update.success');
 
-                if ($this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')) {
+                if ($currentAdmin->isSuperAdmin()) {
                     return new RedirectResponse($this->router->generate('admin_list_admin'));
                 }
 
@@ -105,6 +105,7 @@ class UpdateAction
 
         return new Response($this->engine->render('AdminBundle:Partner:update.html.twig', [
             'form' => $form->createView(),
+            'isSuperAdmin' => $currentAdmin->isSuperAdmin(),
         ]));
     }
 }

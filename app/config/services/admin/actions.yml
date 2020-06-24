@@ -408,6 +408,20 @@ services:
             - '@adapter.router'
 
     #
+    # Account
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\IndexAction:
+        arguments:
+            - '@templating.engine.twig'
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\UpdatePasswordAction:
+        arguments:
+            - '@form.factory'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+
+    #
     # Admin
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\DeleteAction:

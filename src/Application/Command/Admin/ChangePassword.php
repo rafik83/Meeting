@@ -1,37 +1,21 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Admin;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class ChangePassword
+class ChangePassword implements Command
 {
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $admin;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $currentPassword;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $plainPassword;
 
-    /**
-     * @param Admin $admin
-     */
     public function __construct(Admin $admin)
     {
         $this->admin = $admin;

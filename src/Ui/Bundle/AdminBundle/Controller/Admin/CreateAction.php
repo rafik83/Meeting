@@ -9,7 +9,6 @@ use Proximum\Vimeet\Application\Command\Admin\Create;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\CreateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

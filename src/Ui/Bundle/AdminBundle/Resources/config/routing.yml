@@ -21,12 +21,12 @@ admin_logout:
 admin_account:
     path: /account
     methods: [GET]
-    defaults: { _controller: AdminBundle:Account:index }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\IndexAction
 
 admin_update_password:
     path: /account/password
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Account:updatePassword }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\UpdatePasswordAction
 
 #
 # Create Admin/Organizer

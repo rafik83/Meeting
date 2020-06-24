@@ -86,7 +86,7 @@ class CreateAction
                 $this->commandBus->handle($create);
                 $this->flashBag->add('success', 'flash.admin.partner.create.success');
 
-                if ($this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')) {
+                if ($currentAdmin->isSuperAdmin()) {
                     return new RedirectResponse($this->router->generate('admin_list_admin'));
                 }
 
@@ -100,6 +100,7 @@ class CreateAction
 
         return new Response($this->engine->render('AdminBundle:Partner:create.html.twig', [
             'form' => $form->createView(),
+            'isSuperAdmin' => $currentAdmin->isSuperAdmin(),
         ]));
     }
 }

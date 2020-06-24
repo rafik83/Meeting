@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Command\Operator;
 
 use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Application\Components\Security\PasswordGenerator;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
@@ -29,6 +30,6 @@ class Create implements Command
     public function __construct(Admin $organizer)
     {
         $this->organizer = $organizer;
-        $this->password = substr(md5(uniqid()), 0, 8);
+        $this->password = PasswordGenerator::generate(12);
     }
 }

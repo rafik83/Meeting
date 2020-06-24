@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Proximum\Vimeet\Tests\Application\Command\Admin;
 
 use PHPUnit\Framework\TestCase;
