@@ -114,7 +114,6 @@ class ResultAction
                         )
                     );
                 }
-
             }
 
             if ($participantImport->hasImportMapping()) {
