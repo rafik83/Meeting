@@ -64,9 +64,9 @@ security:
                 default_target_path: admin_event_list
                 use_referer: true
             remember_me:
-                name: user_remembered
+                name: admin_remembered
                 remember_me_parameter: login[rememberMe]
-                secret:   '%secret%'
+                secret:   '%adminSecret%'
                 secure: true
                 lifetime: 2592000
                 path:     /
