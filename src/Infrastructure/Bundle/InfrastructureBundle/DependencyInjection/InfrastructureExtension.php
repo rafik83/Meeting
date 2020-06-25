@@ -53,6 +53,7 @@ class InfrastructureExtension extends Extension
         $container->setParameter('infrastructure.import_spot_path', $config['import_spot_path']);
         $container->setParameter('infrastructure.import_authentication_token_path', $config['import_authentication_token_path']);
         $container->setParameter('infrastructure.export_participant_path', $config['export_participant_path']);
+        $container->setParameter('infrastructure.common_export_path', $config['common_export_path']);
         $container->setParameter('infrastructure.encrypted_files_path', $config['encrypted_files_path']);
         $container->setParameter('infrastructure.package.default_labels', $config['package']['default_labels']);
         $container->setParameter('infrastructure.print_invoices_path', $config['print_invoices_path']);

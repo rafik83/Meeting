@@ -228,4 +228,6 @@ interface JobQueueInterface
     public function downloadTranslations(?string $emailToNotify = null, ?string $locale = null): void;
 
     public function scheduleUpdateTranslations(?string $emailToNotify = null, ?string $locale = null): void;
+
+    public function exportHappeningParticipants(Event $event, Admin $admin, string $locale): void;
 }

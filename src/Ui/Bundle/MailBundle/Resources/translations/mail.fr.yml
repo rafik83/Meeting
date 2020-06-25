@@ -6,6 +6,9 @@ admin.mail.export_form_template_data.body: "Bonjour,\nVoici le fichier comportan
 admin.mail.export_form_template_data.end: "Cordialement\n"
 admin.mail.export_form_template_data.file_link: 'Fichier CSV'
 admin.mail.export_form_template_data.subject: 'Export des données du formulaire de template'
+admin.mail.export_happening_participants.content: "Bonjour,\n\nVoici le fichier que vous avez demandé et comportant les participants aux conférences."
+admin.mail.export_happening_participants.linkTitle: 'Télécharger'
+admin.mail.export_happening_participants.subject: '[%event%] Export des participants conférences'
 admin.mail.export_rooming_list.body: "Bonjour,\nVoici le fichier comportant l'export de la rooming list\n"
 admin.mail.export_rooming_list.end: Cordialement\n
 admin.mail.export_rooming_list.file_link: 'Fichier CSV'
