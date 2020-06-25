@@ -3,16 +3,16 @@
 namespace Proximum\Vimeet\Application\Command\File;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Domain\File\FileFactory;
 use Proximum\Vimeet\Domain\Model\File;
-use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 
 class PersistContentHandler
 {
+    /** @var FileFactory */
+    private $fileFactory;
+
     /** @var FileStorageInterface */
     private $fileStorage;
-
-    /** @var FileRepositoryInterface */
-    private $fileRepository;
 
     /** @var \DateTimeInterface */
     private $dateTime;
@@ -21,13 +21,13 @@ class PersistContentHandler
     private $pathToExport;
 
     public function __construct(
+        FileFactory $fileFactory,
         FileStorageInterface $fileStorage,
-        FileRepositoryInterface $fileRepository,
         string $pathToExport,
         \DateTimeInterface $dateTime
     ) {
+        $this->fileFactory = $fileFactory;
         $this->fileStorage = $fileStorage;
-        $this->fileRepository = $fileRepository;
         $this->dateTime = $dateTime;
         $this->pathToExport = $pathToExport;
     }
@@ -42,9 +42,6 @@ class PersistContentHandler
             $this->pathToExport
         );
 
-        $file = new File($path, $this->dateTime);
-        $this->fileRepository->add($file);
-
-        return $file;
+        return $this->fileFactory->createAndPersistFile($path);
     }
 }

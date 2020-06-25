@@ -87,8 +87,8 @@ services:
 
     Proximum\Vimeet\Application\Command\File\PersistContentHandler:
         arguments:
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
             - '@adapter.local_file_storage'
-            - '@repository.file_repository'
             - '%infrastructure.common_export_path%'
             - '@datetime'
         tags:
