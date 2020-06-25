@@ -54,7 +54,7 @@ class DownloadAction
             throw new NotFoundHttpException(sprintf('File %s not found', $file->getId()));
         }
 
-        if ('csv' !== pathinfo($path, PATHINFO_EXTENSION)) {
+        if ('csv' === pathinfo($path, PATHINFO_EXTENSION)) {
             return new CsvFileResponse(file_get_contents($path), basename($path));
         }
 
