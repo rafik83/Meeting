@@ -5,13 +5,6 @@ Proximum\Vimeet\Application\Command\Partner\Update:
             - Email:
                   message: validators.email
                   strict: true
-        password:
-            - Length:
-                  min: 12
-                  minMessage: validators.password.min
-            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneNumber: ~
-            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneUppercase: ~
-            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneLowercase: ~
         lastname:
             - NotBlank: ~
         firstname:
