@@ -25,6 +25,7 @@
     {% endif %}
     {{ form_row(form.category, {widget_columns: 3}) }}
     {{ form_row(form.happeningType) }}
+    {{ form_row(form.webinarRecorded) }}
     {{ form_row(form.translations) }}
     {{ form_row(form.begin, {widget_columns: 3}) }}
     {{ form_row(form.end, {widget_columns: 3}) }}
@@ -36,6 +37,29 @@
     {{ form_row(form.sidebarAllowed) }}    
     {{ form_row(form.limitParticipant, {widget_columns: 2}) }}
     {{ form_row(form.talkings) }}
+
+    <script>
+        const webinarRecordedGroup = document.getElementById('happening_update_webinarRecorded-group');
+
+        {% if not happening.isWebinar %}
+        webinarRecordedGroup.classList.add('hide');
+        {% endif %}
+
+        let happeningTypeRadios = document.getElementsByName('happening_update[happeningType]');
+
+        happeningTypeRadios.forEach((happeningTypeRadio) => {
+            happeningTypeRadio.addEventListener(
+                'click',
+                function (event) {
+                    if (event.target.value === 'default') {
+                        webinarRecordedGroup.classList.add('hide');
+                    } else {
+                        webinarRecordedGroup.classList.remove('hide');
+                    }
+                }
+            )
+        });
+    </script>
 {% endblock %}
 
 {% block goback_link path('admin_happening_list', { 'event': event.id }) %}

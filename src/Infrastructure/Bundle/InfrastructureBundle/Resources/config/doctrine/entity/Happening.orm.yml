@@ -43,7 +43,11 @@ Proximum\Vimeet\Domain\Model\Happening:
         sidebarAllowed:
             type: boolean
             options:
-                default: true            
+                default: true
+        webinarRecorded:
+            type: boolean
+            options:
+                default: false
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation
