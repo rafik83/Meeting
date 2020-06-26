@@ -58,7 +58,6 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
 
         $seeableSheet = $this->prophesize(Sheet::class);
         $seeableType = $this->prophesize(Type::class);
-        $seeableType->getId()->shouldBeCalled()->willreturn(2);
         $seeableType->getCategories()->shouldBeCalled()->willReturn(new ArrayCollection());
         $seeableSheet->getType()->shouldBecalled()->willreturn($seeableType->reveal());
         $seeableSheet->getEvent()->shouldBecalled()->willreturn($event->reveal());

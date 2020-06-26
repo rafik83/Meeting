@@ -34,9 +34,6 @@ class ParticipantInfoAccessRulesResolver
 
     public function getParticipantInfoAccessRule(Sheet $seerSheet, Sheet $seeableSheet): ParticipantInfoAccessRule
     {
-        $phoneAccessMinEvaluation = null;
-        $emailAccessMinEvaluation = null;
-
         $rules = $this->loadRules($seeableSheet->getEvent());
 
         $rulesApplicable = [];
@@ -58,27 +55,7 @@ class ParticipantInfoAccessRulesResolver
             }
         }
 
-        // extract inverse rules
-        foreach ($seeableWhos as $who) {
-            if (isset($rules[$who->getId()])) {
-                $rulesApplicable = array_merge($rulesApplicable, array_filter($rules[$who->getId()], function (Rule $rule) use ($seerWhos) {
-                    return in_array($rule->getSeeable(), $seerWhos);
-                }));
-            }
-        }
-
-        if (!empty($rulesApplicable)) {
-            foreach ($rulesApplicable as $rule) {
-                if (null !== $rule->getPhoneAccessMinEvaluation() && $rule->getPhoneAccessMinEvaluation() > $phoneAccessMinEvaluation) {
-                    $phoneAccessMinEvaluation = $rule->getPhoneAccessMinEvaluation();
-                }
-                if (null !== $rule->getEmailAccessMinEvaluation() && $rule->getEmailAccessMinEvaluation() > $emailAccessMinEvaluation) {
-                    $emailAccessMinEvaluation = $rule->getEmailAccessMinEvaluation();
-                }
-            }
-        }
-
-        return new ParticipantInfoAccessRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation);
+        return $this->createAccessInfoRuleFromRulesList($rulesApplicable);
     }
 
     private function loadRules(Event $event): array
@@ -93,5 +70,24 @@ class ParticipantInfoAccessRulesResolver
         }
 
         return $this->rules;
+    }
+
+    private function createAccessInfoRuleFromRulesList(array $rulesApplicable): ParticipantInfoAccessRule
+    {
+        $phoneAccessMinEvaluation = null;
+        $emailAccessMinEvaluation = null;
+
+        if (!empty($rulesApplicable)) {
+            foreach ($rulesApplicable as $rule) {
+                if (null !== $rule->getPhoneAccessMinEvaluation() && $rule->getPhoneAccessMinEvaluation() > $phoneAccessMinEvaluation) {
+                    $phoneAccessMinEvaluation = $rule->getPhoneAccessMinEvaluation();
+                }
+                if (null !== $rule->getEmailAccessMinEvaluation() && $rule->getEmailAccessMinEvaluation() > $emailAccessMinEvaluation) {
+                    $emailAccessMinEvaluation = $rule->getEmailAccessMinEvaluation();
+                }
+            }
+        }
+
+        return new ParticipantInfoAccessRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation);
     }
 }

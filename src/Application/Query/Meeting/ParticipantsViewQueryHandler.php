@@ -79,6 +79,7 @@ class ParticipantsViewQueryHandler
             $participantContactEvaluation = [];
             $participantContactComment = [];
 
+            // check if evaluation from current user is sufficient to access participant info
             $participantInfoAccessRule = $this->participantInfoAccessRulesResolver->getParticipantInfoAccessRule(
                 $query->seerSheet,
                 $participant->getSheet()
@@ -103,6 +104,11 @@ class ParticipantsViewQueryHandler
                 }
             }
 
+            $participantInfoReverseAccessRule = $this->participantInfoAccessRulesResolver->getParticipantInfoAccessRule(
+                $participant->getSheet(),
+                $query->seerSheet
+            );
+
             // Get the evaluation from contact to seer user
             $reverseEvaluation = $this->contactRepository->getEvaluationContactByEventAndUser(
                 $event,
@@ -112,7 +118,7 @@ class ParticipantsViewQueryHandler
 
             if (!$participantInfoAccessRule->isPhoneVisible($ownEvaluation)) {
                 $phoneValue = $insufficientEvaluationMessage;
-            } else if (!$participantInfoAccessRule->isPhoneVisible($reverseEvaluation)) {
+            } else if (!$participantInfoReverseAccessRule->isPhoneVisible($reverseEvaluation)) {
                 $phoneValue = $unavailableMessage;
             } else {
                 $phoneValue = $participantInfo[Tag::PARTICIPANT_PHONE];
@@ -120,7 +126,7 @@ class ParticipantsViewQueryHandler
 
             if (!$participantInfoAccessRule->isEmailVisible($ownEvaluation)) {
                 $emailValue = $insufficientEvaluationMessage;
-            } else if (!$participantInfoAccessRule->isEmailVisible($reverseEvaluation)) {
+            } else if (!$participantInfoReverseAccessRule->isEmailVisible($reverseEvaluation)) {
                 $emailValue = $unavailableMessage;
             } else {
                 $emailValue = $participant->getEmail();
