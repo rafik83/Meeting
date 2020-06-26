@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use InvalidArgumentException;
+use OpenTok\Archive;
+use OpenTok\Layout;
 use OpenTok\MediaMode;
 use OpenTok\OpenTok;
+use OpenTok\OutputMode;
 use OpenTok\Role;
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
@@ -53,6 +56,40 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
             self::SESSION_DEFAULT_OPTIONS,
             $options
         ));
+    }
+
+    public function archive(string $sessionId, string $name): Archive
+    {
+        return $this->openTok->startArchive(
+            $sessionId,
+            [
+                'name' => $name,
+                'hasVideo' => true,
+                'hasAudio' => true,
+                'outputMode' => OutputMode::COMPOSED,
+            ]
+        );
+    }
+
+    public function changeArchiveLayout(string $archiveId, Layout $layout): void
+    {
+        $this->openTok->setArchiveLayout($archiveId, $layout);
+    }
+
+    public function changeStreamClassList(string $sessionId, string $streamId, string $class): void
+    {
+        $this->openTok->updateStream(
+            $sessionId,
+            $streamId,
+            [
+                'layoutClassList' => [$class]
+            ]
+        );
+    }
+
+    public function stopArchive(string $archiveId): Archive
+    {
+        return $this->openTok->stopArchive($archiveId);
     }
 
     /**
