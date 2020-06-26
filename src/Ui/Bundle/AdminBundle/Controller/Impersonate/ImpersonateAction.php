@@ -4,15 +4,15 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ImpersonateAction
 {
@@ -28,7 +28,7 @@ class ImpersonateAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         Impersonate $impersonate,
-        EventUrlGenerator $eventUrlGenerator
+        EventUrlGeneratorInterface $eventUrlGenerator
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->impersonate = $impersonate;
@@ -43,12 +43,12 @@ class ImpersonateAction
             throw new AccessDeniedException('Access Denied!');
         }
 
-        $targetRoute = $request->get('route');
+        $targetRoute = $request->query->get('route');
         if (empty($targetRoute)) {
             throw new BadRequestHttpException('route parameter must be defined');
         }
 
-        $targetParams = $request->get('params');
+        $targetParams = $request->query->get('params');
 
         $token = $this->impersonate->getEncodedToken($adminDomain->getAdmin(), $user);
         $targetParams['_switchto'] = $token;
