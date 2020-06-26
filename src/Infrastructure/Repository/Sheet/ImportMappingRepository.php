@@ -48,7 +48,7 @@ class ImportMappingRepository implements ImportMappingRepositoryInterface
         ;
     }
 
-    public function getById($savedImportMappingId): ?ImportMapping
+    public function getById(int $id): ?ImportMapping
     {
         return $this
             ->entityManager
@@ -57,7 +57,7 @@ class ImportMappingRepository implements ImportMappingRepositoryInterface
             ->from(ImportMapping::class, 'import_mapping')
             ->where('import_mapping.id = :id')
             ->addOrderBy('import_mapping.createdAt')
-            ->setParameter('id', $savedImportMappingId)
+            ->setParameter('id', $id)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()

@@ -17,7 +17,7 @@ interface ImportMappingRepositoryInterface
      */
     public function getByEvent(Event $event): array;
 
-    public function getById($savedImportMappingId): ?ImportMapping;
+    public function getById(int $id): ?ImportMapping;
 
     public function hasExistingMappingWithTitle(Event $event, string $title): bool;
 }
