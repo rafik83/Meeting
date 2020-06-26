@@ -15,10 +15,9 @@ NoFollowerCriteria.prototype = new Criteria();
  * @returns {array}
  */
 NoFollowerCriteria.prototype.meetCriteria = function(sheets) {
+    let noFollowerFilter = false;
 
-    noFollowerFilter = false;
     if (typeof this.followers !== 'undefined' && this.followers.length > 0) {
-
         this.followers.forEach(function (follower) {
             if (follower === 'follower_unassigned') {
                 noFollowerFilter = true;
