@@ -127,82 +127,55 @@ class SheetListView
     /** @var string[] $inkedSheetsTitle */
     public $linkedSheetsTitle;
 
-    /**
-     * @param int                     $id
-     * @param string                  $title
-     * @param string                  $state
-     * @param string                  $validationState
-     * @param int                     $completeness
-     * @param bool                    $enabled
-     * @param bool                    $inCatalog
-     * @param bool                    $attend
-     * @param array                   $categories
-     * @param string                  $type
-     * @param SheetParticipantView    $owner
-     * @param string                  $follower
-     * @param string|null             $commercialStatus
-     * @param \DateTimeInterface|null $reminderDate
-     * @param \DateTimeInterface      $createdAt
-     * @param \DateTimeInterface      $lastLoginAt
-     * @param string                  $impersonationToken
-     * @param int                     $countParticipant
-     * @param bool                    $hasGroup
-     * @param string|null             $groupTitle
-     * @param string|null             $spotReference
-     * @param Trace|null              $trace
-     * @param string[]                $linkedSheetsTitle
-     */
     public function __construct(
-        $id,
-        $title,
-        $state,
-        $validationState,
-        $completeness,
-        $enabled,
-        $inCatalog,
-        $attend,
+        int $id,
+        string $title,
+        string $state,
+        string $validationState,
+        int $completeness,
+        bool $enabled,
+        bool $inCatalog,
+        bool $attend,
         array $categories,
         array $linkedSheetsTitle,
-        $type,
+        string $type,
         SheetParticipantView $owner,
-        $follower,
+        string $follower,
         ?string $commercialStatus = null,
         ?\DateTimeInterface $reminderDate = null,
         \DateTimeInterface $createdAt,
-        \DateTimeInterface $lastLoginAt = null,
-        $impersonationToken,
-        $countParticipant,
-        $hasGroup = false,
-        $groupTitle = null,
-        $spotReference = null,
-        Trace $trace = null
+        ?\DateTimeInterface $lastLoginAt = null,
+        int $countParticipant,
+        ?bool $hasGroup = false,
+        ?string $groupTitle = null,
+        ?string $spotReference = null,
+        ?Trace $trace = null
     ) {
-        $this->id                 = $id;
-        $this->title              = $title;
-        $this->state              = $state;
-        $this->validationState    = $validationState;
-        $this->completeness       = $completeness;
-        $this->enabled            = $enabled;
-        $this->inCatalog          = $inCatalog;
-        $this->attend             = $attend;
-        $this->categories         = $categories;
-        $this->type               = $type;
-        $this->owner              = $owner;
-        $this->follower           = $follower;
-        $this->commercialStatus   = $commercialStatus;
-        $this->reminderDate       = $reminderDate;
-        $this->createdAt          = $createdAt;
-        $this->lastLoginAt        = $lastLoginAt;
-        $this->impersonationToken = $impersonationToken;
-        $this->spotReference      = $spotReference;
-        $this->countParticipant   = $countParticipant;
-        $this->hasGroup           = $hasGroup;
-        $this->groupTitle         = $groupTitle;
+        $this->id = $id;
+        $this->title = $title;
+        $this->state = $state;
+        $this->validationState = $validationState;
+        $this->completeness = $completeness;
+        $this->enabled = $enabled;
+        $this->inCatalog = $inCatalog;
+        $this->attend = $attend;
+        $this->categories = $categories;
+        $this->type = $type;
+        $this->owner = $owner;
+        $this->follower = $follower;
+        $this->commercialStatus = $commercialStatus;
+        $this->reminderDate = $reminderDate;
+        $this->createdAt = $createdAt;
+        $this->lastLoginAt = $lastLoginAt;
+        $this->spotReference = $spotReference;
+        $this->countParticipant = $countParticipant;
+        $this->hasGroup = $hasGroup;
+        $this->groupTitle = $groupTitle;
 
         if (null !== $trace) {
             $this->traceAction = $trace->getAction();
-            $this->traceAt     = $trace->getDate();
-            $this->traceBy     = $trace->getAuthor();
+            $this->traceAt = $trace->getDate();
+            $this->traceBy = $trace->getAuthor();
         }
         $this->linkedSheetsTitle = $linkedSheetsTitle;
     }

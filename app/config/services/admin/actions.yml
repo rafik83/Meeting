@@ -1220,3 +1220,9 @@ services:
             - '@adapter.authorization_checker'
             - '@adapter.file_system_adapter'
             - '%infrastructure.common_export_path%'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate\ImpersonateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@security.impersonate'
+            - '@adapter.event_url_generator'

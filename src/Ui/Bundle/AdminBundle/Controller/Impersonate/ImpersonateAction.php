@@ -1,0 +1,63 @@
+<?php
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate;
+
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
+class ImpersonateAction
+{
+    /** @var AuthorizationCheckerInterface */
+    private $authorizationCheckerAdapter;
+
+    /** @var Impersonate */
+    private $impersonate;
+
+    /** @var EventUrlGenerator */
+    private $eventUrlGenerator;
+
+    public function __construct(
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
+        Impersonate $impersonate,
+        EventUrlGenerator $eventUrlGenerator
+    ) {
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
+        $this->impersonate = $impersonate;
+        $this->eventUrlGenerator = $eventUrlGenerator;
+    }
+
+    public function __invoke(Request $request, AdminDomain $adminDomain, Event $event, User $user): RedirectResponse
+    {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_SWITCH')
+        ) {
+            throw new AccessDeniedException('Access Denied!');
+        }
+
+        $targetRoute = $request->get('route');
+        if (empty($targetRoute)) {
+            throw new BadRequestHttpException('route parameter must be defined');
+        }
+
+        $targetParams = $request->get('params');
+
+        $token = $this->impersonate->getEncodedToken($adminDomain->getAdmin(), $user);
+        $targetParams['_switchto'] = $token;
+        $targetUrl = $this->eventUrlGenerator->generateEventAbsoluteUrl(
+            $event,
+            $targetRoute,
+            $targetParams
+        );
+
+        return new RedirectResponse($targetUrl);
+    }
+}

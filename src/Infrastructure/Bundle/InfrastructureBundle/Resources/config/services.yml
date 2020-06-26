@@ -3277,7 +3277,6 @@ services:
             - '@adapter.sheet_search_adapter'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
-            - '@security.impersonate'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.trace_repository'
             - '@vimeet_infrastructure.repository.type_repository'
