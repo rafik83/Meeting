@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
@@ -77,6 +70,9 @@ class Happening implements TimeRangeInterface
     /** @var null|string */
     private $liveUrl;
 
+    /** @var bool */
+    private $webinarRecorded;
+
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
@@ -88,7 +84,8 @@ class Happening implements TimeRangeInterface
         ?string $invitationCode = null,
         bool $webinar = false,
         bool $interactiveWebinar = false,
-        ?string $liveUrl = null
+        ?string $liveUrl = null,
+        bool $webinarRecorded = true
     ) {
         $this->event = $event;
         $this->begin = $begin;
@@ -106,97 +103,60 @@ class Happening implements TimeRangeInterface
         $this->webinar = $webinar;
         $this->interactiveWebinar = $interactiveWebinar;
         $this->liveUrl = $liveUrl;
+        $this->webinarRecorded = $webinarRecorded;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Event
-     */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    /**
-     * @return CategoryHappening
-     */
-    public function getCategory()
+    public function getCategory(): CategoryHappening
     {
         return $this->category;
     }
 
-    /**
-     * @param CategoryHappening $category
-     */
-    public function setCategory($category)
+    public function setCategory(CategoryHappening $category): void
     {
         $this->category = $category;
     }
 
-    /**
-     * Get begin.
-     *
-     * @return \DateTimeInterface
-     */
-    public function getBegin()
+    public function getBegin(): \DateTimeInterface
     {
         return $this->begin;
     }
 
-    /**
-     * @param \DateTimeInterface $begin
-     */
-    public function setBegin($begin)
+    public function setBegin(\DateTimeInterface $begin): void
     {
         $this->begin = $begin;
     }
 
-    /**
-     * Get end.
-     *
-     * @return \DateTimeInterface
-     */
-    public function getEnd()
+    public function getEnd(): \DateTimeInterface
     {
         return $this->end;
     }
 
-    /**
-     * @param \DateTimeInterface $end
-     */
-    public function setEnd($end)
+    public function setEnd(\DateTimeInterface $end): void
     {
         $this->end = $end;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getTitle($locale)
+    public function getTitle(string $locale): string
     {
         return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getTitle() : '';
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getDescription($locale)
+    public function getDescription(string $locale): string
     {
         return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
     }
 
-    public function getWebinarHeaderImage($locale): ?string
+    public function getWebinarHeaderImage(string $locale): ?string
     {
         /** @var null|HappeningTranslation $translation */
         $translation = $this->translations->get($locale);
@@ -208,20 +168,19 @@ class Happening implements TimeRangeInterface
         return $translation->getWebinarHeaderImage();
     }
 
-    /**
-     * @param HappeningTranslation $translation
-     */
-    public function setTranslation(HappeningTranslation $translation)
+    public function setTranslation(HappeningTranslation $translation): void
     {
         $this->translations->set($translation->getLocale(), $translation);
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getTranslations()
+    public function getTranslations(): Collection
     {
         return $this->translations;
+    }
+
+    public function isWebinarRecorded(): bool
+    {
+        return $this->webinarRecorded;
     }
 
     public function update(
@@ -234,8 +193,9 @@ class Happening implements TimeRangeInterface
         bool $webinar,
         bool $interactiveWebinar,
         ?string $invitationCode = null,
-        ?string $liveUrl = null
-    ) {
+        ?string $liveUrl = null,
+        bool $webinarRecorded = true
+    ): void {
         $this->begin = $begin;
         $this->end = $end;
         $this->types = new ArrayCollection($types);
@@ -244,21 +204,23 @@ class Happening implements TimeRangeInterface
         $this->limitParticipant = $limitParticipant;
         $this->invitationCode = $invitationCode;
         $this->webinar = $webinar;
+        $this->webinarRecorded = $webinarRecorded;
         $this->interactiveWebinar = $interactiveWebinar;
         $this->liveUrl = $liveUrl;
     }
 
-    public function updateTranslation(string $locale, string $title, ?string $description, ?string $webinarHeaderImage)
-    {
+    public function updateTranslation(
+        string $locale,
+        string $title,
+        ?string $description,
+        ?string $webinarHeaderImage
+    ): void {
         /** @var HappeningTranslation $translation */
         $translation = $this->translations->get($locale);
         $translation->update($title, $description, $webinarHeaderImage);
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getTalkings()
+    public function getTalkings(): Collection
     {
         return $this->talkings;
     }
@@ -266,12 +228,12 @@ class Happening implements TimeRangeInterface
     /**
      * @return Speaker[]
      */
-    public function getSpeakers()
+    public function getSpeakers(): array
     {
         return $this
             ->talkings
             ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
-            ->map(function (Talking $talking) {
+            ->map(static function (Talking $talking) {
                 return $talking->getSpeaker();
             })
             ->toArray();
@@ -289,12 +251,7 @@ class Happening implements TimeRangeInterface
         return false;
     }
 
-    /**
-     * @param array $speakers
-     *
-     * @return Happening
-     */
-    public function setSpeakers(array $speakers)
+    public function setSpeakers(array $speakers): void
     {
         // Make sure a speaker doesn't appear more than once
         $speakers = array_unique($speakers, SORT_REGULAR);
@@ -312,46 +269,29 @@ class Happening implements TimeRangeInterface
                 $this->talkings->add(new Talking($speaker, $this, $position));
             }
         }
-
-        return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isQuestionAllowed()
+    public function isQuestionAllowed(): bool
     {
         return $this->questionAllowed;
     }
 
-    /**
-     * @param bool $questionAllowed
-     */
-    public function setQuestionAllowed($questionAllowed)
+    public function setQuestionAllowed(bool $questionAllowed): void
     {
         $this->questionAllowed = $questionAllowed;
     }
 
-    /**
-     * @return bool
-     */
-    public function isParticipantLimited()
+    public function isParticipantLimited(): bool
     {
         return null !== $this->limitParticipant;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getLimitParticipant()
+    public function getLimitParticipant(): ?int
     {
         return $this->limitParticipant;
     }
 
-    /**
-     * @param int|null $limitParticipant
-     */
-    public function setLimitParticipant($limitParticipant)
+    public function setLimitParticipant(?int $limitParticipant): void
     {
         $this->limitParticipant = $limitParticipant;
     }
@@ -359,7 +299,7 @@ class Happening implements TimeRangeInterface
     /**
      * @return HappeningParticipation[]
      */
-    public function getParticipations()
+    public function getParticipations(): array
     {
         return $this->participations->toArray();
     }
@@ -367,7 +307,7 @@ class Happening implements TimeRangeInterface
     /**
      * @return ArrayCollection of Question
      */
-    public function getQuestions()
+    public function getQuestions(): Collection
     {
         return $this->questions;
     }
@@ -375,7 +315,7 @@ class Happening implements TimeRangeInterface
     /**
      * @param HappeningParticipation[] $participations
      */
-    public function setParticipations(array $participations)
+    public function setParticipations(array $participations): void
     {
         $this->participations = new ArrayCollection($participations);
     }
@@ -388,34 +328,22 @@ class Happening implements TimeRangeInterface
         return $this->types->toArray();
     }
 
-    /**
-     * @return null|string
-     */
     public function getInvitationCode(): ?string
     {
         return $this->invitationCode;
     }
 
-    /**
-     * @return bool
-     */
     public function hasInvitationCode(): bool
     {
         return null !== $this->invitationCode;
     }
 
-    /**
-     * @return bool
-     */
     public function isPrivate(): bool
     {
         return $this->hasInvitationCode();
     }
 
-    /**
-     * @param string $invitationCode
-     */
-    public function setInvitationCode(string $invitationCode)
+    public function setInvitationCode(string $invitationCode): void
     {
         $this->invitationCode = $invitationCode;
     }

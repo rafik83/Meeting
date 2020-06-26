@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
@@ -30,7 +22,7 @@ class CreateHandler
         $this->fileStorage = $fileStorage;
     }
 
-    public function handle(Create $create)
+    public function handle(Create $create): void
     {
         if ($create->isWebinar()) {
             foreach ($create->talkings as $talking) {
@@ -51,7 +43,8 @@ class CreateHandler
             $create->invitationCode,
             $create->isWebinar(),
             $create->isInteractiveWebinar(),
-            $create->liveUrl
+            $create->liveUrl,
+            $create->isWebinar() && $create->webinarRecorded
         );
 
         foreach ($create->translations as $locale => $translation) {
@@ -73,10 +66,16 @@ class CreateHandler
         }
 
         // Sort speakers by position
-        usort($create->talkings, function (array $one, array $another) { return $one['position'] - $another['position']; });
+        usort($create->talkings, static function (array $one, array $another) {
+            return $one['position'] - $another['position'];
+        });
 
         // Set speakers
-        $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $create->talkings));
+        $happening->setSpeakers(
+            array_map(static function (array $talking) {
+                return $talking['speaker'];
+            }, $create->talkings)
+        );
 
         $this->happeningRepository->add($happening);
     }

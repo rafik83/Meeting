@@ -508,6 +508,7 @@ form.happening_create.children.translations.prototype.children.webinarHeaderImag
 form.happening_create.children.translations.prototype.children.currentWebinarHeaderImage.label: Image actuelle
 form.happening_create.children.types.label: 'Types ayant accès'
 form.happening_create.children.webinar.label: 'Webinaire activé'
+form.happening_create.children.webinarRecorded.label: 'Enregistrement du webinar'
 form.happening_create.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
@@ -528,6 +529,7 @@ form.happening_update.children.translations.prototype.children.title.label: Titr
 form.happening_update.children.translations.prototype.children.webinarHeaderImage.label: Image entête de webinaire
 form.happening_update.children.types.label: 'Types ayant accès'
 form.happening_update.children.webinar.label: 'Webinaire activé'
+form.happening_update.children.webinarRecorded.label: 'Enregistrement du webinar'
 form.happening_update.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
 form.happening_create_update.speaker_linked_to_user: '%name% (Lié à un utilisateur)'
 form.import_mapping.children.submit.label: Importer

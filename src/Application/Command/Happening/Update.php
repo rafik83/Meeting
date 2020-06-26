@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -27,6 +19,7 @@ class Update extends AbstractHappeningCommand
         $this->limitParticipant = $happening->getLimitParticipant();
         $this->invitationCode = $happening->getInvitationCode();
         $this->liveUrl = $happening->getLiveUrl();
+        $this->webinarRecorded = $happening->isWebinarRecorded();
 
         if ($happening->isWebinar()) {
             $this->happeningType = self::TYPE_WEBINAR;
