@@ -57,14 +57,15 @@ class ParticipantInfoAccessRulesResolver
                 }));
             }
         }
+
         // extract inverse rules
-        // foreach ($seeableWhos as $who) {
-        //     if (isset($rules[$who->getId()])) {
-        //         $rulesApplicable = array_merge($rulesApplicable, array_filter($rules[$who->getId()], function (Rule $rule) use ($seerWhos) {
-        //             return in_array($rule->getSeeable(), $seerWhos);
-        //         }));
-        //     }
-        // }
+        foreach ($seeableWhos as $who) {
+            if (isset($rules[$who->getId()])) {
+                $rulesApplicable = array_merge($rulesApplicable, array_filter($rules[$who->getId()], function (Rule $rule) use ($seerWhos) {
+                    return in_array($rule->getSeeable(), $seerWhos);
+                }));
+            }
+        }
 
         if (!empty($rulesApplicable)) {
             foreach ($rulesApplicable as $rule) {
