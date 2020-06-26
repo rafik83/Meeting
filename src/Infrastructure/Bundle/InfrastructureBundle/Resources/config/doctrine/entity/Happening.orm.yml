@@ -40,6 +40,10 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: string
             length: 5000
             nullable: true
+        webinarRecorded:
+            type: boolean
+            options:
+                default: false
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

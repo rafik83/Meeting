@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
 use Proximum\Vimeet\Application\Command\Happening\Create;
@@ -18,12 +10,12 @@ class CreateType extends HappeningType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class'    => Create::class,
+            'data_class' => Create::class,
             'csrf_token_id' => 'happening_create',
         ]);
     }
@@ -31,7 +23,7 @@ class CreateType extends HappeningType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'happening_create';
     }
