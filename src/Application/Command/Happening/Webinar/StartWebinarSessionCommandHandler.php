@@ -21,7 +21,7 @@ class StartWebinarSessionCommandHandler
         $this->happeningRepository = $happeningRepository;
     }
 
-    public function handle(StartWebinarSessionCommand $command)
+    public function handle(StartWebinarSessionCommand $command): void
     {
         $happening = $command->getHappening();
 
@@ -33,6 +33,16 @@ class StartWebinarSessionCommandHandler
         $sessionId = $session->getSessionId();
 
         $happening->setWebinarSessionId($sessionId);
+
+        if ($happening->isWebinarRecorded()) {
+            $archive = $this->videoConferenceAdapter->archive(
+                $sessionId,
+                $happening->getTitle($happening->getEvent()->getLocaleFallback())
+            );
+
+            $archiveId = $archive->id;
+        }
+
         $this->happeningRepository->set($happening);
     }
 }
