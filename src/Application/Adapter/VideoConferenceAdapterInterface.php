@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
+use OpenTok\Archive;
+use OpenTok\Layout;
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 
@@ -28,6 +30,14 @@ interface VideoConferenceAdapterInterface
      * @return Session
      */
     public function getSession(string $sessionId): Session;
+
+    public function archive(string $sessionId, string $name): Archive;
+
+    public function changeArchiveLayout(string $archiveId, Layout $layout): void;
+
+    public function changeStreamClassList(string $sessionId, string $streamId, string $class): void;
+
+    public function stopArchive(string $archiveId): Archive;
 
     /**
      * @param Session            $session
