@@ -360,6 +360,7 @@ admin.happening.products: 'Ce sous-évènement est lié aux produits suivants'
 admin.happening.products.tooltip: 'Lié à des produits'
 admin.happening.title: Conférences
 admin.happening.type.interactiveWebinar: Webinaire interactif
+admin.happening.type.videoWebinar: 'Webinaire vidéo'
 admin.happening.type.webinar: Webinaire
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'

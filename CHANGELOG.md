@@ -4,7 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
 - VIMEET 2110 - Add support to broadcast live video in webinar, using an iframe
+- VIMEET 2086 - Webinar video available available even when the happening is over
 
 ## [2.33.0] - 2020-06-22
 ### Added

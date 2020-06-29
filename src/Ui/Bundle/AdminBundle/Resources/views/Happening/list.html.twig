@@ -77,7 +77,7 @@
 
                     {% if happening.isWebinar %}
                         <span class="label label-info">
-                            {{ happening.isInteractiveWebinar ? 'admin.happening.type.interactiveWebinar'|trans : 'admin.happening.type.webinar'|trans }}
+                            {{ happening.isVideoWebinar ? 'admin.happening.type.videoWebinar'|trans : (happening.isInteractiveWebinar ? 'admin.happening.type.interactiveWebinar'|trans : 'admin.happening.type.webinar'|trans) }}
                         </span>
                     {% endif %}
                 </td>
