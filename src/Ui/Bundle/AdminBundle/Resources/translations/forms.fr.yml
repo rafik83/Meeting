@@ -1034,7 +1034,7 @@ form.sheet_import_mapping_create.children.submit.label: 'Enregistrer une nouvell
 form.sheet_import_mapping_create.children.title.label: 'Titre de la correspondance'
 form.sheet_import_mapping_result.text.diff: 'Vous avez effectué des modifications à la correspondance utilisée'
 form.sheet_import_mapping_result.text.save_title: 'Enregistrer sous une nouvelle correspondance'
-form.sheet_import_mapping_save.children.save.label: 'Mettre à jour la correspondance utilisé avec les changements'
+form.sheet_import_mapping_save.children.save.label: 'Mettre à jour la correspondance utilisée'
 form.sheet_template_add_locale.children.locale.label: Langue
 form.sheet_template_add_locale.children.submit.label: Ajouter
 form.sheet_template_create.children.close.label: Annuler
