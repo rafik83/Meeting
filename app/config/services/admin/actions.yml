@@ -1224,5 +1224,6 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate\ImpersonateAction:
         arguments:
             - '@adapter.authorization_checker'
+            - '@adapter.csrf_token'
             - '@security.impersonate'
             - '@adapter.event_url_generator'

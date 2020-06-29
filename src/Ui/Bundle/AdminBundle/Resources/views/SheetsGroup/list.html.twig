@@ -61,7 +61,9 @@
                             }),
                             'POST',
                             'admin.sheet.impersonate'|trans,
-                            { 'class': 'btn btn-default btn-sm' }
+                            { 'class': 'btn btn-default btn-sm' },
+                            null,
+                            'impersonate-to-'~groupView.managerId
                         )
                     }}
 

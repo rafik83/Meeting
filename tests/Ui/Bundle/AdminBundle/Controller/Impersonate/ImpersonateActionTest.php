@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Impersonate;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CsrfTokenAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
@@ -20,6 +21,9 @@ class ImpersonateActionTest extends TestCase
 {
     /** @var ObjectProphecy */
     private $authorizationCheckerAdapter;
+
+    /** @var ObjectProphecy */
+    private $csrfTokenAdapter;
 
     /** @var ObjectProphecy */
     private $impersonate;
@@ -45,6 +49,7 @@ class ImpersonateActionTest extends TestCase
     public function setUp()
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
+        $this->csrfTokenAdapter = $this->prophesize(CsrfTokenAdapterInterface::class);
         $this->impersonate = $this->prophesize(Impersonate::class);
         $this->eventUrlGenerator = $this->prophesize(EventUrlGeneratorInterface::class);
 
@@ -53,6 +58,7 @@ class ImpersonateActionTest extends TestCase
         $this->adminDomain = new AdminDomain($this->admin->reveal());
         $this->event = $this->prophesize(Event::class);
         $this->user = $this->prophesize(User::class);
+        $this->user->getId()->willReturn(42);
     }
 
     public function testAccessDenied()
@@ -67,6 +73,7 @@ class ImpersonateActionTest extends TestCase
 
         $action = new ImpersonateAction(
             $this->authorizationCheckerAdapter->reveal(),
+            $this->csrfTokenAdapter->reveal(),
             $this->impersonate->reveal(),
             $this->eventUrlGenerator->reveal()
         );
@@ -91,6 +98,7 @@ class ImpersonateActionTest extends TestCase
 
         $action = new ImpersonateAction(
             $this->authorizationCheckerAdapter->reveal(),
+            $this->csrfTokenAdapter->reveal(),
             $this->impersonate->reveal(),
             $this->eventUrlGenerator->reveal()
         );
@@ -112,10 +120,20 @@ class ImpersonateActionTest extends TestCase
             ->willReturn(true)
         ;
 
+        $this->csrfTokenAdapter
+            ->isTokenValid('impersonate-to-42', 'csrf123456')
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
         $query = $this->prophesize(ParameterBag::class);
         $query->get('route')->shouldBeCalled()->willReturn('target_route');
         $query->get('params')->shouldBeCalled()->willReturn([]);
         $this->request->query = $query;
+
+        $request = $this->prophesize(ParameterBag::class);
+        $request->get('_token')->shouldBeCalled()->willReturn('csrf123456');
+        $this->request->request = $request;
 
         $this->impersonate
             ->getEncodedToken($this->admin->reveal(), $this->user->reveal())
@@ -131,6 +149,7 @@ class ImpersonateActionTest extends TestCase
 
         $action = new ImpersonateAction(
             $this->authorizationCheckerAdapter->reveal(),
+            $this->csrfTokenAdapter->reveal(),
             $this->impersonate->reveal(),
             $this->eventUrlGenerator->reveal()
         );
@@ -138,6 +157,41 @@ class ImpersonateActionTest extends TestCase
         $result = $action($this->request->reveal(), $this->adminDomain, $this->event->reveal(), $this->user->reveal());
 
         $this->assertEquals('https://event.wimeet.proximum/sample/path', $result->getTargetUrl());
+    }
+
+    public function testFailWhenCsrfIsInvalid()
+    {
+        $this->expectException(BadRequestHttpException::class);
+
+        $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted('ROLE_ALLOWED_TO_SWITCH')
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this->csrfTokenAdapter
+            ->isTokenValid('impersonate-to-42', 'csrf123456')
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $request = $this->prophesize(ParameterBag::class);
+        $request->get('_token')->shouldBeCalled()->willReturn('csrf123456');
+        $this->request->request = $request;
+
+        $action = new ImpersonateAction(
+            $this->authorizationCheckerAdapter->reveal(),
+            $this->csrfTokenAdapter->reveal(),
+            $this->impersonate->reveal(),
+            $this->eventUrlGenerator->reveal()
+        );
+
+        $action($this->request->reveal(), $this->adminDomain, $this->event->reveal(), $this->user->reveal());
     }
 
     public function testFailWhenRouteParamIsMissing()
@@ -155,13 +209,24 @@ class ImpersonateActionTest extends TestCase
             ->willReturn(true)
         ;
 
+        $this->csrfTokenAdapter
+            ->isTokenValid('impersonate-to-42', 'csrf123456')
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
         $query = $this->prophesize(ParameterBag::class);
         $query->get('route')->shouldBeCalled()->willReturn(null);
         $query->get('params')->shouldNotBeCalled();
         $this->request->query = $query;
 
+        $request = $this->prophesize(ParameterBag::class);
+        $request->get('_token')->shouldBeCalled()->willReturn('csrf123456');
+        $this->request->request = $request;
+
         $action = new ImpersonateAction(
             $this->authorizationCheckerAdapter->reveal(),
+            $this->csrfTokenAdapter->reveal(),
             $this->impersonate->reveal(),
             $this->eventUrlGenerator->reveal()
         );

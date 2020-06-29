@@ -2678,6 +2678,11 @@ services:
         arguments:
             - '@security.authorization_checker'
 
+    adapter.csrf_token:
+        class: Proximum\Vimeet\Infrastructure\Adapter\CsrfTokenAdapter
+        arguments:
+            - '@security.csrf.token_manager'
+
     Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface: '@adapter.authorization_checker'
 
     adapter.templating_adapter:

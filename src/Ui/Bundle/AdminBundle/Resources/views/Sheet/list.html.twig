@@ -383,14 +383,14 @@
                                         }),
                                         'POST',
                                         'admin.sheet.impersonate'|trans,
-                                        { 'class': 'btn btn-default btn-sm' }
+                                        { 'class': 'btn btn-default btn-sm' },
+                                        null,
+                                        'impersonate-to-'~sheet.owner.id
                                     )
                                 }}
                             </li>
                         </ul>
                     </div>
-
-                        {# ('admin.sheet.impersonate'|trans): app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet_default', {'sheet': sheet.id, '_switchto': sheet.impersonationToken}) #}
                 </td>
             </tr>
         {% else %}

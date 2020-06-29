@@ -25,7 +25,13 @@
                                 'user': details.participants.owner.user.id,
                                 'route': 'event_sheet_default',
                                 'params': { 'sheet': sheet.id },
-                            }), 'POST', 'admin.sheet.impersonate'|trans, { 'class': 'btn btn-default btn-sm' }) }}
+                            }),
+                            'POST',
+                            'admin.sheet.impersonate'|trans,
+                            { 'class': 'btn btn-default btn-sm' },
+                            null,
+                            'impersonate-to-'~participant.userId
+                        ) }}
                 </div>
             </div>
         </div>
@@ -80,7 +86,13 @@
                                 'user': participant.userId,
                                 'route': 'event_sheet_default',
                                 'params': { 'sheet': sheet.id },
-                            }), 'POST', 'admin.sheet.impersonate'|trans, { 'class': 'btn btn-default btn-sm' }) }}
+                            }),
+                            'POST',
+                            'admin.sheet.impersonate'|trans,
+                            { 'class': 'btn btn-default btn-sm' },
+                            null,
+                            'impersonate-to-'~participant.userId
+                    ) }}
 
                 </div>
             </div>

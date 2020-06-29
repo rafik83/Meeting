@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CsrfTokenAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\User;
@@ -19,18 +20,23 @@ class ImpersonateAction
     /** @var AuthorizationCheckerInterface */
     private $authorizationCheckerAdapter;
 
+    /** @var CsrfTokenAdapterInterface */
+    private $csrfTokenAdapter;
+
     /** @var Impersonate */
     private $impersonate;
 
-    /** @var EventUrlGenerator */
+    /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
+        CsrfTokenAdapterInterface $csrfTokenAdapter,
         Impersonate $impersonate,
         EventUrlGeneratorInterface $eventUrlGenerator
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
+        $this->csrfTokenAdapter = $csrfTokenAdapter;
         $this->impersonate = $impersonate;
         $this->eventUrlGenerator = $eventUrlGenerator;
     }
@@ -41,6 +47,10 @@ class ImpersonateAction
             || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_SWITCH')
         ) {
             throw new AccessDeniedException('Access Denied!');
+        }
+
+        if (!$this->csrfTokenAdapter->isTokenValid('impersonate-to-'.$user->getId(), $request->request->get('_token'))) {
+            throw new BadRequestHttpException('invalid csrf token');
         }
 
         $targetRoute = $request->query->get('route');
