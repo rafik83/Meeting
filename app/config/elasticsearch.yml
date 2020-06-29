@@ -6,6 +6,7 @@ fos_elastica:
             index_name: "app_%kernel.environment%"
             settings:
                 index:
+                    max_result_window: 100000
                     analysis:
                         analyzer:
                             lowercaseAnalyzer:

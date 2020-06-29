@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet;
 
 use Elastica\Aggregation\Filter;
@@ -108,7 +100,7 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
                                     "nestedTaggedData_nested_values_terms": {
                                         "terms": {
                                             "field": "nestedTaggedData.values.value",
-                                            "size": 10000
+                                            "size": 100000
                                         }
                                     }
                                 }
