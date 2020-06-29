@@ -55,7 +55,7 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
 
         $happeningRepository->findHappeningParticipant($event)->shouldBeCalled()->willReturn([$happening]);
 
-        $questionRepository->findByHappeningAndSheet($happening, $sheet)->shouldBeCalled()->willReturn(null);
+        $questionRepository->findByHappeningAndSheet($happening, $sheet)->shouldBeCalled()->willReturn([]);
 
         $groupNameResolver->resolve($event, $user)->shouldBeCalled()->willReturn('');
         $sheetGuesser->getUserSheet($user, $event, $locale)->shouldBeCalled()->willReturn($sheet);
