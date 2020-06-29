@@ -55,7 +55,15 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
 
         $happeningRepository->findHappeningParticipant($event)->shouldBeCalled()->willReturn([$happening]);
 
-        $questionRepository->findByHappeningAndSheet($happening, $sheet)->shouldBeCalled()->willReturn([]);
+        $question1 = $this->prophesize(Happening\Question::class);
+        $question1->getContent()->shouldBeCalled()->willReturn('Question 1 ?');
+        $question2 = $this->prophesize(Happening\Question::class);
+        $question2->getContent()->shouldBeCalled()->willReturn('Question 2 ?');
+        $questionRepository
+            ->findByHappeningAndSheet($happening, $sheet)
+            ->shouldBeCalled()
+            ->willReturn([$question1->reveal(), $question2->reveal()])
+        ;
 
         $groupNameResolver->resolve($event, $user)->shouldBeCalled()->willReturn('');
         $sheetGuesser->getUserSheet($user, $event, $locale)->shouldBeCalled()->willReturn($sheet);
@@ -78,6 +86,7 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
         $this->assertEquals('doh', $happeningParticipantView->getLastname());
         $this->assertEquals('ceo', $happeningParticipantView->getPosition());
         $this->assertEquals('johndoh@gmail.com', $happeningParticipantView->getEmail());
+        $this->assertEquals("Question 1 ?\nQuestion 2 ?", $happeningParticipantView->getQuestion());
     }
 
     public function testHandleEmptyParticipation()
