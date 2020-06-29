@@ -86,18 +86,18 @@ class VideoConferenceController extends Controller
             return $redirectResponse;
         }
 
-        /** @var MeetingView $meetingView */
-        $meetingView = $this->get('tactician.commandbus')->handle(
-            new MeetingViewQuery($meeting, $sheet, false, $userDomain->getUser(), $event, $request->getLocale())
-        );
-
         /** @var VideoConferenceView $videoConferenceView */
         $videoConferenceView = $this->get('tactician.commandbus')->handle(
             new RequestAccess(
                 $meeting,
-                $userDomain->getUser(),
+                $participant,
                 $event->getAvailableLocale($request->getLocale())
             )
+        );
+
+        /** @var MeetingView $meetingView */
+        $meetingView = $this->get('tactician.commandbus')->handle(
+            new MeetingViewQuery($meeting, $sheet, false, $userDomain->getUser(), $event, $request->getLocale())
         );
 
         $endRedirectLink = ($this->get(EndVisioRedirectHandler::class))(new EndVisioRedirect(
