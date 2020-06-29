@@ -35,12 +35,12 @@ class OwnerView
     public $email;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $mobile;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $phone;
 
@@ -54,8 +54,8 @@ class OwnerView
         string $firstName,
         string $lastName,
         string $email,
-        string $mobile,
-        string $phone,
+        ?string $mobile,
+        ?string $phone,
         bool $shouldBeDisplayed
     ) {
         $this->user = $user;

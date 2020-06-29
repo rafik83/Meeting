@@ -19,11 +19,9 @@ use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationSt
 use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
 use Proximum\Vimeet\Application\View\Sheet\Details\SheetParticipantsView;
-use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 
 class ParticipantDetailQueryHandler
 {
@@ -42,28 +40,18 @@ class ParticipantDetailQueryHandler
     /** @var IsParticipantVisio */
     private $isParticipantVisio;
 
-    /** @var Impersonate */
-    private $impersonate;
-
-    /** @var EventUrlGeneratorInterface */
-    private $eventUrlGenerator;
-
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         AgendaConfirmationStatusQueryHandler $agendaConfirmationStatusQueryHandler,
         PhoneValidationStatusQueryHandler $phoneValidationStatusQueryHandler,
         AvailabilityConfirmationStatusQueryHandler $availabilityConfirmationStatusQueryHandler,
-        IsParticipantVisio $isParticipantVisio,
-        Impersonate $impersonate,
-        EventUrlGeneratorInterface $eventUrlGenerator
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->templateDataFactory = $templateDataFactory;
         $this->agendaConfirmationStatusQueryHandler = $agendaConfirmationStatusQueryHandler;
         $this->phoneValidationStatusQueryHandler = $phoneValidationStatusQueryHandler;
         $this->availabilityConfirmationStatusQueryHandler = $availabilityConfirmationStatusQueryHandler;
         $this->isParticipantVisio = $isParticipantVisio;
-        $this->impersonate = $impersonate;
-        $this->eventUrlGenerator = $eventUrlGenerator;
     }
 
     /**
@@ -73,7 +61,7 @@ class ParticipantDetailQueryHandler
      */
     public function handle(ParticipantDetailQuery $query): SheetParticipantsView
     {
-        $sheet            = $query->sheet;
+        $sheet = $query->sheet;
         $participantViews = [];
 
         $owner = $sheet->getOwner();
