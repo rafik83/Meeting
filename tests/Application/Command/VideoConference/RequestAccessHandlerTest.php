@@ -5,6 +5,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\VideoConference;
 use OpenTok\Session;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeeting;
+use Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeetingHandler;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccess;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccessHandler;
 use Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever;
@@ -18,8 +20,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\VideoConference;
 use Proximum\Vimeet\Domain\Model\VideoConferenceToken;
 use Proximum\Vimeet\Domain\Model\Visio\VisioSettings;
-use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
 
 class RequestAccessHandlerTest extends TestCase
@@ -38,8 +38,6 @@ class RequestAccessHandlerTest extends TestCase
 
         $slot->getEnd()->shouldBeCalled()->willReturn($slotEnd);
         $meeting->getSlot()->shouldBeCalled()->willReturn($slot->reveal());
-        $meeting->hasParticipant($participant->reveal())->shouldBeCalled()->willReturn(false);
-        $meeting->addParticipant($participant->reveal())->shouldBeCalled();
 
         // Mock
         $session                   = $this->prophesize(Session::class);
@@ -79,19 +77,14 @@ class RequestAccessHandlerTest extends TestCase
 
         $videoConferenceRepository->add($videoConference)->shouldBeCalled();
 
-        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->set($meeting->reveal())->shouldBeCalled();
-
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository
-            ->isAvailableForMeeting([$participant->reveal()], $meeting->reveal())
+        $addParticipantToMeetingHandler = $this->prophesize(AddParticipantToMeetingHandler::class);
+        $addParticipantToMeetingHandler
+            ->handle(new AddParticipantToMeeting($participant->reveal(), $meeting->reveal()))
             ->shouldBeCalled()
-            ->willReturn(true)
         ;
 
         $handler = new RequestAccessHandler(
-            $meetingRepository->reveal(),
-            $participantRepository->reveal(),
+            $addParticipantToMeetingHandler->reveal(),
             $videoConferenceAdapter->reveal(),
             $videoConferenceRepository->reveal(),
             $visioSettingsRetriever->reveal()
@@ -133,7 +126,6 @@ class RequestAccessHandlerTest extends TestCase
 
         $slot->getEnd()->shouldBeCalled()->willReturn($slotEnd);
         $meeting->getSlot()->shouldBeCalled()->willReturn($slot->reveal());
-        $meeting->hasParticipant($participant->reveal())->shouldBeCalled()->willReturn(true);
 
         // Mock
         $videoConference           = $this->prophesize(VideoConference::class);
@@ -181,18 +173,14 @@ class RequestAccessHandlerTest extends TestCase
 
         $videoConferenceRepository->set($videoConference)->shouldBeCalled();
 
-        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->set($meeting->reveal())->shouldNotBeCalled();
-
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository
-            ->isAvailableForMeeting([$participant->reveal()], $meeting->reveal())
-            ->shouldNotBeCalled()
+        $addParticipantToMeetingHandler = $this->prophesize(AddParticipantToMeetingHandler::class);
+        $addParticipantToMeetingHandler
+            ->handle(new AddParticipantToMeeting($participant->reveal(), $meeting->reveal()))
+            ->shouldBeCalled()
         ;
 
         $handler = new RequestAccessHandler(
-            $meetingRepository->reveal(),
-            $participantRepository->reveal(),
+            $addParticipantToMeetingHandler->reveal(),
             $videoConferenceInterface->reveal(),
             $videoConferenceRepository->reveal(),
             $visioSettingsRetriever->reveal()
