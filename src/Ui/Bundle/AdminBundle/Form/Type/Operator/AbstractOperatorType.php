@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Operator;
 
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
@@ -35,11 +27,11 @@ class AbstractOperatorType extends AbstractType
                 'required' => true,
             ])
             ->add('events', EventChoiceType::class, [
-                'required'    => false,
-                'expanded'    => true,
-                'multiple'    => true,
+                'required' => false,
+                'expanded' => true,
+                'multiple' => true,
                 'placeholder' => '',
-                'choices'     => $options['events'],
+                'choices' => $options['events'],
             ])
         ;
     }

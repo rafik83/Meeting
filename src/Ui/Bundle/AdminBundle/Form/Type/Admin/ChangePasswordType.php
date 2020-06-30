@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin;
 
 use Proximum\Vimeet\Application\Command\Admin\ChangePassword;
@@ -22,13 +14,16 @@ class ChangePasswordType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('currentPassword', PasswordType::class)
             ->add('plainPassword', RepeatedType::class, [
-                'type'            => PasswordType::class,
+                'type' => PasswordType::class,
                 'invalid_message' => 'validators.password.mismatch',
+                'first_options' => [
+                    'help' => 'form.admin_password.rules',
+                ],
             ])
         ;
     }
@@ -36,7 +31,7 @@ class ChangePasswordType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => ChangePassword::class,
@@ -46,7 +41,7 @@ class ChangePasswordType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'change_password_admin';
     }

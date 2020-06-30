@@ -23,6 +23,7 @@ class CreateType extends PartnerType
             ])
             ->add('password', TextType::class, [
                 'required' => isset($options['password_required']) ? $options['password_required'] : true,
+                'help' => 'form.admin_password.rules',
             ])
             ->add('lastname', TextType::class, [
                 'required' => true,

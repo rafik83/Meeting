@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Operator;
 
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
@@ -22,33 +14,30 @@ class FilterType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('event', EventChoiceType::class, [
-                'label'       => false,
-                'required'    => false,
-                'expanded'    => false,
-                'multiple'    => false,
+                'label' => false,
+                'required' => false,
+                'expanded' => false,
+                'multiple' => false,
                 'placeholder' => 'form.filter_operator.event.all',
-                'choices'     => $options['events'],
+                'choices' => $options['events'],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'form.filter_operator.children.submit.label',
             ]);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired([
             'events',
         ]);
         $resolver->setDefaults([
-            'required'        => false,
-            'method'          => 'GET',
+            'required' => false,
+            'method' => 'GET',
             'csrf_protection' => false,
         ]);
     }
