@@ -72,6 +72,7 @@ validators.option.quantityMustBeAdded: 'Vous devez ajouter une quantité si vous
 validators.order.numeroNotValid: 'Le numéro de la commande que vous avez entré n''est pas valide'
 validators.order.orderNotFound: 'Aucune commande avec ce numéro'
 validators.participant_imported.duplicate_mail_mapping: 'Vous ne pouvez pas selectionner deux fois le champ email'
+validators.participant_imported.empty_group_title_mapping: 'La sélection du champ "Titre de l''entité" est obligatoire'
 validators.participant_imported.empty_mail_mapping: 'La sélection du champ email Vimeet est obligatoire'
 validators.password.min: 'Le mot de passe doit comporter au moins {{ limit }} caractères'
 validators.password.mismatch: 'Les 2 mots de passe ne sont pas identiques'

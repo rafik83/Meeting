@@ -513,8 +513,7 @@ services:
             - '@adapter.authorization_checker'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportAction:
         arguments:
@@ -679,6 +678,24 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@templating'
             - '@router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ConfigureImportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ImportMappingAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+            - '@session.flash_bag'
 
     #
     # Availability Time Range
@@ -1197,3 +1214,9 @@ services:
             - '@adapter.authorization_checker'
             - '@query.sheet.dashboard_view_query_handler'
             - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\File\DownloadAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.file_system_adapter'
+            - '%infrastructure.common_export_path%'

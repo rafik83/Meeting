@@ -67,7 +67,8 @@ class UpdateHandler
             $update->limitParticipant,
             $update->isWebinar(),
             $update->isInteractiveWebinar(),
-            $update->invitationCode
+            $update->invitationCode,
+            $update->liveUrl
         );
 
         foreach ($update->translations as $locale => $translation) {

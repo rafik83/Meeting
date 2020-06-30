@@ -4,8 +4,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Fixed
+### Added
+- VIMEET 2110 - Add support to broadcast live video in webinar, using an iframe
+- VIMEET-2126 Add - Export all participants of sheet met
+- VIMEET-2126 - Hide participants phone / email in contact export if evaluations are below a user-defined floor
 - VIMEET-2153 - secure cookies
+
+## [2.34.0] - 2020-06-25
+### Added
+- MV-240 - Asynchronous export of happening participants
+
+## [2.33.0] - 2020-06-22
+### Added
+- VIMEET-2142 - Import multi sheet for user
+- VIMEET-2131 - Add datetime when user connects to a webinar (like a scan in conference)
+- VIMEET-2158 - Webinar fixes and improvement
+- VIMEET-2144 - Webinar is always open to speaker
 
 ## [2.32.0] - 2020-06-18
 ### Added
@@ -13,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2102 - Evaluate visio meeting
 - VIMEET-2128 - Show participant name on visio
 - VIMEET-2140 - Screen share without feedback
+- VIMEET-2150 - Block account in admin login after 5 failed attempts
 
 ### Fixed
 - MV-236 - Add unavailability with a different timezone

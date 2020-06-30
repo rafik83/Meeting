@@ -16,11 +16,11 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -98,6 +98,11 @@ abstract class HappeningType extends AbstractType
             ])
             ->add('invitationCode', TextType::class, [
                 'required' => false,
+            ])
+            ->add('liveUrl', UrlType::class, [
+                'required' => false,
+                'help' => 'form.happening_create.children.liveUrl.help',
+                'default_protocol' => 'https',
             ])
         ;
     }

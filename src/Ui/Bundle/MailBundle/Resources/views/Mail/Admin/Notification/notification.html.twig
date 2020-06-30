@@ -1,0 +1,12 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    {{ mail.content|nl2br }}
+
+    {% if mail.link %}
+        <br><br>
+        {{ macros.button(mail.linkTitle, mail.link) }}
+    {% endif %}
+{% endblock %}

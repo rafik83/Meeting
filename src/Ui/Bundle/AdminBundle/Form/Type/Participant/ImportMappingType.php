@@ -21,23 +21,23 @@ class ImportMappingType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var ImportMappingView $importMappingView */
         $importMappingView = $options['importMappingView'];
 
         $builder
             ->add('mappings', MappingType::class, [
-                'csvHeaders'          => $importMappingView->fieldHeaders,
+                'csvHeaders' => $importMappingView->fieldHeaders,
                 'registrationHeaders' => $importMappingView->registrationHeaders,
-                'label'               => false,
+                'label' => false,
             ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['locale', 'importMappingView']);
         $resolver->setAllowedTypes('importMappingView', ImportMappingView::class);

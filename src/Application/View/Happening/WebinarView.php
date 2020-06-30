@@ -56,6 +56,9 @@ class WebinarView
     /** @var int */
     public $currentUserId;
 
+    /** @var string|null */
+    public $liveUrl;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -74,7 +77,8 @@ class WebinarView
         \DateTimeInterface $currentTime,
         int $timeRemainingInSeconds,
         int $warningTimeRemainingInSeconds,
-        ?string $headerImage
+        ?string $headerImage,
+        ?string $liveUrl
     ) {
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
@@ -90,6 +94,7 @@ class WebinarView
         $this->headerImage = $headerImage;
         $this->speakers = $speakers;
         $this->participantViews = $participantViews;
+        $this->liveUrl = $liveUrl;
     }
 
     public function getSpeakerInfosByUserId(): string
@@ -120,7 +125,7 @@ class WebinarView
                 $participantView->lastName,
                 $position,
                 $sheetTitle
-            );;
+            );
         }
 
         return json_encode($mapping);

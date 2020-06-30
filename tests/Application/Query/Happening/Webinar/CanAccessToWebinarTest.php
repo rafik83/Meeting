@@ -53,6 +53,7 @@ class CanAccessToWebinarTest extends TestCase
     public function test_webinar_not_opened()
     {
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(true);
+        $this->happening->hasSpeaker($this->user->reveal())->shouldBeCalled()->willReturn(false);
         $this->happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-04-12 09:45:00'));
         $this->happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-04-12 10:15:00'));
 

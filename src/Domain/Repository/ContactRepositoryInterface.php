@@ -46,4 +46,6 @@ interface ContactRepositoryInterface
     public function getByEvent(Event $event): array;
 
     public function hasEvaluateContactByEventAndUser(Event $event, User $user, User $contact): bool;
+
+    public function getEvaluationContactByEventAndUser(Event $event, User $user, User $contact): ?int;
 }

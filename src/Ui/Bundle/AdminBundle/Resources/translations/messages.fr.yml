@@ -795,6 +795,7 @@ admin.rule.list.action.seeWhat: 'Voit quoi ?'
 admin.rule.list.add.title: 'Ajouter une règle'
 admin.rule.list.column.actions: Actions
 admin.rule.list.column.priority: Priorité
+admin.rule.list.column.restrictions: 'Restrictions sur l''export'
 admin.rule.list.column.see: Voit
 admin.rule.list.column.who: Qui
 admin.rule.list.content.category: Catégorie

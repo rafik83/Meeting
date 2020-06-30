@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type;
 
 use Proximum\Vimeet\Domain\Model\Type;
@@ -19,16 +11,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TypeChoiceType extends AbstractType
 {
-    /**
-     * @var TypeRepositoryInterface
-     */
+    /** @var TypeRepositoryInterface */
     private $typeRepository;
 
-    /**
-     * TypeChoiceType constructor.
-     *
-     * @param TypeRepositoryInterface $typeRepository
-     */
     public function __construct(TypeRepositoryInterface $typeRepository)
     {
         $this->typeRepository = $typeRepository;
@@ -37,7 +22,7 @@ class TypeChoiceType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['event', 'locale', 'user', 'exceptHidden']);
         $resolver->setDefined(['orderByTitle']);
@@ -46,8 +31,8 @@ class TypeChoiceType extends AbstractType
         $resolver->setDefaults([
             'exceptHidden' => false,
             'orderByTitle' => false,
-            'choice_label' => function (Options $options) {
-                return function ($type) use ($options) {
+            'choice_label' => static function (Options $options) {
+                return static function ($type) use ($options) {
                     if ($type instanceof Type) {
                         return $type->getTitle($options['locale']);
                     }
@@ -55,7 +40,7 @@ class TypeChoiceType extends AbstractType
                     return null;
                 };
             },
-            'choice_value' => function ($type) {
+            'choice_value' => static function ($type) {
                 if ($type instanceof Type) {
                     return $type->getId();
                 }
@@ -105,7 +90,7 @@ class TypeChoiceType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }

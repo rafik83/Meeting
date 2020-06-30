@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Participant\Import;
 
 use PHPUnit\Framework\TestCase;
@@ -32,7 +24,7 @@ use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 
 class ImportMappingHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $datetime = new \DateTime();
         $locale   = 'fr';
@@ -104,7 +96,7 @@ class ImportMappingHandlerTest extends TestCase
             $type->reveal(),
             $admin->reveal(),
             $locale,
-            new ImportMappingView($csvHeaders, $registrationHeaders)
+            new ImportMappingView($csvHeaders, $registrationHeaders, false)
         );
 
         $command->setMappings($mapping);
@@ -139,7 +131,7 @@ class ImportMappingHandlerTest extends TestCase
             ->dispatch(
                 Events::PARTICIPANT_IMPORTED,
                 Argument::that(
-                    function (ParticipantImportedEvent $event) {
+                    static function (ParticipantImportedEvent $event) {
                         return true;
                     }
                 )
@@ -154,7 +146,7 @@ class ImportMappingHandlerTest extends TestCase
                 'csv',
                 [
                     'csv_delimiter' => ';',
-                    'mappings'      => [
+                    'mappings' => [
                         'Nom participant'       => 'lastname',
                         'Prénom participant'    => 'firstname',
                         'Société Acheteur'      => 'company',
@@ -165,9 +157,10 @@ class ImportMappingHandlerTest extends TestCase
                         'Facture - Code postal' => 'zipcode',
                         'Facture - Adresse'     => 'address',
                     ],
-                    'event'         => $event->reveal(),
-                    'type'          => $type->reveal(),
-                    'locale'        => 'fr',
+                    'event' => $event->reveal(),
+                    'type' => $type->reveal(),
+                    'locale' => 'fr',
+                    'allowMultiSheet' => false,
                 ]
             )
             ->shouldBeCalled()

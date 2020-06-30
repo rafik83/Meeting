@@ -32,7 +32,7 @@ class SeeWhatHandler
      */
     public function handle(SeeWhat $seeWhat)
     {
-        $seeWhat->rule->update($seeWhat->seeWhat, $seeWhat->priority);
+        $seeWhat->rule->update($seeWhat->seeWhat, $seeWhat->priority, $seeWhat->phoneAccessMinEvaluation, $seeWhat->emailAccessMinEvaluation);
 
         $this->ruleRepository->update($seeWhat->rule);
     }

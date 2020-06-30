@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Query\Rooming\RoomingList\View\UserSheetTypeView;
 use Proximum\Vimeet\Application\Query\User\Event\Contact\UserSheetsView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;

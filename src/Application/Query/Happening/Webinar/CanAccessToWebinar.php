@@ -43,12 +43,12 @@ class CanAccessToWebinar
         $start = DaysHelper::cloneDateTime($happening->getBegin())->modify('-5 min');
         $end = DaysHelper::cloneDateTime($happening->getEnd())->modify('+15 min');
 
-        if ($this->hasSecurity && ($this->dateTime < $start || $this->dateTime > $end)) {
-            return false;
-        }
-
         if ($happening->hasSpeaker($user)) {
             return true;
+        }
+
+        if ($this->hasSecurity && ($this->dateTime < $start || $this->dateTime > $end)) {
+            return false;
         }
 
         return $this->happeningParticipationRepository

@@ -6,6 +6,9 @@ Proximum\Vimeet\Application\Command\Participant\ImportMapping:
         - Expression:
             expression: "this.isOnlyOneEmailMapping() === true"
             message: "validators.participant_imported.duplicate_mail_mapping"
+        - Expression:
+              expression: "this.isGroupTitleInMappingsForAllowMultiSheet() === true"
+              message: "validators.participant_imported.empty_group_title_mapping"
     properties:
         mappings:
             - Valid: ~

@@ -489,6 +489,8 @@ form.happening_create.children.happeningType.label: Type
 form.happening_create.children.invitationCode.label: 'Code d''invitation'
 form.happening_create.children.limitParticipant.help: 'Pas de limite si vide'
 form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants'
+form.happening_create.children.liveUrl.help: 'Uniquement pour les webinaires, ex: https://www.youtube.com/embed/wwNZKfBLAsc?autoplay=1&modestbranding=1&controls=0&disablekb=1&showinfo=0&fs=0&rel=0'
+form.happening_create.children.liveUrl.label: 'Url de l''iframe pour la diffusion d''un live'
 form.happening_create.children.questionAllowed.answer.false: Non
 form.happening_create.children.questionAllowed.answer.true: Oui
 form.happening_create.children.questionAllowed.label: 'Question des participants'
@@ -511,6 +513,7 @@ form.happening_update.children.end.label: 'Date de fin'
 form.happening_update.children.happeningType.label: Type
 form.happening_update.children.invitationCode.label: 'Code d''invitation'
 form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
+form.happening_update.children.liveUrl.label: 'Url de l''iframe pour la diffusion d''un live'
 form.happening_update.children.questionAllowed.label: 'Question des participants'
 form.happening_update.children.submit.label: Envoyer
 form.happening_update.children.talkings.label: Intervenants
@@ -659,11 +662,16 @@ form.package_update.children.templateData.children.blocks.prototype.label: 'Libe
 form.package_update.children.title.label: 'Titre du template'
 form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Envoyer
+form.participant_import.children.allowMultiSheet.choice.no: 'Non'
+form.participant_import.children.allowMultiSheet.choice.yes: 'Oui'
+form.participant_import.children.allowMultiSheet.label: 'Autoriser le multi-fiche'
 form.participant_import.children.charset.label: Encodage
 form.participant_import.children.file.label: 'Fichier CSV'
 form.participant_import.children.submit.label: Importer
 form.participant_import.children.type.label: Type
+form.participant_import.children.type.placeholder: 'Sélectionner un type'
 form.participant_import.field.ignore: Ignorer
+form.participant_import.field.group_title: 'Titre de l''entité'
 form.participant_import.field.mail: Email
 form.participant_update_agenda_confirmation_status.children.status.choice.confirmed: Confirmé
 form.participant_update_agenda_confirmation_status.children.status.choice.not_confirmed: 'Non confirmé'
@@ -869,9 +877,12 @@ form.registration_template_create.children.title.label: 'Titre du nouveau templa
 form.registration_template_duplicate.children.event.label: 'Événement de destination du nouveau template'
 form.registration_template_duplicate.children.submit.label: Dupliquer
 form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
+form.rule_see_what.children.emailAccessMinEvaluation.label: 'Dans l''export des contacts, masquer l''adresse email pour les notes de 1 à'
+form.rule_see_what.children.phoneAccessMinEvaluation.label: 'Dans l''export des contacts, masquer les coordonnées téléphoniques pour les notes de 1 à'
 form.rule_see_what.children.priority.label: 'Priorité de la règle'
 form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'
 form.rule_see_what.children.submit.label: 'Enregistrer la règle'
+form.rule_see_what.children.unrestricted: 'Toujours afficher'
 form.rule_see_what.not_see_what_column: 'Ne voit pas'
 form.rule_see_what.see_what_column: Voit
 form.schedule_config.children.scale.label: 'Echelle (en minutes)'

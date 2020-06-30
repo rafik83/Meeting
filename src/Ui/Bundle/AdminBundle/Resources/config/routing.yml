@@ -534,6 +534,15 @@ admin_omz_export_download:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\DownloadAction }
 
+admin_file_download:
+    path: /event/{event}/file/download/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+        hash: \w+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\File\DownloadAction
+
 admin_agenda_meeting_update_spot:
     path: /event/{event}/agenda/meeting/{meeting}/update-spot
     requirements:
@@ -904,18 +913,22 @@ admin_participant_export:
         file: \d+
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\ExportAction }
+
 admin_sheet_import:
     path: /event/{event}/sheet/import
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Sheet:import }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ConfigureImportAction
+
 admin_sheet_import_mapping:
     path: /event/{event}/sheet/{type}/import/mapping
     requirements:
         event: \d+
+        type: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Sheet:importMapping }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ImportMappingAction
+
 admin_sheet_import_result:
     path: /event/{event}/sheet/{type}/import/result
     requirements:
@@ -1083,7 +1096,7 @@ admin_happening_participant_export:
     path: /event/{event}/happening/export
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction }
 
 admin_happening_export:

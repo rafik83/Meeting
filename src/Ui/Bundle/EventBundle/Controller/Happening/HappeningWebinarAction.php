@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCommand;
+use Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappening;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
@@ -45,18 +46,23 @@ class HappeningWebinarAction
     /** @var QueryBusInterface */
     private $queryBus;
 
+    /** @var \DateTimeInterface */
+    private $datetime;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar,
         CommandBusInterface $commandBus,
         EngineInterface $engine,
-        QueryBusInterface $queryBus
+        QueryBusInterface $queryBus,
+        \DateTimeInterface $datetime
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
         $this->commandBus = $commandBus;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
+        $this->datetime = $datetime;
     }
 
     public function __invoke(
@@ -81,6 +87,8 @@ class HappeningWebinarAction
         }
 
         $this->commandBus->handle(new StartWebinarSessionCommand($happening));
+
+        $this->commandBus->handle(new ScanHappening($event, $user, $happening, $this->datetime));
 
         /** @var WebinarView $webinarView */
         $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale()));

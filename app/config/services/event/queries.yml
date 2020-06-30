@@ -49,8 +49,16 @@ services:
     Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestionsHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestions }
+
+    Proximum\Vimeet\Application\Command\Happening\Export\PrepareContentHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.serializer_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\PrepareContent }
 
     #
     # Participant

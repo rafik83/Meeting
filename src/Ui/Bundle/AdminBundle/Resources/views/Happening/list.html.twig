@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% import '@Admin/macro.html.twig' as form_macros %}
+
 {% block title 'admin.happening.title'|trans %}
 
 {% block content %}
@@ -12,9 +14,14 @@
             <a class="btn btn-info" href="{{ path('admin_happening_speaker_list', {event: event.id}) }}">
                 {{ 'admin.happening.button.speaker'|trans }}
             </a>
-            <a class="btn btn-info" href="{{ path('admin_happening_participant_export', {event: event.id}) }}">
-                {{ 'admin.happening.participations.button.export'|trans }}
-            </a>
+
+            {{ form_macros.button(
+                path('admin_happening_participant_export', { 'event': event.id }),
+                'POST',
+                'admin.happening.participations.button.export'|trans,
+                {'class': 'btn btn-info'}
+            ) }}
+
             {% if event.locales|length > 1 %}
                 <div class="dropdown pull-right" style="margin: 0 10px;">
                     <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
