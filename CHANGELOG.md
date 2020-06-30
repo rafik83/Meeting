@@ -42,6 +42,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix happening speakers display in program page
 - VIMEET-2148 - Restrict PDF access
 
+### Upgraded
+- Update Sensio Framework Extra Bundle to 5.4.1
+
 ## [2.31.0] - 2020-06-01
 ### Added
 - VIMEET-2124 - Share a video in a webinar
