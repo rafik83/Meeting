@@ -27,7 +27,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\StaticFormulation;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets;
@@ -86,7 +85,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
 
         // Rule
         $rule = $this->prophesize(Rule::class);
-        $who = $this->prophesize(WhoInterface::class);
+        $who = $this->prophesize(Type::class);
         $sheet->getEvent()
             ->shouldBeCalled()
             ->willReturn($event);
@@ -155,7 +154,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         ];
 
         $rule = $this->prophesize(Rule::class);
-        $who = $this->prophesize(WhoInterface::class);
+        $who = $this->prophesize(Type::class);
         $sheet->getEvent()
             ->shouldBeCalled()
             ->willReturn($event);

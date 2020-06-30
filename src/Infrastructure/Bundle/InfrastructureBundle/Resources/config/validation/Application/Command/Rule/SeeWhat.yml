@@ -5,3 +5,9 @@ Proximum\Vimeet\Application\Command\Rule\SeeWhat:
             - Type: { type: integer }
             - Range:
                 min: 1
+        phoneAccessMinEvaluation:
+            - Type: { type: integer }
+            - Range: { min: 1, max: 5 }
+        emailAccessMinEvaluation:
+            - Type: { type: integer }
+            - Range: { min: 1, max: 5 }
