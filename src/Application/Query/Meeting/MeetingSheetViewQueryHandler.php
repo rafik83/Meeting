@@ -76,10 +76,9 @@ class MeetingSheetViewQueryHandler
 
         foreach ($this->requestRepository->findApproved($sheet) as $meetingRequest) {
             $sheetMet = $meetingRequest->getSheetMet($sheet);
-            $participantsMet = $meetingRequest->getParticipants($sheetMet);
             $meetingSheetViews[$sheetMet->getId()] = $this->createMeetingSheetView(
                 $sheetMet,
-                !empty($participantsMet) ? $participantsMet : [$sheetMet->getFirstParticipant()],
+                $sheetMet->getParticipantsArray(),
                 $locale,
                 true,
                 $contacts

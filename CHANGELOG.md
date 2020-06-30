@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2171 - Add participant to meeting when accessing to a videoconference meeting
+- VIMEET-2126 Add - Export all participants of sheet met
 
 ## [2.34.0] - 2020-06-25
 ### Added
