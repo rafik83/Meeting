@@ -2437,6 +2437,7 @@ services:
         class: Proximum\Vimeet\Application\Command\VideoConference\RequestAccessHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
             - '@adapter.video_conference_adapter'
             - '@repository.video_conference_repository'
             - '@Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever'

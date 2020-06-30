@@ -543,6 +543,17 @@ class ParticipantRepository implements ParticipantRepositoryInterface
         return $this->getAvailableParticipants($participants, $begin, $end, null, null, true);
     }
 
+    public function isAvailableForMeeting(array $participants, Meeting $meeting): bool
+    {
+        $meetingSlot = $meeting->getSlot();
+
+        return $participants === $this->getParticipantsWithoutMeetingAndHappening(
+            $participants,
+            $meetingSlot->getBegin(),
+            $meetingSlot->getEnd()
+        );
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -19,12 +19,16 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\VideoConference;
 use Proximum\Vimeet\Domain\Model\VideoConferenceToken;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
 
 class RequestAccessHandler
 {
     /** @var MeetingRepositoryInterface */
     private $meetingRepository;
+
+    /** @var ParticipantRepositoryInterface */
+    private $participantRepository;
 
     /** @var VideoConferenceRepositoryInterface */
     private $videoConferenceRepository;
@@ -37,11 +41,13 @@ class RequestAccessHandler
 
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
+        ParticipantRepositoryInterface $participantRepository,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         VideoConferenceRepositoryInterface $videoConferenceRepository,
         VisioSettingsRetriever $visioSettingsRetriever
     ) {
         $this->meetingRepository = $meetingRepository;
+        $this->participantRepository = $participantRepository;
         $this->videoConferenceRepository = $videoConferenceRepository;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->visioSettingsRetriever = $visioSettingsRetriever;
@@ -123,6 +129,10 @@ class RequestAccessHandler
     private function addParticipantToMeeting(Participant $participant, Meeting $meeting): void
     {
         if ($meeting->hasParticipant($participant)) {
+            return;
+        }
+
+        if (!$this->participantRepository->isAvailableForMeeting([$participant], $meeting)) {
             return;
         }
 

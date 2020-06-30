@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\VideoConference;
 use Proximum\Vimeet\Domain\Model\VideoConferenceToken;
 use Proximum\Vimeet\Domain\Model\Visio\VisioSettings;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
 
 class RequestAccessHandlerTest extends TestCase
@@ -81,8 +82,16 @@ class RequestAccessHandlerTest extends TestCase
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->set($meeting->reveal())->shouldBeCalled();
 
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository
+            ->isAvailableForMeeting([$participant->reveal()], $meeting->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
         $handler = new RequestAccessHandler(
             $meetingRepository->reveal(),
+            $participantRepository->reveal(),
             $videoConferenceAdapter->reveal(),
             $videoConferenceRepository->reveal(),
             $visioSettingsRetriever->reveal()
@@ -175,8 +184,15 @@ class RequestAccessHandlerTest extends TestCase
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->set($meeting->reveal())->shouldNotBeCalled();
 
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository
+            ->isAvailableForMeeting([$participant->reveal()], $meeting->reveal())
+            ->shouldNotBeCalled()
+        ;
+
         $handler = new RequestAccessHandler(
             $meetingRepository->reveal(),
+            $participantRepository->reveal(),
             $videoConferenceInterface->reveal(),
             $videoConferenceRepository->reveal(),
             $visioSettingsRetriever->reveal()
