@@ -26,9 +26,9 @@ interface QuestionRepositoryInterface
      * @param User      $user
      * @param Happening $happening
      *
-     * @return null|Question
+     * @return Question[]
      */
-    public function getByUserAndHappening(User $user, Happening $happening);
+    public function getByUserAndHappening(User $user, Happening $happening): array;
 
     /**
      * @param User      $user
@@ -40,9 +40,9 @@ interface QuestionRepositoryInterface
      * @param Happening $happening
      * @param Sheet     $sheet
      *
-     * @return Question|null
+     * @return Question[]
      */
-    public function findByHappeningAndSheet(Happening $happening, Sheet $sheet);
+    public function findByHappeningAndSheet(Happening $happening, Sheet $sheet): array;
 
     /**
      * @param Happening $happening

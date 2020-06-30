@@ -434,14 +434,14 @@ class ParticipateHandler
     private function getPreviousQuestionContent(Happening $happening, User $user): ?string
     {
         if ($happening->isQuestionAllowed()) {
-            $question = $this
+            $questions = $this
                 ->questionRepository
                 ->getByUserAndHappening($user, $happening)
             ;
 
-            if (null !== $question) {
+            return implode("\n", array_map(static function (Happening\Question $question) {
                 return $question->getContent();
-            }
+            }, $questions));
         }
 
         return null;
