@@ -36,9 +36,9 @@ class AdminUserEventAccessVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
-        $user = $token->getUser();
+        $admin = $token->getUser();
 
-        if (!$user instanceof Admin) {
+        if (!$admin instanceof Admin) {
             return false;
         }
 
@@ -50,7 +50,7 @@ class AdminUserEventAccessVoter extends Voter
 
         // check that current user has access to all sheets of subject user
         foreach ($sheets as $sheet) {
-            if (!$this->adminSheetAccess->canAccess($user, $sheet)) {
+            if (!$this->adminSheetAccess->canAccess($admin, $sheet)) {
                 return false;
             }
         }

@@ -68,8 +68,13 @@ class ImpersonateActionTest extends TestCase
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
             ->shouldBeCalled()
             ->willReturn(true)
-            ;
-            $this->authorizationCheckerAdapter
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted('ROLE_ALLOWED_TO_OPERATE')
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+        $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_USER_ACCESS', new Authorization($this->user->reveal(), $this->event->reveal()))
             ->shouldBeCalled()
             ->willReturn(true)
@@ -150,6 +155,11 @@ class ImpersonateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->authorizationCheckerAdapter
+            ->isGranted('ROLE_ALLOWED_TO_OPERATE')
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+        $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_USER_ACCESS', new Authorization($this->user->reveal(), $this->event->reveal()))
             ->shouldBeCalled()
             ->willReturn(false)
@@ -173,6 +183,11 @@ class ImpersonateActionTest extends TestCase
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
             ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted('ROLE_ALLOWED_TO_OPERATE')
+            ->shouldBeCalled()
+            ->willReturn(false)
         ;
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_USER_ACCESS', new Authorization($this->user->reveal(), $this->event->reveal()))
@@ -203,6 +218,11 @@ class ImpersonateActionTest extends TestCase
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
             ->shouldBeCalled()
             ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted('ROLE_ALLOWED_TO_OPERATE')
+            ->shouldBeCalled()
+            ->willReturn(false)
         ;
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_USER_ACCESS', new Authorization($this->user->reveal(), $this->event->reveal()))
@@ -243,6 +263,11 @@ class ImpersonateActionTest extends TestCase
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
             ->shouldBeCalled()
             ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted('ROLE_ALLOWED_TO_OPERATE')
+            ->shouldBeCalled()
+            ->willReturn(false)
         ;
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_USER_ACCESS', new Authorization($this->user->reveal(), $this->event->reveal()))

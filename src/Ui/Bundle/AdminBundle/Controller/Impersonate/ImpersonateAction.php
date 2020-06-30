@@ -45,7 +45,10 @@ class ImpersonateAction
     public function __invoke(Request $request, AdminDomain $adminDomain, Event $event, User $user): RedirectResponse
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
-            || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_USER_ACCESS', new Authorization($user, $event))
+            || (
+                !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_OPERATE')
+                && !$this->authorizationCheckerAdapter->isGranted('PERMISSION_USER_ACCESS', new Authorization($user, $event))
+            )
             || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_SWITCH')
         ) {
             throw new AccessDeniedException('Access Denied!');

@@ -34,8 +34,6 @@ class GroupListViewQueryHandlerTest extends TestCase
         $admin = AdminFactory::create();
 
         $user = $this->prophesize(User::class);
-        // $user->getEmail()->shouldBeCalled()->willReturn('john@email.com');
-        // $user->getId()->shouldBeCalled()->willReturn(42);
 
         $reflectionGroup = new \ReflectionClass(Group::class);
         $propertyGroupId = $reflectionGroup->getProperty('id');
