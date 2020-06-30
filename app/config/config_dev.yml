@@ -9,6 +9,7 @@ framework:
         strict_requirements: true
     profiler: { only_exceptions: false }
     session:
+        cookie_secure:   ~
         cookie_lifetime: 2592000
         gc_maxlifetime:  2592000
 
