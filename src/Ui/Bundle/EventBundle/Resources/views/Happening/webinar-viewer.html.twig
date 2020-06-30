@@ -24,6 +24,9 @@
          data-warning-time-remaining="{{ webinarView.warningTimeRemainingInSeconds }}"
          data-current-user-id="{{ webinarView.currentUserId }}"
          data-subscriber-mapping="{{ webinarView.speakerInfosByUserId }}"
+         {% if webinarView.liveUrl %}
+         data-live-url="{{ webinarView.liveUrl }}"
+         {% endif %}
     >
         {% if webinarView.headerImage %}
             <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>
