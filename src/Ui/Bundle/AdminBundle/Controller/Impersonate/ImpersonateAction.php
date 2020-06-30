@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\CsrfTokenAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -44,6 +45,7 @@ class ImpersonateAction
     public function __invoke(Request $request, AdminDomain $adminDomain, Event $event, User $user): RedirectResponse
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_USER_ACCESS', new UserEvent($user, $event))
             || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_SWITCH')
         ) {
             throw new AccessDeniedException('Access Denied!');

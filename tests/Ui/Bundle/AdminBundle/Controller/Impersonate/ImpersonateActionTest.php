@@ -9,6 +9,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate\ImpersonateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
@@ -61,56 +62,15 @@ class ImpersonateActionTest extends TestCase
         $this->user->getId()->willReturn(42);
     }
 
-    public function testAccessDenied()
-    {
-        $this->expectException(AccessDeniedException::class);
-
-        $this->authorizationCheckerAdapter
-            ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
-            ->shouldBeCalled()
-            ->willReturn(false)
-        ;
-
-        $action = new ImpersonateAction(
-            $this->authorizationCheckerAdapter->reveal(),
-            $this->csrfTokenAdapter->reveal(),
-            $this->impersonate->reveal(),
-            $this->eventUrlGenerator->reveal()
-        );
-
-        $action($this->request->reveal(), $this->adminDomain, $this->event->reveal(), $this->user->reveal());
-
-    }
-
-    public function testAccessDeniedWhenAllowedToSwitchRoleIsNotGranted()
-    {
-        $this->expectException(AccessDeniedException::class);
-
-        $this->authorizationCheckerAdapter
-            ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
-            ->willReturn(true)
-        ;
-        $this->authorizationCheckerAdapter
-            ->isGranted('ROLE_ALLOWED_TO_SWITCH')
-            ->shouldBeCalled()
-            ->willReturn(false)
-        ;
-
-        $action = new ImpersonateAction(
-            $this->authorizationCheckerAdapter->reveal(),
-            $this->csrfTokenAdapter->reveal(),
-            $this->impersonate->reveal(),
-            $this->eventUrlGenerator->reveal()
-        );
-
-        $action($this->request->reveal(), $this->adminDomain, $this->event->reveal(), $this->user->reveal());
-
-    }
-
     public function testHandle()
     {
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+            ;
+            $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_USER_ACCESS', new UserEvent($this->user->reveal(), $this->event->reveal()))
             ->shouldBeCalled()
             ->willReturn(true)
         ;
@@ -159,12 +119,93 @@ class ImpersonateActionTest extends TestCase
         $this->assertEquals('https://event.wimeet.proximum/sample/path', $result->getTargetUrl());
     }
 
+    public function testAccessDeniedWhenEventAccessIsNotGranted()
+    {
+        $this->expectException(AccessDeniedException::class);
+
+        $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $action = new ImpersonateAction(
+            $this->authorizationCheckerAdapter->reveal(),
+            $this->csrfTokenAdapter->reveal(),
+            $this->impersonate->reveal(),
+            $this->eventUrlGenerator->reveal()
+        );
+
+        $action($this->request->reveal(), $this->adminDomain, $this->event->reveal(), $this->user->reveal());
+
+    }
+
+    public function testAccessDeniedWhenUserSheetAccessIsNotGranted()
+    {
+        $this->expectException(AccessDeniedException::class);
+
+        $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_USER_ACCESS', new UserEvent($this->user->reveal(), $this->event->reveal()))
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $action = new ImpersonateAction(
+            $this->authorizationCheckerAdapter->reveal(),
+            $this->csrfTokenAdapter->reveal(),
+            $this->impersonate->reveal(),
+            $this->eventUrlGenerator->reveal()
+        );
+
+        $action($this->request->reveal(), $this->adminDomain, $this->event->reveal(), $this->user->reveal());
+
+    }
+
+    public function testAccessDeniedWhenAllowedToSwitchRoleIsNotGranted()
+    {
+        $this->expectException(AccessDeniedException::class);
+
+        $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_USER_ACCESS', new UserEvent($this->user->reveal(), $this->event->reveal()))
+            ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted('ROLE_ALLOWED_TO_SWITCH')
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $action = new ImpersonateAction(
+            $this->authorizationCheckerAdapter->reveal(),
+            $this->csrfTokenAdapter->reveal(),
+            $this->impersonate->reveal(),
+            $this->eventUrlGenerator->reveal()
+        );
+
+        $action($this->request->reveal(), $this->adminDomain, $this->event->reveal(), $this->user->reveal());
+
+    }
+
     public function testFailWhenCsrfIsInvalid()
     {
         $this->expectException(BadRequestHttpException::class);
 
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_USER_ACCESS', new UserEvent($this->user->reveal(), $this->event->reveal()))
             ->shouldBeCalled()
             ->willReturn(true)
         ;
@@ -201,6 +242,10 @@ class ImpersonateActionTest extends TestCase
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
             ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_USER_ACCESS', new UserEvent($this->user->reveal(), $this->event->reveal()))
             ->willReturn(true)
         ;
         $this->authorizationCheckerAdapter

@@ -66,6 +66,13 @@ services:
             - '@components.security.admin_sheet_access'
         tags:
             - { name: security.voter }
+    security.admin_user_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminUserAccessVoter
+        arguments:
+            - '@components.security.admin_sheet_access'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: security.voter }
     security_voter.happening_access_voter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter
         arguments:
