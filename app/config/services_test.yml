@@ -183,6 +183,13 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
 
+    Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager:
+        arguments:
+            - '@vimeet_infrastructure.repository_happening.category_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager:
+        arguments:
+            - '@repository.unavailability.category_repository'
 
     #
     # Proxies
@@ -328,6 +335,16 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.billing_info'
+
+    Proximum\Vimeet\Behat\Proxy\Happening\CategoryContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager'
+
+    Proximum\Vimeet\Behat\Proxy\Unavailability\CategoryContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager'
 
     #
     # Other services
