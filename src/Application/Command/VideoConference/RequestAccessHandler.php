@@ -11,24 +11,19 @@
 namespace Proximum\Vimeet\Application\Command\VideoConference;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeeting;
+use Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeetingHandler;
 use Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
-use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\VideoConference;
 use Proximum\Vimeet\Domain\Model\VideoConferenceToken;
-use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
 
 class RequestAccessHandler
 {
-    /** @var MeetingRepositoryInterface */
-    private $meetingRepository;
-
-    /** @var ParticipantRepositoryInterface */
-    private $participantRepository;
+    /** @var AddParticipantToMeetingHandler */
+    private $addParticipantToMeetingHandler;
 
     /** @var VideoConferenceRepositoryInterface */
     private $videoConferenceRepository;
@@ -40,14 +35,12 @@ class RequestAccessHandler
     private $visioSettingsRetriever;
 
     public function __construct(
-        MeetingRepositoryInterface $meetingRepository,
-        ParticipantRepositoryInterface $participantRepository,
+        AddParticipantToMeetingHandler $addParticipantToMeetingHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         VideoConferenceRepositoryInterface $videoConferenceRepository,
         VisioSettingsRetriever $visioSettingsRetriever
     ) {
-        $this->meetingRepository = $meetingRepository;
-        $this->participantRepository = $participantRepository;
+        $this->addParticipantToMeetingHandler = $addParticipantToMeetingHandler;
         $this->videoConferenceRepository = $videoConferenceRepository;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->visioSettingsRetriever = $visioSettingsRetriever;
@@ -62,7 +55,9 @@ class RequestAccessHandler
      */
     public function handle(RequestAccess $requestAccess): VideoConferenceView
     {
-        $this->addParticipantToMeeting($requestAccess->participant, $requestAccess->meeting);
+        $this->addParticipantToMeetingHandler->handle(
+            new AddParticipantToMeeting($requestAccess->participant, $requestAccess->meeting)
+        );
 
         $videoConference = $this->videoConferenceRepository->findByMeeting($requestAccess->meeting);
         $visioSettings = $this->visioSettingsRetriever->get($requestAccess->meeting->getEvent());
@@ -124,19 +119,5 @@ class RequestAccessHandler
             $visioSettings->getEndImage($requestAccess->locale),
             $visioSettings->getEndMessage($requestAccess->locale)
         );
-    }
-
-    private function addParticipantToMeeting(Participant $participant, Meeting $meeting): void
-    {
-        if ($meeting->hasParticipant($participant)) {
-            return;
-        }
-
-        if (!$this->participantRepository->isAvailableForMeeting([$participant], $meeting)) {
-            return;
-        }
-
-        $meeting->addParticipant($participant);
-        $this->meetingRepository->set($meeting);
     }
 }
