@@ -80,7 +80,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
         $sheetMet1->getTitle()->shouldBeCalled()->willReturn('Sheet 1');
 
         $sheetMet1Participant = $this->prophesize(Participant::class);
-        $sheetMet1->getFirstParticipant()->shouldBeCalled()->willReturn($sheetMet1Participant->reveal());
+        $sheetMet1->getParticipantsArray()->shouldBeCalled()->willReturn([$sheetMet1Participant->reveal()]);
 
         $contact1 = new User('contact1@example.com', 'salt', 'pwd', 'fr');
         $contact2 = new User('contact2@example.com', 'salt', 'pwd', 'fr');
@@ -136,8 +136,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
         $meetingRequest1->getSheetMet($sheet->reveal())->shouldBeCalled()->willReturn($sheetMet1->reveal());
         $meetingRequest1
             ->getParticipants($sheetMet1->reveal())
-            ->shouldBeCalled()
-            ->willReturn([])
+            ->shouldNotBeCalled()
         ;
 
         $sheetMet2 = $this->prophesize(Sheet::class);
@@ -147,13 +146,17 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
 
         $sheetMet2Participant1 = $this->prophesize(Participant::class);
         $sheetMet2Participant1->getSheet()->shouldBeCalled()->willReturn($sheetMet2->reveal());
+        $sheetMet2Participant2 = $this->prophesize(Participant::class);
+
         $sheetMet2->getFirstParticipant()->shouldNotBeCalled();
         $sheetMet2->getUserParticipant($contact1)
             ->shouldBeCalled()
             ->willReturn($sheetMet2Participant1->reveal())
         ;
-
-        $sheetMet2Participant2 = $this->prophesize(Participant::class);
+        $sheetMet2->getParticipantsArray()
+            ->shouldBeCalled()
+            ->willReturn([$sheetMet2Participant1->reveal(), $sheetMet2Participant2->reveal()])
+        ;
 
         $sheetMet2ParticipantView1 = new MeetingParticipantView(
             'Robin',
@@ -212,8 +215,7 @@ class MeetingSheetViewQueryHandlerTest extends TestCase
         $meetingRequest2->getSheetMet($sheet->reveal())->shouldBeCalled()->willReturn($sheetMet2->reveal());
         $meetingRequest2
             ->getParticipants($sheetMet2->reveal())
-            ->shouldBeCalled()
-            ->willReturn([$sheetMet2Participant1->reveal(), $sheetMet2Participant2->reveal()])
+            ->shouldNotBeCalled()
         ;
 
         $this->requestRepository
