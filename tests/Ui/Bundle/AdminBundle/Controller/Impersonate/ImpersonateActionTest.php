@@ -9,7 +9,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Model\User\Event\Authorization;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate\ImpersonateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
@@ -70,7 +70,7 @@ class ImpersonateActionTest extends TestCase
             ->willReturn(true)
             ;
             $this->authorizationCheckerAdapter
-            ->isGranted('PERMISSION_USER_ACCESS', new UserEvent($this->user->reveal(), $this->event->reveal()))
+            ->isGranted('PERMISSION_USER_ACCESS', new Authorization($this->user->reveal(), $this->event->reveal()))
             ->shouldBeCalled()
             ->willReturn(true)
         ;
@@ -150,7 +150,7 @@ class ImpersonateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->authorizationCheckerAdapter
-            ->isGranted('PERMISSION_USER_ACCESS', new UserEvent($this->user->reveal(), $this->event->reveal()))
+            ->isGranted('PERMISSION_USER_ACCESS', new Authorization($this->user->reveal(), $this->event->reveal()))
             ->shouldBeCalled()
             ->willReturn(false)
         ;
@@ -175,7 +175,7 @@ class ImpersonateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->authorizationCheckerAdapter
-            ->isGranted('PERMISSION_USER_ACCESS', new UserEvent($this->user->reveal(), $this->event->reveal()))
+            ->isGranted('PERMISSION_USER_ACCESS', new Authorization($this->user->reveal(), $this->event->reveal()))
             ->willReturn(true)
         ;
         $this->authorizationCheckerAdapter
@@ -205,7 +205,7 @@ class ImpersonateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->authorizationCheckerAdapter
-            ->isGranted('PERMISSION_USER_ACCESS', new UserEvent($this->user->reveal(), $this->event->reveal()))
+            ->isGranted('PERMISSION_USER_ACCESS', new Authorization($this->user->reveal(), $this->event->reveal()))
             ->shouldBeCalled()
             ->willReturn(true)
         ;
@@ -245,7 +245,7 @@ class ImpersonateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->authorizationCheckerAdapter
-            ->isGranted('PERMISSION_USER_ACCESS', new UserEvent($this->user->reveal(), $this->event->reveal()))
+            ->isGranted('PERMISSION_USER_ACCESS', new Authorization($this->user->reveal(), $this->event->reveal()))
             ->willReturn(true)
         ;
         $this->authorizationCheckerAdapter

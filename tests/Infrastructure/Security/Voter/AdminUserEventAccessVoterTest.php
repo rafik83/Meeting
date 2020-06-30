@@ -8,7 +8,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Model\User\Event\Authorization;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminUserEventAccessVoter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -42,7 +42,7 @@ class AdminUserEventAccessVoterTest extends TestCase
         $this->token->getUser()->willReturn($this->admin->reveal());
         $event = $this->prophesize(Event::class);
         $userToTest = $this->prophesize(User::class);
-        $userEvent = new UserEvent($userToTest->reveal(), $event->reveal());
+        $userEvent = new Authorization($userToTest->reveal(), $event->reveal());
         $sheet = $this->prophesize(Sheet::class);
         $this->sheetRepository->getSheetsByUserAndEvent($userToTest->reveal(), $event->reveal())->shouldBeCalled()->willReturn([$sheet->reveal()]);
 
@@ -58,7 +58,7 @@ class AdminUserEventAccessVoterTest extends TestCase
         $this->token->getUser()->willReturn($this->admin->reveal());
         $event = $this->prophesize(Event::class);
         $userToTest = $this->prophesize(User::class);
-        $userEvent = new UserEvent($userToTest->reveal(), $event->reveal());
+        $userEvent = new Authorization($userToTest->reveal(), $event->reveal());
         $sheet = $this->prophesize(Sheet::class);
         $this->sheetRepository->getSheetsByUserAndEvent($userToTest->reveal(), $event->reveal())->shouldBeCalled()->willReturn([$sheet->reveal()]);
 
@@ -74,7 +74,7 @@ class AdminUserEventAccessVoterTest extends TestCase
         $this->token->getUser()->willReturn($this->prophesize(User::class));
         $event = $this->prophesize(Event::class);
         $userToTest = $this->prophesize(User::class);
-        $userEvent = new UserEvent($userToTest->reveal(), $event->reveal());
+        $userEvent = new Authorization($userToTest->reveal(), $event->reveal());
         $sheet = $this->prophesize(Sheet::class);
         $this->sheetRepository->getSheetsByUserAndEvent($userToTest->reveal(), $event->reveal())->shouldNotBeCalled();
 
@@ -90,7 +90,7 @@ class AdminUserEventAccessVoterTest extends TestCase
         $this->token->getUser()->willReturn($this->admin->reveal());
         $event = $this->prophesize(Event::class);
         $userToTest = $this->prophesize(User::class);
-        $userEvent = new UserEvent($userToTest->reveal(), $event->reveal());
+        $userEvent = new Authorization($userToTest->reveal(), $event->reveal());
         $sheet = $this->prophesize(Sheet::class);
         $this->sheetRepository->getSheetsByUserAndEvent($userToTest->reveal(), $event->reveal())->shouldBeCalled()->willReturn([]);
 

@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Vo
 
 use Proximum\Vimeet\Application\Components\Security\AdminSheetAccess;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Model\User\Event\Authorization;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -28,7 +28,7 @@ class AdminUserEventAccessVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        return 'PERMISSION_USER_ACCESS' === $attribute && $subject instanceof UserEvent;
+        return 'PERMISSION_USER_ACCESS' === $attribute && $subject instanceof Authorization;
     }
 
     /**
