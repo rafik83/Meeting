@@ -7,6 +7,7 @@ Feature: Impersonation
     Given the database is purged
     And the event "Forum PHP" is created
     And there is a sheet with the title "Proximum"
+    And there is a participant for this sheet
     And I am logged as admin
     And I am on this page "/fr/event/1/sheet"
     And I am on this page "/fr/event/1/sheet/1"
