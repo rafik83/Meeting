@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -28,6 +29,10 @@ class TipTranslationViewByUserQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $user = $this->prophesize(User::class);
         $sheet = $this->prophesize(Sheet::class);
+        $type = $this->prophesize(Type::class);
+
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+        $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
 
         $onConfirmationPhoneContext = TipTranslationViewQueryHandler::CONTEXT_CONFIRMATION_PHONE;
 

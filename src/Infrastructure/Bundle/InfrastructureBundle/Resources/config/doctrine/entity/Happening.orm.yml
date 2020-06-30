@@ -32,6 +32,10 @@ Proximum\Vimeet\Domain\Model\Happening:
         webinarSessionId:
             type: string
             nullable: true
+        liveUrl:
+            type: string
+            length: 5000
+            nullable: true
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

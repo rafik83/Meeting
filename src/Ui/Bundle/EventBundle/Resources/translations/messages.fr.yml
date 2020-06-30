@@ -138,6 +138,8 @@ event.invisible.label: Invisible
 event.meeting.evaluation.label: 'Pour accéder au prochain rendez-vous vous devez noter la pertinence business de ce rendez-vous (confidentiel) :'
 event.meeting.evaluation.skip: 'Plus tard'
 event.meeting.listRequest.contact.export: 'Télécharger mes contacts'
+event.meeting.listRequest.contact.insufficient_evaluation: 'Le niveau de note du RDV ne permet l''accès à cette information'
+event.meeting.listRequest.contact.unavailable: 'Votre interlocuteur n''a pas souhaité partager cette information avec vous'
 event.meeting.listRequest.filter.all: Toutes
 event.meeting.listRequest.filter.propositions: 'Propositions reçues'
 event.meeting.listRequest.filter.requests: 'Mes demandes'

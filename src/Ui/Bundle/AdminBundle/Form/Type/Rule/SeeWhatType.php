@@ -74,6 +74,22 @@ class SeeWhatType extends AbstractType
                 'required'                  => false,
             ])
         ;
+
+        $grades = range(1, 5);
+        $gradeChoices = array_combine($grades, $grades);
+        $builder
+            ->add('phoneAccessMinEvaluation', ChoiceType::class, [
+                'required' => false,
+                'placeholder' => 'form.rule_see_what.children.unrestricted',
+                'choices' => $gradeChoices,
+            ])
+            ->add('emailAccessMinEvaluation', ChoiceType::class, [
+                'required' => false,
+                'placeholder' => 'form.rule_see_what.children.unrestricted',
+                'choices' => $gradeChoices,
+            ])
+        ;
+
     }
 
     /**

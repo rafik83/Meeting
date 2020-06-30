@@ -21,9 +21,10 @@ use Proximum\Vimeet\Application\Command\Sheet\LinkedSheets\NotEnoughSheetsExcept
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Sheet\LinkedSheetsRepositoryInterface;
 use Proximum\Vimeet\Domain\View\SheetView;
 
 class CreateHandlerTest extends TestCase
@@ -67,8 +68,8 @@ class CreateHandlerTest extends TestCase
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet2 = $this->prophesize(Sheet::class);
 
-        $type1 = $this->prophesize(Sheet::class);
-        $type2 = $this->prophesize(Sheet::class);
+        $type1 = $this->prophesize(Type::class);
+        $type2 = $this->prophesize(Type::class);
 
         $sheet1->getType()->shouldBeCalled()->willReturn($type1->reveal());
         $sheet2->getType()->shouldBeCalled()->willReturn($type2->reveal());
@@ -150,7 +151,7 @@ class CreateHandlerTest extends TestCase
 
         $sheet1 = $this->prophesize(Sheet::class);
 
-        $type1 = $this->prophesize(Sheet::class);
+        $type1 = $this->prophesize(Type::class);
 
         $sheet1->getType()->shouldBeCalled()->willReturn($type1->reveal());
 
@@ -191,7 +192,7 @@ class CreateHandlerTest extends TestCase
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet2 = $this->prophesize(Sheet::class);
 
-        $type = $this->prophesize(Sheet::class);
+        $type = $this->prophesize(Type::class);
 
         $sheet1->getType()->shouldBeCalled()->willReturn($type->reveal());
         $sheet2->getType()->shouldBeCalled()->willReturn($type->reveal());
@@ -236,7 +237,7 @@ class CreateHandlerTest extends TestCase
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet2 = $this->prophesize(Sheet::class);
 
-        $type = $this->prophesize(Sheet::class);
+        $type = $this->prophesize(Type::class);
 
         $sheet1->getType()->shouldBeCalled()->willReturn($type->reveal());
         $sheet2->getType()->shouldBeCalled()->willReturn($type->reveal());

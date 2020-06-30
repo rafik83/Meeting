@@ -57,20 +57,28 @@ class MeetingSheetViewQueryHandler
     public function handle(MeetingSheetViewQuery $query): MeetingSheetListView
     {
         $contacts = $this->contactRepository->findByEventAndUsers($query->event, $query->sheet->getUsers());
-        $meetingSheetViews = $this->getFromApprovedRequests($query->sheet, $query->locale, $contacts);
-        $meetingSheetViews = $this->addFromContacts($meetingSheetViews, $query->event, $contacts, $query->locale);
+        $meetingSheetViews = $this->getFromApprovedRequests($query->sheet, $query->user, $query->locale, $contacts);
+        $meetingSheetViews = $this->addFromContacts(
+            $meetingSheetViews,
+            $query->event,
+            $contacts,
+            $query->locale,
+            $query->sheet,
+            $query->user
+        );
 
         return new MeetingSheetListView($meetingSheetViews, $query->event->getTitle());
     }
 
     /**
      * @param Sheet  $sheet
+     * @param User   $user
      * @param string $locale
      * @param array  $contacts
      *
      * @return MeetingSheetView[]
      */
-    private function getFromApprovedRequests(Sheet $sheet, string $locale, array $contacts): array
+    private function getFromApprovedRequests(Sheet $sheet, User $user, string $locale, array $contacts): array
     {
         $meetingSheetViews = [];
 
@@ -81,7 +89,9 @@ class MeetingSheetViewQueryHandler
                 $sheetMet->getParticipantsArray(),
                 $locale,
                 true,
-                $contacts
+                $contacts,
+                $sheet,
+                $user
             );
         }
 
@@ -93,11 +103,19 @@ class MeetingSheetViewQueryHandler
      * @param Event              $event
      * @param array              $contacts
      * @param string             $locale
+     * @param Sheet              $seerSheet
+     * @param User               $seerUser
      *
      * @return MeetingSheetView[]
      */
-    private function addFromContacts(array $meetingSheetViews, Event $event, array $contacts, string $locale): array
-    {
+    private function addFromContacts(
+        array $meetingSheetViews,
+        Event $event,
+        array $contacts,
+        string $locale,
+        Sheet $seerSheet,
+        User $seerUser
+    ): array {
         $participantsBySheet = [];
         $sheets = [];
 
@@ -133,7 +151,9 @@ class MeetingSheetViewQueryHandler
                 $participantsBySheet[$sheetId],
                 $locale,
                 false,
-                $contacts
+                $contacts,
+                $seerSheet,
+                $seerUser
             );
         }
 
@@ -145,7 +165,9 @@ class MeetingSheetViewQueryHandler
      * @param Participant[] $participants
      * @param string        $locale
      * @param bool          $hasApprovedMeetingRequestWith
-     * @param Contact[]         $contacts
+     * @param Contact[]     $contacts
+     * @param Sheet         $seerSheet
+     * @param User          $seerUser
      *
      * @return MeetingSheetView
      */
@@ -154,7 +176,9 @@ class MeetingSheetViewQueryHandler
         array $participants,
         string $locale,
         bool $hasApprovedMeetingRequestWith,
-        array $contacts
+        array $contacts,
+        Sheet $seerSheet,
+        User $seerUser
     ): MeetingSheetView {
         $sheetTags = $this->sheetInfoGuesser->guessSheetInfos($sheet, $locale);
 
@@ -171,7 +195,7 @@ class MeetingSheetViewQueryHandler
             $sheet->getType()->getTitle($locale),
             $hasApprovedMeetingRequestWith,
             $this->participantsViewQueryHandler->handle(
-                new ParticipantsViewQuery($participants, $locale, $contacts)
+                new ParticipantsViewQuery($participants, $locale, $contacts, $seerSheet, $seerUser)
             )
         );
     }
