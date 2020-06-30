@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Command\Command;
