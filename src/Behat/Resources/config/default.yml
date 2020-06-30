@@ -81,5 +81,7 @@ default:
                     - '@Proximum\Vimeet\Behat\Proxy\Happening\CategoryContextProxy'
                 - Proximum\Vimeet\Behat\Context\Domain\Unavailability\CategoryContext:
                     - '@Proximum\Vimeet\Behat\Proxy\Unavailability\CategoryContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Messaging\MessageContext:
+                      - '@Proximum\Vimeet\Behat\Proxy\Messaging\MessageContextProxy'
                 - behatch:context:json
                 - behatch:context:rest

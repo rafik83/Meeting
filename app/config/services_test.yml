@@ -191,6 +191,10 @@ services:
         arguments:
             - '@repository.unavailability.category_repository'
 
+    Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager:
+        arguments:
+            - '@repository.messaging.message_repository'
+
     #
     # Proxies
     #
@@ -345,6 +349,11 @@ services:
         arguments:
             - '@behat_storage'
             - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager'
+
+    Proximum\Vimeet\Behat\Proxy\Messaging\MessageContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager'
 
     #
     # Other services
