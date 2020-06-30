@@ -534,6 +534,15 @@ admin_omz_export_download:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\DownloadAction }
 
+admin_file_download:
+    path: /event/{event}/file/download/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+        hash: \w+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\File\DownloadAction
+
 admin_agenda_meeting_update_spot:
     path: /event/{event}/agenda/meeting/{meeting}/update-spot
     requirements:
@@ -1087,7 +1096,7 @@ admin_happening_participant_export:
     path: /event/{event}/happening/export
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction }
 
 admin_happening_export:

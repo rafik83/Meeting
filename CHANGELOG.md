@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 - VIMEET 2110 - Add support to broadcast live video in webinar, using an iframe
 
+## [2.34.0] - 2020-06-25
+### Added
+- MV-240 - Asynchronous export of happening participants
+
 ## [2.33.0] - 2020-06-22
 ### Added
 - VIMEET-2142 - Import multi sheet for user

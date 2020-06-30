@@ -437,4 +437,18 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
 
         return $happeningParticipations;
     }
+
+    public function hasHappeningParticipant(Event $event): bool
+    {
+        return null !== $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation.id')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening', 'WITH', 'happening.event = :event')
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

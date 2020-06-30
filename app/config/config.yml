@@ -141,6 +141,7 @@ infrastructure:
     import_authentication_token_path: '%shared_uploaded_files%/import_authentication_tokens/'
     encrypted_files_path: '%shared_uploaded_files%/encrypted_files/'
     export_omz_path: '%kernel.project_dir%/web/uploads/export_omz'
+    common_export_path: '%shared_uploaded_files%/export/'
     export_participant_path: '%shared_uploaded_files%/export/participant/'
     export_spot_path: '%kernel.project_dir%/web/uploads/export_spot'
     export_form_template_user_data_path: '%shared_uploaded_files%/export/form-template/'
