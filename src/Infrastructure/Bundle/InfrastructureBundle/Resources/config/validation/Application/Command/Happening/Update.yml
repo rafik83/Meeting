@@ -44,3 +44,5 @@ Proximum\Vimeet\Application\Command\Happening\Update:
                             - NotNull: ~
         liveUrl:
             - Url: ~
+            - Length:
+                max: 5000
