@@ -484,4 +484,9 @@ class Happening implements TimeRangeInterface
     {
         return $this->liveUrl;
     }
+
+    public function isVideoWebinarAndHasLiveUrl(): bool
+    {
+        return $this->isVideoWebinar() && null !== $this->getLiveUrl();
+    }
 }

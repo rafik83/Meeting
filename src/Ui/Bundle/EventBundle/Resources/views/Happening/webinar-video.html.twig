@@ -1,0 +1,23 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block body_attributes 'class="background-black"' %}
+
+{% block body %}
+    <div class="webinar-video">
+        {% if webinarView.headerImage %}
+            <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>
+        {% endif %}
+
+        <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}>
+            <iframe src="{{ webinarView.liveUrl }}" frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+
+        <div class="buttons-container">
+            <a class="btn btn-primary end-webinar" href="{{ path('event_agenda', {sheet: sheet.id}) }}">
+                <i class="icon-Disconnect"></i> {{ 'happening.webinar.end'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock body %}
+

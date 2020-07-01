@@ -57,6 +57,10 @@ class GetWebinarViewQueryHandler
         $speakers = [];
 
         foreach ($happening->getSpeakers() as $speaker) {
+            if (!$speaker->getUser()) {
+                continue;
+            }
+
             $speakers[] = new WebinarSpeakerView(
                 $speaker->getUser()->getId(),
                 $speaker->getFirstname(),
@@ -96,6 +100,7 @@ class GetWebinarViewQueryHandler
             $happening->getId(),
             $query->getUser()->getId(),
             $happening->getTitle($query->getLocale()),
+            $happening->isVideoWebinarAndHasLiveUrl(),
             $token,
             $sessionId,
             $this->videoConferenceAdapter->getApiKey(),

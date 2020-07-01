@@ -90,6 +90,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->getEvent()->shouldNotBeCalled();
 
         $session = $this->prophesize(Session::class);
@@ -129,6 +130,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 1,
                 111,
                 'Webinar: how to work remotely during the Covid-19 crisis',
+                false,
                 'User token',
                 'webinar-session-id',
                 'api key',
@@ -191,6 +193,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -226,6 +229,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 1,
                 111,
                 'Webinar: how to work remotely during the Covid-19 crisis',
+                false,
                 'User token',
                 'webinar-session-id',
                 'api key',

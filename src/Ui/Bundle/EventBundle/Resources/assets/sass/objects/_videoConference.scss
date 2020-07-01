@@ -2,7 +2,7 @@
   background-color: #000000;
 }
 
-.webinar, .video-conference, .video-conference-preview {
+.webinar, webinar-video, .video-conference, .video-conference-preview {
   .visio-user-name {
     top: 0;
     position: absolute;
@@ -185,7 +185,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  .webinar, .video-conference, .video-conference-preview {
+  .webinar, .webinar-video, .video-conference, .video-conference-preview {
     .video-helper {
       width: 95%;
       overflow-y: scroll;
