@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Happening\Webinar;
 
 use OpenTok\Session;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
@@ -142,7 +143,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 900,
                 180,
                 '/path/image.jpg',
-                null
+                null,
+                false
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -264,7 +266,63 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 900,
                 180,
                 '/path/image.jpg',
-                null
+                null,
+                false
+            ),
+            $this->getWebinarViewQueryHandler->handle(
+                new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
+            )
+        );
+    }
+
+    public function testHandleEndedVideoWebinar(): void
+    {
+        $user = $this->prophesize(User::class);
+        $user->getId()->shouldBeCalled()->willReturn(111);
+
+        $happening = $this->prophesize(Happening::class);
+        $happening->getId()->shouldBeCalled()->willReturn(1);
+        $happening->getTitle('en')->shouldBeCalled()->willReturn(
+            'Video Webinar: how to work remotely during the Covid-19 crisis'
+        );
+        $happening->hasWebinarSessionId()->shouldNotBeCalled();
+        $happening->getWebinarSessionId()->shouldNotBeCalled();
+        $happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
+        $happening->hasSpeaker($user->reveal())->shouldBeCalled()->willReturn(false);
+        $happening->getSpeakers()->shouldNotBeCalled();
+        $happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:00:00'));
+        $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:45:00'));
+        $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
+        $happening->getEvent()->shouldNotBeCalled();
+        $happening->getLiveUrl()->shouldBeCalled()->willReturn('https://www.utube.com/embed/whatever');
+        $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
+
+        $this->videoConferenceAdapter->getSession(Argument::any())->shouldNotBeCalled();
+        $this->videoConferenceAdapter->getApiKey()->shouldNotBeCalled();
+        $this->videoConferenceAdapter->generateAccessToken(Argument::any())->shouldNotBeCalled();
+
+        $happening->getParticipations()->shouldNotBeCalled();
+        $this->getUserParticipantInfosHandler->handle(Argument::any())->shouldNotBeCalled();
+
+        $this->assertEquals(
+            new WebinarView(
+                1,
+                111,
+                'Video Webinar: how to work remotely during the Covid-19 crisis',
+                true,
+                '',
+                '',
+                '',
+                false,
+                [],
+                [],
+                new TimeRangeView(new \DateTime('2020-03-30 11:00:00'), new \DateTime('2020-03-30 11:45:00')),
+                $this->dateTime,
+                0,
+                0,
+                '/path/image.jpg',
+                'https://www.utube.com/embed/whatever',
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
