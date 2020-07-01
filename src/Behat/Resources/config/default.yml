@@ -85,5 +85,9 @@ default:
                     - '@Proximum\Vimeet\Behat\Proxy\Messaging\MessageContextProxy'
                 - Proximum\Vimeet\Behat\Context\Domain\Notification\NotificationContext:
                     - '@Proximum\Vimeet\Behat\Proxy\Notification\NotificationContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Sheet\SheetCompletenessContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Sheet\SheetCompletenessContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Transaction\TransactionContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Transaction\TransactionContextProxy'
                 - behatch:context:json
                 - behatch:context:rest

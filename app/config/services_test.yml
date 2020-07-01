@@ -199,6 +199,14 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.notification_repository'
 
+    Proximum\Vimeet\Behat\Service\Manager\Sheet\SheetCompletenessManager:
+        arguments:
+            - '@repository.sheet.completeness_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager:
+        arguments:
+            - '@repository.transaction'
+
     #
     # Proxies
     #
@@ -363,6 +371,16 @@ services:
         arguments:
             - '@behat_storage'
             - '@Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager'
+
+    Proximum\Vimeet\Behat\Proxy\Sheet\SheetCompletenessContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Sheet\SheetCompletenessManager'
+
+    Proximum\Vimeet\Behat\Proxy\Transaction\TransactionContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager'
 
     #
     # Other services

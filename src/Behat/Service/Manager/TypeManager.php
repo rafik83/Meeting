@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -29,30 +21,19 @@ class TypeManager
     /** @var RegistrationTemplateManager */
     private $registrationTemplateManager;
 
-    /**
-     * @param TypeRepositoryInterface     $typeRepository
-     * @param UserManager                 $userManager
-     * @param SheetTemplateManager        $sheetTemplateManager
-     * @param RegistrationTemplateManager $registrationTemplateManager
-     */
     public function __construct(
         TypeRepositoryInterface $typeRepository,
         UserManager $userManager,
         SheetTemplateManager $sheetTemplateManager,
         RegistrationTemplateManager $registrationTemplateManager
     ) {
-        $this->typeRepository              = $typeRepository;
-        $this->userManager                 = $userManager;
-        $this->sheetTemplateManager        = $sheetTemplateManager;
+        $this->typeRepository = $typeRepository;
+        $this->userManager = $userManager;
+        $this->sheetTemplateManager = $sheetTemplateManager;
         $this->registrationTemplateManager = $registrationTemplateManager;
     }
 
-    /**
-     * @param Event $event
-     *
-     * @return Type
-     */
-    public function create(Event $event)
+    public function create(Event $event): Type
     {
         $type = new Type($event);
         $type->setSheetTemplate($this->sheetTemplateManager->create($event));
@@ -67,11 +48,7 @@ class TypeManager
         return $type;
     }
 
-    /**
-     * @param Type    $type
-     * @param Package $package
-     */
-    public function assignPackageToType(Type $type, Package $package)
+    public function assignPackageToType(Type $type, Package $package): void
     {
         $type->setPackage($package);
 
