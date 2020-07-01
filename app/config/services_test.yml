@@ -195,6 +195,10 @@ services:
         arguments:
             - '@repository.messaging.message_repository'
 
+    Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager:
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+
     #
     # Proxies
     #
@@ -354,6 +358,11 @@ services:
         arguments:
             - '@behat_storage'
             - '@Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager'
+
+    Proximum\Vimeet\Behat\Proxy\Notification\NotificationContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager'
 
     #
     # Other services

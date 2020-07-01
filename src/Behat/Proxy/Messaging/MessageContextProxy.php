@@ -21,6 +21,7 @@ class MessageContextProxy implements MessageContextProxyInterface
         $this->storage = $storage;
         $this->messageManager = $messageManager;
     }
+
     public function getStorage(): StorageInterface
     {
         return $this->storage;
