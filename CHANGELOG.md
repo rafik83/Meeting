@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - VIMEET-2154 - securize impersonation
+### Updated
+- Suppression de la librairie elao/form-bundle pour ramener sa logique en interne
 
 ## [2.35.1] - 2020-06-30
 ### Fixed
@@ -43,6 +45,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add number validator for priority meeting request number
 - Fix happening speakers display in program page
 - VIMEET-2148 - Restrict PDF access
+
+### Upgraded
+- Update Sensio Framework Extra Bundle to 5.4.1
 
 ## [2.31.0] - 2020-06-01
 ### Added

@@ -23,6 +23,20 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class InfrastructureExtension extends Extension
 {
     /**
+     * Features
+     *
+     * @var array
+     */
+    private const FORM_FEATURES = [
+        'form_collection'  => 'form_collection.xml',
+        'form_choice'      => 'form_choice.xml',
+        'form_buttons'     => 'form_buttons.xml',
+        'form_help'        => 'form_help.xml',
+        'form_placeholder' => 'form_placeholder.xml',
+        'form_confirm'     => 'form_confirm.xml',
+    ];
+
+    /**
      * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
@@ -67,5 +81,15 @@ class InfrastructureExtension extends Extension
         $loader->load('services_third_party_comexposium.yml');
         $loader->load('services_third_party_openl10n.yml');
         $loader->load('services_third_party_oauth2.yml');
+
+        $loaderXml = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+
+        foreach (self::FORM_FEATURES as $option => $xml) {
+            if ($config[$option]) {
+                $loaderXml->load($xml);
+            }
+        }
+
+        $loaderXml->load('twig_bootstrap_extension.xml');
     }
 }
