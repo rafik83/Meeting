@@ -6,11 +6,11 @@ Feature: Navigate in my notification
     And the event "Super event" is created
     And there is a type in this event
     And there is a sheet for this type with the title "Proximum"
+    And the user "user_asddays_1@proximum.com" is created
+    And there is a participant for this sheet and this user
     And there is a package selected notification for this sheet
     And there is a sheet translation completeness notification for this sheet
     And there is a pending transaction notification for this sheet
-    And the user "user_asddays_1@proximum.com" is created
-    And there is a participant for this sheet and this user
     When I am logged with "user_asddays_1@proximum.com" on event "http://super-event.vimeet.proximum"
     And I go to this page "/fr"
     When I follow "navigation.links.notification"

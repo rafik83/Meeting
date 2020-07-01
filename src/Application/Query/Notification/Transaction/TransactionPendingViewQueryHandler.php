@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Notification\Transaction;
 
 use Proximum\Vimeet\Application\Components\Navigation\Category;
@@ -17,12 +9,7 @@ use Proximum\Vimeet\Domain\Notification\Notification;
 
 class TransactionPendingViewQueryHandler extends AbstractNotificationQueryHandler
 {
-    /**
-     * @param TransactionPendingViewQuery $query
-     *
-     * @return NotificationView
-     */
-    public function handle(TransactionPendingViewQuery $query)
+    public function handle(TransactionPendingViewQuery $query): NotificationView
     {
         return new NotificationView(
             $query->transaction->getDate(),
