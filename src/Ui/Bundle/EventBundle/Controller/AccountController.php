@@ -63,7 +63,7 @@ class AccountController extends Controller
         return $this->render('EventBundle:User:update_account.html.twig', [
             'event' => $eventDomain->getEvent(),
             'sheet' => $sheet,
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -80,7 +80,7 @@ class AccountController extends Controller
             $this->get('adapter.authentication_manager')->disconnect();
         }
 
-        $user                 = $changeMailToken->getUser();
+        $user = $changeMailToken->getUser();
         $changeMailActivation = new ChangeMailActivation($changeMailToken);
 
         $this->get('tactician.commandbus')->handle($changeMailActivation);
