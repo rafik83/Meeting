@@ -911,22 +911,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountToken }
 
-    command.user.change_mail_handler:
-        class: Proximum\Vimeet\Application\Command\User\ChangeMailHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@repository.change_mail_token_repository'
-            - '@components.token.change_mail_token_generator'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMail }
-    command.user.change_mail_activation_handler:
-        class: Proximum\Vimeet\Application\Command\User\ChangeMailActivationHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@repository.change_mail_token_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMailActivation }
     command.happening.speaker.create_handler:
         class: Proximum\Vimeet\Application\Command\Happening\Speaker\CreateHandler
         arguments:

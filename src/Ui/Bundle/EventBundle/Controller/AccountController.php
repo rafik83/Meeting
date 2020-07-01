@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\User\ChangeMail;
 use Proximum\Vimeet\Application\Command\User\ChangeMailActivation;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Application\Exception\User\InvalidPasswordException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -30,23 +31,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class AccountController extends Controller
 {
     /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param UserInterface $user
-     *
      * @return RedirectResponse|Response
      */
-    public function updateEmailAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user = null)
+    public function updateEmailAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user = null): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted(EventVoter::CHANGE_EMAIL, $eventDomain->getEvent());
 
         $changeMail = new ChangeMail($user, $eventDomain->getEvent());
-        $form       = $this->createForm(ChangeMailType::class, $changeMail, [
+        $form = $this->createForm(ChangeMailType::class, $changeMail, [
             'action' => $this->generateUrl('event_account_change_mail', ['sheet' => $sheet->getId()]),
         ]);
+
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -54,6 +51,8 @@ class AccountController extends Controller
                 $this->addFlash('success', 'flash.change_mail.success');
 
                 return $this->redirectToRoute('event');
+            } catch (InvalidPasswordException $exception) {
+                $form->get('password')->addError(new FormError('validators.currentPassword'));
             } catch (EmailAlreadyExistsException $exception) {
                 $form->get('mail')->addError(new FormError('validators.emailAlreadyExist'));
             } catch (SameEmailException $exception) {
@@ -69,12 +68,9 @@ class AccountController extends Controller
     }
 
     /**
-     * @param EventDomain     $eventDomain
-     * @param ChangeMailToken $changeMailToken
-     *
      * @return RedirectResponse
      */
-    public function activateNewMailAction(EventDomain $eventDomain, ChangeMailToken $changeMailToken)
+    public function activateNewMailAction(EventDomain $eventDomain, ChangeMailToken $changeMailToken): RedirectResponse
     {
         if ($changeMailToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token expired.');
